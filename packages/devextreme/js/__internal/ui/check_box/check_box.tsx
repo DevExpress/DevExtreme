@@ -1,7 +1,7 @@
 import _objectWithoutPropertiesLoose from "@babel/runtime/helpers/esm/objectWithoutPropertiesLoose";
 import _extends from "@babel/runtime/helpers/esm/extends";
 const _excluded = ["accessKey", "activeStateEnabled", "aria", "className", "defaultValue", "disabled", "enableThreeStateBehavior", "focusStateEnabled", "height", "hint", "hoverStateEnabled", "iconSize", "inputAttr", "isDirty", "isValid", "name", "onClick", "onFocusIn", "onKeyDown", "readOnly", "rtlEnabled", "saveValueChangeEvent", "tabIndex", "text", "validationError", "validationErrors", "validationMessageMode", "validationMessagePosition", "validationStatus", "value", "valueChange", "visible", "width"];
-import { createVNode, createFragment, createComponentVNode, normalizeProps } from "inferno";
+import { createVNode, createFragment, createComponentVNode, normalizeProps, RefObject } from "inferno";
 import { Fragment } from 'inferno';
 import { InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import devices from '@js/core/devices';
@@ -23,78 +23,6 @@ const getCssClasses = model => {
     'dx-checkbox-indeterminate': indeterminate
   };
   return combineClasses(classesMap);
-};
-export const viewFunction = viewModel => {
-  const {
-    aria,
-    cssClasses: classes,
-    editorRef,
-    keyDown: onKeyDown,
-    onWidgetClick: onClick,
-    props: {
-      accessKey,
-      activeStateEnabled,
-      className,
-      disabled,
-      focusStateEnabled,
-      height,
-      hint,
-      hoverStateEnabled,
-      iconSize,
-      isValid,
-      name,
-      onFocusIn,
-      readOnly,
-      rtlEnabled,
-      tabIndex,
-      text,
-      validationError,
-      validationErrors,
-      validationMessageMode,
-      validationMessagePosition,
-      validationStatus,
-      value,
-      visible,
-      width
-    },
-    restAttributes
-  } = viewModel;
-  return normalizeProps(createComponentVNode(2, Editor, _extends({
-    "aria": aria,
-    "classes": classes,
-    "onClick": onClick,
-    "onKeyDown": onKeyDown,
-    "accessKey": accessKey,
-    "activeStateEnabled": activeStateEnabled,
-    "focusStateEnabled": focusStateEnabled,
-    "hoverStateEnabled": hoverStateEnabled,
-    "className": className,
-    "disabled": disabled,
-    "readOnly": readOnly,
-    "hint": hint,
-    "height": height,
-    "width": width,
-    "rtlEnabled": rtlEnabled,
-    "tabIndex": tabIndex,
-    "visible": visible,
-    "validationError": validationError,
-    "validationErrors": validationErrors,
-    "validationMessageMode": validationMessageMode,
-    "validationMessagePosition": validationMessagePosition,
-    "validationStatus": validationStatus,
-    "isValid": isValid,
-    "onFocusIn": onFocusIn
-  }, restAttributes, {
-    children: createFragment([normalizeProps(createVNode(64, "input", null, null, 1, _extends({
-      "type": "hidden",
-      "value": `${value}`
-    }, name && {
-      name
-    }))), createVNode(1, "div", "dx-checkbox-container", [createComponentVNode(2, CheckBoxIcon, {
-      "size": iconSize,
-      "isChecked": value === true
-    }), text && createVNode(1, "span", "dx-checkbox-text", text, 0)], 0)], 4)
-  }), null, editorRef));
 };
 
 export interface CheckBoxProps extends EditorProps {
@@ -134,6 +62,8 @@ import { convertRulesToOptions } from '@js/core/options/utils';
 import { createReRenderEffect } from '@devextreme/runtime/inferno';
 import { createRef as infernoCreateRef } from 'inferno';
 export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
+  editorRef!: RefObject<Editor>;
+  
   constructor(props: CheckBoxProps) {
     super(props);
     this.editorRef = infernoCreateRef();
@@ -228,18 +158,48 @@ export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
     this.editorRef.current.blur();
   }
   render() {
-    const props = this.props;
-    return viewFunction({
-      props: _extends({}, props, {
-        value: this.props.value !== undefined ? this.props.value : this.state.value
-      }),
-      editorRef: this.editorRef,
-      onWidgetClick: this.onWidgetClick,
-      keyDown: this.keyDown,
-      cssClasses: this.cssClasses,
-      aria: this.aria,
-      restAttributes: this.restAttributes
-    });
+    const value = this.props.value !== undefined ? this.props.value : this.state.value;
+    
+    return (
+      <Editor // eslint-disable-line jsx-a11y/no-access-key
+        ref={this.editorRef}
+        aria={this.props.aria}
+        classes={this.props.classes}
+        onClick={this.props.onClick}
+        onKeyDown={this.props.onKeyDown}
+        accessKey={this.props.accessKey}
+        activeStateEnabled={this.props.activeStateEnabled}
+        focusStateEnabled={this.props.focusStateEnabled}
+        hoverStateEnabled={this.props.hoverStateEnabled}
+        className={this.props.className}
+        disabled={this.props.disabled}
+        readOnly={this.props.readOnly}
+        hint={this.props.hint}
+        height={this.props.height}
+        width={this.props.width}
+        rtlEnabled={this.props.rtlEnabled}
+        tabIndex={this.props.tabIndex}
+        visible={this.props.visible}
+        validationError={this.props.validationError}
+        validationErrors={this.props.validationErrors}
+        validationMessageMode={this.props.validationMessageMode}
+        validationMessagePosition={this.props.validationMessagePosition}
+        validationStatus={this.props.validationStatus}
+        isValid={this.props.isValid}
+        onFocusIn={this.props.onFocusIn}
+        {...this.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
+      >
+        <Fragment>
+          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+          <input type="hidden" value={`${value}`} {...this.props.name && { name: this.props.name }} />
+          <div className="dx-checkbox-container">
+            <CheckBoxIcon size={this.props.iconSize}/>
+            {this.props.text && (<span className="dx-checkbox-text">{this.props.text}</span>)}
+          </div>
+        </Fragment>
+      </Editor>
+    )
+
   }
 }
 function __processTwoWayProps(defaultProps) {
