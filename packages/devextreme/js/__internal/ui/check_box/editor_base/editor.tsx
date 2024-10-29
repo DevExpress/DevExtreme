@@ -1,21 +1,27 @@
-import { RefObject } from "inferno";
-import { Fragment } from 'inferno';
-import { InfernoEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import Guid from '@js/core/guid';
-import { Widget, WidgetProps, WidgetDefaultProps } from '@ts/core/r1/widget';
+import { convertRulesToOptions } from '@js/core/options/utils';
+import type { WidgetProps } from '@ts/core/r1/widget';
+import { Widget, WidgetDefaultProps } from '@ts/core/r1/widget';
 import { combineClasses } from '@ts/core/utils/combine_classes';
+import type { RefObject } from 'inferno';
+import { createRef as infernoCreateRef, Fragment } from 'inferno';
+
 import { ValidationMessage } from '../wrappers/validation_message';
 
-const getCssClasses = model => {
+const getCssClasses = (model: EditorProps): string => {
   const {
     classes,
     isValid,
-    readOnly
+    readOnly,
   } = model;
   const classesMap = {
     'dx-state-readonly': !!readOnly,
     'dx-invalid': !isValid,
-    [String(classes)]: !!classes
+    [String(classes)]: !!classes,
   };
   return combineClasses(classesMap);
 };
@@ -25,10 +31,13 @@ export interface EditorProps extends WidgetProps {
 
   name: string;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value?: any;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   defaultValue?: any;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   valueChange?: (value: any) => void;
 
   // validation
@@ -52,7 +61,6 @@ export interface EditorProps extends WidgetProps {
   onFocusIn?: (e: Event) => void;
 }
 
-
 export const defaultEditorProps: EditorProps = {
   ...WidgetDefaultProps,
   readOnly: false,
@@ -66,12 +74,8 @@ export const defaultEditorProps: EditorProps = {
   isDirty: false,
   inputAttr: {},
   defaultValue: null,
-  valueChange: () => {}
+  valueChange: () => {},
 };
-
-import { convertRulesToOptions } from '../../../../core/options/utils';
-import { createReRenderEffect } from '@devextreme/runtime/inferno';
-import { createRef as infernoCreateRef } from 'inferno';
 
 export class Editor extends InfernoWrapperComponent<EditorProps> {
   widgetRef!: RefObject<Widget>;
@@ -82,6 +86,7 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
 
   isValidationMessageVisible = false;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   __getterCache: any;
 
   constructor(props: EditorProps) {
@@ -93,105 +98,136 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
     this.state = {
       validationMessageGuid: `dx-${new Guid()}`,
       isValidationMessageVisible: false,
-      value: this.props.value !== undefined ? this.props.value : this.props.defaultValue
+      value: this.props.value !== undefined ? this.props.value : this.props.defaultValue,
     };
     this.updateValidationMessageVisibility = this.updateValidationMessageVisibility.bind(this);
     this.focus = this.focus.bind(this);
     this.blur = this.blur.bind(this);
     this.onFocusIn = this.onFocusIn.bind(this);
   }
-  createEffects() {
-    return [new InfernoEffect(this.updateValidationMessageVisibility, [this.props.isValid, this.props.validationStatus, this.props.validationError, this.props.validationErrors]), createReRenderEffect()];
+
+  createEffects(): InfernoEffect[] {
+    return [
+      new InfernoEffect(
+        this.updateValidationMessageVisibility,
+        [
+          this.props.isValid,
+          this.props.validationStatus,
+          this.props.validationError,
+          this.props.validationErrors,
+        ],
+      ), createReRenderEffect()];
   }
-  updateEffects() {
-    var _this$_effects$;
-    (_this$_effects$ = this._effects[0]) === null || _this$_effects$ === void 0 || _this$_effects$.update([this.props.isValid, this.props.validationStatus, this.props.validationError, this.props.validationErrors]);
+
+  updateEffects(): void {
+    this._effects?.[0]?.update([
+      this.props.isValid,
+      this.props.validationStatus,
+      this.props.validationError,
+      this.props.validationErrors,
+    ]);
   }
-  updateValidationMessageVisibility() {
-    this.setState(__state_argument => ({
-      isValidationMessageVisible: this.shouldShowValidationMessage
+
+  updateValidationMessageVisibility(): void {
+    this.setState(() => ({
+      isValidationMessageVisible: this.shouldShowValidationMessage,
     }));
   }
-  onFocusIn(event) {
+
+  onFocusIn(event: Event): void {
     const {
-      onFocusIn
+      onFocusIn,
     } = this.props;
-    onFocusIn === null || onFocusIn === void 0 || onFocusIn(event);
+    onFocusIn?.(event);
   }
-  get cssClasses() {
+
+  get cssClasses(): string {
     return `${getCssClasses({
       ...this.props,
-      value: this.props.value !== undefined ? this.props.value : this.state!.value
+      value: this.props.value !== undefined ? this.props.value : this.state!.value,
     })}`;
   }
-  get shouldShowValidationMessage() {
+
+  get shouldShowValidationMessage(): boolean {
     const {
       isValid,
-      validationStatus
+      validationStatus,
     } = this.props;
     const validationErrors = this.validationErrors ?? [];
     const isEditorValid = isValid && validationStatus !== 'invalid';
     return !isEditorValid && validationErrors.length > 0;
   }
-  get aria() {
+
+  get aria(): Record<string, string> {
     const {
       isValid,
-      readOnly
+      readOnly,
     } = this.props;
     const result: Record<string, string> = {
       readonly: readOnly ? 'true' : 'false',
-      invalid: !isValid ? 'true' : 'false'
+      invalid: !isValid ? 'true' : 'false',
     };
     if (this.shouldShowValidationMessage) {
       result.describedBy = this.state!.validationMessageGuid as string;
     }
-    return {...result, ...this.props.aria};
+    return { ...result, ...this.props.aria };
   }
-  get validationErrors() {
-    if (this.__getterCache['validationErrors'] !== undefined) {
-      return this.__getterCache['validationErrors'];
+
+  get validationErrors(): Record<string, unknown>[] | null | undefined {
+    if (this.__getterCache.validationErrors !== undefined) {
+      return this.__getterCache.validationErrors;
     }
-    return this.__getterCache['validationErrors'] = (() => {
+    // eslint-disable-next-line no-return-assign, @typescript-eslint/no-explicit-any
+    return this.__getterCache.validationErrors = ((): any => {
       const {
         validationError,
-        validationErrors
+        validationErrors,
       } = this.props;
       let allValidationErrors = validationErrors && [...validationErrors];
       if (!allValidationErrors && validationError) {
-        allValidationErrors = [{...validationError}];
+        allValidationErrors = [{ ...validationError }];
       }
       return allValidationErrors;
     })();
   }
-  get validationMessageTarget() {
-    var _this$rootElementRef;
-    return (_this$rootElementRef = this.rootElementRef) === null || _this$rootElementRef === void 0 ? void 0 : _this$rootElementRef.current;
+
+  get validationMessageTarget(): HTMLDivElement | null | undefined {
+    return this.rootElementRef?.current;
   }
-  get restAttributes() {
+
+  get restAttributes(): Record<string, unknown> {
     const {
+      // eslint-disable-next-line max-len
       accessKey, activeStateEnabled, aria, children, className, classes, defaultValue, disabled, focusStateEnabled, height, hint, hoverStateEnabled, inputAttr, isDirty, isValid, name, onClick, onFocusIn, onKeyDown, readOnly, rtlEnabled, tabIndex, validationError, validationErrors, validationMessageMode, validationMessagePosition, validationStatus, value, valueChange, visible, width,
       ...restProps
-    } = this.props
+    } = this.props;
     return restProps;
   }
-  focus() {
+
+  focus(): void {
     this.widgetRef.current!.focus();
   }
-  blur() {
+
+  blur(): void {
     this.widgetRef.current!.blur();
   }
-  componentWillUpdate(nextProps, nextState, context) {
+
+  componentWillUpdate(nextProps: EditorProps): void {
     super.componentWillUpdate();
-    if (this.props['validationError'] !== nextProps['validationError'] || this.props['validationErrors'] !== nextProps['validationErrors']) {
-      this.__getterCache['validationErrors'] = undefined;
+    if (
+      this.props.validationError !== nextProps.validationError
+      || this.props.validationErrors !== nextProps.validationErrors
+    ) {
+      this.__getterCache.validationErrors = undefined;
     }
   }
-  render() {
-    const value = this.props.value !== undefined ? this.props.value : this.state!.value
 
+  render(): JSX.Element {
     return (
       <Widget
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ref={this.widgetRef as any}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         rootElementRef={this.rootElementRef as any}
         aria={this.aria}
         classes={this.cssClasses}
@@ -210,7 +246,7 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
         onKeyDown={this.props.onKeyDown}
         tabIndex={this.props.tabIndex}
         visible={this.props.visible}
-        {...this.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
+        {...this.restAttributes}
       >
         <Fragment>
           {this.props.children}
@@ -232,19 +268,30 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
   }
 }
 
-function __processTwoWayProps(defaultProps) {
+// eslint-disable-next-line @typescript-eslint/naming-convention
+function __processTwoWayProps(defaultProps): Record<string, unknown> {
   const twoWayProps = ['value'];
   return Object.keys(defaultProps).reduce((props, propName) => {
     const propValue = defaultProps[propName];
-    const defaultPropName = twoWayProps.some(p => p === propName) ? 'default' + propName.charAt(0).toUpperCase() + propName.slice(1) : propName;
+    const defaultPropName = twoWayProps.some((p) => p === propName) ? `default${propName.charAt(0).toUpperCase()}${propName.slice(1)}` : propName;
     props[defaultPropName] = propValue;
     return props;
   }, {});
 }
 
 Editor.defaultProps = defaultEditorProps;
+// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-explicit-any
 const __defaultOptionRules: any[] = [];
-export function defaultOptions(rule) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function defaultOptions(rule: any): void {
   __defaultOptionRules.push(rule);
-  Editor.defaultProps = Object.create(Object.prototype, Object.assign(Object.getOwnPropertyDescriptors(Editor.defaultProps), Object.getOwnPropertyDescriptors(__processTwoWayProps(convertRulesToOptions(__defaultOptionRules)))));
+  Editor.defaultProps = Object.create(
+    Object.prototype,
+    Object.assign(
+      Object.getOwnPropertyDescriptors(Editor.defaultProps),
+      Object.getOwnPropertyDescriptors(
+        __processTwoWayProps(convertRulesToOptions(__defaultOptionRules)),
+      ),
+    ),
+  );
 }
