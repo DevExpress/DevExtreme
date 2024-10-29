@@ -1,4 +1,7 @@
 import Guid from '@js/core/guid';
+import type {
+  DeepPartial,
+} from '@js/core/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
@@ -36,6 +39,13 @@ const CHAT_MESSAGELIST_DAY_HEADER_CLASS = 'dx-chat-messagelist-day-header';
 
 const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
 export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
+
+export interface Change {
+  type: 'insert' | 'update' | 'remove';
+  data?: DeepPartial<Message>;
+  key?: unknown;
+  index?: number;
+}
 
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
@@ -500,6 +510,23 @@ class MessageList extends Widget<Properties> {
     this._lastMessageDate = null;
 
     super._clean();
+  }
+
+  _modifyByChanges(changes: Change[]): void {
+    changes.forEach((change) => {
+      switch (change.type) {
+        case 'update': {
+          break;
+        }
+        case 'insert':
+          this._renderMessage(change.data ?? {});
+          break;
+        case 'remove':
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {

@@ -803,6 +803,10 @@ QUnit.module('Chat', () => {
 
             const expectedData = [...messages, newMessage];
             assert.deepEqual(this.instance.option('items'), expectedData, 'items option should contain all messages including the new one');
+            assert.deepEqual(this.instance.option('dataSource'), messages, 'dataSource option is not updated');
+
+            this.instance.getDataSource().store().insert(newMessage);
+
             assert.deepEqual(this.instance.option('dataSource'), expectedData, 'dataSource option should contain all messages including the new one');
         });
 
@@ -921,16 +925,16 @@ QUnit.module('Chat', () => {
                 load: function() {
                     const d = $.Deferred();
                     setTimeout(function() {
-                        d.resolve(messages);
+                        d.resolve([...messages]);
                     }, timeout);
                     return d.promise();
                 },
-                insert: function(values) {
+                insert: function(value) {
                     const d = $.Deferred();
+                    messages.push(value);
 
                     setTimeout(() => {
-                        messages.push(values);
-                        d.resolve(values);
+                        d.resolve();
                     }, timeout);
 
                     return d.promise();
@@ -948,7 +952,96 @@ QUnit.module('Chat', () => {
 
             this.clock.tick(timeout);
 
+            assert.deepEqual(this.instance.option('items'), [...messages, newMessage], 'items option should contain all messages including the new one');
+            assert.strictEqual(this.getBubbles().length, 3, 'new message should be rendered in list');
+        });
+
+        QUnit.test('new message should be rendered after message is entered if reloadOnChange is true', function(assert) {
+            const messages = [{ text: 'message_1' }, { text: 'message_2' }];
+            const timeout = 1000;
+
+            const store = new CustomStore({
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+                insert: function(message) {
+                    const d = $.Deferred();
+                    messages.push(message);
+
+                    setTimeout(() => {
+                        d.resolve();
+                    }, timeout);
+
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                reloadOnChange: true,
+            });
+
+            this.clock.tick(timeout);
+
+            const newMessage = { text: 'message_3' };
+            keyboardMock(this.$input)
+                .focus()
+                .type(newMessage.text);
+
+            this.$sendButton.trigger('dxclick');
+
+            this.clock.tick(timeout * 2);
+
             assert.deepEqual(this.instance.option('items'), messages, 'items option should contain all messages including the new one');
+            assert.strictEqual(this.getBubbles().length, 3, 'new message should be rendered in list');
+        });
+
+        QUnit.test('new message should be rendered when using store.push({ type: insert }) and reloadOnChange is false', function(assert) {
+            const messages = [{ text: 'message_1' }, { text: 'message_2' }];
+            const timeout = 1000;
+
+            const store = new CustomStore({
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+                insert: function(message) {
+                    const d = $.Deferred();
+
+                    setTimeout(() => {
+                        d.resolve();
+                    }, timeout);
+
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+
+            const newMessage = { text: 'message_3' };
+            keyboardMock(this.$input)
+                .focus()
+                .type(newMessage.text);
+
+            this.$sendButton.trigger('dxclick');
+
+            store.push([{ type: 'insert', data: newMessage }]);
+
+            this.clock.tick(timeout * 2);
+
+            assert.deepEqual(this.instance.option('items'), [...messages, newMessage], 'items option should contain all messages including the new one');
             assert.strictEqual(this.getBubbles().length, 3, 'new message should be rendered in list');
         });
 

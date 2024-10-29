@@ -17,6 +17,7 @@ import type {
 } from '@js/ui/chat';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import { applyBatch } from '@ts/data/m_array_utils';
 
 import ErrorList from './errorlist';
 import ChatHeader from './header';
@@ -26,6 +27,7 @@ import type {
   TypingStartEvent as MessageBoxTypingStartEvent,
 } from './messagebox';
 import MessageBox from './messagebox';
+import type { Change } from './messagelist';
 import MessageList from './messagelist';
 
 const CHAT_CLASS = 'dx-chat';
@@ -73,6 +75,7 @@ class Chat extends Widget<Properties> {
       showUserName: true,
       showMessageTimestamp: true,
       typingUsers: [],
+      reloadOnChange: true,
       onMessageSend: undefined,
       messageTemplate: null,
       onTypingStart: undefined,
@@ -97,8 +100,22 @@ class Chat extends Widget<Properties> {
     this.option('items', []);
   }
 
-  _dataSourceChangedHandler(newItems: Message[]): void {
-    this.option('items', newItems.slice());
+  _dataSourceChangedHandler(newItems: Message[], e?: { changes?: Change[] }): void {
+    if (e?.changes) {
+      this._messageList._modifyByChanges(e.changes);
+
+      // @ts-expect-error
+      const dataSource = this.getDataSource();
+      // @ts-expect-error
+      applyBatch({
+        // // @ts-expect-error
+        keyInfo: dataSource,
+        data: this.option('items'),
+        changes: e.changes,
+      });
+    } else {
+      this.option('items', newItems.slice());
+    }
   }
 
   _dataSourceLoadingChangedHandler(isLoading: boolean): void {
@@ -262,6 +279,19 @@ class Chat extends Widget<Properties> {
       text,
     };
 
+    // @ts-expect-error
+    const dataSource = this.getDataSource();
+
+    if (isDefined(dataSource)) {
+      dataSource.store().insert(message).done(() => {
+        const { reloadOnChange } = this.option();
+
+        if (reloadOnChange) {
+          dataSource.reload();
+        }
+      });
+    }
+
     this._messageSendAction?.({ message, event });
   }
 
@@ -344,6 +374,8 @@ class Chat extends Widget<Properties> {
       case 'typingUsers':
         this._messageList.option(name, value);
         break;
+      case 'reloadOnChange':
+        break;
       default:
         super._optionChanged(args);
     }
@@ -357,17 +389,7 @@ class Chat extends Widget<Properties> {
   }
 
   renderMessage(message: Message = {}): void {
-    // @ts-expect-error
-    const dataSource = this.getDataSource();
-
-    if (!isDefined(dataSource)) {
-      this._insertNewItem(message);
-      return;
-    }
-
-    dataSource.store().insert(message).done(() => {
-      this._insertNewItem(message);
-    });
+    this._insertNewItem(message);
   }
 }
 
