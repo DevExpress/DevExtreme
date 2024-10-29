@@ -165,7 +165,7 @@ export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
   get restAttributes(): Record<string, unknown> {
     const {
       // eslint-disable-next-line max-len
-      accessKey, activeStateEnabled, aria, className, defaultValue, disabled, enableThreeStateBehavior, focusStateEnabled, height, hint, hoverStateEnabled, iconSize, inputAttr, isDirty, isValid, name, onClick, onFocusIn, onKeyDown, readOnly, rtlEnabled, saveValueChangeEvent, tabIndex, text, validationError, validationErrors, validationMessageMode, validationMessagePosition, validationStatus, value, valueChange, visible, width,
+      accessKey, activeStateEnabled, aria, className, classes, defaultValue, disabled, enableThreeStateBehavior, focusStateEnabled, height, hint, hoverStateEnabled, iconSize, inputAttr, isDirty, isValid, name, onClick, onFocusIn, onKeyDown, readOnly, rtlEnabled, saveValueChangeEvent, tabIndex, text, validationError, validationErrors, validationMessageMode, validationMessagePosition, validationStatus, value, valueChange, visible, width,
       ...restProps
     } = this.props;
     return restProps;
@@ -186,10 +186,10 @@ export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
       <Editor
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ref={this.editorRef as any}
-        aria={this.props.aria}
-        classes={this.props.classes}
-        onClick={this.props.onClick}
-        onKeyDown={this.props.onKeyDown}
+        aria={this.aria}
+        classes={this.cssClasses}
+        onClick={this.onWidgetClick}
+        onKeyDown={this.keyDown}
         accessKey={this.props.accessKey}
         activeStateEnabled={this.props.activeStateEnabled}
         focusStateEnabled={this.props.focusStateEnabled}
@@ -215,7 +215,8 @@ export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
         <Fragment>
           <input type="hidden" value={`${value}`} {...this.props.name && { name: this.props.name }} />
           <div className="dx-checkbox-container">
-            <CheckBoxIcon size={this.props.iconSize}/>
+            {/* @ts-expect-error */}
+            <CheckBoxIcon size={this.props.iconSize} isChecked={value === true}/>
             {this.props.text && (<span className="dx-checkbox-text">{this.props.text}</span>)}
           </div>
         </Fragment>

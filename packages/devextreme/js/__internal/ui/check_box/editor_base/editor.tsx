@@ -84,8 +84,6 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
 
   rootElementRef!: RefObject<HTMLDivElement>;
 
-  isValidationMessageVisible = false;
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   __getterCache: any;
 
@@ -250,7 +248,7 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
       >
         <Fragment>
           {this.props.children}
-          {this.isValidationMessageVisible && (
+          {this.state!.isValidationMessageVisible && (
             <ValidationMessage
               validationErrors={this.props.validationErrors}
               mode={this.props.validationMessageMode}
