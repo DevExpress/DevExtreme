@@ -31,7 +31,6 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 type Properties = ChatProperties & {
   title: string;
-  showDayHeaders: boolean;
   // eslint-disable-next-line
   messageTemplate: any;
 };
@@ -131,7 +130,7 @@ class Chat extends Widget<Properties> {
     const {
       items = [],
       user,
-      showDayHeaders,
+      showDayHeaders = true,
       messageTemplate,
     } = this.option();
 

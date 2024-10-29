@@ -9583,6 +9583,22 @@ declare module DevExpress.ui {
      */
     errors?: Array<DevExpress.ui.dxChat.ChatError>;
     /**
+     * [descr:dxChatOptions.showDayHeaders]
+     */
+    showDayHeaders?: boolean;
+    /**
+     * [descr:dxChatOptions.showUserName]
+     */
+    showUserName?: boolean;
+    /**
+     * [descr:dxChatOptions.showAvatar]
+     */
+    showAvatar?: boolean;
+    /**
+     * [descr:dxChatOptions.showMessageTimestamp]
+     */
+    showMessageTimestamp?: boolean;
+    /**
      * [descr:dxChatOptions.onMessageSend]
      */
     onMessageSend?: (e: DevExpress.ui.dxChat.MessageSendEvent) => void;
@@ -30741,6 +30757,10 @@ declare module DevExpress.ui.dxChat {
      * [descr:User.avatarUrl]
      */
     avatarUrl?: string;
+    /**
+     * [descr:User.avatarAlt]
+     */
+    avatarAlt?: string;
   };
 }
 declare module DevExpress.ui.dxContextMenu {

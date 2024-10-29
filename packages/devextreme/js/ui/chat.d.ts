@@ -87,6 +87,12 @@ export type User = {
      * @public
      */
     avatarUrl?: string;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    avatarAlt?: string;
 };
 
 /**
@@ -190,6 +196,30 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     errors?: Array<ChatError>;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    showDayHeaders?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    showUserName?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    showAvatar?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    showMessageTimestamp?: boolean;
     /**
      * @docid
      * @default undefined

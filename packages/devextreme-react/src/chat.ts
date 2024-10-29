@@ -76,6 +76,7 @@ const Chat = memo(
 // owners:
 // Item
 type IAuthorProps = React.PropsWithChildren<{
+  avatarAlt?: string;
   avatarUrl?: string;
   id?: number | string;
   name?: string;
@@ -141,6 +142,7 @@ const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componen
 // owners:
 // Chat
 type IUserProps = React.PropsWithChildren<{
+  avatarAlt?: string;
   avatarUrl?: string;
   id?: number | string;
   name?: string;
