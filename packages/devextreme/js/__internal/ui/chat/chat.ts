@@ -5,6 +5,7 @@ import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import type { Options as DataSourceOptions } from '@js/data/data_source';
 import DataHelperMixin from '@js/data_helper';
+import type { Format } from '@js/localization';
 import messageLocalization from '@js/localization/message';
 import type {
   Message,
@@ -31,6 +32,8 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 type Properties = ChatProperties & {
   title: string;
+  dayHeaderFormat?: Format;
+  messageTimestampFormat?: Format;
 };
 
 class Chat extends Widget<Properties> {
@@ -59,6 +62,8 @@ class Chat extends Widget<Properties> {
       items: [],
       dataSource: null,
       user: { id: new Guid().toString() },
+      dayHeaderFormat: 'shortdate',
+      messageTimestampFormat: 'shorttime',
       errors: [],
       showAvatar: true,
       showUserName: true,
@@ -134,6 +139,8 @@ class Chat extends Widget<Properties> {
       showAvatar = true,
       showUserName = true,
       showMessageTimestamp = true,
+      dayHeaderFormat,
+      messageTimestampFormat,
     } = this.option();
 
     const currentUserId = user?.id;
@@ -150,6 +157,8 @@ class Chat extends Widget<Properties> {
       showAvatar,
       showUserName,
       showMessageTimestamp,
+      dayHeaderFormat,
+      messageTimestampFormat,
     });
   }
 
@@ -314,6 +323,8 @@ class Chat extends Widget<Properties> {
       case 'showAvatar':
       case 'showUserName':
       case 'showMessageTimestamp':
+      case 'dayHeaderFormat':
+      case 'messageTimestampFormat':
         this._messageList.option(name, value);
         break;
       default:

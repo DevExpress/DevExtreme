@@ -1355,6 +1355,8 @@ testComponentDefaults(Chat,
         showAvatar: true,
         showUserName: true,
         showMessageTimestamp: true,
+        dayHeaderFormat: 'shortdate',
+        messageTimestampFormat: 'shorttime',
     }
 );
 
@@ -1395,6 +1397,7 @@ testComponentDefaults(ChatMessageGroup,
     {},
     {
         alignment: 'start',
+        messageTimestampFormat: 'shorttime',
     }
 );
 
@@ -1405,6 +1408,8 @@ testComponentDefaults(ChatMessageList,
         currentUserId: '',
         showDayHeaders: true,
         isLoading: false,
+        dayHeaderFormat: 'shortdate',
+        messageTimestampFormat: 'shorttime',
     }
 );
 

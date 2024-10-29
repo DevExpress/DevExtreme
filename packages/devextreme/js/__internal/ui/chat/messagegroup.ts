@@ -1,7 +1,9 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateSerialization from '@js/core/utils/date_serialization';
-import { isDefined } from '@js/core/utils/type';
+import { isDate } from '@js/core/utils/type';
+import type { Format } from '@js/localization';
+import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
 import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
@@ -27,6 +29,7 @@ export interface Properties extends WidgetOptions<MessageGroup> {
   showAvatar: boolean;
   showUserName: boolean;
   showMessageTimestamp: boolean;
+  messageTimestampFormat?: Format;
 }
 
 class MessageGroup extends Widget<Properties> {
@@ -42,6 +45,7 @@ class MessageGroup extends Widget<Properties> {
       showAvatar: true,
       showUserName: true,
       showMessageTimestamp: true,
+      messageTimestampFormat: 'shorttime',
     };
   }
 
@@ -139,21 +143,31 @@ class MessageGroup extends Widget<Properties> {
       const $time = $('<div>')
         .addClass(CHAT_MESSAGEGROUP_TIME_CLASS)
         .appendTo($information);
+    }
 
-      if (isDefined(timestamp)) {
-        $time.text(this._getTimeValue(timestamp));
-      }
+    const shouldAddTimeValue = this._shouldAddTimeValue(timestamp);
+
+    if (shouldAddTimeValue) {
+      const timeValue = this._getTimeValue(timestamp);
+      $time.text(timeValue);
     }
 
     $information.appendTo(this.element());
   }
 
-  _getTimeValue(timestamp: Date | string | number): string {
-    const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
-    const date = dateSerialization.deserializeDate(timestamp);
+  _shouldAddTimeValue(timestamp: Date | string | number | undefined): boolean {
+    const deserializedDate = dateSerialization.deserializeDate(timestamp);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return date.toLocaleTimeString(undefined, options);
+    return isDate(deserializedDate) && !isNaN(deserializedDate.getTime());
+  }
+
+  _getTimeValue(timestamp: Date | string | number | undefined): string {
+    const deserializedDate = dateSerialization.deserializeDate(timestamp);
+
+    const { messageTimestampFormat } = this.option();
+    const formattedTime = dateLocalization.format(deserializedDate, messageTimestampFormat);
+
+    return formattedTime as string;
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
@@ -165,6 +179,7 @@ class MessageGroup extends Widget<Properties> {
       case 'showAvatar':
       case 'showUserName':
       case 'showMessageTimestamp':
+      case 'messageTimestampFormat':
         this._invalidate();
         break;
       default:
