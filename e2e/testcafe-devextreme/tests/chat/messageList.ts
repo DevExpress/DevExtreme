@@ -196,3 +196,54 @@ test('Messagelist with date headers', async (t) => {
     height: 600,
   });
 });
+
+test('Messagelist with messageTemplate', async (t) => {
+  const chat = new Chat('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist with message template.png', { element: '#container' });
+
+  await t
+    .typeText(chat.getInput(), 'New last message')
+    .pressKey('enter');
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist with message template after new message add.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+  const items = [{
+    author: userFirst,
+    text: 'AAA',
+  }, {
+    author: userFirst,
+    text: 'BBB',
+  }, {
+    author: userSecond,
+    text: 'CCC',
+  }];
+
+  return createWidget('dxChat', {
+    items,
+    user: userFirst,
+    width: 400,
+    height: 600,
+    showDayHeaders: false,
+    onMessageSend: ({ component, message }) => {
+      message.timestamp = undefined;
+      component.renderMessage(message);
+    },
+    messageTemplate: ({ text, author, isLast }, container) => {
+      if (isLast) {
+        $('<div>').text('Last message template').appendTo(container);
+
+        return;
+      }
+
+      $('<div>').text(`${author.name} says: ${text}`).appendTo(container);
+    },
+  });
+});

@@ -32,6 +32,8 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 type Properties = ChatProperties & {
   title: string;
+  // eslint-disable-next-line
+  messageTemplate: any;
   dayHeaderFormat?: Format;
   messageTimestampFormat?: Format;
 };
@@ -69,6 +71,7 @@ class Chat extends Widget<Properties> {
       showUserName: true,
       showMessageTimestamp: true,
       onMessageSend: undefined,
+      messageTemplate: null,
       onTypingStart: undefined,
       onTypingEnd: undefined,
     };
@@ -139,6 +142,7 @@ class Chat extends Widget<Properties> {
       showAvatar = true,
       showUserName = true,
       showMessageTimestamp = true,
+      messageTemplate,
       dayHeaderFormat,
       messageTimestampFormat,
     } = this.option();
@@ -152,6 +156,8 @@ class Chat extends Widget<Properties> {
       items,
       currentUserId,
       showDayHeaders,
+      messageTemplate,
+      messageTemplateData: { component: this },
       // @ts-expect-error
       isLoading: this._dataController.isLoading(),
       showAvatar,
@@ -323,6 +329,7 @@ class Chat extends Widget<Properties> {
       case 'showAvatar':
       case 'showUserName':
       case 'showMessageTimestamp':
+      case 'messageTemplate':
       case 'dayHeaderFormat':
       case 'messageTimestampFormat':
         this._messageList.option(name, value);

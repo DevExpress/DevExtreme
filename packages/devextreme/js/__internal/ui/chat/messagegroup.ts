@@ -11,6 +11,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
 import Avatar from './avatar';
+import type Chat from './chat';
 import MessageBubble from './messagebubble';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
@@ -29,10 +30,16 @@ export interface Properties extends WidgetOptions<MessageGroup> {
   showAvatar: boolean;
   showUserName: boolean;
   showMessageTimestamp: boolean;
+  // eslint-disable-next-line
+  messageTemplate: any;
+  messageTemplateData: { component?: Chat };
+  isLast: boolean;
   messageTimestampFormat?: Format;
 }
 
 class MessageGroup extends Widget<Properties> {
+  private _lastBubble?: MessageBubble | null;
+
   _avatar?: Avatar;
 
   _$messageBubbleContainer!: dxElementWrapper;
@@ -45,6 +52,9 @@ class MessageGroup extends Widget<Properties> {
       showAvatar: true,
       showUserName: true,
       showMessageTimestamp: true,
+      messageTemplate: null,
+      messageTemplateData: {},
+      isLast: false,
       messageTimestampFormat: 'shorttime',
     };
   }
@@ -82,6 +92,8 @@ class MessageGroup extends Widget<Properties> {
       this._renderAvatar();
     }
 
+    this._lastBubble = null;
+
     this._renderMessageGroupInformation(items?.[0]);
     this._renderMessageBubbles(items);
   }
@@ -102,21 +114,33 @@ class MessageGroup extends Widget<Properties> {
     });
   }
 
-  _renderMessageBubble(message: Message): void {
+  _renderMessageBubble(message: Message, isLast = false): void {
     const $bubble = $('<div>');
+    const { messageTemplate, messageTemplateData } = this.option();
 
-    this._createComponent($bubble, MessageBubble, {
+    const messageBubble = this._createComponent($bubble, MessageBubble, {
       text: message.text,
+      template: messageTemplate,
+      templateData: {
+        ...messageTemplateData,
+        author: message.author,
+        isLast,
+      },
     });
+
+    this._lastBubble = messageBubble;
 
     this._$messageBubbleContainer.append($bubble);
   }
 
   _renderMessageBubbles(items: Message[]): void {
     this._$messageBubbleContainer = $('<div>').addClass(CHAT_MESSAGEGROUP_CONTENT_CLASS);
+    const { isLast } = this.option();
 
-    items.forEach((message) => {
-      this._renderMessageBubble(message);
+    items.forEach((message, index) => {
+      const isLastMessage = isLast && index === items.length - 1;
+
+      this._renderMessageBubble(message, isLastMessage);
     });
 
     this._$messageBubbleContainer.appendTo(this.element());
@@ -155,6 +179,10 @@ class MessageGroup extends Widget<Properties> {
     $information.appendTo(this.element());
   }
 
+  updateIsLastOptionOfLastMessage(isLast: boolean): void {
+    this._lastBubble?.option('templateData.isLast', isLast);
+  }
+
   _shouldAddTimeValue(timestamp: Date | string | number | undefined): boolean {
     const deserializedDate = dateSerialization.deserializeDate(timestamp);
 
@@ -170,6 +198,12 @@ class MessageGroup extends Widget<Properties> {
     return formattedTime as string;
   }
 
+  _clean(): void {
+    this._lastBubble = null;
+
+    super._clean();
+  }
+
   _optionChanged(args: OptionChanged<Properties>): void {
     const { name } = args;
 
@@ -179,6 +213,7 @@ class MessageGroup extends Widget<Properties> {
       case 'showAvatar':
       case 'showUserName':
       case 'showMessageTimestamp':
+      case 'messageTemplate':
       case 'messageTimestampFormat':
         this._invalidate();
         break;
@@ -194,7 +229,7 @@ class MessageGroup extends Widget<Properties> {
 
     this._setOptionWithoutOptionChange('items', newItems);
 
-    this._renderMessageBubble(message);
+    this._renderMessageBubble(message, true);
   }
 }
 

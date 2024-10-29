@@ -4,6 +4,7 @@ import Chat from 'ui/chat';
 import MessageList from '__internal/ui/chat/messagelist';
 import ErrorList from '__internal/ui/chat/errorlist';
 import MessageBox, { TYPING_END_DELAY } from '__internal/ui/chat/messagebox';
+import MessageBubble from '__internal/ui/chat/messagebubble';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
@@ -212,6 +213,36 @@ QUnit.module('Chat', () => {
             });
         });
 
+        QUnit.test('Chat should pass messageTemplate to messageList on init', function(assert) {
+            const messageTemplate = () => { return $('<div>'); };
+            this.reinit({
+                messageTemplate,
+            });
+
+            const messageList = this.getMessageList();
+            assert.strictEqual(messageList.option('messageTemplate'), messageTemplate, 'messageTemplate is passed on init');
+        });
+
+        QUnit.test('Chat should pass messageTemplate to messageList at runtime', function(assert) {
+            this.reinit({ });
+
+            const messageTemplate = () => { return $('<div>'); };
+
+            this.instance.option('messageTemplate', messageTemplate);
+
+            const messageList = this.getMessageList();
+
+            assert.strictEqual(messageList.option('messageTemplate'), messageTemplate, 'messageTemplate is passed on runtime');
+        });
+
+        QUnit.test('Chat should pass messageTemplateData with chat instance to messageList', function(assert) {
+            this.reinit({ });
+
+            const messageList = this.getMessageList();
+            const messageTemplateData = messageList.option('messageTemplateData');
+            assert.strictEqual(messageTemplateData.component, this.instance, 'messageTemplateData with chat instance is passed to messageList');
+        });
+
         QUnit.test('dayHeaderFormat option value should be passed to messageList on init', function(assert) {
             const dayHeaderFormat = 'dd of MMMM, yyyy';
 
@@ -298,6 +329,30 @@ QUnit.module('Chat', () => {
             const errorList = this.getErrorList();
 
             assert.deepEqual(errorList.option('items'), newErrors, 'items value is updated');
+        });
+    });
+
+    QUnit.module('MessageBubble integration', {
+        beforeEach: function() {
+            moduleConfig.beforeEach.apply(this, arguments);
+
+            this.getMessageBubbles = () => MessageBubble.getInstance(this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`));
+        }
+    }, () => {
+        QUnit.test('MessageBubble should have messageTemplateData with correct fields', function(assert) {
+            this.reinit({
+                items: [{
+                    text: 'text',
+                    author: userFirst,
+                }],
+            });
+
+            const messageBubble = this.getMessageBubbles();
+            const messageTemplateData = messageBubble.option('templateData');
+
+            assert.strictEqual(messageTemplateData.component, this.instance, 'messageTemplateData includes chat instance');
+            assert.strictEqual(messageTemplateData.isLast, true, 'messageTemplateData includes isLast field');
+            assert.deepEqual(messageTemplateData.author, userFirst, 'messageTemplateData includes author field');
         });
     });
 
