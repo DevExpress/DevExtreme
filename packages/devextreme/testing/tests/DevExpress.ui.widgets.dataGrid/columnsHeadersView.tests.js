@@ -2616,7 +2616,7 @@ QUnit.module('Headers with band columns', {
         this.columnHeadersView.render($testElement);
 
         // act
-        this.columnHeadersView.toggleDraggableColumnClass(1, '0.5');
+        this.columnHeadersView.toggleDraggableColumnClass(1, true);
 
         const $cellElements = $testElement.find('td');
 

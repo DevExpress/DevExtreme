@@ -50,7 +50,6 @@ const MODULE_NAMESPACE = 'dxDataGridResizingReordering';
 
 const COLUMNS_SEPARATOR_TOUCH_TRACKER_WIDTH = 10;
 const DRAGGING_DELTA = 5;
-const COLUMN_OPACITY = 0.5;
 
 const allowResizing = function (that) {
   // TODO getController
