@@ -198,6 +198,12 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     errors?: Array<ChatError>;
     /**
      * @docid
+     * @default []
+     * @public
+     */
+    typingUsers?: Array<User>;
+    /**
+     * @docid
      * @default true
      * @public
      */
