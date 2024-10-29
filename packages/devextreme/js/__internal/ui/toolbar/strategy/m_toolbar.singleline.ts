@@ -216,7 +216,7 @@ export class SingleLineStrategy {
       const $item = overflowItems.eq(-1);
       $item.addClass(TOOLBAR_HIDDEN_ITEM);
       itemsWidth = this._getItemsWidth();
-      overflowItems = overflowItems.slice(0, -1);
+      overflowItems = overflowItems.slice(0, -1); //$.splice
     }
   }
 

@@ -637,11 +637,11 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       return this._fixedTableElement && this._getRowElements(this._fixedTableElement).eq(rowIndex).children();
     }
 
-    const columnElements: any = that.getColumnElements();
+    let columnElements: any = that.getColumnElements();
     const $transparentColumnElement = that.getTransparentColumnElement();
     if (columnElements && $transparentColumnElement && $transparentColumnElement.length) {
       const transparentColumnIndex = getTransparentColumnIndex(that.getFixedColumns());
-      columnElements.splice(transparentColumnIndex, $transparentColumnElement.get(0).colSpan, $transparentColumnElement.get(0));
+      columnElements = columnElements.slice(0, transparentColumnIndex).add(columnElements.slice(transparentColumnIndex + $transparentColumnElement.get(0).colSpan)); //$.splice
     }
 
     return columnElements;
