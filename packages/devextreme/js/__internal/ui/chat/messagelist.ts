@@ -419,20 +419,16 @@ class MessageList extends Widget<Properties> {
 
     switch (name) {
       case 'currentUserId':
+      case 'showDayHeaders':
+      case 'showAvatar':
+      case 'showUserName':
+      case 'showMessageTimestamp':
         this._invalidate();
         break;
       case 'items':
         this._processItemsUpdating(value ?? [], previousValue ?? []);
         break;
-      case 'showDayHeaders':
-        this._invalidate();
-        break;
       case 'isLoading':
-        break;
-      case 'showAvatar':
-      case 'showUserName':
-      case 'showMessageTimestamp':
-        this._invalidate();
         break;
       default:
         super._optionChanged(args);
