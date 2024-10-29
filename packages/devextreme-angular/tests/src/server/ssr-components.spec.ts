@@ -52,7 +52,7 @@ describe('Universal', () => {
         expect(fixture.detectChanges.bind(fixture)).not.toThrow();
     });
 
-    it('should no error if renderer is called (T1255582)', async () => {
+    it('should not throw error if core/renderer is called (T1255582)', async () => {
         TestBed.overrideComponent(TestContainerComponent, {
             set: {
                 template: `<div></div>`
