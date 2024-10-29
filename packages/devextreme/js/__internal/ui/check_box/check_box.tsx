@@ -1,14 +1,10 @@
-import _objectWithoutPropertiesLoose from "@babel/runtime/helpers/esm/objectWithoutPropertiesLoose";
-import _extends from "@babel/runtime/helpers/esm/extends";
-const _excluded = ["accessKey", "activeStateEnabled", "aria", "className", "defaultValue", "disabled", "enableThreeStateBehavior", "focusStateEnabled", "height", "hint", "hoverStateEnabled", "iconSize", "inputAttr", "isDirty", "isValid", "name", "onClick", "onFocusIn", "onKeyDown", "readOnly", "rtlEnabled", "saveValueChangeEvent", "tabIndex", "text", "validationError", "validationErrors", "validationMessageMode", "validationMessagePosition", "validationStatus", "value", "valueChange", "visible", "width"];
-import { createVNode, createFragment, createComponentVNode, normalizeProps, RefObject } from "inferno";
+import { RefObject } from "inferno";
 import { Fragment } from 'inferno';
 import { InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import devices from '@js/core/devices';
 import { defaultEditorProps, Editor, EditorProps } from './editor_base/editor';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 import { CheckBoxIcon } from './check_box_icon';
-import { WidgetProps } from '@ts/core/r1/widget';
 const getCssClasses = model => {
   const {
     text,
@@ -131,9 +127,10 @@ export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
     return undefined;
   }
   get cssClasses() {
-    return getCssClasses(_extends({}, this.props, {
+    return getCssClasses({
+      ...this.props,
       value: this.props.value !== undefined ? this.props.value : this.state.value
-    }));
+    });
   }
   get aria() {
     const checked = (this.props.value !== undefined ? this.props.value : this.state.value) === true;
@@ -142,13 +139,13 @@ export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
       role: 'checkbox',
       checked: indeterminate ? 'mixed' : `${checked}`
     };
-    return _extends({}, result, this.props.aria);
+    return {...result, ...this.props.aria};
   }
   get restAttributes() {
-    const _this$props$value = _extends({}, this.props, {
-        value: this.props.value !== undefined ? this.props.value : this.state.value
-      }),
-      restProps = _objectWithoutPropertiesLoose(_this$props$value, _excluded);
+    const {
+      accessKey, activeStateEnabled, aria, className, defaultValue, disabled, enableThreeStateBehavior, focusStateEnabled, height, hint, hoverStateEnabled, iconSize, inputAttr, isDirty, isValid, name, onClick, onFocusIn, onKeyDown, readOnly, rtlEnabled, saveValueChangeEvent, tabIndex, text, validationError, validationErrors, validationMessageMode, validationMessagePosition, validationStatus, value, valueChange, visible, width,
+      ...restProps
+    } = this.props;
     return restProps;
   }
   focus() {
