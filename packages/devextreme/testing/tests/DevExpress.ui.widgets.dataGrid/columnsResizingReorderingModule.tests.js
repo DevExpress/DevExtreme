@@ -3907,7 +3907,7 @@ QUnit.module('Headers reordering', {
         };
 
         controller._rowsView = {};
-        controller._rowsView.setRowsOpacity = function() { };
+        controller._rowsView.toggleDraggableColumnClass = function() { };
         controller._columnHeadersView.element = function() { return $('<div />'); };
 
         const draggingHeader = new TestDraggingHeader(this.component);
@@ -3949,7 +3949,7 @@ QUnit.module('Headers reordering', {
         // assert
         assert.equal(dropParameters.sourceColumnIndex, 0, 'sourceColumnIndex');
         assert.equal(dropParameters.sourceLocation, 'headers', 'sourceLocation');
-        assert.equal(dropParameters.sourceColumnElement.css('opacity'), 0.5, 'sourceColumnElement');
+        assert.ok(dropParameters.sourceColumnElement.hasClass('dx-datagrid-draggable-column'), 'sourceColumnElement');
         assert.equal(dropParameters.targetColumnIndex, 1, 'targetColumnIndex');
         assert.equal(dropParameters.targetLocation, 'headers', 'targetLocation');
         assert.ok(!draggingHeader._isDragging, 'is not dragged');
@@ -3979,7 +3979,7 @@ QUnit.module('Headers reordering', {
         };
 
         controller._rowsView = {};
-        controller._rowsView.setRowsOpacity = function() { };
+        controller._rowsView.toggleDraggableColumnClass = function() { };
         controller._columnHeadersView.element = function() { return $('<div />'); };
 
         const draggingHeader = new TestDraggingHeader(this.component);
@@ -4025,7 +4025,7 @@ QUnit.module('Headers reordering', {
         // assert
         assert.equal(dropParameters.sourceColumnIndex, 0, 'sourceColumnIndex');
         assert.equal(dropParameters.sourceLocation, 'headers', 'sourceLocation');
-        assert.equal(dropParameters.sourceColumnElement.css('opacity'), 0.5, 'sourceColumnElement');
+        assert.ok(dropParameters.sourceColumnElement.hasClass('dx-datagrid-draggable-column'), 'sourceColumnElement');
         assert.equal(dropParameters.targetColumnIndex, 2, 'targetColumnIndex');
         assert.equal(dropParameters.targetLocation, 'headers', 'targetLocation');
         assert.ok(!draggingHeader._isDragging, 'is not dragged');
@@ -4051,7 +4051,7 @@ QUnit.module('Headers reordering', {
         };
 
         controller._rowsView = {};
-        controller._rowsView.setRowsOpacity = function() { };
+        controller._rowsView.toggleDraggableColumnClass = function() { };
         controller._columnHeadersView.element = function() { return $('<div />'); };
 
         const draggingHeader = new TestDraggingHeader(this.component);
@@ -4109,7 +4109,7 @@ QUnit.module('Headers reordering', {
         const draggingHeader = new TestDraggingHeader(this.component);
 
         controller._rowsView = {};
-        controller._rowsView.setRowsOpacity = function() { };
+        controller._rowsView.toggleDraggableColumnClass = function() { };
         controller._columnHeadersView.element = function() { return $('<div />'); };
 
         draggingHeader.init();
@@ -4157,7 +4157,7 @@ QUnit.module('Headers reordering', {
         const draggingHeader = new TestDraggingHeader(this.component);
 
         controller._rowsView = {};
-        controller._rowsView.setRowsOpacity = function() { };
+        controller._rowsView.toggleDraggableColumnClass = function() { };
         controller._columnHeadersView.element = function() { return $('<div />'); };
 
         draggingHeader.init();
@@ -4209,7 +4209,7 @@ QUnit.module('Headers reordering', {
         const columnElement = $('<td/>').appendTo($('#container')).offset({ left: baseOffset, top: baseOffset });
 
         controller._rowsView = {};
-        controller._rowsView.setRowsOpacity = function() { };
+        controller._rowsView.toggleDraggableColumnClass = function() { };
         controller._columnHeadersView.element = function() { return $('<div />'); };
 
         draggingHeader.init();
@@ -4259,7 +4259,7 @@ QUnit.module('Headers reordering', {
         const columnElement = $('<td/>').appendTo($('#container')).offset({ left: baseOffset, top: baseOffset });
 
         controller._rowsView = {};
-        controller._rowsView.setRowsOpacity = function() { };
+        controller._rowsView.toggleDraggableColumnClass = function() { };
         controller._columnHeadersView.element = function() { return $('<div />'); };
 
         draggingHeader.init();
@@ -4305,7 +4305,7 @@ QUnit.module('Headers reordering', {
         const draggingHeader = new TestDraggingHeader(this.component);
 
         controller._rowsView = {};
-        controller._rowsView.setRowsOpacity = function() { };
+        controller._rowsView.toggleDraggableColumnClass = function() { };
         controller._columnHeadersView.element = function() { return $('<div />'); };
 
         document['onselectstart'] = function() {
@@ -4394,7 +4394,7 @@ QUnit.module('Headers reordering', {
         };
 
         controller._rowsView = {};
-        controller._rowsView.setRowsOpacity = function() { };
+        controller._rowsView.toggleDraggableColumnClass = function() { };
         controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingPanels = [new MockDraggingPanel({
@@ -4505,7 +4505,7 @@ QUnit.module('Headers reordering', {
         };
 
         controller._rowsView = {};
-        controller._rowsView.setRowsOpacity = function() { };
+        controller._rowsView.toggleDraggableColumnClass = function() { };
         controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingPanels = [new MockDraggingPanel({
@@ -4655,14 +4655,14 @@ QUnit.module('Headers reordering', {
     QUnit.test('Reset opacity for rows', function(assert) {
         const testElement = $('#container');
         let columnIndexOpacity;
-        let opacityValue;
+        let toggleClass;
         const controller = this.createDraggingHeaderViewController();
 
         controller._rowsView = {};
-        controller._columnHeadersView = { setRowsOpacity: noop };
-        controller._rowsView.setRowsOpacity = function(columnIndex, value) {
+        controller._columnHeadersView = { toggleDraggableColumnClass: noop };
+        controller._rowsView.toggleDraggableColumnClass = function(columnIndex, value) {
             columnIndexOpacity = columnIndex;
-            opacityValue = value;
+            toggleClass = value;
         };
         controller._columnHeadersView.element = function() {
             return $('<div/>');
@@ -4704,7 +4704,7 @@ QUnit.module('Headers reordering', {
 
         // assert
         assert.equal(columnIndexOpacity, 1);
-        assert.equal(opacityValue, 0.5);
+        assert.equal(toggleClass, true);
 
         // act
         draggingHeader.dropHeader({
@@ -4715,7 +4715,7 @@ QUnit.module('Headers reordering', {
 
         // assert
         assert.equal(columnIndexOpacity, 1);
-        assert.equal(opacityValue, '');
+        assert.equal(toggleClass, false);
     });
 
     // B253154
@@ -4763,7 +4763,7 @@ QUnit.module('Headers reordering', {
         assert.strictEqual(moveHeaderDataSelfArgs[1], controller2._draggingHeaderView);
     });
 
-    QUnit.test('setRowsOpacity method of views should called only once for begin dragging', function(assert) {
+    QUnit.test('toggleDraggableColumnClass method of views should called only once for begin dragging', function(assert) {
         // arrange
         const testElement = $('#container');
         const rowsView = new RowsView(this.component);
@@ -4780,8 +4780,8 @@ QUnit.module('Headers reordering', {
         draggingHeader._columnHeadersView = columnHeadersView;
         draggingHeader.render(testElement);
 
-        sinon.stub(rowsView, 'setRowsOpacity');
-        sinon.stub(columnHeadersView, 'setRowsOpacity');
+        sinon.stub(rowsView, 'toggleDraggableColumnClass');
+        sinon.stub(columnHeadersView, 'toggleDraggableColumnClass');
 
         draggingHeader.dragHeader({
             columnElement: $('<td />', {
@@ -4810,8 +4810,8 @@ QUnit.module('Headers reordering', {
         });
 
         // assert
-        assert.ok(rowsView.setRowsOpacity.calledOnce, 'setRowsOpacity of RowsView method should is called once');
-        assert.ok(columnHeadersView.setRowsOpacity.calledOnce, 'setRowsOpacity of ColumnHeadersView method should is called once');
+        assert.ok(rowsView.toggleDraggableColumnClass.calledOnce, 'toggleDraggableColumnClass of RowsView method should is called once');
+        assert.ok(columnHeadersView.toggleDraggableColumnClass.calledOnce, 'toggleDraggableColumnClass of ColumnHeadersView method should is called once');
     });
 
     QUnit.test('Drag command column', function(assert) {
@@ -4960,7 +4960,7 @@ QUnit.module('Group panel reordering', {
             return true;
         };
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._rowsView.toggleDraggableColumnClass = function() { };
 
         this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
@@ -5010,7 +5010,7 @@ QUnit.module('Group panel reordering', {
         // assert
         assert.equal(dropParameters.sourceColumnIndex, 0, 'sourceColumnIndex');
         assert.equal(dropParameters.sourceLocation, 'group', 'sourceLocation');
-        assert.equal(dropParameters.sourceColumnElement.css('opacity'), 0.5, 'sourceColumnElement');
+        assert.ok(dropParameters.sourceColumnElement.hasClass('dx-datagrid-draggable-column'), 'sourceColumnElement');
         assert.equal(dropParameters.targetColumnIndex, 1, 'targetColumnIndex');
         assert.equal(dropParameters.targetLocation, 'group', 'targetLocation');
         assert.ok(!this.draggingHeaderView._isDragging, 'is not dragged');
@@ -5036,7 +5036,7 @@ QUnit.module('Group panel reordering', {
         };
 
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._rowsView.toggleDraggableColumnClass = function() { };
         this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingHeaderView.render(testElement);
@@ -5092,7 +5092,7 @@ QUnit.module('Group panel reordering', {
         const testElement = $('#container');
 
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._rowsView.toggleDraggableColumnClass = function() { };
         this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingHeaderView.render(testElement);
@@ -5136,7 +5136,7 @@ QUnit.module('Group panel reordering', {
         const testElement = $('#container');
 
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._rowsView.toggleDraggableColumnClass = function() { };
         this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingHeaderView.render(testElement);
@@ -5189,7 +5189,7 @@ QUnit.module('Group panel reordering', {
         };
 
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._rowsView.toggleDraggableColumnClass = function() { };
         this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingHeaderView.render(testElement);
@@ -5247,7 +5247,7 @@ QUnit.module('Group panel reordering', {
         const testElement = $('#container');
 
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._rowsView.toggleDraggableColumnClass = function() { };
         this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingHeaderView.render(testElement);
@@ -5293,7 +5293,7 @@ QUnit.module('Group panel reordering', {
         let blockSeparator;
 
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._rowsView.toggleDraggableColumnClass = function() { };
         this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingHeaderView.render(testElement);
@@ -5343,7 +5343,7 @@ QUnit.module('Group panel reordering', {
         const testElement = $('#container');
 
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._rowsView.toggleDraggableColumnClass = function() { };
         this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingHeaderView.render(testElement);
@@ -5389,7 +5389,7 @@ QUnit.module('Group panel reordering', {
         let blockSeparator;
 
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._rowsView.toggleDraggableColumnClass = function() { };
         this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingHeaderView.render(testElement);
@@ -5440,8 +5440,8 @@ QUnit.module('Group panel reordering', {
         let opacityValue;
 
         this.controller._rowsView = {};
-        this.controller._columnHeadersView = { setRowsOpacity: noop };
-        this.controller._rowsView.setRowsOpacity = function(columnIndex, value) {
+        this.controller._columnHeadersView = { toggleDraggableColumnClass: noop };
+        this.controller._rowsView.toggleDraggableColumnClass = function(columnIndex, value) {
             columnIndexOpacity = columnIndex;
             opacityValue = value;
         };
@@ -5510,7 +5510,7 @@ QUnit.module('Group panel reordering', {
 
         that.controller._rowsView = {};
         that.controller._columnHeadersView = {};
-        that.controller._rowsView.setRowsOpacity = function() {};
+        that.controller._rowsView.toggleDraggableColumnClass = function() {};
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
         };
@@ -5577,7 +5577,7 @@ QUnit.module('Group panel reordering', {
 
         that.controller._rowsView = {};
         that.controller._columnHeadersView = {};
-        that.controller._rowsView.setRowsOpacity = function() {};
+        that.controller._rowsView.toggleDraggableColumnClass = function() {};
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
         };
@@ -5625,8 +5625,8 @@ QUnit.module('Group panel reordering', {
         const testElement = $('#container');
 
         that.controller._rowsView = {};
-        that.controller._columnHeadersView = { setRowsOpacity: noop };
-        that.controller._rowsView.setRowsOpacity = function() {};
+        that.controller._columnHeadersView = { toggleDraggableColumnClass: noop };
+        that.controller._rowsView.toggleDraggableColumnClass = function() {};
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
         };
@@ -5689,8 +5689,8 @@ QUnit.module('Group panel reordering', {
         const testElement = $('#container');
 
         that.controller._rowsView = {};
-        that.controller._columnHeadersView = { setRowsOpacity: noop };
-        that.controller._rowsView.setRowsOpacity = function() {};
+        that.controller._columnHeadersView = { toggleDraggableColumnClass: noop };
+        that.controller._rowsView.toggleDraggableColumnClass = function() {};
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
         };
@@ -5739,7 +5739,7 @@ QUnit.module('Group panel reordering', {
 
         that.controller._rowsView = {};
         that.controller._columnHeadersView = {};
-        that.controller._rowsView.setRowsOpacity = function() {};
+        that.controller._rowsView.toggleDraggableColumnClass = function() {};
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
         };
@@ -5950,7 +5950,7 @@ QUnit.module('column chooser reordering', {
             return true;
         };
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._rowsView.toggleDraggableColumnClass = function() { };
 
         this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
@@ -6001,7 +6001,7 @@ QUnit.module('column chooser reordering', {
         // assert
         assert.equal(dropParameters.sourceColumnIndex, 0, 'sourceColumnIndex');
         assert.equal(dropParameters.sourceLocation, 'columnChooser', 'sourceLocation');
-        assert.equal(dropParameters.sourceColumnElement.css('opacity'), 0.5, 'sourceColumnElement');
+        assert.ok(dropParameters.sourceColumnElement.hasClass('dx-datagrid-draggable-column'), 'sourceColumnElement');
         assert.equal(dropParameters.targetColumnIndex, 1, 'targetColumnIndex');
         assert.equal(dropParameters.targetLocation, 'headers', 'targetLocation');
         assert.ok(!this.draggingHeaderView._isDragging, 'is not dragged');
@@ -6023,7 +6023,7 @@ QUnit.module('column chooser reordering', {
             return true;
         };
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._rowsView.toggleDraggableColumnClass = function() { };
 
         this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
@@ -6073,7 +6073,7 @@ QUnit.module('column chooser reordering', {
         // assert
         assert.equal(dropParameters.sourceColumnIndex, 0, 'sourceColumnIndex');
         assert.equal(dropParameters.sourceLocation, 'columnChooser', 'sourceLocation');
-        assert.equal(dropParameters.sourceColumnElement.css('opacity'), 0.5, 'sourceColumnElement');
+        assert.ok(dropParameters.sourceColumnElement.hasClass('dx-datagrid-draggable-column'), 'sourceColumnElement');
         assert.equal(dropParameters.targetColumnIndex, 1, 'targetColumnIndex');
         assert.equal(dropParameters.targetLocation, 'group', 'targetLocation');
         assert.ok(!this.draggingHeaderView._isDragging, 'is not dragged');
@@ -6097,7 +6097,7 @@ QUnit.module('column chooser reordering', {
             return true;
         };
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._rowsView.toggleDraggableColumnClass = function() { };
 
         this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
@@ -6155,7 +6155,7 @@ QUnit.module('column chooser reordering', {
         const testElement = $('#container');
 
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._rowsView.toggleDraggableColumnClass = function() { };
         this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingHeaderView.render(testElement);
@@ -6199,7 +6199,7 @@ QUnit.module('column chooser reordering', {
         const testElement = $('#container');
 
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._rowsView.toggleDraggableColumnClass = function() { };
         this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingHeaderView.render(testElement);
@@ -6244,7 +6244,7 @@ QUnit.module('column chooser reordering', {
         let blockSeparator;
 
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._rowsView.toggleDraggableColumnClass = function() { };
         this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingHeaderView.render(testElement);
@@ -6294,7 +6294,7 @@ QUnit.module('column chooser reordering', {
         let blockSeparator;
 
         this.controller._rowsView = {};
-        this.controller._rowsView.setRowsOpacity = function() { };
+        this.controller._rowsView.toggleDraggableColumnClass = function() { };
         this.controller._columnHeadersView.element = function() { return $('<div />'); };
 
         this.draggingHeaderView.render(testElement);
@@ -6345,8 +6345,8 @@ QUnit.module('column chooser reordering', {
         let opacityValue;
 
         this.controller._rowsView = {};
-        this.controller._columnHeadersView = { setRowsOpacity: noop, getColumnElements: noop };
-        this.controller._rowsView.setRowsOpacity = function(columnIndex, value) {
+        this.controller._columnHeadersView = { toggleDraggableColumnClass: noop, getColumnElements: noop };
+        this.controller._rowsView.toggleDraggableColumnClass = function(columnIndex, value) {
             columnIndexOpacity = columnIndex;
             opacityValue = value;
         };
@@ -6415,7 +6415,7 @@ QUnit.module('column chooser reordering', {
 
         that.controller._rowsView = {};
         that.controller._columnHeadersView = { getColumnElements: noop };
-        that.controller._rowsView.setRowsOpacity = function() {
+        that.controller._rowsView.toggleDraggableColumnClass = function() {
         };
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
@@ -6480,8 +6480,8 @@ QUnit.module('column chooser reordering', {
         const testElement = $('#container');
 
         that.controller._rowsView = {};
-        that.controller._columnHeadersView = { setRowsOpacity: noop, getColumnElements: noop };
-        that.controller._rowsView.setRowsOpacity = function() {
+        that.controller._columnHeadersView = { toggleDraggableColumnClass: noop, getColumnElements: noop };
+        that.controller._rowsView.toggleDraggableColumnClass = function() {
         };
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
@@ -6545,7 +6545,7 @@ QUnit.module('column chooser reordering', {
 
         that.controller._rowsView = {};
         that.controller._columnHeadersView = { getColumnElements: noop };
-        that.controller._rowsView.setRowsOpacity = function() {
+        that.controller._rowsView.toggleDraggableColumnClass = function() {
         };
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
@@ -6608,7 +6608,7 @@ QUnit.module('column chooser reordering', {
                 dropParameters = parameters;
             };
             this.controller._rowsView = {};
-            this.controller._rowsView.setRowsOpacity = function() { };
+            this.controller._rowsView.toggleDraggableColumnClass = function() { };
             this.controller._columnHeadersView.element = function() { return $('<div />'); };
             this.options.columnChooser.search.enabled = true;
             this.columnsController.getChooserColumns = function() {

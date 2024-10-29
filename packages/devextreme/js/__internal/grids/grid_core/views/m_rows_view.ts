@@ -27,6 +27,7 @@ import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
+import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
 import type { EditingController } from '../editing/m_editing';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
 import gridCoreUtils from '../m_utils';
@@ -923,7 +924,7 @@ export class RowsView extends ColumnsView {
     return parameters;
   }
 
-  public _setRowsOpacityCore($rows, visibleColumns, columnIndex, value) {
+  protected _toggleDraggableSourceColumnClass($rows, visibleColumns, columnIndex, value) {
     const columnsController = this._columnsController;
     const columns = columnsController.getColumns();
     const column = columns && columns[columnIndex];
@@ -933,7 +934,11 @@ export class RowsView extends ColumnsView {
       if (!$(row).hasClass(GROUP_ROW_CLASS)) {
         for (let i = 0; i < visibleColumns.length; i++) {
           if (isNumeric(columnID) && columnsController.isParentBandColumn(visibleColumns[i].index, columnID) || visibleColumns[i].index === columnIndex) {
-            $rows.eq(rowIndex).children().eq(i).css({ opacity: value });
+            $rows.eq(rowIndex)
+              .children()
+              .eq(i)
+              .toggleClass(this.addWidgetPrefix(REORDERING_CLASSES.draggableColumn), value);
+
             if (!isNumeric(columnID)) {
               break;
             }
@@ -1260,9 +1265,9 @@ export class RowsView extends ColumnsView {
   /**
    * @extended: column_fixing
    */
-  public setRowsOpacity(columnIndex, value) {
+  public toggleDraggableColumnClass(columnIndex, value) {
     const $rows = this._getRowElements().not(`.${GROUP_ROW_CLASS}`) || [];
-    this._setRowsOpacityCore($rows, this.getColumns(), columnIndex, value);
+    this._toggleDraggableSourceColumnClass($rows, this.getColumns(), columnIndex, value);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
