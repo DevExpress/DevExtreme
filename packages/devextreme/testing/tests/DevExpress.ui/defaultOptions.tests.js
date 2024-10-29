@@ -1352,6 +1352,9 @@ testComponentDefaults(Chat,
         onMessageSend: undefined,
         dataSource: undefined,
         showDayHeaders: true,
+        showAvatar: true,
+        showUserName: true,
+        showMessageTimestamp: true,
     }
 );
 

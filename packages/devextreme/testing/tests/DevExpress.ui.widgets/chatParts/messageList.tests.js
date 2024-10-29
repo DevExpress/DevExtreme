@@ -530,6 +530,19 @@ QUnit.module('MessageList', moduleConfig, () => {
             assert.strictEqual(messageGroup.option('alignment'), 'end');
         });
 
+        ['showAvatar', 'showUserName', 'showMessageTimestamp'].forEach(option => {
+            QUnit.test(`message list should pass option ${option} to message group`, function(assert) {
+                this.reinit({
+                    items: [{ author: { id: 'MikeID' } }],
+                    [option]: true,
+                });
+
+                const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
+
+                assert.strictEqual(messageGroup.option(option), true);
+            });
+        });
+
         QUnit.test(`new message group should be rendered if ${MESSAGEGROUP_TIMEOUT} ms elapsed between the last and new messages`, function(assert) {
             const items = [
                 {
@@ -755,6 +768,14 @@ QUnit.module('MessageList', moduleConfig, () => {
             this.instance.option({ items: newItems });
 
             assert.strictEqual(this.invalidateStub.callCount, 1);
+        });
+
+        ['showAvatar', 'showUserName', 'showMessageTimestamp'].forEach(option => {
+            QUnit.test(`should run invalidate after changing ${option} in runtime`, function(assert) {
+                this.instance.option({ [option]: false });
+
+                assert.strictEqual(this.invalidateStub.callCount, 1);
+            });
         });
     });
 

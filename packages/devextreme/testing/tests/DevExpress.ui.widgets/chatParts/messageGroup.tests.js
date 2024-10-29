@@ -13,6 +13,10 @@ const moduleConfig = {
         const init = (options = {}) => {
             this.instance = new MessageGroup($('#component'), options);
             this.$element = $(this.instance.$element());
+
+            this.getAvatar = () => this.$element.find(`.${AVATAR_CLASS}`);
+            this.getUsername = () => this.$element.find(`.${CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS}`);
+            this.getMessageTimestamp = () => this.$element.find(`.${CHAT_MESSAGEGROUP_TIME_CLASS}`);
         };
 
         this.reinit = (options) => {
@@ -29,6 +33,39 @@ QUnit.module('MessageGroup', moduleConfig, () => {
     QUnit.module('Render', () => {
         QUnit.test('should be initialized with correct type', function(assert) {
             assert.ok(this.instance instanceof MessageGroup);
+        });
+
+        QUnit.test('Avatar should not be rendered when showAvatar is set to false', function(assert) {
+            this.reinit({
+                items: [{ timestamp: new Date().getTime(), text: 'ABC' }],
+                showAvatar: false,
+            });
+
+            const $avatar = this.getAvatar();
+
+            assert.strictEqual($avatar.length, 0, 'avatar was not added');
+        });
+
+        QUnit.test('Username should not be rendered when showUserName is set to false', function(assert) {
+            this.reinit({
+                items: [{ timestamp: new Date().getTime(), text: 'ABC' }],
+                showUserName: false,
+            });
+
+            const $username = this.getUsername();
+
+            assert.strictEqual($username.length, 0, 'username was not added');
+        });
+
+        QUnit.test('Message timestamps should not be rendered when showMessageTimestamp is set to false', function(assert) {
+            this.reinit({
+                items: [{ timestamp: new Date().getTime(), text: 'ABC' }],
+                showMessageTimestamp: false,
+            });
+
+            const $messageTimestamp = this.getMessageTimestamp();
+
+            assert.strictEqual($messageTimestamp.length, 0, 'message timestamp was not added');
         });
     });
 
@@ -187,6 +224,31 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 const avatar = ChatAvatar.getInstance(this.$element.find(`.${AVATAR_CLASS}`));
 
                 assert.deepEqual(avatar.option('alt'), passedAltValue);
+            });
+        });
+    });
+
+    QUnit.module('Options', {
+        beforeEach: function() {
+            const createInvalidateStub = () => {
+                this.invalidateStub = sinon.stub(this.instance, '_invalidate');
+            };
+
+            this.recreateInvalidateStub = () => {
+                createInvalidateStub();
+            };
+
+            createInvalidateStub();
+        },
+        afterEach: function() {
+            this.invalidateStub.restore();
+        }
+    }, () => {
+        ['showAvatar', 'showUserName', 'showMessageTimestamp'].forEach(option => {
+            QUnit.test(`should run invalidate after changing ${option} in runtime`, function(assert) {
+                this.instance.option({ [option]: false });
+
+                assert.strictEqual(this.invalidateStub.callCount, 1);
             });
         });
     });
