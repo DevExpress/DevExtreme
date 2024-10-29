@@ -229,6 +229,7 @@ export * from './toolbar';
 export * from './toolbox';
 export * from './tooltip';
 export * from './total-item-dxi';
+export * from './typing-user-dxi';
 export * from './upload';
 export * from './url';
 export * from './user';

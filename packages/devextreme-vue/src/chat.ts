@@ -26,6 +26,7 @@ type AccessibleOptions = Pick<Properties,
   "showDayHeaders" |
   "showMessageTimestamp" |
   "showUserName" |
+  "typingUsers" |
   "user" |
   "visible" |
   "width"
@@ -59,6 +60,7 @@ const componentConfig = {
     showDayHeaders: Boolean,
     showMessageTimestamp: Boolean,
     showUserName: Boolean,
+    typingUsers: Array,
     user: Object,
     visible: Boolean,
     width: [Function, Number, String]
@@ -88,6 +90,7 @@ const componentConfig = {
     "update:showDayHeaders": null,
     "update:showMessageTimestamp": null,
     "update:showUserName": null,
+    "update:typingUsers": null,
     "update:user": null,
     "update:visible": null,
     "update:width": null,
@@ -103,6 +106,7 @@ const componentConfig = {
     (this as any).$_expectedChildren = {
       error: { isCollectionItem: true, optionName: "errors" },
       item: { isCollectionItem: true, optionName: "items" },
+      typingUser: { isCollectionItem: true, optionName: "typingUsers" },
       user: { isCollectionItem: false, optionName: "user" }
     };
   }
@@ -183,6 +187,30 @@ const DxItem = defineComponent(DxItemConfig);
   author: { isCollectionItem: false, optionName: "author" }
 };
 
+const DxTypingUserConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:avatarAlt": null,
+    "update:avatarUrl": null,
+    "update:id": null,
+    "update:name": null,
+  },
+  props: {
+    avatarAlt: String,
+    avatarUrl: String,
+    id: [Number, String],
+    name: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxTypingUserConfig);
+
+const DxTypingUser = defineComponent(DxTypingUserConfig);
+
+(DxTypingUser as any).$_optionName = "typingUsers";
+(DxTypingUser as any).$_isCollectionItem = true;
+
 const DxUserConfig = {
   emits: {
     "update:isActive": null,
@@ -212,6 +240,7 @@ export {
   DxAuthor,
   DxError,
   DxItem,
+  DxTypingUser,
   DxUser
 };
 import type * as DxChatTypes from "devextreme/ui/chat_types";

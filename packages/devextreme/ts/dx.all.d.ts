@@ -9583,6 +9583,10 @@ declare module DevExpress.ui {
      */
     errors?: Array<DevExpress.ui.dxChat.ChatError>;
     /**
+     * [descr:dxChatOptions.typingUsers]
+     */
+    typingUsers?: Array<DevExpress.ui.dxChat.User>;
+    /**
      * [descr:dxChatOptions.showDayHeaders]
      */
     showDayHeaders?: boolean;
