@@ -200,8 +200,10 @@ export class CompactAppointmentsHelper {
   }
 
   _getDateText(appointment) {
-    const startDateText = this._localizeDate(this._getStartDate(appointment));
-    const endDateText = this._localizeDate(this._getEndDate(appointment));
+    const startDate = this._getStartDate(appointment);
+    const endDate = this._getEndDate(appointment);
+    const startDateText = startDate ? this._localizeDate(startDate) : '';
+    const endDateText = endDate ? this._localizeDate(endDate) : '';
 
     const dateText = startDateText === endDateText
       ? `${startDateText}`
