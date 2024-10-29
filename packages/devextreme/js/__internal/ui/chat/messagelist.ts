@@ -455,16 +455,13 @@ class MessageList extends Widget<Properties> {
       case 'showAvatar':
       case 'showUserName':
       case 'showMessageTimestamp':
-        this._invalidate();
-        break;
-      case 'items':
-        this._processItemsUpdating(value ?? [], previousValue ?? []);
-        break;
-      case 'showDayHeaders':
       case 'messageTemplate':
       case 'dayHeaderFormat':
       case 'messageTimestampFormat':
         this._invalidate();
+        break;
+      case 'items':
+        this._processItemsUpdating(value ?? [], previousValue ?? []);
         break;
       case 'isLoading':
         break;
