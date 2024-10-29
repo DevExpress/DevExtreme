@@ -59,7 +59,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
     /**
      * [descr:WidgetOptions.accessKey]
-
+    
      */
     @Input()
     get accessKey(): string {
@@ -72,7 +72,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-
+    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -85,7 +85,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
     /**
      * [descr:dxPaginationOptions.allowedPageSizes]
-
+    
      */
     @Input()
     get allowedPageSizes(): Array<number | string> {
@@ -98,7 +98,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
     /**
      * [descr:WidgetOptions.disabled]
-
+    
      */
     @Input()
     get disabled(): boolean {
@@ -111,7 +111,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-
+    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -124,7 +124,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
     /**
      * [descr:WidgetOptions.focusStateEnabled]
-
+    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -137,7 +137,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
     /**
      * [descr:DOMComponentOptions.height]
-
+    
      */
     @Input()
     get height(): (() => number | string) | number | string {
@@ -150,7 +150,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
     /**
      * [descr:WidgetOptions.hint]
-
+    
      */
     @Input()
     get hint(): string {
@@ -163,7 +163,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-
+    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -176,7 +176,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
     /**
      * [descr:dxPaginationOptions.itemCount]
-
+    
      */
     @Input()
     get itemCount(): number {
@@ -189,7 +189,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
     /**
      * [descr:dxPaginationOptions.pageIndex]
-
+    
      */
     @Input()
     get pageIndex(): number {
@@ -202,7 +202,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
     /**
      * [descr:dxPaginationOptions.pageSize]
-
+    
      */
     @Input()
     get pageSize(): number {
@@ -215,7 +215,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-
+    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -228,7 +228,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
     /**
      * [descr:WidgetOptions.tabIndex]
-
+    
      */
     @Input()
     get tabIndex(): number {
@@ -241,7 +241,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
     /**
      * [descr:WidgetOptions.visible]
-
+    
      */
     @Input()
     get visible(): boolean {
@@ -254,7 +254,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
     /**
      * [descr:DOMComponentOptions.width]
-
+    
      */
     @Input()
     get width(): (() => number | string) | number | string {
@@ -265,146 +265,146 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     }
 
     /**
-
+    
      * [descr:WidgetOptions.onContentReady]
-
-
+    
+    
      */
     @Output() onContentReady: EventEmitter<EventInfo<any>>;
 
     /**
-
+    
      * [descr:DOMComponentOptions.onDisposing]
-
-
+    
+    
      */
     @Output() onDisposing: EventEmitter<EventInfo<any>>;
 
     /**
-
+    
      * [descr:ComponentOptions.onInitialized]
-
-
+    
+    
      */
     @Output() onInitialized: EventEmitter<Object>;
 
     /**
-
+    
      * [descr:DOMComponentOptions.onOptionChanged]
-
-
+    
+    
      */
     @Output() onOptionChanged: EventEmitter<Object>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() accessKeyChange: EventEmitter<string>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() allowedPageSizesChange: EventEmitter<Array<number | string>>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() hintChange: EventEmitter<string>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() itemCountChange: EventEmitter<number>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() pageIndexChange: EventEmitter<number>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() pageSizeChange: EventEmitter<number>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 

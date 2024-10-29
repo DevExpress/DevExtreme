@@ -24,6 +24,7 @@ import {
     QueryList
 } from '@angular/core';
 
+
 import * as CommonTypes from 'devextreme/common';
 import { EventInfo } from 'devextreme/events/index';
 
@@ -88,7 +89,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:dxValidatorOptions.adapter]
-
+    
      */
     @Input()
     get adapter(): Record<string, any> | { applyValidationResults?: Function, bypass?: Function, focus?: Function, getValue?: Function, reset?: Function, validationRequestsCallbacks?: Array<(() => void)> } {
@@ -101,7 +102,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-
+    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -114,7 +115,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:DOMComponentOptions.height]
-
+    
      */
     @Input()
     get height(): (() => number | string) | number | string {
@@ -127,7 +128,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:dxValidatorOptions.name]
-
+    
      */
     @Input()
     get name(): string {
@@ -140,7 +141,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:dxValidatorOptions.validationGroup]
-
+    
      */
     @Input()
     get validationGroup(): string {
@@ -153,7 +154,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:dxValidatorOptions.validationRules]
-
+    
      */
     @Input()
     get validationRules(): Array<CommonTypes.ValidationRule> {
@@ -166,7 +167,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:DOMComponentOptions.width]
-
+    
      */
     @Input()
     get width(): (() => number | string) | number | string {
@@ -177,83 +178,83 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     }
 
     /**
-
+    
      * [descr:DOMComponentOptions.onDisposing]
-
-
+    
+    
      */
     @Output() onDisposing: EventEmitter<EventInfo<any>>;
 
     /**
-
+    
      * [descr:ComponentOptions.onInitialized]
-
-
+    
+    
      */
     @Output() onInitialized: EventEmitter<Object>;
 
     /**
-
+    
      * [descr:DOMComponentOptions.onOptionChanged]
-
-
+    
+    
      */
     @Output() onOptionChanged: EventEmitter<Object>;
 
     /**
-
+    
      * [descr:dxValidatorOptions.onValidated]
-
-
+    
+    
      */
     @Output() onValidated: EventEmitter<Object>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() adapterChange: EventEmitter<Record<string, any> | { applyValidationResults?: Function, bypass?: Function, focus?: Function, getValue?: Function, reset?: Function, validationRequestsCallbacks?: Array<(() => void)> }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() nameChange: EventEmitter<string>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() validationGroupChange: EventEmitter<string>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() validationRulesChange: EventEmitter<Array<CommonTypes.ValidationRule>>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
