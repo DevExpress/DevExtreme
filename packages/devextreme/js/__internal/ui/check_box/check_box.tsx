@@ -91,7 +91,7 @@ export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
               value: __newValue
             };
           });
-          this.props.valueChange(__newValue);
+          this.props.valueChange?.(__newValue);
         }
       } else {
         {
@@ -102,7 +102,7 @@ export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
               value: __newValue
             };
           });
-          this.props.valueChange(__newValue);
+          this.props.valueChange?.(__newValue);
         }
       }
     }
@@ -129,12 +129,12 @@ export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
   get cssClasses() {
     return getCssClasses({
       ...this.props,
-      value: this.props.value !== undefined ? this.props.value : this.state.value
+      value: this.props.value !== undefined ? this.props.value : this.state!.value
     });
   }
   get aria() {
-    const checked = (this.props.value !== undefined ? this.props.value : this.state.value) === true;
-    const indeterminate = (this.props.value !== undefined ? this.props.value : this.state.value) === null;
+    const checked = (this.props.value !== undefined ? this.props.value : this.state!.value) === true;
+    const indeterminate = (this.props.value !== undefined ? this.props.value : this.state!.value) === null;
     const result = {
       role: 'checkbox',
       checked: indeterminate ? 'mixed' : `${checked}`
@@ -149,17 +149,17 @@ export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
     return restProps;
   }
   focus() {
-    this.editorRef.current.focus();
+    this.editorRef.current!.focus();
   }
   blur() {
-    this.editorRef.current.blur();
+    this.editorRef.current!.blur();
   }
   render() {
-    const value = this.props.value !== undefined ? this.props.value : this.state.value;
+    const value = this.props.value !== undefined ? this.props.value : this.state!.value;
     
     return (
       <Editor // eslint-disable-line jsx-a11y/no-access-key
-        ref={this.editorRef}
+        ref={this.editorRef as any}
         aria={this.props.aria}
         classes={this.props.classes}
         onClick={this.props.onClick}
@@ -209,7 +209,7 @@ function __processTwoWayProps(defaultProps) {
   }, {});
 }
 CheckBox.defaultProps = defaultCheckBoxProps;
-const __defaultOptionRules = [];
+const __defaultOptionRules: any[] = [];
 export function defaultOptions(rule) {
   __defaultOptionRules.push(rule);
   CheckBox.defaultProps = Object.create(Object.prototype, Object.assign(Object.getOwnPropertyDescriptors(CheckBox.defaultProps), Object.getOwnPropertyDescriptors(__processTwoWayProps(convertRulesToOptions(__defaultOptionRules)))));

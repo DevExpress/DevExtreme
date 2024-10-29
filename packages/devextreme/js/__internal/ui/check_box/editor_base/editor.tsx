@@ -29,7 +29,7 @@ const getCssClasses = (model: EditorProps): string => {
 export interface EditorProps extends WidgetProps {
   readOnly: boolean;
 
-  name: string;
+  name?: string;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value?: any;
@@ -53,9 +53,9 @@ export interface EditorProps extends WidgetProps {
 
   isValid: boolean;
 
-  isDirty: boolean;
+  isDirty?: boolean;
 
-  inputAttr: Record<string, unknown>;
+  inputAttr?: Record<string, unknown>;
 
   // private
   onFocusIn?: (e: Event) => void;
