@@ -44,7 +44,7 @@ module('render', {
 
         assert.equal(this.element.children().length, 2);
         assert.equal(this.element.children().eq(0).text().trim(), 'item 1');
-        assert.ok(this.element.children().eq(0).hasClass(DISABLED_STATE_CLASS).trim());
+        assert.ok(this.element.children().eq(0).hasClass(DISABLED_STATE_CLASS));
         assert.equal(this.element.children().eq(1).text().trim(), 'item 2');
     });
 
