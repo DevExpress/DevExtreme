@@ -201,6 +201,7 @@ $datagrid-overlay-content-shadow-color: color.change($base-shadow-color, $alpha:
 $datagrid-columnchooser-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
 $datagrid-column-separator-bg: null !default;
 $datagrid-text-stub-background-image-path: null !default;
+$datagrid-draggable-column-text-color: lighten($base-text-color, 40%) !default;
 
 @if $color == "carmine" {
   $datagrid-columnchooser-item-color: $base-label-color !default;
@@ -537,4 +538,3 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-row-removed-bg: $datagrid-border-color !default;
   $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
 }
-
