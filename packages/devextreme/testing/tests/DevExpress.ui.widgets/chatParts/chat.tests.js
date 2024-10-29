@@ -196,7 +196,7 @@ QUnit.module('Chat', () => {
 
                 const messageList = this.getMessageList();
 
-                assert.strictEqual(messageList.option(`${option}`), false, `${option} showMessageTimestamp is passed on init`);
+                assert.strictEqual(messageList.option(`${option}`), false, `${option} is passed on init`);
             });
 
             QUnit.test(`Chat should pass ${option} to messageList at runtime`, function(assert) {
