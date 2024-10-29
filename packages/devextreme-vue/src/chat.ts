@@ -21,6 +21,7 @@ type AccessibleOptions = Pick<Properties,
   "onOptionChanged" |
   "onTypingEnd" |
   "onTypingStart" |
+  "reloadOnChange" |
   "rtlEnabled" |
   "showAvatar" |
   "showDayHeaders" |
@@ -54,6 +55,7 @@ const componentConfig = {
     onOptionChanged: Function,
     onTypingEnd: Function,
     onTypingStart: Function,
+    reloadOnChange: Boolean,
     rtlEnabled: Boolean,
     showAvatar: Boolean,
     showDayHeaders: Boolean,
@@ -83,6 +85,7 @@ const componentConfig = {
     "update:onOptionChanged": null,
     "update:onTypingEnd": null,
     "update:onTypingStart": null,
+    "update:reloadOnChange": null,
     "update:rtlEnabled": null,
     "update:showAvatar": null,
     "update:showDayHeaders": null,
@@ -161,12 +164,14 @@ const DxItemConfig = {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:author": null,
+    "update:id": null,
     "update:text": null,
     "update:timestamp": null,
     "update:typing": null,
   },
   props: {
     author: Object,
+    id: [Number, String],
     text: String,
     timestamp: [Date, Number, String],
     typing: Boolean

@@ -118,6 +118,7 @@ const Error = Object.assign<typeof _componentError, NestedComponentMeta>(_compon
 // Chat
 type IItemProps = React.PropsWithChildren<{
   author?: ChatUser;
+  id?: number | string;
   text?: string;
   timestamp?: Date | number | string;
   typing?: boolean;

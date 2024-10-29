@@ -217,6 +217,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
+     * [descr:dxChatOptions.reloadOnChange]
+    
+     */
+    @Input()
+    get reloadOnChange(): boolean {
+        return this._getOption('reloadOnChange');
+    }
+    set reloadOnChange(value: boolean) {
+        this._setOption('reloadOnChange', value);
+    }
+
+
+    /**
      * [descr:DOMComponentOptions.rtlEnabled]
     
      */
@@ -449,6 +462,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() reloadOnChangeChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -572,6 +592,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
             { emit: 'itemsChange' },
+            { emit: 'reloadOnChangeChange' },
             { emit: 'rtlEnabledChange' },
             { emit: 'showAvatarChange' },
             { emit: 'showDayHeadersChange' },
