@@ -36,6 +36,9 @@ export interface Properties extends WidgetOptions<MessageList> {
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
   isLoading?: boolean;
+  showAvatar: boolean;
+  showUserName: boolean;
+  showMessageTimestamp: boolean;
 }
 
 class MessageList extends Widget<Properties> {
@@ -54,6 +57,9 @@ class MessageList extends Widget<Properties> {
       currentUserId: '',
       showDayHeaders: true,
       isLoading: false,
+      showAvatar: true,
+      showUserName: true,
+      showMessageTimestamp: true,
     };
   }
 
@@ -161,11 +167,15 @@ class MessageList extends Widget<Properties> {
   }
 
   _createMessageGroupComponent(items: Message[], userId: string | number | undefined): void {
+    const { showAvatar, showUserName, showMessageTimestamp } = this.option();
     const $messageGroup = $('<div>').appendTo(this._$content());
 
     const messageGroup = this._createComponent($messageGroup, MessageGroup, {
       items,
       alignment: this._messageGroupAlignment(userId),
+      showAvatar,
+      showUserName,
+      showMessageTimestamp,
     });
 
     this._messageGroups?.push(messageGroup);
@@ -409,13 +419,14 @@ class MessageList extends Widget<Properties> {
 
     switch (name) {
       case 'currentUserId':
+      case 'showDayHeaders':
+      case 'showAvatar':
+      case 'showUserName':
+      case 'showMessageTimestamp':
         this._invalidate();
         break;
       case 'items':
         this._processItemsUpdating(value ?? [], previousValue ?? []);
-        break;
-      case 'showDayHeaders':
-        this._invalidate();
         break;
       case 'isLoading':
         break;
