@@ -143,13 +143,13 @@ class MessageGroup extends Widget<Properties> {
       const $time = $('<div>')
         .addClass(CHAT_MESSAGEGROUP_TIME_CLASS)
         .appendTo($information);
-    }
 
-    const shouldAddTimeValue = this._shouldAddTimeValue(timestamp);
+      const shouldAddTimeValue = this._shouldAddTimeValue(timestamp);
 
-    if (shouldAddTimeValue) {
-      const timeValue = this._getTimeValue(timestamp);
-      $time.text(timeValue);
+      if (shouldAddTimeValue) {
+        const timeValue = this._getTimeValue(timestamp);
+        $time.text(timeValue);
+      }
     }
 
     $information.appendTo(this.element());
