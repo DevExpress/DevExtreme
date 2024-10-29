@@ -2070,10 +2070,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     }
 
     @ContentChildren(DxiDataGridSortByGroupSummaryInfoComponent)
-    get sortByGroupSummaryInfoChildren(): QueryList<DxiDataGridSortByGroupSummaryInfoComponent> {
+    get sortByGroupSummaryInfosChildren(): QueryList<DxiDataGridSortByGroupSummaryInfoComponent> {
         return this._getOption('sortByGroupSummaryInfo');
     }
-    set sortByGroupSummaryInfoChildren(value) {
+    set sortByGroupSummaryInfosChildren(value) {
         this.setContentChildren('sortByGroupSummaryInfo', value, 'DxiDataGridSortByGroupSummaryInfoComponent');
         this.setChildren('sortByGroupSummaryInfo', value);
     }

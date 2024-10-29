@@ -1469,10 +1469,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     }
 
     @ContentChildren(DxiChartValueAxisComponent)
-    get valueAxisChildren(): QueryList<DxiChartValueAxisComponent> {
+    get valueAxesChildren(): QueryList<DxiChartValueAxisComponent> {
         return this._getOption('valueAxis');
     }
-    set valueAxisChildren(value) {
+    set valueAxesChildren(value) {
         this.setContentChildren('valueAxis', value, 'DxiChartValueAxisComponent');
         this.setChildren('valueAxis', value);
     }

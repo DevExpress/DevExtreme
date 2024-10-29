@@ -153,10 +153,10 @@ export class DxoRangeSelectorChartComponent extends NestedOption implements OnDe
 
 
     @ContentChildren(forwardRef(() => DxiRangeSelectorSeriesComponent))
-    get seriessChildren(): QueryList<DxiRangeSelectorSeriesComponent> {
+    get seriesChildren(): QueryList<DxiRangeSelectorSeriesComponent> {
         return this._getOption('series');
     }
-    set seriessChildren(value) {
+    set seriesChildren(value) {
         this.setChildren('series', value);
     }
 

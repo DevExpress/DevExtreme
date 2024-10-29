@@ -258,6 +258,89 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
+
+
+    @ContentChildren(DxiValidatorAsyncRuleComponent)
+    get asyncRulesChildren(): QueryList<DxiValidatorAsyncRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set asyncRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorAsyncRuleComponent');
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(DxiValidatorCompareRuleComponent)
+    get compareRulesChildren(): QueryList<DxiValidatorCompareRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set compareRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorCompareRuleComponent');
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(DxiValidatorCustomRuleComponent)
+    get customRulesChildren(): QueryList<DxiValidatorCustomRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set customRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorCustomRuleComponent');
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(DxiValidatorEmailRuleComponent)
+    get emailRulesChildren(): QueryList<DxiValidatorEmailRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set emailRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorEmailRuleComponent');
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(DxiValidatorNumericRuleComponent)
+    get numericRulesChildren(): QueryList<DxiValidatorNumericRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set numericRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorNumericRuleComponent');
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(DxiValidatorPatternRuleComponent)
+    get patternRulesChildren(): QueryList<DxiValidatorPatternRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set patternRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorPatternRuleComponent');
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(DxiValidatorRangeRuleComponent)
+    get rangeRulesChildren(): QueryList<DxiValidatorRangeRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set rangeRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorRangeRuleComponent');
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(DxiValidatorRequiredRuleComponent)
+    get requiredRulesChildren(): QueryList<DxiValidatorRequiredRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set requiredRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorRequiredRuleComponent');
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(DxiValidatorStringLengthRuleComponent)
+    get stringLengthRulesChildren(): QueryList<DxiValidatorStringLengthRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set stringLengthRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorStringLengthRuleComponent');
+        this.setChildren('validationRules', value);
+    }
+
     @ContentChildren(DxiValidatorValidationRuleComponent)
     get validationRulesChildren(): QueryList<DxiValidatorValidationRuleComponent> {
         return this._getOption('validationRules');
