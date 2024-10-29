@@ -5,10 +5,10 @@ import { createFragment, createComponentVNode, normalizeProps } from "inferno";
 import { Fragment } from 'inferno';
 import { InfernoEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import Guid from '@js/core/guid';
-import { Widget, WidgetProps } from '@ts/core/r1/widget';
-import { BaseWidgetProps } from '@ts/core/r1/base_props';
+import { Widget, WidgetProps, WidgetDefaultProps } from '@ts/core/r1/widget';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 import { ValidationMessage } from '../wrappers/validation_message';
+
 const getCssClasses = model => {
   const {
     classes,
@@ -22,6 +22,7 @@ const getCssClasses = model => {
   };
   return combineClasses(classesMap);
 };
+
 export const viewFunction = viewModel => {
   const {
     aria,
@@ -86,7 +87,42 @@ export const viewFunction = viewModel => {
     })], 0)
   }), null, widgetRef));
 };
-export const EditorProps = Object.create(Object.prototype, Object.assign(Object.getOwnPropertyDescriptors(BaseWidgetProps), Object.getOwnPropertyDescriptors({
+
+export interface EditorProps extends WidgetProps {
+  readOnly: boolean;
+
+  name: string;
+
+  value?: any;
+
+  defaultValue?: any;
+
+  valueChange?: (value: any) => void;
+
+  // validation
+  validationError: Record<string, unknown> | null;
+
+  validationErrors: Record<string, unknown>[] | null;
+
+  validationMessageMode: 'auto' | 'always';
+
+  validationMessagePosition: 'top' | 'right' | 'bottom' | 'left';
+
+  validationStatus: 'valid' | 'invalid' | 'pending';
+
+  isValid: boolean;
+
+  isDirty: boolean;
+
+  inputAttr: Record<string, unknown>;
+
+  // private
+  onFocusIn?: (e: Event) => void;
+}
+
+
+export const defaultEditorProps: EditorProps = {
+  ...WidgetDefaultProps,
   readOnly: false,
   name: '',
   validationError: null,
@@ -96,80 +132,17 @@ export const EditorProps = Object.create(Object.prototype, Object.assign(Object.
   validationStatus: 'valid',
   isValid: true,
   isDirty: false,
-  inputAttr: Object.freeze({}),
+  inputAttr: {},
   defaultValue: null,
   valueChange: () => {}
-})));
-export const EditorPropsType = {
-  get readOnly() {
-    return EditorProps.readOnly;
-  },
-  get name() {
-    return EditorProps.name;
-  },
-  get validationError() {
-    return EditorProps.validationError;
-  },
-  get validationErrors() {
-    return EditorProps.validationErrors;
-  },
-  get validationMessageMode() {
-    return EditorProps.validationMessageMode;
-  },
-  get validationMessagePosition() {
-    return EditorProps.validationMessagePosition;
-  },
-  get validationStatus() {
-    return EditorProps.validationStatus;
-  },
-  get isValid() {
-    return EditorProps.isValid;
-  },
-  get isDirty() {
-    return EditorProps.isDirty;
-  },
-  get inputAttr() {
-    return EditorProps.inputAttr;
-  },
-  get defaultValue() {
-    return EditorProps.defaultValue;
-  },
-  get valueChange() {
-    return EditorProps.valueChange;
-  },
-  get className() {
-    return EditorProps.className;
-  },
-  get activeStateEnabled() {
-    return EditorProps.activeStateEnabled;
-  },
-  get disabled() {
-    return EditorProps.disabled;
-  },
-  get focusStateEnabled() {
-    return EditorProps.focusStateEnabled;
-  },
-  get hoverStateEnabled() {
-    return EditorProps.hoverStateEnabled;
-  },
-  get tabIndex() {
-    return EditorProps.tabIndex;
-  },
-  get visible() {
-    return EditorProps.visible;
-  },
-  get aria() {
-    return WidgetProps.aria;
-  },
-  get classes() {
-    return WidgetProps.classes;
-  }
 };
+
 import { convertRulesToOptions } from '../../../../core/options/utils';
 import { createReRenderEffect } from '@devextreme/runtime/inferno';
 import { createRef as infernoCreateRef } from 'inferno';
-export class Editor extends InfernoWrapperComponent {
-  constructor(props) {
+
+export class Editor extends InfernoWrapperComponent<EditorProps> {
+  constructor(props: EditorProps) {
     super(props);
     this.widgetRef = infernoCreateRef();
     this.rootElementRef = infernoCreateRef();
@@ -289,6 +262,7 @@ export class Editor extends InfernoWrapperComponent {
     });
   }
 }
+
 function __processTwoWayProps(defaultProps) {
   const twoWayProps = ['value'];
   return Object.keys(defaultProps).reduce((props, propName) => {
@@ -298,7 +272,8 @@ function __processTwoWayProps(defaultProps) {
     return props;
   }, {});
 }
-Editor.defaultProps = EditorPropsType;
+
+Editor.defaultProps = defaultEditorProps;
 const __defaultOptionRules = [];
 export function defaultOptions(rule) {
   __defaultOptionRules.push(rule);
