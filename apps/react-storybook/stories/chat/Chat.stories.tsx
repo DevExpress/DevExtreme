@@ -30,6 +30,10 @@ const commonArgs: ChatTypes.Properties = {
     activeStateEnabled: true,
     hoverStateEnabled: true,
     focusStateEnabled: true,
+    showDayHeaders: true,
+    showAvatar: true,
+    showUserName: true,
+    showMessageTimestamp: true,
 };
 
 export const Overview: Story = {
@@ -83,6 +87,10 @@ export const Overview: Story = {
         activeStateEnabled,
         hoverStateEnabled,
         focusStateEnabled,
+        showDayHeaders,
+        showAvatar,
+        showUserName,
+        showMessageTimestamp,
     }) => {
         const [messages, setMessages] = useState(items);
         
@@ -95,7 +103,7 @@ export const Overview: Story = {
         useEffect(() => {
             setMessages(items);
         }, [items]);
-        
+
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Chat
@@ -112,6 +120,10 @@ export const Overview: Story = {
                     activeStateEnabled={activeStateEnabled}
                     focusStateEnabled={focusStateEnabled}
                     hoverStateEnabled={hoverStateEnabled}
+                    showDayHeaders={showDayHeaders}
+                    showAvatar={showAvatar}
+                    showUserName={showUserName}
+                    showMessageTimestamp={showMessageTimestamp}
                 >
                 </Chat>
             </div>
@@ -291,6 +303,10 @@ export const PopupIntegration: Story = {
         activeStateEnabled,
         hoverStateEnabled,
         focusStateEnabled,
+        showDayHeaders,
+        showAvatar,
+        showUserName,
+        showMessageTimestamp,
     }) => {
         const [messages, setMessages] = useState(items);
         
@@ -328,6 +344,10 @@ export const PopupIntegration: Story = {
                     activeStateEnabled={activeStateEnabled}
                     focusStateEnabled={focusStateEnabled}
                     hoverStateEnabled={hoverStateEnabled}
+                    showDayHeaders={showDayHeaders}
+                    showAvatar={showAvatar}
+                    showUserName={showUserName}
+                    showMessageTimestamp={showMessageTimestamp}
                 >
                 </Chat>
             </Popup>
