@@ -1,6 +1,7 @@
 import { locate, move } from '@js/animation/translator';
 import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
+import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
 
@@ -137,10 +138,12 @@ export class CompactAppointmentsHelper {
   }
 
   _createCompactButtonElement({
-    isCompact, $container, coordinates, sortedIndex,
+    isCompact, $container, coordinates, sortedIndex, items,
   }) {
+    const appointmentDate = this._getDateText(items.data[0]);
     const result = $('<div>')
       .addClass(APPOINTMENT_COLLECTOR_CLASS)
+      .attr('aria-roledescription', appointmentDate)
       .toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact)
       .appendTo($container);
 
@@ -180,5 +183,32 @@ export class CompactAppointmentsHelper {
     return element
       .append($('<span>').text(text))
       .addClass(APPOINTMENT_COLLECTOR_CONTENT_CLASS);
+  }
+
+  _localizeDate(date) {
+    return `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
+  }
+
+  _getStartDate(appointment) {
+    const date = appointment.startDate;
+    return date ? new Date(date) : null;
+  }
+
+  _getEndDate(appointment) {
+    const date = appointment.endDate;
+    return date ? new Date(date) : null;
+  }
+
+  _getDateText(appointment) {
+    const startDate = this._getStartDate(appointment);
+    const endDate = this._getEndDate(appointment);
+    const startDateText = startDate ? this._localizeDate(startDate) : '';
+    const endDateText = endDate ? this._localizeDate(endDate) : '';
+
+    const dateText = startDateText === endDateText
+      ? `${startDateText}`
+      : `${startDateText} - ${endDateText}`;
+
+    return `${dateText}`;
   }
 }

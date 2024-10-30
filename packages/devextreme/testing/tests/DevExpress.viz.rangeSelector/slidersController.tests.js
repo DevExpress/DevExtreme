@@ -1,9 +1,9 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const SlidersController = require('viz/range_selector/sliders_controller').SlidersController;
-const rendererModule = require('viz/core/renderers/renderer');
-const translator2DModule = require('viz/translators/translator2d');
-const support = require('core/utils/support');
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import { SlidersController } from 'viz/range_selector/sliders_controller';
+import rendererModule from 'viz/core/renderers/renderer';
+import translator2DModule from 'viz/translators/translator2d';
+import support from '__internal/core/utils/m_support';
 
 const environment = {
     beforeEach: function() {

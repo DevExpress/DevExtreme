@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { fileSaver } from 'exporter';
 import errors from 'ui/widget/ui.errors';
 import typeUtils from 'core/utils/type';
-import domAdapter from 'core/dom_adapter';
+import domAdapter from '__internal/core/m_dom_adapter';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
 QUnit.module('saveAs');

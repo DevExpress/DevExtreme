@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import typeUtils from 'core/utils/type';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import pointerEvents from 'events/pointer';
 import fx from 'animation/fx';
 import commonUtils from 'core/utils/common';

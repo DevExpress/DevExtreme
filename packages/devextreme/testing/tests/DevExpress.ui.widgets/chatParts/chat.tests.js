@@ -3,7 +3,8 @@ import $ from 'jquery';
 import Chat from 'ui/chat';
 import MessageList from '__internal/ui/chat/messagelist';
 import ErrorList from '__internal/ui/chat/errorlist';
-import MessageBox from '__internal/ui/chat/messagebox';
+import MessageBox, { TYPING_END_DELAY } from '__internal/ui/chat/messagebox';
+import MessageBubble from '__internal/ui/chat/messagebubble';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
@@ -30,7 +31,7 @@ const MOCK_CHAT_HEADER_TEXT = 'Chat title';
 
 export const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 export const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
-export const NOW = '1721747399083';
+export const NOW = 1721747399083;
 
 export const userFirst = {
     id: MOCK_COMPANION_USER_ID,
@@ -178,6 +179,39 @@ QUnit.module('Chat', () => {
             assert.deepEqual(messageList.option('currentUserId'), newUserID, 'currentUserId value is updated');
         });
 
+        QUnit.test('typingUsers should be passed to messageList', function(assert) {
+            const typingUsers = [
+                { name: 'Mike' },
+                { name: 'John' },
+            ];
+
+            this.reinit({ typingUsers });
+
+            const messageList = this.getMessageList();
+
+            assert.deepEqual(messageList.option('typingUsers'), typingUsers, 'typingUsers value is passed correctly');
+        });
+
+        QUnit.test('typingUsers should be passed correctly to messageList after update', function(assert) {
+            const typingUsers = [
+                { name: 'Mike' },
+                { name: 'John' },
+            ];
+
+            this.reinit({ typingUsers });
+
+            const newTypingUsers = [
+                { name: 'Alice' },
+                { name: 'James' },
+            ];
+
+            this.instance.option({ typingUsers: newTypingUsers });
+
+            const messageList = this.getMessageList();
+
+            assert.deepEqual(messageList.option('typingUsers'), newTypingUsers, 'typingUsers value is updated');
+        });
+
         QUnit.test('items should be passed to messageList after update', function(assert) {
             const newItems = [{ author: { name: 'Mike' } }, { author: { name: 'John' } }];
 
@@ -188,26 +222,132 @@ QUnit.module('Chat', () => {
             assert.deepEqual(messageList.option('items'), newItems, 'items value is updated');
         });
 
-        QUnit.test('Chat should pass showDayHeaders to messageList on init', function(assert) {
-            this.reinit({
-                showDayHeaders: false,
+        ['showDayHeaders', 'showAvatar', 'showUserName', 'showMessageTimestamp'].forEach(option => {
+            QUnit.test(`Chat should pass ${option} to messageList on init`, function(assert) {
+                this.reinit({
+                    [option]: false,
+                });
+
+                const messageList = this.getMessageList();
+
+                assert.strictEqual(messageList.option(option), false, `${option} is passed on init`);
             });
 
-            const messageList = this.getMessageList();
+            QUnit.test(`Chat should pass ${option} to messageList at runtime`, function(assert) {
+                this.reinit({
+                    [option]: true,
+                });
 
-            assert.strictEqual(messageList.option('showDayHeaders'), false, 'showDayHeaders is passed on init');
+                const messageList = this.getMessageList();
+
+                this.instance.option(option, false);
+
+                assert.strictEqual(messageList.option(option), false, `${option} is passed on runtime`);
+            });
+
+            QUnit.test(`Chat should pass ${option} with value undefined to messageList as false on init`, function(assert) {
+                this.reinit({
+                    [option]: undefined,
+                });
+
+                const messageList = this.getMessageList();
+
+                assert.strictEqual(messageList.option(option), false, `${option} with value undefined is passed as false on init`);
+            });
+
+            QUnit.test(`Chat should pass ${option} with value undefined to messageList as false on runtime`, function(assert) {
+                this.reinit({
+                    [option]: true,
+                });
+
+                this.instance.option(option, undefined);
+
+                const messageList = this.getMessageList();
+
+                assert.strictEqual(messageList.option(option), false, `${option} with value undefined is passed as false on runtime`);
+            });
         });
 
-        QUnit.test('Chat should pass showDayHeaders to messageList at runtime', function(assert) {
+        QUnit.test('Chat should pass messageTemplate to messageList on init', function(assert) {
+            const messageTemplate = () => { return $('<div>'); };
             this.reinit({
-                showDayHeaders: true,
+                messageTemplate,
+            });
+
+            const messageList = this.getMessageList();
+            assert.strictEqual(messageList.option('messageTemplate'), messageTemplate, 'messageTemplate is passed on init');
+        });
+
+        QUnit.test('Chat should pass messageTemplate to messageList at runtime', function(assert) {
+            this.reinit({ });
+
+            const messageTemplate = () => { return $('<div>'); };
+
+            this.instance.option('messageTemplate', messageTemplate);
+
+            const messageList = this.getMessageList();
+
+            assert.strictEqual(messageList.option('messageTemplate'), messageTemplate, 'messageTemplate is passed on runtime');
+        });
+
+        QUnit.test('Chat should pass messageTemplateData with chat instance to messageList', function(assert) {
+            this.reinit({ });
+
+            const messageList = this.getMessageList();
+            const messageTemplateData = messageList.option('messageTemplateData');
+            assert.strictEqual(messageTemplateData.component, this.instance, 'messageTemplateData with chat instance is passed to messageList');
+        });
+
+        QUnit.test('dayHeaderFormat option value should be passed to messageList on init', function(assert) {
+            const dayHeaderFormat = 'dd of MMMM, yyyy';
+
+            this.reinit({
+                dayHeaderFormat,
             });
 
             const messageList = this.getMessageList();
 
-            this.instance.option('showDayHeaders', false);
+            assert.strictEqual(messageList.option('dayHeaderFormat'), dayHeaderFormat, 'dayHeaderFormat is passed on init');
+        });
 
-            assert.strictEqual(messageList.option('showDayHeaders'), false, 'showDayHeaders is passed on runtime');
+        QUnit.test('messageTimestampFormat option value should be passed to messageList on init', function(assert) {
+            const messageTimestampFormat = 'hh hours and mm minutes';
+
+            this.reinit({
+                messageTimestampFormat,
+            });
+
+            const messageList = this.getMessageList();
+
+            assert.strictEqual(messageList.option('messageTimestampFormat'), messageTimestampFormat, 'messageTimestampFormat is passed on init');
+        });
+
+        QUnit.test('dayHeaderFormat option value should be passed to messageList at runtime', function(assert) {
+            const dayHeaderFormat = 'dd of MMMM, yyyy';
+
+            this.reinit({
+                dayHeaderFormat: 'yyyy',
+            });
+
+            this.instance.option('dayHeaderFormat', dayHeaderFormat);
+
+            const messageList = this.getMessageList();
+
+            assert.strictEqual(messageList.option('dayHeaderFormat'), dayHeaderFormat, 'dayHeaderFormat is updated at runtime');
+        });
+
+        QUnit.test('messageTimestampFormat option value should be passed to messageList at runtime', function(assert) {
+            const messageTimestampFormat = 'hh hours and mm minutes';
+
+            this.reinit({
+                messageTimestampFormat: 'hh',
+            });
+
+            this.instance.option('messageTimestampFormat', messageTimestampFormat);
+
+            const messageList = this.getMessageList();
+
+            assert.strictEqual(messageList.option('messageTimestampFormat'), messageTimestampFormat, 'messageTimestampFormat is updated at runtime');
         });
     });
 
@@ -244,6 +384,30 @@ QUnit.module('Chat', () => {
             const errorList = this.getErrorList();
 
             assert.deepEqual(errorList.option('items'), newErrors, 'items value is updated');
+        });
+    });
+
+    QUnit.module('MessageBubble integration', {
+        beforeEach: function() {
+            moduleConfig.beforeEach.apply(this, arguments);
+
+            this.getMessageBubbles = () => MessageBubble.getInstance(this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`));
+        }
+    }, () => {
+        QUnit.test('MessageBubble should have messageTemplateData with correct fields', function(assert) {
+            this.reinit({
+                items: [{
+                    text: 'text',
+                    author: userFirst,
+                }],
+            });
+
+            const messageBubble = this.getMessageBubbles();
+            const messageTemplateData = messageBubble.option('templateData');
+
+            assert.strictEqual(messageTemplateData.component, this.instance, 'messageTemplateData includes chat instance');
+            assert.strictEqual(messageTemplateData.isLast, true, 'messageTemplateData includes isLast field');
+            assert.deepEqual(messageTemplateData.author, userFirst, 'messageTemplateData includes author field');
         });
     });
 
@@ -337,6 +501,88 @@ QUnit.module('Chat', () => {
                     .type(text);
 
                 this.$sendButton.trigger('dxclick');
+            });
+        });
+
+        QUnit.module('onTypingStart', moduleConfig, () => {
+            QUnit.test('should be called with correct arguments', function(assert) {
+                assert.expect(5);
+
+                const currentUser = { id: 1 };
+
+                this.reinit({
+                    user: currentUser,
+                    onTypingStart: ({ component, element, event, user }) => {
+                        assert.strictEqual(component, this.instance, 'component field is correct');
+                        assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
+                        assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                        assert.strictEqual(event.type, 'input', 'e.event.type is correct');
+                        assert.deepEqual(user, currentUser, 'user field is correct');
+                    },
+                });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('n');
+            });
+
+            QUnit.test('should be possible to change at runtime', function(assert) {
+                const onTypingStart = sinon.spy();
+
+                this.instance.option({ onTypingStart });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('n');
+
+                assert.strictEqual(onTypingStart.callCount, 1);
+            });
+        });
+
+        QUnit.module('onTypingEnd', {
+            beforeEach: function() {
+                this.clock = sinon.useFakeTimers();
+
+                moduleConfig.beforeEach.apply(this, arguments);
+            },
+            afterEach: function() {
+                this.clock.restore();
+            }
+        }, () => {
+            QUnit.test('should be called with correct arguments', function(assert) {
+                assert.expect(4);
+
+                const currentUser = { id: 1 };
+
+                this.reinit({
+                    user: currentUser,
+                    onTypingEnd: ({ component, element, user }) => {
+                        assert.strictEqual(component, this.instance, 'component field is correct');
+                        assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
+                        assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                        assert.deepEqual(user, currentUser, 'user field is correct');
+                    },
+                });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('n');
+
+                this.clock.tick(TYPING_END_DELAY);
+            });
+
+            QUnit.test('should be possible to change at runtime', function(assert) {
+                const onTypingEnd = sinon.spy();
+
+                this.instance.option({ onTypingEnd });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('n');
+
+                this.clock.tick(TYPING_END_DELAY);
+
+                assert.strictEqual(onTypingEnd.callCount, 1);
             });
         });
     });

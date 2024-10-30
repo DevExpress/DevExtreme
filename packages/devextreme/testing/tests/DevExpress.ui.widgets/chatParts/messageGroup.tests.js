@@ -2,17 +2,26 @@ import $ from 'jquery';
 
 import MessageGroup from '__internal/ui/chat/messagegroup';
 import ChatAvatar from '__internal/ui/chat/avatar';
+import dateLocalization from 'localization/date';
 
 const AVATAR_CLASS = 'dx-avatar';
 const CHAT_MESSAGEGROUP_TIME_CLASS = 'dx-chat-messagegroup-time';
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 const CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS = 'dx-chat-messagegroup-author-name';
 
+const getStringTime = (time) => {
+    return dateLocalization.format(time, 'shorttime');
+};
+
 const moduleConfig = {
     beforeEach: function() {
         const init = (options = {}) => {
             this.instance = new MessageGroup($('#component'), options);
             this.$element = $(this.instance.$element());
+
+            this.getAvatar = () => this.$element.find(`.${AVATAR_CLASS}`);
+            this.getUsername = () => this.$element.find(`.${CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS}`);
+            this.getMessageTimestamp = () => this.$element.find(`.${CHAT_MESSAGEGROUP_TIME_CLASS}`);
         };
 
         this.reinit = (options) => {
@@ -30,6 +39,39 @@ QUnit.module('MessageGroup', moduleConfig, () => {
         QUnit.test('should be initialized with correct type', function(assert) {
             assert.ok(this.instance instanceof MessageGroup);
         });
+
+        QUnit.test('Avatar should not be rendered when showAvatar is set to false', function(assert) {
+            this.reinit({
+                items: [{ timestamp: new Date().getTime(), text: 'ABC' }],
+                showAvatar: false,
+            });
+
+            const $avatar = this.getAvatar();
+
+            assert.strictEqual($avatar.length, 0, 'avatar was not added');
+        });
+
+        QUnit.test('Username should not be rendered when showUserName is set to false', function(assert) {
+            this.reinit({
+                items: [{ timestamp: new Date().getTime(), text: 'ABC' }],
+                showUserName: false,
+            });
+
+            const $username = this.getUsername();
+
+            assert.strictEqual($username.length, 0, 'username was not added');
+        });
+
+        QUnit.test('Message timestamps should not be rendered when showMessageTimestamp is set to false', function(assert) {
+            this.reinit({
+                items: [{ timestamp: new Date().getTime(), text: 'ABC' }],
+                showMessageTimestamp: false,
+            });
+
+            const $messageTimestamp = this.getMessageTimestamp();
+
+            assert.strictEqual($messageTimestamp.length, 0, 'message timestamp was not added');
+        });
     });
 
     QUnit.module('Time', () => {
@@ -46,7 +88,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 const $time = this.$element.find(`.${CHAT_MESSAGEGROUP_TIME_CLASS}`);
 
                 assert.strictEqual($time.length, 1);
-                assert.strictEqual($time.text(), '21:34', 'time text is correct');
+                assert.strictEqual($time.text(), getStringTime(new Date(timestamp)), 'time text is correct');
             });
         });
 
@@ -63,7 +105,38 @@ QUnit.module('MessageGroup', moduleConfig, () => {
 
             const $time = this.$element.find(`.${CHAT_MESSAGEGROUP_TIME_CLASS}`);
 
-            assert.strictEqual($time.text(), '21:34');
+            assert.strictEqual($time.text(), getStringTime(messageTimeFirst));
+        });
+
+        QUnit.test('time should have formatted value if messageTimestampFormat is specified on init', function(assert) {
+            const messageTime = new Date(2021, 9, 17, 4, 20);
+
+            this.reinit({
+                items: [
+                    { timestamp: messageTime },
+                ],
+                messageTimestampFormat: 'hh_mm',
+            });
+
+            const $time = this.$element.find(`.${CHAT_MESSAGEGROUP_TIME_CLASS}`);
+
+            assert.strictEqual($time.text(), '04_20');
+        });
+
+        QUnit.test('time should have formatted value if messageTimestampFormat is specified at runtime', function(assert) {
+            const messageTime = new Date(2021, 9, 17, 4, 20);
+
+            this.reinit({
+                items: [
+                    { timestamp: messageTime },
+                ],
+            });
+
+            this.instance.option('messageTimestampFormat', 'hh...mm');
+
+            const $time = this.$element.find(`.${CHAT_MESSAGEGROUP_TIME_CLASS}`);
+
+            assert.strictEqual($time.text(), '04...20');
         });
     });
 
@@ -165,6 +238,53 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 const avatar = ChatAvatar.getInstance(this.$element.find(`.${AVATAR_CLASS}`));
 
                 assert.deepEqual(avatar.option('url'), passedUrlValue);
+            });
+        });
+
+        QUnit.test('avatar component should be initialized with correct alt property', function(assert) {
+            [
+                { items: [{}], passedAltValue: undefined },
+                { items: [{ author: {} }], passedAltValue: undefined },
+                { items: [{ author: undefined }], passedAltValue: undefined },
+                { items: [{ author: { avatarAlt: undefined } }], passedAltValue: undefined },
+                { items: [{ author: { avatarAlt: null } }], passedAltValue: null },
+                { items: [{ author: { avatarAlt: '' } }], passedAltValue: '' },
+                { items: [{ author: { avatarAlt: ' ' } }], passedAltValue: ' ' },
+                { items: [{ author: { avatarAlt: 888 } }], passedAltValue: 888 },
+                { items: [{ author: { avatarAlt: NaN } }], passedAltValue: NaN },
+            ].forEach(({ items, passedAltValue }) => {
+                this.reinit({
+                    items,
+                });
+
+                const avatar = ChatAvatar.getInstance(this.$element.find(`.${AVATAR_CLASS}`));
+
+                assert.deepEqual(avatar.option('alt'), passedAltValue);
+            });
+        });
+    });
+
+    QUnit.module('Options', {
+        beforeEach: function() {
+            const createInvalidateStub = () => {
+                this.invalidateStub = sinon.stub(this.instance, '_invalidate');
+            };
+
+            this.recreateInvalidateStub = () => {
+                createInvalidateStub();
+            };
+
+            createInvalidateStub();
+        },
+        afterEach: function() {
+            this.invalidateStub.restore();
+        }
+    }, () => {
+        ['showAvatar', 'showUserName', 'showMessageTimestamp'].forEach(option => {
+            QUnit.test(`should run invalidate after changing ${option} in runtime`, function(assert) {
+                this.instance.option({ [option]: false });
+
+                assert.strictEqual(this.invalidateStub.callCount, 1);
             });
         });
     });

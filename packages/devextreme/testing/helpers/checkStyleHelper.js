@@ -1,4 +1,4 @@
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import browser from 'core/utils/browser';
 import { isDefined } from 'core/utils/type';
 

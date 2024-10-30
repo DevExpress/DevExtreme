@@ -8,7 +8,7 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { value as viewPort } from 'core/utils/view_port';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import fx from 'animation/fx';
 import dateLocalization from 'localization/date';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';

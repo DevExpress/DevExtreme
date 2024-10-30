@@ -5,7 +5,6 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import { touch } from '@js/core/utils/support';
 import { isDefined } from '@js/core/utils/type';
 import { applyBatch } from '@js/data/array_utils';
 import { name as clickEventName } from '@js/events/click';
@@ -14,6 +13,7 @@ import holdEvent from '@js/events/hold';
 import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
+import supportUtils from '@ts/core/utils/m_support';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_context_menu';
@@ -890,7 +890,7 @@ export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => cl
     const $table = super._createTable.apply(that, arguments as any);
 
     if (selectionMode !== 'none') {
-      if (that.option(SHOW_CHECKBOXES_MODE) === 'onLongTap' || !touch) {
+      if (that.option(SHOW_CHECKBOXES_MODE) === 'onLongTap' || !supportUtils.touch) {
         // TODO Not working timeout by hold when it is larger than other timeouts by hold
         eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), `.${DATA_ROW_CLASS}`, that.createAction((e) => {
           processLongTap(that.component, e.event);

@@ -48,13 +48,11 @@ export class ContextMenuController extends modules.ViewController {
           targetElement: getPublicElement($targetElement),
           target: viewName[this],
           rowIndex,
-          // @ts-expect-error
           row: view._getRows()[rowIndex],
           columnIndex,
           column: rowOptions?.cells?.[columnIndex]?.column,
         };
 
-        // @ts-expect-error
         options.items = view.getContextMenuItems && view.getContextMenuItems(options);
 
         that.executeAction('onContextMenuPreparing', options);

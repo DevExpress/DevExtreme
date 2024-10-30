@@ -1,0 +1,18 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+/**
+* $name 180. Pager selected item text color
+* $type color
+*/
+$pagination-page-selected-color: $base-inverted-text-color !default;
+$pagination-page-hovered-bg: $base-hover-bg !default;
+
+/**
+* $name 190. Pager selected item background color
+* $type color
+*/
+$pagination-page-selected-bg: $base-accent !default;

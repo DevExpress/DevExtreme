@@ -3,7 +3,7 @@ import { noop } from 'core/utils/common';
 import { Component } from 'core/component';
 import { PostponedOperations } from 'core/postponed_operations';
 import errors from 'core/errors';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import config from 'core/config';
 
 const TestComponent = Component.inherit({

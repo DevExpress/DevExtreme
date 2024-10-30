@@ -1578,7 +1578,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     // @ts-expect-error
     const result = new Deferred();
     const deferreds: any[] = [];
-    const data = [];
+    const data: any[] = [];
 
     each(rowKeys, (index, key) => {
       deferreds.push(that.byKey(key).done((keyData) => {

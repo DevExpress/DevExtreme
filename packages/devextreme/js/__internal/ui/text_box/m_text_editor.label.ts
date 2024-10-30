@@ -181,7 +181,6 @@ class TextEditorLabel {
   _updateMaxWidth() {
     if (this._isVisible() && !this._isOutsideMode()) {
       const maxWidth = this._props.containerWidth ?? this._props.getContainerWidth();
-      // @ts-expect-error
       this._$label.css({ maxWidth });
     }
   }

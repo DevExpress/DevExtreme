@@ -607,7 +607,6 @@ class ContextMenu extends MenuBase {
     if (!this._shouldHideOnOutsideClick(e)) {
       return false;
     }
-    // @ts-expect-error
     if (domAdapter.isDocument(e.target)) {
       return true;
     }

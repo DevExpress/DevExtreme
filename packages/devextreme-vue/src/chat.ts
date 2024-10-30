@@ -19,7 +19,13 @@ type AccessibleOptions = Pick<Properties,
   "onInitialized" |
   "onMessageSend" |
   "onOptionChanged" |
+  "onTypingEnd" |
+  "onTypingStart" |
   "rtlEnabled" |
+  "showAvatar" |
+  "showDayHeaders" |
+  "showMessageTimestamp" |
+  "showUserName" |
   "user" |
   "visible" |
   "width"
@@ -46,7 +52,13 @@ const componentConfig = {
     onInitialized: Function,
     onMessageSend: Function,
     onOptionChanged: Function,
+    onTypingEnd: Function,
+    onTypingStart: Function,
     rtlEnabled: Boolean,
+    showAvatar: Boolean,
+    showDayHeaders: Boolean,
+    showMessageTimestamp: Boolean,
+    showUserName: Boolean,
     user: Object,
     visible: Boolean,
     width: [Function, Number, String]
@@ -69,7 +81,13 @@ const componentConfig = {
     "update:onInitialized": null,
     "update:onMessageSend": null,
     "update:onOptionChanged": null,
+    "update:onTypingEnd": null,
+    "update:onTypingStart": null,
     "update:rtlEnabled": null,
+    "update:showAvatar": null,
+    "update:showDayHeaders": null,
+    "update:showMessageTimestamp": null,
+    "update:showUserName": null,
     "update:user": null,
     "update:visible": null,
     "update:width": null,
@@ -99,11 +117,13 @@ const DxAuthorConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:avatarAlt": null,
     "update:avatarUrl": null,
     "update:id": null,
     "update:name": null,
   },
   props: {
+    avatarAlt: String,
     avatarUrl: String,
     id: [Number, String],
     name: String
@@ -167,11 +187,13 @@ const DxUserConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:avatarAlt": null,
     "update:avatarUrl": null,
     "update:id": null,
     "update:name": null,
   },
   props: {
+    avatarAlt: String,
     avatarUrl: String,
     id: [Number, String],
     name: String

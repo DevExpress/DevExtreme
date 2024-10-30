@@ -9,9 +9,9 @@ if(typeof define === 'function' && define.amd) {
             require('jquery'),
             require('__internal/grids/tree_list/m_core').default,
             null,
-            require('core/utils/dom'),
-            require('core/utils/common'),
-            require('core/utils/type'),
+            require('__internal/core/utils/m_dom'),
+            require('__internal/core/utils/m_common'),
+            require('__internal/core/utils/m_type'),
             require('data/array_store'),
             'TreeList'
         );
@@ -23,9 +23,9 @@ if(typeof define === 'function' && define.amd) {
         jQuery,
         DevExpress.require('__internal/grids/tree_list/m_core'),
         null,
-        DevExpress.require('core/utils/dom'),
-        DevExpress.require('core/utils/common'),
-        DevExpress.require('core/utils/type'),
+        DevExpress.require('__internal/core/utils/m_dom'),
+        DevExpress.require('__internal/core/utils/m_common'),
+        DevExpress.require('__internal/core/utils/m_type'),
         DevExpress.require('data/array_store'),
         'TreeList'
     ));

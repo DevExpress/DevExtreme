@@ -2,7 +2,6 @@
 
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
-// @ts-expect-error
 import { toComparable } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -719,7 +718,6 @@ export default {
           });
 
           newDataSource
-            // @ts-expect-error
             .load()
             .done(d.resolve)
             .fail(d.fail);

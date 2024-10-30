@@ -5,10 +5,10 @@ import dxChat, {
     Properties
 } from "devextreme/ui/chat";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { Message, DisposingEvent, InitializedEvent, MessageSendEvent, User as ChatUser } from "devextreme/ui/chat";
+import type { Message, DisposingEvent, InitializedEvent, MessageSendEvent, TypingEndEvent, TypingStartEvent, User as ChatUser } from "devextreme/ui/chat";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -18,6 +18,8 @@ type IChatOptionsNarrowedEvents = {
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
   onMessageSend?: ((e: MessageSendEvent) => void);
+  onTypingEnd?: ((e: TypingEndEvent) => void);
+  onTypingStart?: ((e: TypingStartEvent) => void);
 }
 
 type IChatOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IChatOptionsNarrowedEvents> & IHtmlOptions & {
@@ -43,7 +45,7 @@ const Chat = memo(
       ), [baseRef.current]);
 
       const subscribableOptions = useMemo(() => (["items"]), []);
-      const independentEvents = useMemo(() => (["onDisposing","onInitialized","onMessageSend"]), []);
+      const independentEvents = useMemo(() => (["onDisposing","onInitialized","onMessageSend","onTypingEnd","onTypingStart"]), []);
 
       const defaults = useMemo(() => ({
         defaultItems: "items",
@@ -74,19 +76,23 @@ const Chat = memo(
 // owners:
 // Item
 type IAuthorProps = React.PropsWithChildren<{
+  avatarAlt?: string;
   avatarUrl?: string;
   id?: number | string;
   name?: string;
 }>
-const _componentAuthor = memo(
-  (props: IAuthorProps) => {
-    return React.createElement(NestedOption<IAuthorProps>, { ...props });
-  }
-);
+const _componentAuthor = (props: IAuthorProps) => {
+  return React.createElement(NestedOption<IAuthorProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "author",
+    },
+  });
+};
 
-const Author: typeof _componentAuthor & IElementDescriptor = Object.assign(_componentAuthor, {
-  OptionName: "author",
-})
+const Author = Object.assign<typeof _componentAuthor, NestedComponentMeta>(_componentAuthor, {
+  componentType: "option",
+});
 
 // owners:
 // Chat
@@ -94,16 +100,19 @@ type IErrorProps = React.PropsWithChildren<{
   id?: number | string;
   message?: string;
 }>
-const _componentError = memo(
-  (props: IErrorProps) => {
-    return React.createElement(NestedOption<IErrorProps>, { ...props });
-  }
-);
+const _componentError = (props: IErrorProps) => {
+  return React.createElement(NestedOption<IErrorProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "errors",
+      IsCollectionItem: true,
+    },
+  });
+};
 
-const Error: typeof _componentError & IElementDescriptor = Object.assign(_componentError, {
-  OptionName: "errors",
-  IsCollectionItem: true,
-})
+const Error = Object.assign<typeof _componentError, NestedComponentMeta>(_componentError, {
+  componentType: "option",
+});
 
 // owners:
 // Chat
@@ -113,36 +122,43 @@ type IItemProps = React.PropsWithChildren<{
   timestamp?: Date | number | string;
   typing?: boolean;
 }>
-const _componentItem = memo(
-  (props: IItemProps) => {
-    return React.createElement(NestedOption<IItemProps>, { ...props });
-  }
-);
+const _componentItem = (props: IItemProps) => {
+  return React.createElement(NestedOption<IItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        author: { optionName: "author", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  ExpectedChildren: {
-    author: { optionName: "author", isCollectionItem: false }
-  },
-})
+const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
+  componentType: "option",
+});
 
 // owners:
 // Chat
 type IUserProps = React.PropsWithChildren<{
+  avatarAlt?: string;
   avatarUrl?: string;
   id?: number | string;
   name?: string;
 }>
-const _componentUser = memo(
-  (props: IUserProps) => {
-    return React.createElement(NestedOption<IUserProps>, { ...props });
-  }
-);
+const _componentUser = (props: IUserProps) => {
+  return React.createElement(NestedOption<IUserProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "user",
+    },
+  });
+};
 
-const User: typeof _componentUser & IElementDescriptor = Object.assign(_componentUser, {
-  OptionName: "user",
-})
+const User = Object.assign<typeof _componentUser, NestedComponentMeta>(_componentUser, {
+  componentType: "option",
+});
 
 export default Chat;
 export {

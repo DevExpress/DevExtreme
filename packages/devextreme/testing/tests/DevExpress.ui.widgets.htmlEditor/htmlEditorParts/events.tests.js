@@ -4,7 +4,7 @@ import 'ui/html_editor';
 import { deferUpdate } from 'core/utils/common';
 import { Event as dxEvent } from 'events/index';
 
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import eventsEngine from 'events/core/events_engine';
 
 import keyboardMock from '../../../helpers/keyboardMock.js';

@@ -14,6 +14,7 @@ export {
   OptionChangedEvent,
   ValueChangedEvent,
   MentionTemplateData,
+  Converter,
   ImageUploadTab,
   ContextMenuItem,
   ToolbarItem,
