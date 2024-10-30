@@ -7,7 +7,7 @@ import animationFrame from 'animation/frame';
 import browser from 'core/utils/browser';
 import translator from 'animation/translator';
 import viewPort from 'core/utils/view_port';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 
 import 'generic_light.css!';
 

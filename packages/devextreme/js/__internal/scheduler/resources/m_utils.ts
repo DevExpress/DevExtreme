@@ -524,7 +524,7 @@ export const loadResources = (groups, resources, resourceLoaderMap) => {
       const name = getFieldExpr(resource);
       deferreds.push(deferred);
 
-      const dataSourcePromise = (getWrappedDataSource(resource.dataSource) as any).load();
+      const dataSourcePromise = getWrappedDataSource(resource.dataSource).load();
       resourceLoaderMap.set(name, dataSourcePromise);
 
       dataSourcePromise

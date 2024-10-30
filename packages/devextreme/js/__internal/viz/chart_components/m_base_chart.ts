@@ -307,7 +307,7 @@ export const BaseChart = BaseWidget.inherit({
 
   _createThemeManager() {
     const chartOption = this.option();
-    const themeManager = new ThemeManager(this._getThemeManagerOptions()) as any;
+    const themeManager = new ThemeManager(this._getThemeManagerOptions());
 
     themeManager.setTheme(chartOption.theme, chartOption.rtlEnabled);
     return themeManager;

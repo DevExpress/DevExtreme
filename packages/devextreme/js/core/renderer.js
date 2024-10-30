@@ -1,2 +1,3 @@
-import rendererBase from './renderer_base';
-export default rendererBase.get();
+// deprecated
+import { renderer } from '../__internal/core/m_renderer';
+export default renderer;

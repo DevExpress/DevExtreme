@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import ToolbarBase from 'ui/toolbar/ui.toolbar.base';
+import ToolbarBase from '__internal/ui/toolbar/m_toolbar.base';
 
 import fx from 'animation/fx';
 import resizeCallbacks from 'core/utils/resize_callbacks';

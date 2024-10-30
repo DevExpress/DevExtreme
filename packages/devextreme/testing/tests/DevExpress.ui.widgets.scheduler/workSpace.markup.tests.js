@@ -3,7 +3,7 @@ import SchedulerWorkSpace from '__internal/scheduler/workspaces/m_work_space';
 import SchedulerWorkSpaceHorizontalStrategy from '__internal/scheduler/workspaces/m_work_space_grouped_strategy_horizontal';
 import SchedulerWorkSpaceVerticalStrategy from '__internal/scheduler/workspaces/m_work_space_grouped_strategy_vertical';
 import dateLocalization from 'localization/date';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import '__internal/scheduler/m_scheduler';
 
 import 'generic_light.css!';

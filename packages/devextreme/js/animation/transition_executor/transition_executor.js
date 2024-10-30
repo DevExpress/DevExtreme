@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import Class from '../../core/class';
 import { extend } from '../../core/utils/extend';
-import { executeAsync } from '../../core/utils/common';
+import commonUtils from '../../__internal/core/utils/m_common';
 import { isFunction, isPlainObject } from '../../core/utils/type';
 import { map } from '../../core/utils/iterator';
 import fx from '../fx';
@@ -164,7 +164,7 @@ export const TransitionExecutor = Class.inherit({
                     that.reset();
                 });
 
-            executeAsync(function() {
+            commonUtils.executeAsync(function() {
                 that._startAnimations();
             });
         }

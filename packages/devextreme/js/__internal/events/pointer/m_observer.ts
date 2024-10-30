@@ -7,7 +7,6 @@ const addEventsListener = function (events, handler) {
     events
       .split(' ')
       .forEach((event) => {
-        // @ts-expect-error
         domAdapter.listen(domAdapter.getDocument(), event, handler, true);
       });
   });

@@ -1144,7 +1144,7 @@ describe('Animator', () => {
           (inRange as Mock).mockImplementation(inRangeFn);
           viewModel.pendingBounceAnimator = pendingBounceAnimator;
 
-          expect(viewModel.acceleration).toEqual(inRange() || pendingBounceAnimator
+          expect(viewModel.acceleration).toEqual((inRange as Mock)() || pendingBounceAnimator
             ? ACCELERATION
             : OUT_BOUNDS_ACCELERATION);
         });

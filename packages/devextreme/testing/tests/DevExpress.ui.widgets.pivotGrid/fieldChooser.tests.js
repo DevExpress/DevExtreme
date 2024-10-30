@@ -7,7 +7,7 @@ QUnit.testStart(function() {
 });
 
 import { isDefined } from 'core/utils/type';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import dataUtils from 'core/element_data';
 import renderer from 'core/renderer';
 import { triggerShownEvent } from 'events/visibility_change';

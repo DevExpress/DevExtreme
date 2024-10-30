@@ -9,9 +9,9 @@ if(typeof define === 'function' && define.amd) {
             require('jquery'),
             require('__internal/grids/data_grid/m_core').default,
             require('__internal/grids/data_grid/module_not_extended/columns_resizing_reordering').default,
-            require('core/utils/dom'),
-            require('core/utils/common'),
-            require('core/utils/type'),
+            require('__internal/core/utils/m_dom'),
+            require('__internal/core/utils/m_common'),
+            require('__internal/core/utils/m_type'),
             require('data/array_store'),
             'DataGrid'
         );
@@ -23,9 +23,9 @@ if(typeof define === 'function' && define.amd) {
         jQuery,
         DevExpress.require('__internal/grids/data_grid/m_core'),
         DevExpress.require('__internal/grids/data_grid/module_not_extended/columns_resizing_reordering'),
-        DevExpress.require('core/utils/dom'),
-        DevExpress.require('core/utils/common'),
-        DevExpress.require('core/utils/type'),
+        DevExpress.require('__internal/core/utils/m_dom'),
+        DevExpress.require('__internal/core/utils/m_common'),
+        DevExpress.require('__internal/core/utils/m_type'),
         DevExpress.require('data/array_store'),
         'DataGrid'
     ));

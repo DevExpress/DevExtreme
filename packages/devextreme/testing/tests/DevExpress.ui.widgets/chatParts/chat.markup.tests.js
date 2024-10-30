@@ -8,6 +8,7 @@ const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 const CHAT_ERRORLIST_CLASS = 'dx-chat-errorlist';
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
+const CHAT_TYPINGINDICATOR_CLASS = 'dx-chat-typingindicator';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const moduleConfig = {
@@ -85,6 +86,12 @@ QUnit.module('Chat', moduleConfig, () => {
             const $errorList = this.$element.find(`.${CHAT_ERRORLIST_CLASS}`);
 
             assert.strictEqual($errorList.length, 1);
+        });
+
+        QUnit.test('TypingIndicator element should be rendered', function(assert) {
+            const $typingIndicator = this.$element.find(`.${CHAT_TYPINGINDICATOR_CLASS}`);
+
+            assert.strictEqual($typingIndicator.length, 1);
         });
     });
 

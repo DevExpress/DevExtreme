@@ -24,6 +24,7 @@ jobs:
         uses: DevExpress/github-actions/pr-filter@v1
         with:
           paths: '**;!apps/**/*.md'
+          gh-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Show warning for .md files
         if: steps.mdFilesFilter.outputs.result == 'true'

@@ -9,7 +9,6 @@ import { equalByValue } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 // @ts-expect-error
 import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
-import { resetActiveElement } from '@js/core/utils/dom';
 import { extend } from '@js/core/utils/extend';
 import * as iconUtils from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
@@ -27,6 +26,7 @@ import { addNamespace } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import { confirm } from '@js/ui/dialog';
 import { current, isFluent } from '@js/ui/themes';
+import domUtils from '@ts/core/utils/m_dom';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
@@ -2687,7 +2687,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
 
     if (eventName === 'down') {
       if (devices.real().ios || devices.real().android) {
-        resetActiveElement();
+        domUtils.resetActiveElement();
       }
 
       return isShowEditorAlways && allowEditing && editingController.editCell(e.rowIndex, columnIndex);

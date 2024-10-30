@@ -9,7 +9,7 @@ import ArrayStore from 'data/array_store';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import { extend } from 'core/utils/extend';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 
 import 'generic_light.css!';
 
