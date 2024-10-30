@@ -7,6 +7,5 @@ paths-ignore:
   - "/packages/devextreme/artifacts/transpiled-esm-npm/**"
   - "/packages/devextreme/artifacts/transpiled-renovation/**"
   - "/packages/devextreme/artifacts/transpiled-renovation-npm/**"
-  - "/packages/devextreme/artifacts/npm/devextreme/cjs/**"
   - "/packages/devextreme-angular/dist/**"
   - "/packages/devextreme-angular/npm/**"
