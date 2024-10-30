@@ -299,7 +299,7 @@ const getKarmaConfig = function (testsPath) {
   return karmaConfig.parseConfig(path.resolve('./karma.conf.js'), {
     files: [{ pattern: testsPath, watched: false }],
     preprocessors,
-  });
+  }, {throwErrors: true});
 };
 
 gulp.task('test.components.client', gulp.series('build.tests', (done) => {
