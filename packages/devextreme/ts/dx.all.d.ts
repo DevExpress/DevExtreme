@@ -9583,9 +9583,9 @@ declare module DevExpress.ui {
      */
     reloadOnChange?: boolean;
     /**
-     * [descr:dxChatOptions.errors]
+     * [descr:dxChatOptions.alerts]
      */
-    errors?: Array<DevExpress.ui.dxChat.ChatError>;
+    alerts?: Array<DevExpress.ui.dxChat.Alert>;
     /**
      * [descr:dxChatOptions.typingUsers]
      */
@@ -30716,15 +30716,15 @@ declare module DevExpress.ui.dxButtonGroup {
 }
 declare module DevExpress.ui.dxChat {
   /**
-   * [descr:ChatError]
+   * [descr:Alert]
    */
-  export type ChatError = {
+  export type Alert = {
     /**
-     * [descr:ChatError.id]
+     * [descr:Alert.id]
      */
     id?: number | string;
     /**
-     * [descr:ChatError.message]
+     * [descr:Alert.message]
      */
     message?: string;
   };

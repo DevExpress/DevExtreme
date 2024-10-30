@@ -6,7 +6,7 @@ export {
   TypingStartEvent,
   TypingEndEvent,
   User,
-  ChatError,
+  Alert,
   Message,
   dxChatOptions,
   Properties,

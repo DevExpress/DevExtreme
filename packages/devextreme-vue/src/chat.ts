@@ -6,10 +6,10 @@ import { prepareConfigurationComponentConfig } from "./core/index";
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
+  "alerts" |
   "dataSource" |
   "disabled" |
   "elementAttr" |
-  "errors" |
   "focusStateEnabled" |
   "height" |
   "hint" |
@@ -41,10 +41,10 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
+    alerts: Array,
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
-    errors: Array,
     focusStateEnabled: Boolean,
     height: [Function, Number, String],
     hint: String,
@@ -72,10 +72,10 @@ const componentConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
+    "update:alerts": null,
     "update:dataSource": null,
     "update:disabled": null,
     "update:elementAttr": null,
-    "update:errors": null,
     "update:focusStateEnabled": null,
     "update:height": null,
     "update:hint": null,
@@ -107,7 +107,7 @@ const componentConfig = {
     (this as any).$_WidgetClass = Chat;
     (this as any).$_hasAsyncTemplate = true;
     (this as any).$_expectedChildren = {
-      error: { isCollectionItem: true, optionName: "errors" },
+      alert: { isCollectionItem: true, optionName: "alerts" },
       item: { isCollectionItem: true, optionName: "items" },
       typingUser: { isCollectionItem: true, optionName: "typingUsers" },
       user: { isCollectionItem: false, optionName: "user" }
@@ -119,6 +119,26 @@ prepareComponentConfig(componentConfig);
 
 const DxChat = defineComponent(componentConfig);
 
+
+const DxAlertConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:id": null,
+    "update:message": null,
+  },
+  props: {
+    id: [Number, String],
+    message: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxAlertConfig);
+
+const DxAlert = defineComponent(DxAlertConfig);
+
+(DxAlert as any).$_optionName = "alerts";
+(DxAlert as any).$_isCollectionItem = true;
 
 const DxAuthorConfig = {
   emits: {
@@ -142,26 +162,6 @@ prepareConfigurationComponentConfig(DxAuthorConfig);
 const DxAuthor = defineComponent(DxAuthorConfig);
 
 (DxAuthor as any).$_optionName = "author";
-
-const DxErrorConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:id": null,
-    "update:message": null,
-  },
-  props: {
-    id: [Number, String],
-    message: String
-  }
-};
-
-prepareConfigurationComponentConfig(DxErrorConfig);
-
-const DxError = defineComponent(DxErrorConfig);
-
-(DxError as any).$_optionName = "errors";
-(DxError as any).$_isCollectionItem = true;
 
 const DxItemConfig = {
   emits: {
@@ -242,8 +242,8 @@ const DxUser = defineComponent(DxUserConfig);
 export default DxChat;
 export {
   DxChat,
+  DxAlert,
   DxAuthor,
-  DxError,
   DxItem,
   DxTypingUser,
   DxUser

@@ -36,7 +36,7 @@ export const Overview: Story = {
     args: {
         items: initialMessages,
         user: firstAuthor,
-        errors: [],
+        alerts: [],
         ...commonArgs,
     },
     argTypes: {
@@ -52,7 +52,7 @@ export const Overview: Story = {
         hint: {
             control: 'text',
         },
-        errors: {
+        alerts: {
             control: 'select',
             options: ['None', 'One error', 'One error with long text', 'Three errors'],
             mapping: {
@@ -77,7 +77,7 @@ export const Overview: Story = {
         rtlEnabled,
         user,
         items,
-        errors,
+        alerts,
         visible,
         hint,
         activeStateEnabled,
@@ -105,7 +105,7 @@ export const Overview: Story = {
                     disabled={disabled}
                     rtlEnabled={rtlEnabled}
                     user={user}
-                    errors={errors}
+                    alerts={alerts}
                     onMessageEntered={onMessageEntered}
                     visible={visible}
                     hint={hint}

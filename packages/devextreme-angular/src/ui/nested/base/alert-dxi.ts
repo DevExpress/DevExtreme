@@ -9,7 +9,7 @@ import {
 @Component({
     template: ''
 })
-export abstract class DxiChatError extends CollectionNestedOption {
+export abstract class DxiAlert extends CollectionNestedOption {
     get id(): number | string {
         return this._getOption('id');
     }

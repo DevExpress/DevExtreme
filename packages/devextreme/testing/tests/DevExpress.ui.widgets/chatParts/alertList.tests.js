@@ -1,17 +1,17 @@
 import $ from 'jquery';
 
-import ErrorList from '__internal/ui/chat/errorlist';
+import AlertList from '__internal/ui/chat/alertlist';
 
-const CHAT_ERRORLIST_ERROR_CLASS = 'dx-chat-errorlist-error';
+const CHAT_ALERTLIST_ERROR_CLASS = 'dx-chat-alertlist-error';
 
 const moduleConfig = {
     beforeEach: function() {
         const init = (options = {}, selector = '#component') => {
-            this.instance = new ErrorList($(selector), options);
+            this.instance = new AlertList($(selector), options);
             this.$element = $(this.instance.$element());
         };
 
-        this.getErrors = () => this.$element.children(`.${CHAT_ERRORLIST_ERROR_CLASS}`);
+        this.getErrors = () => this.$element.children(`.${CHAT_ALERTLIST_ERROR_CLASS}`);
 
         this.reinit = (options, selector) => {
             this.instance.dispose();
@@ -23,10 +23,10 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('ErrorList', moduleConfig, () => {
+QUnit.module('AlertList', moduleConfig, () => {
     QUnit.module('Render', () => {
         QUnit.test('should be initialized with correct type', function(assert) {
-            assert.ok(this.instance instanceof ErrorList);
+            assert.ok(this.instance instanceof AlertList);
         });
 
         QUnit.test('should not be any errors if the items contain undefined values', function(assert) {
