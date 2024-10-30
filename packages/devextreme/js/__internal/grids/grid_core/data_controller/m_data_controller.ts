@@ -57,7 +57,7 @@ const changePaging = function (that, optionName, value) {
     return dataSource[optionName]();
   }
 
-  return 0;
+  return optionName === 'pageSize' ? 0 : Deferred().resolve().promise();
 };
 
 interface HandleDataChangedArguments {
