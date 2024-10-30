@@ -2366,6 +2366,25 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.equal(contentReadyCallCount, 2);
     });
 
+    QUnit.test('pageIndex return deferred when dataSource is null', function(assert) {
+        let doneCalled = false;
+
+        // act
+        const dataGrid = createDataGrid({});
+
+        this.clock.tick(10);
+
+        // act
+        dataGrid.pageIndex(1).done(function() {
+            doneCalled = true;
+        });
+
+        this.clock.tick(10);
+
+        // assert
+        assert.equal(doneCalled, true);
+    });
+
 
     QUnit.test('pageIndex return deferred when change page', function(assert) {
         let doneCalled = false;
