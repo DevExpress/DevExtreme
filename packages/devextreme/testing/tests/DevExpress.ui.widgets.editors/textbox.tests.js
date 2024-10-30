@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import TextBox from 'ui/text_box';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import { getWidth, getOuterWidth } from 'core/utils/size';
 import keyboardMock from '../../helpers/keyboardMock.js';

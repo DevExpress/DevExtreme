@@ -112,7 +112,6 @@ const Accordion = CollectionWidget.inherit({
           }
 
           if (isDefined(data.title) && !isPlainObject(data.title)) {
-            // @ts-expect-error
             $container.append(domAdapter.createTextNode(data.title));
           }
         } else if (isDefined(data)) {

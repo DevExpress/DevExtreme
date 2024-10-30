@@ -1,0 +1,98 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../../base/pagination";
+@use "../gridBase/sizes" as *;
+
+// adduse
+
+
+.dx-pager,
+.dx-pagination {
+  padding: $fluent-pagination-paddings $fluent-grid-base-cell-horizontal-padding;
+
+  &.dx-light-mode {
+    .dx-page-sizes {
+      min-width: $fluent-pagination-light-pagesizes-min-width;
+    }
+
+    .dx-page-index {
+      min-width: $fluent-pagination-light-pageindex-min-width;
+    }
+
+    .dx-pages {
+      .dx-page-indexes {
+        vertical-align: middle;
+      }
+
+      .dx-navigate-button,
+      .dx-light-pages {
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .dx-pages {
+    .dx-page {
+      padding: $fluent-pagination-page-padding;
+      line-height: $fluent-pagination-page-line-height;
+    }
+
+    .dx-separator {
+      padding-left: $fluent-pagination-separator-paddings;
+      padding-right: $fluent-pagination-separator-paddings;
+    }
+
+    .dx-navigate-button {
+      width: 9px;
+      height: $fluent-pagination-navbutton-height;
+      padding: $fluent-pagination-navbutton-paddings;
+    }
+
+    .dx-prev-button {
+      @include dx-icon(chevronleft);
+    }
+
+    .dx-next-button {
+      @include dx-icon(chevronright);
+    }
+
+    .dx-prev-button,
+    .dx-next-button {
+      @include dx-icon-font-centered-sizing($fluent-pagination-navbutton-icon-size);
+    }
+  }
+
+  .dx-page,
+  .dx-page-size {
+    font-size: $fluent-pagination-page-font-size;
+
+    &:hover {
+      background-color: $pagination-page-hovered-bg;
+    }
+
+    border-radius: 20px;
+  }
+
+  .dx-page-sizes .dx-page-size {
+    &:first-child,
+    &.dx-first-child {
+      margin-left: 0;
+    }
+
+    padding: $fluent-pagination-page-padding;
+    line-height: $fluent-pagination-page-line-height;
+  }
+
+  .dx-pages,
+  .dx-page-sizes {
+    .dx-selection {
+      font-weight: 500;
+      background-color: $pagination-page-selected-bg;
+      color: $pagination-page-selected-color;
+    }
+  }
+}

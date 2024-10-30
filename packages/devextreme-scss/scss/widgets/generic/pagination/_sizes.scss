@@ -1,0 +1,43 @@
+@use "../sizes" as *;
+
+// adduse
+
+$generic-pagination-paddings: null !default;
+$generic-pagination-separator-paddings: null !default;
+$generic-pagination-page-padding-left-right: null !default;
+$generic-pagination-page-padding-top: null !default;
+$generic-pagination-page-padding-bottom: null !default;
+$generic-pagination-navbutton-paddings: null !default;
+$generic-pagination-navbutton-height: null !default;
+$generic-pagination-pagesize-padding-top: null !default;
+$generic-pagination-pagesize-padding-bottom: null !default;
+$generic-pagination-pagesize-padding-left: null !default;
+$generic-pagination-pagesize-padding-right: null !default;
+
+@if $size == "default" {
+  $generic-pagination-paddings: 9px !default;
+  $generic-pagination-separator-paddings: 8px !default;
+  $generic-pagination-page-padding-left-right: 9px !default;
+  $generic-pagination-page-padding-top: 7px !default;
+  $generic-pagination-page-padding-bottom: 8px !default;
+  $generic-pagination-navbutton-paddings: $generic-pagination-paddings 13px !default;
+  $generic-pagination-navbutton-height: 17px !default;
+  $generic-pagination-pagesize-padding-top: 7px !default;
+  $generic-pagination-pagesize-padding-bottom: 8px !default;
+  $generic-pagination-pagesize-padding-left: 10px !default;
+  $generic-pagination-pagesize-padding-right: 9px !default;
+}
+
+@else if $size == "compact" {
+  $generic-pagination-paddings: 5px !default;
+  $generic-pagination-page-padding-left-right: 6px !default;
+  $generic-pagination-page-padding-top: 4px !default;
+  $generic-pagination-page-padding-bottom: 5px !default;
+  $generic-pagination-separator-paddings: 4px !default;
+  $generic-pagination-navbutton-paddings: $generic-pagination-paddings 7px !default;
+  $generic-pagination-navbutton-height: 16px !default;
+  $generic-pagination-pagesize-padding-top: 4px !default;
+  $generic-pagination-pagesize-padding-bottom: 5px !default;
+  $generic-pagination-pagesize-padding-left: 8px !default;
+  $generic-pagination-pagesize-padding-right: 6px !default;
+}

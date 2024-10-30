@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-// @ts-expect-error
 import { equalByValue, getKeyHash } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';

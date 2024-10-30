@@ -14,6 +14,7 @@ import {
   Widget,
   WidgetClass,
 } from './test-component';
+import { NestedComponentMeta } from '../types';
 
 jest.useFakeTimers();
 jest.mock('devextreme/core/utils/common', () => ({
@@ -42,7 +43,7 @@ const ControlledComponent = memo(function ControlledComponent(props: IControlled
   );
 });
 
-const NestedComponent = memo(function NestedComponent(props: any) {
+const NestedComponent = function NestedComponent(props: any) {
   return (
     <ConfigurationComponent<{
       a?: number;
@@ -54,59 +55,58 @@ const NestedComponent = memo(function NestedComponent(props: any) {
       value?: number;
       onValueChange?: (value: number) => void;
     } & React.PropsWithChildren>
+      elementDescriptor={{
+        OptionName: 'nestedOption',
+        DefaultsProps: {
+          defaultC: 'c',
+        },
+      }}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & {
-  OptionName: string
-  DefaultsProps: Record<string, string>
-};
+} as React.ComponentType<any> & NestedComponentMeta;
 
-NestedComponent.DefaultsProps = {
-  defaultC: 'c',
-};
-NestedComponent.OptionName = 'nestedOption';
+NestedComponent.componentType = 'option';
 
-const CollectionNestedComponent = memo(function CollectionNestedComponent(props: any) {
+const CollectionNestedComponent = function CollectionNestedComponent(props: any) {
   return (
     <ConfigurationComponent<{
       a?: number;
       onAChange?: (value: number) => void;
     } & React.PropsWithChildren>
+      elementDescriptor={{
+        OptionName: 'items',
+        IsCollectionItem: true,
+        ExpectedChildren: {
+          subItems: {
+            optionName: 'subItems',
+            isCollectionItem: true,
+          },
+        },
+      }}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & {
-  OptionName: string
-  IsCollectionItem: boolean;
-  ExpectedChildren: Record<string, { optionName: string, isCollectionItem: boolean }>
-};
+} as React.ComponentType<any> & NestedComponentMeta;
 
-CollectionNestedComponent.OptionName = 'items';
-CollectionNestedComponent.IsCollectionItem = true;
-CollectionNestedComponent.ExpectedChildren = {
-  subItems: {
-    optionName: 'subItems',
-    isCollectionItem: true,
-  },
-};
+CollectionNestedComponent.componentType = 'option';
 
-const CollectionSubNestedComponent = memo(function CollectionSubNestedComponent(props: any) {
+const CollectionSubNestedComponent = function CollectionSubNestedComponent(props: any) {
   return (
     <ConfigurationComponent<{
       a?: number;
       onAChange?: (value: number) => void;
     }>
+      elementDescriptor={{
+        OptionName: 'subItems',
+        IsCollectionItem: true,
+      }}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & {
-  OptionName: string
-  IsCollectionItem: boolean;
-};
+} as React.ComponentType<any> & NestedComponentMeta;
 
-CollectionSubNestedComponent.OptionName = 'subItems';
-CollectionSubNestedComponent.IsCollectionItem = true;
+CollectionSubNestedComponent.componentType = 'option';
 
 const TestComponentWithExpectation = memo(function TestComponentWithExpectation(props: any) {
   return (
@@ -206,6 +206,32 @@ describe('option update', () => {
     expect(Widget.option.mock.calls[0]).toEqual(['items[0].a', 234]);
   });
 
+  it('updates nested collection item inside a custom configuration component', () => {
+    const MySetting = (props: any) => {
+      const { value } = props;
+
+      return (
+        <CollectionNestedComponent a={value} />
+      );
+    };
+
+    const TestContainer = (props: any) => {
+      const { value } = props;
+      return (
+        <TestComponentWithExpectation>
+          <MySetting value={value} />
+        </TestComponentWithExpectation>
+      );
+    };
+
+    const { rerender } = render(<TestContainer value={123} />);
+    rerender(<TestContainer value={234} />);
+
+    jest.runAllTimers();
+    expect(Widget.option.mock.calls.length).toBe(1);
+    expect(Widget.option.mock.calls[0]).toEqual(['items[0].a', 234]);
+  });
+
   it('updates sub-nested collection item', () => {
     const TestContainer = (props: any) => {
       const { value } = props;
@@ -224,6 +250,33 @@ describe('option update', () => {
     expect(Widget.option.mock.calls.length).toBe(1);
     expect(Widget.option.mock.calls[0]).toEqual(['items[0].subItems[0].a', 234]);
   });
+});
+
+it('updates sub-nested collection item within a custom component', () => {
+  const MySetting = (props: any) => {
+    const { value } = props;
+
+    return (
+      <CollectionNestedComponent>
+        <CollectionSubNestedComponent a={value} />
+      </CollectionNestedComponent>
+    );
+  };
+
+  const TestContainer = (props: any) => {
+    const { value } = props;
+    return (
+      <TestComponentWithExpectation>
+        <MySetting value={value} />
+      </TestComponentWithExpectation>
+    );
+  };
+  const { rerender } = render(<TestContainer value={123} />);
+  rerender(<TestContainer value={234} />);
+
+  jest.runAllTimers();
+  expect(Widget.option.mock.calls.length).toBe(1);
+  expect(Widget.option.mock.calls[0]).toEqual(['items[0].subItems[0].a', 234]);
 });
 
 describe('option control', () => {
@@ -617,11 +670,44 @@ describe('cfg-component option control', () => {
     expect(Widget.option.mock.calls[0]).toEqual(['nestedOption.a', 123]);
   });
 
+  it('rolls cfg-component option value back (option is inside a custom configuration component)', () => {
+    const MySetting = ({ a }) => <NestedComponent a={a} />;
+
+    render(
+      <ControlledComponent>
+        <MySetting a={123} />
+      </ControlledComponent>,
+    );
+
+    fireOptionChange('nestedOption.a', 234);
+    jest.runAllTimers();
+    expect(Widget.option.mock.calls.length).toBe(1);
+    expect(Widget.option.mock.calls[0]).toEqual(['nestedOption.a', 123]);
+  });
+
   it('rolls nested collection value back', () => {
     render(
       <TestComponentWithExpectation>
         <CollectionNestedComponent a={1} />
         <CollectionNestedComponent a={2} />
+      </TestComponentWithExpectation>,
+    );
+
+    fireOptionChange('items', []);
+    jest.runAllTimers();
+    expect(Widget.option.mock.calls.length).toBe(1);
+    expect(Widget.option.mock.calls[0]).toEqual(['items', [{ a: 1 }, { a: 2 }]]);
+  });
+
+  it('rolls nested collection value back (options is inside a custom configuration component)', () => {
+    const MySetting = ({ a1, a2 }) => <>
+      <CollectionNestedComponent a={a1} />
+      <CollectionNestedComponent a={a2} />
+    </>;
+
+    render(
+      <TestComponentWithExpectation>
+        <MySetting a1={1} a2={2} />
       </TestComponentWithExpectation>,
     );
 
@@ -649,6 +735,21 @@ describe('cfg-component option control', () => {
     render(
       <ControlledComponent>
         <NestedComponent complexValue={{ a: 123, b: 234 }} />
+      </ControlledComponent>,
+    );
+
+    fireOptionChange('nestedOption.complexValue', {});
+    jest.runAllTimers();
+    expect(Widget.option.mock.calls.length).toBe(1);
+    expect(Widget.option.mock.calls[0]).toEqual(['nestedOption.complexValue', { a: 123, b: 234 }]);
+  });
+
+  it('rolls cfg-component option complex value (options in custom configuration component)', () => {
+    const MySetting = ({ a, b }) => <NestedComponent complexValue={{ a, b }} />;
+
+    render(
+      <ControlledComponent>
+        <MySetting a={123} b={234} />
       </ControlledComponent>,
     );
 
@@ -738,11 +839,34 @@ describe('cfg-component option control', () => {
     expect(Widget.option).toHaveBeenCalledWith('nestedOption.a', 123);
   });
 
+  it('invokes option change guard handlers in strict mode (options in custom configuration component)', () => {
+    const MySetting = ({ a }) => <NestedComponent a={a} />;
+
+    const TestContainer = ({ value }: { value: number }) => {
+      return (
+        <React.StrictMode>
+          <ControlledComponent>
+            <MySetting a={value} />
+          </ControlledComponent>
+        </React.StrictMode>
+      );
+    };
+
+    const { rerender } = render(<TestContainer value={123} />);
+
+    fireOptionChange('nestedOption.a', 234);
+
+    rerender(<TestContainer value={123} />);
+    jest.runAllTimers();
+
+    expect(Widget.option).toHaveBeenCalledWith('nestedOption.a', 123);
+  });
+
   // T1106899
   it('apply cfg-component option value if value has changes', () => {
     const optionsManager = new OptionsManagerModule.OptionsManager();
     const config = {
-      fullName: '',
+      name: '',
       predefinedOptions: {},
       initialOptions: {},
       options: { value: 1 },
@@ -819,6 +943,28 @@ describe('cfg-component option control', () => {
     expect(Widget.option.mock.calls[0]).toEqual(['nestedOption.a', 234]);
   });
 
+  it('apply cfg-component option change if value really change (option in custom configuration component)', () => {
+    const MySetting = ({ value }) => <NestedComponent a={value} b="const" />;
+
+    const TestContainer = (props: any) => {
+      const { value } = props;
+      return (
+        <ControlledComponent>
+          <MySetting value={value} />
+        </ControlledComponent>
+      );
+    };
+
+    const { rerender } = render(<TestContainer value={123} />);
+    fireOptionChange('nestedOption.a', 234);
+
+    rerender(<TestContainer value={234} />);
+
+    jest.runAllTimers();
+    expect(Widget.option.mock.calls.length).toBe(1);
+    expect(Widget.option.mock.calls[0]).toEqual(['nestedOption.a', 234]);
+  });
+
   it('does not control not specified cfg-component option', () => {
     render(
       <ControlledComponent>
@@ -872,12 +1018,45 @@ describe('cfg-component option defaults control', () => {
     expect(Widget.option.mock.calls.length).toBe(0);
   });
 
+  it('ignores cfg-component option with default prefix (option in custom configuration component)', () => {
+    const MySetting = () => <NestedComponent defaultC="default" />;
+
+    render(
+      <ControlledComponent>
+        <MySetting />
+      </ControlledComponent>,
+    );
+
+    fireOptionChange('nestedOption.c', 'changed');
+    jest.runAllTimers();
+    expect(Widget.option.mock.calls.length).toBe(0);
+  });
+
   it('ignores 3rd-party changes in nested default props', () => {
     const TestContainer = (props: any) => {
       const { optionDefValue } = props;
       return (
         <ControlledComponent>
           <NestedComponent defaultC={optionDefValue} />
+        </ControlledComponent>
+      );
+    };
+
+    const { rerender } = render(<TestContainer optionDefValue="default" />);
+    rerender(<TestContainer optionDefValue="changed" />);
+
+    jest.runAllTimers();
+    expect(Widget.option.mock.calls.length).toBe(0);
+  });
+
+  it('ignores 3rd-party changes in nested default props (option in custom configuration component)', () => {
+    const MySetting = ({ optionDefValue }) => <NestedComponent defaultC={optionDefValue} />;
+
+    const TestContainer = (props: any) => {
+      const { optionDefValue } = props;
+      return (
+        <ControlledComponent>
+          <MySetting optionDefValue={optionDefValue} />
         </ControlledComponent>
       );
     };
@@ -1185,6 +1364,62 @@ describe('onXXXChange', () => {
               onValueChange={onSubNestedPropChange}
             />
           </CollectionNestedComponent>
+        </TestComponent>,
+      );
+
+      fireOptionChange('items[1].a', 1);
+      expect(onCollectionPropChange).toHaveBeenCalledTimes(1);
+      expect(onCollectionPropChange).toBeCalledWith(1);
+
+      fireOptionChange('items[1].subItems[0].a', 2);
+      expect(onSubCollectionPropChange).toHaveBeenCalledTimes(1);
+      expect(onSubCollectionPropChange).toBeCalledWith(2);
+
+      fireOptionChange('nestedOption.value', '3');
+      expect(onNestedPropChange).toHaveBeenCalledTimes(1);
+      expect(onNestedPropChange).toBeCalledWith('3');
+
+      fireOptionChange('items[1].nestedOption.value', '4');
+      expect(onSubNestedPropChange).toHaveBeenCalledTimes(1);
+      expect(onSubNestedPropChange).toBeCalledWith('4');
+    });
+
+    it('is called on nested option changed (options in custom configuration components)', () => {
+      const onNestedPropChange = jest.fn();
+      const onSubNestedPropChange = jest.fn();
+      const onCollectionPropChange = jest.fn();
+      const onSubCollectionPropChange = jest.fn();
+
+      const MySettingInner = () => <>
+        <CollectionSubNestedComponent
+          a={0}
+          onAChange={onSubCollectionPropChange}
+        />
+        <NestedComponent
+          value={0}
+          onValueChange={onSubNestedPropChange}
+        />
+      </>;
+
+      const MySettingOuter = () => <>
+          <NestedComponent
+            value={0}
+            onValueChange={onNestedPropChange}
+          />
+          <CollectionNestedComponent
+            a={0}
+          />
+          <CollectionNestedComponent
+            a={0}
+            onAChange={onCollectionPropChange}
+          >
+            <MySettingInner />
+          </CollectionNestedComponent>
+      </>;
+
+      render(
+        <TestComponent>
+          <MySettingOuter />
         </TestComponent>,
       );
 

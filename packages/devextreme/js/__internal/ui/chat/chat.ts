@@ -5,12 +5,14 @@ import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import type { Options as DataSourceOptions } from '@js/data/data_source';
 import DataHelperMixin from '@js/data_helper';
-import type { NativeEventInfo } from '@js/events';
+import type { Format } from '@js/localization';
 import messageLocalization from '@js/localization/message';
 import type {
   Message,
   MessageSendEvent,
   Properties as ChatProperties,
+  TypingEndEvent,
+  TypingStartEvent,
   User,
 } from '@js/ui/chat';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -29,14 +31,13 @@ import MessageList from './messagelist';
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-type TypingStartEvent = NativeEventInfo<Chat> & { user?: User };
-type TypingEndEvent = NativeEventInfo<Chat> & { user?: User };
-
 type Properties = ChatProperties & {
   title: string;
-  showDayHeaders: boolean;
-  onTypingStart?: ((e: TypingStartEvent) => void);
-  onTypingEnd?: ((e: TypingEndEvent) => void);
+  // eslint-disable-next-line
+  messageTemplate: any;
+  dayHeaderFormat?: Format;
+  messageTimestampFormat?: Format;
+  typingUsers: User[];
 };
 
 class Chat extends Widget<Properties> {
@@ -65,8 +66,15 @@ class Chat extends Widget<Properties> {
       items: [],
       dataSource: null,
       user: { id: new Guid().toString() },
+      dayHeaderFormat: 'shortdate',
+      messageTimestampFormat: 'shorttime',
       errors: [],
+      showAvatar: true,
+      showUserName: true,
+      showMessageTimestamp: true,
+      typingUsers: [],
       onMessageSend: undefined,
+      messageTemplate: null,
       onTypingStart: undefined,
       onTypingEnd: undefined,
     };
@@ -130,10 +138,24 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageList(): void {
-    const { items = [], user, showDayHeaders } = this.option();
+    const {
+      items = [],
+      user,
+      showDayHeaders = false,
+      showAvatar = false,
+      showUserName = false,
+      showMessageTimestamp = false,
+      messageTemplate,
+      dayHeaderFormat,
+      messageTimestampFormat,
+      typingUsers,
+    } = this.option();
 
-    const currentUserId = user?.id;
     const $messageList = $('<div>');
+
+    // @ts-expect-error
+    const isLoading = this._dataController.isLoading();
+    const currentUserId = user?.id;
 
     this.$element().append($messageList);
 
@@ -141,8 +163,15 @@ class Chat extends Widget<Properties> {
       items,
       currentUserId,
       showDayHeaders,
-      // @ts-expect-error
-      isLoading: this._dataController.isLoading(),
+      messageTemplate,
+      messageTemplateData: { component: this },
+      showAvatar,
+      showUserName,
+      showMessageTimestamp,
+      dayHeaderFormat,
+      messageTimestampFormat,
+      typingUsers,
+      isLoading,
     });
   }
 
@@ -304,6 +333,15 @@ class Chat extends Widget<Properties> {
         this._createTypingEndAction();
         break;
       case 'showDayHeaders':
+      case 'showAvatar':
+      case 'showUserName':
+      case 'showMessageTimestamp':
+        this._messageList.option(name, !!value);
+        break;
+      case 'messageTemplate':
+      case 'dayHeaderFormat':
+      case 'messageTimestampFormat':
+      case 'typingUsers':
         this._messageList.option(name, value);
         break;
       default:

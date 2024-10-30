@@ -51,6 +51,9 @@ safeSizeTest('Move right fixed column to the left', async (t) => {
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(24).element, -400, 0);
 
+  // TODO: issue will be fixed in the card 7Mct6tJU
+  await dataGrid.scrollTo(t, { x: 0 });
+
   await takeScreenshot('move_right_fixed_column_to_left.png', dataGrid.element);
 
   // assert
@@ -154,6 +157,9 @@ safeSizeTest('Move right fixed band column to the left', async (t) => {
 
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(3).element, -500, 0);
+
+  // TODO: issue will be fixed in the card 7Mct6tJU
+  await dataGrid.scrollTo(t, { x: 0 });
 
   await takeScreenshot('move_right_fixed_band_column_to_left.png', dataGrid.element);
 

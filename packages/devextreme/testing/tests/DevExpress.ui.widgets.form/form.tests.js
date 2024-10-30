@@ -1,8 +1,8 @@
 import { getWidth, getHeight } from 'core/utils/size';
 import device from 'core/devices';
 import config from 'core/config';
-import domAdapter from 'core/dom_adapter';
-import resizeCallbacks from 'core/utils/resize_callbacks';
+import domAdapter from '__internal/core/m_dom_adapter';
+import resizeCallbacks from '__internal/core/utils/m_resize_callbacks';
 import typeUtils from 'core/utils/type';
 import { extend } from 'core/utils/extend';
 import visibilityEventsModule from 'events/visibility_change';
@@ -17,7 +17,7 @@ import 'ui/switch';
 import 'ui/slider';
 import 'ui/range_slider';
 
-import windowModule from 'core/utils/window';
+import windowModule from '__internal/core/utils/m_window';
 import Form from 'ui/form';
 import TextEditorBase from 'ui/text_box/ui.text_editor.base.js';
 

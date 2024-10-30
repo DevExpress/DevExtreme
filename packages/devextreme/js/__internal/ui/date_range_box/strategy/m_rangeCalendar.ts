@@ -27,7 +27,6 @@ class RangeCalendarStrategy extends CalendarStrategy {
   }
 
   popupConfig(popupConfig) {
-    // @ts-expect-error
     return extend(true, super.popupConfig(popupConfig), {
       position: { of: this.getDateRangeBox().$element() },
     });
@@ -48,7 +47,6 @@ class RangeCalendarStrategy extends CalendarStrategy {
     const dateRangeBox = this.getDateRangeBox();
 
     return {
-      // @ts-expect-error
       ...super.supportedKeys(),
       rightArrow: () => {
         if (dateRangeBox.option('opened')) {
@@ -129,7 +127,6 @@ class RangeCalendarStrategy extends CalendarStrategy {
       ? this._injectComponent(disabledDatesValue)
       : disabledDatesValue ?? undefined;
 
-    // @ts-expect-error
     return extend(super._getWidgetOptions(), {
       disabledDates,
       value,

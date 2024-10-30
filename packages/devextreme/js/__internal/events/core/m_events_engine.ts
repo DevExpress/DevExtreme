@@ -61,7 +61,6 @@ const EVENT_PROPERTIES = [
 ];
 
 function matchesSafe(target, selector) {
-  // @ts-expect-error
   return !isWindow(target) && target.nodeName !== '#document' && domAdapter.elementMatches(target, selector);
 }
 const elementDataMap = new WeakMap();
@@ -322,8 +321,6 @@ function getHandlersController(element, eventName) {
             passive: false,
           };
         }
-
-        // @ts-expect-error
         eventData.removeListener = domAdapter.listen(element, NATIVE_EVENTS_TO_SUBSCRIBE[eventName] || eventName, eventData.nativeHandler, nativeListenerOptions);
       }
 

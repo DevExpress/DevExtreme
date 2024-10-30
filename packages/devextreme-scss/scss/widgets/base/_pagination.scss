@@ -1,0 +1,146 @@
+@use "./mixins" as *;
+
+// adduse
+
+
+$pagination-paddings: 8px;
+$pagination-info-paddings: 9px;
+
+.dx-pager,
+.dx-pagination {
+  overflow: hidden;
+  width: 100%;
+  padding-top: $pagination-paddings;
+  padding-bottom: $pagination-paddings;
+  line-height: normal;
+
+  @include user-select(none);
+
+  .dx-pages {
+    white-space: nowrap;
+    float: right;
+
+    .dx-page-indexes {
+      display: inline-block;
+    }
+
+    .dx-page {
+      display: inline-block;
+      cursor: pointer;
+      padding: 7px 8px 8px;
+      margin-left: 5px;
+      margin-right: 1px;
+    }
+
+    .dx-separator {
+      display: inline-block;
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    .dx-info {
+      display: inline-block;
+      margin-right: $pagination-info-paddings;
+      opacity: 0.7;
+    }
+
+    .dx-navigate-button {
+      width: 10px;
+      height: 20px;
+      cursor: pointer;
+      display: inline-block;
+      vertical-align: top;
+      padding: $pagination-paddings - 1px 13px;
+      box-sizing: content-box;
+
+      &.dx-button-disable {
+        opacity: 0.3;
+        cursor: inherit;
+      }
+    }
+
+    .dx-prev-button,
+    .dx-next-button {
+      position: relative;
+    }
+  }
+
+  .dx-page-sizes {
+    float: left;
+
+    .dx-page-size {
+      &:first-child,
+      &.dx-first-child {
+        margin-left: 1px;
+      }
+
+      display: inline-block;
+      cursor: pointer;
+      padding-left: 10px;
+      padding-right: 9px;
+      padding-top: 7px;
+      padding-bottom: 8px;
+      margin-left: 4px;
+      margin-right: 1px;
+    }
+  }
+
+  .dx-pages,
+  .dx-page-sizes {
+    .dx-selection {
+      cursor: inherit;
+      text-shadow: none;
+    }
+  }
+
+  .dx-light-pages {
+    display: inline-block;
+
+    .dx-page-index {
+      width: 40px;
+    }
+
+    .dx-pages-count {
+      cursor: pointer;
+    }
+
+    .dx-info-text,
+    .dx-pages-count {
+      padding-left: 6px;
+    }
+
+    .dx-page-index,
+    .dx-info-text,
+    .dx-pages-count {
+      display: table-cell;
+    }
+  }
+}
+
+.dx-rtl .dx-pager,
+.dx-pager.dx-rtl,
+.dx-rtl .dx-pagination,
+.dx-pagination.dx-rtl {
+  .dx-pages {
+    float: left;
+    direction: ltr;
+
+    .dx-page {
+      direction: ltr;
+
+      &:first-child {
+        margin-left: 1px;
+      }
+    }
+
+    .dx-info {
+      direction: rtl;
+      margin-left: $pagination-info-paddings;
+      margin-right: 0;
+    }
+  }
+
+  .dx-page-sizes {
+    float: right;
+  }
+}

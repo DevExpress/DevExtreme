@@ -1,5 +1,5 @@
 import $ from '@js/core/renderer';
-import { nativeScrolling } from '@js/core/utils/support';
+import supportUtils from '@ts/core/utils/m_support';
 
 import { AreaItem } from '../area_item/m_area_item';
 import { calculateScrollbarWidth } from '../m_widget_utils';
@@ -63,7 +63,7 @@ const DataArea = AreaItem.inherit({
     const { useNative } = this.component.option('scrolling');
 
     return useNative === 'auto'
-      ? !!nativeScrolling
+      ? !!supportUtils.nativeScrolling
       : !!useNative;
   },
 
