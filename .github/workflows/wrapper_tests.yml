@@ -70,7 +70,7 @@ jobs:
 
 # NOTE: temporary skipped during migrating to the PNPM
       - name: Angular - Run tests
-        run: pnpx nx test:dev devextreme-angular
+        run: pnpx nx test:dev devextreme-angular --verbose
 
       - name: Angular - Check packing
         run: pnpx nx pack devextreme-angular
