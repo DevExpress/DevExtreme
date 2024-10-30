@@ -54,6 +54,7 @@ jobs:
         with:
           repository: DevExpress/npmdeps-scanner
           token: ${{ secrets.NPM_DEPS_SCANNER_PAT }}
+          ref: 2024.1
           path: deps-scanner
 
       - name: Run deps scanner
