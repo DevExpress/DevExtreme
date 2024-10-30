@@ -30,10 +30,6 @@ const commonArgs: ChatTypes.Properties = {
     activeStateEnabled: true,
     hoverStateEnabled: true,
     focusStateEnabled: true,
-    showDayHeaders: true,
-    showAvatar: true,
-    showUserName: true,
-    showMessageTimestamp: true,
 };
 
 export const Overview: Story = {
@@ -87,10 +83,6 @@ export const Overview: Story = {
         activeStateEnabled,
         hoverStateEnabled,
         focusStateEnabled,
-        showDayHeaders,
-        showAvatar,
-        showUserName,
-        showMessageTimestamp,
     }) => {
         const [messages, setMessages] = useState(items);
         
@@ -120,10 +112,6 @@ export const Overview: Story = {
                     activeStateEnabled={activeStateEnabled}
                     focusStateEnabled={focusStateEnabled}
                     hoverStateEnabled={hoverStateEnabled}
-                    showDayHeaders={showDayHeaders}
-                    showAvatar={showAvatar}
-                    showUserName={showUserName}
-                    showMessageTimestamp={showMessageTimestamp}
                 >
                 </Chat>
             </div>
@@ -303,10 +291,6 @@ export const PopupIntegration: Story = {
         activeStateEnabled,
         hoverStateEnabled,
         focusStateEnabled,
-        showDayHeaders,
-        showAvatar,
-        showUserName,
-        showMessageTimestamp,
     }) => {
         const [messages, setMessages] = useState(items);
         
@@ -344,13 +328,90 @@ export const PopupIntegration: Story = {
                     activeStateEnabled={activeStateEnabled}
                     focusStateEnabled={focusStateEnabled}
                     hoverStateEnabled={hoverStateEnabled}
+                >
+                </Chat>
+            </Popup>
+        );
+    }
+}
+
+export const Customization: Story = {
+    args: {
+        showDayHeaders: true,
+        showAvatar: true,
+        showUserName: true,
+        showMessageTimestamp: true,
+        items: initialMessages,
+        user: firstAuthor,
+        errors: [],
+        ...commonArgs,
+    },
+    parameters: { constrols: { exclude: 'user' }},
+    argTypes: {
+        user: { table: { disable: true } },
+        hint: { table: { disable: true } },
+        items: { table: { disable: true } },
+        errors: { table: { disable: true } },
+        // hide all other args
+        ...Object.fromEntries(
+            Object.keys(commonArgs).map(
+                key => [key, { table: { disable: true } }],
+            ),
+        ),
+    },
+    render: ({
+        width,
+        height,
+        disabled,
+        rtlEnabled,
+        user,
+        items,
+        errors,
+        visible,
+        hint,
+        activeStateEnabled,
+        hoverStateEnabled,
+        focusStateEnabled,
+        showDayHeaders,
+        showAvatar,
+        showUserName,
+        showMessageTimestamp,
+    }) => {
+        const [messages, setMessages] = useState(items);
+
+        const onMessageSend = useCallback(({ message }) => {
+            const updatedMessages = [...messages, message];
+
+            setMessages(updatedMessages);
+        }, [messages]);
+
+        useEffect(() => {
+            setMessages(items);
+        }, [items]);
+
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Chat
+                    width={width}
+                    height={height}
+                    items={messages}
+                    disabled={disabled}
+                    rtlEnabled={rtlEnabled}
+                    user={user}
+                    errors={errors}
+                    onMessageSend={onMessageSend}
+                    visible={visible}
+                    hint={hint}
+                    activeStateEnabled={activeStateEnabled}
+                    focusStateEnabled={focusStateEnabled}
+                    hoverStateEnabled={hoverStateEnabled}
                     showDayHeaders={showDayHeaders}
                     showAvatar={showAvatar}
                     showUserName={showUserName}
                     showMessageTimestamp={showMessageTimestamp}
                 >
                 </Chat>
-            </Popup>
+            </div>
         );
     }
 }
