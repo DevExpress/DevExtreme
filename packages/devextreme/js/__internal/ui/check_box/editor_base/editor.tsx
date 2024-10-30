@@ -80,8 +80,6 @@ export const defaultEditorProps: EditorProps = {
 export class Editor extends InfernoWrapperComponent<EditorProps> {
   widgetRef!: RefObject<Widget>;
 
-  validationMessageGuid = `dx-${new Guid()}`;
-
   rootElementRef!: RefObject<HTMLDivElement>;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -250,14 +248,14 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
           {this.props.children}
           {this.state!.isValidationMessageVisible && (
             <ValidationMessage
-              validationErrors={this.props.validationErrors}
+              validationErrors={this.validationErrors}
               mode={this.props.validationMessageMode}
               positionSide={this.props.validationMessagePosition}
               rtlEnabled={this.props.rtlEnabled}
               target={this.validationMessageTarget}
               boundary={this.validationMessageTarget}
               visualContainer={this.validationMessageTarget}
-              contentId={this.validationMessageGuid}
+              contentId={this.state!.validationMessageGuid as string}
             />
           )}
         </Fragment>
