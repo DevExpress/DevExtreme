@@ -7,6 +7,7 @@
       :column-auto-width="true"
       :show-borders="true"
     >
+      <DxColumnFixing :enabled="true"/>
       <DxColumn
         :width="230"
         :fixed="true"
@@ -48,6 +49,7 @@
 import {
   DxDataGrid,
   DxColumn,
+  DxColumnFixing,
 } from 'devextreme-vue/data-grid';
 import { employees, Employee } from './data.ts';
 

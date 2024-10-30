@@ -1,5 +1,5 @@
 import React from 'react';
-import DataGrid, { Column } from 'devextreme-react/data-grid';
+import DataGrid, { Column, ColumnFixing } from 'devextreme-react/data-grid';
 
 import { Employee, employees } from './data.ts';
 
@@ -13,6 +13,7 @@ const App = () => (
     columnAutoWidth={true}
     showBorders={true}
   >
+    <ColumnFixing enabled={true} />
     <Column
       caption="Employee"
       width={230}

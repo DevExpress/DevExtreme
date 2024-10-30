@@ -1,5 +1,5 @@
 import React from 'react';
-import DataGrid, { Column } from 'devextreme-react/data-grid';
+import DataGrid, { Column, ColumnFixing } from 'devextreme-react/data-grid';
 import { employees } from './data.js';
 
 const calculateCellValue = (data) => [data.Title, data.FirstName, data.LastName].join(' ');
@@ -11,6 +11,7 @@ const App = () => (
     columnAutoWidth={true}
     showBorders={true}
   >
+    <ColumnFixing enabled={true} />
     <Column
       caption="Employee"
       width={230}
