@@ -3,10 +3,10 @@ import '../../helpers/includeThemesLinks.js';
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import browser from 'core/utils/browser';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import themes from 'ui/themes';
-import support from 'core/utils/support';
-import publicComponentUtils from 'core/utils/public_component';
+import support from '__internal/core/utils/m_support';
+import publicComponentUtils from '__internal/core/utils/m_public_component';
 import { isFunction } from 'core/utils/type';
 import { getNestedOptionValue } from 'core/options/utils';
 
@@ -22,6 +22,7 @@ import ChatMessageBubble from '__internal/ui/chat/messagebubble';
 import ChatMessageGroup from '__internal/ui/chat/messagegroup';
 import ChatMessageList from '__internal/ui/chat/messagelist';
 import ChatErrorList from '__internal/ui/chat/errorlist';
+import ChatTypingIndicator from '__internal/ui/chat/typingindicator';
 import DataGrid from 'ui/data_grid';
 import DateBox from 'ui/date_box';
 import DateRangeBox from 'ui/date_range_box';
@@ -49,7 +50,7 @@ import RadioGroup from 'ui/radio_group';
 import Resizable from 'ui/resizable';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
 import Scheduler from '__internal/scheduler/m_scheduler';
-import Scrollable from 'ui/scroll_view/ui.scrollable';
+import Scrollable from '__internal/ui/scroll_view/m_scrollable';
 import ScrollView from 'ui/scroll_view';
 import SelectBox from 'ui/select_box';
 import SliderHandle from '__internal/ui/slider/m_slider_handle';
@@ -60,7 +61,7 @@ import TagBox from 'ui/tag_box';
 import Toast from 'ui/toast';
 import TreeList from 'ui/tree_list';
 import TreeView from 'ui/tree_view';
-import TileView from 'ui/tile_view';
+import TileView from '__internal/ui/m_tile_view';
 import FileUploader from 'ui/file_uploader';
 import Form from 'ui/form';
 import ValidationMessage from 'ui/validation_message';
@@ -1349,10 +1350,20 @@ testComponentDefaults(Chat,
         activeStateEnabled: true,
         focusStateEnabled: true,
         hoverStateEnabled: true,
-        title: '',
-        onMessageSend: undefined,
-        dataSource: undefined,
         showDayHeaders: true,
+        showAvatar: true,
+        showUserName: true,
+        showMessageTimestamp: true,
+        dayHeaderFormat: 'shortdate',
+        messageTimestampFormat: 'shorttime',
+        title: '',
+        dataSource: null,
+        items: [],
+        errors: [],
+        typingUsers: [],
+        onMessageSend: undefined,
+        onTypingStart: undefined,
+        onTypingEnd: undefined,
     }
 );
 
@@ -1375,10 +1386,12 @@ testComponentDefaults(ChatHeader,
 testComponentDefaults(ChatMessageBox,
     {},
     {
-        onMessageSend: undefined,
         activeStateEnabled: true,
         focusStateEnabled: true,
         hoverStateEnabled: true,
+        onMessageSend: undefined,
+        onTypingStart: undefined,
+        onTypingEnd: undefined,
     }
 );
 
@@ -1393,6 +1406,7 @@ testComponentDefaults(ChatMessageGroup,
     {},
     {
         alignment: 'start',
+        messageTimestampFormat: 'shorttime',
     }
 );
 
@@ -1400,16 +1414,26 @@ testComponentDefaults(ChatMessageList,
     {},
     {
         items: [],
+        typingUsers: [],
         currentUserId: '',
         showDayHeaders: true,
         isLoading: false,
+        dayHeaderFormat: 'shortdate',
+        messageTimestampFormat: 'shorttime',
     }
 );
 
 testComponentDefaults(ChatErrorList,
     {},
     {
-        items: []
+        items: [],
+    }
+);
+
+testComponentDefaults(ChatTypingIndicator,
+    {},
+    {
+        typingUsers: [],
     }
 );
 

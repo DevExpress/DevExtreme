@@ -11,7 +11,6 @@ function nodesByEvent(event) {
 }
 
 export const subscribeNodesDisposing = (event, callback) => {
-  // @ts-expect-error
   eventsEngine.one(nodesByEvent(event), removeEvent, callback);
 };
 

@@ -1,5 +1,5 @@
 import { getHeight, getWidth } from 'core/utils/size';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import commonUtils from 'core/utils/common';
 import browser from 'core/utils/browser';
 import ArrayStore from 'data/array_store';

@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import Widget from 'ui/widget/ui.widget';
 import registerComponent from 'core/component_registrator';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { extend } from 'core/utils/extend';
 import { TemplateBase } from 'core/templates/template_base';
 import { Template } from 'core/templates/template';

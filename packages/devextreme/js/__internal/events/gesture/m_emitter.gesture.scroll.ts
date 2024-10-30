@@ -1,12 +1,12 @@
 import { cancelAnimationFrame, requestAnimationFrame } from '@js/animation/frame';
 import Class from '@js/core/class';
-import devices from '@js/core/devices';
 import registerEmitter from '@js/events/core/emitter_registrator';
 import eventsEngine from '@js/events/core/events_engine';
 import GestureEmitter from '@js/events/gesture/emitter.gesture';
 import {
   addNamespace, eventData, eventDelta, isDxMouseWheelEvent, isMouseEvent,
 } from '@js/events/utils/index';
+import devices from '@ts/core/m_devices';
 
 const { abstract } = Class;
 

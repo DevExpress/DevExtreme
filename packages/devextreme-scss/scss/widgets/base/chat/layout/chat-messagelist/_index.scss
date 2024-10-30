@@ -30,10 +30,26 @@
   .dx-scrollview-scrollbottom-text {
     margin: 0;
   }
+
+  &.dx-chat-messagelist-empty {
+    .dx-scrollable.dx-scrollview {
+      .dx-scrollable-content {
+        height: 100%;
+      }
+    }
+  }
 }
 
 .dx-chat-messagelist-empty {
-  .dx-scrollable-content {
+  .dx-scrollview-content {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+  }
+
+  .dx-chat-messagelist-content {
+    flex-grow: 1;
+    display: flex;
     align-items: center;
     justify-content: center;
   }

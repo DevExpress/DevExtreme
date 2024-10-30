@@ -2,10 +2,11 @@ import { move } from '@js/animation/translator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { originalViewPort } from '@js/core/utils/view_port';
-import { getWindow } from '@js/core/utils/window';
 import { OverlayPositionController } from '@ts/ui/overlay/m_overlay_position_controller';
 
-const window = getWindow();
+import windowUtils from '../../core/utils/m_window';
+
+const window = windowUtils.getWindow();
 
 class PopupPositionController extends OverlayPositionController {
   _$dragResizeContainer?: dxElementWrapper;
@@ -104,7 +105,6 @@ class PopupPositionController extends OverlayPositionController {
 
   _getDragResizeContainer() {
     if (this._props.dragOutsideBoundary) {
-      // @ts-expect-error
       return $(window);
     }
     if (this._props.dragAndResizeArea) {
@@ -115,13 +115,11 @@ class PopupPositionController extends OverlayPositionController {
 
     return isContainerDefined
       ? this._$markupContainer
-    // @ts-expect-error
       : $(window);
   }
 
   _getVisualContainer(): dxElementWrapper {
     if (this._props.fullScreen) {
-      // @ts-expect-error
       return $(window);
     }
 

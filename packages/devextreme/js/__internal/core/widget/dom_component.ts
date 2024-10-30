@@ -5,7 +5,6 @@ import { cleanDataRecursive } from '@js/core/element_data';
 import errors from '@js/core/errors';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { TemplateManager } from '@js/core/template_manager';
 // @ts-expect-error
 import { grep, noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
@@ -17,6 +16,7 @@ import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import { resize as resizeEvent, visibility as visibilityEvents } from '@js/events/short';
 import license, { peekValidationPerformed } from '@ts/core/license/license_validation';
+import TemplateManagerModule from '@ts/core/m_template_manager';
 
 import { Component } from './component';
 import type { OptionChanged } from './types';
@@ -82,8 +82,7 @@ class DOMComponent<
       disabled: false,
 
       integrationOptions: {},
-      // @ts-expect-error
-    }, this._useTemplates() ? TemplateManager.createDefaultOptions() : {});
+    }, this._useTemplates() ? TemplateManagerModule.TemplateManager.createDefaultOptions() : {});
   }
 
   ctor(element: Element, options: TProperties): void {
@@ -225,7 +224,6 @@ class DOMComponent<
     const height = this._getOptionValue('height', element);
 
     if (this._isCssUpdateRequired(element, height, width)) {
-      // @ts-expect-error
       $element.css({
         width: width === null ? '' : width,
         height: height === null ? '' : height,
@@ -533,8 +531,7 @@ class DOMComponent<
     const { integrationOptions = {} } = this.option();
     const { createTemplate } = integrationOptions;
 
-    this._templateManager = new TemplateManager(
-      // @ts-expect-error
+    this._templateManager = new TemplateManagerModule.TemplateManager(
       createTemplate,
       this._getAnonymousTemplateName(),
     );

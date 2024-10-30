@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import config from 'core/config';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import DateRangeBox from 'ui/date_range_box';
 import DateBox from 'ui/date_box';
 import { isRenderer } from 'core/utils/type';

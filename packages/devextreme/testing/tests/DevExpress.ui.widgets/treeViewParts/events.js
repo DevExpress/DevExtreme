@@ -4,7 +4,7 @@ import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import holdEvent from 'events/hold';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import fx from 'animation/fx';
 import contextMenuEvent from 'events/contextmenu';
 import dblclickEvent from 'events/dblclick';

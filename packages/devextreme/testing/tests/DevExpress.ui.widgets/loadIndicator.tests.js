@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import support from 'core/utils/support';
+import support from '__internal/core/utils/m_support';
 import messageLocalization from 'localization/message';
 import 'ui/load_indicator';
 

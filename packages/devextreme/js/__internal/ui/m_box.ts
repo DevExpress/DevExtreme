@@ -62,9 +62,9 @@ const setFlexProp = (element, prop, value) => {
   }
 };
 
+// @ts-expect-error dxClass inheritance issue
 class BoxItem extends CollectionWidgetItem {
   _renderVisible(value, oldValue) {
-    // @ts-expect-error
     super._renderVisible(value);
     if (isDefined(oldValue)) {
       // @ts-expect-error
@@ -124,7 +124,6 @@ class LayoutStrategy {
       const $item = $(this);
       const item = $item.data(BOX_ITEM_DATA_KEY) as any;
 
-      // @ts-expect-error
       $item.css({ display: `${flexPropPrefix}flex` })
         .css(MAXSIZE_MAP[direction], item.maxSize || 'none')
         .css(MINSIZE_MAP[direction], item.minSize || '0');
@@ -135,7 +134,6 @@ class LayoutStrategy {
 
       // @ts-expect-error
       $item.children().each((_, itemContent) => {
-        // @ts-expect-error
         $(itemContent).css({
           width: 'auto',
           height: 'auto',
@@ -285,7 +283,6 @@ class Box extends CollectionWidget {
 
   _createItemByTemplate(itemTemplate, args) {
     if (args.itemData.box) {
-      // @ts-expect-error
       return itemTemplate.source ? itemTemplate.source() : $();
     }
     return super._createItemByTemplate(itemTemplate, args);

@@ -1,5 +1,5 @@
-const errorUtils = require('core/utils/error');
-const consoleUtils = require('core/utils/console');
+import errorUtils from '__internal/core/utils/m_error';
+import consoleUtils from '__internal/core/utils/m_console';
 
 const errors = errorUtils({
     'E1': 'Error 1',

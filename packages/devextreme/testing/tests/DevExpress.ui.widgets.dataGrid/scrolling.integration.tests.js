@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import commonUtils from 'core/utils/common';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import browser from 'core/utils/browser';
 import pointerEvents from 'events/pointer';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';

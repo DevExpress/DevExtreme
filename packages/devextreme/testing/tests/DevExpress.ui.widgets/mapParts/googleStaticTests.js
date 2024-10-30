@@ -222,6 +222,35 @@ QUnit.test('apiKey', function(assert) {
     });
 });
 
+QUnit.test('map id should be added to url if mapId option is specified', function(assert) {
+    return new Promise(function(resolve) {
+        const map = new Map($('#map'), {
+            provider: 'googleStatic',
+            providerConfig: {
+                mapId: 'someId',
+            },
+            onReady: function(e) {
+                assert.notStrictEqual(mapUrl(map).indexOf('map_id=someId'), -1, 'map id is added');
+
+                resolve();
+            }
+        });
+    });
+});
+
+QUnit.test('map id should not be added to url if mapId option is not specified', function(assert) {
+    return new Promise(function(resolve) {
+        const map = new Map($('#map'), {
+            provider: 'googleStatic',
+            onReady: function(e) {
+                assert.strictEqual(mapUrl(map).indexOf('map_id=someId'), -1, 'map id is not added');
+
+                resolve();
+            }
+        });
+    });
+});
+
 QUnit.test('markers', function(assert) {
     assert.expect(4);
 
