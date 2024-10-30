@@ -57,7 +57,11 @@ const changePaging = function (that, optionName, value) {
     return dataSource[optionName]();
   }
 
-  return optionName === 'pageSize' ? 0 : Deferred().resolve().promise();
+  if (optionName === 'pageIndex' && value !== undefined) {
+    return Deferred().resolve().promise();
+  }
+
+  return 0;
 };
 
 interface HandleDataChangedArguments {
