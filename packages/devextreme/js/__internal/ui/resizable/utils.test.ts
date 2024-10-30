@@ -1,8 +1,9 @@
 import {
-  getMovingSides, getAreaFromElement, getAreaFromObject, getDragOffsets, filterOffsets,
-} from '../utils';
+  filterOffsets,
+  getAreaFromElement, getAreaFromObject, getDragOffsets, getMovingSides,
+} from './utils';
 
-jest.mock('../../../../core/utils/size', () => ({
+jest.mock('@js/core/utils/size', () => ({
   getOuterWidth: ({ outerWidth }) => outerWidth,
   getInnerWidth: ({ innerWidth }) => innerWidth,
   getOuterHeight: ({ outerHeight }) => outerHeight,

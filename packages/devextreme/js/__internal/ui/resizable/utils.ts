@@ -1,15 +1,16 @@
-import type {
-  Area, Handle, AreaObject, AreaProp, MovingSides,
-} from './common/types';
-import { isWindow } from '../../../core/utils/type';
-import { extend } from '../../../core/utils/extend';
+import { extend } from '@js/core/utils/extend';
 import {
-  getOuterWidth,
-  getInnerWidth,
-  getOuterHeight,
   getInnerHeight,
+  getInnerWidth,
   getOffset,
-} from '../../../core/utils/size';
+  getOuterHeight,
+  getOuterWidth,
+} from '@js/core/utils/size';
+import { isWindow } from '@js/core/utils/type';
+
+import type {
+  Area, AreaObject, AreaProp, Handle, MovingSides,
+} from './types';
 
 export const borderWidthStyles = {
   left: 'borderLeftWidth',
