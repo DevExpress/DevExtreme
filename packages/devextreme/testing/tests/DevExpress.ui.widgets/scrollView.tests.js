@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import renderer from 'core/renderer';
 import { noop } from 'core/utils/common';
-import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
+import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import animationFrame from 'animation/frame';
 import devices from '__internal/core/m_devices';
 import eventsEngine from 'events/core/events_engine';
