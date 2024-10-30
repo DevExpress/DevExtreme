@@ -19,12 +19,14 @@ function getDiffItem(key, value, previousValue): ResultItem {
   return { path: key, value, previousValue };
 }
 
-function compare(resultPaths: ResultItem[],
+function compare(
+  resultPaths: ResultItem[],
   item1,
   item2,
   key: string,
   fullPropName: string,
-  notDeepCopyArrays: string[]): void {
+  notDeepCopyArrays: string[],
+): void {
   if (propsToIgnore[key]) {
     return;
   }
@@ -51,8 +53,10 @@ function compare(resultPaths: ResultItem[],
     } else {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       const diffPaths = objectDiffs(item1, item2, fullPropName, notDeepCopyArrays);
-      ([] as ResultItem[]).push.apply(resultPaths,
-        diffPaths.map((item) => ({ ...item, path: `${key}${item.path}` })));
+      ([] as ResultItem[]).push.apply(
+        resultPaths,
+        diffPaths.map((item) => ({ ...item, path: `${key}${item.path}` })),
+      );
     }
   } else {
     resultPaths.push(getDiffItem(key, item2, item1));
