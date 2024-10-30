@@ -1,12 +1,13 @@
+import { ensureDefined } from '@js/core/utils/common';
 import {
   isDefined,
   isPlainObject,
-} from '../../../../core/utils/type';
-import {
+} from '@js/core/utils/type';
+
+import type {
   ScrollableDirection,
   ScrollOffset,
-} from '../common/types';
-import { ensureDefined } from '../../../../core/utils/common';
+} from '../types';
 import {
   ScrollDirection,
 } from './scroll_direction';

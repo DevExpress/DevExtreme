@@ -11,12 +11,12 @@ import { isDate, isDefined } from '@js/core/utils/type';
 import type { Format } from '@js/localization';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
-import { getScrollTopMax } from '@js/renovation/ui/scroll_view/utils/get_scroll_top_max';
 import type { Message, User } from '@js/ui/chat';
 import ScrollView from '@js/ui/scroll_view';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import { getScrollTopMax } from '@ts/ui/scroll_view/utils/get_scroll_top_max';
 
 import { isElementVisible } from '../splitter/utils/layout';
 import type Chat from './chat';

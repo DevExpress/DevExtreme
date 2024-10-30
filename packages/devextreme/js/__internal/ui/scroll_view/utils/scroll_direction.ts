@@ -1,12 +1,11 @@
 import {
-  DIRECTION_VERTICAL,
-  DIRECTION_HORIZONTAL,
   DIRECTION_BOTH,
-} from '../common/consts';
-
-import {
+  DIRECTION_HORIZONTAL,
+  DIRECTION_VERTICAL,
+} from '../consts';
+import type {
   ScrollableDirection,
-} from '../common/types';
+} from '../types';
 
 export class ScrollDirection {
   direction: ScrollableDirection;

@@ -1,4 +1,5 @@
-import { getRelativeOffset } from '../get_relative_offset';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { getRelativeOffset } from './get_relative_offset';
 
 describe('getRelativeOffset(targetElementClass, sourceElement)', () => {
   it('should return correct relative offset', () => {

@@ -1,5 +1,6 @@
-import { titleize } from '../../../../core/utils/inflector';
-import { getWindow, hasWindow } from '../../../../core/utils/window';
+import { titleize } from '@js/core/utils/inflector';
+import { getWindow, hasWindow } from '@js/core/utils/window';
+
 import { toNumber } from '../../../utils/type_conversion';
 
 export function getElementStyle(

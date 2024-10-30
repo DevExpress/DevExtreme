@@ -1,11 +1,10 @@
-import { getScrollLeftMax } from './get_scroll_left_max';
-import { getScrollTopMax } from './get_scroll_top_max';
-import {
-  ScrollOffset,
+import type {
   ScrollableBoundary,
   ScrollableDirection,
-} from '../common/types';
-
+  ScrollOffset,
+} from '../types';
+import { getScrollLeftMax } from './get_scroll_left_max';
+import { getScrollTopMax } from './get_scroll_top_max';
 import {
   ScrollDirection,
 } from './scroll_direction';

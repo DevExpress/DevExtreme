@@ -1,15 +1,14 @@
-import { titleize } from '../../../../core/utils/inflector';
-import {
-  ElementOffset,
-  ScrollableDirection, ScrollOffset,
-} from '../common/types';
-
-import { getRelativeOffset } from './get_relative_offset';
+import { titleize } from '@js/core/utils/inflector';
 
 import {
   DIRECTION_VERTICAL,
   SCROLLABLE_CONTENT_CLASS,
-} from '../common/consts';
+} from '../consts';
+import type {
+  ElementOffset,
+  ScrollableDirection, ScrollOffset,
+} from '../types';
+import { getRelativeOffset } from './get_relative_offset';
 
 // this function tested by testcafe
 /* istanbul ignore next */

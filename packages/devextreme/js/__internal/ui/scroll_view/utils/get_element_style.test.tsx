@@ -1,14 +1,15 @@
+import { titleize } from '@js/core/utils/inflector';
+import { setWindow } from '@js/core/utils/window';
 import each from 'jest-each';
+
 import {
-  getElementStyle,
-  getElementOverflowX,
-  getElementPadding,
-  getElementTransform,
-  getElementOverflowY,
   getElementMargin,
-} from '../get_element_style';
-import { setWindow } from '../../../../../core/utils/window';
-import { titleize } from '../../../../../core/utils/inflector';
+  getElementOverflowX,
+  getElementOverflowY,
+  getElementPadding,
+  getElementStyle,
+  getElementTransform,
+} from './get_element_style';
 
 describe('getElementStyle', () => {
   it('element is not defined', () => {
