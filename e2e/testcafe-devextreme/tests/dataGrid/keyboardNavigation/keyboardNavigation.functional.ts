@@ -2415,9 +2415,9 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
 
   test(`The first cell should be focused on pressing shift and tab keys after clicking on the document when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the right side (T951849)`, async (t) => {
     const dataGrid = new DataGrid('#container');
+    await t.expect(dataGrid.isReady()).ok();
     const headers = dataGrid.getHeaders();
     const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
-    await t.expect(dataGrid.isReady()).ok();
 
     async function checkNavigationOfAllCells(): Promise<void> {
       await t
@@ -2451,14 +2451,15 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     }
 
     await checkNavigationOfAllCells();
+    await t.expect(dataGrid.isReady()).ok();
 
     await t
       .click(Selector('body'), {
         offsetY: dataGridOffsetBottom + 10,
       })
       .pressKey('shift+tab')
-      .expect(dataGrid.getDataCell(0, 0).element.focused)
-      .ok();
+      .expect(dataGrid.isReady()).ok()
+      .expect(dataGrid.getDataCell(0, 0).element.focused).ok();
   }).before(async () => {
     await createWidget('dxDataGrid', {
       dataSource: [
