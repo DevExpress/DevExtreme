@@ -2366,7 +2366,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.equal(contentReadyCallCount, 2);
     });
 
-    QUnit.test('pageIndex return deferred when dataSource is null', function(assert) {
+    QUnit.test('pageIndex should return correct values when dataSource is null', function(assert) {
         let doneCalled = false;
 
         // act
@@ -2383,6 +2383,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         // assert
         assert.equal(doneCalled, true);
+        assert.equal(dataGrid.pageIndex(), 0);
     });
 
 
