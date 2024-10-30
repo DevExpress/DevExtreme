@@ -1,4 +1,4 @@
-import { toMilliseconds } from '../date';
+import { toMilliseconds } from './toMilliseconds';
 
 describe('toMilliseconds', () => {
   test('milliseconds to milliseconds', () => {
