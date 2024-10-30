@@ -6,7 +6,7 @@ on:
 jobs:
   analyze-javascript:
     name: Analyze JavaScript
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     permissions:
       actions: read
       contents: read
