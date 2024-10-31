@@ -3,6 +3,9 @@ module.exports = {
     mode: 'development',
     plugins: [],
     resolve: {
+        alias: {
+            'devextreme-angular': path.resolve(__dirname, 'npm/dist'),
+        },
         fallback: { "stream": require.resolve("stream-browserify")}
     },
     module: {
