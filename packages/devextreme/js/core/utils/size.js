@@ -188,9 +188,9 @@ export const getVerticalOffsets = function(element, withMargins) {
 
 export const getVisibleHeight = function(element) {
     if(element) {
-        const boundingClientRect = element.getBoundingClientRect();
+        const boundingClientRect = element.getBoundingClientRect?.();
 
-        if(boundingClientRect.height) {
+        if(boundingClientRect?.height) {
             return boundingClientRect.height;
         }
     }
@@ -304,14 +304,14 @@ export const getWindowByElement = (el) => {
 };
 
 export const getOffset = (el) => {
-    if(!el.getClientRects().length) {
+    if(!el.getClientRects?.().length) {
         return {
             top: 0,
             left: 0
         };
     }
 
-    const rect = el.getBoundingClientRect();
+    const rect = el.getBoundingClientRect?.();
     const win = getWindowByElement(el.ownerDocument);
     const docElem = el.ownerDocument.documentElement;
 
