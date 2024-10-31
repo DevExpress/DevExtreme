@@ -2607,7 +2607,7 @@ QUnit.module('Headers with band columns', {
         assert.strictEqual(this.columnsController.getVisibleColumns(1)[0].sortOrder, 'asc', 'sort order of the first cell of the second row');
     });
 
-    QUnit.test('setRowsOpacity for band column', function(assert) {
+    QUnit.test('set rows opacity for band column', function(assert) {
         // arrange
         const $testElement = $('#container');
 
@@ -2616,7 +2616,7 @@ QUnit.module('Headers with band columns', {
         this.columnHeadersView.render($testElement);
 
         // act
-        this.columnHeadersView.setRowsOpacity(1, '0.5');
+        this.columnHeadersView.toggleDraggableColumnClass(1, true);
 
         const $cellElements = $testElement.find('td');
 

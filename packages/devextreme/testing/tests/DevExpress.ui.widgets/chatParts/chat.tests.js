@@ -412,11 +412,11 @@ QUnit.module('Chat', () => {
     });
 
     QUnit.module('Events', () => {
-        QUnit.module('onMessageSend', moduleConfig, () => {
+        QUnit.module('onMessageEntered', moduleConfig, () => {
             QUnit.test('should be called when the send button was clicked', function(assert) {
-                const onMessageSend = sinon.spy();
+                const onMessageEntered = sinon.spy();
 
-                this.reinit({ onMessageSend });
+                this.reinit({ onMessageEntered });
 
                 keyboardMock(this.$input)
                     .focus()
@@ -424,7 +424,7 @@ QUnit.module('Chat', () => {
 
                 this.$sendButton.trigger('dxclick');
 
-                assert.strictEqual(onMessageSend.callCount, 1);
+                assert.strictEqual(onMessageEntered.callCount, 1);
             });
 
             QUnit.test('should get correct arguments after clicking the send button', function(assert) {
@@ -433,7 +433,7 @@ QUnit.module('Chat', () => {
                 const text = 'new text message';
 
                 this.instance.option({
-                    onMessageSend: ({ component, element, event, message }) => {
+                    onMessageEntered: ({ component, element, event, message }) => {
                         assert.strictEqual(component, this.instance, 'component field is correct');
                         assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
                         assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
@@ -449,9 +449,9 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.test('should be possible to change at runtime', function(assert) {
-                const onMessageSend = sinon.spy();
+                const onMessageEntered = sinon.spy();
 
-                this.instance.option({ onMessageSend });
+                this.instance.option({ onMessageEntered });
 
                 const text = 'new text message';
 
@@ -461,7 +461,7 @@ QUnit.module('Chat', () => {
 
                 this.$sendButton.trigger('dxclick');
 
-                assert.strictEqual(onMessageSend.callCount, 1);
+                assert.strictEqual(onMessageEntered.callCount, 1);
             });
 
             QUnit.test('new message should not be created after clicking the send button', function(assert) {
@@ -486,7 +486,7 @@ QUnit.module('Chat', () => {
                 const text = 'new text message';
 
                 this.instance.option({
-                    onMessageSend: ({ message }) => {
+                    onMessageEntered: ({ message }) => {
                         const { author, text: messageText } = message;
 
                         assert.strictEqual(author, this.instance.option('user'), 'author field is correct');
@@ -803,6 +803,10 @@ QUnit.module('Chat', () => {
 
             const expectedData = [...messages, newMessage];
             assert.deepEqual(this.instance.option('items'), expectedData, 'items option should contain all messages including the new one');
+            assert.deepEqual(this.instance.option('dataSource'), messages, 'dataSource option is not updated');
+
+            this.instance.getDataSource().store().insert(newMessage);
+
             assert.deepEqual(this.instance.option('dataSource'), expectedData, 'dataSource option should contain all messages including the new one');
         });
 
@@ -921,16 +925,16 @@ QUnit.module('Chat', () => {
                 load: function() {
                     const d = $.Deferred();
                     setTimeout(function() {
-                        d.resolve(messages);
+                        d.resolve([...messages]);
                     }, timeout);
                     return d.promise();
                 },
-                insert: function(values) {
+                insert: function(value) {
                     const d = $.Deferred();
+                    messages.push(value);
 
                     setTimeout(() => {
-                        messages.push(values);
-                        d.resolve(values);
+                        d.resolve();
                     }, timeout);
 
                     return d.promise();
@@ -948,7 +952,96 @@ QUnit.module('Chat', () => {
 
             this.clock.tick(timeout);
 
+            assert.deepEqual(this.instance.option('items'), [...messages, newMessage], 'items option should contain all messages including the new one');
+            assert.strictEqual(this.getBubbles().length, 3, 'new message should be rendered in list');
+        });
+
+        QUnit.test('new message should be rendered after message is entered if reloadOnChange is true', function(assert) {
+            const messages = [{ text: 'message_1' }, { text: 'message_2' }];
+            const timeout = 1000;
+
+            const store = new CustomStore({
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+                insert: function(message) {
+                    const d = $.Deferred();
+                    messages.push(message);
+
+                    setTimeout(() => {
+                        d.resolve();
+                    }, timeout);
+
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                reloadOnChange: true,
+            });
+
+            this.clock.tick(timeout);
+
+            const newMessage = { text: 'message_3' };
+            keyboardMock(this.$input)
+                .focus()
+                .type(newMessage.text);
+
+            this.$sendButton.trigger('dxclick');
+
+            this.clock.tick(timeout * 2);
+
             assert.deepEqual(this.instance.option('items'), messages, 'items option should contain all messages including the new one');
+            assert.strictEqual(this.getBubbles().length, 3, 'new message should be rendered in list');
+        });
+
+        QUnit.test('new message should be rendered when using store.push({ type: insert }) and reloadOnChange is false', function(assert) {
+            const messages = [{ text: 'message_1' }, { text: 'message_2' }];
+            const timeout = 1000;
+
+            const store = new CustomStore({
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+                insert: function(message) {
+                    const d = $.Deferred();
+
+                    setTimeout(() => {
+                        d.resolve();
+                    }, timeout);
+
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+
+            const newMessage = { text: 'message_3' };
+            keyboardMock(this.$input)
+                .focus()
+                .type(newMessage.text);
+
+            this.$sendButton.trigger('dxclick');
+
+            store.push([{ type: 'insert', data: newMessage }]);
+
+            this.clock.tick(timeout * 2);
+
+            assert.deepEqual(this.instance.option('items'), [...messages, newMessage], 'items option should contain all messages including the new one');
             assert.strictEqual(this.getBubbles().length, 3, 'new message should be rendered in list');
         });
 

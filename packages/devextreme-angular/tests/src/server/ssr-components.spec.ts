@@ -11,6 +11,8 @@ import {
     DevExtremeModule
 } from 'devextreme-angular';
 
+import renderer from 'devextreme/core/renderer';
+
 import { DxServerModule } from 'devextreme-angular/server';
 
 import {
@@ -48,5 +50,19 @@ describe('Universal', () => {
 
         let fixture = TestBed.createComponent(TestContainerComponent);
         expect(fixture.detectChanges.bind(fixture)).not.toThrow();
+    });
+
+    it('should not throw error if core/renderer is called (T1255582)', async () => {
+        TestBed.overrideComponent(TestContainerComponent, {
+            set: {
+                template: `<div></div>`
+            }
+        });
+
+        let fixture = TestBed.createComponent(TestContainerComponent);
+
+        fixture.detectChanges();
+
+        expect(() => renderer(fixture.nativeElement).filter(':visible')).not.toThrow();
     });
 });

@@ -19,7 +19,7 @@ type AccessibleOptions = Pick<Properties,
   "messageTimestampFormat" |
   "onDisposing" |
   "onInitialized" |
-  "onMessageSend" |
+  "onMessageEntered" |
   "onOptionChanged" |
   "onTypingEnd" |
   "onTypingStart" |
@@ -54,7 +54,7 @@ const componentConfig = {
     messageTimestampFormat: [Object, Function, String],
     onDisposing: Function,
     onInitialized: Function,
-    onMessageSend: Function,
+    onMessageEntered: Function,
     onOptionChanged: Function,
     onTypingEnd: Function,
     onTypingStart: Function,
@@ -85,7 +85,7 @@ const componentConfig = {
     "update:messageTimestampFormat": null,
     "update:onDisposing": null,
     "update:onInitialized": null,
-    "update:onMessageSend": null,
+    "update:onMessageEntered": null,
     "update:onOptionChanged": null,
     "update:onTypingEnd": null,
     "update:onTypingStart": null,
@@ -196,12 +196,14 @@ const DxItemConfig = {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:author": null,
+    "update:id": null,
     "update:text": null,
     "update:timestamp": null,
     "update:typing": null,
   },
   props: {
     author: Object,
+    id: [Number, String],
     text: String,
     timestamp: [Date, Number, String],
     typing: Boolean

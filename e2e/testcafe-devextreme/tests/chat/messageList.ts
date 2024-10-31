@@ -105,7 +105,7 @@ test('Messagelist appearance with scrollbar', async (t) => {
     width: 400,
     height: 600,
     showDayHeaders: false,
-    onMessageSend: (e) => {
+    onMessageEntered: (e) => {
       const { component, message } = e;
 
       component.renderMessage(message);
@@ -232,7 +232,7 @@ test('Messagelist with messageTemplate', async (t) => {
     width: 400,
     height: 600,
     showDayHeaders: false,
-    onMessageSend: ({ component, message }) => {
+    onMessageEntered: ({ component, message }) => {
       message.timestamp = undefined;
       component.renderMessage(message);
     },
@@ -245,5 +245,43 @@ test('Messagelist with messageTemplate', async (t) => {
 
       $('<div>').text(`${author.name} says: ${text}`).appendTo(container);
     },
+  });
+});
+
+test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp set to false work', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'Messagelist with showDayHeaders, showUserName and showMessageTimestamp options set to false.png',
+    { element: '#container' },
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+  const items = [{
+    author: userFirst,
+    text: 'AAA',
+  }, {
+    author: userFirst,
+    text: 'BBB',
+  }, {
+    author: userSecond,
+    text: 'CCC',
+  }];
+
+  return createWidget('dxChat', {
+    items,
+    user: userFirst,
+    width: 400,
+    height: 600,
+    showDayHeaders: false,
+    showUserName: false,
+    showMessageTimestamp: false,
   });
 });

@@ -1302,4 +1302,9 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       border-radius: $datagrid-border-radius;
     }
   }
+
+  .dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-draggable-column {
+    opacity: 1;
+    color: $datagrid-draggable-column-text-color;
+  }
 }

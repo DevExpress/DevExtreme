@@ -1021,6 +1021,11 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
     }
   }
 
+  .dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-draggable-column {
+    opacity: 1;
+    color: $datagrid-draggable-column-text-color;
+  }
+
   .dx-rtl {
     .dx-toolbar-menu-section {
       .dx-checkbox-text {
