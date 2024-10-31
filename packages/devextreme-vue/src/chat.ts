@@ -16,7 +16,6 @@ type AccessibleOptions = Pick<Properties,
   "hint" |
   "hoverStateEnabled" |
   "items" |
-  "messageTemplate" |
   "messageTimestampFormat" |
   "onDisposing" |
   "onInitialized" |
@@ -52,7 +51,6 @@ const componentConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     items: Array,
-    messageTemplate: {},
     messageTimestampFormat: [Object, Function, String],
     onDisposing: Function,
     onInitialized: Function,
@@ -84,7 +82,6 @@ const componentConfig = {
     "update:hint": null,
     "update:hoverStateEnabled": null,
     "update:items": null,
-    "update:messageTemplate": null,
     "update:messageTimestampFormat": null,
     "update:onDisposing": null,
     "update:onInitialized": null,

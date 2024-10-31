@@ -1,12 +1,11 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { template } from '@js/core/templates/template';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { isDate } from '@js/core/utils/type';
 import type { Format } from '@js/localization';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
-import type { Message, MessageTemplate } from '@js/ui/chat';
+import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -31,8 +30,9 @@ export interface Properties extends WidgetOptions<MessageGroup> {
   showAvatar: boolean;
   showUserName: boolean;
   showMessageTimestamp: boolean;
-  messageTemplate?: MessageTemplate | template | null;
-  messageTemplateData?: { component?: Chat };
+  // eslint-disable-next-line
+  messageTemplate: any;
+  messageTemplateData: { component?: Chat };
   isLast: boolean;
   messageTimestampFormat?: Format;
 }

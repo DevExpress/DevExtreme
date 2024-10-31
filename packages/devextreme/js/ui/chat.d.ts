@@ -1,13 +1,4 @@
 import {
-    UserDefinedElement,
-    DxElement,
-} from '../core/element';
-
-import {
-    template,
-} from '../core/templates/template';
-
-import {
     Format,
 } from '../localization';
 
@@ -159,21 +150,6 @@ export type Message = {
     typing?: boolean;
 };
 
-/** @public */
-export type MessageTemplateData = {
-    readonly author?: User;
-    readonly component: dxChat;
-    readonly isLast?: boolean;
-    readonly text?: string;
-};
-
-/**
- * @docid
- * @namespace DevExpress.ui.dxChat
- * @public
- */
-export type MessageTemplate = ((data: MessageTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement);
-
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
@@ -230,13 +206,6 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     errors?: Array<ChatError>;
-    /**
-     * @docid
-     * @default null
-     * @type_function_return string|Element|jQuery
-     * @public
-     */
-    messageTemplate?: MessageTemplate | template | null;
     /**
      * @docid
      * @default 'shorttime'
