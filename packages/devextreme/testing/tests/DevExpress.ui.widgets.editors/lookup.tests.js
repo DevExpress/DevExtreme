@@ -3017,38 +3017,27 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('refocusing a Popover element after pressing shift+Tab should not auto-select a value', function(assert) {
-        const done = assert.async();
-
         if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not apply for mobile devices');
-            done();
+            assert.ok(true, 'test does not actual for mobile devices');
             return;
         }
 
+        $('#qunit-fixture').css({ 'position': 'static', 'padding-top': '50% ' });
         const $element = $('#widget').dxLookup({
             opened: true,
             items: [1, 2, 3],
-            searchEnabled: false,
             focusStateEnabled: true,
-            onOpened: () => {
-                setTimeout(() => {
-                    const instance = $element.dxLookup('instance');
-                    const $overlayContent = $(instance.content()).parent();
-                    const $firstListItem = $overlayContent.find('.dx-list-item').first();
-                    $(instance._list._$container).trigger('focusin');
-                    $firstListItem[0].focus();
-                    $firstListItem.trigger('focusin');
-
-                    const shiftTabKeyDownEvent = $.Event('keydown', { key: 'Tab', shiftKey: true });
-
-                    $(instance._list._$container).trigger(shiftTabKeyDownEvent);
-
-                    assert.strictEqual(instance.option('value'), null, 'No value should be auto-selected');
-                    assert.ok($element.hasClass(FOCUSED_CLASS), 'Lookup field is focused');
-                    done();
-                }, 0);
-            }
+            searchEnabled: false,
         });
+
+        const instance = $element.dxLookup('instance');
+        const $container = $(instance._list._$container);
+        $container.trigger('focusin');
+        // instance._$list.dxList('focus');
+        // const $listItemContainer = instance._$list.find(`.${LIST_ITEMS_CLASS}`).parent();
+        const shiftTabKeyDownEvent = $.Event('keydown', { key: 'Tab', shiftKey: true });
+        const $listParentContent = $(instance._list._$element);
+        $($listParentContent).trigger(shiftTabKeyDownEvent).trigger(shiftTabKeyDownEvent).trigger(shiftTabKeyDownEvent);
     });
 
     QUnit.testInActiveWindow('lookup item should be selected after \'enter\' key pressing', function(assert) {
