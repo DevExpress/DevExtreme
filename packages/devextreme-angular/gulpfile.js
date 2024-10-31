@@ -304,10 +304,8 @@ const getKarmaConfig = function (testsPath) {
 
 gulp.task('test.components.client', gulp.series('build.tests', (done) => {
   const config = getKarmaConfig('./karma.test.shim.js');
-  console.log('------getKarmaConfig---->', config);
 
   new karmaServer(config, (e) => {
-    console.log('----karmaServer-catch----->', e);
     done()})
       .start()
       .finally(() => done());
