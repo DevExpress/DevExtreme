@@ -71,7 +71,7 @@
     display: inline-block;
     position: sticky;
     background-color: $datagrid-group-row-bg;
-    width: 100%;
+    max-width: 100%;
     overflow: clip;
   }
 

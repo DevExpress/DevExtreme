@@ -202,7 +202,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
 
         const styleProps = normalizeOffset(offset);
 
-        this.setCellProperties(styleProps, visibleColumnIndex, rowIndex, true);
+        this.setCellProperties(styleProps, visibleColumnIndex, rowIndex);
       }
     });
   }
@@ -389,6 +389,45 @@ const rowsView = (
       $masterDetailCells,
       `${width}px`,
     );
+  }
+
+  protected setStickyOffsets(rowIndex?: number, offsets?: Record<number, Record<string, number>>) {
+    super.setStickyOffsets(rowIndex, offsets);
+    this.setStickyOffsetsForGroupCells();
+  }
+
+  private setStickyOffsetsForGroupCells() {
+    const groupColumns = this._columnsController.getGroupColumns();
+    let columns = this.getColumns();
+    let widths = this.getColumnWidths();
+    const columnsCountBeforeGroups = this._getColumnsCountBeforeGroups(columns);
+
+    const rtlEnabled = this.option('rtlEnabled');
+
+    if (rtlEnabled) {
+      columns = rtlEnabled ? [...columns].reverse() : columns;
+      widths = rtlEnabled ? [...widths].reverse() : widths;
+    }
+
+    const $tableElement = this.getTableElement()!;
+
+    groupColumns.forEach((column) => {
+      const columnIndex = columnsCountBeforeGroups + column.groupIndex + 1;
+      const visibleColumnIndex = rtlEnabled ? columns.length - columnIndex - 1 : columnIndex;
+      const offset = getStickyOffset(this._columnsController, columns, widths, visibleColumnIndex);
+      const styleProps = normalizeOffset(offset);
+
+      const $cells = $tableElement
+        .children().children('.dx-group-row')
+        .find(`.dx-group-cell[aria-colindex=${columnIndex + 1}]`);
+
+      for (let i = 0; i < $cells.length; i += 1) {
+        const cell = $cells.get(i) as HTMLElement;
+        const container = $(cell).find('.dx-datagrid-group-row-container').get(0) as HTMLElement;
+        Object.assign(cell.style, styleProps);
+        Object.assign(container.style, styleProps);
+      }
+    });
   }
 
   protected _resizeCore() {

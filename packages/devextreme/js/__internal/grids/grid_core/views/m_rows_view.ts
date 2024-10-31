@@ -676,7 +676,7 @@ export class RowsView extends ColumnsView {
     this.executeAction('onRowDblClick', extend({}, e, item));
   }
 
-  private _getColumnsCountBeforeGroups(columns) {
+  protected _getColumnsCountBeforeGroups(columns) {
     for (let i = 0; i < columns.length; i++) {
       if (columns[i].type === 'groupExpand') {
         return i;
@@ -734,6 +734,7 @@ export class RowsView extends ColumnsView {
         expandColumn = {
           command: 'expand',
           cssClass: columns[i].cssClass,
+          fixed: columns[i].fixed,
         };
       }
 
