@@ -3016,29 +3016,26 @@ QUnit.module('keyboard navigation', {
         assert.ok(instance.option('opened'), 'popup is opened');
     });
 
-    QUnit.test('refocusing a Popover element after pressing shift+Tab should not auto-select a value', function(assert) {
+    QUnit.test('lookup value should not be changed after pressing tab', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test does not actual for mobile devices');
             return;
         }
 
-        $('#qunit-fixture').css({ 'position': 'static', 'padding-top': '50% ' });
         const $element = $('#widget').dxLookup({
             opened: true,
             items: [1, 2, 3],
             focusStateEnabled: true,
             searchEnabled: false,
         });
-
         const instance = $element.dxLookup('instance');
-        const $container = $(instance._list._$container);
-        $container.trigger('focusin');
-        // instance._$list.dxList('focus');
-        // const $listItemContainer = instance._$list.find(`.${LIST_ITEMS_CLASS}`).parent();
-        const shiftTabKeyDownEvent = $.Event('keydown', { key: 'Tab', shiftKey: true });
-        const $listParentContent = $(instance._list._$element);
-        $($listParentContent).trigger(shiftTabKeyDownEvent).trigger(shiftTabKeyDownEvent).trigger(shiftTabKeyDownEvent);
-        assert.strictEqual(instance.option('value'), null, 'No value should be auto-selected');
+        const $input = $(instance.field());
+        const keyboard = keyboardMock($input);
+
+        $input.trigger('focusin');
+        keyboard.keyDown('tab');
+
+        assert.strictEqual(instance.option('value'), null, 'Lookup input field has no value');
     });
 
     QUnit.testInActiveWindow('lookup item should be selected after \'enter\' key pressing', function(assert) {
