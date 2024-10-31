@@ -12,7 +12,7 @@
     "regenerate": "gulp generate",
     "lint": "eslint src",
     "test": "pnpm run gulp -- test",
-    "test:dev": "pnpm run gulp -- run.tests",
+    "test:dev": "set PUPPETEER_SKIP_DOWNLOAD=true && pnpm run gulp -- run.tests",
     "pack": "gulp npm.pack"
   },
   "author": "Developer Express Inc.",
