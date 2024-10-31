@@ -25,7 +25,7 @@ import {
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
-import { ChatError, DisposingEvent, InitializedEvent, Message, MessageSendEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
+import { ChatError, DisposingEvent, InitializedEvent, Message, MessageSendEvent, MessageTemplate, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
 
 import DxChat from 'devextreme/ui/chat';
 
@@ -231,6 +231,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
     set items(value: Array<Message>) {
         this._setOption('items', value);
+    }
+
+
+    /**
+     * [descr:dxChatOptions.messageTemplate]
+    
+     */
+    @Input()
+    get messageTemplate(): MessageTemplate | null {
+        return this._getOption('messageTemplate');
+    }
+    set messageTemplate(value: MessageTemplate | null) {
+        this._setOption('messageTemplate', value);
     }
 
 
@@ -487,6 +500,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() messageTemplateChange: EventEmitter<MessageTemplate | null>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() messageTimestampFormatChange: EventEmitter<Format | string>;
 
     /**
@@ -618,6 +638,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
             { emit: 'itemsChange' },
+            { emit: 'messageTemplateChange' },
             { emit: 'messageTimestampFormatChange' },
             { emit: 'rtlEnabledChange' },
             { emit: 'showAvatarChange' },

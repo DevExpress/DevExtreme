@@ -8,6 +8,8 @@ export {
   User,
   ChatError,
   Message,
+  MessageTemplateData,
+  MessageTemplate,
   dxChatOptions,
   Properties,
 } from './chat';

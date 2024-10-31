@@ -31,8 +31,6 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 type Properties = ChatProperties & {
   title: string;
-  // eslint-disable-next-line
-  messageTemplate: any;
 };
 
 class Chat extends Widget<Properties> {
@@ -62,13 +60,13 @@ class Chat extends Widget<Properties> {
       dataSource: null,
       user: { id: new Guid().toString() },
       dayHeaderFormat: 'shortdate',
+      messageTemplate: null,
       messageTimestampFormat: 'shorttime',
       errors: [],
       showAvatar: true,
       showUserName: true,
       showMessageTimestamp: true,
       onMessageSend: undefined,
-      messageTemplate: null,
       onTypingStart: undefined,
       onTypingEnd: undefined,
     };

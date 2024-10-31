@@ -9521,6 +9521,12 @@ declare module DevExpress.ui {
        */
       readonly message?: Message;
     };
+    export type MessageTemplateData = {
+      readonly author?: User;
+      readonly component: dxChat;
+      readonly isLast?: boolean;
+      readonly text?: string;
+    };
     /**
      * [descr:_ui_chat_OptionChangedEvent]
      */
@@ -9586,6 +9592,13 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.errors]
      */
     errors?: Array<DevExpress.ui.dxChat.ChatError>;
+    /**
+     * [descr:dxChatOptions.messageTemplate]
+     */
+    messageTemplate?:
+      | DevExpress.ui.dxChat.MessageTemplate
+      | DevExpress.core.template
+      | null;
     /**
      * [descr:dxChatOptions.messageTimestampFormat]
      */
@@ -30749,6 +30762,13 @@ declare module DevExpress.ui.dxChat {
      */
     typing?: boolean;
   };
+  /**
+   * [descr:MessageTemplate]
+   */
+  export type MessageTemplate = (
+    data: MessageTemplateData,
+    messageBubbleElement: DevExpress.core.DxElement
+  ) => string | DevExpress.core.UserDefinedElement;
   /**
    * [descr:User]
    */

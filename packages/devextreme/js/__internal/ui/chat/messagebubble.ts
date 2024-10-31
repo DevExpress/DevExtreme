@@ -1,5 +1,6 @@
 import $ from '@js/core/renderer';
-import type { User } from '@js/ui/chat';
+import type { template } from '@js/core/templates/template';
+import type { MessageTemplate, User } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -10,8 +11,7 @@ const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 
 export interface Properties extends WidgetOptions<MessageBubble> {
   text?: string;
-  // eslint-disable-next-line
-  template?: null | any;
+  template?: MessageTemplate | template | null;
   templateData?: { component?: Chat; isLast?: boolean; author?: User };
 }
 
