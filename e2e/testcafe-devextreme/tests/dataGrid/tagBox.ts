@@ -17,6 +17,8 @@ fixture.disablePageReloads`Tagbox Columns`.page(
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       await t
         .click(dataGrid.getDataCell(0, 1).element)
+        .expect(dataGrid.isReady())
+        .ok()
         .expect(
           await takeScreenshot(
             `T1228720-grid-tagbox-on-edit_(${theme}).png`,
