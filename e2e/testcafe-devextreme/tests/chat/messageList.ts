@@ -248,7 +248,7 @@ test('Messagelist with messageTemplate', async (t) => {
   });
 });
 
-test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp set to false work', async(t) => {
+test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp set to false work', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(
