@@ -42,7 +42,7 @@ export interface BaseLegend {
      * @default undefined
      * @public
      */
-    backgroundColor?: string;
+    backgroundColor?: string | undefined;
     /**
      * @docid
      * @public
@@ -67,7 +67,7 @@ export interface BaseLegend {
        * @docid
        * @default undefined
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * @docid
        * @default false
@@ -108,13 +108,13 @@ export interface BaseLegend {
      * @default undefined
      * @public
      */
-    itemTextPosition?: Position;
+    itemTextPosition?: Position | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    itemsAlignment?: HorizontalAlignment;
+    itemsAlignment?: HorizontalAlignment | undefined;
     /**
      * @docid
      * @default 10
@@ -153,7 +153,7 @@ export interface BaseLegend {
      * @default undefined
      * @public
      */
-    orientation?: Orientation;
+    orientation?: Orientation | undefined;
     /**
      * @docid
      * @default 10
@@ -195,7 +195,7 @@ export interface BaseLegend {
        * @docid
        * @default undefined
        */
-      horizontalAlignment?: HorizontalAlignment;
+      horizontalAlignment?: HorizontalAlignment | undefined;
       /**
        * @docid
        */
@@ -225,7 +225,7 @@ export interface BaseLegend {
        * @docid
        * @default undefined
        */
-      placeholderSize?: number;
+      placeholderSize?: number | undefined;
       /**
        * @docid
        */
@@ -327,13 +327,13 @@ export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    tag?: any;
+    tag?: any | undefined;
     /**
      * @docid
      * @default 'line'

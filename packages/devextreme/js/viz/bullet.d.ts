@@ -112,7 +112,7 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
      * @notUsedInTheme
      * @public
      */
-    endScaleValue?: number;
+    endScaleValue?: number | undefined;
     /**
      * @docid
      * @default true

@@ -95,7 +95,7 @@ export interface DataSourceOptions<
      * @default undefined
      * @public
      */
-    paginate?: boolean;
+    paginate?: boolean | undefined;
     /**
      * @docid
      * @type_function_param1 data:Array<any>
@@ -108,7 +108,7 @@ export interface DataSourceOptions<
      * @default undefined
      * @public
      */
-    pushAggregationTimeout?: number;
+    pushAggregationTimeout?: number | undefined;
     /**
      * @docid
      * @public

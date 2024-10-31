@@ -232,7 +232,7 @@ export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Excl
      * @default undefined
      * @public
      */
-    maxDisplayedTags?: number;
+    maxDisplayedTags?: number | undefined;
     /**
      * @docid
      * @default true

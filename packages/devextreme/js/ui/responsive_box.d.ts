@@ -116,7 +116,7 @@ export interface dxResponsiveBoxOptions<
        * @docid
        * @default undefined
        */
-      screen?: string;
+      screen?: string | undefined;
       /**
        * @docid
        * @default 1
@@ -162,7 +162,7 @@ export interface dxResponsiveBoxOptions<
        * @docid
        * @default undefined
        */
-      screen?: string;
+      screen?: string | undefined;
       /**
        * @docid
        * @default 1
@@ -223,7 +223,7 @@ export interface dxResponsiveBoxItem extends CollectionWidgetItem {
        * @docid
        * @default undefined
        */
-      colspan?: number;
+      colspan?: number | undefined;
       /**
        * @docid
        */
@@ -232,12 +232,12 @@ export interface dxResponsiveBoxItem extends CollectionWidgetItem {
        * @docid
        * @default undefined
        */
-      rowspan?: number;
+      rowspan?: number | undefined;
       /**
        * @docid
        * @default undefined
        */
-      screen?: string;
+      screen?: string | undefined;
     } | Array<{ col?: number; colspan?: number; row?: number; rowspan?: number; screen?: string }>;
 }
 

@@ -362,7 +362,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @notUsedInTheme
      * @public
      */
-    bounds?: Array<number>;
+    bounds?: Array<number> | undefined;
     /**
      * @docid
      * @default [0, 0]
@@ -595,7 +595,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @default undefined
      * @public
      */
-    legends?: Array<Legend>;
+    legends?: Array<Legend> | undefined;
     /**
      * @docid
      * @type object
@@ -726,7 +726,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @notUsedInTheme
      * @public
      */
-    customizeAnnotation?: ((annotation: dxVectorMapAnnotationConfig | any) => dxVectorMapAnnotationConfig);
+    customizeAnnotation?: ((annotation: dxVectorMapAnnotationConfig | any) => dxVectorMapAnnotationConfig) | undefined;
 }
 
 /**
@@ -741,7 +741,7 @@ export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotation
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
 }
 
 /**
@@ -756,7 +756,7 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
      * @default undefined
      * @public
      */
-    coordinates?: Array<number>;
+    coordinates?: Array<number> | undefined;
     /**
      * @docid
      * @type_function_return object
@@ -764,21 +764,21 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
      * @notUsedInTheme
      * @public
      */
-    customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => any);
+    customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => any) | undefined;
     /**
      * @docid
      * @default undefined
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
      * @docid
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
+    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: DxElement) => string | UserDefinedElement) | undefined;
 }
 
 /**
@@ -816,7 +816,7 @@ export type Legend = BaseLegend & {
      * @default undefined
      * @public
      */
-    markerColor?: string;
+    markerColor?: string | undefined;
     /**
      * @docid dxVectorMapOptions.legends.markerShape
      * @default "square"
@@ -836,7 +836,7 @@ export type Legend = BaseLegend & {
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
      * @docid dxVectorMapOptions.legends.source
      * @notUsedInTheme
@@ -866,7 +866,7 @@ export type Tooltip = BaseWidgetTooltip & {
      * @default undefined
      * @public
      */
-    contentTemplate?: template | ((info: MapLayerElement, element: DxElement) => string | UserDefinedElement);
+    contentTemplate?: template | ((info: MapLayerElement, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid dxVectorMapOptions.tooltip.customizeTooltip
      * @type_function_return object
@@ -874,7 +874,7 @@ export type Tooltip = BaseWidgetTooltip & {
      * @notUsedInTheme
      * @public
      */
-    customizeTooltip?: ((info: MapLayerElement) => any);
+    customizeTooltip?: ((info: MapLayerElement) => any) | undefined;
     /**
      * @docid dxVectorMapOptions.tooltip.format
      * @hidden

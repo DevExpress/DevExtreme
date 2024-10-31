@@ -160,7 +160,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @default undefined
      * @public
      */
-    buttons?: Array<NumberBoxPredefinedButton | TextEditorButton>;
+    buttons?: Array<NumberBoxPredefinedButton | TextEditorButton> | undefined;
     /**
      * @docid
      * @default ""
@@ -178,13 +178,13 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @default undefined
      * @public
      */
-    max?: number;
+    max?: number | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    min?: number;
+    min?: number | undefined;
     /**
      * @docid
      * @default "text"

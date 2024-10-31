@@ -85,7 +85,7 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
      * @default undefined
      * @public
      */
-    iconSize?: number | string;
+    iconSize?: number | string | undefined;
     /**
      * @docid
      * @hidden false

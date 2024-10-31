@@ -180,7 +180,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @default undefined
      * @public
      */
-    colCountByScreen?: any;
+    colCountByScreen?: any | undefined;
     /**
      * @docid
      * @type_function_param1 item:dxFormSimpleItem|dxFormGroupItem|dxFormTabbedItem|dxFormEmptyItem|dxFormButtonItem
@@ -206,7 +206,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @default undefined
      * @public
      */
-    items?: Array<Item>;
+    items?: Array<Item> | undefined;
     /**
      * @docid
      * @default "left"
@@ -309,7 +309,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @default undefined
      * @public
      */
-    validationGroup?: string;
+    validationGroup?: string | undefined;
     /**
      * @docid
      * @default false
@@ -427,19 +427,19 @@ export interface dxFormButtonItem {
      * @default undefined
      * @public
      */
-    buttonOptions?: dxButtonOptions;
+    buttonOptions?: dxButtonOptions | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    colSpan?: number;
+    colSpan?: number | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * @docid
      * @default "right"
@@ -457,7 +457,7 @@ export interface dxFormButtonItem {
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * @docid
      * @default "top"
@@ -475,7 +475,7 @@ export interface dxFormButtonItem {
      * @default undefined
      * @public
      */
-    visibleIndex?: number;
+    visibleIndex?: number | undefined;
 }
 
 /**
@@ -494,13 +494,13 @@ export interface dxFormEmptyItem {
      * @default undefined
      * @public
      */
-    colSpan?: number;
+    colSpan?: number | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * @docid
      * @default "simple"
@@ -512,7 +512,7 @@ export interface dxFormEmptyItem {
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * @docid
      * @default true
@@ -524,7 +524,7 @@ export interface dxFormEmptyItem {
      * @default undefined
      * @public
      */
-    visibleIndex?: number;
+    visibleIndex?: number | undefined;
 }
 
 /**
@@ -549,7 +549,7 @@ export interface dxFormGroupItem {
      * @default undefined
      * @public
      */
-    caption?: string;
+    caption?: string | undefined;
     /**
      * @docid
      * @type_function_return string|Element|jQuery
@@ -569,19 +569,19 @@ export interface dxFormGroupItem {
      * @default undefined
      * @public
      */
-    colCountByScreen?: any;
+    colCountByScreen?: any | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    colSpan?: number;
+    colSpan?: number | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * @docid
      * @default "simple"
@@ -594,13 +594,13 @@ export interface dxFormGroupItem {
      * @default undefined
      * @public
      */
-    items?: Array<Item>;
+    items?: Array<Item> | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * @docid
      * @type_function_param1 data:object
@@ -620,7 +620,7 @@ export interface dxFormGroupItem {
      * @default undefined
      * @public
      */
-    visibleIndex?: number;
+    visibleIndex?: number | undefined;
 }
 
 /**
@@ -639,25 +639,25 @@ export interface dxFormSimpleItem {
      * @default undefined
      * @public
      */
-    colSpan?: number;
+    colSpan?: number | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    dataField?: string;
+    dataField?: string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    editorOptions?: any;
+    editorOptions?: any | undefined;
     /**
      * @docid
      * @public
@@ -668,13 +668,13 @@ export interface dxFormSimpleItem {
      * @default undefined
      * @public
      */
-    helpText?: string;
+    helpText?: string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    isRequired?: boolean;
+    isRequired?: boolean | undefined;
     /**
      * @docid
      * @default "simple"
@@ -712,7 +712,7 @@ export interface dxFormSimpleItem {
        * @docid
        * @default undefined
        */
-      text?: string;
+      text?: string | undefined;
       /**
        * @docid
        * @default true
@@ -724,7 +724,7 @@ export interface dxFormSimpleItem {
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * @docid
      * @type_function_param1 data:object
@@ -750,7 +750,7 @@ export interface dxFormSimpleItem {
      * @default undefined
      * @public
      */
-    visibleIndex?: number;
+    visibleIndex?: number | undefined;
 }
 
 /**
@@ -769,13 +769,13 @@ export interface dxFormTabbedItem {
      * @default undefined
      * @public
      */
-    colSpan?: number;
+    colSpan?: number | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * @docid
      * @default "simple"
@@ -787,13 +787,13 @@ export interface dxFormTabbedItem {
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    tabPanelOptions?: dxTabPanelOptions;
+    tabPanelOptions?: dxTabPanelOptions | undefined;
     /**
      * @docid
      * @default undefined
@@ -809,7 +809,7 @@ export interface dxFormTabbedItem {
        * @docid
        * @default undefined
        */
-      badge?: string;
+      badge?: string | undefined;
       /**
        * @docid
        * @default 1
@@ -821,7 +821,7 @@ export interface dxFormTabbedItem {
        * @inherits ColCountResponsible
        * @default undefined
        */
-      colCountByScreen?: any;
+      colCountByScreen?: any | undefined;
       /**
        * @docid
        * @default false
@@ -831,30 +831,30 @@ export interface dxFormTabbedItem {
        * @docid
        * @default undefined
        */
-      icon?: string;
+      icon?: string | undefined;
       /**
        * @docid
        * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
        * @default undefined
        */
-      items?: Array<Item>;
+      items?: Array<Item> | undefined;
       /**
        * @docid
        * @type_function_param1 tabData:object
        * @default undefined
        */
-      tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any);
+      tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any) | undefined;
       /**
        * @docid
        * @type_function_param1 tabData:object
        * @default undefined
        */
-      template?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any);
+      template?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any) | undefined;
       /**
        * @docid
        * @default undefined
        */
-      title?: string;
+      title?: string | undefined;
     }>;
     /**
      * @docid
@@ -867,7 +867,7 @@ export interface dxFormTabbedItem {
      * @default undefined
      * @public
      */
-    visibleIndex?: number;
+    visibleIndex?: number | undefined;
 }
 
 /** @public */

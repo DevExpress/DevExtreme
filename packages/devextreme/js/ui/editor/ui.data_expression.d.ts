@@ -33,7 +33,7 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
      * @type_function_param1 item:object
      * @public
      */
-    displayExpr?: string | ((item: any) => string);
+    displayExpr?: string | ((item: any) => string) | undefined;
     /**
      * @docid
      * @default "item"

@@ -8,23 +8,23 @@ export interface ColCountResponsible {
      * @default undefined
      * @public
      */
-    lg?: number;
+    lg?: number | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    md?: number;
+    md?: number | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    sm?: number;
+    sm?: number | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    xs?: number;
+    xs?: number | undefined;
 }

@@ -444,12 +444,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default undefined
        */
-      data?: any;
+      data?: any | undefined;
       /**
        * @docid
        * @default undefined
        */
-      group?: string;
+      group?: string | undefined;
       /**
        * @docid
        * @type_function_param1 e:object
@@ -541,7 +541,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default undefined
      * @public
      */
-    customizeDateNavigatorText?: ((info: DateNavigatorTextInfo) => string);
+    customizeDateNavigatorText?: ((info: DateNavigatorTextInfo) => string) | undefined;
     /**
      * @docid
      * @default null
@@ -568,7 +568,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default undefined
      * @public
      */
-    dateSerializationFormat?: string;
+    dateSerializationFormat?: string | undefined;
     /**
      * @docid
      * @default 'description'
@@ -646,7 +646,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default undefined
      * @public
      */
-    firstDayOfWeek?: FirstDayOfWeek;
+    firstDayOfWeek?: FirstDayOfWeek | undefined;
     /**
      * @docid
      * @default true &for(desktop)
@@ -676,7 +676,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default undefined
      * @public
      */
-    max?: Date | number | string;
+    max?: Date | number | string | undefined;
     /**
      * @docid
      * @default "auto"
@@ -688,7 +688,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default undefined
      * @public
      */
-    min?: Date | number | string;
+    min?: Date | number | string | undefined;
     /**
      * @docid
      * @default "No data to display"
@@ -1046,7 +1046,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default undefined
        */
-      firstDayOfWeek?: FirstDayOfWeek;
+      firstDayOfWeek?: FirstDayOfWeek | undefined;
       /**
        * @docid
        * @default false
@@ -1075,7 +1075,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default undefined
        */
-      name?: string;
+      name?: string | undefined;
       /**
        * @docid
        * @default null
@@ -1086,7 +1086,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default undefined
        */
-      startDate?: Date | number | string;
+      startDate?: Date | number | string | undefined;
       /**
        * @docid
        * @default 0
@@ -1102,7 +1102,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default undefined
        */
-      type?: ViewType;
+      type?: ViewType | undefined;
       /**
        * @docid
        */

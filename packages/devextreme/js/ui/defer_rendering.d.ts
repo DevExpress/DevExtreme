@@ -71,7 +71,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @default undefined
      * @public
      */
-    animation?: AnimationConfig;
+    animation?: AnimationConfig | undefined;
     /**
      * @docid
      * @default null
@@ -94,7 +94,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @default undefined
      * @public
      */
-    renderWhen?: PromiseLike<void> | boolean;
+    renderWhen?: PromiseLike<void> | boolean | undefined;
     /**
      * @docid
      * @default false
@@ -106,7 +106,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @default undefined
      * @public
      */
-    staggerItemSelector?: string;
+    staggerItemSelector?: string | undefined;
 }
 /**
  * @docid

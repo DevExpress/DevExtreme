@@ -238,12 +238,12 @@ export interface dxContextMenuOptions<
        * @docid
        * @default undefined
        */
-      delay?: number;
+      delay?: number | undefined;
       /**
        * @docid
        * @default undefined
        */
-      name?: string;
+      name?: string | undefined;
     } | string;
     /**
      * @docid
@@ -256,7 +256,7 @@ export interface dxContextMenuOptions<
      * @default undefined
      * @public
      */
-    target?: string | UserDefinedElement;
+    target?: string | UserDefinedElement | undefined;
     /**
      * @docid
      * @default false

@@ -152,7 +152,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @type_function_param1 itemData:object
      * @public
      */
-    displayExpr?: string | ((itemData: any) => string);
+    displayExpr?: string | ((itemData: any) => string) | undefined;
     /**
      * @docid
      * @default "content"
@@ -185,7 +185,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default undefined
      * @public
      */
-    icon?: string;
+    icon?: string | undefined;
     /**
      * @docid
      * @default "item"

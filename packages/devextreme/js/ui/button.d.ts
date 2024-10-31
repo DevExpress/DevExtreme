@@ -155,7 +155,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @default undefined
      * @public
      */
-    validationGroup?: string;
+    validationGroup?: string | undefined;
 }
 /**
  * @docid

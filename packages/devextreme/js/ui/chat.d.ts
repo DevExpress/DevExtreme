@@ -130,13 +130,13 @@ export type Message = {
      * @default undefined
      * @public
      */
-    timestamp?: Date | number | string;
+    timestamp?: Date | number | string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    author?: User;
+    author?: User | undefined;
     /**
      * @docid
      * @default ''
@@ -206,7 +206,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @default undefined
      * @public
      */
-    alerts?: Array<Alert>;
+    errors?: Array<Alert> | undefined;
     /**
      * @docid
      * @default []

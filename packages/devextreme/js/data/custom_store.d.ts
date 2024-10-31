@@ -104,7 +104,7 @@ export interface CustomStoreOptions<
      * @default undefined
      * @public
      */
-    useDefaultSearch?: boolean;
+    useDefaultSearch?: boolean | undefined;
 }
 
 /**

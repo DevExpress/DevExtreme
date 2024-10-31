@@ -116,7 +116,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @default undefined
      * @public
      */
-    dateSerializationFormat?: string;
+    dateSerializationFormat?: string | undefined;
     /**
      * @docid
      * @default null
@@ -129,7 +129,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @default undefined
      * @public
      */
-    firstDayOfWeek?: FirstDayOfWeek;
+    firstDayOfWeek?: FirstDayOfWeek | undefined;
     /**
      * @docid
      * @default true &for(desktop)

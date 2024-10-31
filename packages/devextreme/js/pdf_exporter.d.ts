@@ -153,13 +153,13 @@ export interface PdfExportDataGridProps {
      * @default undefined
      * @public
      */
-    jsPDFDocument?: object;
+    jsPDFDocument?: object | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    component?: dxDataGrid;
+    component?: dxDataGrid | undefined;
     /**
      * @docid
      * @public
@@ -183,7 +183,7 @@ export interface PdfExportDataGridProps {
      * @default undefined
      * @public
      */
-    columnWidths?: Array<number>;
+    columnWidths?: Array<number> | undefined;
     /**
      * @docid
      * @default 0
@@ -282,19 +282,19 @@ export interface PdfExportGanttProps {
    * @default undefined
    * @public
    */
-  jsPDFDocument?: object;
+  jsPDFDocument?: object | undefined;
   /**
    * @docid
    * @default undefined
    * @public
    */
-  component?: dxGantt;
+  component?: dxGantt | undefined;
   /**
    * @docid
    * @default undefined
    * @public
    */
-  format?: string | object;
+  format?: string | object | undefined;
   /**
    * @docid
    * @default true
@@ -306,13 +306,13 @@ export interface PdfExportGanttProps {
    * @default undefined
    * @public
    */
-  fileName?: string;
+  fileName?: string | undefined;
   /**
    * @docid
    * @default undefined
    * @public
    */
-  margins?: object;
+  margins?: object | undefined;
   /**
    * @docid
    * @default 'all'
@@ -340,13 +340,13 @@ export interface PdfExportGanttFont {
   * @default undefined
   * @public
   */
-  fontObject: object;
+  fontObject: object | undefined;
   /**
   * @docid
   * @default undefined
   * @public
   */
-  name: string;
+  name: string | undefined;
   /**
   * @docid
   * @default 'normal'
@@ -360,7 +360,7 @@ export interface PdfExportGanttFont {
   * @acceptValues  "normal" | "bold" | 400 | 700
   * @public
   */
-  weight?: string | number;
+  weight?: string | number | undefined;
 }
 
 /**
