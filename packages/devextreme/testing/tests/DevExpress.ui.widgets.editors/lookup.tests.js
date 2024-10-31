@@ -3038,6 +3038,7 @@ QUnit.module('keyboard navigation', {
         const shiftTabKeyDownEvent = $.Event('keydown', { key: 'Tab', shiftKey: true });
         const $listParentContent = $(instance._list._$element);
         $($listParentContent).trigger(shiftTabKeyDownEvent).trigger(shiftTabKeyDownEvent).trigger(shiftTabKeyDownEvent);
+        assert.strictEqual(instance.option('value'), null, 'No value should be auto-selected');
     });
 
     QUnit.testInActiveWindow('lookup item should be selected after \'enter\' key pressing', function(assert) {
