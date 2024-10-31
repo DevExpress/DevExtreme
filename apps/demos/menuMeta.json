@@ -619,6 +619,16 @@
             "DemoType": "Web"
           },
           {
+            "Title": "Column Reordering",
+            "Name": "ColumnReordering",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/employeeData.js"
+            ],
+            "DemoType": "Web",
+            "Badge": "New"
+          },
+          {
             "Title": "Column Chooser",
             "Name": "ColumnChooser",
             "Widget": "DataGrid",
