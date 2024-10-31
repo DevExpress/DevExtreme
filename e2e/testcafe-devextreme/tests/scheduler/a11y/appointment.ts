@@ -232,6 +232,38 @@ test('appointments & collector buttons can be navigated', async (t) => {
   });
 });
 
+test('Scheduler a11y: Disabled time ranges are not supported', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const {
+    nextButton,
+    prevButton,
+  } = scheduler.toolbar.navigator;
+  const expectedAriaLabels = {
+    prev: 'Previous page',
+    next: 'Next page',
+  };
+  const actualPrevAriaLabel = await prevButton.getAttribute('aria-label');
+  const actualNextAriaLabel = await nextButton.getAttribute('aria-label');
+
+  await t
+    .expect(actualPrevAriaLabel)
+    .eql(expectedAriaLabels.prev)
+    .expect(actualNextAriaLabel)
+    .eql(expectedAriaLabels.next);
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    dataSource: [
+      {
+        text: 'App 1',
+        startDate: new Date(2021, 1, 1, 12),
+        endDate: new Date(2021, 1, 1, 13),
+      },
+    ],
+    currentView: 'day',
+    currentDate: new Date(2021, 3, 27),
+  });
+});
+
 test('Scheduler a11y: appointments does not have info about reccurence', async (t) => {
   const scheduler = new Scheduler('#container');
   const recurrenceIcon = scheduler.getAppointment('Website Re-Design Plan').getRecurrenceElement();

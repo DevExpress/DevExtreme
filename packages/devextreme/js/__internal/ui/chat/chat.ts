@@ -12,6 +12,7 @@ import type {
   Properties as ChatProperties,
   TypingEndEvent,
   TypingStartEvent,
+  User,
 } from '@js/ui/chat';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -31,6 +32,7 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 type Properties = ChatProperties & {
   title: string;
+  typingUsers: User[];
 };
 
 class Chat extends Widget<Properties> {
@@ -66,6 +68,7 @@ class Chat extends Widget<Properties> {
       showAvatar: true,
       showUserName: true,
       showMessageTimestamp: true,
+      typingUsers: [],
       onMessageSend: undefined,
       onTypingStart: undefined,
       onTypingEnd: undefined,
@@ -140,10 +143,14 @@ class Chat extends Widget<Properties> {
       messageTemplate,
       dayHeaderFormat,
       messageTimestampFormat,
+      typingUsers,
     } = this.option();
 
-    const currentUserId = user?.id;
     const $messageList = $('<div>');
+
+    // @ts-expect-error
+    const isLoading = this._dataController.isLoading();
+    const currentUserId = user?.id;
 
     this.$element().append($messageList);
 
@@ -153,13 +160,13 @@ class Chat extends Widget<Properties> {
       showDayHeaders,
       messageTemplate,
       messageTemplateData: { component: this },
-      // @ts-expect-error
-      isLoading: this._dataController.isLoading(),
       showAvatar,
       showUserName,
       showMessageTimestamp,
       dayHeaderFormat,
       messageTimestampFormat,
+      typingUsers,
+      isLoading,
     });
   }
 
@@ -329,6 +336,7 @@ class Chat extends Widget<Properties> {
       case 'messageTemplate':
       case 'dayHeaderFormat':
       case 'messageTimestampFormat':
+      case 'typingUsers':
         this._messageList.option(name, value);
         break;
       default:

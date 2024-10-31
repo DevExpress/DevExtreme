@@ -45,7 +45,6 @@ export class ModuleItem {
       flags.unique = true;
       flags.syncStrategy = true;
 
-      // @ts-expect-error
       that[this] = Callbacks(flags);
     });
   }

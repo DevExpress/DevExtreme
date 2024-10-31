@@ -2,7 +2,7 @@ import fx from 'animation/fx';
 import translator from 'animation/translator';
 import 'generic_light.css!';
 import config from 'core/config';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { isRenderer } from 'core/utils/type';
 import Swipeable from 'events/gesture/swipeable';
 import { triggerShownEvent } from 'events/visibility_change';

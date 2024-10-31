@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import animationFrame from 'animation/frame';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import Scrollbar from '__internal/ui/scroll_view/m_scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 import Scrollable from 'ui/scroll_view/ui.scrollable';

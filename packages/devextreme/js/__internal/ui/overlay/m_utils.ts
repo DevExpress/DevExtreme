@@ -2,13 +2,13 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getInnerHeight, getOuterHeight } from '@js/core/utils/size';
 import { isNumeric } from '@js/core/utils/type';
-import { getWindow } from '@js/core/utils/window';
+
+import windowUtils from '../../core/utils/m_window';
 
 const WINDOW_HEIGHT_PERCENT = 0.9;
 
 export const getElementMaxHeightByWindow = ($element: dxElementWrapper, startLocation?: number) => {
-  // @ts-expect-error
-  const $window = $(getWindow());
+  const $window = $(windowUtils.getWindow());
   // @ts-expect-error
   const { top: elementOffset } = $element.offset();
   let actualOffset;

@@ -2,7 +2,7 @@ import $ from 'jquery';
 import translator from 'animation/translator';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.js';
 
 import '__internal/scheduler/m_scheduler';

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { validateGroup } from 'ui/validation_engine';
 import dxCheckBox from 'ui/check_box';

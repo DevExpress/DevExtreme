@@ -1,5 +1,4 @@
 import Class from '@js/core/class';
-// @ts-expect-error
 import { compileGetter, toComparable } from '@js/core/utils/data';
 import { Deferred } from '@js/core/utils/deferred';
 import { each, map } from '@js/core/utils/iterator';
@@ -161,7 +160,6 @@ const SortIterator = Iterator.inherit({
   thenBy(getter, desc, compare) {
     const result = new SortIterator(this.sortedIter || this.iter, getter, desc, compare);
     if (!this.sortedIter) {
-      // @ts-expect-error
       result.rules = this.rules.concat(result.rules);
     }
     return result;
@@ -648,7 +646,6 @@ const arrayQueryImpl = function (iter, queryOptions) {
 
     thenBy(getter, desc, compare) {
       if (iter instanceof SortIterator) {
-        // @ts-expect-error
         return chainQuery(iter.thenBy(getter, desc, compare));
       }
 

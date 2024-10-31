@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import eventsEngine from 'events/core/events_engine';
-import domUtils from 'core/utils/dom';
-import devices from 'core/devices';
+import domUtils from '__internal/core/utils/m_dom';
+import devices from '__internal/core/m_devices';
 import pointerMock from '../../../helpers/pointerMock.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import caretWorkaround from './caretWorkaround.js';
@@ -11,7 +11,7 @@ import consoleUtils from 'core/utils/console';
 import { normalizeKeyName } from 'events/utils/index';
 import { getWidth, implementationsMap } from 'core/utils/size';
 
-import TextEditor from 'ui/text_box/ui.text_editor';
+import TextEditor from '__internal/ui/text_box/m_text_editor';
 import { TextEditorLabel } from '__internal/ui/text_box/m_text_editor.label';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';

@@ -19,7 +19,7 @@ import {
     getEasing
 } from './easing';
 import { requestAnimationFrame, cancelAnimationFrame } from './frame';
-import { transitionEndEventName, transition } from '../core/utils/support';
+import supportUtils from '../__internal/core/utils/m_support';
 import positionUtils from './position';
 import { removeEvent } from '../events/remove';
 import { addNamespace } from '../events/utils/index';
@@ -94,7 +94,7 @@ const TransitionAnimationStrategy = {
         const transitionEndFired = new Deferred();
         const simulatedTransitionEndFired = new Deferred();
         let simulatedEndEventTimer;
-        const transitionEndEventFullName = transitionEndEventName() + '.dxFX';
+        const transitionEndEventFullName = supportUtils.transitionEndEventName() + '.dxFX';
 
         config.transitionAnimation.cleanup = function() {
             clearTimeout(simulatedEndEventTimer);
@@ -377,13 +377,13 @@ const FallbackToNoAnimationStrategy = {
 const getAnimationStrategy = function(config) {
     config = config || {};
     const animationStrategies = {
-        'transition': transition() ? TransitionAnimationStrategy : FrameAnimationStrategy,
+        'transition': supportUtils.transition() ? TransitionAnimationStrategy : FrameAnimationStrategy,
         'frame': FrameAnimationStrategy,
         'noAnimation': FallbackToNoAnimationStrategy
     };
     let strategy = config.strategy || 'transition';
 
-    if(config.type === 'css' && !transition()) {
+    if(config.type === 'css' && !supportUtils.transition()) {
         strategy = 'noAnimation';
     }
 

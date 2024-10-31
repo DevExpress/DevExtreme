@@ -193,7 +193,6 @@ const GoogleStaticProvider = Provider.inherit({
 });
 
 /// #DEBUG
-// @ts-expect-error
 GoogleStaticProvider.remapConstant = function (newValue) {
   GOOGLE_STATIC_URL = newValue;
 };

@@ -179,6 +179,39 @@ QUnit.module('Chat', () => {
             assert.deepEqual(messageList.option('currentUserId'), newUserID, 'currentUserId value is updated');
         });
 
+        QUnit.test('typingUsers should be passed to messageList', function(assert) {
+            const typingUsers = [
+                { name: 'Mike' },
+                { name: 'John' },
+            ];
+
+            this.reinit({ typingUsers });
+
+            const messageList = this.getMessageList();
+
+            assert.deepEqual(messageList.option('typingUsers'), typingUsers, 'typingUsers value is passed correctly');
+        });
+
+        QUnit.test('typingUsers should be passed correctly to messageList after update', function(assert) {
+            const typingUsers = [
+                { name: 'Mike' },
+                { name: 'John' },
+            ];
+
+            this.reinit({ typingUsers });
+
+            const newTypingUsers = [
+                { name: 'Alice' },
+                { name: 'James' },
+            ];
+
+            this.instance.option({ typingUsers: newTypingUsers });
+
+            const messageList = this.getMessageList();
+
+            assert.deepEqual(messageList.option('typingUsers'), newTypingUsers, 'typingUsers value is updated');
+        });
+
         QUnit.test('items should be passed to messageList after update', function(assert) {
             const newItems = [{ author: { name: 'Mike' } }, { author: { name: 'John' } }];
 

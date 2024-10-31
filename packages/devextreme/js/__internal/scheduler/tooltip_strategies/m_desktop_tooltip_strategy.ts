@@ -1,4 +1,4 @@
-import { touch } from '@js/core/utils/support';
+import supportUtils from '@ts/core/utils/m_support';
 import Tooltip from '@ts/ui/m_tooltip';
 
 import { TooltipStrategyBase } from './m_tooltip_strategy_base';
@@ -35,7 +35,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
     const result: any = super._createListOption(target, dataList);
     // TODO:T724287 this condition is not covered by tests, because touch variable cannot be overridden.
     // In the future, it is necessary to cover the tests
-    result.showScrollbar = touch ? 'always' : 'onHover';
+    result.showScrollbar = supportUtils.touch ? 'always' : 'onHover';
     return result;
   }
 

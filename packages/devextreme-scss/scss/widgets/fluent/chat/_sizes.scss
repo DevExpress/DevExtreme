@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "../textEditor/colors" as *;
 @use "../common/sizes" as *;
 @use "../sizes" as *;
@@ -21,6 +22,7 @@ $chat-messagegroup-alignment-start-template: auto 1fr !default;
 $chat-messagegroup-alignment-start-gap: 12px !default;
 $chat-header-padding: 20px !default;
 $chat-information-font-size: 12px !default;
+
 $chat-error-icon-size: $fluent-base-icon-size !default;
 $chat-error-content-column-gap: null !default;
 $chat-errors-padding-block: null !default;
@@ -37,6 +39,19 @@ $chat-messagelist-empty-prompt-font-size: null !default;
 $chat-messagelist-day-header-padding-bottom: 12px !default;
 $chat-messagelist-day-header-first-padding-top: 20px !default;
 
+$chat-typingindicator-template: $chat-messagegroup-alignment-start-template !default;
+$chat-typingindicator-padding: null !default;
+$chat-typingindicator-row-gap: $chat-messagegroup-gap !default;
+$chat-typingindicator-column-gap: $chat-messagegroup-alignment-start-gap !default;
+$chat-typingindicator-font-size: $chat-information-font-size !default;
+$chat-typingindicator-bubble-padding-block: null !default;
+$chat-typingindicator-bubble-padding-inline: null !default;
+$chat-typingindicator-bubble-border-radius: null !default;
+$chat-typingindicator-bubble-column-gap: 4px !default;
+$chat-typingindicator-circle-size: null !default;
+$chat-typingindicator-circle-size-center: null !default;
+$chat-typingindicator-circle-border-radius: 999em !default;
+
 @if $size == "default" {
   $chat-bubble-border-radius: $fluent-base-border-radius * 3 !default;
   $chat-bubble-padding: 8px 12px !default;
@@ -50,12 +65,19 @@ $chat-messagelist-day-header-first-padding-top: 20px !default;
   $chat-errors-row-gap: 2px !default;
   $chat-error-padding-block: 6px !default;
 
-  $chat-messagelist-empty-icon-box-size: 64px !default;;
+  $chat-messagelist-empty-icon-box-size: 64px !default;
   $chat-messagelist-empty-icon-size: 40px !default;
   $chat-messagelist-empty-icon-margin-bottom: 12px !default;
   $chat-messagelist-empty-row-gap: 4px !default;
   $chat-messagelist-empty-message-font-size: 18px !default;
   $chat-messagelist-empty-prompt-font-size: 14px !default;
+
+  $chat-typingindicator-circle-size: math.div(8, 14) * 1em !default;
+  $chat-typingindicator-circle-size-center: math.div(12, 14) * 1em !default;
+  $chat-typingindicator-bubble-padding-block: 12px !default;
+  $chat-typingindicator-bubble-padding-inline: 20px !default;
+  $chat-typingindicator-padding: $chat-messagegroup-padding !default;
+  $chat-typingindicator-bubble-border-radius: $chat-bubble-border-radius !default;
 }
 
 @else if $size == "compact" {
@@ -71,10 +93,17 @@ $chat-messagelist-day-header-first-padding-top: 20px !default;
   $chat-errors-row-gap: 2px !default;
   $chat-error-padding-block: 5px !default;
 
-  $chat-messagelist-empty-icon-box-size: 48px !default;;
+  $chat-messagelist-empty-icon-box-size: 48px !default;
   $chat-messagelist-empty-icon-size: 32px !default;
   $chat-messagelist-empty-icon-margin-bottom: 14px !default;
   $chat-messagelist-empty-row-gap: 2px !default;
   $chat-messagelist-empty-message-font-size: 14px !default;
   $chat-messagelist-empty-prompt-font-size: 12px !default;
+
+  $chat-typingindicator-circle-size: math.div(8, 12) * 1em !default;
+  $chat-typingindicator-circle-size-center: math.div(12, 12) * 1em !default;
+  $chat-typingindicator-bubble-padding-block: 8px !default;
+  $chat-typingindicator-bubble-padding-inline: 12px !default;
+  $chat-typingindicator-padding: $chat-messagegroup-padding !default;
+  $chat-typingindicator-bubble-border-radius: $chat-bubble-border-radius !default;
 }

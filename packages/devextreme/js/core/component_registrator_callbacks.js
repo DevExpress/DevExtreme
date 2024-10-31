@@ -1,3 +1,3 @@
-import MemorizedCallbacks from './memorized_callbacks';
-
-export default new MemorizedCallbacks();
+// deprecated
+import { componentRegistratorCallbacks } from '../__internal/core/m_component_registrator_callbacks';
+export default componentRegistratorCallbacks;
