@@ -9579,9 +9579,17 @@ declare module DevExpress.ui {
      */
     dataSource?: DevExpress.data.DataSource.DataSourceLike<DevExpress.ui.dxChat.Message> | null;
     /**
+     * [descr:dxChatOptions.dayHeaderFormat]
+     */
+    dayHeaderFormat?: Format;
+    /**
      * [descr:dxChatOptions.errors]
      */
     errors?: Array<DevExpress.ui.dxChat.ChatError>;
+    /**
+     * [descr:dxChatOptions.messageTimestampFormat]
+     */
+    messageTimestampFormat?: Format;
     /**
      * [descr:dxChatOptions.showDayHeaders]
      */

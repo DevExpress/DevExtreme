@@ -7,6 +7,7 @@ type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
   "dataSource" |
+  "dayHeaderFormat" |
   "disabled" |
   "elementAttr" |
   "errors" |
@@ -15,6 +16,7 @@ type AccessibleOptions = Pick<Properties,
   "hint" |
   "hoverStateEnabled" |
   "items" |
+  "messageTimestampFormat" |
   "onDisposing" |
   "onInitialized" |
   "onMessageSend" |
@@ -40,6 +42,7 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     dataSource: {},
+    dayHeaderFormat: [Object, Function, String],
     disabled: Boolean,
     elementAttr: Object,
     errors: Array,
@@ -48,6 +51,7 @@ const componentConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     items: Array,
+    messageTimestampFormat: [Object, Function, String],
     onDisposing: Function,
     onInitialized: Function,
     onMessageSend: Function,
@@ -69,6 +73,7 @@ const componentConfig = {
     "update:accessKey": null,
     "update:activeStateEnabled": null,
     "update:dataSource": null,
+    "update:dayHeaderFormat": null,
     "update:disabled": null,
     "update:elementAttr": null,
     "update:errors": null,
@@ -77,6 +82,7 @@ const componentConfig = {
     "update:hint": null,
     "update:hoverStateEnabled": null,
     "update:items": null,
+    "update:messageTimestampFormat": null,
     "update:onDisposing": null,
     "update:onInitialized": null,
     "update:onMessageSend": null,
@@ -101,8 +107,10 @@ const componentConfig = {
     (this as any).$_WidgetClass = Chat;
     (this as any).$_hasAsyncTemplate = true;
     (this as any).$_expectedChildren = {
+      dayHeaderFormat: { isCollectionItem: false, optionName: "dayHeaderFormat" },
       error: { isCollectionItem: true, optionName: "errors" },
       item: { isCollectionItem: true, optionName: "items" },
+      messageTimestampFormat: { isCollectionItem: false, optionName: "messageTimestampFormat" },
       user: { isCollectionItem: false, optionName: "user" }
     };
   }
@@ -135,6 +143,33 @@ prepareConfigurationComponentConfig(DxAuthorConfig);
 const DxAuthor = defineComponent(DxAuthorConfig);
 
 (DxAuthor as any).$_optionName = "author";
+
+const DxDayHeaderFormatConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:currency": null,
+    "update:formatter": null,
+    "update:parser": null,
+    "update:precision": null,
+    "update:type": null,
+    "update:useCurrencyAccountingStyle": null,
+  },
+  props: {
+    currency: String,
+    formatter: Function,
+    parser: Function,
+    precision: Number,
+    type: String,
+    useCurrencyAccountingStyle: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxDayHeaderFormatConfig);
+
+const DxDayHeaderFormat = defineComponent(DxDayHeaderFormatConfig);
+
+(DxDayHeaderFormat as any).$_optionName = "dayHeaderFormat";
 
 const DxErrorConfig = {
   emits: {
@@ -183,6 +218,33 @@ const DxItem = defineComponent(DxItemConfig);
   author: { isCollectionItem: false, optionName: "author" }
 };
 
+const DxMessageTimestampFormatConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:currency": null,
+    "update:formatter": null,
+    "update:parser": null,
+    "update:precision": null,
+    "update:type": null,
+    "update:useCurrencyAccountingStyle": null,
+  },
+  props: {
+    currency: String,
+    formatter: Function,
+    parser: Function,
+    precision: Number,
+    type: String,
+    useCurrencyAccountingStyle: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxMessageTimestampFormatConfig);
+
+const DxMessageTimestampFormat = defineComponent(DxMessageTimestampFormatConfig);
+
+(DxMessageTimestampFormat as any).$_optionName = "messageTimestampFormat";
+
 const DxUserConfig = {
   emits: {
     "update:isActive": null,
@@ -210,8 +272,10 @@ export default DxChat;
 export {
   DxChat,
   DxAuthor,
+  DxDayHeaderFormat,
   DxError,
   DxItem,
+  DxMessageTimestampFormat,
   DxUser
 };
 import type * as DxChatTypes from "devextreme/ui/chat_types";
