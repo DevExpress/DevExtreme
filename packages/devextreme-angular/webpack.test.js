@@ -1,3 +1,5 @@
+var path = require('path');
+
 module.exports = {
     devtool: 'inline-source-map',
     mode: 'development',
