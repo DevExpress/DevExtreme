@@ -54,6 +54,7 @@ const Chat = memo(
       const expectedChildren = useMemo(() => ({
         error: { optionName: "errors", isCollectionItem: true },
         item: { optionName: "items", isCollectionItem: true },
+        typingUser: { optionName: "typingUsers", isCollectionItem: true },
         user: { optionName: "user", isCollectionItem: false }
       }), []);
 
@@ -118,6 +119,7 @@ const Error = Object.assign<typeof _componentError, NestedComponentMeta>(_compon
 // Chat
 type IItemProps = React.PropsWithChildren<{
   author?: ChatUser;
+  id?: number | string;
   text?: string;
   timestamp?: Date | number | string;
   typing?: boolean;
@@ -136,6 +138,28 @@ const _componentItem = (props: IItemProps) => {
 };
 
 const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
+  componentType: "option",
+});
+
+// owners:
+// Chat
+type ITypingUserProps = React.PropsWithChildren<{
+  avatarAlt?: string;
+  avatarUrl?: string;
+  id?: number | string;
+  name?: string;
+}>
+const _componentTypingUser = (props: ITypingUserProps) => {
+  return React.createElement(NestedOption<ITypingUserProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "typingUsers",
+      IsCollectionItem: true,
+    },
+  });
+};
+
+const TypingUser = Object.assign<typeof _componentTypingUser, NestedComponentMeta>(_componentTypingUser, {
   componentType: "option",
 });
 
@@ -171,6 +195,8 @@ export {
   IErrorProps,
   Item,
   IItemProps,
+  TypingUser,
+  ITypingUserProps,
   User,
   IUserProps
 };

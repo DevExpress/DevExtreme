@@ -1,19 +1,18 @@
-import { isDefined } from '../../../core/utils/type';
-import Component from '../common/component';
-import ValidationEngine from '../../../ui/validation_engine';
-import { extend } from '../../../core/utils/extend';
-// eslint-disable-next-line import/named
-import $ from '../../../core/renderer';
-import { data } from '../../../core/element_data';
-import Callbacks from '../../../core/utils/callbacks';
-import OldEditor from '../../../ui/editor/editor';
-import { Option } from '../common/types';
-import { querySelectorInSameDocument } from '../../utils/dom';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { data } from '@js/core/element_data';
+import $ from '@js/core/renderer';
+import Callbacks from '@js/core/utils/callbacks';
+import { extend } from '@js/core/utils/extend';
+import { isDefined } from '@js/core/utils/type';
+import OldEditor from '@js/ui/editor/editor';
+import ValidationEngine from '@js/ui/validation_engine';
+import { ComponentWrapper } from '@ts/core/r1/component_wrapper';
+import { querySelectorInSameDocument } from '@ts/core/r1/utils/dom';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';
 
-export default class Editor extends Component {
+export default class Editor extends ComponentWrapper {
   showValidationMessageTimeout?: ReturnType<typeof setTimeout>;
 
   validationRequest!: ReturnType<typeof Callbacks>;
@@ -29,33 +28,26 @@ export default class Editor extends Component {
     const props = super.getProps();
     props.onFocusIn = (): void => {
       const isValidationMessageShownOnFocus = this.option('validationMessageMode') === 'auto';
-
-      // NOTE: The click should be processed before the validation message is shown because
-      // it can change the editor's value
       if (isValidationMessageShownOnFocus) {
-        // NOTE: Prevent the validation message from showing
-        const $validationMessageWrapper = $(querySelectorInSameDocument(this.element(), '.dx-invalid-message.dx-overlay-wrapper') as Element);
+        // @ts-expect-error
+        const $validationMessageWrapper = $(querySelectorInSameDocument(this.element(), '.dx-invalid-message.dx-overlay-wrapper'));
         $validationMessageWrapper?.removeClass(INVALID_MESSAGE_AUTO);
-
         const timeToWaitBeforeShow = 150;
         if (this.showValidationMessageTimeout) {
           clearTimeout(this.showValidationMessageTimeout);
         }
-
-        // NOTE: Show the validation message after a click changes the value
         this.showValidationMessageTimeout = setTimeout(() => {
           $validationMessageWrapper?.addClass(INVALID_MESSAGE_AUTO);
         }, timeToWaitBeforeShow);
       }
     };
-    props.saveValueChangeEvent = (e: Event): void => {
+    props.saveValueChangeEvent = (e): void => {
       this._valueChangeEventInstance = e;
     };
-
     return props;
   }
 
-  _createElement(element: HTMLElement): void {
+  _createElement(element): void {
     super._createElement(element);
     this.showValidationMessageTimeout = undefined;
     this.validationRequest = Callbacks();
@@ -73,40 +65,40 @@ export default class Editor extends Component {
 
   _initializeComponent(): void {
     super._initializeComponent();
-
+    // @ts-expect-error
     this._valueChangeAction = this._createActionByOption('onValueChanged', {
       excludeValidators: ['disabled', 'readOnly'],
     });
   }
 
   _initOptions(options: Record<string, unknown>): void {
+    // @ts-expect-error
     super._initOptions(options);
-
-    this.option((ValidationEngine as unknown as ({ initValidationOptions }))
-      .initValidationOptions(options));
+    // @ts-expect-error
+    this.option(ValidationEngine.initValidationOptions(options));
   }
 
   _getDefaultOptions(): Record<string, unknown> {
-    return extend(
-      super._getDefaultOptions(),
-      {
-        validationMessageOffset: { h: 0, v: 0 },
-        validationTooltipOptions: {},
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return extend(super._getDefaultOptions(), {
+      validationMessageOffset: {
+        h: 0,
+        v: 0,
       },
-    ) as Record<string, unknown>;
+      validationTooltipOptions: {},
+    });
   }
 
-  _bindInnerWidgetOptions(innerWidget: Component, optionsContainer: string): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _bindInnerWidgetOptions(innerWidget: any, optionsContainer: string): void {
     const innerWidgetOptions = extend({}, innerWidget.option());
     const syncOptions = (): void => this._silent(optionsContainer, innerWidgetOptions);
-
     syncOptions();
     innerWidget.on('optionChanged', syncOptions);
   }
 
-  _raiseValidation(value: unknown, previousValue: unknown): void {
+  _raiseValidation(value, previousValue): void {
     const areValuesEmpty = !isDefined(value) && !isDefined(previousValue);
-
     if (value !== previousValue && !areValuesEmpty) {
       this.validationRequest.fire({
         value,
@@ -125,13 +117,15 @@ export default class Editor extends Component {
     this._valueChangeEventInstance = undefined;
   }
 
-  _optionChanged(option: Option): void {
-    const { name, value, previousValue } = option;
-
+  _optionChanged(option): void {
+    const {
+      name,
+      previousValue,
+      value,
+    } = option;
     if (name && this._getActionConfigs()[name] !== undefined) {
       this._addAction(name);
     }
-
     switch (name) {
       case 'value':
         this._raiseValidation(value, previousValue);
@@ -139,6 +133,7 @@ export default class Editor extends Component {
         this._raiseValueChangeAction(value, previousValue);
         break;
       case 'onValueChanged':
+        // @ts-expect-error
         this._valueChangeAction = this._createActionByOption('onValueChanged', {
           excludeValidators: ['disabled', 'readOnly'],
         });
@@ -147,19 +142,22 @@ export default class Editor extends Component {
       case 'validationError':
       case 'validationErrors':
       case 'validationStatus':
-        this.option((ValidationEngine as unknown as ({ synchronizeValidationOptions }))
-          .synchronizeValidationOptions(option, this.option()));
+        // @ts-expect-error
+        this.option(ValidationEngine.synchronizeValidationOptions(option, this.option()));
         break;
       default:
         break;
     }
-
     super._optionChanged(option);
   }
 
   clear(): void {
-    const { value } = this._getDefaultOptions();
-    this.option({ value });
+    const {
+      value,
+    } = this._getDefaultOptions();
+    this.option({
+      value,
+    });
   }
 
   reset(value: unknown = undefined): void {
@@ -182,8 +180,11 @@ export default class Editor extends Component {
   }
 }
 
-const prevIsEditor = (OldEditor as unknown as { isEditor: (instance: Component) => boolean })
-  .isEditor;
+// @ts-expect-error
+const prevIsEditor = OldEditor.isEditor;
+// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 const newIsEditor = (instance): boolean => prevIsEditor(instance) || instance instanceof Editor;
-(Editor as unknown as { isEditor: (instance: Component) => boolean }).isEditor = newIsEditor;
-(OldEditor as unknown as { isEditor: (instance: Component) => boolean }).isEditor = newIsEditor;
+// @ts-expect-error
+Editor.isEditor = newIsEditor;
+// @ts-expect-error
+OldEditor.isEditor = newIsEditor;

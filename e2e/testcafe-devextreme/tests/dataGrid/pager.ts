@@ -234,3 +234,16 @@ test('Page index should not reset when scrolling while the grid is being refresh
   },
   height: 440,
 }));
+
+test('No error should occur if dataSource is not defined and pageIndex is promise chained (T1256070)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+}).before(() => createWidget('dxDataGrid', {
+  onContentReady(e) {
+    e.component.pageIndex(1).then(() => {}, () => {});
+  },
+}));

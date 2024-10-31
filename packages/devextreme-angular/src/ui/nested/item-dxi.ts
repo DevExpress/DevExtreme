@@ -57,6 +57,7 @@ import { DxiLocationComponent } from './location-dxi';
         'elementAttr',
         'hint',
         'author',
+        'id',
         'timestamp',
         'typing',
         'beginGroup',
@@ -117,7 +118,6 @@ import { DxiLocationComponent } from './location-dxi';
         'widthRatio',
         'expanded',
         'hasItems',
-        'id',
         'parentId'
     ]
 })

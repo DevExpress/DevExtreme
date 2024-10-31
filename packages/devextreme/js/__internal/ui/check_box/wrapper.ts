@@ -1,14 +1,13 @@
-import Editor from './editor';
+import Editor from './editor_base/wrapper';
 
 export default class CheckBox extends Editor {
-  // eslint-disable-next-line class-methods-use-this
   _useTemplates(): boolean {
     return false;
   }
 
   _isFocused(): boolean {
-    const focusTarget: Element = this.$element()[0];
-
+    const focusTarget = this.$element()[0];
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return focusTarget.classList.contains('dx-state-focused');
   }
 
@@ -18,12 +17,9 @@ export default class CheckBox extends Editor {
 
   getProps(): Record<string, unknown> {
     const props = super.getProps();
-
     if (props.value !== null) {
-      // NOTE: we want CheckBox to be checked if any non-nullable data is passed to value property
       props.value = Boolean(props.value);
     }
-
     return props;
   }
 }

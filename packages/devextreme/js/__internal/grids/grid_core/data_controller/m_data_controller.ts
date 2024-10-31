@@ -57,6 +57,10 @@ const changePaging = function (that, optionName, value) {
     return dataSource[optionName]();
   }
 
+  if (optionName === 'pageIndex' && value !== undefined) {
+    return Deferred().resolve().promise();
+  }
+
   return 0;
 };
 

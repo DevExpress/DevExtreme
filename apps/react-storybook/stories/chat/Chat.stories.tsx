@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import {Chat, ChatTypes} from 'devextreme-react/chat'
 import type {Meta, StoryObj} from '@storybook/react';
 import DataSource from 'devextreme/data/data_source';
@@ -95,7 +95,7 @@ export const Overview: Story = {
         useEffect(() => {
             setMessages(items);
         }, [items]);
-        
+
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Chat
@@ -162,7 +162,6 @@ export const EmptyView: Story = {
         }, [messages]);
 
         useEffect(() => {
-            console.log(2);
             setMessages(items);
         }, [items]);
 
@@ -191,8 +190,8 @@ export const EmptyView: Story = {
 
 export const DataLoading: Story = {
     args: {
-        items: initialMessages,
         user: firstAuthor,
+        reloadOnChange: true,
         ...commonArgs,
     },
     argTypes: {
@@ -214,37 +213,61 @@ export const DataLoading: Story = {
         height,
         disabled,
         rtlEnabled,
+        reloadOnChange,
         user,
         visible,
         hint,
         activeStateEnabled,
         hoverStateEnabled,
         focusStateEnabled,
-    }) => {       
-        const dataSource = new DataSource({
+    }) => {
+        const messagesRef = React.useRef([...initialMessages]);
+
+        const dataSource = useMemo(() => new DataSource({
             store: new CustomStore({
                 load: () => {
-                  const promise = new Promise((resolve) => {
-                    setTimeout(() => {
-                      resolve(initialMessages);
-                    }, 3000);
-                  });
-          
-                  return promise;
+                    const promise = new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve(messagesRef.current);
+                        }, 500);
+                    });
+            
+                    return promise;
+                },
+                insert: (message) => {
+                    if(reloadOnChange) {
+                        messagesRef.current.push(message);
+                    }
+    
+                    const promise = new Promise<void>((resolve) => {
+                        setTimeout(() => {
+                            resolve();
+                        }, 200);
+                    });
+              
+                    return promise;
                 },
             }),
             paginate: false,
-        });
+        }), [reloadOnChange]);
         
+        const onMessageSend = useCallback((e) => {
+            if(!reloadOnChange) {
+                e.component.getDataSource().store().push([{ type: 'insert', data: e.message }]);
+            }
+        }, [reloadOnChange]);
+
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Chat
                     width={width}
                     height={height}
                     dataSource={dataSource}
+                    reloadOnChange={reloadOnChange}
                     disabled={disabled}
                     rtlEnabled={rtlEnabled}
                     user={user}
+                    onMessageSend={onMessageSend}
                     visible={visible}
                     hint={hint}
                     activeStateEnabled={activeStateEnabled}
@@ -331,6 +354,41 @@ export const PopupIntegration: Story = {
                 >
                 </Chat>
             </Popup>
+        );
+    }
+}
+
+export const Customization: Story = {
+    args: {
+        width: 500,
+        height: 600,
+        showDayHeaders: true,
+        showAvatar: true,
+        showUserName: true,
+        showMessageTimestamp: true,
+    },
+    render: ({
+        width,
+        height,
+        showDayHeaders,
+        showAvatar,
+        showUserName,
+        showMessageTimestamp,
+    }) => {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Chat
+                    width={width}
+                    height={height}
+                    items={initialMessages}
+                    user={secondAuthor}
+                    showDayHeaders={showDayHeaders}
+                    showAvatar={showAvatar}
+                    showUserName={showUserName}
+                    showMessageTimestamp={showMessageTimestamp}
+                >
+                </Chat>
+            </div>
         );
     }
 }

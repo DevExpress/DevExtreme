@@ -247,3 +247,41 @@ test('Messagelist with messageTemplate', async (t) => {
     },
   });
 });
+
+test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp set to false work', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'Messagelist with showDayHeaders, showUserName and showMessageTimestamp options set to false.png',
+    { element: '#container' },
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+  const items = [{
+    author: userFirst,
+    text: 'AAA',
+  }, {
+    author: userFirst,
+    text: 'BBB',
+  }, {
+    author: userSecond,
+    text: 'CCC',
+  }];
+
+  return createWidget('dxChat', {
+    items,
+    user: userFirst,
+    width: 400,
+    height: 600,
+    showDayHeaders: false,
+    showUserName: false,
+    showMessageTimestamp: false,
+  });
+});

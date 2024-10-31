@@ -122,6 +122,11 @@ export type ChatError = {
 export type Message = {
     /**
      * @docid
+     * @public
+     */
+    id?: number | string;
+    /**
+     * @docid
      * @default undefined
      * @public
      */
@@ -192,10 +197,22 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     dataSource?: DataSourceLike<Message> | null;
     /**
      * @docid
+     * @default true
+     * @public
+     */
+    reloadOnChange?: boolean;
+    /**
+     * @docid
      * @default undefined
      * @public
      */
     errors?: Array<ChatError>;
+    /**
+     * @docid
+     * @default []
+     * @public
+     */
+    typingUsers?: Array<User>;
     /**
      * @docid
      * @default true
