@@ -217,7 +217,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @hideDefaults true
      * @public
      */
-    series?: any | Array<any>;
+    series?: any | Array<any> | undefined;
     /**
      * @docid
      * @type object
@@ -267,7 +267,7 @@ export interface BaseChartLegend extends BaseLegend {
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
 }
 /**
  * @hidden
@@ -280,7 +280,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
      * @default undefined
      * @public
      */
-    argumentFormat?: Format;
+    argumentFormat?: Format | undefined;
     /**
      * @docid BaseChartOptions.tooltip.contentTemplate
      * @type_function_param1 pointInfo:object
@@ -288,7 +288,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
      * @default undefined
      * @public
      */
-    contentTemplate?: template | ((pointInfo: any, element: DxElement) => string | UserDefinedElement);
+    contentTemplate?: template | ((pointInfo: any, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid BaseChartOptions.tooltip.customizeTooltip
      * @type_function_param1 pointInfo:object
@@ -297,7 +297,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
      * @notUsedInTheme
      * @public
      */
-    customizeTooltip?: ((pointInfo: any) => any);
+    customizeTooltip?: ((pointInfo: any) => any) | undefined;
     /**
      * @docid BaseChartOptions.tooltip.shared
      * @default false
@@ -383,17 +383,17 @@ export interface BaseChartAnnotationConfig extends BaseWidgetAnnotationConfig {
      * @default undefined
      * @public
      */
-    argument?: number | Date | string;
+    argument?: number | Date | string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    series?: string;
+    series?: string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    value?: number | Date | string;
+    value?: number | Date | string | undefined;
 }

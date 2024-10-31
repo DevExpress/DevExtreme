@@ -137,7 +137,7 @@ export interface dxGalleryOptions<
      * @default undefined
      * @public
      */
-    initialItemWidth?: number;
+    initialItemWidth?: number | undefined;
     /**
      * @docid
      * @type Array<string | dxGalleryItem | any>

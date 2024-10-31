@@ -18,7 +18,7 @@ export interface WidgetOptions<TComponent> extends DOMComponentOptions<TComponen
      * @default undefined
      * @public
      */
-    accessKey?: string;
+    accessKey?: string | undefined;
     /**
      * @docid
      * @default false
@@ -42,7 +42,7 @@ export interface WidgetOptions<TComponent> extends DOMComponentOptions<TComponen
      * @default undefined
      * @public
      */
-    hint?: string;
+    hint?: string | undefined;
     /**
      * @docid
      * @default false

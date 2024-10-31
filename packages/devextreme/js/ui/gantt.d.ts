@@ -518,7 +518,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default undefined
      * @public
      */
-    columns?: Array<Column | string>;
+    columns?: Array<Column | string> | undefined;
     /**
      * @docid
      * @default null
@@ -944,7 +944,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default undefined
      * @public
      */
-    selectedRowKey?: any;
+    selectedRowKey?: any | undefined;
     /**
      * @docid
      * @default true
@@ -980,7 +980,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default undefined
      * @public
      */
-    firstDayOfWeek?: FirstDayOfWeek;
+    firstDayOfWeek?: FirstDayOfWeek | undefined;
     /**
      * @docid
      * @default null
@@ -1432,25 +1432,25 @@ export interface dxGanttStripLine {
      * @default undefined
      * @public
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    end?: Date | number | string | (() => Date | number | string);
+    end?: Date | number | string | (() => Date | number | string) | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    start?: Date | number | string | (() => Date | number | string);
+    start?: Date | number | string | (() => Date | number | string) | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    title?: string;
+    title?: string | undefined;
 }
 
 /**

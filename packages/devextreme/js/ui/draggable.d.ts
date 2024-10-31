@@ -42,13 +42,13 @@ export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TC
      * @default undefined
      * @public
      */
-    boundary?: string | UserDefinedElement;
+    boundary?: string | UserDefinedElement | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    container?: string | UserDefinedElement;
+    container?: string | UserDefinedElement | undefined;
     /**
      * @docid
      * @public
@@ -70,7 +70,7 @@ export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TC
      * @default undefined
      * @public
      */
-    data?: any;
+    data?: any | undefined;
     /**
      * @docid
      * @default "both"
@@ -82,7 +82,7 @@ export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TC
      * @default undefined
      * @public
      */
-    group?: string;
+    group?: string | undefined;
     /**
      * @docid
      * @default ""
@@ -218,7 +218,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @default undefined
      * @public
      */
-    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: DxElement) => string | UserDefinedElement);
+    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid
      * @default null

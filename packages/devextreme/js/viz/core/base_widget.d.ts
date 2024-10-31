@@ -180,7 +180,7 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
      * @default undefined
      * @public
      */
-    size?: BaseWidgetSize;
+    size?: BaseWidgetSize | undefined;
     /**
      * @docid
      * @default 'generic.light'
@@ -253,7 +253,7 @@ export interface BaseWidgetExport {
      * @default undefined
      * @public
      */
-    svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => PromiseLike<void>);
+    svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => PromiseLike<void>) | undefined;
 }
 /**
  * @hidden
@@ -336,13 +336,13 @@ export interface BaseWidgetSize {
      * @default undefined
      * @public
      */
-    height?: number;
+    height?: number | undefined;
     /**
      * @docid BaseWidgetOptions.size.width
      * @default undefined
      * @public
      */
-    width?: number;
+    width?: number | undefined;
 }
 /**
  * @hidden
@@ -398,7 +398,7 @@ export interface BaseWidgetTitle {
      * @default undefined
      * @public
      */
-    placeholderSize?: number;
+    placeholderSize?: number | undefined;
     /**
      * @docid BaseWidgetOptions.title.subtitle
      * @public
@@ -490,7 +490,7 @@ export interface BaseWidgetTooltip {
        * @docid BaseWidgetOptions.tooltip.border.opacity
        * @default undefined
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * @docid BaseWidgetOptions.tooltip.border.visible
        * @default true
@@ -513,7 +513,7 @@ export interface BaseWidgetTooltip {
      * @default undefined
      * @public
      */
-    container?: string | UserDefinedElement;
+    container?: string | UserDefinedElement | undefined;
     /**
      * @docid BaseWidgetOptions.tooltip.cornerRadius
      * @default 0
@@ -540,13 +540,13 @@ export interface BaseWidgetTooltip {
      * @default undefined
      * @public
      */
-    format?: Format;
+    format?: Format | undefined;
     /**
      * @docid BaseWidgetOptions.tooltip.opacity
      * @default undefined
      * @public
      */
-    opacity?: number;
+    opacity?: number | undefined;
     /**
      * @docid BaseWidgetOptions.tooltip.paddingLeftRight
      * @default 18
@@ -595,7 +595,7 @@ export interface BaseWidgetTooltip {
      * @default undefined
      * @public
      */
-    zIndex?: number;
+    zIndex?: number | undefined;
 }
 /**
  * @docid
@@ -710,7 +710,7 @@ export interface BaseWidgetAnnotationConfig {
        * @docid
        * @default undefined
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * @docid
        * @default true
@@ -738,7 +738,7 @@ export interface BaseWidgetAnnotationConfig {
      * @default undefined
      * @public
      */
-    description?: string;
+    description?: string | undefined;
     /**
      * @docid
      * @default '#333333' &prop(color)
@@ -751,7 +751,7 @@ export interface BaseWidgetAnnotationConfig {
      * @default undefined
      * @public
      */
-    height?: number;
+    height?: number | undefined;
     /**
      * @docid
      * @public
@@ -766,7 +766,7 @@ export interface BaseWidgetAnnotationConfig {
        * @docid
        * @default undefined
        */
-      url?: string;
+      url?: string | undefined;
       /**
        * @docid
        * @default 30
@@ -778,13 +778,13 @@ export interface BaseWidgetAnnotationConfig {
      * @default undefined
      * @public
      */
-    offsetX?: number;
+    offsetX?: number | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    offsetY?: number;
+    offsetY?: number | undefined;
     /**
      * @docid
      * @default 0.9
@@ -839,7 +839,7 @@ export interface BaseWidgetAnnotationConfig {
      * @default undefined
      * @public
      */
-    text?: string;
+    text?: string | undefined;
     /**
      * @docid
      * @default "ellipsis"
@@ -857,13 +857,13 @@ export interface BaseWidgetAnnotationConfig {
      * @default undefined
      * @public
      */
-    type?: AnnotationType;
+    type?: AnnotationType | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    width?: number;
+    width?: number | undefined;
     /**
      * @docid
      * @default "normal"
@@ -875,13 +875,13 @@ export interface BaseWidgetAnnotationConfig {
      * @default undefined
      * @public
      */
-    x?: number;
+    x?: number | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    y?: number;
+    y?: number | undefined;
 }
 
 // #region deprecated in 23.1

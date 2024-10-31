@@ -309,7 +309,7 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
      * @default undefined
      * @public
      */
-    dateSerializationFormat?: string;
+    dateSerializationFormat?: string | undefined;
     /**
      * @docid
      * @default null
@@ -321,13 +321,13 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
      * @default undefined
      * @public
      */
-    max?: Date | number | string;
+    max?: Date | number | string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    min?: Date | number | string;
+    min?: Date | number | string | undefined;
     /**
      * @docid
      * @default "Today"

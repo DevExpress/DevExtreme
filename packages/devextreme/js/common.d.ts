@@ -289,7 +289,7 @@ export type GlobalConfig = {
    * @default undefined
    * @public
    */
-  editorStylingMode?: EditorStyle;
+  editorStylingMode?: EditorStyle | undefined;
   /**
    * @docid
    * @public
@@ -754,14 +754,14 @@ export type TextEditorButton = {
    * @docid
    * @default undefined
    */
-  name?: string;
+  name?: string | undefined;
   /**
    * @public
    * @docid
-   * @type dxButtonOptions
+   * @type dxButtonOptions | undefined
    * @default undefined
    */
-  options?: ButtonProperties;
+  options?: ButtonProperties | undefined;
 };
 
 /**

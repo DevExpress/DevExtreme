@@ -43,7 +43,7 @@ export interface SearchBoxMixinOptions {
      * @default undefined
      * @public
      */
-    searchTimeout?: number;
+    searchTimeout?: number | undefined;
     /**
      * @docid
      * @default ""

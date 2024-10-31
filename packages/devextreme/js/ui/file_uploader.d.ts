@@ -409,13 +409,13 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default undefined
      * @public
      */
-    dialogTrigger?: string | UserDefinedElement;
+    dialogTrigger?: string | UserDefinedElement | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    dropZone?: string | UserDefinedElement;
+    dropZone?: string | UserDefinedElement | undefined;
     /**
      * @docid
      * @default "Upload"

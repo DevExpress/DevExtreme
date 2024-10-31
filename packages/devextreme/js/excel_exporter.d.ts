@@ -141,7 +141,7 @@ export interface ExcelExportBaseProps {
      * @default undefined
      * @public
      */
-    worksheet?: object;
+    worksheet?: object | undefined;
     /**
      * @docid
      * @default { row: 1, column: 1 }
@@ -179,7 +179,7 @@ export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
      * @default undefined
      * @public
      */
-    component?: dxDataGrid;
+    component?: dxDataGrid | undefined;
     /**
      * @docid
      * @default false
@@ -212,7 +212,7 @@ export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
      * @default undefined
      * @public
      */
-    component?: dxPivotGrid;
+    component?: dxPivotGrid | undefined;
     /**
      * @docid
      * @default true

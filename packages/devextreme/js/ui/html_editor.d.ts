@@ -155,7 +155,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @default undefined
      * @public
      */
-    converter?: Converter;
+    converter?: Converter | undefined;
     /**
      * @docid
      * @default true
@@ -472,13 +472,13 @@ export interface dxHtmlEditorImageUpload {
    * @default undefined
    * @public
    */
-  uploadUrl?: string;
+  uploadUrl?: string | undefined;
   /**
    * @docid
    * @default undefined
    * @public
    */
-  uploadDirectory?: string;
+  uploadDirectory?: string | undefined;
   /**
    * @docid
    * @default 'base64'
@@ -517,7 +517,7 @@ export interface dxHtmlEditorImageUploadTabItem {
      * @default undefined
      * @public
      */
-    name?: HtmlEditorImageUploadTab;
+    name?: HtmlEditorImageUploadTab | undefined;
  }
 
 /**
@@ -556,7 +556,7 @@ export interface dxHtmlEditorTableContextMenuItem extends MenuBasePlainItem {
      * @default undefined
      * @public
      */
-    name?: HtmlEditorPredefinedContextMenuItem;
+    name?: HtmlEditorPredefinedContextMenuItem | undefined;
     /**
      * @docid
      * @public

@@ -284,7 +284,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @default undefined
      * @public
      */
-    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: DxElement) => string | UserDefinedElement);
+    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid
      * @default "push"

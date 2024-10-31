@@ -318,7 +318,7 @@ export interface dxListOptions<
      * @type_function_param1 item:object
      * @public
      */
-    displayExpr?: string | ((item: TItem) => string);
+    displayExpr?: string | ((item: TItem) => string) | undefined;
     /**
      * @docid
      * @default true &for(desktop)

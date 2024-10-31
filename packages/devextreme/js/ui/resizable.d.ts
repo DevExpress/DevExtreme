@@ -83,7 +83,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @default undefined
      * @public
      */
-    area?: string | UserDefinedElement;
+    area?: string | UserDefinedElement | undefined;
     /**
      * @docid
      * @default "all"

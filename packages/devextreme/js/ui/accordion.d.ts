@@ -156,7 +156,7 @@ export interface dxAccordionOptions<
      * @default undefined
      * @public
      */
-    height?: number | string | (() => number | string);
+    height?: number | string | (() => number | string) | undefined;
     /**
      * @docid
      * @default true

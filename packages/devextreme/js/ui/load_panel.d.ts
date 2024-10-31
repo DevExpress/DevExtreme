@@ -108,7 +108,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @default undefined
      * @public
      */
-    container?: string | UserDefinedElement;
+    container?: string | UserDefinedElement | undefined;
     /**
      * @docid
      * @default 0
