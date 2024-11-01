@@ -1,10 +1,10 @@
+import localizationMessage from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { camelize } from '@js/core/utils/inflector';
 import { each } from '@js/core/utils/iterator';
 import { getOuterHeight, getOuterWidth, getWidth } from '@js/core/utils/size';
 import { isBoolean, isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import localizationMessage from '@js/localization/message';
 import ButtonGroup from '@js/ui/button_group';
 import ColorBox from '@js/ui/color_box';
 import Form from '@js/ui/form';

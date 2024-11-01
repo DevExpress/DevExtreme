@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { removeEvent } from '@js/common/core/events/remove';
+import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
@@ -13,9 +16,6 @@ import { isEmpty } from '@js/core/utils/string';
 import { setHeight } from '@js/core/utils/style';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
-import { removeEvent } from '@js/events/remove';
-import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type {

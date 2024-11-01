@@ -1,7 +1,7 @@
+import messageLocalization from '@js/common/core/localization/message';
 import type { Properties as DOMComponentProperties } from '@js/core/dom_component';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import messageLocalization from '@js/localization/message';
 import type { User } from '@js/ui/chat';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';

@@ -1,6 +1,6 @@
 import {
     Format,
-} from '../localization';
+} from '../common/core/localization';
 
 import {
     UserDefinedElement,
@@ -9,7 +9,7 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+} from '../common';
 
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import {
@@ -17,8 +17,8 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
-import DataSource, { DataSourceLike } from '../data/data_source';
+} from '../common/core/events';
+import { DataSource, DataSourceLike } from '../common/data';
 
 /**
  * @docid _ui_chat_DisposingEvent

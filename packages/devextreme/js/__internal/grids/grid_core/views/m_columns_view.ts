@@ -1,4 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { name as dblclickEvent } from '@js/common/core/events/double_click';
+import pointerEvents from '@js/common/core/events/pointer';
+import { removeEvent } from '@js/common/core/events/remove';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import { data as elementData } from '@js/core/element_data';
@@ -21,11 +26,6 @@ import {
   isRenderer, isString,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import { name as dblclickEvent } from '@js/events/double_click';
-import pointerEvents from '@js/events/pointer';
-import { removeEvent } from '@js/events/remove';
 import supportUtils from '@ts/core/utils/m_support';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';

@@ -1,12 +1,12 @@
-import $ from '../core/renderer';
-import { getWindow } from '../core/utils/window';
+import $ from '../../../core/renderer';
+import { getWindow } from '../../../core/utils/window';
 const window = getWindow();
 import eventsEngine from '../events/core/events_engine';
-import errors from '../core/errors';
-import { getPublicElement } from '../core/element';
-import { extend } from '../core/utils/extend';
-import { isFunction, isPlainObject } from '../core/utils/type';
-import { each, map } from '../core/utils/iterator';
+import errors from '../../../core/errors';
+import { getPublicElement } from '../../../core/element';
+import { extend } from '../../../core/utils/extend';
+import { isFunction, isPlainObject } from '../../../core/utils/type';
+import { each, map } from '../../../core/utils/iterator';
 import {
     getTranslateCss,
     parseTranslate,
@@ -19,13 +19,13 @@ import {
     getEasing
 } from './easing';
 import { requestAnimationFrame, cancelAnimationFrame } from './frame';
-import supportUtils from '../__internal/core/utils/m_support';
+import supportUtils from '../../../__internal/core/utils/m_support';
 import positionUtils from './position';
 import { removeEvent } from '../events/remove';
 import { addNamespace } from '../events/utils/index';
-import { when, Deferred } from '../core/utils/deferred';
+import { when, Deferred } from '../../../core/utils/deferred';
 const removeEventName = addNamespace(removeEvent, 'dxFX');
-import { noop } from '../core/utils/common';
+import { noop } from '../../../core/utils/common';
 
 
 const RELATIVE_VALUE_REGEX = /^([+-])=(.*)/i;

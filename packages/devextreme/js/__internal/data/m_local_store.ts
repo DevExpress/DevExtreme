@@ -1,10 +1,9 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { ArrayStore } from '@js/common/data';
+import { errors } from '@js/common/data/errors';
 import Class from '@js/core/class';
 import domAdapter from '@js/core/dom_adapter';
 import { getWindow } from '@js/core/utils/window';
-import ArrayStore from '@js/data/array_store';
-// @ts-expect-error
-import { errors } from '@js/data/errors';
-import eventsEngine from '@js/events/core/events_engine';
 
 const window = getWindow();
 const { abstract } = Class;

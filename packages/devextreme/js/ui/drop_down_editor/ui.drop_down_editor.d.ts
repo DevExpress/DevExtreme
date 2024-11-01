@@ -5,7 +5,11 @@ import {
 
 import {
     template,
-} from '../../core/templates/template';
+    ApplyValueMode,
+    Mode,
+    Position,
+    TextEditorButton,
+} from '../../common';
 
 import dxTextBox, {
     dxTextBoxOptions,
@@ -21,14 +25,7 @@ import {
 
 import {
     EventInfo,
-} from '../../events/index';
-
-import {
-    ApplyValueMode,
-    Mode,
-    Position,
-    TextEditorButton,
-} from '../../common';
+} from '../../common/core/events';
 
 /** @public */
 export type DropDownPredefinedButton = 'clear' | 'dropDown';

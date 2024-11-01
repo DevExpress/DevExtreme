@@ -1,6 +1,6 @@
-import eventsEngine from '@js/events/core/events_engine';
-import KeyboardProcessor from '@js/events/core/keyboard_processor';
-import { addNamespace as pureAddNamespace } from '@js/events/utils/index';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import KeyboardProcessor from '@js/common/core/events/core/keyboard_processor';
+import { addNamespace as pureAddNamespace } from '@js/common/core/events/utils/index';
 
 function addNamespace(event, namespace) {
   return namespace ? pureAddNamespace(event, namespace) : event;

@@ -1,7 +1,7 @@
+import registerEvent from '@js/common/core/events/core/event_registrator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace, fireEvent } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
-import registerEvent from '@js/events/core/event_registrator';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace, fireEvent } from '@js/events/utils/index';
 
 const EVENT_NAME = 'dxmousewheel';
 const EVENT_NAMESPACE = 'dxWheel';

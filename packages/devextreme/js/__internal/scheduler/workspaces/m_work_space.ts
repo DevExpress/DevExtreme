@@ -1,4 +1,15 @@
-import { locate, resetPosition } from '@js/animation/translator';
+import { locate, resetPosition } from '@js/common/core/animation/translator';
+import { name as clickEventName } from '@js/common/core/events/click';
+import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import {
+  drop as dragEventDrop,
+  enter as dragEventEnter,
+  leave as dragEventLeave,
+} from '@js/common/core/events/drag';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace, isMouseEvent } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
@@ -17,17 +28,6 @@ import {
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import { name as clickEventName } from '@js/events/click';
-import { name as contextMenuEventName } from '@js/events/contextmenu';
-import eventsEngine from '@js/events/core/events_engine';
-import {
-  drop as dragEventDrop,
-  enter as dragEventEnter,
-  leave as dragEventLeave,
-} from '@js/events/drag';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace, isMouseEvent } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import errors from '@js/ui/widget/ui.errors';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';

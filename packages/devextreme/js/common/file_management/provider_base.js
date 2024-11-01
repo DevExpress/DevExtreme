@@ -1,10 +1,10 @@
-import { compileGetter } from '../core/utils/data';
-import { ensureDefined } from '../core/utils/common';
-import dateSerialization from '../core/utils/date_serialization';
-import { each } from '../core/utils/iterator';
-import { isPromise } from '../core/utils/type';
-import { Deferred, fromPromise } from '../core/utils/deferred';
-import FileSystemItem from './file_system_item';
+import { compileGetter } from '../../core/utils/data';
+import { ensureDefined } from '../../core/utils/common';
+import dateSerialization from '../../core/utils/date_serialization';
+import { each } from '../../core/utils/iterator';
+import { isPromise } from '../../core/utils/type';
+import { Deferred, fromPromise } from '../../core/utils/deferred';
+import { FileSystemItem } from '../file_management';
 
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 

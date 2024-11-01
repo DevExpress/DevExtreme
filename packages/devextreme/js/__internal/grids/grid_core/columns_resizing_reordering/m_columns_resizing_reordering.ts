@@ -1,5 +1,13 @@
 /* eslint-disable max-classes-per-file */
-import fx from '@js/animation/fx';
+import { fx } from '@js/common/core/animation';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import {
+  end as dragEventEnd,
+  move as dragEventMove,
+  start as dragEventStart,
+} from '@js/common/core/events/drag';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace, eventData as getEventData, isTouchEvent } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -12,14 +20,6 @@ import {
   setHeight, setWidth,
 } from '@js/core/utils/size';
 import { isDefined, isObject, isString } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import {
-  end as dragEventEnd,
-  move as dragEventMove,
-  start as dragEventStart,
-} from '@js/events/drag';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace, eventData as getEventData, isTouchEvent } from '@js/events/utils/index';
 import swatchContainer from '@js/ui/widget/swatch_container';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';

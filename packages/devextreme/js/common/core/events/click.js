@@ -5,4 +5,4 @@
   * @module events/click
 */
 
-export * from '../__internal/events/m_click';
+export * from '../../../__internal/events/m_click';

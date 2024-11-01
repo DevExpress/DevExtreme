@@ -1,7 +1,6 @@
+import { hideTopOverlay } from '../common/core/environment';
+
 /**
- * @docid
- * @publicName hideTopOverlay()
- * @namespace DevExpress
- * @public
+ * @deprecated Use hideTopOverlay from /common/core/environment instead
  */
-export default function hideTopOverlay(): boolean;
+export default hideTopOverlay;

@@ -1,9 +1,9 @@
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import messageLocalization from '@js/localization/message';
 import LoadIndicator from '@js/ui/load_indicator';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { isFluent, isMaterial } from '@js/ui/themes';

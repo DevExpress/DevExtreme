@@ -1,6 +1,6 @@
 import {
   Format,
-} from './localization';
+} from './common/core/localization';
 
 export interface FormatHelper {
   format(

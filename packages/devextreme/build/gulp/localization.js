@@ -84,7 +84,7 @@ const accountingFormats = function() {
 };
 
 const RESULT_PATH = path.join(context.RESULT_JS_PATH, 'localization');
-const DICTIONARY_SOURCE_FOLDER = 'js/localization/messages';
+const DICTIONARY_SOURCE_FOLDER = 'js/common/core/localization/messages';
 
 const getLocales = function(directory) {
     return fs.readdirSync(directory).map(file => {
@@ -110,7 +110,7 @@ const getMessages = function(directory, locale) {
 };
 
 gulp.task('clean-cldr-data', function() {
-    return del('js/localization/cldr-data/**', { force: true });
+    return del('js/common/core/localization/cldr-data/**', { force: true });
 });
 
 gulp.task('generate-community-locales', () => {
@@ -119,8 +119,8 @@ gulp.task('generate-community-locales', () => {
 
     return gulp
         .src([
-            'js/localization/messages/*.json',
-            '!js/localization/messages/en.json'
+            'js/common/core/localization/messages/*.json',
+            '!js/common/core/localization/messages/en.json'
         ])
         .pipe(through.obj(function(file, encoding, callback) {
             const parsedFile = JSON.parse(file.contents.toString(encoding));
@@ -169,38 +169,38 @@ gulp.task('localization-messages', gulp.parallel(getLocales(DICTIONARY_SOURCE_FO
 
 gulp.task('localization-generated-sources', gulp.parallel([
     {
-        data: require('../../js/localization/messages/en.json'),
+        data: require('../../js/common/core/localization/messages/en.json'),
         filename: 'default_messages.js',
         exportName: 'defaultMessages',
-        destination: 'js/localization'
+        destination: 'js/common/core/localization'
     },
     {
         data: parentLocales,
         filename: 'parent_locales.js',
-        destination: 'js/localization/cldr-data'
+        destination: 'js/common/core/localization/cldr-data'
     },
     {
         data: firstDayOfWeekData(),
         filename: 'first_day_of_week_data.js',
-        destination: 'js/localization/cldr-data'
+        destination: 'js/common/core/localization/cldr-data'
     },
     {
         data: accountingFormats(),
         filename: 'accounting_formats.js',
-        destination: 'js/localization/cldr-data'
+        destination: 'js/common/core/localization/cldr-data'
 
     },
     {
         data: globalizeEnCldr,
         exportName: 'enCldr',
         filename: 'en.js',
-        destination: 'js/localization/cldr-data'
+        destination: 'js/common/core/localization/cldr-data'
     },
     {
         data: globalizeSupplementalCldr,
         exportName: 'supplementalCldr',
         filename: 'supplemental.js',
-        destination: 'js/localization/cldr-data'
+        destination: 'js/common/core/localization/cldr-data'
     }
 ].map((source) => Object.assign(
     function() {

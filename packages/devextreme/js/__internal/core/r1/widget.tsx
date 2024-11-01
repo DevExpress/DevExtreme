@@ -2,22 +2,22 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import '@js/events/click';
-import '@js/events/hover';
+import '@js/common/core/events/click';
+import '@js/common/core/events/hover';
 
 import {
   createReRenderEffect, InfernoEffect, InfernoWrapperComponent,
 } from '@devextreme/runtime/inferno';
 import type { RefObject } from '@devextreme-generator/declarations';
+import {
+  dxClick, focus, keyboard, resize, visibility,
+} from '@js/common/core/events/short';
 import domAdapter from '@js/core/dom_adapter';
 import errors from '@js/core/errors';
 import { extend } from '@js/core/utils/extend';
 import resizeCallbacks from '@js/core/utils/resize_callbacks';
 import { normalizeStyleProp } from '@js/core/utils/style';
 import { isFunction } from '@js/core/utils/type';
-import {
-  dxClick, focus, keyboard, resize, visibility,
-} from '@js/events/short';
 import type { ConfigContextValue } from '@ts/core/r1/config_context';
 import { ConfigContext } from '@ts/core/r1/config_context';
 import { ConfigProvider } from '@ts/core/r1/config_provider';

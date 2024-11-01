@@ -1,10 +1,10 @@
+import Emitter from '@js/common/core/events/core/emitter';
+import registerEmitter from '@js/common/core/events/core/emitter_registrator';
+import pointerEvents from '@js/common/core/events/pointer';
+import { isMouseEvent } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import { ensureDefined, noop } from '@js/core/utils/common';
 import { contains } from '@js/core/utils/dom';
-import Emitter from '@js/events/core/emitter';
-import registerEmitter from '@js/events/core/emitter_registrator';
-import pointerEvents from '@js/events/pointer';
-import { isMouseEvent } from '@js/events/utils/index';
 import devices from '@ts/core/m_devices';
 
 const ACTIVE_EVENT_NAME = 'dxactive';

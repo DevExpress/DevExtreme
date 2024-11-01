@@ -1,7 +1,7 @@
-import dependencyInjector from '../core/utils/dependency_injector';
-import { extend } from '../core/utils/extend';
-import { format as stringFormat } from '../core/utils/string';
-import { humanize } from '../core/utils/inflector';
+import dependencyInjector from '../../../core/utils/dependency_injector';
+import { extend } from '../../../core/utils/extend';
+import { format as stringFormat } from '../../../core/utils/string';
+import { humanize } from '../../../core/utils/inflector';
 import coreLocalization from './core';
 import { defaultMessages } from './default_messages';
 

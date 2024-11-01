@@ -1,4 +1,4 @@
-import { DataSourceLike } from '../data/data_source';
+import { DataSourceLike } from '../common/data';
 import {
     UserDefinedElement,
     DxElement,
@@ -6,7 +6,9 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    ToolbarItemLocation,
+    ToolbarItemComponent,
+} from '../common';
 
 import {
     EventInfo,
@@ -14,12 +16,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../events/index';
-
-import {
-    ToolbarItemLocation,
-    ToolbarItemComponent,
-} from '../common';
+} from '../common/core/events';
 
 import CollectionWidget, {
     CollectionWidgetItem,

@@ -1,21 +1,6 @@
+import { Guid } from '../common';
+
 /**
- * @docid
- * @namespace DevExpress.data
- * @public
+ * @deprecated Use Guid from /common instead
  */
-export default class Guid {
-    constructor();
-    constructor(value: string);
-    /**
-     * @docid
-     * @publicName toString()
-     * @public
-     */
-    toString(): string;
-    /**
-     * @docid
-     * @publicName valueOf()
-     * @public
-     */
-    valueOf(): string;
-}
+export default Guid;

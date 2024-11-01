@@ -1,5 +1,5 @@
 /* globals Intl */
-import dxConfig from '../../core/config';
+import { config as dxConfig } from '../../../../common';
 import localizationCoreUtils from '../core';
 import openXmlCurrencyFormat from '../open_xml_currency_format';
 import accountingFormats from '../cldr-data/accounting_formats';

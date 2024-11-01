@@ -1,1 +1,1 @@
-export * from '../../__internal/events/utils/index';
+export * from '../../../../__internal/events/utils/index';

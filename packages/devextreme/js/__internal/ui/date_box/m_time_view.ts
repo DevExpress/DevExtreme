@@ -1,7 +1,7 @@
+import dateLocalization from '@js/common/core/localization/date';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import dateLocalization from '@js/localization/date';
 import Box from '@js/ui/box';
 import Editor from '@js/ui/editor/editor';
 import NumberBox from '@js/ui/number_box';

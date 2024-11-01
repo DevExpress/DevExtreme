@@ -1,6 +1,7 @@
 import {
     ButtonType,
     ButtonStyle,
+    template,
 } from '../common';
 
 import {
@@ -12,18 +13,14 @@ import {
     DxPromise,
 } from '../core/utils/deferred';
 
-import {
-    template,
-} from '../core/templates/template';
-
-import DataSource, { DataSourceLike } from '../data/data_source';
+import { DataSource, DataSourceLike } from '../common/data';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     Item as dxListItem,

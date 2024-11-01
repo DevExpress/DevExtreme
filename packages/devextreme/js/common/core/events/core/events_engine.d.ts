@@ -7,5 +7,5 @@ type EventsEngineType = {
 };
 
 declare const eventsEngine: EventsEngineType;
-export declare function set(eventEngine: any): void;
+export function set(eventEngine: any): void;
 export default eventsEngine;

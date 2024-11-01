@@ -1,10 +1,7 @@
 import {
     AnimationConfig,
-} from '../animation/fx';
-
-import {
     PositionConfig,
-} from '../animation/position';
+} from '../common/core/animation';
 
 import {
     UserDefinedElement,
@@ -13,7 +10,10 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    PositionAlignment,
+    ToolbarItemLocation,
+    ToolbarItemComponent,
+} from '../common';
 
 import {
     Cancelable,
@@ -21,17 +21,11 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     Item as dxToolbarItem,
 } from './toolbar';
-
-import {
-    PositionAlignment,
-    ToolbarItemLocation,
-    ToolbarItemComponent,
-} from '../common';
 
 import dxOverlay, {
     dxOverlayAnimation,

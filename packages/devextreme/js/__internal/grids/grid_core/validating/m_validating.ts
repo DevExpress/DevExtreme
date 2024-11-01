@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-classes-per-file */
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointerEvents from '@js/common/core/events/pointer';
+import messageLocalization from '@js/common/core/localization/message';
+import { createObjectWithChanges } from '@js/common/data/array_utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
@@ -14,10 +18,6 @@ import {
 } from '@js/core/utils/size';
 import { encodeHtml } from '@js/core/utils/string';
 import { isDefined, isEmptyObject, isObject } from '@js/core/utils/type';
-import { createObjectWithChanges } from '@js/data/array_utils';
-import eventsEngine from '@js/events/core/events_engine';
-import pointerEvents from '@js/events/pointer';
-import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
 import LoadIndicator from '@js/ui/load_indicator';
 import Overlay from '@js/ui/overlay/ui.overlay';

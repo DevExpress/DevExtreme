@@ -55,4 +55,4 @@
   * @module events/pointer
 */
 
-export { default } from '../__internal/events/m_pointer';
+export { default } from '../../../__internal/events/m_pointer';

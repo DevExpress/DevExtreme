@@ -1,14 +1,13 @@
+import messageLocalization from '@js/common/core/localization/message';
+import { DataSource } from '@js/common/data/data_source/data_source';
+import { errors as dataErrors } from '@js/common/data/errors';
 import $ from '@js/core/renderer';
 import { compileGetter } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { captionize } from '@js/core/utils/inflector';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import { DataSource } from '@js/data/data_source/data_source';
-// @ts-expect-error errors.d.ts is badly typed and doesn't contain all exported entities.
-import { errors as dataErrors } from '@js/data/errors';
 import formatHelper from '@js/format_helper';
-import messageLocalization from '@js/localization/message';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 
@@ -142,7 +141,7 @@ function getCriteriaOperation(criteria) {
     const item = criteria[i];
     if (!Array.isArray(item)) {
       if (value && value !== item) {
-        throw new dataErrors.Error('E4019');
+        throw dataErrors.Error('E4019');
       }
       if (item !== '!') {
         value = item;

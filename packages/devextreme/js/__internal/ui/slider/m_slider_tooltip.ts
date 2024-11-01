@@ -1,5 +1,5 @@
+import numberLocalization from '@js/common/core/localization/number';
 import { extend } from '@js/core/utils/extend';
-import numberLocalization from '@js/localization/number';
 import Tooltip from '@js/ui/tooltip';
 
 import { SliderTooltipPositionController } from './m_slider_tooltip_position_controller';

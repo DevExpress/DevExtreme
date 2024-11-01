@@ -88,4 +88,4 @@
 * @name ErrorsData.W4002
 */
 
-export * from '../__internal/data/m_errors';
+export * from '../../__internal/data/m_errors';
