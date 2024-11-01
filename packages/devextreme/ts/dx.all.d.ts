@@ -9320,7 +9320,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonOptions.type]
      */
-    type?: DevExpress.common.ButtonType;
+    type?: DevExpress.common.ButtonType | string;
     /**
      * [descr:dxButtonOptions.useSubmitBehavior]
      */

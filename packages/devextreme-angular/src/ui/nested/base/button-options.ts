@@ -145,10 +145,10 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('text', value);
     }
 
-    get type(): ButtonType {
+    get type(): ButtonType | string {
         return this._getOption('type');
     }
-    set type(value: ButtonType) {
+    set type(value: ButtonType | string) {
         this._setOption('type', value);
     }
 
