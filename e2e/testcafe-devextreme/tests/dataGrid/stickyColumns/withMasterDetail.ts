@@ -40,3 +40,32 @@ safeSizeTest('Sticky columns with master-detail', async (t) => {
     },
   },
 }));
+
+safeSizeTest('Master detail resizing', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.apiExpandRow(1);
+
+  await takeScreenshot('masterdetail-before-resize.png', dataGrid.element);
+
+  await dataGrid.option('width', 500);
+
+  await takeScreenshot('masterdetail-after-resize.png', dataGrid.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  ...defaultConfig,
+  masterDetail: {
+    enabled: true,
+    template(container) {
+      $(container)
+        .text('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
+    },
+  },
+}));
