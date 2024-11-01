@@ -1,4 +1,8 @@
-import { locate, move } from '@js/animation/translator';
+import { locate, move } from '@js/common/core/animation/translator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/common/core/events/drag';
+import { addNamespace } from '@js/common/core/events/utils/index';
+import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import registerComponent from '@js/core/component_registrator';
 import DOMComponent from '@js/core/dom_component';
 import $ from '@js/core/renderer';
@@ -12,10 +16,6 @@ import {
 } from '@js/core/utils/size';
 import { isFunction, isPlainObject, isWindow } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
-import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/events/drag';
-import { addNamespace } from '@js/events/utils/index';
-import { triggerResizeEvent } from '@js/events/visibility_change';
 
 const RESIZABLE = 'dxResizable';
 const RESIZABLE_CLASS = 'dx-resizable';

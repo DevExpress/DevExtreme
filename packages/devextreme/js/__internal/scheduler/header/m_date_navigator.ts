@@ -1,5 +1,5 @@
+import messageLocalization from '@js/common/core/localization/message';
 import dateUtils from '@js/core/utils/date';
-import messageLocalization from '@js/localization/message';
 import { isMaterialBased } from '@js/ui/themes';
 
 const { trimTime } = dateUtils;

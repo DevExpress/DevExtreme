@@ -1,9 +1,6 @@
-/**
- * @docid
- * @publicName setTemplateEngine(options)
- * @namespace DevExpress
- * @public
- */
-declare function setTemplateEngine(templateEngineOptions: { compile?: Function; render?: Function }): void;
+import { setTemplateEngine } from '../common';
 
+/**
+ * @deprecated Use setTemplateEngine from /common instead
+ */
 export default setTemplateEngine;

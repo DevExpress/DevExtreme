@@ -1,10 +1,10 @@
-import dependencyInjector from '../core/utils/dependency_injector';
-import { escapeRegExp } from '../core/utils/common';
-import { each } from '../core/utils/iterator';
-import { isPlainObject } from '../core/utils/type';
+import dependencyInjector from '../../../core/utils/dependency_injector';
+import { escapeRegExp } from '../../../core/utils/common';
+import { each } from '../../../core/utils/iterator';
+import { isPlainObject } from '../../../core/utils/type';
 import { getFormatter } from './ldml/number';
-import config from '../core/config';
-import errors from '../core/errors';
+import config from '../../../core/config';
+import errors from '../../../core/errors';
 import { toFixed } from './utils';
 import currencyLocalization from './currency';
 import intlNumberLocalization from './intl/number';

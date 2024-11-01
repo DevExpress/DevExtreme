@@ -1,24 +1,14 @@
-import { GlobalConfig } from '../common';
+import {
+  config,
+  GlobalConfig,
+} from '../common';
 
-/** @public */
-export type FloatingActionButtonDirection = 'auto' | 'up' | 'down';
-
-/**
- * @docid
- * @publicName config()
- * @namespace DevExpress
- * @public
- */
-declare function config(): GlobalConfig;
-
-/**
- * @docid
- * @publicName config(config)
- * @namespace DevExpress
- * @public
- */
-// eslint-disable-next-line @typescript-eslint/no-shadow
-declare function config(config: GlobalConfig): void;
+export {
+  /**
+   * @deprecated Use FloatingActionButtonDirection from /common instead
+   */
+  FloatingActionButtonDirection,
+} from '../common';
 
 /**
 * @namespace DevExpress
@@ -26,4 +16,7 @@ declare function config(config: GlobalConfig): void;
 */
 export type globalConfig = GlobalConfig;
 
+/**
+ * @deprecated Use config from /common instead
+ */
 export default config;

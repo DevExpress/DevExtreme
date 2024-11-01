@@ -1,12 +1,10 @@
-import Store from '@js/data/abstract_store';
+import { query as Query } from '@js/common/data';
+import Store from '@js/common/data/abstract_store';
 import {
   applyBatch, indexByKey, insert, remove, update,
-} from '@js/data/array_utils';
-// @ts-expect-error
-import { errors } from '@js/data/errors';
-import Query from '@js/data/query';
-// @ts-expect-error
-import { rejectedPromise, trivialPromise } from '@js/data/utils';
+} from '@js/common/data/array_utils';
+import { errors } from '@js/common/data/errors';
+import { rejectedPromise, trivialPromise } from '@js/common/data/utils';
 
 // @ts-expect-error
 const ArrayStore = Store.inherit({
@@ -37,9 +35,11 @@ const ArrayStore = Store.inherit({
     const index = indexByKey(this, this._array, key);
 
     if (index === -1) {
+      // @ts-expect-error
       return rejectedPromise(errors.Error('E4009'));
     }
 
+    // @ts-expect-error
     return trivialPromise(this._array[index]);
   },
 

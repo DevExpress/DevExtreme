@@ -8,13 +8,13 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import Editor, {
     EditorOptions,
 } from './editor/editor';
 
-import UploadInfo from '../file_management/upload_info';
+import { UploadInfo } from '../common/file_management';
 
 /** @public */
 export type FileUploadMode = 'instantly' | 'useButtons' | 'useForm';

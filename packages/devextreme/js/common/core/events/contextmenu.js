@@ -5,4 +5,4 @@
   * @module events/contextmenu
 */
 
-export * from '../__internal/events/m_contextmenu';
+export * from '../../../__internal/events/m_contextmenu';

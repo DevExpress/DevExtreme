@@ -1,4 +1,4 @@
-import fx from '@js/animation/fx';
+import { fx } from '@js/common/core/animation';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';

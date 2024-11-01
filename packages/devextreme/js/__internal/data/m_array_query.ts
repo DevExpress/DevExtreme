@@ -1,24 +1,17 @@
+import { errors, handleError as handleDataError } from '@js/common/data/errors';
+import {
+  aggregators,
+  isConjunctiveOperator as isConjunctiveOperatorChecker,
+  isGroupCriterion,
+  isUnaryOperation,
+  isUniformEqualsByOr,
+  normalizeBinaryCriterion,
+} from '@js/common/data/utils';
 import Class from '@js/core/class';
 import { compileGetter, toComparable } from '@js/core/utils/data';
 import { Deferred } from '@js/core/utils/deferred';
 import { each, map } from '@js/core/utils/iterator';
 import { isDefined, isFunction, isString } from '@js/core/utils/type';
-// @ts-expect-error
-import { errors, handleError as handleDataError } from '@js/data/errors';
-import {
-  // @ts-expect-error
-  aggregators,
-  // @ts-expect-error
-  isConjunctiveOperator as isConjunctiveOperatorChecker,
-  // @ts-expect-error
-  isGroupCriterion,
-  // @ts-expect-error
-  isUnaryOperation,
-  // @ts-expect-error
-  isUniformEqualsByOr,
-  // @ts-expect-error
-  normalizeBinaryCriterion,
-} from '@js/data/utils';
 
 const Iterator = Class.inherit({
 
@@ -281,7 +274,7 @@ const compileCriteria = (function () {
     each(crit, function () {
       if (Array.isArray(this) || isFunction(this)) {
         if (ops.length > 1 && isConjunctiveOperator !== isConjunctiveNextOperator) {
-          throw new errors.Error('E4019');
+          throw errors.Error('E4019');
         }
         // @ts-expect-error
         ops.push(compileCriteria(this, langParams));

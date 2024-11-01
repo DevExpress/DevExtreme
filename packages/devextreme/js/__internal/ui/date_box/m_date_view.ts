@@ -1,9 +1,9 @@
+import dateLocalization from '@js/common/core/localization/date';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import dateLocalization from '@js/localization/date';
 import Editor from '@js/ui/editor/editor';
 
 import uiDateUtils from './m_date_utils';

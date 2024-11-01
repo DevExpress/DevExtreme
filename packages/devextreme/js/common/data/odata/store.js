@@ -1,1 +1,1 @@
-export { default } from '../../__internal/data/odata/m_store';
+export { default } from '../../../__internal/data/odata/m_store';

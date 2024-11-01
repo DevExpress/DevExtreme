@@ -5,8 +5,8 @@ node_modules
 /testing/LastSuiteTime.txt
 /dotnet_packages
 /js/bundles/dx.custom.js
-/js/localization/default_messages.js
-/js/localization/cldr-data
+/js/common/core/localization/default_messages.js
+/js/common/core/localization/cldr-data
 /js/renovation/**/*.j.tsx
 /js/renovation/code_coverage
 /scss/bundles/*.scss

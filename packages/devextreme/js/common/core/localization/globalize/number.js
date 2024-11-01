@@ -2,7 +2,7 @@ import './core';
 // eslint-disable-next-line no-restricted-imports
 import Globalize from 'globalize';
 import numberLocalization from '../number';
-import errors from '../../core/errors';
+import errors from '../../../../core/errors';
 
 // eslint-disable-next-line no-restricted-imports, import/no-unresolved
 import 'globalize/number';

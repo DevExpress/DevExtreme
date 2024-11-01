@@ -1,4 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, max-classes-per-file */
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointerEvents from '@js/common/core/events/pointer';
+import { removeEvent } from '@js/common/core/events/remove';
+import { addNamespace } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
+import { createObjectWithChanges } from '@js/common/data/array_utils';
 import type { GridsEditMode } from '@js/common/grids';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
@@ -17,13 +24,6 @@ import {
   isDefined, isEmptyObject,
   isFunction, isObject,
 } from '@js/core/utils/type';
-import { createObjectWithChanges } from '@js/data/array_utils';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import pointerEvents from '@js/events/pointer';
-import { removeEvent } from '@js/events/remove';
-import { addNamespace } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import { confirm } from '@js/ui/dialog';
 import { current, isFluent } from '@js/ui/themes';
 import domUtils from '@ts/core/utils/m_dom';

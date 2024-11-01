@@ -5,23 +5,20 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    ButtonType,
+    ButtonStyle,
+} from '../common';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
-
-import {
-    ButtonType,
-    ButtonStyle,
-} from '../common';
 
 export {
     ButtonType,

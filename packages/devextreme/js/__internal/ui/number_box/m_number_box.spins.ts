@@ -1,8 +1,8 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointer from '@js/common/core/events/pointer';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import eventsEngine from '@js/events/core/events_engine';
-import pointer from '@js/events/pointer';
-import { addNamespace } from '@js/events/utils/index';
 import TextEditorButton from '@ts/ui/text_box/texteditor_button_collection/m_button';
 
 import SpinButton from './m_number_box.spin';

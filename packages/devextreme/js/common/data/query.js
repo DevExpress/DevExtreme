@@ -1,1 +1,1 @@
-export { default } from '../__internal/data/m_query';
+export { default } from '../../__internal/data/m_query';

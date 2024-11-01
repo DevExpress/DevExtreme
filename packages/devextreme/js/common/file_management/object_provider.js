@@ -1,12 +1,12 @@
-import { ensureDefined } from '../core/utils/common';
-import { compileGetter, compileSetter } from '../core/utils/data';
-import Guid from '../core/guid';
-import { isFunction } from '../core/utils/type';
+import { ensureDefined } from '../../core/utils/common';
+import { compileGetter, compileSetter } from '../../core/utils/data';
+import Guid from '../../core/guid';
+import { isFunction } from '../../core/utils/type';
 import { errors } from '../data/errors';
-import { Deferred } from '../core/utils/deferred';
-import { getWindow } from '../core/utils/window';
-import { fileSaver } from '../exporter/file_saver';
-import Errors from '../ui/widget/ui.errors';
+import { Deferred } from '../../core/utils/deferred';
+import { getWindow } from '../../core/utils/window';
+import { fileSaver } from '../../exporter/file_saver';
+import Errors from '../../ui/widget/ui.errors';
 import JSZip from 'jszip';
 
 import FileSystemProviderBase from './provider_base';

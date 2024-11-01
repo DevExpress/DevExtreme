@@ -1,4 +1,4 @@
-import { DataSourceLike } from '../data/data_source';
+import { DataSourceLike } from '../common/data';
 import {
     UserDefinedElement,
     DxElement,
@@ -6,19 +6,16 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    EditorStyle,
+    ToolbarItemLocation,
+} from '../common';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
-
-import {
-    EditorStyle,
-    ToolbarItemLocation,
-} from '../common';
+} from '../common/core/events';
 
 import Editor, {
     ValueChangedInfo,

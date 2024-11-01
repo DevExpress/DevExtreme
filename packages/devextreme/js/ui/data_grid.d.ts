@@ -1,5 +1,4 @@
-import DataSource, {
-} from '../data/data_source';
+import { DataSource } from '../common/data';
 
 import {
   UserDefinedElement,
@@ -13,7 +12,13 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    HorizontalAlignment,
+    Mode,
+    Scrollable,
+    SelectAllMode,
+    SortOrder,
+    ToolbarItemLocation,
+} from '../common';
 
 import {
     Cancelable,
@@ -21,7 +26,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     dxToolbarItem,
@@ -33,15 +38,6 @@ import Widget, {
 import {
   Format,
 } from '../localization';
-
-import {
-    HorizontalAlignment,
-    Mode,
-    Scrollable,
-    SelectAllMode,
-    SortOrder,
-    ToolbarItemLocation,
-} from '../common';
 
 import {
     AdaptiveDetailRowPreparingInfo,

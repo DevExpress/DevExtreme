@@ -1,7 +1,7 @@
 import { noop } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import DataHelperMixin from '../../data_helper';
+import DataHelperMixin from '../../common/data/data_helper';
 import { isFunction as _isFunction, isDefined as _isDefined } from '../../core/utils/type';
 import { Deferred, when } from '../../core/utils/deferred';
 import { parseScalar as _parseScalar,

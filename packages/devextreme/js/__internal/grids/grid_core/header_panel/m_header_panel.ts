@@ -1,9 +1,9 @@
 /* eslint-disable max-classes-per-file */
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { getPathParts } from '@js/core/utils/data';
 import { extend } from '@js/core/utils/extend';
 import { isDefined, isString } from '@js/core/utils/type';
-import messageLocalization from '@js/localization/message';
 import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';

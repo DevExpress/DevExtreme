@@ -1,5 +1,15 @@
-import positionUtils from '@js/animation/position';
-import { locate, move } from '@js/animation/translator';
+import positionUtils from '@js/common/core/animation/position';
+import { locate, move } from '@js/common/core/animation/translator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import {
+  end as dragEventEnd,
+  enter as dragEventEnter,
+  leave as dragEventLeave,
+  move as dragEventMove,
+  start as dragEventStart,
+} from '@js/common/core/events/drag';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace, needSkipEvent } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import DOMComponent from '@js/core/dom_component';
@@ -22,16 +32,6 @@ import { quadToObject } from '@js/core/utils/string';
 import { isFunction, isNumeric, isObject } from '@js/core/utils/type';
 import { value as viewPort } from '@js/core/utils/view_port';
 import { getWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
-import {
-  end as dragEventEnd,
-  enter as dragEventEnter,
-  leave as dragEventLeave,
-  move as dragEventMove,
-  start as dragEventStart,
-} from '@js/events/drag';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace, needSkipEvent } from '@js/events/utils/index';
 
 import Animator from './ui/scroll_view/m_animator';
 

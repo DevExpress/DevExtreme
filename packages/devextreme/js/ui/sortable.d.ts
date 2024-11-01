@@ -7,7 +7,9 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    DragHighlight,
+    Orientation,
+} from '../common';
 
 import {
     DxEvent,
@@ -16,17 +18,12 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import dxDraggable, {
     DraggableBase,
     DraggableBaseOptions,
 } from './draggable';
-
-import {
-    DragHighlight,
-    Orientation,
-} from '../common';
 
 export {
     DragHighlight,

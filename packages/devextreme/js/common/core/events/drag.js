@@ -42,4 +42,4 @@
   * @type_function_param1_field2 cancel:boolean
   * @module events/drag
 */
-export * from '../__internal/events/m_drag';
+export * from '../../../__internal/events/m_drag';
