@@ -11,10 +11,8 @@ import NestedOption from "./core/nested-option";
 import type { DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, TooltipHiddenEvent, TooltipShownEvent, dxPieChartAnnotationConfig, PieChartAnnotationLocation, dxPieChartCommonAnnotationConfig, PieChartSeriesInteractionMode, SmallValuesGroupingMode, PieChartLegendItem, PieChartLegendHoverMode, PieChartSeries } from "devextreme/viz/pie_chart";
 import type { AnimationEaseMode, DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, ChartsDataType, ChartsColor, HatchDirection, LabelPosition } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
-import type { ExportFormat, HorizontalAlignment, Position, Orientation, VerticalEdge } from "devextreme/common";
-
-import type * as LocalizationTypes from "devextreme/common";
-import type * as LocalizationTypes from "devextreme/localization";
+import type { Format as CommonFormat, ExportFormat, HorizontalAlignment, Position, Orientation, VerticalEdge } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -268,7 +266,7 @@ type IArgumentFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: LocalizationTypes.Format | string;
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentArgumentFormat = (props: IArgumentFormatProps) => {
@@ -441,7 +439,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
     highlight?: boolean;
   };
   label?: Record<string, any> | {
-    argumentFormat?: LocalizationTypes.Format;
+    argumentFormat?: LocalizationFormat;
     backgroundColor?: string;
     border?: Record<string, any> | {
       color?: string;
@@ -457,7 +455,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
     customizeText?: ((pointInfo: any) => string);
     displayFormat?: string;
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat;
     position?: LabelPosition;
     radialOffset?: number;
     rotationAngle?: number;
@@ -597,7 +595,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: LocalizationTypes.Format | string;
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = (props: IFormatProps) => {
@@ -695,7 +693,7 @@ const Image = Object.assign<typeof _componentImage, NestedComponentMeta>(_compon
 // owners:
 // CommonSeriesSettings
 type ILabelProps = React.PropsWithChildren<{
-  argumentFormat?: LocalizationTypes.Format;
+  argumentFormat?: LocalizationFormat;
   backgroundColor?: string;
   border?: Record<string, any> | {
     color?: string;
@@ -711,7 +709,7 @@ type ILabelProps = React.PropsWithChildren<{
   customizeText?: ((pointInfo: any) => string);
   displayFormat?: string;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   position?: LabelPosition;
   radialOffset?: number;
   rotationAngle?: number;
@@ -1075,7 +1073,7 @@ type ISeriesProps = React.PropsWithChildren<{
     highlight?: boolean;
   };
   label?: Record<string, any> | {
-    argumentFormat?: LocalizationTypes.Format;
+    argumentFormat?: LocalizationFormat;
     backgroundColor?: string;
     border?: Record<string, any> | {
       color?: string;
@@ -1091,7 +1089,7 @@ type ISeriesProps = React.PropsWithChildren<{
     customizeText?: ((pointInfo: any) => string);
     displayFormat?: string;
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat;
     position?: LabelPosition;
     radialOffset?: number;
     rotationAngle?: number;
@@ -1313,7 +1311,7 @@ const Title = Object.assign<typeof _componentTitle, NestedComponentMeta>(_compon
 // owners:
 // PieChart
 type ITooltipProps = React.PropsWithChildren<{
-  argumentFormat?: LocalizationTypes.Format;
+  argumentFormat?: LocalizationFormat;
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
@@ -1329,7 +1327,7 @@ type ITooltipProps = React.PropsWithChildren<{
   customizeTooltip?: ((pointInfo: any) => Record<string, any>);
   enabled?: boolean;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   interactive?: boolean;
   opacity?: number;
   paddingLeftRight?: number;

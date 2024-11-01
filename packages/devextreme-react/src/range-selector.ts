@@ -10,13 +10,12 @@ import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, ValueChangedEvent, BackgroundImageLocation, ValueChangedCallMode, ChartAxisScale, AxisScale } from "devextreme/viz/range_selector";
 import type { chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod, dxChartCommonSeriesSettings, FinancialChartReductionLevel } from "devextreme/viz/chart";
-import type { SliderValueChangeMode, HorizontalAlignment, ExportFormat, VerticalEdge } from "devextreme/common";
+import type { Format as CommonFormat, SliderValueChangeMode, HorizontalAlignment, ExportFormat, VerticalEdge } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/localization";
 import type { DashStyle, ScaleBreakLineStyle, Palette, PaletteExtensionMode, ChartsDataType, ChartsColor, SeriesHoverMode, HatchDirection, Font as ChartsFont, RelativePosition, PointInteractionMode, PointSymbol, SeriesSelectionMode, SeriesType, ValueErrorBarDisplayMode, ValueErrorBarType, LabelOverlap, TimeInterval, ScaleBreak, DiscreteAxisDivisionMode, TextOverflow, WordWrap } from "devextreme/common/charts";
 import type { ChartSeries } from "devextreme/viz/common";
 
 import type * as CommonChartTypes from "devextreme/common/charts";
-import type * as LocalizationTypes from "devextreme/common";
-import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -151,7 +150,7 @@ type IArgumentFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: LocalizationTypes.Format | string;
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentArgumentFormat = (props: IArgumentFormatProps) => {
@@ -436,7 +435,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
   innerColor?: string;
   label?: Record<string, any> | {
     alignment?: HorizontalAlignment;
-    argumentFormat?: LocalizationTypes.Format;
+    argumentFormat?: LocalizationFormat;
     backgroundColor?: string;
     border?: Record<string, any> | {
       color?: string;
@@ -452,7 +451,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
     customizeText?: ((pointInfo: any) => string);
     displayFormat?: string;
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat;
     horizontalOffset?: number;
     position?: RelativePosition;
     rotationAngle?: number;
@@ -641,7 +640,7 @@ const CommonSeriesSettingsHoverStyle = Object.assign<typeof _componentCommonSeri
 // CommonSeriesSettings
 type ICommonSeriesSettingsLabelProps = React.PropsWithChildren<{
   alignment?: HorizontalAlignment;
-  argumentFormat?: LocalizationTypes.Format;
+  argumentFormat?: LocalizationFormat;
   backgroundColor?: string;
   border?: Record<string, any> | {
     color?: string;
@@ -657,7 +656,7 @@ type ICommonSeriesSettingsLabelProps = React.PropsWithChildren<{
   customizeText?: ((pointInfo: any) => string);
   displayFormat?: string;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   horizontalOffset?: number;
   position?: RelativePosition;
   rotationAngle?: number;
@@ -826,7 +825,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: LocalizationTypes.Format | string;
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = (props: IFormatProps) => {
@@ -974,7 +973,7 @@ const Indent = Object.assign<typeof _componentIndent, NestedComponentMeta>(_comp
 // Marker
 type ILabelProps = React.PropsWithChildren<{
   alignment?: HorizontalAlignment;
-  argumentFormat?: LocalizationTypes.Format;
+  argumentFormat?: LocalizationFormat;
   backgroundColor?: string;
   border?: Record<string, any> | {
     color?: string;
@@ -990,7 +989,7 @@ type ILabelProps = React.PropsWithChildren<{
   customizeText?: ((pointInfo: any) => string);
   displayFormat?: string;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   horizontalOffset?: number;
   position?: RelativePosition;
   rotationAngle?: number;
@@ -1096,7 +1095,7 @@ const Margin = Object.assign<typeof _componentMargin, NestedComponentMeta>(_comp
 type IMarkerProps = React.PropsWithChildren<{
   label?: Record<string, any> | {
     customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string);
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat;
   };
   separatorHeight?: number;
   textLeftIndent?: number;
@@ -1125,7 +1124,7 @@ const Marker = Object.assign<typeof _componentMarker, NestedComponentMeta>(_comp
 // Marker
 type IMarkerLabelProps = React.PropsWithChildren<{
   customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string);
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
 }>
 const _componentMarkerLabel = (props: IMarkerLabelProps) => {
   return React.createElement(NestedOption<IMarkerLabelProps>, {
@@ -1480,7 +1479,7 @@ type IScaleProps = React.PropsWithChildren<{
   label?: Record<string, any> | {
     customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string);
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat;
     overlappingBehavior?: LabelOverlap;
     topIndent?: number;
     visible?: boolean;
@@ -1490,7 +1489,7 @@ type IScaleProps = React.PropsWithChildren<{
   marker?: Record<string, any> | {
     label?: Record<string, any> | {
       customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string);
-      format?: LocalizationTypes.Format;
+      format?: LocalizationFormat;
     };
     separatorHeight?: number;
     textLeftIndent?: number;
@@ -1595,7 +1594,7 @@ const Scale = Object.assign<typeof _componentScale, NestedComponentMeta>(_compon
 type IScaleLabelProps = React.PropsWithChildren<{
   customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string);
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   overlappingBehavior?: LabelOverlap;
   topIndent?: number;
   visible?: boolean;
@@ -1699,7 +1698,7 @@ type ISeriesProps = React.PropsWithChildren<{
   innerColor?: string;
   label?: Record<string, any> | {
     alignment?: HorizontalAlignment;
-    argumentFormat?: LocalizationTypes.Format;
+    argumentFormat?: LocalizationFormat;
     backgroundColor?: string;
     border?: Record<string, any> | {
       color?: string;
@@ -1715,7 +1714,7 @@ type ISeriesProps = React.PropsWithChildren<{
     customizeText?: ((pointInfo: any) => string);
     displayFormat?: string;
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat;
     horizontalOffset?: number;
     position?: RelativePosition;
     rotationAngle?: number;
@@ -1942,7 +1941,7 @@ type ISliderMarkerProps = React.PropsWithChildren<{
   color?: string;
   customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string);
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   invalidRangeColor?: string;
   paddingLeftRight?: number;
   paddingTopBottom?: number;

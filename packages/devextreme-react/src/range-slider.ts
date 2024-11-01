@@ -9,10 +9,8 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, DisposingEvent, InitializedEvent, ValueChangedEvent } from "devextreme/ui/range_slider";
-import type { VerticalEdge, TooltipShowMode } from "devextreme/common";
-
-import type * as LocalizationTypes from "devextreme/common";
-import type * as LocalizationTypes from "devextreme/localization";
+import type { Format as CommonFormat, VerticalEdge, TooltipShowMode } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -83,7 +81,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: LocalizationTypes.Format | string;
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = (props: IFormatProps) => {
@@ -102,7 +100,7 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 // owners:
 // RangeSlider
 type ILabelProps = React.PropsWithChildren<{
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   position?: VerticalEdge;
   visible?: boolean;
 }>
@@ -126,7 +124,7 @@ const Label = Object.assign<typeof _componentLabel, NestedComponentMeta>(_compon
 // RangeSlider
 type ITooltipProps = React.PropsWithChildren<{
   enabled?: boolean;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   position?: VerticalEdge;
   showMode?: TooltipShowMode;
 }>
