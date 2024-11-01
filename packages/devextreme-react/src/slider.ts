@@ -9,7 +9,9 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, DisposingEvent, InitializedEvent, ValueChangedEvent } from "devextreme/ui/slider";
+import type { VerticalEdge, TooltipShowMode } from "devextreme/common";
 
+import type * as LocalizationTypes from "devextreme/common";
 import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -81,7 +83,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: LocalizationTypes.Format | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = (props: IFormatProps) => {
@@ -101,7 +103,7 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 // Slider
 type ILabelProps = React.PropsWithChildren<{
   format?: LocalizationTypes.Format;
-  position?: "bottom" | "top";
+  position?: VerticalEdge;
   visible?: boolean;
 }>
 const _componentLabel = (props: ILabelProps) => {
@@ -125,8 +127,8 @@ const Label = Object.assign<typeof _componentLabel, NestedComponentMeta>(_compon
 type ITooltipProps = React.PropsWithChildren<{
   enabled?: boolean;
   format?: LocalizationTypes.Format;
-  position?: "bottom" | "top";
-  showMode?: "always" | "onHover";
+  position?: VerticalEdge;
+  showMode?: TooltipShowMode;
 }>
 const _componentTooltip = (props: ITooltipProps) => {
   return React.createElement(NestedOption<ITooltipProps>, {

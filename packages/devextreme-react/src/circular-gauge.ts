@@ -8,10 +8,12 @@ import dxCircularGauge, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent } from "devextreme/viz/circular_gauge";
-import type { Font as ChartsFont, ChartsColor } from "devextreme/common/charts";
+import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent, CircularGaugeLabelOverlap, CircularGaugeElementOrientation } from "devextreme/viz/circular_gauge";
+import type { AnimationEaseMode, DashStyle, Font as ChartsFont, LabelOverlap, ChartsColor, Palette, PaletteExtensionMode, TextOverflow, WordWrap } from "devextreme/common/charts";
+import type { ExportFormat, HorizontalEdge, VerticalEdge, HorizontalAlignment } from "devextreme/common";
 import type { template } from "devextreme/core/templates/template";
 
+import type * as LocalizationTypes from "devextreme/common";
 import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -111,7 +113,7 @@ const CircularGauge = memo(
 // CircularGauge
 type IAnimationProps = React.PropsWithChildren<{
   duration?: number;
-  easing?: "easeOutCubic" | "linear";
+  easing?: AnimationEaseMode;
   enabled?: boolean;
 }>
 const _componentAnimation = (props: IAnimationProps) => {
@@ -150,7 +152,7 @@ const BackgroundColor = Object.assign<typeof _componentBackgroundColor, NestedCo
 // Tooltip
 type IBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
   visible?: boolean;
   width?: number;
@@ -194,7 +196,7 @@ type IExportProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
   fileName?: string;
-  formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">;
+  formats?: Array<ExportFormat>;
   margin?: number;
   printingEnabled?: boolean;
   svgToCanvas?: ((svg: any, canvas: any) => any);
@@ -248,7 +250,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: LocalizationTypes.Format | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = (props: IFormatProps) => {
@@ -289,9 +291,9 @@ type ILabelProps = React.PropsWithChildren<{
   customizeText?: ((scaleValue: { value: number, valueText: string }) => string);
   font?: ChartsFont;
   format?: LocalizationTypes.Format;
-  hideFirstOrLast?: "first" | "last";
+  hideFirstOrLast?: CircularGaugeLabelOverlap;
   indentFromTick?: number;
-  overlappingBehavior?: "hide" | "none";
+  overlappingBehavior?: LabelOverlap;
   useRangeColors?: boolean;
   visible?: boolean;
 }>
@@ -414,9 +416,9 @@ const Range = Object.assign<typeof _componentRange, NestedComponentMeta>(_compon
 type IRangeContainerProps = React.PropsWithChildren<{
   backgroundColor?: ChartsColor | string;
   offset?: number;
-  orientation?: "center" | "inside" | "outside";
-  palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office";
-  paletteExtensionMode?: "alternate" | "blend" | "extrapolate";
+  orientation?: CircularGaugeElementOrientation;
+  palette?: Array<string> | Palette;
+  paletteExtensionMode?: PaletteExtensionMode;
   ranges?: Array<Record<string, any>> | {
     color?: ChartsColor | string;
     endValue?: number;
@@ -452,9 +454,9 @@ type IScaleProps = React.PropsWithChildren<{
     customizeText?: ((scaleValue: { value: number, valueText: string }) => string);
     font?: ChartsFont;
     format?: LocalizationTypes.Format;
-    hideFirstOrLast?: "first" | "last";
+    hideFirstOrLast?: CircularGaugeLabelOverlap;
     indentFromTick?: number;
-    overlappingBehavior?: "hide" | "none";
+    overlappingBehavior?: LabelOverlap;
     useRangeColors?: boolean;
     visible?: boolean;
   };
@@ -466,7 +468,7 @@ type IScaleProps = React.PropsWithChildren<{
     width?: number;
   };
   minorTickInterval?: number;
-  orientation?: "center" | "inside" | "outside";
+  orientation?: CircularGaugeElementOrientation;
   scaleDivisionFactor?: number;
   startValue?: number;
   tick?: Record<string, any> | {
@@ -543,8 +545,8 @@ type ISubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  wordWrap?: WordWrap;
 }>
 const _componentSubtitle = (props: ISubtitleProps) => {
   return React.createElement(NestedOption<ISubtitleProps>, {
@@ -570,11 +572,11 @@ type ISubvalueIndicatorProps = React.PropsWithChildren<{
   baseValue?: number;
   beginAdaptingAtRadius?: number;
   color?: ChartsColor | string;
-  horizontalOrientation?: "left" | "right";
+  horizontalOrientation?: HorizontalEdge;
   indentFromCenter?: number;
   length?: number;
   offset?: number;
-  palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office";
+  palette?: Array<string> | Palette;
   secondColor?: string;
   secondFraction?: number;
   size?: number;
@@ -587,7 +589,7 @@ type ISubvalueIndicatorProps = React.PropsWithChildren<{
     indent?: number;
   };
   type?: "circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle";
-  verticalOrientation?: "bottom" | "top";
+  verticalOrientation?: VerticalEdge;
   width?: number;
 }>
 const _componentSubvalueIndicator = (props: ISubvalueIndicatorProps) => {
@@ -658,7 +660,7 @@ const Tick = Object.assign<typeof _componentTick, NestedComponentMeta>(_componen
 // CircularGauge
 type ITitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: number | Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -670,13 +672,13 @@ type ITitleProps = React.PropsWithChildren<{
     font?: ChartsFont;
     offset?: number;
     text?: string;
-    textOverflow?: "ellipsis" | "hide" | "none";
-    wordWrap?: "normal" | "breakWord" | "none";
+    textOverflow?: TextOverflow;
+    wordWrap?: WordWrap;
   };
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  verticalAlignment?: "bottom" | "top";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  verticalAlignment?: VerticalEdge;
+  wordWrap?: WordWrap;
 }>
 const _componentTitle = (props: ITitleProps) => {
   return React.createElement(NestedOption<ITitleProps>, {
@@ -702,7 +704,7 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -762,11 +764,11 @@ type IValueIndicatorProps = React.PropsWithChildren<{
   baseValue?: number;
   beginAdaptingAtRadius?: number;
   color?: ChartsColor | string;
-  horizontalOrientation?: "left" | "right";
+  horizontalOrientation?: HorizontalEdge;
   indentFromCenter?: number;
   length?: number;
   offset?: number;
-  palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office";
+  palette?: Array<string> | Palette;
   secondColor?: string;
   secondFraction?: number;
   size?: number;
@@ -779,7 +781,7 @@ type IValueIndicatorProps = React.PropsWithChildren<{
     indent?: number;
   };
   type?: "circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle";
-  verticalOrientation?: "bottom" | "top";
+  verticalOrientation?: VerticalEdge;
   width?: number;
 }>
 const _componentValueIndicator = (props: IValueIndicatorProps) => {

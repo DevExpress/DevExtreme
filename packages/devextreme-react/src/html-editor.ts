@@ -8,10 +8,12 @@ import dxHtmlEditor, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ContentReadyEvent, DisposingEvent, FocusInEvent, FocusOutEvent, InitializedEvent, ValueChangedEvent, dxHtmlEditorImageUploadTabItem, dxHtmlEditorTableContextMenuItem, dxHtmlEditorToolbarItem } from "devextreme/ui/html_editor";
-import type { ContentReadyEvent as FileUploaderContentReadyEvent, DisposingEvent as FileUploaderDisposingEvent, InitializedEvent as FileUploaderInitializedEvent, ValueChangedEvent as FileUploaderValueChangedEvent, BeforeSendEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, dxFileUploaderOptions } from "devextreme/ui/file_uploader";
+import type { ContentReadyEvent, DisposingEvent, FocusInEvent, FocusOutEvent, InitializedEvent, ValueChangedEvent, HtmlEditorImageUploadMode, dxHtmlEditorImageUploadTabItem, HtmlEditorImageUploadTab, dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem, dxHtmlEditorToolbarItem } from "devextreme/ui/html_editor";
+import type { ContentReadyEvent as FileUploaderContentReadyEvent, DisposingEvent as FileUploaderDisposingEvent, InitializedEvent as FileUploaderInitializedEvent, ValueChangedEvent as FileUploaderValueChangedEvent, BeforeSendEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, UploadHttpMethod, FileUploadMode, dxFileUploaderOptions } from "devextreme/ui/file_uploader";
+import type { ValidationStatus, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { template } from "devextreme/core/templates/template";
+import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 
@@ -165,12 +167,12 @@ type IFileUploaderOptionsProps = React.PropsWithChildren<{
   uploadFailedMessage?: string;
   uploadFile?: ((file: any, progressCallback: (() => void)) => any);
   uploadHeaders?: any;
-  uploadMethod?: "POST" | "PUT";
-  uploadMode?: "instantly" | "useButtons" | "useForm";
+  uploadMethod?: UploadHttpMethod;
+  uploadMode?: FileUploadMode;
   uploadUrl?: string;
   validationError?: any;
   validationErrors?: Array<any>;
-  validationStatus?: "valid" | "invalid" | "pending";
+  validationStatus?: ValidationStatus;
   value?: Array<any>;
   visible?: boolean;
   width?: (() => number | string) | number | string;
@@ -197,8 +199,8 @@ const FileUploaderOptions = Object.assign<typeof _componentFileUploaderOptions, 
 // HtmlEditor
 type IImageUploadProps = React.PropsWithChildren<{
   fileUploaderOptions?: dxFileUploaderOptions;
-  fileUploadMode?: "base64" | "server" | "both";
-  tabs?: Array<dxHtmlEditorImageUploadTabItem | "url" | "file">;
+  fileUploadMode?: HtmlEditorImageUploadMode;
+  tabs?: Array<dxHtmlEditorImageUploadTabItem | HtmlEditorImageUploadTab>;
   uploadDirectory?: string;
   uploadUrl?: string;
 }>
@@ -228,8 +230,8 @@ type IItemProps = React.PropsWithChildren<{
   closeMenuOnClick?: boolean;
   disabled?: boolean;
   icon?: string;
-  items?: Array<dxHtmlEditorTableContextMenuItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">;
-  name?: "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties" | "size" | "header" | "separator";
+  items?: Array<dxHtmlEditorTableContextMenuItem | HtmlEditorPredefinedContextMenuItem>;
+  name?: HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | string;
   selectable?: boolean;
   selected?: boolean;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
@@ -237,15 +239,15 @@ type IItemProps = React.PropsWithChildren<{
   visible?: boolean;
   acceptedValues?: Array<boolean | number | string>;
   cssClass?: string;
-  formatName?: "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable";
+  formatName?: HtmlEditorPredefinedToolbarItem | string;
   formatValues?: Array<boolean | number | string>;
   html?: string;
-  locateInMenu?: "always" | "auto" | "never";
-  location?: "after" | "before" | "center";
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
   menuItemTemplate?: (() => string | any) | template;
   options?: any;
-  showText?: "always" | "inMenu";
-  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
+  showText?: ShowTextMode;
+  widget?: ToolbarItemComponent;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
   menuItemRender?: (...params: any) => React.ReactNode;
@@ -336,7 +338,7 @@ const Mention = Object.assign<typeof _componentMention, NestedComponentMeta>(_co
 // owners:
 // ImageUpload
 type ITabProps = React.PropsWithChildren<{
-  name?: "url" | "file";
+  name?: HtmlEditorImageUploadTab;
 }>
 const _componentTab = (props: ITabProps) => {
   return React.createElement(NestedOption<ITabProps>, {
@@ -356,7 +358,7 @@ const Tab = Object.assign<typeof _componentTab, NestedComponentMeta>(_componentT
 // HtmlEditor
 type ITableContextMenuProps = React.PropsWithChildren<{
   enabled?: boolean;
-  items?: Array<dxHtmlEditorTableContextMenuItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">;
+  items?: Array<dxHtmlEditorTableContextMenuItem | HtmlEditorPredefinedContextMenuItem>;
 }>
 const _componentTableContextMenu = (props: ITableContextMenuProps) => {
   return React.createElement(NestedOption<ITableContextMenuProps>, {
@@ -383,8 +385,8 @@ type ITableContextMenuItemProps = React.PropsWithChildren<{
   closeMenuOnClick?: boolean;
   disabled?: boolean;
   icon?: string;
-  items?: Array<dxHtmlEditorTableContextMenuItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">;
-  name?: "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties";
+  items?: Array<dxHtmlEditorTableContextMenuItem | HtmlEditorPredefinedContextMenuItem>;
+  name?: HtmlEditorPredefinedContextMenuItem;
   selectable?: boolean;
   selected?: boolean;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
@@ -436,7 +438,7 @@ const TableResizing = Object.assign<typeof _componentTableResizing, NestedCompon
 // HtmlEditor
 type IToolbarProps = React.PropsWithChildren<{
   container?: any | string;
-  items?: Array<dxHtmlEditorToolbarItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable">;
+  items?: Array<dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem>;
   multiline?: boolean;
 }>
 const _componentToolbar = (props: IToolbarProps) => {
@@ -462,19 +464,19 @@ type IToolbarItemProps = React.PropsWithChildren<{
   acceptedValues?: Array<boolean | number | string>;
   cssClass?: string;
   disabled?: boolean;
-  formatName?: "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable";
+  formatName?: HtmlEditorPredefinedToolbarItem | string;
   formatValues?: Array<boolean | number | string>;
   html?: string;
-  locateInMenu?: "always" | "auto" | "never";
-  location?: "after" | "before" | "center";
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
   menuItemTemplate?: (() => string | any) | template;
-  name?: "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable";
+  name?: HtmlEditorPredefinedToolbarItem | string;
   options?: any;
-  showText?: "always" | "inMenu";
+  showText?: ShowTextMode;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
+  widget?: ToolbarItemComponent;
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;
