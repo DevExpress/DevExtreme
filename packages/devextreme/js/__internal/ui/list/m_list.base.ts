@@ -334,6 +334,10 @@ export const ListBase = CollectionWidget.inherit({
     });
   },
 
+  _itemElements() {
+    return this._itemElementsCache;
+  },
+
   _itemSelectHandler(e) {
     const isSingleSelectedItemClicked = this.option('selectionMode') === 'single'
       && this.isItemSelected(e.currentTarget);
