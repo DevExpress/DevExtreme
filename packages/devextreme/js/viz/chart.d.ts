@@ -1645,7 +1645,7 @@ export type ArgumentAxisLabel = CommonAxisSettingsLabel & {
      * @default undefined
      * @public
      */
-    format?: Format;
+    format?: Format | undefined;
 };
 /**
  * @public
