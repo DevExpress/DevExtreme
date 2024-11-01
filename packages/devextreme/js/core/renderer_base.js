@@ -465,7 +465,7 @@ const isVisible = function(_, element) {
     element = element.host ?? element;
 
     if(!element.nodeType) return true;
-    return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
+    return !!(element.offsetWidth || element.offsetHeight || element.getClientRects?.().length);
 };
 
 initRender.prototype.filter = function(selector) {

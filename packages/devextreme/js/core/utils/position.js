@@ -15,7 +15,7 @@ const getBoundingRect = (element) => {
         };
     }
 
-    return element.getBoundingClientRect();
+    return element.getBoundingClientRect?.();
 };
 
 export {
