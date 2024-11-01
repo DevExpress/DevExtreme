@@ -303,8 +303,13 @@ const getKarmaConfig = function (testsPath) {
 };
 
 gulp.task('test.components.client', gulp.series('build.tests', (done) => {
-  new karmaServer(getKarmaConfig('./karma.test.shim.js'), done).start();
-}));
+  const config = getKarmaConfig('./karma.test.shim.js');
+
+  new karmaServer(config, (e) => {
+    done()})
+      .start()
+      .finally(() => done());
+}));;
 
 gulp.task('test.components.server', gulp.series('build.tests', (done) => {
   new karmaServer(getKarmaConfig('./karma.server.test.shim.js'), done).start();
