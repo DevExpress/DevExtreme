@@ -258,22 +258,6 @@ export const ListBase = CollectionWidget.inherit({
     return LIST_ITEM_CLASS;
   },
 
-  _getExtendedSelector(): string {
-    const selector = `.${this._itemClass()}, .${LIST_GROUP_HEADER_CLASS}`;
-
-    return selector;
-  },
-
-  _itemSelector(): string {
-    // const { collapsibleGroups } = this.option();
-
-    // if (collapsibleGroups) {
-    //   return this._getExtendedSelector();
-    // }
-
-    return this.callBase();
-  },
-
   _itemDataKey() {
     return LIST_ITEM_DATA_KEY;
   },
@@ -301,20 +285,30 @@ export const ListBase = CollectionWidget.inherit({
     return this._selectionChangeEventInstance;
   },
 
+  _getGroupedItems() {
+    const { collapsibleGroups } = this.option();
+
+    const listGroupBodyItemSelector = `> .${LIST_GROUP_BODY_CLASS} > ${this._itemSelector()}`;
+    const listGroupBodyAndHeaderItemSelector = `${listGroupBodyItemSelector}, > .${LIST_GROUP_HEADER_CLASS}`;
+    const selector = collapsibleGroups
+      ? listGroupBodyAndHeaderItemSelector
+      : listGroupBodyItemSelector;
+
+    const $listGroup = this._getItemsContainer().children(`.${LIST_GROUP_CLASS}`);
+
+    const $items = $listGroup.find(selector);
+
+    return $items;
+  },
+
   _refreshItemElements() {
-    // const $itemsContainer = this._getItemsContainer();
-    // const $items = $itemsContainer.find(this._itemSelector());
+    const { grouped } = this.option();
 
-    // this._itemElementsCache = $items;
+    const $items = grouped
+      ? this._getGroupedItems()
+      : this._getItemsContainer().children(this._itemSelector());
 
-    if (!this.option('grouped')) {
-      this._itemElementsCache = this._getItemsContainer().children(this._itemSelector());
-    } else {
-      this._itemElementsCache = this._getItemsContainer()
-        .children(`.${LIST_GROUP_CLASS}`)
-        .children(`.${LIST_GROUP_BODY_CLASS}`)
-        .children(this._itemSelector());
-    }
+    this._itemElementsCache = $items;
   },
 
   _modifyByChanges() {
@@ -338,10 +332,6 @@ export const ListBase = CollectionWidget.inherit({
     return promise.done(function () {
       this._refreshItemElements();
     });
-  },
-
-  _itemElements() {
-    return this._itemElementsCache;
   },
 
   _itemSelectHandler(e) {

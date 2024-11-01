@@ -3240,14 +3240,14 @@ QUnit.module('scrollView integration', {
             }
         }).dxList('instance');
 
-        assert.strictEqual(list.itemElements().length, 4, 'two pages is loaded');
+        assert.strictEqual(list.itemElements().length, 6, 'two pages is loaded');
 
         list.collapseGroup(0).done(() => {
-            assert.strictEqual(list.itemElements().length, 4, 'third page is not loaded after collapse first group');
+            assert.strictEqual(list.itemElements().length, 6, 'third page is not loaded after collapse first group');
 
             list.scrollTo(400);
 
-            assert.strictEqual(list.itemElements().length, 5, 'third page is loaded');
+            assert.strictEqual(list.itemElements().length, 8, 'third page is loaded');
             done();
         });
     });

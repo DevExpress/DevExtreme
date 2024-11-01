@@ -44,9 +44,14 @@
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
     <style>
         .list-container {
-            min-height: 440px;
-            width: 100%;
-            height: auto;
+          min-height: 440px;
+          width: 100%;
+          height: auto;
+        }
+
+        .dx-list-group-header.dx-state-focused {
+          background-color: #337ab7;
+          color: #fff;
         }
     </style>
 </head>
@@ -71,7 +76,7 @@
                     grouped: true,
                     collapsibleGroups: true,
                     groupTemplate(data) {
-                        return $(`<div>Assigned: ${data.key}</div>`);
+                      return $(`<div>Assigned: ${data.key}</div>`);
                     },
                     // onContentReady: ({ element }) => {
                     //     const $listItems = $(element).find('.dx-list-items');
