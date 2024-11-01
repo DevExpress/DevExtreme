@@ -152,7 +152,10 @@ test('Messagelist should scrolled to the latest messages after being rendered in
   });
 });
 
-test('Messagelist with date headers', async (t) => {
+test.clientScripts([
+  { module: 'mockdate' },
+  { content: 'window.MockDate = MockDate;' },
+])('Messagelist with date headers', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'Messagelist with date headers.png', { element: '#container' });
@@ -161,10 +164,14 @@ test('Messagelist with date headers', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await ClientFunction(() => {
+    (window as any).MockDate.set('2024/10/27');
+  })();
+
   const userFirst = createUser(1, 'First');
   const userSecond = createUser(2, 'Second');
   const msInDay = 86400000;
-  const today = new Date().setHours(7, 22, 0, 0);
+  const today = new Date('2024/10/27').setHours(7, 22, 0, 0);
   const yesterday = today - msInDay;
 
   const items = [{
@@ -195,6 +202,10 @@ test('Messagelist with date headers', async (t) => {
     width: 400,
     height: 600,
   });
+}).after(async () => {
+  await ClientFunction(() => {
+    (window as any).MockDate.reset();
+  })();
 });
 
 test('Messagelist with messageTemplate', async (t) => {
