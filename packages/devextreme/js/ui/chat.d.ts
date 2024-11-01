@@ -237,7 +237,28 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @default []
      * @public
      */
-    typingUsers?: Array<User>;
+    typingUsers?: Array<{
+        /**
+         * @docid
+         * @public
+         */
+        id?: number | string;
+        /**
+         * @docid
+         * @public
+         */
+        name?: string;
+        /**
+         * @docid
+         * @public
+         */
+        avatarUrl?: string;
+        /**
+         * @docid
+         * @public
+         */
+        avatarAlt?: string;
+    }>;
     /**
      * @docid
      * @default true

@@ -9611,7 +9611,24 @@ declare module DevExpress.ui {
     /**
      * [descr:dxChatOptions.typingUsers]
      */
-    typingUsers?: Array<DevExpress.ui.dxChat.User>;
+    typingUsers?: Array<{
+      /**
+       * [descr:dxChatOptions.typingUsers.id]
+       */
+      id?: number | string;
+      /**
+       * [descr:dxChatOptions.typingUsers.name]
+       */
+      name?: string;
+      /**
+       * [descr:dxChatOptions.typingUsers.avatarUrl]
+       */
+      avatarUrl?: string;
+      /**
+       * [descr:dxChatOptions.typingUsers.avatarAlt]
+       */
+      avatarAlt?: string;
+    }>;
     /**
      * [descr:dxChatOptions.showDayHeaders]
      */

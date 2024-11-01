@@ -1,12 +1,12 @@
 /* tslint:disable:max-line-length */
 
-/* tslint:disable:use-input-property-decorator */
 
 import {
     Component,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
+    Input
 } from '@angular/core';
 
 
@@ -16,22 +16,48 @@ import {
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxiUser } from './base/user-dxi';
+import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxi-typing-user',
     template: '',
     styles: [''],
-    providers: [NestedOptionHost],
-    inputs: [
-        'avatarAlt',
-        'avatarUrl',
-        'id',
-        'name'
-    ]
+    providers: [NestedOptionHost]
 })
-export class DxiTypingUserComponent extends DxiUser {
+export class DxiTypingUserComponent extends CollectionNestedOption {
+    @Input()
+    get avatarAlt(): string {
+        return this._getOption('avatarAlt');
+    }
+    set avatarAlt(value: string) {
+        this._setOption('avatarAlt', value);
+    }
+
+    @Input()
+    get avatarUrl(): string {
+        return this._getOption('avatarUrl');
+    }
+    set avatarUrl(value: string) {
+        this._setOption('avatarUrl', value);
+    }
+
+    @Input()
+    get id(): number | string {
+        return this._getOption('id');
+    }
+    set id(value: number | string) {
+        this._setOption('id', value);
+    }
+
+    @Input()
+    get name(): string {
+        return this._getOption('name');
+    }
+    set name(value: string) {
+        this._setOption('name', value);
+    }
+
 
     protected get _optionPath() {
         return 'typingUsers';

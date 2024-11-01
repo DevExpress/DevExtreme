@@ -347,10 +347,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get typingUsers(): Array<User> {
+    get typingUsers(): Array<any | { avatarAlt?: string, avatarUrl?: string, id?: number | string, name?: string }> {
         return this._getOption('typingUsers');
     }
-    set typingUsers(value: Array<User>) {
+    set typingUsers(value: Array<any | { avatarAlt?: string, avatarUrl?: string, id?: number | string, name?: string }>) {
         this._setOption('typingUsers', value);
     }
 
@@ -586,7 +586,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() typingUsersChange: EventEmitter<Array<User>>;
+    @Output() typingUsersChange: EventEmitter<Array<any | { avatarAlt?: string, avatarUrl?: string, id?: number | string, name?: string }>>;
 
     /**
     
