@@ -395,19 +395,20 @@ QUnit.module('Chat', () => {
         }
     }, () => {
         QUnit.test('MessageBubble should have messageTemplateData with correct fields', function(assert) {
+            const message = {
+                text: 'text',
+                author: userFirst,
+            };
+
             this.reinit({
-                items: [{
-                    text: 'text',
-                    author: userFirst,
-                }],
+                items: [message],
             });
 
             const messageBubble = this.getMessageBubbles();
             const messageTemplateData = messageBubble.option('templateData');
 
             assert.strictEqual(messageTemplateData.component, this.instance, 'messageTemplateData includes chat instance');
-            assert.strictEqual(messageTemplateData.isLast, true, 'messageTemplateData includes isLast field');
-            assert.deepEqual(messageTemplateData.author, userFirst, 'messageTemplateData includes author field');
+            assert.deepEqual(messageTemplateData.message, message, 'messageTemplateData includes message field');
         });
     });
 

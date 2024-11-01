@@ -236,14 +236,8 @@ test('Messagelist with messageTemplate', async (t) => {
       message.timestamp = undefined;
       component.renderMessage(message);
     },
-    messageTemplate: ({ text, author, isLast }, container) => {
-      if (isLast) {
-        $('<div>').text('Last message template').appendTo(container);
-
-        return;
-      }
-
-      $('<div>').text(`${author.name} says: ${text}`).appendTo(container);
+    messageTemplate: ({ message }, container) => {
+      $('<div>').text(`${message.author.name} says: ${message.text}`).appendTo(container);
     },
   });
 });

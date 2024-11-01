@@ -214,11 +214,7 @@ class MessageList extends Widget<Properties> {
     return this._isCurrentUser(id) ? 'end' : 'start';
   }
 
-  _createMessageGroupComponent(
-    items: Message[],
-    userId: string | number | undefined,
-    isLast = false,
-  ): void {
+  _createMessageGroupComponent(items: Message[], userId: string | number | undefined): void {
     const {
       showAvatar,
       showUserName,
@@ -238,7 +234,6 @@ class MessageList extends Widget<Properties> {
       showMessageTimestamp,
       messageTemplate,
       messageTemplateData,
-      isLast,
       messageTimestampFormat,
     });
 
@@ -362,11 +357,7 @@ class MessageList extends Widget<Properties> {
       }
 
       if (items.length - 1 === index) {
-        this._createMessageGroupComponent(
-          currentMessageGroupItems,
-          currentMessageGroupUserId,
-          true,
-        );
+        this._createMessageGroupComponent(currentMessageGroupItems, currentMessageGroupUserId);
       }
     });
 
@@ -379,8 +370,6 @@ class MessageList extends Widget<Properties> {
 
     const lastMessageGroup = this._messageGroups?.at(-1);
     const shouldCreateDayHeader = this._shouldAddDayHeader(timestamp);
-
-    lastMessageGroup?.updateIsLastOptionOfLastMessage(false);
 
     if (lastMessageGroup) {
       const { items } = lastMessageGroup.option();
@@ -401,7 +390,7 @@ class MessageList extends Widget<Properties> {
       this._createDayHeader(timestamp);
     }
 
-    this._createMessageGroupComponent([message], author?.id, true);
+    this._createMessageGroupComponent([message], author?.id);
 
     this._scrollDownContent();
   }
