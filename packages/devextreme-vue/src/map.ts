@@ -67,12 +67,12 @@ const componentConfig = {
     onReady: Function,
     onRouteAdded: Function,
     onRouteRemoved: Function,
-    provider: String,
+    provider: {},
     providerConfig: Object,
     routes: Array,
     rtlEnabled: Boolean,
     tabIndex: Number,
-    type: String,
+    type: {},
     visible: Boolean,
     width: [Function, Number, String],
     zoom: Number
@@ -257,7 +257,7 @@ const DxRouteConfig = {
   props: {
     color: String,
     locations: Array,
-    mode: String,
+    mode: {},
     opacity: Number,
     weight: Number
   }

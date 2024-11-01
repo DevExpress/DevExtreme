@@ -59,9 +59,9 @@ const componentConfig = {
     statusFormat: [Function, String],
     validationError: {},
     validationErrors: Array,
-    validationMessageMode: String,
-    validationMessagePosition: String,
-    validationStatus: String,
+    validationMessageMode: {},
+    validationMessagePosition: {},
+    validationStatus: {},
     value: {},
     visible: Boolean,
     width: [Function, Number, String]
