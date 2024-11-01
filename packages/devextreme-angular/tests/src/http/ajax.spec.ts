@@ -92,7 +92,7 @@ class TestFileUploaderComponent {
   value = [createBlobFile('image1.png', 50100)];
 }
 
-xdescribe('Ajax request using DxHttpModule', () => {
+describe('Ajax request using DxHttpModule', () => {
   let httpTestingControllerMock: HttpTestingController;
 
   beforeEach(() => {
