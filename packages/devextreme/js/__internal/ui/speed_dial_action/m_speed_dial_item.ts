@@ -1,11 +1,11 @@
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
 import { isPlainObject } from '@js/core/utils/type';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace } from '@js/events/utils/index';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import type { Properties as PublicProperties } from '@js/ui/speed_dial_action';
 import { isMaterial } from '@js/ui/themes';

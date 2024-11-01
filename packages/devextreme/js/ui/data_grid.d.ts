@@ -1,5 +1,4 @@
-import DataSource, {
-} from '../data/data_source';
+import { DataSource } from '../common/data';
 
 import {
   UserDefinedElement,
@@ -21,7 +20,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     dxToolbarItem,

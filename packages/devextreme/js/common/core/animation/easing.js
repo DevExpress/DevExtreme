@@ -1,4 +1,4 @@
-import { isFunction } from '../core/utils/type';
+import { isFunction } from '../../../core/utils/type';
 
 const CSS_TRANSITION_EASING_REGEX = /cubic-bezier\((\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\)/;
 

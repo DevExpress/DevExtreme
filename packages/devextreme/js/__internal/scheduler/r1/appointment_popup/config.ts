@@ -1,8 +1,8 @@
-import type { AnimationConfig } from '@js/animation/fx';
+import type { AnimationConfig } from '@js/common/core/animation';
+import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
 import { getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
-import messageLocalization from '@js/localization/message';
 
 import type { IToolbarButtonConfig } from './types';
 

@@ -1,13 +1,13 @@
+import { query } from '@js/common/data';
+import ArrayStore from '@js/common/data/array_store';
+import { createObjectWithChanges } from '@js/common/data/array_utils';
+import storeHelper from '@js/common/data/store_helper';
 import { equalByValue } from '@js/core/utils/common';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import ArrayStore from '@js/data/array_store';
-import { createObjectWithChanges } from '@js/data/array_utils';
-import query from '@js/data/query';
-import storeHelper from '@js/data/store_helper';
 import errors from '@js/ui/widget/ui.errors';
 import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';

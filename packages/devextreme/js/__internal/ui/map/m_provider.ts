@@ -1,7 +1,7 @@
+import { addNamespace } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import { map } from '@js/core/utils/iterator';
 import { isNumeric, isPlainObject } from '@js/core/utils/type';
-import { addNamespace } from '@js/events/utils/index';
 
 const { abstract } = Class;
 

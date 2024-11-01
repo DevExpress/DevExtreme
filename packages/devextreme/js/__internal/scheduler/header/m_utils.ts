@@ -1,9 +1,9 @@
+import dateLocalization from '@js/common/core/localization/date';
+import messageLocalization from '@js/common/core/localization/message';
 import errors from '@js/core/errors';
 import dateUtils from '@js/core/utils/date';
 import { camelize } from '@js/core/utils/inflector';
 import { isFunction, isObject } from '@js/core/utils/type';
-import dateLocalization from '@js/localization/date';
-import messageLocalization from '@js/localization/message';
 
 import { VIEWS } from '../m_constants';
 

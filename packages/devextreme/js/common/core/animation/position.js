@@ -1,19 +1,19 @@
-import { getOuterWidth, getOuterHeight, getWidth, getHeight } from '../core/utils/size';
-import $ from '../core/renderer';
+import { getOuterWidth, getOuterHeight, getWidth, getHeight } from '../../../core/utils/size';
+import $ from '../../../core/renderer';
 
-import { splitPair, pairToObject } from '../core/utils/common';
-import { each } from '../core/utils/iterator';
-import { getWindow } from '../core/utils/window';
+import { splitPair, pairToObject } from '../../../core/utils/common';
+import { each } from '../../../core/utils/iterator';
+import { getWindow } from '../../../core/utils/window';
 const window = getWindow();
-import domAdapter from '../core/dom_adapter';
-import { isWindow, isDefined } from '../core/utils/type';
-import { extend } from '../core/utils/extend';
-import { getBoundingRect } from '../core/utils/position';
-import browser from '../core/utils/browser';
+import domAdapter from '../../../core/dom_adapter';
+import { isWindow, isDefined } from '../../../core/utils/type';
+import { extend } from '../../../core/utils/extend';
+import { getBoundingRect } from '../../../core/utils/position';
+import browser from '../../../core/utils/browser';
 import { resetPosition, move } from './translator';
-import { touch } from '../core/utils/support';
-import devices from '../core/devices';
-import { setStyle } from '../core/utils/style';
+import { touch } from '../../../core/utils/support';
+import devices from '../../../core/devices';
+import { setStyle } from '../../../core/utils/style';
 
 const horzRe = /left|right/;
 const vertRe = /top|bottom/;

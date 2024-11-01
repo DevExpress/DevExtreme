@@ -1,10 +1,10 @@
+import type { Format } from '@js/common/core/localization';
+import dateLocalization from '@js/common/core/localization/date';
+import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { isDate } from '@js/core/utils/type';
-import type { Format } from '@js/localization';
-import dateLocalization from '@js/localization/date';
-import messageLocalization from '@js/localization/message';
 import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';

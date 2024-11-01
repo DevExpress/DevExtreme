@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-dynamic-delete */
+import { ArrayStore } from '@js/common/data';
+import { applyBatch } from '@js/common/data/array_utils';
 import Callbacks from '@js/core/utils/callbacks';
 import { getKeyHash } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
-import ArrayStore from '@js/data/array_store';
-import { applyBatch } from '@js/data/array_utils';
 
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';

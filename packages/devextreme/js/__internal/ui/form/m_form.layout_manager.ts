@@ -4,6 +4,9 @@ import '@js/ui/check_box';
 import '@js/ui/date_box';
 import '@js/ui/button';
 
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { removeEvent } from '@js/common/core/events/remove';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { normalizeIndexes } from '@js/core/utils/array';
@@ -17,9 +20,6 @@ import {
 import variableWrapper from '@js/core/utils/variable_wrapper';
 // @ts-expect-error
 import { getCurrentScreenFactor, hasWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
-import { removeEvent } from '@js/events/remove';
-import messageLocalization from '@js/localization/message';
 import ResponsiveBox from '@js/ui/responsive_box';
 import Widget from '@js/ui/widget/ui.widget';
 

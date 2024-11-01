@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 import errors from '../widget/ui.errors';
 import { Deferred } from '../../core/utils/deferred';
 import { stubComponent } from '../../core/utils/stubs';

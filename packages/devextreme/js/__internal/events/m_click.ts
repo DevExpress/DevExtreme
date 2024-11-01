@@ -1,13 +1,13 @@
 import { cancelAnimationFrame, requestAnimationFrame } from '@js/animation/frame';
+import Emitter from '@js/common/core/events/core/emitter';
+import registerEmitter from '@js/common/core/events/core/emitter_registrator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointerEvents from '@js/common/core/events/pointer';
+import { subscribeNodesDisposing, unsubscribeNodesDisposing } from '@js/common/core/events/utils/event_nodes_disposing';
+import { getEventTarget } from '@js/common/core/events/utils/event_target';
+import { addNamespace, fireEvent } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
-import Emitter from '@js/events/core/emitter';
-import registerEmitter from '@js/events/core/emitter_registrator';
-import eventsEngine from '@js/events/core/events_engine';
-import pointerEvents from '@js/events/pointer';
-import { subscribeNodesDisposing, unsubscribeNodesDisposing } from '@js/events/utils/event_nodes_disposing';
-import { getEventTarget } from '@js/events/utils/event_target';
-import { addNamespace, fireEvent } from '@js/events/utils/index';
 import devices from '@ts/core/m_devices';
 import domUtils from '@ts/core/utils/m_dom';
 

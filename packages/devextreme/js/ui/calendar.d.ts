@@ -8,7 +8,7 @@ import {
     EventInfo,
     InitializedEventInfo,
     NativeEventInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     template,

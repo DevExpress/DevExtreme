@@ -1,4 +1,4 @@
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 
 const DiagramToolboxManager = {
     getDefaultGroups() {

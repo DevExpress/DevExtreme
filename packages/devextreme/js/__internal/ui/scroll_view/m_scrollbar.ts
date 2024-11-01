@@ -1,4 +1,7 @@
-import { move } from '@js/animation/translator';
+import { move } from '@js/common/core/animation/translator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 // @ts-expect-error
@@ -6,9 +9,6 @@ import { deferRenderer } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import readyCallback from '@js/core/utils/ready_callbacks';
 import { isPlainObject } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace } from '@js/events/utils/index';
 import Widget from '@js/ui/widget/ui.widget';
 
 const SCROLLBAR = 'dxScrollbar';

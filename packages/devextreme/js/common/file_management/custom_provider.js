@@ -1,6 +1,6 @@
-import { ensureDefined, noop } from '../core/utils/common';
-import { isFunction } from '../core/utils/type';
-import { compileGetter } from '../core/utils/data';
+import { ensureDefined, noop } from '../../core/utils/common';
+import { isFunction } from '../../core/utils/type';
+import { compileGetter } from '../../core/utils/data';
 
 import FileSystemProviderBase from './provider_base';
 

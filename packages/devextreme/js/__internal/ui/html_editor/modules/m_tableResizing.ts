@@ -1,4 +1,6 @@
-import { move } from '@js/animation/translator';
+import { move } from '@js/common/core/animation/translator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
@@ -8,8 +10,6 @@ import _windowResizeCallbacks from '@js/core/utils/resize_callbacks';
 import { getHeight, getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace } from '@js/events/utils/index';
 import type { Properties } from '@js/ui/draggable';
 import Draggable from '@js/ui/draggable';
 

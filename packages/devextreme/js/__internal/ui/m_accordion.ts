@@ -1,4 +1,7 @@
-import fx from '@js/animation/fx';
+import { fx } from '@js/common/core/animation';
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
@@ -12,9 +15,6 @@ import { getImageContainer } from '@js/core/utils/icon';
 import * as iteratorUtils from '@js/core/utils/iterator';
 import { getHeight, getOuterHeight, setHeight } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace } from '@js/events/utils/index';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
 import { isMaterialBased } from '@js/ui/themes';
 

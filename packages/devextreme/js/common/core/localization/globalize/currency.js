@@ -6,7 +6,7 @@ import '../currency';
 import 'globalize/currency';
 // eslint-disable-next-line no-restricted-imports
 import Globalize from 'globalize';
-import config from '../../core/config';
+import { config } from '../../../../common';
 import numberLocalization from '../number';
 
 const CURRENCY_STYLES = ['symbol', 'accounting'];

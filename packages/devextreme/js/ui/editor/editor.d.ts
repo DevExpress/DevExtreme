@@ -1,6 +1,6 @@
 import {
     NativeEventInfo,
-} from '../../events/index';
+} from '../../common/core/events';
 
 import Widget, {
     WidgetOptions,

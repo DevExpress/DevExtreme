@@ -1,4 +1,4 @@
-import { CANCELED_TOKEN } from '@js/data/data_source/utils';
+import { CANCELED_TOKEN } from '@js/common/data/data_source/utils';
 
 export default class OperationManager {
   constructor() {

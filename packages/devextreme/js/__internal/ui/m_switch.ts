@@ -1,4 +1,10 @@
-import fx from '@js/animation/fx';
+import { fx } from '@js/common/core/animation';
+import { name as clickEventName } from '@js/common/core/events/click';
+import { lock } from '@js/common/core/events/core/emitter.feedback';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import Swipeable from '@js/common/core/events/gesture/swipeable';
+import { addNamespace } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
@@ -6,12 +12,6 @@ import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterWidth } from '@js/core/utils/size';
-import { name as clickEventName } from '@js/events/click';
-import { lock } from '@js/events/core/emitter.feedback';
-import eventsEngine from '@js/events/core/events_engine';
-import Swipeable from '@js/events/gesture/swipeable';
-import { addNamespace } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import Editor from '@js/ui/editor/editor';
 
 const SWITCH_CLASS = 'dx-switch';

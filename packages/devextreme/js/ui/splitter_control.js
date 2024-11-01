@@ -1,10 +1,10 @@
 import $ from '../core/renderer';
 import Widget from './widget/ui.widget';
 import domAdapter from '../core/dom_adapter';
-import eventsEngine from '../events/core/events_engine';
-import pointerEvents from '../events/pointer';
+import eventsEngine from '../common/core/events/core/events_engine';
+import pointerEvents from '../common/core/events/pointer';
 import { getWindow } from '../core/utils/window';
-import { addNamespace } from '../events/utils/index';
+import { addNamespace } from '../common/core/events/utils/index';
 import Guid from '../core/guid';
 
 const window = getWindow();

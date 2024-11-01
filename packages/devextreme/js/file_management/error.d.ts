@@ -1,27 +1,6 @@
-import FileSystemItem from './file_system_item';
+import { FileSystemError } from '../common/file_management';
 
 /**
- * @docid FileSystemError
- * @namespace DevExpress.fileManagement
- * @public
+ * @deprecated Use FileSystemError from /common/file_management instead
  */
-export default class FileSystemError {
-   constructor(errorCode?: number, fileSystemItem?: FileSystemItem, errorText?: string);
-    /**
-     * @docid FileSystemError.fileSystemItem
-     * @public
-     */
-    fileSystemItem?: FileSystemItem;
-
-    /**
-     * @docid FileSystemError.errorCode
-     * @public
-     */
-    errorCode?: number;
-
-    /**
-     * @docid FileSystemError.errorText
-     * @public
-     */
-     errorText?: string;
-}
+export default FileSystemError;

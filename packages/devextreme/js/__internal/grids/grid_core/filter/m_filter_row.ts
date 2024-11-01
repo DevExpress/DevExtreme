@@ -1,13 +1,13 @@
 /* eslint-disable max-classes-per-file */
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { normalizeKeyName } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import { normalizeKeyName } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import Editor from '@js/ui/editor/editor';
 import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';

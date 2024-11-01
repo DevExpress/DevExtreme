@@ -1,4 +1,6 @@
 import type { DxElement, UserDefinedElement } from '@js/core/element';
+import dateLocalization from '@js/common/core/localization/date';
+import messageLocalization from '@js/common/core/localization/message';
 import Guid from '@js/core/guid';
 import type {
   DeepPartial,
@@ -14,8 +16,6 @@ import { isElementInDom } from '@js/core/utils/dom';
 import { getHeight } from '@js/core/utils/size';
 import { isDate, isDefined } from '@js/core/utils/type';
 import type { Format } from '@js/localization';
-import dateLocalization from '@js/localization/date';
-import messageLocalization from '@js/localization/message';
 import type { Message, MessageTemplateData, User } from '@js/ui/chat';
 import ScrollView from '@js/ui/scroll_view';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';

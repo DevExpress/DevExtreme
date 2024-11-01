@@ -1,12 +1,12 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { eventData } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 // @ts-expect-error
 import { applyServerDecimalSeparator } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { getWidth } from '@js/core/utils/size';
-import eventsEngine from '@js/events/core/events_engine';
-import { eventData } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import Slider from '@js/ui/slider';
 
 import SliderHandle from './slider/m_slider_handle';

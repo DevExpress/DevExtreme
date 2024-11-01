@@ -1,13 +1,22 @@
-import { PositionConfig } from './animation/position';
+import { PositionConfig } from './common/core/animation';
 import type {
   OmitInternal,
 } from './core';
-import { FloatingActionButtonDirection } from './core/config';
+
+import {
+  Device,
+} from './common/core/environment';
+
+import {
+  DeepPartial,
+} from './core';
 
 import type dxDraggable from './ui/draggable';
 import type dxScrollable from './ui/scroll_view/ui.scrollable';
 import type dxSortable from './ui/sortable';
 import type { Properties as ButtonProperties } from './ui/button';
+import { PromiseType } from './core/utils/deferred';
+import { UserDefinedElement } from './core/element';
 
 /**
  * @public
@@ -887,3 +896,77 @@ export type PagerBase = {
    */
   label?: string;
 };
+
+/**
+ * @docid
+ * @type Promise<void>
+ * @namespace DevExpress.core.utils
+ */
+// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+export type DxPromise<T = void> = {} extends PromiseType<T> ? Promise<T> : PromiseType<T>;
+
+/**
+ * @docid
+ * @namespace DevExpress.data
+ * @public
+ */
+export class Guid {
+  constructor();
+  constructor(value: string);
+  /**
+   * @docid
+   * @publicName toString()
+   * @public
+   */
+  toString(): string;
+  /**
+   * @docid
+   * @publicName valueOf()
+   * @public
+   */
+  valueOf(): string;
+}
+
+/**
+* @docid
+* @public
+*/
+export type DefaultOptionsRule<T> = {
+  device?: Device | Device[] | ((device: Device) => boolean);
+  options: DeepPartial<T>;
+};
+
+/** @public */
+export type FloatingActionButtonDirection = 'auto' | 'up' | 'down';
+
+/**
+ * @docid
+ * @publicName config()
+ * @namespace DevExpress
+ * @public
+ */
+export function config(): GlobalConfig;
+
+/**
+ * @docid
+ * @publicName config(config)
+ * @namespace DevExpress
+ * @public
+ */
+// eslint-disable-next-line @typescript-eslint/no-shadow
+export function config(config: GlobalConfig): void;
+
+/**
+ * @docid
+ * @section Common
+ * @public
+ */
+export type Template = string | Function | UserDefinedElement;
+
+/**
+ * @docid
+ * @publicName setTemplateEngine(options)
+ * @namespace DevExpress
+ * @public
+ */
+export function setTemplateEngine(templateEngineOptions: { compile?: Function; render?: Function }): void;

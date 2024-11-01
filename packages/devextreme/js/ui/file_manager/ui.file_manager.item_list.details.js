@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { extendAttributes, getDisplayFileSize } from './ui.file_manager.common';
 import { isString, isFunction, isDefined } from '../../core/utils/type';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 
 // NOTE: Using the "public" export here for the theme-builder deps check
 import DataGrid from '../../ui/data_grid';

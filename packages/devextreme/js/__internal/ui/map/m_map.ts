@@ -1,3 +1,6 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
@@ -9,9 +12,6 @@ import { extend } from '@js/core/utils/extend';
 import { titleize } from '@js/core/utils/inflector';
 import { each } from '@js/core/utils/iterator';
 import { isNumeric } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace } from '@js/events/utils/index';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 

@@ -1,4 +1,4 @@
-import dependencyInjector from '../core/utils/dependency_injector';
+import dependencyInjector from '../../../core/utils/dependency_injector';
 import parentLocales from './cldr-data/parent_locales';
 import getParentLocale from './parentLocale';
 

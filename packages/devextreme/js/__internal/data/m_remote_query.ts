@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import arrayQueryImpl from '@js/common/data/array_query';
+import { errors, handleError } from '@js/common/data/errors';
+import queryAdapters from '@js/common/data/query_adapters';
 import { Deferred } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isFunction } from '@js/core/utils/type';
-import arrayQueryImpl from '@js/data/array_query';
-// @ts-expect-error
-import { errors, handleError } from '@js/data/errors';
-import queryAdapters from '@js/data/query_adapters';
 
 const remoteQueryImpl = function (url, queryOptions, tasks) {
   tasks = tasks || [];

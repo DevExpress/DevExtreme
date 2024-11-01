@@ -1,13 +1,13 @@
-import fx from '@js/animation/fx';
-import { locate, move } from '@js/animation/translator';
+import { fx } from '@js/common/core/animation';
+import { locate, move } from '@js/common/core/animation/translator';
+import { name as clickEventName } from '@js/common/core/events/click';
+import { active } from '@js/common/core/events/core/emitter.feedback';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { getOuterWidth, setWidth } from '@js/core/utils/size';
-import { name as clickEventName } from '@js/events/click';
-import { active } from '@js/events/core/emitter.feedback';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import ActionSheet from '@js/ui/action_sheet';
 import { isMaterialBased } from '@js/ui/themes';
 

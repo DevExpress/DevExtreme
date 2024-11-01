@@ -1,4 +1,4 @@
-import { DataSourceLike } from '../data/data_source';
+import { DataSourceLike } from '../common/data';
 
 import {
     EventInfo,
@@ -6,7 +6,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import CollectionWidget, {
     CollectionWidgetItem,

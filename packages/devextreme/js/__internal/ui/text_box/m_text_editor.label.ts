@@ -1,13 +1,13 @@
+import { name as click } from '@js/common/core/events/click';
+import { active } from '@js/common/core/events/core/emitter.feedback';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { start as hoverStart } from '@js/common/core/events/hover';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
-import { name as click } from '@js/events/click';
-import { active } from '@js/events/core/emitter.feedback';
-import eventsEngine from '@js/events/core/events_engine';
-import { start as hoverStart } from '@js/events/hover';
-import { addNamespace } from '@js/events/utils/index';
 
 const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';

@@ -1,11 +1,11 @@
 /* eslint-disable max-classes-per-file */
 import '../module_not_extended/editor_factory';
 
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
-import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import { dataControllerEditingExtenderMixin, editingModule } from '@ts/grids/grid_core/editing/m_editing';

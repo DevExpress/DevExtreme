@@ -1,3 +1,9 @@
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { start as hoverStartEventName } from '@js/common/core/events/hover';
+import { addNamespace } from '@js/common/core/events/utils/index';
+import dateLocalization from '@js/common/core/localization/date';
+import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import { data as elementData } from '@js/core/element_data';
@@ -6,12 +12,6 @@ import { noop } from '@js/core/utils/common';
 import coreDateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { extend } from '@js/core/utils/extend';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import { start as hoverStartEventName } from '@js/events/hover';
-import { addNamespace } from '@js/events/utils/index';
-import dateLocalization from '@js/localization/date';
-import messageLocalization from '@js/localization/message';
 import Widget from '@js/ui/widget/ui.widget';
 
 // @ts-expect-error

@@ -1,7 +1,7 @@
-import { DxPromise } from './core/utils/deferred';
-import dxDataGrid, { Column } from './ui/data_grid';
-import dxPivotGrid, { Cell } from './ui/pivot_grid';
-import { ExportLoadPanel } from './exporter/export_load_panel';
+import { DxPromise } from '../../common';
+import dxDataGrid, { Column } from '../../ui/data_grid';
+import dxPivotGrid, { Cell } from '../../ui/pivot_grid';
+import { ExportLoadPanel } from '../export';
 
 /**
  * @public

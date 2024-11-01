@@ -1,4 +1,4 @@
-import DataSource, { DataSourceLike } from '../data/data_source';
+import { DataSource, DataSourceLike } from '../common/data';
 
 import {
     DxElement,
@@ -12,7 +12,7 @@ import {
   EventInfo,
   InitializedEventInfo,
   ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import Widget, {
     WidgetOptions,

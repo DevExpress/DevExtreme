@@ -1,4 +1,7 @@
-import { locate } from '@js/animation/translator';
+import { locate } from '@js/common/core/animation/translator';
+import Swipeable from '@js/common/core/events/gesture/swipeable';
+import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
@@ -9,9 +12,6 @@ import { extend } from '@js/core/utils/extend';
 import { sign } from '@js/core/utils/math';
 import { getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
-import Swipeable from '@js/events/gesture/swipeable';
-import { triggerResizeEvent } from '@js/events/visibility_change';
-import messageLocalization from '@js/localization/message';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
 
 import { _translator, animation } from './multi_view/m_multi_view.animation';

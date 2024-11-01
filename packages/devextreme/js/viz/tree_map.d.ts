@@ -1,4 +1,4 @@
-import DataSource, { DataSourceLike } from '../data/data_source';
+import { DataSource, DataSourceLike } from '../common/data';
 
 import {
     UserDefinedElement,
@@ -14,7 +14,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import BaseWidget, {
     BaseWidgetMargin,
