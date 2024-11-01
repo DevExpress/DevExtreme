@@ -419,7 +419,7 @@ const rowsView = (
 
       const $cells = $tableElement
         .children().children('.dx-group-row')
-        .find(`.dx-group-cell[aria-colindex=${columnIndex + 1}]`);
+        .find(`.dx-group-cell[aria-colindex='${columnIndex + 1}']`);
 
       for (let i = 0; i < $cells.length; i += 1) {
         const cell = $cells.get(i) as HTMLElement;
