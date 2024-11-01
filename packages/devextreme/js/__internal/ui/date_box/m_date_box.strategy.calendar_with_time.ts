@@ -1,9 +1,9 @@
+import dateLocalization from '@js/common/core/localization/date';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
-import dateLocalization from '@js/localization/date';
 import Box from '@js/ui/box';
 
 import CalendarStrategy from './m_date_box.strategy.calendar';

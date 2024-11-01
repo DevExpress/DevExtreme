@@ -1,10 +1,7 @@
 import {
     AnimationConfig,
-} from '../animation/fx';
-
-import {
     PositionConfig,
-} from '../animation/position';
+} from '../common/core/animation';
 
 import {
     UserDefinedElement,
@@ -15,12 +12,13 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    DxEvent,
     Cancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
+
+import { DxEvent } from '../events';
 
 import dxPopup, {
     dxPopupAnimation,

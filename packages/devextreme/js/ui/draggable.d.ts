@@ -9,7 +9,8 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    DragDirection,
+} from '../common';
 
 import {
     Cancelable,
@@ -17,13 +18,9 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import dxSortable from './sortable';
-
-import {
-    DragDirection,
-} from '../common';
 
 /**
  * @namespace DevExpress.ui

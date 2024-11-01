@@ -1,4 +1,10 @@
 /* eslint-disable max-classes-per-file */
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import holdEvent from '@js/common/core/events/hold';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace } from '@js/common/core/events/utils/index';
+import { createObjectWithChanges } from '@js/common/data/array_utils';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import { deferRender } from '@js/core/utils/common';
@@ -6,12 +12,6 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isElementInDom } from '@js/core/utils/dom';
 import { isDefined, isString } from '@js/core/utils/type';
-import { createObjectWithChanges } from '@js/data/array_utils';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import holdEvent from '@js/events/hold';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace } from '@js/events/utils/index';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 

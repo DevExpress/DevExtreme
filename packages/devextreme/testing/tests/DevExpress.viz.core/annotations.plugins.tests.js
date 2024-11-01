@@ -4,7 +4,7 @@ import rendererModule from 'viz/core/renderers/renderer';
 import TooltipModule from 'viz/core/tooltip';
 import vizMocks from '../../helpers/vizMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import eventsEngine from 'events/core/events_engine';
+import eventsEngine from 'common/core/events/core/events_engine';
 import { getDocument } from 'core/dom_adapter';
 import devices from '__internal/core/m_devices';
 

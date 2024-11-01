@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import MessageGroup from '__internal/ui/chat/messagegroup';
 import ChatAvatar from '__internal/ui/chat/avatar';
-import dateLocalization from 'localization/date';
+import dateLocalization from 'common/core/localization/date';
 
 const AVATAR_CLASS = 'dx-avatar';
 const CHAT_MESSAGEGROUP_TIME_CLASS = 'dx-chat-messagegroup-time';

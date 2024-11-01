@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import registerEvent from 'events/core/event_registrator';
-import eventsEngine from 'events/core/events_engine';
-import registerEventCallbacks from 'events/core/event_registrator_callbacks';
+import registerEvent from 'common/core/events/core/event_registrator';
+import eventsEngine from 'common/core/events/core/events_engine';
+import registerEventCallbacks from 'common/core/events/core/event_registrator_callbacks';
 import Class from 'core/class';
 
 import eventHelper from '../../helpers/eventHelper.js';

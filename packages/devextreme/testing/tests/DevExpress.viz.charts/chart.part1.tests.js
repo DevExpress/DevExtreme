@@ -2,7 +2,7 @@ const $ = require('jquery');
 const noop = require('core/utils/common').noop;
 const vizMocks = require('../../helpers/vizMocks.js');
 const commons = require('./chartParts/commons.js');
-const DataSource = require('data/data_source/data_source').DataSource;
+const DataSource = require('common/data/data_source/data_source').DataSource;
 const { BaseChart } = require('__internal/viz/chart_components/m_base_chart');
 const rendererModule = require('viz/core/renderers/renderer');
 const layoutManagerModule = require('viz/chart_components/layout_manager');
@@ -516,7 +516,7 @@ QUnit.test('not hide on resize, when resize', function(assert) {
 });
 
 QUnit.test('Schedule loading indicator hiding on data source changed event', function(assert) {
-    const DataSource = require('data/data_source/data_source').DataSource;
+    const DataSource = require('common/data/data_source/data_source').DataSource;
     const dataSource = new DataSource({
         load: function() {
             return [];

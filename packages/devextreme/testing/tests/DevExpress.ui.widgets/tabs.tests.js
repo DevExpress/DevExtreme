@@ -1,9 +1,9 @@
 import 'generic_light.css!';
 import themes from 'ui/themes';
 import { extend } from 'core/utils/extend';
-import { DataSource } from 'data/data_source/data_source';
-import holdEvent from 'events/hold';
-import { triggerShownEvent } from 'events/visibility_change';
+import { DataSource } from 'common/data/data_source/data_source';
+import holdEvent from 'common/core/events/hold';
+import { triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import 'ui/responsive_box';
 import 'ui/tabs';

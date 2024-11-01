@@ -21,7 +21,7 @@ import * as CommonTypes from 'devextreme/common';
 import { HorizontalAlignment, DataType, SearchMode, SortOrder } from 'devextreme/common';
 import { dxTreeListColumnButton, TreeListPredefinedColumnButton, dxTreeListColumn, TreeListCommandColumnType } from 'devextreme/ui/tree_list';
 import { FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation } from 'devextreme/common/grids';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 import { dxFormSimpleItem } from 'devextreme/ui/form';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';

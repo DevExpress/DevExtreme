@@ -1,4 +1,4 @@
-import messageLocalization from '@js/localization/message';
+import messageLocalization from '@js/common/core/localization/message';
 import supportUtils from '@ts/core/utils/m_support';
 import Tooltip from '@ts/ui/m_tooltip';
 

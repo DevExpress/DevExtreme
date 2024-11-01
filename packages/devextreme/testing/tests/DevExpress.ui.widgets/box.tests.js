@@ -1,4 +1,4 @@
-import { triggerShownEvent } from 'events/visibility_change';
+import { triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import 'ui/box';
 import 'ui/scroll_view/ui.scrollable';

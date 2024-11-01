@@ -1,7 +1,7 @@
 import Guid from 'core/guid';
-import { processRequestResultLock, keysEqual, isGroupCriterion, throttleChanges, base64_encode as b64, isUniformEqualsByOr } from 'data/utils';
-import { EdmLiteral } from 'data/odata/utils';
-import { createObjectWithChanges } from 'data/array_utils';
+import { processRequestResultLock, keysEqual, isGroupCriterion, throttleChanges, base64_encode as b64, isUniformEqualsByOr } from 'common/data/utils';
+import { EdmLiteral } from 'common/data/odata/utils';
+import { createObjectWithChanges } from 'common/data/array_utils';
 
 QUnit.module('keysEqual');
 

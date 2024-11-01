@@ -22,7 +22,7 @@ import {
 } from "devextreme/ui/tab_panel";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -89,7 +89,7 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     animationEnabled: Boolean,
-    dataSource: [Array, Object, String] as PropType<(Array<any | dxTabPanelItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxTabPanelItem | string>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     deferRendering: Boolean,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,

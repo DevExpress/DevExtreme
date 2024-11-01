@@ -1,3 +1,5 @@
+import dateLocalization from '@js/common/core/localization/date';
+import messageLocalization from '@js/common/core/localization/message';
 import config from '@js/core/config';
 import devices from '@js/core/devices';
 import browser from '@js/core/utils/browser';
@@ -9,8 +11,6 @@ import { each } from '@js/core/utils/iterator';
 import { inputType } from '@js/core/utils/support';
 import { isDate as isDateType, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import dateLocalization from '@js/localization/date';
-import messageLocalization from '@js/localization/message';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
 
 import Calendar from './m_date_box.strategy.calendar';

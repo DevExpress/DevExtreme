@@ -1,4 +1,6 @@
 /* eslint-disable max-classes-per-file */
+import messageLocalization from '@js/common/core/localization/message';
+import numberLocalization from '@js/common/core/localization/number';
 import Class from '@js/core/class';
 import errors from '@js/core/errors';
 import { EventsStrategy } from '@js/core/events_strategy';
@@ -20,8 +22,6 @@ import {
   isPromise,
   isString,
 } from '@js/core/utils/type';
-import messageLocalization from '@js/localization/message';
-import numberLocalization from '@js/localization/number';
 
 const EMAIL_VALIDATION_REGEX = /^[\d\w.+_-]+@[\d\w._-]+\.[\w]+$/i;
 

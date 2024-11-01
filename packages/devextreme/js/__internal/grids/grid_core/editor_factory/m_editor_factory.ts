@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
-import positionUtils from '@js/animation/position';
+import positionUtils from '@js/common/core/animation/position';
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -10,10 +14,6 @@ import {
   getOuterHeight,
   getOuterWidth, setOuterHeight, setOuterWidth,
 } from '@js/core/utils/size';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace, normalizeKeyName } from '@js/events/utils/index';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import type {
   ColumnsResizerViewController,
@@ -194,7 +194,6 @@ export class EditorFactory extends ViewControllerWithMixin {
   protected updateFocusOverlaySize($element, position): void {
     $element.hide();
 
-    // @ts-expect-error
     const location = positionUtils.calculate($element, extend({ collision: 'fit' }, position));
 
     if (location.h.oversize > 0) {
@@ -254,7 +253,6 @@ export class EditorFactory extends ViewControllerWithMixin {
       };
 
       this.updateFocusOverlaySize(this._$focusOverlay, focusOverlayPosition);
-      // @ts-expect-error
       positionUtils.setup(this._$focusOverlay, focusOverlayPosition);
 
       this._$focusOverlay.css('visibility', 'visible'); // for ios

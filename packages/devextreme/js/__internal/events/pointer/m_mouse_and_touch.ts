@@ -1,8 +1,8 @@
+import BaseStrategy from '@js/common/core/events/pointer/base';
+import MouseStrategy from '@js/common/core/events/pointer/mouse';
+import TouchStrategy from '@js/common/core/events/pointer/touch';
+import { isMouseEvent } from '@js/common/core/events/utils/index';
 import { extend } from '@js/core/utils/extend';
-import BaseStrategy from '@js/events/pointer/base';
-import MouseStrategy from '@js/events/pointer/mouse';
-import TouchStrategy from '@js/events/pointer/touch';
-import { isMouseEvent } from '@js/events/utils/index';
 
 /* eslint-disable spellcheck/spell-checker */
 const eventMap = {

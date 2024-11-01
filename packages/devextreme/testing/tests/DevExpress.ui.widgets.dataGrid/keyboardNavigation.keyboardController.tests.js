@@ -8,9 +8,9 @@ import { keyboardNavigationModule } from '__internal/grids/grid_core/keyboard_na
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import publicComponentUtils from 'core/utils/public_component';
-import eventsEngine from 'events/core/events_engine';
-import pointerEvents from 'events/pointer';
-import { keyboard } from 'events/short';
+import eventsEngine from 'common/core/events/core/events_engine';
+import pointerEvents from 'common/core/events/pointer';
+import { keyboard } from 'common/core/events/short';
 import { MockDataController, MockColumnsController, MockEditingController } from '../../helpers/dataGridMocks.js';
 import { CLICK_EVENT, callViewsRenderCompleted } from '../../helpers/grid/keyboardNavigationHelper.js';
 

@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
 /* eslint-disable max-classes-per-file */
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { removeEvent } from '@js/common/core/events/remove';
+import { addNamespace } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -10,11 +15,6 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getWidth } from '@js/core/utils/size';
 import { isDefined, isString } from '@js/core/utils/type';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import { removeEvent } from '@js/events/remove';
-import { addNamespace } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import Form from '@js/ui/form';
 import { isMaterial } from '@js/ui/themes';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';

@@ -22,7 +22,7 @@ import {
 } from "devextreme/ui/menu";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -37,14 +37,12 @@ import {
 } from "devextreme/common";
 import {
  AnimationConfig,
- AnimationState,
- AnimationType,
-} from "devextreme/animation/fx";
-import {
  CollisionResolution,
  PositionConfig,
+ AnimationState,
+ AnimationType,
  CollisionResolutionCombination,
-} from "devextreme/animation/position";
+} from "devextreme/common/core/animation";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -103,7 +101,7 @@ const componentConfig = {
     adaptivityEnabled: Boolean,
     animation: Object as PropType<Record<string, any>>,
     cssClass: String,
-    dataSource: [Array, Object, String] as PropType<Array<dxMenuItem> | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<Array<dxMenuItem> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
     disabledExpr: [Function, String] as PropType<((() => void)) | string>,
     displayExpr: [Function, String] as PropType<(((item: any) => string)) | string>,

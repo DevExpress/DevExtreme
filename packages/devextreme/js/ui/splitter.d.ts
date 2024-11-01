@@ -8,7 +8,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import CollectionWidget, {
     CollectionWidgetItem,

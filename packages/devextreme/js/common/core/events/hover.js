@@ -12,4 +12,4 @@
  * @module events/hover
 */
 
-export * from '../__internal/events/m_hover';
+export * from '../../../__internal/events/m_hover';

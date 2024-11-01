@@ -19,11 +19,11 @@ import {
 import dxOverlay from 'devextreme/ui/overlay';
 import DOMComponent from 'devextreme/core/dom_component';
 import dxPopup from 'devextreme/ui/popup';
-import { AnimationConfig } from 'devextreme/animation/fx';
-import { event, EventInfo } from 'devextreme/events/index';
+import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
+import { event } from 'devextreme/events/events.types';
+import { EventInfo } from 'devextreme/common/core/events';
 import { Component as CoreComponent } from 'devextreme/core/component';
 import { PositionAlignment } from 'devextreme/common';
-import { PositionConfig } from 'devextreme/animation/position';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import {

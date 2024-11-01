@@ -8,9 +8,8 @@ import dxToast, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { PositionConfig, CollisionResolution, CollisionResolutionCombination } from "devextreme/animation/position";
+import type { PositionConfig, AnimationConfig, CollisionResolution, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ShowingEvent, ShownEvent } from "devextreme/ui/toast";
-import type { AnimationConfig, AnimationState, AnimationType } from "devextreme/animation/fx";
 import type { HorizontalAlignment, VerticalAlignment, Direction, PositionAlignment } from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {

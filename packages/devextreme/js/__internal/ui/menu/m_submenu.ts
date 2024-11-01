@@ -1,7 +1,7 @@
 import '@js/ui/context_menu';
 
-import type { PositionConfig } from '@js/animation/position';
-import animationPosition from '@js/animation/position';
+import type { PositionConfig } from '@js/common/core/animation';
+import animationPosition from '@js/common/core/animation/position';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -178,7 +178,6 @@ class Submenu extends ContextMenu {
       position.offset = '2.5 0';
       position.at = position.my = 'right bottom';
     }
-    // @ts-expect-error
     animationPosition.setup(this.$contentDelimiter, position);
   }
 

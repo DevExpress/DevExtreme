@@ -13,8 +13,8 @@ import {
 
 
 import { HorizontalAlignment } from 'devextreme/common';
+import { Format } from 'devextreme/common/core/localization';
 import { SummaryType } from 'devextreme/common/grids';
-import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,

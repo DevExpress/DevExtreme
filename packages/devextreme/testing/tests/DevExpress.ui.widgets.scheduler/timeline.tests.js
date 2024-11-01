@@ -1,7 +1,7 @@
 import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import dateUtils from 'core/utils/date';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
+import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 import '__internal/scheduler/workspaces/m_timeline';

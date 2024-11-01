@@ -9,9 +9,8 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, ValueChangedEvent, dxFilterBuilderField, FilterBuilderOperation } from "devextreme/ui/filter_builder";
-import type { DataType, Format as CommonFormat } from "devextreme/common";
-import type { template } from "devextreme/core/templates/template";
-import type { Format as LocalizationFormat } from "devextreme/localization";
+import type { DataType, template, Format as CommonFormat } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 

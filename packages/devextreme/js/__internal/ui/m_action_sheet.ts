@@ -1,3 +1,4 @@
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
@@ -5,7 +6,6 @@ import { noop } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getWindow } from '@js/core/utils/window';
-import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import Popover from '@js/ui/popover/ui.popover';

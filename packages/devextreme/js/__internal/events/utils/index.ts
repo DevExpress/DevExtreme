@@ -1,7 +1,7 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import eventsEngine from '@js/events/core/events_engine';
 import { focused } from '@js/ui/widget/selectors';
 
 import mappedAddNamespace from './m_add_namespace';

@@ -6,7 +6,7 @@ import axisModule from 'viz/axes/base_axis';
 import { Crosshair } from 'viz/chart_components/crosshair';
 import trackers from 'viz/chart_components/tracker';
 import { MockAxis } from '../../helpers/chartMocks.js';
-import holdEvent from 'events/hold';
+import holdEvent from 'common/core/events/hold';
 import errors from 'core/errors';
 
 function getEvent(type, params) {

@@ -4,7 +4,7 @@ import { prepareComponentConfig } from "./core/index";
 import Drawer, { Properties } from "devextreme/ui/drawer";
 import {
  event,
-} from "devextreme/events/index";
+} from "devextreme/events/events.types";
 import {
  DisposingEvent,
  InitializedEvent,

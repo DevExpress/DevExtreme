@@ -10,8 +10,7 @@ import NestedOption from "./core/nested-option";
 
 import type { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/number_box";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
-import type { TextEditorButtonLocation, Format as CommonFormat, ButtonStyle, ButtonType } from "devextreme/common";
-import type { template } from "devextreme/core/templates/template";
+import type { TextEditorButtonLocation, Format as CommonFormat, ButtonStyle, template, ButtonType } from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];

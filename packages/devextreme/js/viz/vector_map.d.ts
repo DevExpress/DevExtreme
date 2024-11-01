@@ -7,14 +7,17 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    HorizontalAlignment,
+    SingleMultipleOrNone,
+    VerticalEdge,
+} from '../common';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     Format,
@@ -44,12 +47,6 @@ import {
     Palette,
     Font,
 } from '../common/charts';
-
-import {
-    HorizontalAlignment,
-    SingleMultipleOrNone,
-    VerticalEdge,
-} from '../common';
 
 export {
     SingleMultipleOrNone,

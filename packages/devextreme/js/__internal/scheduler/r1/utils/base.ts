@@ -1,7 +1,7 @@
+import dateLocalization from '@js/common/core/localization/date';
 import { equalByValue } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import { isDefined } from '@js/core/utils/type';
-import dateLocalization from '@js/localization/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { VERTICAL_GROUP_COUNT_CLASSES } from '../../m_classes';

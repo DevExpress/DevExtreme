@@ -1,4 +1,4 @@
-import eventsEngine from './core/events_engine';
+import eventsEngine from './events/core/events_engine';
 
 /**
 * @name events
@@ -10,7 +10,6 @@ export const on = eventsEngine.on;
 export const one = eventsEngine.one;
 export const off = eventsEngine.off;
 export const trigger = eventsEngine.trigger;
-export const triggerHandler = eventsEngine.triggerHandler;
 
 /**
 * @name events.Event

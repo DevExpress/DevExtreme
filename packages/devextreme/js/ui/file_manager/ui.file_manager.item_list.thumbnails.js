@@ -2,11 +2,11 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
 import { Deferred } from '../../core/utils/deferred';
-import eventsEngine from '../../events/core/events_engine';
-import { addNamespace } from '../../events/utils/index';
-import { name as contextMenuEventName } from '../../events/contextmenu';
+import eventsEngine from '../../common/core/events/core/events_engine';
+import { addNamespace } from '../../common/core/events/utils/index';
+import { name as contextMenuEventName } from '../../common/core/events/contextmenu';
 import { getDisplayFileSize } from './ui.file_manager.common';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 
 import FileManagerThumbnailListBox from './ui.file_manager.items_list.thumbnails.list_box';
 import FileManagerItemListBase from './ui.file_manager.item_list';

@@ -26,7 +26,7 @@ import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { ExportFormat, HorizontalEdge, HorizontalAlignment, Position, Orientation, VerticalEdge, SingleMultipleOrNone } from 'devextreme/common';
 import { HatchDirection, DashStyle, Font, LabelPosition, TextOverflow, WordWrap, Palette, PaletteExtensionMode, ShiftLabelOverlap, Theme } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 
 import DxFunnel from 'devextreme/viz/funnel';
 

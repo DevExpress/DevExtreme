@@ -1,4 +1,4 @@
-import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../../events/drag';
+import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../../common/core/events/drag';
 const SHUTTER_EVENTS_NS = '.shutter-zoom';
 const DRAG_START_EVENT_NAME = dragEventStart + SHUTTER_EVENTS_NS;
 const DRAG_UPDATE_EVENT_NAME = dragEventMove + SHUTTER_EVENTS_NS;

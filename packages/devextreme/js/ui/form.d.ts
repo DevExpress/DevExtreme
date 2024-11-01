@@ -9,13 +9,25 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    AsyncRule,
+    CompareRule,
+    CustomRule,
+    EmailRule,
+    HorizontalAlignment,
+    Mode,
+    NumericRule,
+    PatternRule,
+    RangeRule,
+    RequiredRule,
+    StringLengthRule,
+    VerticalAlignment,
+} from '../common';
 
 import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import dxButton, {
     dxButtonOptions,
@@ -34,21 +46,6 @@ import {
 import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
-
-import {
-    AsyncRule,
-    CompareRule,
-    CustomRule,
-    EmailRule,
-    HorizontalAlignment,
-    Mode,
-    NumericRule,
-    PatternRule,
-    RangeRule,
-    RequiredRule,
-    StringLengthRule,
-    VerticalAlignment,
-} from '../common';
 
 export {
     HorizontalAlignment,

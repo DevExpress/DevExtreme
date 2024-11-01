@@ -10,7 +10,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
-import pointerEvents from 'events/pointer';
+import pointerEvents from 'common/core/events/pointer';
 import { setupDataGridModules, MockDataController } from '../../helpers/dataGridMocks.js';
 import {
     CLICK_EVENT,

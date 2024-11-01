@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import eventsEngine from 'events/core/events_engine';
+import eventsEngine from 'common/core/events/core/events_engine';
 import domUtils from '__internal/core/utils/m_dom';
 import devices from '__internal/core/m_devices';
 import pointerMock from '../../../helpers/pointerMock.js';
@@ -8,7 +8,7 @@ import caretWorkaround from './caretWorkaround.js';
 import themes from 'ui/themes';
 import config from 'core/config';
 import consoleUtils from 'core/utils/console';
-import { normalizeKeyName } from 'events/utils/index';
+import { normalizeKeyName } from 'common/core/events/utils/index';
 import { getWidth, implementationsMap } from 'core/utils/size';
 
 import TextEditor from '__internal/ui/text_box/m_text_editor';

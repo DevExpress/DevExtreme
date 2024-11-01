@@ -1,7 +1,7 @@
+import dataQuery from '@js/common/data/query';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isString } from '@js/core/utils/type';
-import dataQuery from '@js/data/query';
 import errors from '@js/ui/widget/ui.errors';
 
 import SelectionStrategy from './m_selection.strategy';
@@ -82,6 +82,7 @@ export default class DeferredStrategy extends SelectionStrategy {
         },
       },
     };
+    // @ts-expect-error
     return !!dataQuery([itemData], queryParams).filter(selectionFilter).toArray().length;
   }
 

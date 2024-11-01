@@ -1,5 +1,5 @@
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
-import messageLocalization from '@js/localization/message';
 import type {
   Alert,
 } from '@js/ui/chat';

@@ -1,1 +1,1 @@
-export { default } from '../../__internal/events/pointer/m_touch';
+export { default } from '../../../../__internal/events/pointer/m_touch';

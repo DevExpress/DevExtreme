@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import animationFrame from 'animation/frame';
+import animationFrame from 'common/core/animation/frame';
 import devices from '__internal/core/m_devices';
 import pointerMock from '../../../helpers/pointerMock.js';
 

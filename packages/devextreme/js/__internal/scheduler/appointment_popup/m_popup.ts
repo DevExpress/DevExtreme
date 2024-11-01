@@ -1,9 +1,9 @@
+import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
+import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { Deferred, when } from '@js/core/utils/deferred';
-import { triggerResizeEvent } from '@js/events/visibility_change';
-import messageLocalization from '@js/localization/message';
 import Popup from '@js/ui/popup/ui.popup';
 import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
 import {

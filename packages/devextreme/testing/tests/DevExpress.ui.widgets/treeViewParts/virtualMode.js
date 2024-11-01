@@ -2,13 +2,13 @@
 
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import fx from 'animation/fx';
-import { DataSource } from 'data/data_source/data_source';
-import ArrayStore from 'data/array_store';
-import CustomStore from 'data/custom_store';
-import dblclickEvent from 'events/dblclick';
+import fx from 'common/core/animation/fx';
+import { DataSource } from 'common/data/data_source/data_source';
+import ArrayStore from 'common/data/array_store';
+import { CustomStore } from 'common/data/custom_store';
+import dblclickEvent from 'common/core/events/dblclick';
 import TreeView from 'ui/tree_view';
-import eventsEngine from 'events/core/events_engine';
+import eventsEngine from 'common/core/events/core/events_engine';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import LoadIndicator from 'ui/load_indicator';
 

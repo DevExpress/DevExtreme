@@ -1,9 +1,9 @@
+import { fireEvent, hasTouches, isDxMouseWheelEvent } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
-import { fireEvent, hasTouches, isDxMouseWheelEvent } from '@js/events/utils/index';
 
 const Emitter = Class.inherit({
 

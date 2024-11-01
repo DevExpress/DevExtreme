@@ -1,9 +1,9 @@
 import { getHeight, getWidth, getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import fixtures from '../../helpers/positionFixtures.js';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
-import positionUtils from 'animation/position';
+import positionUtils from 'common/core/animation/position';
 import uiErrors from 'ui/widget/ui.errors';
 import Popover from 'ui/popover';
 import { getBoundingRect } from 'core/utils/position';

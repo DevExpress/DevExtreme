@@ -22,7 +22,7 @@ import {
 } from "devextreme/ui/splitter";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -66,7 +66,7 @@ interface DxSplitter extends AccessibleOptions {
 const componentConfig = {
   props: {
     allowKeyboardNavigation: Boolean,
-    dataSource: [Array, Object, String] as PropType<Array<dxSplitterItem> | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<Array<dxSplitterItem> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,

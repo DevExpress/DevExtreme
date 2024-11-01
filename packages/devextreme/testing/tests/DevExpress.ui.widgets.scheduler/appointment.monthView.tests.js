@@ -1,11 +1,11 @@
 import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
-import translator from 'animation/translator';
-import fx from 'animation/fx';
+import translator from 'common/core/animation/translator';
+import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import Color from 'color';
-import { DataSource } from 'data/data_source/data_source';
-import CustomStore from 'data/custom_store';
+import { DataSource } from 'common/data/data_source/data_source';
+import { CustomStore } from 'common/data/custom_store';
 import browser from 'core/utils/browser';
 import { APPOINTMENT_FORM_GROUP_NAMES } from '__internal/scheduler/appointment_popup/m_form';
 import {

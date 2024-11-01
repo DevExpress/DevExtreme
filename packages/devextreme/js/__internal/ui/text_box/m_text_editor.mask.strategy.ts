@@ -1,7 +1,7 @@
+import EventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import browser from '@js/core/utils/browser';
 import { clipboardText as getClipboardText } from '@js/core/utils/dom';
-import EventsEngine from '@js/events/core/events_engine';
-import { addNamespace } from '@js/events/utils/index';
 
 const MASK_EVENT_NAMESPACE = 'dxMask';
 const BLUR_EVENT = 'blur beforedeactivate';

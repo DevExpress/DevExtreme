@@ -1,5 +1,5 @@
-import translator from 'animation/translator';
-import visibilityChange from 'events/visibility_change';
+import translator from 'common/core/animation/translator';
+import visibilityChange from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import 'ui/resizable';
 import pointerMock from '../../helpers/pointerMock.js';

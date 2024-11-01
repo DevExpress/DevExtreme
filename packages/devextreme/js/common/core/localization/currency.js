@@ -1,4 +1,4 @@
-import { extend } from '../core/utils/extend';
+import { extend } from '../../../core/utils/extend';
 
 export default {
     _formatNumberCore: function(value, format, formatConfig) {

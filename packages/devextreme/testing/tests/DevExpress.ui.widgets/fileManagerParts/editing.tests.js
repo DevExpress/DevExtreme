@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import 'ui/file_manager';
 import FileUploader from 'ui/file_uploader';
-import fx from 'animation/fx';
-import pointerEvents from 'events/pointer';
+import fx from 'common/core/animation/fx';
+import pointerEvents from 'common/core/events/pointer';
 import ObjectFileSystemProvider from 'file_management/object_provider';
 import CustomFileSystemProvider from 'file_management/custom_provider';
 import FileSystemError from 'file_management/error.js';

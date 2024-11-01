@@ -1,5 +1,5 @@
+import { isDxMouseWheelEvent } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
-import { isDxMouseWheelEvent } from '@js/events/utils/index';
 
 // @ts-expect-error
 const allowScroll = function (container, delta, shiftKey?: boolean) {

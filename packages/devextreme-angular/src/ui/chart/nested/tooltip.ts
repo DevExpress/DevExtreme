@@ -14,7 +14,7 @@ import {
 
 
 
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 import { DashStyle, Font } from 'devextreme/common/charts';
 import { ChartTooltipLocation } from 'devextreme/viz/chart';
 

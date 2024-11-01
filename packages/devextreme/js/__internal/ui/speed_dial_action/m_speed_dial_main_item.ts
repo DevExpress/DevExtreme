@@ -1,9 +1,9 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import config from '@js/core/config';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getHeight } from '@js/core/utils/size';
-import eventsEngine from '@js/events/core/events_engine';
 import { isCompact, isFluent, isMaterial } from '@js/ui/themes';
 import swatchContainer from '@js/ui/widget/swatch_container';
 import errors from '@js/ui/widget/ui.errors';

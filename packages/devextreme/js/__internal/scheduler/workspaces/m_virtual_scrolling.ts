@@ -1,9 +1,9 @@
 /* eslint-disable max-classes-per-file */
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace } from '@js/events/utils/index';
 
 const DEFAULT_CELL_HEIGHT = 50;
 const MIN_CELL_WIDTH = 1;

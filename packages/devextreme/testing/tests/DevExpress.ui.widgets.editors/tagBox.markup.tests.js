@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import TagBox from 'ui/tag_box';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import windowModule from 'core/utils/window';

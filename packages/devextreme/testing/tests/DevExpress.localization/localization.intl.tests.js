@@ -1,12 +1,12 @@
 import '../../helpers/noIntl.js';
 import Intl from 'intl';
 import sharedTests from './sharedParts/localization.shared.js';
-import dateLocalization from 'localization/date';
-import numberLocalization from 'localization/number';
-import intlDateLocalization from 'localization/intl/date';
-import intlNumberLocalization from 'localization/intl/number';
-import { locale } from 'localization/core';
-import { disableIntl } from 'localization';
+import dateLocalization from 'common/core/localization/date';
+import numberLocalization from 'common/core/localization/number';
+import intlDateLocalization from 'common/core/localization/intl/date';
+import intlNumberLocalization from 'common/core/localization/intl/number';
+import { locale } from 'common/core/localization/core';
+import { disableIntl } from 'common/core/localization';
 import config from 'core/config';
 import ExcelJSLocalizationFormatTests from '../DevExpress.exporter/exceljsParts/exceljs.format.tests.js';
 

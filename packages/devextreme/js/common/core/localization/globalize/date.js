@@ -9,8 +9,8 @@ const RTL_MARKS_REGEX = /[\u200E\u200F]/g;
 // eslint-disable-next-line no-restricted-imports
 import Globalize from 'globalize';
 import dateLocalization from '../date';
-import { isObject } from '../../core/utils/type';
-import * as iteratorUtils from '../../core/utils/iterator';
+import { isObject } from '../../../../core/utils/type';
+import * as iteratorUtils from '../../../../core/utils/iterator';
 
 if(Globalize && Globalize.formatDate) {
 

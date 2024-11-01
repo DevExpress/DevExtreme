@@ -30,7 +30,7 @@ import {
 } from "devextreme/ui/list";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -185,7 +185,7 @@ const componentConfig = {
     allowItemDeleting: Boolean,
     bounceEnabled: Boolean,
     collapsibleGroups: Boolean,
-    dataSource: [Array, Object, String] as PropType<(Array<any | dxListItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxListItem | string>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
     displayExpr: [Function, String] as PropType<(((item: any) => string)) | string>,
     elementAttr: Object as PropType<Record<string, any>>,

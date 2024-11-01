@@ -55,7 +55,7 @@ module.exports = {
             outputFileName: 'tests/src/server/component-names.ts'
         },
         commonReexportsGenerator: {
-            metadataPath: './metadata/NGMetaData.json',
+            imdMetadataFilePath: './metadata/integration-data.json',
             outputPath: './src/'
         },
     },

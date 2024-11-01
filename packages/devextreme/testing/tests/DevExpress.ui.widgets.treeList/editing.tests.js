@@ -13,9 +13,9 @@ QUnit.testStart(function() {
 import 'generic_light.css!';
 import '__internal/grids/tree_list/m_widget';
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { setupTreeListModules } from '../../helpers/treeListMocks.js';
-import ArrayStore from 'data/array_store';
+import ArrayStore from 'common/data/array_store';
 
 fx.off = true;
 

@@ -1,12 +1,12 @@
-import $ from '../../core/renderer';
-import Class from '../../core/class';
-import { extend } from '../../core/utils/extend';
-import commonUtils from '../../__internal/core/utils/m_common';
-import { isFunction, isPlainObject } from '../../core/utils/type';
-import { map } from '../../core/utils/iterator';
+import $ from '../../../../core/renderer';
+import Class from '../../../../core/class';
+import { extend } from '../../../../core/utils/extend';
+import commonUtils from '../../../../__internal/core/utils/m_common';
+import { isFunction, isPlainObject } from '../../../../core/utils/type';
+import { map } from '../../../../core/utils/iterator';
 import fx from '../fx';
 import { presets } from '../presets/presets';
-import { when, Deferred } from '../../core/utils/deferred';
+import { when, Deferred } from '../../../../core/utils/deferred';
 
 const directionPostfixes = {
     forward: ' dx-forward',

@@ -1,10 +1,10 @@
-import eventsEngine from '../../events/core/events_engine';
+import eventsEngine from '../../common/core/events/core/events_engine';
 import domAdapter from '../../core/dom_adapter';
 import { isFunction } from '../../core/utils/type';
 import BaseWidget from '../../__internal/viz/core/m_base_widget';
 import { extend } from '../../core/utils/extend';
-import { addNamespace } from '../../events/utils/index';
-import pointerEvents from '../../events/pointer';
+import { addNamespace } from '../../common/core/events/utils/index';
+import pointerEvents from '../../common/core/events/pointer';
 import { pointInCanvas } from '../core/utils';
 import $ from '../../core/renderer';
 

@@ -9,11 +9,10 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { ViewType, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, AllDayPanelMode, AppointmentTemplateData, AppointmentTooltipTemplateData, CellAppointmentsLimit, dxSchedulerScrolling } from "devextreme/ui/scheduler";
-import type { event } from "devextreme/events/index";
+import type { event } from "devextreme/events/events.types";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
-import type { ScrollMode, FirstDayOfWeek, Orientation } from "devextreme/common";
-import type { template } from "devextreme/core/templates/template";
+import type { ScrollMode, template, FirstDayOfWeek, Orientation } from "devextreme/common";
 
 import type dxSortable from "devextreme/ui/sortable";
 import type dxDraggable from "devextreme/ui/draggable";

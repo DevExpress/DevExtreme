@@ -5,9 +5,9 @@ import {
     Component,
 } from '@angular/core';
 
-import { AnimationConfig, AnimationState, AnimationType } from 'devextreme/animation/fx';
 import { Direction } from 'devextreme/common';
 import { AnimationEaseMode } from 'devextreme/common/charts';
+import { AnimationConfig, AnimationState, AnimationType } from 'devextreme/common/core/animation';
 
 @Component({
     template: ''

@@ -1,8 +1,8 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace } from '@js/events/utils/index';
 import FileUploader from '@js/ui/file_uploader';
 import Quill from 'devextreme-quill';
 

@@ -4,8 +4,8 @@ import dxTreeList from '../tree_list';
 import { getBoundingRect } from '../../core/utils/position';
 import { isDefined } from '../../core/utils/type';
 import { GanttHelper } from './ui.gantt.helper';
-import { DataSource } from '../../data/data_source/data_source';
-import ArrayStore from '../../data/array_store';
+import DataSource from '../../common/data/data_source';
+import ArrayStore from '../../common/data/array_store';
 import { compileGetter } from '../../core/utils/data';
 import { GanttTreeListNodesState } from './ui.gantt.treelist.nodes_state';
 

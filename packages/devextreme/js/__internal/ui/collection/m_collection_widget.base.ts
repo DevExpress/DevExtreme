@@ -1,3 +1,11 @@
+import { name as clickEventName } from '@js/common/core/events/click';
+import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import holdEvent from '@js/common/core/events/hold';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
+import DataHelperMixin from '@js/common/data/data_helper';
 import Action from '@js/core/action';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
@@ -17,14 +25,6 @@ import { each } from '@js/core/utils/iterator';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { findTemplates } from '@js/core/utils/template_manager';
 import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
-import DataHelperMixin from '@js/data_helper';
-import { name as clickEventName } from '@js/events/click';
-import { name as contextMenuEventName } from '@js/events/contextmenu';
-import eventsEngine from '@js/events/core/events_engine';
-import holdEvent from '@js/events/hold';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import { focusable } from '@js/ui/widget/selectors';
 import Widget from '@js/ui/widget/ui.widget';
 

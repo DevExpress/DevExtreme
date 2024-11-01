@@ -6,14 +6,15 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    DataType,
+} from '../common';
 
 import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import Widget, {
     WidgetOptions,
@@ -22,10 +23,6 @@ import Widget, {
 import {
     Format,
 } from '../localization';
-
-import {
-    DataType,
-} from '../common';
 
 export {
     DataType,

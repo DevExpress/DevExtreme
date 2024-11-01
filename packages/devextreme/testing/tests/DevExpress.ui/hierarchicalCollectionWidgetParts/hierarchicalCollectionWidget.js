@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import HierarchicalCollectionWidget from 'ui/hierarchical_collection/ui.hierarchical_collection_widget';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 

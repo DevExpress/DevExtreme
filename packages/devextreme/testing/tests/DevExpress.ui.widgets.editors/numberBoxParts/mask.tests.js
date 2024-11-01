@@ -3,7 +3,7 @@ import browser from 'core/utils/browser';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import keyboardMock from '../../../helpers/keyboardMock.js';
-import numberLocalization from 'localization/number';
+import numberLocalization from 'common/core/localization/number';
 import errors from 'core/errors';
 
 import 'ui/text_box/ui.text_editor';

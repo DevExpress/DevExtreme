@@ -1,9 +1,9 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import registerComponent from '@js/core/component_registrator';
 // @ts-expect-error
 import { grep } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
-import eventsEngine from '@js/events/core/events_engine';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 
 import ValidationEngine from './m_validation_engine';

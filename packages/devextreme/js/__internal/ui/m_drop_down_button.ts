@@ -1,3 +1,4 @@
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
 import Guid from '@js/core/guid';
@@ -10,7 +11,6 @@ import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
 import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
 import DataController from '@js/data_controller';
-import messageLocalization from '@js/localization/message';
 import ButtonGroup from '@js/ui/button_group';
 import List from '@js/ui/list_light';
 import Popup from '@js/ui/popup/ui.popup';

@@ -19,7 +19,7 @@ import {
 } from "devextreme/ui/tabs";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -80,7 +80,7 @@ interface DxTabs extends AccessibleOptions {
 const componentConfig = {
   props: {
     accessKey: String,
-    dataSource: [Array, Object, String] as PropType<(Array<any | dxTabsItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxTabsItem | string>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,

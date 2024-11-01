@@ -44,7 +44,7 @@
     "axe-core": "4.10.2",
     "cheerio": "1.0.0-rc.10",
     "codelyzer": "6.0.2",
-    "devextreme-internal-tools": "16.0.0-beta.18",
+    "devextreme-internal-tools": "16.0.0",
     "http-server": "14.1.1",
     "husky": "8.0.3",
     "jest": "29.7.0",
