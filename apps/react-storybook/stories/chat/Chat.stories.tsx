@@ -228,16 +228,14 @@ export const DataLoading: Story = {
                 load: () => {
                     const promise = new Promise((resolve) => {
                         setTimeout(() => {
-                            resolve(messagesRef.current);
+                            resolve([...messagesRef.current]);
                         }, 500);
                     });
             
                     return promise;
                 },
                 insert: (message) => {
-                    if(reloadOnChange) {
-                        messagesRef.current.push(message);
-                    }
+                    messagesRef.current.push(message);
     
                     const promise = new Promise<void>((resolve) => {
                         setTimeout(() => {
@@ -249,7 +247,7 @@ export const DataLoading: Story = {
                 },
             }),
             paginate: false,
-        }), [reloadOnChange]);
+        }), []);
         
         const onMessageEntered = useCallback((e) => {
             if(!reloadOnChange) {
