@@ -1,68 +1,21 @@
-import {
-  DxExtendedPromise,
-} from '../core/utils/deferred';
-import {
-  Store as BaseStore,
-  Options as BaseStoreOptions,
-} from './store';
-import {
-  LoadOptions,
-} from './index';
+import AbstractStore from '../common/data/abstract_store';
 
-export type Options<
-  TItem = any,
-  TKey = any,
-  > = AbstractStoreOptions<TItem, TKey>;
-
-/**
- * @namespace DevExpress.data
- */
-interface AbstractStoreOptions<
-  TItem = any,
-  TKey = any,
-  > extends BaseStoreOptions<TItem, TKey> {
+export {
   /**
-   * @docid StoreOptions.onLoaded
-   * @type_function_param2 loadOptions:LoadOptions
-   * @action
-   * @public
+   * @deprecated Use Options from common/data/abstract_store instead
    */
-  onLoaded?: ((result: Array<TItem>, loadOptions: LoadOptions<TItem>) => void);
-}
-
-/**
- * @namespace DevExpress.data
- */
-export default class AbstractStore<
-  TItem = any,
-  TKey = any,
-  > extends BaseStore<TItem, TKey> {
-  constructor(options?: Options<TItem, TKey>);
+  Options,
   /**
-   * @docid Store.load()
-   * @publicName load()
-   * @return Promise<any>
-   * @public
+   * @deprecated Use StoreOptions from common/data/abstract_store instead
    */
-  load(): DxExtendedPromise<Array<TItem>>;
+  StoreOptions,
   /**
-   * @docid Store.load(options)
-   * @publicName load(options)
-   * @param1 options:LoadOptions
-   * @return Promise<any>
-   * @public
+   * @deprecated Use Store from common/data/abstract_store instead
    */
-  load(options: LoadOptions<TItem>): DxExtendedPromise<Array<TItem>>;
-}
+  Store,
+} from '../common/data/abstract_store';
 
 /**
- * @namespace DevExpress.data
- * @deprecated Use Options from data/store instead
+ * @deprecated Use the default export from common/data/abstract_store instead
  */
-export type StoreOptions<TItem = any, TKey = any> = BaseStoreOptions<TItem, TKey>;
-
-/**
- * @namespace DevExpress.data
- * @deprecated Use Store from data/store instead
- */
-export type Store<TItem = any, TKey = any> = BaseStore<TItem, TKey>;
+export default AbstractStore;

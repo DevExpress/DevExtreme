@@ -1,4 +1,4 @@
-import { requestAnimationFrame, cancelAnimationFrame } from '../../../animation/frame';
+import { requestAnimationFrame, cancelAnimationFrame } from '../../../common/core/animation/frame';
 const noop = function() { };
 export const easingFunctions = {
     easeOutCubic: function(pos, start, end) { return (pos === 1) ? end : ((1 - Math.pow((1 - pos), 3)) * (end - start) + (+start)); },

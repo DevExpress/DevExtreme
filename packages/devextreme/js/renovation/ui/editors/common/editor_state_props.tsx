@@ -1,7 +1,7 @@
 import {
   ComponentBindings, OneWay,
 } from '@devextreme-generator/declarations';
-import devices from '../../../../core/devices';
+import devices from '../../../../common/core/environment/devices';
 
 @ComponentBindings()
 export class EditorStateProps {

@@ -1,11 +1,11 @@
+import registerEvent from '@js/common/core/events/core/event_registrator';
+import MouseStrategy from '@js/common/core/events/pointer/mouse';
+import MouseAndTouchStrategy from '@js/common/core/events/pointer/mouse_and_touch';
+import TouchStrategy from '@js/common/core/events/pointer/touch';
 import GlobalConfig from '@js/core/config';
 import devices from '@js/core/devices';
 import { each } from '@js/core/utils/iterator';
 import * as support from '@js/core/utils/support';
-import registerEvent from '@js/events/core/event_registrator';
-import MouseStrategy from '@js/events/pointer/mouse';
-import MouseAndTouchStrategy from '@js/events/pointer/mouse_and_touch';
-import TouchStrategy from '@js/events/pointer/touch';
 
 const getStrategy = (support, { tablet, phone }) => {
   const pointerEventStrategy = getStrategyFromGlobalConfig();

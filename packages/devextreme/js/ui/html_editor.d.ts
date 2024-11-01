@@ -1,4 +1,4 @@
-import { DataSourceLike } from '../data/data_source';
+import { DataSourceLike } from '../common/data';
 import {
     UserDefinedElement,
     DxElement,
@@ -13,7 +13,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     EditorStyle,

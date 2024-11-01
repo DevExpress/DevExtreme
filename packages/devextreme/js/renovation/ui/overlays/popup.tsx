@@ -13,13 +13,12 @@ import {
   TwoWay,
 } from '@devextreme-generator/declarations';
 import { getWindow } from '../../../core/utils/window';
-import devices from '../../../core/devices';
+import devices from '../../../common/core/environment/devices';
 import LegacyPopup from '../../../ui/popup/ui.popup';
 /* eslint-disable import/named */
 import { UserDefinedElement, DxElement } from '../../../core/element';
 import { template } from '../../../core/templates/template';
-import { AnimationConfig } from '../../../animation/fx';
-import { PositionConfig } from '../../../animation/position';
+import { AnimationConfig, PositionConfig } from '../../../common/core/animation';
 /* eslint-enable import/named */
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { BaseWidgetProps } from '../common/base_props';
@@ -130,8 +129,7 @@ export class PopupProps extends BaseWidgetProps {
   // eslint-disable-next-line @typescript-eslint/ban-types
   @OneWay() position: PositionConfig | Function
   | 'bottom' | 'center' | 'left' | 'left bottom'
-  | 'left top' | 'right' | 'right bottom' | 'right top' | 'top'
-  = { my: 'center', at: 'center', of: 'window' };
+  | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' = { my: 'center', at: 'center', of: 'window' };
 
   @OneWay() resizeEnabled = false;
 

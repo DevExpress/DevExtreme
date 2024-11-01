@@ -1,6 +1,6 @@
 import config from '../config';
-import { getFormatter as getLDMLFormatter } from '../../localization/ldml/date.formatter';
-import defaultDateNames from '../../localization/default_date_names';
+import { getFormatter as getLDMLFormatter } from '../../common/core/localization/ldml/date.formatter';
+import defaultDateNames from '../../common/core/localization/default_date_names';
 import { isString, isDate, isNumeric as isNumber } from './type';
 
 const NUMBER_SERIALIZATION_FORMAT = 'number';

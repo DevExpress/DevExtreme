@@ -8,7 +8,7 @@ import {
   viewFunction,
 } from '../scroll_view';
 
-import devices from '../../../../core/devices';
+import devices from '../../../../common/core/environment/devices';
 import * as support from '../../../../core/utils/support';
 import browser from '../../../../core/utils/browser';
 

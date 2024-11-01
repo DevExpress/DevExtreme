@@ -1,3 +1,10 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { name as dxDblClickEvent } from '@js/common/core/events/double_click';
+import {
+  addNamespace, getChar, isCommandKeyPressed, normalizeKeyName,
+} from '@js/common/core/events/utils/index';
+import { getFormat as getLDMLFormat } from '@js/common/core/localization/ldml/number';
+import number from '@js/common/core/localization/number';
 import devices from '@js/core/devices';
 import { ensureDefined, escapeRegExp } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
@@ -5,13 +12,6 @@ import { fitIntoRange, inRange } from '@js/core/utils/math';
 import {
   isDefined, isFunction, isNumeric, isString,
 } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import { name as dxDblClickEvent } from '@js/events/double_click';
-import {
-  addNamespace, getChar, isCommandKeyPressed, normalizeKeyName,
-} from '@js/events/utils/index';
-import { getFormat as getLDMLFormat } from '@js/localization/ldml/number';
-import number from '@js/localization/number';
 
 import NumberBoxBase from './m_number_box.base';
 import {

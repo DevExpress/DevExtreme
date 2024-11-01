@@ -1,3 +1,7 @@
+import { ArrayStore, CustomStore, query as dataQuery } from '@js/common/data';
+import { DataSource } from '@js/common/data/data_source/data_source';
+// eslint-disable-next-line import/extensions
+import { aggregators } from '@js/common/data/utils';
 import Class from '@js/core/class';
 import { noop } from '@js/core/utils/common';
 // @ts-expect-error
@@ -6,13 +10,6 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
-import ArrayStore from '@js/data/array_store';
-import CustomStore from '@js/data/custom_store';
-import { DataSource } from '@js/data/data_source/data_source';
-import dataQuery from '@js/data/query';
-// eslint-disable-next-line import/extensions
-// @ts-expect-error
-import { aggregators } from '@js/data/utils';
 
 import {
   discoverObjectFields,

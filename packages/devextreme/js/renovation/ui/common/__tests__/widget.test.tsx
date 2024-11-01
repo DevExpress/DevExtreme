@@ -15,8 +15,8 @@ import resizeCallbacks from '../../../../core/utils/resize_callbacks';
 import errors from '../../../../core/errors';
 import domAdapter from '../../../../core/dom_adapter';
 
-jest.mock('../../../../events/utils/index', () => ({
-  ...jest.requireActual('../../../../events/utils/index'),
+jest.mock('../../../../common/core/events/utils/index', () => ({
+  ...jest.requireActual('../../../../common/core/events/utils/index'),
 }));
 jest.mock('../../../common/config_provider', () => ({ ConfigProvider: () => null }));
 jest.mock('../../../../__internal/core/r1/utils/resolve_rtl');
@@ -705,9 +705,9 @@ describe('Widget', () => {
 
           const dispose = widget.windowResizeEffect() as DisposeEffectReturn;
 
-          expect(resizeCallbacks.add).toBeCalledTimes(1);
+          expect(resizeCallbacks.add).toHaveBeenCalledTimes(1);
           expect(resizeCallbacks.add).toHaveBeenCalledWith(onDimensionChanged);
-          expect(resizeCallbacks.remove).toBeCalledTimes(0);
+          expect(resizeCallbacks.remove).toHaveBeenCalledTimes(0);
 
           dispose?.();
         });
@@ -720,7 +720,7 @@ describe('Widget', () => {
 
           dispose?.();
 
-          expect(resizeCallbacks.remove).toBeCalledTimes(1);
+          expect(resizeCallbacks.remove).toHaveBeenCalledTimes(1);
           expect(resizeCallbacks.remove).toHaveBeenCalledWith(onDimensionChanged);
         });
 
@@ -728,8 +728,8 @@ describe('Widget', () => {
           const widget = new Widget({ });
           const dispose = widget.windowResizeEffect();
 
-          expect(resizeCallbacks.add).toBeCalledTimes(0);
-          expect(resizeCallbacks.remove).toBeCalledTimes(0);
+          expect(resizeCallbacks.add).toHaveBeenCalledTimes(0);
+          expect(resizeCallbacks.remove).toHaveBeenCalledTimes(0);
           expect(dispose).toBe(undefined);
         });
       });
@@ -798,8 +798,8 @@ describe('Widget', () => {
 
           component.setRootElementRef();
 
-          expect(onRootElementRendered).toBeCalledTimes(1);
-          expect(onRootElementRendered).toBeCalledWith(component.widgetElementRef.current);
+          expect(onRootElementRendered).toHaveBeenCalledTimes(1);
+          expect(onRootElementRendered).toHaveBeenCalledWith(component.widgetElementRef.current);
         });
 
         it('does not raise any error if onRootElementRendered is not passed', () => {
@@ -816,7 +816,7 @@ describe('Widget', () => {
             height: () => {},
           } as WidgetProps);
           component.checkDeprecation();
-          expect(errors.log).toBeCalledTimes(2);
+          expect(errors.log).toHaveBeenCalledTimes(2);
           expect(errors.log).toHaveBeenNthCalledWith(1, 'W0017', 'width');
           expect(errors.log).toHaveBeenNthCalledWith(2, 'W0017', 'height');
         });
@@ -827,7 +827,7 @@ describe('Widget', () => {
             height: '100px',
           } as WidgetProps);
           component.checkDeprecation();
-          expect(errors.log).toBeCalledTimes(0);
+          expect(errors.log).toHaveBeenCalledTimes(0);
         });
       });
     });
@@ -896,7 +896,7 @@ describe('Widget', () => {
           widget.focus();
           widget.blur();
 
-          expect(widget.widgetElementRef.current?.blur).not.toBeCalled();
+          expect(widget.widgetElementRef.current?.blur).not.toHaveBeenCalled();
         });
       });
     });

@@ -1,12 +1,12 @@
 import '@ts/ui/list/modules/m_selection';
 
+import dateLocalization from '@js/common/core/localization/date';
 import { ensureDefined, noop } from '@js/core/utils/common';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { extend } from '@js/core/utils/extend';
 import { getHeight, getOuterHeight } from '@js/core/utils/size';
 import { isDate } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import dateLocalization from '@js/localization/date';
 import List from '@js/ui/list_light';
 import { getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
 

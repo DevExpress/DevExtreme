@@ -16,7 +16,7 @@ import type {
 } from './common/types';
 import { ResizableHandle } from './handle';
 import { combineClasses } from '../../utils/combine_classes';
-import { triggerResizeEvent } from '../../../events/visibility_change';
+import { triggerResizeEvent } from '../../../common/core/events/visibility_change';
 import { EffectReturn } from '../../utils/effect_return';
 
 const getCssClasses = (

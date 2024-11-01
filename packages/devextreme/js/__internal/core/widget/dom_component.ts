@@ -1,3 +1,4 @@
+import { resize as resizeEvent, visibility as visibilityEvents } from '@js/common/core/events/short';
 import config from '@js/core/config';
 import type { DOMComponentOptions } from '@js/core/dom_component';
 import { getPublicElement } from '@js/core/element';
@@ -15,7 +16,6 @@ import windowResizeCallbacks from '@js/core/utils/resize_callbacks';
 import { addShadowDomStyles } from '@js/core/utils/shadow_dom';
 import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import { resize as resizeEvent, visibility as visibilityEvents } from '@js/events/short';
 import license, { peekValidationPerformed } from '@ts/core/license/license_validation';
 
 import { Component } from './component';

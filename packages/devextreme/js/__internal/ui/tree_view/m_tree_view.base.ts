@@ -1,4 +1,10 @@
-import fx from '@js/animation/fx';
+import { fx } from '@js/common/core/animation';
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { name as dblclickEvent } from '@js/common/core/events/double_click';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
@@ -15,12 +21,6 @@ import {
   isDefined, isFunction, isPrimitive, isString,
 } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import { name as dblclickEvent } from '@js/events/double_click';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, SCROLLABLE_CONTENT_CLASS } from '@js/renovation/ui/scroll_view/common/consts';
 import { getRelativeOffset } from '@js/renovation/ui/scroll_view/utils/get_relative_offset';
 import CheckBox from '@js/ui/check_box';

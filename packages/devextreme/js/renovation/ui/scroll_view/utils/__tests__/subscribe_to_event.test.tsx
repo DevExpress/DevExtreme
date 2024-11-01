@@ -1,7 +1,7 @@
 import { DisposeEffectReturn } from '../../../../utils/effect_return';
 import resizeObserverSingleton from '../../../../../core/resize_observer';
 import { getWindow, setWindow } from '../../../../../core/utils/window';
-import { requestAnimationFrame, cancelAnimationFrame } from '../../../../../animation/frame';
+import { requestAnimationFrame, cancelAnimationFrame } from '../../../../../common/core/animation/frame';
 
 import { subscribeToResize } from '../subscribe_to_resize';
 
@@ -11,8 +11,8 @@ jest.mock('../../../../../core/resize_observer', () => ({
   unobserve: jest.fn(),
 }));
 
-jest.mock('../../../../../animation/frame', () => ({
-  ...jest.requireActual('../../../../../animation/frame'),
+jest.mock('../../../../../common/core/animation/frame', () => ({
+  ...jest.requireActual('../../../../../common/core/animation/frame'),
   requestAnimationFrame: jest.fn(),
   cancelAnimationFrame: jest.fn(),
 }));
@@ -26,7 +26,7 @@ describe('subscribeToResize', () => {
 
     subscribeToResize(null, () => { });
 
-    expect(observeHandler).toBeCalledTimes(0);
+    expect(observeHandler).toHaveBeenCalledTimes(0);
   });
 
   it('should not initialize resizeObservable on element if window is not defined', () => {
@@ -46,7 +46,7 @@ describe('subscribeToResize', () => {
 
       subscribeToResize(element, resizeHandler);
 
-      expect(observeHandler).toBeCalledTimes(0);
+      expect(observeHandler).toHaveBeenCalledTimes(0);
     } finally {
       setWindow(originalWindow, true);
     }
@@ -70,7 +70,7 @@ describe('subscribeToResize', () => {
       const unsubscribeFn = subscribeToResize(element, handler);
 
       expect(unsubscribeFn).toEqual(undefined);
-      expect(unobserveHandler).toBeCalledTimes(0);
+      expect(unobserveHandler).toHaveBeenCalledTimes(0);
     } finally {
       setWindow(originalWindow, true);
     }
@@ -94,7 +94,7 @@ describe('subscribeToResize', () => {
 
       subscribeToResize(element, resizeHandler);
 
-      expect(observeHandler).toBeCalledTimes(1);
+      expect(observeHandler).toHaveBeenCalledTimes(1);
       expect(observeHandler.mock.calls[0][0]).toEqual(element);
 
       const target = {
@@ -104,8 +104,8 @@ describe('subscribeToResize', () => {
       const entry = [{}];
       (entry as any).target = target;
       observeHandler.mock.calls[0][1](entry);
-      expect(resizeHandler).toBeCalledTimes(1);
-      expect(resizeHandler).toBeCalledWith(target);
+      expect(resizeHandler).toHaveBeenCalledTimes(1);
+      expect(resizeHandler).toHaveBeenCalledWith(target);
     } finally {
       setWindow(originalWindow, true);
       jest.restoreAllMocks();
@@ -128,15 +128,15 @@ describe('subscribeToResize', () => {
 
       const unsubscribeFn = subscribeToResize(element, handler);
 
-      expect(cancelAnimationFrame).toBeCalledTimes(0);
-      expect(unobserveHandler).toBeCalledTimes(0);
+      expect(cancelAnimationFrame).toHaveBeenCalledTimes(0);
+      expect(unobserveHandler).toHaveBeenCalledTimes(0);
 
       (unsubscribeFn as DisposeEffectReturn)();
 
-      expect(unobserveHandler).toBeCalledTimes(1);
-      expect(unobserveHandler).toBeCalledWith(element);
-      expect(cancelAnimationFrame).toBeCalledTimes(1);
-      expect(cancelAnimationFrame).toBeCalledWith(-1);
+      expect(unobserveHandler).toHaveBeenCalledTimes(1);
+      expect(unobserveHandler).toHaveBeenCalledWith(element);
+      expect(cancelAnimationFrame).toHaveBeenCalledTimes(1);
+      expect(cancelAnimationFrame).toHaveBeenCalledWith(-1);
     } finally {
       jest.restoreAllMocks();
     }

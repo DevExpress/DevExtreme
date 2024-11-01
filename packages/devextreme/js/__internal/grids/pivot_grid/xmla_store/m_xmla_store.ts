@@ -1,3 +1,5 @@
+import { getLanguageId } from '@js/common/core/localization/language_codes';
+import { errors } from '@js/common/data/errors';
 import Class from '@js/core/class';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
@@ -9,9 +11,6 @@ import {
   isDefined, isFunction, isNumeric, isString,
 } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-// @ts-expect-error
-import { errors } from '@js/data/errors';
-import { getLanguageId } from '@js/localization/language_codes';
 
 import pivotGridUtils, {
   foreachTree,
@@ -70,7 +69,7 @@ const XmlaStore = Class.inherit((function () {
           xml = undefined;
         }
         if (!xml || xml.getElementsByTagName('parsererror').length || xml.childNodes.length === 0) {
-          throw new errors.Error('E4023', text);
+          throw errors.Error('E4023', text);
         }
       } catch (e: any) {
         deferred.reject({
@@ -833,7 +832,7 @@ const XmlaStore = Class.inherit((function () {
 
     if (errorElement.length) {
       const description = errorElement.attr('Description');
-      const error = new errors.Error('E4000', description);
+      const error = errors.Error('E4000', description);
       errors.log('E4000', description);
       return error;
     }

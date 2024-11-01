@@ -20,10 +20,10 @@ import {
 } from '../../../test_utils/events_mock';
 import { setPublicElementWrapper } from '../../../../core/element';
 import * as UpdatePropsImmutable from '../../utils/update_props_immutable';
-import registerEvent from '../../../../events/core/event_registrator';
-import { one } from '../../../../events';
-import KeyboardProcessor from '../../../../events/core/keyboard_processor';
-import { removeEvent } from '../../../../events/remove';
+import registerEvent from '../../../../common/core/events/core/event_registrator';
+import { one } from '../../../../common/core/events';
+import KeyboardProcessor from '../../../../common/core/events/core/keyboard_processor';
+import { removeEvent } from '../../../../common/core/events/remove';
 
 const fakeEventSingleton = new class {
   handlerCount = 0;

@@ -1,3 +1,5 @@
+import { DataSource } from '@js/common/data/data_source/data_source';
+import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import { wrapToArray } from '@js/core/utils/array';
 import { equalByValue } from '@js/core/utils/common';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
@@ -6,8 +8,6 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { deepExtendArraySafe } from '@js/core/utils/object';
 import { isDefined } from '@js/core/utils/type';
-import { DataSource } from '@js/data/data_source/data_source';
-import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
 import { current, isFluent } from '@js/ui/themes';
 import { getGroupCount, hasResourceValue } from '@ts/scheduler/r1/utils/index';
 

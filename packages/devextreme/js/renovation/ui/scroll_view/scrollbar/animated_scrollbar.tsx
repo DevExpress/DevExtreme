@@ -12,13 +12,13 @@ import {
 
 import { DisposeEffectReturn } from '../../../utils/effect_return';
 import { Scrollbar } from './scrollbar';
-import { requestAnimationFrame, cancelAnimationFrame } from '../../../../animation/frame';
+import { requestAnimationFrame, cancelAnimationFrame } from '../../../../common/core/animation';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
 import { inRange } from '../../../../core/utils/math';
 import { DxMouseEvent } from '../common/types';
 import { clampIntoRange } from '../utils/clamp_into_range';
 import { AnimatedScrollbarProps } from '../common/animated_scrollbar_props';
-import { isDxMouseWheelEvent } from '../../../../events/utils/index';
+import { isDxMouseWheelEvent } from '../../../../common/core/events/utils/index';
 import { DIRECTION_HORIZONTAL } from '../common/consts';
 import { ConfigContextValue, ConfigContext } from '../../../../__internal/core/r1/config_context';
 

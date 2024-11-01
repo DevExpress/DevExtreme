@@ -1,10 +1,10 @@
+import { active } from '@js/common/core/events/core/emitter.feedback';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { getOuterHeight, setHeight } from '@js/core/utils/size';
-import { active } from '@js/events/core/emitter.feedback';
-import eventsEngine from '@js/events/core/events_engine';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace } from '@js/events/utils/index';
 
 import EditDecorator from './m_list.edit.decorator';
 

@@ -1,4 +1,4 @@
-import { move } from '@js/animation/translator';
+import { move } from '@js/common/core/animation/translator';
 import $ from '@js/core/renderer';
 
 import { animation } from './m_drawer.animation';

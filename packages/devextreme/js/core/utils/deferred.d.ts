@@ -1,8 +1,17 @@
+import type { DxPromise } from '../../common';
+
+export type {
+    /**
+     * @deprecated Use DxPromise from /common instead
+     */
+    DxPromise,
+} from '../../common';
+
 interface Callback<T> {
     // eslint-disable-next-line @typescript-eslint/prefer-function-type
     (value: T, ...args: T[]): void;
 }
-declare class DeferredObj<T> {
+export declare class DeferredObj<T> {
     constructor();
     state(): 'pending' | 'rejected' | 'resolved';
     always(alwaysCallback?: Callback<T>): DeferredObj<T>;
@@ -24,13 +33,6 @@ export function Deferred<T>(): DeferredObj<T>;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
 export interface PromiseType<T> { }
-/**
- * @docid
- * @type Promise<void>
- * @namespace DevExpress.core.utils
- */
-// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-export type DxPromise<T = void> = {} extends PromiseType<T> ? Promise<T> : PromiseType<T>;
 
 /** @namespace DevExpress.core.utils */
 export type DxExtendedPromise<T> = DxPromise<T> & {

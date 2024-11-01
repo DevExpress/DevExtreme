@@ -1,9 +1,9 @@
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
 import { captionize } from '@js/core/utils/inflector';
 import { format } from '@js/core/utils/string';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
 import { isMaterialBased } from '@js/ui/themes';
 import Validator from '@js/ui/validator';
 import errors from '@js/ui/widget/ui.errors';

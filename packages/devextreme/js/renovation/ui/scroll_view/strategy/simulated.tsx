@@ -9,7 +9,7 @@ import {
   Mutable,
   ForwardRef,
 } from '@devextreme-generator/declarations';
-import '../../../../events/gesture/emitter.gesture.scroll';
+import '../../../../common/core/events/gesture/emitter.gesture.scroll';
 import {
   subscribeToScrollEvent,
   subscribeToScrollInitEvent,
@@ -34,10 +34,10 @@ import { permissibleWheelDirection } from '../utils/get_permissible_wheel_direct
 import { DisposeEffectReturn, EffectReturn } from '../../../utils/effect_return';
 import {
   isDxMouseWheelEvent, normalizeKeyName, isCommandKeyPressed,
-} from '../../../../events/utils/index';
+} from '../../../../common/core/events/utils/index';
 import { isDefined } from '../../../../core/utils/type';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
-import eventsEngine from '../../../../events/core/events_engine';
+import eventsEngine from '../../../../common/core/events/core/events_engine';
 import { inRange } from '../../../../core/utils/math';
 
 import {

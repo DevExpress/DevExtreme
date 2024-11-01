@@ -5,7 +5,7 @@ import {
   RefObject,
 } from '@devextreme-generator/declarations';
 
-import devices from '../../../../../core/devices';
+import devices from '../../../../../common/core/environment/devices';
 import {
   clear as clearEventHandlers, emit, defaultEvent,
 } from '../../../../test_utils/events_mock';

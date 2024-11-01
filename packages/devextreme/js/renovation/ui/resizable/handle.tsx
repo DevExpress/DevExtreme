@@ -8,9 +8,9 @@ import {
   RefObject,
 } from '@devextreme-generator/declarations';
 import { EffectReturn } from '../../utils/effect_return';
-import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../../../events/drag';
-import { addNamespace } from '../../../events/utils/index';
-import eventsEngine from '../../../events/core/events_engine';
+import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../../../common/core/events/drag';
+import { addNamespace } from '../../../common/core/events/utils/index';
+import eventsEngine from '../../../common/core/events/core/events_engine';
 import type {
   Handle, Corner, DragStartEvent, DragEvent,
 } from './common/types';

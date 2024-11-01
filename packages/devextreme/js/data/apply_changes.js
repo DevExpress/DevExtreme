@@ -1,3 +1,3 @@
-import { applyChanges } from './array_utils';
+import { applyChanges } from '../common/data';
 
 export default applyChanges;

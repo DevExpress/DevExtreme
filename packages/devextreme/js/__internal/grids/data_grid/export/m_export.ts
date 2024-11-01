@@ -2,13 +2,13 @@
 import '@js/ui/button';
 import '@js/ui/drop_down_button';
 
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getDefaultAlignment } from '@js/core/utils/position';
 import { format } from '@js/core/utils/string';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import messageLocalization from '@js/localization/message';
 import List from '@js/ui/list_light';
 import errors from '@js/ui/widget/ui.errors';
 import { prepareItems } from '@ts/grids/grid_core/m_export';

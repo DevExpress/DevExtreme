@@ -1,9 +1,9 @@
-import eventsEngine from '../../events/core/events_engine';
-import * as clickEvent from '../../events/click';
+import eventsEngine from '../../common/core/events/core/events_engine';
+import * as clickEvent from '../../common/core/events/click';
 import { EffectReturn } from './effect_return';
-import { addNamespace } from '../../events/utils/index';
-import scrollEvents from '../../events/gesture/emitter.gesture.scroll';
-import pointerEvents from '../../events/pointer';
+import { addNamespace } from '../../common/core/events/utils/index';
+import scrollEvents from '../../common/core/events/gesture/emitter.gesture.scroll';
+import pointerEvents from '../../common/core/events/pointer';
 
 export function subscribeToEvent(eventName: string) {
   return (

@@ -15,7 +15,7 @@ import {
   ShowScrollbarMode,
 } from '../../common/consts';
 
-import devices from '../../../../../core/devices';
+import devices from '../../../../../common/core/environment/devices';
 
 import {
   clear as clearEventHandlers, emit, defaultEvent,

@@ -1,7 +1,7 @@
+import { isTouchEvent } from '@js/common/core/events/utils/index';
+import localizationMessage from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import { isTouchEvent } from '@js/events/utils/index';
-import localizationMessage from '@js/localization/message';
 
 import { ListBase } from './m_list.base';
 import EditProvider from './m_list.edit.provider';

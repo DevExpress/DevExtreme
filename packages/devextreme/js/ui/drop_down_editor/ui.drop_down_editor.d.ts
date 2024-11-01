@@ -21,7 +21,7 @@ import {
 
 import {
     EventInfo,
-} from '../../events/index';
+} from '../../common/core/events';
 
 import {
     ApplyValueMode,

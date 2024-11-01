@@ -1,6 +1,6 @@
 import { compileGetter, compileSetter } from '../../core/utils/data';
 import { isFunction } from '../../core/utils/type';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 
 export const GanttHelper = {
 

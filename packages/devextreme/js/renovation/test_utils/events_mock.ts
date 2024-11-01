@@ -1,4 +1,4 @@
-import { keyboard } from '../../events/short';
+import { keyboard } from '../../common/core/events/short';
 import { AbstractFunction } from '../common/types';
 
 let eventHandlers = {};
@@ -95,8 +95,8 @@ keyboard.on = (_el, _focusTarget, handler): string => {
 
 keyboard.off = (id) => { keyboardHandlers[id] = []; };
 
-jest.mock('../../events/core/events_engine', () => {
-  const originalEventsEngine = jest.requireActual('../../events/core/events_engine').default;
+jest.mock('../../common/core/events/core/events_engine', () => {
+  const originalEventsEngine = jest.requireActual('../../common/core/events/core/events_engine').default;
 
   return (
     {

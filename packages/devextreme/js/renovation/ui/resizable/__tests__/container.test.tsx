@@ -3,10 +3,10 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { ResizableContainer, viewFunction } from '../container';
 import { ResizableHandle } from '../handle';
-import { triggerResizeEvent } from '../../../../events/visibility_change';
+import { triggerResizeEvent } from '../../../../common/core/events/visibility_change';
 import { defaultEvent } from '../../../test_utils/events_mock';
 
-jest.mock('../../../../events/visibility_change', () => ({
+jest.mock('../../../../common/core/events/visibility_change', () => ({
   triggerResizeEvent: jest.fn(),
 }));
 

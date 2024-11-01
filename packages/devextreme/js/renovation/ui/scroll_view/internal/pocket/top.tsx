@@ -9,7 +9,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { LoadIndicator } from '../../../load_indicator';
 import { combineClasses } from '../../../../utils/combine_classes';
-import messageLocalization from '../../../../../localization/message';
+import messageLocalization from '../../../../../common/core/localization/message';
 
 import {
   PULLDOWN_ICON_CLASS,

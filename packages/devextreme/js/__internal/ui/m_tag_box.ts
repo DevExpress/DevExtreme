@@ -1,3 +1,8 @@
+import { name as clickEvent } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
+import { normalizeLoadResult } from '@js/common/data/data_source/utils';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
@@ -16,11 +21,6 @@ import { SelectionFilterCreator as FilterCreator } from '@js/core/utils/selectio
 import { getHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined, isObject, isString } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import { normalizeLoadResult } from '@js/data/data_source/utils';
-import { name as clickEvent } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import SelectBox from '@js/ui/select_box';
 import errors from '@js/ui/widget/ui.errors';
 import caret from '@ts/ui/text_box/m_utils.caret';

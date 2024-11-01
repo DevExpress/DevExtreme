@@ -13,13 +13,13 @@ import {
   ForwardRef,
   RefObject,
 } from '@devextreme-generator/declarations';
-import '../../../events/click';
-import '../../../events/hover';
+import '../../../common/core/events/click';
+import '../../../common/core/events/hover';
 
 import { isFunction } from '../../../core/utils/type';
 import {
   dxClick, focus, keyboard, resize, visibility,
-} from '../../../events/short';
+} from '../../../common/core/events/short';
 import {
   subscribeToDxActiveEvent,
   subscribeToDxInactiveEvent,
@@ -261,7 +261,9 @@ export class Widget extends JSXComponent(WidgetProps) {
               this.focused = true;
               onFocusIn?.(event);
             }
-          }, null, namespace);
+          },
+          null,
+          namespace);
       }
     }
 
@@ -282,7 +284,9 @@ export class Widget extends JSXComponent(WidgetProps) {
             this.focused = false;
             onFocusOut?.(event);
           }
-        }, null, namespace);
+        },
+        null,
+        namespace);
     }
 
     return undefined;
@@ -303,7 +307,8 @@ export class Widget extends JSXComponent(WidgetProps) {
             !this.active && (this.hovered = true);
             onHoverStart?.(event);
           },
-          { selector }, namespace);
+          { selector },
+          namespace);
       }
     }
 
@@ -326,7 +331,8 @@ export class Widget extends JSXComponent(WidgetProps) {
             onHoverEnd?.(event);
           }
         },
-        { selector }, namespace);
+        { selector },
+        namespace);
     }
 
     return undefined;

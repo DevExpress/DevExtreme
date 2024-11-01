@@ -12,13 +12,12 @@ import {
   Effect,
   TwoWay,
 } from '@devextreme-generator/declarations';
-import devices from '../../../core/devices';
+import devices from '../../../common/core/environment/devices';
 import LegacyTooltip from '../../../ui/tooltip';
 /* eslint-disable import/named */
 import { UserDefinedElement, DxElement } from '../../../core/element';
 import { template } from '../../../core/templates/template';
-import { AnimationConfig } from '../../../animation/fx';
-import { PositionConfig } from '../../../animation/position';
+import { AnimationConfig, PositionConfig } from '../../../common/core/animation';
 /* eslint-enable import/named */
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { BaseWidgetProps } from '../common/base_props';
@@ -106,8 +105,7 @@ export class TooltipProps extends BaseWidgetProps {
 
   // eslint-disable-next-line @typescript-eslint/ban-types
   @OneWay() position: PositionConfig | Function
-  | 'bottom' | 'left' | 'right' | 'top'
-  = 'bottom';
+  | 'bottom' | 'left' | 'right' | 'top' = 'bottom';
 
   @OneWay() rtlEnabled = false;
 

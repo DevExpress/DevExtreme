@@ -1,3 +1,6 @@
+import registerEventCallbacks from '@js/common/core/events/core/event_registrator_callbacks';
+import hookTouchProps from '@js/common/core/events/core/hook_touch_props';
+import { getEventTarget } from '@js/common/core/events/utils/event_target';
 import domAdapter from '@js/core/dom_adapter';
 import errors from '@js/core/errors';
 import callOnce from '@js/core/utils/call_once';
@@ -8,9 +11,6 @@ import {
   isFunction, isObject, isString, isWindow,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import registerEventCallbacks from '@js/events/core/event_registrator_callbacks';
-import hookTouchProps from '@js/events/core/hook_touch_props';
-import { getEventTarget } from '@js/events/utils/event_target';
 
 const window = getWindow();
 

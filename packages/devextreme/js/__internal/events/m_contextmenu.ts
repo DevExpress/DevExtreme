@@ -1,11 +1,11 @@
+import registerEvent from '@js/common/core/events/core/event_registrator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import holdEvent from '@js/common/core/events/hold';
+import { addNamespace, fireEvent, isMouseEvent } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import { touch } from '@js/core/utils/support';
-import registerEvent from '@js/events/core/event_registrator';
-import eventsEngine from '@js/events/core/events_engine';
-import holdEvent from '@js/events/hold';
-import { addNamespace, fireEvent, isMouseEvent } from '@js/events/utils/index';
 
 const CONTEXTMENU_NAMESPACE = 'dxContexMenu';
 

@@ -1,4 +1,7 @@
 import type { Position } from '@js/common';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import config from '@js/core/config';
 import devices from '@js/core/devices';
@@ -11,9 +14,6 @@ import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
 import { camelize } from '@js/core/utils/inflector';
 import { each } from '@js/core/utils/iterator';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import type { Properties } from '@js/ui/date_range_box';
 import Editor from '@js/ui/editor/editor';
 import { current, isFluent, isMaterial } from '@js/ui/themes';

@@ -1,1 +1,5 @@
-export { default } from '../__internal/data/m_local_store';
+import {
+    LocalStore,
+} from '../common/data';
+
+export default LocalStore;

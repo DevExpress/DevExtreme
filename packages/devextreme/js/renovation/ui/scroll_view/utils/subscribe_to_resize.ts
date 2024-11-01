@@ -1,7 +1,7 @@
 import resizeObserverSingleton from '../../../../core/resize_observer';
 import { EffectReturn } from '../../../utils/effect_return';
 import { hasWindow } from '../../../../core/utils/window';
-import { requestAnimationFrame, cancelAnimationFrame } from '../../../../animation/frame';
+import { requestAnimationFrame, cancelAnimationFrame } from '../../../../common/core/animation';
 
 export function subscribeToResize(
   element: HTMLDivElement | undefined | null,

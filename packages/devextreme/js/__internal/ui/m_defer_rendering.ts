@@ -1,4 +1,6 @@
-import { TransitionExecutor } from '@js/animation/transition_executor/transition_executor';
+import { TransitionExecutor } from '@js/common/core/animation/transition_executor/transition_executor';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { triggerShownEvent } from '@js/common/core/events/visibility_change';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
@@ -17,8 +19,6 @@ import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isPromise } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
-import { triggerShownEvent } from '@js/events/visibility_change';
 import LoadIndicator from '@js/ui/load_indicator';
 import Widget from '@js/ui/widget/ui.widget';
 

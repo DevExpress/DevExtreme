@@ -2,8 +2,8 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import '../../../events/click';
-import '../../../events/hover';
+import '../../../common/core/events/click';
+import '../../../common/core/events/hover';
 
 import {
   createReRenderEffect, InfernoEffect, InfernoWrapperComponent,
@@ -11,15 +11,15 @@ import {
 import type { RefObject } from '@devextreme-generator/declarations';
 import { createRef as infernoCreateRef } from 'inferno';
 
+import {
+  dxClick, focus, keyboard, resize, visibility,
+} from '../../../common/core/events/short';
 import domAdapter from '../../../core/dom_adapter';
 import errors from '../../../core/errors';
 import { extend } from '../../../core/utils/extend';
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
 import { normalizeStyleProp } from '../../../core/utils/style';
 import { isFunction } from '../../../core/utils/type';
-import {
-  dxClick, focus, keyboard, resize, visibility,
-} from '../../../events/short';
 import type { ConfigContextValue } from '../../core/r1/config_context';
 import { ConfigContext } from '../../core/r1/config_context';
 import { ConfigProvider } from '../../core/r1/config_provider';

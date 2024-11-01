@@ -1,11 +1,11 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointerEvents from '@js/common/core/events/pointer';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
 import { isString } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import pointerEvents from '@js/events/pointer';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { isMaterialBased } from '@js/ui/themes';
 

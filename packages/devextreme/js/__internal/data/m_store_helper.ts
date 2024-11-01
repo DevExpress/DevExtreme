@@ -1,10 +1,9 @@
+import arrayQuery from '@js/common/data/array_query';
+import { normalizeSortingInfo } from '@js/common/data/utils';
 // @ts-expect-error
 import { grep } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import arrayQuery from '@js/data/array_query';
-// @ts-expect-error
-import { normalizeSortingInfo } from '@js/data/utils';
 
 function multiLevelGroup(query, groupInfo) {
   query = query.groupBy(groupInfo[0].selector);

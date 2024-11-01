@@ -3,8 +3,8 @@ import {
 } from '@devextreme-generator/declarations';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable-next-line import/named */
-import DataSource, { Options as DataSourceOptions } from '../../../../data/data_source';
-import Store from '../../../../data/abstract_store';
+import { DataSource, DataSourceOptions } from '../../../../common/data';
+import Store from '../../../../common/data/abstract_store';
 import LegacySelectBox from '../../../../ui/select_box';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import { EventCallback } from '../../common/event_callback';

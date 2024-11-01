@@ -12,13 +12,12 @@ import {
   Effect,
   TwoWay,
 } from '@devextreme-generator/declarations';
-import devices from '../../../core/devices';
+import devices from '../../../common/core/environment/devices';
 import LegacyPopover from '../../../ui/popover/ui.popover';
 /* eslint-disable import/named */
 import { UserDefinedElement, DxElement } from '../../../core/element';
 import { template } from '../../../core/templates/template';
-import { AnimationConfig } from '../../../animation/fx';
-import { PositionConfig } from '../../../animation/position';
+import { PositionConfig, AnimationConfig } from '../../../common/core/animation';
 /* eslint-enable import/named */
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { BaseWidgetProps } from '../common/base_props';

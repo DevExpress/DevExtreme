@@ -1,7 +1,7 @@
 import domAdapter from '../dom_adapter';
 import callOnce from './call_once';
 import { getNavigator, hasProperty } from './window';
-import devices from '../devices';
+import devices from '../../common/core/environment/devices';
 import { stylePropPrefix, styleProp } from './style';
 
 const {

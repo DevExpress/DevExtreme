@@ -4,7 +4,7 @@ import { RadioGroup, RadioGroupProps, viewFunction as RadioGroupView } from '../
 import { EditorStateProps } from '../common/editor_state_props';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import LegacyRadioGroup from '../../../../ui/radio_group';
-import devices from '../../../../core/devices';
+import devices from '../../../../common/core/environment/devices';
 
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;

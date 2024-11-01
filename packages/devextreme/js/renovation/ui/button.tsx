@@ -12,9 +12,9 @@ import {
   RefObject,
 } from '@devextreme-generator/declarations';
 import { createDefaultOptionRules } from '../../core/options/utils';
-import devices from '../../core/devices';
+import devices from '../../common/core/environment/devices';
 import { isMaterial, current } from '../../ui/themes';
-import { click } from '../../events/short';
+import { click } from '../../common/core/events/short';
 import { combineClasses } from '../utils/combine_classes';
 import { getImageSourceType } from '../../core/utils/icon';
 import { camelize } from '../../core/utils/inflector';
@@ -24,7 +24,7 @@ import { Widget } from './common/widget';
 import { BaseWidgetProps } from './common/base_props';
 // eslint-disable-next-line import/no-cycle
 import BaseComponent from '../component_wrapper/button';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 import { EffectReturn } from '../utils/effect_return';
 
 const stylingModes = ['outlined', 'text', 'contained'];

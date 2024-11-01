@@ -1,6 +1,9 @@
-import {
-    UserDefinedElement,
-} from '../element';
+export type {
+    /**
+     * @deprecated Use Template from /common instead
+     */
+    Template as template,
+} from '../../common';
 
 /**
  * @docid
@@ -28,8 +31,5 @@ export class Template {
 }
 
 /**
- * @docid
- * @section Common
- * @public
+ * @deprecated Use Template from /common instead
  */
-export type template = string | Function | UserDefinedElement;

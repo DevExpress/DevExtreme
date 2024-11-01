@@ -1,9 +1,3 @@
-class FileSystemError {
-    constructor(errorCode, fileSystemItem, errorText) {
-        this.errorCode = errorCode;
-        this.fileSystemItem = fileSystemItem;
-        this.errorText = errorText;
-    }
-}
+import { FileSystemError } from '../common/file_management';
 
 export default FileSystemError;

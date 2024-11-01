@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { ensureDefined } from '../../core/utils/common';
 import { getImageContainer } from '../../core/utils/icon';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 
 import Widget from '../widget/ui.widget';
 import ProgressBar from '../progress_bar';

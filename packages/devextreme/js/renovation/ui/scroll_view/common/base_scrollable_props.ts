@@ -6,7 +6,7 @@ import { ScrollableDirection, ScrollEventArgs, RefreshStrategy } from './types';
 import { touch } from '../../../../core/utils/support';
 import { getDefaultBounceEnabled, isDesktop } from '../utils/get_default_option_value';
 import { current, isMaterial } from '../../../../ui/themes';
-import messageLocalization from '../../../../localization/message';
+import messageLocalization from '../../../../common/core/localization/message';
 import { ScrollViewLoadPanelProps } from './scrollview_loadpanel_props';
 
 @ComponentBindings()

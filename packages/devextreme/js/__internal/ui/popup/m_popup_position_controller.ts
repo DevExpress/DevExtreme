@@ -1,4 +1,4 @@
-import { move } from '@js/animation/translator';
+import { move } from '@js/common/core/animation/translator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { originalViewPort } from '@js/core/utils/view_port';

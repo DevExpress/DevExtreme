@@ -1,3 +1,4 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
 // @ts-expect-error
 import { fromPromise } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -5,7 +6,6 @@ import { each } from '@js/core/utils/iterator';
 import { sessionStorage } from '@js/core/utils/storage';
 import { isDefined, isEmptyObject, isPlainObject } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
 import errors from '@js/ui/widget/ui.errors';
 import type { ExportController } from '@ts/grids/data_grid/export/m_export';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';

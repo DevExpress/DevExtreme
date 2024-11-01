@@ -2,7 +2,7 @@
 import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
 import { RefObject } from '@devextreme-generator/declarations';
-import devices from '../../../../../core/devices';
+import devices from '../../../../../common/core/environment/devices';
 import {
   clear as clearEventHandlers,
 } from '../../../../test_utils/events_mock';

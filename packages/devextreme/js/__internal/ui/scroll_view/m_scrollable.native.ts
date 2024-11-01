@@ -1,11 +1,11 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { isDxMouseWheelEvent } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { each } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
-import eventsEngine from '@js/events/core/events_engine';
-import { isDxMouseWheelEvent } from '@js/events/utils/index';
 
 import Scrollbar from './m_scrollbar';
 

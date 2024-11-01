@@ -1,6 +1,6 @@
 import {
     Device,
-} from '../devices';
+} from '../../common/core/environment';
 
 import {
     DefaultOptionsRule,

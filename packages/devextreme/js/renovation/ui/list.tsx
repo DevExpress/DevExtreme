@@ -2,11 +2,11 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Event, Template,
 } from '@devextreme-generator/declarations';
 /* eslint-disable import/named */
-import DataSource, { Options as DataSourceOptions } from '../../data/data_source';
-import Store from '../../data/abstract_store';
+import { DataSource, DataSourceOptions } from '../../common/data';
+import Store from '../../common/data/abstract_store';
 import LegacyList, { dxListItem } from '../../ui/list';
 import { DxElement } from '../../core/element';
-import { EventExtension, DxEvent } from '../../events/index';
+import { EventExtension, DxEvent } from '../../common/core/events';
 
 // import renderTemplate from '../utils/render_template';
 import { DomComponentWrapper } from './common/dom_component_wrapper';

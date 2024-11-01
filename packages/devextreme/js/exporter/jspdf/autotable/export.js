@@ -1,8 +1,8 @@
 import { isDate, isDefined, isObject, isFunction, isNumeric } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import dateLocalization from '../../../localization/date';
-import numberLocalization from '../../../localization/number';
-import messageLocalization from '../../../localization/message';
+import dateLocalization from '../../../common/core/localization/date';
+import numberLocalization from '../../../common/core/localization/number';
+import messageLocalization from '../../../common/core/localization/message';
 import { ExportLoadPanel } from '../../common/export_load_panel';
 import { hasWindow } from '../../../core/utils/window';
 

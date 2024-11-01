@@ -13,7 +13,7 @@ import {
 import { combineClasses } from '../../../../../utils/combine_classes';
 import {
   keyboard,
-} from '../../../../../../events/short';
+} from '../../../../../../common/core/events/short';
 
 import BaseTestComponent from './component_wrapper/base';
 

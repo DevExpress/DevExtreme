@@ -1,4 +1,4 @@
-import devices from '../../../../core/devices';
+import devices from '../../../../common/core/environment/devices';
 import { nativeScrolling } from '../../../../core/utils/support';
 import browser from '../../../../core/utils/browser';
 

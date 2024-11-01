@@ -1,3 +1,6 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import scrollEvents from '@js/common/core/events/gesture/emitter.gesture.scroll';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import DOMComponent from '@js/core/dom_component';
@@ -13,9 +16,6 @@ import {
 import { nativeScrolling } from '@js/core/utils/support';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
-import scrollEvents from '@js/events/gesture/emitter.gesture.scroll';
-import { addNamespace } from '@js/events/utils/index';
 import { getElementLocationInternal } from '@js/renovation/ui/scroll_view/utils/get_element_location_internal';
 
 import { deviceDependentOptions } from './m_scrollable.device';

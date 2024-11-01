@@ -5,7 +5,7 @@ import DOMComponent, {
 
 import {
     EventInfo,
-} from '../../events/index';
+} from '../../common/core/events';
 
 /**
  * @namespace DevExpress.ui

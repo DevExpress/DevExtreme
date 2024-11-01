@@ -1,11 +1,11 @@
+import { DataSource } from '@js/common/data/data_source/data_source';
+import { normalizeLoadResult } from '@js/common/data/data_source/utils';
 import Class from '@js/core/class';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isString } from '@js/core/utils/type';
-import { DataSource } from '@js/data/data_source/data_source';
-import { normalizeLoadResult } from '@js/data/data_source/utils';
 
 import pivotGridUtils, {
   capitalizeFirstLetter,

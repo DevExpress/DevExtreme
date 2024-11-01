@@ -1,5 +1,5 @@
 import domAdapter from './dom_adapter';
-import eventsEngine from '../events/core/events_engine';
+import eventsEngine from '../common/core/events/core/events_engine';
 import MemorizedCallbacks from './memorized_callbacks';
 
 const dataMap = new WeakMap();

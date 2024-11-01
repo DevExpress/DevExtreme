@@ -1,11 +1,11 @@
 import $ from '../core/renderer';
-import eventsEngine from '../events/core/events_engine';
+import eventsEngine from '../common/core/events/core/events_engine';
 import devices from '../core/devices';
 import { extend } from '../core/utils/extend';
 import Editor from './editor/editor';
 import registerComponent from '../core/component_registrator';
-import { addNamespace } from '../events/utils/index';
-import { name as clickEventName } from '../events/click';
+import { addNamespace } from '../common/core/events/utils/index';
+import { name as clickEventName } from '../common/core/events/click';
 
 // STYLE checkbox
 

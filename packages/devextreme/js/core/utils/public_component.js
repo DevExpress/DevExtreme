@@ -1,7 +1,7 @@
 import { data as elementData } from '../../core/element_data';
-import eventsEngine from '../../events/core/events_engine';
+import eventsEngine from '../../common/core/events/core/events_engine';
 import { isDefined } from './type';
-import { removeEvent } from '../../events/remove';
+import { removeEvent } from '../../common/core/events/remove';
 
 const COMPONENT_NAMES_DATA_KEY = 'dxComponents';
 const ANONYMOUS_COMPONENT_DATA_KEY = 'dxPrivateComponent';

@@ -1,9 +1,9 @@
 /* eslint-disable max-classes-per-file */
+import { query } from '@js/common/data';
 import { wrapToArray } from '@js/core/utils/array';
 import dateUtils from '@js/core/utils/date';
 import { each, map } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import query from '@js/data/query';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import {
   getAppointmentTakesAllDay, getDatesWithoutTime, hasResourceValue, isDateAndTimeView,

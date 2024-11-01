@@ -7,9 +7,9 @@ import { EditorProps } from './common/editor';
 import { EditorStateProps } from './common/editor_state_props';
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 // eslint-disable-next-line import/named
-import DataSource, { Options as DataSourceOptions } from '../../../data/data_source';
-import Store from '../../../data/abstract_store';
-import devices from '../../../core/devices';
+import { DataSource, DataSourceOptions } from '../../../common/data';
+import Store from '../../../common/data/abstract_store';
+import devices from '../../../common/core/environment/devices';
 
 export const viewFunction = ({
   componentProps,

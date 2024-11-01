@@ -1,7 +1,7 @@
-import { locate, move } from '@js/animation/translator';
+import { locate, move } from '@js/common/core/animation/translator';
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
-import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
 
 import { createAppointmentAdapter } from './m_appointment_adapter';

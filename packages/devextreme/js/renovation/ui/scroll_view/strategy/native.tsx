@@ -9,7 +9,7 @@ import {
   InternalState,
   ForwardRef,
 } from '@devextreme-generator/declarations';
-import '../../../../events/gesture/emitter.gesture.scroll';
+import '../../../../common/core/events/gesture/emitter.gesture.scroll';
 import {
   subscribeToScrollEvent,
   subscribeToScrollInitEvent,
@@ -29,7 +29,7 @@ import {
 } from '../utils/get_element_style';
 
 import { DisposeEffectReturn, EffectReturn } from '../../../utils/effect_return';
-import devices from '../../../../core/devices';
+import devices from '../../../../common/core/environment/devices';
 import { isDefined } from '../../../../core/utils/type';
 
 import { TopPocket } from '../internal/pocket/top';
@@ -41,7 +41,7 @@ import {
   DxMouseWheelEvent,
 } from '../common/types';
 
-import { isDxMouseWheelEvent } from '../../../../events/utils/index';
+import { isDxMouseWheelEvent } from '../../../../common/core/events/utils/index';
 
 import {
   ScrollDirection,

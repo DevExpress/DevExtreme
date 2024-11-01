@@ -16,8 +16,8 @@ import {
   start,
   move,
   end,
-} from '../../../events/drag';
-import eventsEngine from '../../../events/core/events_engine';
+} from '../../../common/core/events/drag';
+import eventsEngine from '../../../common/core/events/core/events_engine';
 import { combineClasses } from '../../utils/combine_classes';
 
 export const viewFunction = ({

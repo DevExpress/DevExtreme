@@ -9,7 +9,7 @@ import {
   Fragment,
   Method,
 } from '@devextreme-generator/declarations';
-import devices from '../../../../core/devices';
+import devices from '../../../../common/core/environment/devices';
 import { Editor, EditorProps } from '../common/editor';
 import BaseComponent from '../../../component_wrapper/editors/check_box';
 import { combineClasses } from '../../../utils/combine_classes';

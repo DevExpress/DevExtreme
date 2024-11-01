@@ -1,7 +1,7 @@
+import { query as dataQuery } from '@js/common/data';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isString } from '@js/core/utils/type';
-import dataQuery from '@js/data/query';
 import errors from '@js/ui/widget/ui.errors';
 
 import SelectionStrategy from './m_selection.strategy';

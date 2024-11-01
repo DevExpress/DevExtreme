@@ -6,7 +6,7 @@ import { EventCallback } from '../common/event_callback';
 import { EditorProps } from './common/editor';
 import { EditorStateProps } from './common/editor_state_props';
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
-import messageLocalization from '../../../localization/message';
+import messageLocalization from '../../../common/core/localization/message';
 
 export const viewFunction = ({
   componentProps,

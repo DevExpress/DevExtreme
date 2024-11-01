@@ -6,8 +6,7 @@ import {
 import LegacyOverlay from '../../../ui/overlay/ui.overlay';
 import { UserDefinedElement, DxElement } from '../../../core/element';
 import { template } from '../../../core/templates/template';
-import { AnimationConfig } from '../../../animation/fx';
-import { PositionConfig } from '../../../animation/position';
+import { AnimationConfig, PositionConfig } from '../../../common/core/animation';
 /* eslint-enable import/named */
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { BaseWidgetProps } from '../common/base_props';

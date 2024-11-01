@@ -3,7 +3,7 @@
 import {
   createRef, RefObject, VNode, Component,
 } from 'inferno';
-import KeyboardProcessor from '../../../events/core/keyboard_processor';
+import KeyboardProcessor from '../../../common/core/events/core/keyboard_processor';
 import renderer from '../../../core/inferno_renderer';
 
 // eslint-disable-next-line import/named
@@ -20,9 +20,9 @@ import { TemplateModel, TemplateWrapper, buildTemplateArgs } from './template_wr
 import { updatePropsImmutable } from '../utils/update_props_immutable';
 import type { Option, TemplateComponent } from './types';
 
-import '../../../events/click';
-import '../../../events/core/emitter.feedback';
-import '../../../events/hover';
+import '../../../common/core/events/click';
+import '../../../common/core/events/core/emitter.feedback';
+import '../../../common/core/events/hover';
 
 const setDefaultOptionValue = (
   options: Record<string, unknown>,

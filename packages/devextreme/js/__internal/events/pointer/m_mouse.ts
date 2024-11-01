@@ -1,6 +1,6 @@
+import BaseStrategy from '@js/common/core/events/pointer/base';
+import Observer from '@js/common/core/events/pointer/observer';
 import { extend } from '@js/core/utils/extend';
-import BaseStrategy from '@js/events/pointer/base';
-import Observer from '@js/events/pointer/observer';
 
 /* eslint-disable spellcheck/spell-checker */
 const eventMap = {

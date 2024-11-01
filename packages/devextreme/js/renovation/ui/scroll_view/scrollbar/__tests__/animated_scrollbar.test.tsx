@@ -18,7 +18,7 @@ import {
   defaultEvent,
 } from '../../../../test_utils/events_mock';
 import { AnimatedScrollbarProps } from '../../common/animated_scrollbar_props';
-import * as AnimationFrameModule from '../../../../../animation/frame';
+import * as AnimationFrameModule from '../../../../../common/core/animation/frame';
 
 interface Mock extends jest.Mock {}
 
@@ -59,7 +59,7 @@ describe('AnimatedScrollbar', () => {
 
       viewModel[methodInfo.name](...methodInfo.calledWith);
 
-      expect(handlerMock).toBeCalledTimes(1);
+      expect(handlerMock).toHaveBeenCalledTimes(1);
       expect(handlerMock).toHaveBeenCalledWith(...methodInfo.calledWith);
     });
   });
@@ -170,7 +170,7 @@ describe('Methods', () => {
         },
       );
 
-      expect(onScrollHandler).toBeCalledTimes(expected.needFireScroll ? 1 : 0);
+      expect(onScrollHandler).toHaveBeenCalledTimes(expected.needFireScroll ? 1 : 0);
     });
   });
 });
@@ -228,18 +228,18 @@ describe('Handlers', () => {
                 expectedCrossThumbScrolling = !expectedThumbScrolling && crossThumbScrolling;
 
                 if (isScrollbarClicked) {
-                  expect(viewModel.moveToMouseLocation).toBeCalledTimes(1);
+                  expect(viewModel.moveToMouseLocation).toHaveBeenCalledTimes(1);
                   expect(viewModel.moveToMouseLocation).toHaveBeenCalledWith(event, 30);
                 } else {
-                  expect(viewModel.moveToMouseLocation).toBeCalledTimes(0);
+                  expect(viewModel.moveToMouseLocation).toHaveBeenCalledTimes(0);
                 }
 
                 if (expectedThumbScrolling) {
-                  expect(viewModel.setActiveState).toBeCalledTimes(1);
+                  expect(viewModel.setActiveState).toHaveBeenCalledTimes(1);
                 }
               } else {
-                expect(viewModel.setActiveState).toBeCalledTimes(0);
-                expect(viewModel.moveToMouseLocation).toBeCalledTimes(0);
+                expect(viewModel.setActiveState).toHaveBeenCalledTimes(0);
+                expect(viewModel.moveToMouseLocation).toHaveBeenCalledTimes(0);
               }
 
               expect(viewModel.setActiveState)
@@ -309,9 +309,9 @@ describe('Handlers', () => {
                   }
 
                   if (crossThumbScrolling) {
-                    expect(viewModel.moveTo).toBeCalledTimes(0);
+                    expect(viewModel.moveTo).toHaveBeenCalledTimes(0);
                   } else {
-                    expect(viewModel.moveTo).toBeCalledTimes(1);
+                    expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
                     expect(viewModel.moveTo).toHaveBeenCalledWith(resultDelta);
                   }
                 });
@@ -341,7 +341,7 @@ describe('Handlers', () => {
     it('scrollToNextStep()', () => {
       try {
         const cancelAnimationFrameHandler = jest.fn();
-        const requestAnimationFrameHandler = jest.fn(() => 14);
+        const requestAnimationFrameHandler = jest.fn(() => 14 as unknown as NodeJS.Timeout);
 
         jest.spyOn(AnimationFrameModule, 'cancelAnimationFrame').mockImplementation(cancelAnimationFrameHandler);
         jest.spyOn(AnimationFrameModule, 'requestAnimationFrame').mockImplementation(requestAnimationFrameHandler);
@@ -361,16 +361,16 @@ describe('Handlers', () => {
 
         viewModel.scrollToNextStep();
 
-        expect(cancelAnimationFrameHandler).toBeCalledTimes(1);
-        expect(cancelAnimationFrameHandler).toBeCalledWith(13);
+        expect(cancelAnimationFrameHandler).toHaveBeenCalledTimes(1);
+        expect(cancelAnimationFrameHandler).toHaveBeenCalledWith(13);
 
-        expect(requestAnimationFrameHandler).toBeCalledTimes(1);
+        expect(requestAnimationFrameHandler).toHaveBeenCalledTimes(1);
         const requestHandler = requestAnimationFrameHandler.mock.calls[0];
         (requestHandler as any)[0]();
 
         expect(viewModel.stepAnimationFrame).toEqual(14);
-        expect(viewModel.moveTo).toBeCalledTimes(1);
-        expect(viewModel.moveTo).toBeCalledWith(-107);
+        expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
+        expect(viewModel.moveTo).toHaveBeenCalledWith(-107);
         // expect(viewModel.newScrollLocation).toEqual(-107);
         expect(viewModel.velocity).toEqual(-6.44);
       } finally {
@@ -508,10 +508,10 @@ describe('Effects', () => {
 
               if (pendingBounceAnimator || pendingRefreshing || pendingLoading) {
                 if (lockHandler) {
-                  expect(lockHandler).toBeCalled();
+                  expect(lockHandler).toHaveBeenCalled();
                 }
               } else if (unLockHandler) {
-                expect(unLockHandler).toBeCalled();
+                expect(unLockHandler).toHaveBeenCalled();
               }
             });
           });
@@ -539,9 +539,9 @@ describe('Effects', () => {
 
     viewModel.updateLockedState();
 
-    expect(viewModel.stop).toBeCalledTimes(0);
-    expect(viewModel.suppressVelocityBeforeBoundary).toBeCalledTimes(0);
-    expect(viewModel.scrollToNextStep).toBeCalledTimes(0);
+    expect(viewModel.stop).toHaveBeenCalledTimes(0);
+    expect(viewModel.suppressVelocityBeforeBoundary).toHaveBeenCalledTimes(0);
+    expect(viewModel.scrollToNextStep).toHaveBeenCalledTimes(0);
   });
 
   each([0, 10, -10]).describe('distanceToNearestBoundary: %o', (distanceToNearestBoundary) => {
@@ -566,13 +566,13 @@ describe('Effects', () => {
       viewModel.performAnimation();
 
       if (distanceToNearestBoundary === 0) {
-        expect(viewModel.stop).toBeCalledTimes(1);
-        expect(viewModel.suppressVelocityBeforeBoundary).toBeCalledTimes(0);
-        expect(viewModel.scrollToNextStep).toBeCalledTimes(0);
+        expect(viewModel.stop).toHaveBeenCalledTimes(1);
+        expect(viewModel.suppressVelocityBeforeBoundary).toHaveBeenCalledTimes(0);
+        expect(viewModel.scrollToNextStep).toHaveBeenCalledTimes(0);
       } else {
-        expect(viewModel.stop).toBeCalledTimes(0);
-        expect(viewModel.suppressVelocityBeforeBoundary).toBeCalledTimes(1);
-        expect(viewModel.scrollToNextStep).toBeCalledTimes(1);
+        expect(viewModel.stop).toHaveBeenCalledTimes(0);
+        expect(viewModel.suppressVelocityBeforeBoundary).toHaveBeenCalledTimes(1);
+        expect(viewModel.scrollToNextStep).toHaveBeenCalledTimes(1);
       }
     });
   });
@@ -605,29 +605,29 @@ describe('Effects', () => {
 
             if (canceled) {
               expect(viewModel.needRiseEnd).toEqual(false);
-              expect(viewModel.stop).toBeCalledTimes(1);
-              expect(viewModel.suppressVelocityBeforeBoundary).toBeCalledTimes(0);
-              expect(viewModel.scrollToNextStep).toBeCalledTimes(0);
+              expect(viewModel.stop).toHaveBeenCalledTimes(1);
+              expect(viewModel.suppressVelocityBeforeBoundary).toHaveBeenCalledTimes(0);
+              expect(viewModel.scrollToNextStep).toHaveBeenCalledTimes(0);
               return;
             }
 
             if (finished || (!bounceEnabled && distanceToNearestBoundary === 0)) {
               expect(viewModel.needRiseEnd).toEqual(true);
-              expect(viewModel.stop).toBeCalledTimes(1);
-              expect(viewModel.suppressVelocityBeforeBoundary).toBeCalledTimes(0);
-              expect(viewModel.scrollToNextStep).toBeCalledTimes(0);
+              expect(viewModel.stop).toHaveBeenCalledTimes(1);
+              expect(viewModel.suppressVelocityBeforeBoundary).toHaveBeenCalledTimes(0);
+              expect(viewModel.scrollToNextStep).toHaveBeenCalledTimes(0);
               return;
             }
 
             if (!bounceEnabled) {
-              expect(viewModel.suppressVelocityBeforeBoundary).toBeCalledTimes(1);
+              expect(viewModel.suppressVelocityBeforeBoundary).toHaveBeenCalledTimes(1);
             } else {
-              expect(viewModel.suppressVelocityBeforeBoundary).toBeCalledTimes(0);
+              expect(viewModel.suppressVelocityBeforeBoundary).toHaveBeenCalledTimes(0);
             }
 
             expect(viewModel.needRiseEnd).toEqual(true);
-            expect(viewModel.stop).toBeCalledTimes(0);
-            expect(viewModel.scrollToNextStep).toBeCalledTimes(1);
+            expect(viewModel.stop).toHaveBeenCalledTimes(0);
+            expect(viewModel.scrollToNextStep).toHaveBeenCalledTimes(1);
           });
         });
       });
@@ -701,7 +701,7 @@ describe('Effects', () => {
                   expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
                   expect(viewModel.moveTo).toHaveBeenCalledWith(newScrollLocation);
                 } else {
-                  expect(viewModel.moveTo).not.toBeCalled();
+                  expect(viewModel.moveTo).not.toHaveBeenCalled();
                 }
                 expect(viewModel.rightScrollLocation).toEqual(expectedRightScrollLocation);
               });
