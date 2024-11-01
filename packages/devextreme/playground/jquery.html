@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -41,6 +42,13 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+    <style>
+        .list-container {
+            min-height: 440px;
+            width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
 <body class="dx-surface">
     <div role="main">
@@ -49,14 +57,95 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div class="dx-viewport demo-container">
+            <div class="list-container">
+                <div id="simpleList"></div>
+            </div>
+        </div>
+
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+            $(() => {
+                $('#simpleList').dxList({
+                    dataSource: employees,
+                    height: '100%',
+                    grouped: true,
+                    collapsibleGroups: true,
+                    groupTemplate(data) {
+                        return $(`<div>Assigned: ${data.key}</div>`);
+                    },
+                    // onContentReady: ({ element }) => {
+                    //     const $listItems = $(element).find('.dx-list-items');
+
+                    //     $listItems.attr({
+                    //         role: null,
+                    //         'aria-label': null,
+                    //     });
+
+                    //     const $listGroup = $(element).find('.dx-list-group');
+
+                    //     $listGroup.attr({
+                    //         role: null,
+                    //         'aria-labelledby': null,
+                    //     });
+
+                    //     const $listGroupHeader = $(element).find('.dx-list-group-header');
+
+                    //     $listGroupHeader.attr({
+                    //         id: 'uniq-header-id',
+                    //         role: 'button',
+                    //         'aria-expanded': true,
+                    //         'aria-controls': 'uniq-listbox-id',
+                    //     });
+
+                    //     const $listGroupBody = $(element).find('.dx-list-group-body');
+
+                    //     $listGroupBody.attr({
+                    //         id: 'uniq-listbox-id',
+                    //         role: 'listbox',
+                    //         'aria-labelledby': 'uniq-header-id',
+                    //     });
+                    // },
                 });
             });
+
+
+            const employees = [
+                {
+                    key: 'Mr. John Heart',
+                    items: [
+                        'Choose between PPO and HMO Health Plan',
+                        'Google AdWords Strategy',
+                        'New Brochures',
+                        'Update NDA Agreement',
+                        'Review Product Recall Report by Engineering Team',
+                    ],
+                },
+                  {
+                  key: 'Mrs. Olivia Peyton',
+                  items: ['Update Personnel Files', 'Review Health Insurance Options Under the Affordable Care Act', 'Non-Compete Agreements'],
+                }, {
+                  key: 'Mr. Robert Reagan',
+                  items: ['Deliver R&D Plans for 2013', 'Decide on Mobile Devices to Use in the Field', 'Try New Touch-Enabled WinForms Apps', 'Approval on Converting to New HDMI Specification'],
+                }, {
+                  key: 'Ms. Greta Sims',
+                  items: ['Approve Hiring of John Jeffers', 'Update Employee Files with New NDA', 'Give Final Approval for Refunds'],
+                }, {
+                  key: 'Mr. Brett Wade',
+                  items: ['Prepare 3013 Marketing Plan', 'Rollout of New Website and Marketing Brochures', 'Review 2012 Sales Report and Approve 2013 Plans', 'Review Site Up-Time Report'],
+                }, {
+                  key: 'Mrs. Sandra Johnson',
+                  items: ['Provide New Health Insurance Docs', 'Review HR Budget Company Wide', 'Final Budget Review'],
+                }, {
+                  key: 'Mr. Kevin Carter',
+                  items: ['Sign Updated NDA', 'Review Overtime Report', 'Upgrade Server Hardware', 'Upgrade Personal Computers'],
+                }, {
+                  key: 'Ms. Cynthia Stanwick',
+                  items: ['Prepare 2013 Financial', 'Update Revenue Projections', 'Submit D&B Number to ISP for Credit Approval'],
+                }, {
+                  key: 'Dr. Kent Samuelson',
+                  items: ['Update Sales Strategy Documents', 'Review Revenue Projections', 'Refund Request Template'],
+                }
+            ];
         </script>
     </div>
 </body>

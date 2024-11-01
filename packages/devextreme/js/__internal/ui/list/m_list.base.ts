@@ -258,6 +258,22 @@ export const ListBase = CollectionWidget.inherit({
     return LIST_ITEM_CLASS;
   },
 
+  _getExtendedSelector(): string {
+    const selector = `.${this._itemClass()}, .${LIST_GROUP_HEADER_CLASS}`;
+
+    return selector;
+  },
+
+  _itemSelector(): string {
+    // const { collapsibleGroups } = this.option();
+
+    // if (collapsibleGroups) {
+    //   return this._getExtendedSelector();
+    // }
+
+    return this.callBase();
+  },
+
   _itemDataKey() {
     return LIST_ITEM_DATA_KEY;
   },
@@ -286,6 +302,11 @@ export const ListBase = CollectionWidget.inherit({
   },
 
   _refreshItemElements() {
+    // const $itemsContainer = this._getItemsContainer();
+    // const $items = $itemsContainer.find(this._itemSelector());
+
+    // this._itemElementsCache = $items;
+
     if (!this.option('grouped')) {
       this._itemElementsCache = this._getItemsContainer().children(this._itemSelector());
     } else {
