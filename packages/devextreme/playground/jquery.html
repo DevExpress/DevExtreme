@@ -49,10 +49,10 @@
           height: auto;
         }
 
-        .dx-list-group-header.dx-state-focused {
+        /* .dx-list-group-header.dx-state-focused {
           background-color: #337ab7;
           color: #fff;
-        }
+        } */
     </style>
 </head>
 <body class="dx-surface">
@@ -70,14 +70,24 @@
 
         <script>
             $(() => {
-                $('#simpleList').dxList({
-                    dataSource: employees,
+                const element = $('#simpleList').dxList({
+                    // dataSource: employees,
+                    items: [
+                      {
+                          key: 'a',
+                          items: ['11', '12'],
+                      },
+                      {
+                          key: 'b',
+                          items: ['21', '22'],
+                      },
+                    ],
                     height: '100%',
                     grouped: true,
                     collapsibleGroups: true,
-                    groupTemplate(data) {
-                      return $(`<div>Assigned: ${data.key}</div>`);
-                    },
+                    // groupTemplate(data) {
+                    //   return $(`<div>Assigned: ${data.key}</div>`);
+                    // },
                     // onContentReady: ({ element }) => {
                     //     const $listItems = $(element).find('.dx-list-items');
 
