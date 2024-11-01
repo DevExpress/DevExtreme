@@ -2,7 +2,7 @@ export {
   DisposingEvent,
   InitializedEvent,
   OptionChangedEvent,
-  MessageSendEvent,
+  MessageEnteredEvent,
   TypingStartEvent,
   TypingEndEvent,
   User,

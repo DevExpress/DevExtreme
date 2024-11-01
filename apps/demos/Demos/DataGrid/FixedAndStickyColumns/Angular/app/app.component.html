@@ -1,0 +1,34 @@
+<dx-data-grid
+  id="gridContainer"
+  [dataSource]="employees"
+  keyExpr="ID"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+>
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxi-column
+    caption="Employee"
+    [width]="230"
+    [fixed]="true"
+    [calculateCellValue]="calculateCellValue"
+  ></dxi-column>
+  <dxi-column dataField="BirthDate" dataType="date"></dxi-column>
+  <dxi-column dataField="HireDate" dataType="date"></dxi-column>
+  <dxi-column dataField="Position" alignment="right"></dxi-column>
+  <dxi-column
+    dataField="Address"
+    [width]="230"
+    [fixed]="true"
+    fixedPosition="sticky"
+  ></dxi-column>
+  <dxi-column dataField="City"></dxi-column>
+  <dxi-column
+    dataField="State"
+    [fixed]="true"
+    fixedPosition="right"
+  ></dxi-column>
+  <dxi-column dataField="HomePhone"></dxi-column>
+  <dxi-column dataField="MobilePhone"></dxi-column>
+  <dxi-column dataField="Skype"></dxi-column>
+  <dxi-column dataField="Email"></dxi-column>
+</dx-data-grid>

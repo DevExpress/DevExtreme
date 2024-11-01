@@ -86,7 +86,7 @@ export const Overview: Story = {
     }) => {
         const [messages, setMessages] = useState(items);
         
-        const onMessageSend = useCallback(({ message }) => {
+        const onMessageEntered = useCallback(({ message }) => {
             const updatedMessages = [...messages, message];
 
             setMessages(updatedMessages);
@@ -106,7 +106,7 @@ export const Overview: Story = {
                     rtlEnabled={rtlEnabled}
                     user={user}
                     errors={errors}
-                    onMessageSend={onMessageSend}
+                    onMessageEntered={onMessageEntered}
                     visible={visible}
                     hint={hint}
                     activeStateEnabled={activeStateEnabled}
@@ -155,7 +155,7 @@ export const EmptyView: Story = {
     }) => {
         const [messages, setMessages] = useState(items);
         
-        const onMessageSend = useCallback(({ message }) => {
+        const onMessageEntered = useCallback(({ message }) => {
             const updatedMessages = [...messages, message];
 
             setMessages(updatedMessages);
@@ -175,7 +175,7 @@ export const EmptyView: Story = {
                     disabled={disabled}
                     rtlEnabled={rtlEnabled}
                     user={user}
-                    onMessageSend={onMessageSend}
+                    onMessageEntered={onMessageEntered}
                     visible={visible}
                     hint={hint}
                     activeStateEnabled={activeStateEnabled}
@@ -251,7 +251,7 @@ export const DataLoading: Story = {
             paginate: false,
         }), [reloadOnChange]);
         
-        const onMessageSend = useCallback((e) => {
+        const onMessageEntered = useCallback((e) => {
             if(!reloadOnChange) {
                 e.component.getDataSource().store().push([{ type: 'insert', data: e.message }]);
             }
@@ -267,7 +267,7 @@ export const DataLoading: Story = {
                     disabled={disabled}
                     rtlEnabled={rtlEnabled}
                     user={user}
-                    onMessageSend={onMessageSend}
+                    onMessageEntered={onMessageEntered}
                     visible={visible}
                     hint={hint}
                     activeStateEnabled={activeStateEnabled}
@@ -317,7 +317,7 @@ export const PopupIntegration: Story = {
     }) => {
         const [messages, setMessages] = useState(items);
         
-        const onMessageSend = useCallback(({ message }) => {
+        const onMessageEntered = useCallback(({ message }) => {
             setMessages((prevMessages) => [...prevMessages, message]);
         }, []);
         
@@ -345,7 +345,7 @@ export const PopupIntegration: Story = {
                     disabled={disabled}
                     rtlEnabled={rtlEnabled}
                     user={user}
-                    onMessageSend={onMessageSend}
+                    onMessageEntered={onMessageEntered}
                     visible={visible}
                     hint={hint}
                     activeStateEnabled={activeStateEnabled}

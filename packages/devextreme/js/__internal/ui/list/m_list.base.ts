@@ -18,7 +18,6 @@ import eventsEngine from '@js/events/core/events_engine';
 import { end as swipeEventEnd } from '@js/events/swipe';
 import { addNamespace } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
-import { getElementMargin } from '@js/renovation/ui/scroll_view/utils/get_element_style';
 import Button from '@js/ui/button';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
 import ScrollView from '@js/ui/scroll_view';
@@ -26,6 +25,7 @@ import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
 import { deviceDependentOptions } from '@ts/ui/scroll_view/m_scrollable.device';
+import { getElementMargin } from '@ts/ui/scroll_view/utils/get_element_style';
 import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
 
 import ListItem from './m_item';

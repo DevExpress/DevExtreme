@@ -2497,7 +2497,7 @@ QUnit.module('Headers reordering and resizing with fixed columns', {
         this.rowsView.render(testElement);
 
         // act
-        this.rowsView.setRowsOpacity(0, 0.5);
+        this.rowsView.toggleDraggableColumnClass(0, true);
 
         // assert
         const $cells = $('.dx-datagrid-table-fixed').eq(1).find('td:first-child');

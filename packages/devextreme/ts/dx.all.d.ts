@@ -9320,7 +9320,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonOptions.type]
      */
-    type?: DevExpress.common.ButtonType;
+    type?: DevExpress.common.ButtonType | string;
     /**
      * [descr:dxButtonOptions.useSubmitBehavior]
      */
@@ -9510,14 +9510,14 @@ declare module DevExpress.ui {
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxChat>;
     /**
-     * [descr:_ui_chat_MessageSendEvent]
+     * [descr:_ui_chat_MessageEnteredEvent]
      */
-    export type MessageSendEvent = DevExpress.events.NativeEventInfo<
+    export type MessageEnteredEvent = DevExpress.events.NativeEventInfo<
       dxChat,
       KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
     > & {
       /**
-       * [descr:_ui_chat_MessageSendEvent.message]
+       * [descr:_ui_chat_MessageEnteredEvent.message]
        */
       readonly message?: Message;
     };
@@ -9607,9 +9607,9 @@ declare module DevExpress.ui {
      */
     showMessageTimestamp?: boolean;
     /**
-     * [descr:dxChatOptions.onMessageSend]
+     * [descr:dxChatOptions.onMessageEntered]
      */
-    onMessageSend?: (e: DevExpress.ui.dxChat.MessageSendEvent) => void;
+    onMessageEntered?: (e: DevExpress.ui.dxChat.MessageEnteredEvent) => void;
     /**
      * [descr:dxChatOptions.onTypingStart]
      */

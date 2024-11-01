@@ -395,28 +395,29 @@ QUnit.module('Chat', () => {
         }
     }, () => {
         QUnit.test('MessageBubble should have messageTemplateData with correct fields', function(assert) {
+            const message = {
+                text: 'text',
+                author: userFirst,
+            };
+
             this.reinit({
-                items: [{
-                    text: 'text',
-                    author: userFirst,
-                }],
+                items: [message],
             });
 
             const messageBubble = this.getMessageBubbles();
             const messageTemplateData = messageBubble.option('templateData');
 
             assert.strictEqual(messageTemplateData.component, this.instance, 'messageTemplateData includes chat instance');
-            assert.strictEqual(messageTemplateData.isLast, true, 'messageTemplateData includes isLast field');
-            assert.deepEqual(messageTemplateData.author, userFirst, 'messageTemplateData includes author field');
+            assert.deepEqual(messageTemplateData.message, message, 'messageTemplateData includes message field');
         });
     });
 
     QUnit.module('Events', () => {
-        QUnit.module('onMessageSend', moduleConfig, () => {
+        QUnit.module('onMessageEntered', moduleConfig, () => {
             QUnit.test('should be called when the send button was clicked', function(assert) {
-                const onMessageSend = sinon.spy();
+                const onMessageEntered = sinon.spy();
 
-                this.reinit({ onMessageSend });
+                this.reinit({ onMessageEntered });
 
                 keyboardMock(this.$input)
                     .focus()
@@ -424,7 +425,7 @@ QUnit.module('Chat', () => {
 
                 this.$sendButton.trigger('dxclick');
 
-                assert.strictEqual(onMessageSend.callCount, 1);
+                assert.strictEqual(onMessageEntered.callCount, 1);
             });
 
             QUnit.test('should get correct arguments after clicking the send button', function(assert) {
@@ -433,7 +434,7 @@ QUnit.module('Chat', () => {
                 const text = 'new text message';
 
                 this.instance.option({
-                    onMessageSend: ({ component, element, event, message }) => {
+                    onMessageEntered: ({ component, element, event, message }) => {
                         assert.strictEqual(component, this.instance, 'component field is correct');
                         assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
                         assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
@@ -449,9 +450,9 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.test('should be possible to change at runtime', function(assert) {
-                const onMessageSend = sinon.spy();
+                const onMessageEntered = sinon.spy();
 
-                this.instance.option({ onMessageSend });
+                this.instance.option({ onMessageEntered });
 
                 const text = 'new text message';
 
@@ -461,7 +462,7 @@ QUnit.module('Chat', () => {
 
                 this.$sendButton.trigger('dxclick');
 
-                assert.strictEqual(onMessageSend.callCount, 1);
+                assert.strictEqual(onMessageEntered.callCount, 1);
             });
 
             QUnit.test('new message should not be created after clicking the send button', function(assert) {
@@ -486,7 +487,7 @@ QUnit.module('Chat', () => {
                 const text = 'new text message';
 
                 this.instance.option({
-                    onMessageSend: ({ message }) => {
+                    onMessageEntered: ({ message }) => {
                         const { author, text: messageText } = message;
 
                         assert.strictEqual(author, this.instance.option('user'), 'author field is correct');

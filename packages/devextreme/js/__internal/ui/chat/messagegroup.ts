@@ -33,7 +33,6 @@ export interface Properties extends WidgetOptions<MessageGroup> {
   // eslint-disable-next-line
   messageTemplate: any;
   messageTemplateData: { component?: Chat };
-  isLast: boolean;
   messageTimestampFormat?: Format;
 }
 
@@ -54,7 +53,6 @@ class MessageGroup extends Widget<Properties> {
       showMessageTimestamp: true,
       messageTemplate: null,
       messageTemplateData: {},
-      isLast: false,
       messageTimestampFormat: 'shorttime',
     };
   }
@@ -92,8 +90,6 @@ class MessageGroup extends Widget<Properties> {
       this._renderAvatar();
     }
 
-    this._lastBubble = null;
-
     this._renderMessageGroupInformation(items?.[0]);
     this._renderMessageBubbles(items);
   }
@@ -114,33 +110,27 @@ class MessageGroup extends Widget<Properties> {
     });
   }
 
-  _renderMessageBubble(message: Message, isLast = false): void {
+  _renderMessageBubble(message: Message): void {
     const $bubble = $('<div>');
     const { messageTemplate, messageTemplateData } = this.option();
 
-    const messageBubble = this._createComponent($bubble, MessageBubble, {
+    this._createComponent($bubble, MessageBubble, {
       text: message.text,
       template: messageTemplate,
       templateData: {
         ...messageTemplateData,
-        author: message.author,
-        isLast,
+        message,
       },
     });
-
-    this._lastBubble = messageBubble;
 
     this._$messageBubbleContainer.append($bubble);
   }
 
   _renderMessageBubbles(items: Message[]): void {
     this._$messageBubbleContainer = $('<div>').addClass(CHAT_MESSAGEGROUP_CONTENT_CLASS);
-    const { isLast } = this.option();
 
-    items.forEach((message, index) => {
-      const isLastMessage = isLast && index === items.length - 1;
-
-      this._renderMessageBubble(message, isLastMessage);
+    items.forEach((message) => {
+      this._renderMessageBubble(message);
     });
 
     this._$messageBubbleContainer.appendTo(this.element());
@@ -177,10 +167,6 @@ class MessageGroup extends Widget<Properties> {
     }
 
     $information.appendTo(this.element());
-  }
-
-  updateIsLastOptionOfLastMessage(isLast: boolean): void {
-    this._lastBubble?.option('templateData.isLast', isLast);
   }
 
   _shouldAddTimeValue(timestamp: Date | string | number | undefined): boolean {
@@ -229,7 +215,7 @@ class MessageGroup extends Widget<Properties> {
 
     this._setOptionWithoutOptionChange('items', newItems);
 
-    this._renderMessageBubble(message, true);
+    this._renderMessageBubble(message);
   }
 }
 

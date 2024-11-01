@@ -9,7 +9,7 @@ import type { Format } from '@js/localization';
 import messageLocalization from '@js/localization/message';
 import type {
   Message,
-  MessageSendEvent,
+  MessageEnteredEvent,
   Properties as ChatProperties,
   TypingEndEvent,
   TypingStartEvent,
@@ -21,7 +21,7 @@ import { applyBatch } from '@ts/data/m_array_utils';
 import ErrorList from './errorlist';
 import ChatHeader from './header';
 import type {
-  MessageSendEvent as MessageBoxMessageSendEvent,
+  MessageEnteredEvent as MessageBoxMessageEnteredEvent,
   Properties as MessageBoxProperties,
   TypingStartEvent as MessageBoxTypingStartEvent,
 } from './messagebox';
@@ -49,7 +49,7 @@ class Chat extends Widget<Properties> {
 
   _errorList!: ErrorList;
 
-  _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
+  _messageEnteredAction?: (e: Partial<MessageEnteredEvent>) => void;
 
   _typingStartAction?: (e: Partial<TypingStartEvent>) => void;
 
@@ -73,8 +73,8 @@ class Chat extends Widget<Properties> {
       showUserName: true,
       showMessageTimestamp: true,
       typingUsers: [],
+      onMessageEntered: undefined,
       reloadOnChange: true,
-      onMessageSend: undefined,
       messageTemplate: null,
       onTypingStart: undefined,
       onTypingEnd: undefined,
@@ -89,7 +89,7 @@ class Chat extends Widget<Properties> {
     // @ts-expect-error
     this._refreshDataSource();
 
-    this._createMessageSendAction();
+    this._createMessageEnteredAction();
     this._createTypingStartAction();
     this._createTypingEndAction();
   }
@@ -217,8 +217,8 @@ class Chat extends Widget<Properties> {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
-      onMessageSend: (e) => {
-        this._messageSendHandler(e);
+      onMessageEntered: (e) => {
+        this._messageEnteredHandler(e);
       },
       onTypingStart: (e) => {
         this._typingStartHandler(e);
@@ -246,9 +246,9 @@ class Chat extends Widget<Properties> {
     this._messageBox.updateInputAria(emptyViewId);
   }
 
-  _createMessageSendAction(): void {
-    this._messageSendAction = this._createActionByOption(
-      'onMessageSend',
+  _createMessageEnteredAction(): void {
+    this._messageEnteredAction = this._createActionByOption(
+      'onMessageEntered',
       { excludeValidators: ['disabled'] },
     );
   }
@@ -267,7 +267,7 @@ class Chat extends Widget<Properties> {
     );
   }
 
-  _messageSendHandler(e: MessageBoxMessageSendEvent): void {
+  _messageEnteredHandler(e: MessageBoxMessageEnteredEvent): void {
     const { text, event } = e;
     const { user } = this.option();
 
@@ -290,7 +290,7 @@ class Chat extends Widget<Properties> {
       });
     }
 
-    this._messageSendAction?.({ message, event });
+    this._messageEnteredAction?.({ message, event });
   }
 
   _typingStartHandler(e: MessageBoxTypingStartEvent): void {
@@ -351,8 +351,8 @@ class Chat extends Widget<Properties> {
       case 'errors':
         this._errorList.option('items', value ?? []);
         break;
-      case 'onMessageSend':
-        this._createMessageSendAction();
+      case 'onMessageEntered':
+        this._createMessageEnteredAction();
         break;
       case 'onTypingStart':
         this._createTypingStartAction();

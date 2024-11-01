@@ -88,7 +88,6 @@ test.clientScripts([
     height: 600,
     errors: [{ id: 1, message: 'Error Message 1. Error Description...' }],
   });
-  // eslint-disable-next-line @typescript-eslint/require-await
 }).after(async () => {
   await ClientFunction(() => {
     (window as any).MockDate.reset();

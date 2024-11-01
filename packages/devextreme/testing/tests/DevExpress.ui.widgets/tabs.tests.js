@@ -9,7 +9,7 @@ import 'ui/responsive_box';
 import 'ui/tabs';
 import pointerMock from '../../helpers/pointerMock.js';
 import { TestAsyncTabsWrapper, TestTabsWrapper } from '../../helpers/wrappers/tabsWrappers.js';
-import { getScrollLeftMax } from 'renovation/ui/scroll_view/utils/get_scroll_left_max';
+import { getScrollLeftMax } from '__internal/ui/scroll_view/utils/get_scroll_left_max';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 QUnit.testStart(function() {
