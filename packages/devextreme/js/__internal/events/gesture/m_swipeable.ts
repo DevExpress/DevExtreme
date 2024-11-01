@@ -1,14 +1,14 @@
-import DOMComponent from '@js/core/dom_component';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { name } from '@js/core/utils/public_component';
-import eventsEngine from '@js/events/core/events_engine';
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   end as swipeEventEnd,
   start as swipeEventStart,
   swipe as swipeEventSwipe,
-} from '@js/events/swipe';
-import { addNamespace } from '@js/events/utils/index';
+} from '@js/common/core/events/swipe';
+import { addNamespace } from '@js/common/core/events/utils/index';
+import DOMComponent from '@js/core/dom_component';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { name } from '@js/core/utils/public_component';
 
 const DX_SWIPEABLE = 'dxSwipeable';
 const SWIPEABLE_CLASS = 'dx-swipeable';

@@ -1,4 +1,4 @@
-import { move } from '@js/animation/translator';
+import { move } from '@js/common/core/animation/translator';
 import $ from '@js/core/renderer';
 import { ensureDefined } from '@js/core/utils/common';
 import { camelize } from '@js/core/utils/inflector';

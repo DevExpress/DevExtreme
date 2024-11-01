@@ -1,7 +1,7 @@
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { isString } from '../../core/utils/type';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 
 export const defaultPermissions = {
     create: false,

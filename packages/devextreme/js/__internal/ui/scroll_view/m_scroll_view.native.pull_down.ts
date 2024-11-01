@@ -1,4 +1,4 @@
-import { move } from '@js/animation/translator';
+import { move } from '@js/common/core/animation/translator';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
 import { Deferred } from '@js/core/utils/deferred';

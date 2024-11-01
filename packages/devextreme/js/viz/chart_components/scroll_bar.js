@@ -1,10 +1,10 @@
-import eventsEngine from '../../events/core/events_engine';
-import { fireEvent } from '../../events/utils/index';
+import eventsEngine from '../../common/core/events/core/events_engine';
+import { fireEvent } from '../../common/core/events/utils/index';
 import { extend } from '../../core/utils/extend';
 import { Translator2D } from '../translators/translator2d';
 import { isDefined } from '../../core/utils/type';
 import { noop } from '../../core/utils/common';
-import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../../events/drag';
+import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../../common/core/events/drag';
 
 const _min = Math.min;
 const _max = Math.max;

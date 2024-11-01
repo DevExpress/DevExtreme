@@ -4,10 +4,10 @@ import { Tooltip } from '../core/tooltip';
 import { extend } from '../../core/utils/extend';
 import { patchFontOptions } from './utils';
 import { Plaque } from './plaque';
-import pointerEvents from '../../events/pointer';
-import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../../events/drag';
-import { addNamespace } from '../../events/utils/index';
-import eventsEngine from '../../events/core/events_engine';
+import pointerEvents from '../../common/core/events/pointer';
+import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../../common/core/events/drag';
+import { addNamespace } from '../../common/core/events/utils/index';
+import eventsEngine from '../../common/core/events/core/events_engine';
 
 const getDocument = domAdapter.getDocument;
 

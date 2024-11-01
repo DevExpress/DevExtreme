@@ -1,11 +1,11 @@
-import DataSource from '../data/data_source';
+import { DataSource } from '../common/data';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import Editor, {
     ValueChangedInfo,

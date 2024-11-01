@@ -1,4 +1,4 @@
-import { fitIntoRange, multiplyInExponentialForm } from '../../core/utils/math';
+import { fitIntoRange, multiplyInExponentialForm } from '../../../../core/utils/math';
 import { toFixed } from '../utils';
 
 const DEFAULT_CONFIG = { thousandsSeparator: ',', decimalSeparator: '.' };

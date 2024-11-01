@@ -5,4 +5,4 @@
   * @module events/remove
 */
 
-export * from '../__internal/events/m_remove';
+export * from '../../../__internal/events/m_remove';

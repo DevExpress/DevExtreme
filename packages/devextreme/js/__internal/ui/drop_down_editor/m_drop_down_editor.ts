@@ -1,5 +1,9 @@
-import animationPosition from '@js/animation/position';
-import { locate, move } from '@js/animation/translator';
+import animationPosition from '@js/common/core/animation/position';
+import { locate, move } from '@js/common/core/animation/translator';
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
@@ -16,10 +20,6 @@ import { each } from '@js/core/utils/iterator';
 import { getDefaultAlignment } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import Popup from '@js/ui/popup/ui.popup';
 import TextBox from '@js/ui/text_box';
 import { focused } from '@js/ui/widget/selectors';
@@ -731,9 +731,7 @@ const DropDownEditor = TextBox.inherit({
     let positionSide = 'bottom';
 
     if (this._popup && this._popup.option('visible')) {
-      // @ts-expect-error
       const { top: myTop } = animationPosition.setup(this.$element());
-      // @ts-expect-error
       const { top: popupTop } = animationPosition.setup(this._popup.$content());
 
       positionSide = (myTop + this.option('popupPosition').offset.v) > popupTop ? 'bottom' : 'top';

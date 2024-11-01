@@ -1,6 +1,6 @@
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
-import messageLocalization from '@js/localization/message';
 import Overlay from '@js/ui/overlay/ui.overlay';
 
 import { ListBase } from './m_list.base';

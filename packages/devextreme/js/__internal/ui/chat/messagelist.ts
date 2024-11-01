@@ -1,4 +1,7 @@
-import Guid from '@js/core/guid';
+import { Guid } from '@js/common';
+import type { Format } from '@js/common/core/localization';
+import dateLocalization from '@js/common/core/localization/date';
+import messageLocalization from '@js/common/core/localization/message';
 import type {
   DeepPartial,
 } from '@js/core/index';
@@ -10,9 +13,6 @@ import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { isElementInDom } from '@js/core/utils/dom';
 import { isDate, isDefined } from '@js/core/utils/type';
-import type { Format } from '@js/localization';
-import dateLocalization from '@js/localization/date';
-import messageLocalization from '@js/localization/message';
 import type { Message, User } from '@js/ui/chat';
 import ScrollView from '@js/ui/scroll_view';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';

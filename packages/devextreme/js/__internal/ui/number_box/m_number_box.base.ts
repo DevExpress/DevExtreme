@@ -1,3 +1,8 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import {
+  addNamespace, getChar, isCommandKeyPressed, normalizeKeyName,
+} from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
@@ -11,11 +16,6 @@ import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { fitIntoRange, inRange } from '@js/core/utils/math';
 import { isDefined } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import {
-  addNamespace, getChar, isCommandKeyPressed, normalizeKeyName,
-} from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import TextEditor from '@js/ui/text_box/ui.text_editor';
 
 import SpinButtons from './m_number_box.spins';

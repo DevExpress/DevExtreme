@@ -2,12 +2,12 @@ import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
 import { getGanttViewCore } from './gantt_importer';
 import { TaskAreaContainer } from './ui.gantt.task.area.container';
-import dateLocalization from '../../localization/date';
+import dateLocalization from '../../common/core/localization/date';
 import { isDefined } from '../../core/utils/type';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 import { format } from '../../core/utils/string';
-import coreLocalization from '../../localization/core';
-import { requestAnimationFrame, cancelAnimationFrame } from '../../animation/frame';
+import coreLocalization from '../../common/core/localization/core';
+import { requestAnimationFrame, cancelAnimationFrame } from '../../common/core/animation/frame';
 
 
 const visualStateKey = 'visualState';

@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -11,7 +12,6 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import messageLocalization from '@js/localization/message';
 import * as accessibility from '@js/ui/shared/accessibility';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import { A11yStatusContainerComponent } from '@ts/grids/grid_core/views/a11y_status_container_component';

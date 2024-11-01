@@ -5,7 +5,9 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    ApplyValueMode,
+    SelectAllMode,
+} from '../common';
 
 import {
     Cancelable,
@@ -14,7 +16,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     SelectionChangeInfo,
@@ -32,11 +34,6 @@ import dxSelectBox, {
     dxSelectBoxOptions,
     CustomItemCreatingInfo,
 } from './select_box';
-
-import {
-    ApplyValueMode,
-    SelectAllMode,
-} from '../common';
 
 /**
  * @docid _ui_tag_box_ChangeEvent

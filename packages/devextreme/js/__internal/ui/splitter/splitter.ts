@@ -1,4 +1,5 @@
 import type { Orientation } from '@js/common';
+import { lock } from '@js/common/core/events/core/emitter.feedback';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
@@ -15,7 +16,6 @@ import {
 } from '@js/core/utils/size';
 import { isDefined, isObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import { lock } from '@js/events/core/emitter.feedback';
 import type {
   Item,
   ItemCollapsedEvent,

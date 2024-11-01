@@ -1,5 +1,5 @@
+import { query } from '@js/common/data';
 import dateUtils from '@js/core/utils/date';
-import query from '@js/data/query';
 
 import { sortAppointmentsByStartDate } from '../data_provider/m_utils';
 import HorizontalAppointmentsStrategy from './m_strategy_horizontal';

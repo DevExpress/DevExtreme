@@ -1,5 +1,5 @@
-import fx from '@js/animation/fx';
-import { move } from '@js/animation/translator';
+import { fx } from '@js/common/core/animation';
+import { move } from '@js/common/core/animation/translator';
 import type { dxElementWrapper } from '@js/core/renderer';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention

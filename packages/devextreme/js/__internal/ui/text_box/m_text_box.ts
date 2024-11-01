@@ -1,9 +1,9 @@
+import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getOuterWidth, getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
-import { normalizeKeyName } from '@js/events/utils/index';
 
 import TextEditor from './m_text_editor';
 

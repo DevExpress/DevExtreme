@@ -1,6 +1,6 @@
 import {
     AnimationConfig,
-} from '../animation/fx';
+} from '../common/core/animation';
 
 import {
     UserDefinedElement,
@@ -9,7 +9,7 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+} from '../common';
 
 import {
     DxPromise,
@@ -19,7 +19,7 @@ import {
     DxEvent,
     Cancelable,
     EventInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import Widget, {
     WidgetOptions,

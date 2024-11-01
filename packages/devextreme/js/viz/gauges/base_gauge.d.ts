@@ -5,26 +5,23 @@ import {
 
 import {
     template,
-} from '../../core/templates/template';
+    HorizontalEdge,
+    VerticalEdge,
+} from '../../common';
 
 import {
     EventInfo,
-} from '../../events/index';
+} from '../../common/core/events';
 
 import {
     Format,
-} from '../../localization';
+} from '../../common/core/localization';
 
 import BaseWidget, {
     BaseWidgetLoadingIndicator,
     BaseWidgetOptions,
     BaseWidgetTooltip,
 } from '../core/base_widget';
-
-import {
-    HorizontalEdge,
-    VerticalEdge,
-} from '../../common';
 
 import {
     AnimationEaseMode,

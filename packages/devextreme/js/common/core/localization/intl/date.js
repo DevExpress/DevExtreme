@@ -1,5 +1,5 @@
 /* globals Intl */
-import { extend } from '../../core/utils/extend';
+import { extend } from '../../../../core/utils/extend';
 import localizationCoreUtils from '../core';
 
 const SYMBOLS_TO_REMOVE_REGEX = /[\u200E\u200F]/g;

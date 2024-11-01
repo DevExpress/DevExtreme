@@ -5,9 +5,9 @@ import {
 
 import {
     template,
-} from '../../core/templates/template';
+} from '../../common';
 
-import DataSource, { DataSourceLike } from '../../data/data_source';
+import { DataSource, DataSourceLike } from '../../common/data';
 
 import {
     CollectionWidgetItem,

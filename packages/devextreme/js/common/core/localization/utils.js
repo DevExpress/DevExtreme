@@ -1,4 +1,4 @@
-import { sign, multiplyInExponentialForm } from '../core/utils/math';
+import { sign, multiplyInExponentialForm } from '../../../core/utils/math';
 
 const DECIMAL_BASE = 10;
 

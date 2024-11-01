@@ -1,4 +1,4 @@
-import { cancelAnimationFrame, requestAnimationFrame } from '@js/animation/frame';
+import { cancelAnimationFrame, requestAnimationFrame } from '@js/common/core/animation/frame';
 import Class from '@js/core/class';
 import { noop } from '@js/core/utils/common';
 

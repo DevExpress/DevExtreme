@@ -1,6 +1,6 @@
-import $ from '../core/renderer';
-import { data as elementData, removeData } from '../core/element_data';
-import { type } from '../core/utils/type';
+import $ from '../../../core/renderer';
+import { data as elementData, removeData } from '../../../core/element_data';
+import { type } from '../../../core/utils/type';
 
 const TRANSLATOR_DATA_KEY = 'dxTranslator';
 const TRANSFORM_MATRIX_REGEX = /matrix(3d)?\((.+?)\)/;

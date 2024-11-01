@@ -1,3 +1,5 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
@@ -9,8 +11,6 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { map } from '@js/core/utils/iterator';
 import { isDefined, isObject } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import { normalizeKeyName } from '@js/events/utils/index';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import { tabbable } from '@js/ui/widget/selectors';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';

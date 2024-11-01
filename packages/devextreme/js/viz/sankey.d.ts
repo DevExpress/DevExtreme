@@ -1,4 +1,4 @@
-import DataSource, { DataSourceLike } from '../data/data_source';
+import { DataSource, DataSourceLike } from '../common/data';
 
 import {
     UserDefinedElement,
@@ -7,14 +7,15 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    VerticalAlignment,
+} from '../common';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import BaseWidget, {
     BaseWidgetOptions,
@@ -23,10 +24,6 @@ import BaseWidget, {
     ExportInfo,
     IncidentInfo,
 } from './core/base_widget';
-
-import {
-    VerticalAlignment,
-} from '../common';
 
 import {
     HatchDirection,

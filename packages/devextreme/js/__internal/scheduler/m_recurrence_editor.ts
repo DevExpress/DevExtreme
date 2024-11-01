@@ -1,14 +1,14 @@
 /* eslint-disable max-classes-per-file, spellcheck/spell-checker */
 import '@js/ui/radio_group';
 
+import dateLocalization from '@js/common/core/localization/date';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
-import dateLocalization from '@js/localization/date';
-import messageLocalization from '@js/localization/message';
 import ButtonGroup from '@js/ui/button_group';
 import DateBox from '@js/ui/date_box';
 import Editor from '@js/ui/editor/editor';

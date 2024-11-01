@@ -1,5 +1,11 @@
-import fx from '@js/animation/fx';
-import { move } from '@js/animation/translator';
+import { fx } from '@js/common/core/animation';
+import { move } from '@js/common/core/animation/translator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import Swipeable from '@js/common/core/events/gesture/swipeable';
+import { end as hoverEndEventName } from '@js/common/core/events/hover';
+import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
+import dateLocalization from '@js/common/core/localization/date';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import Guid from '@js/core/guid';
@@ -15,12 +21,6 @@ import {
   isDefined, isFunction, isNumeric, isString,
 } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
-import Swipeable from '@js/events/gesture/swipeable';
-import { end as hoverEndEventName } from '@js/events/hover';
-import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
-import dateLocalization from '@js/localization/date';
-import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
 import Editor from '@js/ui/editor/editor';
 import { isFluent } from '@js/ui/themes';

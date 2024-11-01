@@ -1,7 +1,10 @@
 /* eslint-disable max-classes-per-file */
 // TODO Move DataGrid's summary methods to the DataGrid
 // TODO Move virtual scrolling related methods to the virtual_scrolling
-import { move } from '@js/animation/translator';
+import { move } from '@js/common/core/animation/translator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { name as wheelEventName } from '@js/common/core/events/core/wheel';
+import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
@@ -11,9 +14,6 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterWidth } from '@js/core/utils/size';
 import { setWidth } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import { name as wheelEventName } from '@js/events/core/wheel';
-import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 

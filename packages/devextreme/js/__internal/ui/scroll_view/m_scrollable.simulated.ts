@@ -1,4 +1,11 @@
-import { locate, move, resetPosition } from '@js/animation/translator';
+import { locate, move, resetPosition } from '@js/common/core/animation/translator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import {
+  addNamespace as addEventNamespace,
+  isCommandKeyPressed,
+  isDxMouseWheelEvent,
+  normalizeKeyName,
+} from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
@@ -19,13 +26,6 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
-import {
-  addNamespace as addEventNamespace,
-  isCommandKeyPressed,
-  isDxMouseWheelEvent,
-  normalizeKeyName,
-} from '@js/events/utils/index';
 
 import Animator from './m_animator';
 import Scrollbar from './m_scrollbar';

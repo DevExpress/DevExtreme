@@ -1,8 +1,8 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import dateLocalization from '@js/common/core/localization/date';
 import Class from '@js/core/class';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
-import eventsEngine from '@js/events/core/events_engine';
-import dateLocalization from '@js/localization/date';
 
 const { abstract } = Class;
 

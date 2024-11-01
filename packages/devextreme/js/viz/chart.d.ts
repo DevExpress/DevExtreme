@@ -9,7 +9,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     Format,
@@ -17,7 +17,11 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    SingleOrMultiple,
+    HorizontalAlignment,
+    Position,
+    VerticalAlignment,
+} from '../common';
 
 import {
     BaseChart,
@@ -38,13 +42,6 @@ import {
     ExportInfo,
     IncidentInfo,
 } from './core/base_widget';
-
-import {
-    SingleOrMultiple,
-    HorizontalAlignment,
-    Position,
-    VerticalAlignment,
-} from '../common';
 
 import {
     ArgumentAxisHoverMode,

@@ -6,13 +6,18 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    DataStructure,
+    Mode,
+    ScrollMode,
+    SingleMultipleOrNone,
+    ToolbarItemLocation,
+} from '../common';
 
 import {
     DxPromise,
 } from '../core/utils/deferred';
 
-import DataSource from '../data/data_source';
+import { DataSource } from '../common/data';
 
 import {
     Cancelable,
@@ -20,15 +25,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
-
-import {
-    DataStructure,
-    Mode,
-    ScrollMode,
-    SingleMultipleOrNone,
-    ToolbarItemLocation,
-} from '../common';
+} from '../common/core/events';
 
 import {
     AdaptiveDetailRowPreparingInfo,

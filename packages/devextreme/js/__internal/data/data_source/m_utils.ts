@@ -1,12 +1,10 @@
+import { ArrayStore, CustomStore } from '@js/common/data';
+import Store from '@js/common/data/abstract_store';
+import { normalizeSortingInfo } from '@js/common/data/utils';
 import ajaxUtils from '@js/core/utils/ajax';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { isPlainObject } from '@js/core/utils/type';
-import Store from '@js/data/abstract_store';
-import ArrayStore from '@js/data/array_store';
-import CustomStore from '@js/data/custom_store';
-// @ts-expect-error
-import { normalizeSortingInfo } from '@js/data/utils';
 
 export const CANCELED_TOKEN = 'canceled';
 

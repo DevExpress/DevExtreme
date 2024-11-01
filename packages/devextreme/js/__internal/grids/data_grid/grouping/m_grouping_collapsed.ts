@@ -1,8 +1,7 @@
+import { errors as dataErrors } from '@js/common/data/errors';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-// @ts-expect-error
-import { errors as dataErrors } from '@js/data/errors';
 import errors from '@js/ui/widget/ui.errors';
 
 import dataGridCore from '../m_core';

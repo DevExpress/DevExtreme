@@ -1,7 +1,7 @@
+import defaultDateNames from '@js/common/core/localization/default_date_names';
+import { getFormatter as getLDMLFormatter } from '@js/common/core/localization/ldml/date.formatter';
 import config from '@js/core/config';
 import { isDate, isNumeric as isNumber, isString } from '@js/core/utils/type';
-import defaultDateNames from '@js/localization/default_date_names';
-import { getFormatter as getLDMLFormatter } from '@js/localization/ldml/date.formatter';
 
 const NUMBER_SERIALIZATION_FORMAT = 'number';
 const DATE_SERIALIZATION_FORMAT = 'yyyy/MM/dd';

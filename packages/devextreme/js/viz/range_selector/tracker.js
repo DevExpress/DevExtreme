@@ -1,5 +1,5 @@
-import eventsEngine from '../../events/core/events_engine';
-import pointerEvents from '../../events/pointer';
+import eventsEngine from '../../common/core/events/core/events_engine';
+import pointerEvents from '../../common/core/events/pointer';
 import { getWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import { each } from '../../core/utils/iterator';

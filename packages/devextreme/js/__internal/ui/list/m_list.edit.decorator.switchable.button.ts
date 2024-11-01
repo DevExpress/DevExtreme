@@ -1,7 +1,7 @@
-import fx from '@js/animation/fx';
+import { fx } from '@js/common/core/animation';
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { getOuterWidth, getWidth } from '@js/core/utils/size';
-import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
 import { isMaterialBased } from '@js/ui/themes';
 
