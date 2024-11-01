@@ -29,6 +29,7 @@ import './ganttParts/filtering.tests.js';
 import './ganttParts/constraintViolationDialog.tests.js';
 import './ganttParts/undo.tests.js';
 import './ganttParts/treeListExpanding.tests.js';
+import './ganttParts/scrolling.tests.js';
 
 QUnit.testStart(() => {
     const markup = '<div id="gantt"></div>';

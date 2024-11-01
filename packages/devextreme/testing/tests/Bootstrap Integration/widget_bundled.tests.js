@@ -1,11 +1,11 @@
-const $ = require('jquery');
-const GoogleStaticProvider = require('ui/map/provider.google_static');
-const fx = require('animation/fx');
-const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
+import $ from 'jquery';
+import GoogleStaticProvider from '__internal/ui/map/m_provider.google_static';
+import fx from 'animation/fx';
+import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
-require('generic_light.css!');
+import 'generic_light.css!';
 
-require('bundles/modules/parts/widgets-web');
+import 'bundles/modules/parts/widgets-web';
 
 GoogleStaticProvider.remapConstant('/mapURL?');
 

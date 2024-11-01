@@ -138,6 +138,14 @@ function combineGetters(getters) {
     };
 }
 
+function toLowerCase(value, options) {
+    return options?.locale ? value.toLocaleLowerCase(options.locale) : value.toLowerCase();
+}
+
+function toUpperCase(value, options) {
+    return options?.locale ? value.toLocaleUpperCase(options.locale) : value.toUpperCase();
+}
+
 const ensurePropValueDefined = function(obj, propName, value, options) {
     if(isDefined(value)) {
         return value;
@@ -197,7 +205,10 @@ export const toComparable = function(value, caseSensitive, options = {}) {
             value = value.normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
         }
 
-        return options?.locale ? value.toLocaleLowerCase(options.locale) : value.toLowerCase();
+        const locale = options?.locale?.toLowerCase();
+        const useUpperCase = locale && !!['hy', 'el'].find((code) => locale === code || locale.startsWith(`${code}-`));
+
+        return (useUpperCase ? toUpperCase : toLowerCase)(value, options);
     }
 
     return value;

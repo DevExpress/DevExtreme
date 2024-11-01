@@ -1,23 +1,28 @@
-# DevExtreme React UI Components #
+# DevExtreme for React
 
-[![Build Status](https://api.shippable.com/projects/5a9532d976382b0800e7a53c/badge?branch=master)](https://app.shippable.com/github/DevExpress/devextreme-react)
-[![NPM](https://img.shields.io/npm/v/devextreme-react.svg?maxAge=43200)](https://www.npmjs.com/package/devextreme-react)
+[![NPM version](https://img.shields.io/npm/v/devextreme-react.svg?maxAge=43200)](https://www.npmjs.com/package/devextreme-react)
 
-This project allows you to use [DevExtreme widgets](http://js.devexpress.com/Demos/WidgetsGallery/) in [React](https://reactjs.org) applications.
+The `devextreme-react` package contains the [DevExtreme component suite](http://js.devexpress.com/Demos/WidgetsGallery/) for the [React](https://react.dev/) framework.
 
-* [Documentation](https://js.devexpress.com/Documentation/Guide/React_Components/DevExtreme_React_Components/)
-* [Technical Demos](https://js.devexpress.com/Demos/WidgetsGallery/Demo/DataGrid/Overview/React/Light/)
-* [API Reference](http://js.devexpress.com/Documentation/ApiReference/)
-* [Live example](https://stackblitz.com/edit/devextreme-react)
+* [Documentation](https://js.devexpress.com/React/Documentation/Guide/React_Components/DevExtreme_React_Components/)
+* [Demo Gallery](https://js.devexpress.com/React/Demos/WidgetsGallery/Demo/DataGrid/Overview/React/Light/)
+* [Responsive UI Templates](https://js.devexpress.com/React/Templates/UITemplates/)
+* [Application Template](https://js.devexpress.com/React/Documentation/Guide/React_Components/Application_Template/)
 
-## License ##
+## License
 
-**DevExtreme React UI Components are released as an MIT-licensed (free and open-source) add-on to DevExtreme.**
+DevExpress distributes the `devextreme-react` package under the free and open-source **MIT** license.
 
-Familiarize yourself with the [DevExtreme License](https://js.devexpress.com/Licensing/). [Free trial is available!](http://js.devexpress.com/Buy/)
+For more information on licensing requirements, read the following articles:
 
-## Support & Feedback ##
+* [Licensing Guide](https://js.devexpress.com/Angular/Documentation/Guide/Common/Licensing/) 
+* [Licensing FAQ](https://js.devexpress.com/Licensing/)
+* [EULA](https://js.devexpress.com/EULAs/DevExtremeComplete/)
 
-If you have questions regarding React functionality, consult [React docs](https://reactjs.org/docs).
+DevExpress offers a [free trial](https://js.devexpress.com/Download/) of the product.
 
-If you want to report a bug, request a feature, or ask a question, submit an [issue](https://github.com/DevExpress/devextreme-react/issues) to this repo. Alternatively, you can contact us at the [DevExpress Support Center](https://www.devexpress.com/Support/Center) if you own an active DevExtreme license.
+## Support & Feedback
+
+For more information on the React framework and how to use it, see this [official documentation](https://react.dev/learn).
+
+If you own an [active DevExtreme license](https://js.devexpress.com/Licensing/#Commercial), submit your questions, suggestions, and bug reports to the [DevExpress Support Center](https://www.devexpress.com/sc).

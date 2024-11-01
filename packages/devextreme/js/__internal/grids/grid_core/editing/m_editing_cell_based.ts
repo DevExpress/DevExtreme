@@ -154,6 +154,10 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       const editColumnIndex = this._getVisibleEditColumnIndex();
       const $cell = this._rowsView?._getCellElement(this._getVisibleEditRowIndex(), editColumnIndex); // T319885
 
+      // NOTE: Cancel redundant editor refocus [T1194403]
+      this._refocusEditCell = false;
+      clearTimeout(this._inputFocusTimeoutID);
+
       if ($cell && !$cell.find(':focus').length) {
         this._focusEditingCell(() => {
           this._editCellInProgress = false;

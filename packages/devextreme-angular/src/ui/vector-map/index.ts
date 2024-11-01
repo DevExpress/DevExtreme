@@ -88,7 +88,7 @@ import { DxiLegendComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxVectorMap;
+    instance: DxVectorMap = null;
 
     /**
      * [descr:dxVectorMapOptions.annotations]

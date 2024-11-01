@@ -73,7 +73,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxRangeSliderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    instance: DxRangeSlider;
+    instance: DxRangeSlider = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

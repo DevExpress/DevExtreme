@@ -68,7 +68,7 @@ import { DxoShadowModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxSparklineComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxSparkline;
+    instance: DxSparkline = null;
 
     /**
      * [descr:dxSparklineOptions.argumentField]

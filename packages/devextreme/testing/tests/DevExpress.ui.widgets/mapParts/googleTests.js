@@ -4,7 +4,7 @@ import $ from 'jquery';
 import { LOCATIONS, MARKERS, ROUTES } from './utils.js';
 import devices from 'core/devices';
 import errors from 'ui/widget/ui.errors';
-import GoogleProvider from 'ui/map/provider.dynamic.google';
+import GoogleProvider from '__internal/ui/map/m_provider.dynamic.google';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 
 import 'ui/map';

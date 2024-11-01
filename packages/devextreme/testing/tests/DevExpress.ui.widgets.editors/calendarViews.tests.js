@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import dateUtils from 'core/utils/date';
-import BaseView from 'ui/calendar/ui.calendar.base_view';
-import Views from 'ui/calendar/ui.calendar.views';
+import BaseView from '__internal/ui/calendar/m_calendar.base_view';
+import Views from '__internal/ui/calendar/m_calendar.views';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
 import dateSerialization from 'core/utils/date_serialization';

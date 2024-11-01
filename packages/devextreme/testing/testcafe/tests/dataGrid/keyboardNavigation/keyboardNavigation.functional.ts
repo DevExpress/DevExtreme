@@ -4633,3 +4633,93 @@ test('TreeList/DataGrid - Focus indicator is not visible when the Toolbar includ
   keyExpr: 'field_0',
   showBorders: true,
 }));
+
+test('DataGrid - Data rows are skipped during Tab navigation if the first column is hidden via hidingPriority (T1228477)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await t
+    .expect(dataGrid.getDataCell(0, 2).element.getAttribute('tabindex'))
+    .eql('0');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(3, 5),
+  keyExpr: 'field_0',
+  columns: [{
+    dataField: 'field_0',
+    hidingPriority: 0,
+  }, {
+    dataField: 'field_1',
+    hidingPriority: 1,
+  }, 'field_2', 'field_3', 'field_4'],
+  showBorders: true,
+  width: 300,
+}));
+
+test('DataGrid input cell should not put tabindex to incorrect element while on edit mode (T1239462)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .click(dataGrid.getToolbar().getItem(0))
+    .pressKey('tab');
+  await takeScreenshot('data-grid_keyboard-navigation-input-text-focused.png', dataGrid.element);
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    showBorders: true,
+    selection: {
+      mode: 'multiple',
+    },
+    editing: {
+      mode: 'form',
+      allowAdding: true,
+    },
+    columns: [
+      'Calculation',
+      'CalculationType',
+      {
+        type: 'buttons',
+        fixed: true,
+      },
+    ],
+    dataSource: {
+      store: [],
+    },
+  });
+});
+
+test('Cancel button in the last column cannot be focused via the Tab key (T1248987)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const saveButton = dataGrid.getFixedDataRow(0).getCommandCell(1).getButton(0);
+  const cancelButton = dataGrid.getFixedDataRow(0).getCommandCell(1).getButton(1);
+  const inputCell = dataGrid.getDataCell(0, 0).element;
+
+  await t
+    .click(inputCell)
+    .pressKey('tab')
+    .expect(saveButton.focused)
+    .ok()
+    .pressKey('tab')
+    .expect(cancelButton.focused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  keyExpr: 'ID',
+  dataSource: [
+    {
+      ID: 1,
+      FirstName: 'John',
+    },
+  ],
+  showBorders: true,
+  editing: {
+    allowAdding: true,
+    mode: 'row',
+    editRowKey: 1,
+  },
+  columnFixing: {
+    enabled: true,
+  },
+  columns: [
+    'FirstName',
+  ],
+}));

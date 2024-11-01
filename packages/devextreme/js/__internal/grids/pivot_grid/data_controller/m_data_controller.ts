@@ -1182,6 +1182,8 @@ const DataController = Class.inherit((function () {
       if (scrollController && !getAllData) {
         const startIndex = scrollController.beginPageIndex() * that.rowPageSize();
         const endIndex = scrollController.endPageIndex() * that.rowPageSize() + that.rowPageSize();
+        const summaryFields = that._dataSource.getSummaryFields();
+        const isRowDataFieldArea = this._options.dataFieldArea === 'row';
         const newRowsInfo: any = [];
         let maxDepth = 1;
 
@@ -1208,7 +1210,10 @@ const DataController = Class.inherit((function () {
 
             newRowsInfo[index].push(cell);
 
-            maxDepth = math.max(maxDepth, columnIndex + 1);
+            const isSummaryCell = summaryFields.some((field) => field.caption === cell.text);
+            if (!isRowDataFieldArea || !isSummaryCell) {
+              maxDepth = math.max(maxDepth, columnIndex + 1);
+            }
           } else {
             return false;
           }

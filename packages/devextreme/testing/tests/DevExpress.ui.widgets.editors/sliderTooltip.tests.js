@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import SliderTooltip from 'ui/slider/ui.slider_tooltip';
+import SliderTooltip from '__internal/ui/slider/m_slider_tooltip';
 
 const SLIDER_TOOLTIP_VISIBILITY_CLASS = 'dx-slider-tooltip-visible-on-hover';
 

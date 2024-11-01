@@ -50,7 +50,7 @@ import {
     ]
 })
 export class DxValidationGroupComponent extends DxComponent implements OnDestroy {
-    instance: DxValidationGroup;
+    instance: DxValidationGroup = null;
 
     /**
      * [descr:DOMComponentOptions.elementAttr]

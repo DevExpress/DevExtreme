@@ -4778,7 +4778,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.ok($noDataTextElement.hasClass('dx-hidden'), 'no datatext is hidden');
 
         // act
-        this.clock.restore();
         const noDataTextHidden = [];
         dataGrid.on('contentReady', function() {
             const $noDataTextElement = $(dataGrid.element()).find('.dx-datagrid-nodata');
@@ -4790,10 +4789,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             if(dataGrid.pageIndex() === 0 && rowData && rowData.id === 1) {
                 // assert
                 assert.strictEqual(noDataTextHidden.filter(it => it === false).length, 0, 'no data text is hidden');
-
+                this.clock.tick(1000);
                 done();
             }
         }, 300);
+        this.clock.runAll();
     });
 
     QUnit.test('Rows should be rendered properly when renderAsync = true', function(assert) {

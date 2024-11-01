@@ -94,7 +94,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxAutocompleteComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    instance: DxAutocomplete;
+    instance: DxAutocomplete = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

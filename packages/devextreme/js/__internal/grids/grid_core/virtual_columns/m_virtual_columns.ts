@@ -9,12 +9,28 @@ import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import type { ColumnsView } from '../views/m_columns_view';
 import type { RowsView } from '../views/m_rows_view';
 import { createColumnsInfo } from './m_virtual_columns_core';
 
 const DEFAULT_COLUMN_WIDTH = 50;
 
-const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExtender extends Base {
+const baseView = <T extends ModuleType<ColumnsView>>(Base: T) => class BaseViewVirtualColumnsExtender extends Base {
+  protected _needToSetCellWidths() {
+    let result = super._needToSetCellWidths();
+
+    // @ts-expect-error
+    if (!result && this._columnsController.isVirtualMode()) {
+      const columns = this._columnsController.getColumns();
+
+      result = columns.some((column) => column.width === 'auto');
+    }
+
+    return result;
+  }
+};
+
+const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExtender extends baseView(Base) {
   protected _resizeCore() {
     // @ts-expect-error
     super._resizeCore.apply(this, arguments);
@@ -63,7 +79,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
   }
 };
 
-const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class VirtualColumnsColumnHeaderViewExtender extends Base {
+const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class VirtualColumnsColumnHeaderViewExtender extends baseView(Base) {
   protected _renderCore() {
     // @ts-expect-error
     const deferred = super._renderCore.apply(this, arguments);

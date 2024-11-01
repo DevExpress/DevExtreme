@@ -183,7 +183,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class TreeListEditingRowsViewEx
     const isEditRow = options.row && editingController.isEditRow(options.row.rowIndex);
     const isEditing = options.isEditing || isEditRow;
 
-    if (!isEditing) {
+    if (!options.isOnForm && !isEditing) {
       // @ts-expect-error
       return super._renderCellCommandContent.apply(this, arguments);
     }

@@ -1,6 +1,9 @@
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import DataGrid from '../../../model/dataGrid';
+import { changeTheme } from '../../../helpers/changeTheme';
+import { Themes } from '../../../helpers/themes';
 
 fixture.disablePageReloads`Sorting`
   .page(url(__dirname, '../../container.html'));
@@ -47,3 +50,40 @@ test('Filter expression should be valid when sortingMethod, remoteOperations, an
     autoNavigateToFocusedRow: true,
   };
 }));
+
+test('Multiple sorting alphabetical icons should be correct in Fluent Theme (T1243658)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .rightClick(dataGrid.getHeaders().element);
+  await takeScreenshot(
+    'datagrid-alphabetical-icons-should-be-correct.png',
+    dataGrid.element,
+  );
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(
+  async () => {
+    await changeTheme(Themes.fluentBlue);
+    await createWidget('dxDataGrid', {
+      dataSource: [
+        {
+          ID: 1,
+          FirstName: 'John',
+        },
+      ],
+      keyExpr: 'ID',
+      sorting: {
+        mode: 'multiple',
+      },
+      columns: [
+        {
+          dataField: 'FirstName',
+          sortOrder: 'asc',
+        },
+      ],
+    });
+  },
+).after(async () => { await changeTheme(Themes.genericLight); });

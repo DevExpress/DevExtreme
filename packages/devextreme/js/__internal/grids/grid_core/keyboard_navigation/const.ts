@@ -48,4 +48,5 @@ export const FOCUS_TYPE_ROW = 'row';
 export const FOCUS_TYPE_CELL = 'cell';
 
 export const COLUMN_HEADERS_VIEW = 'columnHeadersView';
+export const ROWS_VIEW = 'rowsView';
 export const FUNCTIONAL_KEYS = ['shift', 'control', 'alt'];

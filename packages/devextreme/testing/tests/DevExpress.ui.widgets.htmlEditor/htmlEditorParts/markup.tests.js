@@ -109,6 +109,44 @@ export default function() {
     });
 
     QUnit.module('Accessibility', () => {
+        test('aria-readonly should be set on initialization if readOnly=true (T1248155)', function(assert) {
+            const $element = $('#htmlEditor');
+
+            $element.dxHtmlEditor({
+                readOnly: true
+            });
+
+            const $editorContent = $element.find(`.${HTML_EDITOR_CONTENT_CLASS}`);
+            const isQuillRendered = !!$editorContent.length;
+
+            assert.expect(isQuillRendered ? 1 : 0);
+
+            if(isQuillRendered) {
+                assert.strictEqual($editorContent.attr('aria-readonly'), 'true', 'aria-readonly is set on initialization');
+            }
+        });
+
+        test('aria-readonly should be set if readOnly property is set to true on runtime (T1248155) (T1248155)', function(assert) {
+            const $element = $('#htmlEditor');
+
+            $element.dxHtmlEditor({
+                readOnly: false
+            });
+            const instance = $element.dxHtmlEditor('instance');
+
+            const $editorContent = $element.find(`.${HTML_EDITOR_CONTENT_CLASS}`);
+            const isQuillRendered = !!$editorContent.length;
+
+            assert.expect(isQuillRendered ? 2 : 0);
+
+            if(isQuillRendered) {
+                assert.strictEqual($editorContent.attr('aria-readonly'), undefined, 'aria-readonly is properly set on initialization');
+
+                instance.option('readOnly', true);
+                assert.strictEqual($editorContent.attr('aria-readonly'), 'true', 'aria-readonly is properly set on runtime');
+            }
+        });
+
         test('accessibility roles', function(assert) {
             const $element = $('#htmlEditor');
 

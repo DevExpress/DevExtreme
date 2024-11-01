@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
-import MentionFormat from 'ui/html_editor/formats/mention';
-import Mentions from 'ui/html_editor/modules/mentions';
+import MentionFormat from '__internal/ui/html_editor/formats/m_mention';
+import Mentions from '__internal/ui/html_editor/modules/m_mentions';
 
 import { noop } from 'core/utils/common';
 import devices from 'core/devices';
@@ -207,6 +207,31 @@ QUnit.module('Mention format', () => {
 });
 
 QUnit.module('Mentions module', moduleConfig, () => {
+    test('retain formatting after inserting a mention (T1236869)', function(assert) {
+        this.quillMock.getFormat = () => {
+            return { bold: true };
+        };
+        const mention = new Mentions(this.quillMock, this.options);
+        mention.savePosition(0);
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
+
+        $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).first().trigger('dxclick');
+
+        this.clock.tick(POPUP_HIDING_TIMEOUT);
+
+        const expectedDelta = new this.Delta()
+            .delete(1)
+            .insert({ mention: {
+                value: 'Alex',
+                marker: '@',
+                id: 'Alex',
+                keyInTemplateStorage: 'my_key_in_storage'
+            } })
+            .insert(' ', { bold: true });
+
+        assert.deepEqual(this.log[0].delta.ops, expectedDelta.ops, 'Correct formatting');
+    });
+
     test('insert mention after click on item', function(assert) {
         const mention = new Mentions(this.quillMock, this.options);
 

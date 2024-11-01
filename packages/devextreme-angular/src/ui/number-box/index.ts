@@ -77,7 +77,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxNumberBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    instance: DxNumberBox;
+    instance: DxNumberBox = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

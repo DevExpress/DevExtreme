@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import DeltaConverter from 'ui/html_editor/converters/delta';
+import DeltaConverter from '__internal/ui/html_editor/converters/m_delta';
 import MarkdownConverter from 'ui/html_editor/converters/markdown';
 import { getQuill } from 'ui/html_editor/quill_importer';
 

@@ -3,6 +3,7 @@
         "Yes": "Ja",
         "No": "Nein",
         "Cancel": "Abbrechen",
+        "CheckState": "Check state",
         "Close": "Schließen",
         "Clear": "Löschen",
         "Done": "Fertig",
@@ -272,8 +273,8 @@
         "dxScheduler-recurrenceRepeatCount": "Ereignisse",
         "dxScheduler-allDay": "Ganztägig",
 
-        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
-        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+        "dxScheduler-confirmRecurrenceEditTitle": "Wiederkehrenden Termin bearbeiten",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Wiederkehrenden Termin löschen",
 
         "dxScheduler-confirmRecurrenceEditMessage": "Möchten Sie nur diesen Termin bearbeiten, oder die gesamte Serie?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Möchten Sie nur diesen Termin löschen, oder die gesamte Serie?",
@@ -406,6 +407,7 @@
         "dxHtmlEditor-width": "Breite",
         "dxHtmlEditor-height": "Höhe",
         "dxHtmlEditor-borderColor": "Farbe",
+        "dxHtmlEditor-borderWidth": "Border Width",
         "dxHtmlEditor-tableBackground": "Hintergrund",
         "dxHtmlEditor-dimensions": "Abmessungen",
         "dxHtmlEditor-alignment": "Ausrichtung",

@@ -344,3 +344,37 @@ test('The collapse icon should update if repaintChangesOnly option is enabled (T
   },
   showBorders: true,
 }));
+
+const customersT1232129 = [
+  {
+    id: 1,
+    number: 2,
+    description: 'Material Description',
+    groupId: '',
+    articleGroup: 'Material',
+  },
+];
+test('DataGrid loses grouping after the expandAll method if a grouped column has calculateDisplayValue (T1232129)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.apiExpandAll();
+  await t
+    .expect(dataGrid.apiColumnOption('groupId', 'groupIndex'))
+    .eql(0);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: customersT1232129,
+  keyExpr: 'id',
+  showBorders: true,
+  grouping: {
+    autoExpandAll: false,
+  },
+  columns: [
+    'number',
+    'description',
+    {
+      dataField: 'groupId',
+      calculateDisplayValue: 'articleGroup',
+      groupIndex: 0,
+    },
+  ],
+}));

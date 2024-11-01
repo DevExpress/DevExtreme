@@ -11,7 +11,7 @@ import visibilityChange from 'events/visibility_change';
 import $ from 'jquery';
 import Button from 'ui/button';
 import Drawer from 'ui/drawer';
-import { animation } from 'ui/drawer/ui.drawer.animation';
+import { animation } from '__internal/ui/drawer/m_drawer.animation';
 import Overlay from 'ui/overlay/ui.overlay';
 
 

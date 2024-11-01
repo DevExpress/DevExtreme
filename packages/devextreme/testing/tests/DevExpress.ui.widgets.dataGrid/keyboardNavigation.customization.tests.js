@@ -1066,7 +1066,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.find('.dx-texteditor-input').val(), 'D', 'input value');
 
         // act
-        this.triggerKeyDown('enter');
+        this.triggerKeyDown('enter', false, false, $editor.find('input'));
         this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
@@ -1117,7 +1117,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.find('.dx-texteditor-input').val(), 'D', 'input value');
 
         // act
-        this.triggerKeyDown('enter');
+        this.triggerKeyDown('enter', false, false, $editor.find('input'));
         this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
@@ -1169,7 +1169,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.find('.dx-texteditor-input').val(), 'D', 'input value');
 
         // act
-        this.triggerKeyDown('enter');
+        this.triggerKeyDown('enter', false, false, $editor.find('input'));
         this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
@@ -1220,7 +1220,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.find('.dx-texteditor-input').val(), 'D', 'input value');
 
         // act
-        this.triggerKeyDown('enter');
+        this.triggerKeyDown('enter', false, false, $editor.find('input'));
         this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
@@ -1272,7 +1272,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.find('.dx-texteditor-input').val(), 'D', 'input value');
 
         // act
-        this.triggerKeyDown('enter');
+        this.triggerKeyDown('enter', false, false, $editor.find('input'));
         this.clock.tick(10);
 
         $editor = $('.dx-texteditor').eq(0);
@@ -2007,7 +2007,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
         assert.equal($input.val(), '#_1.00', 'input value');
 
-        this.triggerKeyDown('enter');
+        this.triggerKeyDown('enter', false, false, $input);
         this.clock.tick(10);
 
         // arrange, assert

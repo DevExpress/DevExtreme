@@ -359,9 +359,10 @@ function updateRangeSeriesValues() {
                 if(!point.hasValue()) {
                     return;
                 }
+
                 if(point.value.valueOf() - point.minValue.valueOf() < minShownBusinessValue) {
-                    point.value = point.value.valueOf() + minShownBusinessValue / 2;
-                    point.minValue = point.minValue.valueOf() - minShownBusinessValue / 2;
+                    point.value = valueAxisTranslator.toValue(point.value.valueOf() + minShownBusinessValue / 2);
+                    point.minValue = valueAxisTranslator.toValue(point.minValue.valueOf() - minShownBusinessValue / 2);
                 }
             });
         }

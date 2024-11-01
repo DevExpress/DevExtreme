@@ -65,7 +65,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxActionSheet<TItem, TKey>;
+    instance: DxActionSheet<TItem, TKey> = null;
 
     /**
      * [descr:dxActionSheetOptions.cancelText]

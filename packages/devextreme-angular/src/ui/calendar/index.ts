@@ -69,7 +69,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxCalendarComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    instance: DxCalendar;
+    instance: DxCalendar = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

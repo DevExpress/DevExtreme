@@ -125,7 +125,7 @@ jobs:
       matrix:
         CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4)]
 
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: Demos visual tests ${{ matrix.CONSTEL }}
     timeout-minutes: 30
 
@@ -224,7 +224,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: DevExpress/github-actions/send-teams-notification@main
+      - uses: DevExpress/github-actions/send-teams-notification@v1
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}

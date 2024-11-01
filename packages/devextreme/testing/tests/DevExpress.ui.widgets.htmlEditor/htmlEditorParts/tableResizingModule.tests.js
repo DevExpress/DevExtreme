@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import TableResizing from 'ui/html_editor/modules/tableResizing';
+import TableResizing from '__internal/ui/html_editor/modules/m_tableResizing';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 
 const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';

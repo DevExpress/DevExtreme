@@ -1272,6 +1272,7 @@ export class ColumnsController extends modules.Controller {
 
             if (selector === column.dataField
                                   || selector === column.name
+                                  || selector === column.displayField
                                   || selector === column.selector
                                   || selector === column.calculateCellValue
                                   || selector === column.calculateGroupValue

@@ -281,12 +281,17 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
+  protected _needToSetCellWidths() {
+    return this.option('columnAutoWidth');
+  }
+
   /**
    * @extended: column_fixing, editing
    */
   protected _createCell(options) {
     const { column } = options;
     const alignment = column.alignment || getDefaultAlignment(this.option('rtlEnabled'));
+    const needToSetCellWidths = this._needToSetCellWidths();
 
     const cell = domAdapter.createElement('td');
     cell.style.textAlign = alignment;
@@ -316,7 +321,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     if (column.colspan > 1) {
       $cell.attr('colSpan', column.colspan);
-    } else if (!column.isBand && column.visibleWidth !== 'auto' && this.option('columnAutoWidth')) {
+    } else if (!column.isBand && column.visibleWidth !== 'auto' && needToSetCellWidths) {
       if (column.width || column.minWidth) {
         cell.style.minWidth = getWidthStyle(column.minWidth || column.width);
       }
@@ -1186,7 +1191,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
 
     const columns = this.getColumns();
-    const columnAutoWidth = this.option('columnAutoWidth');
+    const needToSetCellWidths = this._needToSetCellWidths();
 
     const $cols = $tableElement.children('colgroup').children('col');
     $cols.toArray().forEach((col) => col.removeAttribute('style'));
@@ -1199,7 +1204,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
       Also check _createCell method because min-width, width and max-width are also set there.
       */
-      if (columnAutoWidth && column.width && !column.command) {
+      if (needToSetCellWidths && column.width && !column.command) {
         const width = getWidthStyle(column.visibleWidth || column.width);
         const minWidth = getWidthStyle(column.minWidth || width);
 

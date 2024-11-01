@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
-import GoogleProvider from 'ui/map/provider.dynamic.google';
+import GoogleProvider from '__internal/ui/map/m_provider.dynamic.google';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
 
 import 'bundles/modules/parts/widgets-web';

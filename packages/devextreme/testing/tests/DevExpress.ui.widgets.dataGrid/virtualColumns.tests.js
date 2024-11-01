@@ -683,5 +683,54 @@ QUnit.module('Rendering', { beforeEach: setupRenderingModule, afterEach: teardow
         assert.strictEqual(getOuterWidth($cells.eq(5)), 2250, 'virtual cell width');
         assert.strictEqual(this.getVisibleColumns()[0].dataField, 'field1', 'first rendered dataField');
     });
+
+    // T1227204
+    QUnit.test('Cells must have width/min-width/max-width when at least one column width is set to auto', function(assert) {
+        // arrange
+        this.columns = [{
+            dataField: 'field1',
+            width: 300,
+        }, {
+            dataField: 'field2',
+            width: 300,
+        }, {
+            dataField: 'field3',
+            width: 300,
+        }, {
+            dataField: 'field4',
+            width: 'auto',
+        }];
+
+        this.setupModules({
+            width: 400,
+            scrolling: {
+                columnRenderingMode: 'virtual',
+                useNative: true
+            },
+            columns: this.columns,
+            dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4' }]
+        });
+
+        // act
+        this.gridView.render($('#container'));
+        this.gridView.update();
+
+        this.clock.tick(30);
+
+        // assert
+        assert.strictEqual($(this.getCellElement(0, 0)).get(0).style.minWidth, '300px', 'minWidth of the first cell');
+        assert.strictEqual($(this.getCellElement(0, 0)).get(0).style.width, '300px', 'width of the first cell');
+        assert.strictEqual($(this.getCellElement(0, 0)).get(0).style.maxWidth, '300px', 'maxWidth of the first cell');
+
+        assert.strictEqual($(this.getCellElement(0, 1)).get(0).style.minWidth, '300px', 'minWidth of the second cell');
+        assert.strictEqual($(this.getCellElement(0, 1)).get(0).style.width, '300px', 'width of the second cell');
+        assert.strictEqual($(this.getCellElement(0, 1)).get(0).style.maxWidth, '300px', 'maxWidth of the second cell');
+
+        assert.strictEqual($(this.getCellElement(0, 2)).get(0).style.minWidth, '300px', 'minWidth of the third cell');
+        assert.strictEqual($(this.getCellElement(0, 2)).get(0).style.width, '300px', 'width of the third cell');
+        assert.strictEqual($(this.getCellElement(0, 2)).get(0).style.maxWidth, '300px', 'maxWidth of the third cell');
+
+        assert.ok(parseFloat($(this.getCellElement(0, 3)).get(0).style.minWidth) > 0, 'minWidth of the fourth cell');
+    });
 });
 

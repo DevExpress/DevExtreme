@@ -84,7 +84,7 @@ import { DxiCustomShapeComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxDiagram;
+    instance: DxDiagram = null;
 
     /**
      * [descr:dxDiagramOptions.autoZoomMode]

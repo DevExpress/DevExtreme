@@ -1,7 +1,7 @@
 
 module.exports = {
   src: './src/**/*.{ts,tsx}',
-  testSrc: './src/**/__tests__/*.*',
+  testSrc: './src/**/__tests__/**/*.*',
   npm: {
     dist: './npm/',
     package: 'package.json',

@@ -79,7 +79,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    instance: DxFilterBuilder;
+    instance: DxFilterBuilder = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

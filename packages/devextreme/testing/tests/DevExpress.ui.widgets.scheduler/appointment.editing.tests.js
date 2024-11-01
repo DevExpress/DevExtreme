@@ -3,7 +3,7 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
-import tooltip from 'ui/tooltip/ui.tooltip';
+import { hide } from '__internal/ui/tooltip/m_tooltip';
 import { DataSource } from 'data/data_source/data_source';
 import { Deferred } from 'core/utils/deferred';
 import {
@@ -307,7 +307,7 @@ module('Integration: Appointment editing', {
 
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                    tooltip.hide();
+                    hide();
 
                     assert.ok(spy.calledOnce, 'Update method is called');
                     assert.deepEqual(spy.getCall(0).args[0], updatedItem, 'Target item is correct');

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label';
+import { TextEditorLabel } from '__internal/ui/text_box/m_text_editor.label';
 import { getWidth } from 'core/utils/size';
 
 const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';

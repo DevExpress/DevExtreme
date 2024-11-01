@@ -36,7 +36,7 @@ jobs:
           if_no_artifact_found: warn
 
       - name: Teams Notification
-        uses: DevExpress/github-actions/send-teams-notification@main
+        uses: DevExpress/github-actions/send-teams-notification@v1
         with:
           hook_url: ${{ secrets.TEAMS_SECURITY_ALERTS }}
           alerts: ${{ needs.fetch.outputs.alerts }}

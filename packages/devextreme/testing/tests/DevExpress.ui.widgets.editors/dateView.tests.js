@@ -5,8 +5,8 @@ import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 import dateLocalization from 'localization/date';
-import 'ui/date_box/ui.date_view';
-import 'ui/date_box/ui.date_view_roller';
+import '__internal/ui/date_box/m_date_view';
+import '__internal/ui/date_box/m_date_view_roller';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 

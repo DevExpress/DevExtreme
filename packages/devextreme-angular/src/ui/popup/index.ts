@@ -75,7 +75,7 @@ import { DxiToolbarItemComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxPopupComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxPopup;
+    instance: DxPopup = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

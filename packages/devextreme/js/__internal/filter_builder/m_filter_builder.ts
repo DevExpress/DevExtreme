@@ -8,11 +8,11 @@ import { isDefined } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
 import { normalizeKeyName } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
-import { getElementMaxHeightByWindow } from '@js/ui/overlay/utils';
-import Popup from '@js/ui/popup';
+import Popup from '@js/ui/popup/ui.popup';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import TreeView from '@js/ui/tree_view';
 import Widget from '@js/ui/widget/ui.widget';
+import { getElementMaxHeightByWindow } from '@ts/ui/overlay/m_utils';
 
 import {
   addItem, convertToInnerStructure,
@@ -292,7 +292,6 @@ class FilterBuilder extends Widget<any> {
     if (parent != null) {
       this._createRemoveButton(() => {
         removeItem(parent, criteria);
-        // @ts-expect-error dxElementWrapper remove method is badly typed
         $group.remove();
         this._updateFilter();
       }).appendTo($groupItem);
@@ -449,12 +448,10 @@ class FilterBuilder extends Widget<any> {
             const $valueButton = $operationButton.siblings().filter(`.${FILTER_BUILDER_ITEM_VALUE_CLASS}`);
             if (that._hasValueButton(condition)) {
               if ($valueButton.length !== 0) {
-                // @ts-expect-error
                 $valueButton.remove();
               }
               that._createValueButton(condition, field).appendTo($operationButton.parent());
             } else {
-              // @ts-expect-error
               $valueButton.remove();
             }
             $operationButton.text(currentOperation.text);
@@ -503,7 +500,6 @@ class FilterBuilder extends Widget<any> {
             condition[0] = item.name || item.dataField;
             condition[2] = item.dataType === 'object' ? null : '';
             updateConditionByOperation(condition, getDefaultOperation(item), that._customOperations);
-            // @ts-expect-error
             $fieldButton.siblings().filter(`.${FILTER_BUILDER_ITEM_TEXT_CLASS}`).remove();
             that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
@@ -533,10 +529,8 @@ class FilterBuilder extends Widget<any> {
       removeItem(parent, condition);
       const isSingleChild = $item.parent().children().length === 1;
       if (isSingleChild) {
-        // @ts-expect-error dxElementWrapper remove method is badly typed
         $item.parent().remove();
       } else {
-        // @ts-expect-error dxElementWrapper remove method is badly typed
         $item.remove();
       }
       this._updateFilter();
@@ -823,6 +817,7 @@ class FilterBuilder extends Widget<any> {
       },
       visible: true,
       focusStateEnabled: false,
+      preventScrollEvents: false,
       hideOnParentScroll: this.option('closePopupOnTargetScroll'),
       hideOnOutsideClick: true,
       onShown: options.popup.onShown,

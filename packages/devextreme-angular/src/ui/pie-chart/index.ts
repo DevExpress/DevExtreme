@@ -95,7 +95,7 @@ import { DxiSeriesComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxPieChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxPieChart;
+    instance: DxPieChart = null;
 
     /**
      * [descr:dxPieChartOptions.adaptiveLayout]

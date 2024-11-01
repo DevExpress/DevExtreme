@@ -37,6 +37,7 @@ import {
   EDIT_MODE_FORM,
   EDIT_MODE_ROW,
   EDITOR_CELL_CLASS,
+  FILTER_ROW_CLASS,
   FOCUSABLE_ELEMENT_SELECTOR,
   ROW_CLASS,
 } from '../editing/const';
@@ -68,6 +69,7 @@ import {
   MASTER_DETAIL_CELL_CLASS,
   NON_FOCUSABLE_ELEMENTS_SELECTOR,
   REVERT_BUTTON_CLASS,
+  ROWS_VIEW,
   ROWS_VIEW_CLASS,
   WIDGET_CLASS,
 } from './const';
@@ -101,6 +103,8 @@ export class KeyboardNavigationController extends modules.ViewController {
   private renderCompletedWithContext!: (e: any) => void;
 
   private rowsViewFocusHandlerContext!: (event: any) => void;
+
+  private rowsViewFocusOutHandlerContext!: (event: Event) => void;
 
   public _isNeedScroll: any;
 
@@ -159,6 +163,8 @@ export class KeyboardNavigationController extends modules.ViewController {
     this.focusedHandlerWithContext = this.focusedHandlerWithContext || this.focusedHandler.bind(this);
     this.renderCompletedWithContext = this.renderCompletedWithContext || this.renderCompleted.bind(this);
     this.rowsViewFocusHandlerContext = this.rowsViewFocusHandlerContext || this.rowsViewFocusHandler.bind(this);
+    this.rowsViewFocusOutHandlerContext = this.rowsViewFocusOutHandlerContext
+      ?? this.rowsViewFocusOutHandler.bind(this);
 
     this._updateFocusTimeout = null;
     this._fastEditingStarted = false;
@@ -239,16 +245,22 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
+  protected rowsViewFocusOutHandler(): void {
+    this._toggleInertAttr(false);
+  }
+
   protected subscribeToRowsViewFocusEvent(): void {
     const $rowsView = this._rowsView?.element();
 
     eventsEngine.on($rowsView, 'focusin', this.rowsViewFocusHandlerContext);
+    eventsEngine.on($rowsView, 'focusout', this.rowsViewFocusOutHandlerContext);
   }
 
   protected unsubscribeFromRowsViewFocusEvent(): void {
     const $rowsView = this._rowsView?.element();
 
     eventsEngine.off($rowsView, 'focusin', this.rowsViewFocusHandlerContext);
+    eventsEngine.off($rowsView, 'focusout', this.rowsViewFocusOutHandlerContext);
   }
 
   protected renderCompleted(e: any): void {
@@ -538,9 +550,11 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   private _closeEditCell() {
+    const d = Deferred();
     setTimeout(() => {
-      this._editingController.closeEditCell();
+      this._editingController.closeEditCell().always(d.resolve);
     });
+    return d;
   }
 
   /**
@@ -678,15 +692,18 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected _toggleInertAttr(value: boolean): void {}
+
   protected _tabKeyHandler(eventArgs, isEditing) {
     const editingOptions = this.option('editing');
     const direction = eventArgs.shift ? 'previous' : 'next';
     const isCellPositionDefined = isDefined(this._focusedCellPosition)
       && !isEmptyObject(this._focusedCellPosition);
+    const isFirstValidCell = eventArgs.shift && this._isFirstValidCell(this._focusedCellPosition);
+    const isLastValidCell = !eventArgs.shift && this._isLastValidCell(this._focusedCellPosition);
 
-    let isOriginalHandlerRequired = !isCellPositionDefined
-      || (!eventArgs.shift && this._isLastValidCell(this._focusedCellPosition))
-      || (eventArgs.shift && this._isFirstValidCell(this._focusedCellPosition));
+    let isOriginalHandlerRequired = !isCellPositionDefined || isFirstValidCell || isLastValidCell;
 
     const eventTarget = eventArgs.originalEvent.target;
     const focusedViewElement = this._focusedView && this._focusedView.element();
@@ -716,6 +733,11 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
 
     if (isOriginalHandlerRequired) {
+      const $cell = this._getFocusedCell();
+      const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
+      if (isLastValidCell && !isCommandCell) {
+        this._toggleInertAttr(true);
+      }
       this._editorFactory.loseFocus();
 
       if (this._editingController.isEditing() && !this._isRowEditMode()) {
@@ -1023,12 +1045,13 @@ export class KeyboardNavigationController extends modules.ViewController {
     const allowEditingOnEnterKey = this._allowEditingOnEnterKey();
 
     if (isEditing || (!allowEditingOnEnterKey && direction)) {
-      this._handleEnterKeyEditingCell(eventArgs.originalEvent);
-      if (direction === 'next' || direction === 'previous') {
-        this._targetCellTabHandler(eventArgs, direction);
-      } else if (direction === 'upArrow' || direction === 'downArrow') {
-        this._navigateNextCell(eventArgs.originalEvent, direction);
-      }
+      this._handleEnterKeyEditingCell(eventArgs.originalEvent).done(() => {
+        if (direction === 'next' || direction === 'previous') {
+          this._targetCellTabHandler(eventArgs, direction);
+        } else if (direction === 'upArrow' || direction === 'downArrow') {
+          this._navigateNextCell(eventArgs.originalEvent, direction);
+        }
+      });
     } else if (allowEditingOnEnterKey) {
       this._startEditing(eventArgs);
     }
@@ -1051,6 +1074,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   private _handleEnterKeyEditingCell(event) {
+    const d = Deferred();
     const { target } = event;
     const $cell = this._getCellElementFromTarget(target);
     const isRowEditMode = this._isRowEditMode();
@@ -1062,13 +1086,16 @@ export class KeyboardNavigationController extends modules.ViewController {
       setTimeout(
         this._editingController.saveEditData.bind(this._editingController),
       );
+      d.resolve();
     } else {
       // @ts-expect-error
       eventsEngine.trigger($(target), 'change');
-      this._closeEditCell();
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      this._closeEditCell().always(d.resolve);
 
       event.preventDefault();
     }
+    return d;
   }
 
   /**
@@ -1612,7 +1639,6 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._isNeedScroll = false;
     this._focusedCellPosition = {};
     clearTimeout(this._updateFocusTimeout);
-    // @ts-expect-error
     this._focusedView?.renderFocusState({ preventScroll });
   }
 
@@ -2093,7 +2119,6 @@ export class KeyboardNavigationController extends modules.ViewController {
           $input.val(inputValue);
 
           const $widgetContainer = $input.closest(`.${WIDGET_CLASS}`);
-          // @ts-expect-error
           eventsEngine.off($widgetContainer, 'focusout'); // for NumberBox to save entered symbol
           // @ts-expect-error
           eventsEngine.one($widgetContainer, 'focusout', () => {
@@ -2591,7 +2616,9 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender 
     }
   }
 
-  private renderFocusState(params) {
+  public renderFocusState(params) {
+    super.renderFocusState(params);
+
     const { preventScroll, pageSizeChanged } = params ?? {};
     const $rowsViewElement = this.element();
 
@@ -2794,9 +2821,21 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
 
     const result = super.closeEditCell.apply(this, arguments as any);
 
-    keyboardNavigation._updateFocus();
+    const $focusedElement = this._getFocusedElement();
+    const isFilterCell = !!$focusedElement.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
+
+    if (!isFilterCell) {
+      keyboardNavigation._updateFocus();
+    }
 
     return result;
+  }
+
+  private _getFocusedElement() {
+    const $element = $(this.component.element?.());
+    const $focusedElement = $element.find(':focus');
+
+    return $focusedElement;
   }
 
   protected _delayedInputFocus() {
@@ -2861,6 +2900,13 @@ const adaptiveColumns = (Base: ModuleType<AdaptiveColumnsController>) => class A
 
     if (viewName === COLUMN_HEADERS_VIEW && !isCommandColumn && isCellInHeaderRow($cell)) {
       $cell.removeAttr('tabindex');
+    }
+  }
+
+  protected _hideVisibleColumnInView({ view, isCommandColumn, visibleIndex }) {
+    super._hideVisibleColumnInView({ view, isCommandColumn, visibleIndex });
+    if (view.name === ROWS_VIEW) {
+      this._rowsView.renderFocusState(null);
     }
   }
 };

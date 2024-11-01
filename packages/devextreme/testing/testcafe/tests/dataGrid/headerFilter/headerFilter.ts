@@ -168,3 +168,28 @@ test('Header filter should support string height and width', async (t) => {
     width: '330px',
   },
 }));
+
+test('DataGrid - Column Header filter does not properly work if the column caption contains double quotes (T1251768)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(GRID_CONTAINER);
+  const filterIconElement = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getFilterIcon();
+
+  await t
+    .click(filterIconElement)
+    .expect(await takeScreenshot('T1251768-header-filter-double-quotes.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(5, 1),
+  headerFilter: {
+    visible: true,
+  },
+  columns: [
+    {
+      dataField: 'Position',
+      caption: '"סה"כ שולם"',
+    },
+    'FirstName',
+  ],
+}));

@@ -106,7 +106,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
   private _editingController!: EditingController;
 
-  private _rowsView!: RowsView;
+  protected _rowsView!: RowsView;
 
   private _hiddenColumns: any;
 
@@ -257,7 +257,6 @@ export class AdaptiveColumnsController extends modules.ViewController {
           isItemEdited: that._isItemEdited(item),
           value: cellOptions.row.values[columnIndex],
         }), () => {
-          // @ts-expect-error
           $container.contents().remove();
           $container.removeClass(ADAPTIVE_ITEM_TEXT_CLASS);
           renderFormTemplate();
@@ -519,7 +518,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
     });
   }
 
-  private _hideVisibleColumnInView({ view, isCommandColumn, visibleIndex }) {
+  protected _hideVisibleColumnInView({ view, isCommandColumn, visibleIndex }) {
     const viewName = view.name;
     let $cellElement;
     const column = this._columnsController.getVisibleColumns()[visibleIndex];

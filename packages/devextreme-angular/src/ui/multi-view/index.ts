@@ -63,7 +63,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxMultiView<TItem, TKey>;
+    instance: DxMultiView<TItem, TKey> = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

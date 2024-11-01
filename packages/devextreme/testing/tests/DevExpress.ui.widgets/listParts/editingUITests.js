@@ -9,9 +9,9 @@ import config from 'core/config';
 import pointerMock from '../../../helpers/pointerMock.js';
 import contextMenuEvent from 'events/contextmenu';
 import keyboardMock from '../../../helpers/keyboardMock.js';
-import decoratorRegistry from 'ui/list/ui.list.edit.decorator_registry';
-import SwitchableEditDecorator from 'ui/list/ui.list.edit.decorator.switchable';
-import SwitchableButtonEditDecorator from 'ui/list/ui.list.edit.decorator.switchable.button';
+import { registry, register } from '__internal/ui/list/m_list.edit.decorator_registry';
+import SwitchableEditDecorator from '__internal/ui/list/m_list.edit.decorator.switchable';
+import SwitchableButtonEditDecorator from '__internal/ui/list/m_list.edit.decorator.switchable.button';
 import themes from 'ui/themes';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
@@ -58,10 +58,10 @@ QUnit.module('switchable menu decorator', {
 
         });
 
-        decoratorRegistry.register('menu', 'test', testDecorator);
+        register('menu', 'test', testDecorator);
     },
     afterEach: function() {
-        delete decoratorRegistry.registry.menu.test;
+        delete registry.menu.test;
     }
 });
 
@@ -289,12 +289,12 @@ QUnit.module('switchable button delete decorator', {
             }
 
         });
-        decoratorRegistry.register('menu', 'test', testDecorator);
+        register('menu', 'test', testDecorator);
     },
     afterEach: function() {
         fx.off = false;
 
-        delete decoratorRegistry.registry.menu.test;
+        delete registry.menu.test;
     }
 });
 

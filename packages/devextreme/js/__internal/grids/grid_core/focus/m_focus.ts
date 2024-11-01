@@ -358,9 +358,9 @@ export class FocusController extends core.ViewController {
     return undefined;
   }
 
-  public updateFocusedRow(e: { focusedRowKey?: number; focusedRowIndex?: number; preventScroll?: boolean }) {
+  public updateFocusedRow(e: { focusedRowKey?: any; preventScroll?: boolean }) {
     const that = this;
-    const focusedRowIndex = e.focusedRowIndex ?? that.getDataController().getRowIndexByKey(e.focusedRowKey);
+    const focusedRowIndex = that.getDataController().getRowIndexByKey(e.focusedRowKey);
     const rowsView = that.getView('rowsView');
     let $tableElement;
 
@@ -534,6 +534,8 @@ const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExten
 };
 
 const data = (Base: ModuleType<DataController>) => class FocusDataControllerExtender extends Base {
+  private _needToUpdateFocusedRowByIndex = false;
+
   protected _applyChange(change) {
     if (change && change.changeType === 'updateFocusedRow') return;
 
@@ -548,7 +550,10 @@ const data = (Base: ModuleType<DataController>) => class FocusDataControllerExte
       const isPartialUpdate = e.changeType === 'update' && e.repaintChangesOnly;
       const isPartialUpdateWithDeleting = isPartialUpdate && e.changeTypes && e.changeTypes.indexOf('remove') >= 0;
 
-      if (e.changeType === 'refresh' && e.items.length || isPartialUpdateWithDeleting) {
+      if (this._needToUpdateFocusedRowByIndex) {
+        this._needToUpdateFocusedRowByIndex = false;
+        this._focusController._focusRowByIndex();
+      } else if (e.changeType === 'refresh' && e.items.length || isPartialUpdateWithDeleting) {
         this._updatePageIndexes();
         this._updateFocusedRow(e);
       } else if (e.changeType === 'append' || e.changeType === 'prepend') {
@@ -557,6 +562,14 @@ const data = (Base: ModuleType<DataController>) => class FocusDataControllerExte
         this._updateFocusedRow(e);
       }
     }
+  }
+
+  protected _handleDataPushed(changes) {
+    super._handleDataPushed(changes);
+
+    const focusedRowKey = this.option('focusedRowKey');
+
+    this._needToUpdateFocusedRowByIndex = changes?.some((change) => change.type === 'remove' && equalByValue(change.key, focusedRowKey));
   }
 
   private _updatePageIndexes() {
@@ -873,7 +886,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
 
     if (!isPaging && rowIndex < 0 && rowIndexFromOption >= 0) {
       this._focusController.updateFocusedRow({
-        focusedRowIndex: rowIndexFromOption,
+        focusedRowKey,
         preventScroll,
       });
     }

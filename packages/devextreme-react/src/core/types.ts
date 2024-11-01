@@ -54,6 +54,7 @@ export type DXTemplateCreator = (templateOptions: Record<string, ITemplate>) => 
 
 export interface TemplateManagerProps {
   init: (args: InitArgument) => void;
+  onTemplatesRendered: () => void;
 }
 
 export interface TemplateInstantiationModel {

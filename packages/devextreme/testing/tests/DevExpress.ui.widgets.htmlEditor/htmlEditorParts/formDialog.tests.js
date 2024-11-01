@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import FormDialog from 'ui/html_editor/ui/formDialog';
+import FormDialog from '__internal/ui/html_editor/ui/m_formDialog';
 import { isPromise } from 'core/utils/type';
 import devices from 'core/devices';
 import { getCurrentScreenFactor, hasWindow } from 'core/utils/window';

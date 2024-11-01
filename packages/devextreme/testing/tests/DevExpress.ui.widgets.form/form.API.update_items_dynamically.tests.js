@@ -1,8 +1,8 @@
 import { getWidth } from 'core/utils/size';
 import $ from 'jquery';
-import 'ui/form/ui.form';
-import 'ui/form/ui.form.layout_manager';
-import { renderLabel } from 'ui/form/components/label.js';
+import 'ui/form';
+import '__internal/ui/form/m_form.layout_manager';
+import { renderLabel } from '__internal/ui/form/components/m_label';
 
 import 'generic_light.css!';
 

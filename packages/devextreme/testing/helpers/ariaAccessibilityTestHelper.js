@@ -77,7 +77,7 @@ class ariaAccessibilityTestHelper {
         const expectedAttributes = {
             role: 'checkbox',
             'aria-checked': $checkBox.hasClass('dx-checkbox-indeterminate') ? 'mixed' : defaultValue,
-            'aria-label': 'Check State',
+            'aria-label': 'Check state',
         };
 
         if(attributes && attributes.includes('aria-disabled')) {

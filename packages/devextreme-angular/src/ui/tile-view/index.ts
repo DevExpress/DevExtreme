@@ -64,7 +64,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxTileView<TItem, TKey>;
+    instance: DxTileView<TItem, TKey> = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

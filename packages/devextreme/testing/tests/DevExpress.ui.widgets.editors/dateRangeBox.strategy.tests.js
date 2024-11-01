@@ -35,7 +35,7 @@ const moduleConfig = {
 
             this.startDateBox = this.instance.getStartDateBox();
             this.endDateBox = this.instance.getEndDateBox();
-            this.getCalendar = () => this.instance.getStartDateBox()._strategy._widget;
+            this.getCalendar = () => this.startDateBox.getStrategy().getWidget();
         };
 
         this.reinit = (options) => {

@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import devices from 'core/devices';
 
-import 'ui/form/ui.form';
+import 'ui/form';
 
 import 'generic_light.css!';
 

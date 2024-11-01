@@ -71,7 +71,8 @@ function getActiveAccessibleElements(ariaLabel, viewElement) {
     let $activeElements;
 
     if(ariaLabel) {
-        $activeElements = $viewElement.find(`[aria-label="${ariaLabel}"][tabindex]`);
+        const escapedAriaLabel = ariaLabel?.replace(/"/g, '\\"');
+        $activeElements = $viewElement.find(`[aria-label="${escapedAriaLabel}"][tabindex]`);
     } else {
         $activeElements = $viewElement.find('[tabindex]');
     }

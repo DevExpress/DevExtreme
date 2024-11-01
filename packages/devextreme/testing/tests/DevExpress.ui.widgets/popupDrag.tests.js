@@ -1,7 +1,7 @@
 
 import $ from 'jquery';
-import PopupDrag from 'ui/popup/popup_drag';
-import { PopupPositionController } from 'ui/popup/popup_position_controller';
+import PopupDrag from '__internal/ui/popup/m_popup_drag';
+import { PopupPositionController } from '__internal/ui/popup/m_popup_position_controller';
 
 const KEYBOARD_DRAG_STEP = 5;
 

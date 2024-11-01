@@ -50,6 +50,7 @@ import {
   EDIT_FORM_CLASS,
   EDIT_ICON_CLASS,
   EDIT_LINK_CLASS,
+  EDIT_MODE_POPUP,
   EDIT_MODE_ROW,
   EDIT_MODES,
   EDITING_CHANGES_OPTION_NAME,
@@ -132,7 +133,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   private _internalState: any;
 
-  private _refocusEditCell: any;
+  protected _refocusEditCell: any;
 
   protected _editCellInProgress: any;
 
@@ -146,7 +147,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   protected _pageIndex: any;
 
-  private _inputFocusTimeoutID: any;
+  protected _inputFocusTimeoutID: any;
 
   public init() {
     this._columnsController = this.getController('columns');
@@ -350,6 +351,11 @@ class EditingControllerImpl extends modules.ViewController {
     }
 
     return result;
+  }
+
+  protected isPopupEditMode() {
+    const editMode = this.option('editing.mode');
+    return editMode === EDIT_MODE_POPUP;
   }
 
   private _isButtonVisible(button, options) {

@@ -57,6 +57,10 @@ const changePaging = function (that, optionName, value) {
     return dataSource[optionName]();
   }
 
+  if (optionName === 'pageIndex' && value !== undefined) {
+    return Deferred().resolve().promise();
+  }
+
   return 0;
 };
 
@@ -603,7 +607,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this.dataErrorOccurred.fire(e);
   }
 
-  private _handleDataPushed(changes) {
+  protected _handleDataPushed(changes) {
     this.pushed.fire(changes);
   }
 

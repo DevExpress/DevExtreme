@@ -34,7 +34,8 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
   protected _isDefaultButtonVisible(button, options) {
     const isRowMode = this.isRowBasedEditMode();
-    const isEditRow = options.row && equalByValue(options.row.key, this.option(EDITING_EDITROWKEY_OPTION_NAME));
+    const isPopupEditMode = this.isPopupEditMode();
+    const isEditRow = !isPopupEditMode && options.row && equalByValue(options.row.key, this.option(EDITING_EDITROWKEY_OPTION_NAME));
 
     if (isRowMode) {
       switch (button.name) {

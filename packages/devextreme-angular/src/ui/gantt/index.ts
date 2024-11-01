@@ -82,7 +82,7 @@ import { DxiStripLineComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxGanttComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxGantt;
+    instance: DxGantt = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

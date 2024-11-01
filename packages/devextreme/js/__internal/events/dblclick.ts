@@ -54,6 +54,10 @@ const DblClick = Class.inherit({
     } else {
       this._firstClickTarget = e.target;
       this._lastClickTimeStamp = timeStamp;
+      clearTimeout(this._lastClickClearTimeout);
+      this._lastClickClearTimeout = setTimeout(() => {
+        this._forgetLastClick();
+      }, DBLCLICK_TIMEOUT * 2);
     }
   },
 
@@ -63,6 +67,7 @@ const DblClick = Class.inherit({
     if (this._handlerCount <= 0) {
       this._forgetLastClick();
       eventsEngine.off(domAdapter.getDocument(), NAMESPACED_CLICK_EVENT, undefined);
+      clearTimeout(this._lastClickClearTimeout);
 
       this._handlerCount = 0;
     }

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import ImageCursor from 'ui/html_editor/modules/imageCursor';
+import ImageCursor from '__internal/ui/html_editor/modules/m_imageCursor';
 import { name as clickEvent } from 'events/click';
 
 const moduleConfig = {

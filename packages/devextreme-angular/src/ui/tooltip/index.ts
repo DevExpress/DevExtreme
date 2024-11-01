@@ -67,7 +67,7 @@ import { DxoShowEventModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxTooltipComponent extends DxComponent implements OnDestroy {
-    instance: DxTooltip;
+    instance: DxTooltip = null;
 
     /**
      * [descr:dxPopoverOptions.animation]

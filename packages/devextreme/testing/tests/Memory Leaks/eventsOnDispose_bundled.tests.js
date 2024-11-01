@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import GoogleProvider from 'ui/map/provider.dynamic.google';
+import GoogleProvider from '__internal/ui/map/m_provider.dynamic.google';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
 
 import 'bundles/modules/parts/widgets-web';

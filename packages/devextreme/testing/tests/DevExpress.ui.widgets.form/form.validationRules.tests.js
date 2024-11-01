@@ -4,7 +4,7 @@ import { logger } from 'core/utils/console';
 import ValidationEngine from 'ui/validation_engine';
 import { Deferred } from 'core/utils/deferred';
 
-import 'ui/form/ui.form';
+import 'ui/form';
 import 'ui/text_area';
 import 'ui/autocomplete';
 import 'ui/calendar';
@@ -473,6 +473,33 @@ QUnit.test('Changing an validationRules options of an any item does not invalida
     assert.strictEqual(form.option('items[1].validationRules[0].max'), 11, 'correct validationRule option');
     assert.strictEqual(formInvalidateSpy.callCount, 0, 'Invalidate does not called');
     assert.strictEqual(renderComponentSpy.callCount, 0, 'renderComponentSpy.callCount');
+});
+
+[false, true].forEach(hasValidationGroup => {
+    QUnit.test(`form ${hasValidationGroup ? 'with' : 'without'} validationGroup property specified should validate without errors after nested validators remove (T1233487)`, function(assert) {
+        const form = $('#form').dxForm({
+            validationGroup: hasValidationGroup ? 'test' : undefined,
+            formData: {
+                firstName: 'Kyle',
+            },
+            items: [{
+                itemType: 'group',
+                items: [{
+                    dataField: 'firstName',
+                    validationRules: [{ type: 'required' }]
+                }],
+            }],
+        }).dxForm('instance');
+
+        form.option('items[0].items', []);
+
+        try {
+            form.validate();
+            assert.ok(true);
+        } catch(e) {
+            assert.ok(false, 'error is thrown');
+        }
+    });
 });
 
 QUnit.test('Validate the form without validation rules for an any simple items', function(assert) {

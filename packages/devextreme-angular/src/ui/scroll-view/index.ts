@@ -51,7 +51,7 @@ import {
     ]
 })
 export class DxScrollViewComponent extends DxComponent implements OnDestroy {
-    instance: DxScrollView;
+    instance: DxScrollView = null;
 
     /**
      * [descr:dxScrollableOptions.bounceEnabled]

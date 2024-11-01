@@ -182,7 +182,7 @@ QUnit.test('resize', function(assert) {
 
     this.legend.resize({ width: 300, height: 100 });
 
-    assert.strictEqual(this.renderer.g.callCount, 18, 'redrawn');
+    assert.strictEqual(this.renderer.g.callCount, 19, 'redrawn');
     assert.strictEqual(this.notifyDirty.callCount, 1, 'notify dirty');
     assert.strictEqual(this.notifyReady.callCount, 1, 'notify ready');
 });

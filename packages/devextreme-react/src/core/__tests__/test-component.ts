@@ -8,6 +8,7 @@ const Widget = {
   resetOption: jest.fn(),
   beginUpdate: jest.fn(),
   endUpdate: jest.fn(),
+  focus: jest.fn(),
   element: (undefined as unknown as Element),
   on: (event: string, handler: (e: any) => void): void => {
     if (eventHandlers[event]) {

@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 
-import 'ui/color_box/color_view';
+import '__internal/ui/color_box/m_color_view';
 
 QUnit.testStart(function() {
     const markup =

@@ -68,7 +68,7 @@ import { DxiViewComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxScheduler;
+    instance: DxScheduler = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

@@ -15,7 +15,7 @@ export interface dxElementWrapper {
 
   appendTo(element: Element | dxElementWrapper): this;
 
-  attr(attributeName: string, value: string | number | null): this;
+  attr(attributeName: string, value: string | number | boolean | null): this;
 
   attr(attributeName: string): string | undefined;
 
@@ -61,7 +61,7 @@ export interface dxElementWrapper {
 
   insertBefore(element: Element | dxElementWrapper): this;
 
-  is(selector: string): boolean;
+  is(selector: string | dxElementWrapper): boolean;
 
   last(): this;
 
@@ -87,7 +87,7 @@ export interface dxElementWrapper {
 
   prop(propertyName: string, value: string | number | boolean): this;
 
-  remove(element: Element | dxElementWrapper): this;
+  remove(element?: Element | dxElementWrapper): this;
 
   removeAttr(attributeName: string): this;
 

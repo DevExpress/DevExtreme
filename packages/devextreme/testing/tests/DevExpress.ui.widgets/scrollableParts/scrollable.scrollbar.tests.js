@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import animationFrame from 'animation/frame';
 import devices from 'core/devices';
-import Scrollbar from 'ui/scroll_view/ui.scrollbar';
+import Scrollbar from '__internal/ui/scroll_view/m_scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
@@ -567,6 +567,22 @@ QUnit.test('scrollbar add active class when thumb is clicked', function(assert) 
 
     pointerMock($('body')).start().up();
     assert.equal($scrollbar.hasClass(SCROLLBAR_ACTIVE_CLASS), false, 'active class was not attached after mouse up');
+});
+
+QUnit.test('preventDefault should be called when the thumb is clicked cancels the default selection behavior', function(assert) {
+    const $scrollable = $('#scrollable').dxScrollable({
+        useNative: false,
+        showScrollbar: 'onHover',
+        scrollByThumb: true
+    });
+
+    const $thumb = $scrollable.find(`.${SCROLLABLE_SCROLL_CLASS}`);
+
+    const mouse = pointerMock($thumb).start();
+
+    mouse.down();
+
+    assert.strictEqual(mouse.lastEvent().isDefaultPrevented(), true, 'default action is prevented for dxpointerdown on a thumb click');
 });
 
 QUnit.test('scrollbar add active class when click on scrollbar area', function(assert) {

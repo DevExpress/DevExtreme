@@ -81,7 +81,7 @@ import { DxoShadowModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxFunnel;
+    instance: DxFunnel = null;
 
     /**
      * [descr:dxFunnelOptions.adaptiveLayout]

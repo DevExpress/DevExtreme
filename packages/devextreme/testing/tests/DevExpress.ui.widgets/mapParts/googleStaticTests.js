@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import testing from './utils.js';
 import Map from 'ui/map';
-import GoogleStaticProvider from 'ui/map/provider.google_static';
+import GoogleStaticProvider from '__internal/ui/map/m_provider.google_static';
 import Color from 'color';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 

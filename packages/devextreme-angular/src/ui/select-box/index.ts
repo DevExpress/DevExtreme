@@ -94,7 +94,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxSelectBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    instance: DxSelectBox;
+    instance: DxSelectBox = null;
 
     /**
      * [descr:dxSelectBoxOptions.acceptCustomValue]

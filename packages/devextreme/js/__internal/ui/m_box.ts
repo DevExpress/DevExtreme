@@ -10,7 +10,7 @@ import {
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import CollectionWidget from '@js/ui//collection/ui.collection_widget.edit';
-import CollectionWidgetItem from '@js/ui/collection/item';
+import CollectionWidgetItem from '@ts/ui/collection/m_item';
 
 const BOX_CLASS = 'dx-box';
 const BOX_FLEX_CLASS = 'dx-box-flex';

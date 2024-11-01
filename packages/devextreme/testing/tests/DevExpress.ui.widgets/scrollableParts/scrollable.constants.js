@@ -1,4 +1,8 @@
-import simulatedStrategy from 'ui/scroll_view/ui.scrollable.simulated';
+import {
+    FRAME_DURATION,
+    ACCELERATION,
+    MIN_VELOCITY_LIMIT,
+} from '__internal/ui/scroll_view/m_scrollable.simulated';
 
 export const SCROLLABLE_CLASS = 'dx-scrollable';
 export const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
@@ -18,9 +22,11 @@ export const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = 'dx-scrollable-scrollbar-active
 export const RTL_CLASS = 'dx-rtl';
 export const SCROLLBAR_HOVERABLE_CLASS = 'dx-scrollbar-hoverable';
 
-export const FRAME_DURATION = simulatedStrategy.FRAME_DURATION;
-export const ACCELERATION = simulatedStrategy.ACCELERATION;
-export const MIN_VELOCITY_LIMIT = simulatedStrategy.MIN_VELOCITY_LIMIT;
+export {
+    FRAME_DURATION,
+    ACCELERATION,
+    MIN_VELOCITY_LIMIT,
+};
 
 export const calculateInertiaDistance = function(distance, duration) {
     let velocity = FRAME_DURATION * distance / duration;

@@ -66,7 +66,7 @@ import { DxiRouteComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxMap;
+    instance: DxMap = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

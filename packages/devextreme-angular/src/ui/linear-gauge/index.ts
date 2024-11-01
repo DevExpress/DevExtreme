@@ -86,7 +86,7 @@ import { DxoValueIndicatorModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxLinearGauge;
+    instance: DxLinearGauge = null;
 
     /**
      * [descr:BaseGaugeOptions.animation]

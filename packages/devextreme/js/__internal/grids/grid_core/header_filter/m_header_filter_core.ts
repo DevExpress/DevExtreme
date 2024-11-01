@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import '@js/ui/list/modules/search';
-import '@js/ui/list/modules/selection';
+import '@ts/ui/list/modules/m_search';
+import '@ts/ui/list/modules/m_selection';
 
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';

@@ -11,7 +11,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import dateUtils from 'core/utils/date';
 import dateLocalization from 'localization/date';
 import translator from 'animation/translator';
-import tooltip from 'ui/tooltip/ui.tooltip';
+import { hide } from '__internal/ui/tooltip/m_tooltip';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
 import dragEvents from 'events/drag';
@@ -414,7 +414,7 @@ module('API', moduleConfig, () => {
 
             $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-            tooltip.hide();
+            hide();
 
             assert.ok(updateAppointment.calledOnce, 'Update method is called');
             assert.deepEqual(updateAppointment.getCall(0).args[0], updatedItem, 'Target item is correct');

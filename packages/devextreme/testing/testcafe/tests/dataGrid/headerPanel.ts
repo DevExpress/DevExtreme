@@ -151,3 +151,32 @@ test('Toolbar should render on changing visibility if visibility is false initia
     visible: false,
   },
 }));
+
+test('Toolbar should not reset its widget values when changing the disabled property', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const toolbar = dataGrid.getToolbar();
+  const textBox = toolbar.getItem(0);
+
+  // act
+  await t.typeText(textBox, 'test');
+
+  // assert
+  await t
+    .expect(textBox.find('input').value)
+    .eql('test');
+
+  // act
+  await dataGrid.option('toolbar.disabled', false);
+
+  // assert
+  await t
+    .expect(textBox.find('input').value)
+    .eql('test');
+}).before(async () => createWidget('dxDataGrid', {
+  showBorders: true,
+  toolbar: {
+    items: [{
+      widget: 'dxTextBox',
+    }],
+  },
+}));

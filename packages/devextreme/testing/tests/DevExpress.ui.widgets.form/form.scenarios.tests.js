@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import FormLayoutTestWrapper from '../../helpers/FormLayoutTestWrapper.js';
 import browser from 'core/utils/browser';
-import 'ui/form/ui.form';
+import 'ui/form';
 
 import 'generic_light.css!';
 

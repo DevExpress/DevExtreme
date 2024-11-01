@@ -3,7 +3,7 @@ import type { WidgetName } from '../../helpers/widgetTypings';
 import Widget from '../internal/widget';
 import Field from './field';
 
-type FieldType = 'item' | 'groupOperation' | 'itemOperation';
+type FieldType = 'item' | 'groupOperation' | 'itemOperation' | 'itemAction';
 const CLASS = {
   item: 'dx-filterbuilder-item-field',
   popupContent: 'dx-popup-content',
@@ -11,6 +11,7 @@ const CLASS = {
   treeViewLeaf: 'dx-treeview-node-is-leaf',
   groupOperation: 'dx-filterbuilder-group-operation',
   itemOperation: 'dx-filterbuilder-item-operation',
+  itemAction: 'dx-filterbuilder-action',
 };
 
 export default class FilterBuilder extends Widget {

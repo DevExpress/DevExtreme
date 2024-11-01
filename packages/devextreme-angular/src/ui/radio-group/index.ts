@@ -76,7 +76,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxRadioGroupComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    instance: DxRadioGroup;
+    instance: DxRadioGroup = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

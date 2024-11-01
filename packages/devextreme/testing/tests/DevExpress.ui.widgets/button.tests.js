@@ -2,7 +2,7 @@ import $ from 'jquery';
 import renderer from 'core/renderer';
 import ValidationEngine from 'ui/validation_engine';
 import Validator from 'ui/validator';
-import DefaultAdapter from 'ui/validation/default_adapter';
+import DefaultAdapter from '__internal/ui/validation/m_default_adapter';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';

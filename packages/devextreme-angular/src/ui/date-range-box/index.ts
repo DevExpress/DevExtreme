@@ -94,7 +94,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    instance: DxDateRangeBox;
+    instance: DxDateRangeBox = null;
 
     /**
      * [descr:dxDropDownEditorOptions.acceptCustomValue]

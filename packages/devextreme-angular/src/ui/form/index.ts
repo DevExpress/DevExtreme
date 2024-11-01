@@ -67,7 +67,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxForm;
+    instance: DxForm = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

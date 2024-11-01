@@ -12,7 +12,7 @@ import { GanttTreeListNodesState } from './ui.gantt.treelist.nodes_state';
 const GANTT_TASKS = 'tasks';
 const GANTT_COLLAPSABLE_ROW = 'dx-gantt-collapsable-row';
 const GANTT_DEFAULT_ROW_HEIGHT = 34;
-const GANTT_SCROLL_ACTIVATION_LEVEL = 1;
+const GANTT_SCROLL_ACTIVATION_LEVEL = 2;
 
 export class GanttTreeList {
     constructor(gantt) {

@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import $ from '@js/core/renderer';
 import { equalByValue, noop } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
@@ -202,7 +203,8 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return super.selectedItemKeys(value, preserve, isDeselect, isSelectAll);
   }
 
-  public changeItemSelection(itemIndex, keyboardKeys) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public changeItemSelection(itemIndex, keyboardKeys, setFocusOnly?: boolean): boolean | DeferredObj<unknown> | undefined {
     const isRecursiveSelection = this.isRecursiveSelection();
     const callBase = super.changeItemSelection.bind(this);
 

@@ -77,7 +77,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxDropDownButtonComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxDropDownButton;
+    instance: DxDropDownButton = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

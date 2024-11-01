@@ -51,7 +51,7 @@ import {
     ]
 })
 export class DxButtonComponent extends DxComponent implements OnDestroy {
-    instance: DxButton;
+    instance: DxButton = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import ko from 'knockout';
-import { FIELD_ITEM_CONTENT_CLASS } from 'ui/form/constants';
-import { FIELD_ITEM_CONTENT_LOCATION_CLASS } from 'ui/form/components/field_item';
-import { FIELD_ITEM_LABEL_LOCATION_CLASS } from 'ui/form/components/label';
+import { FIELD_ITEM_CONTENT_CLASS } from '__internal/ui/form/constants';
+import { FIELD_ITEM_CONTENT_LOCATION_CLASS } from '__internal/ui/form/components/m_field_item';
+import { FIELD_ITEM_LABEL_LOCATION_CLASS } from '__internal/ui/form/components/m_label';
 
 import fx from 'animation/fx';
 

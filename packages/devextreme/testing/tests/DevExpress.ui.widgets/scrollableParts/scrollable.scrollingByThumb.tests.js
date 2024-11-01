@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import animationFrame from 'animation/frame';
-import Scrollbar from 'ui/scroll_view/ui.scrollbar';
+import Scrollbar from '__internal/ui/scroll_view/m_scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 
@@ -113,7 +113,7 @@ QUnit.test('scroll by thumb', function(assert) {
     mouse.move(0, distance);
     location = getScrollOffset($scrollable);
 
-    assert.notOk(downEvent.isDefaultPrevented(), 'default is not prevented'); // T516691
+    assert.strictEqual(downEvent.isDefaultPrevented(), true, 'default should be prevented (T1240632)');
     assert.equal(location.top, -distance / containerToContentRatio, 'scroll follows pointer');
 
     mouse.move(0, distance);
