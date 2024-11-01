@@ -130,9 +130,15 @@
   }
 
   & > td {
+    border-top: $datagrid-border;
     background-color: $datagrid-summary-bg;
     border-left-width: 0;
     border-right-width: 0;
+  }
+
+  &.dx-row-lines > td {
+    border-top: none;
+    border-bottom: none;
   }
 }
 
