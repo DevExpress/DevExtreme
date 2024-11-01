@@ -1,4 +1,13 @@
 /* eslint-disable max-classes-per-file */
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointerEvents from '@js/common/core/events/pointer';
+import { keyboard } from '@js/common/core/events/short';
+import {
+  addNamespace,
+  createEvent,
+  isCommandKeyPressed,
+} from '@js/common/core/events/utils/index';
 import { noop } from '@js/core//utils/common';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
@@ -13,15 +22,6 @@ import {
   getWidth,
 } from '@js/core/utils/size';
 import { isDeferred, isDefined, isEmptyObject } from '@js/core/utils/type';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import pointerEvents from '@js/events/pointer';
-import { keyboard } from '@js/events/short';
-import {
-  addNamespace,
-  createEvent,
-  isCommandKeyPressed,
-} from '@js/events/utils/index';
 import * as accessibility from '@js/ui/shared/accessibility';
 import { focused } from '@js/ui/widget/selectors';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';

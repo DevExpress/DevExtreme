@@ -1,5 +1,5 @@
+import type { DataSource } from '@js/common/data';
 import type { dxElementWrapper } from '@js/core/renderer';
-import type DataSource from '@js/data/data_source';
 import type { CollectionWidgetOptions, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.base';
 

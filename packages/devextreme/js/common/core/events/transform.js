@@ -1,4 +1,4 @@
-import { exportNames } from '../__internal/events/m_transform';
+import { exportNames } from '../../../__internal/events/m_transform';
 
 /**
  * @name UI Events.dxtransformstart

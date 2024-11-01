@@ -1,5 +1,6 @@
-import fx from '@js/animation/fx';
-import { resetPosition } from '@js/animation/translator';
+import { fx } from '@js/common/core/animation';
+import { resetPosition } from '@js/common/core/animation/translator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
@@ -10,7 +11,6 @@ import {
   getHeight, getOuterHeight, getOuterWidth, getWidth,
 } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
 import Draggable from '@ts/m_draggable';
 
 import { isDefined } from '../core/utils/type';

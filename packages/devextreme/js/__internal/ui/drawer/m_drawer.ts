@@ -1,4 +1,7 @@
-import fx from '@js/animation/fx';
+import { fx } from '@js/common/core/animation';
+import { name as CLICK_EVENT_NAME } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
@@ -8,9 +11,6 @@ import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import { name as CLICK_EVENT_NAME } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import { triggerResizeEvent } from '@js/events/visibility_change';
 import Widget from '@js/ui/widget/ui.widget';
 
 import { animation } from './m_drawer.animation';

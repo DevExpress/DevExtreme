@@ -7,15 +7,12 @@ import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     AnimationConfig,
-} from '../animation/fx';
-
-import {
     PositionConfig,
-} from '../animation/position';
+} from '../common/core/animation';
 
 import dxOverlay, {
     dxOverlayAnimation,

@@ -22,4 +22,4 @@
   * @module events/swipe
 */
 
-export * from '../__internal/events/m_swipe';
+export * from '../../../__internal/events/m_swipe';

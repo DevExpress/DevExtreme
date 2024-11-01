@@ -4,4 +4,4 @@
  * @param1 options:Object
  * @hidden
 */
-export { default } from '../__internal/data/m_endpoint_selector';
+export { default } from '../../__internal/data/m_endpoint_selector';

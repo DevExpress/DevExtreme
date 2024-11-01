@@ -7,11 +7,11 @@ import {
     isPlainObject
 } from './core/utils/type';
 import dateUtils from './core/utils/date';
-import numberLocalization from './localization/number';
-import dateLocalization from './localization/date';
+import numberLocalization from './common/core/localization/number';
+import dateLocalization from './common/core/localization/date';
 import dependencyInjector from './core/utils/dependency_injector';
 
-import './localization/currency';
+import './common/core/localization/currency';
 
 export default dependencyInjector({
     format: function(value, format) {

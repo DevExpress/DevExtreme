@@ -1,6 +1,6 @@
+import { DataSource } from '@js/common/data/data_source/data_source';
+import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import { extend } from '@js/core/utils/extend';
-import { DataSource } from '@js/data/data_source/data_source';
-import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
 import DataController from '@ts/ui/collection/m_data_controller';
 
 import type { Controller } from '../m_modules';

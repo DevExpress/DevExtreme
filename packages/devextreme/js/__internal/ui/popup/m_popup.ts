@@ -1,5 +1,7 @@
 import '@js/ui/toolbar/ui.toolbar.base';
 
+import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
@@ -24,8 +26,6 @@ import {
 } from '@js/core/utils/size';
 import { isDefined, isObject } from '@js/core/utils/type';
 import { compare as compareVersions } from '@js/core/utils/version';
-import { triggerResizeEvent } from '@js/events/visibility_change';
-import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import type { ToolbarItem } from '@js/ui/popup';

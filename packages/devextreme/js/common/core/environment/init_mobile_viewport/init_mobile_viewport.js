@@ -1,15 +1,15 @@
-import { getWidth, setWidth } from '../../core/utils/size';
-import $ from '../../core/renderer';
-import { getWindow } from '../../core/utils/window';
+import { getWidth, setWidth } from '../../../../core/utils/size';
+import $ from '../../../../core/renderer';
+import { getWindow } from '../../../../core/utils/window';
 const window = getWindow();
 import eventsEngine from '../../events/core/events_engine';
-import { extend } from '../../core/utils/extend';
-import resizeCallbacks from '../../core/utils/resize_callbacks';
-import { styleProp } from '../../core/utils/style';
+import { extend } from '../../../../core/utils/extend';
+import resizeCallbacks from '../../../../core/utils/resize_callbacks';
+import { styleProp } from '../../../../core/utils/style';
 
-import devices from '../../__internal/core/m_devices';
-import domAdapter from '../../__internal/core/m_dom_adapter';
-import supportUtils from '../../__internal/core/utils/m_support';
+import devices from '../../../../__internal/core/m_devices';
+import domAdapter from '../../../../__internal/core/m_dom_adapter';
+import supportUtils from '../../../../__internal/core/utils/m_support';
 
 export const initMobileViewport = function(options) {
     options = extend({}, options);

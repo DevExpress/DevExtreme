@@ -1,4 +1,5 @@
 import type { Orientation } from '@js/common';
+import { toFixed } from '@js/common/core/localization/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import {
   getHeight,
@@ -8,7 +9,6 @@ import {
   normalizeStyleProp, styleProp,
 } from '@js/core/utils/style';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
-import { toFixed } from '@js/localization/utils';
 import type { Item } from '@js/ui/splitter';
 
 import { compareNumbersWithPrecision, PRECISION } from './number_comparison';

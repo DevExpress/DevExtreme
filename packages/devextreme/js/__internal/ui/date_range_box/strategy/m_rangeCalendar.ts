@@ -1,6 +1,6 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import { extend } from '@js/core/utils/extend';
 import { isFunction } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
 import type Calendar from '@js/ui/calendar';
 import type DateBox from '@js/ui/date_box';
 

@@ -1,5 +1,5 @@
+import { toFixed } from '@js/common/core/localization/utils';
 import { isDefined } from '@js/core/utils/type';
-import { toFixed } from '@js/localization/utils';
 
 import { findLastIndexOfVisibleItem, normalizePanelSize } from './layout';
 import { compareNumbersWithPrecision, PRECISION } from './number_comparison';

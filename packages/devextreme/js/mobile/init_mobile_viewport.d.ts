@@ -1,7 +1,6 @@
+import { initMobileViewport } from '../common/core/environment';
+
 /**
- * @docid utils.initMobileViewport
- * @publicName initMobileViewport(options)
- * @namespace DevExpress.utils
- * @public
+ * @deprecated Use initMobileViewport from /common/core/environment instead
  */
-export default function initMobileViewport(options: { allowZoom?: boolean; allowPan?: boolean; allowSelection?: boolean }): void;
+export default initMobileViewport;

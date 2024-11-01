@@ -1,10 +1,10 @@
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace } from '@js/events/utils/index';
 import Editor from '@js/ui/editor/editor';
 
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';

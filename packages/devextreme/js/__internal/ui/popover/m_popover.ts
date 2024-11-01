@@ -1,5 +1,7 @@
-import positionUtils from '@js/animation/position';
-import { move } from '@js/animation/translator';
+import positionUtils from '@js/common/core/animation/position';
+import { move } from '@js/common/core/animation/translator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
@@ -12,8 +14,6 @@ import {
 } from '@js/core/utils/size';
 import { isObject, isString } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace } from '@js/events/utils/index';
 import Popup from '@js/ui/popup/ui.popup';
 import { isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
@@ -258,7 +258,6 @@ const Popover = Popup.inherit({
     this._updateContentSize(shouldUpdateDimensions);
 
     const contentPosition = this._getContainerPosition();
-    // @ts-expect-error
     const resultLocation = positionUtils.setup(this.$overlayContent(), contentPosition);
 
     const positionSide = this._getSideByLocation(resultLocation);
@@ -288,7 +287,6 @@ const Popover = Popup.inherit({
     if (!this.$content() || !shouldUpdateDimensions) {
       return;
     }
-    // @ts-expect-error
     const containerLocation = positionUtils.calculate(this.$overlayContent(), this._getContainerPosition());
 
     if ((containerLocation.h.oversize > 0) && this._isHorizontalSide() && !containerLocation.h.fit) {
@@ -343,13 +341,11 @@ const Popover = Popup.inherit({
     const axis = this._isVerticalSide(side) ? 'left' : 'top';
     const sizeProperty = this._isVerticalSide(side) ? 'width' : 'height';
     const $target = $(this._positionController._position.of);
-    // @ts-expect-error
-    const targetOffset = positionUtils.offset($target) || { top: 0, left: 0 };
-    // @ts-expect-error
+    const targetOffset = positionUtils.offset($target) ?? { top: 0, left: 0 };
     const contentOffset = positionUtils.offset(this.$overlayContent());
 
     const arrowSize = arrowRect[sizeProperty];
-    const contentLocation = contentOffset[axis];
+    const contentLocation = contentOffset?.[axis];
     const contentSize = getBoundingRect(this.$overlayContent().get(0))[sizeProperty];
     const targetLocation = targetOffset[axis];
     const targetElement = $target.get(0);

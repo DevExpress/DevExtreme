@@ -1,11 +1,11 @@
 /* eslint-disable max-classes-per-file */
+import localizationMessage from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { map } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
-import localizationMessage from '@js/localization/message';
 import ButtonGroup from '@js/ui/button_group';
 import FileUploader from '@js/ui/file_uploader';
 import TextBox from '@js/ui/text_box';

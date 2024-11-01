@@ -1,8 +1,8 @@
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { inputType } from '@js/core/utils/support';
 import { getWindow } from '@js/core/utils/window';
-import messageLocalization from '@js/localization/message';
 
 import DateBoxStrategy from './m_date_box.strategy';
 import dateUtils from './m_date_utils';

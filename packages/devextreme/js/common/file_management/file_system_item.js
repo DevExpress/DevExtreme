@@ -1,4 +1,4 @@
-import { isString } from '../core/utils/type';
+import { isString } from '../../core/utils/type';
 import { pathCombine, getFileExtension, getPathParts, getName, getEscapedFileName, PATH_SEPARATOR } from './utils';
 
 class FileSystemItem {

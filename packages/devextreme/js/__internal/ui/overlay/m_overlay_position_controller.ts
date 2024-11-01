@@ -1,5 +1,5 @@
-import positionUtils from '@js/animation/position';
-import { locate, move, resetPosition } from '@js/animation/translator';
+import positionUtils from '@js/common/core/animation/position';
+import { locate, move, resetPosition } from '@js/common/core/animation/translator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
@@ -162,7 +162,6 @@ class OverlayPositionController {
 
   positionWrapper() {
     if (this._$visualContainer) {
-      // @ts-expect-error
       positionUtils.setup(this._$wrapper, { my: 'top left', at: 'top left', of: this._$visualContainer });
     }
   }
@@ -188,7 +187,6 @@ class OverlayPositionController {
     this._$wrapper.css('overflow', 'hidden');
 
     if (!this._props._skipContentPositioning) {
-      // @ts-expect-error
       const resultPosition = positionUtils.setup(this._$content, this._position);
       this._initialPosition = resultPosition;
     }

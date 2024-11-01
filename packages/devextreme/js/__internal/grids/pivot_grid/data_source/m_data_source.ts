@@ -1,3 +1,5 @@
+import Store from '@js/common/data/abstract_store';
+import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import Class from '@js/core/class';
 import { EventsStrategy } from '@js/core/events_strategy';
 import { normalizeIndexes } from '@js/core/utils/array';
@@ -8,8 +10,6 @@ import {
   isDefined, isFunction, isNumeric, isPlainObject,
   isString,
 } from '@js/core/utils/type';
-import Store from '@js/data/abstract_store';
-import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
 import commonUtils from '@ts/core/utils/m_common';
 import inflector from '@ts/core/utils/m_inflector';
 

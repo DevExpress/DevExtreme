@@ -1,15 +1,15 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { name as wheelEventName } from '@js/common/core/events/core/wheel';
+import {
+  addNamespace, createEvent, isCommandKeyPressed, normalizeKeyName,
+} from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isEmpty } from '@js/core/utils/string';
 import { isDefined } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import { name as wheelEventName } from '@js/events/core/wheel';
-import {
-  addNamespace, createEvent, isCommandKeyPressed, normalizeKeyName,
-} from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import { focused } from '@js/ui/widget/selectors';
 
 import TextEditorBase from './m_text_editor.base';

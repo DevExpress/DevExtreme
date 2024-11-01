@@ -2,11 +2,11 @@
 import '@ts/ui/list/modules/m_search';
 import '@ts/ui/list/modules/m_selection';
 
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import messageLocalization from '@js/localization/message';
 import List from '@js/ui/list_light';
 import Popup from '@js/ui/popup/ui.popup';
 import TreeView from '@js/ui/tree_view';

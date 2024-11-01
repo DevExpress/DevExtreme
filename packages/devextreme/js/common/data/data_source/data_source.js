@@ -26,4 +26,4 @@
   * @name DataSourceOptions.store.type
   * @type Enums.StoreType
   */
-export * from '../../__internal/data/data_source/m_data_source';
+export * from '../../../__internal/data/data_source/m_data_source';

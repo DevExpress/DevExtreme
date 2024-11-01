@@ -1,9 +1,9 @@
+import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { isCommandKeyPressed } from '@js/events/utils/index';
 import DropDownList from '@js/ui/drop_down_editor/ui.drop_down_list';
 
 const AUTOCOMPLETE_CLASS = 'dx-autocomplete';

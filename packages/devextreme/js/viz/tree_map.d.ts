@@ -1,4 +1,4 @@
-import DataSource, { DataSourceLike } from '../data/data_source';
+import { DataSource, DataSourceLike } from '../common/data';
 
 import {
     UserDefinedElement,
@@ -7,14 +7,15 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    SingleMultipleOrNone,
+} from '../common';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import BaseWidget, {
     BaseWidgetMargin,
@@ -24,10 +25,6 @@ import BaseWidget, {
     ExportInfo,
     IncidentInfo,
 } from './core/base_widget';
-
-import {
-    SingleMultipleOrNone,
-} from '../common';
 
 import {
     Palette,

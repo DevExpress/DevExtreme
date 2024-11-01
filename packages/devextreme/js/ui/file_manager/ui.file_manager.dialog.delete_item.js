@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 
 import ScrollView from '../scroll_view';
 import FileManagerDialogBase from './ui.file_manager.dialog';

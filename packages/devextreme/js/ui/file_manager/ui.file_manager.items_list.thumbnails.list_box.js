@@ -4,9 +4,9 @@ import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
 import { Deferred, when } from '../../core/utils/deferred';
 
-import holdEvent from '../../events/hold';
-import { addNamespace, isCommandKeyPressed } from '../../events/utils/index';
-import eventsEngine from '../../events/core/events_engine';
+import holdEvent from '../../common/core/events/hold';
+import { addNamespace, isCommandKeyPressed } from '../../common/core/events/utils/index';
+import eventsEngine from '../../common/core/events/core/events_engine';
 
 import { BindableTemplate } from '../../core/templates/bindable_template';
 

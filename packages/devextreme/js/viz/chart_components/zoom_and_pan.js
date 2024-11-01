@@ -2,9 +2,9 @@
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { normalizeEnum, getVizRangeObject } from '../core/utils';
-import { name as wheelEvent } from '../../events/core/wheel';
-import * as transformEvents from '../../events/transform';
-import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../../events/drag';
+import { name as wheelEvent } from '../../common/core/events/core/wheel';
+import * as transformEvents from '../../common/core/events/transform';
+import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../../common/core/events/drag';
 
 const EVENTS_NS = '.zoomAndPanNS';
 

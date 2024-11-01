@@ -1,6 +1,6 @@
+import messageLocalization from '@js/common/core/localization/message';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import messageLocalization from '@js/localization/message';
 import Pagination from '@ts/pagination/wrappers/pagination';
 
 import modules from '../m_modules';

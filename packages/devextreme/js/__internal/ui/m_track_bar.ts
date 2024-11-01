@@ -1,4 +1,4 @@
-import fx from '@js/animation/fx';
+import { fx } from '@js/common/core/animation';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
