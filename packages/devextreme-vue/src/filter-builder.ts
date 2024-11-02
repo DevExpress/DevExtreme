@@ -175,12 +175,12 @@ const DxFieldConfig = {
     caption: String,
     customizeText: Function,
     dataField: String,
-    dataType: String,
+    dataType: {},
     editorOptions: {},
     editorTemplate: {},
     falseText: String,
     filterOperations: Array,
-    format: [Object, Function, String],
+    format: {},
     lookup: Object,
     name: String,
     trueText: String
@@ -255,7 +255,7 @@ const DxFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };

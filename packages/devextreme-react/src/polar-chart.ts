@@ -8,12 +8,13 @@ import dxPolarChart, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, SeriesClickEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, dxPolarChartAnnotationConfig, dxPolarChartCommonAnnotationConfig, PolarChartSeries } from "devextreme/viz/polar_chart";
-import type { Font as ChartsFont, ChartsColor, LegendItem } from "devextreme/common/charts";
+import type { ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, SeriesClickEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, dxPolarChartAnnotationConfig, dxPolarChartCommonAnnotationConfig, PolarChartSeriesType, PolarChartSeries, ValueAxisVisualRangeUpdateMode } from "devextreme/viz/polar_chart";
+import type { AnimationEaseMode, DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, ChartsDataType, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, LabelOverlap, TimeInterval, AxisScaleType, ChartsColor, SeriesHoverMode, HatchDirection, RelativePosition, PointInteractionMode, PointSymbol, SeriesSelectionMode, ValueErrorBarDisplayMode, ValueErrorBarType, LegendItem, LegendHoverMode } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
+import type { Format as LocalizationFormat } from "devextreme/localization";
+import type { Format as CommonFormat, ExportFormat, HorizontalAlignment, Position, Orientation, VerticalEdge } from "devextreme/common";
 
 import type * as CommonChartTypes from "devextreme/common/charts";
-import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -132,7 +133,7 @@ const AdaptiveLayout = Object.assign<typeof _componentAdaptiveLayout, NestedComp
 // PolarChart
 type IAnimationProps = React.PropsWithChildren<{
   duration?: number;
-  easing?: "easeOutCubic" | "linear";
+  easing?: AnimationEaseMode;
   enabled?: boolean;
   maxPointCountSupported?: number;
 }>
@@ -160,7 +161,7 @@ type IAnnotationProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -193,13 +194,13 @@ type IAnnotationProps = React.PropsWithChildren<{
   };
   template?: ((annotation: dxPolarChartCommonAnnotationConfig | any, element: any) => string | any) | template;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
+  textOverflow?: TextOverflow;
   tooltipEnabled?: boolean;
   tooltipTemplate?: ((annotation: dxPolarChartAnnotationConfig | any, element: any) => string | any) | template;
-  type?: "text" | "image" | "custom";
+  type?: AnnotationType;
   value?: Date | number | string;
   width?: number;
-  wordWrap?: "normal" | "breakWord" | "none";
+  wordWrap?: WordWrap;
   x?: number;
   y?: number;
   render?: (...params: any) => React.ReactNode;
@@ -243,7 +244,7 @@ const Annotation = Object.assign<typeof _componentAnnotation, NestedComponentMet
 type IAnnotationBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
   visible?: boolean;
   width?: number;
@@ -265,13 +266,13 @@ const AnnotationBorder = Object.assign<typeof _componentAnnotationBorder, Nested
 // PolarChart
 type IArgumentAxisProps = React.PropsWithChildren<{
   allowDecimals?: boolean;
-  argumentType?: "datetime" | "numeric" | "string";
+  argumentType?: ChartsDataType;
   axisDivisionFactor?: number;
   categories?: Array<Date | number | string>;
   color?: string;
   constantLines?: Array<Record<string, any>> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     displayBehindSeries?: boolean;
     extendAxis?: boolean;
     label?: Record<string, any> | {
@@ -284,14 +285,14 @@ type IArgumentAxisProps = React.PropsWithChildren<{
   }[];
   constantLineStyle?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     label?: Record<string, any> | {
       font?: ChartsFont;
       visible?: boolean;
     };
     width?: number;
   };
-  discreteAxisDivisionMode?: "betweenLabels" | "crossLabels";
+  discreteAxisDivisionMode?: DiscreteAxisDivisionMode;
   endOnTick?: boolean;
   firstPointOnStartAngle?: boolean;
   grid?: Record<string, any> | {
@@ -300,15 +301,15 @@ type IArgumentAxisProps = React.PropsWithChildren<{
     visible?: boolean;
     width?: number;
   };
-  hoverMode?: "allArgumentPoints" | "none";
+  hoverMode?: ArgumentAxisHoverMode;
   inverted?: boolean;
   label?: Record<string, any> | {
     customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string);
     customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string);
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat;
     indentFromAxis?: number;
-    overlappingBehavior?: "hide" | "none";
+    overlappingBehavior?: LabelOverlap;
     visible?: boolean;
   };
   linearThreshold?: number;
@@ -328,7 +329,7 @@ type IArgumentAxisProps = React.PropsWithChildren<{
     width?: number;
   };
   minorTickCount?: number;
-  minorTickInterval?: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | {
+  minorTickInterval?: number | Record<string, any> | TimeInterval | {
     days?: number;
     hours?: number;
     milliseconds?: number;
@@ -365,7 +366,7 @@ type IArgumentAxisProps = React.PropsWithChildren<{
     visible?: boolean;
     width?: number;
   };
-  tickInterval?: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | {
+  tickInterval?: number | Record<string, any> | TimeInterval | {
     days?: number;
     hours?: number;
     milliseconds?: number;
@@ -376,7 +377,7 @@ type IArgumentAxisProps = React.PropsWithChildren<{
     weeks?: number;
     years?: number;
   };
-  type?: "continuous" | "discrete" | "logarithmic";
+  type?: AxisScaleType;
   visible?: boolean;
   width?: number;
 }>
@@ -463,7 +464,7 @@ type IArgumentFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentArgumentFormat = (props: IArgumentFormatProps) => {
@@ -486,9 +487,9 @@ type IAxisLabelProps = React.PropsWithChildren<{
   customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string);
   customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string);
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   indentFromAxis?: number;
-  overlappingBehavior?: "hide" | "none";
+  overlappingBehavior?: LabelOverlap;
   visible?: boolean;
 }>
 const _componentAxisLabel = (props: IAxisLabelProps) => {
@@ -518,7 +519,7 @@ const AxisLabel = Object.assign<typeof _componentAxisLabel, NestedComponentMeta>
 type IBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
   visible?: boolean;
   width?: number;
@@ -571,7 +572,7 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -603,13 +604,13 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   };
   template?: ((annotation: dxPolarChartCommonAnnotationConfig | any, element: any) => string | any) | template;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
+  textOverflow?: TextOverflow;
   tooltipEnabled?: boolean;
   tooltipTemplate?: ((annotation: dxPolarChartAnnotationConfig | any, element: any) => string | any) | template;
-  type?: "text" | "image" | "custom";
+  type?: AnnotationType;
   value?: Date | number | string;
   width?: number;
-  wordWrap?: "normal" | "breakWord" | "none";
+  wordWrap?: WordWrap;
   x?: number;
   y?: number;
   render?: (...params: any) => React.ReactNode;
@@ -646,14 +647,14 @@ type ICommonAxisSettingsProps = React.PropsWithChildren<{
   color?: string;
   constantLineStyle?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     label?: Record<string, any> | {
       font?: ChartsFont;
       visible?: boolean;
     };
     width?: number;
   };
-  discreteAxisDivisionMode?: "betweenLabels" | "crossLabels";
+  discreteAxisDivisionMode?: DiscreteAxisDivisionMode;
   endOnTick?: boolean;
   grid?: Record<string, any> | {
     color?: string;
@@ -665,7 +666,7 @@ type ICommonAxisSettingsProps = React.PropsWithChildren<{
   label?: Record<string, any> | {
     font?: ChartsFont;
     indentFromAxis?: number;
-    overlappingBehavior?: "hide" | "none";
+    overlappingBehavior?: LabelOverlap;
     visible?: boolean;
   };
   minorGrid?: Record<string, any> | {
@@ -723,7 +724,7 @@ const CommonAxisSettings = Object.assign<typeof _componentCommonAxisSettings, Ne
 type ICommonAxisSettingsLabelProps = React.PropsWithChildren<{
   font?: ChartsFont;
   indentFromAxis?: number;
-  overlappingBehavior?: "hide" | "none";
+  overlappingBehavior?: LabelOverlap;
   visible?: boolean;
 }>
 const _componentCommonAxisSettingsLabel = (props: ICommonAxisSettingsLabelProps) => {
@@ -794,25 +795,25 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
   barWidth?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     visible?: boolean;
     width?: number;
   };
   closed?: boolean;
   color?: ChartsColor | string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
-  hoverMode?: "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "nearestPoint" | "none" | "onlyPoint";
+  dashStyle?: DashStyle;
+  hoverMode?: SeriesHoverMode;
   hoverStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string;
-      dashStyle?: "dash" | "dot" | "longDash" | "solid";
+      dashStyle?: DashStyle;
       visible?: boolean;
       width?: number;
     };
     color?: ChartsColor | string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     hatching?: Record<string, any> | {
-      direction?: "left" | "none" | "right";
+      direction?: HatchDirection;
       opacity?: number;
       step?: number;
       width?: number;
@@ -822,11 +823,11 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
   };
   ignoreEmptyPoints?: boolean;
   label?: Record<string, any> | {
-    argumentFormat?: LocalizationTypes.Format;
+    argumentFormat?: LocalizationFormat;
     backgroundColor?: string;
     border?: Record<string, any> | {
       color?: string;
-      dashStyle?: "dash" | "dot" | "longDash" | "solid";
+      dashStyle?: DashStyle;
       visible?: boolean;
       width?: number;
     };
@@ -838,8 +839,8 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
     customizeText?: ((pointInfo: any) => string);
     displayFormat?: string;
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
-    position?: "inside" | "outside";
+    format?: LocalizationFormat;
+    position?: RelativePosition;
     rotationAngle?: number;
     showForZeroValues?: boolean;
     visible?: boolean;
@@ -855,7 +856,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
       width?: number;
     };
     color?: ChartsColor | string;
-    hoverMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint";
+    hoverMode?: PointInteractionMode;
     hoverStyle?: Record<string, any> | {
       border?: Record<string, any> | {
         color?: string;
@@ -870,7 +871,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
       url?: string;
       width?: number;
     };
-    selectionMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint";
+    selectionMode?: PointInteractionMode;
     selectionStyle?: Record<string, any> | {
       border?: Record<string, any> | {
         color?: string;
@@ -881,22 +882,22 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
       size?: number;
     };
     size?: number;
-    symbol?: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp";
+    symbol?: PointSymbol;
     visible?: boolean;
   };
   scatter?: any;
-  selectionMode?: "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "none" | "onlyPoint";
+  selectionMode?: SeriesSelectionMode;
   selectionStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string;
-      dashStyle?: "dash" | "dot" | "longDash" | "solid";
+      dashStyle?: DashStyle;
       visible?: boolean;
       width?: number;
     };
     color?: ChartsColor | string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     hatching?: Record<string, any> | {
-      direction?: "left" | "none" | "right";
+      direction?: HatchDirection;
       opacity?: number;
       step?: number;
       width?: number;
@@ -908,16 +909,16 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
   stack?: string;
   stackedbar?: any;
   tagField?: string;
-  type?: "area" | "bar" | "line" | "scatter" | "stackedbar";
+  type?: PolarChartSeriesType;
   valueErrorBar?: Record<string, any> | {
     color?: string;
-    displayMode?: "auto" | "high" | "low" | "none";
+    displayMode?: ValueErrorBarDisplayMode;
     edgeLength?: number;
     highValueField?: string;
     lineWidth?: number;
     lowValueField?: string;
     opacity?: number;
-    type?: "fixed" | "percent" | "stdDeviation" | "stdError" | "variance";
+    type?: ValueErrorBarType;
     value?: number;
   };
   valueField?: string;
@@ -955,14 +956,14 @@ const CommonSeriesSettings = Object.assign<typeof _componentCommonSeriesSettings
 type ICommonSeriesSettingsHoverStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     visible?: boolean;
     width?: number;
   };
   color?: ChartsColor | string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   hatching?: Record<string, any> | {
-    direction?: "left" | "none" | "right";
+    direction?: HatchDirection;
     opacity?: number;
     step?: number;
     width?: number;
@@ -992,11 +993,11 @@ const CommonSeriesSettingsHoverStyle = Object.assign<typeof _componentCommonSeri
 // owners:
 // CommonSeriesSettings
 type ICommonSeriesSettingsLabelProps = React.PropsWithChildren<{
-  argumentFormat?: LocalizationTypes.Format;
+  argumentFormat?: LocalizationFormat;
   backgroundColor?: string;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     visible?: boolean;
     width?: number;
   };
@@ -1008,8 +1009,8 @@ type ICommonSeriesSettingsLabelProps = React.PropsWithChildren<{
   customizeText?: ((pointInfo: any) => string);
   displayFormat?: string;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
-  position?: "inside" | "outside";
+  format?: LocalizationFormat;
+  position?: RelativePosition;
   rotationAngle?: number;
   showForZeroValues?: boolean;
   visible?: boolean;
@@ -1040,14 +1041,14 @@ const CommonSeriesSettingsLabel = Object.assign<typeof _componentCommonSeriesSet
 type ICommonSeriesSettingsSelectionStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     visible?: boolean;
     width?: number;
   };
   color?: ChartsColor | string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   hatching?: Record<string, any> | {
-    direction?: "left" | "none" | "right";
+    direction?: HatchDirection;
     opacity?: number;
     step?: number;
     width?: number;
@@ -1099,7 +1100,7 @@ const Connector = Object.assign<typeof _componentConnector, NestedComponentMeta>
 // ValueAxis
 type IConstantLineProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   displayBehindSeries?: boolean;
   extendAxis?: boolean;
   label?: Record<string, any> | {
@@ -1149,7 +1150,7 @@ const ConstantLineLabel = Object.assign<typeof _componentConstantLineLabel, Nest
 // ArgumentAxis
 type IConstantLineStyleProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   label?: Record<string, any> | {
     font?: ChartsFont;
     visible?: boolean;
@@ -1218,7 +1219,7 @@ type IExportProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
   fileName?: string;
-  formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">;
+  formats?: Array<ExportFormat>;
   margin?: number;
   printingEnabled?: boolean;
   svgToCanvas?: ((svg: any, canvas: any) => any);
@@ -1279,7 +1280,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = (props: IFormatProps) => {
@@ -1320,7 +1321,7 @@ const Grid = Object.assign<typeof _componentGrid, NestedComponentMeta>(_componen
 // CommonSeriesSettingsHoverStyle
 // CommonSeriesSettingsSelectionStyle
 type IHatchingProps = React.PropsWithChildren<{
-  direction?: "left" | "none" | "right";
+  direction?: HatchDirection;
   opacity?: number;
   step?: number;
   width?: number;
@@ -1344,14 +1345,14 @@ const Hatching = Object.assign<typeof _componentHatching, NestedComponentMeta>(_
 type IHoverStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     visible?: boolean;
     width?: number;
   };
   color?: ChartsColor | string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   hatching?: Record<string, any> | {
-    direction?: "left" | "none" | "right";
+    direction?: HatchDirection;
     opacity?: number;
     step?: number;
     width?: number;
@@ -1411,14 +1412,14 @@ type ILabelProps = React.PropsWithChildren<{
   visible?: boolean;
   customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string);
   customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string);
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   indentFromAxis?: number;
-  overlappingBehavior?: "hide" | "none";
-  argumentFormat?: LocalizationTypes.Format;
+  overlappingBehavior?: LabelOverlap;
+  argumentFormat?: LocalizationFormat;
   backgroundColor?: string;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     visible?: boolean;
     width?: number;
   };
@@ -1428,7 +1429,7 @@ type ILabelProps = React.PropsWithChildren<{
     width?: number;
   };
   displayFormat?: string;
-  position?: "inside" | "outside";
+  position?: RelativePosition;
   rotationAngle?: number;
   showForZeroValues?: boolean;
 }>
@@ -1452,7 +1453,7 @@ type ILegendProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -1463,10 +1464,10 @@ type ILegendProps = React.PropsWithChildren<{
   customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
   customizeText?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string);
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
-  hoverMode?: "excludePoints" | "includePoints" | "none";
-  itemsAlignment?: "center" | "left" | "right";
-  itemTextPosition?: "bottom" | "left" | "right" | "top";
+  horizontalAlignment?: HorizontalAlignment;
+  hoverMode?: LegendHoverMode;
+  itemsAlignment?: HorizontalAlignment;
+  itemTextPosition?: Position;
   margin?: number | Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -1475,14 +1476,14 @@ type ILegendProps = React.PropsWithChildren<{
   };
   markerSize?: number;
   markerTemplate?: ((legendItem: LegendItem, element: any) => string | any) | template;
-  orientation?: "horizontal" | "vertical";
+  orientation?: Orientation;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
   rowCount?: number;
   rowItemSpacing?: number;
   title?: Record<string, any> | string | {
     font?: ChartsFont;
-    horizontalAlignment?: "center" | "left" | "right";
+    horizontalAlignment?: HorizontalAlignment;
     margin?: Record<string, any> | {
       bottom?: number;
       left?: number;
@@ -1496,9 +1497,9 @@ type ILegendProps = React.PropsWithChildren<{
       text?: string;
     };
     text?: string;
-    verticalAlignment?: "bottom" | "top";
+    verticalAlignment?: VerticalEdge;
   };
-  verticalAlignment?: "bottom" | "top";
+  verticalAlignment?: VerticalEdge;
   visible?: boolean;
   markerRender?: (...params: any) => React.ReactNode;
   markerComponent?: React.ComponentType<any>;
@@ -1533,7 +1534,7 @@ const Legend = Object.assign<typeof _componentLegend, NestedComponentMeta>(_comp
 // Legend
 type ILegendTitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -1547,7 +1548,7 @@ type ILegendTitleProps = React.PropsWithChildren<{
     text?: string;
   };
   text?: string;
-  verticalAlignment?: "bottom" | "top";
+  verticalAlignment?: VerticalEdge;
 }>
 const _componentLegendTitle = (props: ILegendTitleProps) => {
   return React.createElement(NestedOption<ILegendTitleProps>, {
@@ -1778,7 +1779,7 @@ type IPointProps = React.PropsWithChildren<{
     width?: number;
   };
   color?: ChartsColor | string;
-  hoverMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint";
+  hoverMode?: PointInteractionMode;
   hoverStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string;
@@ -1793,7 +1794,7 @@ type IPointProps = React.PropsWithChildren<{
     url?: string;
     width?: number;
   };
-  selectionMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint";
+  selectionMode?: PointInteractionMode;
   selectionStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string;
@@ -1804,7 +1805,7 @@ type IPointProps = React.PropsWithChildren<{
     size?: number;
   };
   size?: number;
-  symbol?: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp";
+  symbol?: PointSymbol;
   visible?: boolean;
 }>
 const _componentPoint = (props: IPointProps) => {
@@ -1914,7 +1915,7 @@ const PointSelectionStyle = Object.assign<typeof _componentPointSelectionStyle, 
 // PolarChart
 type IPolarChartTitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: number | Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -1926,13 +1927,13 @@ type IPolarChartTitleProps = React.PropsWithChildren<{
     font?: ChartsFont;
     offset?: number;
     text?: string;
-    textOverflow?: "ellipsis" | "hide" | "none";
-    wordWrap?: "normal" | "breakWord" | "none";
+    textOverflow?: TextOverflow;
+    wordWrap?: WordWrap;
   };
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  verticalAlignment?: "bottom" | "top";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  verticalAlignment?: VerticalEdge;
+  wordWrap?: WordWrap;
 }>
 const _componentPolarChartTitle = (props: IPolarChartTitleProps) => {
   return React.createElement(NestedOption<IPolarChartTitleProps>, {
@@ -1959,8 +1960,8 @@ type IPolarChartTitleSubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  wordWrap?: WordWrap;
 }>
 const _componentPolarChartTitleSubtitle = (props: IPolarChartTitleSubtitleProps) => {
   return React.createElement(NestedOption<IPolarChartTitleSubtitleProps>, {
@@ -1986,13 +1987,13 @@ type ISelectionStyleProps = React.PropsWithChildren<{
     color?: string;
     visible?: boolean;
     width?: number;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
   };
   color?: ChartsColor | string;
   size?: number;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   hatching?: Record<string, any> | {
-    direction?: "left" | "none" | "right";
+    direction?: HatchDirection;
     opacity?: number;
     step?: number;
     width?: number;
@@ -2021,25 +2022,25 @@ type ISeriesProps = React.PropsWithChildren<{
   barWidth?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     visible?: boolean;
     width?: number;
   };
   closed?: boolean;
   color?: ChartsColor | string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
-  hoverMode?: "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "nearestPoint" | "none" | "onlyPoint";
+  dashStyle?: DashStyle;
+  hoverMode?: SeriesHoverMode;
   hoverStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string;
-      dashStyle?: "dash" | "dot" | "longDash" | "solid";
+      dashStyle?: DashStyle;
       visible?: boolean;
       width?: number;
     };
     color?: ChartsColor | string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     hatching?: Record<string, any> | {
-      direction?: "left" | "none" | "right";
+      direction?: HatchDirection;
       opacity?: number;
       step?: number;
       width?: number;
@@ -2049,11 +2050,11 @@ type ISeriesProps = React.PropsWithChildren<{
   };
   ignoreEmptyPoints?: boolean;
   label?: Record<string, any> | {
-    argumentFormat?: LocalizationTypes.Format;
+    argumentFormat?: LocalizationFormat;
     backgroundColor?: string;
     border?: Record<string, any> | {
       color?: string;
-      dashStyle?: "dash" | "dot" | "longDash" | "solid";
+      dashStyle?: DashStyle;
       visible?: boolean;
       width?: number;
     };
@@ -2065,8 +2066,8 @@ type ISeriesProps = React.PropsWithChildren<{
     customizeText?: ((pointInfo: any) => string);
     displayFormat?: string;
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
-    position?: "inside" | "outside";
+    format?: LocalizationFormat;
+    position?: RelativePosition;
     rotationAngle?: number;
     showForZeroValues?: boolean;
     visible?: boolean;
@@ -2082,7 +2083,7 @@ type ISeriesProps = React.PropsWithChildren<{
       width?: number;
     };
     color?: ChartsColor | string;
-    hoverMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint";
+    hoverMode?: PointInteractionMode;
     hoverStyle?: Record<string, any> | {
       border?: Record<string, any> | {
         color?: string;
@@ -2097,7 +2098,7 @@ type ISeriesProps = React.PropsWithChildren<{
       url?: string;
       width?: number;
     };
-    selectionMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint";
+    selectionMode?: PointInteractionMode;
     selectionStyle?: Record<string, any> | {
       border?: Record<string, any> | {
         color?: string;
@@ -2108,21 +2109,21 @@ type ISeriesProps = React.PropsWithChildren<{
       size?: number;
     };
     size?: number;
-    symbol?: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp";
+    symbol?: PointSymbol;
     visible?: boolean;
   };
-  selectionMode?: "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "none" | "onlyPoint";
+  selectionMode?: SeriesSelectionMode;
   selectionStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string;
-      dashStyle?: "dash" | "dot" | "longDash" | "solid";
+      dashStyle?: DashStyle;
       visible?: boolean;
       width?: number;
     };
     color?: ChartsColor | string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     hatching?: Record<string, any> | {
-      direction?: "left" | "none" | "right";
+      direction?: HatchDirection;
       opacity?: number;
       step?: number;
       width?: number;
@@ -2134,16 +2135,16 @@ type ISeriesProps = React.PropsWithChildren<{
   stack?: string;
   tag?: any;
   tagField?: string;
-  type?: "area" | "bar" | "line" | "scatter" | "stackedbar";
+  type?: PolarChartSeriesType;
   valueErrorBar?: Record<string, any> | {
     color?: string;
-    displayMode?: "auto" | "high" | "low" | "none";
+    displayMode?: ValueErrorBarDisplayMode;
     edgeLength?: number;
     highValueField?: string;
     lineWidth?: number;
     lowValueField?: string;
     opacity?: number;
-    type?: "fixed" | "percent" | "stdDeviation" | "stdError" | "variance";
+    type?: ValueErrorBarType;
     value?: number;
   };
   valueField?: string;
@@ -2171,7 +2172,7 @@ const Series = Object.assign<typeof _componentSeries, NestedComponentMeta>(_comp
 // CommonSeriesSettingsSelectionStyle
 type ISeriesBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   visible?: boolean;
   width?: number;
 }>
@@ -2344,8 +2345,8 @@ type ISubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  wordWrap?: WordWrap;
 }>
 const _componentSubtitle = (props: ISubtitleProps) => {
   return React.createElement(NestedOption<ISubtitleProps>, {
@@ -2417,7 +2418,7 @@ const TickInterval = Object.assign<typeof _componentTickInterval, NestedComponen
 // PolarChart
 type ITitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: Record<string, any> | number | {
     bottom?: number;
     left?: number;
@@ -2429,13 +2430,13 @@ type ITitleProps = React.PropsWithChildren<{
     font?: ChartsFont;
     offset?: number;
     text?: string;
-    textOverflow?: "ellipsis" | "hide" | "none";
-    wordWrap?: "normal" | "breakWord" | "none";
+    textOverflow?: TextOverflow;
+    wordWrap?: WordWrap;
   };
   text?: string;
-  verticalAlignment?: "bottom" | "top";
-  textOverflow?: "ellipsis" | "hide" | "none";
-  wordWrap?: "normal" | "breakWord" | "none";
+  verticalAlignment?: VerticalEdge;
+  textOverflow?: TextOverflow;
+  wordWrap?: WordWrap;
 }>
 const _componentTitle = (props: ITitleProps) => {
   return React.createElement(NestedOption<ITitleProps>, {
@@ -2453,11 +2454,11 @@ const Title = Object.assign<typeof _componentTitle, NestedComponentMeta>(_compon
 // owners:
 // PolarChart
 type ITooltipProps = React.PropsWithChildren<{
-  argumentFormat?: LocalizationTypes.Format;
+  argumentFormat?: LocalizationFormat;
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -2469,7 +2470,7 @@ type ITooltipProps = React.PropsWithChildren<{
   customizeTooltip?: ((pointInfo: any) => Record<string, any>);
   enabled?: boolean;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   interactive?: boolean;
   opacity?: number;
   paddingLeftRight?: number;
@@ -2516,7 +2517,7 @@ const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_co
 // Tooltip
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
   visible?: boolean;
   width?: number;
@@ -2543,7 +2544,7 @@ type IValueAxisProps = React.PropsWithChildren<{
   color?: string;
   constantLines?: Array<Record<string, any>> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     displayBehindSeries?: boolean;
     extendAxis?: boolean;
     label?: Record<string, any> | {
@@ -2556,14 +2557,14 @@ type IValueAxisProps = React.PropsWithChildren<{
   }[];
   constantLineStyle?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     label?: Record<string, any> | {
       font?: ChartsFont;
       visible?: boolean;
     };
     width?: number;
   };
-  discreteAxisDivisionMode?: "betweenLabels" | "crossLabels";
+  discreteAxisDivisionMode?: DiscreteAxisDivisionMode;
   endOnTick?: boolean;
   grid?: Record<string, any> | {
     color?: string;
@@ -2576,9 +2577,9 @@ type IValueAxisProps = React.PropsWithChildren<{
     customizeHint?: ((axisValue: { value: Date | number | string, valueText: string }) => string);
     customizeText?: ((axisValue: { value: Date | number | string, valueText: string }) => string);
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat;
     indentFromAxis?: number;
-    overlappingBehavior?: "hide" | "none";
+    overlappingBehavior?: LabelOverlap;
     visible?: boolean;
   };
   linearThreshold?: number;
@@ -2598,7 +2599,7 @@ type IValueAxisProps = React.PropsWithChildren<{
     width?: number;
   };
   minorTickCount?: number;
-  minorTickInterval?: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | {
+  minorTickInterval?: number | Record<string, any> | TimeInterval | {
     days?: number;
     hours?: number;
     milliseconds?: number;
@@ -2610,7 +2611,7 @@ type IValueAxisProps = React.PropsWithChildren<{
     years?: number;
   };
   minValueMargin?: number;
-  minVisualRangeLength?: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | {
+  minVisualRangeLength?: number | Record<string, any> | TimeInterval | {
     days?: number;
     hours?: number;
     milliseconds?: number;
@@ -2644,7 +2645,7 @@ type IValueAxisProps = React.PropsWithChildren<{
     visible?: boolean;
     width?: number;
   };
-  tickInterval?: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | {
+  tickInterval?: number | Record<string, any> | TimeInterval | {
     days?: number;
     hours?: number;
     milliseconds?: number;
@@ -2655,12 +2656,12 @@ type IValueAxisProps = React.PropsWithChildren<{
     weeks?: number;
     years?: number;
   };
-  type?: "continuous" | "discrete" | "logarithmic";
+  type?: AxisScaleType;
   valueMarginsEnabled?: boolean;
-  valueType?: "datetime" | "numeric" | "string";
+  valueType?: ChartsDataType;
   visible?: boolean;
   visualRange?: Array<Date | number | string> | CommonChartTypes.VisualRange;
-  visualRangeUpdateMode?: "auto" | "keep" | "reset";
+  visualRangeUpdateMode?: ValueAxisVisualRangeUpdateMode;
   wholeRange?: Array<Date | number | string> | CommonChartTypes.VisualRange;
   width?: number;
   defaultVisualRange?: Array<Date | number | string> | CommonChartTypes.VisualRange;
@@ -2699,13 +2700,13 @@ const ValueAxis = Object.assign<typeof _componentValueAxis, NestedComponentMeta>
 // CommonSeriesSettings
 type IValueErrorBarProps = React.PropsWithChildren<{
   color?: string;
-  displayMode?: "auto" | "high" | "low" | "none";
+  displayMode?: ValueErrorBarDisplayMode;
   edgeLength?: number;
   highValueField?: string;
   lineWidth?: number;
   lowValueField?: string;
   opacity?: number;
-  type?: "fixed" | "percent" | "stdDeviation" | "stdError" | "variance";
+  type?: ValueErrorBarType;
   value?: number;
 }>
 const _componentValueErrorBar = (props: IValueErrorBarProps) => {
@@ -2725,7 +2726,7 @@ const ValueErrorBar = Object.assign<typeof _componentValueErrorBar, NestedCompon
 // ValueAxis
 type IVisualRangeProps = React.PropsWithChildren<{
   endValue?: Date | number | string;
-  length?: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | {
+  length?: number | Record<string, any> | TimeInterval | {
     days?: number;
     hours?: number;
     milliseconds?: number;
@@ -2766,7 +2767,7 @@ const VisualRange = Object.assign<typeof _componentVisualRange, NestedComponentM
 // ValueAxis
 type IWholeRangeProps = React.PropsWithChildren<{
   endValue?: Date | number | string;
-  length?: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | {
+  length?: number | Record<string, any> | TimeInterval | {
     days?: number;
     hours?: number;
     milliseconds?: number;

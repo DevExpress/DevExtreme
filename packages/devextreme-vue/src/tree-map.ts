@@ -65,8 +65,8 @@ const componentConfig = {
     idField: String,
     interactWithGroup: Boolean,
     labelField: String,
-    layoutAlgorithm: [Function, String],
-    layoutDirection: String,
+    layoutAlgorithm: {},
+    layoutDirection: {},
     loadingIndicator: Object,
     maxDepth: Number,
     onClick: Function,
@@ -87,9 +87,9 @@ const componentConfig = {
     pathModified: Boolean,
     redrawOnResize: Boolean,
     rtlEnabled: Boolean,
-    selectionMode: String,
+    selectionMode: {},
     size: Object,
-    theme: String,
+    theme: {},
     tile: Object,
     title: [Object, String],
     tooltip: Object,
@@ -178,7 +178,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -205,10 +205,10 @@ const DxColorizerConfig = {
   props: {
     colorCodeField: String,
     colorizeGroups: Boolean,
-    palette: [Array, String],
-    paletteExtensionMode: String,
+    palette: {},
+    paletteExtensionMode: {},
     range: Array,
-    type: String
+    type: {}
   }
 };
 
@@ -288,7 +288,7 @@ const DxFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -348,7 +348,7 @@ const DxGroupLabelConfig = {
   },
   props: {
     font: Object,
-    textOverflow: String,
+    textOverflow: {},
     visible: Boolean
   }
 };
@@ -392,9 +392,9 @@ const DxLabelConfig = {
   },
   props: {
     font: Object,
-    textOverflow: String,
+    textOverflow: {},
     visible: Boolean,
-    wordWrap: String
+    wordWrap: {}
   }
 };
 
@@ -532,8 +532,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 
@@ -590,9 +590,9 @@ const DxTileLabelConfig = {
   },
   props: {
     font: Object,
-    textOverflow: String,
+    textOverflow: {},
     visible: Boolean,
-    wordWrap: String
+    wordWrap: {}
   }
 };
 
@@ -621,14 +621,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: {},
+    verticalAlignment: {},
+    wordWrap: {}
   }
 };
 
@@ -673,7 +673,7 @@ const DxTooltipConfig = {
     customizeTooltip: Function,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String],
+    format: {},
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -707,7 +707,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number

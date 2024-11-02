@@ -20,7 +20,7 @@ import ChatMessageBox from '__internal/ui/chat/messagebox';
 import ChatMessageBubble from '__internal/ui/chat/messagebubble';
 import ChatMessageGroup from '__internal/ui/chat/messagegroup';
 import ChatMessageList from '__internal/ui/chat/messagelist';
-import ChatErrorList from '__internal/ui/chat/errorlist';
+import ChatAlertList from '__internal/ui/chat/alertlist';
 import ChatTypingIndicator from '__internal/ui/chat/typingindicator';
 import DataGrid from 'ui/data_grid';
 import DateBox from 'ui/date_box';
@@ -1357,10 +1357,11 @@ testComponentDefaults(Chat,
         messageTimestampFormat: 'shorttime',
         title: '',
         dataSource: null,
+        reloadOnChange: true,
         items: [],
-        errors: [],
+        alerts: [],
         typingUsers: [],
-        onMessageSend: undefined,
+        onMessageEntered: undefined,
         onTypingStart: undefined,
         onTypingEnd: undefined,
     }
@@ -1388,7 +1389,7 @@ testComponentDefaults(ChatMessageBox,
         activeStateEnabled: true,
         focusStateEnabled: true,
         hoverStateEnabled: true,
-        onMessageSend: undefined,
+        onMessageEntered: undefined,
         onTypingStart: undefined,
         onTypingEnd: undefined,
     }
@@ -1422,7 +1423,7 @@ testComponentDefaults(ChatMessageList,
     }
 );
 
-testComponentDefaults(ChatErrorList,
+testComponentDefaults(ChatAlertList,
     {},
     {
         items: [],

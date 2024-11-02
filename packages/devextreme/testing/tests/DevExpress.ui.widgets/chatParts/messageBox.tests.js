@@ -156,11 +156,11 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
     });
 
-    QUnit.module('onMessageSend event', () => {
+    QUnit.module('onMessageEntered event', () => {
         QUnit.test('should be fired when the send button is clicked if the textarea input contains a value', function(assert) {
-            const onMessageSendStub = sinon.stub();
+            const onMessageEnteredStub = sinon.stub();
 
-            this.reinit({ onMessageSend: onMessageSendStub });
+            this.reinit({ onMessageEntered: onMessageEnteredStub });
 
             keyboardMock(this.$input)
                 .focus()
@@ -168,13 +168,13 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             this.$sendButton.trigger('dxclick');
 
-            assert.strictEqual(onMessageSendStub.callCount, 1);
+            assert.strictEqual(onMessageEnteredStub.callCount, 1);
         });
 
         QUnit.test('should be fired on enter key if the textarea input contains a value', function(assert) {
-            const onMessageSendStub = sinon.stub();
+            const onMessageEnteredStub = sinon.stub();
 
-            this.reinit({ onMessageSend: onMessageSendStub });
+            this.reinit({ onMessageEntered: onMessageEnteredStub });
 
             keyboardMock(this.$input)
                 .focus()
@@ -182,42 +182,42 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 .keyUp('enter');
 
 
-            assert.strictEqual(onMessageSendStub.callCount, 1);
+            assert.strictEqual(onMessageEnteredStub.callCount, 1);
         });
 
         QUnit.test('should not be fired when the send button is clicked if the textarea input does not contain a value', function(assert) {
-            const onMessageSendStub = sinon.stub();
+            const onMessageEnteredStub = sinon.stub();
 
-            this.reinit({ onMessageSend: onMessageSendStub });
+            this.reinit({ onMessageEntered: onMessageEnteredStub });
 
             this.$sendButton.trigger('dxclick');
 
-            assert.strictEqual(onMessageSendStub.callCount, 0);
+            assert.strictEqual(onMessageEnteredStub.callCount, 0);
         });
 
         QUnit.test('should not be fired on enter key if the textarea input does not contain a value (excluding spaces)', function(assert) {
-            const onMessageSendStub = sinon.stub();
+            const onMessageEnteredStub = sinon.stub();
 
-            this.reinit({ onMessageSend: onMessageSendStub });
+            this.reinit({ onMessageEntered: onMessageEnteredStub });
 
             keyboardMock(this.$input)
                 .focus()
                 .keyUp('enter');
 
-            assert.strictEqual(onMessageSendStub.callCount, 0);
+            assert.strictEqual(onMessageEnteredStub.callCount, 0);
 
             keyboardMock(this.$input)
                 .focus()
                 .type('   ')
                 .keyUp('enter');
 
-            assert.strictEqual(onMessageSendStub.callCount, 0);
+            assert.strictEqual(onMessageEnteredStub.callCount, 0);
         });
 
         QUnit.test('should be possible to update it at runtime', function(assert) {
             const eventHandlerStub = sinon.stub();
 
-            this.instance.option('onMessageSend', eventHandlerStub);
+            this.instance.option('onMessageEntered', eventHandlerStub);
 
             keyboardMock(this.$input)
                 .focus()
@@ -230,9 +230,9 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
         QUnit.test('should not be fired when the send button is clicked if the textarea input contains a value consisting only of spaces', function(assert) {
             const emptyText = '    ';
-            const onMessageSendStub = sinon.stub();
+            const onMessageEnteredStub = sinon.stub();
 
-            this.reinit({ onMessageSend: onMessageSendStub });
+            this.reinit({ onMessageEntered: onMessageEnteredStub });
 
             keyboardMock(this.$input)
                 .focus()
@@ -240,7 +240,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             this.$sendButton.trigger('dxclick');
 
-            assert.strictEqual(onMessageSendStub.callCount, 0);
+            assert.strictEqual(onMessageEnteredStub.callCount, 0);
         });
 
         QUnit.test('should be fired with correct arguments', function(assert) {
@@ -249,7 +249,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             const text = '  new text message ';
 
             this.reinit({
-                onMessageSend: (e) => {
+                onMessageEntered: (e) => {
                     const { component, element, event, text } = e;
 
                     assert.strictEqual(component, this.instance, 'component field is correct');
@@ -274,7 +274,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             const text = '  new text message ';
 
             this.reinit({
-                onMessageSend: (e) => {
+                onMessageEntered: (e) => {
                     const { component, element, event, text } = e;
 
                     assert.strictEqual(component, this.instance, 'component field is correct');

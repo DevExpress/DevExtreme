@@ -4,8 +4,8 @@ import devices from '__internal/core/m_devices';
 import Scrollbar from '__internal/ui/scroll_view/m_scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
-import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
-import { getElementOverflowY, getElementOverflowX } from 'renovation/ui/scroll_view/utils/get_element_style';
+import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
+import { getElementOverflowY, getElementOverflowX } from '__internal/ui/scroll_view/utils/get_element_style';
 
 import 'generic_light.css!';
 
@@ -13,7 +13,7 @@ import {
     DIRECTION_HORIZONTAL,
     DIRECTION_VERTICAL,
     DIRECTION_BOTH,
-} from 'renovation/ui/scroll_view/common/consts.js';
+} from '__internal/ui/scroll_view/consts.js';
 
 import {
     SCROLLABLE_CONTAINER_CLASS,

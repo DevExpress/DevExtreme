@@ -201,6 +201,7 @@ $datagrid-overlay-content-shadow-color: color.change($base-shadow-color, $alpha:
 $datagrid-columnchooser-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
 $datagrid-column-separator-bg: null !default;
 $datagrid-text-stub-background-image-path: null !default;
+$datagrid-draggable-column-text-color: null !default;
 
 @if $color == "carmine" {
   $datagrid-columnchooser-item-color: $base-label-color !default;
@@ -242,6 +243,7 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-cell-removed-border-color: $datagrid-border-color !default;
   $datagrid-row-removed-bg: $datagrid-border-color !default;
   $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
+  $datagrid-draggable-column-text-color: $base-label-color !default;
 }
 
 @if $color == "contrast" {
@@ -284,6 +286,7 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-cell-removed-border-color: $base-accent !default;
   $datagrid-row-removed-bg: $base-accent !default;
   $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
+  $datagrid-draggable-column-text-color: $base-text-color !default;
 }
 
 @if $color == "dark" {
@@ -326,6 +329,7 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-cell-removed-border-color: $datagrid-border-color !default;
   $datagrid-row-removed-bg: darken($datagrid-border-color, 6.67) !default;
   $datagrid-cell-removed-text-color: color.change($base-text-color, $alpha: 0.7) !default;
+  $datagrid-draggable-column-text-color: darken($base-text-color, 40%) !default;
 }
 
 @if $color == "darkmoon" {
@@ -368,6 +372,7 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-cell-removed-border-color: $datagrid-border-color !default;
   $datagrid-row-removed-bg: $datagrid-border-color !default;
   $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
+  $datagrid-draggable-column-text-color: darken($base-label-color, 17%) !default;
 }
 
 @if $color == "darkviolet" {
@@ -410,6 +415,7 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-cell-removed-border-color: $datagrid-border-color !default;
   $datagrid-row-removed-bg: $datagrid-border-color !default;
   $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
+  $datagrid-draggable-column-text-color: darken($base-text-color, 40%) !default;
 }
 
 @if $color == "greenmist" {
@@ -452,6 +458,7 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-cell-removed-border-color: $datagrid-border-color !default;
   $datagrid-row-removed-bg: $datagrid-border-color !default;
   $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
+  $datagrid-draggable-column-text-color: lighten($base-label-color, 16%) !default;
 }
 
 @if $color == "light" {
@@ -494,6 +501,7 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-cell-removed-border-color: $datagrid-border-color !default;
   $datagrid-row-removed-bg: lighten($datagrid-border-color, 6.67) !default;
   $datagrid-cell-removed-text-color: color.change($base-text-color, $alpha: 0.7) !default;
+  $datagrid-draggable-column-text-color: lighten($base-text-color, 40%) !default;
 }
 
 @if $color == "softblue" {
@@ -536,5 +544,5 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-cell-removed-border-color: $datagrid-border-color !default;
   $datagrid-row-removed-bg: $datagrid-border-color !default;
   $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
+  $datagrid-draggable-column-text-color: lighten($base-text-color, 40%) !default;
 }
-

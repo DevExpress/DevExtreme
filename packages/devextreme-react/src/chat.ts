@@ -8,7 +8,7 @@ import dxChat, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { Message, DisposingEvent, InitializedEvent, MessageSendEvent, TypingEndEvent, TypingStartEvent, User as ChatUser } from "devextreme/ui/chat";
+import type { Message, DisposingEvent, InitializedEvent, MessageEnteredEvent, TypingEndEvent, TypingStartEvent, User as ChatUser } from "devextreme/ui/chat";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -17,7 +17,7 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type IChatOptionsNarrowedEvents = {
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
-  onMessageSend?: ((e: MessageSendEvent) => void);
+  onMessageEntered?: ((e: MessageEnteredEvent) => void);
   onTypingEnd?: ((e: TypingEndEvent) => void);
   onTypingStart?: ((e: TypingStartEvent) => void);
 }
@@ -45,15 +45,16 @@ const Chat = memo(
       ), [baseRef.current]);
 
       const subscribableOptions = useMemo(() => (["items"]), []);
-      const independentEvents = useMemo(() => (["onDisposing","onInitialized","onMessageSend","onTypingEnd","onTypingStart"]), []);
+      const independentEvents = useMemo(() => (["onDisposing","onInitialized","onMessageEntered","onTypingEnd","onTypingStart"]), []);
 
       const defaults = useMemo(() => ({
         defaultItems: "items",
       }), []);
 
       const expectedChildren = useMemo(() => ({
-        error: { optionName: "errors", isCollectionItem: true },
+        alert: { optionName: "alerts", isCollectionItem: true },
         item: { optionName: "items", isCollectionItem: true },
+        typingUser: { optionName: "typingUsers", isCollectionItem: true },
         user: { optionName: "user", isCollectionItem: false }
       }), []);
 
@@ -72,6 +73,26 @@ const Chat = memo(
   ),
 ) as (props: React.PropsWithChildren<IChatOptions> & { ref?: Ref<ChatRef> }) => ReactElement | null;
 
+
+// owners:
+// Chat
+type IAlertProps = React.PropsWithChildren<{
+  id?: number | string;
+  message?: string;
+}>
+const _componentAlert = (props: IAlertProps) => {
+  return React.createElement(NestedOption<IAlertProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "alerts",
+      IsCollectionItem: true,
+    },
+  });
+};
+
+const Alert = Object.assign<typeof _componentAlert, NestedComponentMeta>(_componentAlert, {
+  componentType: "option",
+});
 
 // owners:
 // Item
@@ -96,28 +117,9 @@ const Author = Object.assign<typeof _componentAuthor, NestedComponentMeta>(_comp
 
 // owners:
 // Chat
-type IErrorProps = React.PropsWithChildren<{
-  id?: number | string;
-  message?: string;
-}>
-const _componentError = (props: IErrorProps) => {
-  return React.createElement(NestedOption<IErrorProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "errors",
-      IsCollectionItem: true,
-    },
-  });
-};
-
-const Error = Object.assign<typeof _componentError, NestedComponentMeta>(_componentError, {
-  componentType: "option",
-});
-
-// owners:
-// Chat
 type IItemProps = React.PropsWithChildren<{
   author?: ChatUser;
+  id?: number | string;
   text?: string;
   timestamp?: Date | number | string;
   typing?: boolean;
@@ -136,6 +138,28 @@ const _componentItem = (props: IItemProps) => {
 };
 
 const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
+  componentType: "option",
+});
+
+// owners:
+// Chat
+type ITypingUserProps = React.PropsWithChildren<{
+  avatarAlt?: string;
+  avatarUrl?: string;
+  id?: number | string;
+  name?: string;
+}>
+const _componentTypingUser = (props: ITypingUserProps) => {
+  return React.createElement(NestedOption<ITypingUserProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "typingUsers",
+      IsCollectionItem: true,
+    },
+  });
+};
+
+const TypingUser = Object.assign<typeof _componentTypingUser, NestedComponentMeta>(_componentTypingUser, {
   componentType: "option",
 });
 
@@ -165,12 +189,14 @@ export {
   Chat,
   IChatOptions,
   ChatRef,
+  Alert,
+  IAlertProps,
   Author,
   IAuthorProps,
-  Error,
-  IErrorProps,
   Item,
   IItemProps,
+  TypingUser,
+  ITypingUserProps,
   User,
   IUserProps
 };

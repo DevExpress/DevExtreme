@@ -32,13 +32,13 @@ export type InitializedEvent = InitializedEventInfo<dxChat>;
 export type OptionChangedEvent = EventInfo<dxChat> & ChangedOptionInfo;
 
 /**
- * @docid _ui_chat_MessageSendEvent
+ * @docid _ui_chat_MessageEnteredEvent
  * @public
  * @type object
  * @inherits NativeEventInfo
  */
-export type MessageSendEvent = NativeEventInfo<dxChat, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
-    /** @docid _ui_chat_MessageSendEvent.message */
+export type MessageEnteredEvent = NativeEventInfo<dxChat, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+    /** @docid _ui_chat_MessageEnteredEvent.message */
     readonly message?: Message;
 };
 
@@ -100,7 +100,7 @@ export type User = {
  * @namespace DevExpress.ui.dxChat
  * @public
  */
-export type ChatError = {
+export type Alert = {
     /**
      * @docid
      * @public
@@ -120,6 +120,11 @@ export type ChatError = {
  * @public
  */
 export type Message = {
+    /**
+     * @docid
+     * @public
+     */
+    id?: number | string;
     /**
      * @docid
      * @default undefined
@@ -192,10 +197,22 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     dataSource?: DataSourceLike<Message> | null;
     /**
      * @docid
+     * @default true
+     * @public
+     */
+    reloadOnChange?: boolean;
+    /**
+     * @docid
      * @default undefined
      * @public
      */
-    errors?: Array<ChatError>;
+    alerts?: Array<Alert>;
+    /**
+     * @docid
+     * @default []
+     * @public
+     */
+    typingUsers?: Array<User>;
     /**
      * @docid
      * @default true
@@ -223,11 +240,11 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
      * @default undefined
-     * @type_function_param1 e:{ui/chat:MessageSendEvent}
+     * @type_function_param1 e:{ui/chat:MessageEnteredEvent}
      * @action
      * @public
      */
-    onMessageSend?: ((e: MessageSendEvent) => void);
+    onMessageEntered?: ((e: MessageEnteredEvent) => void);
     /**
      * @docid
      * @default undefined
@@ -280,7 +297,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut' >;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMessageSend' | 'onTypingStart' | 'onTypingEnd'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMessageEntered' | 'onTypingStart' | 'onTypingEnd'>;
 
 /**
 * @hidden

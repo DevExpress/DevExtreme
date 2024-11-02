@@ -93,7 +93,7 @@ const componentConfig = {
     accessKey: String,
     adaptivityEnabled: Boolean,
     allDayExpr: String,
-    allDayPanelMode: String,
+    allDayPanelMode: {},
     appointmentCollectorTemplate: {},
     appointmentDragging: Object,
     appointmentTemplate: {},
@@ -101,7 +101,7 @@ const componentConfig = {
     cellDuration: Number,
     crossScrollingEnabled: Boolean,
     currentDate: [Date, Number, String],
-    currentView: String,
+    currentView: {},
     customizeDateNavigatorText: Function,
     dataCellTemplate: {},
     dataSource: {},
@@ -115,18 +115,7 @@ const componentConfig = {
     endDateExpr: String,
     endDateTimeZoneExpr: String,
     endDayHour: Number,
-    firstDayOfWeek: {
-      type: Number,
-      validator: (v) => typeof(v) !== "number" || [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ].indexOf(v) !== -1
-    },
+    firstDayOfWeek: {},
     focusStateEnabled: Boolean,
     groupByDate: Boolean,
     groups: Array,
@@ -134,7 +123,7 @@ const componentConfig = {
     hint: String,
     indicatorUpdateInterval: Number,
     max: [Date, Number, String],
-    maxAppointmentsPerCell: [Number, String],
+    maxAppointmentsPerCell: {},
     min: [Date, Number, String],
     noDataText: String,
     offset: Number,
@@ -156,7 +145,7 @@ const componentConfig = {
     onDisposing: Function,
     onInitialized: Function,
     onOptionChanged: Function,
-    recurrenceEditMode: String,
+    recurrenceEditMode: {},
     recurrenceExceptionExpr: String,
     recurrenceRuleExpr: String,
     remoteFiltering: Boolean,
@@ -386,7 +375,7 @@ const DxScrollingConfig = {
     "update:mode": null,
   },
   props: {
-    mode: String
+    mode: {}
   }
 };
 
@@ -427,7 +416,7 @@ const DxViewConfig = {
   },
   props: {
     agendaDuration: Number,
-    allDayPanelMode: String,
+    allDayPanelMode: {},
     appointmentCollectorTemplate: {},
     appointmentTemplate: {},
     appointmentTooltipTemplate: {},
@@ -436,23 +425,12 @@ const DxViewConfig = {
     dateCellTemplate: {},
     dropDownAppointmentTemplate: {},
     endDayHour: Number,
-    firstDayOfWeek: {
-      type: Number,
-      validator: (v) => typeof(v) !== "number" || [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ].indexOf(v) !== -1
-    },
+    firstDayOfWeek: {},
     groupByDate: Boolean,
-    groupOrientation: String,
+    groupOrientation: {},
     groups: Array,
     intervalCount: Number,
-    maxAppointmentsPerCell: [Number, String],
+    maxAppointmentsPerCell: {},
     name: String,
     offset: Number,
     resourceCellTemplate: {},
@@ -460,7 +438,7 @@ const DxViewConfig = {
     startDate: [Date, Number, String],
     startDayHour: Number,
     timeCellTemplate: {},
-    type: String
+    type: {}
   }
 };
 

@@ -95,18 +95,7 @@ const componentConfig = {
     elementAttr: Object,
     endDateRange: Date,
     filterRow: Object,
-    firstDayOfWeek: {
-      type: Number,
-      validator: (v) => typeof(v) !== "number" || [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ].indexOf(v) !== -1
-    },
+    firstDayOfWeek: {},
     focusStateEnabled: Boolean,
     headerFilter: Object,
     height: [Function, Number, String],
@@ -146,7 +135,7 @@ const componentConfig = {
     resourceAssignments: Object,
     resources: Object,
     rootValue: {},
-    scaleType: String,
+    scaleType: {},
     scaleTypeRange: Object,
     selectedRowKey: {},
     showDependencies: Boolean,
@@ -161,7 +150,7 @@ const componentConfig = {
     taskProgressTooltipContentTemplate: {},
     tasks: Object,
     taskTimeTooltipContentTemplate: {},
-    taskTitlePosition: String,
+    taskTitlePosition: {},
     taskTooltipContentTemplate: {},
     toolbar: Object,
     validation: Object,
@@ -315,7 +304,7 @@ const DxColumnConfig = {
     "update:width": null,
   },
   props: {
-    alignment: String,
+    alignment: {},
     allowFiltering: Boolean,
     allowHeaderFiltering: Boolean,
     allowSorting: Boolean,
@@ -328,21 +317,21 @@ const DxColumnConfig = {
     cssClass: String,
     customizeText: Function,
     dataField: String,
-    dataType: String,
+    dataType: {},
     encodeHtml: Boolean,
     falseText: String,
     filterOperations: Array,
-    filterType: String,
+    filterType: {},
     filterValue: {},
     filterValues: Array,
-    format: [Object, Function, String],
+    format: {},
     headerCellTemplate: {},
     headerFilter: Object,
     minWidth: Number,
-    selectedFilterOperation: String,
+    selectedFilterOperation: {},
     sortIndex: Number,
     sortingMethod: Function,
-    sortOrder: String,
+    sortOrder: {},
     trueText: String,
     visible: Boolean,
     visibleIndex: Number,
@@ -379,10 +368,10 @@ const DxColumnHeaderFilterConfig = {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: {},
-    groupInterval: [Number, String],
+    groupInterval: {},
     height: [Number, String],
     search: Object,
-    searchMode: String,
+    searchMode: {},
     width: [Number, String]
   }
 };
@@ -410,7 +399,7 @@ const DxColumnHeaderFilterSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String,
+    mode: {},
     searchExpr: [Array, Function, String],
     timeout: Number
   }
@@ -467,7 +456,7 @@ const DxContextMenuItemConfig = {
     disabled: Boolean,
     icon: String,
     items: Array,
-    name: String,
+    name: {},
     selectable: Boolean,
     selected: Boolean,
     template: {},
@@ -591,7 +580,7 @@ const DxFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -650,7 +639,7 @@ const DxGanttHeaderFilterSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String,
+    mode: {},
     timeout: Number
   }
 };
@@ -681,10 +670,10 @@ const DxHeaderFilterConfig = {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: {},
-    groupInterval: [Number, String],
+    groupInterval: {},
     height: [Number, String],
     search: Object,
-    searchMode: String,
+    searchMode: {},
     searchTimeout: Number,
     texts: Object,
     visible: Boolean,
@@ -730,18 +719,18 @@ const DxItemConfig = {
     html: String,
     icon: String,
     items: Array,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: {},
+    location: {},
     menuItemTemplate: {},
-    name: String,
+    name: {},
     options: {},
     selectable: Boolean,
     selected: Boolean,
-    showText: String,
+    showText: {},
     template: {},
     text: String,
     visible: Boolean,
-    widget: String
+    widget: {}
   }
 };
 
@@ -843,8 +832,8 @@ const DxScaleTypeRangeConfig = {
     "update:min": null,
   },
   props: {
-    max: String,
-    min: String
+    max: {},
+    min: {}
   }
 };
 
@@ -867,7 +856,7 @@ const DxSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String,
+    mode: {},
     searchExpr: [Array, Function, String],
     timeout: Number
   }
@@ -893,7 +882,7 @@ const DxSortingConfig = {
     ascendingText: String,
     clearText: String,
     descendingText: String,
-    mode: String,
+    mode: {},
     showSortIndexes: Boolean
   }
 };
@@ -1023,16 +1012,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: {},
+    location: {},
     menuItemTemplate: {},
-    name: String,
+    name: {},
     options: {},
-    showText: String,
+    showText: {},
     template: {},
     text: String,
     visible: Boolean,
-    widget: String
+    widget: {}
   }
 };
 

@@ -8,11 +8,11 @@ import dxTreeMap, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ClickEvent, DisposingEvent, DrawnEvent, DrillEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, NodesInitializedEvent, NodesRenderingEvent, dxTreeMapNode } from "devextreme/viz/tree_map";
-import type { Font as ChartsFont } from "devextreme/common/charts";
+import type { ClickEvent, DisposingEvent, DrawnEvent, DrillEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, NodesInitializedEvent, NodesRenderingEvent, TreeMapColorizerType, dxTreeMapNode } from "devextreme/viz/tree_map";
+import type { DashStyle, Palette, PaletteExtensionMode, Font as ChartsFont, TextOverflow, WordWrap } from "devextreme/common/charts";
+import type { ExportFormat, Format as CommonFormat, HorizontalAlignment, VerticalEdge } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/localization";
 import type { template } from "devextreme/core/templates/template";
-
-import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -99,7 +99,7 @@ const TreeMap = memo(
 type IBorderProps = React.PropsWithChildren<{
   color?: string;
   width?: number;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
   visible?: boolean;
 }>
@@ -121,10 +121,10 @@ const Border = Object.assign<typeof _componentBorder, NestedComponentMeta>(_comp
 type IColorizerProps = React.PropsWithChildren<{
   colorCodeField?: string;
   colorizeGroups?: boolean;
-  palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office";
-  paletteExtensionMode?: "alternate" | "blend" | "extrapolate";
+  palette?: Array<string> | Palette;
+  paletteExtensionMode?: PaletteExtensionMode;
   range?: Array<number>;
-  type?: "discrete" | "gradient" | "none" | "range";
+  type?: TreeMapColorizerType;
 }>
 const _componentColorizer = (props: IColorizerProps) => {
   return React.createElement(NestedOption<IColorizerProps>, {
@@ -145,7 +145,7 @@ type IExportProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
   fileName?: string;
-  formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">;
+  formats?: Array<ExportFormat>;
   margin?: number;
   printingEnabled?: boolean;
   svgToCanvas?: ((svg: any, canvas: any) => any);
@@ -197,7 +197,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = (props: IFormatProps) => {
@@ -232,7 +232,7 @@ type IGroupProps = React.PropsWithChildren<{
   };
   label?: Record<string, any> | {
     font?: ChartsFont;
-    textOverflow?: "ellipsis" | "hide" | "none";
+    textOverflow?: TextOverflow;
     visible?: boolean;
   };
   padding?: number;
@@ -269,7 +269,7 @@ const Group = Object.assign<typeof _componentGroup, NestedComponentMeta>(_compon
 // Group
 type IGroupLabelProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  textOverflow?: "ellipsis" | "hide" | "none";
+  textOverflow?: TextOverflow;
   visible?: boolean;
 }>
 const _componentGroupLabel = (props: IGroupLabelProps) => {
@@ -316,9 +316,9 @@ const HoverStyle = Object.assign<typeof _componentHoverStyle, NestedComponentMet
 // Tile
 type ILabelProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  textOverflow?: "ellipsis" | "hide" | "none";
+  textOverflow?: TextOverflow;
   visible?: boolean;
-  wordWrap?: "normal" | "breakWord" | "none";
+  wordWrap?: WordWrap;
 }>
 const _componentLabel = (props: ILabelProps) => {
   return React.createElement(NestedOption<ILabelProps>, {
@@ -454,8 +454,8 @@ type ISubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  wordWrap?: WordWrap;
 }>
 const _componentSubtitle = (props: ISubtitleProps) => {
   return React.createElement(NestedOption<ISubtitleProps>, {
@@ -490,9 +490,9 @@ type ITileProps = React.PropsWithChildren<{
   };
   label?: Record<string, any> | {
     font?: ChartsFont;
-    textOverflow?: "ellipsis" | "hide" | "none";
+    textOverflow?: TextOverflow;
     visible?: boolean;
-    wordWrap?: "normal" | "breakWord" | "none";
+    wordWrap?: WordWrap;
   };
   selectionStyle?: Record<string, any> | {
     border?: Record<string, any> | {
@@ -527,9 +527,9 @@ const Tile = Object.assign<typeof _componentTile, NestedComponentMeta>(_componen
 // Tile
 type ITileLabelProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  textOverflow?: "ellipsis" | "hide" | "none";
+  textOverflow?: TextOverflow;
   visible?: boolean;
-  wordWrap?: "normal" | "breakWord" | "none";
+  wordWrap?: WordWrap;
 }>
 const _componentTileLabel = (props: ITileLabelProps) => {
   return React.createElement(NestedOption<ITileLabelProps>, {
@@ -551,7 +551,7 @@ const TileLabel = Object.assign<typeof _componentTileLabel, NestedComponentMeta>
 // TreeMap
 type ITitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: number | Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -563,13 +563,13 @@ type ITitleProps = React.PropsWithChildren<{
     font?: ChartsFont;
     offset?: number;
     text?: string;
-    textOverflow?: "ellipsis" | "hide" | "none";
-    wordWrap?: "normal" | "breakWord" | "none";
+    textOverflow?: TextOverflow;
+    wordWrap?: WordWrap;
   };
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  verticalAlignment?: "bottom" | "top";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  verticalAlignment?: VerticalEdge;
+  wordWrap?: WordWrap;
 }>
 const _componentTitle = (props: ITitleProps) => {
   return React.createElement(NestedOption<ITitleProps>, {
@@ -595,7 +595,7 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -607,7 +607,7 @@ type ITooltipProps = React.PropsWithChildren<{
   customizeTooltip?: ((info: { node: dxTreeMapNode, value: number, valueText: string }) => Record<string, any>);
   enabled?: boolean;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   opacity?: number;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
@@ -651,7 +651,7 @@ const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_co
 // Tooltip
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
   visible?: boolean;
   width?: number;

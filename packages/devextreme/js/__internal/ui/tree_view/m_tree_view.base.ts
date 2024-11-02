@@ -20,13 +20,13 @@ import { name as dblclickEvent } from '@js/events/double_click';
 import pointerEvents from '@js/events/pointer';
 import { addNamespace } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
-import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, SCROLLABLE_CONTENT_CLASS } from '@js/renovation/ui/scroll_view/common/consts';
-import { getRelativeOffset } from '@js/renovation/ui/scroll_view/utils/get_relative_offset';
 import CheckBox from '@js/ui/check_box';
 import HierarchicalCollectionWidget from '@js/ui/hierarchical_collection/ui.hierarchical_collection_widget';
 import LoadIndicator from '@js/ui/load_indicator';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import supportUtils from '@ts/core/utils/m_support';
+import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, SCROLLABLE_CONTENT_CLASS } from '@ts/ui/scroll_view/consts';
+import { getRelativeOffset } from '@ts/ui/scroll_view/utils/get_relative_offset';
 
 const WIDGET_CLASS = 'dx-treeview';
 
