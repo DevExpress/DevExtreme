@@ -56,6 +56,9 @@ jobs:
           corepack enable
           pnpm install
 
+      - name: Angular - Download Browser
+        run: pnpx puppeteer browsers install chrome@130.0.6723.69
+
       - name: Build devextreme package
         env:
           BUILD_TEST_INTERNAL_PACKAGE: true
