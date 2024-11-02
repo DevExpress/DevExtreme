@@ -287,11 +287,14 @@ gulp.task('build.tests', gulp.series('clean.tests', 'generate-component-names', 
   const config = buildConfig.components;
   const testConfig = buildConfig.tests;
 
-  return gulp.src(config.tsTestSrc)
+  console.log('------starting --conf after copy.dist.dx-angular-->');
+  const result = gulp.src(config.tsTestSrc)
     .pipe(sourcemaps.init())
     .pipe(typescript(testConfig.tsConfigPath))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(config.testsPath));
+
+  return result;
 }));
 
 gulp.task('watch.spec', () => {
@@ -308,13 +311,10 @@ const getKarmaConfig = function (testsPath) {
 };
 
 gulp.task('test.components.client', gulp.series('build.tests', (done) => {
+  console.log('------starting --getKarmaConfig-->');
   const config = getKarmaConfig('./karma.test.shim.js');
 
-  new karmaServer(config, (e) => {
-    console.log('----karmaServer-catch----->', e);
-    done()})
-      .start()
-      .finally(() => done());
+  new karmaServer(config, done).start();
 }));
 
 gulp.task('test.components.server', gulp.series('build.tests', (done) => {
