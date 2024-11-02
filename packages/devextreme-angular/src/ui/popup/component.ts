@@ -22,9 +22,8 @@ import {
 } from '@angular/core';
 
 
-import { AnimationConfig } from 'devextreme/animation/fx';
-import { PositionConfig } from 'devextreme/animation/position';
 import { PositionAlignment, ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
+import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { ToolbarLocation } from 'devextreme/ui/popup';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';

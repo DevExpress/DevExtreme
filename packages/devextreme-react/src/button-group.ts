@@ -10,7 +10,6 @@ import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent } from "devextreme/ui/button_group";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { template } from "devextreme/core/templates/template";
 import type { ButtonType } from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -94,7 +93,7 @@ type IItemProps = React.PropsWithChildren<{
   elementAttr?: Record<string, any>;
   hint?: string;
   icon?: string;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
   text?: string;
   type?: ButtonType;
   visible?: boolean;

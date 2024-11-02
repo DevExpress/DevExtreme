@@ -9,11 +9,10 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { ButtonClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent } from "devextreme/ui/drop_down_button";
-import type { AnimationConfig, AnimationState, AnimationType } from "devextreme/animation/fx";
+import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { HorizontalAlignment, VerticalAlignment, PositionAlignment, Direction, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
-import type { CollisionResolution, PositionConfig, CollisionResolutionCombination } from "devextreme/animation/position";
-import type { event, EventInfo } from "devextreme/events/index";
-import type { template } from "devextreme/core/templates/template";
+import type { event } from "devextreme/common/core/events/index";
+import type { EventInfo } from "devextreme/common/core/events";
 import type { Component } from "devextreme/core/component";
 import type { dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
@@ -192,7 +191,7 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   bindingOptions?: Record<string, any>;
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string;
-  contentTemplate?: ((contentElement: any) => string | any) | template;
+  contentTemplate?: any | ((contentElement: any) => string | any);
   deferRendering?: boolean;
   disabled?: boolean;
   dragAndResizeArea?: any | string;
@@ -232,7 +231,7 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   showTitle?: boolean;
   tabIndex?: number;
   title?: string;
-  titleTemplate?: ((titleElement: any) => string | any) | template;
+  titleTemplate?: any | ((titleElement: any) => string | any);
   toolbarItems?: Array<dxPopupToolbarItem>;
   visible?: boolean;
   width?: (() => number | string) | number | string;
@@ -347,7 +346,7 @@ type IItemProps = React.PropsWithChildren<{
   html?: string;
   icon?: string;
   onClick?: ((e: ItemClickEvent) => void);
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
   text?: string;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
@@ -507,10 +506,10 @@ type IToolbarItemProps = React.PropsWithChildren<{
   html?: string;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
-  menuItemTemplate?: (() => string | any) | template;
+  menuItemTemplate?: any | (() => string | any);
   options?: any;
   showText?: ShowTextMode;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
   text?: string;
   toolbar?: ToolbarLocation;
   visible?: boolean;

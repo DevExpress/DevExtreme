@@ -20,7 +20,7 @@ import {
 
 
 import { AxisScaleType, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, TimeInterval, VisualRange } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 import { ValueAxisVisualRangeUpdateMode } from 'devextreme/viz/polar_chart';
 import { ChartAxisScale } from 'devextreme/viz/range_selector';
 

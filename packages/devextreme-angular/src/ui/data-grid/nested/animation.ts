@@ -14,7 +14,7 @@ import {
 
 
 
-import { AnimationConfig } from 'devextreme/animation/fx';
+import { AnimationConfig } from 'devextreme/common/core/animation';
 
 import {
     NestedOptionHost,

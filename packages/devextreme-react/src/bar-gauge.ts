@@ -11,8 +11,7 @@ import NestedOption from "./core/nested-option";
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent, BarGaugeBarInfo, BarGaugeLegendItem } from "devextreme/viz/bar_gauge";
 import type { AnimationEaseMode, Font as ChartsFont, TextOverflow, WordWrap, DashStyle } from "devextreme/common/charts";
 import type { HorizontalAlignment, VerticalEdge, ExportFormat, Format as CommonFormat, Position, Orientation } from "devextreme/common";
-import type { Format as LocalizationFormat } from "devextreme/localization";
-import type { template } from "devextreme/core/templates/template";
+import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -391,7 +390,7 @@ type ILegendProps = React.PropsWithChildren<{
     top?: number;
   };
   markerSize?: number;
-  markerTemplate?: ((legendItem: BarGaugeLegendItem, element: any) => string | any) | template;
+  markerTemplate?: any | ((legendItem: BarGaugeLegendItem, element: any) => string | any);
   orientation?: Orientation;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
@@ -700,7 +699,7 @@ type ITooltipProps = React.PropsWithChildren<{
   };
   color?: string;
   container?: any | string;
-  contentTemplate?: ((scaleValue: { index: number, value: number, valueText: string }, element: any) => string | any) | template;
+  contentTemplate?: any | ((scaleValue: { index: number, value: number, valueText: string }, element: any) => string | any);
   cornerRadius?: number;
   customizeTooltip?: ((scaleValue: { index: number, value: number, valueText: string }) => Record<string, any>);
   enabled?: boolean;

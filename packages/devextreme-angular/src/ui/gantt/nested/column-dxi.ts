@@ -15,10 +15,10 @@ import {
 
 
 import { DataType, HorizontalAlignment, SearchMode, SortOrder } from 'devextreme/common';
+import { Format } from 'devextreme/common/core/localization';
 import { ColumnHeaderFilterSearchConfig, FilterOperation, FilterType, HeaderFilterGroupInterval, SelectedFilterOperation } from 'devextreme/common/grids';
 import { Store } from 'devextreme/data';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,

@@ -14,14 +14,13 @@ import type { DataChange, DataChangeType, FilterOperation, FilterType, FixedPosi
 import type { Mode, ValidationRuleType, HorizontalAlignment, VerticalAlignment, DataType, Format as CommonFormat, SearchMode, SortOrder, ComparisonOperator, SingleMultipleOrNone, SelectAllMode, PositionAlignment, Direction, ToolbarItemLocation, ToolbarItemComponent, DisplayMode, DragDirection, DragHighlight, ScrollbarMode } from "devextreme/common";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, dxFilterBuilderField, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
 import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, dxFormSimpleItem, dxFormOptions, OptionChangedEvent as FormOptionChangedEvent, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent, FormItemType } from "devextreme/ui/form";
-import type { AnimationConfig, AnimationState, AnimationType } from "devextreme/animation/fx";
-import type { template } from "devextreme/core/templates/template";
-import type { CollisionResolution, PositionConfig, CollisionResolutionCombination } from "devextreme/animation/position";
-import type { Format as LocalizationFormat } from "devextreme/localization";
+import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
+import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/data/store";
+import type { Store } from "devextreme/common/data";
 import type { dxPopupOptions, dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
-import type { event, EventInfo } from "devextreme/events/index";
+import type { event } from "devextreme/common/core/events/index";
+import type { EventInfo } from "devextreme/common/core/events";
 import type { Component } from "devextreme/core/component";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
@@ -305,7 +304,7 @@ type IButtonProps = React.PropsWithChildren<{
   icon?: string;
   name?: DataGridPredefinedColumnButton | string;
   onClick?: ((e: ColumnButtonClickEvent) => void);
-  template?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, key: any, row: dxDataGridRowObject, rowIndex: number, rowType: string }) => string | any) | template;
+  template?: any | ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, key: any, row: dxDataGridRowObject, rowIndex: number, rowType: string }) => string | any);
   text?: string;
   visible?: boolean | ((options: { column: dxDataGridColumn, component: dxDataGrid, row: dxDataGridRowObject }) => boolean);
   render?: (...params: any) => React.ReactNode;
@@ -416,13 +415,13 @@ type IColumnProps = React.PropsWithChildren<{
   calculateGroupValue?: ((rowData: any) => any) | string;
   calculateSortValue?: ((rowData: any) => any) | string;
   caption?: string;
-  cellTemplate?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, oldValue: any, row: dxDataGridRowObject, rowIndex: number, rowType: string, text: string, value: any, watch: (() => void) }) => any) | template;
+  cellTemplate?: any | ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, oldValue: any, row: dxDataGridRowObject, rowIndex: number, rowType: string, text: string, value: any, watch: (() => void) }) => any);
   columns?: Array<dxDataGridColumn | string>;
   cssClass?: string;
   customizeText?: ((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string);
   dataField?: string;
   dataType?: DataType;
-  editCellTemplate?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, row: dxDataGridRowObject, rowIndex: number, rowType: string, setValue(newValue, newText): any, text: string, value: any, watch: (() => void) }) => any) | template;
+  editCellTemplate?: any | ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, row: dxDataGridRowObject, rowIndex: number, rowType: string, setValue(newValue, newText): any, text: string, value: any, watch: (() => void) }) => any);
   editorOptions?: any;
   encodeHtml?: boolean;
   falseText?: string;
@@ -434,9 +433,9 @@ type IColumnProps = React.PropsWithChildren<{
   fixedPosition?: FixedPosition;
   format?: LocalizationFormat;
   formItem?: dxFormSimpleItem;
-  groupCellTemplate?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, groupContinuedMessage: string, groupContinuesMessage: string, row: dxDataGridRowObject, rowIndex: number, summaryItems: Array<any>, text: string, value: any }) => any) | template;
+  groupCellTemplate?: any | ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, groupContinuedMessage: string, groupContinuesMessage: string, row: dxDataGridRowObject, rowIndex: number, summaryItems: Array<any>, text: string, value: any }) => any);
   groupIndex?: number;
-  headerCellTemplate?: ((columnHeader: any, headerInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid }) => any) | template;
+  headerCellTemplate?: any | ((columnHeader: any, headerInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid }) => any);
   headerFilter?: Record<string, any> | {
     allowSearch?: boolean;
     allowSelectAll?: boolean;
@@ -821,7 +820,7 @@ type ICustomOperationProps = React.PropsWithChildren<{
   caption?: string;
   customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string);
   dataTypes?: Array<DataType>;
-  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
+  editorTemplate?: any | ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | Date }, container: any) => string | any);
   hasValue?: boolean;
   icon?: string;
   name?: string;
@@ -1147,7 +1146,7 @@ type IFieldProps = React.PropsWithChildren<{
   dataField?: string;
   dataType?: DataType;
   editorOptions?: any;
-  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
+  editorTemplate?: any | ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | Date }, container: any) => string | any);
   falseText?: string;
   filterOperations?: Array<FilterBuilderOperation | string>;
   format?: LocalizationFormat;
@@ -1293,7 +1292,7 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   bindingOptions?: Record<string, any>;
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string;
-  contentTemplate?: ((contentElement: any) => string | any) | template;
+  contentTemplate?: any | ((contentElement: any) => string | any);
   deferRendering?: boolean;
   disabled?: boolean;
   dragAndResizeArea?: any | string;
@@ -1333,7 +1332,7 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   showTitle?: boolean;
   tabIndex?: number;
   title?: string;
-  titleTemplate?: ((titleElement: any) => string | any) | template;
+  titleTemplate?: any | ((titleElement: any) => string | any);
   toolbarItems?: Array<dxPopupToolbarItem>;
   visible?: boolean;
   width?: (() => number | string) | number | string;
@@ -1614,12 +1613,12 @@ type IFormItemProps = React.PropsWithChildren<{
     alignment?: HorizontalAlignment;
     location?: LabelLocation;
     showColon?: boolean;
-    template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
+    template?: any | ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any);
     text?: string;
     visible?: boolean;
   };
   name?: string;
-  template?: ((data: { component: dxForm, dataField: string, editorOptions: Record<string, any>, editorType: string, name: string }, itemElement: any) => string | any) | template;
+  template?: any | ((data: { component: dxForm, dataField: string, editorOptions: Record<string, any>, editorType: string, name: string }, itemElement: any) => string | any);
   validationRules?: Array<CommonTypes.ValidationRule>;
   visible?: boolean;
   visibleIndex?: number;
@@ -1907,11 +1906,11 @@ type IItemProps = React.PropsWithChildren<{
   html?: string;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
-  menuItemTemplate?: (() => string | any) | template;
+  menuItemTemplate?: any | (() => string | any);
   name?: DataGridPredefinedToolbarItem | string;
   options?: any;
   showText?: ShowTextMode;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
   text?: string;
   visible?: boolean;
   widget?: ToolbarItemComponent;
@@ -1970,7 +1969,7 @@ type ILabelProps = React.PropsWithChildren<{
   alignment?: HorizontalAlignment;
   location?: LabelLocation;
   showColon?: boolean;
-  template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
+  template?: any | ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any);
   text?: string;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
@@ -2048,7 +2047,7 @@ const Lookup = Object.assign<typeof _componentLookup, NestedComponentMeta>(_comp
 type IMasterDetailProps = React.PropsWithChildren<{
   autoExpandAll?: boolean;
   enabled?: boolean;
-  template?: ((detailElement: any, detailInfo: { data: Record<string, any>, key: any, watch: (() => void) }) => any) | template;
+  template?: any | ((detailElement: any, detailInfo: { data: Record<string, any>, key: any, watch: (() => void) }) => any);
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
@@ -2251,7 +2250,7 @@ type IPopupProps = React.PropsWithChildren<{
   bindingOptions?: Record<string, any>;
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string;
-  contentTemplate?: ((contentElement: any) => string | any) | template;
+  contentTemplate?: any | ((contentElement: any) => string | any);
   deferRendering?: boolean;
   disabled?: boolean;
   dragAndResizeArea?: any | string;
@@ -2291,7 +2290,7 @@ type IPopupProps = React.PropsWithChildren<{
   showTitle?: boolean;
   tabIndex?: number;
   title?: string;
-  titleTemplate?: ((titleElement: any) => string | any) | template;
+  titleTemplate?: any | ((titleElement: any) => string | any);
   toolbarItems?: Array<dxPopupToolbarItem>;
   visible?: boolean;
   width?: (() => number | string) | number | string;
@@ -2473,7 +2472,7 @@ type IRowDraggingProps = React.PropsWithChildren<{
   };
   data?: any;
   dragDirection?: DragDirection;
-  dragTemplate?: ((dragInfo: { itemData: any, itemElement: any }, containerElement: any) => string | any) | template;
+  dragTemplate?: any | ((dragInfo: { itemData: any, itemElement: any }, containerElement: any) => string | any);
   dropFeedbackMode?: DragHighlight;
   filter?: string;
   group?: string;
@@ -2940,10 +2939,10 @@ type IToolbarItemProps = React.PropsWithChildren<{
   html?: string;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
-  menuItemTemplate?: (() => string | any) | template;
+  menuItemTemplate?: any | (() => string | any);
   options?: any;
   showText?: ShowTextMode;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
   text?: string;
   toolbar?: ToolbarLocation;
   visible?: boolean;

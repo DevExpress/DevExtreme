@@ -14,8 +14,8 @@ import {
 
 
 
-import { PositionConfig } from 'devextreme/animation/position';
 import { SortOrder } from 'devextreme/common';
+import { PositionConfig } from 'devextreme/common/core/animation';
 import { ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig } from 'devextreme/common/grids';
 import { UserDefinedElement } from 'devextreme/core/element';
 

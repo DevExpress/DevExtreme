@@ -12,10 +12,9 @@ import type { ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, Initialize
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, dxTabPanelItem, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, ButtonType, ComparisonOperator, TabsIconPosition, TabsStyle, Position } from "devextreme/common";
-import type { template } from "devextreme/core/templates/template";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/data/store";
+import type { Store } from "devextreme/common/data";
 
 import type DataSource from "devextreme/data/data_source";
 
@@ -167,7 +166,7 @@ type IButtonOptionsProps = React.PropsWithChildren<{
   rtlEnabled?: boolean;
   stylingMode?: ButtonStyle;
   tabIndex?: number;
-  template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template;
+  template?: any | ((buttonData: { icon: string, text: string }, contentElement: any) => string | any);
   text?: string;
   type?: ButtonType | string;
   useSubmitBehavior?: boolean;
@@ -326,7 +325,7 @@ const EmptyItem = Object.assign<typeof _componentEmptyItem, NestedComponentMeta>
 type IGroupItemProps = React.PropsWithChildren<{
   alignItemLabels?: boolean;
   caption?: string;
-  captionTemplate?: ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any) | template;
+  captionTemplate?: any | ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any);
   colCount?: number;
   colCountByScreen?: Record<string, any> | {
     lg?: number;
@@ -339,7 +338,7 @@ type IGroupItemProps = React.PropsWithChildren<{
   items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
   itemType?: FormItemType;
   name?: string;
-  template?: ((data: { component: dxForm, formData: Record<string, any> }, itemElement: any) => string | any) | template;
+  template?: any | ((data: { component: dxForm, formData: Record<string, any> }, itemElement: any) => string | any);
   visible?: boolean;
   visibleIndex?: number;
   captionRender?: (...params: any) => React.ReactNode;
@@ -384,8 +383,8 @@ type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   html?: string;
   icon?: string;
-  tabTemplate?: (() => string | any) | template;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  tabTemplate?: any | (() => string | any);
+  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
   text?: string;
   title?: string;
   visible?: boolean;
@@ -401,7 +400,7 @@ type IItemProps = React.PropsWithChildren<{
     alignment?: HorizontalAlignment;
     location?: LabelLocation;
     showColon?: boolean;
-    template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
+    template?: any | ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any);
     text?: string;
     visible?: boolean;
   };
@@ -410,7 +409,7 @@ type IItemProps = React.PropsWithChildren<{
   visibleIndex?: number;
   alignItemLabels?: boolean;
   caption?: string;
-  captionTemplate?: ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any) | template;
+  captionTemplate?: any | ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any);
   colCount?: number;
   colCountByScreen?: Record<string, any> | {
     lg?: number;
@@ -433,8 +432,8 @@ type IItemProps = React.PropsWithChildren<{
     disabled?: boolean;
     icon?: string;
     items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-    tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
-    template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
+    tabTemplate?: any | ((tabData: any, tabIndex: number, tabElement: any) => any);
+    template?: any | ((tabData: any, tabIndex: number, tabElement: any) => any);
     title?: string;
   }[];
   buttonOptions?: dxButtonOptions;
@@ -480,7 +479,7 @@ type ILabelProps = React.PropsWithChildren<{
   alignment?: HorizontalAlignment;
   location?: LabelLocation;
   showColon?: boolean;
-  template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
+  template?: any | ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any);
   text?: string;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
@@ -619,12 +618,12 @@ type ISimpleItemProps = React.PropsWithChildren<{
     alignment?: HorizontalAlignment;
     location?: LabelLocation;
     showColon?: boolean;
-    template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
+    template?: any | ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any);
     text?: string;
     visible?: boolean;
   };
   name?: string;
-  template?: ((data: { component: dxForm, dataField: string, editorOptions: Record<string, any>, editorType: string, name: string }, itemElement: any) => string | any) | template;
+  template?: any | ((data: { component: dxForm, dataField: string, editorOptions: Record<string, any>, editorType: string, name: string }, itemElement: any) => string | any);
   validationRules?: Array<CommonTypes.ValidationRule>;
   visible?: boolean;
   visibleIndex?: number;
@@ -708,8 +707,8 @@ type ITabProps = React.PropsWithChildren<{
   disabled?: boolean;
   icon?: string;
   items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-  tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
-  template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
+  tabTemplate?: any | ((tabData: any, tabIndex: number, tabElement: any) => any);
+  template?: any | ((tabData: any, tabIndex: number, tabElement: any) => any);
   title?: string;
   tabRender?: (...params: any) => React.ReactNode;
   tabComponent?: React.ComponentType<any>;
@@ -763,8 +762,8 @@ type ITabbedItemProps = React.PropsWithChildren<{
     disabled?: boolean;
     icon?: string;
     items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-    tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
-    template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
+    tabTemplate?: any | ((tabData: any, tabIndex: number, tabElement: any) => any);
+    template?: any | ((tabData: any, tabIndex: number, tabElement: any) => any);
     title?: string;
   }[];
   visible?: boolean;
@@ -809,8 +808,8 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   iconPosition?: TabsIconPosition;
   itemHoldTimeout?: number;
   items?: Array<any | dxTabPanelItem | string>;
-  itemTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
-  itemTitleTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
+  itemTemplate?: any | ((itemData: any, itemIndex: number, itemElement: any) => string | any);
+  itemTitleTemplate?: any | ((itemData: any, itemIndex: number, itemElement: any) => string | any);
   loop?: boolean;
   noDataText?: string;
   onContentReady?: ((e: TabPanelContentReadyEvent) => void);
@@ -888,8 +887,8 @@ type ITabPanelOptionsItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   html?: string;
   icon?: string;
-  tabTemplate?: (() => string | any) | template;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  tabTemplate?: any | (() => string | any);
+  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
   text?: string;
   title?: string;
   visible?: boolean;

@@ -17,8 +17,8 @@ import {
 } from '@angular/core';
 
 
-import { AnimationConfig } from 'devextreme/animation/fx';
-import { DxPromise } from 'devextreme/core/utils/deferred';
+import { DxPromise } from 'devextreme/common';
+import { AnimationConfig } from 'devextreme/common/core/animation';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, RenderedEvent, ShownEvent } from 'devextreme/ui/defer_rendering';
 
 import DxDeferRendering from 'devextreme/ui/defer_rendering';

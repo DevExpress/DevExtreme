@@ -9,10 +9,8 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { PositionAlignment, HorizontalAlignment, VerticalAlignment, Direction, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
-import type { PositionConfig, CollisionResolution, CollisionResolutionCombination } from "devextreme/animation/position";
-import type { AnimationConfig, AnimationState, AnimationType } from "devextreme/animation/fx";
+import type { PositionConfig, AnimationConfig, CollisionResolution, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
-import type { template } from "devextreme/core/templates/template";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { ToolbarLocation } from "devextreme/ui/popup";
 
@@ -366,10 +364,10 @@ type IToolbarItemProps = React.PropsWithChildren<{
   html?: string;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
-  menuItemTemplate?: (() => string | any) | template;
+  menuItemTemplate?: any | (() => string | any);
   options?: any;
   showText?: ShowTextMode;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
   text?: string;
   toolbar?: ToolbarLocation;
   visible?: boolean;
