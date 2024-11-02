@@ -273,9 +273,14 @@ gulp.task('generate-component-names', (done) => {
 });
 
 gulp.task('copy.dist.dx-angular', () => {
-  return gulp
+  const testDistPath = path.join(buildConfig.components.testsPath, 'node_modules/devextreme-angular');
+  const res = gulp
     .src(`${buildConfig.npm.distPath}/**/*`)
-    .pipe(gulp.dest(path.join(buildConfig.components.testsPath, 'node_modules/devextreme-angular')));
+    .pipe(gulp.dest(testDistPath));
+
+  console.log('------testDistPath---->',  path.resolve(testDistPath));
+
+  return res;
 });
 
 gulp.task('build.tests', gulp.series('clean.tests', 'generate-component-names', 'copy.dist.dx-angular', () => {
@@ -304,7 +309,6 @@ const getKarmaConfig = function (testsPath) {
 
 gulp.task('test.components.client', gulp.series('build.tests', (done) => {
   const config = getKarmaConfig('./karma.test.shim.js');
-  console.log('------getKarmaConfig---->', config);
 
   new karmaServer(config, (e) => {
     console.log('----karmaServer-catch----->', e);
