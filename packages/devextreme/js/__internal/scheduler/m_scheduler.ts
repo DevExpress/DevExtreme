@@ -1309,6 +1309,12 @@ class Scheduler extends Widget<any> {
     // @ts-expect-error
     super._initMarkup();
 
+    // @ts-expect-error
+    this.setAria({
+      label: messageLocalization.format('dxScheduler-ariaLabel'),
+      role: 'group',
+    });
+
     this._renderMainContainer();
 
     this._renderHeader();
