@@ -249,6 +249,8 @@
         "dxPivotGrid-rowFieldArea": "Pudota rivikentät tähän",
         "dxPivotGrid-filterFieldArea": "Pudota suodatinkentät tähän",
 
+        "dxScheduler-ariaLabel": "Scheduler",
+
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
