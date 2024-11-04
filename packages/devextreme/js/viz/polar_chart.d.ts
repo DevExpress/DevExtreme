@@ -1290,12 +1290,12 @@ export type ValueAxis = CommonAxisSettings & {
     /**
      * @docid dxPolarChartOptions.valueAxis.minVisualRangeLength
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval
+     * @type number|object|Enums.TimeInterval|undefined
      * @default undefined
      * @notUsedInTheme
      * @public
      */
-    minVisualRangeLength?: TimeIntervalConfig | undefined;
+    minVisualRangeLength?: TimeIntervalConfig;
     /**
      * @docid dxPolarChartOptions.valueAxis.minorTickCount
      * @default undefined

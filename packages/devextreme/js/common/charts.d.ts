@@ -251,7 +251,7 @@ export type VisualRange = {
     /**
     * @docid
     * @inherits VizTimeInterval
-    * @type number|object|Enums.TimeInterval
+    * @type number|object|Enums.TimeInterval|undefined
     * @default undefined
     * @public
     */

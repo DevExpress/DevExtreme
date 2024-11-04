@@ -1432,7 +1432,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     summary?: Summary<TRowData, TKey>;
     /**
      * @docid
-     * @type dxDataGridToolbar
+     * @type dxDataGridToolbar | undefined
      * @default undefined
      * @public
      */

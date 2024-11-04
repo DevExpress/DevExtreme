@@ -508,7 +508,7 @@ export interface dxFilterBuilderField {
       /**
        * @docid
        * @default undefined
-       * @type Array<any> | Store | DataSourceOptions
+       * @type Array<any> | Store | DataSourceOptions | undefined
        */
       dataSource?: FilterLookupDataSource<any> | null | undefined;
       /**

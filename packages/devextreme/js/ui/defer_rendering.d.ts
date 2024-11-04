@@ -90,7 +90,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
     onShown?: ((e: ShownEvent) => void);
     /**
      * @docid
-     * @type DxPromise|bool
+     * @type DxPromise|bool|undefined
      * @default undefined
      * @public
      */

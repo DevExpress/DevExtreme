@@ -719,7 +719,7 @@ export type ColumnHeaderFilter = {
    * @docid GridBaseColumn.headerFilter.dataSource
    * @type_function_param1_field component:object
    * @default undefined
-   * @type Array<any>|Store|DataSourceOptions|Function|null
+   * @type Array<any>|Store|DataSourceOptions|Function|null|undefined
    */
   dataSource?: FilterLookupDataSource<any> | ((options: { component?: any; dataSource?: DataSourceOptions | null }) => void) | undefined;
   /**
@@ -758,7 +758,7 @@ export type ColumnHeaderFilter = {
 export type ColumnHeaderFilterSearchConfig = HeaderFilterSearchConfig & {
   /**
    * @docid
-   * @type getter|Array<getter>
+   * @type getter|Array<getter>|undefined
    * @default undefined
    */
   searchExpr?: string | Function | Array<string | Function> | undefined;
@@ -779,7 +779,7 @@ export type ColumnLookup = {
    * @type_function_param1_field data:object
    * @default undefined
    * @type_function_return Array<any>|Store|DataSourceOptions
-   * @type Array<any>|Store|DataSourceOptions|Function|null
+   * @type Array<any>|Store|DataSourceOptions|Function|null|undefined
    */
   dataSource?: FilterLookupDataSource<any> | ((options: { data?: any; key?: any }) => FilterLookupDataSource<any>) | null | undefined;
   /**

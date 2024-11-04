@@ -244,7 +244,7 @@ export interface dxSplitterItem<TKey = any> extends CollectionWidgetItem {
      * @docid
      * @default undefined
      * @public
-     * @type dxSplitterOptions
+     * @type dxSplitterOptions | undefined
      */
     splitter?: Properties<any, TKey> | undefined;
     /**

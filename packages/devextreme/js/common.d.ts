@@ -758,7 +758,7 @@ export type TextEditorButton = {
   /**
    * @public
    * @docid
-   * @type dxButtonOptions
+   * @type dxButtonOptions | undefined
    * @default undefined
    */
   options?: ButtonProperties | undefined;

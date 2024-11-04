@@ -923,7 +923,7 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
 export interface dxFileManagerDetailsColumn {
     /**
      * @docid
-     * @type Enums.HorizontalAlignment
+     * @type Enums.HorizontalAlignment | undefined
      * @default undefined
      * @acceptValues undefined
      * @public
@@ -967,7 +967,7 @@ export interface dxFileManagerDetailsColumn {
     sortIndex?: number | undefined;
     /**
      * @docid
-     * @type Enums.SortOrder
+     * @type Enums.SortOrder | undefined
      * @default undefined
      * @acceptValues undefined
      * @public

@@ -1427,12 +1427,12 @@ export type ArgumentAxis = CommonAxisSettings & {
     /**
      * @docid dxChartOptions.argumentAxis.minVisualRangeLength
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval
+     * @type number|object|Enums.TimeInterval|undefined
      * @default undefined
      * @notUsedInTheme
      * @public
      */
-    minVisualRangeLength?: TimeIntervalConfig | undefined;
+    minVisualRangeLength?: TimeIntervalConfig;
     /**
      * @docid dxChartOptions.argumentAxis.minorTickCount
      * @default undefined
@@ -2522,12 +2522,12 @@ export type ValueAxis = CommonAxisSettings & {
     /**
      * @docid dxChartOptions.valueAxis.minVisualRangeLength
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval
+     * @type number|object|Enums.TimeInterval|undefined
      * @default undefined
      * @notUsedInTheme
      * @public
      */
-    minVisualRangeLength?: TimeIntervalConfig | undefined;
+    minVisualRangeLength?: TimeIntervalConfig;
     /**
      * @docid dxChartOptions.valueAxis.minorTickCount
      * @default undefined

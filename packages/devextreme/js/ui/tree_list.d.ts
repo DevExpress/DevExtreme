@@ -1140,7 +1140,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     selection?: Selection;
     /**
      * @docid
-     * @type dxTreeListToolbar
+     * @type dxTreeListToolbar | undefined
      * @default undefined
      * @public
      */
