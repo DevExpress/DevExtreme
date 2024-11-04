@@ -1367,7 +1367,7 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @notUsedInTheme
      * @public
      */
-    breaks?: Array<ScaleBreak> | undefined;
+    breaks?: Array<ScaleBreak>;
     /**
      * @docid dxChartOptions.argumentAxis.categories
      * @public
@@ -1399,7 +1399,7 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    holidays?: Array<Date | string> | Array<number> | undefined;
+    holidays?: Array<Date | string> | Array<number>;
     /**
      * @docid dxChartOptions.argumentAxis.hoverMode
      * @default 'none'
@@ -1475,7 +1475,7 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    singleWorkdays?: Array<Date | string> | Array<number> | undefined;
+    singleWorkdays?: Array<Date | string> | Array<number>;
     /**
      * @docid dxChartOptions.argumentAxis.strips
      * @type Array<Object>
@@ -2468,7 +2468,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @notUsedInTheme
      * @public
      */
-    breaks?: Array<ScaleBreak> | undefined;
+    breaks?: Array<ScaleBreak>;
     /**
      * @docid dxChartOptions.valueAxis.categories
      * @public

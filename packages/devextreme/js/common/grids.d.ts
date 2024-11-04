@@ -261,7 +261,7 @@ export interface ColumnBase<TRowData = any> {
    * @default undefined
    * @public
    */
-  filterOperations?: Array<FilterOperation | string> | undefined;
+  filterOperations?: Array<FilterOperation | string>;
   /**
    * @docid GridBaseColumn.filterType
    * @default "include"
@@ -281,7 +281,7 @@ export interface ColumnBase<TRowData = any> {
    * @fires GridBaseOptions.onOptionChanged
    * @public
    */
-  filterValues?: Array<any> | undefined;
+  filterValues?: Array<any>;
   /**
    * @docid GridBaseColumn.fixed
    * @default false

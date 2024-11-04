@@ -2422,7 +2422,6 @@ declare module DevExpress.common.charts {
            */
           height?:
             | number
-            | undefined
             | {
                 /**
                  * [descr:dxChartSeriesTypes.CommonSeries.point.image.height.rangeMaxPoint]
@@ -2765,7 +2764,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.filterOperations]
      */
-    filterOperations?: Array<FilterOperation | string> | undefined;
+    filterOperations?: Array<FilterOperation | string>;
     /**
      * [descr:GridBaseColumn.filterType]
      */
@@ -2777,7 +2776,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.filterValues]
      */
-    filterValues?: Array<any> | undefined;
+    filterValues?: Array<any>;
     /**
      * [descr:GridBaseColumn.fixed]
      */
@@ -9594,7 +9593,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxChatOptions.alerts]
      */
-    alerts?: Array<DevExpress.ui.dxChat.Alert> | undefined;
+    alerts?: Array<DevExpress.ui.dxChat.Alert>;
     /**
      * [descr:dxChatOptions.typingUsers]
      */
@@ -13353,12 +13352,9 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.contextMenu.commands]
        */
-      commands?:
-        | Array<
-            | DevExpress.ui.dxDiagram.CustomCommand
-            | DevExpress.ui.dxDiagram.Command
-          >
-        | undefined;
+      commands?: Array<
+        DevExpress.ui.dxDiagram.CustomCommand | DevExpress.ui.dxDiagram.Command
+      >;
       /**
        * [descr:dxDiagramOptions.contextMenu.enabled]
        */
@@ -14008,12 +14004,9 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.mainToolbar.commands]
        */
-      commands?:
-        | Array<
-            | DevExpress.ui.dxDiagram.CustomCommand
-            | DevExpress.ui.dxDiagram.Command
-          >
-        | undefined;
+      commands?: Array<
+        DevExpress.ui.dxDiagram.CustomCommand | DevExpress.ui.dxDiagram.Command
+      >;
       /**
        * [descr:dxDiagramOptions.mainToolbar.visible]
        */
@@ -14026,12 +14019,9 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.historyToolbar.commands]
        */
-      commands?:
-        | Array<
-            | DevExpress.ui.dxDiagram.CustomCommand
-            | DevExpress.ui.dxDiagram.Command
-          >
-        | undefined;
+      commands?: Array<
+        DevExpress.ui.dxDiagram.CustomCommand | DevExpress.ui.dxDiagram.Command
+      >;
       /**
        * [descr:dxDiagramOptions.historyToolbar.visible]
        */
@@ -14044,12 +14034,9 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.viewToolbar.commands]
        */
-      commands?:
-        | Array<
-            | DevExpress.ui.dxDiagram.CustomCommand
-            | DevExpress.ui.dxDiagram.Command
-          >
-        | undefined;
+      commands?: Array<
+        DevExpress.ui.dxDiagram.CustomCommand | DevExpress.ui.dxDiagram.Command
+      >;
       /**
        * [descr:dxDiagramOptions.viewToolbar.visible]
        */
@@ -14085,8 +14072,7 @@ declare module DevExpress.ui {
              */
             title?: string;
           }>
-        | Array<DevExpress.ui.dxDiagram.ShapeCategory>
-        | undefined;
+        | Array<DevExpress.ui.dxDiagram.ShapeCategory>;
       /**
        * [descr:dxDiagramOptions.toolbox.shapeIconsPerRow]
        */
@@ -14121,7 +14107,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxDiagramOptions.zoomLevel.items]
            */
-          items?: Array<number> | undefined;
+          items?: Array<number>;
           /**
            * [descr:dxDiagramOptions.zoomLevel.value]
            */
@@ -14949,12 +14935,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownEditorOptions.buttons]
      */
-    buttons?:
-      | Array<
-          | DevExpress.ui.dxDropDownEditor.DropDownPredefinedButton
-          | DevExpress.common.TextEditorButton
-        >
-      | undefined;
+    buttons?: Array<
+      | DevExpress.ui.dxDropDownEditor.DropDownPredefinedButton
+      | DevExpress.common.TextEditorButton
+    >;
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
      */
@@ -16657,9 +16641,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderField.filterOperations]
      */
-    filterOperations?:
-      | Array<DevExpress.ui.dxFilterBuilder.FilterBuilderOperation | string>
-      | undefined;
+    filterOperations?: Array<
+      DevExpress.ui.dxFilterBuilder.FilterBuilderOperation | string
+    >;
     /**
      * [descr:dxFilterBuilderField.format]
      */
@@ -18972,7 +18956,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.stripLines]
      */
-    stripLines?: Array<dxGanttStripLine> | undefined;
+    stripLines?: Array<dxGanttStripLine>;
     /**
      * [descr:dxGanttOptions.taskTooltipContentTemplate]
      */
@@ -21640,12 +21624,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxNumberBoxOptions.buttons]
      */
-    buttons?:
-      | Array<
-          | DevExpress.ui.dxNumberBox.NumberBoxPredefinedButton
-          | DevExpress.common.TextEditorButton
-        >
-      | undefined;
+    buttons?: Array<
+      | DevExpress.ui.dxNumberBox.NumberBoxPredefinedButton
+      | DevExpress.common.TextEditorButton
+    >;
     /**
      * [descr:dxNumberBoxOptions.format]
      */
@@ -31602,7 +31584,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.subvalues]
      */
-    subvalues?: Array<number> | undefined;
+    subvalues?: Array<number>;
     /**
      * [descr:BaseGaugeOptions.tooltip]
      */
@@ -31663,11 +31645,11 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.scale.customMinorTicks]
      */
-    customMinorTicks?: Array<number> | undefined;
+    customMinorTicks?: Array<number>;
     /**
      * [descr:BaseGaugeOptions.scale.customTicks]
      */
-    customTicks?: Array<number> | undefined;
+    customTicks?: Array<number>;
     /**
      * [descr:BaseGaugeOptions.scale.endValue]
      */
@@ -33373,7 +33355,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.argumentAxis.breaks]
        */
-      breaks?: Array<DevExpress.common.charts.ScaleBreak> | undefined;
+      breaks?: Array<DevExpress.common.charts.ScaleBreak>;
       /**
        * [descr:dxChartOptions.argumentAxis.categories]
        */
@@ -33393,7 +33375,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.argumentAxis.holidays]
        */
-      holidays?: Array<Date | string> | Array<number> | undefined;
+      holidays?: Array<Date | string> | Array<number>;
       /**
        * [descr:dxChartOptions.argumentAxis.hoverMode]
        */
@@ -33441,7 +33423,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.argumentAxis.singleWorkdays]
        */
-      singleWorkdays?: Array<Date | string> | Array<number> | undefined;
+      singleWorkdays?: Array<Date | string> | Array<number>;
       /**
        * [descr:dxChartOptions.argumentAxis.strips]
        */
@@ -34340,7 +34322,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.valueAxis.breaks]
        */
-      breaks?: Array<DevExpress.common.charts.ScaleBreak> | undefined;
+      breaks?: Array<DevExpress.common.charts.ScaleBreak>;
       /**
        * [descr:dxChartOptions.valueAxis.categories]
        */
@@ -40303,7 +40285,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.breaks]
        */
-      breaks?: Array<DevExpress.common.charts.ScaleBreak> | undefined;
+      breaks?: Array<DevExpress.common.charts.ScaleBreak>;
       /**
        * [descr:dxRangeSelectorOptions.scale.categories]
        */
@@ -40319,7 +40301,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.holidays]
        */
-      holidays?: Array<Date | string> | Array<number> | undefined;
+      holidays?: Array<Date | string> | Array<number>;
       /**
        * [descr:dxRangeSelectorOptions.scale.label]
        */
@@ -40449,7 +40431,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.singleWorkdays]
        */
-      singleWorkdays?: Array<Date | string> | Array<number> | undefined;
+      singleWorkdays?: Array<Date | string> | Array<number>;
       /**
        * [descr:dxRangeSelectorOptions.scale.startValue]
        */
@@ -41602,7 +41584,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxTreeMapOptions.colorizer.range]
        */
-      range?: Array<number> | undefined;
+      range?: Array<number>;
       /**
        * [descr:dxTreeMapOptions.colorizer.type]
        */
@@ -42154,7 +42136,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxVectorMapCommonAnnotationConfig.coordinates]
      */
-    coordinates?: Array<number> | undefined;
+    coordinates?: Array<number>;
     /**
      * [descr:dxVectorMapCommonAnnotationConfig.customizeTooltip]
      */
@@ -42204,7 +42186,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxVectorMapOptions.bounds]
      */
-    bounds?: Array<number> | undefined;
+    bounds?: Array<number>;
     /**
      * [descr:dxVectorMapOptions.center]
      */

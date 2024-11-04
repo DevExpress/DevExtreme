@@ -459,7 +459,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @default undefined
        * @notUsedInTheme
        */
-      breaks?: Array<ScaleBreak> | undefined;
+      breaks?: Array<ScaleBreak>;
       /**
        * @docid
        */
@@ -479,7 +479,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default undefined
        */
-      holidays?: Array<Date | string> | Array<number> | undefined;
+      holidays?: Array<Date | string> | Array<number>;
       /**
        * @docid
        */
@@ -633,7 +633,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default undefined
        */
-      singleWorkdays?: Array<Date | string> | Array<number> | undefined;
+      singleWorkdays?: Array<Date | string> | Array<number>;
       /**
        * @docid
        * @default undefined

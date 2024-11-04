@@ -74,7 +74,7 @@ export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptio
      * @default undefined
      * @public
      */
-    buttons?: Array<DropDownPredefinedButton | TextEditorButton> | undefined;
+    buttons?: Array<DropDownPredefinedButton | TextEditorButton>;
     /**
      * @docid
      * @default true

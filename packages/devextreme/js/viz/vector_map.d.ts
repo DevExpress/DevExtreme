@@ -362,7 +362,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @notUsedInTheme
      * @public
      */
-    bounds?: Array<number> | undefined;
+    bounds?: Array<number>;
     /**
      * @docid
      * @default [0, 0]
@@ -756,7 +756,7 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
      * @default undefined
      * @public
      */
-    coordinates?: Array<number> | undefined;
+    coordinates?: Array<number>;
     /**
      * @docid
      * @type_function_return object

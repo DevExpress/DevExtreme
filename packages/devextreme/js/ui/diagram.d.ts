@@ -256,7 +256,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      commands?: Array<CustomCommand | Command> | undefined;
+      commands?: Array<CustomCommand | Command>;
       /**
        * @docid
        * @default true
@@ -1004,7 +1004,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      commands?: Array<CustomCommand | Command> | undefined;
+      commands?: Array<CustomCommand | Command>;
       /**
        * @docid
        * @default false
@@ -1021,7 +1021,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      commands?: Array<CustomCommand | Command> | undefined;
+      commands?: Array<CustomCommand | Command>;
       /**
        * @docid
        * @default true
@@ -1038,7 +1038,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      commands?: Array<CustomCommand | Command> | undefined;
+      commands?: Array<CustomCommand | Command>;
       /**
        * @docid
        * @default true
@@ -1076,7 +1076,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
          * @docid
          */
         title?: string;
-      }> | Array<ShapeCategory> | undefined;
+      }> | Array<ShapeCategory>;
       /**
        * @docid
        * @default 3
@@ -1120,7 +1120,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      items?: Array<number> | undefined;
+      items?: Array<number>;
       /**
        * @docid
        * @default undefined

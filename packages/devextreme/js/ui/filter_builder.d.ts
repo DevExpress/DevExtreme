@@ -487,7 +487,7 @@ export interface dxFilterBuilderField {
      * @default undefined
      * @public
      */
-    filterOperations?: Array<FilterBuilderOperation | string> | undefined;
+    filterOperations?: Array<FilterBuilderOperation | string>;
     /**
      * @docid
      * @default ""

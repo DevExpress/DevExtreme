@@ -206,7 +206,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @default undefined
      * @public
      */
-    alerts?: Array<Alert> | undefined;
+    alerts?: Array<Alert>;
     /**
      * @docid
      * @default []

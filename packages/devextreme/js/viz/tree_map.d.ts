@@ -231,7 +231,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
        * @docid
        * @default undefined
        */
-      range?: Array<number> | undefined;
+      range?: Array<number>;
       /**
        * @docid
        * @default undefined

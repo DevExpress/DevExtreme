@@ -112,7 +112,7 @@ export interface BaseGaugeOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @fires BaseWidgetOptions.onOptionChanged
      * @public
      */
-    subvalues?: Array<number> | undefined;
+    subvalues?: Array<number>;
     /**
      * @docid
      * @type object
@@ -234,14 +234,14 @@ export interface BaseGaugeScale {
      * @notUsedInTheme
      * @public
      */
-    customMinorTicks?: Array<number> | undefined;
+    customMinorTicks?: Array<number>;
     /**
      * @docid BaseGaugeOptions.scale.customTicks
      * @default undefined
      * @notUsedInTheme
      * @public
      */
-    customTicks?: Array<number> | undefined;
+    customTicks?: Array<number>;
     /**
      * @docid BaseGaugeOptions.scale.endValue
      * @default 100

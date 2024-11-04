@@ -1045,7 +1045,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default undefined
      * @public
      */
-    stripLines?: Array<dxGanttStripLine> | undefined;
+    stripLines?: Array<dxGanttStripLine>;
     /**
      * @docid
      * @type_function_return string|Element|jQuery
