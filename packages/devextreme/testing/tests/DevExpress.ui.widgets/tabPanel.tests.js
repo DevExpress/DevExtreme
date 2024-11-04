@@ -484,26 +484,6 @@ QUnit.module('onSelectionChanging', {
     });
 
     QUnit.module('after multiView swipe', () => {
-        QUnit.test('when all items are hidden selectedIndex should be initialized to 0 after swipe', function(assert) {
-            this.reinit({
-                items: [
-                    { text: '1', visible: false },
-                    { text: '2', visible: false },
-                    { text: '3', visible: false },
-                ],
-                selectedIndex: 2,
-                loop: true,
-                swipeEnabled: true
-            });
-
-            const pointer = pointerMock(this.$tabPanel);
-            pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
-
-            assert.strictEqual(this.tabs.option('selectedIndex'), 0, 'container was not swiped');
-            const $itemContainer = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
-            assert.strictEqual(translator.locate($itemContainer).left, 0, 'container was not swiped');
-        });
-
         QUnit.test('should cancel selection if e.cancel = true', function(assert) {
             this.onSelectionChangingStub = sinon.spy((e) => {
                 e.cancel = true;

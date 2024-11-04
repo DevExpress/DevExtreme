@@ -504,6 +504,26 @@ QUnit.module('interaction via swipe', {
         });
     });
 
+    QUnit.test('when all items are hidden selectedIndex should be initialized to 0 after swipe', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: false },
+                { text: '2', visible: false },
+                { text: '3', visible: false },
+            ],
+            selectedIndex: 2,
+            loop: true,
+            swipeEnabled: true
+        });
+        const instance = $multiView.dxMultiView('instance');
+        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+        assert.strictEqual(position($itemContainer), 0, 'container did not move');
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
+    });
+
     QUnit.test('when only one item is visible, swipe action does not move the current visible item', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [
