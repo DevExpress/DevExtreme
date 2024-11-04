@@ -288,11 +288,12 @@ export const ListBase = CollectionWidget.inherit({
   _getGroupedItems() {
     const { collapsibleGroups } = this.option();
 
-    const listGroupBodyItemSelector = `> .${LIST_GROUP_BODY_CLASS} > ${this._itemSelector()}`;
-    const listGroupBodyAndHeaderItemSelector = `${listGroupBodyItemSelector}, > .${LIST_GROUP_HEADER_CLASS}`;
+    const itemSelector = `> .${LIST_GROUP_BODY_CLASS} > ${this._itemSelector()}`;
+    const itemAndHeaderSelector = `${itemSelector}, > .${LIST_GROUP_HEADER_CLASS}`;
+
     const selector = collapsibleGroups
-      ? listGroupBodyAndHeaderItemSelector
-      : listGroupBodyItemSelector;
+      ? itemAndHeaderSelector
+      : itemSelector;
 
     const $listGroup = this._getItemsContainer().children(`.${LIST_GROUP_CLASS}`);
 

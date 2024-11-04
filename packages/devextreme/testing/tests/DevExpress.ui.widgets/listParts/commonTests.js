@@ -3688,7 +3688,7 @@ QUnit.module('keyboard navigation', {
             ],
             grouped: true,
             focusStateEnabled: true,
-            collapsibleGroups: true
+            collapsibleGroups: true,
         });
 
         const $items = $element.find(`.${LIST_ITEM_CLASS}`);
@@ -3708,6 +3708,44 @@ QUnit.module('keyboard navigation', {
         keyboard.keyDown('down');
 
         assert.ok($headers.eq(1).hasClass(FOCUSED_STATE_CLASS));
+    });
+
+    QUnit.test('focus should not move to group header if collapsibleGroups: false', function(assert) {
+        const $element = $('#list').dxList({
+            items: [
+                {
+                    key: 'a',
+                    items: [1],
+                },
+                {
+                    key: 'b',
+                    items: [2],
+                },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: false,
+        });
+
+        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
+        const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+        const keyboard = getListKeyboard($element);
+
+        keyboard.keyDown('down');
+
+        assert.notOk($headers.eq(0).hasClass(FOCUSED_STATE_CLASS));
+        assert.ok($items.eq(0).hasClass(FOCUSED_STATE_CLASS));
+
+        keyboard.keyDown('down');
+
+        assert.notOk($headers.eq(1).hasClass(FOCUSED_STATE_CLASS));
+        assert.ok($items.eq(1).hasClass(FOCUSED_STATE_CLASS));
+
+        keyboard.keyDown('down');
+
+        assert.notOk($headers.eq(0).hasClass(FOCUSED_STATE_CLASS));
+        assert.ok($items.eq(0).hasClass(FOCUSED_STATE_CLASS));
     });
 
     QUnit.test('list scroll to focused item after press up/down arrows', function(assert) {
