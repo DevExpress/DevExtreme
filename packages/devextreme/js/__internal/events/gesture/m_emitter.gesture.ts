@@ -1,8 +1,6 @@
-import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import callOnce from '@js/core/utils/call_once';
 import { noop } from '@js/core/utils/common';
-import { clearSelection, resetActiveElement } from '@js/core/utils/dom';
 import { sign } from '@js/core/utils/math';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
 import { styleProp } from '@js/core/utils/style';
@@ -12,6 +10,8 @@ import eventsEngine from '@js/events/core/events_engine';
 import {
   createEvent, eventData, eventDelta, isDxMouseWheelEvent, isTouchEvent, needSkipEvent,
 } from '@js/events/utils/index';
+import devices from '@ts/core/m_devices';
+import domUtils from '@ts/core/utils/m_dom';
 
 const ready = readyCallbacks.add;
 const { abs } = Math;
@@ -180,7 +180,7 @@ const GestureEmitter = Emitter.inherit({
 
   _resetActiveElement() {
     if (devices.real().platform === 'ios' && this.getElement().find(':focus').length) {
-      resetActiveElement();
+      domUtils.resetActiveElement();
     }
   },
 
@@ -201,7 +201,7 @@ const GestureEmitter = Emitter.inherit({
       return;
     }
 
-    clearSelection();
+    domUtils.clearSelection();
   },
 
   end(e) {
@@ -229,9 +229,7 @@ const GestureEmitter = Emitter.inherit({
   _end: noop,
 
 });
-// @ts-expect-error
 GestureEmitter.initialTouchBoundary = TOUCH_BOUNDARY;
-// @ts-expect-error
 GestureEmitter.touchBoundary = function (newBoundary) {
   if (isDefined(newBoundary)) {
     TOUCH_BOUNDARY = newBoundary;

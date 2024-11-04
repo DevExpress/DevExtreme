@@ -6,7 +6,7 @@ import { isPlainObject } from '../../core/utils/type';
 import registerComponentCallbacks from '../../core/component_registrator_callbacks';
 import Widget from '../../ui/widget/ui.widget';
 import VizWidget from '../../__internal/viz/core/m_base_widget';
-import ComponentWrapper from '../../renovation/component_wrapper/common/component';
+import { ComponentWrapper } from '../../__internal/core/r1/component_wrapper';
 import Draggable from '../../ui/draggable';
 import ScrollView from '../../ui/scroll_view';
 import { KoTemplate } from './template';

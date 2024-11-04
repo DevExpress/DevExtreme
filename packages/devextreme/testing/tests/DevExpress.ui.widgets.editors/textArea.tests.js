@@ -2,7 +2,7 @@ import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { parseHeight } from 'core/utils/size.js';
 

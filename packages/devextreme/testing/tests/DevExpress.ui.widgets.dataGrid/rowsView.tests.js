@@ -8,9 +8,9 @@ import dataUtils from 'core/element_data';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import { getHeight, setHeight, setWidth, getOuterHeight, getWidth } from 'core/utils/size';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import config from 'core/config';
-import support from 'core/utils/support';
+import support from '__internal/core/utils/m_support';
 import browser from 'core/utils/browser';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -3153,7 +3153,7 @@ QUnit.module('Rows view', {
         rowsView.render(testElement);
 
         // act
-        rowsView.setRowsOpacity(1, 0.5);
+        rowsView.toggleDraggableColumnClass(1, true);
         const cells = getCells(testElement);
 
         // assert
@@ -3186,7 +3186,7 @@ QUnit.module('Rows view', {
         rowsView.render($testElement);
 
         // act
-        rowsView.setRowsOpacity(0, 0.5);
+        rowsView.toggleDraggableColumnClass(0, true);
         const $cells = getCells($testElement);
 
         // assert
@@ -4059,7 +4059,7 @@ QUnit.module('Rows view', {
         sinon.spy(rowsView, '_getRowElements');
 
         // act
-        rowsView.setRowsOpacity(0, 0.01);
+        rowsView.toggleDraggableColumnClass(0, true);
 
         // assert
         assert.ok(rowsView._getRowElements.calledOnce, 'GetRowsElements method should called once');

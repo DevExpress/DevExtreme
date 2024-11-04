@@ -5,12 +5,13 @@ import dxForm, {
     Properties
 } from "devextreme/ui/form";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, InitializedEvent, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from "devextreme/ui/form";
+import type { ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, InitializedEvent, FormItemType, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem, FormItemComponent, LabelLocation } from "devextreme/ui/form";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, dxTabPanelItem, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
+import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, ButtonType, ComparisonOperator, TabsIconPosition, TabsStyle, Position } from "devextreme/common";
 import type { template } from "devextreme/core/templates/template";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { DataSourceOptions } from "devextreme/data/data_source";
@@ -92,22 +93,25 @@ type IAsyncRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
   reevaluate?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any);
 }>
-const _componentAsyncRule = memo(
-  (props: IAsyncRuleProps) => {
-    return React.createElement(NestedOption<IAsyncRuleProps>, { ...props });
-  }
-);
+const _componentAsyncRule = (props: IAsyncRuleProps) => {
+  return React.createElement(NestedOption<IAsyncRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "async"
+      },
+    },
+  });
+};
 
-const AsyncRule: typeof _componentAsyncRule & IElementDescriptor = Object.assign(_componentAsyncRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "async"
-  },
-})
+const AsyncRule = Object.assign<typeof _componentAsyncRule, NestedComponentMeta>(_componentAsyncRule, {
+  componentType: "option",
+});
 
 // owners:
 // Form
@@ -115,29 +119,32 @@ type IButtonItemProps = React.PropsWithChildren<{
   buttonOptions?: dxButtonOptions;
   colSpan?: number;
   cssClass?: string;
-  horizontalAlignment?: "center" | "left" | "right";
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
+  horizontalAlignment?: HorizontalAlignment;
+  itemType?: FormItemType;
   name?: string;
-  verticalAlignment?: "bottom" | "center" | "top";
+  verticalAlignment?: VerticalAlignment;
   visible?: boolean;
   visibleIndex?: number;
 }>
-const _componentButtonItem = memo(
-  (props: IButtonItemProps) => {
-    return React.createElement(NestedOption<IButtonItemProps>, { ...props });
-  }
-);
+const _componentButtonItem = (props: IButtonItemProps) => {
+  return React.createElement(NestedOption<IButtonItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        buttonOptions: { optionName: "buttonOptions", isCollectionItem: false }
+      },
+      PredefinedProps: {
+        itemType: "button"
+      },
+    },
+  });
+};
 
-const ButtonItem: typeof _componentButtonItem & IElementDescriptor = Object.assign(_componentButtonItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  ExpectedChildren: {
-    buttonOptions: { optionName: "buttonOptions", isCollectionItem: false }
-  },
-  PredefinedProps: {
-    itemType: "button"
-  },
-})
+const ButtonItem = Object.assign<typeof _componentButtonItem, NestedComponentMeta>(_componentButtonItem, {
+  componentType: "option",
+});
 
 // owners:
 // ButtonItem
@@ -158,11 +165,11 @@ type IButtonOptionsProps = React.PropsWithChildren<{
   onInitialized?: ((e: ButtonInitializedEvent) => void);
   onOptionChanged?: ((e: OptionChangedEvent) => void);
   rtlEnabled?: boolean;
-  stylingMode?: "text" | "outlined" | "contained";
+  stylingMode?: ButtonStyle;
   tabIndex?: number;
   template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template;
   text?: string;
-  type?: "danger" | "default" | "normal" | "success";
+  type?: ButtonType | string;
   useSubmitBehavior?: boolean;
   validationGroup?: string;
   visible?: boolean;
@@ -170,20 +177,23 @@ type IButtonOptionsProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentButtonOptions = memo(
-  (props: IButtonOptionsProps) => {
-    return React.createElement(NestedOption<IButtonOptionsProps>, { ...props });
-  }
-);
+const _componentButtonOptions = (props: IButtonOptionsProps) => {
+  return React.createElement(NestedOption<IButtonOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "buttonOptions",
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
 
-const ButtonOptions: typeof _componentButtonOptions & IElementDescriptor = Object.assign(_componentButtonOptions, {
-  OptionName: "buttonOptions",
-  TemplateProps: [{
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-})
+const ButtonOptions = Object.assign<typeof _componentButtonOptions, NestedComponentMeta>(_componentButtonOptions, {
+  componentType: "option",
+});
 
 // owners:
 // Form
@@ -195,38 +205,44 @@ type IColCountByScreenProps = React.PropsWithChildren<{
   sm?: number;
   xs?: number;
 }>
-const _componentColCountByScreen = memo(
-  (props: IColCountByScreenProps) => {
-    return React.createElement(NestedOption<IColCountByScreenProps>, { ...props });
-  }
-);
+const _componentColCountByScreen = (props: IColCountByScreenProps) => {
+  return React.createElement(NestedOption<IColCountByScreenProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "colCountByScreen",
+    },
+  });
+};
 
-const ColCountByScreen: typeof _componentColCountByScreen & IElementDescriptor = Object.assign(_componentColCountByScreen, {
-  OptionName: "colCountByScreen",
-})
+const ColCountByScreen = Object.assign<typeof _componentColCountByScreen, NestedComponentMeta>(_componentColCountByScreen, {
+  componentType: "option",
+});
 
 // owners:
 // SimpleItem
 type ICompareRuleProps = React.PropsWithChildren<{
   comparisonTarget?: (() => any);
-  comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
+  comparisonType?: ComparisonOperator;
   ignoreEmptyValue?: boolean;
   message?: string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
-const _componentCompareRule = memo(
-  (props: ICompareRuleProps) => {
-    return React.createElement(NestedOption<ICompareRuleProps>, { ...props });
-  }
-);
+const _componentCompareRule = (props: ICompareRuleProps) => {
+  return React.createElement(NestedOption<ICompareRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "compare"
+      },
+    },
+  });
+};
 
-const CompareRule: typeof _componentCompareRule & IElementDescriptor = Object.assign(_componentCompareRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "compare"
-  },
-})
+const CompareRule = Object.assign<typeof _componentCompareRule, NestedComponentMeta>(_componentCompareRule, {
+  componentType: "option",
+});
 
 // owners:
 // SimpleItem
@@ -234,67 +250,76 @@ type ICustomRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
   reevaluate?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
 }>
-const _componentCustomRule = memo(
-  (props: ICustomRuleProps) => {
-    return React.createElement(NestedOption<ICustomRuleProps>, { ...props });
-  }
-);
+const _componentCustomRule = (props: ICustomRuleProps) => {
+  return React.createElement(NestedOption<ICustomRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "custom"
+      },
+    },
+  });
+};
 
-const CustomRule: typeof _componentCustomRule & IElementDescriptor = Object.assign(_componentCustomRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "custom"
-  },
-})
+const CustomRule = Object.assign<typeof _componentCustomRule, NestedComponentMeta>(_componentCustomRule, {
+  componentType: "option",
+});
 
 // owners:
 // SimpleItem
 type IEmailRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
-const _componentEmailRule = memo(
-  (props: IEmailRuleProps) => {
-    return React.createElement(NestedOption<IEmailRuleProps>, { ...props });
-  }
-);
+const _componentEmailRule = (props: IEmailRuleProps) => {
+  return React.createElement(NestedOption<IEmailRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "email"
+      },
+    },
+  });
+};
 
-const EmailRule: typeof _componentEmailRule & IElementDescriptor = Object.assign(_componentEmailRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "email"
-  },
-})
+const EmailRule = Object.assign<typeof _componentEmailRule, NestedComponentMeta>(_componentEmailRule, {
+  componentType: "option",
+});
 
 // owners:
 // Form
 type IEmptyItemProps = React.PropsWithChildren<{
   colSpan?: number;
   cssClass?: string;
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
+  itemType?: FormItemType;
   name?: string;
   visible?: boolean;
   visibleIndex?: number;
 }>
-const _componentEmptyItem = memo(
-  (props: IEmptyItemProps) => {
-    return React.createElement(NestedOption<IEmptyItemProps>, { ...props });
-  }
-);
+const _componentEmptyItem = (props: IEmptyItemProps) => {
+  return React.createElement(NestedOption<IEmptyItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        itemType: "empty"
+      },
+    },
+  });
+};
 
-const EmptyItem: typeof _componentEmptyItem & IElementDescriptor = Object.assign(_componentEmptyItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    itemType: "empty"
-  },
-})
+const EmptyItem = Object.assign<typeof _componentEmptyItem, NestedComponentMeta>(_componentEmptyItem, {
+  componentType: "option",
+});
 
 // owners:
 // Form
@@ -312,7 +337,7 @@ type IGroupItemProps = React.PropsWithChildren<{
   colSpan?: number;
   cssClass?: string;
   items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
+  itemType?: FormItemType;
   name?: string;
   template?: ((data: { component: dxForm, formData: Record<string, any> }, itemElement: any) => string | any) | template;
   visible?: boolean;
@@ -322,31 +347,34 @@ type IGroupItemProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentGroupItem = memo(
-  (props: IGroupItemProps) => {
-    return React.createElement(NestedOption<IGroupItemProps>, { ...props });
-  }
-);
+const _componentGroupItem = (props: IGroupItemProps) => {
+  return React.createElement(NestedOption<IGroupItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false }
+      },
+      TemplateProps: [{
+        tmplOption: "captionTemplate",
+        render: "captionRender",
+        component: "captionComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+      PredefinedProps: {
+        itemType: "group"
+      },
+    },
+  });
+};
 
-const GroupItem: typeof _componentGroupItem & IElementDescriptor = Object.assign(_componentGroupItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  ExpectedChildren: {
-    colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false }
-  },
-  TemplateProps: [{
-    tmplOption: "captionTemplate",
-    render: "captionRender",
-    component: "captionComponent"
-  }, {
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-  PredefinedProps: {
-    itemType: "group"
-  },
-})
+const GroupItem = Object.assign<typeof _componentGroupItem, NestedComponentMeta>(_componentGroupItem, {
+  componentType: "option",
+});
 
 // owners:
 // TabPanelOptions
@@ -365,13 +393,13 @@ type IItemProps = React.PropsWithChildren<{
   cssClass?: string;
   dataField?: string;
   editorOptions?: any;
-  editorType?: "dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox";
+  editorType?: FormItemComponent;
   helpText?: string;
   isRequired?: boolean;
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
+  itemType?: FormItemType;
   label?: Record<string, any> | {
-    alignment?: "center" | "left" | "right";
-    location?: "left" | "right" | "top";
+    alignment?: HorizontalAlignment;
+    location?: LabelLocation;
     showColon?: boolean;
     template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
     text?: string;
@@ -410,8 +438,8 @@ type IItemProps = React.PropsWithChildren<{
     title?: string;
   }[];
   buttonOptions?: dxButtonOptions;
-  horizontalAlignment?: "center" | "left" | "right";
-  verticalAlignment?: "bottom" | "center" | "top";
+  horizontalAlignment?: HorizontalAlignment;
+  verticalAlignment?: VerticalAlignment;
   tabRender?: (...params: any) => React.ReactNode;
   tabComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;
@@ -419,35 +447,38 @@ type IItemProps = React.PropsWithChildren<{
   captionRender?: (...params: any) => React.ReactNode;
   captionComponent?: React.ComponentType<any>;
 }>
-const _componentItem = memo(
-  (props: IItemProps) => {
-    return React.createElement(NestedOption<IItemProps>, { ...props });
-  }
-);
+const _componentItem = (props: IItemProps) => {
+  return React.createElement(NestedOption<IItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "tabTemplate",
+        render: "tabRender",
+        component: "tabComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }, {
+        tmplOption: "captionTemplate",
+        render: "captionRender",
+        component: "captionComponent"
+      }],
+    },
+  });
+};
 
-const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  TemplateProps: [{
-    tmplOption: "tabTemplate",
-    render: "tabRender",
-    component: "tabComponent"
-  }, {
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }, {
-    tmplOption: "captionTemplate",
-    render: "captionRender",
-    component: "captionComponent"
-  }],
-})
+const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
+  componentType: "option",
+});
 
 // owners:
 // SimpleItem
 type ILabelProps = React.PropsWithChildren<{
-  alignment?: "center" | "left" | "right";
-  location?: "left" | "right" | "top";
+  alignment?: HorizontalAlignment;
+  location?: LabelLocation;
   showColon?: boolean;
   template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
   text?: string;
@@ -455,41 +486,47 @@ type ILabelProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentLabel = memo(
-  (props: ILabelProps) => {
-    return React.createElement(NestedOption<ILabelProps>, { ...props });
-  }
-);
+const _componentLabel = (props: ILabelProps) => {
+  return React.createElement(NestedOption<ILabelProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "label",
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
 
-const Label: typeof _componentLabel & IElementDescriptor = Object.assign(_componentLabel, {
-  OptionName: "label",
-  TemplateProps: [{
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-})
+const Label = Object.assign<typeof _componentLabel, NestedComponentMeta>(_componentLabel, {
+  componentType: "option",
+});
 
 // owners:
 // SimpleItem
 type INumericRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
-const _componentNumericRule = memo(
-  (props: INumericRuleProps) => {
-    return React.createElement(NestedOption<INumericRuleProps>, { ...props });
-  }
-);
+const _componentNumericRule = (props: INumericRuleProps) => {
+  return React.createElement(NestedOption<INumericRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "numeric"
+      },
+    },
+  });
+};
 
-const NumericRule: typeof _componentNumericRule & IElementDescriptor = Object.assign(_componentNumericRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "numeric"
-  },
-})
+const NumericRule = Object.assign<typeof _componentNumericRule, NestedComponentMeta>(_componentNumericRule, {
+  componentType: "option",
+});
 
 // owners:
 // SimpleItem
@@ -497,21 +534,24 @@ type IPatternRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
   pattern?: RegExp | string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
-const _componentPatternRule = memo(
-  (props: IPatternRuleProps) => {
-    return React.createElement(NestedOption<IPatternRuleProps>, { ...props });
-  }
-);
+const _componentPatternRule = (props: IPatternRuleProps) => {
+  return React.createElement(NestedOption<IPatternRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "pattern"
+      },
+    },
+  });
+};
 
-const PatternRule: typeof _componentPatternRule & IElementDescriptor = Object.assign(_componentPatternRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "pattern"
-  },
-})
+const PatternRule = Object.assign<typeof _componentPatternRule, NestedComponentMeta>(_componentPatternRule, {
+  componentType: "option",
+});
 
 // owners:
 // SimpleItem
@@ -521,42 +561,48 @@ type IRangeRuleProps = React.PropsWithChildren<{
   message?: string;
   min?: Date | number | string;
   reevaluate?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
-const _componentRangeRule = memo(
-  (props: IRangeRuleProps) => {
-    return React.createElement(NestedOption<IRangeRuleProps>, { ...props });
-  }
-);
+const _componentRangeRule = (props: IRangeRuleProps) => {
+  return React.createElement(NestedOption<IRangeRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "range"
+      },
+    },
+  });
+};
 
-const RangeRule: typeof _componentRangeRule & IElementDescriptor = Object.assign(_componentRangeRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "range"
-  },
-})
+const RangeRule = Object.assign<typeof _componentRangeRule, NestedComponentMeta>(_componentRangeRule, {
+  componentType: "option",
+});
 
 // owners:
 // SimpleItem
 type IRequiredRuleProps = React.PropsWithChildren<{
   message?: string;
   trim?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
-const _componentRequiredRule = memo(
-  (props: IRequiredRuleProps) => {
-    return React.createElement(NestedOption<IRequiredRuleProps>, { ...props });
-  }
-);
+const _componentRequiredRule = (props: IRequiredRuleProps) => {
+  return React.createElement(NestedOption<IRequiredRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "required"
+      },
+    },
+  });
+};
 
-const RequiredRule: typeof _componentRequiredRule & IElementDescriptor = Object.assign(_componentRequiredRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "required"
-  },
-})
+const RequiredRule = Object.assign<typeof _componentRequiredRule, NestedComponentMeta>(_componentRequiredRule, {
+  componentType: "option",
+});
 
 // owners:
 // Form
@@ -565,13 +611,13 @@ type ISimpleItemProps = React.PropsWithChildren<{
   cssClass?: string;
   dataField?: string;
   editorOptions?: any;
-  editorType?: "dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox";
+  editorType?: FormItemComponent;
   helpText?: string;
   isRequired?: boolean;
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
+  itemType?: FormItemType;
   label?: Record<string, any> | {
-    alignment?: "center" | "left" | "right";
-    location?: "left" | "right" | "top";
+    alignment?: HorizontalAlignment;
+    location?: LabelLocation;
     showColon?: boolean;
     template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
     text?: string;
@@ -585,37 +631,40 @@ type ISimpleItemProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentSimpleItem = memo(
-  (props: ISimpleItemProps) => {
-    return React.createElement(NestedOption<ISimpleItemProps>, { ...props });
-  }
-);
+const _componentSimpleItem = (props: ISimpleItemProps) => {
+  return React.createElement(NestedOption<ISimpleItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        AsyncRule: { optionName: "validationRules", isCollectionItem: true },
+        CompareRule: { optionName: "validationRules", isCollectionItem: true },
+        CustomRule: { optionName: "validationRules", isCollectionItem: true },
+        EmailRule: { optionName: "validationRules", isCollectionItem: true },
+        label: { optionName: "label", isCollectionItem: false },
+        NumericRule: { optionName: "validationRules", isCollectionItem: true },
+        PatternRule: { optionName: "validationRules", isCollectionItem: true },
+        RangeRule: { optionName: "validationRules", isCollectionItem: true },
+        RequiredRule: { optionName: "validationRules", isCollectionItem: true },
+        StringLengthRule: { optionName: "validationRules", isCollectionItem: true },
+        validationRule: { optionName: "validationRules", isCollectionItem: true }
+      },
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+      PredefinedProps: {
+        itemType: "simple"
+      },
+    },
+  });
+};
 
-const SimpleItem: typeof _componentSimpleItem & IElementDescriptor = Object.assign(_componentSimpleItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  ExpectedChildren: {
-    AsyncRule: { optionName: "validationRules", isCollectionItem: true },
-    CompareRule: { optionName: "validationRules", isCollectionItem: true },
-    CustomRule: { optionName: "validationRules", isCollectionItem: true },
-    EmailRule: { optionName: "validationRules", isCollectionItem: true },
-    label: { optionName: "label", isCollectionItem: false },
-    NumericRule: { optionName: "validationRules", isCollectionItem: true },
-    PatternRule: { optionName: "validationRules", isCollectionItem: true },
-    RangeRule: { optionName: "validationRules", isCollectionItem: true },
-    RequiredRule: { optionName: "validationRules", isCollectionItem: true },
-    StringLengthRule: { optionName: "validationRules", isCollectionItem: true },
-    validationRule: { optionName: "validationRules", isCollectionItem: true }
-  },
-  TemplateProps: [{
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-  PredefinedProps: {
-    itemType: "simple"
-  },
-})
+const SimpleItem = Object.assign<typeof _componentSimpleItem, NestedComponentMeta>(_componentSimpleItem, {
+  componentType: "option",
+});
 
 // owners:
 // SimpleItem
@@ -625,21 +674,24 @@ type IStringLengthRuleProps = React.PropsWithChildren<{
   message?: string;
   min?: number;
   trim?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
-const _componentStringLengthRule = memo(
-  (props: IStringLengthRuleProps) => {
-    return React.createElement(NestedOption<IStringLengthRuleProps>, { ...props });
-  }
-);
+const _componentStringLengthRule = (props: IStringLengthRuleProps) => {
+  return React.createElement(NestedOption<IStringLengthRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "stringLength"
+      },
+    },
+  });
+};
 
-const StringLengthRule: typeof _componentStringLengthRule & IElementDescriptor = Object.assign(_componentStringLengthRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "stringLength"
-  },
-})
+const StringLengthRule = Object.assign<typeof _componentStringLengthRule, NestedComponentMeta>(_componentStringLengthRule, {
+  componentType: "option",
+});
 
 // owners:
 // TabbedItem
@@ -664,35 +716,38 @@ type ITabProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentTab = memo(
-  (props: ITabProps) => {
-    return React.createElement(NestedOption<ITabProps>, { ...props });
-  }
-);
+const _componentTab = (props: ITabProps) => {
+  return React.createElement(NestedOption<ITabProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "tabs",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false }
+      },
+      TemplateProps: [{
+        tmplOption: "tabTemplate",
+        render: "tabRender",
+        component: "tabComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
 
-const Tab: typeof _componentTab & IElementDescriptor = Object.assign(_componentTab, {
-  OptionName: "tabs",
-  IsCollectionItem: true,
-  ExpectedChildren: {
-    colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false }
-  },
-  TemplateProps: [{
-    tmplOption: "tabTemplate",
-    render: "tabRender",
-    component: "tabComponent"
-  }, {
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-})
+const Tab = Object.assign<typeof _componentTab, NestedComponentMeta>(_componentTab, {
+  componentType: "option",
+});
 
 // owners:
 // Form
 type ITabbedItemProps = React.PropsWithChildren<{
   colSpan?: number;
   cssClass?: string;
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
+  itemType?: FormItemType;
   name?: string;
   tabPanelOptions?: dxTabPanelOptions;
   tabs?: Array<Record<string, any>> | {
@@ -715,23 +770,26 @@ type ITabbedItemProps = React.PropsWithChildren<{
   visible?: boolean;
   visibleIndex?: number;
 }>
-const _componentTabbedItem = memo(
-  (props: ITabbedItemProps) => {
-    return React.createElement(NestedOption<ITabbedItemProps>, { ...props });
-  }
-);
+const _componentTabbedItem = (props: ITabbedItemProps) => {
+  return React.createElement(NestedOption<ITabbedItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        tab: { optionName: "tabs", isCollectionItem: true },
+        tabPanelOptions: { optionName: "tabPanelOptions", isCollectionItem: false }
+      },
+      PredefinedProps: {
+        itemType: "tabbed"
+      },
+    },
+  });
+};
 
-const TabbedItem: typeof _componentTabbedItem & IElementDescriptor = Object.assign(_componentTabbedItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  ExpectedChildren: {
-    tab: { optionName: "tabs", isCollectionItem: true },
-    tabPanelOptions: { optionName: "tabPanelOptions", isCollectionItem: false }
-  },
-  PredefinedProps: {
-    itemType: "tabbed"
-  },
-})
+const TabbedItem = Object.assign<typeof _componentTabbedItem, NestedComponentMeta>(_componentTabbedItem, {
+  componentType: "option",
+});
 
 // owners:
 // TabbedItem
@@ -748,7 +806,7 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   height?: (() => number | string) | number | string;
   hint?: string;
   hoverStateEnabled?: boolean;
-  iconPosition?: "top" | "end" | "bottom" | "start";
+  iconPosition?: TabsIconPosition;
   itemHoldTimeout?: number;
   items?: Array<any | dxTabPanelItem | string>;
   itemTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
@@ -775,10 +833,10 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   selectedIndex?: number;
   selectedItem?: any;
   showNavButtons?: boolean;
-  stylingMode?: "primary" | "secondary";
+  stylingMode?: TabsStyle;
   swipeEnabled?: boolean;
   tabIndex?: number;
-  tabsPosition?: "bottom" | "left" | "right" | "top";
+  tabsPosition?: Position;
   visible?: boolean;
   width?: (() => number | string) | number | string;
   defaultItems?: Array<any | dxTabPanelItem | string>;
@@ -792,33 +850,36 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   itemTitleRender?: (...params: any) => React.ReactNode;
   itemTitleComponent?: React.ComponentType<any>;
 }>
-const _componentTabPanelOptions = memo(
-  (props: ITabPanelOptionsProps) => {
-    return React.createElement(NestedOption<ITabPanelOptionsProps>, { ...props });
-  }
-);
+const _componentTabPanelOptions = (props: ITabPanelOptionsProps) => {
+  return React.createElement(NestedOption<ITabPanelOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "tabPanelOptions",
+      DefaultsProps: {
+        defaultItems: "items",
+        defaultSelectedIndex: "selectedIndex",
+        defaultSelectedItem: "selectedItem"
+      },
+      ExpectedChildren: {
+        item: { optionName: "items", isCollectionItem: true },
+        tabPanelOptionsItem: { optionName: "items", isCollectionItem: true }
+      },
+      TemplateProps: [{
+        tmplOption: "itemTemplate",
+        render: "itemRender",
+        component: "itemComponent"
+      }, {
+        tmplOption: "itemTitleTemplate",
+        render: "itemTitleRender",
+        component: "itemTitleComponent"
+      }],
+    },
+  });
+};
 
-const TabPanelOptions: typeof _componentTabPanelOptions & IElementDescriptor = Object.assign(_componentTabPanelOptions, {
-  OptionName: "tabPanelOptions",
-  DefaultsProps: {
-    defaultItems: "items",
-    defaultSelectedIndex: "selectedIndex",
-    defaultSelectedItem: "selectedItem"
-  },
-  ExpectedChildren: {
-    item: { optionName: "items", isCollectionItem: true },
-    tabPanelOptionsItem: { optionName: "items", isCollectionItem: true }
-  },
-  TemplateProps: [{
-    tmplOption: "itemTemplate",
-    render: "itemRender",
-    component: "itemComponent"
-  }, {
-    tmplOption: "itemTitleTemplate",
-    render: "itemTitleRender",
-    component: "itemTitleComponent"
-  }],
-})
+const TabPanelOptions = Object.assign<typeof _componentTabPanelOptions, NestedComponentMeta>(_componentTabPanelOptions, {
+  componentType: "option",
+});
 
 // owners:
 // TabPanelOptions
@@ -837,54 +898,60 @@ type ITabPanelOptionsItemProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentTabPanelOptionsItem = memo(
-  (props: ITabPanelOptionsItemProps) => {
-    return React.createElement(NestedOption<ITabPanelOptionsItemProps>, { ...props });
-  }
-);
+const _componentTabPanelOptionsItem = (props: ITabPanelOptionsItemProps) => {
+  return React.createElement(NestedOption<ITabPanelOptionsItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "tabTemplate",
+        render: "tabRender",
+        component: "tabComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
 
-const TabPanelOptionsItem: typeof _componentTabPanelOptionsItem & IElementDescriptor = Object.assign(_componentTabPanelOptionsItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  TemplateProps: [{
-    tmplOption: "tabTemplate",
-    render: "tabRender",
-    component: "tabComponent"
-  }, {
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-})
+const TabPanelOptionsItem = Object.assign<typeof _componentTabPanelOptionsItem, NestedComponentMeta>(_componentTabPanelOptionsItem, {
+  componentType: "option",
+});
 
 // owners:
 // SimpleItem
 type IValidationRuleProps = React.PropsWithChildren<{
   message?: string;
   trim?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
   ignoreEmptyValue?: boolean;
   max?: Date | number | string;
   min?: Date | number | string;
   reevaluate?: boolean;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
   comparisonTarget?: (() => any);
-  comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
+  comparisonType?: ComparisonOperator;
   pattern?: RegExp | string;
 }>
-const _componentValidationRule = memo(
-  (props: IValidationRuleProps) => {
-    return React.createElement(NestedOption<IValidationRuleProps>, { ...props });
-  }
-);
+const _componentValidationRule = (props: IValidationRuleProps) => {
+  return React.createElement(NestedOption<IValidationRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "required"
+      },
+    },
+  });
+};
 
-const ValidationRule: typeof _componentValidationRule & IElementDescriptor = Object.assign(_componentValidationRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "required"
-  },
-})
+const ValidationRule = Object.assign<typeof _componentValidationRule, NestedComponentMeta>(_componentValidationRule, {
+  componentType: "option",
+});
 
 export default Form;
 export {

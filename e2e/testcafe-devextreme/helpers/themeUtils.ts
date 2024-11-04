@@ -29,6 +29,7 @@ export async function testScreenshot(
     theme?: string;
     shouldTestInCompact?: boolean;
     compactCallBack?: () => Promise<unknown>;
+    themeChanged?: () => Promise<unknown>;
   },
 
 ): Promise<void> {
@@ -37,10 +38,12 @@ export async function testScreenshot(
     theme,
     shouldTestInCompact = false,
     compactCallBack,
+    themeChanged,
   } = options ?? {};
 
   if (isString(theme)) {
     await changeTheme(theme);
+    await themeChanged?.();
   }
 
   await t

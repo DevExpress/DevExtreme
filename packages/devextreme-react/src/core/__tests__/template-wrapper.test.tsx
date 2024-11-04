@@ -3,8 +3,8 @@ import { useEffect, useContext } from 'react';
 import { TemplateWrapper } from '../template-wrapper';
 import { cleanup, render } from '@testing-library/react';
 import * as events from 'devextreme/events';
-import { RemovalLockerContext } from '../helpers';
-import { TemplateFunc, UpdateLocker } from '../types';
+import { RemovalLockerContext, UpdateLocker } from '../contexts';
+import { TemplateFunc } from '../types';
 
 function TemplateComponent(args: { data, index, onRendered?, effect? }) {
   const { data, index, onRendered, effect } = args;

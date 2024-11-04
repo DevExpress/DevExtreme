@@ -912,12 +912,12 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     }
   }
 
-  public setRowsOpacity(columnIndex, value) {
-    super.setRowsOpacity(columnIndex, value);
+  public toggleDraggableColumnClass(columnIndex, value) {
+    super.toggleDraggableColumnClass(columnIndex, value);
 
-    if (this._isFixedColumns) {
+    if (this.isFixedColumns()) {
       const $rows = this._getRowElements(this._fixedTableElement);
-      this._setRowsOpacityCore($rows, this.getFixedColumns(), columnIndex, value);
+      this._toggleDraggableSourceColumnClass($rows, this.getFixedColumns(), columnIndex, value);
     }
   }
 
@@ -1025,8 +1025,10 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     super._afterRowPrepared(e);
   }
 
-  public _scrollToElement($element) {
-    super._scrollToElement($element, this.getFixedColumnsOffset());
+  public _scrollToElement($element, offset?) {
+    const scrollOffset = this.isFixedColumns() ? this.getFixedColumnsOffset() : offset;
+
+    super._scrollToElement($element, scrollOffset);
   }
 };
 

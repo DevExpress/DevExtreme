@@ -7,6 +7,7 @@ type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
   "allowSoftLineBreak" |
+  "converter" |
   "customizeModules" |
   "disabled" |
   "elementAttr" |
@@ -55,6 +56,7 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     allowSoftLineBreak: Boolean,
+    converter: Object,
     customizeModules: Function,
     disabled: Boolean,
     elementAttr: Object,
@@ -78,16 +80,16 @@ const componentConfig = {
     placeholder: String,
     readOnly: Boolean,
     rtlEnabled: Boolean,
-    stylingMode: String,
+    stylingMode: {},
     tabIndex: Number,
     tableContextMenu: Object,
     tableResizing: Object,
     toolbar: Object,
     validationError: {},
     validationErrors: Array,
-    validationMessageMode: String,
-    validationMessagePosition: String,
-    validationStatus: String,
+    validationMessageMode: {},
+    validationMessagePosition: {},
+    validationStatus: {},
     value: {},
     variables: Object,
     visible: Boolean,
@@ -99,6 +101,7 @@ const componentConfig = {
     "update:accessKey": null,
     "update:activeStateEnabled": null,
     "update:allowSoftLineBreak": null,
+    "update:converter": null,
     "update:customizeModules": null,
     "update:disabled": null,
     "update:elementAttr": null,
@@ -147,6 +150,7 @@ const componentConfig = {
     (this as any).$_WidgetClass = HtmlEditor;
     (this as any).$_hasAsyncTemplate = true;
     (this as any).$_expectedChildren = {
+      converter: { isCollectionItem: false, optionName: "converter" },
       imageUpload: { isCollectionItem: false, optionName: "imageUpload" },
       mediaResizing: { isCollectionItem: false, optionName: "mediaResizing" },
       mention: { isCollectionItem: true, optionName: "mentions" },
@@ -162,6 +166,25 @@ prepareComponentConfig(componentConfig);
 
 const DxHtmlEditor = defineComponent(componentConfig);
 
+
+const DxConverterConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:fromHtml": null,
+    "update:toHtml": null,
+  },
+  props: {
+    fromHtml: Function,
+    toHtml: Function
+  }
+};
+
+prepareConfigurationComponentConfig(DxConverterConfig);
+
+const DxConverter = defineComponent(DxConverterConfig);
+
+(DxConverter as any).$_optionName = "converter";
 
 const DxFileUploaderOptionsConfig = {
   emits: {
@@ -290,12 +313,12 @@ const DxFileUploaderOptionsConfig = {
     uploadFailedMessage: String,
     uploadFile: Function,
     uploadHeaders: {},
-    uploadMethod: String,
-    uploadMode: String,
+    uploadMethod: {},
+    uploadMode: {},
     uploadUrl: String,
     validationError: {},
     validationErrors: Array,
-    validationStatus: String,
+    validationStatus: {},
     value: Array,
     visible: Boolean,
     width: [Function, Number, String]
@@ -320,7 +343,7 @@ const DxImageUploadConfig = {
   },
   props: {
     fileUploaderOptions: Object,
-    fileUploadMode: String,
+    fileUploadMode: {},
     tabs: Array,
     uploadDirectory: String,
     uploadUrl: String
@@ -370,23 +393,23 @@ const DxItemConfig = {
     closeMenuOnClick: Boolean,
     cssClass: String,
     disabled: Boolean,
-    formatName: String,
+    formatName: {},
     formatValues: Array,
     html: String,
     icon: String,
     items: Array,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: {},
+    location: {},
     menuItemTemplate: {},
-    name: String,
+    name: {},
     options: {},
     selectable: Boolean,
     selected: Boolean,
-    showText: String,
+    showText: {},
     template: {},
     text: String,
     visible: Boolean,
-    widget: String
+    widget: {}
   }
 };
 
@@ -457,7 +480,7 @@ const DxTabConfig = {
     "update:name": null,
   },
   props: {
-    name: String
+    name: {}
   }
 };
 
@@ -513,7 +536,7 @@ const DxTableContextMenuItemConfig = {
     disabled: Boolean,
     icon: String,
     items: Array,
-    name: String,
+    name: {},
     selectable: Boolean,
     selected: Boolean,
     template: {},
@@ -600,19 +623,19 @@ const DxToolbarItemConfig = {
     acceptedValues: Array,
     cssClass: String,
     disabled: Boolean,
-    formatName: String,
+    formatName: {},
     formatValues: Array,
     html: String,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: {},
+    location: {},
     menuItemTemplate: {},
-    name: String,
+    name: {},
     options: {},
-    showText: String,
+    showText: {},
     template: {},
     text: String,
     visible: Boolean,
-    widget: String
+    widget: {}
   }
 };
 
@@ -645,6 +668,7 @@ const DxVariables = defineComponent(DxVariablesConfig);
 export default DxHtmlEditor;
 export {
   DxHtmlEditor,
+  DxConverter,
   DxFileUploaderOptions,
   DxImageUpload,
   DxItem,

@@ -15,6 +15,8 @@ safeSizeTest('Sticky columns with grouping & summary', async (t) => {
 
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await takeScreenshot('grouping-scroll-begin.png', dataGrid.element);
 
   await dataGrid.scrollTo(t, { x: 100 });

@@ -154,6 +154,13 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('author', value);
     }
 
+    get id(): number | string | undefined {
+        return this._getOption('id');
+    }
+    set id(value: number | string | undefined) {
+        this._setOption('id', value);
+    }
+
     get timestamp(): Date | number | string | undefined {
         return this._getOption('timestamp');
     }
@@ -572,13 +579,6 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set hasItems(value: boolean | undefined) {
         this._setOption('hasItems', value);
-    }
-
-    get id(): number | string | undefined {
-        return this._getOption('id');
-    }
-    set id(value: number | string | undefined) {
-        this._setOption('id', value);
     }
 
     get parentId(): number | string | undefined {

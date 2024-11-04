@@ -1,10 +1,11 @@
 import devices from '@js/core/devices';
-import { nativeScrolling, touch } from '@js/core/utils/support';
+
+import supportUtils from '../../core/utils/m_support';
 
 export const deviceDependentOptions = function () {
   return [{
     device() {
-      return !nativeScrolling;
+      return !supportUtils.nativeScrolling;
     },
     options: {
       useNative: false,
@@ -18,7 +19,7 @@ export const deviceDependentOptions = function () {
 
       scrollByThumb: true,
 
-      scrollByContent: touch,
+      scrollByContent: supportUtils.touch,
 
       showScrollbar: 'onHover',
     },

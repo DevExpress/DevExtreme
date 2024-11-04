@@ -24,7 +24,7 @@
 // adduse
 @use "../scrollable";
 @use "../overlay";
-@use "../pager";
+@use "../pagination";
 
 $material-grid-base-border-hidden: 1px solid transparent;
 $material-grid-base-row-border: 1px solid transparent;
@@ -1266,5 +1266,10 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       padding-top: 0;
       padding-bottom: 0;
     }
+  }
+
+  .dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-draggable-column {
+    opacity: 1;
+    color: $datagrid-draggable-column-text-color;
   }
 }

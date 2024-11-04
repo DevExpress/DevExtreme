@@ -56,12 +56,12 @@
       border-top: 0;
     }
 
-    > .dx-#{$widget-name}-pager {
-      margin-top: -1px;
-    }
-
     > .dx-#{$widget-name}-header-panel {
       border-bottom: 0;
+    }
+
+    > .dx-pager {
+      margin-top: -1px;
     }
 
     > .dx-#{$widget-name}-rowsview.dx-last-row-border {
@@ -237,6 +237,10 @@
             cursor: pointer;
             touch-action: pinch-zoom;
           }
+
+          &.dx-#{$widget-name}-draggable-column {
+            opacity: 0.5;
+          }
         }
       }
     }
@@ -315,6 +319,10 @@
   .dx-#{$widget-name}-action,
   .dx-#{$widget-name}-drag-action {
     cursor: pointer;
+  }
+
+  .dx-#{$widget-name}-draggable-column {
+    opacity: 0.5;
   }
 
   .dx-data-row.dx-state-hover {

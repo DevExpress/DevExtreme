@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import support from 'core/utils/support';
+import support from '__internal/core/utils/m_support';
 
-import 'ui/load_indicator';
+import '__internal/ui/m_load_indicator';
 
 import 'generic_light.css!';
 

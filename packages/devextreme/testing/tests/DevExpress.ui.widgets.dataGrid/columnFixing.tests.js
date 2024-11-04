@@ -4,7 +4,7 @@ import 'ui/data_grid';
 
 import $ from 'jquery';
 import browser from 'core/utils/browser';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
 import gridCoreUtils from '__internal/grids/grid_core/m_utils';
@@ -2497,7 +2497,7 @@ QUnit.module('Headers reordering and resizing with fixed columns', {
         this.rowsView.render(testElement);
 
         // act
-        this.rowsView.setRowsOpacity(0, 0.5);
+        this.rowsView.toggleDraggableColumnClass(0, true);
 
         // assert
         const $cells = $('.dx-datagrid-table-fixed').eq(1).find('td:first-child');

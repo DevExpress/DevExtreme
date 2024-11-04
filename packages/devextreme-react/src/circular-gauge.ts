@@ -5,14 +5,14 @@ import dxCircularGauge, {
     Properties
 } from "devextreme/viz/circular_gauge";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent } from "devextreme/viz/circular_gauge";
-import type { Font as ChartsFont, ChartsColor } from "devextreme/common/charts";
+import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent, CircularGaugeLabelOverlap, CircularGaugeElementOrientation } from "devextreme/viz/circular_gauge";
+import type { AnimationEaseMode, DashStyle, Font as ChartsFont, LabelOverlap, ChartsColor, Palette, PaletteExtensionMode, TextOverflow, WordWrap } from "devextreme/common/charts";
+import type { ExportFormat, Format as CommonFormat, HorizontalEdge, VerticalEdge, HorizontalAlignment } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/localization";
 import type { template } from "devextreme/core/templates/template";
-
-import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -111,18 +111,21 @@ const CircularGauge = memo(
 // CircularGauge
 type IAnimationProps = React.PropsWithChildren<{
   duration?: number;
-  easing?: "easeOutCubic" | "linear";
+  easing?: AnimationEaseMode;
   enabled?: boolean;
 }>
-const _componentAnimation = memo(
-  (props: IAnimationProps) => {
-    return React.createElement(NestedOption<IAnimationProps>, { ...props });
-  }
-);
+const _componentAnimation = (props: IAnimationProps) => {
+  return React.createElement(NestedOption<IAnimationProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "animation",
+    },
+  });
+};
 
-const Animation: typeof _componentAnimation & IElementDescriptor = Object.assign(_componentAnimation, {
-  OptionName: "animation",
-})
+const Animation = Object.assign<typeof _componentAnimation, NestedComponentMeta>(_componentAnimation, {
+  componentType: "option",
+});
 
 // owners:
 // RangeContainer
@@ -130,34 +133,40 @@ type IBackgroundColorProps = React.PropsWithChildren<{
   base?: string;
   fillId?: string;
 }>
-const _componentBackgroundColor = memo(
-  (props: IBackgroundColorProps) => {
-    return React.createElement(NestedOption<IBackgroundColorProps>, { ...props });
-  }
-);
+const _componentBackgroundColor = (props: IBackgroundColorProps) => {
+  return React.createElement(NestedOption<IBackgroundColorProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "backgroundColor",
+    },
+  });
+};
 
-const BackgroundColor: typeof _componentBackgroundColor & IElementDescriptor = Object.assign(_componentBackgroundColor, {
-  OptionName: "backgroundColor",
-})
+const BackgroundColor = Object.assign<typeof _componentBackgroundColor, NestedComponentMeta>(_componentBackgroundColor, {
+  componentType: "option",
+});
 
 // owners:
 // Tooltip
 type IBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
   visible?: boolean;
   width?: number;
 }>
-const _componentBorder = memo(
-  (props: IBorderProps) => {
-    return React.createElement(NestedOption<IBorderProps>, { ...props });
-  }
-);
+const _componentBorder = (props: IBorderProps) => {
+  return React.createElement(NestedOption<IBorderProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "border",
+    },
+  });
+};
 
-const Border: typeof _componentBorder & IElementDescriptor = Object.assign(_componentBorder, {
-  OptionName: "border",
-})
+const Border = Object.assign<typeof _componentBorder, NestedComponentMeta>(_componentBorder, {
+  componentType: "option",
+});
 
 // owners:
 // Range
@@ -166,15 +175,18 @@ type IColorProps = React.PropsWithChildren<{
   base?: string;
   fillId?: string;
 }>
-const _componentColor = memo(
-  (props: IColorProps) => {
-    return React.createElement(NestedOption<IColorProps>, { ...props });
-  }
-);
+const _componentColor = (props: IColorProps) => {
+  return React.createElement(NestedOption<IColorProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "color",
+    },
+  });
+};
 
-const Color: typeof _componentColor & IElementDescriptor = Object.assign(_componentColor, {
-  OptionName: "color",
-})
+const Color = Object.assign<typeof _componentColor, NestedComponentMeta>(_componentColor, {
+  componentType: "option",
+});
 
 // owners:
 // CircularGauge
@@ -182,20 +194,23 @@ type IExportProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
   fileName?: string;
-  formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">;
+  formats?: Array<ExportFormat>;
   margin?: number;
   printingEnabled?: boolean;
   svgToCanvas?: ((svg: any, canvas: any) => any);
 }>
-const _componentExport = memo(
-  (props: IExportProps) => {
-    return React.createElement(NestedOption<IExportProps>, { ...props });
-  }
-);
+const _componentExport = (props: IExportProps) => {
+  return React.createElement(NestedOption<IExportProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "export",
+    },
+  });
+};
 
-const Export: typeof _componentExport & IElementDescriptor = Object.assign(_componentExport, {
-  OptionName: "export",
-})
+const Export = Object.assign<typeof _componentExport, NestedComponentMeta>(_componentExport, {
+  componentType: "option",
+});
 
 // owners:
 // Label
@@ -211,15 +226,18 @@ type IFontProps = React.PropsWithChildren<{
   size?: number | string;
   weight?: number;
 }>
-const _componentFont = memo(
-  (props: IFontProps) => {
-    return React.createElement(NestedOption<IFontProps>, { ...props });
-  }
-);
+const _componentFont = (props: IFontProps) => {
+  return React.createElement(NestedOption<IFontProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "font",
+    },
+  });
+};
 
-const Font: typeof _componentFont & IElementDescriptor = Object.assign(_componentFont, {
-  OptionName: "font",
-})
+const Font = Object.assign<typeof _componentFont, NestedComponentMeta>(_componentFont, {
+  componentType: "option",
+});
 
 // owners:
 // Label
@@ -230,18 +248,21 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
-const _componentFormat = memo(
-  (props: IFormatProps) => {
-    return React.createElement(NestedOption<IFormatProps>, { ...props });
-  }
-);
+const _componentFormat = (props: IFormatProps) => {
+  return React.createElement(NestedOption<IFormatProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "format",
+    },
+  });
+};
 
-const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_componentFormat, {
-  OptionName: "format",
-})
+const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_componentFormat, {
+  componentType: "option",
+});
 
 // owners:
 // CircularGauge
@@ -249,41 +270,47 @@ type IGeometryProps = React.PropsWithChildren<{
   endAngle?: number;
   startAngle?: number;
 }>
-const _componentGeometry = memo(
-  (props: IGeometryProps) => {
-    return React.createElement(NestedOption<IGeometryProps>, { ...props });
-  }
-);
+const _componentGeometry = (props: IGeometryProps) => {
+  return React.createElement(NestedOption<IGeometryProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "geometry",
+    },
+  });
+};
 
-const Geometry: typeof _componentGeometry & IElementDescriptor = Object.assign(_componentGeometry, {
-  OptionName: "geometry",
-})
+const Geometry = Object.assign<typeof _componentGeometry, NestedComponentMeta>(_componentGeometry, {
+  componentType: "option",
+});
 
 // owners:
 // Scale
 type ILabelProps = React.PropsWithChildren<{
   customizeText?: ((scaleValue: { value: number, valueText: string }) => string);
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
-  hideFirstOrLast?: "first" | "last";
+  format?: LocalizationFormat;
+  hideFirstOrLast?: CircularGaugeLabelOverlap;
   indentFromTick?: number;
-  overlappingBehavior?: "hide" | "none";
+  overlappingBehavior?: LabelOverlap;
   useRangeColors?: boolean;
   visible?: boolean;
 }>
-const _componentLabel = memo(
-  (props: ILabelProps) => {
-    return React.createElement(NestedOption<ILabelProps>, { ...props });
-  }
-);
+const _componentLabel = (props: ILabelProps) => {
+  return React.createElement(NestedOption<ILabelProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "label",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false },
+        format: { optionName: "format", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Label: typeof _componentLabel & IElementDescriptor = Object.assign(_componentLabel, {
-  OptionName: "label",
-  ExpectedChildren: {
-    font: { optionName: "font", isCollectionItem: false },
-    format: { optionName: "format", isCollectionItem: false }
-  },
-})
+const Label = Object.assign<typeof _componentLabel, NestedComponentMeta>(_componentLabel, {
+  componentType: "option",
+});
 
 // owners:
 // CircularGauge
@@ -295,21 +322,24 @@ type ILoadingIndicatorProps = React.PropsWithChildren<{
   defaultShow?: boolean;
   onShowChange?: (value: boolean) => void;
 }>
-const _componentLoadingIndicator = memo(
-  (props: ILoadingIndicatorProps) => {
-    return React.createElement(NestedOption<ILoadingIndicatorProps>, { ...props });
-  }
-);
+const _componentLoadingIndicator = (props: ILoadingIndicatorProps) => {
+  return React.createElement(NestedOption<ILoadingIndicatorProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "loadingIndicator",
+      DefaultsProps: {
+        defaultShow: "show"
+      },
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const LoadingIndicator: typeof _componentLoadingIndicator & IElementDescriptor = Object.assign(_componentLoadingIndicator, {
-  OptionName: "loadingIndicator",
-  DefaultsProps: {
-    defaultShow: "show"
-  },
-  ExpectedChildren: {
-    font: { optionName: "font", isCollectionItem: false }
-  },
-})
+const LoadingIndicator = Object.assign<typeof _componentLoadingIndicator, NestedComponentMeta>(_componentLoadingIndicator, {
+  componentType: "option",
+});
 
 // owners:
 // CircularGauge
@@ -320,15 +350,18 @@ type IMarginProps = React.PropsWithChildren<{
   right?: number;
   top?: number;
 }>
-const _componentMargin = memo(
-  (props: IMarginProps) => {
-    return React.createElement(NestedOption<IMarginProps>, { ...props });
-  }
-);
+const _componentMargin = (props: IMarginProps) => {
+  return React.createElement(NestedOption<IMarginProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "margin",
+    },
+  });
+};
 
-const Margin: typeof _componentMargin & IElementDescriptor = Object.assign(_componentMargin, {
-  OptionName: "margin",
-})
+const Margin = Object.assign<typeof _componentMargin, NestedComponentMeta>(_componentMargin, {
+  componentType: "option",
+});
 
 // owners:
 // Scale
@@ -339,15 +372,18 @@ type IMinorTickProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-const _componentMinorTick = memo(
-  (props: IMinorTickProps) => {
-    return React.createElement(NestedOption<IMinorTickProps>, { ...props });
-  }
-);
+const _componentMinorTick = (props: IMinorTickProps) => {
+  return React.createElement(NestedOption<IMinorTickProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "minorTick",
+    },
+  });
+};
 
-const MinorTick: typeof _componentMinorTick & IElementDescriptor = Object.assign(_componentMinorTick, {
-  OptionName: "minorTick",
-})
+const MinorTick = Object.assign<typeof _componentMinorTick, NestedComponentMeta>(_componentMinorTick, {
+  componentType: "option",
+});
 
 // owners:
 // RangeContainer
@@ -356,28 +392,31 @@ type IRangeProps = React.PropsWithChildren<{
   endValue?: number;
   startValue?: number;
 }>
-const _componentRange = memo(
-  (props: IRangeProps) => {
-    return React.createElement(NestedOption<IRangeProps>, { ...props });
-  }
-);
+const _componentRange = (props: IRangeProps) => {
+  return React.createElement(NestedOption<IRangeProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "ranges",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        color: { optionName: "color", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Range: typeof _componentRange & IElementDescriptor = Object.assign(_componentRange, {
-  OptionName: "ranges",
-  IsCollectionItem: true,
-  ExpectedChildren: {
-    color: { optionName: "color", isCollectionItem: false }
-  },
-})
+const Range = Object.assign<typeof _componentRange, NestedComponentMeta>(_componentRange, {
+  componentType: "option",
+});
 
 // owners:
 // CircularGauge
 type IRangeContainerProps = React.PropsWithChildren<{
   backgroundColor?: ChartsColor | string;
   offset?: number;
-  orientation?: "center" | "inside" | "outside";
-  palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office";
-  paletteExtensionMode?: "alternate" | "blend" | "extrapolate";
+  orientation?: CircularGaugeElementOrientation;
+  palette?: Array<string> | Palette;
+  paletteExtensionMode?: PaletteExtensionMode;
   ranges?: Array<Record<string, any>> | {
     color?: ChartsColor | string;
     endValue?: number;
@@ -385,19 +424,22 @@ type IRangeContainerProps = React.PropsWithChildren<{
   }[];
   width?: number;
 }>
-const _componentRangeContainer = memo(
-  (props: IRangeContainerProps) => {
-    return React.createElement(NestedOption<IRangeContainerProps>, { ...props });
-  }
-);
+const _componentRangeContainer = (props: IRangeContainerProps) => {
+  return React.createElement(NestedOption<IRangeContainerProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "rangeContainer",
+      ExpectedChildren: {
+        backgroundColor: { optionName: "backgroundColor", isCollectionItem: false },
+        range: { optionName: "ranges", isCollectionItem: true }
+      },
+    },
+  });
+};
 
-const RangeContainer: typeof _componentRangeContainer & IElementDescriptor = Object.assign(_componentRangeContainer, {
-  OptionName: "rangeContainer",
-  ExpectedChildren: {
-    backgroundColor: { optionName: "backgroundColor", isCollectionItem: false },
-    range: { optionName: "ranges", isCollectionItem: true }
-  },
-})
+const RangeContainer = Object.assign<typeof _componentRangeContainer, NestedComponentMeta>(_componentRangeContainer, {
+  componentType: "option",
+});
 
 // owners:
 // CircularGauge
@@ -409,10 +451,10 @@ type IScaleProps = React.PropsWithChildren<{
   label?: Record<string, any> | {
     customizeText?: ((scaleValue: { value: number, valueText: string }) => string);
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
-    hideFirstOrLast?: "first" | "last";
+    format?: LocalizationFormat;
+    hideFirstOrLast?: CircularGaugeLabelOverlap;
     indentFromTick?: number;
-    overlappingBehavior?: "hide" | "none";
+    overlappingBehavior?: LabelOverlap;
     useRangeColors?: boolean;
     visible?: boolean;
   };
@@ -424,7 +466,7 @@ type IScaleProps = React.PropsWithChildren<{
     width?: number;
   };
   minorTickInterval?: number;
-  orientation?: "center" | "inside" | "outside";
+  orientation?: CircularGaugeElementOrientation;
   scaleDivisionFactor?: number;
   startValue?: number;
   tick?: Record<string, any> | {
@@ -436,20 +478,23 @@ type IScaleProps = React.PropsWithChildren<{
   };
   tickInterval?: number;
 }>
-const _componentScale = memo(
-  (props: IScaleProps) => {
-    return React.createElement(NestedOption<IScaleProps>, { ...props });
-  }
-);
+const _componentScale = (props: IScaleProps) => {
+  return React.createElement(NestedOption<IScaleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "scale",
+      ExpectedChildren: {
+        label: { optionName: "label", isCollectionItem: false },
+        minorTick: { optionName: "minorTick", isCollectionItem: false },
+        tick: { optionName: "tick", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Scale: typeof _componentScale & IElementDescriptor = Object.assign(_componentScale, {
-  OptionName: "scale",
-  ExpectedChildren: {
-    label: { optionName: "label", isCollectionItem: false },
-    minorTick: { optionName: "minorTick", isCollectionItem: false },
-    tick: { optionName: "tick", isCollectionItem: false }
-  },
-})
+const Scale = Object.assign<typeof _componentScale, NestedComponentMeta>(_componentScale, {
+  componentType: "option",
+});
 
 // owners:
 // Tooltip
@@ -460,15 +505,18 @@ type IShadowProps = React.PropsWithChildren<{
   offsetY?: number;
   opacity?: number;
 }>
-const _componentShadow = memo(
-  (props: IShadowProps) => {
-    return React.createElement(NestedOption<IShadowProps>, { ...props });
-  }
-);
+const _componentShadow = (props: IShadowProps) => {
+  return React.createElement(NestedOption<IShadowProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "shadow",
+    },
+  });
+};
 
-const Shadow: typeof _componentShadow & IElementDescriptor = Object.assign(_componentShadow, {
-  OptionName: "shadow",
-})
+const Shadow = Object.assign<typeof _componentShadow, NestedComponentMeta>(_componentShadow, {
+  componentType: "option",
+});
 
 // owners:
 // CircularGauge
@@ -476,15 +524,18 @@ type ISizeProps = React.PropsWithChildren<{
   height?: number;
   width?: number;
 }>
-const _componentSize = memo(
-  (props: ISizeProps) => {
-    return React.createElement(NestedOption<ISizeProps>, { ...props });
-  }
-);
+const _componentSize = (props: ISizeProps) => {
+  return React.createElement(NestedOption<ISizeProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "size",
+    },
+  });
+};
 
-const Size: typeof _componentSize & IElementDescriptor = Object.assign(_componentSize, {
-  OptionName: "size",
-})
+const Size = Object.assign<typeof _componentSize, NestedComponentMeta>(_componentSize, {
+  componentType: "option",
+});
 
 // owners:
 // Title
@@ -492,21 +543,24 @@ type ISubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  wordWrap?: WordWrap;
 }>
-const _componentSubtitle = memo(
-  (props: ISubtitleProps) => {
-    return React.createElement(NestedOption<ISubtitleProps>, { ...props });
-  }
-);
+const _componentSubtitle = (props: ISubtitleProps) => {
+  return React.createElement(NestedOption<ISubtitleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "subtitle",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Subtitle: typeof _componentSubtitle & IElementDescriptor = Object.assign(_componentSubtitle, {
-  OptionName: "subtitle",
-  ExpectedChildren: {
-    font: { optionName: "font", isCollectionItem: false }
-  },
-})
+const Subtitle = Object.assign<typeof _componentSubtitle, NestedComponentMeta>(_componentSubtitle, {
+  componentType: "option",
+});
 
 // owners:
 // CircularGauge
@@ -516,11 +570,11 @@ type ISubvalueIndicatorProps = React.PropsWithChildren<{
   baseValue?: number;
   beginAdaptingAtRadius?: number;
   color?: ChartsColor | string;
-  horizontalOrientation?: "left" | "right";
+  horizontalOrientation?: HorizontalEdge;
   indentFromCenter?: number;
   length?: number;
   offset?: number;
-  palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office";
+  palette?: Array<string> | Palette;
   secondColor?: string;
   secondFraction?: number;
   size?: number;
@@ -529,48 +583,54 @@ type ISubvalueIndicatorProps = React.PropsWithChildren<{
   text?: Record<string, any> | {
     customizeText?: ((indicatedValue: { value: number, valueText: string }) => string);
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat;
     indent?: number;
   };
   type?: "circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle";
-  verticalOrientation?: "bottom" | "top";
+  verticalOrientation?: VerticalEdge;
   width?: number;
 }>
-const _componentSubvalueIndicator = memo(
-  (props: ISubvalueIndicatorProps) => {
-    return React.createElement(NestedOption<ISubvalueIndicatorProps>, { ...props });
-  }
-);
+const _componentSubvalueIndicator = (props: ISubvalueIndicatorProps) => {
+  return React.createElement(NestedOption<ISubvalueIndicatorProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "subvalueIndicator",
+      ExpectedChildren: {
+        color: { optionName: "color", isCollectionItem: false },
+        text: { optionName: "text", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const SubvalueIndicator: typeof _componentSubvalueIndicator & IElementDescriptor = Object.assign(_componentSubvalueIndicator, {
-  OptionName: "subvalueIndicator",
-  ExpectedChildren: {
-    color: { optionName: "color", isCollectionItem: false },
-    text: { optionName: "text", isCollectionItem: false }
-  },
-})
+const SubvalueIndicator = Object.assign<typeof _componentSubvalueIndicator, NestedComponentMeta>(_componentSubvalueIndicator, {
+  componentType: "option",
+});
 
 // owners:
 // SubvalueIndicator
 type ITextProps = React.PropsWithChildren<{
   customizeText?: ((indicatedValue: { value: number, valueText: string }) => string);
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   indent?: number;
 }>
-const _componentText = memo(
-  (props: ITextProps) => {
-    return React.createElement(NestedOption<ITextProps>, { ...props });
-  }
-);
+const _componentText = (props: ITextProps) => {
+  return React.createElement(NestedOption<ITextProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "text",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false },
+        format: { optionName: "format", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Text: typeof _componentText & IElementDescriptor = Object.assign(_componentText, {
-  OptionName: "text",
-  ExpectedChildren: {
-    font: { optionName: "font", isCollectionItem: false },
-    format: { optionName: "format", isCollectionItem: false }
-  },
-})
+const Text = Object.assign<typeof _componentText, NestedComponentMeta>(_componentText, {
+  componentType: "option",
+});
 
 // owners:
 // Scale
@@ -581,21 +641,24 @@ type ITickProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-const _componentTick = memo(
-  (props: ITickProps) => {
-    return React.createElement(NestedOption<ITickProps>, { ...props });
-  }
-);
+const _componentTick = (props: ITickProps) => {
+  return React.createElement(NestedOption<ITickProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "tick",
+    },
+  });
+};
 
-const Tick: typeof _componentTick & IElementDescriptor = Object.assign(_componentTick, {
-  OptionName: "tick",
-})
+const Tick = Object.assign<typeof _componentTick, NestedComponentMeta>(_componentTick, {
+  componentType: "option",
+});
 
 // owners:
 // CircularGauge
 type ITitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: number | Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -607,28 +670,31 @@ type ITitleProps = React.PropsWithChildren<{
     font?: ChartsFont;
     offset?: number;
     text?: string;
-    textOverflow?: "ellipsis" | "hide" | "none";
-    wordWrap?: "normal" | "breakWord" | "none";
+    textOverflow?: TextOverflow;
+    wordWrap?: WordWrap;
   };
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  verticalAlignment?: "bottom" | "top";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  verticalAlignment?: VerticalEdge;
+  wordWrap?: WordWrap;
 }>
-const _componentTitle = memo(
-  (props: ITitleProps) => {
-    return React.createElement(NestedOption<ITitleProps>, { ...props });
-  }
-);
+const _componentTitle = (props: ITitleProps) => {
+  return React.createElement(NestedOption<ITitleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "title",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false },
+        margin: { optionName: "margin", isCollectionItem: false },
+        subtitle: { optionName: "subtitle", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Title: typeof _componentTitle & IElementDescriptor = Object.assign(_componentTitle, {
-  OptionName: "title",
-  ExpectedChildren: {
-    font: { optionName: "font", isCollectionItem: false },
-    margin: { optionName: "margin", isCollectionItem: false },
-    subtitle: { optionName: "subtitle", isCollectionItem: false }
-  },
-})
+const Title = Object.assign<typeof _componentTitle, NestedComponentMeta>(_componentTitle, {
+  componentType: "option",
+});
 
 // owners:
 // CircularGauge
@@ -636,7 +702,7 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -648,7 +714,7 @@ type ITooltipProps = React.PropsWithChildren<{
   customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>);
   enabled?: boolean;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   interactive?: boolean;
   opacity?: number;
   paddingLeftRight?: number;
@@ -664,26 +730,29 @@ type ITooltipProps = React.PropsWithChildren<{
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
 }>
-const _componentTooltip = memo(
-  (props: ITooltipProps) => {
-    return React.createElement(NestedOption<ITooltipProps>, { ...props });
-  }
-);
+const _componentTooltip = (props: ITooltipProps) => {
+  return React.createElement(NestedOption<ITooltipProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "tooltip",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        font: { optionName: "font", isCollectionItem: false },
+        format: { optionName: "format", isCollectionItem: false },
+        shadow: { optionName: "shadow", isCollectionItem: false }
+      },
+      TemplateProps: [{
+        tmplOption: "contentTemplate",
+        render: "contentRender",
+        component: "contentComponent"
+      }],
+    },
+  });
+};
 
-const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_componentTooltip, {
-  OptionName: "tooltip",
-  ExpectedChildren: {
-    border: { optionName: "border", isCollectionItem: false },
-    font: { optionName: "font", isCollectionItem: false },
-    format: { optionName: "format", isCollectionItem: false },
-    shadow: { optionName: "shadow", isCollectionItem: false }
-  },
-  TemplateProps: [{
-    tmplOption: "contentTemplate",
-    render: "contentRender",
-    component: "contentComponent"
-  }],
-})
+const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_componentTooltip, {
+  componentType: "option",
+});
 
 // owners:
 // CircularGauge
@@ -693,11 +762,11 @@ type IValueIndicatorProps = React.PropsWithChildren<{
   baseValue?: number;
   beginAdaptingAtRadius?: number;
   color?: ChartsColor | string;
-  horizontalOrientation?: "left" | "right";
+  horizontalOrientation?: HorizontalEdge;
   indentFromCenter?: number;
   length?: number;
   offset?: number;
-  palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office";
+  palette?: Array<string> | Palette;
   secondColor?: string;
   secondFraction?: number;
   size?: number;
@@ -706,22 +775,25 @@ type IValueIndicatorProps = React.PropsWithChildren<{
   text?: Record<string, any> | {
     customizeText?: ((indicatedValue: { value: number, valueText: string }) => string);
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat;
     indent?: number;
   };
   type?: "circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle";
-  verticalOrientation?: "bottom" | "top";
+  verticalOrientation?: VerticalEdge;
   width?: number;
 }>
-const _componentValueIndicator = memo(
-  (props: IValueIndicatorProps) => {
-    return React.createElement(NestedOption<IValueIndicatorProps>, { ...props });
-  }
-);
+const _componentValueIndicator = (props: IValueIndicatorProps) => {
+  return React.createElement(NestedOption<IValueIndicatorProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "valueIndicator",
+    },
+  });
+};
 
-const ValueIndicator: typeof _componentValueIndicator & IElementDescriptor = Object.assign(_componentValueIndicator, {
-  OptionName: "valueIndicator",
-})
+const ValueIndicator = Object.assign<typeof _componentValueIndicator, NestedComponentMeta>(_componentValueIndicator, {
+  componentType: "option",
+});
 
 export default CircularGauge;
 export {

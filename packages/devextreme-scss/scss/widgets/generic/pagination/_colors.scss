@@ -1,0 +1,76 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+/**
+* $name 180. Pager selected item text color
+* $type color
+*/
+$pagination-page-selected-color: null !default;
+
+/**
+* $name 190. Pager selected item background color
+* $type color
+*/
+$pagination-page-selected-bg: null !default;
+$pagination-page-selected-border-color: null !default;
+$pagination-page-border-radius: $base-border-radius - 1px !default;
+$pagination-outline-color: null !default;
+
+@if $color == "carmine" {
+  $pagination-page-selected-color: lighten($base-text-color, 100%) !default;
+  $pagination-page-selected-bg: $base-accent !default;
+  $pagination-page-selected-border-color: transparent !default;
+  $pagination-outline-color: mix($base-bg, darken($base-accent, 15%), 20%) !default;
+}
+
+@if $color == "contrast" {
+  $pagination-page-selected-bg: $base-inverted-bg !default;
+  $pagination-page-selected-border-color: $base-border-color !default;
+  $pagination-page-selected-color: $base-inverted-text-color !default;
+  $pagination-outline-color: $base-accent !default;
+}
+
+@if $color == "dark" {
+  $pagination-page-selected-color: $base-text-color !default;
+  $pagination-page-selected-bg: lighten($base-bg, 17%) !default;
+  $pagination-page-selected-border-color: transparent !default;
+  $pagination-outline-color: mix($base-bg, $base-focus-bg, 20%) !default;
+}
+
+@if $color == "darkmoon" {
+  $pagination-page-selected-color: $base-bg !default;
+  $pagination-page-selected-bg: $base-accent !default;
+  $pagination-page-selected-border-color: transparent !default;
+  $pagination-outline-color: mix($base-bg, darken($base-accent, 20%), 20%) !default;
+}
+
+@if $color == "darkviolet" {
+  $pagination-page-selected-bg: lighten($base-bg, 17%) !default;
+  $pagination-page-selected-border-color: transparent !default;
+  $pagination-page-selected-color: $base-text-color !default;
+  $pagination-outline-color: mix($base-bg, $base-focus-bg, 20%) !default;
+}
+
+@if $color == "greenmist" {
+  $pagination-page-selected-bg: $base-link-color !default;
+  $pagination-page-selected-border-color: transparent !default;
+  $pagination-page-selected-color: lighten($base-text-color, 100%) !default;
+  $pagination-outline-color: mix($base-bg, darken($base-focus-bg, 15%), 20%) !default;
+}
+
+@if $color == "light" {
+  $pagination-page-selected-color: $base-text-color !default;
+  $pagination-page-selected-bg: darken($base-bg, 17%) !default;
+  $pagination-page-selected-border-color: transparent !default;
+  $pagination-outline-color: mix($base-bg, $base-focus-bg, 20%) !default;
+}
+
+@if $color == "softblue" {
+  $pagination-page-selected-color: $base-text-color !default;
+  $pagination-page-selected-bg: $base-border-color !default;
+  $pagination-page-selected-border-color: transparent !default;
+  $pagination-outline-color: mix($base-bg, $base-focus-bg, 20%) !default;
+}

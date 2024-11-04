@@ -5,8 +5,8 @@ import { pairToObject } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined, isString } from '@js/core/utils/type';
-import { borderWidthStyles } from '@js/renovation/ui/resizable/utils';
 import { OverlayPositionController } from '@ts/ui/overlay/m_overlay_position_controller';
+import { borderWidthStyles } from '@ts/ui/resizable/utils';
 
 const WEIGHT_OF_SIDES = {
   left: -1,
@@ -53,7 +53,6 @@ class PopoverPositionController extends OverlayPositionController {
 
   positionWrapper(): void {
     if (this._props.shading) {
-      // @ts-expect-error
       this._$wrapper.css({ top: 0, left: 0 });
     }
   }
@@ -86,7 +85,6 @@ class PopoverPositionController extends OverlayPositionController {
   }
 
   _getContentBorderWidth(side) {
-    // @ts-expect-error
     const borderWidth = this._$content.css(borderWidthStyles[side]);
 
     // @ts-expect-error

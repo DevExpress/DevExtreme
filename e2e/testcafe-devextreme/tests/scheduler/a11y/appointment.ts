@@ -282,3 +282,100 @@ test('appointments & collector buttons can be navigated', async (t) => {
     currentDate: new Date(2021, 1, 1),
   });
 });
+
+test('Scheduler a11y: Disabled time ranges are not supported', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const {
+    nextButton,
+    prevButton,
+  } = scheduler.toolbar.navigator;
+  const expectedAriaLabels = {
+    prev: 'Previous page',
+    next: 'Next page',
+  };
+  const actualPrevAriaLabel = await prevButton.getAttribute('aria-label');
+  const actualNextAriaLabel = await nextButton.getAttribute('aria-label');
+
+  await t
+    .expect(actualPrevAriaLabel)
+    .eql(expectedAriaLabels.prev)
+    .expect(actualNextAriaLabel)
+    .eql(expectedAriaLabels.next);
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    dataSource: [
+      {
+        text: 'App 1',
+        startDate: new Date(2021, 1, 1, 12),
+        endDate: new Date(2021, 1, 1, 13),
+      },
+    ],
+    currentView: 'day',
+    currentDate: new Date(2021, 3, 27),
+  });
+});
+
+test('Scheduler a11y: appointments does not have info about reccurence', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const recurrenceIcon = scheduler.getAppointment('Website Re-Design Plan').getRecurrenceElement();
+
+  await t
+    .expect(recurrenceIcon.getAttribute('aria-label'))
+    .eql('Recurring appointment');
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    timeZone: 'America/Los_Angeles',
+    dataSource: [
+      {
+        text: 'Website Re-Design Plan',
+        startDate: new Date('2021-04-26T16:30:00.000Z'),
+        endDate: new Date('2021-04-26T18:30:00.000Z'),
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10',
+      },
+    ],
+    views: ['day', 'week', 'workWeek', 'month'],
+    currentView: 'day',
+    currentDate: new Date(2021, 3, 29),
+    startDayHour: 9,
+  });
+});
+
+test('Scheduler a11y: Appointment collector button doesn\'t have info about date', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const schedulerCollector = scheduler.collectors.get(0);
+  const dateText = 'March 6, 2021';
+
+  await t
+    .expect(scheduler.element().exists)
+    .ok()
+    .expect(schedulerCollector.element().getAttribute('aria-roledescription'))
+    .contains(dateText);
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    timeZone: 'America/Los_Angeles',
+    dataSource: [
+      {
+        text: 'Website Re-Design Plan',
+        startDate: new Date('2021-03-05T23:45:00.000Z'),
+        endDate: new Date('2021-03-05T18:15:00.000Z'),
+      },
+      {
+        text: 'Complete Shipper Selection Form',
+        startDate: new Date('2021-03-05T15:30:00.000Z'),
+        endDate: new Date('2021-03-05T17:00:00.000Z'),
+      },
+      {
+        text: 'Upgrade Server Hardware',
+        startDate: new Date('2021-03-05T19:00:00.000Z'),
+        endDate: new Date('2021-03-05T21:15:00.000Z'),
+      },
+      {
+        text: 'Upgrade Personal Computers',
+        startDate: new Date('2021-03-05T21:45:00.000Z'),
+        endDate: new Date('2021-03-05T23:30:00.000Z'),
+      },
+    ],
+    currentView: 'month',
+    currentDate: new Date(2021, 2, 1),
+  });
+});

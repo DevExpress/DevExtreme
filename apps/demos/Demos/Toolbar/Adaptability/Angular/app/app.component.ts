@@ -1,4 +1,4 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
+import { NgModule, Component, enableProdMode, inject } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
@@ -43,31 +43,33 @@ if (window && window.config.packageConfigPaths) {
 })
 
 export class AppComponent {
+  customService = inject(Service);
+
   stylingMode = !themes.current().startsWith('generic') ? 'text' : undefined;
 
-  fontSizes: FontSize[] = this.service.getFontSizes();
-
-  lineHeights: LineHeight[] = this.service.getLineHeights();
-
+  fontSizes: FontSize[] = this.customService.getFontSizes();
+  
+  lineHeights: LineHeight[] = this.customService.getLineHeights();
   lineHeight: number[] = [this.lineHeights[1].lineHeight];
 
-  fontFamilies: FontFamily[] = this.service.getFontFamilies();
+  fontFamilies: FontFamily[] = this.customService.getFontFamilies();
 
-  headings: Heading[] = this.service.getHeadings();
+  headings: Heading[] = this.customService.getHeadings();
 
-  heading = this.headings[0].text;
+  heading = this.headings[0]?.text;
 
-  fontStyles: FontStyle[] = this.service.getFontStyles();
+  fontStyles: FontStyle[] = this.customService.getFontStyles();
 
-  textAlignItems: TextAlign[] = this.service.getTextAlign();
+  textAlignItems: TextAlign[] = this.customService.getTextAlign();
 
-  textAlignItemsExtended: TextAlignExtended[] = this.service.getTextAlignExtended();
+  textAlignItemsExtended: TextAlignExtended[] = this.customService.getTextAlignExtended();
 
-  selectedTextAlign = [this.textAlignItems[0].alignment];
+  selectedTextAlign = [this.textAlignItems[0]?.alignment];
 
-  listTypes: ListType[] = this.service.getListType();
+  listTypes: ListType[] = this.customService.getListType();
 
-  constructor(private service: Service) {}
+  constructor() {
+  }
 
   onTextAlignChanged(e: { itemData: { hint: string } }): void {
     this.onButtonClick(e.itemData.hint);

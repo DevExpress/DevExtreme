@@ -17,14 +17,14 @@
   $chat-avatar-background-color,
 );
 @include chat-header($chat-header-padding);
-@include chat-errorlist(
-  $chat-errorlist-color,
-  $chat-errors-padding-block,
-  $chat-errors-padding-inline,
-  $chat-error-padding-block,
-  $chat-errors-row-gap,
-  $chat-error-icon-size,
-  $chat-error-content-column-gap,
+@include chat-alertlist(
+  $chat-alertlist-color,
+  $chat-alerts-padding-block,
+  $chat-alerts-padding-inline,
+  $chat-alert-padding-block,
+  $chat-alerts-row-gap,
+  $chat-alert-icon-size,
+  $chat-alert-content-column-gap,
 );
 @include chat-messagebox(
   $chat-messagebox-padding,
@@ -68,4 +68,22 @@
   $chat-messagelist-day-header-color,
   $chat-messagelist-day-header-padding-bottom,
   $chat-messagelist-day-header-first-padding-top,
+);
+@include chat-typingindicator(
+  $chat-typingindicator-template,
+  $chat-typingindicator-padding,
+  $chat-typingindicator-row-gap,
+  $chat-typingindicator-column-gap,
+  $chat-typingindicator-font-size,
+  $chat-typingindicator-color,
+  $chat-typingindicator-bubble-padding-block,
+  $chat-typingindicator-bubble-padding-inline,
+  $chat-typingindicator-bubble-border-radius,
+  $chat-typingindicator-bubble-bg-color,
+  $chat-typingindicator-bubble-column-gap,
+  $chat-typingindicator-circle-size,
+  $chat-typingindicator-circle-size-center,
+  $chat-typingindicator-circle-border-radius,
+  $chat-typingindicator-circle-bg-color,
+  $chat-typingindicator-circle-bg-color-center,
 );

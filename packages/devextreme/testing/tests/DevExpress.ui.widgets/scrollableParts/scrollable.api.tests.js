@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
-import { getElementOverflowY, getElementOverflowX } from 'renovation/ui/scroll_view/utils/get_element_style';
-import { getScrollbarSize } from 'renovation/ui/scroll_view/utils/get_scrollbar_size';
+import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
+import { getElementOverflowY, getElementOverflowX } from '__internal/ui/scroll_view/utils/get_element_style';
+import { getScrollbarSize } from '__internal/ui/scroll_view/utils/get_scrollbar_size';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import config from 'core/config';
 import pointerMock from '../../../helpers/pointerMock.js';
@@ -28,7 +28,7 @@ import {
     DIRECTION_VERTICAL,
     DIRECTION_BOTH,
     SCROLLABLE_WRAPPER_CLASS
-} from 'renovation/ui/scroll_view/common/consts.js';
+} from '__internal/ui/scroll_view/consts.js';
 
 
 const moduleConfig = {

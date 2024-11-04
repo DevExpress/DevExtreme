@@ -5,13 +5,14 @@ import dxScheduler, {
     Properties
 } from "devextreme/ui/scheduler";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, AppointmentTemplateData, AppointmentTooltipTemplateData, dxSchedulerScrolling } from "devextreme/ui/scheduler";
+import type { ViewType, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, AllDayPanelMode, AppointmentTemplateData, AppointmentTooltipTemplateData, CellAppointmentsLimit, dxSchedulerScrolling } from "devextreme/ui/scheduler";
 import type { event } from "devextreme/events/index";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
+import type { ScrollMode, FirstDayOfWeek, Orientation } from "devextreme/common";
 import type { template } from "devextreme/core/templates/template";
 
 import type dxSortable from "devextreme/ui/sortable";
@@ -60,9 +61,9 @@ type ISchedulerOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, I
   timeCellRender?: (...params: any) => React.ReactNode;
   timeCellComponent?: React.ComponentType<any>;
   defaultCurrentDate?: Date | number | string;
-  defaultCurrentView?: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek";
+  defaultCurrentView?: ViewType;
   onCurrentDateChange?: (value: Date | number | string) => void;
-  onCurrentViewChange?: (value: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek") => void;
+  onCurrentViewChange?: (value: ViewType) => void;
 }>
 
 interface SchedulerRef {
@@ -172,15 +173,18 @@ type IAppointmentDraggingProps = React.PropsWithChildren<{
   scrollSensitivity?: number;
   scrollSpeed?: number;
 }>
-const _componentAppointmentDragging = memo(
-  (props: IAppointmentDraggingProps) => {
-    return React.createElement(NestedOption<IAppointmentDraggingProps>, { ...props });
-  }
-);
+const _componentAppointmentDragging = (props: IAppointmentDraggingProps) => {
+  return React.createElement(NestedOption<IAppointmentDraggingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "appointmentDragging",
+    },
+  });
+};
 
-const AppointmentDragging: typeof _componentAppointmentDragging & IElementDescriptor = Object.assign(_componentAppointmentDragging, {
-  OptionName: "appointmentDragging",
-})
+const AppointmentDragging = Object.assign<typeof _componentAppointmentDragging, NestedComponentMeta>(_componentAppointmentDragging, {
+  componentType: "option",
+});
 
 // owners:
 // Scheduler
@@ -192,15 +196,18 @@ type IEditingProps = React.PropsWithChildren<{
   allowTimeZoneEditing?: boolean;
   allowUpdating?: boolean;
 }>
-const _componentEditing = memo(
-  (props: IEditingProps) => {
-    return React.createElement(NestedOption<IEditingProps>, { ...props });
-  }
-);
+const _componentEditing = (props: IEditingProps) => {
+  return React.createElement(NestedOption<IEditingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "editing",
+    },
+  });
+};
 
-const Editing: typeof _componentEditing & IElementDescriptor = Object.assign(_componentEditing, {
-  OptionName: "editing",
-})
+const Editing = Object.assign<typeof _componentEditing, NestedComponentMeta>(_componentEditing, {
+  componentType: "option",
+});
 
 // owners:
 // Scheduler
@@ -214,38 +221,44 @@ type IResourceProps = React.PropsWithChildren<{
   useColorAsDefault?: boolean;
   valueExpr?: (() => void) | string;
 }>
-const _componentResource = memo(
-  (props: IResourceProps) => {
-    return React.createElement(NestedOption<IResourceProps>, { ...props });
-  }
-);
+const _componentResource = (props: IResourceProps) => {
+  return React.createElement(NestedOption<IResourceProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "resources",
+      IsCollectionItem: true,
+    },
+  });
+};
 
-const Resource: typeof _componentResource & IElementDescriptor = Object.assign(_componentResource, {
-  OptionName: "resources",
-  IsCollectionItem: true,
-})
+const Resource = Object.assign<typeof _componentResource, NestedComponentMeta>(_componentResource, {
+  componentType: "option",
+});
 
 // owners:
 // Scheduler
 // View
 type IScrollingProps = React.PropsWithChildren<{
-  mode?: "standard" | "virtual";
+  mode?: ScrollMode;
 }>
-const _componentScrolling = memo(
-  (props: IScrollingProps) => {
-    return React.createElement(NestedOption<IScrollingProps>, { ...props });
-  }
-);
+const _componentScrolling = (props: IScrollingProps) => {
+  return React.createElement(NestedOption<IScrollingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "scrolling",
+    },
+  });
+};
 
-const Scrolling: typeof _componentScrolling & IElementDescriptor = Object.assign(_componentScrolling, {
-  OptionName: "scrolling",
-})
+const Scrolling = Object.assign<typeof _componentScrolling, NestedComponentMeta>(_componentScrolling, {
+  componentType: "option",
+});
 
 // owners:
 // Scheduler
 type IViewProps = React.PropsWithChildren<{
   agendaDuration?: number;
-  allDayPanelMode?: "all" | "allDay" | "hidden";
+  allDayPanelMode?: AllDayPanelMode;
   appointmentCollectorTemplate?: ((data: { appointmentCount: number, isCompact: boolean }, collectorElement: any) => string | any) | template;
   appointmentTemplate?: ((model: AppointmentTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template;
   appointmentTooltipTemplate?: ((model: AppointmentTooltipTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template;
@@ -254,12 +267,12 @@ type IViewProps = React.PropsWithChildren<{
   dateCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
   dropDownAppointmentTemplate?: ((itemData: any, itemIndex: number, contentElement: any) => string | any) | template;
   endDayHour?: number;
-  firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  firstDayOfWeek?: FirstDayOfWeek;
   groupByDate?: boolean;
-  groupOrientation?: "horizontal" | "vertical";
+  groupOrientation?: Orientation;
   groups?: Array<string>;
   intervalCount?: number;
-  maxAppointmentsPerCell?: number | "auto" | "unlimited";
+  maxAppointmentsPerCell?: CellAppointmentsLimit | number;
   name?: string;
   offset?: number;
   resourceCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
@@ -267,7 +280,7 @@ type IViewProps = React.PropsWithChildren<{
   startDate?: Date | number | string;
   startDayHour?: number;
   timeCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
-  type?: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek";
+  type?: ViewType;
   appointmentCollectorRender?: (...params: any) => React.ReactNode;
   appointmentCollectorComponent?: React.ComponentType<any>;
   appointmentRender?: (...params: any) => React.ReactNode;
@@ -285,52 +298,55 @@ type IViewProps = React.PropsWithChildren<{
   timeCellRender?: (...params: any) => React.ReactNode;
   timeCellComponent?: React.ComponentType<any>;
 }>
-const _componentView = memo(
-  (props: IViewProps) => {
-    return React.createElement(NestedOption<IViewProps>, { ...props });
-  }
-);
+const _componentView = (props: IViewProps) => {
+  return React.createElement(NestedOption<IViewProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "views",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        scrolling: { optionName: "scrolling", isCollectionItem: false }
+      },
+      TemplateProps: [{
+        tmplOption: "appointmentCollectorTemplate",
+        render: "appointmentCollectorRender",
+        component: "appointmentCollectorComponent"
+      }, {
+        tmplOption: "appointmentTemplate",
+        render: "appointmentRender",
+        component: "appointmentComponent"
+      }, {
+        tmplOption: "appointmentTooltipTemplate",
+        render: "appointmentTooltipRender",
+        component: "appointmentTooltipComponent"
+      }, {
+        tmplOption: "dataCellTemplate",
+        render: "dataCellRender",
+        component: "dataCellComponent"
+      }, {
+        tmplOption: "dateCellTemplate",
+        render: "dateCellRender",
+        component: "dateCellComponent"
+      }, {
+        tmplOption: "dropDownAppointmentTemplate",
+        render: "dropDownAppointmentRender",
+        component: "dropDownAppointmentComponent"
+      }, {
+        tmplOption: "resourceCellTemplate",
+        render: "resourceCellRender",
+        component: "resourceCellComponent"
+      }, {
+        tmplOption: "timeCellTemplate",
+        render: "timeCellRender",
+        component: "timeCellComponent"
+      }],
+    },
+  });
+};
 
-const View: typeof _componentView & IElementDescriptor = Object.assign(_componentView, {
-  OptionName: "views",
-  IsCollectionItem: true,
-  ExpectedChildren: {
-    scrolling: { optionName: "scrolling", isCollectionItem: false }
-  },
-  TemplateProps: [{
-    tmplOption: "appointmentCollectorTemplate",
-    render: "appointmentCollectorRender",
-    component: "appointmentCollectorComponent"
-  }, {
-    tmplOption: "appointmentTemplate",
-    render: "appointmentRender",
-    component: "appointmentComponent"
-  }, {
-    tmplOption: "appointmentTooltipTemplate",
-    render: "appointmentTooltipRender",
-    component: "appointmentTooltipComponent"
-  }, {
-    tmplOption: "dataCellTemplate",
-    render: "dataCellRender",
-    component: "dataCellComponent"
-  }, {
-    tmplOption: "dateCellTemplate",
-    render: "dateCellRender",
-    component: "dateCellComponent"
-  }, {
-    tmplOption: "dropDownAppointmentTemplate",
-    render: "dropDownAppointmentRender",
-    component: "dropDownAppointmentComponent"
-  }, {
-    tmplOption: "resourceCellTemplate",
-    render: "resourceCellRender",
-    component: "resourceCellComponent"
-  }, {
-    tmplOption: "timeCellTemplate",
-    render: "timeCellRender",
-    component: "timeCellComponent"
-  }],
-})
+const View = Object.assign<typeof _componentView, NestedComponentMeta>(_componentView, {
+  componentType: "option",
+});
 
 export default Scheduler;
 export {

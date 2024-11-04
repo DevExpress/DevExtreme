@@ -9,7 +9,7 @@ import { getHeight } from '@js/core/utils/size';
 import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
 import { addNamespace } from '@js/events/utils/index';
-import { convertToLocation } from '@js/renovation/ui/scroll_view/utils/convert_location';
+import { convertToLocation } from '@ts/ui/scroll_view/utils/convert_location';
 
 import Scrollable from '../scroll_view/m_scrollable';
 
@@ -89,7 +89,6 @@ class DateViewRoller extends Scrollable {
 
   _renderItems() {
     const items = this.option('items') || [];
-    // @ts-expect-error
     let $items = $();
 
     $(this.content()).empty();

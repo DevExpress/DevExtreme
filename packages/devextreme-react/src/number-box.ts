@@ -5,11 +5,12 @@ import dxNumberBox, {
     Properties
 } from "devextreme/ui/number_box";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/number_box";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
+import type { TextEditorButtonLocation, Format as CommonFormat, ButtonStyle, ButtonType } from "devextreme/common";
 import type { template } from "devextreme/core/templates/template";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -86,23 +87,26 @@ const NumberBox = memo(
 // owners:
 // NumberBox
 type IButtonProps = React.PropsWithChildren<{
-  location?: "after" | "before";
+  location?: TextEditorButtonLocation;
   name?: string;
   options?: dxButtonOptions;
 }>
-const _componentButton = memo(
-  (props: IButtonProps) => {
-    return React.createElement(NestedOption<IButtonProps>, { ...props });
-  }
-);
+const _componentButton = (props: IButtonProps) => {
+  return React.createElement(NestedOption<IButtonProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "buttons",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        options: { optionName: "options", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Button: typeof _componentButton & IElementDescriptor = Object.assign(_componentButton, {
-  OptionName: "buttons",
-  IsCollectionItem: true,
-  ExpectedChildren: {
-    options: { optionName: "options", isCollectionItem: false }
-  },
-})
+const Button = Object.assign<typeof _componentButton, NestedComponentMeta>(_componentButton, {
+  componentType: "option",
+});
 
 // owners:
 // NumberBox
@@ -111,18 +115,21 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
-const _componentFormat = memo(
-  (props: IFormatProps) => {
-    return React.createElement(NestedOption<IFormatProps>, { ...props });
-  }
-);
+const _componentFormat = (props: IFormatProps) => {
+  return React.createElement(NestedOption<IFormatProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "format",
+    },
+  });
+};
 
-const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_componentFormat, {
-  OptionName: "format",
-})
+const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_componentFormat, {
+  componentType: "option",
+});
 
 // owners:
 // Button
@@ -143,11 +150,11 @@ type IOptionsProps = React.PropsWithChildren<{
   onInitialized?: ((e: ButtonInitializedEvent) => void);
   onOptionChanged?: ((e: OptionChangedEvent) => void);
   rtlEnabled?: boolean;
-  stylingMode?: "text" | "outlined" | "contained";
+  stylingMode?: ButtonStyle;
   tabIndex?: number;
   template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template;
   text?: string;
-  type?: "danger" | "default" | "normal" | "success";
+  type?: ButtonType | string;
   useSubmitBehavior?: boolean;
   validationGroup?: string;
   visible?: boolean;
@@ -155,20 +162,23 @@ type IOptionsProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentOptions = memo(
-  (props: IOptionsProps) => {
-    return React.createElement(NestedOption<IOptionsProps>, { ...props });
-  }
-);
+const _componentOptions = (props: IOptionsProps) => {
+  return React.createElement(NestedOption<IOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "options",
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
 
-const Options: typeof _componentOptions & IElementDescriptor = Object.assign(_componentOptions, {
-  OptionName: "options",
-  TemplateProps: [{
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-})
+const Options = Object.assign<typeof _componentOptions, NestedComponentMeta>(_componentOptions, {
+  componentType: "option",
+});
 
 export default NumberBox;
 export {

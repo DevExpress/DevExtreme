@@ -10,6 +10,7 @@ import messageLocalization from '@js/localization/message';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 
+import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
 import { registerKeyboardAction } from '../m_accessibility';
 import { ColumnsView } from '../views/m_columns_view';
 
@@ -144,10 +145,8 @@ export class ColumnHeadersView extends ColumnsView {
       eventsEngine.on($link, 'click', this.createAction(() => columnChooserView.showColumnChooser()));
 
       $cellContent
-      // @ts-expect-error
         .append(domAdapter.createTextNode(leftPart))
         .append($link)
-      // @ts-expect-error
         .append(domAdapter.createTextNode(rightPart));
     } else {
       $cellContent.text(textEmpty);
@@ -610,19 +609,21 @@ export class ColumnHeadersView extends ColumnsView {
     return this._columnsController && this._columnsController.getRowCount();
   }
 
-  public setRowsOpacity(columnIndex, value, rowIndex?) {
+  public toggleDraggableColumnClass(columnIndex, value, rowIndex?) {
     let i;
     let columnElements;
     const rowCount = this.getRowCount();
     const columns = this._columnsController.getColumns();
     const column = columns && columns[columnIndex];
     const columnID = column && column.isBand && column.index;
-    const setColumnOpacity = (column, index) => {
+    const setColumnClass = (column, index) => {
       if (column.ownerBand === columnID) {
-        columnElements.eq(index).css({ opacity: value });
+        columnElements
+          .eq(index)
+          .toggleClass(this.addWidgetPrefix(REORDERING_CLASSES.draggableColumn), value);
 
         if (column.isBand) {
-          this.setRowsOpacity(column.index, value, i + 1);
+          this.toggleDraggableColumnClass(column.index, value, i + 1);
         }
       }
     };
@@ -634,7 +635,7 @@ export class ColumnHeadersView extends ColumnsView {
 
         if (columnElements) {
           const rowColumns = this.getColumns(i);
-          rowColumns.forEach(setColumnOpacity);
+          rowColumns.forEach(setColumnClass);
         }
       }
     }

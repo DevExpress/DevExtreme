@@ -21,7 +21,6 @@ const activateStrategy = function () {
   if (activated) {
     return;
   }
-  // @ts-expect-error
   MouseStrategy.activate();
 
   activated = true;
@@ -66,7 +65,6 @@ const MouseAndTouchStrategy = BaseStrategy.inherit({
   },
 
   _fireEvent(args) {
-    // @ts-expect-error
     const normalizer = isMouseEvent(args.originalEvent) ? MouseStrategy.normalize : TouchStrategy.normalize;
 
     return this.callBase(extend(normalizer(args.originalEvent), args));
@@ -80,9 +78,7 @@ const MouseAndTouchStrategy = BaseStrategy.inherit({
   },
 });
 
-// @ts-expect-error
 MouseAndTouchStrategy.map = eventMap;
-// @ts-expect-error
 MouseAndTouchStrategy.resetObserver = MouseStrategy.resetObserver;
 
 export default MouseAndTouchStrategy;

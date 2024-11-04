@@ -32,14 +32,36 @@ export type InitializedEvent = InitializedEventInfo<dxChat>;
 export type OptionChangedEvent = EventInfo<dxChat> & ChangedOptionInfo;
 
 /**
- * @docid _ui_chat_MessageSendEvent
+ * @docid _ui_chat_MessageEnteredEvent
  * @public
  * @type object
  * @inherits NativeEventInfo
  */
-export type MessageSendEvent = NativeEventInfo<dxChat, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
-    /** @docid _ui_chat_MessageSendEvent.message */
+export type MessageEnteredEvent = NativeEventInfo<dxChat, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+    /** @docid _ui_chat_MessageEnteredEvent.message */
     readonly message?: Message;
+};
+
+/**
+ * @docid _ui_chat_TypingStartEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
+export type TypingStartEvent = NativeEventInfo<dxChat, UIEvent & { target: HTMLInputElement }> & {
+    /** @docid _ui_chat_TypingStartEvent.user */
+    readonly user?: User;
+};
+
+/**
+ * @docid _ui_chat_TypingEndEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type TypingEndEvent = EventInfo<dxChat> & {
+    /** @docid _ui_chat_TypingEndEvent.user */
+    readonly user?: User;
 };
 
 /**
@@ -65,6 +87,12 @@ export type User = {
      * @public
      */
     avatarUrl?: string;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    avatarAlt?: string;
 };
 
 /**
@@ -72,7 +100,7 @@ export type User = {
  * @namespace DevExpress.ui.dxChat
  * @public
  */
-export type ChatError = {
+export type Alert = {
     /**
      * @docid
      * @public
@@ -92,6 +120,11 @@ export type ChatError = {
  * @public
  */
 export type Message = {
+    /**
+     * @docid
+     * @public
+     */
+    id?: number | string;
     /**
      * @docid
      * @default undefined
@@ -164,18 +197,70 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     dataSource?: DataSourceLike<Message> | null;
     /**
      * @docid
+     * @default true
+     * @public
+     */
+    reloadOnChange?: boolean;
+    /**
+     * @docid
      * @default undefined
      * @public
      */
-    errors?: Array<ChatError>;
+    alerts?: Array<Alert>;
     /**
      * @docid
-     * @default null
-     * @type_function_param1 e:{ui/chat:MessageSendEvent}
+     * @default []
+     * @public
+     */
+    typingUsers?: Array<User>;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    showDayHeaders?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    showUserName?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    showAvatar?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    showMessageTimestamp?: boolean;
+    /**
+     * @docid
+     * @default undefined
+     * @type_function_param1 e:{ui/chat:MessageEnteredEvent}
      * @action
      * @public
      */
-    onMessageSend?: ((e: MessageSendEvent) => void);
+    onMessageEntered?: ((e: MessageEnteredEvent) => void);
+    /**
+     * @docid
+     * @default undefined
+     * @type_function_param1 e:{ui/chat:TypingStartEvent}
+     * @action
+     * @public
+     */
+    onTypingStart?: ((e: TypingEndEvent) => void);
+    /**
+     * @docid
+     * @default undefined
+     * @type_function_param1 e:{ui/chat:TypingEndEvent}
+     * @action
+     * @public
+     */
+    onTypingEnd?: ((e: TypingEndEvent) => void);
 }
 
 /**
@@ -212,7 +297,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut' >;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMessageSend'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMessageEntered' | 'onTypingStart' | 'onTypingEnd'>;
 
 /**
 * @hidden

@@ -1049,7 +1049,6 @@ class DateRangeBox extends Editor<Properties> {
           this._applyCustomValidation(newValue);
 
           this._updateDateBoxesValue(newValue);
-          // @ts-expect-error
           this.getStartDateBox().getStrategy().renderValue();
           this._toggleEmptinessState();
 

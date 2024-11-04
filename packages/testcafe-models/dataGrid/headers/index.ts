@@ -18,6 +18,10 @@ export default class Headers extends FocusableElement {
     this.widgetName = widgetName;
   }
 
+  getContent(): Selector {
+    return this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.content)}:not(.${Widget.addClassPrefix(this.widgetName, CLASS.contentFixed)})`);
+  }
+
   getHeaderRow(index: number): HeaderRow {
     return new HeaderRow(this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.content)}:not(.${Widget.addClassPrefix(this.widgetName, CLASS.contentFixed)}) .${CLASS.headerRow}:nth-child(${index + 1})`), this.widgetName);
   }

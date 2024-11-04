@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import {Chat, ChatTypes} from 'devextreme-react/chat'
 import type {Meta, StoryObj} from '@storybook/react';
 import DataSource from 'devextreme/data/data_source';
@@ -36,7 +36,7 @@ export const Overview: Story = {
     args: {
         items: initialMessages,
         user: firstAuthor,
-        errors: [],
+        alerts: [],
         ...commonArgs,
     },
     argTypes: {
@@ -52,7 +52,7 @@ export const Overview: Story = {
         hint: {
             control: 'text',
         },
-        errors: {
+        alerts: {
             control: 'select',
             options: ['None', 'One error', 'One error with long text', 'Three errors'],
             mapping: {
@@ -77,7 +77,7 @@ export const Overview: Story = {
         rtlEnabled,
         user,
         items,
-        errors,
+        alerts,
         visible,
         hint,
         activeStateEnabled,
@@ -86,7 +86,7 @@ export const Overview: Story = {
     }) => {
         const [messages, setMessages] = useState(items);
         
-        const onMessageSend = useCallback(({ message }) => {
+        const onMessageEntered = useCallback(({ message }) => {
             const updatedMessages = [...messages, message];
 
             setMessages(updatedMessages);
@@ -95,7 +95,7 @@ export const Overview: Story = {
         useEffect(() => {
             setMessages(items);
         }, [items]);
-        
+
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Chat
@@ -105,8 +105,8 @@ export const Overview: Story = {
                     disabled={disabled}
                     rtlEnabled={rtlEnabled}
                     user={user}
-                    errors={errors}
-                    onMessageSend={onMessageSend}
+                    alerts={alerts}
+                    onMessageEntered={onMessageEntered}
                     visible={visible}
                     hint={hint}
                     activeStateEnabled={activeStateEnabled}
@@ -155,14 +155,13 @@ export const EmptyView: Story = {
     }) => {
         const [messages, setMessages] = useState(items);
         
-        const onMessageSend = useCallback(({ message }) => {
+        const onMessageEntered = useCallback(({ message }) => {
             const updatedMessages = [...messages, message];
 
             setMessages(updatedMessages);
         }, [messages]);
 
         useEffect(() => {
-            console.log(2);
             setMessages(items);
         }, [items]);
 
@@ -176,7 +175,7 @@ export const EmptyView: Story = {
                     disabled={disabled}
                     rtlEnabled={rtlEnabled}
                     user={user}
-                    onMessageSend={onMessageSend}
+                    onMessageEntered={onMessageEntered}
                     visible={visible}
                     hint={hint}
                     activeStateEnabled={activeStateEnabled}
@@ -191,8 +190,8 @@ export const EmptyView: Story = {
 
 export const DataLoading: Story = {
     args: {
-        items: initialMessages,
         user: firstAuthor,
+        reloadOnChange: true,
         ...commonArgs,
     },
     argTypes: {
@@ -214,37 +213,59 @@ export const DataLoading: Story = {
         height,
         disabled,
         rtlEnabled,
+        reloadOnChange,
         user,
         visible,
         hint,
         activeStateEnabled,
         hoverStateEnabled,
         focusStateEnabled,
-    }) => {       
-        const dataSource = new DataSource({
+    }) => {
+        const messagesRef = React.useRef([...initialMessages]);
+
+        const dataSource = useMemo(() => new DataSource({
             store: new CustomStore({
                 load: () => {
-                  const promise = new Promise((resolve) => {
-                    setTimeout(() => {
-                      resolve(initialMessages);
-                    }, 3000);
-                  });
-          
-                  return promise;
+                    const promise = new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve([...messagesRef.current]);
+                        }, 500);
+                    });
+            
+                    return promise;
+                },
+                insert: (message) => {
+                    messagesRef.current.push(message);
+    
+                    const promise = new Promise<void>((resolve) => {
+                        setTimeout(() => {
+                            resolve();
+                        }, 200);
+                    });
+              
+                    return promise;
                 },
             }),
             paginate: false,
-        });
+        }), []);
         
+        const onMessageEntered = useCallback((e) => {
+            if(!reloadOnChange) {
+                e.component.getDataSource().store().push([{ type: 'insert', data: e.message }]);
+            }
+        }, [reloadOnChange]);
+
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Chat
                     width={width}
                     height={height}
                     dataSource={dataSource}
+                    reloadOnChange={reloadOnChange}
                     disabled={disabled}
                     rtlEnabled={rtlEnabled}
                     user={user}
+                    onMessageEntered={onMessageEntered}
                     visible={visible}
                     hint={hint}
                     activeStateEnabled={activeStateEnabled}
@@ -294,7 +315,7 @@ export const PopupIntegration: Story = {
     }) => {
         const [messages, setMessages] = useState(items);
         
-        const onMessageSend = useCallback(({ message }) => {
+        const onMessageEntered = useCallback(({ message }) => {
             setMessages((prevMessages) => [...prevMessages, message]);
         }, []);
         
@@ -322,7 +343,7 @@ export const PopupIntegration: Story = {
                     disabled={disabled}
                     rtlEnabled={rtlEnabled}
                     user={user}
-                    onMessageSend={onMessageSend}
+                    onMessageEntered={onMessageEntered}
                     visible={visible}
                     hint={hint}
                     activeStateEnabled={activeStateEnabled}
@@ -331,6 +352,41 @@ export const PopupIntegration: Story = {
                 >
                 </Chat>
             </Popup>
+        );
+    }
+}
+
+export const Customization: Story = {
+    args: {
+        width: 500,
+        height: 600,
+        showDayHeaders: true,
+        showAvatar: true,
+        showUserName: true,
+        showMessageTimestamp: true,
+    },
+    render: ({
+        width,
+        height,
+        showDayHeaders,
+        showAvatar,
+        showUserName,
+        showMessageTimestamp,
+    }) => {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Chat
+                    width={width}
+                    height={height}
+                    items={initialMessages}
+                    user={secondAuthor}
+                    showDayHeaders={showDayHeaders}
+                    showAvatar={showAvatar}
+                    showUserName={showUserName}
+                    showMessageTimestamp={showMessageTimestamp}
+                >
+                </Chat>
+            </div>
         );
     }
 }

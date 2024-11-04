@@ -6,15 +6,15 @@ import dxTreeView, {
     Properties
 } from "devextreme/ui/tree_view";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxTreeViewItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, SelectAllValueChangedEvent } from "devextreme/ui/tree_view";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
-import type { ContentReadyEvent as TextBoxContentReadyEvent, DisposingEvent as TextBoxDisposingEvent, InitializedEvent as TextBoxInitializedEvent, OptionChangedEvent as TextBoxOptionChangedEvent, ChangeEvent, CopyEvent, CutEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InputEvent, KeyDownEvent, KeyUpEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_box";
+import type { ContentReadyEvent as TextBoxContentReadyEvent, DisposingEvent as TextBoxDisposingEvent, InitializedEvent as TextBoxInitializedEvent, OptionChangedEvent as TextBoxOptionChangedEvent, TextBoxType, ChangeEvent, CopyEvent, CutEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InputEvent, KeyDownEvent, KeyUpEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_box";
+import type { TextEditorButtonLocation, ButtonStyle, ButtonType, TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorStyle, ValidationMessageMode, Position, ValidationStatus } from "devextreme/common";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { template } from "devextreme/core/templates/template";
-import type { TextEditorButton } from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -98,23 +98,26 @@ const TreeView = memo(
 // owners:
 // SearchEditorOptions
 type IButtonProps = React.PropsWithChildren<{
-  location?: "after" | "before";
+  location?: TextEditorButtonLocation;
   name?: string;
   options?: dxButtonOptions;
 }>
-const _componentButton = memo(
-  (props: IButtonProps) => {
-    return React.createElement(NestedOption<IButtonProps>, { ...props });
-  }
-);
+const _componentButton = (props: IButtonProps) => {
+  return React.createElement(NestedOption<IButtonProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "buttons",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        options: { optionName: "options", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Button: typeof _componentButton & IElementDescriptor = Object.assign(_componentButton, {
-  OptionName: "buttons",
-  IsCollectionItem: true,
-  ExpectedChildren: {
-    options: { optionName: "options", isCollectionItem: false }
-  },
-})
+const Button = Object.assign<typeof _componentButton, NestedComponentMeta>(_componentButton, {
+  componentType: "option",
+});
 
 // owners:
 // TreeView
@@ -134,21 +137,24 @@ type IItemProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentItem = memo(
-  (props: IItemProps) => {
-    return React.createElement(NestedOption<IItemProps>, { ...props });
-  }
-);
+const _componentItem = (props: IItemProps) => {
+  return React.createElement(NestedOption<IItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
 
-const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  TemplateProps: [{
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-})
+const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
+  componentType: "option",
+});
 
 // owners:
 // Button
@@ -169,11 +175,11 @@ type IOptionsProps = React.PropsWithChildren<{
   onInitialized?: ((e: ButtonInitializedEvent) => void);
   onOptionChanged?: ((e: OptionChangedEvent) => void);
   rtlEnabled?: boolean;
-  stylingMode?: "text" | "outlined" | "contained";
+  stylingMode?: ButtonStyle;
   tabIndex?: number;
   template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template;
   text?: string;
-  type?: "danger" | "default" | "normal" | "success";
+  type?: ButtonType | string;
   useSubmitBehavior?: boolean;
   validationGroup?: string;
   visible?: boolean;
@@ -181,20 +187,23 @@ type IOptionsProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentOptions = memo(
-  (props: IOptionsProps) => {
-    return React.createElement(NestedOption<IOptionsProps>, { ...props });
-  }
-);
+const _componentOptions = (props: IOptionsProps) => {
+  return React.createElement(NestedOption<IOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "options",
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
 
-const Options: typeof _componentOptions & IElementDescriptor = Object.assign(_componentOptions, {
-  OptionName: "options",
-  TemplateProps: [{
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-})
+const Options = Object.assign<typeof _componentOptions, NestedComponentMeta>(_componentOptions, {
+  componentType: "option",
+});
 
 // owners:
 // TreeView
@@ -202,7 +211,7 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   accessKey?: string;
   activeStateEnabled?: boolean;
   bindingOptions?: Record<string, any>;
-  buttons?: Array<string | "clear" | TextEditorButton>;
+  buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
@@ -213,13 +222,13 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   isDirty?: boolean;
   isValid?: boolean;
   label?: string;
-  labelMode?: "static" | "floating" | "hidden" | "outside";
+  labelMode?: LabelMode;
   mask?: string;
   maskChar?: string;
   maskInvalidMessage?: string;
   maskRules?: any;
   maxLength?: number | string;
-  mode?: "email" | "password" | "search" | "tel" | "text" | "url";
+  mode?: TextBoxType;
   name?: string;
   onChange?: ((e: ChangeEvent) => void);
   onContentReady?: ((e: TextBoxContentReadyEvent) => void);
@@ -240,17 +249,17 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   readOnly?: boolean;
   rtlEnabled?: boolean;
   showClearButton?: boolean;
-  showMaskMode?: "always" | "onFocus";
+  showMaskMode?: MaskMode;
   spellcheck?: boolean;
-  stylingMode?: "outlined" | "underlined" | "filled";
+  stylingMode?: EditorStyle;
   tabIndex?: number;
   text?: string;
   useMaskedValue?: boolean;
   validationError?: any;
   validationErrors?: Array<any>;
-  validationMessageMode?: "always" | "auto";
-  validationMessagePosition?: "bottom" | "left" | "right" | "top";
-  validationStatus?: "valid" | "invalid" | "pending";
+  validationMessageMode?: ValidationMessageMode;
+  validationMessagePosition?: Position;
+  validationStatus?: ValidationStatus;
   value?: string;
   valueChangeEvent?: string;
   visible?: boolean;
@@ -258,21 +267,24 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   defaultValue?: string;
   onValueChange?: (value: string) => void;
 }>
-const _componentSearchEditorOptions = memo(
-  (props: ISearchEditorOptionsProps) => {
-    return React.createElement(NestedOption<ISearchEditorOptionsProps>, { ...props });
-  }
-);
+const _componentSearchEditorOptions = (props: ISearchEditorOptionsProps) => {
+  return React.createElement(NestedOption<ISearchEditorOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "searchEditorOptions",
+      DefaultsProps: {
+        defaultValue: "value"
+      },
+      ExpectedChildren: {
+        button: { optionName: "buttons", isCollectionItem: true }
+      },
+    },
+  });
+};
 
-const SearchEditorOptions: typeof _componentSearchEditorOptions & IElementDescriptor = Object.assign(_componentSearchEditorOptions, {
-  OptionName: "searchEditorOptions",
-  DefaultsProps: {
-    defaultValue: "value"
-  },
-  ExpectedChildren: {
-    button: { optionName: "buttons", isCollectionItem: true }
-  },
-})
+const SearchEditorOptions = Object.assign<typeof _componentSearchEditorOptions, NestedComponentMeta>(_componentSearchEditorOptions, {
+  componentType: "option",
+});
 
 export default TreeView;
 export {

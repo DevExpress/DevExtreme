@@ -20,4 +20,6 @@ export function getFieldName(fullName: string): string;
 
 export function getParentName(fullName: string): string;
 
+export function getNestedOptionValue(optionsObject: object, name: string): unknown;
+
 export function createDefaultOptionRules<T>(options?: DefaultOptionsRule<T>[]): DefaultOptionsRule<T>[];

@@ -6,7 +6,7 @@ import dxAccordion, {
     Properties
 } from "devextreme/ui/accordion";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxAccordionItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, ItemTitleClickEvent } from "devextreme/ui/accordion";
@@ -124,25 +124,28 @@ type IItemProps = React.PropsWithChildren<{
   titleRender?: (...params: any) => React.ReactNode;
   titleComponent?: React.ComponentType<any>;
 }>
-const _componentItem = memo(
-  (props: IItemProps) => {
-    return React.createElement(NestedOption<IItemProps>, { ...props });
-  }
-);
+const _componentItem = (props: IItemProps) => {
+  return React.createElement(NestedOption<IItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }, {
+        tmplOption: "titleTemplate",
+        render: "titleRender",
+        component: "titleComponent"
+      }],
+    },
+  });
+};
 
-const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  TemplateProps: [{
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }, {
-    tmplOption: "titleTemplate",
-    render: "titleRender",
-    component: "titleComponent"
-  }],
-})
+const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
+  componentType: "option",
+});
 
 export default Accordion;
 export {

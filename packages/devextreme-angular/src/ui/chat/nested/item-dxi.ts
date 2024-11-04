@@ -36,6 +36,14 @@ export class DxiChatItemComponent extends CollectionNestedOption {
     }
 
     @Input()
+    get id(): number | string {
+        return this._getOption('id');
+    }
+    set id(value: number | string) {
+        this._setOption('id', value);
+    }
+
+    @Input()
     get text(): string {
         return this._getOption('text');
     }

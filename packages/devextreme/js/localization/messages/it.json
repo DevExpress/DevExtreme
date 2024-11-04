@@ -218,6 +218,17 @@
         "dxPager-ariaPageSize": "Page size",
         "dxPager-ariaPageNumber": "Page number",
 
+        "dxPagination-infoText": "Pagina {0} di {1} ({2} elementi)",
+        "dxPagination-pagesCountText": "di",
+        "dxPagination-pageSize": "Items per page: {0}",
+        "dxPagination-pageSizesAllText": "Tutti",
+        "dxPagination-page": "Pagina {0}",
+        "dxPagination-prevPage": "Pagina precedente",
+        "dxPagination-nextPage": "Pagina successiva",
+        "dxPagination-ariaLabel": "Navigazione pagine",
+        "dxPagination-ariaPageSize": "Page size",
+        "dxPagination-ariaPageNumber": "Page number",
+
         "dxPivotGrid-grandTotal": "Totale",
         "dxPivotGrid-total": "{0} Totale",
         "dxPivotGrid-fieldChooserTitle": "Selezione campi",
@@ -246,6 +257,9 @@
         "dxScheduler-editorLabelEndDate": "Data fine",
         "dxScheduler-editorLabelDescription": "Descrizione",
         "dxScheduler-editorLabelRecurrence": "Ripeti",
+
+        "dxScheduler-navigationPrevious": "Previous page",
+        "dxScheduler-navigationNext": "Next page",
 
         "dxScheduler-openAppointment": "Apri appuntamento",
 
@@ -332,9 +346,13 @@
         "dxChat-sendButtonAriaLabel": "Send",
         "dxChat-defaultUserName": "Unknown User",
         "dxChat-messageListAriaLabel": "Message list",
-        "dxChat-errorListAriaLabel": "Error list",
+        "dxChat-alertListAriaLabel": "Error list",
         "dxChat-emptyListMessage": "There are no messages in this chat",
         "dxChat-emptyListPrompt": "Write your first message",
+        "dxChat-typingMessageSingleUser": "{0} is typing...",
+        "dxChat-typingMessageTwoUsers": "{0} and {1} are typing...",
+        "dxChat-typingMessageThreeUsers": "{0}, {1} and {2} are typing...",
+        "dxChat-typingMessageMultipleUsers": "{0} and others are typing...",
 
         "dxColorView-ariaRed": "Rosso",
         "dxColorView-ariaGreen": "Verde",

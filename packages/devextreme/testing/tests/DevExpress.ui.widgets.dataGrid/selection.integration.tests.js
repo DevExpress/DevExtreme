@@ -1,4 +1,4 @@
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import errors from 'ui/widget/ui.errors';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import pointerMock from '../../helpers/pointerMock.js';

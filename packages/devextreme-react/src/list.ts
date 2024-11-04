@@ -6,16 +6,16 @@ import dxList, {
     Properties
 } from "devextreme/ui/list";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxListItem, ContentReadyEvent, DisposingEvent, GroupRenderedEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemDeletedEvent, ItemDeletingEvent, ItemHoldEvent, ItemRenderedEvent, ItemReorderedEvent, ItemSwipeEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectAllValueChangedEvent, SelectionChangingEvent } from "devextreme/ui/list";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, OptionChangedEvent as ButtonOptionChangedEvent, ClickEvent } from "devextreme/ui/button";
-import type { ContentReadyEvent as TextBoxContentReadyEvent, DisposingEvent as TextBoxDisposingEvent, InitializedEvent as TextBoxInitializedEvent, OptionChangedEvent as TextBoxOptionChangedEvent, ChangeEvent, CopyEvent, CutEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InputEvent, KeyDownEvent, KeyUpEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_box";
+import type { ContentReadyEvent as TextBoxContentReadyEvent, DisposingEvent as TextBoxDisposingEvent, InitializedEvent as TextBoxInitializedEvent, OptionChangedEvent as TextBoxOptionChangedEvent, TextBoxType, ChangeEvent, CopyEvent, CutEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InputEvent, KeyDownEvent, KeyUpEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_box";
 import type { DisposingEvent as SortableDisposingEvent, InitializedEvent as SortableInitializedEvent, AddEvent, DragChangeEvent, DragEndEvent, DragMoveEvent, DragStartEvent, OptionChangedEvent, RemoveEvent, ReorderEvent } from "devextreme/ui/sortable";
+import type { TextEditorButtonLocation, DragDirection, DragHighlight, Orientation, ButtonStyle, ButtonType, TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorStyle, ValidationMessageMode, Position, ValidationStatus } from "devextreme/common";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { template } from "devextreme/core/templates/template";
-import type { TextEditorButton } from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -121,23 +121,26 @@ const List = memo(
 // owners:
 // SearchEditorOptions
 type IButtonProps = React.PropsWithChildren<{
-  location?: "after" | "before";
+  location?: TextEditorButtonLocation;
   name?: string;
   options?: dxButtonOptions;
 }>
-const _componentButton = memo(
-  (props: IButtonProps) => {
-    return React.createElement(NestedOption<IButtonProps>, { ...props });
-  }
-);
+const _componentButton = (props: IButtonProps) => {
+  return React.createElement(NestedOption<IButtonProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "buttons",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        options: { optionName: "options", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Button: typeof _componentButton & IElementDescriptor = Object.assign(_componentButton, {
-  OptionName: "buttons",
-  IsCollectionItem: true,
-  ExpectedChildren: {
-    options: { optionName: "options", isCollectionItem: false }
-  },
-})
+const Button = Object.assign<typeof _componentButton, NestedComponentMeta>(_componentButton, {
+  componentType: "option",
+});
 
 // owners:
 // ItemDragging
@@ -145,15 +148,18 @@ type ICursorOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-const _componentCursorOffset = memo(
-  (props: ICursorOffsetProps) => {
-    return React.createElement(NestedOption<ICursorOffsetProps>, { ...props });
-  }
-);
+const _componentCursorOffset = (props: ICursorOffsetProps) => {
+  return React.createElement(NestedOption<ICursorOffsetProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "cursorOffset",
+    },
+  });
+};
 
-const CursorOffset: typeof _componentCursorOffset & IElementDescriptor = Object.assign(_componentCursorOffset, {
-  OptionName: "cursorOffset",
-})
+const CursorOffset = Object.assign<typeof _componentCursorOffset, NestedComponentMeta>(_componentCursorOffset, {
+  componentType: "option",
+});
 
 // owners:
 // List
@@ -170,21 +176,24 @@ type IItemProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentItem = memo(
-  (props: IItemProps) => {
-    return React.createElement(NestedOption<IItemProps>, { ...props });
-  }
-);
+const _componentItem = (props: IItemProps) => {
+  return React.createElement(NestedOption<IItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
 
-const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  TemplateProps: [{
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-})
+const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
+  componentType: "option",
+});
 
 // owners:
 // List
@@ -200,15 +209,15 @@ type IItemDraggingProps = React.PropsWithChildren<{
     y?: number;
   };
   data?: any;
-  dragDirection?: "both" | "horizontal" | "vertical";
+  dragDirection?: DragDirection;
   dragTemplate?: ((dragInfo: { fromIndex: number, itemData: any, itemElement: any }, containerElement: any) => string | any) | template;
-  dropFeedbackMode?: "push" | "indicate";
+  dropFeedbackMode?: DragHighlight;
   elementAttr?: Record<string, any>;
   filter?: string;
   group?: string;
   handle?: string;
   height?: (() => number | string) | number | string;
-  itemOrientation?: "horizontal" | "vertical";
+  itemOrientation?: Orientation;
   moveItemOnDrop?: boolean;
   onAdd?: ((e: AddEvent) => void);
   onDisposing?: ((e: SortableDisposingEvent) => void);
@@ -227,23 +236,26 @@ type IItemDraggingProps = React.PropsWithChildren<{
   dragRender?: (...params: any) => React.ReactNode;
   dragComponent?: React.ComponentType<any>;
 }>
-const _componentItemDragging = memo(
-  (props: IItemDraggingProps) => {
-    return React.createElement(NestedOption<IItemDraggingProps>, { ...props });
-  }
-);
+const _componentItemDragging = (props: IItemDraggingProps) => {
+  return React.createElement(NestedOption<IItemDraggingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "itemDragging",
+      ExpectedChildren: {
+        cursorOffset: { optionName: "cursorOffset", isCollectionItem: false }
+      },
+      TemplateProps: [{
+        tmplOption: "dragTemplate",
+        render: "dragRender",
+        component: "dragComponent"
+      }],
+    },
+  });
+};
 
-const ItemDragging: typeof _componentItemDragging & IElementDescriptor = Object.assign(_componentItemDragging, {
-  OptionName: "itemDragging",
-  ExpectedChildren: {
-    cursorOffset: { optionName: "cursorOffset", isCollectionItem: false }
-  },
-  TemplateProps: [{
-    tmplOption: "dragTemplate",
-    render: "dragRender",
-    component: "dragComponent"
-  }],
-})
+const ItemDragging = Object.assign<typeof _componentItemDragging, NestedComponentMeta>(_componentItemDragging, {
+  componentType: "option",
+});
 
 // owners:
 // List
@@ -251,16 +263,19 @@ type IMenuItemProps = React.PropsWithChildren<{
   action?: ((itemElement: any, itemData: any) => void);
   text?: string;
 }>
-const _componentMenuItem = memo(
-  (props: IMenuItemProps) => {
-    return React.createElement(NestedOption<IMenuItemProps>, { ...props });
-  }
-);
+const _componentMenuItem = (props: IMenuItemProps) => {
+  return React.createElement(NestedOption<IMenuItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "menuItems",
+      IsCollectionItem: true,
+    },
+  });
+};
 
-const MenuItem: typeof _componentMenuItem & IElementDescriptor = Object.assign(_componentMenuItem, {
-  OptionName: "menuItems",
-  IsCollectionItem: true,
-})
+const MenuItem = Object.assign<typeof _componentMenuItem, NestedComponentMeta>(_componentMenuItem, {
+  componentType: "option",
+});
 
 // owners:
 // Button
@@ -281,11 +296,11 @@ type IOptionsProps = React.PropsWithChildren<{
   onInitialized?: ((e: ButtonInitializedEvent) => void);
   onOptionChanged?: ((e: ButtonOptionChangedEvent) => void);
   rtlEnabled?: boolean;
-  stylingMode?: "text" | "outlined" | "contained";
+  stylingMode?: ButtonStyle;
   tabIndex?: number;
   template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template;
   text?: string;
-  type?: "danger" | "default" | "normal" | "success";
+  type?: ButtonType | string;
   useSubmitBehavior?: boolean;
   validationGroup?: string;
   visible?: boolean;
@@ -293,20 +308,23 @@ type IOptionsProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentOptions = memo(
-  (props: IOptionsProps) => {
-    return React.createElement(NestedOption<IOptionsProps>, { ...props });
-  }
-);
+const _componentOptions = (props: IOptionsProps) => {
+  return React.createElement(NestedOption<IOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "options",
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
 
-const Options: typeof _componentOptions & IElementDescriptor = Object.assign(_componentOptions, {
-  OptionName: "options",
-  TemplateProps: [{
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-})
+const Options = Object.assign<typeof _componentOptions, NestedComponentMeta>(_componentOptions, {
+  componentType: "option",
+});
 
 // owners:
 // List
@@ -314,7 +332,7 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   accessKey?: string;
   activeStateEnabled?: boolean;
   bindingOptions?: Record<string, any>;
-  buttons?: Array<string | "clear" | TextEditorButton>;
+  buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
@@ -325,13 +343,13 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   isDirty?: boolean;
   isValid?: boolean;
   label?: string;
-  labelMode?: "static" | "floating" | "hidden" | "outside";
+  labelMode?: LabelMode;
   mask?: string;
   maskChar?: string;
   maskInvalidMessage?: string;
   maskRules?: any;
   maxLength?: number | string;
-  mode?: "email" | "password" | "search" | "tel" | "text" | "url";
+  mode?: TextBoxType;
   name?: string;
   onChange?: ((e: ChangeEvent) => void);
   onContentReady?: ((e: TextBoxContentReadyEvent) => void);
@@ -352,17 +370,17 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   readOnly?: boolean;
   rtlEnabled?: boolean;
   showClearButton?: boolean;
-  showMaskMode?: "always" | "onFocus";
+  showMaskMode?: MaskMode;
   spellcheck?: boolean;
-  stylingMode?: "outlined" | "underlined" | "filled";
+  stylingMode?: EditorStyle;
   tabIndex?: number;
   text?: string;
   useMaskedValue?: boolean;
   validationError?: any;
   validationErrors?: Array<any>;
-  validationMessageMode?: "always" | "auto";
-  validationMessagePosition?: "bottom" | "left" | "right" | "top";
-  validationStatus?: "valid" | "invalid" | "pending";
+  validationMessageMode?: ValidationMessageMode;
+  validationMessagePosition?: Position;
+  validationStatus?: ValidationStatus;
   value?: string;
   valueChangeEvent?: string;
   visible?: boolean;
@@ -370,21 +388,24 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   defaultValue?: string;
   onValueChange?: (value: string) => void;
 }>
-const _componentSearchEditorOptions = memo(
-  (props: ISearchEditorOptionsProps) => {
-    return React.createElement(NestedOption<ISearchEditorOptionsProps>, { ...props });
-  }
-);
+const _componentSearchEditorOptions = (props: ISearchEditorOptionsProps) => {
+  return React.createElement(NestedOption<ISearchEditorOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "searchEditorOptions",
+      DefaultsProps: {
+        defaultValue: "value"
+      },
+      ExpectedChildren: {
+        button: { optionName: "buttons", isCollectionItem: true }
+      },
+    },
+  });
+};
 
-const SearchEditorOptions: typeof _componentSearchEditorOptions & IElementDescriptor = Object.assign(_componentSearchEditorOptions, {
-  OptionName: "searchEditorOptions",
-  DefaultsProps: {
-    defaultValue: "value"
-  },
-  ExpectedChildren: {
-    button: { optionName: "buttons", isCollectionItem: true }
-  },
-})
+const SearchEditorOptions = Object.assign<typeof _componentSearchEditorOptions, NestedComponentMeta>(_componentSearchEditorOptions, {
+  componentType: "option",
+});
 
 export default List;
 export {

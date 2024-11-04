@@ -6,10 +6,11 @@ import dxToolbar, {
     Properties
 } from "devextreme/ui/toolbar";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { dxToolbarItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent } from "devextreme/ui/toolbar";
+import type { dxToolbarItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
+import type { ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
 import type { template } from "devextreme/core/templates/template";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 
@@ -101,39 +102,42 @@ type IItemProps = React.PropsWithChildren<{
   cssClass?: string;
   disabled?: boolean;
   html?: string;
-  locateInMenu?: "always" | "auto" | "never";
-  location?: "after" | "before" | "center";
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
   menuItemTemplate?: (() => string | any) | template;
   options?: any;
-  showText?: "always" | "inMenu";
+  showText?: ShowTextMode;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
+  widget?: ToolbarItemComponent;
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentItem = memo(
-  (props: IItemProps) => {
-    return React.createElement(NestedOption<IItemProps>, { ...props });
-  }
-);
+const _componentItem = (props: IItemProps) => {
+  return React.createElement(NestedOption<IItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "menuItemTemplate",
+        render: "menuItemRender",
+        component: "menuItemComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
 
-const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  TemplateProps: [{
-    tmplOption: "menuItemTemplate",
-    render: "menuItemRender",
-    component: "menuItemComponent"
-  }, {
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-})
+const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
+  componentType: "option",
+});
 
 export default Toolbar;
 export {

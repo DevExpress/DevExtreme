@@ -3,7 +3,7 @@ import typeUtils from 'core/utils/type';
 import rendererModule from 'viz/core/renderers/renderer';
 import coreRenderer from 'core/renderer';
 import eventsEngine from 'events/core/events_engine';
-import domAdapter from 'core/dom_adapter';
+import domAdapter from '__internal/core/m_dom_adapter';
 import Color from 'color';
 
 let $ = jQuery;

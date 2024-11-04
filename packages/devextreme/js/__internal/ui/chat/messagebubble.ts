@@ -1,12 +1,18 @@
 import $ from '@js/core/renderer';
+import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+
+import type Chat from './chat';
 
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 
 export interface Properties extends WidgetOptions<MessageBubble> {
   text?: string;
+  // eslint-disable-next-line
+  template?: null | any;
+  templateData?: { component?: Chat; message?: Message };
 }
 
 class MessageBubble extends Widget<Properties> {
@@ -14,6 +20,8 @@ class MessageBubble extends Widget<Properties> {
     return {
       ...super._getDefaultOptions(),
       text: '',
+      template: null,
+      templateData: {},
     };
   }
 
@@ -23,11 +31,26 @@ class MessageBubble extends Widget<Properties> {
 
     super._initMarkup();
 
-    this._updateText();
+    this._updateContent();
   }
 
-  _updateText(): void {
-    const { text = '' } = this.option();
+  _updateContent(): void {
+    const {
+      text = '', template = null, templateData,
+    } = this.option();
+
+    if (template) {
+      $(this.element()).empty();
+
+      const messageTemplate = this._getTemplateByOption('template');
+
+      messageTemplate.render({
+        container: this.element(),
+        model: templateData,
+      });
+
+      return;
+    }
 
     $(this.element()).text(text);
   }
@@ -37,7 +60,9 @@ class MessageBubble extends Widget<Properties> {
 
     switch (name) {
       case 'text':
-        this._updateText();
+      case 'template':
+      case 'templateData':
+        this._updateContent();
         break;
       default:
         super._optionChanged(args);

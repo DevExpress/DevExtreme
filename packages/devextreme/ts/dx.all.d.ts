@@ -9320,7 +9320,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonOptions.type]
      */
-    type?: DevExpress.common.ButtonType;
+    type?: DevExpress.common.ButtonType | string;
     /**
      * [descr:dxButtonOptions.useSubmitBehavior]
      */
@@ -9510,14 +9510,14 @@ declare module DevExpress.ui {
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxChat>;
     /**
-     * [descr:_ui_chat_MessageSendEvent]
+     * [descr:_ui_chat_MessageEnteredEvent]
      */
-    export type MessageSendEvent = DevExpress.events.NativeEventInfo<
+    export type MessageEnteredEvent = DevExpress.events.NativeEventInfo<
       dxChat,
       KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
     > & {
       /**
-       * [descr:_ui_chat_MessageSendEvent.message]
+       * [descr:_ui_chat_MessageEnteredEvent.message]
        */
       readonly message?: Message;
     };
@@ -9527,6 +9527,27 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxChat> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxChatOptions;
+    /**
+     * [descr:_ui_chat_TypingEndEvent]
+     */
+    export type TypingEndEvent = DevExpress.events.EventInfo<dxChat> & {
+      /**
+       * [descr:_ui_chat_TypingEndEvent.user]
+       */
+      readonly user?: User;
+    };
+    /**
+     * [descr:_ui_chat_TypingStartEvent]
+     */
+    export type TypingStartEvent = DevExpress.events.NativeEventInfo<
+      dxChat,
+      UIEvent & { target: HTMLInputElement }
+    > & {
+      /**
+       * [descr:_ui_chat_TypingStartEvent.user]
+       */
+      readonly user?: User;
+    };
   }
   /**
    * [descr:dxChatOptions]
@@ -9558,13 +9579,45 @@ declare module DevExpress.ui {
      */
     dataSource?: DevExpress.data.DataSource.DataSourceLike<DevExpress.ui.dxChat.Message> | null;
     /**
-     * [descr:dxChatOptions.errors]
+     * [descr:dxChatOptions.reloadOnChange]
      */
-    errors?: Array<DevExpress.ui.dxChat.ChatError>;
+    reloadOnChange?: boolean;
     /**
-     * [descr:dxChatOptions.onMessageSend]
+     * [descr:dxChatOptions.alerts]
      */
-    onMessageSend?: (e: DevExpress.ui.dxChat.MessageSendEvent) => void;
+    alerts?: Array<DevExpress.ui.dxChat.Alert>;
+    /**
+     * [descr:dxChatOptions.typingUsers]
+     */
+    typingUsers?: Array<DevExpress.ui.dxChat.User>;
+    /**
+     * [descr:dxChatOptions.showDayHeaders]
+     */
+    showDayHeaders?: boolean;
+    /**
+     * [descr:dxChatOptions.showUserName]
+     */
+    showUserName?: boolean;
+    /**
+     * [descr:dxChatOptions.showAvatar]
+     */
+    showAvatar?: boolean;
+    /**
+     * [descr:dxChatOptions.showMessageTimestamp]
+     */
+    showMessageTimestamp?: boolean;
+    /**
+     * [descr:dxChatOptions.onMessageEntered]
+     */
+    onMessageEntered?: (e: DevExpress.ui.dxChat.MessageEnteredEvent) => void;
+    /**
+     * [descr:dxChatOptions.onTypingStart]
+     */
+    onTypingStart?: (e: DevExpress.ui.dxChat.TypingEndEvent) => void;
+    /**
+     * [descr:dxChatOptions.onTypingEnd]
+     */
+    onTypingEnd?: (e: DevExpress.ui.dxChat.TypingEndEvent) => void;
   }
   /**
    * [descr:dxCheckBox]
@@ -19380,6 +19433,10 @@ declare module DevExpress.ui {
      * [descr:dxHtmlEditorOptions.customizeModules]
      */
     customizeModules?: (config: any) => void;
+    /**
+     * [descr:dxHtmlEditorOptions.converter]
+     */
+    converter?: DevExpress.ui.dxHtmlEditor.Converter;
     /**
      * [descr:dxHtmlEditorOptions.focusStateEnabled]
      */
@@ -30659,15 +30716,15 @@ declare module DevExpress.ui.dxButtonGroup {
 }
 declare module DevExpress.ui.dxChat {
   /**
-   * [descr:ChatError]
+   * [descr:Alert]
    */
-  export type ChatError = {
+  export type Alert = {
     /**
-     * [descr:ChatError.id]
+     * [descr:Alert.id]
      */
     id?: number | string;
     /**
-     * [descr:ChatError.message]
+     * [descr:Alert.message]
      */
     message?: string;
   };
@@ -30675,6 +30732,10 @@ declare module DevExpress.ui.dxChat {
    * [descr:Message]
    */
   export type Message = {
+    /**
+     * [descr:Message.id]
+     */
+    id?: number | string;
     /**
      * [descr:Message.timestamp]
      */
@@ -30708,6 +30769,10 @@ declare module DevExpress.ui.dxChat {
      * [descr:User.avatarUrl]
      */
     avatarUrl?: string;
+    /**
+     * [descr:User.avatarAlt]
+     */
+    avatarAlt?: string;
   };
 }
 declare module DevExpress.ui.dxContextMenu {
@@ -30939,6 +31004,19 @@ declare module DevExpress.ui.dxGantt {
 }
 declare module DevExpress.ui.dxHtmlEditor {
   export type ContextMenuItem = dxHtmlEditorTableContextMenuItem;
+  /**
+   * [descr:Converter]
+   */
+  export type Converter = {
+    /**
+     * [descr:Converter.toHtml]
+     */
+    toHtml?: (value: string) => string;
+    /**
+     * [descr:Converter.fromHtml]
+     */
+    fromHtml?: (value: string) => string;
+  };
   export type ImageUploadTab = dxHtmlEditorImageUploadTabItem;
   export type ToolbarItem = dxHtmlEditorToolbarItem;
 }

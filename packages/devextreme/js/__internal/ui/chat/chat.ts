@@ -5,22 +5,28 @@ import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import type { Options as DataSourceOptions } from '@js/data/data_source';
 import DataHelperMixin from '@js/data_helper';
+import type { Format } from '@js/localization';
 import messageLocalization from '@js/localization/message';
 import type {
   Message,
-  MessageSendEvent,
+  MessageEnteredEvent,
   Properties as ChatProperties,
+  TypingEndEvent,
+  TypingStartEvent,
 } from '@js/ui/chat';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import { applyBatch } from '@ts/data/m_array_utils';
 
-import ErrorList from './errorlist';
+import AlertList from './alertlist';
 import ChatHeader from './header';
 import type {
-  MessageSendEvent as MessageBoxMessageSendEvent,
+  MessageEnteredEvent as MessageBoxMessageEnteredEvent,
   Properties as MessageBoxProperties,
+  TypingStartEvent as MessageBoxTypingStartEvent,
 } from './messagebox';
 import MessageBox from './messagebox';
+import type { Change } from './messagelist';
 import MessageList from './messagelist';
 
 const CHAT_CLASS = 'dx-chat';
@@ -28,7 +34,10 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 type Properties = ChatProperties & {
   title: string;
-  showDayHeaders: boolean;
+  // eslint-disable-next-line
+  messageTemplate: any;
+  dayHeaderFormat?: Format;
+  messageTimestampFormat?: Format;
 };
 
 class Chat extends Widget<Properties> {
@@ -38,23 +47,37 @@ class Chat extends Widget<Properties> {
 
   _messageList!: MessageList;
 
-  _errorList!: ErrorList;
+  _alertList!: AlertList;
 
-  _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
+  _messageEnteredAction?: (e: Partial<MessageEnteredEvent>) => void;
+
+  _typingStartAction?: (e: Partial<TypingStartEvent>) => void;
+
+  _typingEndAction?: (e: Partial<TypingEndEvent>) => void;
 
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
+      title: '',
+      showDayHeaders: true,
       activeStateEnabled: true,
       focusStateEnabled: true,
       hoverStateEnabled: true,
-      title: '',
       items: [],
       dataSource: null,
       user: { id: new Guid().toString() },
-      onMessageSend: undefined,
-      showDayHeaders: true,
-      errors: [],
+      dayHeaderFormat: 'shortdate',
+      messageTimestampFormat: 'shorttime',
+      alerts: [],
+      showAvatar: true,
+      showUserName: true,
+      showMessageTimestamp: true,
+      typingUsers: [],
+      onMessageEntered: undefined,
+      reloadOnChange: true,
+      messageTemplate: null,
+      onTypingStart: undefined,
+      onTypingEnd: undefined,
     };
   }
 
@@ -63,19 +86,34 @@ class Chat extends Widget<Properties> {
 
     // @ts-expect-error
     this._initDataController();
-
     // @ts-expect-error
     this._refreshDataSource();
 
-    this._createMessageSendAction();
+    this._createMessageEnteredAction();
+    this._createTypingStartAction();
+    this._createTypingEndAction();
   }
 
   _dataSourceLoadErrorHandler(): void {
     this.option('items', []);
   }
 
-  _dataSourceChangedHandler(newItems: Message[]): void {
-    this.option('items', newItems.slice());
+  _dataSourceChangedHandler(newItems: Message[], e?: { changes?: Change[] }): void {
+    if (e?.changes) {
+      this._messageList._modifyByChanges(e.changes);
+
+      // @ts-expect-error
+      const dataSource = this.getDataSource();
+      // @ts-expect-error
+      applyBatch({
+        // // @ts-expect-error
+        keyInfo: dataSource,
+        data: this.option('items'),
+        changes: e.changes,
+      });
+    } else {
+      this.option('items', newItems.slice());
+    }
   }
 
   _dataSourceLoadingChangedHandler(isLoading: boolean): void {
@@ -98,7 +136,7 @@ class Chat extends Widget<Properties> {
     }
 
     this._renderMessageList();
-    this._renderErrorList();
+    this._renderAlertList();
     this._renderMessageBox();
 
     this._updateRootAria();
@@ -115,10 +153,24 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageList(): void {
-    const { items = [], user, showDayHeaders } = this.option();
+    const {
+      items = [],
+      user,
+      showDayHeaders = false,
+      showAvatar = false,
+      showUserName = false,
+      showMessageTimestamp = false,
+      messageTemplate,
+      dayHeaderFormat,
+      messageTimestampFormat,
+      typingUsers = [],
+    } = this.option();
 
-    const currentUserId = user?.id;
     const $messageList = $('<div>');
+
+    // @ts-expect-error
+    const isLoading = this._dataController.isLoading();
+    const currentUserId = user?.id;
 
     this.$element().append($messageList);
 
@@ -126,20 +178,27 @@ class Chat extends Widget<Properties> {
       items,
       currentUserId,
       showDayHeaders,
-      // @ts-expect-error
-      isLoading: this._dataController.isLoading(),
+      messageTemplate,
+      messageTemplateData: { component: this },
+      showAvatar,
+      showUserName,
+      showMessageTimestamp,
+      dayHeaderFormat,
+      messageTimestampFormat,
+      typingUsers,
+      isLoading,
     });
   }
 
-  _renderErrorList(): void {
+  _renderAlertList(): void {
     const $errors = $('<div>');
 
     this.$element().append($errors);
 
-    const { errors = [] } = this.option();
+    const { alerts = [] } = this.option();
 
-    this._errorList = this._createComponent($errors, ErrorList, {
-      items: errors,
+    this._alertList = this._createComponent($errors, AlertList, {
+      items: alerts,
     });
   }
 
@@ -158,8 +217,14 @@ class Chat extends Widget<Properties> {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
-      onMessageSend: (e) => {
-        this._messageSendHandler(e);
+      onMessageEntered: (e) => {
+        this._messageEnteredHandler(e);
+      },
+      onTypingStart: (e) => {
+        this._typingStartHandler(e);
+      },
+      onTypingEnd: () => {
+        this._typingEndHandler();
       },
     };
 
@@ -181,14 +246,28 @@ class Chat extends Widget<Properties> {
     this._messageBox.updateInputAria(emptyViewId);
   }
 
-  _createMessageSendAction(): void {
-    this._messageSendAction = this._createActionByOption(
-      'onMessageSend',
-      { excludeValidators: ['disabled', 'readOnly'] },
+  _createMessageEnteredAction(): void {
+    this._messageEnteredAction = this._createActionByOption(
+      'onMessageEntered',
+      { excludeValidators: ['disabled'] },
     );
   }
 
-  _messageSendHandler(e: MessageBoxMessageSendEvent): void {
+  _createTypingStartAction(): void {
+    this._typingStartAction = this._createActionByOption(
+      'onTypingStart',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
+  _createTypingEndAction(): void {
+    this._typingEndAction = this._createActionByOption(
+      'onTypingEnd',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
+  _messageEnteredHandler(e: MessageBoxMessageEnteredEvent): void {
     const { text, event } = e;
     const { user } = this.option();
 
@@ -198,7 +277,33 @@ class Chat extends Widget<Properties> {
       text,
     };
 
-    this._messageSendAction?.({ message, event });
+    // @ts-expect-error
+    const dataSource = this.getDataSource();
+
+    if (isDefined(dataSource)) {
+      dataSource.store().insert(message).done(() => {
+        const { reloadOnChange } = this.option();
+
+        if (reloadOnChange) {
+          dataSource.reload();
+        }
+      });
+    }
+
+    this._messageEnteredAction?.({ message, event });
+  }
+
+  _typingStartHandler(e: MessageBoxTypingStartEvent): void {
+    const { event } = e;
+    const { user } = this.option();
+
+    this._typingStartAction?.({ user, event });
+  }
+
+  _typingEndHandler(): void {
+    const { user } = this.option();
+
+    this._typingEndAction?.({ user });
   }
 
   _focusTarget(): dxElementWrapper {
@@ -243,14 +348,31 @@ class Chat extends Widget<Properties> {
         // @ts-expect-error
         this._refreshDataSource();
         break;
-      case 'errors':
-        this._errorList.option('items', value ?? []);
+      case 'alerts':
+        this._alertList.option('items', value ?? []);
         break;
-      case 'onMessageSend':
-        this._createMessageSendAction();
+      case 'onMessageEntered':
+        this._createMessageEnteredAction();
+        break;
+      case 'onTypingStart':
+        this._createTypingStartAction();
+        break;
+      case 'onTypingEnd':
+        this._createTypingEndAction();
         break;
       case 'showDayHeaders':
+      case 'showAvatar':
+      case 'showUserName':
+      case 'showMessageTimestamp':
+        this._messageList.option(name, !!value);
+        break;
+      case 'messageTemplate':
+      case 'dayHeaderFormat':
+      case 'messageTimestampFormat':
+      case 'typingUsers':
         this._messageList.option(name, value);
+        break;
+      case 'reloadOnChange':
         break;
       default:
         super._optionChanged(args);
@@ -265,17 +387,7 @@ class Chat extends Widget<Properties> {
   }
 
   renderMessage(message: Message = {}): void {
-    // @ts-expect-error
-    const dataSource = this.getDataSource();
-
-    if (!isDefined(dataSource)) {
-      this._insertNewItem(message);
-      return;
-    }
-
-    dataSource.store().insert(message).done(() => {
-      this._insertNewItem(message);
-    });
+    this._insertNewItem(message);
   }
 }
 

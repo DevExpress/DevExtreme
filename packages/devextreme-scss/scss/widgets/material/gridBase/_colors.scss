@@ -168,6 +168,7 @@ $datagrid-filter-row-background-color: darken($datagrid-base-background-color, 2
 $datagrid-active-header-filter-icon-color: $base-accent !default;
 $datagrid-text-stub-background-image-path: null !default;
 $datagrid-filter-panel-color: $base-accent !default;
+$datagrid-draggable-column-text-color: color.change($base-text-color, $alpha: 0.38) !default;
 
 $datagrid-text-link-disabled-opacity: $base-disabled-opacity;
 $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;

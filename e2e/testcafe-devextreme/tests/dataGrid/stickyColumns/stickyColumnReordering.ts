@@ -4,6 +4,8 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../helpers/generateDataSourceData';
 import url from '../../../helpers/getPageUrl';
+import { Themes } from '../../../helpers/themes';
+import { changeTheme } from '../../../helpers/changeTheme';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -14,6 +16,8 @@ safeSizeTest('Move left fixed column to the right', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.expect(dataGrid.isReady()).ok();
 
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element, 400, 0);
@@ -44,8 +48,13 @@ safeSizeTest('Move right fixed column to the left', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(24).element, -400, 0);
+
+  // TODO: issue will be fixed in the card 7Mct6tJU
+  await dataGrid.scrollTo(t, { x: 0 });
 
   await takeScreenshot('move_right_fixed_column_to_left.png', dataGrid.element);
 
@@ -72,6 +81,8 @@ safeSizeTest('Move fixed column with fixedPosition = \'sticky\' to the right', a
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.expect(dataGrid.isReady()).ok();
 
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(5).element, 200, 0);
@@ -108,6 +119,8 @@ safeSizeTest('Move left fixed band column to the right', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0).element, 500, 0);
 
@@ -142,8 +155,13 @@ safeSizeTest('Move right fixed band column to the left', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(3).element, -500, 0);
+
+  // TODO: issue will be fixed in the card 7Mct6tJU
+  await dataGrid.scrollTo(t, { x: 0 });
 
   await takeScreenshot('move_right_fixed_band_column_to_left.png', dataGrid.element);
 
@@ -176,6 +194,8 @@ safeSizeTest('Move fixed band column with fixedPosition=\'sticky\' to the right'
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0).element, 400, 0);
 
@@ -199,3 +219,44 @@ safeSizeTest('Move fixed band column with fixedPosition=\'sticky\' to the right'
     });
   },
 }));
+
+[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
+  safeSizeTest(`Check the draggable source column while moving the fixed column on the right side (${theme} theme)`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await t.expect(dataGrid.isReady()).ok();
+
+    // act
+    await dataGrid.moveHeader(24, -200, 5, true);
+
+    await takeScreenshot(`draggable_source_column_with_fixed_columns_(${theme}).png`, dataGrid.element);
+
+    // assert
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [1000, 800])
+    .before(async () => {
+      await changeTheme(theme);
+
+      await createWidget('dxDataGrid', {
+        dataSource: getData(5, 25),
+        columnAutoWidth: true,
+        allowColumnReordering: true,
+        columnWidth: 100,
+        customizeColumns: (columns) => {
+          columns[5].fixed = true;
+          columns[5].fixedPosition = 'right';
+          columns[6].fixed = true;
+          columns[6].fixedPosition = 'right';
+          columns[7].fixed = true;
+          columns[7].fixedPosition = 'right';
+        },
+      });
+    })
+    .after(async () => {
+      await changeTheme(Themes.genericLight);
+    });
+});

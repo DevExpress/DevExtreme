@@ -221,7 +221,6 @@ const DropDownList = DropDownEditor.inherit({
     // @ts-expect-error
     each(items, (index, item) => {
       if (this._isValueEquals(item, selectedItem)) {
-        // @ts-expect-error
         result = index;
         return false;
       }
@@ -417,7 +416,6 @@ const DropDownList = DropDownEditor.inherit({
   },
 
   _listItemElements() {
-    // @ts-expect-error
     return this._$list ? this._$list.find(LIST_ITEM_SELECTOR) : $();
   },
 

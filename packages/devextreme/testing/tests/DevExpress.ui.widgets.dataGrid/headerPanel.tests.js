@@ -4,7 +4,7 @@ import 'ui/data_grid';
 
 import $ from 'jquery';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import typeUtils from 'core/utils/type';
 
 QUnit.testStart(function() {
