@@ -68,7 +68,7 @@
             </div>
         </div>
 
-        <script>
+        <!-- <script>
             $(() => {
                 const element = $('#simpleList').dxList({
                     // dataSource: employees,
@@ -123,7 +123,6 @@
                 });
             });
 
-
             const employees = [
                 {
                     key: 'Mr. John Heart',
@@ -161,6 +160,49 @@
                   items: ['Update Sales Strategy Documents', 'Review Revenue Projections', 'Refund Request Template'],
                 }
             ];
+        </script> -->
+
+        <script>
+          $(() => {
+            const data = [
+              { group: 'group1', value: '11' },
+              { group: 'group1', value: '12' },
+              { group: 'group1', value: '13' },
+              { group: 'group2', value: '21' },
+              { group: 'group2', value: '22' },
+              { group: 'group2', value: '23' },
+              { group: 'group2', value: '24' },
+              { group: 'group2', value: '25' },
+              { group: 'group2', value: '26' },
+              { group: 'group2', value: '27' },
+              { group: 'group2', value: '28' },
+              { group: 'group2', value: '29' },
+              { group: 'group2', value: '20' },
+              { group: 'group3', value: '31' },
+              { group: 'group3', value: '32' },
+              { group: 'group3', value: '33' },
+              { group: 'group3', value: '34' },
+              { group: 'group3', value: '35' },
+              { group: 'group3', value: '36' },
+              { group: 'group3', value: '37' },
+              { group: 'group3', value: '38' },
+              { group: 'group3', value: '39' },
+              { group: 'group3', value: '30' },
+            ];
+
+            const element = $('#simpleList').dxList({
+              dataSource: {
+                store: data,
+                group: 'group',
+              },
+              itemDragging: {
+                allowReordering: true,
+              },
+              collapsibleGroups: true,
+              grouped: true,
+              itemTemplate: ({ value }, _, el) => el.append($('<b>').text(value)),
+            });
+          });
         </script>
     </div>
 </body>

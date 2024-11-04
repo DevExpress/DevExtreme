@@ -292,7 +292,8 @@ export const ListBase = CollectionWidget.inherit({
     const itemAndHeaderSelector = `${itemSelector}, > .${LIST_GROUP_HEADER_CLASS}`;
 
     const selector = collapsibleGroups
-      ? itemAndHeaderSelector
+      // ? itemAndHeaderSelector
+      ? itemSelector
       : itemSelector;
 
     const $listGroup = this._getItemsContainer().children(`.${LIST_GROUP_CLASS}`);
