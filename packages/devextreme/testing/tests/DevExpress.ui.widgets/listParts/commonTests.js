@@ -226,6 +226,24 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         assert.notOk(firstItemIsFocused, 'first item of the first group lost focus');
     });
 
+    QUnit.test('the first header shoul get focus when focusin, collapsibleGroups: true', function(assert) {
+        const $element = this.element.dxList({
+            items: [
+                { key: 'a', items: ['11', '12'] },
+                { key: 'b', items: ['21', '22'] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+        });
+        const instance = $element.dxList('instance');
+        const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+        instance.focus();
+
+        assert.ok($headers.eq(0).hasClass(FOCUSED_STATE_CLASS), 'first header is focused');
+    });
+
     QUnit.test('focus class should not be added to any item when expanding group via api', function(assert) {
         const element = this.element.dxList({
             items: [{ key: 'a', items: ['11', '12'] }, { key: 'b', items: ['21', '22'] }],

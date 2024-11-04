@@ -60,7 +60,7 @@
 
     <script>
       $(() => {
-        const element = $('#simpleList').dxList({
+        const instance = $('#simpleList').dxList({
           width: 300,
           height: 800,
           dataSource: [{
@@ -82,12 +82,9 @@
           }],
           collapsibleGroups: true,
           grouped: true,
-          allowItemDeleting: true,
-          itemDeleteMode: 'static',
-          itemDragging: {
-            allowReordering: true,
-          },
-        });
+        }).dxList('instance');
+
+        instance.focus();
       });
     </script>
   </div>
