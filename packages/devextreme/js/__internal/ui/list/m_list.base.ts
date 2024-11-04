@@ -640,28 +640,42 @@ export const ListBase = CollectionWidget.inherit({
   },
 
   _attachGroupCollapseEvent() {
-    const eventName = addNamespace(clickEventName, this.NAME);
-    const selector = `.${LIST_GROUP_HEADER_CLASS}`;
+    const { collapsibleGroups } = this.option();
+
+    const eventNameClick = addNamespace(clickEventName, this.NAME);
+    const headerSelector = `.${LIST_GROUP_HEADER_CLASS}`;
+
     const $element = this.$element();
-    const collapsibleGroups = this.option('collapsibleGroups');
 
     $element.toggleClass(LIST_COLLAPSIBLE_GROUPS_CLASS, collapsibleGroups);
 
-    eventsEngine.off($element, eventName, selector);
+    eventsEngine.off($element, eventNameClick, headerSelector);
+
     if (collapsibleGroups) {
-      eventsEngine.on($element, eventName, selector, (e) => {
-        this._createAction((e) => {
+      const collapseGroupCallback = (e) => {
+        const actionCallback = (e) => {
+          const { focusStateEnabled } = this.option();
           const $group = $(e.event.currentTarget).parent();
+
           this._collapseGroupHandler($group);
-          if (this.option('focusStateEnabled')) {
-            this.option('focusedElement', getPublicElement($group.find(`.${LIST_ITEM_CLASS}`).eq(0)));
+
+          if (focusStateEnabled) {
+            const listItemElement = getPublicElement($group.find(`.${LIST_ITEM_CLASS}`).eq(0));
+
+            this.option({ focusedElement: listItemElement });
           }
-        }, {
+        };
+
+        const actionParams = {
           validatingTargetName: 'element',
-        })({
-          event: e,
-        });
-      });
+        };
+
+        const action = this._createAction(actionCallback, actionParams);
+
+        action({ event: e });
+      };
+
+      eventsEngine.on($element, eventNameClick, headerSelector, collapseGroupCallback);
     }
   },
 
