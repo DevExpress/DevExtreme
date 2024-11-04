@@ -229,15 +229,6 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
       .dx-list-item {
         @include item-states();
       }
-
-      .dx-list-group-header {
-        @include item-states();
-
-        &:hover {
-          background-color: $list-item-hover-bg;
-          color: $list-item-hover-color;
-        }
-      }
     }
   }
 
@@ -288,6 +279,8 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
   }
 
   .dx-list-group-header {
+    @include item-states();
+
     font-weight: 500;
     padding: $fluent-list-group-header-vertical-padding $item-horizontal-padding;
     background: $list-group-header-bg;
@@ -297,6 +290,11 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
     display: flex;
     align-items: center;
     column-gap: $fluent-list-item-horizontal-padding;
+
+    &.dx-state-hover {
+      background-color: $list-item-hover-bg;
+      color: $list-item-hover-color;
+    }
 
     .dx-list-group-header-indicator {
       color: $list-header-indicator-color;

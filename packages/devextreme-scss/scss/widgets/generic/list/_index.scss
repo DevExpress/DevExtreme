@@ -165,11 +165,6 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
 
       .dx-list-group-header {
         @include item-states();
-
-        &:hover {
-          background-color: $list-item-hover-bg;
-          color: $list-item-hover-color;
-        }
       }
     }
   }
