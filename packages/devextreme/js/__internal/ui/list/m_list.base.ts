@@ -285,32 +285,39 @@ export const ListBase = CollectionWidget.inherit({
     return this._selectionChangeEventInstance;
   },
 
-  _getGroupedItems() {
-    const { collapsibleGroups } = this.option();
+  _refreshItemElements() {
+    const { grouped } = this.option();
+    const $itemsContainer = this._getItemsContainer();
 
+    if (grouped) {
+      this._itemElementsCache = $itemsContainer
+        .children(`.${LIST_GROUP_CLASS}`)
+        .children(`.${LIST_GROUP_BODY_CLASS}`)
+        .children(this._itemSelector());
+    } else {
+      this._itemElementsCache = $itemsContainer.children(this._itemSelector());
+    }
+  },
+
+  _getItemAndHeaderElements() {
     const itemSelector = `> .${LIST_GROUP_BODY_CLASS} > ${this._itemSelector()}`;
     const itemAndHeaderSelector = `${itemSelector}, > .${LIST_GROUP_HEADER_CLASS}`;
 
-    const selector = collapsibleGroups
-      // ? itemAndHeaderSelector
-      ? itemSelector
-      : itemSelector;
-
     const $listGroup = this._getItemsContainer().children(`.${LIST_GROUP_CLASS}`);
 
-    const $items = $listGroup.find(selector);
+    const $items = $listGroup.find(itemAndHeaderSelector).filter(':visible');
 
     return $items;
   },
 
-  _refreshItemElements() {
-    const { grouped } = this.option();
+  _getAvailableItems($itemElements) {
+    const { collapsibleGroups } = this.option();
 
-    const $items = grouped
-      ? this._getGroupedItems()
-      : this._getItemsContainer().children(this._itemSelector());
+    if (collapsibleGroups) {
+      return this._getItemAndHeaderElements();
+    }
 
-    this._itemElementsCache = $items;
+    return this.callBase($itemElements);
   },
 
   _modifyByChanges() {
