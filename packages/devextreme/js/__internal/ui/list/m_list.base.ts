@@ -52,6 +52,8 @@ const SELECT_ALL_ITEM_SELECTOR = '.dx-list-select-all';
 const LIST_ITEM_DATA_KEY = 'dxListItemData';
 const LIST_FEEDBACK_SHOW_TIMEOUT = 70;
 
+const DEFAULT_ACTIVE_STATE_UNIT_ARRAY = [LIST_ITEM_SELECTOR, SELECT_ALL_ITEM_SELECTOR];
+
 const groupItemsGetter = compileGetter('items');
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -59,7 +61,7 @@ let _scrollView;
 
 export const ListBase = CollectionWidget.inherit({
 
-  _activeStateUnit: [LIST_ITEM_SELECTOR, SELECT_ALL_ITEM_SELECTOR].join(','),
+  _activeStateUnit: DEFAULT_ACTIVE_STATE_UNIT_ARRAY.join(','),
 
   _supportedKeys() {
     const that = this;
@@ -369,6 +371,15 @@ export const ListBase = CollectionWidget.inherit({
   },
 
   _init() {
+    const { collapsibleGroups } = this.option();
+
+    if (collapsibleGroups) {
+      this._activeStateUnit = [
+        ...DEFAULT_ACTIVE_STATE_UNIT_ARRAY,
+        `.${LIST_GROUP_HEADER_CLASS}`,
+      ].join(',');
+    }
+
     this.callBase();
     this._dataController.resetDataSourcePageIndex();
     this._$container = this.$element();
