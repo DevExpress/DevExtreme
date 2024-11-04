@@ -6,10 +6,10 @@ import { prepareConfigurationComponentConfig } from "./core/index";
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
+  "alerts" |
   "dataSource" |
   "disabled" |
   "elementAttr" |
-  "errors" |
   "focusStateEnabled" |
   "height" |
   "hint" |
@@ -17,15 +17,17 @@ type AccessibleOptions = Pick<Properties,
   "items" |
   "onDisposing" |
   "onInitialized" |
-  "onMessageSend" |
+  "onMessageEntered" |
   "onOptionChanged" |
   "onTypingEnd" |
   "onTypingStart" |
+  "reloadOnChange" |
   "rtlEnabled" |
   "showAvatar" |
   "showDayHeaders" |
   "showMessageTimestamp" |
   "showUserName" |
+  "typingUsers" |
   "user" |
   "visible" |
   "width"
@@ -39,10 +41,10 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
+    alerts: Array,
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
-    errors: Array,
     focusStateEnabled: Boolean,
     height: [Function, Number, String],
     hint: String,
@@ -50,15 +52,17 @@ const componentConfig = {
     items: Array,
     onDisposing: Function,
     onInitialized: Function,
-    onMessageSend: Function,
+    onMessageEntered: Function,
     onOptionChanged: Function,
     onTypingEnd: Function,
     onTypingStart: Function,
+    reloadOnChange: Boolean,
     rtlEnabled: Boolean,
     showAvatar: Boolean,
     showDayHeaders: Boolean,
     showMessageTimestamp: Boolean,
     showUserName: Boolean,
+    typingUsers: Array,
     user: Object,
     visible: Boolean,
     width: [Function, Number, String]
@@ -68,10 +72,10 @@ const componentConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
+    "update:alerts": null,
     "update:dataSource": null,
     "update:disabled": null,
     "update:elementAttr": null,
-    "update:errors": null,
     "update:focusStateEnabled": null,
     "update:height": null,
     "update:hint": null,
@@ -79,15 +83,17 @@ const componentConfig = {
     "update:items": null,
     "update:onDisposing": null,
     "update:onInitialized": null,
-    "update:onMessageSend": null,
+    "update:onMessageEntered": null,
     "update:onOptionChanged": null,
     "update:onTypingEnd": null,
     "update:onTypingStart": null,
+    "update:reloadOnChange": null,
     "update:rtlEnabled": null,
     "update:showAvatar": null,
     "update:showDayHeaders": null,
     "update:showMessageTimestamp": null,
     "update:showUserName": null,
+    "update:typingUsers": null,
     "update:user": null,
     "update:visible": null,
     "update:width": null,
@@ -101,8 +107,9 @@ const componentConfig = {
     (this as any).$_WidgetClass = Chat;
     (this as any).$_hasAsyncTemplate = true;
     (this as any).$_expectedChildren = {
-      error: { isCollectionItem: true, optionName: "errors" },
+      alert: { isCollectionItem: true, optionName: "alerts" },
       item: { isCollectionItem: true, optionName: "items" },
+      typingUser: { isCollectionItem: true, optionName: "typingUsers" },
       user: { isCollectionItem: false, optionName: "user" }
     };
   }
@@ -112,6 +119,26 @@ prepareComponentConfig(componentConfig);
 
 const DxChat = defineComponent(componentConfig);
 
+
+const DxAlertConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:id": null,
+    "update:message": null,
+  },
+  props: {
+    id: [Number, String],
+    message: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxAlertConfig);
+
+const DxAlert = defineComponent(DxAlertConfig);
+
+(DxAlert as any).$_optionName = "alerts";
+(DxAlert as any).$_isCollectionItem = true;
 
 const DxAuthorConfig = {
   emits: {
@@ -136,37 +163,19 @@ const DxAuthor = defineComponent(DxAuthorConfig);
 
 (DxAuthor as any).$_optionName = "author";
 
-const DxErrorConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:id": null,
-    "update:message": null,
-  },
-  props: {
-    id: [Number, String],
-    message: String
-  }
-};
-
-prepareConfigurationComponentConfig(DxErrorConfig);
-
-const DxError = defineComponent(DxErrorConfig);
-
-(DxError as any).$_optionName = "errors";
-(DxError as any).$_isCollectionItem = true;
-
 const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:author": null,
+    "update:id": null,
     "update:text": null,
     "update:timestamp": null,
     "update:typing": null,
   },
   props: {
     author: Object,
+    id: [Number, String],
     text: String,
     timestamp: [Date, Number, String],
     typing: Boolean
@@ -182,6 +191,30 @@ const DxItem = defineComponent(DxItemConfig);
 (DxItem as any).$_expectedChildren = {
   author: { isCollectionItem: false, optionName: "author" }
 };
+
+const DxTypingUserConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:avatarAlt": null,
+    "update:avatarUrl": null,
+    "update:id": null,
+    "update:name": null,
+  },
+  props: {
+    avatarAlt: String,
+    avatarUrl: String,
+    id: [Number, String],
+    name: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxTypingUserConfig);
+
+const DxTypingUser = defineComponent(DxTypingUserConfig);
+
+(DxTypingUser as any).$_optionName = "typingUsers";
+(DxTypingUser as any).$_isCollectionItem = true;
 
 const DxUserConfig = {
   emits: {
@@ -209,9 +242,10 @@ const DxUser = defineComponent(DxUserConfig);
 export default DxChat;
 export {
   DxChat,
+  DxAlert,
   DxAuthor,
-  DxError,
   DxItem,
+  DxTypingUser,
   DxUser
 };
 import type * as DxChatTypes from "devextreme/ui/chat_types";

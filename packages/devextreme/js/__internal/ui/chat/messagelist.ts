@@ -1,4 +1,7 @@
 import Guid from '@js/core/guid';
+import type {
+  DeepPartial,
+} from '@js/core/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
@@ -11,12 +14,12 @@ import { isDate, isDefined } from '@js/core/utils/type';
 import type { Format } from '@js/localization';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
-import { getScrollTopMax } from '@js/renovation/ui/scroll_view/utils/get_scroll_top_max';
 import type { Message, User } from '@js/ui/chat';
 import ScrollView from '@js/ui/scroll_view';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import { getScrollTopMax } from '@ts/ui/scroll_view/utils/get_scroll_top_max';
 
 import { isElementVisible } from '../splitter/utils/layout';
 import type Chat from './chat';
@@ -36,6 +39,13 @@ const CHAT_MESSAGELIST_DAY_HEADER_CLASS = 'dx-chat-messagelist-day-header';
 
 const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
 export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
+
+export interface Change {
+  type: 'insert' | 'update' | 'remove';
+  data?: DeepPartial<Message>;
+  key?: unknown;
+  index?: number;
+}
 
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
@@ -204,11 +214,7 @@ class MessageList extends Widget<Properties> {
     return this._isCurrentUser(id) ? 'end' : 'start';
   }
 
-  _createMessageGroupComponent(
-    items: Message[],
-    userId: string | number | undefined,
-    isLast = false,
-  ): void {
+  _createMessageGroupComponent(items: Message[], userId: string | number | undefined): void {
     const {
       showAvatar,
       showUserName,
@@ -228,7 +234,6 @@ class MessageList extends Widget<Properties> {
       showMessageTimestamp,
       messageTemplate,
       messageTemplateData,
-      isLast,
       messageTimestampFormat,
     });
 
@@ -352,11 +357,7 @@ class MessageList extends Widget<Properties> {
       }
 
       if (items.length - 1 === index) {
-        this._createMessageGroupComponent(
-          currentMessageGroupItems,
-          currentMessageGroupUserId,
-          true,
-        );
+        this._createMessageGroupComponent(currentMessageGroupItems, currentMessageGroupUserId);
       }
     });
 
@@ -369,8 +370,6 @@ class MessageList extends Widget<Properties> {
 
     const lastMessageGroup = this._messageGroups?.at(-1);
     const shouldCreateDayHeader = this._shouldAddDayHeader(timestamp);
-
-    lastMessageGroup?.updateIsLastOptionOfLastMessage(false);
 
     if (lastMessageGroup) {
       const { items } = lastMessageGroup.option();
@@ -391,7 +390,7 @@ class MessageList extends Widget<Properties> {
       this._createDayHeader(timestamp);
     }
 
-    this._createMessageGroupComponent([message], author?.id, true);
+    this._createMessageGroupComponent([message], author?.id);
 
     this._scrollDownContent();
   }
@@ -500,6 +499,23 @@ class MessageList extends Widget<Properties> {
     this._lastMessageDate = null;
 
     super._clean();
+  }
+
+  _modifyByChanges(changes: Change[]): void {
+    changes.forEach((change) => {
+      switch (change.type) {
+        case 'update': {
+          break;
+        }
+        case 'insert':
+          this._renderMessage(change.data ?? {});
+          break;
+        case 'remove':
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {

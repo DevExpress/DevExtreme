@@ -83,11 +83,11 @@ const componentConfig = {
     onZoomFactorChanged: Function,
     panningEnabled: Boolean,
     pathModified: Boolean,
-    projection: [Object, String],
+    projection: {},
     redrawOnResize: Boolean,
     rtlEnabled: Boolean,
     size: Object,
-    theme: String,
+    theme: {},
     title: [Object, String],
     tooltip: Object,
     touchEnabled: Boolean,
@@ -227,12 +227,12 @@ const DxAnnotationConfig = {
     shadow: Object,
     template: {},
     text: String,
-    textOverflow: String,
+    textOverflow: {},
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
-    type: String,
+    type: {},
     width: Number,
-    wordWrap: String,
+    wordWrap: {},
     x: Number,
     y: Number
   }
@@ -266,7 +266,7 @@ const DxAnnotationBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -312,7 +312,7 @@ const DxBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -379,12 +379,12 @@ const DxCommonAnnotationSettingsConfig = {
     shadow: Object,
     template: {},
     text: String,
-    textOverflow: String,
+    textOverflow: {},
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
-    type: String,
+    type: {},
     width: Number,
-    wordWrap: String,
+    wordWrap: {},
     x: Number,
     y: Number
   }
@@ -414,11 +414,11 @@ const DxControlBarConfig = {
     borderColor: String,
     color: String,
     enabled: Boolean,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: Number,
     opacity: Number,
     panVisible: Boolean,
-    verticalAlignment: String,
+    verticalAlignment: {},
     zoomVisible: Boolean
   }
 };
@@ -571,7 +571,7 @@ const DxLayerConfig = {
     customize: Function,
     dataField: String,
     dataSource: {},
-    elementType: String,
+    elementType: {},
     hoveredBorderColor: String,
     hoveredBorderWidth: Number,
     hoveredColor: String,
@@ -581,17 +581,17 @@ const DxLayerConfig = {
     minSize: Number,
     name: String,
     opacity: Number,
-    palette: [Array, String],
+    palette: {},
     paletteIndex: Number,
     paletteSize: Number,
     selectedBorderColor: String,
     selectedBorderWidth: Number,
     selectedColor: String,
-    selectionMode: String,
+    selectionMode: {},
     size: Number,
     sizeGroupingField: String,
     sizeGroups: Array,
-    type: String
+    type: {}
   }
 };
 
@@ -644,22 +644,22 @@ const DxLegendConfig = {
     customizeItems: Function,
     customizeText: Function,
     font: Object,
-    horizontalAlignment: String,
-    itemsAlignment: String,
-    itemTextPosition: String,
+    horizontalAlignment: {},
+    itemsAlignment: {},
+    itemTextPosition: {},
     margin: [Number, Object],
     markerColor: String,
-    markerShape: String,
+    markerShape: {},
     markerSize: Number,
     markerTemplate: {},
-    orientation: String,
+    orientation: {},
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     rowCount: Number,
     rowItemSpacing: Number,
     source: Object,
     title: [Object, String],
-    verticalAlignment: String,
+    verticalAlignment: {},
     visible: Boolean
   }
 };
@@ -694,12 +694,12 @@ const DxLegendTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: Object,
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    verticalAlignment: String
+    verticalAlignment: {}
   }
 };
 
@@ -888,8 +888,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 
@@ -915,14 +915,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: [Object, Number],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: {},
+    verticalAlignment: {},
+    wordWrap: {}
   }
 };
 
@@ -993,7 +993,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -1022,14 +1022,14 @@ const DxVectorMapTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: {},
+    verticalAlignment: {},
+    wordWrap: {}
   }
 };
 
@@ -1059,8 +1059,8 @@ const DxVectorMapTitleSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 

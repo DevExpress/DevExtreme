@@ -32,6 +32,7 @@ import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 import type { PagerView } from '../pager/m_pager';
+import { CLASSES } from './const';
 
 const COLUMNS_SEPARATOR_CLASS = 'columns-separator';
 const COLUMNS_SEPARATOR_TRANSPARENT = 'columns-separator-transparent';
@@ -49,7 +50,6 @@ const MODULE_NAMESPACE = 'dxDataGridResizingReordering';
 
 const COLUMNS_SEPARATOR_TOUCH_TRACKER_WIDTH = 10;
 const DRAGGING_DELTA = 5;
-const COLUMN_OPACITY = 0.5;
 
 const allowResizing = function (that) {
   // TODO getController
@@ -1484,11 +1484,11 @@ export class DraggingHeaderViewController extends modules.ViewController {
     const rowsView = this._rowsView;
 
     if (sourceColumnElement) {
-      sourceColumnElement.css({ opacity: COLUMN_OPACITY });
+      sourceColumnElement.addClass(this.addWidgetPrefix(CLASSES.draggableColumn));
 
       if (sourceLocation === 'headers') {
-        headersView && headersView.setRowsOpacity(sourceIndex, COLUMN_OPACITY);
-        rowsView && rowsView.setRowsOpacity(sourceIndex, COLUMN_OPACITY);
+        headersView && headersView.toggleDraggableColumnClass(sourceIndex, true);
+        rowsView && rowsView.toggleDraggableColumnClass(sourceIndex, true);
       }
     }
   }
@@ -1534,9 +1534,9 @@ export class DraggingHeaderViewController extends modules.ViewController {
     const { sourceColumnElement } = parameters;
 
     if (sourceColumnElement) {
-      sourceColumnElement.css({ opacity: '' });
-      this._columnHeadersView.setRowsOpacity(parameters.sourceIndex, '');
-      this._rowsView.setRowsOpacity(parameters.sourceIndex, '');
+      sourceColumnElement.removeClass(this.addWidgetPrefix(CLASSES.draggableColumn));
+      this._columnHeadersView.toggleDraggableColumnClass(parameters.sourceIndex, false);
+      this._rowsView.toggleDraggableColumnClass(parameters.sourceIndex, false);
       this._columnHeadersView.element().find(`.${HEADER_ROW_CLASS}`).removeClass(this.addWidgetPrefix(HEADERS_DROP_HIGHLIGHT_CLASS));
     }
 

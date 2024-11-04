@@ -120,14 +120,14 @@ const DxAnimationConfig = {
   props: {
     complete: Function,
     delay: Number,
-    direction: String,
+    direction: {},
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function,
     to: Object,
-    type: String
+    type: {}
   }
 };
 
@@ -149,8 +149,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -187,8 +187,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -234,8 +234,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -277,11 +277,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String],
+    at: {},
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String],
-    my: [Object, String],
+    collision: {},
+    my: {},
     of: {},
     offset: [Object, String]
   }

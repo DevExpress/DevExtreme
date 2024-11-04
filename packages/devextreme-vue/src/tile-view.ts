@@ -48,7 +48,7 @@ const componentConfig = {
     baseItemHeight: Number,
     baseItemWidth: Number,
     dataSource: {},
-    direction: String,
+    direction: {},
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
@@ -69,7 +69,7 @@ const componentConfig = {
     onItemRendered: Function,
     onOptionChanged: Function,
     rtlEnabled: Boolean,
-    showScrollbar: String,
+    showScrollbar: {},
     tabIndex: Number,
     visible: Boolean,
     width: [Function, Number, String]

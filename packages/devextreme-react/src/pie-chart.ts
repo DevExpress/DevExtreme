@@ -8,11 +8,11 @@ import dxPieChart, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, TooltipHiddenEvent, TooltipShownEvent, dxPieChartAnnotationConfig, dxPieChartCommonAnnotationConfig, PieChartLegendItem, PieChartSeries } from "devextreme/viz/pie_chart";
-import type { Font as ChartsFont, ChartsColor } from "devextreme/common/charts";
+import type { DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, TooltipHiddenEvent, TooltipShownEvent, dxPieChartAnnotationConfig, PieChartAnnotationLocation, dxPieChartCommonAnnotationConfig, PieChartSeriesInteractionMode, SmallValuesGroupingMode, PieChartLegendItem, PieChartLegendHoverMode, PieChartSeries } from "devextreme/viz/pie_chart";
+import type { AnimationEaseMode, DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, ChartsDataType, ChartsColor, HatchDirection, LabelPosition } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
-
-import type * as LocalizationTypes from "devextreme/localization";
+import type { Format as CommonFormat, ExportFormat, HorizontalAlignment, Position, Orientation, VerticalEdge } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -131,7 +131,7 @@ const AdaptiveLayout = Object.assign<typeof _componentAdaptiveLayout, NestedComp
 // PieChart
 type IAnimationProps = React.PropsWithChildren<{
   duration?: number;
-  easing?: "easeOutCubic" | "linear";
+  easing?: AnimationEaseMode;
   enabled?: boolean;
   maxPointCountSupported?: number;
 }>
@@ -158,7 +158,7 @@ type IAnnotationProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -174,7 +174,7 @@ type IAnnotationProps = React.PropsWithChildren<{
     url?: string;
     width?: number;
   };
-  location?: "center" | "edge";
+  location?: PieChartAnnotationLocation;
   name?: string;
   offsetX?: number;
   offsetY?: number;
@@ -191,12 +191,12 @@ type IAnnotationProps = React.PropsWithChildren<{
   };
   template?: ((annotation: dxPieChartCommonAnnotationConfig | any, element: any) => string | any) | template;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
+  textOverflow?: TextOverflow;
   tooltipEnabled?: boolean;
   tooltipTemplate?: ((annotation: dxPieChartAnnotationConfig | any, element: any) => string | any) | template;
-  type?: "text" | "image" | "custom";
+  type?: AnnotationType;
   width?: number;
-  wordWrap?: "normal" | "breakWord" | "none";
+  wordWrap?: WordWrap;
   x?: number;
   y?: number;
   render?: (...params: any) => React.ReactNode;
@@ -240,7 +240,7 @@ const Annotation = Object.assign<typeof _componentAnnotation, NestedComponentMet
 type IAnnotationBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
   visible?: boolean;
   width?: number;
@@ -266,7 +266,7 @@ type IArgumentFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentArgumentFormat = (props: IArgumentFormatProps) => {
@@ -293,7 +293,7 @@ const ArgumentFormat = Object.assign<typeof _componentArgumentFormat, NestedComp
 type IBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
   visible?: boolean;
   width?: number;
@@ -342,7 +342,7 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -358,7 +358,7 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
     url?: string;
     width?: number;
   };
-  location?: "center" | "edge";
+  location?: PieChartAnnotationLocation;
   offsetX?: number;
   offsetY?: number;
   opacity?: number;
@@ -374,12 +374,12 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   };
   template?: ((annotation: dxPieChartCommonAnnotationConfig | any, element: any) => string | any) | template;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
+  textOverflow?: TextOverflow;
   tooltipEnabled?: boolean;
   tooltipTemplate?: ((annotation: dxPieChartAnnotationConfig | any, element: any) => string | any) | template;
-  type?: "text" | "image" | "custom";
+  type?: AnnotationType;
   width?: number;
-  wordWrap?: "normal" | "breakWord" | "none";
+  wordWrap?: WordWrap;
   x?: number;
   y?: number;
   render?: (...params: any) => React.ReactNode;
@@ -413,25 +413,25 @@ const CommonAnnotationSettings = Object.assign<typeof _componentCommonAnnotation
 // PieChart
 type ICommonSeriesSettingsProps = React.PropsWithChildren<{
   argumentField?: string;
-  argumentType?: "datetime" | "numeric" | "string";
+  argumentType?: ChartsDataType;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     visible?: boolean;
     width?: number;
   };
   color?: ChartsColor | string;
-  hoverMode?: "none" | "onlyPoint";
+  hoverMode?: PieChartSeriesInteractionMode;
   hoverStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string;
-      dashStyle?: "dash" | "dot" | "longDash" | "solid";
+      dashStyle?: DashStyle;
       visible?: boolean;
       width?: number;
     };
     color?: ChartsColor | string;
     hatching?: Record<string, any> | {
-      direction?: "left" | "none" | "right";
+      direction?: HatchDirection;
       opacity?: number;
       step?: number;
       width?: number;
@@ -439,11 +439,11 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
     highlight?: boolean;
   };
   label?: Record<string, any> | {
-    argumentFormat?: LocalizationTypes.Format;
+    argumentFormat?: LocalizationFormat;
     backgroundColor?: string;
     border?: Record<string, any> | {
       color?: string;
-      dashStyle?: "dash" | "dot" | "longDash" | "solid";
+      dashStyle?: DashStyle;
       visible?: boolean;
       width?: number;
     };
@@ -455,27 +455,27 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
     customizeText?: ((pointInfo: any) => string);
     displayFormat?: string;
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
-    position?: "columns" | "inside" | "outside";
+    format?: LocalizationFormat;
+    position?: LabelPosition;
     radialOffset?: number;
     rotationAngle?: number;
-    textOverflow?: "ellipsis" | "hide" | "none";
+    textOverflow?: TextOverflow;
     visible?: boolean;
-    wordWrap?: "normal" | "breakWord" | "none";
+    wordWrap?: WordWrap;
   };
   maxLabelCount?: number;
   minSegmentSize?: number;
-  selectionMode?: "none" | "onlyPoint";
+  selectionMode?: PieChartSeriesInteractionMode;
   selectionStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string;
-      dashStyle?: "dash" | "dot" | "longDash" | "solid";
+      dashStyle?: DashStyle;
       visible?: boolean;
       width?: number;
     };
     color?: ChartsColor | string;
     hatching?: Record<string, any> | {
-      direction?: "left" | "none" | "right";
+      direction?: HatchDirection;
       opacity?: number;
       step?: number;
       width?: number;
@@ -484,7 +484,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
   };
   smallValuesGrouping?: Record<string, any> | {
     groupName?: string;
-    mode?: "none" | "smallValueThreshold" | "topN";
+    mode?: SmallValuesGroupingMode;
     threshold?: number;
     topCount?: number;
   };
@@ -539,7 +539,7 @@ type IExportProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
   fileName?: string;
-  formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">;
+  formats?: Array<ExportFormat>;
   margin?: number;
   printingEnabled?: boolean;
   svgToCanvas?: ((svg: any, canvas: any) => any);
@@ -595,7 +595,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = (props: IFormatProps) => {
@@ -615,7 +615,7 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 // HoverStyle
 // SelectionStyle
 type IHatchingProps = React.PropsWithChildren<{
-  direction?: "left" | "none" | "right";
+  direction?: HatchDirection;
   opacity?: number;
   step?: number;
   width?: number;
@@ -638,13 +638,13 @@ const Hatching = Object.assign<typeof _componentHatching, NestedComponentMeta>(_
 type IHoverStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     visible?: boolean;
     width?: number;
   };
   color?: ChartsColor | string;
   hatching?: Record<string, any> | {
-    direction?: "left" | "none" | "right";
+    direction?: HatchDirection;
     opacity?: number;
     step?: number;
     width?: number;
@@ -693,11 +693,11 @@ const Image = Object.assign<typeof _componentImage, NestedComponentMeta>(_compon
 // owners:
 // CommonSeriesSettings
 type ILabelProps = React.PropsWithChildren<{
-  argumentFormat?: LocalizationTypes.Format;
+  argumentFormat?: LocalizationFormat;
   backgroundColor?: string;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     visible?: boolean;
     width?: number;
   };
@@ -709,13 +709,13 @@ type ILabelProps = React.PropsWithChildren<{
   customizeText?: ((pointInfo: any) => string);
   displayFormat?: string;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
-  position?: "columns" | "inside" | "outside";
+  format?: LocalizationFormat;
+  position?: LabelPosition;
   radialOffset?: number;
   rotationAngle?: number;
-  textOverflow?: "ellipsis" | "hide" | "none";
+  textOverflow?: TextOverflow;
   visible?: boolean;
-  wordWrap?: "normal" | "breakWord" | "none";
+  wordWrap?: WordWrap;
 }>
 const _componentLabel = (props: ILabelProps) => {
   return React.createElement(NestedOption<ILabelProps>, {
@@ -745,7 +745,7 @@ type ILegendProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -756,10 +756,10 @@ type ILegendProps = React.PropsWithChildren<{
   customizeItems?: ((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>);
   customizeText?: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string);
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
-  hoverMode?: "none" | "allArgumentPoints";
-  itemsAlignment?: "center" | "left" | "right";
-  itemTextPosition?: "bottom" | "left" | "right" | "top";
+  horizontalAlignment?: HorizontalAlignment;
+  hoverMode?: PieChartLegendHoverMode;
+  itemsAlignment?: HorizontalAlignment;
+  itemTextPosition?: Position;
   margin?: number | Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -768,14 +768,14 @@ type ILegendProps = React.PropsWithChildren<{
   };
   markerSize?: number;
   markerTemplate?: ((legendItem: PieChartLegendItem, element: any) => string | any) | template;
-  orientation?: "horizontal" | "vertical";
+  orientation?: Orientation;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
   rowCount?: number;
   rowItemSpacing?: number;
   title?: Record<string, any> | string | {
     font?: ChartsFont;
-    horizontalAlignment?: "center" | "left" | "right";
+    horizontalAlignment?: HorizontalAlignment;
     margin?: Record<string, any> | {
       bottom?: number;
       left?: number;
@@ -789,9 +789,9 @@ type ILegendProps = React.PropsWithChildren<{
       text?: string;
     };
     text?: string;
-    verticalAlignment?: "bottom" | "top";
+    verticalAlignment?: VerticalEdge;
   };
-  verticalAlignment?: "bottom" | "top";
+  verticalAlignment?: VerticalEdge;
   visible?: boolean;
   markerRender?: (...params: any) => React.ReactNode;
   markerComponent?: React.ComponentType<any>;
@@ -826,7 +826,7 @@ const Legend = Object.assign<typeof _componentLegend, NestedComponentMeta>(_comp
 // Legend
 type ILegendTitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -840,7 +840,7 @@ type ILegendTitleProps = React.PropsWithChildren<{
     text?: string;
   };
   text?: string;
-  verticalAlignment?: "bottom" | "top";
+  verticalAlignment?: VerticalEdge;
 }>
 const _componentLegendTitle = (props: ILegendTitleProps) => {
   return React.createElement(NestedOption<ILegendTitleProps>, {
@@ -942,7 +942,7 @@ const Margin = Object.assign<typeof _componentMargin, NestedComponentMeta>(_comp
 // PieChart
 type IPieChartTitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: number | Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -954,13 +954,13 @@ type IPieChartTitleProps = React.PropsWithChildren<{
     font?: ChartsFont;
     offset?: number;
     text?: string;
-    textOverflow?: "ellipsis" | "hide" | "none";
-    wordWrap?: "normal" | "breakWord" | "none";
+    textOverflow?: TextOverflow;
+    wordWrap?: WordWrap;
   };
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  verticalAlignment?: "bottom" | "top";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  verticalAlignment?: VerticalEdge;
+  wordWrap?: WordWrap;
 }>
 const _componentPieChartTitle = (props: IPieChartTitleProps) => {
   return React.createElement(NestedOption<IPieChartTitleProps>, {
@@ -987,8 +987,8 @@ type IPieChartTitleSubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  wordWrap?: WordWrap;
 }>
 const _componentPieChartTitleSubtitle = (props: IPieChartTitleSubtitleProps) => {
   return React.createElement(NestedOption<IPieChartTitleSubtitleProps>, {
@@ -1011,13 +1011,13 @@ const PieChartTitleSubtitle = Object.assign<typeof _componentPieChartTitleSubtit
 type ISelectionStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     visible?: boolean;
     width?: number;
   };
   color?: ChartsColor | string;
   hatching?: Record<string, any> | {
-    direction?: "left" | "none" | "right";
+    direction?: HatchDirection;
     opacity?: number;
     step?: number;
     width?: number;
@@ -1047,25 +1047,25 @@ const SelectionStyle = Object.assign<typeof _componentSelectionStyle, NestedComp
 // PieChart
 type ISeriesProps = React.PropsWithChildren<{
   argumentField?: string;
-  argumentType?: "datetime" | "numeric" | "string";
+  argumentType?: ChartsDataType;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     visible?: boolean;
     width?: number;
   };
   color?: ChartsColor | string;
-  hoverMode?: "none" | "onlyPoint";
+  hoverMode?: PieChartSeriesInteractionMode;
   hoverStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string;
-      dashStyle?: "dash" | "dot" | "longDash" | "solid";
+      dashStyle?: DashStyle;
       visible?: boolean;
       width?: number;
     };
     color?: ChartsColor | string;
     hatching?: Record<string, any> | {
-      direction?: "left" | "none" | "right";
+      direction?: HatchDirection;
       opacity?: number;
       step?: number;
       width?: number;
@@ -1073,11 +1073,11 @@ type ISeriesProps = React.PropsWithChildren<{
     highlight?: boolean;
   };
   label?: Record<string, any> | {
-    argumentFormat?: LocalizationTypes.Format;
+    argumentFormat?: LocalizationFormat;
     backgroundColor?: string;
     border?: Record<string, any> | {
       color?: string;
-      dashStyle?: "dash" | "dot" | "longDash" | "solid";
+      dashStyle?: DashStyle;
       visible?: boolean;
       width?: number;
     };
@@ -1089,28 +1089,28 @@ type ISeriesProps = React.PropsWithChildren<{
     customizeText?: ((pointInfo: any) => string);
     displayFormat?: string;
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
-    position?: "columns" | "inside" | "outside";
+    format?: LocalizationFormat;
+    position?: LabelPosition;
     radialOffset?: number;
     rotationAngle?: number;
-    textOverflow?: "ellipsis" | "hide" | "none";
+    textOverflow?: TextOverflow;
     visible?: boolean;
-    wordWrap?: "normal" | "breakWord" | "none";
+    wordWrap?: WordWrap;
   };
   maxLabelCount?: number;
   minSegmentSize?: number;
   name?: string;
-  selectionMode?: "none" | "onlyPoint";
+  selectionMode?: PieChartSeriesInteractionMode;
   selectionStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string;
-      dashStyle?: "dash" | "dot" | "longDash" | "solid";
+      dashStyle?: DashStyle;
       visible?: boolean;
       width?: number;
     };
     color?: ChartsColor | string;
     hatching?: Record<string, any> | {
-      direction?: "left" | "none" | "right";
+      direction?: HatchDirection;
       opacity?: number;
       step?: number;
       width?: number;
@@ -1119,7 +1119,7 @@ type ISeriesProps = React.PropsWithChildren<{
   };
   smallValuesGrouping?: Record<string, any> | {
     groupName?: string;
-    mode?: "none" | "smallValueThreshold" | "topN";
+    mode?: SmallValuesGroupingMode;
     threshold?: number;
     topCount?: number;
   };
@@ -1148,7 +1148,7 @@ const Series = Object.assign<typeof _componentSeries, NestedComponentMeta>(_comp
 // SelectionStyle
 type ISeriesBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   visible?: boolean;
   width?: number;
 }>
@@ -1230,7 +1230,7 @@ const Size = Object.assign<typeof _componentSize, NestedComponentMeta>(_componen
 // CommonSeriesSettings
 type ISmallValuesGroupingProps = React.PropsWithChildren<{
   groupName?: string;
-  mode?: "none" | "smallValueThreshold" | "topN";
+  mode?: SmallValuesGroupingMode;
   threshold?: number;
   topCount?: number;
 }>
@@ -1254,8 +1254,8 @@ type ISubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  wordWrap?: WordWrap;
 }>
 const _componentSubtitle = (props: ISubtitleProps) => {
   return React.createElement(NestedOption<ISubtitleProps>, {
@@ -1275,7 +1275,7 @@ const Subtitle = Object.assign<typeof _componentSubtitle, NestedComponentMeta>(_
 // PieChart
 type ITitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: Record<string, any> | number | {
     bottom?: number;
     left?: number;
@@ -1287,13 +1287,13 @@ type ITitleProps = React.PropsWithChildren<{
     font?: ChartsFont;
     offset?: number;
     text?: string;
-    textOverflow?: "ellipsis" | "hide" | "none";
-    wordWrap?: "normal" | "breakWord" | "none";
+    textOverflow?: TextOverflow;
+    wordWrap?: WordWrap;
   };
   text?: string;
-  verticalAlignment?: "bottom" | "top";
-  textOverflow?: "ellipsis" | "hide" | "none";
-  wordWrap?: "normal" | "breakWord" | "none";
+  verticalAlignment?: VerticalEdge;
+  textOverflow?: TextOverflow;
+  wordWrap?: WordWrap;
 }>
 const _componentTitle = (props: ITitleProps) => {
   return React.createElement(NestedOption<ITitleProps>, {
@@ -1311,11 +1311,11 @@ const Title = Object.assign<typeof _componentTitle, NestedComponentMeta>(_compon
 // owners:
 // PieChart
 type ITooltipProps = React.PropsWithChildren<{
-  argumentFormat?: LocalizationTypes.Format;
+  argumentFormat?: LocalizationFormat;
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -1327,7 +1327,7 @@ type ITooltipProps = React.PropsWithChildren<{
   customizeTooltip?: ((pointInfo: any) => Record<string, any>);
   enabled?: boolean;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   interactive?: boolean;
   opacity?: number;
   paddingLeftRight?: number;
@@ -1374,7 +1374,7 @@ const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_co
 // Tooltip
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
   visible?: boolean;
   width?: number;

@@ -1,5 +1,5 @@
 import $ from '@js/core/renderer';
-import type { User } from '@js/ui/chat';
+import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -12,7 +12,7 @@ export interface Properties extends WidgetOptions<MessageBubble> {
   text?: string;
   // eslint-disable-next-line
   template?: null | any;
-  templateData?: { component?: Chat; isLast?: boolean; author?: User };
+  templateData?: { component?: Chat; message?: Message };
 }
 
 class MessageBubble extends Widget<Properties> {
@@ -43,14 +43,10 @@ class MessageBubble extends Widget<Properties> {
       $(this.element()).empty();
 
       const messageTemplate = this._getTemplateByOption('template');
-      const data = {
-        text,
-        ...templateData,
-      };
 
       messageTemplate.render({
         container: this.element(),
-        model: data,
+        model: templateData,
       });
 
       return;

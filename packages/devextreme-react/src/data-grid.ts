@@ -9,18 +9,21 @@ import dxDataGrid, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { dxDataGridColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxDataGridRowObject, ColumnButtonClickEvent, dxDataGridColumnButton, dxDataGridToolbarItem } from "devextreme/ui/data_grid";
-import type { DataChange, ColumnHeaderFilterSearchConfig, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterSearchConfig, GridBase } from "devextreme/common/grids";
-import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, dxFilterBuilderField, dxFilterBuilderCustomOperation, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
-import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, dxFormSimpleItem, dxFormOptions, OptionChangedEvent as FormOptionChangedEvent, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, EditorEnterKeyEvent, FieldDataChangedEvent } from "devextreme/ui/form";
-import type { AnimationConfig, AnimationState } from "devextreme/animation/fx";
+import type { dxDataGridColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent, dxDataGridColumnButton, DataGridCommandColumnType, SelectionSensitivity, DataGridExportFormat, DataGridPredefinedToolbarItem, DataGridScrollMode, dxDataGridToolbarItem } from "devextreme/ui/data_grid";
+import type { DataChange, DataChangeType, FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterSearchConfig, SelectionColumnDisplayMode, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, GridBase, ApplyFilterMode, GroupExpandMode, SummaryType, EnterKeyAction, EnterKeyDirection, PagerPageSize, DataRenderMode, StateStoreType } from "devextreme/common/grids";
+import type { Mode, ValidationRuleType, HorizontalAlignment, VerticalAlignment, DataType, Format as CommonFormat, SearchMode, SortOrder, ComparisonOperator, SingleMultipleOrNone, SelectAllMode, PositionAlignment, Direction, ToolbarItemLocation, ToolbarItemComponent, DisplayMode, DragDirection, DragHighlight, ScrollbarMode } from "devextreme/common";
+import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, dxFilterBuilderField, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
+import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, dxFormSimpleItem, dxFormOptions, OptionChangedEvent as FormOptionChangedEvent, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent, FormItemType } from "devextreme/ui/form";
+import type { AnimationConfig, AnimationState, AnimationType } from "devextreme/animation/fx";
 import type { template } from "devextreme/core/templates/template";
+import type { CollisionResolution, PositionConfig, CollisionResolutionCombination } from "devextreme/animation/position";
+import type { Format as LocalizationFormat } from "devextreme/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
-import type { PositionConfig } from "devextreme/animation/position";
-import type { dxPopupOptions, dxPopupToolbarItem } from "devextreme/ui/popup";
+import type { dxPopupOptions, dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
 import type { event, EventInfo } from "devextreme/events/index";
 import type { Component } from "devextreme/core/component";
+import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 
 import type dxOverlay from "devextreme/ui/overlay";
@@ -30,7 +33,6 @@ import type dxForm from "devextreme/ui/form";
 import type dxSortable from "devextreme/ui/sortable";
 import type dxDraggable from "devextreme/ui/draggable";
 
-import type * as LocalizationTypes from "devextreme/localization";
 import type * as CommonTypes from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -236,7 +238,7 @@ type IAsyncRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
   reevaluate?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any);
 }>
 const _componentAsyncRule = (props: IAsyncRuleProps) => {
@@ -259,8 +261,8 @@ const AsyncRule = Object.assign<typeof _componentAsyncRule, NestedComponentMeta>
 // owners:
 // Position
 type IAtProps = React.PropsWithChildren<{
-  x?: "center" | "left" | "right";
-  y?: "bottom" | "center" | "top";
+  x?: HorizontalAlignment;
+  y?: VerticalAlignment;
 }>
 const _componentAt = (props: IAtProps) => {
   return React.createElement(NestedOption<IAtProps>, {
@@ -301,7 +303,7 @@ type IButtonProps = React.PropsWithChildren<{
   disabled?: boolean | ((options: { column: dxDataGridColumn, component: dxDataGrid, row: dxDataGridRowObject }) => boolean);
   hint?: string;
   icon?: string;
-  name?: "cancel" | "delete" | "edit" | "save" | "undelete";
+  name?: DataGridPredefinedColumnButton | string;
   onClick?: ((e: ColumnButtonClickEvent) => void);
   template?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, key: any, row: dxDataGridRowObject, rowIndex: number, rowType: string }) => string | any) | template;
   text?: string;
@@ -335,7 +337,7 @@ type IChangeProps = React.PropsWithChildren<{
   insertAfterKey?: any;
   insertBeforeKey?: any;
   key?: any;
-  type?: "insert" | "update" | "remove";
+  type?: DataChangeType;
 }>
 const _componentChange = (props: IChangeProps) => {
   return React.createElement(NestedOption<IChangeProps>, {
@@ -375,8 +377,8 @@ const ColCountByScreen = Object.assign<typeof _componentColCountByScreen, Nested
 // owners:
 // Position
 type ICollisionProps = React.PropsWithChildren<{
-  x?: "fit" | "flip" | "flipfit" | "none";
-  y?: "fit" | "flip" | "flipfit" | "none";
+  x?: CollisionResolution;
+  y?: CollisionResolution;
 }>
 const _componentCollision = (props: ICollisionProps) => {
   return React.createElement(NestedOption<ICollisionProps>, {
@@ -394,7 +396,7 @@ const Collision = Object.assign<typeof _componentCollision, NestedComponentMeta>
 // owners:
 // DataGrid
 type IColumnProps = React.PropsWithChildren<{
-  alignment?: "center" | "left" | "right";
+  alignment?: HorizontalAlignment;
   allowEditing?: boolean;
   allowExporting?: boolean;
   allowFiltering?: boolean;
@@ -407,7 +409,7 @@ type IColumnProps = React.PropsWithChildren<{
   allowSearch?: boolean;
   allowSorting?: boolean;
   autoExpandGroup?: boolean;
-  buttons?: Array<dxDataGridColumnButton | "cancel" | "delete" | "edit" | "save" | "undelete">;
+  buttons?: Array<DataGridPredefinedColumnButton | dxDataGridColumnButton>;
   calculateCellValue?: ((rowData: any) => any);
   calculateDisplayValue?: ((rowData: any) => any) | string;
   calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | (() => any) | Array<any>);
@@ -419,18 +421,18 @@ type IColumnProps = React.PropsWithChildren<{
   cssClass?: string;
   customizeText?: ((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string);
   dataField?: string;
-  dataType?: "string" | "number" | "date" | "boolean" | "object" | "datetime";
+  dataType?: DataType;
   editCellTemplate?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, row: dxDataGridRowObject, rowIndex: number, rowType: string, setValue(newValue, newText): any, text: string, value: any, watch: (() => void) }) => any) | template;
   editorOptions?: any;
   encodeHtml?: boolean;
   falseText?: string;
-  filterOperations?: Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | "anyof" | "noneof" | string>;
-  filterType?: "exclude" | "include";
+  filterOperations?: Array<FilterOperation | string>;
+  filterType?: FilterType;
   filterValue?: any;
   filterValues?: Array<any>;
   fixed?: boolean;
-  fixedPosition?: "left" | "right" | "sticky";
-  format?: LocalizationTypes.Format;
+  fixedPosition?: FixedPosition;
+  format?: LocalizationFormat;
   formItem?: dxFormSimpleItem;
   groupCellTemplate?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, groupContinuedMessage: string, groupContinuesMessage: string, row: dxDataGridRowObject, rowIndex: number, summaryItems: Array<any>, text: string, value: any }) => any) | template;
   groupIndex?: number;
@@ -439,10 +441,10 @@ type IColumnProps = React.PropsWithChildren<{
     allowSearch?: boolean;
     allowSelectAll?: boolean;
     dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
-    groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
+    groupInterval?: HeaderFilterGroupInterval | number;
     height?: number | string;
     search?: ColumnHeaderFilterSearchConfig;
-    searchMode?: "contains" | "startswith" | "equals";
+    searchMode?: SearchMode;
     width?: number | string;
   };
   hidingPriority?: number;
@@ -458,16 +460,16 @@ type IColumnProps = React.PropsWithChildren<{
   name?: string;
   ownerBand?: number;
   renderAsync?: boolean;
-  selectedFilterOperation?: "<" | "<=" | "<>" | "=" | ">" | ">=" | "between" | "contains" | "endswith" | "notcontains" | "startswith";
+  selectedFilterOperation?: SelectedFilterOperation;
   setCellValue?: ((newData: any, value: any, currentRowData: any) => any);
   showEditorAlways?: boolean;
   showInColumnChooser?: boolean;
   showWhenGrouped?: boolean;
   sortIndex?: number;
   sortingMethod?: ((value1: any, value2: any) => number);
-  sortOrder?: "asc" | "desc";
+  sortOrder?: SortOrder;
   trueText?: string;
-  type?: "adaptive" | "buttons" | "detailExpand" | "groupExpand" | "selection" | "drag";
+  type?: DataGridCommandColumnType;
   validationRules?: Array<CommonTypes.ValidationRule>;
   visible?: boolean;
   visibleIndex?: number;
@@ -478,12 +480,12 @@ type IColumnProps = React.PropsWithChildren<{
   onFilterValuesChange?: (value: Array<any>) => void;
   defaultGroupIndex?: number;
   onGroupIndexChange?: (value: number) => void;
-  defaultSelectedFilterOperation?: "<" | "<=" | "<>" | "=" | ">" | ">=" | "between" | "contains" | "endswith" | "notcontains" | "startswith";
-  onSelectedFilterOperationChange?: (value: "<" | "<=" | "<>" | "=" | ">" | ">=" | "between" | "contains" | "endswith" | "notcontains" | "startswith") => void;
+  defaultSelectedFilterOperation?: SelectedFilterOperation;
+  onSelectedFilterOperationChange?: (value: SelectedFilterOperation) => void;
   defaultSortIndex?: number;
   onSortIndexChange?: (value: number) => void;
-  defaultSortOrder?: "asc" | "desc";
-  onSortOrderChange?: (value: "asc" | "desc") => void;
+  defaultSortOrder?: SortOrder;
+  onSortOrderChange?: (value: SortOrder) => void;
   defaultVisible?: boolean;
   onVisibleChange?: (value: boolean) => void;
   defaultVisibleIndex?: number;
@@ -565,12 +567,12 @@ type IColumnChooserProps = React.PropsWithChildren<{
   emptyPanelText?: string;
   enabled?: boolean;
   height?: number | string;
-  mode?: "dragAndDrop" | "select";
+  mode?: ColumnChooserMode;
   position?: PositionConfig;
   search?: ColumnChooserSearchConfig;
   searchTimeout?: number;
   selection?: ColumnChooserSelectionConfig;
-  sortOrder?: "asc" | "desc";
+  sortOrder?: SortOrder;
   title?: string;
   width?: number | string;
 }>
@@ -699,10 +701,10 @@ type IColumnHeaderFilterProps = React.PropsWithChildren<{
   allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
-  groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
+  groupInterval?: HeaderFilterGroupInterval | number;
   height?: number | string;
   search?: ColumnHeaderFilterSearchConfig;
-  searchMode?: "contains" | "startswith" | "equals";
+  searchMode?: SearchMode;
   width?: number | string;
 }>
 const _componentColumnHeaderFilter = (props: IColumnHeaderFilterProps) => {
@@ -727,7 +729,7 @@ const ColumnHeaderFilter = Object.assign<typeof _componentColumnHeaderFilter, Ne
 type IColumnHeaderFilterSearchProps = React.PropsWithChildren<{
   editorOptions?: any;
   enabled?: boolean;
-  mode?: "contains" | "startswith" | "equals";
+  mode?: SearchMode;
   searchExpr?: Array<(() => any) | string> | (() => any) | string;
   timeout?: number;
 }>
@@ -771,10 +773,10 @@ const ColumnLookup = Object.assign<typeof _componentColumnLookup, NestedComponen
 // Column
 type ICompareRuleProps = React.PropsWithChildren<{
   comparisonTarget?: (() => any);
-  comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
+  comparisonType?: ComparisonOperator;
   ignoreEmptyValue?: boolean;
   message?: string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentCompareRule = (props: ICompareRuleProps) => {
   return React.createElement(NestedOption<ICompareRuleProps>, {
@@ -818,7 +820,7 @@ type ICustomOperationProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>);
   caption?: string;
   customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string);
-  dataTypes?: Array<"string" | "number" | "date" | "boolean" | "object" | "datetime">;
+  dataTypes?: Array<DataType>;
   editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   hasValue?: boolean;
   icon?: string;
@@ -852,7 +854,7 @@ type ICustomRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
   reevaluate?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
 }>
 const _componentCustomRule = (props: ICustomRuleProps) => {
@@ -912,7 +914,7 @@ const DataGridHeaderFilter = Object.assign<typeof _componentDataGridHeaderFilter
 type IDataGridHeaderFilterSearchProps = React.PropsWithChildren<{
   editorOptions?: any;
   enabled?: boolean;
-  mode?: "contains" | "startswith" | "equals";
+  mode?: SearchMode;
   timeout?: number;
 }>
 const _componentDataGridHeaderFilterSearch = (props: IDataGridHeaderFilterSearchProps) => {
@@ -953,10 +955,10 @@ const DataGridHeaderFilterTexts = Object.assign<typeof _componentDataGridHeaderF
 type IDataGridSelectionProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
   deferred?: boolean;
-  mode?: "single" | "multiple" | "none";
-  selectAllMode?: "allPages" | "page";
-  sensitivity?: "base" | "accent" | "case" | "variant";
-  showCheckBoxesMode?: "always" | "none" | "onClick" | "onLongTap";
+  mode?: SingleMultipleOrNone;
+  selectAllMode?: SelectAllMode;
+  sensitivity?: SelectionSensitivity;
+  showCheckBoxesMode?: SelectionColumnDisplayMode;
 }>
 const _componentDataGridSelection = (props: IDataGridSelectionProps) => {
   return React.createElement(NestedOption<IDataGridSelectionProps>, {
@@ -982,12 +984,12 @@ type IEditingProps = React.PropsWithChildren<{
   editColumnName?: string;
   editRowKey?: any;
   form?: dxFormOptions;
-  mode?: "batch" | "cell" | "row" | "form" | "popup";
-  newRowPosition?: "first" | "last" | "pageBottom" | "pageTop" | "viewportBottom" | "viewportTop";
+  mode?: GridsEditMode;
+  newRowPosition?: NewRowPosition;
   popup?: dxPopupOptions<any>;
-  refreshMode?: "full" | "reshape" | "repaint";
+  refreshMode?: GridsEditRefreshMode;
   selectTextOnEditStart?: boolean;
-  startEditAction?: "click" | "dblClick";
+  startEditAction?: StartEditAction;
   texts?: any | {
     addRow?: string;
     cancelAllChanges?: string;
@@ -1068,7 +1070,7 @@ const EditingTexts = Object.assign<typeof _componentEditingTexts, NestedComponen
 type IEmailRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentEmailRule = (props: IEmailRuleProps) => {
   return React.createElement(NestedOption<IEmailRuleProps>, {
@@ -1092,7 +1094,7 @@ const EmailRule = Object.assign<typeof _componentEmailRule, NestedComponentMeta>
 type IExportProps = React.PropsWithChildren<{
   allowExportSelectedData?: boolean;
   enabled?: boolean;
-  formats?: Array<"pdf" | "xlsx" | string>;
+  formats?: Array<DataGridExportFormat | string>;
   texts?: Record<string, any> | {
     exportAll?: string;
     exportSelectedRows?: string;
@@ -1143,12 +1145,12 @@ type IFieldProps = React.PropsWithChildren<{
   caption?: string;
   customizeText?: ((fieldInfo: { value: string | number | Date, valueText: string }) => string);
   dataField?: string;
-  dataType?: "string" | "number" | "date" | "boolean" | "object" | "datetime";
+  dataType?: DataType;
   editorOptions?: any;
   editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   falseText?: string;
-  filterOperations?: Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | string>;
-  format?: LocalizationTypes.Format;
+  filterOperations?: Array<FilterBuilderOperation | string>;
+  format?: LocalizationFormat;
   lookup?: Record<string, any> | {
     allowClearing?: boolean;
     dataSource?: Array<any> | DataSourceOptions | Store;
@@ -1238,7 +1240,7 @@ type IFilterBuilderProps = React.PropsWithChildren<{
     notOr?: string;
     or?: string;
   };
-  groupOperations?: Array<"and" | "or" | "notAnd" | "notOr">;
+  groupOperations?: Array<GroupOperation>;
   height?: (() => number | string) | number | string;
   hint?: string;
   hoverStateEnabled?: boolean;
@@ -1321,7 +1323,7 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   onShowing?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
   onShown?: ((e: EventInfo<any>) => void);
   onTitleRendered?: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void);
-  position?: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top";
+  position?: (() => void) | PositionAlignment | PositionConfig;
   resizeEnabled?: boolean;
   restorePosition?: boolean;
   rtlEnabled?: boolean;
@@ -1338,8 +1340,8 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   wrapperAttr?: any;
   defaultHeight?: (() => number | string) | number | string;
   onHeightChange?: (value: (() => number | string) | number | string) => void;
-  defaultPosition?: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top";
-  onPositionChange?: (value: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") => void;
+  defaultPosition?: (() => void) | PositionAlignment | PositionConfig;
+  onPositionChange?: (value: (() => void) | PositionAlignment | PositionConfig) => void;
   defaultVisible?: boolean;
   onVisibleChange?: (value: boolean) => void;
   defaultWidth?: (() => number | string) | number | string;
@@ -1464,7 +1466,7 @@ const FilterPanelTexts = Object.assign<typeof _componentFilterPanelTexts, Nested
 // owners:
 // DataGrid
 type IFilterRowProps = React.PropsWithChildren<{
-  applyFilter?: "auto" | "onClick";
+  applyFilter?: ApplyFilterMode;
   applyFilterText?: string;
   betweenEndText?: string;
   betweenStartText?: string;
@@ -1510,7 +1512,7 @@ type IFormProps = React.PropsWithChildren<{
   alignItemLabels?: boolean;
   alignItemLabelsInAllGroups?: boolean;
   bindingOptions?: Record<string, any>;
-  colCount?: number | "auto";
+  colCount?: Mode | number;
   colCountByScreen?: Record<string, any> | {
     lg?: number;
     md?: number;
@@ -1527,8 +1529,8 @@ type IFormProps = React.PropsWithChildren<{
   hoverStateEnabled?: boolean;
   isDirty?: boolean;
   items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-  labelLocation?: "left" | "right" | "top";
-  labelMode?: "static" | "floating" | "hidden" | "outside";
+  labelLocation?: LabelLocation;
+  labelMode?: FormLabelMode;
   minColWidth?: number;
   onContentReady?: ((e: FormContentReadyEvent) => void);
   onDisposing?: ((e: FormDisposingEvent) => void);
@@ -1581,7 +1583,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = (props: IFormatProps) => {
@@ -1604,13 +1606,13 @@ type IFormItemProps = React.PropsWithChildren<{
   cssClass?: string;
   dataField?: string;
   editorOptions?: any;
-  editorType?: "dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox";
+  editorType?: FormItemComponent;
   helpText?: string;
   isRequired?: boolean;
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
+  itemType?: FormItemType;
   label?: Record<string, any> | {
-    alignment?: "center" | "left" | "right";
-    location?: "left" | "right" | "top";
+    alignment?: HorizontalAlignment;
+    location?: LabelLocation;
     showColon?: boolean;
     template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
     text?: string;
@@ -1686,7 +1688,7 @@ type IGroupingProps = React.PropsWithChildren<{
   allowCollapsing?: boolean;
   autoExpandAll?: boolean;
   contextMenuEnabled?: boolean;
-  expandMode?: "buttonClick" | "rowClick";
+  expandMode?: GroupExpandMode;
   texts?: Record<string, any> | {
     groupByThisColumn?: string;
     groupContinuedMessage?: string;
@@ -1745,8 +1747,8 @@ type IGroupItemProps = React.PropsWithChildren<{
   showInColumn?: string;
   showInGroupFooter?: boolean;
   skipEmptyValues?: boolean;
-  summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum";
-  valueFormat?: LocalizationTypes.Format;
+  summaryType?: string | SummaryType;
+  valueFormat?: LocalizationFormat;
 }>
 const _componentGroupItem = (props: IGroupItemProps) => {
   return React.createElement(NestedOption<IGroupItemProps>, {
@@ -1791,9 +1793,9 @@ const GroupOperationDescriptions = Object.assign<typeof _componentGroupOperation
 type IGroupPanelProps = React.PropsWithChildren<{
   allowColumnDragging?: boolean;
   emptyPanelText?: string;
-  visible?: boolean | "auto";
-  defaultVisible?: boolean | "auto";
-  onVisibleChange?: (value: boolean | "auto") => void;
+  visible?: boolean | Mode;
+  defaultVisible?: boolean | Mode;
+  onVisibleChange?: (value: boolean | Mode) => void;
 }>
 const _componentGroupPanel = (props: IGroupPanelProps) => {
   return React.createElement(NestedOption<IGroupPanelProps>, {
@@ -1818,10 +1820,10 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
-  groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
+  groupInterval?: HeaderFilterGroupInterval | number;
   height?: number | string;
   search?: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig;
-  searchMode?: "contains" | "startswith" | "equals";
+  searchMode?: SearchMode;
   width?: number | string;
   searchTimeout?: number;
   texts?: Record<string, any> | {
@@ -1849,14 +1851,14 @@ const HeaderFilter = Object.assign<typeof _componentHeaderFilter, NestedComponen
 type IHideProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: "bottom" | "left" | "right" | "top";
+  direction?: Direction;
   duration?: number;
   easing?: string;
   from?: AnimationState;
   staggerDelay?: number;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
-  type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
+  type?: AnimationType;
 }>
 const _componentHide = (props: IHideProps) => {
   return React.createElement(NestedOption<IHideProps>, {
@@ -1903,16 +1905,16 @@ type IItemProps = React.PropsWithChildren<{
   cssClass?: string;
   disabled?: boolean;
   html?: string;
-  locateInMenu?: "always" | "auto" | "never";
-  location?: "after" | "before" | "center";
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
   menuItemTemplate?: (() => string | any) | template;
-  name?: "addRowButton" | "applyFilterButton" | "columnChooserButton" | "exportButton" | "groupPanel" | "revertButton" | "saveButton" | "searchPanel";
+  name?: DataGridPredefinedToolbarItem | string;
   options?: any;
-  showText?: "always" | "inMenu";
+  showText?: ShowTextMode;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
+  widget?: ToolbarItemComponent;
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;
@@ -1946,8 +1948,8 @@ const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componen
 type IKeyboardNavigationProps = React.PropsWithChildren<{
   editOnKeyPress?: boolean;
   enabled?: boolean;
-  enterKeyAction?: "startEdit" | "moveFocus";
-  enterKeyDirection?: "none" | "column" | "row";
+  enterKeyAction?: EnterKeyAction;
+  enterKeyDirection?: EnterKeyDirection;
 }>
 const _componentKeyboardNavigation = (props: IKeyboardNavigationProps) => {
   return React.createElement(NestedOption<IKeyboardNavigationProps>, {
@@ -1965,8 +1967,8 @@ const KeyboardNavigation = Object.assign<typeof _componentKeyboardNavigation, Ne
 // owners:
 // FormItem
 type ILabelProps = React.PropsWithChildren<{
-  alignment?: "center" | "left" | "right";
-  location?: "left" | "right" | "top";
+  alignment?: HorizontalAlignment;
+  location?: LabelLocation;
   showColon?: boolean;
   template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
   text?: string;
@@ -1995,7 +1997,7 @@ const Label = Object.assign<typeof _componentLabel, NestedComponentMeta>(_compon
 // owners:
 // DataGrid
 type ILoadPanelProps = React.PropsWithChildren<{
-  enabled?: boolean | "auto";
+  enabled?: boolean | Mode;
   height?: number | string;
   indicatorSrc?: string;
   shading?: boolean;
@@ -2071,8 +2073,8 @@ const MasterDetail = Object.assign<typeof _componentMasterDetail, NestedComponen
 // owners:
 // Position
 type IMyProps = React.PropsWithChildren<{
-  x?: "center" | "left" | "right";
-  y?: "bottom" | "center" | "top";
+  x?: HorizontalAlignment;
+  y?: VerticalAlignment;
 }>
 const _componentMy = (props: IMyProps) => {
   return React.createElement(NestedOption<IMyProps>, {
@@ -2093,7 +2095,7 @@ const My = Object.assign<typeof _componentMy, NestedComponentMeta>(_componentMy,
 type INumericRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentNumericRule = (props: INumericRuleProps) => {
   return React.createElement(NestedOption<INumericRuleProps>, {
@@ -2162,14 +2164,14 @@ const OperationDescriptions = Object.assign<typeof _componentOperationDescriptio
 // owners:
 // DataGrid
 type IPagerProps = React.PropsWithChildren<{
-  allowedPageSizes?: Array<number | "all" | "auto"> | "auto";
-  displayMode?: "adaptive" | "compact" | "full";
+  allowedPageSizes?: Array<number | PagerPageSize> | Mode;
+  displayMode?: DisplayMode;
   infoText?: string;
   label?: string;
   showInfo?: boolean;
   showNavigationButtons?: boolean;
   showPageSizeSelector?: boolean;
-  visible?: boolean | "auto";
+  visible?: boolean | Mode;
 }>
 const _componentPager = (props: IPagerProps) => {
   return React.createElement(NestedOption<IPagerProps>, {
@@ -2219,7 +2221,7 @@ type IPatternRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
   pattern?: RegExp | string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentPatternRule = (props: IPatternRuleProps) => {
   return React.createElement(NestedOption<IPatternRuleProps>, {
@@ -2279,7 +2281,7 @@ type IPopupProps = React.PropsWithChildren<{
   onShowing?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
   onShown?: ((e: EventInfo<any>) => void);
   onTitleRendered?: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void);
-  position?: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top";
+  position?: (() => void) | PositionAlignment | PositionConfig;
   resizeEnabled?: boolean;
   restorePosition?: boolean;
   rtlEnabled?: boolean;
@@ -2296,8 +2298,8 @@ type IPopupProps = React.PropsWithChildren<{
   wrapperAttr?: any;
   defaultHeight?: (() => number | string) | number | string;
   onHeightChange?: (value: (() => number | string) | number | string) => void;
-  defaultPosition?: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top";
-  onPositionChange?: (value: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") => void;
+  defaultPosition?: (() => void) | PositionAlignment | PositionConfig;
+  onPositionChange?: (value: (() => void) | PositionAlignment | PositionConfig) => void;
   defaultVisible?: boolean;
   onVisibleChange?: (value: boolean) => void;
   defaultWidth?: (() => number | string) | number | string;
@@ -2345,22 +2347,22 @@ const Popup = Object.assign<typeof _componentPopup, NestedComponentMeta>(_compon
 // Popup
 // ColumnChooser
 type IPositionProps = React.PropsWithChildren<{
-  at?: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | {
-    x?: "center" | "left" | "right";
-    y?: "bottom" | "center" | "top";
+  at?: Record<string, any> | PositionAlignment | {
+    x?: HorizontalAlignment;
+    y?: VerticalAlignment;
   };
   boundary?: any | string;
   boundaryOffset?: Record<string, any> | string | {
     x?: number;
     y?: number;
   };
-  collision?: Record<string, any> | "fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit" | {
-    x?: "fit" | "flip" | "flipfit" | "none";
-    y?: "fit" | "flip" | "flipfit" | "none";
+  collision?: CollisionResolutionCombination | Record<string, any> | {
+    x?: CollisionResolution;
+    y?: CollisionResolution;
   };
-  my?: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | {
-    x?: "center" | "left" | "right";
-    y?: "bottom" | "center" | "top";
+  my?: Record<string, any> | PositionAlignment | {
+    x?: HorizontalAlignment;
+    y?: VerticalAlignment;
   };
   of?: any | string;
   offset?: Record<string, any> | string | {
@@ -2390,7 +2392,7 @@ type IRangeRuleProps = React.PropsWithChildren<{
   message?: string;
   min?: Date | number | string;
   reevaluate?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentRangeRule = (props: IRangeRuleProps) => {
   return React.createElement(NestedOption<IRangeRuleProps>, {
@@ -2438,7 +2440,7 @@ const RemoteOperations = Object.assign<typeof _componentRemoteOperations, Nested
 type IRequiredRuleProps = React.PropsWithChildren<{
   message?: string;
   trim?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentRequiredRule = (props: IRequiredRuleProps) => {
   return React.createElement(NestedOption<IRequiredRuleProps>, {
@@ -2470,9 +2472,9 @@ type IRowDraggingProps = React.PropsWithChildren<{
     y?: number;
   };
   data?: any;
-  dragDirection?: "both" | "horizontal" | "vertical";
+  dragDirection?: DragDirection;
   dragTemplate?: ((dragInfo: { itemData: any, itemElement: any }, containerElement: any) => string | any) | template;
-  dropFeedbackMode?: "push" | "indicate";
+  dropFeedbackMode?: DragHighlight;
   filter?: string;
   group?: string;
   handle?: string;
@@ -2513,15 +2515,15 @@ const RowDragging = Object.assign<typeof _componentRowDragging, NestedComponentM
 // owners:
 // DataGrid
 type IScrollingProps = React.PropsWithChildren<{
-  columnRenderingMode?: "standard" | "virtual";
-  mode?: "infinite" | "standard" | "virtual";
+  columnRenderingMode?: DataRenderMode;
+  mode?: DataGridScrollMode;
   preloadEnabled?: boolean;
   renderAsync?: boolean;
-  rowRenderingMode?: "standard" | "virtual";
+  rowRenderingMode?: DataRenderMode;
   scrollByContent?: boolean;
   scrollByThumb?: boolean;
-  showScrollbar?: "always" | "never" | "onHover" | "onScroll";
-  useNative?: boolean | "auto";
+  showScrollbar?: ScrollbarMode;
+  useNative?: boolean | Mode;
 }>
 const _componentScrolling = (props: IScrollingProps) => {
   return React.createElement(NestedOption<IScrollingProps>, {
@@ -2543,7 +2545,7 @@ const Scrolling = Object.assign<typeof _componentScrolling, NestedComponentMeta>
 type ISearchProps = React.PropsWithChildren<{
   editorOptions?: any;
   enabled?: boolean;
-  mode?: "contains" | "startswith" | "equals";
+  mode?: SearchMode;
   searchExpr?: Array<(() => any) | string> | (() => any) | string;
   timeout?: number;
 }>
@@ -2595,10 +2597,10 @@ const SearchPanel = Object.assign<typeof _componentSearchPanel, NestedComponentM
 type ISelectionProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
   deferred?: boolean;
-  mode?: "single" | "multiple" | "none";
-  selectAllMode?: "allPages" | "page";
-  sensitivity?: "base" | "accent" | "case" | "variant";
-  showCheckBoxesMode?: "always" | "none" | "onClick" | "onLongTap";
+  mode?: SingleMultipleOrNone;
+  selectAllMode?: SelectAllMode;
+  sensitivity?: SelectionSensitivity;
+  showCheckBoxesMode?: SelectionColumnDisplayMode;
   recursive?: boolean;
   selectByClick?: boolean;
 }>
@@ -2620,14 +2622,14 @@ const Selection = Object.assign<typeof _componentSelection, NestedComponentMeta>
 type IShowProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: "bottom" | "left" | "right" | "top";
+  direction?: Direction;
   duration?: number;
   easing?: string;
   from?: AnimationState;
   staggerDelay?: number;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
-  type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
+  type?: AnimationType;
 }>
 const _componentShow = (props: IShowProps) => {
   return React.createElement(NestedOption<IShowProps>, {
@@ -2646,7 +2648,7 @@ const Show = Object.assign<typeof _componentShow, NestedComponentMeta>(_componen
 // DataGrid
 type ISortByGroupSummaryInfoProps = React.PropsWithChildren<{
   groupColumn?: string;
-  sortOrder?: "asc" | "desc";
+  sortOrder?: SortOrder;
   summaryItem?: number | string;
 }>
 const _componentSortByGroupSummaryInfo = (props: ISortByGroupSummaryInfoProps) => {
@@ -2669,7 +2671,7 @@ type ISortingProps = React.PropsWithChildren<{
   ascendingText?: string;
   clearText?: string;
   descendingText?: string;
-  mode?: "single" | "multiple" | "none";
+  mode?: SingleMultipleOrNone;
   showSortIndexes?: boolean;
 }>
 const _componentSorting = (props: ISortingProps) => {
@@ -2693,7 +2695,7 @@ type IStateStoringProps = React.PropsWithChildren<{
   enabled?: boolean;
   savingTimeout?: number;
   storageKey?: string;
-  type?: "custom" | "localStorage" | "sessionStorage";
+  type?: StateStoreType;
 }>
 const _componentStateStoring = (props: IStateStoringProps) => {
   return React.createElement(NestedOption<IStateStoringProps>, {
@@ -2717,7 +2719,7 @@ type IStringLengthRuleProps = React.PropsWithChildren<{
   message?: string;
   min?: number;
   trim?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentStringLengthRule = (props: IStringLengthRuleProps) => {
   return React.createElement(NestedOption<IStringLengthRuleProps>, {
@@ -2749,8 +2751,8 @@ type ISummaryProps = React.PropsWithChildren<{
     showInColumn?: string;
     showInGroupFooter?: boolean;
     skipEmptyValues?: boolean;
-    summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum";
-    valueFormat?: LocalizationTypes.Format;
+    summaryType?: string | SummaryType;
+    valueFormat?: LocalizationFormat;
   }[];
   recalculateWhileEditing?: boolean;
   skipEmptyValues?: boolean;
@@ -2766,7 +2768,7 @@ type ISummaryProps = React.PropsWithChildren<{
     sumOtherColumn?: string;
   };
   totalItems?: Array<Record<string, any>> | {
-    alignment?: "center" | "left" | "right";
+    alignment?: HorizontalAlignment;
     column?: string;
     cssClass?: string;
     customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string);
@@ -2774,8 +2776,8 @@ type ISummaryProps = React.PropsWithChildren<{
     name?: string;
     showInColumn?: string;
     skipEmptyValues?: boolean;
-    summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum";
-    valueFormat?: LocalizationTypes.Format;
+    summaryType?: string | SummaryType;
+    valueFormat?: LocalizationFormat;
   }[];
 }>
 const _componentSummary = (props: ISummaryProps) => {
@@ -2911,7 +2913,7 @@ const To = Object.assign<typeof _componentTo, NestedComponentMeta>(_componentTo,
 // DataGrid
 type IToolbarProps = React.PropsWithChildren<{
   disabled?: boolean;
-  items?: Array<dxDataGridToolbarItem | "addRowButton" | "applyFilterButton" | "columnChooserButton" | "exportButton" | "groupPanel" | "revertButton" | "saveButton" | "searchPanel">;
+  items?: Array<DataGridPredefinedToolbarItem | dxDataGridToolbarItem>;
   visible?: boolean;
 }>
 const _componentToolbar = (props: IToolbarProps) => {
@@ -2936,16 +2938,16 @@ type IToolbarItemProps = React.PropsWithChildren<{
   cssClass?: string;
   disabled?: boolean;
   html?: string;
-  locateInMenu?: "always" | "auto" | "never";
-  location?: "after" | "before" | "center";
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
   menuItemTemplate?: (() => string | any) | template;
   options?: any;
-  showText?: "always" | "inMenu";
+  showText?: ShowTextMode;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
-  toolbar?: "bottom" | "top";
+  toolbar?: ToolbarLocation;
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
+  widget?: ToolbarItemComponent;
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;
@@ -2977,7 +2979,7 @@ const ToolbarItem = Object.assign<typeof _componentToolbarItem, NestedComponentM
 // owners:
 // Summary
 type ITotalItemProps = React.PropsWithChildren<{
-  alignment?: "center" | "left" | "right";
+  alignment?: HorizontalAlignment;
   column?: string;
   cssClass?: string;
   customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string);
@@ -2985,8 +2987,8 @@ type ITotalItemProps = React.PropsWithChildren<{
   name?: string;
   showInColumn?: string;
   skipEmptyValues?: boolean;
-  summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum";
-  valueFormat?: LocalizationTypes.Format;
+  summaryType?: string | SummaryType;
+  valueFormat?: LocalizationFormat;
 }>
 const _componentTotalItem = (props: ITotalItemProps) => {
   return React.createElement(NestedOption<ITotalItemProps>, {
@@ -3011,14 +3013,14 @@ const TotalItem = Object.assign<typeof _componentTotalItem, NestedComponentMeta>
 type IValidationRuleProps = React.PropsWithChildren<{
   message?: string;
   trim?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
   ignoreEmptyValue?: boolean;
   max?: Date | number | string;
   min?: Date | number | string;
   reevaluate?: boolean;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
   comparisonTarget?: (() => any);
-  comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
+  comparisonType?: ComparisonOperator;
   pattern?: RegExp | string;
 }>
 const _componentValidationRule = (props: IValidationRuleProps) => {
@@ -3046,7 +3048,7 @@ type IValueFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentValueFormat = (props: IValueFormatProps) => {

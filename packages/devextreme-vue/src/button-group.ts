@@ -57,8 +57,8 @@ const componentConfig = {
     rtlEnabled: Boolean,
     selectedItemKeys: Array,
     selectedItems: Array,
-    selectionMode: String,
-    stylingMode: String,
+    selectionMode: {},
+    stylingMode: {},
     tabIndex: Number,
     visible: Boolean,
     width: [Function, Number, String]
@@ -131,7 +131,7 @@ const DxItemConfig = {
     icon: String,
     template: {},
     text: String,
-    type: String,
+    type: {},
     visible: Boolean
   }
 };

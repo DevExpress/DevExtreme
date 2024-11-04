@@ -42,3 +42,27 @@ test('Chat: avatar', async (t) => {
     items,
   }, '#chat');
 });
+
+test('Chat: showAvatar set to false', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await testScreenshot(t, takeScreenshot, 'Avatar with showAvatar set to false.png', { element: '#chat' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'chat');
+
+  const userFirst = createUser(1, 'First User');
+  const userSecond = createUser(2, 'Second User');
+
+  const items = generateMessages(2, userFirst, userSecond, false, false, 2);
+
+  return createWidget('dxChat', {
+    width: 400,
+    height: 600,
+    user: userSecond,
+    items,
+    showAvatar: false,
+  }, '#chat');
+});
