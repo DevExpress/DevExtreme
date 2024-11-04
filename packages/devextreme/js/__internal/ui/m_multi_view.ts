@@ -109,7 +109,7 @@ const MultiView = CollectionWidget.inherit({
   _normalizeIndex(index, direction, loop = true) {
     const count = this._itemsCount();
 
-    if (count === 0 || this._isAllItemsHidden()) {
+    if (this._isAllItemsHidden()) {
       return;
     }
 
