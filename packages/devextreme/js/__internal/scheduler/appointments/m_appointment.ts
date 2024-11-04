@@ -151,7 +151,7 @@ export class Appointment extends DOMComponent {
     this._renderDirection();
 
     (this.$element() as any).data('dxAppointmentStartDate', this.option('startDate'));
-    (this.$element() as any).attr('role', 'button');
+    (this.$element() as any).attr('role', 'application');
 
     this._renderRecurrenceClass();
     this._renderResizable();
