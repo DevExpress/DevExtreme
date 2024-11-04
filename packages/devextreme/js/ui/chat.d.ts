@@ -92,7 +92,7 @@ export type User = {
      * @default undefined
      * @public
      */
-    avatarAlt?: string;
+    avatarAlt?: string | undefined;
 };
 
 /**
@@ -206,7 +206,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @default undefined
      * @public
      */
-    errors?: Array<Alert> | undefined;
+    alerts?: Array<Alert> | undefined;
     /**
      * @docid
      * @default []
@@ -244,7 +244,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @action
      * @public
      */
-    onMessageEntered?: ((e: MessageEnteredEvent) => void);
+    onMessageEntered?: ((e: MessageEnteredEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
@@ -252,7 +252,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @action
      * @public
      */
-    onTypingStart?: ((e: TypingEndEvent) => void);
+    onTypingStart?: ((e: TypingEndEvent) => void) | undefined ;
     /**
      * @docid
      * @default undefined
@@ -260,7 +260,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @action
      * @public
      */
-    onTypingEnd?: ((e: TypingEndEvent) => void);
+    onTypingEnd?: ((e: TypingEndEvent) => void) | undefined;
 }
 
 /**
