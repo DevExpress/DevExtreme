@@ -447,7 +447,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @docid
        * @default undefined
        */
-      colorGroupingField?: string;
+      colorGroupingField?: string | undefined;
       /**
        * @docid
        * @default undefined
@@ -462,7 +462,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @docid
        * @default undefined
        */
-      dataField?: string;
+      dataField?: string | undefined;
       /**
        * @docid
        * @type object|Store|DataSource|DataSourceOptions|string|Array<any>|null
@@ -576,7 +576,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @docid
        * @default undefined
        */
-      sizeGroupingField?: string;
+      sizeGroupingField?: string | undefined;
       /**
        * @docid
        * @default undefined

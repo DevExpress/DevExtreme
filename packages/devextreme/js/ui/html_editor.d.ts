@@ -155,7 +155,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @default undefined
      * @public
      */
-    converter?: Converter;
+    converter?: Converter | undefined;
     /**
      * @docid
      * @default true

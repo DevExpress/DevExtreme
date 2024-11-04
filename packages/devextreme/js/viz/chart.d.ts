@@ -1596,7 +1596,7 @@ export type ArgumentAxisConstantLines = CommonAxisSettingsConstantLineStyle & {
      * @default undefined
      * @public
      */
-    value?: number | Date | string;
+    value?: number | Date | string | undefined;
 };
 /**
  * @public
@@ -1615,7 +1615,7 @@ export type ArgumentAxisConstantLinesLabel = CommonAxisSettingsConstantLineStyle
      * @default undefined
      * @public
      */
-    text?: string;
+    text?: string | undefined;
     /**
      * @docid dxChartOptions.argumentAxis.constantLines.label.verticalAlignment
      * @default 'top'

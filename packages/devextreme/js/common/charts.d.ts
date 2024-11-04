@@ -470,45 +470,45 @@ export interface SeriesPoint {
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
      * @public
      */
-    image?: string | {
+    image?: string | undefined | {
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.image.height
        * @default 30
        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
        */
-      height?: number | {
+      height?: number | undefined | {
         /**
          * @docid dxChartSeriesTypes.CommonSeries.point.image.height.rangeMaxPoint
          * @default undefined
          * @propertyOf dxChartSeriesTypes.RangeAreaSeries
          */
-        rangeMaxPoint?: number;
+        rangeMaxPoint?: number | undefined;
         /**
          * @docid dxChartSeriesTypes.CommonSeries.point.image.height.rangeMinPoint
          * @default undefined
          * @propertyOf dxChartSeriesTypes.RangeAreaSeries
          */
-        rangeMinPoint?: number;
-      } | undefined;
+        rangeMinPoint?: number | undefined;
+      };
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.image.url
        * @default undefined
        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
        */
-      url?: string | {
+      url?: string | undefined | {
         /**
          * @docid dxChartSeriesTypes.CommonSeries.point.image.url.rangeMaxPoint
          * @default undefined
          * @propertyOf dxChartSeriesTypes.RangeAreaSeries
          */
-        rangeMaxPoint?: string;
+        rangeMaxPoint?: string | undefined;
         /**
          * @docid dxChartSeriesTypes.CommonSeries.point.image.url.rangeMinPoint
          * @default undefined
          * @propertyOf dxChartSeriesTypes.RangeAreaSeries
          */
-        rangeMinPoint?: string;
-      } | undefined;
+        rangeMinPoint?: string | undefined;
+      };
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.image.width
        * @default 30

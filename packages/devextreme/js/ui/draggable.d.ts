@@ -218,7 +218,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @default undefined
      * @public
      */
-    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: DxElement) => string | UserDefinedElement | undefined);
+    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid
      * @default null

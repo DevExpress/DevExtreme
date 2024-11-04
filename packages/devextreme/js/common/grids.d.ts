@@ -515,7 +515,7 @@ export type ColumnChooser = {
    * @docid GridBaseOptions.columnChooser.position
    * @default undefined
    */
-  position?: PositionConfig;
+  position?: PositionConfig | undefined;
   /**
    * @docid GridBaseOptions.columnChooser.search
    */
