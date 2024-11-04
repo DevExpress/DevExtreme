@@ -239,10 +239,10 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get type(): ButtonType {
+    get type(): ButtonType | string {
         return this._getOption('type');
     }
-    set type(value: ButtonType) {
+    set type(value: ButtonType | string) {
         this._setOption('type', value);
     }
 
@@ -441,7 +441,7 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() typeChange: EventEmitter<ButtonType>;
+    @Output() typeChange: EventEmitter<ButtonType | string>;
 
     /**
     

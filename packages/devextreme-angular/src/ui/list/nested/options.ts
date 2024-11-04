@@ -1,17 +1,36 @@
 /* tslint:disable:max-line-length */
 
-import { NestedOption } from 'devextreme-angular/core';
+
 import {
     Component,
+    OnInit,
+    OnDestroy,
+    NgModule,
+    Host,
+    SkipSelf,
+    Input
 } from '@angular/core';
+
+
+
 
 import { ButtonStyle, ButtonType } from 'devextreme/common';
 import { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/button';
 
+import {
+    NestedOptionHost,
+} from 'devextreme-angular/core';
+import { NestedOption } from 'devextreme-angular/core';
+
+
 @Component({
-    template: ''
+    selector: 'dxo-list-options',
+    template: '',
+    styles: [''],
+    providers: [NestedOptionHost]
 })
-export abstract class DxoButtonOptions extends NestedOption {
+export class DxoListOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+    @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
     }
@@ -19,6 +38,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('accessKey', value);
     }
 
+    @Input()
     get activeStateEnabled(): boolean {
         return this._getOption('activeStateEnabled');
     }
@@ -26,6 +46,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('activeStateEnabled', value);
     }
 
+    @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
     }
@@ -33,6 +54,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('disabled', value);
     }
 
+    @Input()
     get elementAttr(): any {
         return this._getOption('elementAttr');
     }
@@ -40,6 +62,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('elementAttr', value);
     }
 
+    @Input()
     get focusStateEnabled(): boolean {
         return this._getOption('focusStateEnabled');
     }
@@ -47,6 +70,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('focusStateEnabled', value);
     }
 
+    @Input()
     get height(): number | Function | string | undefined {
         return this._getOption('height');
     }
@@ -54,6 +78,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('height', value);
     }
 
+    @Input()
     get hint(): string | undefined {
         return this._getOption('hint');
     }
@@ -61,6 +86,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('hint', value);
     }
 
+    @Input()
     get hoverStateEnabled(): boolean {
         return this._getOption('hoverStateEnabled');
     }
@@ -68,6 +94,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('hoverStateEnabled', value);
     }
 
+    @Input()
     get icon(): string {
         return this._getOption('icon');
     }
@@ -75,6 +102,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('icon', value);
     }
 
+    @Input()
     get onClick(): ((e: ClickEvent) => void) {
         return this._getOption('onClick');
     }
@@ -82,6 +110,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('onClick', value);
     }
 
+    @Input()
     get onContentReady(): ((e: ContentReadyEvent) => void) {
         return this._getOption('onContentReady');
     }
@@ -89,6 +118,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('onContentReady', value);
     }
 
+    @Input()
     get onDisposing(): ((e: DisposingEvent) => void) {
         return this._getOption('onDisposing');
     }
@@ -96,6 +126,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('onDisposing', value);
     }
 
+    @Input()
     get onInitialized(): ((e: InitializedEvent) => void) {
         return this._getOption('onInitialized');
     }
@@ -103,6 +134,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('onInitialized', value);
     }
 
+    @Input()
     get onOptionChanged(): ((e: OptionChangedEvent) => void) {
         return this._getOption('onOptionChanged');
     }
@@ -110,6 +142,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('onOptionChanged', value);
     }
 
+    @Input()
     get rtlEnabled(): boolean {
         return this._getOption('rtlEnabled');
     }
@@ -117,6 +150,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('rtlEnabled', value);
     }
 
+    @Input()
     get stylingMode(): ButtonStyle {
         return this._getOption('stylingMode');
     }
@@ -124,6 +158,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('stylingMode', value);
     }
 
+    @Input()
     get tabIndex(): number {
         return this._getOption('tabIndex');
     }
@@ -131,6 +166,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('tabIndex', value);
     }
 
+    @Input()
     get template(): any {
         return this._getOption('template');
     }
@@ -138,6 +174,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('template', value);
     }
 
+    @Input()
     get text(): string {
         return this._getOption('text');
     }
@@ -145,6 +182,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('text', value);
     }
 
+    @Input()
     get type(): ButtonType | string {
         return this._getOption('type');
     }
@@ -152,6 +190,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('type', value);
     }
 
+    @Input()
     get useSubmitBehavior(): boolean {
         return this._getOption('useSubmitBehavior');
     }
@@ -159,6 +198,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('useSubmitBehavior', value);
     }
 
+    @Input()
     get validationGroup(): string | undefined {
         return this._getOption('validationGroup');
     }
@@ -166,6 +206,7 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('validationGroup', value);
     }
 
+    @Input()
     get visible(): boolean {
         return this._getOption('visible');
     }
@@ -173,10 +214,45 @@ export abstract class DxoButtonOptions extends NestedOption {
         this._setOption('visible', value);
     }
 
+    @Input()
     get width(): number | Function | string | undefined {
         return this._getOption('width');
     }
     set width(value: number | Function | string | undefined) {
         this._setOption('width', value);
     }
+
+
+    protected get _optionPath() {
+        return 'options';
+    }
+
+
+    constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
+            @Host() optionHost: NestedOptionHost) {
+        super();
+        parentOptionHost.setNestedOption(this);
+        optionHost.setHost(this, this._fullOptionPath.bind(this));
+    }
+
+
+    ngOnInit() {
+        this._addRecreatedComponent();
+    }
+
+    ngOnDestroy() {
+        this._addRemovedOption(this._getOptionPath());
+    }
+
+
 }
+
+@NgModule({
+  declarations: [
+    DxoListOptionsComponent
+  ],
+  exports: [
+    DxoListOptionsComponent
+  ],
+})
+export class DxoListOptionsModule { }
