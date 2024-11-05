@@ -1121,6 +1121,26 @@ QUnit.module('keyboard navigation', {
         assert.equal(tabsFocusedIndex, $(this.instance.option('focusedElement')).index(), 'multiView focused element is equal tabs focused element');
     });
 
+    QUnit.test('should go back to first index when loop = true and root element is focused', function(assert) {
+        this.instance.option({
+            items: [1, 2, 3],
+            loop: false,
+            swipeEnabled: true,
+            focusStateEnabled: true
+        });
+        this.instance.option('loop', true);
+        this.$element.attr('tabindex', 0);
+
+        const pointer = pointerMock(this.$element);
+        const keyboard = keyboardMock(this.$element);
+
+        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+        this.instance.focus();
+        keyboard.keyDown('down').keyDown('down');
+
+        assert.strictEqual(this.instance.option('selectedIndex'), 0, 'loop comes back to first element');
+    });
+
     if(devices.current().deviceType === 'desktop') {
         const createWidget = ($element) => {
             const widget = $element.dxTabPanel({
