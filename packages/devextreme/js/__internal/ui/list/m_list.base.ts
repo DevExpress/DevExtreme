@@ -653,12 +653,12 @@ export const ListBase = CollectionWidget.inherit({
 
     if (collapsibleGroups) {
       eventsEngine.on($element, eventNameClick, headerSelector, (e) => {
-        this._collapseGroupCallback(e);
+        this._processGroupCollapse(e);
       });
     }
   },
 
-  _collapseGroupCallback(e): void {
+  _processGroupCollapse(e): void {
     const actionCallback = (e) => {
       const { focusStateEnabled } = this.option();
       const $group = $(e.event.currentTarget).parent();
@@ -688,7 +688,7 @@ export const ListBase = CollectionWidget.inherit({
     if (collapsibleGroups && isGroupHeader) {
       const params = this._getHandlerExtendedParams(e, $(focusedElement));
 
-      this._collapseGroupCallback(params);
+      this._processGroupCollapse(params);
 
       return;
     }
