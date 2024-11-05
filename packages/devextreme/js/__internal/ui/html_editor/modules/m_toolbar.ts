@@ -545,7 +545,7 @@ if (Quill) {
       } else {
         widget.$element().addClass(ACTIVE_FORMAT_CLASS);
         widget.$element().addClass(SELECTED_STATE_CLASS);
-        widget.setAria('pressed', true);
+        widget.$element().attr('aria-pressed', true);
       }
     }
 
@@ -614,7 +614,7 @@ if (Quill) {
     _resetFormatWidget(name, widget) {
       widget.$element().removeClass(ACTIVE_FORMAT_CLASS);
       widget.$element().removeClass(SELECTED_STATE_CLASS);
-      widget.setAria('pressed', undefined);
+      widget.$element().attr('aria-pressed', undefined);
 
       if (this._isColorFormat(name)) {
         this._updateColorWidget(name);
