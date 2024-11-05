@@ -1,9 +1,14 @@
+import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../helpers/generateDataSourceData';
 import url from '../../../helpers/getPageUrl';
+
+const scrollTo = ClientFunction((x = 0, y = 0) => {
+  window.scrollTo(x, y);
+});
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -205,4 +210,81 @@ fixture.disablePageReloads`Resize columns - widget mode`
       columns[6].fixedPosition = 'right';
     },
   }));
+
+  safeSizeTest(`The separator should have correct position when resizing fixed column on the right (rtlEnabled = ${rtlEnabled})`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const columnIndex = rtlEnabled ? 1 : 23;
+
+    await t.expect(dataGrid.isReady()).ok();
+
+    // act
+    await dataGrid.resizeHeader(columnIndex, -100, false);
+
+    await takeScreenshot(`separator_position_with_fixed_column_on_right_(widget_mode_and_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+
+    // assert
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+    dataSource: getData(5, 25),
+    rtlEnabled,
+    columnAutoWidth: true,
+    allowColumnResizing: true,
+    columnWidth: 200,
+    columnResizingMode: 'widget',
+    customizeColumns: (columns) => {
+      columns[5].fixed = true;
+      columns[5].fixedPosition = 'right';
+      columns[6].fixed = true;
+      columns[6].fixedPosition = 'right';
+    },
+  }));
+
+  safeSizeTest(`The separator should have correct position when there is window scrollTop (rtlEnabled = ${rtlEnabled})`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const columnIndex = rtlEnabled ? 1 : 23;
+
+    await t.expect(dataGrid.isReady()).ok();
+
+    // act
+    await scrollTo(0, 1000);
+    await dataGrid.resizeHeader(columnIndex, -100, false);
+
+    await takeScreenshot(`separator_position_with_window_scroll_top_(widget_mode_and_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+
+    // assert
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [900, 800])
+    .before(async () => {
+      await ClientFunction(() => {
+        $('#container').css('margin-top', '800px');
+      })();
+
+      await createWidget('dxDataGrid', {
+        dataSource: getData(5, 25),
+        rtlEnabled,
+        columnAutoWidth: true,
+        allowColumnResizing: true,
+        columnWidth: 200,
+        columnResizingMode: 'widget',
+        customizeColumns: (columns) => {
+          columns[5].fixed = true;
+          columns[5].fixedPosition = 'right';
+          columns[6].fixed = true;
+          columns[6].fixedPosition = 'right';
+        },
+      });
+    })
+    .after(async () => {
+      await ClientFunction(() => {
+        $('#container').css('margin-top', '');
+      })();
+    });
 });

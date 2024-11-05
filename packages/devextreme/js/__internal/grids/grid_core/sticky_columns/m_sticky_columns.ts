@@ -476,6 +476,27 @@ const footerView = (
 ) => class FooterViewStickyColumnsExtender extends baseStickyColumns(Base) {};
 
 const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class ColumnResizerStickyColumnsExtender extends Base {
+  protected getSeparatorOffsetX($cell: dxElementWrapper): number {
+    // @ts-expect-error
+    const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
+
+    if (hasStickyColumns) {
+      const $container = $(this._columnHeadersView.getContent());
+      const isFixedCellPinnedToRight = GridCoreStickyColumnsDom.isFixedCellPinnedToRight(
+        $cell,
+        $container,
+        this.addWidgetPrefix.bind(this),
+      );
+      const isWidgetResizingMode = this.option('columnResizingMode') === 'widget';
+
+      if (isWidgetResizingMode && isFixedCellPinnedToRight) {
+        return $cell.offset()?.left ?? 0;
+      }
+    }
+
+    return super.getSeparatorOffsetX($cell);
+  }
+
   protected _correctColumnIndexForPoint(point, correctionValue: number, columns): void {
     const rtlEnabled = this.option('rtlEnabled');
     const isWidgetResizingMode = this.option('columnResizingMode') === 'widget';

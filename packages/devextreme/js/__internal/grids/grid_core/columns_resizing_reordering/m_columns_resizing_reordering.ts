@@ -754,6 +754,16 @@ export class ColumnsResizerViewController extends modules.ViewController {
     return null;
   }
 
+  protected getSeparatorOffsetX($cell: dxElementWrapper): number {
+    const isNextColumnMode = isNextColumnResizingMode(this);
+    const rtlEnabled = this.option('rtlEnabled');
+    const isRtlParentStyle = this._isRtlParentStyle();
+    const outerWidth: number = $cell[0].getBoundingClientRect().width;
+    const cellOffset: number = $cell.offset()?.left ?? 0;
+
+    return cellOffset + ((isNextColumnMode || isRtlParentStyle) && rtlEnabled ? 0 : outerWidth);
+  }
+
   private _moveSeparator(args) {
     const e = args.event;
     const that = e.data;
@@ -763,7 +773,6 @@ export class ColumnsResizerViewController extends modules.ViewController {
     const parentOffset = that._$parentContainer.offset();
     const parentOffsetLeft = parentOffset.left;
     const eventData = getEventData(e);
-    const rtlEnabled = that.option('rtlEnabled');
     const isRtlParentStyle = this._isRtlParentStyle();
     const isDragging = that._draggingHeaderView?.isDragging();
 
@@ -771,10 +780,11 @@ export class ColumnsResizerViewController extends modules.ViewController {
       if ((parentOffsetLeft <= eventData.x || !isNextColumnMode && isRtlParentStyle) && (!isNextColumnMode || eventData.x <= parentOffsetLeft + getWidth(that._$parentContainer))) {
         if (that._updateColumnsWidthIfNeeded(eventData.x)) {
           const $cell = that._columnHeadersView.getColumnElements().eq(that._resizingInfo.currentColumnIndex);
-          const cell = $cell[0];
-          if (cell) {
-            const outerWidth = cell.getBoundingClientRect().width;
-            that._columnsSeparatorView.moveByX($cell.offset().left + ((isNextColumnMode || isRtlParentStyle) && rtlEnabled ? 0 : outerWidth));
+
+          if ($cell.length) {
+            const offsetX = this.getSeparatorOffsetX($cell);
+
+            that._columnsSeparatorView.moveByX(offsetX);
             that._tablePositionController.update(that._targetPoint.y);
             e.preventDefault();
           }
