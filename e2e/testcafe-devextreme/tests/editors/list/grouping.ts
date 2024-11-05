@@ -40,17 +40,16 @@ test('Grouped list appearance', async (t) => {
 
   const list = new List('#container');
 
-  await t.click(list.getItem(2).element);
-  await t.pressKey('down');
+  await t
+    .click(list.getItem(2).element)
+    .pressKey('down');
 
   await testScreenshot(t, takeScreenshot, 'Grouped list with focused header.png', { element: '#container' });
 
-  await t.hover(list.getGroup(1).header);
-
-  await testScreenshot(t, takeScreenshot, 'Grouped list with hovered header.png', { element: '#container' });
-
-  await t.click(list.getGroup(0).header);
-  await t.click(list.getGroup(2).header);
+  await t
+    .click(list.getGroup(0).header)
+    .click(list.getGroup(2).header)
+    .hover(list.getGroup(1).header);
 
   await testScreenshot(t, takeScreenshot, 'Grouped list appearance.png', { element: '#container' });
 
@@ -98,7 +97,8 @@ test('Grouped list appearance', async (t) => {
 
     await t
       .click(list.getGroup(0).header)
-      .click(list.getGroup(2).header);
+      .click(list.getGroup(2).header)
+      .hover(list.getGroup(1).header);
 
     await testScreenshot(t, takeScreenshot, `Grouped list appearance with template. rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
