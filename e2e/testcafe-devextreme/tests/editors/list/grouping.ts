@@ -49,7 +49,7 @@ test('Grouped list appearance', async (t) => {
   await t
     .click(list.getGroup(0).header)
     .click(list.getGroup(2).header)
-    .click(list.getItem(3).element)
+    .click(list.getItem(4).element)
     .hover(list.getGroup(1).header);
 
   await testScreenshot(t, takeScreenshot, 'Grouped list appearance.png', { element: '#container' });
@@ -104,6 +104,7 @@ test('Grouped list appearance', async (t) => {
     await t
       .click(list.getGroup(0).header)
       .click(list.getGroup(2).header)
+      .click(list.getItem(4).element)
       .hover(list.getGroup(1).header);
 
     await testScreenshot(t, takeScreenshot, `Grouped list appearance with template. rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
@@ -117,24 +118,25 @@ test('Grouped list appearance', async (t) => {
     groupTemplate(data) {
       const wrapper = $('<div>');
 
-      $(`<span>${data.key}</span>`)
-        .appendTo(wrapper);
-
-      $('<div>second row</div>')
-        .appendTo(wrapper);
+      $(`<span>${data.key}</span>`).appendTo(wrapper);
+      $('<div>second row</div>').appendTo(wrapper);
 
       return wrapper;
     },
-    dataSource: [{
-      key: 'One',
-      items: ['1_1', '1_2', '1_3'],
-    }, {
-      key: 'Two',
-      items: ['2_1', '2_2', '2_3'],
-    }, {
-      key: 'Three',
-      items: ['3_1', '3_2', '3_3'],
-    }],
+    dataSource: [
+      {
+        key: 'One',
+        items: ['1_1', '1_2', '1_3'],
+      },
+      {
+        key: 'Two',
+        items: ['2_1', '2_2', '2_3'],
+      },
+      {
+        key: 'Three',
+        items: ['3_1', '3_2', '3_3'],
+      },
+    ],
     collapsibleGroups: true,
     grouped: true,
     rtlEnabled,

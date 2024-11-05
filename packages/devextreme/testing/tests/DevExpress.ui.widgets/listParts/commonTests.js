@@ -3770,14 +3770,8 @@ QUnit.module('keyboard navigation', {
     QUnit.test('focus should not move to group header if collapsibleGroups: false', function(assert) {
         const $element = $('#list').dxList({
             items: [
-                {
-                    key: 'a',
-                    items: [1],
-                },
-                {
-                    key: 'b',
-                    items: [2],
-                },
+                { key: 'a', items: [1] },
+                { key: 'b', items: [2] },
             ],
             grouped: true,
             focusStateEnabled: true,
