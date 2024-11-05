@@ -1,20 +1,20 @@
 import $ from 'jquery';
 
-import ErrorList from '__internal/ui/chat/errorlist';
+import AlertList from '__internal/ui/chat/alertlist';
 
-const CHAT_ERRORLIST_CLASS = 'dx-chat-errorlist';
-const CHAT_ERRORLIST_ERROR_CLASS = 'dx-chat-errorlist-error';
-const CHAT_ERRORLIST_ERROR_ICON_CLASS = 'dx-chat-errorlist-error-icon';
-const CHAT_ERRORLIST_ERROR_TEXT_CLASS = 'dx-chat-errorlist-error-text';
+const CHAT_ALERTLIST_CLASS = 'dx-chat-alertlist';
+const CHAT_ALERTLIST_ERROR_CLASS = 'dx-chat-alertlist-error';
+const CHAT_ALERTLIST_ERROR_ICON_CLASS = 'dx-chat-alertlist-error-icon';
+const CHAT_ALERTLIST_ERROR_TEXT_CLASS = 'dx-chat-alertlist-error-text';
 
 const moduleConfig = {
     beforeEach: function() {
         const init = (options = {}) => {
-            this.instance = new ErrorList($('#component'), options);
+            this.instance = new AlertList($('#component'), options);
             this.$element = $(this.instance.$element());
         };
 
-        this.getErrors = () => this.$element.children(`.${CHAT_ERRORLIST_ERROR_CLASS}`);
+        this.getAlerts = () => this.$element.children(`.${CHAT_ALERTLIST_ERROR_CLASS}`);
 
         this.reinit = (options) => {
             this.instance.dispose();
@@ -26,10 +26,10 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('ErrorList', moduleConfig, () => {
+QUnit.module('AlertList', moduleConfig, () => {
     QUnit.module('Root element', () => {
         QUnit.test('should have correct class', function(assert) {
-            assert.strictEqual(this.$element.hasClass(CHAT_ERRORLIST_CLASS), true);
+            assert.strictEqual(this.$element.hasClass(CHAT_ALERTLIST_CLASS), true);
         });
 
         QUnit.test('should not have any elements inside by default', function(assert) {
@@ -41,9 +41,9 @@ QUnit.module('ErrorList', moduleConfig, () => {
                 items: [{ message: 'error_1' }, { message: 'error_2' }],
             });
 
-            const $errors = this.getErrors();
+            const $alerts = this.getAlerts();
 
-            assert.strictEqual($errors.length, 2, 'error element count is correct');
+            assert.strictEqual($alerts.length, 2, 'error element count is correct');
         });
     });
 
@@ -53,10 +53,10 @@ QUnit.module('ErrorList', moduleConfig, () => {
                 items: [{ message: 'error_1' }],
             });
 
-            const $errors = this.getErrors();
+            const $alerts = this.getAlerts();
 
-            assert.strictEqual($errors.children(0).hasClass(CHAT_ERRORLIST_ERROR_ICON_CLASS), true, 'icon container was rendered');
-            assert.strictEqual($errors.children(1).hasClass(CHAT_ERRORLIST_ERROR_TEXT_CLASS), true, 'text container was rendered');
+            assert.strictEqual($alerts.children(0).hasClass(CHAT_ALERTLIST_ERROR_ICON_CLASS), true, 'icon container was rendered');
+            assert.strictEqual($alerts.children(1).hasClass(CHAT_ALERTLIST_ERROR_TEXT_CLASS), true, 'text container was rendered');
         });
 
         QUnit.test('should be rendered with right text inside', function(assert) {
@@ -67,10 +67,10 @@ QUnit.module('ErrorList', moduleConfig, () => {
                 ],
             });
 
-            const $errors = this.getErrors();
+            const $alerts = this.getAlerts();
 
-            assert.strictEqual($errors.eq(0).find(`.${CHAT_ERRORLIST_ERROR_TEXT_CLASS}`).text(), 'error_1', 'first error text is correct');
-            assert.strictEqual($errors.eq(1).find(`.${CHAT_ERRORLIST_ERROR_TEXT_CLASS}`).text(), 'error_2', 'second error text is correct');
+            assert.strictEqual($alerts.eq(0).find(`.${CHAT_ALERTLIST_ERROR_TEXT_CLASS}`).text(), 'error_1', 'first error text is correct');
+            assert.strictEqual($alerts.eq(1).find(`.${CHAT_ALERTLIST_ERROR_TEXT_CLASS}`).text(), 'error_2', 'second error text is correct');
         });
     });
 

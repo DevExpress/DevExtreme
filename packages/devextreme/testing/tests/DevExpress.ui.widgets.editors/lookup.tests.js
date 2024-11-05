@@ -3016,6 +3016,28 @@ QUnit.module('keyboard navigation', {
         assert.ok(instance.option('opened'), 'popup is opened');
     });
 
+    QUnit.test('lookup value should not be changed after pressing tab', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test does not actual for mobile devices');
+            return;
+        }
+
+        const $element = $('#widget').dxLookup({
+            opened: true,
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            searchEnabled: false,
+        });
+        const instance = $element.dxLookup('instance');
+        const $input = $(instance.field());
+        const keyboard = keyboardMock($input);
+
+        $input.trigger('focusin');
+        keyboard.keyDown('tab');
+
+        assert.strictEqual(instance.option('value'), null, 'Lookup input field has no value');
+    });
+
     QUnit.testInActiveWindow('lookup item should be selected after \'enter\' key pressing', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test does not actual for mobile devices');

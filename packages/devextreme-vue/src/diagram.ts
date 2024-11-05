@@ -58,7 +58,7 @@ interface DxDiagram extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    autoZoomMode: String,
+    autoZoomMode: {},
     contextMenu: Object,
     contextToolbox: Object,
     customShapes: Array,
@@ -88,7 +88,7 @@ const componentConfig = {
     onRequestLayoutUpdate: Function,
     onSelectionChanged: Function,
     pageColor: String,
-    pageOrientation: String,
+    pageOrientation: {},
     pageSize: Object,
     propertiesPanel: Object,
     readOnly: Boolean,
@@ -97,10 +97,10 @@ const componentConfig = {
     simpleView: Boolean,
     snapToGrid: Boolean,
     toolbox: Object,
-    units: String,
+    units: {},
     useNativeScrolling: Boolean,
     viewToolbar: Object,
-    viewUnits: String,
+    viewUnits: {},
     visible: Boolean,
     width: [Function, Number, String],
     zoomLevel: [Number, Object]
@@ -197,8 +197,8 @@ const DxAutoLayoutConfig = {
     "update:type": null,
   },
   props: {
-    orientation: String,
-    type: String
+    orientation: {},
+    type: {}
   }
 };
 
@@ -221,8 +221,8 @@ const DxCommandConfig = {
   props: {
     icon: String,
     items: Array,
-    location: String,
-    name: String,
+    location: {},
+    name: {},
     text: String
   }
 };
@@ -247,8 +247,8 @@ const DxCommandItemConfig = {
   props: {
     icon: String,
     items: Array,
-    location: String,
-    name: String,
+    location: {},
+    name: {},
     text: String
   }
 };
@@ -314,8 +314,8 @@ const DxContextToolboxConfig = {
     "update:width": null,
   },
   props: {
-    category: String,
-    displayMode: String,
+    category: {},
+    displayMode: {},
     enabled: Boolean,
     shapeIconsPerRow: Number,
     shapes: Array,
@@ -382,7 +382,7 @@ const DxCustomShapeConfig = {
     backgroundImageTop: Number,
     backgroundImageUrl: String,
     backgroundImageWidth: Number,
-    baseType: String,
+    baseType: {},
     category: String,
     connectionPoints: Array,
     defaultHeight: Number,
@@ -439,9 +439,9 @@ const DxDefaultItemPropertiesConfig = {
     "update:textStyle": null,
   },
   props: {
-    connectorLineEnd: String,
-    connectorLineStart: String,
-    connectorLineType: String,
+    connectorLineEnd: {},
+    connectorLineStart: {},
+    connectorLineType: {},
     shapeMaxHeight: Number,
     shapeMaxWidth: Number,
     shapeMinHeight: Number,
@@ -585,9 +585,9 @@ const DxGroupConfig = {
     "update:title": null,
   },
   props: {
-    category: String,
+    category: {},
     commands: Array,
-    displayMode: String,
+    displayMode: {},
     expanded: Boolean,
     shapes: Array,
     title: String
@@ -639,8 +639,8 @@ const DxItemConfig = {
     height: Number,
     icon: String,
     items: Array,
-    location: String,
-    name: String,
+    location: {},
+    name: {},
     text: String,
     width: Number
   }
@@ -701,7 +701,7 @@ const DxNodesConfig = {
     "update:zIndexExpr": null,
   },
   props: {
-    autoLayout: [Object, String],
+    autoLayout: {},
     autoSizeEnabled: Boolean,
     containerChildrenExpr: [Function, String],
     containerKeyExpr: [Function, String],
@@ -789,7 +789,7 @@ const DxPropertiesPanelConfig = {
   },
   props: {
     tabs: Array,
-    visibility: String
+    visibility: {}
   }
 };
 
@@ -866,7 +866,7 @@ const DxToolboxConfig = {
     groups: Array,
     shapeIconsPerRow: Number,
     showSearch: Boolean,
-    visibility: String,
+    visibility: {},
     width: Number
   }
 };
@@ -892,8 +892,8 @@ const DxToolboxGroupConfig = {
     "update:title": null,
   },
   props: {
-    category: String,
-    displayMode: String,
+    category: {},
+    displayMode: {},
     expanded: Boolean,
     shapes: Array,
     title: String

@@ -52,7 +52,7 @@ const Chat = memo(
       }), []);
 
       const expectedChildren = useMemo(() => ({
-        error: { optionName: "errors", isCollectionItem: true },
+        alert: { optionName: "alerts", isCollectionItem: true },
         item: { optionName: "items", isCollectionItem: true },
         typingUser: { optionName: "typingUsers", isCollectionItem: true },
         user: { optionName: "user", isCollectionItem: false }
@@ -75,6 +75,26 @@ const Chat = memo(
 
 
 // owners:
+// Chat
+type IAlertProps = React.PropsWithChildren<{
+  id?: number | string;
+  message?: string;
+}>
+const _componentAlert = (props: IAlertProps) => {
+  return React.createElement(NestedOption<IAlertProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "alerts",
+      IsCollectionItem: true,
+    },
+  });
+};
+
+const Alert = Object.assign<typeof _componentAlert, NestedComponentMeta>(_componentAlert, {
+  componentType: "option",
+});
+
+// owners:
 // Item
 type IAuthorProps = React.PropsWithChildren<{
   avatarAlt?: string;
@@ -92,26 +112,6 @@ const _componentAuthor = (props: IAuthorProps) => {
 };
 
 const Author = Object.assign<typeof _componentAuthor, NestedComponentMeta>(_componentAuthor, {
-  componentType: "option",
-});
-
-// owners:
-// Chat
-type IErrorProps = React.PropsWithChildren<{
-  id?: number | string;
-  message?: string;
-}>
-const _componentError = (props: IErrorProps) => {
-  return React.createElement(NestedOption<IErrorProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "errors",
-      IsCollectionItem: true,
-    },
-  });
-};
-
-const Error = Object.assign<typeof _componentError, NestedComponentMeta>(_componentError, {
   componentType: "option",
 });
 
@@ -189,10 +189,10 @@ export {
   Chat,
   IChatOptions,
   ChatRef,
+  Alert,
+  IAlertProps,
   Author,
   IAuthorProps,
-  Error,
-  IErrorProps,
   Item,
   IItemProps,
   TypingUser,

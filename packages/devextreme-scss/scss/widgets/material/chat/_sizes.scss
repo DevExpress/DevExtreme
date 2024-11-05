@@ -21,12 +21,12 @@ $chat-messagegroup-alignment-start-template: auto 1fr !default;
 $chat-messagegroup-alignment-start-gap: 12px !default;
 $chat-header-padding: 20px !default;
 $chat-information-font-size: 12px !default;
-$chat-error-icon-size: $material-base-icon-size !default;
-$chat-error-content-column-gap: null !default;
-$chat-errors-padding-block: null !default;
-$chat-errors-padding-inline: null !default;
-$chat-errors-row-gap: null !default;
-$chat-error-padding-block: null !default;
+$chat-alert-icon-size: $material-base-icon-size !default;
+$chat-alert-content-column-gap: null !default;
+$chat-alerts-padding-block: null !default;
+$chat-alerts-padding-inline: null !default;
+$chat-alerts-row-gap: null !default;
+$chat-alert-padding-block: null !default;
 
 $chat-messagelist-empty-icon-box-size: null !default;
 $chat-messagelist-empty-icon-size: null !default;
@@ -58,11 +58,11 @@ $chat-typingindicator-circle-border-radius: 999em !default;
   $chat-messagelist-padding: 20px !default;
   $chat-messagegroup-padding: 24px !default;
 
-  $chat-error-content-column-gap: 8px !default;
-  $chat-errors-padding-block: 16px !default;
-  $chat-errors-padding-inline: 20px !default;
-  $chat-errors-row-gap: 4px !default;
-  $chat-error-padding-block: 6px !default;
+  $chat-alert-content-column-gap: 8px !default;
+  $chat-alerts-padding-block: 16px !default;
+  $chat-alerts-padding-inline: 20px !default;
+  $chat-alerts-row-gap: 4px !default;
+  $chat-alert-padding-block: 6px !default;
 
   $chat-messagelist-empty-icon-box-size: 64px !default;
   $chat-messagelist-empty-icon-size: 40px !default;
@@ -86,11 +86,11 @@ $chat-typingindicator-circle-border-radius: 999em !default;
   $chat-messagelist-padding: 16px !default;
   $chat-messagegroup-padding: 12px !default;
 
-  $chat-error-content-column-gap: 4px !default;
-  $chat-errors-padding-block: 12px !default;
-  $chat-errors-padding-inline: 16px !default;
-  $chat-errors-row-gap: 2px !default;
-  $chat-error-padding-block: 5px !default;
+  $chat-alert-content-column-gap: 4px !default;
+  $chat-alerts-padding-block: 12px !default;
+  $chat-alerts-padding-inline: 16px !default;
+  $chat-alerts-row-gap: 2px !default;
+  $chat-alert-padding-block: 5px !default;
 
   $chat-messagelist-empty-icon-box-size: 48px !default;
   $chat-messagelist-empty-icon-size: 32px !default;

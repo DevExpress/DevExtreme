@@ -124,15 +124,15 @@ const DxItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: {},
+    location: {},
     menuItemTemplate: {},
     options: {},
-    showText: String,
+    showText: {},
     template: {},
     text: String,
     visible: Boolean,
-    widget: String
+    widget: {}
   }
 };
 

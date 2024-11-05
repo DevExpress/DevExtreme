@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import Chat from 'ui/chat';
 import MessageList from '__internal/ui/chat/messagelist';
-import ErrorList from '__internal/ui/chat/errorlist';
+import AlertList from '__internal/ui/chat/alertlist';
 import MessageBox, { TYPING_END_DELAY } from '__internal/ui/chat/messagebox';
 import MessageBubble from '__internal/ui/chat/messagebubble';
 import keyboardMock from '../../../helpers/keyboardMock.js';
@@ -17,7 +17,7 @@ import ArrayStore from 'data/array_store';
 const CHAT_HEADER_TEXT_CLASS = 'dx-chat-header-text';
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
-const CHAT_ERRORLIST_CLASS = 'dx-chat-errorlist';
+const CHAT_ALERTLIST_CLASS = 'dx-chat-alertlist';
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
@@ -351,39 +351,39 @@ QUnit.module('Chat', () => {
         });
     });
 
-    QUnit.module('ErrorList integration', {
+    QUnit.module('AlertList integration', {
         beforeEach: function() {
             moduleConfig.beforeEach.apply(this, arguments);
 
-            this.getErrorList = () => ErrorList.getInstance(this.$element.find(`.${CHAT_ERRORLIST_CLASS}`));
+            this.getAlertList = () => AlertList.getInstance(this.$element.find(`.${CHAT_ALERTLIST_CLASS}`));
         }
     }, () => {
-        QUnit.test('passed errors option in Chat should be proxied to the Errorlist', function(assert) {
-            const errors = [{ id: 1, message: 'error' }];
+        QUnit.test('passed alerts option value in Chat should be proxied to the Alertlist', function(assert) {
+            const alerts = [{ id: 1, message: 'error' }];
 
             this.reinit({
-                errors: errors
+                alerts
             });
 
-            const errorList = this.getErrorList();
+            const alertList = this.getAlertList();
 
             const expectedOptions = {
-                items: errors,
+                items: alerts,
             };
 
             Object.entries(expectedOptions).forEach(([key, value]) => {
-                assert.deepEqual(value, errorList.option(key), `${key} value is correct`);
+                assert.deepEqual(value, alertList.option(key), `${key} value is correct`);
             });
         });
 
-        QUnit.test('errors should be passed to messageList after change at runtime', function(assert) {
-            const newErrors = [{ id: 1, message: 'error_1' }, { id: 2, message: 'error_2' }];
+        QUnit.test('alerts should be passed to messageList after change at runtime', function(assert) {
+            const newAlerts = [{ id: 1, message: 'error_1' }, { id: 2, message: 'error_2' }];
 
-            this.instance.option('errors', newErrors);
+            this.instance.option('alerts', newAlerts);
 
-            const errorList = this.getErrorList();
+            const alertList = this.getAlertList();
 
-            assert.deepEqual(errorList.option('items'), newErrors, 'items value is updated');
+            assert.deepEqual(alertList.option('items'), newAlerts, 'items value is updated');
         });
     });
 

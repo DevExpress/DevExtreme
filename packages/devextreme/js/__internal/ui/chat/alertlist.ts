@@ -1,22 +1,22 @@
 import $ from '@js/core/renderer';
 import messageLocalization from '@js/localization/message';
 import type {
-  ChatError,
+  Alert,
 } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
-const CHAT_ERRORLIST_CLASS = 'dx-chat-errorlist';
-const CHAT_ERRORLIST_ERROR_CLASS = 'dx-chat-errorlist-error';
-const CHAT_ERRORLIST_ERROR_ICON_CLASS = 'dx-chat-errorlist-error-icon';
-const CHAT_ERRORLIST_ERROR_TEXT_CLASS = 'dx-chat-errorlist-error-text';
+const CHAT_ALERTLIST_CLASS = 'dx-chat-alertlist';
+const CHAT_ALERTLIST_ERROR_CLASS = 'dx-chat-alertlist-error';
+const CHAT_ALERTLIST_ERROR_ICON_CLASS = 'dx-chat-alertlist-error-icon';
+const CHAT_ALERTLIST_ERROR_TEXT_CLASS = 'dx-chat-alertlist-error-text';
 
-export interface Properties extends WidgetOptions<ErrorList> {
-  items: ChatError[];
+export interface Properties extends WidgetOptions<AlertList> {
+  items: Alert[];
 }
 
-class ErrorList extends Widget<Properties> {
+class AlertList extends Widget<Properties> {
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
@@ -25,7 +25,7 @@ class ErrorList extends Widget<Properties> {
   }
 
   _initMarkup(): void {
-    $(this.element()).addClass(CHAT_ERRORLIST_CLASS);
+    $(this.element()).addClass(CHAT_ALERTLIST_CLASS);
 
     super._initMarkup();
 
@@ -35,7 +35,7 @@ class ErrorList extends Widget<Properties> {
     this._updateAria();
   }
 
-  _renderItems(items: ChatError[]): void {
+  _renderItems(items: Alert[]): void {
     if (items?.length) {
       items.forEach((itemData) => {
         this._renderItem(itemData);
@@ -43,18 +43,18 @@ class ErrorList extends Widget<Properties> {
     }
   }
 
-  _renderItem(itemData: ChatError): void {
+  _renderItem(itemData: Alert): void {
     const $item = $('<div>');
 
     $item
-      .addClass(CHAT_ERRORLIST_ERROR_CLASS);
+      .addClass(CHAT_ALERTLIST_ERROR_CLASS);
 
     $('<div>')
-      .addClass(CHAT_ERRORLIST_ERROR_ICON_CLASS)
+      .addClass(CHAT_ALERTLIST_ERROR_ICON_CLASS)
       .appendTo($item);
 
     $('<div>')
-      .addClass(CHAT_ERRORLIST_ERROR_TEXT_CLASS)
+      .addClass(CHAT_ALERTLIST_ERROR_TEXT_CLASS)
       .appendTo($item)
       .text(String(itemData?.message ?? ''));
 
@@ -65,7 +65,7 @@ class ErrorList extends Widget<Properties> {
     const aria = {
       role: 'log',
       atomic: 'false',
-      label: messageLocalization.format('dxChat-errorListAriaLabel'),
+      label: messageLocalization.format('dxChat-alertListAriaLabel'),
       live: 'polite',
       relevant: 'additions',
     };
@@ -86,4 +86,4 @@ class ErrorList extends Widget<Properties> {
   }
 }
 
-export default ErrorList;
+export default AlertList;

@@ -41,7 +41,7 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     allowedPageSizes: Array,
     disabled: Boolean,
-    displayMode: String,
+    displayMode: {},
     elementAttr: Object,
     focusStateEnabled: Boolean,
     height: [Function, Number, String],

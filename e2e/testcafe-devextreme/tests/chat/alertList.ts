@@ -6,25 +6,25 @@ import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { getFullThemeName, testScreenshot } from '../../helpers/themeUtils';
 
-fixture.disablePageReloads`ChatErrorList`
+fixture.disablePageReloads`ChatAlertList`
   .page(url(__dirname, '../container.html'));
 
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
-])('Errorlist appearance', async (t) => {
+])('Alertlist appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const chat = new Chat('#container');
 
-  await testScreenshot(t, takeScreenshot, 'Errorlist with one error.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Alertlist with one error.png', { element: '#container' });
 
-  await chat.option('errors', [
+  await chat.option('alerts', [
     { id: 1, message: 'Error Message 1. Error Description...' },
     { id: 2, message: 'Error Message 2. Message was not sent' },
     { id: 3, message: 'Error Message 3. An unexpected issue occurred while processing your request. Please check your internet connection or contact support for further assistance.' },
   ]);
 
-  await testScreenshot(t, takeScreenshot, 'Errorlist with long text in error.png', {
+  await testScreenshot(t, takeScreenshot, 'Alertlist with long text in error.png', {
     element: '#container',
     shouldTestInCompact: true,
     compactCallBack: async () => {
@@ -33,7 +33,7 @@ test.clientScripts([
   });
 
   const darkTheme = getFullThemeName().replace('light', 'dark');
-  await testScreenshot(t, takeScreenshot, 'Errorlist with long text in error.png', {
+  await testScreenshot(t, takeScreenshot, 'Alertlist with long text in error.png', {
     element: '#container',
     theme: darkTheme,
     themeChanged: async () => {
@@ -43,7 +43,7 @@ test.clientScripts([
 
   await chat.option('rtlEnabled', true);
 
-  await testScreenshot(t, takeScreenshot, 'Errorlist appearance in RTL mode.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Alertlist appearance in RTL mode.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -86,7 +86,7 @@ test.clientScripts([
     user: userFirst,
     width: 400,
     height: 600,
-    errors: [{ id: 1, message: 'Error Message 1. Error Description...' }],
+    alerts: [{ id: 1, message: 'Error Message 1. Error Description...' }],
   });
 }).after(async () => {
   await ClientFunction(() => {

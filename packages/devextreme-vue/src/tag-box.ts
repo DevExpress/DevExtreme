@@ -102,7 +102,7 @@ const componentConfig = {
     acceptCustomValue: Boolean,
     accessKey: String,
     activeStateEnabled: Boolean,
-    applyValueMode: String,
+    applyValueMode: {},
     buttons: Array,
     customItemCreateEvent: String,
     dataSource: {},
@@ -126,7 +126,7 @@ const componentConfig = {
     items: Array,
     itemTemplate: {},
     label: String,
-    labelMode: String,
+    labelMode: {},
     maxDisplayedTags: Number,
     maxFilterQueryLength: Number,
     maxLength: [Number, String],
@@ -160,9 +160,9 @@ const componentConfig = {
     rtlEnabled: Boolean,
     searchEnabled: Boolean,
     searchExpr: [Array, Function, String],
-    searchMode: String,
+    searchMode: {},
     searchTimeout: Number,
-    selectAllMode: String,
+    selectAllMode: {},
     selectAllText: String,
     selectedItems: Array,
     showClearButton: Boolean,
@@ -170,16 +170,16 @@ const componentConfig = {
     showDropDownButton: Boolean,
     showMultiTagOnly: Boolean,
     showSelectionControls: Boolean,
-    stylingMode: String,
+    stylingMode: {},
     tabIndex: Number,
     tagTemplate: {},
     text: String,
     useItemTextAsTitle: Boolean,
     validationError: {},
     validationErrors: Array,
-    validationMessageMode: String,
-    validationMessagePosition: String,
-    validationStatus: String,
+    validationMessageMode: {},
+    validationMessagePosition: {},
+    validationStatus: {},
     value: Array,
     valueChangeEvent: String,
     valueExpr: [Function, String],
@@ -331,8 +331,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -370,7 +370,7 @@ const DxButtonConfig = {
     "update:options": null,
   },
   props: {
-    location: String,
+    location: {},
     name: String,
     options: Object
   }
@@ -394,8 +394,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -496,7 +496,7 @@ const DxDropDownOptionsConfig = {
     onShowing: Function,
     onShown: Function,
     onTitleRendered: Function,
-    position: [Function, Object, String],
+    position: {},
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -571,14 +571,14 @@ const DxHideConfig = {
   props: {
     complete: Function,
     delay: Number,
-    direction: String,
+    direction: {},
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function,
     to: Object,
-    type: String
+    type: {}
   }
 };
 
@@ -626,8 +626,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -703,11 +703,11 @@ const DxOptionsConfig = {
     onInitialized: Function,
     onOptionChanged: Function,
     rtlEnabled: Boolean,
-    stylingMode: String,
+    stylingMode: {},
     tabIndex: Number,
     template: {},
     text: String,
-    type: String,
+    type: {},
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,
@@ -734,11 +734,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String],
+    at: {},
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String],
-    my: [Object, String],
+    collision: {},
+    my: {},
     of: {},
     offset: [Object, String]
   }
@@ -768,14 +768,14 @@ const DxShowConfig = {
   props: {
     complete: Function,
     delay: Number,
-    direction: String,
+    direction: {},
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function,
     to: Object,
-    type: String
+    type: {}
   }
 };
 
@@ -832,16 +832,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: {},
+    location: {},
     menuItemTemplate: {},
     options: {},
-    showText: String,
+    showText: {},
     template: {},
     text: String,
-    toolbar: String,
+    toolbar: {},
     visible: Boolean,
-    widget: String
+    widget: {}
   }
 };
 

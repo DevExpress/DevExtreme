@@ -152,62 +152,6 @@ test('Messagelist should scrolled to the latest messages after being rendered in
   });
 });
 
-test.clientScripts([
-  { module: 'mockdate' },
-  { content: 'window.MockDate = MockDate;' },
-])('Messagelist with date headers', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await testScreenshot(t, takeScreenshot, 'Messagelist with date headers.png', { element: '#container' });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.set('2024/10/27');
-  })();
-
-  const userFirst = createUser(1, 'First');
-  const userSecond = createUser(2, 'Second');
-  const msInDay = 86400000;
-  const today = new Date('2024/10/27').setHours(7, 22, 0, 0);
-  const yesterday = today - msInDay;
-
-  const items = [{
-    timestamp: new Date('05.01.2024'),
-    author: userFirst,
-    text: 'AAA',
-  }, {
-    timestamp: new Date('06.01.2024'),
-    author: userFirst,
-    text: 'BBB',
-  }, {
-    timestamp: new Date('06.01.2024'),
-    author: userSecond,
-    text: 'CCC',
-  }, {
-    timestamp: yesterday,
-    author: userSecond,
-    text: 'DDD',
-  }, {
-    timestamp: today,
-    author: userFirst,
-    text: 'EEE',
-  }];
-
-  return createWidget('dxChat', {
-    items,
-    user: userSecond,
-    width: 400,
-    height: 600,
-  });
-}).after(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.reset();
-  })();
-});
-
 test('Messagelist with messageTemplate', async (t) => {
   const chat = new Chat('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -289,4 +233,64 @@ test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp 
     showUserName: false,
     showMessageTimestamp: false,
   });
+});
+
+fixture`ChatMessageList: dayHeaders`
+  .page(url(__dirname, '../container.html'));
+
+test.clientScripts([
+  { module: 'mockdate' },
+  { content: 'window.MockDate = MockDate;' },
+])('Messagelist with date headers', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist with date headers.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).MockDate.set('2024/10/27');
+  })();
+
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+  const msInDay = 86400000;
+  const today = new Date('2024/10/27').setHours(7, 22, 0, 0);
+  const yesterday = today - msInDay;
+
+  const items = [{
+    timestamp: new Date('05.01.2024'),
+    author: userFirst,
+    text: 'AAA',
+  }, {
+    timestamp: new Date('06.01.2024'),
+    author: userFirst,
+    text: 'BBB',
+  }, {
+    timestamp: new Date('06.01.2024'),
+    author: userSecond,
+    text: 'CCC',
+  }, {
+    timestamp: yesterday,
+    author: userSecond,
+    text: 'DDD',
+  }, {
+    timestamp: today,
+    author: userFirst,
+    text: 'EEE',
+  }];
+
+  return createWidget('dxChat', {
+    items,
+    user: userSecond,
+    width: 400,
+    height: 600,
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    (window as any).MockDate.reset();
+    delete (window as any).MockDate;
+  })();
 });

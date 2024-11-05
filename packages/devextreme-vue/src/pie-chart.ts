@@ -97,23 +97,23 @@ const componentConfig = {
     onPointSelectionChanged: Function,
     onTooltipHidden: Function,
     onTooltipShown: Function,
-    palette: [Array, String],
-    paletteExtensionMode: String,
+    palette: {},
+    paletteExtensionMode: {},
     pathModified: Boolean,
-    pointSelectionMode: String,
+    pointSelectionMode: {},
     redrawOnResize: Boolean,
-    resolveLabelOverlapping: String,
+    resolveLabelOverlapping: {},
     rtlEnabled: Boolean,
-    segmentsDirection: String,
+    segmentsDirection: {},
     series: [Array, Object],
     seriesTemplate: Object,
     size: Object,
     sizeGroup: String,
     startAngle: Number,
-    theme: String,
+    theme: {},
     title: [Object, String],
     tooltip: Object,
-    type: String
+    type: {}
   },
   emits: {
     "update:isActive": null,
@@ -235,7 +235,7 @@ const DxAnimationConfig = {
   },
   props: {
     duration: Number,
-    easing: String,
+    easing: {},
     enabled: Boolean,
     maxPointCountSupported: Number
   }
@@ -296,7 +296,7 @@ const DxAnnotationConfig = {
     font: Object,
     height: Number,
     image: [Object, String],
-    location: String,
+    location: {},
     name: String,
     offsetX: Number,
     offsetY: Number,
@@ -307,12 +307,12 @@ const DxAnnotationConfig = {
     shadow: Object,
     template: {},
     text: String,
-    textOverflow: String,
+    textOverflow: {},
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
-    type: String,
+    type: {},
     width: Number,
-    wordWrap: String,
+    wordWrap: {},
     x: Number,
     y: Number
   }
@@ -346,7 +346,7 @@ const DxAnnotationBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -375,7 +375,7 @@ const DxArgumentFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -400,7 +400,7 @@ const DxBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -480,7 +480,7 @@ const DxCommonAnnotationSettingsConfig = {
     font: Object,
     height: Number,
     image: [Object, String],
-    location: String,
+    location: {},
     offsetX: Number,
     offsetY: Number,
     opacity: Number,
@@ -490,12 +490,12 @@ const DxCommonAnnotationSettingsConfig = {
     shadow: Object,
     template: {},
     text: String,
-    textOverflow: String,
+    textOverflow: {},
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
-    type: String,
+    type: {},
     width: Number,
-    wordWrap: String,
+    wordWrap: {},
     x: Number,
     y: Number
   }
@@ -528,15 +528,15 @@ const DxCommonSeriesSettingsConfig = {
   },
   props: {
     argumentField: String,
-    argumentType: String,
+    argumentType: {},
     border: Object,
     color: [Object, String],
-    hoverMode: String,
+    hoverMode: {},
     hoverStyle: Object,
     label: Object,
     maxLabelCount: Number,
     minSegmentSize: Number,
-    selectionMode: String,
+    selectionMode: {},
     selectionStyle: Object,
     smallValuesGrouping: Object,
     tagField: String,
@@ -650,7 +650,7 @@ const DxFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -671,7 +671,7 @@ const DxHatchingConfig = {
     "update:width": null,
   },
   props: {
-    direction: String,
+    direction: {},
     opacity: Number,
     step: Number,
     width: Number
@@ -754,20 +754,20 @@ const DxLabelConfig = {
     "update:wordWrap": null,
   },
   props: {
-    argumentFormat: [Object, Function, String],
+    argumentFormat: {},
     backgroundColor: String,
     border: Object,
     connector: Object,
     customizeText: Function,
     displayFormat: String,
     font: Object,
-    format: [Object, Function, String],
-    position: String,
+    format: {},
+    position: {},
     radialOffset: Number,
     rotationAngle: Number,
-    textOverflow: String,
+    textOverflow: {},
     visible: Boolean,
-    wordWrap: String
+    wordWrap: {}
   }
 };
 
@@ -822,20 +822,20 @@ const DxLegendConfig = {
     customizeItems: Function,
     customizeText: Function,
     font: Object,
-    horizontalAlignment: String,
-    hoverMode: String,
-    itemsAlignment: String,
-    itemTextPosition: String,
+    horizontalAlignment: {},
+    hoverMode: {},
+    itemsAlignment: {},
+    itemTextPosition: {},
     margin: [Number, Object],
     markerSize: Number,
     markerTemplate: {},
-    orientation: String,
+    orientation: {},
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     rowCount: Number,
     rowItemSpacing: Number,
     title: [Object, String],
-    verticalAlignment: String,
+    verticalAlignment: {},
     visible: Boolean
   }
 };
@@ -868,12 +868,12 @@ const DxLegendTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: Object,
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    verticalAlignment: String
+    verticalAlignment: {}
   }
 };
 
@@ -980,14 +980,14 @@ const DxPieChartTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: {},
+    verticalAlignment: {},
+    wordWrap: {}
   }
 };
 
@@ -1017,8 +1017,8 @@ const DxPieChartTitleSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 
@@ -1083,16 +1083,16 @@ const DxSeriesConfig = {
   },
   props: {
     argumentField: String,
-    argumentType: String,
+    argumentType: {},
     border: Object,
     color: [Object, String],
-    hoverMode: String,
+    hoverMode: {},
     hoverStyle: Object,
     label: Object,
     maxLabelCount: Number,
     minSegmentSize: Number,
     name: String,
-    selectionMode: String,
+    selectionMode: {},
     selectionStyle: Object,
     smallValuesGrouping: Object,
     tag: {},
@@ -1119,7 +1119,7 @@ const DxSeriesBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     visible: Boolean,
     width: Number
   }
@@ -1205,7 +1205,7 @@ const DxSmallValuesGroupingConfig = {
   },
   props: {
     groupName: String,
-    mode: String,
+    mode: {},
     threshold: Number,
     topCount: Number
   }
@@ -1231,8 +1231,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 
@@ -1258,14 +1258,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: [Object, Number],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: {},
+    verticalAlignment: {},
+    wordWrap: {}
   }
 };
 
@@ -1299,7 +1299,7 @@ const DxTooltipConfig = {
     "update:zIndex": null,
   },
   props: {
-    argumentFormat: [Object, Function, String],
+    argumentFormat: {},
     arrowLength: Number,
     border: Object,
     color: String,
@@ -1309,7 +1309,7 @@ const DxTooltipConfig = {
     customizeTooltip: Function,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String],
+    format: {},
     interactive: Boolean,
     opacity: Number,
     paddingLeftRight: Number,
@@ -1346,7 +1346,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number

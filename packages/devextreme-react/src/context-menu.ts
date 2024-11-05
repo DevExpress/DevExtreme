@@ -10,8 +10,9 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { dxContextMenuItem, ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, PositioningEvent, ShowingEvent, ShownEvent } from "devextreme/ui/context_menu";
-import type { AnimationConfig, AnimationState } from "devextreme/animation/fx";
-import type { PositionConfig } from "devextreme/animation/position";
+import type { AnimationConfig, AnimationState, AnimationType } from "devextreme/animation/fx";
+import type { HorizontalAlignment, VerticalAlignment, Direction, PositionAlignment, SubmenuShowMode } from "devextreme/common";
+import type { CollisionResolution, PositionConfig, CollisionResolutionCombination } from "devextreme/animation/position";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { template } from "devextreme/core/templates/template";
 
@@ -130,8 +131,8 @@ const Animation = Object.assign<typeof _componentAnimation, NestedComponentMeta>
 // owners:
 // Position
 type IAtProps = React.PropsWithChildren<{
-  x?: "center" | "left" | "right";
-  y?: "bottom" | "center" | "top";
+  x?: HorizontalAlignment;
+  y?: VerticalAlignment;
 }>
 const _componentAt = (props: IAtProps) => {
   return React.createElement(NestedOption<IAtProps>, {
@@ -168,8 +169,8 @@ const BoundaryOffset = Object.assign<typeof _componentBoundaryOffset, NestedComp
 // owners:
 // Position
 type ICollisionProps = React.PropsWithChildren<{
-  x?: "fit" | "flip" | "flipfit" | "none";
-  y?: "fit" | "flip" | "flipfit" | "none";
+  x?: CollisionResolution;
+  y?: CollisionResolution;
 }>
 const _componentCollision = (props: ICollisionProps) => {
   return React.createElement(NestedOption<ICollisionProps>, {
@@ -233,14 +234,14 @@ const From = Object.assign<typeof _componentFrom, NestedComponentMeta>(_componen
 type IHideProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: "bottom" | "left" | "right" | "top";
+  direction?: Direction;
   duration?: number;
   easing?: string;
   from?: AnimationState;
   staggerDelay?: number;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
-  type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
+  type?: AnimationType;
 }>
 const _componentHide = (props: IHideProps) => {
   return React.createElement(NestedOption<IHideProps>, {
@@ -297,8 +298,8 @@ const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componen
 // owners:
 // Position
 type IMyProps = React.PropsWithChildren<{
-  x?: "center" | "left" | "right";
-  y?: "bottom" | "center" | "top";
+  x?: HorizontalAlignment;
+  y?: VerticalAlignment;
 }>
 const _componentMy = (props: IMyProps) => {
   return React.createElement(NestedOption<IMyProps>, {
@@ -336,22 +337,22 @@ const Offset = Object.assign<typeof _componentOffset, NestedComponentMeta>(_comp
 // ContextMenu
 // From
 type IPositionProps = React.PropsWithChildren<{
-  at?: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | {
-    x?: "center" | "left" | "right";
-    y?: "bottom" | "center" | "top";
+  at?: Record<string, any> | PositionAlignment | {
+    x?: HorizontalAlignment;
+    y?: VerticalAlignment;
   };
   boundary?: any | string;
   boundaryOffset?: Record<string, any> | string | {
     x?: number;
     y?: number;
   };
-  collision?: Record<string, any> | "fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit" | {
-    x?: "fit" | "flip" | "flipfit" | "none";
-    y?: "fit" | "flip" | "flipfit" | "none";
+  collision?: CollisionResolutionCombination | Record<string, any> | {
+    x?: CollisionResolution;
+    y?: CollisionResolution;
   };
-  my?: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | {
-    x?: "center" | "left" | "right";
-    y?: "bottom" | "center" | "top";
+  my?: Record<string, any> | PositionAlignment | {
+    x?: HorizontalAlignment;
+    y?: VerticalAlignment;
   };
   of?: any | string;
   offset?: Record<string, any> | string | {
@@ -377,14 +378,14 @@ const Position = Object.assign<typeof _componentPosition, NestedComponentMeta>(_
 type IShowProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: "bottom" | "left" | "right" | "top";
+  direction?: Direction;
   duration?: number;
   easing?: string;
   from?: AnimationState;
   staggerDelay?: number;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
-  type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
+  type?: AnimationType;
 }>
 const _componentShow = (props: IShowProps) => {
   return React.createElement(NestedOption<IShowProps>, {
@@ -425,7 +426,7 @@ type IShowSubmenuModeProps = React.PropsWithChildren<{
     hide?: number;
     show?: number;
   };
-  name?: "onClick" | "onHover";
+  name?: SubmenuShowMode;
 }>
 const _componentShowSubmenuMode = (props: IShowSubmenuModeProps) => {
   return React.createElement(NestedOption<IShowSubmenuModeProps>, {

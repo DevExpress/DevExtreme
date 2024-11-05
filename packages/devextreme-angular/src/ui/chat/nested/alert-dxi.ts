@@ -20,12 +20,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-chat-error',
+    selector: 'dxi-chat-alert',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiChatErrorComponent extends CollectionNestedOption {
+export class DxiChatAlertComponent extends CollectionNestedOption {
     @Input()
     get id(): number | string {
         return this._getOption('id');
@@ -44,7 +44,7 @@ export class DxiChatErrorComponent extends CollectionNestedOption {
 
 
     protected get _optionPath() {
-        return 'errors';
+        return 'alerts';
     }
 
 
@@ -65,10 +65,10 @@ export class DxiChatErrorComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiChatErrorComponent
+    DxiChatAlertComponent
   ],
   exports: [
-    DxiChatErrorComponent
+    DxiChatAlertComponent
   ],
 })
-export class DxiChatErrorModule { }
+export class DxiChatAlertModule { }

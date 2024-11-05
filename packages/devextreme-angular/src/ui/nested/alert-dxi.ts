@@ -16,11 +16,11 @@ import {
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxiChatError } from './base/chat-error-dxi';
+import { DxiAlert } from './base/alert-dxi';
 
 
 @Component({
-    selector: 'dxi-error',
+    selector: 'dxi-alert',
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -29,10 +29,10 @@ import { DxiChatError } from './base/chat-error-dxi';
         'message'
     ]
 })
-export class DxiErrorComponent extends DxiChatError {
+export class DxiAlertComponent extends DxiAlert {
 
     protected get _optionPath() {
-        return 'errors';
+        return 'alerts';
     }
 
 
@@ -53,10 +53,10 @@ export class DxiErrorComponent extends DxiChatError {
 
 @NgModule({
   declarations: [
-    DxiErrorComponent
+    DxiAlertComponent
   ],
   exports: [
-    DxiErrorComponent
+    DxiAlertComponent
   ],
 })
-export class DxiErrorModule { }
+export class DxiAlertModule { }
