@@ -1,6 +1,8 @@
 export type Employee = {
   ID: number;
 
+  Head_ID: number;
+
   FirstName: string;
 
   LastName: string;
@@ -29,11 +31,14 @@ export type Employee = {
 
   DepartmentID: number;
 
+  Department: string;
+
   MobilePhone: string;
 };
 
 export const employees: Employee[] = [{
   ID: 1,
+  Head_ID: 0,
   FirstName: 'John',
   LastName: 'Heart',
   Position: 'CEO',
@@ -48,9 +53,11 @@ export const employees: Employee[] = [{
   Skype: 'jheartDXskype',
   HomePhone: '(213) 555-9208',
   DepartmentID: 6,
+  Department: 'Management',
   MobilePhone: '(213) 555-9392',
 }, {
   ID: 2,
+  Head_ID: 1,
   FirstName: 'Olivia',
   LastName: 'Peyton',
   Position: 'Sales Assistant',
@@ -65,9 +72,11 @@ export const employees: Employee[] = [{
   Skype: 'oliviapDXskype',
   HomePhone: '(310) 555-2728',
   DepartmentID: 5,
+  Department: 'Human Resources',
   MobilePhone: '(818) 555-2387',
 }, {
   ID: 3,
+  Head_ID: 1,
   FirstName: 'Robert',
   LastName: 'Reagan',
   Position: 'CMO',
@@ -82,9 +91,11 @@ export const employees: Employee[] = [{
   Skype: 'robertrDXskype',
   HomePhone: '(818) 555-2438',
   DepartmentID: 6,
+  Department: 'Management',
   MobilePhone: '(818) 555-2387',
 }, {
   ID: 4,
+  Head_ID: 1,
   FirstName: 'Greta',
   LastName: 'Sims',
   Position: 'HR Manager',
@@ -99,9 +110,11 @@ export const employees: Employee[] = [{
   Skype: 'gretasDXskype',
   HomePhone: '(818) 555-0976',
   DepartmentID: 5,
+  Department: 'Human Resources',
   MobilePhone: '(818) 555-6546',
 }, {
   ID: 5,
+  Head_ID: 1,
   FirstName: 'Brett',
   LastName: 'Wade',
   Position: 'IT Manager',
@@ -116,9 +129,11 @@ export const employees: Employee[] = [{
   Skype: 'brettwDXskype',
   HomePhone: '(626) 555-5985',
   DepartmentID: 7,
+  Department: 'IT',
   MobilePhone: '(626) 555-0358',
 }, {
   ID: 6,
+  Head_ID: 3,
   FirstName: 'Sandra',
   LastName: 'Johnson',
   Position: 'Controller',
@@ -133,9 +148,11 @@ export const employees: Employee[] = [{
   Skype: 'sandrajDXskype',
   HomePhone: '(562) 555-8272',
   DepartmentID: 5,
+  Department: 'Human Resources',
   MobilePhone: '(562) 555-2082',
 }, {
   ID: 7,
+  Head_ID: 7,
   FirstName: 'Kevin',
   LastName: 'Carter',
   Position: 'Shipping Manager',
@@ -150,9 +167,11 @@ export const employees: Employee[] = [{
   Skype: 'kevincDXskype',
   HomePhone: '(213) 555-8038',
   DepartmentID: 3,
+  Department: 'Shipping',
   MobilePhone: '(213) 555-2840',
 }, {
   ID: 8,
+  Head_ID: 4,
   FirstName: 'Cynthia',
   LastName: 'Stanwick',
   Position: 'HR Assistant',
@@ -167,9 +186,11 @@ export const employees: Employee[] = [{
   Skype: 'cindysDXskype',
   HomePhone: '(818) 555-6808',
   DepartmentID: 4,
+  Department: 'Engineering',
   MobilePhone: '(818) 555-6655',
 }, {
   ID: 9,
+  Head_ID: 3,
   FirstName: 'Kent',
   LastName: 'Samuelson',
   Position: 'Ombudsman',
@@ -184,9 +205,11 @@ export const employees: Employee[] = [{
   Skype: 'kentsDXskype',
   HomePhone: '(562) 555-1328',
   DepartmentID: 26,
+  Department: 'Human Resources',
   MobilePhone: '(562) 555-9282',
 }, {
   ID: 10,
+  Head_ID: 2,
   FirstName: 'Taylor',
   LastName: 'Riley',
   Position: 'Network Admin',
@@ -201,5 +224,7 @@ export const employees: Employee[] = [{
   Skype: 'taylorrDXskype',
   HomePhone: '(310) 555-9712',
   DepartmentID: 5,
+  Department: 'Human Resources',
   MobilePhone: '(310) 555-7276',
 }];
+
