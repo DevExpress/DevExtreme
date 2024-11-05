@@ -14,7 +14,8 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
+import { HorizontalAlignment } from 'devextreme/common';
+import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -30,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartCommonAxisSettingsTitleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get alignment(): "center" | "left" | "right" {
+    get alignment(): HorizontalAlignment {
         return this._getOption('alignment');
     }
-    set alignment(value: "center" | "left" | "right") {
+    set alignment(value: HorizontalAlignment) {
         this._setOption('alignment', value);
     }
 
@@ -54,18 +55,18 @@ export class DxoChartCommonAxisSettingsTitleComponent extends NestedOption imple
     }
 
     @Input()
-    get textOverflow(): "ellipsis" | "hide" | "none" {
+    get textOverflow(): TextOverflow {
         return this._getOption('textOverflow');
     }
-    set textOverflow(value: "ellipsis" | "hide" | "none") {
+    set textOverflow(value: TextOverflow) {
         this._setOption('textOverflow', value);
     }
 
     @Input()
-    get wordWrap(): "normal" | "breakWord" | "none" {
+    get wordWrap(): WordWrap {
         return this._getOption('wordWrap');
     }
-    set wordWrap(value: "normal" | "breakWord" | "none") {
+    set wordWrap(value: WordWrap) {
         this._setOption('wordWrap', value);
     }
 

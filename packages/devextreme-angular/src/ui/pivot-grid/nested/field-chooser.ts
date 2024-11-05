@@ -14,6 +14,8 @@ import {
 
 
 
+import { ApplyChangesMode } from 'devextreme/common/grids';
+import { FieldChooserLayout } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -37,10 +39,10 @@ export class DxoPivotGridFieldChooserComponent extends NestedOption implements O
     }
 
     @Input()
-    get applyChangesMode(): "instantly" | "onDemand" {
+    get applyChangesMode(): ApplyChangesMode {
         return this._getOption('applyChangesMode');
     }
-    set applyChangesMode(value: "instantly" | "onDemand") {
+    set applyChangesMode(value: ApplyChangesMode) {
         this._setOption('applyChangesMode', value);
     }
 
@@ -61,10 +63,10 @@ export class DxoPivotGridFieldChooserComponent extends NestedOption implements O
     }
 
     @Input()
-    get layout(): 0 | 1 | 2 {
+    get layout(): FieldChooserLayout {
         return this._getOption('layout');
     }
-    set layout(value: 0 | 1 | 2) {
+    set layout(value: FieldChooserLayout) {
         this._setOption('layout', value);
     }
 

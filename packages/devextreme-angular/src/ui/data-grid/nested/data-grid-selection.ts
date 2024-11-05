@@ -14,6 +14,9 @@ import {
 
 
 
+import { SingleMultipleOrNone, SelectAllMode } from 'devextreme/common';
+import { SelectionSensitivity } from 'devextreme/ui/data_grid';
+import { SelectionColumnDisplayMode } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -45,34 +48,34 @@ export class DxoDataGridDataGridSelectionComponent extends NestedOption implemen
     }
 
     @Input()
-    get mode(): "single" | "multiple" | "none" {
+    get mode(): SingleMultipleOrNone {
         return this._getOption('mode');
     }
-    set mode(value: "single" | "multiple" | "none") {
+    set mode(value: SingleMultipleOrNone) {
         this._setOption('mode', value);
     }
 
     @Input()
-    get selectAllMode(): "allPages" | "page" {
+    get selectAllMode(): SelectAllMode {
         return this._getOption('selectAllMode');
     }
-    set selectAllMode(value: "allPages" | "page") {
+    set selectAllMode(value: SelectAllMode) {
         this._setOption('selectAllMode', value);
     }
 
     @Input()
-    get sensitivity(): "base" | "accent" | "case" | "variant" {
+    get sensitivity(): SelectionSensitivity {
         return this._getOption('sensitivity');
     }
-    set sensitivity(value: "base" | "accent" | "case" | "variant") {
+    set sensitivity(value: SelectionSensitivity) {
         this._setOption('sensitivity', value);
     }
 
     @Input()
-    get showCheckBoxesMode(): "always" | "none" | "onClick" | "onLongTap" {
+    get showCheckBoxesMode(): SelectionColumnDisplayMode {
         return this._getOption('showCheckBoxesMode');
     }
-    set showCheckBoxesMode(value: "always" | "none" | "onClick" | "onLongTap") {
+    set showCheckBoxesMode(value: SelectionColumnDisplayMode) {
         this._setOption('showCheckBoxesMode', value);
     }
 

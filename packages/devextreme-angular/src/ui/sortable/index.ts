@@ -17,6 +17,7 @@ import {
 } from '@angular/core';
 
 
+import { DragDirection, DragHighlight, Orientation } from 'devextreme/common';
 import { AddEvent, DisposingEvent, DragChangeEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent, RemoveEvent, ReorderEvent } from 'devextreme/ui/sortable';
 
 import DxSortable from 'devextreme/ui/sortable';
@@ -124,10 +125,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get cursorOffset(): string | { x?: number, y?: number } {
+    get cursorOffset(): Record<string, any> | string | { x?: number, y?: number } {
         return this._getOption('cursorOffset');
     }
-    set cursorOffset(value: string | { x?: number, y?: number }) {
+    set cursorOffset(value: Record<string, any> | string | { x?: number, y?: number }) {
         this._setOption('cursorOffset', value);
     }
 
@@ -150,10 +151,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get dragDirection(): "both" | "horizontal" | "vertical" {
+    get dragDirection(): DragDirection {
         return this._getOption('dragDirection');
     }
-    set dragDirection(value: "both" | "horizontal" | "vertical") {
+    set dragDirection(value: DragDirection) {
         this._setOption('dragDirection', value);
     }
 
@@ -176,10 +177,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get dropFeedbackMode(): "push" | "indicate" {
+    get dropFeedbackMode(): DragHighlight {
         return this._getOption('dropFeedbackMode');
     }
-    set dropFeedbackMode(value: "push" | "indicate") {
+    set dropFeedbackMode(value: DragHighlight) {
         this._setOption('dropFeedbackMode', value);
     }
 
@@ -254,10 +255,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get itemOrientation(): "horizontal" | "vertical" {
+    get itemOrientation(): Orientation {
         return this._getOption('itemOrientation');
     }
-    set itemOrientation(value: "horizontal" | "vertical") {
+    set itemOrientation(value: Orientation) {
         this._setOption('itemOrientation', value);
     }
 
@@ -446,7 +447,7 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() cursorOffsetChange: EventEmitter<string | { x?: number, y?: number }>;
+    @Output() cursorOffsetChange: EventEmitter<Record<string, any> | string | { x?: number, y?: number }>;
 
     /**
     
@@ -460,7 +461,7 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dragDirectionChange: EventEmitter<"both" | "horizontal" | "vertical">;
+    @Output() dragDirectionChange: EventEmitter<DragDirection>;
 
     /**
     
@@ -474,7 +475,7 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropFeedbackModeChange: EventEmitter<"push" | "indicate">;
+    @Output() dropFeedbackModeChange: EventEmitter<DragHighlight>;
 
     /**
     
@@ -516,7 +517,7 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemOrientationChange: EventEmitter<"horizontal" | "vertical">;
+    @Output() itemOrientationChange: EventEmitter<Orientation>;
 
     /**
     

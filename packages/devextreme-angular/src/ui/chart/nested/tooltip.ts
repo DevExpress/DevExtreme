@@ -14,8 +14,9 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
-import { Font } from 'devextreme/common/charts';
+import { Format } from 'devextreme/localization';
+import { DashStyle, Font } from 'devextreme/common/charts';
+import { ChartTooltipLocation } from 'devextreme/viz/chart';
 
 import {
     NestedOptionHost,
@@ -31,10 +32,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get argumentFormat(): LocalizationTypes.Format {
+    get argumentFormat(): Format {
         return this._getOption('argumentFormat');
     }
-    set argumentFormat(value: LocalizationTypes.Format) {
+    set argumentFormat(value: Format) {
         this._setOption('argumentFormat', value);
     }
 
@@ -47,10 +48,10 @@ export class DxoChartTooltipComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get border(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -111,10 +112,10 @@ export class DxoChartTooltipComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get format(): LocalizationTypes.Format {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: LocalizationTypes.Format) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 
@@ -127,10 +128,10 @@ export class DxoChartTooltipComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get location(): "center" | "edge" {
+    get location(): ChartTooltipLocation {
         return this._getOption('location');
     }
-    set location(value: "center" | "edge") {
+    set location(value: ChartTooltipLocation) {
         this._setOption('location', value);
     }
 

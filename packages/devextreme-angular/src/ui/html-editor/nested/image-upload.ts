@@ -18,7 +18,7 @@ import {
 
 
 import { dxFileUploaderOptions } from 'devextreme/ui/file_uploader';
-import { dxHtmlEditorImageUploadTabItem } from 'devextreme/ui/html_editor';
+import { HtmlEditorImageUploadMode, dxHtmlEditorImageUploadTabItem, HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
 
 import {
     NestedOptionHost,
@@ -43,18 +43,18 @@ export class DxoHtmlEditorImageUploadComponent extends NestedOption implements O
     }
 
     @Input()
-    get fileUploadMode(): "base64" | "server" | "both" {
+    get fileUploadMode(): HtmlEditorImageUploadMode {
         return this._getOption('fileUploadMode');
     }
-    set fileUploadMode(value: "base64" | "server" | "both") {
+    set fileUploadMode(value: HtmlEditorImageUploadMode) {
         this._setOption('fileUploadMode', value);
     }
 
     @Input()
-    get tabs(): Array<dxHtmlEditorImageUploadTabItem | "url" | "file"> {
+    get tabs(): Array<dxHtmlEditorImageUploadTabItem | HtmlEditorImageUploadTab> {
         return this._getOption('tabs');
     }
-    set tabs(value: Array<dxHtmlEditorImageUploadTabItem | "url" | "file">) {
+    set tabs(value: Array<dxHtmlEditorImageUploadTabItem | HtmlEditorImageUploadTab>) {
         this._setOption('tabs', value);
     }
 

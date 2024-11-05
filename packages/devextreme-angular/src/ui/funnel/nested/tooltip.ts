@@ -14,9 +14,9 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
+import { DashStyle, Font } from 'devextreme/common/charts';
 import { dxFunnelItem } from 'devextreme/viz/funnel';
-import { Font } from 'devextreme/common/charts';
+import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -40,10 +40,10 @@ export class DxoFunnelTooltipComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get border(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -104,10 +104,10 @@ export class DxoFunnelTooltipComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get format(): LocalizationTypes.Format {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: LocalizationTypes.Format) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 

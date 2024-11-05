@@ -23,9 +23,10 @@ import {
 
 
 import DataSource from 'devextreme/data/data_source';
-import { CustomCommand, ContentReadyEvent, CustomCommandEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemDblClickEvent, OptionChangedEvent, RequestEditOperationEvent, RequestLayoutUpdateEvent, SelectionChangedEvent } from 'devextreme/ui/diagram';
+import { AutoZoomMode, Command, CustomCommand, ShapeCategory, ToolboxDisplayMode, ShapeType, ConnectorLineEnd, ConnectorLineType, DataLayoutType, ContentReadyEvent, CustomCommandEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemDblClickEvent, OptionChangedEvent, RequestEditOperationEvent, RequestLayoutUpdateEvent, SelectionChangedEvent, PanelVisibility, Units } from 'devextreme/ui/diagram';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
+import { Orientation, PageOrientation } from 'devextreme/common';
 
 import DxDiagram from 'devextreme/ui/diagram';
 
@@ -117,10 +118,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get autoZoomMode(): "fitContent" | "fitWidth" | "disabled" {
+    get autoZoomMode(): AutoZoomMode {
         return this._getOption('autoZoomMode');
     }
-    set autoZoomMode(value: "fitContent" | "fitWidth" | "disabled") {
+    set autoZoomMode(value: AutoZoomMode) {
         this._setOption('autoZoomMode', value);
     }
 
@@ -130,10 +131,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get contextMenu(): Record<string, any> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, enabled?: boolean } {
+    get contextMenu(): Record<string, any> | { commands?: Array<Command | CustomCommand>, enabled?: boolean } {
         return this._getOption('contextMenu');
     }
-    set contextMenu(value: Record<string, any> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, enabled?: boolean }) {
+    set contextMenu(value: Record<string, any> | { commands?: Array<Command | CustomCommand>, enabled?: boolean }) {
         this._setOption('contextMenu', value);
     }
 
@@ -143,10 +144,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get contextToolbox(): Record<string, any> | { category?: "general" | "flowchart" | "orgChart" | "containers" | "custom", displayMode?: "icons" | "texts", enabled?: boolean, shapeIconsPerRow?: number, shapes?: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">, width?: number } {
+    get contextToolbox(): Record<string, any> | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, enabled?: boolean, shapeIconsPerRow?: number, shapes?: Array<ShapeType>, width?: number } {
         return this._getOption('contextToolbox');
     }
-    set contextToolbox(value: Record<string, any> | { category?: "general" | "flowchart" | "orgChart" | "containers" | "custom", displayMode?: "icons" | "texts", enabled?: boolean, shapeIconsPerRow?: number, shapes?: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">, width?: number }) {
+    set contextToolbox(value: Record<string, any> | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, enabled?: boolean, shapeIconsPerRow?: number, shapes?: Array<ShapeType>, width?: number }) {
         this._setOption('contextToolbox', value);
     }
 
@@ -156,10 +157,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get customShapes(): Array<Record<string, any>> | { allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageToolboxUrl?: string, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: "text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight", category?: string, connectionPoints?: Array<Record<string, any>> | { x?: number, y?: number }[], defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, keepRatioOnAutoSize?: boolean, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: any, templateHeight?: any, templateLeft?: any, templateTop?: any, templateWidth?: any, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, toolboxTemplate?: any, toolboxWidthToHeightRatio?: number, type?: string }[] {
+    get customShapes(): Array<Record<string, any>> | { allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageToolboxUrl?: string, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: ShapeType | string, category?: string, connectionPoints?: Array<Record<string, any>> | { x?: number, y?: number }[], defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, keepRatioOnAutoSize?: boolean, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: any, templateHeight?: any, templateLeft?: any, templateTop?: any, templateWidth?: any, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, toolboxTemplate?: any, toolboxWidthToHeightRatio?: number, type?: string }[] {
         return this._getOption('customShapes');
     }
-    set customShapes(value: Array<Record<string, any>> | { allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageToolboxUrl?: string, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: "text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight", category?: string, connectionPoints?: Array<Record<string, any>> | { x?: number, y?: number }[], defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, keepRatioOnAutoSize?: boolean, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: any, templateHeight?: any, templateLeft?: any, templateTop?: any, templateWidth?: any, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, toolboxTemplate?: any, toolboxWidthToHeightRatio?: number, type?: string }[]) {
+    set customShapes(value: Array<Record<string, any>> | { allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageToolboxUrl?: string, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: ShapeType | string, category?: string, connectionPoints?: Array<Record<string, any>> | { x?: number, y?: number }[], defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, keepRatioOnAutoSize?: boolean, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: any, templateHeight?: any, templateLeft?: any, templateTop?: any, templateWidth?: any, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, toolboxTemplate?: any, toolboxWidthToHeightRatio?: number, type?: string }[]) {
         this._setOption('customShapes', value);
     }
 
@@ -195,10 +196,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get defaultItemProperties(): Record<string, any> | { connectorLineEnd?: "none" | "arrow" | "outlinedTriangle" | "filledTriangle", connectorLineStart?: "none" | "arrow" | "outlinedTriangle" | "filledTriangle", connectorLineType?: "straight" | "orthogonal", shapeMaxHeight?: number, shapeMaxWidth?: number, shapeMinHeight?: number, shapeMinWidth?: number, style?: Record<string, any>, textStyle?: Record<string, any> } {
+    get defaultItemProperties(): Record<string, any> | { connectorLineEnd?: ConnectorLineEnd, connectorLineStart?: ConnectorLineEnd, connectorLineType?: ConnectorLineType, shapeMaxHeight?: number, shapeMaxWidth?: number, shapeMinHeight?: number, shapeMinWidth?: number, style?: Record<string, any>, textStyle?: Record<string, any> } {
         return this._getOption('defaultItemProperties');
     }
-    set defaultItemProperties(value: Record<string, any> | { connectorLineEnd?: "none" | "arrow" | "outlinedTriangle" | "filledTriangle", connectorLineStart?: "none" | "arrow" | "outlinedTriangle" | "filledTriangle", connectorLineType?: "straight" | "orthogonal", shapeMaxHeight?: number, shapeMaxWidth?: number, shapeMinHeight?: number, shapeMinWidth?: number, style?: Record<string, any>, textStyle?: Record<string, any> }) {
+    set defaultItemProperties(value: Record<string, any> | { connectorLineEnd?: ConnectorLineEnd, connectorLineStart?: ConnectorLineEnd, connectorLineType?: ConnectorLineType, shapeMaxHeight?: number, shapeMaxWidth?: number, shapeMinHeight?: number, shapeMinWidth?: number, style?: Record<string, any>, textStyle?: Record<string, any> }) {
         this._setOption('defaultItemProperties', value);
     }
 
@@ -325,10 +326,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get historyToolbar(): Record<string, any> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, visible?: boolean } {
+    get historyToolbar(): Record<string, any> | { commands?: Array<Command | CustomCommand>, visible?: boolean } {
         return this._getOption('historyToolbar');
     }
-    set historyToolbar(value: Record<string, any> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, visible?: boolean }) {
+    set historyToolbar(value: Record<string, any> | { commands?: Array<Command | CustomCommand>, visible?: boolean }) {
         this._setOption('historyToolbar', value);
     }
 
@@ -338,10 +339,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get mainToolbar(): Record<string, any> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, visible?: boolean } {
+    get mainToolbar(): Record<string, any> | { commands?: Array<Command | CustomCommand>, visible?: boolean } {
         return this._getOption('mainToolbar');
     }
-    set mainToolbar(value: Record<string, any> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, visible?: boolean }) {
+    set mainToolbar(value: Record<string, any> | { commands?: Array<Command | CustomCommand>, visible?: boolean }) {
         this._setOption('mainToolbar', value);
     }
 
@@ -351,10 +352,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get nodes(): Record<string, any> | { autoLayout?: "auto" | "off" | "tree" | "layered" | { orientation?: "horizontal" | "vertical", type?: "auto" | "off" | "tree" | "layered" }, autoSizeEnabled?: boolean, containerChildrenExpr?: ((data: any, value: any) => any) | string, containerKeyExpr?: ((data: any, value: any) => any) | string, customDataExpr?: ((data: any, value: any) => any) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, heightExpr?: ((data: any, value: any) => any) | string, imageUrlExpr?: ((data: any, value: any) => any) | string, itemsExpr?: ((data: any, value: any) => any) | string, keyExpr?: ((data: any, value: any) => any) | string, leftExpr?: ((data: any, value: any) => any) | string, lockedExpr?: ((data: any, value: any) => any) | string, parentKeyExpr?: ((data: any, value: any) => any) | string, styleExpr?: ((data: any, value: any) => any) | string, textExpr?: ((data: any, value: any) => any) | string, textStyleExpr?: ((data: any, value: any) => any) | string, topExpr?: ((data: any, value: any) => any) | string, typeExpr?: ((data: any, value: any) => any) | string, widthExpr?: ((data: any, value: any) => any) | string, zIndexExpr?: ((data: any, value: any) => any) | string } {
+    get nodes(): Record<string, any> | { autoLayout?: DataLayoutType | Record<string, any> | { orientation?: Orientation, type?: DataLayoutType }, autoSizeEnabled?: boolean, containerChildrenExpr?: ((data: any, value: any) => any) | string, containerKeyExpr?: ((data: any, value: any) => any) | string, customDataExpr?: ((data: any, value: any) => any) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, heightExpr?: ((data: any, value: any) => any) | string, imageUrlExpr?: ((data: any, value: any) => any) | string, itemsExpr?: ((data: any, value: any) => any) | string, keyExpr?: ((data: any, value: any) => any) | string, leftExpr?: ((data: any, value: any) => any) | string, lockedExpr?: ((data: any, value: any) => any) | string, parentKeyExpr?: ((data: any, value: any) => any) | string, styleExpr?: ((data: any, value: any) => any) | string, textExpr?: ((data: any, value: any) => any) | string, textStyleExpr?: ((data: any, value: any) => any) | string, topExpr?: ((data: any, value: any) => any) | string, typeExpr?: ((data: any, value: any) => any) | string, widthExpr?: ((data: any, value: any) => any) | string, zIndexExpr?: ((data: any, value: any) => any) | string } {
         return this._getOption('nodes');
     }
-    set nodes(value: Record<string, any> | { autoLayout?: "auto" | "off" | "tree" | "layered" | { orientation?: "horizontal" | "vertical", type?: "auto" | "off" | "tree" | "layered" }, autoSizeEnabled?: boolean, containerChildrenExpr?: ((data: any, value: any) => any) | string, containerKeyExpr?: ((data: any, value: any) => any) | string, customDataExpr?: ((data: any, value: any) => any) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, heightExpr?: ((data: any, value: any) => any) | string, imageUrlExpr?: ((data: any, value: any) => any) | string, itemsExpr?: ((data: any, value: any) => any) | string, keyExpr?: ((data: any, value: any) => any) | string, leftExpr?: ((data: any, value: any) => any) | string, lockedExpr?: ((data: any, value: any) => any) | string, parentKeyExpr?: ((data: any, value: any) => any) | string, styleExpr?: ((data: any, value: any) => any) | string, textExpr?: ((data: any, value: any) => any) | string, textStyleExpr?: ((data: any, value: any) => any) | string, topExpr?: ((data: any, value: any) => any) | string, typeExpr?: ((data: any, value: any) => any) | string, widthExpr?: ((data: any, value: any) => any) | string, zIndexExpr?: ((data: any, value: any) => any) | string }) {
+    set nodes(value: Record<string, any> | { autoLayout?: DataLayoutType | Record<string, any> | { orientation?: Orientation, type?: DataLayoutType }, autoSizeEnabled?: boolean, containerChildrenExpr?: ((data: any, value: any) => any) | string, containerKeyExpr?: ((data: any, value: any) => any) | string, customDataExpr?: ((data: any, value: any) => any) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, heightExpr?: ((data: any, value: any) => any) | string, imageUrlExpr?: ((data: any, value: any) => any) | string, itemsExpr?: ((data: any, value: any) => any) | string, keyExpr?: ((data: any, value: any) => any) | string, leftExpr?: ((data: any, value: any) => any) | string, lockedExpr?: ((data: any, value: any) => any) | string, parentKeyExpr?: ((data: any, value: any) => any) | string, styleExpr?: ((data: any, value: any) => any) | string, textExpr?: ((data: any, value: any) => any) | string, textStyleExpr?: ((data: any, value: any) => any) | string, topExpr?: ((data: any, value: any) => any) | string, typeExpr?: ((data: any, value: any) => any) | string, widthExpr?: ((data: any, value: any) => any) | string, zIndexExpr?: ((data: any, value: any) => any) | string }) {
         this._setOption('nodes', value);
     }
 
@@ -377,10 +378,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get pageOrientation(): "portrait" | "landscape" {
+    get pageOrientation(): PageOrientation {
         return this._getOption('pageOrientation');
     }
-    set pageOrientation(value: "portrait" | "landscape") {
+    set pageOrientation(value: PageOrientation) {
         this._setOption('pageOrientation', value);
     }
 
@@ -403,10 +404,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get propertiesPanel(): Record<string, any> | { tabs?: Array<Record<string, any>> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, groups?: Array<Record<string, any>> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, title?: string }[], title?: string }[], visibility?: "auto" | "visible" | "collapsed" | "disabled" } {
+    get propertiesPanel(): Record<string, any> | { tabs?: Array<Record<string, any>> | { commands?: Array<Command | CustomCommand>, groups?: Array<Record<string, any>> | { commands?: Array<Command | CustomCommand>, title?: string }[], title?: string }[], visibility?: PanelVisibility } {
         return this._getOption('propertiesPanel');
     }
-    set propertiesPanel(value: Record<string, any> | { tabs?: Array<Record<string, any>> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, groups?: Array<Record<string, any>> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, title?: string }[], title?: string }[], visibility?: "auto" | "visible" | "collapsed" | "disabled" }) {
+    set propertiesPanel(value: Record<string, any> | { tabs?: Array<Record<string, any>> | { commands?: Array<Command | CustomCommand>, groups?: Array<Record<string, any>> | { commands?: Array<Command | CustomCommand>, title?: string }[], title?: string }[], visibility?: PanelVisibility }) {
         this._setOption('propertiesPanel', value);
     }
 
@@ -481,10 +482,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get toolbox(): Record<string, any> | { groups?: Array<Record<string, any>> | { category?: "general" | "flowchart" | "orgChart" | "containers" | "custom", displayMode?: "icons" | "texts", expanded?: boolean, shapes?: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">, title?: string }[], shapeIconsPerRow?: number, showSearch?: boolean, visibility?: "auto" | "visible" | "collapsed" | "disabled", width?: number } {
+    get toolbox(): Record<string, any> | { groups?: Array<Record<string, any>> | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType>, title?: string }[], shapeIconsPerRow?: number, showSearch?: boolean, visibility?: PanelVisibility, width?: number } {
         return this._getOption('toolbox');
     }
-    set toolbox(value: Record<string, any> | { groups?: Array<Record<string, any>> | { category?: "general" | "flowchart" | "orgChart" | "containers" | "custom", displayMode?: "icons" | "texts", expanded?: boolean, shapes?: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">, title?: string }[], shapeIconsPerRow?: number, showSearch?: boolean, visibility?: "auto" | "visible" | "collapsed" | "disabled", width?: number }) {
+    set toolbox(value: Record<string, any> | { groups?: Array<Record<string, any>> | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType>, title?: string }[], shapeIconsPerRow?: number, showSearch?: boolean, visibility?: PanelVisibility, width?: number }) {
         this._setOption('toolbox', value);
     }
 
@@ -494,10 +495,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get units(): "in" | "cm" | "px" {
+    get units(): Units {
         return this._getOption('units');
     }
-    set units(value: "in" | "cm" | "px") {
+    set units(value: Units) {
         this._setOption('units', value);
     }
 
@@ -520,10 +521,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get viewToolbar(): Record<string, any> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, visible?: boolean } {
+    get viewToolbar(): Record<string, any> | { commands?: Array<Command | CustomCommand>, visible?: boolean } {
         return this._getOption('viewToolbar');
     }
-    set viewToolbar(value: Record<string, any> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, visible?: boolean }) {
+    set viewToolbar(value: Record<string, any> | { commands?: Array<Command | CustomCommand>, visible?: boolean }) {
         this._setOption('viewToolbar', value);
     }
 
@@ -533,10 +534,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get viewUnits(): "in" | "cm" | "px" {
+    get viewUnits(): Units {
         return this._getOption('viewUnits');
     }
-    set viewUnits(value: "in" | "cm" | "px") {
+    set viewUnits(value: Units) {
         this._setOption('viewUnits', value);
     }
 
@@ -664,28 +665,28 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() autoZoomModeChange: EventEmitter<"fitContent" | "fitWidth" | "disabled">;
+    @Output() autoZoomModeChange: EventEmitter<AutoZoomMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() contextMenuChange: EventEmitter<Record<string, any> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, enabled?: boolean }>;
+    @Output() contextMenuChange: EventEmitter<Record<string, any> | { commands?: Array<Command | CustomCommand>, enabled?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() contextToolboxChange: EventEmitter<Record<string, any> | { category?: "general" | "flowchart" | "orgChart" | "containers" | "custom", displayMode?: "icons" | "texts", enabled?: boolean, shapeIconsPerRow?: number, shapes?: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">, width?: number }>;
+    @Output() contextToolboxChange: EventEmitter<Record<string, any> | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, enabled?: boolean, shapeIconsPerRow?: number, shapes?: Array<ShapeType>, width?: number }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customShapesChange: EventEmitter<Array<Record<string, any>> | { allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageToolboxUrl?: string, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: "text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight", category?: string, connectionPoints?: Array<Record<string, any>> | { x?: number, y?: number }[], defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, keepRatioOnAutoSize?: boolean, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: any, templateHeight?: any, templateLeft?: any, templateTop?: any, templateWidth?: any, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, toolboxTemplate?: any, toolboxWidthToHeightRatio?: number, type?: string }[]>;
+    @Output() customShapesChange: EventEmitter<Array<Record<string, any>> | { allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageToolboxUrl?: string, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: ShapeType | string, category?: string, connectionPoints?: Array<Record<string, any>> | { x?: number, y?: number }[], defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, keepRatioOnAutoSize?: boolean, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: any, templateHeight?: any, templateLeft?: any, templateTop?: any, templateWidth?: any, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, toolboxTemplate?: any, toolboxWidthToHeightRatio?: number, type?: string }[]>;
 
     /**
     
@@ -706,7 +707,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() defaultItemPropertiesChange: EventEmitter<Record<string, any> | { connectorLineEnd?: "none" | "arrow" | "outlinedTriangle" | "filledTriangle", connectorLineStart?: "none" | "arrow" | "outlinedTriangle" | "filledTriangle", connectorLineType?: "straight" | "orthogonal", shapeMaxHeight?: number, shapeMaxWidth?: number, shapeMinHeight?: number, shapeMinWidth?: number, style?: Record<string, any>, textStyle?: Record<string, any> }>;
+    @Output() defaultItemPropertiesChange: EventEmitter<Record<string, any> | { connectorLineEnd?: ConnectorLineEnd, connectorLineStart?: ConnectorLineEnd, connectorLineType?: ConnectorLineType, shapeMaxHeight?: number, shapeMaxWidth?: number, shapeMinHeight?: number, shapeMinWidth?: number, style?: Record<string, any>, textStyle?: Record<string, any> }>;
 
     /**
     
@@ -776,21 +777,21 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() historyToolbarChange: EventEmitter<Record<string, any> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, visible?: boolean }>;
+    @Output() historyToolbarChange: EventEmitter<Record<string, any> | { commands?: Array<Command | CustomCommand>, visible?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() mainToolbarChange: EventEmitter<Record<string, any> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, visible?: boolean }>;
+    @Output() mainToolbarChange: EventEmitter<Record<string, any> | { commands?: Array<Command | CustomCommand>, visible?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() nodesChange: EventEmitter<Record<string, any> | { autoLayout?: "auto" | "off" | "tree" | "layered" | { orientation?: "horizontal" | "vertical", type?: "auto" | "off" | "tree" | "layered" }, autoSizeEnabled?: boolean, containerChildrenExpr?: ((data: any, value: any) => any) | string, containerKeyExpr?: ((data: any, value: any) => any) | string, customDataExpr?: ((data: any, value: any) => any) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, heightExpr?: ((data: any, value: any) => any) | string, imageUrlExpr?: ((data: any, value: any) => any) | string, itemsExpr?: ((data: any, value: any) => any) | string, keyExpr?: ((data: any, value: any) => any) | string, leftExpr?: ((data: any, value: any) => any) | string, lockedExpr?: ((data: any, value: any) => any) | string, parentKeyExpr?: ((data: any, value: any) => any) | string, styleExpr?: ((data: any, value: any) => any) | string, textExpr?: ((data: any, value: any) => any) | string, textStyleExpr?: ((data: any, value: any) => any) | string, topExpr?: ((data: any, value: any) => any) | string, typeExpr?: ((data: any, value: any) => any) | string, widthExpr?: ((data: any, value: any) => any) | string, zIndexExpr?: ((data: any, value: any) => any) | string }>;
+    @Output() nodesChange: EventEmitter<Record<string, any> | { autoLayout?: DataLayoutType | Record<string, any> | { orientation?: Orientation, type?: DataLayoutType }, autoSizeEnabled?: boolean, containerChildrenExpr?: ((data: any, value: any) => any) | string, containerKeyExpr?: ((data: any, value: any) => any) | string, customDataExpr?: ((data: any, value: any) => any) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, heightExpr?: ((data: any, value: any) => any) | string, imageUrlExpr?: ((data: any, value: any) => any) | string, itemsExpr?: ((data: any, value: any) => any) | string, keyExpr?: ((data: any, value: any) => any) | string, leftExpr?: ((data: any, value: any) => any) | string, lockedExpr?: ((data: any, value: any) => any) | string, parentKeyExpr?: ((data: any, value: any) => any) | string, styleExpr?: ((data: any, value: any) => any) | string, textExpr?: ((data: any, value: any) => any) | string, textStyleExpr?: ((data: any, value: any) => any) | string, topExpr?: ((data: any, value: any) => any) | string, typeExpr?: ((data: any, value: any) => any) | string, widthExpr?: ((data: any, value: any) => any) | string, zIndexExpr?: ((data: any, value: any) => any) | string }>;
 
     /**
     
@@ -804,7 +805,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pageOrientationChange: EventEmitter<"portrait" | "landscape">;
+    @Output() pageOrientationChange: EventEmitter<PageOrientation>;
 
     /**
     
@@ -818,7 +819,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() propertiesPanelChange: EventEmitter<Record<string, any> | { tabs?: Array<Record<string, any>> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, groups?: Array<Record<string, any>> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, title?: string }[], title?: string }[], visibility?: "auto" | "visible" | "collapsed" | "disabled" }>;
+    @Output() propertiesPanelChange: EventEmitter<Record<string, any> | { tabs?: Array<Record<string, any>> | { commands?: Array<Command | CustomCommand>, groups?: Array<Record<string, any>> | { commands?: Array<Command | CustomCommand>, title?: string }[], title?: string }[], visibility?: PanelVisibility }>;
 
     /**
     
@@ -860,14 +861,14 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() toolboxChange: EventEmitter<Record<string, any> | { groups?: Array<Record<string, any>> | { category?: "general" | "flowchart" | "orgChart" | "containers" | "custom", displayMode?: "icons" | "texts", expanded?: boolean, shapes?: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">, title?: string }[], shapeIconsPerRow?: number, showSearch?: boolean, visibility?: "auto" | "visible" | "collapsed" | "disabled", width?: number }>;
+    @Output() toolboxChange: EventEmitter<Record<string, any> | { groups?: Array<Record<string, any>> | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType>, title?: string }[], shapeIconsPerRow?: number, showSearch?: boolean, visibility?: PanelVisibility, width?: number }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() unitsChange: EventEmitter<"in" | "cm" | "px">;
+    @Output() unitsChange: EventEmitter<Units>;
 
     /**
     
@@ -881,14 +882,14 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() viewToolbarChange: EventEmitter<Record<string, any> | { commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">, visible?: boolean }>;
+    @Output() viewToolbarChange: EventEmitter<Record<string, any> | { commands?: Array<Command | CustomCommand>, visible?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() viewUnitsChange: EventEmitter<"in" | "cm" | "px">;
+    @Output() viewUnitsChange: EventEmitter<Units>;
 
     /**
     

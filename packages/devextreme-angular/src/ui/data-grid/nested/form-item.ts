@@ -22,6 +22,8 @@ import { DOCUMENT } from '@angular/common';
 
 
 import * as CommonTypes from 'devextreme/common';
+import { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/form';
+import { HorizontalAlignment } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -84,10 +86,10 @@ export class DxoDataGridFormItemComponent extends NestedOption implements AfterV
     }
 
     @Input()
-    get editorType(): "dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox" {
+    get editorType(): FormItemComponent {
         return this._getOption('editorType');
     }
-    set editorType(value: "dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox") {
+    set editorType(value: FormItemComponent) {
         this._setOption('editorType', value);
     }
 
@@ -108,18 +110,18 @@ export class DxoDataGridFormItemComponent extends NestedOption implements AfterV
     }
 
     @Input()
-    get itemType(): "empty" | "group" | "simple" | "tabbed" | "button" {
+    get itemType(): FormItemType {
         return this._getOption('itemType');
     }
-    set itemType(value: "empty" | "group" | "simple" | "tabbed" | "button") {
+    set itemType(value: FormItemType) {
         this._setOption('itemType', value);
     }
 
     @Input()
-    get label(): Record<string, any> | { alignment?: "center" | "left" | "right", location?: "left" | "right" | "top", showColon?: boolean, template?: any, text?: string, visible?: boolean } {
+    get label(): Record<string, any> | { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { alignment?: "center" | "left" | "right", location?: "left" | "right" | "top", showColon?: boolean, template?: any, text?: string, visible?: boolean }) {
+    set label(value: Record<string, any> | { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string, visible?: boolean }) {
         this._setOption('label', value);
     }
 

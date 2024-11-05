@@ -21,11 +21,11 @@ import {
 
 
 import DataSource from 'devextreme/data/data_source';
-import * as LocalizationTypes from 'devextreme/localization';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/sparkline';
-import { Font } from 'devextreme/common/charts';
+import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, SparklineType } from 'devextreme/viz/sparkline';
+import { PointSymbol, Theme, DashStyle, Font } from 'devextreme/common/charts';
+import { Format } from 'devextreme/localization';
 
 import DxSparkline from 'devextreme/viz/sparkline';
 
@@ -329,10 +329,10 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get pointSymbol(): "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp" {
+    get pointSymbol(): PointSymbol {
         return this._getOption('pointSymbol');
     }
-    set pointSymbol(value: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp") {
+    set pointSymbol(value: PointSymbol) {
         this._setOption('pointSymbol', value);
     }
 
@@ -394,10 +394,10 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get theme(): "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light" {
+    get theme(): Theme {
         return this._getOption('theme');
     }
-    set theme(value: "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light") {
+    set theme(value: Theme) {
         this._setOption('theme', value);
     }
 
@@ -407,10 +407,10 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get tooltip(): Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointsInfo: any) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number } {
+    get tooltip(): Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointsInfo: any) => Record<string, any>), enabled?: boolean, font?: Font, format?: Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointsInfo: any) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }) {
+    set tooltip(value: Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointsInfo: any) => Record<string, any>), enabled?: boolean, font?: Font, format?: Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }) {
         this._setOption('tooltip', value);
     }
 
@@ -420,10 +420,10 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get type(): "area" | "bar" | "line" | "spline" | "splinearea" | "steparea" | "stepline" | "winloss" {
+    get type(): SparklineType {
         return this._getOption('type');
     }
-    set type(value: "area" | "bar" | "line" | "spline" | "splinearea" | "steparea" | "stepline" | "winloss") {
+    set type(value: SparklineType) {
         this._setOption('type', value);
     }
 
@@ -684,7 +684,7 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pointSymbolChange: EventEmitter<"circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp">;
+    @Output() pointSymbolChange: EventEmitter<PointSymbol>;
 
     /**
     
@@ -719,21 +719,21 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() themeChange: EventEmitter<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">;
+    @Output() themeChange: EventEmitter<Theme>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointsInfo: any) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }>;
+    @Output() tooltipChange: EventEmitter<Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointsInfo: any) => Record<string, any>), enabled?: boolean, font?: Font, format?: Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() typeChange: EventEmitter<"area" | "bar" | "line" | "spline" | "splinearea" | "steparea" | "stepline" | "winloss">;
+    @Output() typeChange: EventEmitter<SparklineType>;
 
     /**
     

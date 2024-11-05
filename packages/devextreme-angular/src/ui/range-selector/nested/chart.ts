@@ -18,7 +18,9 @@ import {
 
 
 import { dxChartCommonSeriesSettings } from 'devextreme/viz/chart';
+import { Palette, PaletteExtensionMode, ChartsDataType } from 'devextreme/common/charts';
 import { ChartSeries } from 'devextreme/viz/common';
+import { ChartAxisScale } from 'devextreme/viz/range_selector';
 
 import {
     NestedOptionHost,
@@ -99,18 +101,18 @@ export class DxoRangeSelectorChartComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get palette(): Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office" {
+    get palette(): Array<string> | Palette {
         return this._getOption('palette');
     }
-    set palette(value: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office") {
+    set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
 
     @Input()
-    get paletteExtensionMode(): "alternate" | "blend" | "extrapolate" {
+    get paletteExtensionMode(): PaletteExtensionMode {
         return this._getOption('paletteExtensionMode');
     }
-    set paletteExtensionMode(value: "alternate" | "blend" | "extrapolate") {
+    set paletteExtensionMode(value: PaletteExtensionMode) {
         this._setOption('paletteExtensionMode', value);
     }
 
@@ -139,10 +141,10 @@ export class DxoRangeSelectorChartComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get valueAxis(): Record<string, any> | { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: "continuous" | "logarithmic", valueType?: "datetime" | "numeric" | "string" } {
+    get valueAxis(): Record<string, any> | { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: ChartAxisScale, valueType?: ChartsDataType } {
         return this._getOption('valueAxis');
     }
-    set valueAxis(value: Record<string, any> | { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: "continuous" | "logarithmic", valueType?: "datetime" | "numeric" | "string" }) {
+    set valueAxis(value: Record<string, any> | { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: ChartAxisScale, valueType?: ChartsDataType }) {
         this._setOption('valueAxis', value);
     }
 

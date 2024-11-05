@@ -27,6 +27,7 @@ import DataSource from 'devextreme/data/data_source';
 import { dxTileViewItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/tile_view';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
+import { Orientation, ScrollbarMode } from 'devextreme/common';
 
 import DxTileView from 'devextreme/ui/tile_view';
 
@@ -137,10 +138,10 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get direction(): "horizontal" | "vertical" {
+    get direction(): Orientation {
         return this._getOption('direction');
     }
-    set direction(value: "horizontal" | "vertical") {
+    set direction(value: Orientation) {
         this._setOption('direction', value);
     }
 
@@ -306,10 +307,10 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get showScrollbar(): "always" | "never" | "onHover" | "onScroll" {
+    get showScrollbar(): ScrollbarMode {
         return this._getOption('showScrollbar');
     }
-    set showScrollbar(value: "always" | "never" | "onHover" | "onScroll") {
+    set showScrollbar(value: ScrollbarMode) {
         this._setOption('showScrollbar', value);
     }
 
@@ -456,7 +457,7 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() directionChange: EventEmitter<"horizontal" | "vertical">;
+    @Output() directionChange: EventEmitter<Orientation>;
 
     /**
     
@@ -547,7 +548,7 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showScrollbarChange: EventEmitter<"always" | "never" | "onHover" | "onScroll">;
+    @Output() showScrollbarChange: EventEmitter<ScrollbarMode>;
 
     /**
     

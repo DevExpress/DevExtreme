@@ -14,7 +14,8 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
+import { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
+import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -30,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartTitleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get alignment(): "center" | "left" | "right" {
+    get alignment(): HorizontalAlignment {
         return this._getOption('alignment');
     }
-    set alignment(value: "center" | "left" | "right") {
+    set alignment(value: HorizontalAlignment) {
         this._setOption('alignment', value);
     }
 
@@ -62,26 +63,26 @@ export class DxoChartTitleComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get textOverflow(): "ellipsis" | "hide" | "none" {
+    get textOverflow(): TextOverflow {
         return this._getOption('textOverflow');
     }
-    set textOverflow(value: "ellipsis" | "hide" | "none") {
+    set textOverflow(value: TextOverflow) {
         this._setOption('textOverflow', value);
     }
 
     @Input()
-    get wordWrap(): "normal" | "breakWord" | "none" {
+    get wordWrap(): WordWrap {
         return this._getOption('wordWrap');
     }
-    set wordWrap(value: "normal" | "breakWord" | "none") {
+    set wordWrap(value: WordWrap) {
         this._setOption('wordWrap', value);
     }
 
     @Input()
-    get horizontalAlignment(): "center" | "left" | "right" {
+    get horizontalAlignment(): HorizontalAlignment {
         return this._getOption('horizontalAlignment');
     }
-    set horizontalAlignment(value: "center" | "left" | "right") {
+    set horizontalAlignment(value: HorizontalAlignment) {
         this._setOption('horizontalAlignment', value);
     }
 
@@ -94,18 +95,18 @@ export class DxoChartTitleComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get subtitle(): string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" } {
+    get subtitle(): Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
         return this._getOption('subtitle');
     }
-    set subtitle(value: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }) {
+    set subtitle(value: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
         this._setOption('subtitle', value);
     }
 
     @Input()
-    get verticalAlignment(): "bottom" | "top" {
+    get verticalAlignment(): VerticalEdge {
         return this._getOption('verticalAlignment');
     }
-    set verticalAlignment(value: "bottom" | "top") {
+    set verticalAlignment(value: VerticalEdge) {
         this._setOption('verticalAlignment', value);
     }
 

@@ -16,6 +16,7 @@ import {
 
 import dxSortable from 'devextreme/ui/sortable';
 import dxDraggable from 'devextreme/ui/draggable';
+import { DragDirection, DragHighlight } from 'devextreme/common';
 import { GridBase } from 'devextreme/common/grids';
 import { event } from 'devextreme/events/index';
 
@@ -73,10 +74,10 @@ export class DxoDataGridRowDraggingComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get cursorOffset(): string | { x?: number, y?: number } {
+    get cursorOffset(): Record<string, any> | string | { x?: number, y?: number } {
         return this._getOption('cursorOffset');
     }
-    set cursorOffset(value: string | { x?: number, y?: number }) {
+    set cursorOffset(value: Record<string, any> | string | { x?: number, y?: number }) {
         this._setOption('cursorOffset', value);
     }
 
@@ -89,10 +90,10 @@ export class DxoDataGridRowDraggingComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get dragDirection(): "both" | "horizontal" | "vertical" {
+    get dragDirection(): DragDirection {
         return this._getOption('dragDirection');
     }
-    set dragDirection(value: "both" | "horizontal" | "vertical") {
+    set dragDirection(value: DragDirection) {
         this._setOption('dragDirection', value);
     }
 
@@ -105,10 +106,10 @@ export class DxoDataGridRowDraggingComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get dropFeedbackMode(): "push" | "indicate" {
+    get dropFeedbackMode(): DragHighlight {
         return this._getOption('dropFeedbackMode');
     }
-    set dropFeedbackMode(value: "push" | "indicate") {
+    set dropFeedbackMode(value: DragHighlight) {
         this._setOption('dropFeedbackMode', value);
     }
 

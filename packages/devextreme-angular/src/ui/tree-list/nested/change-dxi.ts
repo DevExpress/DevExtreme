@@ -12,6 +12,7 @@ import {
 
 
 
+import { DataChangeType } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -59,10 +60,10 @@ export class DxiTreeListChangeComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get type(): "insert" | "update" | "remove" {
+    get type(): DataChangeType {
         return this._getOption('type');
     }
-    set type(value: "insert" | "update" | "remove") {
+    set type(value: DataChangeType) {
         this._setOption('type', value);
     }
 

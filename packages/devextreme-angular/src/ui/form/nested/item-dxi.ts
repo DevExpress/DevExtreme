@@ -17,7 +17,8 @@ import { DOCUMENT } from '@angular/common';
 
 
 import * as CommonTypes from 'devextreme/common';
-import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
+import { FormItemComponent, FormItemType, LabelLocation, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
+import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 import { dxButtonOptions } from 'devextreme/ui/button';
 
@@ -144,10 +145,10 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get editorType(): "dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox" {
+    get editorType(): FormItemComponent {
         return this._getOption('editorType');
     }
-    set editorType(value: "dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox") {
+    set editorType(value: FormItemComponent) {
         this._setOption('editorType', value);
     }
 
@@ -168,18 +169,18 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get itemType(): "empty" | "group" | "simple" | "tabbed" | "button" {
+    get itemType(): FormItemType {
         return this._getOption('itemType');
     }
-    set itemType(value: "empty" | "group" | "simple" | "tabbed" | "button") {
+    set itemType(value: FormItemType) {
         this._setOption('itemType', value);
     }
 
     @Input()
-    get label(): Record<string, any> | { alignment?: "center" | "left" | "right", location?: "left" | "right" | "top", showColon?: boolean, template?: any, text?: string, visible?: boolean } {
+    get label(): Record<string, any> | { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { alignment?: "center" | "left" | "right", location?: "left" | "right" | "top", showColon?: boolean, template?: any, text?: string, visible?: boolean }) {
+    set label(value: Record<string, any> | { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -280,18 +281,18 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get horizontalAlignment(): "center" | "left" | "right" {
+    get horizontalAlignment(): HorizontalAlignment {
         return this._getOption('horizontalAlignment');
     }
-    set horizontalAlignment(value: "center" | "left" | "right") {
+    set horizontalAlignment(value: HorizontalAlignment) {
         this._setOption('horizontalAlignment', value);
     }
 
     @Input()
-    get verticalAlignment(): "bottom" | "center" | "top" {
+    get verticalAlignment(): VerticalAlignment {
         return this._getOption('verticalAlignment');
     }
-    set verticalAlignment(value: "bottom" | "center" | "top") {
+    set verticalAlignment(value: VerticalAlignment) {
         this._setOption('verticalAlignment', value);
     }
 

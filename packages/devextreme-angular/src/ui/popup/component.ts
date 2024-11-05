@@ -24,6 +24,7 @@ import {
 
 import { AnimationConfig } from 'devextreme/animation/fx';
 import { event, EventInfo } from 'devextreme/events/index';
+import { PositionAlignment } from 'devextreme/common';
 import { PositionConfig } from 'devextreme/animation/position';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
@@ -379,10 +380,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get position(): (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" {
+    get position(): (() => void) | PositionAlignment | PositionConfig {
         return this._getOption('position');
     }
-    set position(value: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") {
+    set position(value: (() => void) | PositionAlignment | PositionConfig) {
         this._setOption('position', value);
     }
 
@@ -823,7 +824,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<(() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top">;
+    @Output() positionChange: EventEmitter<(() => void) | PositionAlignment | PositionConfig>;
 
     /**
     

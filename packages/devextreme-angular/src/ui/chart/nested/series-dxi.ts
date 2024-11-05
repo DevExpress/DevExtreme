@@ -12,9 +12,10 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
-import { chartPointAggregationInfoObject, chartSeriesObject } from 'devextreme/viz/chart';
-import { ChartsColor, Font } from 'devextreme/common/charts';
+import { chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod, FinancialChartReductionLevel } from 'devextreme/viz/chart';
+import { DashStyle, ChartsColor, SeriesHoverMode, HatchDirection, Font, RelativePosition, PointInteractionMode, PointSymbol, SeriesSelectionMode, SeriesType, ValueErrorBarDisplayMode, ValueErrorBarType } from 'devextreme/common/charts';
+import { HorizontalAlignment } from 'devextreme/common';
+import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -30,10 +31,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiChartSeriesComponent extends CollectionNestedOption {
     @Input()
-    get aggregation(): Record<string, any> | { calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>), enabled?: boolean, method?: "avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom" } {
+    get aggregation(): Record<string, any> | { calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>), enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');
     }
-    set aggregation(value: Record<string, any> | { calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>), enabled?: boolean, method?: "avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom" }) {
+    set aggregation(value: Record<string, any> | { calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>), enabled?: boolean, method?: ChartSeriesAggregationMethod }) {
         this._setOption('aggregation', value);
     }
 
@@ -78,10 +79,10 @@ export class DxiChartSeriesComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get border(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -110,10 +111,10 @@ export class DxiChartSeriesComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get dashStyle(): "dash" | "dot" | "longDash" | "solid" {
+    get dashStyle(): DashStyle {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: "dash" | "dot" | "longDash" | "solid") {
+    set dashStyle(value: DashStyle) {
         this._setOption('dashStyle', value);
     }
 
@@ -126,18 +127,18 @@ export class DxiChartSeriesComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get hoverMode(): "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "nearestPoint" | "none" | "onlyPoint" {
+    get hoverMode(): SeriesHoverMode {
         return this._getOption('hoverMode');
     }
-    set hoverMode(value: "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "nearestPoint" | "none" | "onlyPoint") {
+    set hoverMode(value: SeriesHoverMode) {
         this._setOption('hoverMode', value);
     }
 
     @Input()
-    get hoverStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, dashStyle?: "dash" | "dot" | "longDash" | "solid", hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number } {
+    get hoverStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: ChartsColor | string, dashStyle?: DashStyle, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, dashStyle?: "dash" | "dot" | "longDash" | "solid", hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }) {
+    set hoverStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: ChartsColor | string, dashStyle?: DashStyle, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }) {
         this._setOption('hoverStyle', value);
     }
 
@@ -158,10 +159,10 @@ export class DxiChartSeriesComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): Record<string, any> | { alignment?: "center" | "left" | "right", argumentFormat?: LocalizationTypes.Format, backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string, font?: Font, format?: LocalizationTypes.Format, horizontalOffset?: number, position?: "inside" | "outside", rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean } {
+    get label(): Record<string, any> | { alignment?: HorizontalAlignment, argumentFormat?: Format, backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string, font?: Font, format?: Format, horizontalOffset?: number, position?: RelativePosition, rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { alignment?: "center" | "left" | "right", argumentFormat?: LocalizationTypes.Format, backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string, font?: Font, format?: LocalizationTypes.Format, horizontalOffset?: number, position?: "inside" | "outside", rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean }) {
+    set label(value: Record<string, any> | { alignment?: HorizontalAlignment, argumentFormat?: Format, backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string, font?: Font, format?: Format, horizontalOffset?: number, position?: RelativePosition, rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -222,10 +223,10 @@ export class DxiChartSeriesComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get point(): Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, hoverMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }, image?: string | { height?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number }, url?: string | { rangeMaxPoint?: string, rangeMinPoint?: string }, width?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number } }, selectionMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }, size?: number, symbol?: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp", visible?: boolean } {
+    get point(): Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, hoverMode?: PointInteractionMode, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }, image?: Record<string, any> | string | { height?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number }, url?: Record<string, any> | string | { rangeMaxPoint?: string, rangeMinPoint?: string }, width?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number } }, selectionMode?: PointInteractionMode, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }, size?: number, symbol?: PointSymbol, visible?: boolean } {
         return this._getOption('point');
     }
-    set point(value: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, hoverMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }, image?: string | { height?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number }, url?: string | { rangeMaxPoint?: string, rangeMinPoint?: string }, width?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number } }, selectionMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }, size?: number, symbol?: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp", visible?: boolean }) {
+    set point(value: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, hoverMode?: PointInteractionMode, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }, image?: Record<string, any> | string | { height?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number }, url?: Record<string, any> | string | { rangeMaxPoint?: string, rangeMinPoint?: string }, width?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number } }, selectionMode?: PointInteractionMode, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }, size?: number, symbol?: PointSymbol, visible?: boolean }) {
         this._setOption('point', value);
     }
 
@@ -246,26 +247,26 @@ export class DxiChartSeriesComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get reduction(): Record<string, any> | { color?: string, level?: "close" | "high" | "low" | "open" } {
+    get reduction(): Record<string, any> | { color?: string, level?: FinancialChartReductionLevel } {
         return this._getOption('reduction');
     }
-    set reduction(value: Record<string, any> | { color?: string, level?: "close" | "high" | "low" | "open" }) {
+    set reduction(value: Record<string, any> | { color?: string, level?: FinancialChartReductionLevel }) {
         this._setOption('reduction', value);
     }
 
     @Input()
-    get selectionMode(): "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "none" | "onlyPoint" {
+    get selectionMode(): SeriesSelectionMode {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "none" | "onlyPoint") {
+    set selectionMode(value: SeriesSelectionMode) {
         this._setOption('selectionMode', value);
     }
 
     @Input()
-    get selectionStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, dashStyle?: "dash" | "dot" | "longDash" | "solid", hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number } {
+    get selectionStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: ChartsColor | string, dashStyle?: DashStyle, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, dashStyle?: "dash" | "dot" | "longDash" | "solid", hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }) {
+    set selectionStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: ChartsColor | string, dashStyle?: DashStyle, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }) {
         this._setOption('selectionStyle', value);
     }
 
@@ -310,18 +311,18 @@ export class DxiChartSeriesComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get type(): "area" | "bar" | "bubble" | "candlestick" | "fullstackedarea" | "fullstackedbar" | "fullstackedline" | "fullstackedspline" | "fullstackedsplinearea" | "line" | "rangearea" | "rangebar" | "scatter" | "spline" | "splinearea" | "stackedarea" | "stackedbar" | "stackedline" | "stackedspline" | "stackedsplinearea" | "steparea" | "stepline" | "stock" {
+    get type(): SeriesType {
         return this._getOption('type');
     }
-    set type(value: "area" | "bar" | "bubble" | "candlestick" | "fullstackedarea" | "fullstackedbar" | "fullstackedline" | "fullstackedspline" | "fullstackedsplinearea" | "line" | "rangearea" | "rangebar" | "scatter" | "spline" | "splinearea" | "stackedarea" | "stackedbar" | "stackedline" | "stackedspline" | "stackedsplinearea" | "steparea" | "stepline" | "stock") {
+    set type(value: SeriesType) {
         this._setOption('type', value);
     }
 
     @Input()
-    get valueErrorBar(): Record<string, any> | { color?: string, displayMode?: "auto" | "high" | "low" | "none", edgeLength?: number, highValueField?: string, lineWidth?: number, lowValueField?: string, opacity?: number, type?: "fixed" | "percent" | "stdDeviation" | "stdError" | "variance", value?: number } {
+    get valueErrorBar(): Record<string, any> | { color?: string, displayMode?: ValueErrorBarDisplayMode, edgeLength?: number, highValueField?: string, lineWidth?: number, lowValueField?: string, opacity?: number, type?: ValueErrorBarType, value?: number } {
         return this._getOption('valueErrorBar');
     }
-    set valueErrorBar(value: Record<string, any> | { color?: string, displayMode?: "auto" | "high" | "low" | "none", edgeLength?: number, highValueField?: string, lineWidth?: number, lowValueField?: string, opacity?: number, type?: "fixed" | "percent" | "stdDeviation" | "stdError" | "variance", value?: number }) {
+    set valueErrorBar(value: Record<string, any> | { color?: string, displayMode?: ValueErrorBarDisplayMode, edgeLength?: number, highValueField?: string, lineWidth?: number, lowValueField?: string, opacity?: number, type?: ValueErrorBarType, value?: number }) {
         this._setOption('valueErrorBar', value);
     }
 

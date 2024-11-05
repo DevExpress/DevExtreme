@@ -12,7 +12,9 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
+import { DataType } from 'devextreme/common';
+import { FilterBuilderOperation } from 'devextreme/ui/filter_builder';
+import { Format } from 'devextreme/localization';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
@@ -62,10 +64,10 @@ export class DxiDataGridFieldComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get dataType(): "string" | "number" | "date" | "boolean" | "object" | "datetime" {
+    get dataType(): DataType {
         return this._getOption('dataType');
     }
-    set dataType(value: "string" | "number" | "date" | "boolean" | "object" | "datetime") {
+    set dataType(value: DataType) {
         this._setOption('dataType', value);
     }
 
@@ -94,18 +96,18 @@ export class DxiDataGridFieldComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get filterOperations(): Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | string> {
+    get filterOperations(): Array<FilterBuilderOperation | string> {
         return this._getOption('filterOperations');
     }
-    set filterOperations(value: Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | string>) {
+    set filterOperations(value: Array<FilterBuilderOperation | string>) {
         this._setOption('filterOperations', value);
     }
 
     @Input()
-    get format(): LocalizationTypes.Format {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: LocalizationTypes.Format) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 

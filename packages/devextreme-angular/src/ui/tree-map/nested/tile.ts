@@ -14,7 +14,7 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
+import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -54,10 +54,10 @@ export class DxoTreeMapTileComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get label(): Record<string, any> | { font?: Font, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" } {
+    get label(): Record<string, any> | { font?: Font, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { font?: Font, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" }) {
+    set label(value: Record<string, any> | { font?: Font, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }) {
         this._setOption('label', value);
     }
 

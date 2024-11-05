@@ -27,6 +27,7 @@ import DataSource from 'devextreme/data/data_source';
 import { dxTabPanelItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from 'devextreme/ui/tab_panel';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
+import { TabsIconPosition, TabsStyle, Position } from 'devextreme/common';
 
 import DxTabPanel from 'devextreme/ui/tab_panel';
 
@@ -215,10 +216,10 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get iconPosition(): "top" | "end" | "bottom" | "start" {
+    get iconPosition(): TabsIconPosition {
         return this._getOption('iconPosition');
     }
-    set iconPosition(value: "top" | "end" | "bottom" | "start") {
+    set iconPosition(value: TabsIconPosition) {
         this._setOption('iconPosition', value);
     }
 
@@ -397,10 +398,10 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get stylingMode(): "primary" | "secondary" {
+    get stylingMode(): TabsStyle {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: "primary" | "secondary") {
+    set stylingMode(value: TabsStyle) {
         this._setOption('stylingMode', value);
     }
 
@@ -436,10 +437,10 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get tabsPosition(): "bottom" | "left" | "right" | "top" {
+    get tabsPosition(): Position {
         return this._getOption('tabsPosition');
     }
-    set tabsPosition(value: "bottom" | "left" | "right" | "top") {
+    set tabsPosition(value: Position) {
         this._setOption('tabsPosition', value);
     }
 
@@ -655,7 +656,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() iconPositionChange: EventEmitter<"top" | "end" | "bottom" | "start">;
+    @Output() iconPositionChange: EventEmitter<TabsIconPosition>;
 
     /**
     
@@ -753,7 +754,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<"primary" | "secondary">;
+    @Output() stylingModeChange: EventEmitter<TabsStyle>;
 
     /**
     
@@ -774,7 +775,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tabsPositionChange: EventEmitter<"bottom" | "left" | "right" | "top">;
+    @Output() tabsPositionChange: EventEmitter<Position>;
 
     /**
     

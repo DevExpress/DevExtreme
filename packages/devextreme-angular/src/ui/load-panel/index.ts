@@ -20,6 +20,7 @@ import {
 import { AnimationConfig } from 'devextreme/animation/fx';
 import { event } from 'devextreme/events/index';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/load_panel';
+import { PositionAlignment } from 'devextreme/common';
 import { PositionConfig } from 'devextreme/animation/position';
 
 import DxLoadPanel from 'devextreme/ui/load_panel';
@@ -305,10 +306,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get position(): (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" {
+    get position(): (() => void) | PositionAlignment | PositionConfig {
         return this._getOption('position');
     }
-    set position(value: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") {
+    set position(value: (() => void) | PositionAlignment | PositionConfig) {
         this._setOption('position', value);
     }
 
@@ -604,7 +605,7 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<(() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top">;
+    @Output() positionChange: EventEmitter<(() => void) | PositionAlignment | PositionConfig>;
 
     /**
     

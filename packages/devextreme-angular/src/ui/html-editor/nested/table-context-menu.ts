@@ -17,7 +17,7 @@ import {
 
 
 
-import { dxHtmlEditorTableContextMenuItem } from 'devextreme/ui/html_editor';
+import { dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem } from 'devextreme/ui/html_editor';
 
 import {
     NestedOptionHost,
@@ -43,10 +43,10 @@ export class DxoHtmlEditorTableContextMenuComponent extends NestedOption impleme
     }
 
     @Input()
-    get items(): Array<dxHtmlEditorTableContextMenuItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties"> {
+    get items(): Array<dxHtmlEditorTableContextMenuItem | HtmlEditorPredefinedContextMenuItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxHtmlEditorTableContextMenuItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">) {
+    set items(value: Array<dxHtmlEditorTableContextMenuItem | HtmlEditorPredefinedContextMenuItem>) {
         this._setOption('items', value);
     }
 

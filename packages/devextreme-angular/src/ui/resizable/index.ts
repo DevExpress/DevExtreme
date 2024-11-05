@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 
 
-import { DisposingEvent, InitializedEvent, OptionChangedEvent, ResizeEvent, ResizeEndEvent, ResizeStartEvent } from 'devextreme/ui/resizable';
+import { ResizeHandle, DisposingEvent, InitializedEvent, OptionChangedEvent, ResizeEvent, ResizeEndEvent, ResizeStartEvent } from 'devextreme/ui/resizable';
 
 import DxResizable from 'devextreme/ui/resizable';
 
@@ -83,10 +83,10 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get handles(): "bottom" | "left" | "right" | "top" | "all" {
+    get handles(): ResizeHandle | string {
         return this._getOption('handles');
     }
-    set handles(value: "bottom" | "left" | "right" | "top" | "all") {
+    set handles(value: ResizeHandle | string) {
         this._setOption('handles', value);
     }
 
@@ -261,7 +261,7 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() handlesChange: EventEmitter<"bottom" | "left" | "right" | "top" | "all">;
+    @Output() handlesChange: EventEmitter<ResizeHandle | string>;
 
     /**
     

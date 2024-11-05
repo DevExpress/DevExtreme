@@ -14,6 +14,7 @@ import {
 
 
 
+import { ExportFormat } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -53,10 +54,10 @@ export class DxoFunnelExportComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get formats(): Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG"> {
+    get formats(): Array<ExportFormat> {
         return this._getOption('formats');
     }
-    set formats(value: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">) {
+    set formats(value: Array<ExportFormat>) {
         this._setOption('formats', value);
     }
 

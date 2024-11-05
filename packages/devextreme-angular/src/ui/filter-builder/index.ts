@@ -24,7 +24,7 @@ import {
 } from '@angular/core';
 
 
-import { dxFilterBuilderCustomOperation, dxFilterBuilderField, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
+import { dxFilterBuilderCustomOperation, dxFilterBuilderField, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
 
 import DxFilterBuilder from 'devextreme/ui/filter_builder';
 
@@ -223,10 +223,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get groupOperations(): Array<"and" | "or" | "notAnd" | "notOr"> {
+    get groupOperations(): Array<GroupOperation> {
         return this._getOption('groupOperations');
     }
-    set groupOperations(value: Array<"and" | "or" | "notAnd" | "notOr">) {
+    set groupOperations(value: Array<GroupOperation>) {
         this._setOption('groupOperations', value);
     }
 
@@ -478,7 +478,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() groupOperationsChange: EventEmitter<Array<"and" | "or" | "notAnd" | "notOr">>;
+    @Output() groupOperationsChange: EventEmitter<Array<GroupOperation>>;
 
     /**
     

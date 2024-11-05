@@ -27,6 +27,7 @@ import { dxDropDownButtonItem, ButtonClickEvent, ContentReadyEvent, DisposingEve
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { dxPopupOptions } from 'devextreme/ui/popup';
+import { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import DxDropDownButton from 'devextreme/ui/drop_down_button';
 
@@ -409,10 +410,10 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     
      */
     @Input()
-    get stylingMode(): "text" | "outlined" | "contained" {
+    get stylingMode(): ButtonStyle {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: "text" | "outlined" | "contained") {
+    set stylingMode(value: ButtonStyle) {
         this._setOption('stylingMode', value);
     }
 
@@ -461,10 +462,10 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     
      */
     @Input()
-    get type(): "danger" | "default" | "normal" | "success" {
+    get type(): ButtonType {
         return this._getOption('type');
     }
-    set type(value: "danger" | "default" | "normal" | "success") {
+    set type(value: ButtonType) {
         this._setOption('type', value);
     }
 
@@ -762,7 +763,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<"text" | "outlined" | "contained">;
+    @Output() stylingModeChange: EventEmitter<ButtonStyle>;
 
     /**
     
@@ -790,7 +791,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() typeChange: EventEmitter<"danger" | "default" | "normal" | "success">;
+    @Output() typeChange: EventEmitter<ButtonType>;
 
     /**
     

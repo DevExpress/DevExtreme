@@ -14,7 +14,7 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
+import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -54,18 +54,18 @@ export class DxoRangeSelectorSubtitleComponent extends NestedOption implements O
     }
 
     @Input()
-    get textOverflow(): "ellipsis" | "hide" | "none" {
+    get textOverflow(): TextOverflow {
         return this._getOption('textOverflow');
     }
-    set textOverflow(value: "ellipsis" | "hide" | "none") {
+    set textOverflow(value: TextOverflow) {
         this._setOption('textOverflow', value);
     }
 
     @Input()
-    get wordWrap(): "normal" | "breakWord" | "none" {
+    get wordWrap(): WordWrap {
         return this._getOption('wordWrap');
     }
-    set wordWrap(value: "normal" | "breakWord" | "none") {
+    set wordWrap(value: WordWrap) {
         this._setOption('wordWrap', value);
     }
 

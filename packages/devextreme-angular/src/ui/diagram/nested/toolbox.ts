@@ -17,6 +17,7 @@ import {
 
 
 
+import { ShapeCategory, ToolboxDisplayMode, ShapeType, PanelVisibility } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
@@ -34,10 +35,10 @@ import { DxiDiagramToolboxGroupComponent } from './toolbox-group-dxi';
 })
 export class DxoDiagramToolboxComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get groups(): Array<Record<string, any>> | { category?: "general" | "flowchart" | "orgChart" | "containers" | "custom", displayMode?: "icons" | "texts", expanded?: boolean, shapes?: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">, title?: string }[] {
+    get groups(): Array<Record<string, any>> | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType>, title?: string }[] {
         return this._getOption('groups');
     }
-    set groups(value: Array<Record<string, any>> | { category?: "general" | "flowchart" | "orgChart" | "containers" | "custom", displayMode?: "icons" | "texts", expanded?: boolean, shapes?: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">, title?: string }[]) {
+    set groups(value: Array<Record<string, any>> | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType>, title?: string }[]) {
         this._setOption('groups', value);
     }
 
@@ -58,10 +59,10 @@ export class DxoDiagramToolboxComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get visibility(): "auto" | "visible" | "collapsed" | "disabled" {
+    get visibility(): PanelVisibility {
         return this._getOption('visibility');
     }
-    set visibility(value: "auto" | "visible" | "collapsed" | "disabled") {
+    set visibility(value: PanelVisibility) {
         this._setOption('visibility', value);
     }
 

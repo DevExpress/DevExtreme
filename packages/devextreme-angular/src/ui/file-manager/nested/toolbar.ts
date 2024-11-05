@@ -17,7 +17,7 @@ import {
 
 
 
-import { dxFileManagerToolbarItem } from 'devextreme/ui/file_manager';
+import { dxFileManagerToolbarItem, FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
 
 import {
     NestedOptionHost,
@@ -36,18 +36,18 @@ import { DxiFileManagerToolbarItemComponent } from './toolbar-item-dxi';
 })
 export class DxoFileManagerToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get fileSelectionItems(): Array<dxFileManagerToolbarItem | "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator"> {
+    get fileSelectionItems(): Array<dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem> {
         return this._getOption('fileSelectionItems');
     }
-    set fileSelectionItems(value: Array<dxFileManagerToolbarItem | "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">) {
+    set fileSelectionItems(value: Array<dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem>) {
         this._setOption('fileSelectionItems', value);
     }
 
     @Input()
-    get items(): Array<dxFileManagerToolbarItem | "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator"> {
+    get items(): Array<dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxFileManagerToolbarItem | "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">) {
+    set items(value: Array<dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem>) {
         this._setOption('items', value);
     }
 

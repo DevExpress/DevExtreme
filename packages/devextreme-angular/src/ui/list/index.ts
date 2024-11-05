@@ -24,10 +24,11 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/list';
 
 import DataSource from 'devextreme/data/data_source';
-import { dxListItem, ContentReadyEvent, DisposingEvent, GroupRenderedEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemDeletedEvent, ItemDeletingEvent, ItemHoldEvent, ItemRenderedEvent, ItemReorderedEvent, ItemSwipeEvent, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectAllValueChangedEvent, SelectionChangedEvent, SelectionChangingEvent } from 'devextreme/ui/list';
+import { dxListItem, ItemDeleteMode, ListMenuMode, ContentReadyEvent, DisposingEvent, GroupRenderedEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemDeletedEvent, ItemDeletingEvent, ItemHoldEvent, ItemRenderedEvent, ItemReorderedEvent, ItemSwipeEvent, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectAllValueChangedEvent, SelectionChangedEvent, SelectionChangingEvent } from 'devextreme/ui/list';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { dxSortableOptions } from 'devextreme/ui/sortable';
+import { PageLoadMode, SearchMode, SelectAllMode, SingleMultipleAllOrNone, ScrollbarMode } from 'devextreme/common';
 import { dxTextBoxOptions } from 'devextreme/ui/text_box';
 
 import DxList from 'devextreme/ui/list';
@@ -296,10 +297,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get itemDeleteMode(): "context" | "slideButton" | "slideItem" | "static" | "swipe" | "toggle" {
+    get itemDeleteMode(): ItemDeleteMode {
         return this._getOption('itemDeleteMode');
     }
-    set itemDeleteMode(value: "context" | "slideButton" | "slideItem" | "static" | "swipe" | "toggle") {
+    set itemDeleteMode(value: ItemDeleteMode) {
         this._setOption('itemDeleteMode', value);
     }
 
@@ -387,10 +388,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get menuMode(): "context" | "slide" {
+    get menuMode(): ListMenuMode {
         return this._getOption('menuMode');
     }
-    set menuMode(value: "context" | "slide") {
+    set menuMode(value: ListMenuMode) {
         this._setOption('menuMode', value);
     }
 
@@ -439,10 +440,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get pageLoadMode(): "nextButton" | "scrollBottom" {
+    get pageLoadMode(): PageLoadMode {
         return this._getOption('pageLoadMode');
     }
-    set pageLoadMode(value: "nextButton" | "scrollBottom") {
+    set pageLoadMode(value: PageLoadMode) {
         this._setOption('pageLoadMode', value);
     }
 
@@ -608,10 +609,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get searchMode(): "contains" | "startswith" | "equals" {
+    get searchMode(): SearchMode {
         return this._getOption('searchMode');
     }
-    set searchMode(value: "contains" | "startswith" | "equals") {
+    set searchMode(value: SearchMode) {
         this._setOption('searchMode', value);
     }
 
@@ -647,10 +648,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get selectAllMode(): "allPages" | "page" {
+    get selectAllMode(): SelectAllMode {
         return this._getOption('selectAllMode');
     }
-    set selectAllMode(value: "allPages" | "page") {
+    set selectAllMode(value: SelectAllMode) {
         this._setOption('selectAllMode', value);
     }
 
@@ -712,10 +713,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get selectionMode(): "single" | "multiple" | "all" | "none" {
+    get selectionMode(): SingleMultipleAllOrNone {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: "single" | "multiple" | "all" | "none") {
+    set selectionMode(value: SingleMultipleAllOrNone) {
         this._setOption('selectionMode', value);
     }
 
@@ -725,10 +726,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get showScrollbar(): "always" | "never" | "onHover" | "onScroll" {
+    get showScrollbar(): ScrollbarMode {
         return this._getOption('showScrollbar');
     }
-    set showScrollbar(value: "always" | "never" | "onHover" | "onScroll") {
+    set showScrollbar(value: ScrollbarMode) {
         this._setOption('showScrollbar', value);
     }
 
@@ -1066,7 +1067,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemDeleteModeChange: EventEmitter<"context" | "slideButton" | "slideItem" | "static" | "swipe" | "toggle">;
+    @Output() itemDeleteModeChange: EventEmitter<ItemDeleteMode>;
 
     /**
     
@@ -1115,7 +1116,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() menuModeChange: EventEmitter<"context" | "slide">;
+    @Output() menuModeChange: EventEmitter<ListMenuMode>;
 
     /**
     
@@ -1143,7 +1144,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pageLoadModeChange: EventEmitter<"nextButton" | "scrollBottom">;
+    @Output() pageLoadModeChange: EventEmitter<PageLoadMode>;
 
     /**
     
@@ -1234,7 +1235,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchModeChange: EventEmitter<"contains" | "startswith" | "equals">;
+    @Output() searchModeChange: EventEmitter<SearchMode>;
 
     /**
     
@@ -1255,7 +1256,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectAllModeChange: EventEmitter<"allPages" | "page">;
+    @Output() selectAllModeChange: EventEmitter<SelectAllMode>;
 
     /**
     
@@ -1290,14 +1291,14 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<"single" | "multiple" | "all" | "none">;
+    @Output() selectionModeChange: EventEmitter<SingleMultipleAllOrNone>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showScrollbarChange: EventEmitter<"always" | "never" | "onHover" | "onScroll">;
+    @Output() showScrollbarChange: EventEmitter<ScrollbarMode>;
 
     /**
     

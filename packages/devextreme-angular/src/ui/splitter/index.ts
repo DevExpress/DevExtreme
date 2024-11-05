@@ -27,6 +27,7 @@ import DataSource from 'devextreme/data/data_source';
 import { dxSplitterItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemRenderedEvent, OptionChangedEvent, ResizeEvent, ResizeEndEvent, ResizeStartEvent } from 'devextreme/ui/splitter';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
+import { Orientation } from 'devextreme/common';
 
 import DxSplitter from 'devextreme/ui/splitter';
 
@@ -177,10 +178,10 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get orientation(): "horizontal" | "vertical" {
+    get orientation(): Orientation {
         return this._getOption('orientation');
     }
-    set orientation(value: "horizontal" | "vertical") {
+    set orientation(value: Orientation) {
         this._setOption('orientation', value);
     }
 
@@ -393,7 +394,7 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() orientationChange: EventEmitter<"horizontal" | "vertical">;
+    @Output() orientationChange: EventEmitter<Orientation>;
 
     /**
     

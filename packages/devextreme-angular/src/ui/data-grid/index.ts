@@ -27,16 +27,17 @@ import DataSource from 'devextreme/data/data_source';
 import dxDataGrid from 'devextreme/ui/data_grid';
 import dxSortable from 'devextreme/ui/sortable';
 import dxDraggable from 'devextreme/ui/draggable';
-import * as LocalizationTypes from 'devextreme/localization';
+import { ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataChange, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, GridBase, ApplyFilterMode, GroupExpandMode, HeaderFilterSearchConfig, EnterKeyAction, EnterKeyDirection, Pager, DataRenderMode, SelectionColumnDisplayMode, StateStoreType, SummaryType } from 'devextreme/common/grids';
 import { PositionConfig } from 'devextreme/animation/position';
-import { ColumnChooserSearchConfig, ColumnChooserSelectionConfig, DataChange, GridBase, HeaderFilterSearchConfig, Pager } from 'devextreme/common/grids';
-import { dxDataGridColumn, dxDataGridRowObject, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, dxDataGridToolbar } from 'devextreme/ui/data_grid';
+import { SortOrder, Mode, DragDirection, DragHighlight, ScrollbarMode, SingleMultipleOrNone, SelectAllMode, HorizontalAlignment } from 'devextreme/common';
+import { dxDataGridColumn, dxDataGridRowObject, DataGridExportFormat, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, DataGridScrollMode, SelectionSensitivity, dxDataGridToolbar } from 'devextreme/ui/data_grid';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { dxFormOptions } from 'devextreme/ui/form';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
 import { event } from 'devextreme/events/index';
+import { Format } from 'devextreme/localization';
 
 import DxDataGrid from 'devextreme/ui/data_grid';
 
@@ -337,10 +338,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get columnChooser(): Record<string, any> | { allowSearch?: boolean, container?: any | string, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: "dragAndDrop" | "select", position?: PositionConfig, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: "asc" | "desc", title?: string, width?: number | string } {
+    get columnChooser(): Record<string, any> | { allowSearch?: boolean, container?: any | string, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder, title?: string, width?: number | string } {
         return this._getOption('columnChooser');
     }
-    set columnChooser(value: Record<string, any> | { allowSearch?: boolean, container?: any | string, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: "dragAndDrop" | "select", position?: PositionConfig, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: "asc" | "desc", title?: string, width?: number | string }) {
+    set columnChooser(value: Record<string, any> | { allowSearch?: boolean, container?: any | string, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder, title?: string, width?: number | string }) {
         this._setOption('columnChooser', value);
     }
 
@@ -389,10 +390,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get columnResizingMode(): "nextColumn" | "widget" {
+    get columnResizingMode(): ColumnResizeMode {
         return this._getOption('columnResizingMode');
     }
-    set columnResizingMode(value: "nextColumn" | "widget") {
+    set columnResizingMode(value: ColumnResizeMode) {
         this._setOption('columnResizingMode', value);
     }
 
@@ -415,10 +416,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get columnWidth(): number | "auto" {
+    get columnWidth(): Mode | number {
         return this._getOption('columnWidth');
     }
-    set columnWidth(value: number | "auto") {
+    set columnWidth(value: Mode | number) {
         this._setOption('columnWidth', value);
     }
 
@@ -493,10 +494,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get editing(): Record<string, any> | { allowAdding?: boolean, allowDeleting?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: "batch" | "cell" | "row" | "form" | "popup", newRowPosition?: "first" | "last" | "pageBottom" | "pageTop" | "viewportBottom" | "viewportTop", popup?: dxPopupOptions<any>, refreshMode?: "full" | "reshape" | "repaint", selectTextOnEditStart?: boolean, startEditAction?: "click" | "dblClick", texts?: any | { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean } {
+    get editing(): Record<string, any> | { allowAdding?: boolean, allowDeleting?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, newRowPosition?: NewRowPosition, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: any | { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean } {
         return this._getOption('editing');
     }
-    set editing(value: Record<string, any> | { allowAdding?: boolean, allowDeleting?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: "batch" | "cell" | "row" | "form" | "popup", newRowPosition?: "first" | "last" | "pageBottom" | "pageTop" | "viewportBottom" | "viewportTop", popup?: dxPopupOptions<any>, refreshMode?: "full" | "reshape" | "repaint", selectTextOnEditStart?: boolean, startEditAction?: "click" | "dblClick", texts?: any | { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }) {
+    set editing(value: Record<string, any> | { allowAdding?: boolean, allowDeleting?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, newRowPosition?: NewRowPosition, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: any | { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }) {
         this._setOption('editing', value);
     }
 
@@ -532,10 +533,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get export(): Record<string, any> | { allowExportSelectedData?: boolean, enabled?: boolean, formats?: Array<"pdf" | "xlsx" | string>, texts?: Record<string, any> | { exportAll?: string, exportSelectedRows?: string, exportTo?: string } } {
+    get export(): Record<string, any> | { allowExportSelectedData?: boolean, enabled?: boolean, formats?: Array<DataGridExportFormat | string>, texts?: Record<string, any> | { exportAll?: string, exportSelectedRows?: string, exportTo?: string } } {
         return this._getOption('export');
     }
-    set export(value: Record<string, any> | { allowExportSelectedData?: boolean, enabled?: boolean, formats?: Array<"pdf" | "xlsx" | string>, texts?: Record<string, any> | { exportAll?: string, exportSelectedRows?: string, exportTo?: string } }) {
+    set export(value: Record<string, any> | { allowExportSelectedData?: boolean, enabled?: boolean, formats?: Array<DataGridExportFormat | string>, texts?: Record<string, any> | { exportAll?: string, exportSelectedRows?: string, exportTo?: string } }) {
         this._setOption('export', value);
     }
 
@@ -584,10 +585,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterRow(): Record<string, any> | { applyFilter?: "auto" | "onClick", applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean } {
+    get filterRow(): Record<string, any> | { applyFilter?: ApplyFilterMode, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean } {
         return this._getOption('filterRow');
     }
-    set filterRow(value: Record<string, any> | { applyFilter?: "auto" | "onClick", applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean }) {
+    set filterRow(value: Record<string, any> | { applyFilter?: ApplyFilterMode, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean }) {
         this._setOption('filterRow', value);
     }
 
@@ -597,10 +598,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterSyncEnabled(): boolean | "auto" {
+    get filterSyncEnabled(): boolean | Mode {
         return this._getOption('filterSyncEnabled');
     }
-    set filterSyncEnabled(value: boolean | "auto") {
+    set filterSyncEnabled(value: boolean | Mode) {
         this._setOption('filterSyncEnabled', value);
     }
 
@@ -675,10 +676,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get grouping(): Record<string, any> | { allowCollapsing?: boolean, autoExpandAll?: boolean, contextMenuEnabled?: boolean, expandMode?: "buttonClick" | "rowClick", texts?: Record<string, any> | { groupByThisColumn?: string, groupContinuedMessage?: string, groupContinuesMessage?: string, ungroup?: string, ungroupAll?: string } } {
+    get grouping(): Record<string, any> | { allowCollapsing?: boolean, autoExpandAll?: boolean, contextMenuEnabled?: boolean, expandMode?: GroupExpandMode, texts?: Record<string, any> | { groupByThisColumn?: string, groupContinuedMessage?: string, groupContinuesMessage?: string, ungroup?: string, ungroupAll?: string } } {
         return this._getOption('grouping');
     }
-    set grouping(value: Record<string, any> | { allowCollapsing?: boolean, autoExpandAll?: boolean, contextMenuEnabled?: boolean, expandMode?: "buttonClick" | "rowClick", texts?: Record<string, any> | { groupByThisColumn?: string, groupContinuedMessage?: string, groupContinuesMessage?: string, ungroup?: string, ungroupAll?: string } }) {
+    set grouping(value: Record<string, any> | { allowCollapsing?: boolean, autoExpandAll?: boolean, contextMenuEnabled?: boolean, expandMode?: GroupExpandMode, texts?: Record<string, any> | { groupByThisColumn?: string, groupContinuedMessage?: string, groupContinuesMessage?: string, ungroup?: string, ungroupAll?: string } }) {
         this._setOption('grouping', value);
     }
 
@@ -688,10 +689,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get groupPanel(): Record<string, any> | { allowColumnDragging?: boolean, emptyPanelText?: string, visible?: boolean | "auto" } {
+    get groupPanel(): Record<string, any> | { allowColumnDragging?: boolean, emptyPanelText?: string, visible?: boolean | Mode } {
         return this._getOption('groupPanel');
     }
-    set groupPanel(value: Record<string, any> | { allowColumnDragging?: boolean, emptyPanelText?: string, visible?: boolean | "auto" }) {
+    set groupPanel(value: Record<string, any> | { allowColumnDragging?: boolean, emptyPanelText?: string, visible?: boolean | Mode }) {
         this._setOption('groupPanel', value);
     }
 
@@ -766,10 +767,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get keyboardNavigation(): Record<string, any> | { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: "startEdit" | "moveFocus", enterKeyDirection?: "none" | "column" | "row" } {
+    get keyboardNavigation(): Record<string, any> | { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: EnterKeyAction, enterKeyDirection?: EnterKeyDirection } {
         return this._getOption('keyboardNavigation');
     }
-    set keyboardNavigation(value: Record<string, any> | { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: "startEdit" | "moveFocus", enterKeyDirection?: "none" | "column" | "row" }) {
+    set keyboardNavigation(value: Record<string, any> | { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: EnterKeyAction, enterKeyDirection?: EnterKeyDirection }) {
         this._setOption('keyboardNavigation', value);
     }
 
@@ -792,10 +793,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get loadPanel(): Record<string, any> | { enabled?: boolean | "auto", height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
+    get loadPanel(): Record<string, any> | { enabled?: boolean | Mode, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
         return this._getOption('loadPanel');
     }
-    set loadPanel(value: Record<string, any> | { enabled?: boolean | "auto", height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }) {
+    set loadPanel(value: Record<string, any> | { enabled?: boolean | Mode, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }) {
         this._setOption('loadPanel', value);
     }
 
@@ -857,10 +858,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get remoteOperations(): boolean | "auto" | { filtering?: boolean, grouping?: boolean, groupPaging?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean } {
+    get remoteOperations(): boolean | Mode | Record<string, any> | { filtering?: boolean, grouping?: boolean, groupPaging?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean } {
         return this._getOption('remoteOperations');
     }
-    set remoteOperations(value: boolean | "auto" | { filtering?: boolean, grouping?: boolean, groupPaging?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean }) {
+    set remoteOperations(value: boolean | Mode | Record<string, any> | { filtering?: boolean, grouping?: boolean, groupPaging?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean }) {
         this._setOption('remoteOperations', value);
     }
 
@@ -909,10 +910,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get rowDragging(): Record<string, any> | { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string, container?: any | string, cursorOffset?: string | { x?: number, y?: number }, data?: any, dragDirection?: "both" | "horizontal" | "vertical", dragTemplate?: any, dropFeedbackMode?: "push" | "indicate", filter?: string, group?: string, handle?: string, onAdd?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragChange?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragEnd?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragMove?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragStart?: ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onReorder?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean } {
+    get rowDragging(): Record<string, any> | { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string, container?: any | string, cursorOffset?: Record<string, any> | string | { x?: number, y?: number }, data?: any, dragDirection?: DragDirection, dragTemplate?: any, dropFeedbackMode?: DragHighlight, filter?: string, group?: string, handle?: string, onAdd?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragChange?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragEnd?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragMove?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragStart?: ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onReorder?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean } {
         return this._getOption('rowDragging');
     }
-    set rowDragging(value: Record<string, any> | { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string, container?: any | string, cursorOffset?: string | { x?: number, y?: number }, data?: any, dragDirection?: "both" | "horizontal" | "vertical", dragTemplate?: any, dropFeedbackMode?: "push" | "indicate", filter?: string, group?: string, handle?: string, onAdd?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragChange?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragEnd?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragMove?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragStart?: ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onReorder?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }) {
+    set rowDragging(value: Record<string, any> | { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string, container?: any | string, cursorOffset?: Record<string, any> | string | { x?: number, y?: number }, data?: any, dragDirection?: DragDirection, dragTemplate?: any, dropFeedbackMode?: DragHighlight, filter?: string, group?: string, handle?: string, onAdd?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragChange?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragEnd?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragMove?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragStart?: ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onReorder?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }) {
         this._setOption('rowDragging', value);
     }
 
@@ -950,10 +951,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get scrolling(): Record<string, any> | { columnRenderingMode?: "standard" | "virtual", mode?: "infinite" | "standard" | "virtual", preloadEnabled?: boolean, renderAsync?: boolean, rowRenderingMode?: "standard" | "virtual", scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: "always" | "never" | "onHover" | "onScroll", useNative?: boolean | "auto" } {
+    get scrolling(): Record<string, any> | { columnRenderingMode?: DataRenderMode, mode?: DataGridScrollMode, preloadEnabled?: boolean, renderAsync?: boolean, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode } {
         return this._getOption('scrolling');
     }
-    set scrolling(value: Record<string, any> | { columnRenderingMode?: "standard" | "virtual", mode?: "infinite" | "standard" | "virtual", preloadEnabled?: boolean, renderAsync?: boolean, rowRenderingMode?: "standard" | "virtual", scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: "always" | "never" | "onHover" | "onScroll", useNative?: boolean | "auto" }) {
+    set scrolling(value: Record<string, any> | { columnRenderingMode?: DataRenderMode, mode?: DataGridScrollMode, preloadEnabled?: boolean, renderAsync?: boolean, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode }) {
         this._setOption('scrolling', value);
     }
 
@@ -989,10 +990,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get selection(): Record<string, any> | { allowSelectAll?: boolean, deferred?: boolean, mode?: "single" | "multiple" | "none", selectAllMode?: "allPages" | "page", sensitivity?: "base" | "accent" | "case" | "variant", showCheckBoxesMode?: "always" | "none" | "onClick" | "onLongTap" } {
+    get selection(): Record<string, any> | { allowSelectAll?: boolean, deferred?: boolean, mode?: SingleMultipleOrNone, selectAllMode?: SelectAllMode, sensitivity?: SelectionSensitivity, showCheckBoxesMode?: SelectionColumnDisplayMode } {
         return this._getOption('selection');
     }
-    set selection(value: Record<string, any> | { allowSelectAll?: boolean, deferred?: boolean, mode?: "single" | "multiple" | "none", selectAllMode?: "allPages" | "page", sensitivity?: "base" | "accent" | "case" | "variant", showCheckBoxesMode?: "always" | "none" | "onClick" | "onLongTap" }) {
+    set selection(value: Record<string, any> | { allowSelectAll?: boolean, deferred?: boolean, mode?: SingleMultipleOrNone, selectAllMode?: SelectAllMode, sensitivity?: SelectionSensitivity, showCheckBoxesMode?: SelectionColumnDisplayMode }) {
         this._setOption('selection', value);
     }
 
@@ -1067,10 +1068,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get sortByGroupSummaryInfo(): Array<Record<string, any>> | { groupColumn?: string, sortOrder?: "asc" | "desc", summaryItem?: number | string }[] {
+    get sortByGroupSummaryInfo(): Array<Record<string, any>> | { groupColumn?: string, sortOrder?: SortOrder, summaryItem?: number | string }[] {
         return this._getOption('sortByGroupSummaryInfo');
     }
-    set sortByGroupSummaryInfo(value: Array<Record<string, any>> | { groupColumn?: string, sortOrder?: "asc" | "desc", summaryItem?: number | string }[]) {
+    set sortByGroupSummaryInfo(value: Array<Record<string, any>> | { groupColumn?: string, sortOrder?: SortOrder, summaryItem?: number | string }[]) {
         this._setOption('sortByGroupSummaryInfo', value);
     }
 
@@ -1080,10 +1081,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get sorting(): Record<string, any> | { ascendingText?: string, clearText?: string, descendingText?: string, mode?: "single" | "multiple" | "none", showSortIndexes?: boolean } {
+    get sorting(): Record<string, any> | { ascendingText?: string, clearText?: string, descendingText?: string, mode?: SingleMultipleOrNone, showSortIndexes?: boolean } {
         return this._getOption('sorting');
     }
-    set sorting(value: Record<string, any> | { ascendingText?: string, clearText?: string, descendingText?: string, mode?: "single" | "multiple" | "none", showSortIndexes?: boolean }) {
+    set sorting(value: Record<string, any> | { ascendingText?: string, clearText?: string, descendingText?: string, mode?: SingleMultipleOrNone, showSortIndexes?: boolean }) {
         this._setOption('sorting', value);
     }
 
@@ -1093,10 +1094,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get stateStoring(): Record<string, any> | { customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: "custom" | "localStorage" | "sessionStorage" } {
+    get stateStoring(): Record<string, any> | { customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType } {
         return this._getOption('stateStoring');
     }
-    set stateStoring(value: Record<string, any> | { customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: "custom" | "localStorage" | "sessionStorage" }) {
+    set stateStoring(value: Record<string, any> | { customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }) {
         this._setOption('stateStoring', value);
     }
 
@@ -1106,10 +1107,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get summary(): Record<string, any> | { calculateCustomSummary?: ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void), groupItems?: Array<Record<string, any>> | { alignByColumn?: boolean, column?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat?: LocalizationTypes.Format }[], recalculateWhileEditing?: boolean, skipEmptyValues?: boolean, texts?: Record<string, any> | { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }, totalItems?: Array<Record<string, any>> | { alignment?: "center" | "left" | "right", column?: string, cssClass?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, skipEmptyValues?: boolean, summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat?: LocalizationTypes.Format }[] } {
+    get summary(): Record<string, any> | { calculateCustomSummary?: ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void), groupItems?: Array<Record<string, any>> | { alignByColumn?: boolean, column?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: string | SummaryType, valueFormat?: Format }[], recalculateWhileEditing?: boolean, skipEmptyValues?: boolean, texts?: Record<string, any> | { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }, totalItems?: Array<Record<string, any>> | { alignment?: HorizontalAlignment, column?: string, cssClass?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, skipEmptyValues?: boolean, summaryType?: string | SummaryType, valueFormat?: Format }[] } {
         return this._getOption('summary');
     }
-    set summary(value: Record<string, any> | { calculateCustomSummary?: ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void), groupItems?: Array<Record<string, any>> | { alignByColumn?: boolean, column?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat?: LocalizationTypes.Format }[], recalculateWhileEditing?: boolean, skipEmptyValues?: boolean, texts?: Record<string, any> | { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }, totalItems?: Array<Record<string, any>> | { alignment?: "center" | "left" | "right", column?: string, cssClass?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, skipEmptyValues?: boolean, summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat?: LocalizationTypes.Format }[] }) {
+    set summary(value: Record<string, any> | { calculateCustomSummary?: ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void), groupItems?: Array<Record<string, any>> | { alignByColumn?: boolean, column?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: string | SummaryType, valueFormat?: Format }[], recalculateWhileEditing?: boolean, skipEmptyValues?: boolean, texts?: Record<string, any> | { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }, totalItems?: Array<Record<string, any>> | { alignment?: HorizontalAlignment, column?: string, cssClass?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, skipEmptyValues?: boolean, summaryType?: string | SummaryType, valueFormat?: Format }[] }) {
         this._setOption('summary', value);
     }
 
@@ -1593,7 +1594,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnChooserChange: EventEmitter<Record<string, any> | { allowSearch?: boolean, container?: any | string, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: "dragAndDrop" | "select", position?: PositionConfig, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: "asc" | "desc", title?: string, width?: number | string }>;
+    @Output() columnChooserChange: EventEmitter<Record<string, any> | { allowSearch?: boolean, container?: any | string, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder, title?: string, width?: number | string }>;
 
     /**
     
@@ -1621,7 +1622,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnResizingModeChange: EventEmitter<"nextColumn" | "widget">;
+    @Output() columnResizingModeChange: EventEmitter<ColumnResizeMode>;
 
     /**
     
@@ -1635,7 +1636,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnWidthChange: EventEmitter<number | "auto">;
+    @Output() columnWidthChange: EventEmitter<Mode | number>;
 
     /**
     
@@ -1677,7 +1678,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editingChange: EventEmitter<Record<string, any> | { allowAdding?: boolean, allowDeleting?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: "batch" | "cell" | "row" | "form" | "popup", newRowPosition?: "first" | "last" | "pageBottom" | "pageTop" | "viewportBottom" | "viewportTop", popup?: dxPopupOptions<any>, refreshMode?: "full" | "reshape" | "repaint", selectTextOnEditStart?: boolean, startEditAction?: "click" | "dblClick", texts?: any | { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }>;
+    @Output() editingChange: EventEmitter<Record<string, any> | { allowAdding?: boolean, allowDeleting?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, newRowPosition?: NewRowPosition, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: any | { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }>;
 
     /**
     
@@ -1698,7 +1699,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<Record<string, any> | { allowExportSelectedData?: boolean, enabled?: boolean, formats?: Array<"pdf" | "xlsx" | string>, texts?: Record<string, any> | { exportAll?: string, exportSelectedRows?: string, exportTo?: string } }>;
+    @Output() exportChange: EventEmitter<Record<string, any> | { allowExportSelectedData?: boolean, enabled?: boolean, formats?: Array<DataGridExportFormat | string>, texts?: Record<string, any> | { exportAll?: string, exportSelectedRows?: string, exportTo?: string } }>;
 
     /**
     
@@ -1726,14 +1727,14 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterRowChange: EventEmitter<Record<string, any> | { applyFilter?: "auto" | "onClick", applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean }>;
+    @Output() filterRowChange: EventEmitter<Record<string, any> | { applyFilter?: ApplyFilterMode, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterSyncEnabledChange: EventEmitter<boolean | "auto">;
+    @Output() filterSyncEnabledChange: EventEmitter<boolean | Mode>;
 
     /**
     
@@ -1775,14 +1776,14 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() groupingChange: EventEmitter<Record<string, any> | { allowCollapsing?: boolean, autoExpandAll?: boolean, contextMenuEnabled?: boolean, expandMode?: "buttonClick" | "rowClick", texts?: Record<string, any> | { groupByThisColumn?: string, groupContinuedMessage?: string, groupContinuesMessage?: string, ungroup?: string, ungroupAll?: string } }>;
+    @Output() groupingChange: EventEmitter<Record<string, any> | { allowCollapsing?: boolean, autoExpandAll?: boolean, contextMenuEnabled?: boolean, expandMode?: GroupExpandMode, texts?: Record<string, any> | { groupByThisColumn?: string, groupContinuedMessage?: string, groupContinuesMessage?: string, ungroup?: string, ungroupAll?: string } }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() groupPanelChange: EventEmitter<Record<string, any> | { allowColumnDragging?: boolean, emptyPanelText?: string, visible?: boolean | "auto" }>;
+    @Output() groupPanelChange: EventEmitter<Record<string, any> | { allowColumnDragging?: boolean, emptyPanelText?: string, visible?: boolean | Mode }>;
 
     /**
     
@@ -1824,7 +1825,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyboardNavigationChange: EventEmitter<Record<string, any> | { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: "startEdit" | "moveFocus", enterKeyDirection?: "none" | "column" | "row" }>;
+    @Output() keyboardNavigationChange: EventEmitter<Record<string, any> | { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: EnterKeyAction, enterKeyDirection?: EnterKeyDirection }>;
 
     /**
     
@@ -1838,7 +1839,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() loadPanelChange: EventEmitter<Record<string, any> | { enabled?: boolean | "auto", height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
+    @Output() loadPanelChange: EventEmitter<Record<string, any> | { enabled?: boolean | Mode, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
 
     /**
     
@@ -1873,7 +1874,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() remoteOperationsChange: EventEmitter<boolean | "auto" | { filtering?: boolean, grouping?: boolean, groupPaging?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean }>;
+    @Output() remoteOperationsChange: EventEmitter<boolean | Mode | Record<string, any> | { filtering?: boolean, grouping?: boolean, groupPaging?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean }>;
 
     /**
     
@@ -1901,7 +1902,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() rowDraggingChange: EventEmitter<Record<string, any> | { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string, container?: any | string, cursorOffset?: string | { x?: number, y?: number }, data?: any, dragDirection?: "both" | "horizontal" | "vertical", dragTemplate?: any, dropFeedbackMode?: "push" | "indicate", filter?: string, group?: string, handle?: string, onAdd?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragChange?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragEnd?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragMove?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragStart?: ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onReorder?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }>;
+    @Output() rowDraggingChange: EventEmitter<Record<string, any> | { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string, container?: any | string, cursorOffset?: Record<string, any> | string | { x?: number, y?: number }, data?: any, dragDirection?: DragDirection, dragTemplate?: any, dropFeedbackMode?: DragHighlight, filter?: string, group?: string, handle?: string, onAdd?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragChange?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragEnd?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragMove?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragStart?: ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onReorder?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }>;
 
     /**
     
@@ -1922,7 +1923,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scrollingChange: EventEmitter<Record<string, any> | { columnRenderingMode?: "standard" | "virtual", mode?: "infinite" | "standard" | "virtual", preloadEnabled?: boolean, renderAsync?: boolean, rowRenderingMode?: "standard" | "virtual", scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: "always" | "never" | "onHover" | "onScroll", useNative?: boolean | "auto" }>;
+    @Output() scrollingChange: EventEmitter<Record<string, any> | { columnRenderingMode?: DataRenderMode, mode?: DataGridScrollMode, preloadEnabled?: boolean, renderAsync?: boolean, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode }>;
 
     /**
     
@@ -1943,7 +1944,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionChange: EventEmitter<Record<string, any> | { allowSelectAll?: boolean, deferred?: boolean, mode?: "single" | "multiple" | "none", selectAllMode?: "allPages" | "page", sensitivity?: "base" | "accent" | "case" | "variant", showCheckBoxesMode?: "always" | "none" | "onClick" | "onLongTap" }>;
+    @Output() selectionChange: EventEmitter<Record<string, any> | { allowSelectAll?: boolean, deferred?: boolean, mode?: SingleMultipleOrNone, selectAllMode?: SelectAllMode, sensitivity?: SelectionSensitivity, showCheckBoxesMode?: SelectionColumnDisplayMode }>;
 
     /**
     
@@ -1985,28 +1986,28 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sortByGroupSummaryInfoChange: EventEmitter<Array<Record<string, any>> | { groupColumn?: string, sortOrder?: "asc" | "desc", summaryItem?: number | string }[]>;
+    @Output() sortByGroupSummaryInfoChange: EventEmitter<Array<Record<string, any>> | { groupColumn?: string, sortOrder?: SortOrder, summaryItem?: number | string }[]>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sortingChange: EventEmitter<Record<string, any> | { ascendingText?: string, clearText?: string, descendingText?: string, mode?: "single" | "multiple" | "none", showSortIndexes?: boolean }>;
+    @Output() sortingChange: EventEmitter<Record<string, any> | { ascendingText?: string, clearText?: string, descendingText?: string, mode?: SingleMultipleOrNone, showSortIndexes?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stateStoringChange: EventEmitter<Record<string, any> | { customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: "custom" | "localStorage" | "sessionStorage" }>;
+    @Output() stateStoringChange: EventEmitter<Record<string, any> | { customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() summaryChange: EventEmitter<Record<string, any> | { calculateCustomSummary?: ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void), groupItems?: Array<Record<string, any>> | { alignByColumn?: boolean, column?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat?: LocalizationTypes.Format }[], recalculateWhileEditing?: boolean, skipEmptyValues?: boolean, texts?: Record<string, any> | { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }, totalItems?: Array<Record<string, any>> | { alignment?: "center" | "left" | "right", column?: string, cssClass?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, skipEmptyValues?: boolean, summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat?: LocalizationTypes.Format }[] }>;
+    @Output() summaryChange: EventEmitter<Record<string, any> | { calculateCustomSummary?: ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void), groupItems?: Array<Record<string, any>> | { alignByColumn?: boolean, column?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: string | SummaryType, valueFormat?: Format }[], recalculateWhileEditing?: boolean, skipEmptyValues?: boolean, texts?: Record<string, any> | { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }, totalItems?: Array<Record<string, any>> | { alignment?: HorizontalAlignment, column?: string, cssClass?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, skipEmptyValues?: boolean, summaryType?: string | SummaryType, valueFormat?: Format }[] }>;
 
     /**
     

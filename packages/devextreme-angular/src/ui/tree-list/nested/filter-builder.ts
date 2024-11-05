@@ -17,7 +17,7 @@ import {
 
 
 
-import { dxFilterBuilderCustomOperation, dxFilterBuilderField, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
+import { dxFilterBuilderCustomOperation, dxFilterBuilderField, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
 
 import {
     NestedOptionHost,
@@ -123,10 +123,10 @@ export class DxoTreeListFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get groupOperations(): Array<"and" | "or" | "notAnd" | "notOr"> {
+    get groupOperations(): Array<GroupOperation> {
         return this._getOption('groupOperations');
     }
-    set groupOperations(value: Array<"and" | "or" | "notAnd" | "notOr">) {
+    set groupOperations(value: Array<GroupOperation>) {
         this._setOption('groupOperations', value);
     }
 

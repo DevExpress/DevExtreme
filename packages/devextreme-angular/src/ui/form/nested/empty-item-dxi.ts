@@ -12,6 +12,7 @@ import {
 
 
 
+import { FormItemType } from 'devextreme/ui/form';
 
 import {
     NestedOptionHost,
@@ -43,10 +44,10 @@ export class DxiFormEmptyItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get itemType(): "empty" | "group" | "simple" | "tabbed" | "button" {
+    get itemType(): FormItemType {
         return this._getOption('itemType');
     }
-    set itemType(value: "empty" | "group" | "simple" | "tabbed" | "button") {
+    set itemType(value: FormItemType) {
         this._setOption('itemType', value);
     }
 

@@ -13,10 +13,11 @@ import {
 
 
 import DataSource from 'devextreme/data/data_source';
-import { MapLayerElement } from 'devextreme/viz/vector_map';
+import { MapLayerElement, VectorMapMarkerType, VectorMapLayerType } from 'devextreme/viz/vector_map';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { Font } from 'devextreme/common/charts';
+import { Font, Palette } from 'devextreme/common/charts';
+import { SingleMultipleOrNone } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -96,10 +97,10 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get elementType(): "bubble" | "dot" | "image" | "pie" {
+    get elementType(): VectorMapMarkerType {
         return this._getOption('elementType');
     }
-    set elementType(value: "bubble" | "dot" | "image" | "pie") {
+    set elementType(value: VectorMapMarkerType) {
         this._setOption('elementType', value);
     }
 
@@ -176,10 +177,10 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get palette(): Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office" {
+    get palette(): Array<string> | Palette {
         return this._getOption('palette');
     }
-    set palette(value: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office") {
+    set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
 
@@ -224,10 +225,10 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get selectionMode(): "single" | "multiple" | "none" {
+    get selectionMode(): SingleMultipleOrNone {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: "single" | "multiple" | "none") {
+    set selectionMode(value: SingleMultipleOrNone) {
         this._setOption('selectionMode', value);
     }
 
@@ -256,10 +257,10 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get type(): "area" | "line" | "marker" {
+    get type(): VectorMapLayerType {
         return this._getOption('type');
     }
-    set type(value: "area" | "line" | "marker") {
+    set type(value: VectorMapLayerType) {
         this._setOption('type', value);
     }
 

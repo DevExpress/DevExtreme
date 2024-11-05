@@ -20,9 +20,10 @@ import {
 } from '@angular/core';
 
 
-import * as LocalizationTypes from 'devextreme/localization';
-import { Font, ChartsColor } from 'devextreme/common/charts';
-import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/circular_gauge';
+import { AnimationEaseMode, Font, ChartsColor, Palette, PaletteExtensionMode, LabelOverlap, Theme, TextOverflow, WordWrap, DashStyle } from 'devextreme/common/charts';
+import { ExportFormat, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
+import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, CircularGaugeElementOrientation, CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
+import { Format } from 'devextreme/localization';
 import { GaugeIndicator } from 'devextreme/viz/gauges/base_gauge';
 
 import DxCircularGauge from 'devextreme/viz/circular_gauge';
@@ -114,10 +115,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get animation(): Record<string, any> | { duration?: number, easing?: "easeOutCubic" | "linear", enabled?: boolean } {
+    get animation(): Record<string, any> | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean } {
         return this._getOption('animation');
     }
-    set animation(value: Record<string, any> | { duration?: number, easing?: "easeOutCubic" | "linear", enabled?: boolean }) {
+    set animation(value: Record<string, any> | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean }) {
         this._setOption('animation', value);
     }
 
@@ -179,10 +180,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get export(): Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) } {
+    get export(): Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) } {
         return this._getOption('export');
     }
-    set export(value: Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }) {
+    set export(value: Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }) {
         this._setOption('export', value);
     }
 
@@ -244,10 +245,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get rangeContainer(): Record<string, any> | { backgroundColor?: ChartsColor | string, offset?: number, orientation?: "center" | "inside" | "outside", palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office", paletteExtensionMode?: "alternate" | "blend" | "extrapolate", ranges?: Array<Record<string, any>> | { color?: ChartsColor | string, endValue?: number, startValue?: number }[], width?: number } {
+    get rangeContainer(): Record<string, any> | { backgroundColor?: ChartsColor | string, offset?: number, orientation?: CircularGaugeElementOrientation, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, ranges?: Array<Record<string, any>> | { color?: ChartsColor | string, endValue?: number, startValue?: number }[], width?: number } {
         return this._getOption('rangeContainer');
     }
-    set rangeContainer(value: Record<string, any> | { backgroundColor?: ChartsColor | string, offset?: number, orientation?: "center" | "inside" | "outside", palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office", paletteExtensionMode?: "alternate" | "blend" | "extrapolate", ranges?: Array<Record<string, any>> | { color?: ChartsColor | string, endValue?: number, startValue?: number }[], width?: number }) {
+    set rangeContainer(value: Record<string, any> | { backgroundColor?: ChartsColor | string, offset?: number, orientation?: CircularGaugeElementOrientation, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, ranges?: Array<Record<string, any>> | { color?: ChartsColor | string, endValue?: number, startValue?: number }[], width?: number }) {
         this._setOption('rangeContainer', value);
     }
 
@@ -283,10 +284,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get scale(): Record<string, any> | { allowDecimals?: boolean, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, label?: Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, hideFirstOrLast?: "first" | "last", indentFromTick?: number, overlappingBehavior?: "hide" | "none", useRangeColors?: boolean, visible?: boolean }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number, orientation?: "center" | "inside" | "outside", scaleDivisionFactor?: number, startValue?: number, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number } {
+    get scale(): Record<string, any> | { allowDecimals?: boolean, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, label?: Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number, orientation?: CircularGaugeElementOrientation, scaleDivisionFactor?: number, startValue?: number, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number } {
         return this._getOption('scale');
     }
-    set scale(value: Record<string, any> | { allowDecimals?: boolean, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, label?: Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, hideFirstOrLast?: "first" | "last", indentFromTick?: number, overlappingBehavior?: "hide" | "none", useRangeColors?: boolean, visible?: boolean }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number, orientation?: "center" | "inside" | "outside", scaleDivisionFactor?: number, startValue?: number, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number }) {
+    set scale(value: Record<string, any> | { allowDecimals?: boolean, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, label?: Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number, orientation?: CircularGaugeElementOrientation, scaleDivisionFactor?: number, startValue?: number, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number }) {
         this._setOption('scale', value);
     }
 
@@ -335,10 +336,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get theme(): "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light" {
+    get theme(): Theme {
         return this._getOption('theme');
     }
-    set theme(value: "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light") {
+    set theme(value: Theme) {
         this._setOption('theme', value);
     }
 
@@ -348,10 +349,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get title(): string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" } {
+    get title(): Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
         return this._getOption('title');
     }
-    set title(value: string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" }) {
+    set title(value: Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }) {
         this._setOption('title', value);
     }
 
@@ -361,10 +362,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get tooltip(): Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number } {
+    get tooltip(): Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }) {
+    set tooltip(value: Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }) {
         this._setOption('tooltip', value);
     }
 
@@ -479,7 +480,7 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() animationChange: EventEmitter<Record<string, any> | { duration?: number, easing?: "easeOutCubic" | "linear", enabled?: boolean }>;
+    @Output() animationChange: EventEmitter<Record<string, any> | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean }>;
 
     /**
     
@@ -514,7 +515,7 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }>;
+    @Output() exportChange: EventEmitter<Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }>;
 
     /**
     
@@ -549,7 +550,7 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() rangeContainerChange: EventEmitter<Record<string, any> | { backgroundColor?: ChartsColor | string, offset?: number, orientation?: "center" | "inside" | "outside", palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office", paletteExtensionMode?: "alternate" | "blend" | "extrapolate", ranges?: Array<Record<string, any>> | { color?: ChartsColor | string, endValue?: number, startValue?: number }[], width?: number }>;
+    @Output() rangeContainerChange: EventEmitter<Record<string, any> | { backgroundColor?: ChartsColor | string, offset?: number, orientation?: CircularGaugeElementOrientation, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, ranges?: Array<Record<string, any>> | { color?: ChartsColor | string, endValue?: number, startValue?: number }[], width?: number }>;
 
     /**
     
@@ -570,7 +571,7 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scaleChange: EventEmitter<Record<string, any> | { allowDecimals?: boolean, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, label?: Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, hideFirstOrLast?: "first" | "last", indentFromTick?: number, overlappingBehavior?: "hide" | "none", useRangeColors?: boolean, visible?: boolean }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number, orientation?: "center" | "inside" | "outside", scaleDivisionFactor?: number, startValue?: number, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number }>;
+    @Output() scaleChange: EventEmitter<Record<string, any> | { allowDecimals?: boolean, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, label?: Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number, orientation?: CircularGaugeElementOrientation, scaleDivisionFactor?: number, startValue?: number, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number }>;
 
     /**
     
@@ -598,21 +599,21 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() themeChange: EventEmitter<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">;
+    @Output() themeChange: EventEmitter<Theme>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() titleChange: EventEmitter<string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" }>;
+    @Output() titleChange: EventEmitter<Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }>;
+    @Output() tooltipChange: EventEmitter<Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }>;
 
     /**
     

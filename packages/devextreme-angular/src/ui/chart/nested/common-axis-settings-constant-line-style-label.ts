@@ -14,7 +14,7 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
+import { Font, RelativePosition } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -38,10 +38,10 @@ export class DxoChartCommonAxisSettingsConstantLineStyleLabelComponent extends N
     }
 
     @Input()
-    get position(): "inside" | "outside" {
+    get position(): RelativePosition {
         return this._getOption('position');
     }
-    set position(value: "inside" | "outside") {
+    set position(value: RelativePosition) {
         this._setOption('position', value);
     }
 

@@ -14,6 +14,7 @@ import {
 
 
 
+import { DragDirection, DragHighlight, Orientation } from 'devextreme/common';
 import { AddEvent, DisposingEvent, DragChangeEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent, RemoveEvent, ReorderEvent } from 'devextreme/ui/sortable';
 
 import {
@@ -78,10 +79,10 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get cursorOffset(): string | { x?: number, y?: number } {
+    get cursorOffset(): Record<string, any> | string | { x?: number, y?: number } {
         return this._getOption('cursorOffset');
     }
-    set cursorOffset(value: string | { x?: number, y?: number }) {
+    set cursorOffset(value: Record<string, any> | string | { x?: number, y?: number }) {
         this._setOption('cursorOffset', value);
     }
 
@@ -94,10 +95,10 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get dragDirection(): "both" | "horizontal" | "vertical" {
+    get dragDirection(): DragDirection {
         return this._getOption('dragDirection');
     }
-    set dragDirection(value: "both" | "horizontal" | "vertical") {
+    set dragDirection(value: DragDirection) {
         this._setOption('dragDirection', value);
     }
 
@@ -110,10 +111,10 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get dropFeedbackMode(): "push" | "indicate" {
+    get dropFeedbackMode(): DragHighlight {
         return this._getOption('dropFeedbackMode');
     }
-    set dropFeedbackMode(value: "push" | "indicate") {
+    set dropFeedbackMode(value: DragHighlight) {
         this._setOption('dropFeedbackMode', value);
     }
 
@@ -158,10 +159,10 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get itemOrientation(): "horizontal" | "vertical" {
+    get itemOrientation(): Orientation {
         return this._getOption('itemOrientation');
     }
-    set itemOrientation(value: "horizontal" | "vertical") {
+    set itemOrientation(value: Orientation) {
         this._setOption('itemOrientation', value);
     }
 

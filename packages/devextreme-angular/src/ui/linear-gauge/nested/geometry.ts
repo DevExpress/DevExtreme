@@ -14,6 +14,7 @@ import {
 
 
 
+import { Orientation } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -29,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoLinearGaugeGeometryComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get orientation(): "horizontal" | "vertical" {
+    get orientation(): Orientation {
         return this._getOption('orientation');
     }
-    set orientation(value: "horizontal" | "vertical") {
+    set orientation(value: Orientation) {
         this._setOption('orientation', value);
     }
 

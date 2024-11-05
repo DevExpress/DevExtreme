@@ -18,8 +18,10 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import * as LocalizationTypes from 'devextreme/localization';
-import { Font } from 'devextreme/common/charts';
+import { Font, RelativePosition, ChartsAxisLabelOverlap, TextOverflow, WordWrap, DashStyle } from 'devextreme/common/charts';
+import { HorizontalAlignment, Position, VerticalAlignment } from 'devextreme/common';
+import { ChartLabelDisplayMode } from 'devextreme/viz/chart';
+import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -48,26 +50,26 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
     }
 
     @Input()
-    get horizontalAlignment(): "center" | "left" | "right" {
+    get horizontalAlignment(): HorizontalAlignment {
         return this._getOption('horizontalAlignment');
     }
-    set horizontalAlignment(value: "center" | "left" | "right") {
+    set horizontalAlignment(value: HorizontalAlignment) {
         this._setOption('horizontalAlignment', value);
     }
 
     @Input()
-    get position(): "inside" | "outside" | "bottom" | "left" | "right" | "top" {
+    get position(): RelativePosition | Position {
         return this._getOption('position');
     }
-    set position(value: "inside" | "outside" | "bottom" | "left" | "right" | "top") {
+    set position(value: RelativePosition | Position) {
         this._setOption('position', value);
     }
 
     @Input()
-    get verticalAlignment(): "bottom" | "center" | "top" {
+    get verticalAlignment(): VerticalAlignment {
         return this._getOption('verticalAlignment');
     }
-    set verticalAlignment(value: "bottom" | "center" | "top") {
+    set verticalAlignment(value: VerticalAlignment) {
         this._setOption('verticalAlignment', value);
     }
 
@@ -88,10 +90,10 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
     }
 
     @Input()
-    get alignment(): "center" | "left" | "right" {
+    get alignment(): HorizontalAlignment {
         return this._getOption('alignment');
     }
-    set alignment(value: "center" | "left" | "right") {
+    set alignment(value: HorizontalAlignment) {
         this._setOption('alignment', value);
     }
 
@@ -112,18 +114,18 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
     }
 
     @Input()
-    get displayMode(): "rotate" | "stagger" | "standard" {
+    get displayMode(): ChartLabelDisplayMode {
         return this._getOption('displayMode');
     }
-    set displayMode(value: "rotate" | "stagger" | "standard") {
+    set displayMode(value: ChartLabelDisplayMode) {
         this._setOption('displayMode', value);
     }
 
     @Input()
-    get format(): LocalizationTypes.Format {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: LocalizationTypes.Format) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 
@@ -136,10 +138,10 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
     }
 
     @Input()
-    get overlappingBehavior(): "rotate" | "stagger" | "none" | "hide" {
+    get overlappingBehavior(): ChartsAxisLabelOverlap {
         return this._getOption('overlappingBehavior');
     }
-    set overlappingBehavior(value: "rotate" | "stagger" | "none" | "hide") {
+    set overlappingBehavior(value: ChartsAxisLabelOverlap) {
         this._setOption('overlappingBehavior', value);
     }
 
@@ -168,26 +170,26 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
     }
 
     @Input()
-    get textOverflow(): "ellipsis" | "hide" | "none" {
+    get textOverflow(): TextOverflow {
         return this._getOption('textOverflow');
     }
-    set textOverflow(value: "ellipsis" | "hide" | "none") {
+    set textOverflow(value: TextOverflow) {
         this._setOption('textOverflow', value);
     }
 
     @Input()
-    get wordWrap(): "normal" | "breakWord" | "none" {
+    get wordWrap(): WordWrap {
         return this._getOption('wordWrap');
     }
-    set wordWrap(value: "normal" | "breakWord" | "none") {
+    set wordWrap(value: WordWrap) {
         this._setOption('wordWrap', value);
     }
 
     @Input()
-    get argumentFormat(): LocalizationTypes.Format {
+    get argumentFormat(): Format {
         return this._getOption('argumentFormat');
     }
-    set argumentFormat(value: LocalizationTypes.Format) {
+    set argumentFormat(value: Format) {
         this._setOption('argumentFormat', value);
     }
 
@@ -200,10 +202,10 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
     }
 
     @Input()
-    get border(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 

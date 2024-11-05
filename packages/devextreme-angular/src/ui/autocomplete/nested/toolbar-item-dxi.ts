@@ -16,6 +16,9 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
+import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
+import { ToolbarLocation } from 'devextreme/ui/popup';
 
 import {
     NestedOptionHost,
@@ -60,18 +63,18 @@ export class DxiAutocompleteToolbarItemComponent extends CollectionNestedOption 
     }
 
     @Input()
-    get locateInMenu(): "always" | "auto" | "never" {
+    get locateInMenu(): LocateInMenuMode {
         return this._getOption('locateInMenu');
     }
-    set locateInMenu(value: "always" | "auto" | "never") {
+    set locateInMenu(value: LocateInMenuMode) {
         this._setOption('locateInMenu', value);
     }
 
     @Input()
-    get location(): "after" | "before" | "center" {
+    get location(): ToolbarItemLocation {
         return this._getOption('location');
     }
-    set location(value: "after" | "before" | "center") {
+    set location(value: ToolbarItemLocation) {
         this._setOption('location', value);
     }
 
@@ -92,10 +95,10 @@ export class DxiAutocompleteToolbarItemComponent extends CollectionNestedOption 
     }
 
     @Input()
-    get showText(): "always" | "inMenu" {
+    get showText(): ShowTextMode {
         return this._getOption('showText');
     }
-    set showText(value: "always" | "inMenu") {
+    set showText(value: ShowTextMode) {
         this._setOption('showText', value);
     }
 
@@ -116,10 +119,10 @@ export class DxiAutocompleteToolbarItemComponent extends CollectionNestedOption 
     }
 
     @Input()
-    get toolbar(): "bottom" | "top" {
+    get toolbar(): ToolbarLocation {
         return this._getOption('toolbar');
     }
-    set toolbar(value: "bottom" | "top") {
+    set toolbar(value: ToolbarLocation) {
         this._setOption('toolbar', value);
     }
 
@@ -132,10 +135,10 @@ export class DxiAutocompleteToolbarItemComponent extends CollectionNestedOption 
     }
 
     @Input()
-    get widget(): "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox" {
+    get widget(): ToolbarItemComponent {
         return this._getOption('widget');
     }
-    set widget(value: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox") {
+    set widget(value: ToolbarItemComponent) {
         this._setOption('widget', value);
     }
 

@@ -12,10 +12,11 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
+import { HorizontalAlignment, DataType, SearchMode, SortOrder } from 'devextreme/common';
+import { FilterOperation, FilterType, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation } from 'devextreme/common/grids';
+import { Format } from 'devextreme/localization';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { ColumnHeaderFilterSearchConfig } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -31,10 +32,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiGanttColumnComponent extends CollectionNestedOption {
     @Input()
-    get alignment(): "center" | "left" | "right" {
+    get alignment(): HorizontalAlignment {
         return this._getOption('alignment');
     }
-    set alignment(value: "center" | "left" | "right") {
+    set alignment(value: HorizontalAlignment) {
         this._setOption('alignment', value);
     }
 
@@ -135,10 +136,10 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get dataType(): "string" | "number" | "date" | "boolean" | "object" | "datetime" {
+    get dataType(): DataType {
         return this._getOption('dataType');
     }
-    set dataType(value: "string" | "number" | "date" | "boolean" | "object" | "datetime") {
+    set dataType(value: DataType) {
         this._setOption('dataType', value);
     }
 
@@ -159,18 +160,18 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get filterOperations(): Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | "anyof" | "noneof" | string> {
+    get filterOperations(): Array<FilterOperation | string> {
         return this._getOption('filterOperations');
     }
-    set filterOperations(value: Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | "anyof" | "noneof" | string>) {
+    set filterOperations(value: Array<FilterOperation | string>) {
         this._setOption('filterOperations', value);
     }
 
     @Input()
-    get filterType(): "exclude" | "include" {
+    get filterType(): FilterType {
         return this._getOption('filterType');
     }
-    set filterType(value: "exclude" | "include") {
+    set filterType(value: FilterType) {
         this._setOption('filterType', value);
     }
 
@@ -191,10 +192,10 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get format(): LocalizationTypes.Format {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: LocalizationTypes.Format) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 
@@ -207,10 +208,10 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get headerFilter(): Record<string, any> | { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store, groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year", height?: number | string, search?: ColumnHeaderFilterSearchConfig, searchMode?: "contains" | "startswith" | "equals", width?: number | string } {
+    get headerFilter(): Record<string, any> | { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store, groupInterval?: HeaderFilterGroupInterval | number, height?: number | string, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string } {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: Record<string, any> | { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store, groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year", height?: number | string, search?: ColumnHeaderFilterSearchConfig, searchMode?: "contains" | "startswith" | "equals", width?: number | string }) {
+    set headerFilter(value: Record<string, any> | { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store, groupInterval?: HeaderFilterGroupInterval | number, height?: number | string, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string }) {
         this._setOption('headerFilter', value);
     }
 
@@ -223,10 +224,10 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get selectedFilterOperation(): "<" | "<=" | "<>" | "=" | ">" | ">=" | "between" | "contains" | "endswith" | "notcontains" | "startswith" {
+    get selectedFilterOperation(): SelectedFilterOperation {
         return this._getOption('selectedFilterOperation');
     }
-    set selectedFilterOperation(value: "<" | "<=" | "<>" | "=" | ">" | ">=" | "between" | "contains" | "endswith" | "notcontains" | "startswith") {
+    set selectedFilterOperation(value: SelectedFilterOperation) {
         this._setOption('selectedFilterOperation', value);
     }
 
@@ -247,10 +248,10 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get sortOrder(): "asc" | "desc" {
+    get sortOrder(): SortOrder {
         return this._getOption('sortOrder');
     }
-    set sortOrder(value: "asc" | "desc") {
+    set sortOrder(value: SortOrder) {
         this._setOption('sortOrder', value);
     }
 

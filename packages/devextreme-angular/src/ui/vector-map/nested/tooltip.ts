@@ -14,8 +14,8 @@ import {
 
 
 
+import { DashStyle, Font } from 'devextreme/common/charts';
 import { MapLayerElement } from 'devextreme/viz/vector_map';
-import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -39,10 +39,10 @@ export class DxoVectorMapTooltipComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get border(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 

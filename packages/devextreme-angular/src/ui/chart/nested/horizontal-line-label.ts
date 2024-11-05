@@ -14,9 +14,9 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
 import { chartPointObject } from 'devextreme/viz/chart';
 import { Font } from 'devextreme/common/charts';
+import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -56,10 +56,10 @@ export class DxoChartHorizontalLineLabelComponent extends NestedOption implement
     }
 
     @Input()
-    get format(): LocalizationTypes.Format {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: LocalizationTypes.Format) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 

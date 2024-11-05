@@ -13,6 +13,7 @@ import {
 
 
 import { Font } from 'devextreme/common/charts';
+import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -44,10 +45,10 @@ export class DxiChartStripComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", text?: string, verticalAlignment?: "bottom" | "center" | "top" } {
+    get label(): Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string, verticalAlignment?: VerticalAlignment } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", text?: string, verticalAlignment?: "bottom" | "center" | "top" }) {
+    set label(value: Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string, verticalAlignment?: VerticalAlignment }) {
         this._setOption('label', value);
     }
 

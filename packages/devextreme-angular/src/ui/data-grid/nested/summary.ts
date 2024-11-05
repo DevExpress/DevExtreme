@@ -18,7 +18,9 @@ import {
 
 
 import dxDataGrid from 'devextreme/ui/data_grid';
-import * as LocalizationTypes from 'devextreme/localization';
+import { SummaryType } from 'devextreme/common/grids';
+import { Format } from 'devextreme/localization';
+import { HorizontalAlignment } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -44,10 +46,10 @@ export class DxoDataGridSummaryComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get groupItems(): Array<Record<string, any>> | { alignByColumn?: boolean, column?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat?: LocalizationTypes.Format }[] {
+    get groupItems(): Array<Record<string, any>> | { alignByColumn?: boolean, column?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: string | SummaryType, valueFormat?: Format }[] {
         return this._getOption('groupItems');
     }
-    set groupItems(value: Array<Record<string, any>> | { alignByColumn?: boolean, column?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat?: LocalizationTypes.Format }[]) {
+    set groupItems(value: Array<Record<string, any>> | { alignByColumn?: boolean, column?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: string | SummaryType, valueFormat?: Format }[]) {
         this._setOption('groupItems', value);
     }
 
@@ -76,10 +78,10 @@ export class DxoDataGridSummaryComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get totalItems(): Array<Record<string, any>> | { alignment?: "center" | "left" | "right", column?: string, cssClass?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, skipEmptyValues?: boolean, summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat?: LocalizationTypes.Format }[] {
+    get totalItems(): Array<Record<string, any>> | { alignment?: HorizontalAlignment, column?: string, cssClass?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, skipEmptyValues?: boolean, summaryType?: string | SummaryType, valueFormat?: Format }[] {
         return this._getOption('totalItems');
     }
-    set totalItems(value: Array<Record<string, any>> | { alignment?: "center" | "left" | "right", column?: string, cssClass?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, skipEmptyValues?: boolean, summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat?: LocalizationTypes.Format }[]) {
+    set totalItems(value: Array<Record<string, any>> | { alignment?: HorizontalAlignment, column?: string, cssClass?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, skipEmptyValues?: boolean, summaryType?: string | SummaryType, valueFormat?: Format }[]) {
         this._setOption('totalItems', value);
     }
 

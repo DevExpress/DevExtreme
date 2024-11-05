@@ -14,6 +14,8 @@ import {
 
 
 
+import { Palette, PaletteExtensionMode } from 'devextreme/common/charts';
+import { TreeMapColorizerType } from 'devextreme/viz/tree_map';
 
 import {
     NestedOptionHost,
@@ -45,18 +47,18 @@ export class DxoTreeMapColorizerComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get palette(): Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office" {
+    get palette(): Array<string> | Palette {
         return this._getOption('palette');
     }
-    set palette(value: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office") {
+    set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
 
     @Input()
-    get paletteExtensionMode(): "alternate" | "blend" | "extrapolate" {
+    get paletteExtensionMode(): PaletteExtensionMode {
         return this._getOption('paletteExtensionMode');
     }
-    set paletteExtensionMode(value: "alternate" | "blend" | "extrapolate") {
+    set paletteExtensionMode(value: PaletteExtensionMode) {
         this._setOption('paletteExtensionMode', value);
     }
 
@@ -69,10 +71,10 @@ export class DxoTreeMapColorizerComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get type(): "discrete" | "gradient" | "none" | "range" {
+    get type(): TreeMapColorizerType {
         return this._getOption('type');
     }
-    set type(value: "discrete" | "gradient" | "none" | "range") {
+    set type(value: TreeMapColorizerType) {
         this._setOption('type', value);
     }
 

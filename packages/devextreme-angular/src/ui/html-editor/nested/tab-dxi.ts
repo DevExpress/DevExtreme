@@ -12,6 +12,7 @@ import {
 
 
 
+import { HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
 
 import {
     NestedOptionHost,
@@ -27,10 +28,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiHtmlEditorTabComponent extends CollectionNestedOption {
     @Input()
-    get name(): "url" | "file" {
+    get name(): HtmlEditorImageUploadTab {
         return this._getOption('name');
     }
-    set name(value: "url" | "file") {
+    set name(value: HtmlEditorImageUploadTab) {
         this._setOption('name', value);
     }
 

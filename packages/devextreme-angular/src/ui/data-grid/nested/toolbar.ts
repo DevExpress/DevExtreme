@@ -17,7 +17,7 @@ import {
 
 
 
-import { dxDataGridToolbarItem } from 'devextreme/ui/data_grid';
+import { DataGridPredefinedToolbarItem, dxDataGridToolbarItem } from 'devextreme/ui/data_grid';
 
 import {
     NestedOptionHost,
@@ -42,10 +42,10 @@ export class DxoDataGridToolbarComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get items(): Array<dxDataGridToolbarItem | "addRowButton" | "applyFilterButton" | "columnChooserButton" | "exportButton" | "groupPanel" | "revertButton" | "saveButton" | "searchPanel"> {
+    get items(): Array<DataGridPredefinedToolbarItem | dxDataGridToolbarItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxDataGridToolbarItem | "addRowButton" | "applyFilterButton" | "columnChooserButton" | "exportButton" | "groupPanel" | "revertButton" | "saveButton" | "searchPanel">) {
+    set items(value: Array<DataGridPredefinedToolbarItem | dxDataGridToolbarItem>) {
         this._setOption('items', value);
     }
 

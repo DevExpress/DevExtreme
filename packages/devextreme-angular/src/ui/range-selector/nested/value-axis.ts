@@ -14,6 +14,8 @@ import {
 
 
 
+import { ChartAxisScale } from 'devextreme/viz/range_selector';
+import { ChartsDataType } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -61,18 +63,18 @@ export class DxoRangeSelectorValueAxisComponent extends NestedOption implements 
     }
 
     @Input()
-    get type(): "continuous" | "logarithmic" {
+    get type(): ChartAxisScale {
         return this._getOption('type');
     }
-    set type(value: "continuous" | "logarithmic") {
+    set type(value: ChartAxisScale) {
         this._setOption('type', value);
     }
 
     @Input()
-    get valueType(): "datetime" | "numeric" | "string" {
+    get valueType(): ChartsDataType {
         return this._getOption('valueType');
     }
-    set valueType(value: "datetime" | "numeric" | "string") {
+    set valueType(value: ChartsDataType) {
         this._setOption('valueType', value);
     }
 

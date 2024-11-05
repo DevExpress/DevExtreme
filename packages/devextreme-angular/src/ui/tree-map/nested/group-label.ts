@@ -14,7 +14,7 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
+import { Font, TextOverflow } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -38,10 +38,10 @@ export class DxoTreeMapGroupLabelComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get textOverflow(): "ellipsis" | "hide" | "none" {
+    get textOverflow(): TextOverflow {
         return this._getOption('textOverflow');
     }
-    set textOverflow(value: "ellipsis" | "hide" | "none") {
+    set textOverflow(value: TextOverflow) {
         this._setOption('textOverflow', value);
     }
 

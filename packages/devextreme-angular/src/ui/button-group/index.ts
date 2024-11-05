@@ -23,6 +23,7 @@ import {
 
 
 import { dxButtonGroupItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
+import { SingleMultipleOrNone, ButtonStyle } from 'devextreme/common';
 
 import DxButtonGroup from 'devextreme/ui/button_group';
 
@@ -250,10 +251,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get selectionMode(): "single" | "multiple" | "none" {
+    get selectionMode(): SingleMultipleOrNone {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: "single" | "multiple" | "none") {
+    set selectionMode(value: SingleMultipleOrNone) {
         this._setOption('selectionMode', value);
     }
 
@@ -263,10 +264,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get stylingMode(): "text" | "outlined" | "contained" {
+    get stylingMode(): ButtonStyle {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: "text" | "outlined" | "contained") {
+    set stylingMode(value: ButtonStyle) {
         this._setOption('stylingMode', value);
     }
 
@@ -460,14 +461,14 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<"single" | "multiple" | "none">;
+    @Output() selectionModeChange: EventEmitter<SingleMultipleOrNone>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<"text" | "outlined" | "contained">;
+    @Output() stylingModeChange: EventEmitter<ButtonStyle>;
 
     /**
     

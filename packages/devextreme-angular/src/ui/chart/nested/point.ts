@@ -14,7 +14,7 @@ import {
 
 
 
-import { ChartsColor } from 'devextreme/common/charts';
+import { ChartsColor, PointInteractionMode, PointSymbol } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -46,10 +46,10 @@ export class DxoChartPointComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get hoverMode(): "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint" {
+    get hoverMode(): PointInteractionMode {
         return this._getOption('hoverMode');
     }
-    set hoverMode(value: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint") {
+    set hoverMode(value: PointInteractionMode) {
         this._setOption('hoverMode', value);
     }
 
@@ -62,18 +62,18 @@ export class DxoChartPointComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get image(): string | { height?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number }, url?: string | { rangeMaxPoint?: string, rangeMinPoint?: string }, width?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number } } {
+    get image(): Record<string, any> | string | { height?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number }, url?: Record<string, any> | string | { rangeMaxPoint?: string, rangeMinPoint?: string }, width?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number } } {
         return this._getOption('image');
     }
-    set image(value: string | { height?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number }, url?: string | { rangeMaxPoint?: string, rangeMinPoint?: string }, width?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number } }) {
+    set image(value: Record<string, any> | string | { height?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number }, url?: Record<string, any> | string | { rangeMaxPoint?: string, rangeMinPoint?: string }, width?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number } }) {
         this._setOption('image', value);
     }
 
     @Input()
-    get selectionMode(): "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint" {
+    get selectionMode(): PointInteractionMode {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint") {
+    set selectionMode(value: PointInteractionMode) {
         this._setOption('selectionMode', value);
     }
 
@@ -94,10 +94,10 @@ export class DxoChartPointComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get symbol(): "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp" {
+    get symbol(): PointSymbol {
         return this._getOption('symbol');
     }
-    set symbol(value: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp") {
+    set symbol(value: PointSymbol) {
         this._setOption('symbol', value);
     }
 

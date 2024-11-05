@@ -23,14 +23,15 @@ import {
 
 
 import DataSource from 'devextreme/data/data_source';
-import * as LocalizationTypes from 'devextreme/localization';
 import * as CommonChartTypes from 'devextreme/common/charts';
+import { BackgroundImageLocation, ValueChangedCallMode, ChartAxisScale, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, AxisScale } from 'devextreme/viz/range_selector';
+import { SliderValueChangeMode, ExportFormat, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 import { dxChartCommonSeriesSettings } from 'devextreme/viz/chart';
+import { Palette, PaletteExtensionMode, ChartsDataType, Font, TimeInterval, ScaleBreak, ScaleBreakLineStyle, DiscreteAxisDivisionMode, LabelOverlap, VisualRangeUpdateMode, Theme, TextOverflow, WordWrap } from 'devextreme/common/charts';
 import { ChartSeries } from 'devextreme/viz/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { Font, ScaleBreak } from 'devextreme/common/charts';
-import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/viz/range_selector';
+import { Format } from 'devextreme/localization';
 
 import DxRangeSelector from 'devextreme/viz/range_selector';
 
@@ -214,10 +215,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get background(): Record<string, any> | { color?: string, image?: Record<string, any> | { location?: "center" | "centerBottom" | "centerTop" | "full" | "leftBottom" | "leftCenter" | "leftTop" | "rightBottom" | "rightCenter" | "rightTop", url?: string }, visible?: boolean } {
+    get background(): Record<string, any> | { color?: string, image?: Record<string, any> | { location?: BackgroundImageLocation, url?: string }, visible?: boolean } {
         return this._getOption('background');
     }
-    set background(value: Record<string, any> | { color?: string, image?: Record<string, any> | { location?: "center" | "centerBottom" | "centerTop" | "full" | "leftBottom" | "leftCenter" | "leftTop" | "rightBottom" | "rightCenter" | "rightTop", url?: string }, visible?: boolean }) {
+    set background(value: Record<string, any> | { color?: string, image?: Record<string, any> | { location?: BackgroundImageLocation, url?: string }, visible?: boolean }) {
         this._setOption('background', value);
     }
 
@@ -227,10 +228,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get behavior(): Record<string, any> | { allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: "onMoving" | "onMovingComplete", manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean, valueChangeMode?: "onHandleMove" | "onHandleRelease" } {
+    get behavior(): Record<string, any> | { allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: ValueChangedCallMode, manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean, valueChangeMode?: SliderValueChangeMode } {
         return this._getOption('behavior');
     }
-    set behavior(value: Record<string, any> | { allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: "onMoving" | "onMovingComplete", manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean, valueChangeMode?: "onHandleMove" | "onHandleRelease" }) {
+    set behavior(value: Record<string, any> | { allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: ValueChangedCallMode, manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean, valueChangeMode?: SliderValueChangeMode }) {
         this._setOption('behavior', value);
     }
 
@@ -240,10 +241,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get chart(): Record<string, any> | { barGroupPadding?: number, barGroupWidth?: number, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: Record<string, any> | { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office", paletteExtensionMode?: "alternate" | "blend" | "extrapolate", series?: Array<ChartSeries> | ChartSeries, seriesTemplate?: any, topIndent?: number, valueAxis?: Record<string, any> | { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: "continuous" | "logarithmic", valueType?: "datetime" | "numeric" | "string" } } {
+    get chart(): Record<string, any> | { barGroupPadding?: number, barGroupWidth?: number, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: Record<string, any> | { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, series?: Array<ChartSeries> | ChartSeries, seriesTemplate?: any, topIndent?: number, valueAxis?: Record<string, any> | { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: ChartAxisScale, valueType?: ChartsDataType } } {
         return this._getOption('chart');
     }
-    set chart(value: Record<string, any> | { barGroupPadding?: number, barGroupWidth?: number, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: Record<string, any> | { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office", paletteExtensionMode?: "alternate" | "blend" | "extrapolate", series?: Array<ChartSeries> | ChartSeries, seriesTemplate?: any, topIndent?: number, valueAxis?: Record<string, any> | { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: "continuous" | "logarithmic", valueType?: "datetime" | "numeric" | "string" } }) {
+    set chart(value: Record<string, any> | { barGroupPadding?: number, barGroupWidth?: number, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: Record<string, any> | { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, series?: Array<ChartSeries> | ChartSeries, seriesTemplate?: any, topIndent?: number, valueAxis?: Record<string, any> | { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: ChartAxisScale, valueType?: ChartsDataType } }) {
         this._setOption('chart', value);
     }
 
@@ -318,10 +319,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get export(): Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) } {
+    get export(): Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) } {
         return this._getOption('export');
     }
-    set export(value: Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }) {
+    set export(value: Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }) {
         this._setOption('export', value);
     }
 
@@ -409,10 +410,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get scale(): Record<string, any> | { aggregateByCategory?: boolean, aggregationGroupWidth?: number, aggregationInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string, startValue?: Date | number | string }[], breakStyle?: Record<string, any> | { color?: string, line?: "straight" | "waved", width?: number }, categories?: Array<Date | number | string>, discreteAxisDivisionMode?: "betweenLabels" | "crossLabels", endOnTick?: boolean, endValue?: Date | number | string, holidays?: Array<Date | string> | Array<number>, label?: Record<string, any> | { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, overlappingBehavior?: "hide" | "none", topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: Record<string, any> | { label?: Record<string, any> | { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: LocalizationTypes.Format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: Date | number | string, tick?: Record<string, any> | { color?: string, opacity?: number, width?: number }, tickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: "continuous" | "discrete" | "logarithmic" | "semidiscrete", valueType?: "datetime" | "numeric" | "string", workdaysOnly?: boolean, workWeek?: Array<number> } {
+    get scale(): Record<string, any> | { aggregateByCategory?: boolean, aggregationGroupWidth?: number, aggregationInterval?: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string, startValue?: Date | number | string }[], breakStyle?: Record<string, any> | { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string, holidays?: Array<Date | string> | Array<number>, label?: Record<string, any> | { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: Record<string, any> | { label?: Record<string, any> | { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: Date | number | string, tick?: Record<string, any> | { color?: string, opacity?: number, width?: number }, tickInterval?: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale, valueType?: ChartsDataType, workdaysOnly?: boolean, workWeek?: Array<number> } {
         return this._getOption('scale');
     }
-    set scale(value: Record<string, any> | { aggregateByCategory?: boolean, aggregationGroupWidth?: number, aggregationInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string, startValue?: Date | number | string }[], breakStyle?: Record<string, any> | { color?: string, line?: "straight" | "waved", width?: number }, categories?: Array<Date | number | string>, discreteAxisDivisionMode?: "betweenLabels" | "crossLabels", endOnTick?: boolean, endValue?: Date | number | string, holidays?: Array<Date | string> | Array<number>, label?: Record<string, any> | { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, overlappingBehavior?: "hide" | "none", topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: Record<string, any> | { label?: Record<string, any> | { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: LocalizationTypes.Format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: Date | number | string, tick?: Record<string, any> | { color?: string, opacity?: number, width?: number }, tickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: "continuous" | "discrete" | "logarithmic" | "semidiscrete", valueType?: "datetime" | "numeric" | "string", workdaysOnly?: boolean, workWeek?: Array<number> }) {
+    set scale(value: Record<string, any> | { aggregateByCategory?: boolean, aggregationGroupWidth?: number, aggregationInterval?: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string, startValue?: Date | number | string }[], breakStyle?: Record<string, any> | { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string, holidays?: Array<Date | string> | Array<number>, label?: Record<string, any> | { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: Record<string, any> | { label?: Record<string, any> | { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: Date | number | string, tick?: Record<string, any> | { color?: string, opacity?: number, width?: number }, tickInterval?: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale, valueType?: ChartsDataType, workdaysOnly?: boolean, workWeek?: Array<number> }) {
         this._setOption('scale', value);
     }
 
@@ -435,10 +436,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get selectedRangeUpdateMode(): "auto" | "keep" | "reset" | "shift" {
+    get selectedRangeUpdateMode(): VisualRangeUpdateMode {
         return this._getOption('selectedRangeUpdateMode');
     }
-    set selectedRangeUpdateMode(value: "auto" | "keep" | "reset" | "shift") {
+    set selectedRangeUpdateMode(value: VisualRangeUpdateMode) {
         this._setOption('selectedRangeUpdateMode', value);
     }
 
@@ -487,10 +488,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get sliderMarker(): Record<string, any> | { color?: string, customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number, visible?: boolean } {
+    get sliderMarker(): Record<string, any> | { color?: string, customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number, visible?: boolean } {
         return this._getOption('sliderMarker');
     }
-    set sliderMarker(value: Record<string, any> | { color?: string, customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number, visible?: boolean }) {
+    set sliderMarker(value: Record<string, any> | { color?: string, customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number, visible?: boolean }) {
         this._setOption('sliderMarker', value);
     }
 
@@ -500,10 +501,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get theme(): "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light" {
+    get theme(): Theme {
         return this._getOption('theme');
     }
-    set theme(value: "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light") {
+    set theme(value: Theme) {
         this._setOption('theme', value);
     }
 
@@ -513,10 +514,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get title(): string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" } {
+    get title(): Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
         return this._getOption('title');
     }
-    set title(value: string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" }) {
+    set title(value: Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }) {
         this._setOption('title', value);
     }
 
@@ -610,21 +611,21 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() backgroundChange: EventEmitter<Record<string, any> | { color?: string, image?: Record<string, any> | { location?: "center" | "centerBottom" | "centerTop" | "full" | "leftBottom" | "leftCenter" | "leftTop" | "rightBottom" | "rightCenter" | "rightTop", url?: string }, visible?: boolean }>;
+    @Output() backgroundChange: EventEmitter<Record<string, any> | { color?: string, image?: Record<string, any> | { location?: BackgroundImageLocation, url?: string }, visible?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() behaviorChange: EventEmitter<Record<string, any> | { allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: "onMoving" | "onMovingComplete", manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean, valueChangeMode?: "onHandleMove" | "onHandleRelease" }>;
+    @Output() behaviorChange: EventEmitter<Record<string, any> | { allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: ValueChangedCallMode, manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean, valueChangeMode?: SliderValueChangeMode }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() chartChange: EventEmitter<Record<string, any> | { barGroupPadding?: number, barGroupWidth?: number, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: Record<string, any> | { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office", paletteExtensionMode?: "alternate" | "blend" | "extrapolate", series?: Array<ChartSeries> | ChartSeries, seriesTemplate?: any, topIndent?: number, valueAxis?: Record<string, any> | { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: "continuous" | "logarithmic", valueType?: "datetime" | "numeric" | "string" } }>;
+    @Output() chartChange: EventEmitter<Record<string, any> | { barGroupPadding?: number, barGroupWidth?: number, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: Record<string, any> | { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, series?: Array<ChartSeries> | ChartSeries, seriesTemplate?: any, topIndent?: number, valueAxis?: Record<string, any> | { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: ChartAxisScale, valueType?: ChartsDataType } }>;
 
     /**
     
@@ -666,7 +667,7 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }>;
+    @Output() exportChange: EventEmitter<Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }>;
 
     /**
     
@@ -715,7 +716,7 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scaleChange: EventEmitter<Record<string, any> | { aggregateByCategory?: boolean, aggregationGroupWidth?: number, aggregationInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string, startValue?: Date | number | string }[], breakStyle?: Record<string, any> | { color?: string, line?: "straight" | "waved", width?: number }, categories?: Array<Date | number | string>, discreteAxisDivisionMode?: "betweenLabels" | "crossLabels", endOnTick?: boolean, endValue?: Date | number | string, holidays?: Array<Date | string> | Array<number>, label?: Record<string, any> | { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, overlappingBehavior?: "hide" | "none", topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: Record<string, any> | { label?: Record<string, any> | { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: LocalizationTypes.Format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: Date | number | string, tick?: Record<string, any> | { color?: string, opacity?: number, width?: number }, tickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: "continuous" | "discrete" | "logarithmic" | "semidiscrete", valueType?: "datetime" | "numeric" | "string", workdaysOnly?: boolean, workWeek?: Array<number> }>;
+    @Output() scaleChange: EventEmitter<Record<string, any> | { aggregateByCategory?: boolean, aggregationGroupWidth?: number, aggregationInterval?: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string, startValue?: Date | number | string }[], breakStyle?: Record<string, any> | { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string, holidays?: Array<Date | string> | Array<number>, label?: Record<string, any> | { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: Record<string, any> | { label?: Record<string, any> | { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: Date | number | string, tick?: Record<string, any> | { color?: string, opacity?: number, width?: number }, tickInterval?: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale, valueType?: ChartsDataType, workdaysOnly?: boolean, workWeek?: Array<number> }>;
 
     /**
     
@@ -729,7 +730,7 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectedRangeUpdateModeChange: EventEmitter<"auto" | "keep" | "reset" | "shift">;
+    @Output() selectedRangeUpdateModeChange: EventEmitter<VisualRangeUpdateMode>;
 
     /**
     
@@ -757,21 +758,21 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sliderMarkerChange: EventEmitter<Record<string, any> | { color?: string, customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number, visible?: boolean }>;
+    @Output() sliderMarkerChange: EventEmitter<Record<string, any> | { color?: string, customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number, visible?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() themeChange: EventEmitter<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">;
+    @Output() themeChange: EventEmitter<Theme>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() titleChange: EventEmitter<string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" }>;
+    @Output() titleChange: EventEmitter<Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }>;
 
     /**
     

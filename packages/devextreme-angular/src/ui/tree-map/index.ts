@@ -21,11 +21,12 @@ import {
 
 
 import DataSource from 'devextreme/data/data_source';
-import * as LocalizationTypes from 'devextreme/localization';
+import { Palette, PaletteExtensionMode, Font, TextOverflow, Theme, WordWrap, DashStyle } from 'devextreme/common/charts';
+import { TreeMapColorizerType, TreeMapLayoutAlgorithm, TreeMapLayoutDirection, ClickEvent, DisposingEvent, DrawnEvent, DrillEvent, ExportedEvent, ExportingEvent, FileSavingEvent, HoverChangedEvent, IncidentOccurredEvent, InitializedEvent, NodesInitializedEvent, NodesRenderingEvent, OptionChangedEvent, SelectionChangedEvent, dxTreeMapNode } from 'devextreme/viz/tree_map';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { Font } from 'devextreme/common/charts';
-import { ClickEvent, DisposingEvent, DrawnEvent, DrillEvent, ExportedEvent, ExportingEvent, FileSavingEvent, HoverChangedEvent, IncidentOccurredEvent, InitializedEvent, NodesInitializedEvent, NodesRenderingEvent, OptionChangedEvent, SelectionChangedEvent, dxTreeMapNode } from 'devextreme/viz/tree_map';
+import { ExportFormat, SingleMultipleOrNone, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
+import { Format } from 'devextreme/localization';
 
 import DxTreeMap from 'devextreme/viz/tree_map';
 
@@ -132,10 +133,10 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get colorizer(): Record<string, any> | { colorCodeField?: string, colorizeGroups?: boolean, palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office", paletteExtensionMode?: "alternate" | "blend" | "extrapolate", range?: Array<number>, type?: "discrete" | "gradient" | "none" | "range" } {
+    get colorizer(): Record<string, any> | { colorCodeField?: string, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number>, type?: TreeMapColorizerType } {
         return this._getOption('colorizer');
     }
-    set colorizer(value: Record<string, any> | { colorCodeField?: string, colorizeGroups?: boolean, palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office", paletteExtensionMode?: "alternate" | "blend" | "extrapolate", range?: Array<number>, type?: "discrete" | "gradient" | "none" | "range" }) {
+    set colorizer(value: Record<string, any> | { colorCodeField?: string, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number>, type?: TreeMapColorizerType }) {
         this._setOption('colorizer', value);
     }
 
@@ -184,10 +185,10 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get export(): Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) } {
+    get export(): Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) } {
         return this._getOption('export');
     }
-    set export(value: Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }) {
+    set export(value: Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }) {
         this._setOption('export', value);
     }
 
@@ -197,10 +198,10 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get group(): Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string, headerHeight?: number, hoverEnabled?: boolean, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string }, label?: Record<string, any> | { font?: Font, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean }, padding?: number, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string } } {
+    get group(): Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string, headerHeight?: number, hoverEnabled?: boolean, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string }, label?: Record<string, any> | { font?: Font, textOverflow?: TextOverflow, visible?: boolean }, padding?: number, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string } } {
         return this._getOption('group');
     }
-    set group(value: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string, headerHeight?: number, hoverEnabled?: boolean, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string }, label?: Record<string, any> | { font?: Font, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean }, padding?: number, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string } }) {
+    set group(value: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string, headerHeight?: number, hoverEnabled?: boolean, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string }, label?: Record<string, any> | { font?: Font, textOverflow?: TextOverflow, visible?: boolean }, padding?: number, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string } }) {
         this._setOption('group', value);
     }
 
@@ -262,10 +263,10 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get layoutAlgorithm(): ((e: { items: Array<any>, rect: Array<number>, sum: number }) => void) | "sliceanddice" | "squarified" | "strip" {
+    get layoutAlgorithm(): ((e: { items: Array<any>, rect: Array<number>, sum: number }) => void) | TreeMapLayoutAlgorithm {
         return this._getOption('layoutAlgorithm');
     }
-    set layoutAlgorithm(value: ((e: { items: Array<any>, rect: Array<number>, sum: number }) => void) | "sliceanddice" | "squarified" | "strip") {
+    set layoutAlgorithm(value: ((e: { items: Array<any>, rect: Array<number>, sum: number }) => void) | TreeMapLayoutAlgorithm) {
         this._setOption('layoutAlgorithm', value);
     }
 
@@ -275,10 +276,10 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get layoutDirection(): "leftBottomRightTop" | "leftTopRightBottom" | "rightBottomLeftTop" | "rightTopLeftBottom" {
+    get layoutDirection(): TreeMapLayoutDirection {
         return this._getOption('layoutDirection');
     }
-    set layoutDirection(value: "leftBottomRightTop" | "leftTopRightBottom" | "rightBottomLeftTop" | "rightTopLeftBottom") {
+    set layoutDirection(value: TreeMapLayoutDirection) {
         this._setOption('layoutDirection', value);
     }
 
@@ -366,10 +367,10 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get selectionMode(): "single" | "multiple" | "none" {
+    get selectionMode(): SingleMultipleOrNone {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: "single" | "multiple" | "none") {
+    set selectionMode(value: SingleMultipleOrNone) {
         this._setOption('selectionMode', value);
     }
 
@@ -392,10 +393,10 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get theme(): "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light" {
+    get theme(): Theme {
         return this._getOption('theme');
     }
-    set theme(value: "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light") {
+    set theme(value: Theme) {
         this._setOption('theme', value);
     }
 
@@ -405,10 +406,10 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get tile(): Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string }, label?: Record<string, any> | { font?: Font, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" }, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string } } {
+    get tile(): Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string }, label?: Record<string, any> | { font?: Font, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string } } {
         return this._getOption('tile');
     }
-    set tile(value: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string }, label?: Record<string, any> | { font?: Font, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" }, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string } }) {
+    set tile(value: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string }, label?: Record<string, any> | { font?: Font, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string } }) {
         this._setOption('tile', value);
     }
 
@@ -418,10 +419,10 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get title(): string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" } {
+    get title(): Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
         return this._getOption('title');
     }
-    set title(value: string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" }) {
+    set title(value: Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }) {
         this._setOption('title', value);
     }
 
@@ -431,10 +432,10 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get tooltip(): Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { node: dxTreeMapNode, value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number } {
+    get tooltip(): Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { node: dxTreeMapNode, value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: Format, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { node: dxTreeMapNode, value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }) {
+    set tooltip(value: Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { node: dxTreeMapNode, value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: Format, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }) {
         this._setOption('tooltip', value);
     }
 
@@ -582,7 +583,7 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() colorizerChange: EventEmitter<Record<string, any> | { colorCodeField?: string, colorizeGroups?: boolean, palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office", paletteExtensionMode?: "alternate" | "blend" | "extrapolate", range?: Array<number>, type?: "discrete" | "gradient" | "none" | "range" }>;
+    @Output() colorizerChange: EventEmitter<Record<string, any> | { colorCodeField?: string, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number>, type?: TreeMapColorizerType }>;
 
     /**
     
@@ -610,14 +611,14 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }>;
+    @Output() exportChange: EventEmitter<Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() groupChange: EventEmitter<Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string, headerHeight?: number, hoverEnabled?: boolean, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string }, label?: Record<string, any> | { font?: Font, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean }, padding?: number, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string } }>;
+    @Output() groupChange: EventEmitter<Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string, headerHeight?: number, hoverEnabled?: boolean, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string }, label?: Record<string, any> | { font?: Font, textOverflow?: TextOverflow, visible?: boolean }, padding?: number, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string } }>;
 
     /**
     
@@ -652,14 +653,14 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() layoutAlgorithmChange: EventEmitter<((e: { items: Array<any>, rect: Array<number>, sum: number }) => void) | "sliceanddice" | "squarified" | "strip">;
+    @Output() layoutAlgorithmChange: EventEmitter<((e: { items: Array<any>, rect: Array<number>, sum: number }) => void) | TreeMapLayoutAlgorithm>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() layoutDirectionChange: EventEmitter<"leftBottomRightTop" | "leftTopRightBottom" | "rightBottomLeftTop" | "rightTopLeftBottom">;
+    @Output() layoutDirectionChange: EventEmitter<TreeMapLayoutDirection>;
 
     /**
     
@@ -708,7 +709,7 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<"single" | "multiple" | "none">;
+    @Output() selectionModeChange: EventEmitter<SingleMultipleOrNone>;
 
     /**
     
@@ -722,28 +723,28 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() themeChange: EventEmitter<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">;
+    @Output() themeChange: EventEmitter<Theme>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tileChange: EventEmitter<Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string }, label?: Record<string, any> | { font?: Font, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" }, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string } }>;
+    @Output() tileChange: EventEmitter<Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string }, label?: Record<string, any> | { font?: Font, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string } }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() titleChange: EventEmitter<string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" }>;
+    @Output() titleChange: EventEmitter<Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { node: dxTreeMapNode, value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }>;
+    @Output() tooltipChange: EventEmitter<Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { node: dxTreeMapNode, value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: Format, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }>;
 
     /**
     

@@ -14,6 +14,7 @@ import {
 
 
 
+import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -29,18 +30,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDataGridAtComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get x(): "center" | "left" | "right" {
+    get x(): HorizontalAlignment {
         return this._getOption('x');
     }
-    set x(value: "center" | "left" | "right") {
+    set x(value: HorizontalAlignment) {
         this._setOption('x', value);
     }
 
     @Input()
-    get y(): "bottom" | "center" | "top" {
+    get y(): VerticalAlignment {
         return this._getOption('y');
     }
-    set y(value: "bottom" | "center" | "top") {
+    set y(value: VerticalAlignment) {
         this._setOption('y', value);
     }
 

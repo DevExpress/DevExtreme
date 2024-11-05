@@ -20,6 +20,7 @@ import {
 import { AnimationConfig } from 'devextreme/animation/fx';
 import { event } from 'devextreme/events/index';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
+import { Position } from 'devextreme/common';
 import { PositionConfig } from 'devextreme/animation/position';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
@@ -110,10 +111,10 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
     }
 
     @Input()
-    get hideEvent(): string | { delay?: number, name?: string } {
+    get hideEvent(): Record<string, any> | string | { delay?: number, name?: string } {
         return this._getOption('hideEvent');
     }
-    set hideEvent(value: string | { delay?: number, name?: string }) {
+    set hideEvent(value: Record<string, any> | string | { delay?: number, name?: string }) {
         this._setOption('hideEvent', value);
     }
 
@@ -254,10 +255,10 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
     }
 
     @Input()
-    get position(): PositionConfig | "bottom" | "left" | "right" | "top" {
+    get position(): Position | PositionConfig {
         return this._getOption('position');
     }
-    set position(value: PositionConfig | "bottom" | "left" | "right" | "top") {
+    set position(value: Position | PositionConfig) {
         this._setOption('position', value);
     }
 
@@ -294,10 +295,10 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
     }
 
     @Input()
-    get showEvent(): string | { delay?: number, name?: string } {
+    get showEvent(): Record<string, any> | string | { delay?: number, name?: string } {
         return this._getOption('showEvent');
     }
-    set showEvent(value: string | { delay?: number, name?: string }) {
+    set showEvent(value: Record<string, any> | string | { delay?: number, name?: string }) {
         this._setOption('showEvent', value);
     }
 

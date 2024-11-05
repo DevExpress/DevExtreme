@@ -23,9 +23,10 @@ import {
 
 
 import DataSource from 'devextreme/data/data_source';
-import { dxGanttColumn, dxGanttContextMenu, dxGanttFilterRow, dxGanttHeaderFilter, ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, DependencyDeletedEvent, DependencyDeletingEvent, DependencyInsertedEvent, DependencyInsertingEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ResourceAssignedEvent, ResourceAssigningEvent, ResourceDeletedEvent, ResourceDeletingEvent, ResourceInsertedEvent, ResourceInsertingEvent, ResourceManagerDialogShowingEvent, ResourceUnassignedEvent, ResourceUnassigningEvent, ScaleCellPreparedEvent, SelectionChangedEvent, TaskClickEvent, TaskDblClickEvent, TaskDeletedEvent, TaskDeletingEvent, TaskEditDialogShowingEvent, TaskInsertedEvent, TaskInsertingEvent, TaskMovingEvent, TaskUpdatedEvent, TaskUpdatingEvent, dxGanttSorting, dxGanttStripLine, dxGanttToolbar } from 'devextreme/ui/gantt';
+import { dxGanttColumn, dxGanttContextMenu, dxGanttFilterRow, dxGanttHeaderFilter, ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, DependencyDeletedEvent, DependencyDeletingEvent, DependencyInsertedEvent, DependencyInsertingEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ResourceAssignedEvent, ResourceAssigningEvent, ResourceDeletedEvent, ResourceDeletingEvent, ResourceInsertedEvent, ResourceInsertingEvent, ResourceManagerDialogShowingEvent, ResourceUnassignedEvent, ResourceUnassigningEvent, ScaleCellPreparedEvent, SelectionChangedEvent, TaskClickEvent, TaskDblClickEvent, TaskDeletedEvent, TaskDeletingEvent, TaskEditDialogShowingEvent, TaskInsertedEvent, TaskInsertingEvent, TaskMovingEvent, TaskUpdatedEvent, TaskUpdatingEvent, GanttScaleType, dxGanttSorting, dxGanttStripLine, GanttTaskTitlePosition, dxGanttToolbar } from 'devextreme/ui/gantt';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
+import { FirstDayOfWeek } from 'devextreme/common';
 
 import DxGantt from 'devextreme/ui/gantt';
 
@@ -258,10 +259,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get firstDayOfWeek(): 0 | 1 | 2 | 3 | 4 | 5 | 6 {
+    get firstDayOfWeek(): FirstDayOfWeek {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: 0 | 1 | 2 | 3 | 4 | 5 | 6) {
+    set firstDayOfWeek(value: FirstDayOfWeek) {
         this._setOption('firstDayOfWeek', value);
     }
 
@@ -375,10 +376,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get scaleType(): "auto" | "minutes" | "hours" | "sixHours" | "days" | "weeks" | "months" | "quarters" | "years" {
+    get scaleType(): GanttScaleType {
         return this._getOption('scaleType');
     }
-    set scaleType(value: "auto" | "minutes" | "hours" | "sixHours" | "days" | "weeks" | "months" | "quarters" | "years") {
+    set scaleType(value: GanttScaleType) {
         this._setOption('scaleType', value);
     }
 
@@ -388,10 +389,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get scaleTypeRange(): Record<string, any> | { max?: "auto" | "minutes" | "hours" | "sixHours" | "days" | "weeks" | "months" | "quarters" | "years", min?: "auto" | "minutes" | "hours" | "sixHours" | "days" | "weeks" | "months" | "quarters" | "years" } {
+    get scaleTypeRange(): Record<string, any> | { max?: GanttScaleType, min?: GanttScaleType } {
         return this._getOption('scaleTypeRange');
     }
-    set scaleTypeRange(value: Record<string, any> | { max?: "auto" | "minutes" | "hours" | "sixHours" | "days" | "weeks" | "months" | "quarters" | "years", min?: "auto" | "minutes" | "hours" | "sixHours" | "days" | "weeks" | "months" | "quarters" | "years" }) {
+    set scaleTypeRange(value: Record<string, any> | { max?: GanttScaleType, min?: GanttScaleType }) {
         this._setOption('scaleTypeRange', value);
     }
 
@@ -570,10 +571,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get taskTitlePosition(): "inside" | "outside" | "none" {
+    get taskTitlePosition(): GanttTaskTitlePosition {
         return this._getOption('taskTitlePosition');
     }
-    set taskTitlePosition(value: "inside" | "outside" | "none") {
+    set taskTitlePosition(value: GanttTaskTitlePosition) {
         this._setOption('taskTitlePosition', value);
     }
 
@@ -972,7 +973,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() firstDayOfWeekChange: EventEmitter<0 | 1 | 2 | 3 | 4 | 5 | 6>;
+    @Output() firstDayOfWeekChange: EventEmitter<FirstDayOfWeek>;
 
     /**
     
@@ -1035,14 +1036,14 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scaleTypeChange: EventEmitter<"auto" | "minutes" | "hours" | "sixHours" | "days" | "weeks" | "months" | "quarters" | "years">;
+    @Output() scaleTypeChange: EventEmitter<GanttScaleType>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scaleTypeRangeChange: EventEmitter<Record<string, any> | { max?: "auto" | "minutes" | "hours" | "sixHours" | "days" | "weeks" | "months" | "quarters" | "years", min?: "auto" | "minutes" | "hours" | "sixHours" | "days" | "weeks" | "months" | "quarters" | "years" }>;
+    @Output() scaleTypeRangeChange: EventEmitter<Record<string, any> | { max?: GanttScaleType, min?: GanttScaleType }>;
 
     /**
     
@@ -1140,7 +1141,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() taskTitlePositionChange: EventEmitter<"inside" | "outside" | "none">;
+    @Output() taskTitlePositionChange: EventEmitter<GanttTaskTitlePosition>;
 
     /**
     

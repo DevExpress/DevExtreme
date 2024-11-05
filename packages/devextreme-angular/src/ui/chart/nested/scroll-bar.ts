@@ -14,6 +14,7 @@ import {
 
 
 
+import { Position } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -53,10 +54,10 @@ export class DxoChartScrollBarComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get position(): "bottom" | "left" | "right" | "top" {
+    get position(): Position {
         return this._getOption('position');
     }
-    set position(value: "bottom" | "left" | "right" | "top") {
+    set position(value: Position) {
         this._setOption('position', value);
     }
 

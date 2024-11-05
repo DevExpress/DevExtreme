@@ -14,6 +14,9 @@ import {
 
 
 
+import { DataRenderMode } from 'devextreme/common/grids';
+import { DataGridScrollMode } from 'devextreme/ui/data_grid';
+import { ScrollbarMode, Mode } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -29,18 +32,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDataGridScrollingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get columnRenderingMode(): "standard" | "virtual" {
+    get columnRenderingMode(): DataRenderMode {
         return this._getOption('columnRenderingMode');
     }
-    set columnRenderingMode(value: "standard" | "virtual") {
+    set columnRenderingMode(value: DataRenderMode) {
         this._setOption('columnRenderingMode', value);
     }
 
     @Input()
-    get mode(): "infinite" | "standard" | "virtual" {
+    get mode(): DataGridScrollMode {
         return this._getOption('mode');
     }
-    set mode(value: "infinite" | "standard" | "virtual") {
+    set mode(value: DataGridScrollMode) {
         this._setOption('mode', value);
     }
 
@@ -61,10 +64,10 @@ export class DxoDataGridScrollingComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get rowRenderingMode(): "standard" | "virtual" {
+    get rowRenderingMode(): DataRenderMode {
         return this._getOption('rowRenderingMode');
     }
-    set rowRenderingMode(value: "standard" | "virtual") {
+    set rowRenderingMode(value: DataRenderMode) {
         this._setOption('rowRenderingMode', value);
     }
 
@@ -85,18 +88,18 @@ export class DxoDataGridScrollingComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get showScrollbar(): "always" | "never" | "onHover" | "onScroll" {
+    get showScrollbar(): ScrollbarMode {
         return this._getOption('showScrollbar');
     }
-    set showScrollbar(value: "always" | "never" | "onHover" | "onScroll") {
+    set showScrollbar(value: ScrollbarMode) {
         this._setOption('showScrollbar', value);
     }
 
     @Input()
-    get useNative(): boolean | "auto" {
+    get useNative(): boolean | Mode {
         return this._getOption('useNative');
     }
-    set useNative(value: boolean | "auto") {
+    set useNative(value: boolean | Mode) {
         this._setOption('useNative', value);
     }
 

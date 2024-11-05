@@ -21,7 +21,8 @@ import {
 
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-import { HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import { ApplyChangesMode, HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import { FieldChooserLayout } from 'devextreme/common';
 import { ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/pivot_grid_field_chooser';
 
 import DxPivotGridFieldChooser from 'devextreme/ui/pivot_grid_field_chooser';
@@ -111,10 +112,10 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     
      */
     @Input()
-    get applyChangesMode(): "instantly" | "onDemand" {
+    get applyChangesMode(): ApplyChangesMode {
         return this._getOption('applyChangesMode');
     }
-    set applyChangesMode(value: "instantly" | "onDemand") {
+    set applyChangesMode(value: ApplyChangesMode) {
         this._setOption('applyChangesMode', value);
     }
 
@@ -241,10 +242,10 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     
      */
     @Input()
-    get layout(): 0 | 1 | 2 {
+    get layout(): FieldChooserLayout {
         return this._getOption('layout');
     }
-    set layout(value: 0 | 1 | 2) {
+    set layout(value: FieldChooserLayout) {
         this._setOption('layout', value);
     }
 
@@ -405,7 +406,7 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() applyChangesModeChange: EventEmitter<"instantly" | "onDemand">;
+    @Output() applyChangesModeChange: EventEmitter<ApplyChangesMode>;
 
     /**
     
@@ -475,7 +476,7 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() layoutChange: EventEmitter<0 | 1 | 2>;
+    @Output() layoutChange: EventEmitter<FieldChooserLayout>;
 
     /**
     

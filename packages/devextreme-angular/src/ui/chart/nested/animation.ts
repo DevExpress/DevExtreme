@@ -14,6 +14,7 @@ import {
 
 
 
+import { AnimationEaseMode } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -37,10 +38,10 @@ export class DxoChartAnimationComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get easing(): "easeOutCubic" | "linear" {
+    get easing(): AnimationEaseMode {
         return this._getOption('easing');
     }
-    set easing(value: "easeOutCubic" | "linear") {
+    set easing(value: AnimationEaseMode) {
         this._setOption('easing', value);
     }
 

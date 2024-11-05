@@ -15,8 +15,8 @@ import {
 
 
 
+import { FormItemType, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
-import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 
 import {
     NestedOptionHost,
@@ -49,10 +49,10 @@ export class DxiFormTabbedItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get itemType(): "empty" | "group" | "simple" | "tabbed" | "button" {
+    get itemType(): FormItemType {
         return this._getOption('itemType');
     }
-    set itemType(value: "empty" | "group" | "simple" | "tabbed" | "button") {
+    set itemType(value: FormItemType) {
         this._setOption('itemType', value);
     }
 

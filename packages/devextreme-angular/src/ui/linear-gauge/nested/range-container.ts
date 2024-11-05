@@ -17,7 +17,8 @@ import {
 
 
 
-import { ChartsColor } from 'devextreme/common/charts';
+import { ChartsColor, Palette, PaletteExtensionMode } from 'devextreme/common/charts';
+import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -42,10 +43,10 @@ export class DxoLinearGaugeRangeContainerComponent extends NestedOption implemen
     }
 
     @Input()
-    get horizontalOrientation(): "center" | "left" | "right" {
+    get horizontalOrientation(): HorizontalAlignment {
         return this._getOption('horizontalOrientation');
     }
-    set horizontalOrientation(value: "center" | "left" | "right") {
+    set horizontalOrientation(value: HorizontalAlignment) {
         this._setOption('horizontalOrientation', value);
     }
 
@@ -58,18 +59,18 @@ export class DxoLinearGaugeRangeContainerComponent extends NestedOption implemen
     }
 
     @Input()
-    get palette(): Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office" {
+    get palette(): Array<string> | Palette {
         return this._getOption('palette');
     }
-    set palette(value: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office") {
+    set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
 
     @Input()
-    get paletteExtensionMode(): "alternate" | "blend" | "extrapolate" {
+    get paletteExtensionMode(): PaletteExtensionMode {
         return this._getOption('paletteExtensionMode');
     }
-    set paletteExtensionMode(value: "alternate" | "blend" | "extrapolate") {
+    set paletteExtensionMode(value: PaletteExtensionMode) {
         this._setOption('paletteExtensionMode', value);
     }
 
@@ -82,10 +83,10 @@ export class DxoLinearGaugeRangeContainerComponent extends NestedOption implemen
     }
 
     @Input()
-    get verticalOrientation(): "bottom" | "center" | "top" {
+    get verticalOrientation(): VerticalAlignment {
         return this._getOption('verticalOrientation');
     }
-    set verticalOrientation(value: "bottom" | "center" | "top") {
+    set verticalOrientation(value: VerticalAlignment) {
         this._setOption('verticalOrientation', value);
     }
 

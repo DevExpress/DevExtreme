@@ -18,8 +18,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
+import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextreme/common/charts';
 import { dxVectorMapAnnotationConfig } from 'devextreme/viz/vector_map';
-import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -64,10 +64,10 @@ export class DxoVectorMapCommonAnnotationSettingsComponent extends NestedOption 
     }
 
     @Input()
-    get border(): Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -128,10 +128,10 @@ export class DxoVectorMapCommonAnnotationSettingsComponent extends NestedOption 
     }
 
     @Input()
-    get image(): string | { height?: number, url?: string, width?: number } {
+    get image(): Record<string, any> | string | { height?: number, url?: string, width?: number } {
         return this._getOption('image');
     }
-    set image(value: string | { height?: number, url?: string, width?: number }) {
+    set image(value: Record<string, any> | string | { height?: number, url?: string, width?: number }) {
         this._setOption('image', value);
     }
 
@@ -200,10 +200,10 @@ export class DxoVectorMapCommonAnnotationSettingsComponent extends NestedOption 
     }
 
     @Input()
-    get textOverflow(): "ellipsis" | "hide" | "none" {
+    get textOverflow(): TextOverflow {
         return this._getOption('textOverflow');
     }
-    set textOverflow(value: "ellipsis" | "hide" | "none") {
+    set textOverflow(value: TextOverflow) {
         this._setOption('textOverflow', value);
     }
 
@@ -224,10 +224,10 @@ export class DxoVectorMapCommonAnnotationSettingsComponent extends NestedOption 
     }
 
     @Input()
-    get type(): "text" | "image" | "custom" {
+    get type(): AnnotationType {
         return this._getOption('type');
     }
-    set type(value: "text" | "image" | "custom") {
+    set type(value: AnnotationType) {
         this._setOption('type', value);
     }
 
@@ -240,10 +240,10 @@ export class DxoVectorMapCommonAnnotationSettingsComponent extends NestedOption 
     }
 
     @Input()
-    get wordWrap(): "normal" | "breakWord" | "none" {
+    get wordWrap(): WordWrap {
         return this._getOption('wordWrap');
     }
-    set wordWrap(value: "normal" | "breakWord" | "none") {
+    set wordWrap(value: WordWrap) {
         this._setOption('wordWrap', value);
     }
 

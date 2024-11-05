@@ -14,8 +14,9 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
-import { ChartsColor, Font } from 'devextreme/common/charts';
+import { ChartsColor, Palette, Font } from 'devextreme/common/charts';
+import { HorizontalEdge, VerticalEdge } from 'devextreme/common';
+import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -71,10 +72,10 @@ export class DxoLinearGaugeValueIndicatorComponent extends NestedOption implemen
     }
 
     @Input()
-    get horizontalOrientation(): "left" | "right" {
+    get horizontalOrientation(): HorizontalEdge {
         return this._getOption('horizontalOrientation');
     }
-    set horizontalOrientation(value: "left" | "right") {
+    set horizontalOrientation(value: HorizontalEdge) {
         this._setOption('horizontalOrientation', value);
     }
 
@@ -103,10 +104,10 @@ export class DxoLinearGaugeValueIndicatorComponent extends NestedOption implemen
     }
 
     @Input()
-    get palette(): Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office" {
+    get palette(): Array<string> | Palette {
         return this._getOption('palette');
     }
-    set palette(value: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office") {
+    set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
 
@@ -151,10 +152,10 @@ export class DxoLinearGaugeValueIndicatorComponent extends NestedOption implemen
     }
 
     @Input()
-    get text(): Record<string, any> | { customizeText?: ((indicatedValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indent?: number } {
+    get text(): Record<string, any> | { customizeText?: ((indicatedValue: { value: number, valueText: string }) => string), font?: Font, format?: Format, indent?: number } {
         return this._getOption('text');
     }
-    set text(value: Record<string, any> | { customizeText?: ((indicatedValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indent?: number }) {
+    set text(value: Record<string, any> | { customizeText?: ((indicatedValue: { value: number, valueText: string }) => string), font?: Font, format?: Format, indent?: number }) {
         this._setOption('text', value);
     }
 
@@ -167,10 +168,10 @@ export class DxoLinearGaugeValueIndicatorComponent extends NestedOption implemen
     }
 
     @Input()
-    get verticalOrientation(): "bottom" | "top" {
+    get verticalOrientation(): VerticalEdge {
         return this._getOption('verticalOrientation');
     }
-    set verticalOrientation(value: "bottom" | "top") {
+    set verticalOrientation(value: VerticalEdge) {
         this._setOption('verticalOrientation', value);
     }
 

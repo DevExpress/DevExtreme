@@ -23,6 +23,7 @@ import {
 
 
 import { CompleteEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/progress_bar';
+import { ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import DxProgressBar from 'devextreme/ui/progress_bar';
 
@@ -270,10 +271,10 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get validationMessageMode(): "always" | "auto" {
+    get validationMessageMode(): ValidationMessageMode {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: "always" | "auto") {
+    set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
 
@@ -283,10 +284,10 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get validationMessagePosition(): "bottom" | "left" | "right" | "top" {
+    get validationMessagePosition(): Position {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: "bottom" | "left" | "right" | "top") {
+    set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -296,10 +297,10 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get validationStatus(): "valid" | "invalid" | "pending" {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: "valid" | "invalid" | "pending") {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 
@@ -500,21 +501,21 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<"always" | "auto">;
+    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<"bottom" | "left" | "right" | "top">;
+    @Output() validationMessagePositionChange: EventEmitter<Position>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<"valid" | "invalid" | "pending">;
+    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
     

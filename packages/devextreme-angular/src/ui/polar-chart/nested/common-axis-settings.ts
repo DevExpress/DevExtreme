@@ -14,7 +14,7 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
+import { DashStyle, Font, DiscreteAxisDivisionMode, LabelOverlap } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -46,18 +46,18 @@ export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get constantLineStyle(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number } {
+    get constantLineStyle(): Record<string, any> | { color?: string, dashStyle?: DashStyle, label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number } {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number }) {
+    set constantLineStyle(value: Record<string, any> | { color?: string, dashStyle?: DashStyle, label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number }) {
         this._setOption('constantLineStyle', value);
     }
 
     @Input()
-    get discreteAxisDivisionMode(): "betweenLabels" | "crossLabels" {
+    get discreteAxisDivisionMode(): DiscreteAxisDivisionMode {
         return this._getOption('discreteAxisDivisionMode');
     }
-    set discreteAxisDivisionMode(value: "betweenLabels" | "crossLabels") {
+    set discreteAxisDivisionMode(value: DiscreteAxisDivisionMode) {
         this._setOption('discreteAxisDivisionMode', value);
     }
 
@@ -86,10 +86,10 @@ export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get label(): Record<string, any> | { font?: Font, indentFromAxis?: number, overlappingBehavior?: "hide" | "none", visible?: boolean } {
+    get label(): Record<string, any> | { font?: Font, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { font?: Font, indentFromAxis?: number, overlappingBehavior?: "hide" | "none", visible?: boolean }) {
+    set label(value: Record<string, any> | { font?: Font, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }) {
         this._setOption('label', value);
     }
 

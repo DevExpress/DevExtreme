@@ -12,7 +12,8 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
+import { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
+import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -36,10 +37,10 @@ export class DxiChartConstantLineComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get dashStyle(): "dash" | "dot" | "longDash" | "solid" {
+    get dashStyle(): DashStyle {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: "dash" | "dot" | "longDash" | "solid") {
+    set dashStyle(value: DashStyle) {
         this._setOption('dashStyle', value);
     }
 
@@ -60,10 +61,10 @@ export class DxiChartConstantLineComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", position?: "inside" | "outside", text?: string, verticalAlignment?: "bottom" | "center" | "top", visible?: boolean } {
+    get label(): Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string, verticalAlignment?: VerticalAlignment, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", position?: "inside" | "outside", text?: string, verticalAlignment?: "bottom" | "center" | "top", visible?: boolean }) {
+    set label(value: Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string, verticalAlignment?: VerticalAlignment, visible?: boolean }) {
         this._setOption('label', value);
     }
 

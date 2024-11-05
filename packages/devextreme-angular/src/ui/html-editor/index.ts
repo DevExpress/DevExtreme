@@ -24,8 +24,8 @@ import {
 } from '@angular/core';
 
 
-import { EditorStyle, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { ContentReadyEvent, Converter, DisposingEvent, dxHtmlEditorImageUpload, dxHtmlEditorMediaResizing, dxHtmlEditorMention, dxHtmlEditorTableContextMenu, dxHtmlEditorTableResizing, dxHtmlEditorToolbar, dxHtmlEditorVariables, FocusInEvent, FocusOutEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/html_editor';
+import { Converter, dxHtmlEditorImageUpload, dxHtmlEditorMediaResizing, dxHtmlEditorMention, ContentReadyEvent, DisposingEvent, FocusInEvent, FocusOutEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, dxHtmlEditorTableContextMenu, dxHtmlEditorTableResizing, dxHtmlEditorToolbar, dxHtmlEditorVariables } from 'devextreme/ui/html_editor';
+import { EditorStyle, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import DxHtmlEditor from 'devextreme/ui/html_editor';
 
@@ -57,15 +57,17 @@ import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 import { DxoVariablesModule } from 'devextreme-angular/ui/nested';
 
 import { DxoHtmlEditorConverterModule } from 'devextreme-angular/ui/html-editor/nested';
-import { DxoHtmlEditorImageUploadModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorFileUploaderOptionsModule } from 'devextreme-angular/ui/html-editor/nested';
-import { DxiHtmlEditorTabModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxoHtmlEditorImageUploadModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxiHtmlEditorItemModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorMediaResizingModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxiHtmlEditorMentionModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxiHtmlEditorTabModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorTableContextMenuModule } from 'devextreme-angular/ui/html-editor/nested';
-import { DxiHtmlEditorItemModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxiHtmlEditorTableContextMenuItemModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorTableResizingModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorToolbarModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxiHtmlEditorToolbarItemModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorVariablesModule } from 'devextreme-angular/ui/html-editor/nested';
 
 import { DxiMentionComponent } from 'devextreme-angular/ui/nested';
@@ -102,10 +104,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -141,10 +143,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get converter(): Converter | undefined {
+    get converter(): Converter {
         return this._getOption('converter');
     }
-    set converter(value: Converter | undefined) {
+    set converter(value: Converter) {
         this._setOption('converter', value);
     }
 
@@ -154,10 +156,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get customizeModules(): Function {
+    get customizeModules(): ((config: any) => void) {
         return this._getOption('customizeModules');
     }
-    set customizeModules(value: Function) {
+    set customizeModules(value: ((config: any) => void)) {
         this._setOption('customizeModules', value);
     }
 
@@ -180,10 +182,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -206,10 +208,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -219,10 +221,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -531,10 +533,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -599,7 +601,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
@@ -620,14 +622,14 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() converterChange: EventEmitter<Converter | undefined>;
+    @Output() converterChange: EventEmitter<Converter>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizeModulesChange: EventEmitter<Function>;
+    @Output() customizeModulesChange: EventEmitter<((config: any) => void)>;
 
     /**
     
@@ -641,7 +643,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -655,14 +657,14 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -830,7 +832,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -1000,15 +1002,17 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     DxoToolbarModule,
     DxoVariablesModule,
     DxoHtmlEditorConverterModule,
-    DxoHtmlEditorImageUploadModule,
     DxoHtmlEditorFileUploaderOptionsModule,
-    DxiHtmlEditorTabModule,
+    DxoHtmlEditorImageUploadModule,
+    DxiHtmlEditorItemModule,
     DxoHtmlEditorMediaResizingModule,
     DxiHtmlEditorMentionModule,
+    DxiHtmlEditorTabModule,
     DxoHtmlEditorTableContextMenuModule,
-    DxiHtmlEditorItemModule,
+    DxiHtmlEditorTableContextMenuItemModule,
     DxoHtmlEditorTableResizingModule,
     DxoHtmlEditorToolbarModule,
+    DxiHtmlEditorToolbarItemModule,
     DxoHtmlEditorVariablesModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -1030,15 +1034,17 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     DxoToolbarModule,
     DxoVariablesModule,
     DxoHtmlEditorConverterModule,
-    DxoHtmlEditorImageUploadModule,
     DxoHtmlEditorFileUploaderOptionsModule,
-    DxiHtmlEditorTabModule,
+    DxoHtmlEditorImageUploadModule,
+    DxiHtmlEditorItemModule,
     DxoHtmlEditorMediaResizingModule,
     DxiHtmlEditorMentionModule,
+    DxiHtmlEditorTabModule,
     DxoHtmlEditorTableContextMenuModule,
-    DxiHtmlEditorItemModule,
+    DxiHtmlEditorTableContextMenuItemModule,
     DxoHtmlEditorTableResizingModule,
     DxoHtmlEditorToolbarModule,
+    DxiHtmlEditorToolbarItemModule,
     DxoHtmlEditorVariablesModule,
     DxTemplateModule
   ]

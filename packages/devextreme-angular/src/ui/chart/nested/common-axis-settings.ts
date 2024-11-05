@@ -14,7 +14,9 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
+import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
+import { ScaleBreakLineStyle, DashStyle, Font, RelativePosition, DiscreteAxisDivisionMode, ChartsAxisLabelOverlap, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import { HorizontalAlignment, Position, VerticalAlignment } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -30,10 +32,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartCommonAxisSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get aggregatedPointsPosition(): "betweenTicks" | "crossTicks" {
+    get aggregatedPointsPosition(): AggregatedPointsPosition {
         return this._getOption('aggregatedPointsPosition');
     }
-    set aggregatedPointsPosition(value: "betweenTicks" | "crossTicks") {
+    set aggregatedPointsPosition(value: AggregatedPointsPosition) {
         this._setOption('aggregatedPointsPosition', value);
     }
 
@@ -46,10 +48,10 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get breakStyle(): Record<string, any> | { color?: string, line?: "straight" | "waved", width?: number } {
+    get breakStyle(): Record<string, any> | { color?: string, line?: ScaleBreakLineStyle, width?: number } {
         return this._getOption('breakStyle');
     }
-    set breakStyle(value: Record<string, any> | { color?: string, line?: "straight" | "waved", width?: number }) {
+    set breakStyle(value: Record<string, any> | { color?: string, line?: ScaleBreakLineStyle, width?: number }) {
         this._setOption('breakStyle', value);
     }
 
@@ -62,18 +64,18 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get constantLineStyle(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, position?: "inside" | "outside", visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } {
+    get constantLineStyle(): Record<string, any> | { color?: string, dashStyle?: DashStyle, label?: Record<string, any> | { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, position?: "inside" | "outside", visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }) {
+    set constantLineStyle(value: Record<string, any> | { color?: string, dashStyle?: DashStyle, label?: Record<string, any> | { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }) {
         this._setOption('constantLineStyle', value);
     }
 
     @Input()
-    get discreteAxisDivisionMode(): "betweenLabels" | "crossLabels" {
+    get discreteAxisDivisionMode(): DiscreteAxisDivisionMode {
         return this._getOption('discreteAxisDivisionMode');
     }
-    set discreteAxisDivisionMode(value: "betweenLabels" | "crossLabels") {
+    set discreteAxisDivisionMode(value: DiscreteAxisDivisionMode) {
         this._setOption('discreteAxisDivisionMode', value);
     }
 
@@ -102,10 +104,10 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get label(): Record<string, any> | { alignment?: "center" | "left" | "right", displayMode?: "rotate" | "stagger" | "standard", font?: Font, indentFromAxis?: number, overlappingBehavior?: "rotate" | "stagger" | "none" | "hide", position?: "inside" | "outside" | "bottom" | "left" | "right" | "top", rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" } {
+    get label(): Record<string, any> | { alignment?: HorizontalAlignment, displayMode?: ChartLabelDisplayMode, font?: Font, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { alignment?: "center" | "left" | "right", displayMode?: "rotate" | "stagger" | "standard", font?: Font, indentFromAxis?: number, overlappingBehavior?: "rotate" | "stagger" | "none" | "hide", position?: "inside" | "outside" | "bottom" | "left" | "right" | "top", rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" }) {
+    set label(value: Record<string, any> | { alignment?: HorizontalAlignment, displayMode?: ChartLabelDisplayMode, font?: Font, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }) {
         this._setOption('label', value);
     }
 
@@ -158,10 +160,10 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get stripStyle(): Record<string, any> | { label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", verticalAlignment?: "bottom" | "center" | "top" }, paddingLeftRight?: number, paddingTopBottom?: number } {
+    get stripStyle(): Record<string, any> | { label?: Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number } {
         return this._getOption('stripStyle');
     }
-    set stripStyle(value: Record<string, any> | { label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", verticalAlignment?: "bottom" | "center" | "top" }, paddingLeftRight?: number, paddingTopBottom?: number }) {
+    set stripStyle(value: Record<string, any> | { label?: Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }) {
         this._setOption('stripStyle', value);
     }
 
@@ -174,10 +176,10 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get title(): Record<string, any> | { alignment?: "center" | "left" | "right", font?: Font, margin?: number, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" } {
+    get title(): Record<string, any> | { alignment?: HorizontalAlignment, font?: Font, margin?: number, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
         return this._getOption('title');
     }
-    set title(value: Record<string, any> | { alignment?: "center" | "left" | "right", font?: Font, margin?: number, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }) {
+    set title(value: Record<string, any> | { alignment?: HorizontalAlignment, font?: Font, margin?: number, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
         this._setOption('title', value);
     }
 

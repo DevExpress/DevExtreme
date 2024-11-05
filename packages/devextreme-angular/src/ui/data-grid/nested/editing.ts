@@ -19,7 +19,7 @@ import {
 
 import dxDataGrid from 'devextreme/ui/data_grid';
 import { dxDataGridRowObject } from 'devextreme/ui/data_grid';
-import { DataChange } from 'devextreme/common/grids';
+import { DataChange, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction } from 'devextreme/common/grids';
 import { dxFormOptions } from 'devextreme/ui/form';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 
@@ -102,18 +102,18 @@ export class DxoDataGridEditingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get mode(): "batch" | "cell" | "row" | "form" | "popup" {
+    get mode(): GridsEditMode {
         return this._getOption('mode');
     }
-    set mode(value: "batch" | "cell" | "row" | "form" | "popup") {
+    set mode(value: GridsEditMode) {
         this._setOption('mode', value);
     }
 
     @Input()
-    get newRowPosition(): "first" | "last" | "pageBottom" | "pageTop" | "viewportBottom" | "viewportTop" {
+    get newRowPosition(): NewRowPosition {
         return this._getOption('newRowPosition');
     }
-    set newRowPosition(value: "first" | "last" | "pageBottom" | "pageTop" | "viewportBottom" | "viewportTop") {
+    set newRowPosition(value: NewRowPosition) {
         this._setOption('newRowPosition', value);
     }
 
@@ -126,10 +126,10 @@ export class DxoDataGridEditingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get refreshMode(): "full" | "reshape" | "repaint" {
+    get refreshMode(): GridsEditRefreshMode {
         return this._getOption('refreshMode');
     }
-    set refreshMode(value: "full" | "reshape" | "repaint") {
+    set refreshMode(value: GridsEditRefreshMode) {
         this._setOption('refreshMode', value);
     }
 
@@ -142,10 +142,10 @@ export class DxoDataGridEditingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get startEditAction(): "click" | "dblClick" {
+    get startEditAction(): StartEditAction {
         return this._getOption('startEditAction');
     }
-    set startEditAction(value: "click" | "dblClick") {
+    set startEditAction(value: StartEditAction) {
         this._setOption('startEditAction', value);
     }
 

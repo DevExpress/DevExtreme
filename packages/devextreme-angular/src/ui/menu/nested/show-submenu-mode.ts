@@ -14,6 +14,7 @@ import {
 
 
 
+import { SubmenuShowMode } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -37,10 +38,10 @@ export class DxoMenuShowSubmenuModeComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get name(): "onClick" | "onHover" {
+    get name(): SubmenuShowMode {
         return this._getOption('name');
     }
-    set name(value: "onClick" | "onHover") {
+    set name(value: SubmenuShowMode) {
         this._setOption('name', value);
     }
 

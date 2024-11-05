@@ -12,7 +12,9 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
+import { HorizontalAlignment } from 'devextreme/common';
+import { SummaryType } from 'devextreme/common/grids';
+import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -28,10 +30,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiDataGridTotalItemComponent extends CollectionNestedOption {
     @Input()
-    get alignment(): "center" | "left" | "right" {
+    get alignment(): HorizontalAlignment {
         return this._getOption('alignment');
     }
-    set alignment(value: "center" | "left" | "right") {
+    set alignment(value: HorizontalAlignment) {
         this._setOption('alignment', value);
     }
 
@@ -92,18 +94,18 @@ export class DxiDataGridTotalItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get summaryType(): "avg" | "count" | "custom" | "max" | "min" | "sum" {
+    get summaryType(): string | SummaryType {
         return this._getOption('summaryType');
     }
-    set summaryType(value: "avg" | "count" | "custom" | "max" | "min" | "sum") {
+    set summaryType(value: string | SummaryType) {
         this._setOption('summaryType', value);
     }
 
     @Input()
-    get valueFormat(): LocalizationTypes.Format {
+    get valueFormat(): Format {
         return this._getOption('valueFormat');
     }
-    set valueFormat(value: LocalizationTypes.Format) {
+    set valueFormat(value: Format) {
         this._setOption('valueFormat', value);
     }
 

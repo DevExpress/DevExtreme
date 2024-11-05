@@ -15,7 +15,7 @@ import {
 
 
 import { dxSankeyNode } from 'devextreme/viz/sankey';
-import { Font } from 'devextreme/common/charts';
+import { Font, TextOverflow } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -63,10 +63,10 @@ export class DxoSankeyLabelComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get overlappingBehavior(): "ellipsis" | "hide" | "none" {
+    get overlappingBehavior(): TextOverflow {
         return this._getOption('overlappingBehavior');
     }
-    set overlappingBehavior(value: "ellipsis" | "hide" | "none") {
+    set overlappingBehavior(value: TextOverflow) {
         this._setOption('overlappingBehavior', value);
     }
 

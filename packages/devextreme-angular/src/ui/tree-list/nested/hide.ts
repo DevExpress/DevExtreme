@@ -14,7 +14,8 @@ import {
 
 
 
-import { AnimationConfig, AnimationState } from 'devextreme/animation/fx';
+import { AnimationConfig, AnimationState, AnimationType } from 'devextreme/animation/fx';
+import { Direction } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -46,10 +47,10 @@ export class DxoTreeListHideComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get direction(): "bottom" | "left" | "right" | "top" {
+    get direction(): Direction {
         return this._getOption('direction');
     }
-    set direction(value: "bottom" | "left" | "right" | "top") {
+    set direction(value: Direction) {
         this._setOption('direction', value);
     }
 
@@ -102,10 +103,10 @@ export class DxoTreeListHideComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get type(): "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut" {
+    get type(): AnimationType {
         return this._getOption('type');
     }
-    set type(value: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut") {
+    set type(value: AnimationType) {
         this._setOption('type', value);
     }
 

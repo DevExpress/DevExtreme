@@ -14,9 +14,9 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
+import { DashStyle, Font } from 'devextreme/common/charts';
 import { chartPointObject } from 'devextreme/viz/chart';
-import { Font } from 'devextreme/common/charts';
+import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -40,18 +40,18 @@ export class DxoChartHorizontalLineComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get dashStyle(): "dash" | "dot" | "longDash" | "solid" {
+    get dashStyle(): DashStyle {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: "dash" | "dot" | "longDash" | "solid") {
+    set dashStyle(value: DashStyle) {
         this._setOption('dashStyle', value);
     }
 
     @Input()
-    get label(): Record<string, any> | { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, visible?: boolean } {
+    get label(): Record<string, any> | { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, visible?: boolean }) {
+    set label(value: Record<string, any> | { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format, visible?: boolean }) {
         this._setOption('label', value);
     }
 

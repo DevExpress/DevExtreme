@@ -14,8 +14,8 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
 import { Font } from 'devextreme/common/charts';
+import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -47,10 +47,10 @@ export class DxoLinearGaugeTextComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get format(): LocalizationTypes.Format {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: LocalizationTypes.Format) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 

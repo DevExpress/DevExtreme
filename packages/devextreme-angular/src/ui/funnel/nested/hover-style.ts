@@ -14,6 +14,7 @@ import {
 
 
 
+import { HatchDirection } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -37,10 +38,10 @@ export class DxoFunnelHoverStyleComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get hatching(): Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number } {
+    get hatching(): Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number } {
         return this._getOption('hatching');
     }
-    set hatching(value: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }) {
+    set hatching(value: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number }) {
         this._setOption('hatching', value);
     }
 

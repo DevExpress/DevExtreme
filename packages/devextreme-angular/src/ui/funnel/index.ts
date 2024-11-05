@@ -21,11 +21,12 @@ import {
 
 
 import DataSource from 'devextreme/data/data_source';
-import * as LocalizationTypes from 'devextreme/localization';
+import { FunnelAlgorithm, dxFunnelItem, FunnelLegendItem, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, HoverChangedEvent, IncidentOccurredEvent, InitializedEvent, ItemClickEvent, LegendClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/viz/funnel';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { dxFunnelItem, FunnelLegendItem, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, HoverChangedEvent, IncidentOccurredEvent, InitializedEvent, ItemClickEvent, LegendClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/viz/funnel';
-import { Font } from 'devextreme/common/charts';
+import { ExportFormat, HorizontalEdge, HorizontalAlignment, Position, Orientation, VerticalEdge, SingleMultipleOrNone } from 'devextreme/common';
+import { HatchDirection, DashStyle, Font, LabelPosition, TextOverflow, WordWrap, Palette, PaletteExtensionMode, ShiftLabelOverlap, Theme } from 'devextreme/common/charts';
+import { Format } from 'devextreme/localization';
 
 import DxFunnel from 'devextreme/viz/funnel';
 
@@ -127,10 +128,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get algorithm(): "dynamicHeight" | "dynamicSlope" {
+    get algorithm(): FunnelAlgorithm {
         return this._getOption('algorithm');
     }
-    set algorithm(value: "dynamicHeight" | "dynamicSlope") {
+    set algorithm(value: FunnelAlgorithm) {
         this._setOption('algorithm', value);
     }
 
@@ -205,10 +206,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get export(): Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) } {
+    get export(): Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) } {
         return this._getOption('export');
     }
-    set export(value: Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }) {
+    set export(value: Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }) {
         this._setOption('export', value);
     }
 
@@ -244,10 +245,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get item(): Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number } }, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number } } } {
+    get item(): Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } } {
         return this._getOption('item');
     }
-    set item(value: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number } }, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number } } }) {
+    set item(value: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } }) {
         this._setOption('item', value);
     }
 
@@ -257,10 +258,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get label(): Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, horizontalAlignment?: "left" | "right", horizontalOffset?: number, position?: "columns" | "inside" | "outside", showForZeroValues?: boolean, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" } {
+    get label(): Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => string), font?: Font, format?: Format, horizontalAlignment?: HorizontalEdge, horizontalOffset?: number, position?: LabelPosition, showForZeroValues?: boolean, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, horizontalAlignment?: "left" | "right", horizontalOffset?: number, position?: "columns" | "inside" | "outside", showForZeroValues?: boolean, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" }) {
+    set label(value: Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => string), font?: Font, format?: Format, horizontalAlignment?: HorizontalEdge, horizontalOffset?: number, position?: LabelPosition, showForZeroValues?: boolean, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }) {
         this._setOption('label', value);
     }
 
@@ -270,10 +271,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get legend(): Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>), customizeText?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), font?: Font, horizontalAlignment?: "center" | "left" | "right", itemsAlignment?: "center" | "left" | "right", itemTextPosition?: "bottom" | "left" | "right" | "top", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: "horizontal" | "vertical", paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: "bottom" | "top" }, verticalAlignment?: "bottom" | "top", visible?: boolean } {
+    get legend(): Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>), customizeText?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment, itemTextPosition?: Position, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean } {
         return this._getOption('legend');
     }
-    set legend(value: Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>), customizeText?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), font?: Font, horizontalAlignment?: "center" | "left" | "right", itemsAlignment?: "center" | "left" | "right", itemTextPosition?: "bottom" | "left" | "right" | "top", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: "horizontal" | "vertical", paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: "bottom" | "top" }, verticalAlignment?: "bottom" | "top", visible?: boolean }) {
+    set legend(value: Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>), customizeText?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment, itemTextPosition?: Position, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }) {
         this._setOption('legend', value);
     }
 
@@ -335,10 +336,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get palette(): Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office" {
+    get palette(): Array<string> | Palette {
         return this._getOption('palette');
     }
-    set palette(value: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office") {
+    set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
 
@@ -348,10 +349,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get paletteExtensionMode(): "alternate" | "blend" | "extrapolate" {
+    get paletteExtensionMode(): PaletteExtensionMode {
         return this._getOption('paletteExtensionMode');
     }
-    set paletteExtensionMode(value: "alternate" | "blend" | "extrapolate") {
+    set paletteExtensionMode(value: PaletteExtensionMode) {
         this._setOption('paletteExtensionMode', value);
     }
 
@@ -387,10 +388,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get resolveLabelOverlapping(): "hide" | "none" | "shift" {
+    get resolveLabelOverlapping(): ShiftLabelOverlap {
         return this._getOption('resolveLabelOverlapping');
     }
-    set resolveLabelOverlapping(value: "hide" | "none" | "shift") {
+    set resolveLabelOverlapping(value: ShiftLabelOverlap) {
         this._setOption('resolveLabelOverlapping', value);
     }
 
@@ -413,10 +414,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get selectionMode(): "single" | "multiple" | "none" {
+    get selectionMode(): SingleMultipleOrNone {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: "single" | "multiple" | "none") {
+    set selectionMode(value: SingleMultipleOrNone) {
         this._setOption('selectionMode', value);
     }
 
@@ -452,10 +453,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get theme(): "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light" {
+    get theme(): Theme {
         return this._getOption('theme');
     }
-    set theme(value: "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light") {
+    set theme(value: Theme) {
         this._setOption('theme', value);
     }
 
@@ -465,10 +466,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get title(): string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" } {
+    get title(): Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
         return this._getOption('title');
     }
-    set title(value: string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" }) {
+    set title(value: Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }) {
         this._setOption('title', value);
     }
 
@@ -478,10 +479,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get tooltip(): Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number } {
+    get tooltip(): Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: Format, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }) {
+    set tooltip(value: Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: Format, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }) {
         this._setOption('tooltip', value);
     }
 
@@ -606,7 +607,7 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() algorithmChange: EventEmitter<"dynamicHeight" | "dynamicSlope">;
+    @Output() algorithmChange: EventEmitter<FunnelAlgorithm>;
 
     /**
     
@@ -648,7 +649,7 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }>;
+    @Output() exportChange: EventEmitter<Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }>;
 
     /**
     
@@ -669,21 +670,21 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemChange: EventEmitter<Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number } }, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number } } }>;
+    @Output() itemChange: EventEmitter<Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelChange: EventEmitter<Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, horizontalAlignment?: "left" | "right", horizontalOffset?: number, position?: "columns" | "inside" | "outside", showForZeroValues?: boolean, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" }>;
+    @Output() labelChange: EventEmitter<Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => string), font?: Font, format?: Format, horizontalAlignment?: HorizontalEdge, horizontalOffset?: number, position?: LabelPosition, showForZeroValues?: boolean, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() legendChange: EventEmitter<Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>), customizeText?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), font?: Font, horizontalAlignment?: "center" | "left" | "right", itemsAlignment?: "center" | "left" | "right", itemTextPosition?: "bottom" | "left" | "right" | "top", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: "horizontal" | "vertical", paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: "bottom" | "top" }, verticalAlignment?: "bottom" | "top", visible?: boolean }>;
+    @Output() legendChange: EventEmitter<Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>), customizeText?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment, itemTextPosition?: Position, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }>;
 
     /**
     
@@ -718,14 +719,14 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() paletteChange: EventEmitter<Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office">;
+    @Output() paletteChange: EventEmitter<Array<string> | Palette>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() paletteExtensionModeChange: EventEmitter<"alternate" | "blend" | "extrapolate">;
+    @Output() paletteExtensionModeChange: EventEmitter<PaletteExtensionMode>;
 
     /**
     
@@ -746,7 +747,7 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() resolveLabelOverlappingChange: EventEmitter<"hide" | "none" | "shift">;
+    @Output() resolveLabelOverlappingChange: EventEmitter<ShiftLabelOverlap>;
 
     /**
     
@@ -760,7 +761,7 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<"single" | "multiple" | "none">;
+    @Output() selectionModeChange: EventEmitter<SingleMultipleOrNone>;
 
     /**
     
@@ -781,21 +782,21 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() themeChange: EventEmitter<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">;
+    @Output() themeChange: EventEmitter<Theme>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() titleChange: EventEmitter<string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" }>;
+    @Output() titleChange: EventEmitter<Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }>;
+    @Output() tooltipChange: EventEmitter<Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: Format, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }>;
 
     /**
     

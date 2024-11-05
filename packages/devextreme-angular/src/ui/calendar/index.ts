@@ -22,7 +22,8 @@ import {
 } from '@angular/core';
 
 
-import { DisabledDate, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/calendar';
+import { DisabledDate, CalendarZoomLevel, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, CalendarSelectionMode, WeekNumberRule } from 'devextreme/ui/calendar';
+import { FirstDayOfWeek, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import DxCalendar from 'devextreme/ui/calendar';
 
@@ -166,10 +167,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get firstDayOfWeek(): 0 | 1 | 2 | 3 | 4 | 5 | 6 {
+    get firstDayOfWeek(): FirstDayOfWeek {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: 0 | 1 | 2 | 3 | 4 | 5 | 6) {
+    set firstDayOfWeek(value: FirstDayOfWeek) {
         this._setOption('firstDayOfWeek', value);
     }
 
@@ -270,10 +271,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get maxZoomLevel(): "century" | "decade" | "month" | "year" {
+    get maxZoomLevel(): CalendarZoomLevel {
         return this._getOption('maxZoomLevel');
     }
-    set maxZoomLevel(value: "century" | "decade" | "month" | "year") {
+    set maxZoomLevel(value: CalendarZoomLevel) {
         this._setOption('maxZoomLevel', value);
     }
 
@@ -296,10 +297,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get minZoomLevel(): "century" | "decade" | "month" | "year" {
+    get minZoomLevel(): CalendarZoomLevel {
         return this._getOption('minZoomLevel');
     }
-    set minZoomLevel(value: "century" | "decade" | "month" | "year") {
+    set minZoomLevel(value: CalendarZoomLevel) {
         this._setOption('minZoomLevel', value);
     }
 
@@ -348,10 +349,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get selectionMode(): "single" | "multiple" | "range" {
+    get selectionMode(): CalendarSelectionMode {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: "single" | "multiple" | "range") {
+    set selectionMode(value: CalendarSelectionMode) {
         this._setOption('selectionMode', value);
     }
 
@@ -439,10 +440,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get validationMessageMode(): "always" | "auto" {
+    get validationMessageMode(): ValidationMessageMode {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: "always" | "auto") {
+    set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
 
@@ -452,10 +453,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get validationMessagePosition(): "bottom" | "left" | "right" | "top" {
+    get validationMessagePosition(): Position {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: "bottom" | "left" | "right" | "top") {
+    set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -465,10 +466,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get validationStatus(): "valid" | "invalid" | "pending" {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: "valid" | "invalid" | "pending") {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 
@@ -504,10 +505,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get weekNumberRule(): "auto" | "firstDay" | "fullWeek" | "firstFourDays" {
+    get weekNumberRule(): WeekNumberRule {
         return this._getOption('weekNumberRule');
     }
-    set weekNumberRule(value: "auto" | "firstDay" | "fullWeek" | "firstFourDays") {
+    set weekNumberRule(value: WeekNumberRule) {
         this._setOption('weekNumberRule', value);
     }
 
@@ -530,10 +531,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get zoomLevel(): "century" | "decade" | "month" | "year" {
+    get zoomLevel(): CalendarZoomLevel {
         return this._getOption('zoomLevel');
     }
-    set zoomLevel(value: "century" | "decade" | "month" | "year") {
+    set zoomLevel(value: CalendarZoomLevel) {
         this._setOption('zoomLevel', value);
     }
 
@@ -623,7 +624,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() firstDayOfWeekChange: EventEmitter<0 | 1 | 2 | 3 | 4 | 5 | 6>;
+    @Output() firstDayOfWeekChange: EventEmitter<FirstDayOfWeek>;
 
     /**
     
@@ -679,7 +680,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxZoomLevelChange: EventEmitter<"century" | "decade" | "month" | "year">;
+    @Output() maxZoomLevelChange: EventEmitter<CalendarZoomLevel>;
 
     /**
     
@@ -693,7 +694,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minZoomLevelChange: EventEmitter<"century" | "decade" | "month" | "year">;
+    @Output() minZoomLevelChange: EventEmitter<CalendarZoomLevel>;
 
     /**
     
@@ -721,7 +722,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<"single" | "multiple" | "range">;
+    @Output() selectionModeChange: EventEmitter<CalendarSelectionMode>;
 
     /**
     
@@ -770,21 +771,21 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<"always" | "auto">;
+    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<"bottom" | "left" | "right" | "top">;
+    @Output() validationMessagePositionChange: EventEmitter<Position>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<"valid" | "invalid" | "pending">;
+    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
     
@@ -805,7 +806,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() weekNumberRuleChange: EventEmitter<"auto" | "firstDay" | "fullWeek" | "firstFourDays">;
+    @Output() weekNumberRuleChange: EventEmitter<WeekNumberRule>;
 
     /**
     
@@ -819,7 +820,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() zoomLevelChange: EventEmitter<"century" | "decade" | "month" | "year">;
+    @Output() zoomLevelChange: EventEmitter<CalendarZoomLevel>;
 
     /**
     

@@ -12,6 +12,7 @@ import {
 
 
 
+import { ValidationRuleType } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -67,10 +68,10 @@ export class DxiFormRangeRuleComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get type(): "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async" {
+    get type(): ValidationRuleType {
         return this._getOption('type');
     }
-    set type(value: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async") {
+    set type(value: ValidationRuleType) {
         this._setOption('type', value);
     }
 

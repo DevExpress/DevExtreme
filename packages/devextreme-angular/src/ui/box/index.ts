@@ -24,7 +24,7 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/box';
 
 import DataSource from 'devextreme/data/data_source';
-import { dxBoxItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/box';
+import { Distribution, CrosswiseDistribution, dxBoxItem, BoxDirection, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/box';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
@@ -73,10 +73,10 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     
      */
     @Input()
-    get align(): "center" | "end" | "space-around" | "space-between" | "start" {
+    get align(): Distribution {
         return this._getOption('align');
     }
-    set align(value: "center" | "end" | "space-around" | "space-between" | "start") {
+    set align(value: Distribution) {
         this._setOption('align', value);
     }
 
@@ -86,10 +86,10 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     
      */
     @Input()
-    get crossAlign(): "center" | "end" | "start" | "stretch" {
+    get crossAlign(): CrosswiseDistribution {
         return this._getOption('crossAlign');
     }
-    set crossAlign(value: "center" | "end" | "start" | "stretch") {
+    set crossAlign(value: CrosswiseDistribution) {
         this._setOption('crossAlign', value);
     }
 
@@ -112,10 +112,10 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     
      */
     @Input()
-    get direction(): "col" | "row" {
+    get direction(): BoxDirection {
         return this._getOption('direction');
     }
-    set direction(value: "col" | "row") {
+    set direction(value: BoxDirection) {
         this._setOption('direction', value);
     }
 
@@ -318,14 +318,14 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() alignChange: EventEmitter<"center" | "end" | "space-around" | "space-between" | "start">;
+    @Output() alignChange: EventEmitter<Distribution>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() crossAlignChange: EventEmitter<"center" | "end" | "start" | "stretch">;
+    @Output() crossAlignChange: EventEmitter<CrosswiseDistribution>;
 
     /**
     
@@ -339,7 +339,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() directionChange: EventEmitter<"col" | "row">;
+    @Output() directionChange: EventEmitter<BoxDirection>;
 
     /**
     

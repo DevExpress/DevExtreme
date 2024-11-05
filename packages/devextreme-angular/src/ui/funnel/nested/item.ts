@@ -14,6 +14,7 @@ import {
 
 
 
+import { HatchDirection } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -37,18 +38,18 @@ export class DxoFunnelItemComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get hoverStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number } } {
+    get hoverStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number } }) {
+    set hoverStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }) {
         this._setOption('hoverStyle', value);
     }
 
     @Input()
-    get selectionStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number } } {
+    get selectionStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number } }) {
+    set selectionStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }) {
         this._setOption('selectionStyle', value);
     }
 

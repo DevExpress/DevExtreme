@@ -14,8 +14,9 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
-import { Font } from 'devextreme/common/charts';
+import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import { Font, LabelOverlap } from 'devextreme/common/charts';
+import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -63,18 +64,18 @@ export class DxoLinearGaugeScaleComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get horizontalOrientation(): "center" | "left" | "right" {
+    get horizontalOrientation(): HorizontalAlignment {
         return this._getOption('horizontalOrientation');
     }
-    set horizontalOrientation(value: "center" | "left" | "right") {
+    set horizontalOrientation(value: HorizontalAlignment) {
         this._setOption('horizontalOrientation', value);
     }
 
     @Input()
-    get label(): Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indentFromTick?: number, overlappingBehavior?: "hide" | "none", useRangeColors?: boolean, visible?: boolean } {
+    get label(): Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indentFromTick?: number, overlappingBehavior?: "hide" | "none", useRangeColors?: boolean, visible?: boolean }) {
+    set label(value: Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -127,10 +128,10 @@ export class DxoLinearGaugeScaleComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get verticalOrientation(): "bottom" | "center" | "top" {
+    get verticalOrientation(): VerticalAlignment {
         return this._getOption('verticalOrientation');
     }
-    set verticalOrientation(value: "bottom" | "center" | "top") {
+    set verticalOrientation(value: VerticalAlignment) {
         this._setOption('verticalOrientation', value);
     }
 

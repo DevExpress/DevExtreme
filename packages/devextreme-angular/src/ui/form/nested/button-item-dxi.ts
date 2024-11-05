@@ -13,6 +13,8 @@ import {
 
 
 import { dxButtonOptions } from 'devextreme/ui/button';
+import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import { FormItemType } from 'devextreme/ui/form';
 
 import {
     NestedOptionHost,
@@ -52,18 +54,18 @@ export class DxiFormButtonItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get horizontalAlignment(): "center" | "left" | "right" {
+    get horizontalAlignment(): HorizontalAlignment {
         return this._getOption('horizontalAlignment');
     }
-    set horizontalAlignment(value: "center" | "left" | "right") {
+    set horizontalAlignment(value: HorizontalAlignment) {
         this._setOption('horizontalAlignment', value);
     }
 
     @Input()
-    get itemType(): "empty" | "group" | "simple" | "tabbed" | "button" {
+    get itemType(): FormItemType {
         return this._getOption('itemType');
     }
-    set itemType(value: "empty" | "group" | "simple" | "tabbed" | "button") {
+    set itemType(value: FormItemType) {
         this._setOption('itemType', value);
     }
 
@@ -76,10 +78,10 @@ export class DxiFormButtonItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get verticalAlignment(): "bottom" | "center" | "top" {
+    get verticalAlignment(): VerticalAlignment {
         return this._getOption('verticalAlignment');
     }
-    set verticalAlignment(value: "bottom" | "center" | "top") {
+    set verticalAlignment(value: VerticalAlignment) {
         this._setOption('verticalAlignment', value);
     }
 

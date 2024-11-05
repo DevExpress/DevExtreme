@@ -17,7 +17,7 @@ import {
 
 
 
-import { dxHtmlEditorToolbarItem } from 'devextreme/ui/html_editor';
+import { dxHtmlEditorToolbarItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
 
 import {
     NestedOptionHost,
@@ -43,10 +43,10 @@ export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get items(): Array<dxHtmlEditorToolbarItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable"> {
+    get items(): Array<dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxHtmlEditorToolbarItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable">) {
+    set items(value: Array<dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem>) {
         this._setOption('items', value);
     }
 

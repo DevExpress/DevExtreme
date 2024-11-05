@@ -17,7 +17,8 @@ import {
 
 
 
-import { ChartsColor } from 'devextreme/common/charts';
+import { ChartsColor, Palette, PaletteExtensionMode } from 'devextreme/common/charts';
+import { CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
 
 import {
     NestedOptionHost,
@@ -50,26 +51,26 @@ export class DxoCircularGaugeRangeContainerComponent extends NestedOption implem
     }
 
     @Input()
-    get orientation(): "center" | "inside" | "outside" {
+    get orientation(): CircularGaugeElementOrientation {
         return this._getOption('orientation');
     }
-    set orientation(value: "center" | "inside" | "outside") {
+    set orientation(value: CircularGaugeElementOrientation) {
         this._setOption('orientation', value);
     }
 
     @Input()
-    get palette(): Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office" {
+    get palette(): Array<string> | Palette {
         return this._getOption('palette');
     }
-    set palette(value: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office") {
+    set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
 
     @Input()
-    get paletteExtensionMode(): "alternate" | "blend" | "extrapolate" {
+    get paletteExtensionMode(): PaletteExtensionMode {
         return this._getOption('paletteExtensionMode');
     }
-    set paletteExtensionMode(value: "alternate" | "blend" | "extrapolate") {
+    set paletteExtensionMode(value: PaletteExtensionMode) {
         this._setOption('paletteExtensionMode', value);
     }
 

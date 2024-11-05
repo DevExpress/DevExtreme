@@ -14,8 +14,9 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
-import { Font } from 'devextreme/common/charts';
+import { Font, LabelOverlap } from 'devextreme/common/charts';
+import { Format } from 'devextreme/localization';
+import { CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
 
 import {
     NestedOptionHost,
@@ -47,18 +48,18 @@ export class DxoCircularGaugeLabelComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get format(): LocalizationTypes.Format {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: LocalizationTypes.Format) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 
     @Input()
-    get hideFirstOrLast(): "first" | "last" {
+    get hideFirstOrLast(): CircularGaugeLabelOverlap {
         return this._getOption('hideFirstOrLast');
     }
-    set hideFirstOrLast(value: "first" | "last") {
+    set hideFirstOrLast(value: CircularGaugeLabelOverlap) {
         this._setOption('hideFirstOrLast', value);
     }
 
@@ -71,10 +72,10 @@ export class DxoCircularGaugeLabelComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get overlappingBehavior(): "hide" | "none" {
+    get overlappingBehavior(): LabelOverlap {
         return this._getOption('overlappingBehavior');
     }
-    set overlappingBehavior(value: "hide" | "none") {
+    set overlappingBehavior(value: LabelOverlap) {
         this._setOption('overlappingBehavior', value);
     }
 

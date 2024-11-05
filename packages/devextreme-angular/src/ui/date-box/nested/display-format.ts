@@ -14,6 +14,7 @@ import {
 
 
 
+import { Format } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -61,10 +62,10 @@ export class DxoDateBoxDisplayFormatComponent extends NestedOption implements On
     }
 
     @Input()
-    get type(): "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime" {
+    get type(): Format | string {
         return this._getOption('type');
     }
-    set type(value: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime") {
+    set type(value: Format | string) {
         this._setOption('type', value);
     }
 

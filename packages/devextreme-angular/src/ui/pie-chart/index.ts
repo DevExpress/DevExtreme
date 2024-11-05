@@ -23,11 +23,12 @@ import {
 
 
 import DataSource from 'devextreme/data/data_source';
-import * as LocalizationTypes from 'devextreme/localization';
-import { dxPieChartAnnotationConfig, dxPieChartCommonAnnotationConfig, PieChartLegendItem, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, PieChartSeries } from 'devextreme/viz/pie_chart';
-import { ChartsColor, Font, SeriesLabel, SeriesPoint } from 'devextreme/common/charts';
+import { AnimationEaseMode, ChartsDataType, DashStyle, ChartsColor, HatchDirection, Font, LabelPosition, TextOverflow, WordWrap, SeriesLabel, SeriesPoint, Palette, PaletteExtensionMode, ShiftLabelOverlap, Theme } from 'devextreme/common/charts';
+import { dxPieChartAnnotationConfig, dxPieChartCommonAnnotationConfig, PieChartSeriesInteractionMode, SmallValuesGroupingMode, PieChartLegendItem, PieChartLegendHoverMode, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, PieChartSegmentDirection, PieChartSeries, PieChartType } from 'devextreme/viz/pie_chart';
+import { Format } from 'devextreme/localization';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
+import { ExportFormat, HorizontalAlignment, Position, Orientation, VerticalEdge, SingleOrMultiple } from 'devextreme/common';
 
 import DxPieChart from 'devextreme/viz/pie_chart';
 
@@ -150,10 +151,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get animation(): boolean | Record<string, any> | { duration?: number, easing?: "easeOutCubic" | "linear", enabled?: boolean, maxPointCountSupported?: number } {
+    get animation(): boolean | Record<string, any> | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean, maxPointCountSupported?: number } {
         return this._getOption('animation');
     }
-    set animation(value: boolean | Record<string, any> | { duration?: number, easing?: "easeOutCubic" | "linear", enabled?: boolean, maxPointCountSupported?: number }) {
+    set animation(value: boolean | Record<string, any> | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean, maxPointCountSupported?: number }) {
         this._setOption('animation', value);
     }
 
@@ -202,10 +203,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get commonSeriesSettings(): any | { argumentField?: string, argumentType?: "datetime" | "numeric" | "string", border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, hoverMode?: "none" | "onlyPoint", hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, highlight?: boolean }, label?: Record<string, any> | { argumentFormat?: LocalizationTypes.Format, backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string, font?: Font, format?: LocalizationTypes.Format, position?: "columns" | "inside" | "outside", radialOffset?: number, rotationAngle?: number, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" }, maxLabelCount?: number, minSegmentSize?: number, selectionMode?: "none" | "onlyPoint", selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, highlight?: boolean }, smallValuesGrouping?: Record<string, any> | { groupName?: string, mode?: "none" | "smallValueThreshold" | "topN", threshold?: number, topCount?: number }, tagField?: string, valueField?: string } {
+    get commonSeriesSettings(): any | { argumentField?: string, argumentType?: ChartsDataType, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: ChartsColor | string, hoverMode?: PieChartSeriesInteractionMode, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: ChartsColor | string, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean }, label?: Record<string, any> | { argumentFormat?: Format, backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string, font?: Font, format?: Format, position?: LabelPosition, radialOffset?: number, rotationAngle?: number, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, maxLabelCount?: number, minSegmentSize?: number, selectionMode?: PieChartSeriesInteractionMode, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: ChartsColor | string, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean }, smallValuesGrouping?: Record<string, any> | { groupName?: string, mode?: SmallValuesGroupingMode, threshold?: number, topCount?: number }, tagField?: string, valueField?: string } {
         return this._getOption('commonSeriesSettings');
     }
-    set commonSeriesSettings(value: any | { argumentField?: string, argumentType?: "datetime" | "numeric" | "string", border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, hoverMode?: "none" | "onlyPoint", hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, highlight?: boolean }, label?: Record<string, any> | { argumentFormat?: LocalizationTypes.Format, backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string, font?: Font, format?: LocalizationTypes.Format, position?: "columns" | "inside" | "outside", radialOffset?: number, rotationAngle?: number, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" }, maxLabelCount?: number, minSegmentSize?: number, selectionMode?: "none" | "onlyPoint", selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, highlight?: boolean }, smallValuesGrouping?: Record<string, any> | { groupName?: string, mode?: "none" | "smallValueThreshold" | "topN", threshold?: number, topCount?: number }, tagField?: string, valueField?: string }) {
+    set commonSeriesSettings(value: any | { argumentField?: string, argumentType?: ChartsDataType, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: ChartsColor | string, hoverMode?: PieChartSeriesInteractionMode, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: ChartsColor | string, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean }, label?: Record<string, any> | { argumentFormat?: Format, backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string, font?: Font, format?: Format, position?: LabelPosition, radialOffset?: number, rotationAngle?: number, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, maxLabelCount?: number, minSegmentSize?: number, selectionMode?: PieChartSeriesInteractionMode, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: ChartsColor | string, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean }, smallValuesGrouping?: Record<string, any> | { groupName?: string, mode?: SmallValuesGroupingMode, threshold?: number, topCount?: number }, tagField?: string, valueField?: string }) {
         this._setOption('commonSeriesSettings', value);
     }
 
@@ -306,10 +307,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get export(): Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) } {
+    get export(): Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) } {
         return this._getOption('export');
     }
-    set export(value: Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }) {
+    set export(value: Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }) {
         this._setOption('export', value);
     }
 
@@ -332,10 +333,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get legend(): Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string), customizeItems?: ((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>), customizeText?: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string), font?: Font, horizontalAlignment?: "center" | "left" | "right", hoverMode?: "none" | "allArgumentPoints", itemsAlignment?: "center" | "left" | "right", itemTextPosition?: "bottom" | "left" | "right" | "top", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: "horizontal" | "vertical", paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: "bottom" | "top" }, verticalAlignment?: "bottom" | "top", visible?: boolean } {
+    get legend(): Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string), customizeItems?: ((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>), customizeText?: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, hoverMode?: PieChartLegendHoverMode, itemsAlignment?: HorizontalAlignment, itemTextPosition?: Position, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean } {
         return this._getOption('legend');
     }
-    set legend(value: Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string), customizeItems?: ((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>), customizeText?: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string), font?: Font, horizontalAlignment?: "center" | "left" | "right", hoverMode?: "none" | "allArgumentPoints", itemsAlignment?: "center" | "left" | "right", itemTextPosition?: "bottom" | "left" | "right" | "top", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: "horizontal" | "vertical", paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: "bottom" | "top" }, verticalAlignment?: "bottom" | "top", visible?: boolean }) {
+    set legend(value: Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string), customizeItems?: ((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>), customizeText?: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, hoverMode?: PieChartLegendHoverMode, itemsAlignment?: HorizontalAlignment, itemTextPosition?: Position, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }) {
         this._setOption('legend', value);
     }
 
@@ -384,10 +385,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get palette(): Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office" {
+    get palette(): Array<string> | Palette {
         return this._getOption('palette');
     }
-    set palette(value: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office") {
+    set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
 
@@ -397,10 +398,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get paletteExtensionMode(): "alternate" | "blend" | "extrapolate" {
+    get paletteExtensionMode(): PaletteExtensionMode {
         return this._getOption('paletteExtensionMode');
     }
-    set paletteExtensionMode(value: "alternate" | "blend" | "extrapolate") {
+    set paletteExtensionMode(value: PaletteExtensionMode) {
         this._setOption('paletteExtensionMode', value);
     }
 
@@ -423,10 +424,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get pointSelectionMode(): "single" | "multiple" {
+    get pointSelectionMode(): SingleOrMultiple {
         return this._getOption('pointSelectionMode');
     }
-    set pointSelectionMode(value: "single" | "multiple") {
+    set pointSelectionMode(value: SingleOrMultiple) {
         this._setOption('pointSelectionMode', value);
     }
 
@@ -449,10 +450,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get resolveLabelOverlapping(): "hide" | "none" | "shift" {
+    get resolveLabelOverlapping(): ShiftLabelOverlap {
         return this._getOption('resolveLabelOverlapping');
     }
-    set resolveLabelOverlapping(value: "hide" | "none" | "shift") {
+    set resolveLabelOverlapping(value: ShiftLabelOverlap) {
         this._setOption('resolveLabelOverlapping', value);
     }
 
@@ -475,10 +476,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get segmentsDirection(): "anticlockwise" | "clockwise" {
+    get segmentsDirection(): PieChartSegmentDirection {
         return this._getOption('segmentsDirection');
     }
-    set segmentsDirection(value: "anticlockwise" | "clockwise") {
+    set segmentsDirection(value: PieChartSegmentDirection) {
         this._setOption('segmentsDirection', value);
     }
 
@@ -553,10 +554,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get theme(): "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light" {
+    get theme(): Theme {
         return this._getOption('theme');
     }
-    set theme(value: "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light") {
+    set theme(value: Theme) {
         this._setOption('theme', value);
     }
 
@@ -566,10 +567,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get title(): string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" } {
+    get title(): Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
         return this._getOption('title');
     }
-    set title(value: string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" }) {
+    set title(value: Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }) {
         this._setOption('title', value);
     }
 
@@ -579,10 +580,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get tooltip(): Record<string, any> | { argumentFormat?: LocalizationTypes.Format, arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number } {
+    get tooltip(): Record<string, any> | { argumentFormat?: Format, arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>), enabled?: boolean, font?: Font, format?: Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: Record<string, any> | { argumentFormat?: LocalizationTypes.Format, arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number }) {
+    set tooltip(value: Record<string, any> | { argumentFormat?: Format, arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>), enabled?: boolean, font?: Font, format?: Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number }) {
         this._setOption('tooltip', value);
     }
 
@@ -592,10 +593,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get type(): "donut" | "doughnut" | "pie" {
+    get type(): PieChartType {
         return this._getOption('type');
     }
-    set type(value: "donut" | "doughnut" | "pie") {
+    set type(value: PieChartType) {
         this._setOption('type', value);
     }
 
@@ -731,7 +732,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() animationChange: EventEmitter<boolean | Record<string, any> | { duration?: number, easing?: "easeOutCubic" | "linear", enabled?: boolean, maxPointCountSupported?: number }>;
+    @Output() animationChange: EventEmitter<boolean | Record<string, any> | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean, maxPointCountSupported?: number }>;
 
     /**
     
@@ -759,7 +760,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() commonSeriesSettingsChange: EventEmitter<any | { argumentField?: string, argumentType?: "datetime" | "numeric" | "string", border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, hoverMode?: "none" | "onlyPoint", hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, highlight?: boolean }, label?: Record<string, any> | { argumentFormat?: LocalizationTypes.Format, backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string, font?: Font, format?: LocalizationTypes.Format, position?: "columns" | "inside" | "outside", radialOffset?: number, rotationAngle?: number, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" }, maxLabelCount?: number, minSegmentSize?: number, selectionMode?: "none" | "onlyPoint", selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, highlight?: boolean }, smallValuesGrouping?: Record<string, any> | { groupName?: string, mode?: "none" | "smallValueThreshold" | "topN", threshold?: number, topCount?: number }, tagField?: string, valueField?: string }>;
+    @Output() commonSeriesSettingsChange: EventEmitter<any | { argumentField?: string, argumentType?: ChartsDataType, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: ChartsColor | string, hoverMode?: PieChartSeriesInteractionMode, hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: ChartsColor | string, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean }, label?: Record<string, any> | { argumentFormat?: Format, backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string, font?: Font, format?: Format, position?: LabelPosition, radialOffset?: number, rotationAngle?: number, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, maxLabelCount?: number, minSegmentSize?: number, selectionMode?: PieChartSeriesInteractionMode, selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: ChartsColor | string, hatching?: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean }, smallValuesGrouping?: Record<string, any> | { groupName?: string, mode?: SmallValuesGroupingMode, threshold?: number, topCount?: number }, tagField?: string, valueField?: string }>;
 
     /**
     
@@ -815,7 +816,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }>;
+    @Output() exportChange: EventEmitter<Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }>;
 
     /**
     
@@ -829,7 +830,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() legendChange: EventEmitter<Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string), customizeItems?: ((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>), customizeText?: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string), font?: Font, horizontalAlignment?: "center" | "left" | "right", hoverMode?: "none" | "allArgumentPoints", itemsAlignment?: "center" | "left" | "right", itemTextPosition?: "bottom" | "left" | "right" | "top", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: "horizontal" | "vertical", paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: "bottom" | "top" }, verticalAlignment?: "bottom" | "top", visible?: boolean }>;
+    @Output() legendChange: EventEmitter<Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string), customizeItems?: ((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>), customizeText?: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, hoverMode?: PieChartLegendHoverMode, itemsAlignment?: HorizontalAlignment, itemTextPosition?: Position, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }>;
 
     /**
     
@@ -857,14 +858,14 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() paletteChange: EventEmitter<Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office">;
+    @Output() paletteChange: EventEmitter<Array<string> | Palette>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() paletteExtensionModeChange: EventEmitter<"alternate" | "blend" | "extrapolate">;
+    @Output() paletteExtensionModeChange: EventEmitter<PaletteExtensionMode>;
 
     /**
     
@@ -878,7 +879,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pointSelectionModeChange: EventEmitter<"single" | "multiple">;
+    @Output() pointSelectionModeChange: EventEmitter<SingleOrMultiple>;
 
     /**
     
@@ -892,7 +893,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() resolveLabelOverlappingChange: EventEmitter<"hide" | "none" | "shift">;
+    @Output() resolveLabelOverlappingChange: EventEmitter<ShiftLabelOverlap>;
 
     /**
     
@@ -906,7 +907,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() segmentsDirectionChange: EventEmitter<"anticlockwise" | "clockwise">;
+    @Output() segmentsDirectionChange: EventEmitter<PieChartSegmentDirection>;
 
     /**
     
@@ -948,28 +949,28 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() themeChange: EventEmitter<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">;
+    @Output() themeChange: EventEmitter<Theme>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() titleChange: EventEmitter<string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" }>;
+    @Output() titleChange: EventEmitter<Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<Record<string, any> | { argumentFormat?: LocalizationTypes.Format, arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number }>;
+    @Output() tooltipChange: EventEmitter<Record<string, any> | { argumentFormat?: Format, arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>), enabled?: boolean, font?: Font, format?: Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() typeChange: EventEmitter<"donut" | "doughnut" | "pie">;
+    @Output() typeChange: EventEmitter<PieChartType>;
 
 
 

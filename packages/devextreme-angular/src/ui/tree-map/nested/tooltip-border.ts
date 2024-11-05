@@ -14,6 +14,7 @@ import {
 
 
 
+import { DashStyle } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -37,10 +38,10 @@ export class DxoTreeMapTooltipBorderComponent extends NestedOption implements On
     }
 
     @Input()
-    get dashStyle(): "dash" | "dot" | "longDash" | "solid" {
+    get dashStyle(): DashStyle {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: "dash" | "dot" | "longDash" | "solid") {
+    set dashStyle(value: DashStyle) {
         this._setOption('dashStyle', value);
     }
 

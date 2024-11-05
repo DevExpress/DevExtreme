@@ -17,8 +17,8 @@ import {
 
 
 
-import { TextEditorButton } from 'devextreme/common';
-import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/text_box';
+import { TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorStyle, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
+import { TextBoxType, ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/text_box';
 
 import {
     NestedOptionHost,
@@ -59,10 +59,10 @@ export class DxoListSearchEditorOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get buttons(): Array<string | "clear" | TextEditorButton> {
+    get buttons(): Array<string | TextBoxPredefinedButton | TextEditorButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<string | "clear" | TextEditorButton>) {
+    set buttons(value: Array<string | TextBoxPredefinedButton | TextEditorButton>) {
         this._setOption('buttons', value);
     }
 
@@ -147,10 +147,10 @@ export class DxoListSearchEditorOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get labelMode(): "static" | "floating" | "hidden" | "outside" {
+    get labelMode(): LabelMode {
         return this._getOption('labelMode');
     }
-    set labelMode(value: "static" | "floating" | "hidden" | "outside") {
+    set labelMode(value: LabelMode) {
         this._setOption('labelMode', value);
     }
 
@@ -195,10 +195,10 @@ export class DxoListSearchEditorOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get mode(): "email" | "password" | "search" | "tel" | "text" | "url" {
+    get mode(): TextBoxType {
         return this._getOption('mode');
     }
-    set mode(value: "email" | "password" | "search" | "tel" | "text" | "url") {
+    set mode(value: TextBoxType) {
         this._setOption('mode', value);
     }
 
@@ -363,10 +363,10 @@ export class DxoListSearchEditorOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get showMaskMode(): "always" | "onFocus" {
+    get showMaskMode(): MaskMode {
         return this._getOption('showMaskMode');
     }
-    set showMaskMode(value: "always" | "onFocus") {
+    set showMaskMode(value: MaskMode) {
         this._setOption('showMaskMode', value);
     }
 
@@ -379,10 +379,10 @@ export class DxoListSearchEditorOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get stylingMode(): "outlined" | "underlined" | "filled" {
+    get stylingMode(): EditorStyle {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: "outlined" | "underlined" | "filled") {
+    set stylingMode(value: EditorStyle) {
         this._setOption('stylingMode', value);
     }
 
@@ -427,26 +427,26 @@ export class DxoListSearchEditorOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get validationMessageMode(): "always" | "auto" {
+    get validationMessageMode(): ValidationMessageMode {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: "always" | "auto") {
+    set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
 
     @Input()
-    get validationMessagePosition(): "bottom" | "left" | "right" | "top" {
+    get validationMessagePosition(): Position {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: "bottom" | "left" | "right" | "top") {
+    set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
 
     @Input()
-    get validationStatus(): "valid" | "invalid" | "pending" {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: "valid" | "invalid" | "pending") {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 

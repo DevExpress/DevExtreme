@@ -12,7 +12,7 @@ import {
 
 
 
-import { dxFileManagerContextMenuItem } from 'devextreme/ui/file_manager';
+import { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem } from 'devextreme/ui/file_manager';
 
 import {
     NestedOptionHost,
@@ -68,10 +68,10 @@ export class DxiFileManagerContextMenuItemComponent extends CollectionNestedOpti
     }
 
     @Input()
-    get name(): "create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete" {
+    get name(): FileManagerPredefinedContextMenuItem | string {
         return this._getOption('name');
     }
-    set name(value: "create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete") {
+    set name(value: FileManagerPredefinedContextMenuItem | string) {
         this._setOption('name', value);
     }
 

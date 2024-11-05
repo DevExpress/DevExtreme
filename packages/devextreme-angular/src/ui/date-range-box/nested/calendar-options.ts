@@ -14,7 +14,8 @@ import {
 
 
 
-import { DisabledDate, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/calendar';
+import { DisabledDate, CalendarZoomLevel, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, CalendarSelectionMode, WeekNumberRule } from 'devextreme/ui/calendar';
+import { FirstDayOfWeek, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -94,10 +95,10 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get firstDayOfWeek(): 0 | 1 | 2 | 3 | 4 | 5 | 6 {
+    get firstDayOfWeek(): FirstDayOfWeek {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: 0 | 1 | 2 | 3 | 4 | 5 | 6) {
+    set firstDayOfWeek(value: FirstDayOfWeek) {
         this._setOption('firstDayOfWeek', value);
     }
 
@@ -158,10 +159,10 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get maxZoomLevel(): "century" | "decade" | "month" | "year" {
+    get maxZoomLevel(): CalendarZoomLevel {
         return this._getOption('maxZoomLevel');
     }
-    set maxZoomLevel(value: "century" | "decade" | "month" | "year") {
+    set maxZoomLevel(value: CalendarZoomLevel) {
         this._setOption('maxZoomLevel', value);
     }
 
@@ -174,10 +175,10 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get minZoomLevel(): "century" | "decade" | "month" | "year" {
+    get minZoomLevel(): CalendarZoomLevel {
         return this._getOption('minZoomLevel');
     }
-    set minZoomLevel(value: "century" | "decade" | "month" | "year") {
+    set minZoomLevel(value: CalendarZoomLevel) {
         this._setOption('minZoomLevel', value);
     }
 
@@ -238,10 +239,10 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get selectionMode(): "single" | "multiple" | "range" {
+    get selectionMode(): CalendarSelectionMode {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: "single" | "multiple" | "range") {
+    set selectionMode(value: CalendarSelectionMode) {
         this._setOption('selectionMode', value);
     }
 
@@ -294,26 +295,26 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get validationMessageMode(): "always" | "auto" {
+    get validationMessageMode(): ValidationMessageMode {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: "always" | "auto") {
+    set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
 
     @Input()
-    get validationMessagePosition(): "bottom" | "left" | "right" | "top" {
+    get validationMessagePosition(): Position {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: "bottom" | "left" | "right" | "top") {
+    set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
 
     @Input()
-    get validationStatus(): "valid" | "invalid" | "pending" {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: "valid" | "invalid" | "pending") {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 
@@ -334,10 +335,10 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get weekNumberRule(): "auto" | "firstDay" | "fullWeek" | "firstFourDays" {
+    get weekNumberRule(): WeekNumberRule {
         return this._getOption('weekNumberRule');
     }
-    set weekNumberRule(value: "auto" | "firstDay" | "fullWeek" | "firstFourDays") {
+    set weekNumberRule(value: WeekNumberRule) {
         this._setOption('weekNumberRule', value);
     }
 
@@ -350,10 +351,10 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get zoomLevel(): "century" | "decade" | "month" | "year" {
+    get zoomLevel(): CalendarZoomLevel {
         return this._getOption('zoomLevel');
     }
-    set zoomLevel(value: "century" | "decade" | "month" | "year") {
+    set zoomLevel(value: CalendarZoomLevel) {
         this._setOption('zoomLevel', value);
     }
 

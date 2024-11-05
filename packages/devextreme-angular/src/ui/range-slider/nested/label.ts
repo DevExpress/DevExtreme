@@ -14,7 +14,8 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
+import { Format } from 'devextreme/localization';
+import { VerticalEdge } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -30,18 +31,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoRangeSliderLabelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get format(): LocalizationTypes.Format {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: LocalizationTypes.Format) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 
     @Input()
-    get position(): "bottom" | "top" {
+    get position(): VerticalEdge {
         return this._getOption('position');
     }
-    set position(value: "bottom" | "top") {
+    set position(value: VerticalEdge) {
         this._setOption('position', value);
     }
 

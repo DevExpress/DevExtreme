@@ -14,7 +14,7 @@ import {
 
 
 
-import { ChartsColor } from 'devextreme/common/charts';
+import { DashStyle, ChartsColor, HatchDirection } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoPolarChartSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): Record<string, any> | { color?: string, visible?: boolean, width?: number, dashStyle?: "dash" | "dot" | "longDash" | "solid" } {
+    get border(): Record<string, any> | { color?: string, visible?: boolean, width?: number, dashStyle?: DashStyle } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string, visible?: boolean, width?: number, dashStyle?: "dash" | "dot" | "longDash" | "solid" }) {
+    set border(value: Record<string, any> | { color?: string, visible?: boolean, width?: number, dashStyle?: DashStyle }) {
         this._setOption('border', value);
     }
 
@@ -54,18 +54,18 @@ export class DxoPolarChartSelectionStyleComponent extends NestedOption implement
     }
 
     @Input()
-    get dashStyle(): "dash" | "dot" | "longDash" | "solid" {
+    get dashStyle(): DashStyle {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: "dash" | "dot" | "longDash" | "solid") {
+    set dashStyle(value: DashStyle) {
         this._setOption('dashStyle', value);
     }
 
     @Input()
-    get hatching(): Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number } {
+    get hatching(): Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number } {
         return this._getOption('hatching');
     }
-    set hatching(value: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }) {
+    set hatching(value: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number }) {
         this._setOption('hatching', value);
     }
 

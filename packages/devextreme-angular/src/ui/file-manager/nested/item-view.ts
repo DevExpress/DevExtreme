@@ -14,7 +14,7 @@ import {
 
 
 
-import { dxFileManagerDetailsColumn } from 'devextreme/ui/file_manager';
+import { dxFileManagerDetailsColumn, FileManagerItemViewMode } from 'devextreme/ui/file_manager';
 
 import {
     NestedOptionHost,
@@ -38,10 +38,10 @@ export class DxoFileManagerItemViewComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get mode(): "details" | "thumbnails" {
+    get mode(): FileManagerItemViewMode {
         return this._getOption('mode');
     }
-    set mode(value: "details" | "thumbnails") {
+    set mode(value: FileManagerItemViewMode) {
         this._setOption('mode', value);
     }
 

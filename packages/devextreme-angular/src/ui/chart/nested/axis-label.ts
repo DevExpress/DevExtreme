@@ -18,8 +18,10 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import * as LocalizationTypes from 'devextreme/localization';
-import { Font } from 'devextreme/common/charts';
+import { HorizontalAlignment, Position } from 'devextreme/common';
+import { ChartLabelDisplayMode } from 'devextreme/viz/chart';
+import { Font, ChartsAxisLabelOverlap, RelativePosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -40,10 +42,10 @@ import { NestedOption } from 'devextreme-angular/core';
 export class DxoChartAxisLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
     @Input()
-    get alignment(): "center" | "left" | "right" {
+    get alignment(): HorizontalAlignment {
         return this._getOption('alignment');
     }
-    set alignment(value: "center" | "left" | "right") {
+    set alignment(value: HorizontalAlignment) {
         this._setOption('alignment', value);
     }
 
@@ -64,10 +66,10 @@ export class DxoChartAxisLabelComponent extends NestedOption implements AfterVie
     }
 
     @Input()
-    get displayMode(): "rotate" | "stagger" | "standard" {
+    get displayMode(): ChartLabelDisplayMode {
         return this._getOption('displayMode');
     }
-    set displayMode(value: "rotate" | "stagger" | "standard") {
+    set displayMode(value: ChartLabelDisplayMode) {
         this._setOption('displayMode', value);
     }
 
@@ -80,10 +82,10 @@ export class DxoChartAxisLabelComponent extends NestedOption implements AfterVie
     }
 
     @Input()
-    get format(): LocalizationTypes.Format {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: LocalizationTypes.Format) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 
@@ -96,18 +98,18 @@ export class DxoChartAxisLabelComponent extends NestedOption implements AfterVie
     }
 
     @Input()
-    get overlappingBehavior(): "rotate" | "stagger" | "none" | "hide" {
+    get overlappingBehavior(): ChartsAxisLabelOverlap {
         return this._getOption('overlappingBehavior');
     }
-    set overlappingBehavior(value: "rotate" | "stagger" | "none" | "hide") {
+    set overlappingBehavior(value: ChartsAxisLabelOverlap) {
         this._setOption('overlappingBehavior', value);
     }
 
     @Input()
-    get position(): "inside" | "outside" | "bottom" | "left" | "right" | "top" {
+    get position(): Position | RelativePosition {
         return this._getOption('position');
     }
-    set position(value: "inside" | "outside" | "bottom" | "left" | "right" | "top") {
+    set position(value: Position | RelativePosition) {
         this._setOption('position', value);
     }
 
@@ -136,10 +138,10 @@ export class DxoChartAxisLabelComponent extends NestedOption implements AfterVie
     }
 
     @Input()
-    get textOverflow(): "ellipsis" | "hide" | "none" {
+    get textOverflow(): TextOverflow {
         return this._getOption('textOverflow');
     }
-    set textOverflow(value: "ellipsis" | "hide" | "none") {
+    set textOverflow(value: TextOverflow) {
         this._setOption('textOverflow', value);
     }
 
@@ -152,10 +154,10 @@ export class DxoChartAxisLabelComponent extends NestedOption implements AfterVie
     }
 
     @Input()
-    get wordWrap(): "normal" | "breakWord" | "none" {
+    get wordWrap(): WordWrap {
         return this._getOption('wordWrap');
     }
-    set wordWrap(value: "normal" | "breakWord" | "none") {
+    set wordWrap(value: WordWrap) {
         this._setOption('wordWrap', value);
     }
 

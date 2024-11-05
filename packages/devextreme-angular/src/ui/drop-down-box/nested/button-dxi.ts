@@ -12,6 +12,7 @@ import {
 
 
 
+import { TextEditorButtonLocation } from 'devextreme/common';
 import { dxButtonOptions } from 'devextreme/ui/button';
 
 import {
@@ -28,10 +29,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiDropDownBoxButtonComponent extends CollectionNestedOption {
     @Input()
-    get location(): "after" | "before" {
+    get location(): TextEditorButtonLocation {
         return this._getOption('location');
     }
-    set location(value: "after" | "before") {
+    set location(value: TextEditorButtonLocation) {
         this._setOption('location', value);
     }
 

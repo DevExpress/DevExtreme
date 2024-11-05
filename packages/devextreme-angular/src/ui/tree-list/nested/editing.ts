@@ -19,7 +19,7 @@ import {
 
 import dxTreeList from 'devextreme/ui/tree_list';
 import { dxTreeListRowObject } from 'devextreme/ui/tree_list';
-import { DataChange } from 'devextreme/common/grids';
+import { DataChange, GridsEditMode, GridsEditRefreshMode, StartEditAction } from 'devextreme/common/grids';
 import { dxFormOptions } from 'devextreme/ui/form';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 
@@ -102,10 +102,10 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get mode(): "batch" | "cell" | "row" | "form" | "popup" {
+    get mode(): GridsEditMode {
         return this._getOption('mode');
     }
-    set mode(value: "batch" | "cell" | "row" | "form" | "popup") {
+    set mode(value: GridsEditMode) {
         this._setOption('mode', value);
     }
 
@@ -118,10 +118,10 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get refreshMode(): "full" | "reshape" | "repaint" {
+    get refreshMode(): GridsEditRefreshMode {
         return this._getOption('refreshMode');
     }
-    set refreshMode(value: "full" | "reshape" | "repaint") {
+    set refreshMode(value: GridsEditRefreshMode) {
         this._setOption('refreshMode', value);
     }
 
@@ -134,10 +134,10 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get startEditAction(): "click" | "dblClick" {
+    get startEditAction(): StartEditAction {
         return this._getOption('startEditAction');
     }
-    set startEditAction(value: "click" | "dblClick") {
+    set startEditAction(value: StartEditAction) {
         this._setOption('startEditAction', value);
     }
 

@@ -25,6 +25,7 @@ import {
 import { AnimationConfig } from 'devextreme/animation/fx';
 import { event } from 'devextreme/events/index';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
+import { Position } from 'devextreme/common';
 import { PositionConfig } from 'devextreme/animation/position';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
@@ -202,10 +203,10 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get hideEvent(): string | { delay?: number, name?: string } {
+    get hideEvent(): Record<string, any> | string | { delay?: number, name?: string } {
         return this._getOption('hideEvent');
     }
-    set hideEvent(value: string | { delay?: number, name?: string }) {
+    set hideEvent(value: Record<string, any> | string | { delay?: number, name?: string }) {
         this._setOption('hideEvent', value);
     }
 
@@ -319,10 +320,10 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get position(): PositionConfig | "bottom" | "left" | "right" | "top" {
+    get position(): Position | PositionConfig {
         return this._getOption('position');
     }
-    set position(value: PositionConfig | "bottom" | "left" | "right" | "top") {
+    set position(value: Position | PositionConfig) {
         this._setOption('position', value);
     }
 
@@ -384,10 +385,10 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get showEvent(): string | { delay?: number, name?: string } {
+    get showEvent(): Record<string, any> | string | { delay?: number, name?: string } {
         return this._getOption('showEvent');
     }
-    set showEvent(value: string | { delay?: number, name?: string }) {
+    set showEvent(value: Record<string, any> | string | { delay?: number, name?: string }) {
         this._setOption('showEvent', value);
     }
 
@@ -628,7 +629,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hideEventChange: EventEmitter<string | { delay?: number, name?: string }>;
+    @Output() hideEventChange: EventEmitter<Record<string, any> | string | { delay?: number, name?: string }>;
 
     /**
     
@@ -691,7 +692,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<PositionConfig | "bottom" | "left" | "right" | "top">;
+    @Output() positionChange: EventEmitter<Position | PositionConfig>;
 
     /**
     
@@ -726,7 +727,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showEventChange: EventEmitter<string | { delay?: number, name?: string }>;
+    @Output() showEventChange: EventEmitter<Record<string, any> | string | { delay?: number, name?: string }>;
 
     /**
     

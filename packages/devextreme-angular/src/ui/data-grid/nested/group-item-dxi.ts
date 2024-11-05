@@ -12,7 +12,8 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
+import { SummaryType } from 'devextreme/common/grids';
+import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -92,18 +93,18 @@ export class DxiDataGridGroupItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get summaryType(): "avg" | "count" | "custom" | "max" | "min" | "sum" {
+    get summaryType(): string | SummaryType {
         return this._getOption('summaryType');
     }
-    set summaryType(value: "avg" | "count" | "custom" | "max" | "min" | "sum") {
+    set summaryType(value: string | SummaryType) {
         this._setOption('summaryType', value);
     }
 
     @Input()
-    get valueFormat(): LocalizationTypes.Format {
+    get valueFormat(): Format {
         return this._getOption('valueFormat');
     }
-    set valueFormat(value: LocalizationTypes.Format) {
+    set valueFormat(value: Format) {
         this._setOption('valueFormat', value);
     }
 

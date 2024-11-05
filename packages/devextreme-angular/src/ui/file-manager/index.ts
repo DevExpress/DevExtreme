@@ -21,7 +21,8 @@ import {
 
 
 import FileSystemItem from 'devextreme/file_management/file_system_item';
-import { dxFileManagerContextMenu, dxFileManagerDetailsColumn, ContentReadyEvent, ContextMenuItemClickEvent, ContextMenuShowingEvent, CurrentDirectoryChangedEvent, DirectoryCreatedEvent, DirectoryCreatingEvent, DisposingEvent, ErrorOccurredEvent, FileUploadedEvent, FileUploadingEvent, FocusedItemChangedEvent, InitializedEvent, ItemCopiedEvent, ItemCopyingEvent, ItemDeletedEvent, ItemDeletingEvent, ItemDownloadingEvent, ItemMovedEvent, ItemMovingEvent, ItemRenamedEvent, ItemRenamingEvent, OptionChangedEvent, SelectedFileOpenedEvent, SelectionChangedEvent, ToolbarItemClickEvent, dxFileManagerToolbar } from 'devextreme/ui/file_manager';
+import { dxFileManagerContextMenu, dxFileManagerDetailsColumn, FileManagerItemViewMode, ContentReadyEvent, ContextMenuItemClickEvent, ContextMenuShowingEvent, CurrentDirectoryChangedEvent, DirectoryCreatedEvent, DirectoryCreatingEvent, DisposingEvent, ErrorOccurredEvent, FileUploadedEvent, FileUploadingEvent, FocusedItemChangedEvent, InitializedEvent, ItemCopiedEvent, ItemCopyingEvent, ItemDeletedEvent, ItemDeletingEvent, ItemDownloadingEvent, ItemMovedEvent, ItemMovingEvent, ItemRenamedEvent, ItemRenamingEvent, OptionChangedEvent, SelectedFileOpenedEvent, SelectionChangedEvent, ToolbarItemClickEvent, dxFileManagerToolbar } from 'devextreme/ui/file_manager';
+import { SingleOrMultiple } from 'devextreme/common';
 
 import DxFileManager from 'devextreme/ui/file_manager';
 
@@ -293,10 +294,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get itemView(): Record<string, any> | { details?: Record<string, any> | { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: "details" | "thumbnails", showFolders?: boolean, showParentFolder?: boolean } {
+    get itemView(): Record<string, any> | { details?: Record<string, any> | { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: FileManagerItemViewMode, showFolders?: boolean, showParentFolder?: boolean } {
         return this._getOption('itemView');
     }
-    set itemView(value: Record<string, any> | { details?: Record<string, any> | { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: "details" | "thumbnails", showFolders?: boolean, showParentFolder?: boolean }) {
+    set itemView(value: Record<string, any> | { details?: Record<string, any> | { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: FileManagerItemViewMode, showFolders?: boolean, showParentFolder?: boolean }) {
         this._setOption('itemView', value);
     }
 
@@ -371,10 +372,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get selectionMode(): "single" | "multiple" {
+    get selectionMode(): SingleOrMultiple {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: "single" | "multiple") {
+    set selectionMode(value: SingleOrMultiple) {
         this._setOption('selectionMode', value);
     }
 
@@ -760,7 +761,7 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemViewChange: EventEmitter<Record<string, any> | { details?: Record<string, any> | { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: "details" | "thumbnails", showFolders?: boolean, showParentFolder?: boolean }>;
+    @Output() itemViewChange: EventEmitter<Record<string, any> | { details?: Record<string, any> | { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: FileManagerItemViewMode, showFolders?: boolean, showParentFolder?: boolean }>;
 
     /**
     
@@ -802,7 +803,7 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<"single" | "multiple">;
+    @Output() selectionModeChange: EventEmitter<SingleOrMultiple>;
 
     /**
     

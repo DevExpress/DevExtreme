@@ -14,7 +14,7 @@ import {
 
 
 
-import { chartPointAggregationInfoObject, chartSeriesObject } from 'devextreme/viz/chart';
+import { chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod } from 'devextreme/viz/chart';
 
 import {
     NestedOptionHost,
@@ -46,10 +46,10 @@ export class DxoRangeSelectorAggregationComponent extends NestedOption implement
     }
 
     @Input()
-    get method(): "avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom" {
+    get method(): ChartSeriesAggregationMethod {
         return this._getOption('method');
     }
-    set method(value: "avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom") {
+    set method(value: ChartSeriesAggregationMethod) {
         this._setOption('method', value);
     }
 

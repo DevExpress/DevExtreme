@@ -26,10 +26,11 @@ export { ExplicitTypes } from 'devextreme/ui/context_menu';
 import DataSource from 'devextreme/data/data_source';
 import { AnimationConfig } from 'devextreme/animation/fx';
 import { event } from 'devextreme/events/index';
-import { dxContextMenuItem, ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, PositioningEvent, SelectionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/context_menu';
+import { dxContextMenuItem, ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, PositioningEvent, SelectionChangedEvent, ShowingEvent, ShownEvent, ContextSubmenuDirection } from 'devextreme/ui/context_menu';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { PositionConfig } from 'devextreme/animation/position';
+import { SingleOrNone, SubmenuShowMode } from 'devextreme/common';
 
 import DxContextMenu from 'devextreme/ui/context_menu';
 
@@ -404,10 +405,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get selectionMode(): "single" | "none" {
+    get selectionMode(): SingleOrNone {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: "single" | "none") {
+    set selectionMode(value: SingleOrNone) {
         this._setOption('selectionMode', value);
     }
 
@@ -417,10 +418,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get showEvent(): string | { delay?: number, name?: string } {
+    get showEvent(): Record<string, any> | string | { delay?: number, name?: string } {
         return this._getOption('showEvent');
     }
-    set showEvent(value: string | { delay?: number, name?: string }) {
+    set showEvent(value: Record<string, any> | string | { delay?: number, name?: string }) {
         this._setOption('showEvent', value);
     }
 
@@ -430,10 +431,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get showSubmenuMode(): "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" } {
+    get showSubmenuMode(): Record<string, any> | SubmenuShowMode | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: SubmenuShowMode } {
         return this._getOption('showSubmenuMode');
     }
-    set showSubmenuMode(value: "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" }) {
+    set showSubmenuMode(value: Record<string, any> | SubmenuShowMode | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: SubmenuShowMode }) {
         this._setOption('showSubmenuMode', value);
     }
 
@@ -443,10 +444,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get submenuDirection(): "auto" | "left" | "right" {
+    get submenuDirection(): ContextSubmenuDirection {
         return this._getOption('submenuDirection');
     }
-    set submenuDirection(value: "auto" | "left" | "right") {
+    set submenuDirection(value: ContextSubmenuDirection) {
         this._setOption('submenuDirection', value);
     }
 
@@ -772,28 +773,28 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<"single" | "none">;
+    @Output() selectionModeChange: EventEmitter<SingleOrNone>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showEventChange: EventEmitter<string | { delay?: number, name?: string }>;
+    @Output() showEventChange: EventEmitter<Record<string, any> | string | { delay?: number, name?: string }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showSubmenuModeChange: EventEmitter<"onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" }>;
+    @Output() showSubmenuModeChange: EventEmitter<Record<string, any> | SubmenuShowMode | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: SubmenuShowMode }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() submenuDirectionChange: EventEmitter<"auto" | "left" | "right">;
+    @Output() submenuDirectionChange: EventEmitter<ContextSubmenuDirection>;
 
     /**
     

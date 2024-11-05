@@ -15,6 +15,7 @@ import {
 
 
 import { Font } from 'devextreme/common/charts';
+import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -30,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartStripStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get label(): Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", verticalAlignment?: "bottom" | "center" | "top" } {
+    get label(): Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", verticalAlignment?: "bottom" | "center" | "top" }) {
+    set label(value: Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }) {
         this._setOption('label', value);
     }
 

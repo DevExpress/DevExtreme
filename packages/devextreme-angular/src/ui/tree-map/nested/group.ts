@@ -14,7 +14,7 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
+import { Font, TextOverflow } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -70,10 +70,10 @@ export class DxoTreeMapGroupComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get label(): Record<string, any> | { font?: Font, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean } {
+    get label(): Record<string, any> | { font?: Font, textOverflow?: TextOverflow, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { font?: Font, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean }) {
+    set label(value: Record<string, any> | { font?: Font, textOverflow?: TextOverflow, visible?: boolean }) {
         this._setOption('label', value);
     }
 

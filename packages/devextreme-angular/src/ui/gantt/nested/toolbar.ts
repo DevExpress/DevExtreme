@@ -17,7 +17,7 @@ import {
 
 
 
-import { dxGanttToolbarItem } from 'devextreme/ui/gantt';
+import { dxGanttToolbarItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
 
 import {
     NestedOptionHost,
@@ -35,10 +35,10 @@ import { DxiGanttToolbarItemComponent } from './toolbar-item-dxi';
 })
 export class DxoGanttToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get items(): Array<dxGanttToolbarItem | "separator" | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "taskDetails" | "fullScreen" | "resourceManager" | "showResources" | "showDependencies"> {
+    get items(): Array<dxGanttToolbarItem | GanttPredefinedToolbarItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxGanttToolbarItem | "separator" | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "taskDetails" | "fullScreen" | "resourceManager" | "showResources" | "showDependencies">) {
+    set items(value: Array<dxGanttToolbarItem | GanttPredefinedToolbarItem>) {
         this._setOption('items', value);
     }
 

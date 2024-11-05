@@ -16,7 +16,8 @@ import {
 
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import { SearchMode } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -56,10 +57,10 @@ export class DxoDataGridHeaderFilterComponent extends NestedOption implements On
     }
 
     @Input()
-    get groupInterval(): number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year" {
+    get groupInterval(): HeaderFilterGroupInterval | number {
         return this._getOption('groupInterval');
     }
-    set groupInterval(value: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year") {
+    set groupInterval(value: HeaderFilterGroupInterval | number) {
         this._setOption('groupInterval', value);
     }
 
@@ -80,10 +81,10 @@ export class DxoDataGridHeaderFilterComponent extends NestedOption implements On
     }
 
     @Input()
-    get searchMode(): "contains" | "startswith" | "equals" {
+    get searchMode(): SearchMode {
         return this._getOption('searchMode');
     }
-    set searchMode(value: "contains" | "startswith" | "equals") {
+    set searchMode(value: SearchMode) {
         this._setOption('searchMode', value);
     }
 

@@ -14,7 +14,8 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
+import { Font, RelativePosition } from 'devextreme/common/charts';
+import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -38,18 +39,18 @@ export class DxoChartConstantLineLabelComponent extends NestedOption implements 
     }
 
     @Input()
-    get horizontalAlignment(): "center" | "left" | "right" {
+    get horizontalAlignment(): HorizontalAlignment {
         return this._getOption('horizontalAlignment');
     }
-    set horizontalAlignment(value: "center" | "left" | "right") {
+    set horizontalAlignment(value: HorizontalAlignment) {
         this._setOption('horizontalAlignment', value);
     }
 
     @Input()
-    get position(): "inside" | "outside" {
+    get position(): RelativePosition {
         return this._getOption('position');
     }
-    set position(value: "inside" | "outside") {
+    set position(value: RelativePosition) {
         this._setOption('position', value);
     }
 
@@ -62,10 +63,10 @@ export class DxoChartConstantLineLabelComponent extends NestedOption implements 
     }
 
     @Input()
-    get verticalAlignment(): "bottom" | "center" | "top" {
+    get verticalAlignment(): VerticalAlignment {
         return this._getOption('verticalAlignment');
     }
-    set verticalAlignment(value: "bottom" | "center" | "top") {
+    set verticalAlignment(value: VerticalAlignment) {
         this._setOption('verticalAlignment', value);
     }
 

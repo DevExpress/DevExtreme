@@ -17,9 +17,11 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
 import * as CommonChartTypes from 'devextreme/common/charts';
-import { ScaleBreak, Font } from 'devextreme/common/charts';
+import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
+import { TimeInterval, ChartsDataType, ScaleBreak, ScaleBreakLineStyle, DashStyle, Font, RelativePosition, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, ChartsAxisLabelOverlap, TextOverflow, WordWrap, AxisScaleType, VisualRangeUpdateMode } from 'devextreme/common/charts';
+import { HorizontalAlignment, VerticalAlignment, Position } from 'devextreme/common';
+import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -46,10 +48,10 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get aggregatedPointsPosition(): "betweenTicks" | "crossTicks" {
+    get aggregatedPointsPosition(): AggregatedPointsPosition {
         return this._getOption('aggregatedPointsPosition');
     }
-    set aggregatedPointsPosition(value: "betweenTicks" | "crossTicks") {
+    set aggregatedPointsPosition(value: AggregatedPointsPosition) {
         this._setOption('aggregatedPointsPosition', value);
     }
 
@@ -62,10 +64,10 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get aggregationInterval(): number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get aggregationInterval(): number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('aggregationInterval');
     }
-    set aggregationInterval(value: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set aggregationInterval(value: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('aggregationInterval', value);
     }
 
@@ -78,10 +80,10 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get argumentType(): "datetime" | "numeric" | "string" {
+    get argumentType(): ChartsDataType {
         return this._getOption('argumentType');
     }
-    set argumentType(value: "datetime" | "numeric" | "string") {
+    set argumentType(value: ChartsDataType) {
         this._setOption('argumentType', value);
     }
 
@@ -102,10 +104,10 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get breakStyle(): Record<string, any> | { color?: string, line?: "straight" | "waved", width?: number } {
+    get breakStyle(): Record<string, any> | { color?: string, line?: ScaleBreakLineStyle, width?: number } {
         return this._getOption('breakStyle');
     }
-    set breakStyle(value: Record<string, any> | { color?: string, line?: "straight" | "waved", width?: number }) {
+    set breakStyle(value: Record<string, any> | { color?: string, line?: ScaleBreakLineStyle, width?: number }) {
         this._setOption('breakStyle', value);
     }
 
@@ -126,18 +128,18 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get constantLines(): Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", position?: "inside" | "outside", text?: string, verticalAlignment?: "bottom" | "center" | "top", visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string, width?: number }[] {
+    get constantLines(): Array<Record<string, any>> | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string, width?: number }[] {
         return this._getOption('constantLines');
     }
-    set constantLines(value: Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", position?: "inside" | "outside", text?: string, verticalAlignment?: "bottom" | "center" | "top", visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string, width?: number }[]) {
+    set constantLines(value: Array<Record<string, any>> | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string, width?: number }[]) {
         this._setOption('constantLines', value);
     }
 
     @Input()
-    get constantLineStyle(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", position?: "inside" | "outside", verticalAlignment?: "bottom" | "center" | "top", visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } {
+    get constantLineStyle(): Record<string, any> | { color?: string, dashStyle?: DashStyle, label?: Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", position?: "inside" | "outside", verticalAlignment?: "bottom" | "center" | "top", visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }) {
+    set constantLineStyle(value: Record<string, any> | { color?: string, dashStyle?: DashStyle, label?: Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }) {
         this._setOption('constantLineStyle', value);
     }
 
@@ -158,10 +160,10 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get discreteAxisDivisionMode(): "betweenLabels" | "crossLabels" {
+    get discreteAxisDivisionMode(): DiscreteAxisDivisionMode {
         return this._getOption('discreteAxisDivisionMode');
     }
-    set discreteAxisDivisionMode(value: "betweenLabels" | "crossLabels") {
+    set discreteAxisDivisionMode(value: DiscreteAxisDivisionMode) {
         this._setOption('discreteAxisDivisionMode', value);
     }
 
@@ -190,10 +192,10 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get hoverMode(): "allArgumentPoints" | "none" {
+    get hoverMode(): ArgumentAxisHoverMode {
         return this._getOption('hoverMode');
     }
-    set hoverMode(value: "allArgumentPoints" | "none") {
+    set hoverMode(value: ArgumentAxisHoverMode) {
         this._setOption('hoverMode', value);
     }
 
@@ -206,10 +208,10 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get label(): Record<string, any> | { alignment?: "center" | "left" | "right", customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string), customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string), displayMode?: "rotate" | "stagger" | "standard", font?: Font, format?: LocalizationTypes.Format, indentFromAxis?: number, overlappingBehavior?: "rotate" | "stagger" | "none" | "hide", position?: "inside" | "outside" | "bottom" | "left" | "right" | "top", rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" } {
+    get label(): Record<string, any> | { alignment?: HorizontalAlignment, customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string), customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string), displayMode?: ChartLabelDisplayMode, font?: Font, format?: Format, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { alignment?: "center" | "left" | "right", customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string), customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string), displayMode?: "rotate" | "stagger" | "standard", font?: Font, format?: LocalizationTypes.Format, indentFromAxis?: number, overlappingBehavior?: "rotate" | "stagger" | "none" | "hide", position?: "inside" | "outside" | "bottom" | "left" | "right" | "top", rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" }) {
+    set label(value: Record<string, any> | { alignment?: HorizontalAlignment, customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string), customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string), displayMode?: ChartLabelDisplayMode, font?: Font, format?: Format, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }) {
         this._setOption('label', value);
     }
 
@@ -262,10 +264,10 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get minorTickInterval(): number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get minorTickInterval(): number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('minorTickInterval');
     }
-    set minorTickInterval(value: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set minorTickInterval(value: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('minorTickInterval', value);
     }
 
@@ -278,10 +280,10 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get minVisualRangeLength(): number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get minVisualRangeLength(): number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('minVisualRangeLength');
     }
-    set minVisualRangeLength(value: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set minVisualRangeLength(value: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('minVisualRangeLength', value);
     }
 
@@ -310,10 +312,10 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get position(): "bottom" | "left" | "right" | "top" {
+    get position(): Position {
         return this._getOption('position');
     }
-    set position(value: "bottom" | "left" | "right" | "top") {
+    set position(value: Position) {
         this._setOption('position', value);
     }
 
@@ -326,18 +328,18 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get strips(): Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", text?: string, verticalAlignment?: "bottom" | "center" | "top" }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string }[] {
+    get strips(): Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string }[] {
         return this._getOption('strips');
     }
-    set strips(value: Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", text?: string, verticalAlignment?: "bottom" | "center" | "top" }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string }[]) {
+    set strips(value: Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string }[]) {
         this._setOption('strips', value);
     }
 
     @Input()
-    get stripStyle(): Record<string, any> | { label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", verticalAlignment?: "bottom" | "center" | "top" }, paddingLeftRight?: number, paddingTopBottom?: number } {
+    get stripStyle(): Record<string, any> | { label?: Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number } {
         return this._getOption('stripStyle');
     }
-    set stripStyle(value: Record<string, any> | { label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", verticalAlignment?: "bottom" | "center" | "top" }, paddingLeftRight?: number, paddingTopBottom?: number }) {
+    set stripStyle(value: Record<string, any> | { label?: Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }) {
         this._setOption('stripStyle', value);
     }
 
@@ -350,26 +352,26 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get tickInterval(): number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get tickInterval(): number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('tickInterval');
     }
-    set tickInterval(value: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set tickInterval(value: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('tickInterval', value);
     }
 
     @Input()
-    get title(): string | { alignment?: "center" | "left" | "right", font?: Font, margin?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" } {
+    get title(): Record<string, any> | string | { alignment?: HorizontalAlignment, font?: Font, margin?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
         return this._getOption('title');
     }
-    set title(value: string | { alignment?: "center" | "left" | "right", font?: Font, margin?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }) {
+    set title(value: Record<string, any> | string | { alignment?: HorizontalAlignment, font?: Font, margin?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
         this._setOption('title', value);
     }
 
     @Input()
-    get type(): "continuous" | "discrete" | "logarithmic" {
+    get type(): AxisScaleType {
         return this._getOption('type');
     }
-    set type(value: "continuous" | "discrete" | "logarithmic") {
+    set type(value: AxisScaleType) {
         this._setOption('type', value);
     }
 
@@ -398,10 +400,10 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get visualRangeUpdateMode(): "auto" | "keep" | "reset" | "shift" {
+    get visualRangeUpdateMode(): VisualRangeUpdateMode {
         return this._getOption('visualRangeUpdateMode');
     }
-    set visualRangeUpdateMode(value: "auto" | "keep" | "reset" | "shift") {
+    set visualRangeUpdateMode(value: VisualRangeUpdateMode) {
         this._setOption('visualRangeUpdateMode', value);
     }
 

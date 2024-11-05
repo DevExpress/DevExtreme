@@ -17,7 +17,7 @@ import {
 
 
 
-import { dxGanttContextMenuItem } from 'devextreme/ui/gantt';
+import { dxGanttContextMenuItem, GanttPredefinedContextMenuItem } from 'devextreme/ui/gantt';
 
 import {
     NestedOptionHost,
@@ -43,10 +43,10 @@ export class DxoGanttContextMenuComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get items(): Array<dxGanttContextMenuItem | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "deleteDependency" | "taskDetails" | "resourceManager"> {
+    get items(): Array<dxGanttContextMenuItem | GanttPredefinedContextMenuItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxGanttContextMenuItem | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "deleteDependency" | "taskDetails" | "resourceManager">) {
+    set items(value: Array<dxGanttContextMenuItem | GanttPredefinedContextMenuItem>) {
         this._setOption('items', value);
     }
 

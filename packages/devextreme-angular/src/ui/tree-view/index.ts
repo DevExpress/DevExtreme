@@ -24,9 +24,10 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/tree_view';
 
 import DataSource from 'devextreme/data/data_source';
-import { dxTreeViewNode, dxTreeViewItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, ItemSelectionChangedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent } from 'devextreme/ui/tree_view';
+import { dxTreeViewNode, dxTreeViewItem, TreeViewExpandEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, ItemSelectionChangedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, TreeViewCheckBoxMode } from 'devextreme/ui/tree_view';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
+import { DataStructure, ScrollDirection, SearchMode, SingleOrMultiple } from 'devextreme/common';
 import { dxTextBoxOptions } from 'devextreme/ui/text_box';
 
 import DxTreeView from 'devextreme/ui/tree_view';
@@ -157,10 +158,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get dataStructure(): "plain" | "tree" {
+    get dataStructure(): DataStructure {
         return this._getOption('dataStructure');
     }
-    set dataStructure(value: "plain" | "tree") {
+    set dataStructure(value: DataStructure) {
         this._setOption('dataStructure', value);
     }
 
@@ -248,10 +249,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get expandEvent(): "dblclick" | "click" {
+    get expandEvent(): TreeViewExpandEvent {
         return this._getOption('expandEvent');
     }
-    set expandEvent(value: "dblclick" | "click") {
+    set expandEvent(value: TreeViewExpandEvent) {
         this._setOption('expandEvent', value);
     }
 
@@ -469,10 +470,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get scrollDirection(): "both" | "horizontal" | "vertical" {
+    get scrollDirection(): ScrollDirection {
         return this._getOption('scrollDirection');
     }
-    set scrollDirection(value: "both" | "horizontal" | "vertical") {
+    set scrollDirection(value: ScrollDirection) {
         this._setOption('scrollDirection', value);
     }
 
@@ -521,10 +522,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get searchMode(): "contains" | "startswith" | "equals" {
+    get searchMode(): SearchMode {
         return this._getOption('searchMode');
     }
-    set searchMode(value: "contains" | "startswith" | "equals") {
+    set searchMode(value: SearchMode) {
         this._setOption('searchMode', value);
     }
 
@@ -599,10 +600,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get selectionMode(): "single" | "multiple" {
+    get selectionMode(): SingleOrMultiple {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: "single" | "multiple") {
+    set selectionMode(value: SingleOrMultiple) {
         this._setOption('selectionMode', value);
     }
 
@@ -625,10 +626,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get showCheckBoxesMode(): "none" | "normal" | "selectAll" {
+    get showCheckBoxesMode(): TreeViewCheckBoxMode {
         return this._getOption('showCheckBoxesMode');
     }
-    set showCheckBoxesMode(value: "none" | "normal" | "selectAll") {
+    set showCheckBoxesMode(value: TreeViewCheckBoxMode) {
         this._setOption('showCheckBoxesMode', value);
     }
 
@@ -848,7 +849,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataStructureChange: EventEmitter<"plain" | "tree">;
+    @Output() dataStructureChange: EventEmitter<DataStructure>;
 
     /**
     
@@ -897,7 +898,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() expandEventChange: EventEmitter<"dblclick" | "click">;
+    @Output() expandEventChange: EventEmitter<TreeViewExpandEvent>;
 
     /**
     
@@ -1016,7 +1017,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scrollDirectionChange: EventEmitter<"both" | "horizontal" | "vertical">;
+    @Output() scrollDirectionChange: EventEmitter<ScrollDirection>;
 
     /**
     
@@ -1044,7 +1045,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchModeChange: EventEmitter<"contains" | "startswith" | "equals">;
+    @Output() searchModeChange: EventEmitter<SearchMode>;
 
     /**
     
@@ -1086,7 +1087,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<"single" | "multiple">;
+    @Output() selectionModeChange: EventEmitter<SingleOrMultiple>;
 
     /**
     
@@ -1100,7 +1101,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showCheckBoxesModeChange: EventEmitter<"none" | "normal" | "selectAll">;
+    @Output() showCheckBoxesModeChange: EventEmitter<TreeViewCheckBoxMode>;
 
     /**
     

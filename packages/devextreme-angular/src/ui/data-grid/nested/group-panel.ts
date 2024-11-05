@@ -14,6 +14,7 @@ import {
 
 
 
+import { Mode } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -45,10 +46,10 @@ export class DxoDataGridGroupPanelComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get visible(): boolean | "auto" {
+    get visible(): boolean | Mode {
         return this._getOption('visible');
     }
-    set visible(value: boolean | "auto") {
+    set visible(value: boolean | Mode) {
         this._setOption('visible', value);
     }
 

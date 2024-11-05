@@ -14,7 +14,8 @@ import {
 
 
 
-import { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/form';
+import { Mode } from 'devextreme/common';
+import { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/form';
 
 import {
     NestedOptionHost,
@@ -70,10 +71,10 @@ export class DxoDataGridFormComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get colCount(): number | "auto" {
+    get colCount(): Mode | number {
         return this._getOption('colCount');
     }
-    set colCount(value: number | "auto") {
+    set colCount(value: Mode | number) {
         this._setOption('colCount', value);
     }
 
@@ -166,18 +167,18 @@ export class DxoDataGridFormComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get labelLocation(): "left" | "right" | "top" {
+    get labelLocation(): LabelLocation {
         return this._getOption('labelLocation');
     }
-    set labelLocation(value: "left" | "right" | "top") {
+    set labelLocation(value: LabelLocation) {
         this._setOption('labelLocation', value);
     }
 
     @Input()
-    get labelMode(): "static" | "floating" | "hidden" | "outside" {
+    get labelMode(): FormLabelMode {
         return this._getOption('labelMode');
     }
-    set labelMode(value: "static" | "floating" | "hidden" | "outside") {
+    set labelMode(value: FormLabelMode) {
         this._setOption('labelMode', value);
     }
 

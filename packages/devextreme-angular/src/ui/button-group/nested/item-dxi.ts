@@ -16,6 +16,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
+import { ButtonType } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -84,10 +85,10 @@ export class DxiButtonGroupItemComponent extends CollectionNestedOption implemen
     }
 
     @Input()
-    get type(): "danger" | "default" | "normal" | "success" {
+    get type(): ButtonType {
         return this._getOption('type');
     }
-    set type(value: "danger" | "default" | "normal" | "success") {
+    set type(value: ButtonType) {
         this._setOption('type', value);
     }
 

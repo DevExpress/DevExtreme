@@ -17,7 +17,7 @@ import { DOCUMENT } from '@angular/common';
 
 
 import dxDataGrid from 'devextreme/ui/data_grid';
-import { dxDataGridColumn, dxDataGridRowObject, ColumnButtonClickEvent } from 'devextreme/ui/data_grid';
+import { dxDataGridColumn, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent } from 'devextreme/ui/data_grid';
 
 import {
     NestedOptionHost,
@@ -70,10 +70,10 @@ export class DxiDataGridButtonComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get name(): "cancel" | "delete" | "edit" | "save" | "undelete" {
+    get name(): DataGridPredefinedColumnButton | string {
         return this._getOption('name');
     }
-    set name(value: "cancel" | "delete" | "edit" | "save" | "undelete") {
+    set name(value: DataGridPredefinedColumnButton | string) {
         this._setOption('name', value);
     }
 

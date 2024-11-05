@@ -14,6 +14,7 @@ import {
 
 
 
+import { StateStoreType } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -69,10 +70,10 @@ export class DxoDataGridStateStoringComponent extends NestedOption implements On
     }
 
     @Input()
-    get type(): "custom" | "localStorage" | "sessionStorage" {
+    get type(): StateStoreType {
         return this._getOption('type');
     }
-    set type(value: "custom" | "localStorage" | "sessionStorage") {
+    set type(value: StateStoreType) {
         this._setOption('type', value);
     }
 

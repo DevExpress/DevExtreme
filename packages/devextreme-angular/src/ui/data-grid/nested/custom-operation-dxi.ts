@@ -13,6 +13,7 @@ import {
 
 
 import { dxFilterBuilderField } from 'devextreme/ui/filter_builder';
+import { DataType } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -52,10 +53,10 @@ export class DxiDataGridCustomOperationComponent extends CollectionNestedOption 
     }
 
     @Input()
-    get dataTypes(): Array<"string" | "number" | "date" | "boolean" | "object" | "datetime"> {
+    get dataTypes(): Array<DataType> {
         return this._getOption('dataTypes');
     }
-    set dataTypes(value: Array<"string" | "number" | "date" | "boolean" | "object" | "datetime">) {
+    set dataTypes(value: Array<DataType>) {
         this._setOption('dataTypes', value);
     }
 

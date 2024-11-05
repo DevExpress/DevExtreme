@@ -15,6 +15,7 @@ import {
 
 
 import { Font } from 'devextreme/common/charts';
+import { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -38,10 +39,10 @@ export class DxoVectorMapLegendTitleComponent extends NestedOption implements On
     }
 
     @Input()
-    get horizontalAlignment(): "center" | "left" | "right" {
+    get horizontalAlignment(): HorizontalAlignment {
         return this._getOption('horizontalAlignment');
     }
-    set horizontalAlignment(value: "center" | "left" | "right") {
+    set horizontalAlignment(value: HorizontalAlignment) {
         this._setOption('horizontalAlignment', value);
     }
 
@@ -62,10 +63,10 @@ export class DxoVectorMapLegendTitleComponent extends NestedOption implements On
     }
 
     @Input()
-    get subtitle(): string | { font?: Font, offset?: number, text?: string } {
+    get subtitle(): Record<string, any> | string | { font?: Font, offset?: number, text?: string } {
         return this._getOption('subtitle');
     }
-    set subtitle(value: string | { font?: Font, offset?: number, text?: string }) {
+    set subtitle(value: Record<string, any> | string | { font?: Font, offset?: number, text?: string }) {
         this._setOption('subtitle', value);
     }
 
@@ -78,10 +79,10 @@ export class DxoVectorMapLegendTitleComponent extends NestedOption implements On
     }
 
     @Input()
-    get verticalAlignment(): "bottom" | "top" {
+    get verticalAlignment(): VerticalEdge {
         return this._getOption('verticalAlignment');
     }
-    set verticalAlignment(value: "bottom" | "top") {
+    set verticalAlignment(value: VerticalEdge) {
         this._setOption('verticalAlignment', value);
     }
 

@@ -14,8 +14,8 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
-import { Font } from 'devextreme/common/charts';
+import { Font, LabelOverlap } from 'devextreme/common/charts';
+import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -55,10 +55,10 @@ export class DxoPolarChartAxisLabelComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get format(): LocalizationTypes.Format {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: LocalizationTypes.Format) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 
@@ -71,10 +71,10 @@ export class DxoPolarChartAxisLabelComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get overlappingBehavior(): "hide" | "none" {
+    get overlappingBehavior(): LabelOverlap {
         return this._getOption('overlappingBehavior');
     }
-    set overlappingBehavior(value: "hide" | "none") {
+    set overlappingBehavior(value: LabelOverlap) {
         this._setOption('overlappingBehavior', value);
     }
 

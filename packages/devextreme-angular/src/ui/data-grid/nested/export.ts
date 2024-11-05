@@ -14,6 +14,7 @@ import {
 
 
 
+import { DataGridExportFormat } from 'devextreme/ui/data_grid';
 
 import {
     NestedOptionHost,
@@ -45,10 +46,10 @@ export class DxoDataGridExportComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get formats(): Array<"pdf" | "xlsx" | string> {
+    get formats(): Array<DataGridExportFormat | string> {
         return this._getOption('formats');
     }
-    set formats(value: Array<"pdf" | "xlsx" | string>) {
+    set formats(value: Array<DataGridExportFormat | string>) {
         this._setOption('formats', value);
     }
 

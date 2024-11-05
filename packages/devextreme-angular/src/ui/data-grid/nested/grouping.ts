@@ -14,6 +14,7 @@ import {
 
 
 
+import { GroupExpandMode } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -53,10 +54,10 @@ export class DxoDataGridGroupingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get expandMode(): "buttonClick" | "rowClick" {
+    get expandMode(): GroupExpandMode {
         return this._getOption('expandMode');
     }
-    set expandMode(value: "buttonClick" | "rowClick") {
+    set expandMode(value: GroupExpandMode) {
         this._setOption('expandMode', value);
     }
 

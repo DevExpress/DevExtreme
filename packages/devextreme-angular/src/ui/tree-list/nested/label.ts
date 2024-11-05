@@ -18,6 +18,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
+import { HorizontalAlignment } from 'devextreme/common';
+import { LabelLocation } from 'devextreme/ui/form';
 
 import {
     NestedOptionHost,
@@ -38,18 +40,18 @@ import { NestedOption } from 'devextreme-angular/core';
 export class DxoTreeListLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
     @Input()
-    get alignment(): "center" | "left" | "right" {
+    get alignment(): HorizontalAlignment {
         return this._getOption('alignment');
     }
-    set alignment(value: "center" | "left" | "right") {
+    set alignment(value: HorizontalAlignment) {
         this._setOption('alignment', value);
     }
 
     @Input()
-    get location(): "left" | "right" | "top" {
+    get location(): LabelLocation {
         return this._getOption('location');
     }
-    set location(value: "left" | "right" | "top") {
+    set location(value: LabelLocation) {
         this._setOption('location', value);
     }
 

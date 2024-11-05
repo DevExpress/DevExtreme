@@ -24,9 +24,10 @@ import {
 } from '@angular/core';
 
 
-import * as LocalizationTypes from 'devextreme/localization';
-import { TextEditorButton } from 'devextreme/common';
+import { ApplyValueMode, TextEditorButton, LabelMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
+import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
 import { dxCalendarOptions } from 'devextreme/ui/calendar';
+import { Format } from 'devextreme/localization';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/date_range_box';
 
@@ -168,10 +169,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get applyValueMode(): "instantly" | "useButtons" {
+    get applyValueMode(): ApplyValueMode {
         return this._getOption('applyValueMode');
     }
-    set applyValueMode(value: "instantly" | "useButtons") {
+    set applyValueMode(value: ApplyValueMode) {
         this._setOption('applyValueMode', value);
     }
 
@@ -181,10 +182,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get buttons(): Array<"clear" | "dropDown" | TextEditorButton> {
+    get buttons(): Array<DropDownPredefinedButton | TextEditorButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<"clear" | "dropDown" | TextEditorButton>) {
+    set buttons(value: Array<DropDownPredefinedButton | TextEditorButton>) {
         this._setOption('buttons', value);
     }
 
@@ -272,10 +273,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get displayFormat(): LocalizationTypes.Format {
+    get displayFormat(): Format {
         return this._getOption('displayFormat');
     }
-    set displayFormat(value: LocalizationTypes.Format) {
+    set displayFormat(value: Format) {
         this._setOption('displayFormat', value);
     }
 
@@ -519,10 +520,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get labelMode(): "static" | "floating" | "hidden" | "outside" {
+    get labelMode(): LabelMode {
         return this._getOption('labelMode');
     }
-    set labelMode(value: "static" | "floating" | "hidden" | "outside") {
+    set labelMode(value: LabelMode) {
         this._setOption('labelMode', value);
     }
 
@@ -753,10 +754,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get stylingMode(): "outlined" | "underlined" | "filled" {
+    get stylingMode(): EditorStyle {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: "outlined" | "underlined" | "filled") {
+    set stylingMode(value: EditorStyle) {
         this._setOption('stylingMode', value);
     }
 
@@ -831,10 +832,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get validationMessageMode(): "always" | "auto" {
+    get validationMessageMode(): ValidationMessageMode {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: "always" | "auto") {
+    set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
 
@@ -844,10 +845,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get validationMessagePosition(): "bottom" | "left" | "right" | "top" | "auto" {
+    get validationMessagePosition(): Mode | Position {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: "bottom" | "left" | "right" | "top" | "auto") {
+    set validationMessagePosition(value: Mode | Position) {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -857,10 +858,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get validationStatus(): "valid" | "invalid" | "pending" {
+    get validationStatus(): ValidationStatus {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: "valid" | "invalid" | "pending") {
+    set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
 
@@ -1085,14 +1086,14 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() applyValueModeChange: EventEmitter<"instantly" | "useButtons">;
+    @Output() applyValueModeChange: EventEmitter<ApplyValueMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonsChange: EventEmitter<Array<"clear" | "dropDown" | TextEditorButton>>;
+    @Output() buttonsChange: EventEmitter<Array<DropDownPredefinedButton | TextEditorButton>>;
 
     /**
     
@@ -1141,7 +1142,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() displayFormatChange: EventEmitter<LocalizationTypes.Format>;
+    @Output() displayFormatChange: EventEmitter<Format>;
 
     /**
     
@@ -1274,7 +1275,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelModeChange: EventEmitter<"static" | "floating" | "hidden" | "outside">;
+    @Output() labelModeChange: EventEmitter<LabelMode>;
 
     /**
     
@@ -1400,7 +1401,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<"outlined" | "underlined" | "filled">;
+    @Output() stylingModeChange: EventEmitter<EditorStyle>;
 
     /**
     
@@ -1442,21 +1443,21 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<"always" | "auto">;
+    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<"bottom" | "left" | "right" | "top" | "auto">;
+    @Output() validationMessagePositionChange: EventEmitter<Mode | Position>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<"valid" | "invalid" | "pending">;
+    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
     

@@ -20,6 +20,7 @@ import dxPopup from 'devextreme/ui/popup';
 import { AnimationConfig } from 'devextreme/animation/fx';
 import { event, EventInfo } from 'devextreme/events/index';
 import { Component as CoreComponent } from 'devextreme/core/component';
+import { PositionAlignment } from 'devextreme/common';
 import { PositionConfig } from 'devextreme/animation/position';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
@@ -317,10 +318,10 @@ export class DxoDataGridFilterBuilderPopupComponent extends NestedOption impleme
     }
 
     @Input()
-    get position(): (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" {
+    get position(): (() => void) | PositionAlignment | PositionConfig {
         return this._getOption('position');
     }
-    set position(value: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") {
+    set position(value: (() => void) | PositionAlignment | PositionConfig) {
         this._setOption('position', value);
     }
 

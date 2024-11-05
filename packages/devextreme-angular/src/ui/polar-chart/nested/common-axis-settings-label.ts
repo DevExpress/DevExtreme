@@ -14,7 +14,7 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
+import { Font, LabelOverlap } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -46,10 +46,10 @@ export class DxoPolarChartCommonAxisSettingsLabelComponent extends NestedOption 
     }
 
     @Input()
-    get overlappingBehavior(): "hide" | "none" {
+    get overlappingBehavior(): LabelOverlap {
         return this._getOption('overlappingBehavior');
     }
-    set overlappingBehavior(value: "hide" | "none") {
+    set overlappingBehavior(value: LabelOverlap) {
         this._setOption('overlappingBehavior', value);
     }
 

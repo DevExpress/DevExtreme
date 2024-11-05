@@ -25,9 +25,10 @@ export { ExplicitTypes } from 'devextreme/ui/menu';
 
 import DataSource from 'devextreme/data/data_source';
 import { AnimationConfig } from 'devextreme/animation/fx';
-import { dxMenuItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SubmenuHiddenEvent, SubmenuHidingEvent, SubmenuShowingEvent, SubmenuShownEvent } from 'devextreme/ui/menu';
+import { dxMenuItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SubmenuHiddenEvent, SubmenuHidingEvent, SubmenuShowingEvent, SubmenuShownEvent, SubmenuDirection } from 'devextreme/ui/menu';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
+import { Orientation, SingleOrNone, SubmenuShowMode } from 'devextreme/common';
 
 import DxMenu from 'devextreme/ui/menu';
 
@@ -335,10 +336,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get orientation(): "horizontal" | "vertical" {
+    get orientation(): Orientation {
         return this._getOption('orientation');
     }
-    set orientation(value: "horizontal" | "vertical") {
+    set orientation(value: Orientation) {
         this._setOption('orientation', value);
     }
 
@@ -400,10 +401,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get selectionMode(): "single" | "none" {
+    get selectionMode(): SingleOrNone {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: "single" | "none") {
+    set selectionMode(value: SingleOrNone) {
         this._setOption('selectionMode', value);
     }
 
@@ -413,10 +414,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get showFirstSubmenuMode(): "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" } {
+    get showFirstSubmenuMode(): Record<string, any> | SubmenuShowMode | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: SubmenuShowMode } {
         return this._getOption('showFirstSubmenuMode');
     }
-    set showFirstSubmenuMode(value: "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" }) {
+    set showFirstSubmenuMode(value: Record<string, any> | SubmenuShowMode | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: SubmenuShowMode }) {
         this._setOption('showFirstSubmenuMode', value);
     }
 
@@ -426,10 +427,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get showSubmenuMode(): "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" } {
+    get showSubmenuMode(): Record<string, any> | SubmenuShowMode | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: SubmenuShowMode } {
         return this._getOption('showSubmenuMode');
     }
-    set showSubmenuMode(value: "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" }) {
+    set showSubmenuMode(value: Record<string, any> | SubmenuShowMode | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: SubmenuShowMode }) {
         this._setOption('showSubmenuMode', value);
     }
 
@@ -439,10 +440,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get submenuDirection(): "auto" | "leftOrTop" | "rightOrBottom" {
+    get submenuDirection(): SubmenuDirection {
         return this._getOption('submenuDirection');
     }
-    set submenuDirection(value: "auto" | "leftOrTop" | "rightOrBottom") {
+    set submenuDirection(value: SubmenuDirection) {
         this._setOption('submenuDirection', value);
     }
 
@@ -712,7 +713,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() orientationChange: EventEmitter<"horizontal" | "vertical">;
+    @Output() orientationChange: EventEmitter<Orientation>;
 
     /**
     
@@ -747,28 +748,28 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<"single" | "none">;
+    @Output() selectionModeChange: EventEmitter<SingleOrNone>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showFirstSubmenuModeChange: EventEmitter<"onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" }>;
+    @Output() showFirstSubmenuModeChange: EventEmitter<Record<string, any> | SubmenuShowMode | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: SubmenuShowMode }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showSubmenuModeChange: EventEmitter<"onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" }>;
+    @Output() showSubmenuModeChange: EventEmitter<Record<string, any> | SubmenuShowMode | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: SubmenuShowMode }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() submenuDirectionChange: EventEmitter<"auto" | "leftOrTop" | "rightOrBottom">;
+    @Output() submenuDirectionChange: EventEmitter<SubmenuDirection>;
 
     /**
     

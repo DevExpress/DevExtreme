@@ -17,7 +17,7 @@ import {
 
 
 
-import { dxFileManagerContextMenuItem } from 'devextreme/ui/file_manager';
+import { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem } from 'devextreme/ui/file_manager';
 
 import {
     NestedOptionHost,
@@ -35,10 +35,10 @@ import { DxiFileManagerItemComponent } from './item-dxi';
 })
 export class DxoFileManagerContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get items(): Array<dxFileManagerContextMenuItem | "create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete"> {
+    get items(): Array<dxFileManagerContextMenuItem | FileManagerPredefinedContextMenuItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxFileManagerContextMenuItem | "create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete">) {
+    set items(value: Array<dxFileManagerContextMenuItem | FileManagerPredefinedContextMenuItem>) {
         this._setOption('items', value);
     }
 

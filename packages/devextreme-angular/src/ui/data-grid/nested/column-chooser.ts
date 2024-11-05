@@ -14,8 +14,9 @@ import {
 
 
 
+import { ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig } from 'devextreme/common/grids';
 import { PositionConfig } from 'devextreme/animation/position';
-import { ColumnChooserSearchConfig, ColumnChooserSelectionConfig } from 'devextreme/common/grids';
+import { SortOrder } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -71,10 +72,10 @@ export class DxoDataGridColumnChooserComponent extends NestedOption implements O
     }
 
     @Input()
-    get mode(): "dragAndDrop" | "select" {
+    get mode(): ColumnChooserMode {
         return this._getOption('mode');
     }
-    set mode(value: "dragAndDrop" | "select") {
+    set mode(value: ColumnChooserMode) {
         this._setOption('mode', value);
     }
 
@@ -111,10 +112,10 @@ export class DxoDataGridColumnChooserComponent extends NestedOption implements O
     }
 
     @Input()
-    get sortOrder(): "asc" | "desc" {
+    get sortOrder(): SortOrder {
         return this._getOption('sortOrder');
     }
-    set sortOrder(value: "asc" | "desc") {
+    set sortOrder(value: SortOrder) {
         this._setOption('sortOrder', value);
     }
 

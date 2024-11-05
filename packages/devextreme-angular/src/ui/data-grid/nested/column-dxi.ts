@@ -15,13 +15,14 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
 import * as CommonTypes from 'devextreme/common';
-import { dxDataGridColumnButton, dxDataGridColumn } from 'devextreme/ui/data_grid';
+import { HorizontalAlignment, DataType, SearchMode, SortOrder } from 'devextreme/common';
+import { DataGridPredefinedColumnButton, dxDataGridColumnButton, dxDataGridColumn, DataGridCommandColumnType } from 'devextreme/ui/data_grid';
+import { FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation } from 'devextreme/common/grids';
+import { Format } from 'devextreme/localization';
 import { dxFormSimpleItem } from 'devextreme/ui/form';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { ColumnHeaderFilterSearchConfig } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -48,10 +49,10 @@ import { DxiDataGridValidationRuleComponent } from './validation-rule-dxi';
 })
 export class DxiDataGridColumnComponent extends CollectionNestedOption {
     @Input()
-    get alignment(): "center" | "left" | "right" {
+    get alignment(): HorizontalAlignment {
         return this._getOption('alignment');
     }
-    set alignment(value: "center" | "left" | "right") {
+    set alignment(value: HorizontalAlignment) {
         this._setOption('alignment', value);
     }
 
@@ -152,10 +153,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get buttons(): Array<dxDataGridColumnButton | "cancel" | "delete" | "edit" | "save" | "undelete"> {
+    get buttons(): Array<DataGridPredefinedColumnButton | dxDataGridColumnButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<dxDataGridColumnButton | "cancel" | "delete" | "edit" | "save" | "undelete">) {
+    set buttons(value: Array<DataGridPredefinedColumnButton | dxDataGridColumnButton>) {
         this._setOption('buttons', value);
     }
 
@@ -248,10 +249,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get dataType(): "string" | "number" | "date" | "boolean" | "object" | "datetime" {
+    get dataType(): DataType {
         return this._getOption('dataType');
     }
-    set dataType(value: "string" | "number" | "date" | "boolean" | "object" | "datetime") {
+    set dataType(value: DataType) {
         this._setOption('dataType', value);
     }
 
@@ -288,18 +289,18 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get filterOperations(): Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | "anyof" | "noneof" | string> {
+    get filterOperations(): Array<FilterOperation | string> {
         return this._getOption('filterOperations');
     }
-    set filterOperations(value: Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | "anyof" | "noneof" | string>) {
+    set filterOperations(value: Array<FilterOperation | string>) {
         this._setOption('filterOperations', value);
     }
 
     @Input()
-    get filterType(): "exclude" | "include" {
+    get filterType(): FilterType {
         return this._getOption('filterType');
     }
-    set filterType(value: "exclude" | "include") {
+    set filterType(value: FilterType) {
         this._setOption('filterType', value);
     }
 
@@ -328,18 +329,18 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get fixedPosition(): "left" | "right" | "sticky" {
+    get fixedPosition(): FixedPosition {
         return this._getOption('fixedPosition');
     }
-    set fixedPosition(value: "left" | "right" | "sticky") {
+    set fixedPosition(value: FixedPosition) {
         this._setOption('fixedPosition', value);
     }
 
     @Input()
-    get format(): LocalizationTypes.Format {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: LocalizationTypes.Format) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 
@@ -376,10 +377,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get headerFilter(): Record<string, any> | { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store, groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year", height?: number | string, search?: ColumnHeaderFilterSearchConfig, searchMode?: "contains" | "startswith" | "equals", width?: number | string } {
+    get headerFilter(): Record<string, any> | { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store, groupInterval?: HeaderFilterGroupInterval | number, height?: number | string, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string } {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: Record<string, any> | { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store, groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year", height?: number | string, search?: ColumnHeaderFilterSearchConfig, searchMode?: "contains" | "startswith" | "equals", width?: number | string }) {
+    set headerFilter(value: Record<string, any> | { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store, groupInterval?: HeaderFilterGroupInterval | number, height?: number | string, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string }) {
         this._setOption('headerFilter', value);
     }
 
@@ -440,10 +441,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get selectedFilterOperation(): "<" | "<=" | "<>" | "=" | ">" | ">=" | "between" | "contains" | "endswith" | "notcontains" | "startswith" {
+    get selectedFilterOperation(): SelectedFilterOperation {
         return this._getOption('selectedFilterOperation');
     }
-    set selectedFilterOperation(value: "<" | "<=" | "<>" | "=" | ">" | ">=" | "between" | "contains" | "endswith" | "notcontains" | "startswith") {
+    set selectedFilterOperation(value: SelectedFilterOperation) {
         this._setOption('selectedFilterOperation', value);
     }
 
@@ -496,10 +497,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get sortOrder(): "asc" | "desc" {
+    get sortOrder(): SortOrder {
         return this._getOption('sortOrder');
     }
-    set sortOrder(value: "asc" | "desc") {
+    set sortOrder(value: SortOrder) {
         this._setOption('sortOrder', value);
     }
 
@@ -512,10 +513,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get type(): "adaptive" | "buttons" | "detailExpand" | "groupExpand" | "selection" | "drag" {
+    get type(): DataGridCommandColumnType {
         return this._getOption('type');
     }
-    set type(value: "adaptive" | "buttons" | "detailExpand" | "groupExpand" | "selection" | "drag") {
+    set type(value: DataGridCommandColumnType) {
         this._setOption('type', value);
     }
 

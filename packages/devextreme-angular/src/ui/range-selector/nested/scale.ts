@@ -17,8 +17,9 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
-import { ScaleBreak, Font } from 'devextreme/common/charts';
+import { TimeInterval, ScaleBreak, ScaleBreakLineStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, ChartsDataType } from 'devextreme/common/charts';
+import { Format } from 'devextreme/localization';
+import { AxisScale } from 'devextreme/viz/range_selector';
 
 import {
     NestedOptionHost,
@@ -51,10 +52,10 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get aggregationInterval(): number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get aggregationInterval(): number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('aggregationInterval');
     }
-    set aggregationInterval(value: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set aggregationInterval(value: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('aggregationInterval', value);
     }
 
@@ -75,10 +76,10 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get breakStyle(): Record<string, any> | { color?: string, line?: "straight" | "waved", width?: number } {
+    get breakStyle(): Record<string, any> | { color?: string, line?: ScaleBreakLineStyle, width?: number } {
         return this._getOption('breakStyle');
     }
-    set breakStyle(value: Record<string, any> | { color?: string, line?: "straight" | "waved", width?: number }) {
+    set breakStyle(value: Record<string, any> | { color?: string, line?: ScaleBreakLineStyle, width?: number }) {
         this._setOption('breakStyle', value);
     }
 
@@ -91,10 +92,10 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get discreteAxisDivisionMode(): "betweenLabels" | "crossLabels" {
+    get discreteAxisDivisionMode(): DiscreteAxisDivisionMode {
         return this._getOption('discreteAxisDivisionMode');
     }
-    set discreteAxisDivisionMode(value: "betweenLabels" | "crossLabels") {
+    set discreteAxisDivisionMode(value: DiscreteAxisDivisionMode) {
         this._setOption('discreteAxisDivisionMode', value);
     }
 
@@ -123,10 +124,10 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get label(): Record<string, any> | { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, overlappingBehavior?: "hide" | "none", topIndent?: number, visible?: boolean } {
+    get label(): Record<string, any> | { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, overlappingBehavior?: "hide" | "none", topIndent?: number, visible?: boolean }) {
+    set label(value: Record<string, any> | { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -147,18 +148,18 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get marker(): Record<string, any> | { label?: Record<string, any> | { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: LocalizationTypes.Format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean } {
+    get marker(): Record<string, any> | { label?: Record<string, any> | { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean } {
         return this._getOption('marker');
     }
-    set marker(value: Record<string, any> | { label?: Record<string, any> | { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: LocalizationTypes.Format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }) {
+    set marker(value: Record<string, any> | { label?: Record<string, any> | { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }) {
         this._setOption('marker', value);
     }
 
     @Input()
-    get maxRange(): number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get maxRange(): number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('maxRange');
     }
-    set maxRange(value: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set maxRange(value: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('maxRange', value);
     }
 
@@ -179,18 +180,18 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get minorTickInterval(): number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get minorTickInterval(): number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('minorTickInterval');
     }
-    set minorTickInterval(value: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set minorTickInterval(value: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('minorTickInterval', value);
     }
 
     @Input()
-    get minRange(): number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get minRange(): number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('minRange');
     }
-    set minRange(value: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set minRange(value: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('minRange', value);
     }
 
@@ -235,26 +236,26 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get tickInterval(): number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get tickInterval(): number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('tickInterval');
     }
-    set tickInterval(value: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set tickInterval(value: number | Record<string, any> | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('tickInterval', value);
     }
 
     @Input()
-    get type(): "continuous" | "discrete" | "logarithmic" | "semidiscrete" {
+    get type(): AxisScale {
         return this._getOption('type');
     }
-    set type(value: "continuous" | "discrete" | "logarithmic" | "semidiscrete") {
+    set type(value: AxisScale) {
         this._setOption('type', value);
     }
 
     @Input()
-    get valueType(): "datetime" | "numeric" | "string" {
+    get valueType(): ChartsDataType {
         return this._getOption('valueType');
     }
-    set valueType(value: "datetime" | "numeric" | "string") {
+    set valueType(value: ChartsDataType) {
         this._setOption('valueType', value);
     }
 

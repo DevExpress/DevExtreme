@@ -17,6 +17,7 @@ import {
 } from '@angular/core';
 
 
+import { DragDirection } from 'devextreme/common';
 import { DisposingEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/draggable';
 
 import DxDraggable from 'devextreme/ui/draggable';
@@ -111,10 +112,10 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get cursorOffset(): string | { x?: number, y?: number } {
+    get cursorOffset(): Record<string, any> | string | { x?: number, y?: number } {
         return this._getOption('cursorOffset');
     }
-    set cursorOffset(value: string | { x?: number, y?: number }) {
+    set cursorOffset(value: Record<string, any> | string | { x?: number, y?: number }) {
         this._setOption('cursorOffset', value);
     }
 
@@ -137,10 +138,10 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get dragDirection(): "both" | "horizontal" | "vertical" {
+    get dragDirection(): DragDirection {
         return this._getOption('dragDirection');
     }
-    set dragDirection(value: "both" | "horizontal" | "vertical") {
+    set dragDirection(value: DragDirection) {
         this._setOption('dragDirection', value);
     }
 
@@ -342,7 +343,7 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() cursorOffsetChange: EventEmitter<string | { x?: number, y?: number }>;
+    @Output() cursorOffsetChange: EventEmitter<Record<string, any> | string | { x?: number, y?: number }>;
 
     /**
     
@@ -356,7 +357,7 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dragDirectionChange: EventEmitter<"both" | "horizontal" | "vertical">;
+    @Output() dragDirectionChange: EventEmitter<DragDirection>;
 
     /**
     

@@ -14,6 +14,7 @@ import {
 
 
 
+import { SingleMultipleOrNone } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -37,10 +38,10 @@ export class DxoTreeListTreeListSelectionComponent extends NestedOption implemen
     }
 
     @Input()
-    get mode(): "single" | "multiple" | "none" {
+    get mode(): SingleMultipleOrNone {
         return this._getOption('mode');
     }
-    set mode(value: "single" | "multiple" | "none") {
+    set mode(value: SingleMultipleOrNone) {
         this._setOption('mode', value);
     }
 

@@ -14,8 +14,9 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
-import { Font } from 'devextreme/common/charts';
+import { Font, LabelOverlap } from 'devextreme/common/charts';
+import { Format } from 'devextreme/localization';
+import { CircularGaugeLabelOverlap, CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
 
 import {
     NestedOptionHost,
@@ -63,10 +64,10 @@ export class DxoCircularGaugeScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get label(): Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, hideFirstOrLast?: "first" | "last", indentFromTick?: number, overlappingBehavior?: "hide" | "none", useRangeColors?: boolean, visible?: boolean } {
+    get label(): Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, hideFirstOrLast?: "first" | "last", indentFromTick?: number, overlappingBehavior?: "hide" | "none", useRangeColors?: boolean, visible?: boolean }) {
+    set label(value: Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -87,10 +88,10 @@ export class DxoCircularGaugeScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get orientation(): "center" | "inside" | "outside" {
+    get orientation(): CircularGaugeElementOrientation {
         return this._getOption('orientation');
     }
-    set orientation(value: "center" | "inside" | "outside") {
+    set orientation(value: CircularGaugeElementOrientation) {
         this._setOption('orientation', value);
     }
 

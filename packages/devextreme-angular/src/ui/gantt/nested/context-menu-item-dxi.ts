@@ -17,6 +17,7 @@ import { DOCUMENT } from '@angular/common';
 
 
 import { dxContextMenuItem } from 'devextreme/ui/context_menu';
+import { GanttPredefinedContextMenuItem } from 'devextreme/ui/gantt';
 
 import {
     NestedOptionHost,
@@ -77,10 +78,10 @@ export class DxiGanttContextMenuItemComponent extends CollectionNestedOption imp
     }
 
     @Input()
-    get name(): "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "deleteDependency" | "taskDetails" | "resourceManager" {
+    get name(): GanttPredefinedContextMenuItem | string {
         return this._getOption('name');
     }
-    set name(value: "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "deleteDependency" | "taskDetails" | "resourceManager") {
+    set name(value: GanttPredefinedContextMenuItem | string) {
         this._setOption('name', value);
     }
 

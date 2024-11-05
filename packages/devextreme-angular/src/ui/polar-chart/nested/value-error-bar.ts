@@ -14,6 +14,7 @@ import {
 
 
 
+import { ValueErrorBarDisplayMode, ValueErrorBarType } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -37,10 +38,10 @@ export class DxoPolarChartValueErrorBarComponent extends NestedOption implements
     }
 
     @Input()
-    get displayMode(): "auto" | "high" | "low" | "none" {
+    get displayMode(): ValueErrorBarDisplayMode {
         return this._getOption('displayMode');
     }
-    set displayMode(value: "auto" | "high" | "low" | "none") {
+    set displayMode(value: ValueErrorBarDisplayMode) {
         this._setOption('displayMode', value);
     }
 
@@ -85,10 +86,10 @@ export class DxoPolarChartValueErrorBarComponent extends NestedOption implements
     }
 
     @Input()
-    get type(): "fixed" | "percent" | "stdDeviation" | "stdError" | "variance" {
+    get type(): ValueErrorBarType {
         return this._getOption('type');
     }
-    set type(value: "fixed" | "percent" | "stdDeviation" | "stdError" | "variance") {
+    set type(value: ValueErrorBarType) {
         this._setOption('type', value);
     }
 

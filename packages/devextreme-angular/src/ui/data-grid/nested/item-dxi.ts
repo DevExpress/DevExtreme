@@ -16,6 +16,9 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
+import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
+import { DataGridPredefinedToolbarItem } from 'devextreme/ui/data_grid';
 
 import {
     NestedOptionHost,
@@ -60,18 +63,18 @@ export class DxiDataGridItemComponent extends CollectionNestedOption implements 
     }
 
     @Input()
-    get locateInMenu(): "always" | "auto" | "never" {
+    get locateInMenu(): LocateInMenuMode {
         return this._getOption('locateInMenu');
     }
-    set locateInMenu(value: "always" | "auto" | "never") {
+    set locateInMenu(value: LocateInMenuMode) {
         this._setOption('locateInMenu', value);
     }
 
     @Input()
-    get location(): "after" | "before" | "center" {
+    get location(): ToolbarItemLocation {
         return this._getOption('location');
     }
-    set location(value: "after" | "before" | "center") {
+    set location(value: ToolbarItemLocation) {
         this._setOption('location', value);
     }
 
@@ -84,10 +87,10 @@ export class DxiDataGridItemComponent extends CollectionNestedOption implements 
     }
 
     @Input()
-    get name(): "addRowButton" | "applyFilterButton" | "columnChooserButton" | "exportButton" | "groupPanel" | "revertButton" | "saveButton" | "searchPanel" {
+    get name(): DataGridPredefinedToolbarItem | string {
         return this._getOption('name');
     }
-    set name(value: "addRowButton" | "applyFilterButton" | "columnChooserButton" | "exportButton" | "groupPanel" | "revertButton" | "saveButton" | "searchPanel") {
+    set name(value: DataGridPredefinedToolbarItem | string) {
         this._setOption('name', value);
     }
 
@@ -100,10 +103,10 @@ export class DxiDataGridItemComponent extends CollectionNestedOption implements 
     }
 
     @Input()
-    get showText(): "always" | "inMenu" {
+    get showText(): ShowTextMode {
         return this._getOption('showText');
     }
-    set showText(value: "always" | "inMenu") {
+    set showText(value: ShowTextMode) {
         this._setOption('showText', value);
     }
 
@@ -132,10 +135,10 @@ export class DxiDataGridItemComponent extends CollectionNestedOption implements 
     }
 
     @Input()
-    get widget(): "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox" {
+    get widget(): ToolbarItemComponent {
         return this._getOption('widget');
     }
-    set widget(value: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox") {
+    set widget(value: ToolbarItemComponent) {
         this._setOption('widget', value);
     }
 

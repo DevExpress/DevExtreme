@@ -12,7 +12,7 @@ import {
 
 
 
-import { CustomCommand } from 'devextreme/ui/diagram';
+import { Command, CustomCommand, ShapeCategory, ToolboxDisplayMode, ShapeType } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
@@ -28,10 +28,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiDiagramGroupComponent extends CollectionNestedOption {
     @Input()
-    get commands(): Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox"> {
+    get commands(): Array<Command | CustomCommand> {
         return this._getOption('commands');
     }
-    set commands(value: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">) {
+    set commands(value: Array<Command | CustomCommand>) {
         this._setOption('commands', value);
     }
 
@@ -44,18 +44,18 @@ export class DxiDiagramGroupComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get category(): "general" | "flowchart" | "orgChart" | "containers" | "custom" {
+    get category(): ShapeCategory | string {
         return this._getOption('category');
     }
-    set category(value: "general" | "flowchart" | "orgChart" | "containers" | "custom") {
+    set category(value: ShapeCategory | string) {
         this._setOption('category', value);
     }
 
     @Input()
-    get displayMode(): "icons" | "texts" {
+    get displayMode(): ToolboxDisplayMode {
         return this._getOption('displayMode');
     }
-    set displayMode(value: "icons" | "texts") {
+    set displayMode(value: ToolboxDisplayMode) {
         this._setOption('displayMode', value);
     }
 
@@ -68,10 +68,10 @@ export class DxiDiagramGroupComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get shapes(): Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight"> {
+    get shapes(): Array<ShapeType> {
         return this._getOption('shapes');
     }
-    set shapes(value: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">) {
+    set shapes(value: Array<ShapeType>) {
         this._setOption('shapes', value);
     }
 

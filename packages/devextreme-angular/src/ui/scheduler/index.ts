@@ -26,10 +26,11 @@ import dxScheduler from 'devextreme/ui/scheduler';
 import dxSortable from 'devextreme/ui/sortable';
 import dxDraggable from 'devextreme/ui/draggable';
 import DataSource from 'devextreme/data/data_source';
+import { AllDayPanelMode, ViewType, dxSchedulerAppointment, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, RecurrenceEditMode, dxSchedulerScrolling } from 'devextreme/ui/scheduler';
 import { event } from 'devextreme/events/index';
-import { dxSchedulerAppointment, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, dxSchedulerScrolling } from 'devextreme/ui/scheduler';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
+import { FirstDayOfWeek, Orientation } from 'devextreme/common';
 
 import DxScheduler from 'devextreme/ui/scheduler';
 
@@ -124,10 +125,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get allDayPanelMode(): "all" | "allDay" | "hidden" {
+    get allDayPanelMode(): AllDayPanelMode {
         return this._getOption('allDayPanelMode');
     }
-    set allDayPanelMode(value: "all" | "allDay" | "hidden") {
+    set allDayPanelMode(value: AllDayPanelMode) {
         this._setOption('allDayPanelMode', value);
     }
 
@@ -228,10 +229,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get currentView(): "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek" {
+    get currentView(): ViewType {
         return this._getOption('currentView');
     }
-    set currentView(value: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek") {
+    set currentView(value: ViewType) {
         this._setOption('currentView', value);
     }
 
@@ -412,10 +413,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get firstDayOfWeek(): 0 | 1 | 2 | 3 | 4 | 5 | 6 {
+    get firstDayOfWeek(): FirstDayOfWeek {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: 0 | 1 | 2 | 3 | 4 | 5 | 6) {
+    set firstDayOfWeek(value: FirstDayOfWeek) {
         this._setOption('firstDayOfWeek', value);
     }
 
@@ -516,10 +517,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get maxAppointmentsPerCell(): number | "auto" | "unlimited" {
+    get maxAppointmentsPerCell(): CellAppointmentsLimit | number {
         return this._getOption('maxAppointmentsPerCell');
     }
-    set maxAppointmentsPerCell(value: number | "auto" | "unlimited") {
+    set maxAppointmentsPerCell(value: CellAppointmentsLimit | number) {
         this._setOption('maxAppointmentsPerCell', value);
     }
 
@@ -568,10 +569,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get recurrenceEditMode(): "dialog" | "occurrence" | "series" {
+    get recurrenceEditMode(): RecurrenceEditMode {
         return this._getOption('recurrenceEditMode');
     }
-    set recurrenceEditMode(value: "dialog" | "occurrence" | "series") {
+    set recurrenceEditMode(value: RecurrenceEditMode) {
         this._setOption('recurrenceEditMode', value);
     }
 
@@ -828,10 +829,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get views(): Array<string> | { agendaDuration?: number, allDayPanelMode?: "all" | "allDay" | "hidden", appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, groupByDate?: boolean, groupOrientation?: "horizontal" | "vertical", groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: number | "auto" | "unlimited", name?: string, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: any, type?: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek" }[] {
+    get views(): Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: any, type?: ViewType }[] {
         return this._getOption('views');
     }
-    set views(value: Array<string> | { agendaDuration?: number, allDayPanelMode?: "all" | "allDay" | "hidden", appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, groupByDate?: boolean, groupOrientation?: "horizontal" | "vertical", groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: number | "auto" | "unlimited", name?: string, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: any, type?: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek" }[]) {
+    set views(value: Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: any, type?: ViewType }[]) {
         this._setOption('views', value);
     }
 
@@ -1031,7 +1032,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() allDayPanelModeChange: EventEmitter<"all" | "allDay" | "hidden">;
+    @Output() allDayPanelModeChange: EventEmitter<AllDayPanelMode>;
 
     /**
     
@@ -1087,7 +1088,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() currentViewChange: EventEmitter<"agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek">;
+    @Output() currentViewChange: EventEmitter<ViewType>;
 
     /**
     
@@ -1185,7 +1186,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() firstDayOfWeekChange: EventEmitter<0 | 1 | 2 | 3 | 4 | 5 | 6>;
+    @Output() firstDayOfWeekChange: EventEmitter<FirstDayOfWeek>;
 
     /**
     
@@ -1241,7 +1242,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxAppointmentsPerCellChange: EventEmitter<number | "auto" | "unlimited">;
+    @Output() maxAppointmentsPerCellChange: EventEmitter<CellAppointmentsLimit | number>;
 
     /**
     
@@ -1269,7 +1270,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() recurrenceEditModeChange: EventEmitter<"dialog" | "occurrence" | "series">;
+    @Output() recurrenceEditModeChange: EventEmitter<RecurrenceEditMode>;
 
     /**
     
@@ -1409,7 +1410,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() viewsChange: EventEmitter<Array<string> | { agendaDuration?: number, allDayPanelMode?: "all" | "allDay" | "hidden", appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, groupByDate?: boolean, groupOrientation?: "horizontal" | "vertical", groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: number | "auto" | "unlimited", name?: string, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: any, type?: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek" }[]>;
+    @Output() viewsChange: EventEmitter<Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: any, type?: ViewType }[]>;
 
     /**
     

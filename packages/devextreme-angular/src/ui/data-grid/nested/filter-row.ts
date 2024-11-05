@@ -14,6 +14,7 @@ import {
 
 
 
+import { ApplyFilterMode } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -29,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDataGridFilterRowComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get applyFilter(): "auto" | "onClick" {
+    get applyFilter(): ApplyFilterMode {
         return this._getOption('applyFilter');
     }
-    set applyFilter(value: "auto" | "onClick") {
+    set applyFilter(value: ApplyFilterMode) {
         this._setOption('applyFilter', value);
     }
 

@@ -12,8 +12,9 @@ import {
 
 
 
-import { VectorMapLegendItem } from 'devextreme/viz/vector_map';
-import { Font } from 'devextreme/common/charts';
+import { DashStyle, Font } from 'devextreme/common/charts';
+import { VectorMapLegendItem, VectorMapMarkerShape } from 'devextreme/viz/vector_map';
+import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -37,10 +38,10 @@ export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get border(): Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -93,26 +94,26 @@ export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get horizontalAlignment(): "center" | "left" | "right" {
+    get horizontalAlignment(): HorizontalAlignment {
         return this._getOption('horizontalAlignment');
     }
-    set horizontalAlignment(value: "center" | "left" | "right") {
+    set horizontalAlignment(value: HorizontalAlignment) {
         this._setOption('horizontalAlignment', value);
     }
 
     @Input()
-    get itemsAlignment(): "center" | "left" | "right" {
+    get itemsAlignment(): HorizontalAlignment {
         return this._getOption('itemsAlignment');
     }
-    set itemsAlignment(value: "center" | "left" | "right") {
+    set itemsAlignment(value: HorizontalAlignment) {
         this._setOption('itemsAlignment', value);
     }
 
     @Input()
-    get itemTextPosition(): "bottom" | "left" | "right" | "top" {
+    get itemTextPosition(): Position {
         return this._getOption('itemTextPosition');
     }
-    set itemTextPosition(value: "bottom" | "left" | "right" | "top") {
+    set itemTextPosition(value: Position) {
         this._setOption('itemTextPosition', value);
     }
 
@@ -133,10 +134,10 @@ export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get markerShape(): "circle" | "square" {
+    get markerShape(): VectorMapMarkerShape {
         return this._getOption('markerShape');
     }
-    set markerShape(value: "circle" | "square") {
+    set markerShape(value: VectorMapMarkerShape) {
         this._setOption('markerShape', value);
     }
 
@@ -157,10 +158,10 @@ export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get orientation(): "horizontal" | "vertical" {
+    get orientation(): Orientation {
         return this._getOption('orientation');
     }
-    set orientation(value: "horizontal" | "vertical") {
+    set orientation(value: Orientation) {
         this._setOption('orientation', value);
     }
 
@@ -205,18 +206,18 @@ export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get title(): string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: "bottom" | "top" } {
+    get title(): Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge } {
         return this._getOption('title');
     }
-    set title(value: string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: "bottom" | "top" }) {
+    set title(value: Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }) {
         this._setOption('title', value);
     }
 
     @Input()
-    get verticalAlignment(): "bottom" | "top" {
+    get verticalAlignment(): VerticalEdge {
         return this._getOption('verticalAlignment');
     }
-    set verticalAlignment(value: "bottom" | "top") {
+    set verticalAlignment(value: VerticalEdge) {
         this._setOption('verticalAlignment', value);
     }
 

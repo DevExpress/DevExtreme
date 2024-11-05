@@ -14,6 +14,7 @@ import {
 
 
 
+import { BackgroundImageLocation } from 'devextreme/viz/range_selector';
 
 import {
     NestedOptionHost,
@@ -37,10 +38,10 @@ export class DxoRangeSelectorBackgroundComponent extends NestedOption implements
     }
 
     @Input()
-    get image(): Record<string, any> | { location?: "center" | "centerBottom" | "centerTop" | "full" | "leftBottom" | "leftCenter" | "leftTop" | "rightBottom" | "rightCenter" | "rightTop", url?: string } {
+    get image(): Record<string, any> | { location?: BackgroundImageLocation, url?: string } {
         return this._getOption('image');
     }
-    set image(value: Record<string, any> | { location?: "center" | "centerBottom" | "centerTop" | "full" | "leftBottom" | "leftCenter" | "leftTop" | "rightBottom" | "rightCenter" | "rightTop", url?: string }) {
+    set image(value: Record<string, any> | { location?: BackgroundImageLocation, url?: string }) {
         this._setOption('image', value);
     }
 

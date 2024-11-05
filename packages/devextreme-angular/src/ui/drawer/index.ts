@@ -18,7 +18,7 @@ import {
 
 
 import { event } from 'devextreme/events/index';
-import { DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/drawer';
+import { DisposingEvent, InitializedEvent, OptionChangedEvent, OpenedStateMode, PanelLocation, RevealMode } from 'devextreme/ui/drawer';
 
 import DxDrawer from 'devextreme/ui/drawer';
 
@@ -214,10 +214,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get openedStateMode(): "overlap" | "shrink" | "push" {
+    get openedStateMode(): OpenedStateMode {
         return this._getOption('openedStateMode');
     }
-    set openedStateMode(value: "overlap" | "shrink" | "push") {
+    set openedStateMode(value: OpenedStateMode) {
         this._setOption('openedStateMode', value);
     }
 
@@ -227,10 +227,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get position(): "left" | "right" | "top" | "bottom" | "before" | "after" {
+    get position(): PanelLocation {
         return this._getOption('position');
     }
-    set position(value: "left" | "right" | "top" | "bottom" | "before" | "after") {
+    set position(value: PanelLocation) {
         this._setOption('position', value);
     }
 
@@ -240,10 +240,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get revealMode(): "slide" | "expand" {
+    get revealMode(): RevealMode {
         return this._getOption('revealMode');
     }
-    set revealMode(value: "slide" | "expand") {
+    set revealMode(value: RevealMode) {
         this._setOption('revealMode', value);
     }
 
@@ -425,21 +425,21 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() openedStateModeChange: EventEmitter<"overlap" | "shrink" | "push">;
+    @Output() openedStateModeChange: EventEmitter<OpenedStateMode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<"left" | "right" | "top" | "bottom" | "before" | "after">;
+    @Output() positionChange: EventEmitter<PanelLocation>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() revealModeChange: EventEmitter<"slide" | "expand">;
+    @Output() revealModeChange: EventEmitter<RevealMode>;
 
     /**
     

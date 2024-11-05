@@ -27,6 +27,7 @@ import DataSource from 'devextreme/data/data_source';
 import { dxTabsItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SelectionChangingEvent } from 'devextreme/ui/tabs';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
+import { TabsIconPosition, Orientation, SingleOrMultiple, TabsStyle } from 'devextreme/common';
 
 import DxTabs from 'devextreme/ui/tabs';
 
@@ -176,10 +177,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get iconPosition(): "top" | "end" | "bottom" | "start" {
+    get iconPosition(): TabsIconPosition {
         return this._getOption('iconPosition');
     }
-    set iconPosition(value: "top" | "end" | "bottom" | "start") {
+    set iconPosition(value: TabsIconPosition) {
         this._setOption('iconPosition', value);
     }
 
@@ -254,10 +255,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get orientation(): "horizontal" | "vertical" {
+    get orientation(): Orientation {
         return this._getOption('orientation');
     }
-    set orientation(value: "horizontal" | "vertical") {
+    set orientation(value: Orientation) {
         this._setOption('orientation', value);
     }
 
@@ -371,10 +372,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get selectionMode(): "single" | "multiple" {
+    get selectionMode(): SingleOrMultiple {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: "single" | "multiple") {
+    set selectionMode(value: SingleOrMultiple) {
         this._setOption('selectionMode', value);
     }
 
@@ -397,10 +398,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get stylingMode(): "primary" | "secondary" {
+    get stylingMode(): TabsStyle {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: "primary" | "secondary") {
+    set stylingMode(value: TabsStyle) {
         this._setOption('stylingMode', value);
     }
 
@@ -584,7 +585,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() iconPositionChange: EventEmitter<"top" | "end" | "bottom" | "start">;
+    @Output() iconPositionChange: EventEmitter<TabsIconPosition>;
 
     /**
     
@@ -626,7 +627,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() orientationChange: EventEmitter<"horizontal" | "vertical">;
+    @Output() orientationChange: EventEmitter<Orientation>;
 
     /**
     
@@ -689,7 +690,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<"single" | "multiple">;
+    @Output() selectionModeChange: EventEmitter<SingleOrMultiple>;
 
     /**
     
@@ -703,7 +704,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<"primary" | "secondary">;
+    @Output() stylingModeChange: EventEmitter<TabsStyle>;
 
     /**
     

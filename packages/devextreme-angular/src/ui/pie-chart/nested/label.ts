@@ -14,8 +14,8 @@ import {
 
 
 
-import * as LocalizationTypes from 'devextreme/localization';
-import { Font } from 'devextreme/common/charts';
+import { Format } from 'devextreme/localization';
+import { DashStyle, Font, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -31,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get argumentFormat(): LocalizationTypes.Format {
+    get argumentFormat(): Format {
         return this._getOption('argumentFormat');
     }
-    set argumentFormat(value: LocalizationTypes.Format) {
+    set argumentFormat(value: Format) {
         this._setOption('argumentFormat', value);
     }
 
@@ -47,10 +47,10 @@ export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get border(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -87,18 +87,18 @@ export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get format(): LocalizationTypes.Format {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: LocalizationTypes.Format) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 
     @Input()
-    get position(): "columns" | "inside" | "outside" {
+    get position(): LabelPosition {
         return this._getOption('position');
     }
-    set position(value: "columns" | "inside" | "outside") {
+    set position(value: LabelPosition) {
         this._setOption('position', value);
     }
 
@@ -119,10 +119,10 @@ export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get textOverflow(): "ellipsis" | "hide" | "none" {
+    get textOverflow(): TextOverflow {
         return this._getOption('textOverflow');
     }
-    set textOverflow(value: "ellipsis" | "hide" | "none") {
+    set textOverflow(value: TextOverflow) {
         this._setOption('textOverflow', value);
     }
 
@@ -135,10 +135,10 @@ export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get wordWrap(): "normal" | "breakWord" | "none" {
+    get wordWrap(): WordWrap {
         return this._getOption('wordWrap');
     }
-    set wordWrap(value: "normal" | "breakWord" | "none") {
+    set wordWrap(value: WordWrap) {
         this._setOption('wordWrap', value);
     }
 

@@ -17,7 +17,7 @@ import {
 
 
 
-import { dxTreeListToolbarItem } from 'devextreme/ui/tree_list';
+import { dxTreeListToolbarItem, TreeListPredefinedToolbarItem } from 'devextreme/ui/tree_list';
 
 import {
     NestedOptionHost,
@@ -42,10 +42,10 @@ export class DxoTreeListToolbarComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get items(): Array<dxTreeListToolbarItem | "addRowButton" | "applyFilterButton" | "columnChooserButton" | "revertButton" | "saveButton" | "searchPanel"> {
+    get items(): Array<dxTreeListToolbarItem | TreeListPredefinedToolbarItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxTreeListToolbarItem | "addRowButton" | "applyFilterButton" | "columnChooserButton" | "revertButton" | "saveButton" | "searchPanel">) {
+    set items(value: Array<dxTreeListToolbarItem | TreeListPredefinedToolbarItem>) {
         this._setOption('items', value);
     }
 

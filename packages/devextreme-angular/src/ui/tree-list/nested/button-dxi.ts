@@ -17,7 +17,7 @@ import { DOCUMENT } from '@angular/common';
 
 
 import dxTreeList from 'devextreme/ui/tree_list';
-import { dxTreeListColumn, dxTreeListRowObject } from 'devextreme/ui/tree_list';
+import { dxTreeListColumn, dxTreeListRowObject, TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
 import { event } from 'devextreme/events/index';
 
 import {
@@ -71,10 +71,10 @@ export class DxiTreeListButtonComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get name(): "add" | "cancel" | "delete" | "edit" | "save" | "undelete" {
+    get name(): string | TreeListPredefinedColumnButton {
         return this._getOption('name');
     }
-    set name(value: "add" | "cancel" | "delete" | "edit" | "save" | "undelete") {
+    set name(value: string | TreeListPredefinedColumnButton) {
         this._setOption('name', value);
     }
 
