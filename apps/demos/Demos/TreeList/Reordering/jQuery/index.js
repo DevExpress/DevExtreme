@@ -5,15 +5,32 @@ $(() => {
     keyExpr: 'ID',
     parentIdExpr: 'Head_ID',
     columns: [{
-      dataField: 'Full_Name',
-      allowReordering: false,
-    }, {
-      dataField: 'Title',
-      caption: 'Position',
-    }, 'City', 'State', 'Mobile_Phone', {
-      dataField: 'Hire_Date',
-      dataType: 'date',
-    },
+        caption: 'Full Name',
+        fixed: true,
+        calculateCellValue(data) {
+          return [data.Title,
+            data.FirstName, data.LastName]
+            .join(' ');
+        }, 
+      },  {
+        dataField: 'City',
+        fixed: true,
+        fixedPosition: 'right',
+      }, {
+        dataField: 'State',
+        fixed: true,
+        fixedPosition: 'right',
+      }, {
+        dataField: 'HireDate',
+        dataType: 'date',
+      }, {
+        dataField: 'BirthDate',
+        dataType: 'date',
+      }, {
+        dataField: 'Address',
+        fixed: true,
+        fixedPosition: 'sticky',
+      }, 'Department', 'Position', 'HomePhone', 'MobilePhone', 'Skype', 'Email', 'Zipcode',
     ],
     showRowLines: true,
     showBorders: true,

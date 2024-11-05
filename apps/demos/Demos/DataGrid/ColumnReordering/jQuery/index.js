@@ -10,7 +10,6 @@ $(() => {
     },
     columns: [{
       caption: 'Employee',
-      width: 230,
       fixed: true,
       fixedPosition: 'left',
       calculateCellValue(data) {
@@ -18,23 +17,29 @@ $(() => {
           data.FirstName, data.LastName]
           .join(' ');
       },
-    }, {
-      dataField: 'BirthDate',
-      dataType: 'date',
-    }, {
-      dataField: 'HireDate',
-      dataType: 'date',
-    }, {
-      dataField: 'Position',
-      alignment: 'right',
-      fixed: true,
-      fixedPosition: 'right',
-    }, {
-      dataField: 'Address',
-      width: 230,
-    }, 'City', 'State', {
-      dataField: 'Zipcode',
-      visible: false,
-    }, 'HomePhone', 'MobilePhone', 'Skype', 'Email'],
+      }, {
+        dataField: 'BirthDate',
+        dataType: 'date',
+      }, {
+        dataField: 'Address',
+        width: 190,
+        fixed: true,
+        fixedPosition: 'sticky',
+      }, 'Zipcode', {
+        dataField: 'HireDate',
+        dataType: 'date',
+      }, {
+        dataField: 'Position',
+        alignment: 'right',
+      }, {
+        dataField: 'City',
+        fixed: true,
+        fixedPosition: 'right',
+      }, {
+        dataField: 'State',
+        fixed: true,
+        fixedPosition: 'right',
+      }, 'Department', 'HomePhone', 'MobilePhone', 'Skype', 'Email',
+    ]
   });
 });
