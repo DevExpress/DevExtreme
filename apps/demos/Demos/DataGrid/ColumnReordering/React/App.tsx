@@ -1,5 +1,5 @@
 import React from 'react';
-import DataGrid, { Column, ColumnChooser, ColumnFixing } from 'devextreme-react/data-grid';
+import DataGrid, { Column, ColumnFixing } from 'devextreme-react/data-grid';
 
 import { Employee, employees } from './data.ts';
 
@@ -17,9 +17,7 @@ const App = () => (
     <ColumnFixing enabled={true} />
     <Column
       caption="Employee"
-      width={230}
       fixed={true}
-      fixedPosition="left"
       calculateCellValue={calculateCellValue}
     />
     <Column
@@ -27,25 +25,32 @@ const App = () => (
       dataType="date"
     />
     <Column
+      dataField="Address"
+      width={190}
+      fixed={true}
+      fixedPosition="sticky"
+    />
+    <Column dataField="Zipcode"/>
+    <Column
       dataField="HireDate"
       dataType="date"
     />
     <Column
       dataField="Position"
       alignment="right"
+
+    />
+    <Column
+      dataField="City"
       fixed={true}
       fixedPosition="right"
     />
     <Column
-      dataField="Address"
-      width={230}
+      dataField="State"
+      fixed={true}
+      fixedPosition="right"
     />
-    <Column dataField="City" />
-    <Column dataField="State" />
-    <Column
-      dataField="Zipcode"
-      visible={false}
-    />
+    <Column dataField="Department" />
     <Column dataField="HomePhone" />
     <Column dataField="MobilePhone" />
     <Column dataField="Skype" />

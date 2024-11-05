@@ -1,5 +1,5 @@
 import React from 'react';
-import DataGrid, { Column, ColumnChooser, ColumnFixing } from 'devextreme-react/data-grid';
+import DataGrid, { Column, ColumnFixing } from 'devextreme-react/data-grid';
 import { employees } from './data.js';
 
 const calculateCellValue = (data) => [data.Title, data.FirstName, data.LastName].join(' ');
@@ -9,15 +9,12 @@ const App = () => (
     dataSource={employees}
     keyExpr="ID"
     allowColumnReordering={true}
-    allowColumnResizing={true}
     columnAutoWidth={true}
     showBorders={true}
   >
-    <ColumnChooser enabled={true} />
     <ColumnFixing enabled={true} />
     <Column
       caption="Employee"
-      width={230}
       fixed={true}
       calculateCellValue={calculateCellValue}
     />
@@ -25,6 +22,13 @@ const App = () => (
       dataField="BirthDate"
       dataType="date"
     />
+    <Column
+      dataField="Address"
+      width={190}
+      fixed={true}
+      fixedPosition='sticky'
+    />
+    <Column dataField="Zipcode" />
     <Column
       dataField="HireDate"
       dataType="date"
@@ -34,15 +38,16 @@ const App = () => (
       alignment="right"
     />
     <Column
-      dataField="Address"
-      width={230}
+      dataField="City"
+      fixed={true}
+      fixedPosition='right'
     />
-    <Column dataField="City" />
-    <Column dataField="State" />
     <Column
-      dataField="Zipcode"
-      visible={false}
+      dataField="State"
+      fixed={true}
+      fixedPosition='right'
     />
+    <Column dataField="Department" />
     <Column dataField="HomePhone" />
     <Column dataField="MobilePhone" />
     <Column dataField="Skype" />

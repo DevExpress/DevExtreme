@@ -11,7 +11,6 @@ $(() => {
     columns: [{
       caption: 'Employee',
       fixed: true,
-      fixedPosition: 'left',
       calculateCellValue(data) {
         return [data.Title,
           data.FirstName, data.LastName]
