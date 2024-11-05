@@ -16,7 +16,6 @@ import type {
 } from '@js/ui/chat';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-import { applyBatch } from '@ts/data/m_array_utils';
 
 import AlertList from './alertlist';
 import ChatHeader from './header';
@@ -100,15 +99,10 @@ class Chat extends Widget<Properties> {
     if (e?.changes) {
       this._messageList._modifyByChanges(e.changes);
 
-      // @ts-expect-error
-      const dataSource = this.getDataSource();
-      // @ts-expect-error
-      applyBatch({
-        // // @ts-expect-error
-        keyInfo: dataSource,
-        data: this.option('items'),
-        changes: e.changes,
-      });
+      this._setOptionWithoutOptionChange('items', newItems.slice());
+      this._messageList._setOptionWithoutOptionChange('items', newItems.slice());
+
+      this._messageList._renderEmptyView();
     } else {
       this.option('items', newItems.slice());
     }
