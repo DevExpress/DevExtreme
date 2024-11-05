@@ -26,6 +26,8 @@ export class AppComponent {
   constructor(service: Service) {
     this.employees = service.getEmployees();
   }
+
+  calculateCellValue = ({ Title, FirstName, LastName }) => [Title, FirstName, LastName].join(' ');
 }
 
 @NgModule({
