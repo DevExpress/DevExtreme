@@ -3728,6 +3728,32 @@ QUnit.module('keyboard navigation', {
         assert.ok($headers.eq(1).hasClass(FOCUSED_STATE_CLASS));
     });
 
+    QUnit.test('group should be collapsed after pressing enter key on group header', function(assert) {
+        const $element = $('#list').dxList({
+            items: [
+                { key: 'a', items: ['11', '12'] },
+                { key: 'b', items: ['21', '22'] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+        });
+        const keyboard = getListKeyboard($element);
+        const $group = $element.find(`.${LIST_GROUP_CLASS}`).eq(0);
+
+        keyboard
+            .keyDown('down')
+            .keyDown('enter');
+
+        assert.ok($group.hasClass(LIST_GROUP_COLLAPSED_CLASS), 'first group is collapsed');
+
+        keyboard
+            .keyDown('up')
+            .keyDown('enter');
+
+        assert.notOk($group.hasClass(LIST_GROUP_COLLAPSED_CLASS), 'first group is collapsed');
+    });
+
     QUnit.test('focus should not move to group header if collapsibleGroups: false', function(assert) {
         const $element = $('#list').dxList({
             items: [
