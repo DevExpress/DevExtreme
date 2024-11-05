@@ -85,7 +85,7 @@ const CollectionWidget = Widget.inherit({
     });
   },
 
-  _getExtendedHandlerParams(e, target) {
+  _getHandlerExtendedParams(e, target) {
     const params = extend({}, e, {
       target: target.get(0),
       currentTarget: target.get(0),
@@ -108,7 +108,7 @@ const CollectionWidget = Widget.inherit({
       });
     }
 
-    this._itemClickHandler(this._getExtendedHandlerParams(e, $itemElement));
+    this._itemClickHandler(this._getHandlerExtendedParams(e, $itemElement));
   },
 
   _getDefaultOptions() {

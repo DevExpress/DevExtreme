@@ -682,11 +682,11 @@ export const ListBase = CollectionWidget.inherit({
   },
 
   _enterKeyHandler(e): void {
-    const { collapsibleGroups, focusedElement: $focusedElement } = this.option();
-    const isGroupHeader = $focusedElement.hasClass(LIST_GROUP_HEADER_CLASS);
+    const { collapsibleGroups, focusedElement } = this.option();
+    const isGroupHeader = $(focusedElement).hasClass(LIST_GROUP_HEADER_CLASS);
 
     if (collapsibleGroups && isGroupHeader) {
-      const params = this._getExtendedHandlerParams(e, $focusedElement);
+      const params = this._getHandlerExtendedParams(e, $(focusedElement));
 
       this._collapseGroupCallback(params);
 
