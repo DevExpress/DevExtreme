@@ -226,7 +226,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         assert.notOk(firstItemIsFocused, 'first item of the first group lost focus');
     });
 
-    QUnit.test('the first header shoul get focus when focusin, collapsibleGroups: true', function(assert) {
+    QUnit.test('the first header should get focus when focusin, collapsibleGroups: true', function(assert) {
         const $element = this.element.dxList({
             items: [
                 { key: 'a', items: ['11', '12'] },
@@ -3695,14 +3695,8 @@ QUnit.module('keyboard navigation', {
     QUnit.test('focus should move from last group list item to group header if collapsibleGroups: true', function(assert) {
         const $element = $('#list').dxList({
             items: [
-                {
-                    key: 'a',
-                    items: [1],
-                },
-                {
-                    key: 'b',
-                    items: [2],
-                },
+                { key: 'a', items: [1] },
+                { key: 'b', items: [2] },
             ],
             grouped: true,
             focusStateEnabled: true,
@@ -3752,6 +3746,25 @@ QUnit.module('keyboard navigation', {
             .keyDown('enter');
 
         assert.notOk($group.hasClass(LIST_GROUP_COLLAPSED_CLASS), 'first group is collapsed');
+    });
+
+    QUnit.test('Pressing the Enter key on the group header should not fire onItemClick', function(assert) {
+        const onItemClickStub = sinon.stub();
+
+        const $element = $('#list').dxList({
+            items: [{ key: 'a', items: ['11', '12'] }],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+            onItemClick: onItemClickStub,
+        });
+        const keyboard = getListKeyboard($element);
+
+        keyboard
+            .keyDown('down')
+            .keyDown('enter');
+
+        assert.strictEqual(onItemClickStub.callCount, 0, 'onItemClick is not called');
     });
 
     QUnit.test('focus should not move to group header if collapsibleGroups: false', function(assert) {
