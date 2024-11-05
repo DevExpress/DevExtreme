@@ -652,31 +652,48 @@ export const ListBase = CollectionWidget.inherit({
     eventsEngine.off($element, eventNameClick, headerSelector);
 
     if (collapsibleGroups) {
-      const collapseGroupCallback = (e) => {
-        const actionCallback = (e) => {
-          const { focusStateEnabled } = this.option();
-          const $group = $(e.event.currentTarget).parent();
-
-          this._collapseGroupHandler($group);
-
-          if (focusStateEnabled) {
-            const listItemElement = getPublicElement($group.find(`.${LIST_ITEM_CLASS}`).eq(0));
-
-            this.option({ focusedElement: listItemElement });
-          }
-        };
-
-        const actionParams = {
-          validatingTargetName: 'element',
-        };
-
-        const action = this._createAction(actionCallback, actionParams);
-
-        action({ event: e });
-      };
-
-      eventsEngine.on($element, eventNameClick, headerSelector, collapseGroupCallback);
+      eventsEngine.on($element, eventNameClick, headerSelector, (e) => {
+        this._collapseGroupCallback(e);
+      });
     }
+  },
+
+  _collapseGroupCallback(e): void {
+    const actionCallback = (e) => {
+      const { focusStateEnabled } = this.option();
+      const $group = $(e.event.currentTarget).parent();
+
+      this._collapseGroupHandler($group);
+
+      if (focusStateEnabled) {
+        const listItemElement = getPublicElement($group.find(`.${LIST_ITEM_CLASS}`).eq(0));
+
+        this.option({ focusedElement: listItemElement });
+      }
+    };
+
+    const actionParams = {
+      validatingTargetName: 'element',
+    };
+
+    const action = this._createAction(actionCallback, actionParams);
+
+    action({ event: e });
+  },
+
+  _enterKeyHandler(e): void {
+    const { collapsibleGroups, focusedElement: $focusedElement } = this.option();
+    const isGroupHeader = $focusedElement.hasClass(LIST_GROUP_HEADER_CLASS);
+
+    if (collapsibleGroups && isGroupHeader) {
+      const params = this._getExtendedHandlerParams(e, $focusedElement);
+
+      this._collapseGroupCallback(params);
+
+      return;
+    }
+
+    this.callBase(e);
   },
 
   _collapseGroupHandler($group, toggle) {
