@@ -2282,11 +2282,11 @@ declare module DevExpress.common.charts {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.label.border.color]
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.label.border.dashStyle]
        */
-      dashStyle?: DashStyle;
+      dashStyle?: DashStyle | undefined;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.label.border.visible]
        */
@@ -35721,7 +35721,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border.dashStyle]
      */
-    dashStyle?: DevExpress.common.charts.DashStyle;
+    dashStyle?: DevExpress.common.charts.DashStyle | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border.visible]
      */
@@ -35792,7 +35792,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border.dashStyle]
      */
-    dashStyle?: DevExpress.common.charts.DashStyle;
+    dashStyle?: DevExpress.common.charts.DashStyle | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border.visible]
      */
@@ -37213,15 +37213,15 @@ declare module DevExpress.viz {
         /**
          * [descr:dxFunnelOptions.item.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxFunnelOptions.item.border.visible]
          */
-        visible?: boolean;
+        visible?: boolean | undefined;
         /**
          * [descr:dxFunnelOptions.item.border.width]
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * [descr:dxFunnelOptions.item.hoverStyle]
@@ -38068,11 +38068,11 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.border.dashStyle]
          */
-        dashStyle?: DevExpress.common.charts.DashStyle;
+        dashStyle?: DevExpress.common.charts.DashStyle | undefined;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.border.visible]
          */
@@ -39470,7 +39470,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.dashStyle]
          */
-        dashStyle?: DevExpress.common.charts.DashStyle;
+        dashStyle?: DevExpress.common.charts.DashStyle | undefined;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.visible]
          */
@@ -39561,7 +39561,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.dashStyle]
          */
-        dashStyle?: DevExpress.common.charts.DashStyle;
+        dashStyle?: DevExpress.common.charts.DashStyle | undefined;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.visible]
          */
@@ -39694,11 +39694,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.color]
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.dashStyle]
        */
-      dashStyle?: DevExpress.common.charts.DashStyle;
+      dashStyle?: DevExpress.common.charts.DashStyle | undefined;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.visible]
        */
@@ -40845,15 +40845,15 @@ declare module DevExpress.viz {
         /**
          * [descr:dxSankeyOptions.label.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxSankeyOptions.label.border.visible]
          */
-        visible?: boolean;
+        visible?: boolean | undefined;
         /**
          * [descr:dxSankeyOptions.label.border.width]
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * [descr:dxSankeyOptions.label.customizeText]
@@ -40920,15 +40920,15 @@ declare module DevExpress.viz {
         /**
          * [descr:dxSankeyOptions.link.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxSankeyOptions.link.border.visible]
          */
-        visible?: boolean;
+        visible?: boolean | undefined;
         /**
          * [descr:dxSankeyOptions.link.border.width]
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * [descr:dxSankeyOptions.link.color]
@@ -40987,7 +40987,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxSankeyOptions.link.hoverStyle.opacity]
          */
-        opacity?: number;
+        opacity?: number | undefined;
       };
       /**
        * [descr:dxSankeyOptions.link.opacity]
@@ -41005,15 +41005,15 @@ declare module DevExpress.viz {
         /**
          * [descr:dxSankeyOptions.node.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxSankeyOptions.node.border.visible]
          */
-        visible?: boolean;
+        visible?: boolean | undefined;
         /**
          * [descr:dxSankeyOptions.node.border.width]
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * [descr:dxSankeyOptions.node.color]
@@ -41605,11 +41605,11 @@ declare module DevExpress.viz {
         /**
          * [descr:dxTreeMapOptions.group.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxTreeMapOptions.group.border.width]
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * [descr:dxTreeMapOptions.group.color]
@@ -41677,7 +41677,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxTreeMapOptions.group.selectionStyle.border.color]
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * [descr:dxTreeMapOptions.group.selectionStyle.border.width]
            */
@@ -41776,11 +41776,11 @@ declare module DevExpress.viz {
         /**
          * [descr:dxTreeMapOptions.tile.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxTreeMapOptions.tile.border.width]
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * [descr:dxTreeMapOptions.tile.color]
@@ -41840,7 +41840,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxTreeMapOptions.tile.selectionStyle.border.color]
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * [descr:dxTreeMapOptions.tile.selectionStyle.border.width]
            */

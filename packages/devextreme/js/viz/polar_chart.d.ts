@@ -1731,7 +1731,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.dashStyle
          * @default 'solid'
          */
-        dashStyle?: DashStyle;
+        dashStyle?: DashStyle | undefined;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.visible
          * @default false
@@ -1858,7 +1858,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.dashStyle
          * @default 'solid'
          */
-        dashStyle?: DashStyle;
+        dashStyle?: DashStyle | undefined;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.visible
          * @default false
@@ -2036,12 +2036,12 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.color
        * @default  '#d3d3d3'
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.dashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyle;
+      dashStyle?: DashStyle | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.visible
        * @default false

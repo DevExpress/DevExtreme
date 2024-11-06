@@ -3749,7 +3749,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyleBorder {
      * @default 'solid'
      * @public
      */
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border.visible
      * @default false
@@ -3847,7 +3847,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyleBorder {
      * @default 'solid'
      * @public
      */
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.border.visible
      * @default false
