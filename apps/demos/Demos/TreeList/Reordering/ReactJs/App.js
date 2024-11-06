@@ -30,7 +30,7 @@ const App = () => (
       dataField="Address"
       width={190}
       fixed={true}
-      fixedPosition='sticky'
+      fixedPosition="sticky"
     />
     <Column dataField="Zipcode" />
     <Column
@@ -44,12 +44,12 @@ const App = () => (
     <Column
       dataField="City"
       fixed={true}
-      fixedPosition='right'
+      fixedPosition="right"
     />
     <Column
       dataField="State"
       fixed={true}
-      fixedPosition='right'
+      fixedPosition="right"
     />
     <Column dataField="Department" />
     <Column dataField="HomePhone" />
