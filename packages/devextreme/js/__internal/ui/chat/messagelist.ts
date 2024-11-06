@@ -30,6 +30,7 @@ import TypingIndicator from './typingindicator';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 const CHAT_MESSAGELIST_CONTENT_CLASS = 'dx-chat-messagelist-content';
 const CHAT_MESSAGELIST_EMPTY_CLASS = 'dx-chat-messagelist-empty';
+const CHAT_MESSAGELIST_EMPTY_LOADING_CLASS = 'dx-chat-messagelist-empty-loading';
 
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
@@ -194,7 +195,9 @@ class MessageList extends Widget<Properties> {
   }
 
   _removeEmptyView(): void {
-    this.$element().removeClass(CHAT_MESSAGELIST_EMPTY_CLASS);
+    this.$element()
+      .removeClass(CHAT_MESSAGELIST_EMPTY_CLASS)
+      .removeClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS);
     this._$content.empty();
   }
 
@@ -297,6 +300,8 @@ class MessageList extends Widget<Properties> {
       return;
     }
 
+    this.$element().toggleClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS, this._isEmpty() && isLoading);
+
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._scrollView.release(!isLoading);
   }
@@ -310,7 +315,9 @@ class MessageList extends Widget<Properties> {
   _renderEmptyView(): void {
     const { isLoading } = this.option();
 
-    this.$element().toggleClass(CHAT_MESSAGELIST_EMPTY_CLASS, this._isEmpty() && !isLoading);
+    this.$element()
+      .toggleClass(CHAT_MESSAGELIST_EMPTY_CLASS, this._isEmpty() && !isLoading)
+      .toggleClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS, this._isEmpty() && isLoading);
 
     if (this._isEmpty() && !isLoading) {
       this._renderEmptyViewContent();
@@ -504,12 +511,14 @@ class MessageList extends Widget<Properties> {
   _modifyByChanges(changes: Change[]): void {
     changes.forEach((change) => {
       switch (change.type) {
-        case 'update': {
+        case 'update':
+          break;
+        case 'insert': {
+          const { items } = this.option();
+
+          this.option('items', [...items, change.data ?? {}]);
           break;
         }
-        case 'insert':
-          this._renderMessage(change.data ?? {});
-          break;
         case 'remove':
           break;
         default:
@@ -541,6 +550,7 @@ class MessageList extends Widget<Properties> {
         this._processScrollDownContent();
         break;
       case 'isLoading':
+        this._updateLoadingState(!!value);
         break;
       default:
         super._optionChanged(args);
