@@ -13,6 +13,7 @@ import Widget from '@ts/core/widget/widget';
 import Avatar from './avatar';
 import type Chat from './chat';
 import MessageBubble from './messagebubble';
+import type { MessageTemplate } from './messagelist';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-messagegroup-alignment-start';
@@ -30,9 +31,8 @@ export interface Properties extends WidgetOptions<MessageGroup> {
   showAvatar: boolean;
   showUserName: boolean;
   showMessageTimestamp: boolean;
-  // eslint-disable-next-line
-  messageTemplate: any;
-  messageTemplateData: { component?: Chat };
+  messageTemplate?: MessageTemplate;
+  messageTemplateData?: { component?: Chat };
   messageTimestampFormat?: Format;
 }
 

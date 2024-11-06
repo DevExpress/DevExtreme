@@ -1,3 +1,4 @@
+import type { DxElement, UserDefinedElement } from '@js/core/element';
 import Guid from '@js/core/guid';
 import type {
   DeepPartial,
@@ -5,6 +6,7 @@ import type {
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
+import type { template } from '@js/core/templates/template';
 import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
@@ -14,7 +16,7 @@ import { isDate, isDefined } from '@js/core/utils/type';
 import type { Format } from '@js/localization';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
-import type { Message, User } from '@js/ui/chat';
+import type { Message, MessageTemplateData, User } from '@js/ui/chat';
 import ScrollView from '@js/ui/scroll_view';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -47,13 +49,17 @@ export interface Change {
   index?: number;
 }
 
+export type MessageTemplate =
+((data: MessageTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement)
+| template
+| null;
+
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
-  // eslint-disable-next-line
-  messageTemplate: any;
-  messageTemplateData: { component?: Chat };
+  messageTemplate?: MessageTemplate;
+  messageTemplateData?: { component?: Chat };
   dayHeaderFormat?: Format;
   messageTimestampFormat?: Format;
   typingUsers: User[];
