@@ -1122,6 +1122,11 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('looping should work on keyboard navigation after loop runtime change to true and swipe', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'no kbn on mobile devices');
+            return;
+        }
+
         this.instance.option({
             items: [1, 2, 3],
             loop: false,
