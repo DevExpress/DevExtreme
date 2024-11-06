@@ -6,8 +6,7 @@ import { isPlainObject } from '../../core/utils/type';
 import registerComponentCallbacks from '../../core/component_registrator_callbacks';
 import Widget from '../../ui/widget/ui.widget';
 import VizWidget from '../../__internal/viz/core/m_base_widget';
-import ComponentWrapper from '../../renovation/component_wrapper/common/component';
-import { ComponentWrapper as ComponentWrapperMigrated } from '../../__internal/core/r1/component_wrapper';
+import { ComponentWrapper } from '../../__internal/core/r1/component_wrapper';
 import Draggable from '../../ui/draggable';
 import ScrollView from '../../ui/scroll_view';
 import { KoTemplate } from './template';
@@ -213,7 +212,7 @@ if(ko) {
 
                 return {
                     controlsDescendantBindings: componentClass.subclassOf(Widget) || componentClass.subclassOf(VizWidget) ||
-                    ((componentClass.subclassOf(ComponentWrapper) || componentClass.subclassOf(ComponentWrapperMigrated)) && !(component instanceof ScrollView)) || component instanceof Draggable
+                    (componentClass.subclassOf(ComponentWrapper) && !(component instanceof ScrollView)) || component instanceof Draggable
                 };
             }
         };

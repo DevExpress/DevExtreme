@@ -73,16 +73,16 @@ const componentConfig = {
     onOptionChanged: Function,
     onTooltipHidden: Function,
     onTooltipShown: Function,
-    palette: [Array, String],
-    paletteExtensionMode: String,
+    palette: {},
+    paletteExtensionMode: {},
     pathModified: Boolean,
     redrawOnResize: Boolean,
     relativeInnerRadius: Number,
-    resolveLabelOverlapping: String,
+    resolveLabelOverlapping: {},
     rtlEnabled: Boolean,
     size: Object,
     startValue: Number,
-    theme: String,
+    theme: {},
     title: [Object, String],
     tooltip: Object,
     values: Array
@@ -167,7 +167,7 @@ const DxAnimationConfig = {
   },
   props: {
     duration: Number,
-    easing: String,
+    easing: {},
     enabled: Boolean
   }
 };
@@ -194,14 +194,14 @@ const DxBarGaugeTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: {},
+    verticalAlignment: {},
+    wordWrap: {}
   }
 };
 
@@ -231,8 +231,8 @@ const DxBarGaugeTitleSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 
@@ -259,7 +259,7 @@ const DxBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -342,7 +342,7 @@ const DxFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -388,7 +388,7 @@ const DxItemTextFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -416,7 +416,7 @@ const DxLabelConfig = {
     connectorWidth: Number,
     customizeText: Function,
     font: Object,
-    format: [Object, Function, String],
+    format: {},
     indent: Number,
     visible: Boolean
   }
@@ -469,20 +469,20 @@ const DxLegendConfig = {
     customizeItems: Function,
     customizeText: Function,
     font: Object,
-    horizontalAlignment: String,
-    itemsAlignment: String,
-    itemTextFormat: [Object, Function, String],
-    itemTextPosition: String,
+    horizontalAlignment: {},
+    itemsAlignment: {},
+    itemTextFormat: {},
+    itemTextPosition: {},
     margin: [Number, Object],
     markerSize: Number,
     markerTemplate: {},
-    orientation: String,
+    orientation: {},
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     rowCount: Number,
     rowItemSpacing: Number,
     title: [Object, String],
-    verticalAlignment: String,
+    verticalAlignment: {},
     visible: Boolean
   }
 };
@@ -516,7 +516,7 @@ const DxLegendBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -543,12 +543,12 @@ const DxLegendTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: Object,
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    verticalAlignment: String
+    verticalAlignment: {}
   }
 };
 
@@ -695,8 +695,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 
@@ -722,14 +722,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: [Object, Number],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: {},
+    verticalAlignment: {},
+    wordWrap: {}
   }
 };
 
@@ -770,7 +770,7 @@ const DxTooltipConfig = {
     customizeTooltip: Function,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String],
+    format: {},
     interactive: Boolean,
     opacity: Number,
     paddingLeftRight: Number,
@@ -805,7 +805,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number

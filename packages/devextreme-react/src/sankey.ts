@@ -8,11 +8,11 @@ import dxSankey, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LinkClickEvent, NodeClickEvent, dxSankeyNode } from "devextreme/viz/sankey";
-import type { Font as ChartsFont } from "devextreme/common/charts";
+import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LinkClickEvent, NodeClickEvent, dxSankeyNode, SankeyColorMode } from "devextreme/viz/sankey";
+import type { DashStyle, HatchDirection, Font as ChartsFont, TextOverflow, WordWrap } from "devextreme/common/charts";
+import type { ExportFormat, Format as CommonFormat, HorizontalAlignment, VerticalEdge } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/localization";
 import type { template } from "devextreme/core/templates/template";
-
-import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -119,7 +119,7 @@ type IBorderProps = React.PropsWithChildren<{
   color?: string;
   visible?: boolean;
   width?: number;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
 }>
 const _componentBorder = (props: IBorderProps) => {
@@ -141,7 +141,7 @@ type IExportProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
   fileName?: string;
-  formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">;
+  formats?: Array<ExportFormat>;
   margin?: number;
   printingEnabled?: boolean;
   svgToCanvas?: ((svg: any, canvas: any) => any);
@@ -192,7 +192,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = (props: IFormatProps) => {
@@ -212,7 +212,7 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 // HoverStyle
 // HoverStyle
 type IHatchingProps = React.PropsWithChildren<{
-  direction?: "left" | "none" | "right";
+  direction?: HatchDirection;
   opacity?: number;
   step?: number;
   width?: number;
@@ -241,7 +241,7 @@ type IHoverStyleProps = React.PropsWithChildren<{
   };
   color?: string;
   hatching?: Record<string, any> | {
-    direction?: "left" | "none" | "right";
+    direction?: HatchDirection;
     opacity?: number;
     step?: number;
     width?: number;
@@ -272,7 +272,7 @@ type ILabelProps = React.PropsWithChildren<{
   customizeText?: ((itemInfo: dxSankeyNode) => string);
   font?: ChartsFont;
   horizontalOffset?: number;
-  overlappingBehavior?: "ellipsis" | "hide" | "none";
+  overlappingBehavior?: TextOverflow;
   shadow?: Record<string, any> | {
     blur?: number;
     color?: string;
@@ -312,7 +312,7 @@ type ILinkProps = React.PropsWithChildren<{
     width?: number;
   };
   color?: string;
-  colorMode?: "none" | "source" | "target" | "gradient";
+  colorMode?: SankeyColorMode;
   hoverStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string;
@@ -321,7 +321,7 @@ type ILinkProps = React.PropsWithChildren<{
     };
     color?: string;
     hatching?: Record<string, any> | {
-      direction?: "left" | "none" | "right";
+      direction?: HatchDirection;
       opacity?: number;
       step?: number;
       width?: number;
@@ -417,7 +417,7 @@ type INodeProps = React.PropsWithChildren<{
     };
     color?: string;
     hatching?: Record<string, any> | {
-      direction?: "left" | "none" | "right";
+      direction?: HatchDirection;
       opacity?: number;
       step?: number;
       width?: number;
@@ -518,8 +518,8 @@ type ISubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  wordWrap?: WordWrap;
 }>
 const _componentSubtitle = (props: ISubtitleProps) => {
   return React.createElement(NestedOption<ISubtitleProps>, {
@@ -541,7 +541,7 @@ const Subtitle = Object.assign<typeof _componentSubtitle, NestedComponentMeta>(_
 // Sankey
 type ITitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: number | Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -553,13 +553,13 @@ type ITitleProps = React.PropsWithChildren<{
     font?: ChartsFont;
     offset?: number;
     text?: string;
-    textOverflow?: "ellipsis" | "hide" | "none";
-    wordWrap?: "normal" | "breakWord" | "none";
+    textOverflow?: TextOverflow;
+    wordWrap?: WordWrap;
   };
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  verticalAlignment?: "bottom" | "top";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  verticalAlignment?: VerticalEdge;
+  wordWrap?: WordWrap;
 }>
 const _componentTitle = (props: ITitleProps) => {
   return React.createElement(NestedOption<ITitleProps>, {
@@ -585,7 +585,7 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -597,7 +597,7 @@ type ITooltipProps = React.PropsWithChildren<{
   customizeNodeTooltip?: ((info: { label: string, title: string, weightIn: number, weightOut: number }) => Record<string, any>);
   enabled?: boolean;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   linkTooltipTemplate?: ((info: { source: string, target: string, weight: number }, element: any) => string | any) | template;
   nodeTooltipTemplate?: ((info: { label: string, weightIn: number, weightOut: number }, element: any) => string | any) | template;
   opacity?: number;
@@ -649,7 +649,7 @@ const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_co
 // Tooltip
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
   visible?: boolean;
   width?: number;

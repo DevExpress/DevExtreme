@@ -58,7 +58,7 @@ const componentConfig = {
     onResize: Function,
     onResizeEnd: Function,
     onResizeStart: Function,
-    orientation: String,
+    orientation: {},
     rtlEnabled: Boolean,
     separatorSize: Number,
     visible: Boolean,

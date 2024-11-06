@@ -160,6 +160,7 @@ $datagrid-filter-row-background-color: null !default;
 $datagrid-active-header-filter-icon-color: $base-accent !default;
 $datagrid-text-stub-background-image-path: null !default;
 $datagrid-filter-panel-color: $base-accent !default;
+$datagrid-draggable-column-text-color: null !default;
 
 $datagrid-text-link-disabled-opacity: $base-disabled-opacity;
 $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
@@ -186,6 +187,7 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
   $datagrid-row-alternation-bg: darken($datagrid-base-background-color, 4%) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/fluent/color-schemes/light/grid/text-stub.png') !default;
   $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
+  $datagrid-draggable-column-text-color: lighten($base-text-color, 60) !default;
 }
 
 @if $mode == "dark" {
@@ -202,6 +204,7 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
   $datagrid-row-alternation-bg: lighten($datagrid-base-background-color, 4%) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/fluent/color-schemes/dark/grid/text-stub.png') !default;
   $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
+  $datagrid-draggable-column-text-color: darken($base-text-color, 63.9) !default;
 }
 
 $datagrid-border: 1px solid $datagrid-border-color !default;

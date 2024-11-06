@@ -183,10 +183,10 @@ export class DxoDateBoxOptionsComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get type(): ButtonType {
+    get type(): ButtonType | string {
         return this._getOption('type');
     }
-    set type(value: ButtonType) {
+    set type(value: ButtonType | string) {
         this._setOption('type', value);
     }
 

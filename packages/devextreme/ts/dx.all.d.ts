@@ -9320,7 +9320,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonOptions.type]
      */
-    type?: DevExpress.common.ButtonType;
+    type?: DevExpress.common.ButtonType | string;
     /**
      * [descr:dxButtonOptions.useSubmitBehavior]
      */
@@ -9510,14 +9510,14 @@ declare module DevExpress.ui {
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxChat>;
     /**
-     * [descr:_ui_chat_MessageSendEvent]
+     * [descr:_ui_chat_MessageEnteredEvent]
      */
-    export type MessageSendEvent = DevExpress.events.NativeEventInfo<
+    export type MessageEnteredEvent = DevExpress.events.NativeEventInfo<
       dxChat,
       KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
     > & {
       /**
-       * [descr:_ui_chat_MessageSendEvent.message]
+       * [descr:_ui_chat_MessageEnteredEvent.message]
        */
       readonly message?: Message;
     };
@@ -9579,9 +9579,17 @@ declare module DevExpress.ui {
      */
     dataSource?: DevExpress.data.DataSource.DataSourceLike<DevExpress.ui.dxChat.Message> | null;
     /**
-     * [descr:dxChatOptions.errors]
+     * [descr:dxChatOptions.reloadOnChange]
      */
-    errors?: Array<DevExpress.ui.dxChat.ChatError>;
+    reloadOnChange?: boolean;
+    /**
+     * [descr:dxChatOptions.alerts]
+     */
+    alerts?: Array<DevExpress.ui.dxChat.Alert>;
+    /**
+     * [descr:dxChatOptions.typingUsers]
+     */
+    typingUsers?: Array<DevExpress.ui.dxChat.User>;
     /**
      * [descr:dxChatOptions.showDayHeaders]
      */
@@ -9599,9 +9607,9 @@ declare module DevExpress.ui {
      */
     showMessageTimestamp?: boolean;
     /**
-     * [descr:dxChatOptions.onMessageSend]
+     * [descr:dxChatOptions.onMessageEntered]
      */
-    onMessageSend?: (e: DevExpress.ui.dxChat.MessageSendEvent) => void;
+    onMessageEntered?: (e: DevExpress.ui.dxChat.MessageEnteredEvent) => void;
     /**
      * [descr:dxChatOptions.onTypingStart]
      */
@@ -30708,15 +30716,15 @@ declare module DevExpress.ui.dxButtonGroup {
 }
 declare module DevExpress.ui.dxChat {
   /**
-   * [descr:ChatError]
+   * [descr:Alert]
    */
-  export type ChatError = {
+  export type Alert = {
     /**
-     * [descr:ChatError.id]
+     * [descr:Alert.id]
      */
     id?: number | string;
     /**
-     * [descr:ChatError.message]
+     * [descr:Alert.message]
      */
     message?: string;
   };
@@ -30724,6 +30732,10 @@ declare module DevExpress.ui.dxChat {
    * [descr:Message]
    */
   export type Message = {
+    /**
+     * [descr:Message.id]
+     */
+    id?: number | string;
     /**
      * [descr:Message.timestamp]
      */

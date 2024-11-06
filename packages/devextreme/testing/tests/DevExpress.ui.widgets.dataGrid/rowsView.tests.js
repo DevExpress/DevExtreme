@@ -3153,7 +3153,7 @@ QUnit.module('Rows view', {
         rowsView.render(testElement);
 
         // act
-        rowsView.setRowsOpacity(1, 0.5);
+        rowsView.toggleDraggableColumnClass(1, true);
         const cells = getCells(testElement);
 
         // assert
@@ -3186,7 +3186,7 @@ QUnit.module('Rows view', {
         rowsView.render($testElement);
 
         // act
-        rowsView.setRowsOpacity(0, 0.5);
+        rowsView.toggleDraggableColumnClass(0, true);
         const $cells = getCells($testElement);
 
         // assert
@@ -4059,7 +4059,7 @@ QUnit.module('Rows view', {
         sinon.spy(rowsView, '_getRowElements');
 
         // act
-        rowsView.setRowsOpacity(0, 0.01);
+        rowsView.toggleDraggableColumnClass(0, true);
 
         // assert
         assert.ok(rowsView._getRowElements.calledOnce, 'GetRowsElements method should called once');

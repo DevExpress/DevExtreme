@@ -237,6 +237,10 @@
             cursor: pointer;
             touch-action: pinch-zoom;
           }
+
+          &.dx-#{$widget-name}-draggable-column {
+            opacity: 0.5;
+          }
         }
       }
     }
@@ -315,6 +319,10 @@
   .dx-#{$widget-name}-action,
   .dx-#{$widget-name}-drag-action {
     cursor: pointer;
+  }
+
+  .dx-#{$widget-name}-draggable-column {
+    opacity: 0.5;
   }
 
   .dx-data-row.dx-state-hover {

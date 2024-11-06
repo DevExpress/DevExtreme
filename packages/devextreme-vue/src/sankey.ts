@@ -50,7 +50,7 @@ interface DxSankey extends AccessibleOptions {
 const componentConfig = {
   props: {
     adaptiveLayout: Object,
-    alignment: [Array, String],
+    alignment: {},
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
@@ -73,8 +73,8 @@ const componentConfig = {
     onNodeClick: Function,
     onNodeHoverChanged: Function,
     onOptionChanged: Function,
-    palette: [Array, String],
-    paletteExtensionMode: String,
+    palette: {},
+    paletteExtensionMode: {},
     pathModified: Boolean,
     redrawOnResize: Boolean,
     rtlEnabled: Boolean,
@@ -82,7 +82,7 @@ const componentConfig = {
     sortData: {},
     sourceField: String,
     targetField: String,
-    theme: String,
+    theme: {},
     title: [Object, String],
     tooltip: Object,
     weightField: String
@@ -189,7 +189,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -272,7 +272,7 @@ const DxFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -293,7 +293,7 @@ const DxHatchingConfig = {
     "update:width": null,
   },
   props: {
-    direction: String,
+    direction: {},
     opacity: Number,
     step: Number,
     width: Number
@@ -348,7 +348,7 @@ const DxLabelConfig = {
     customizeText: Function,
     font: Object,
     horizontalOffset: Number,
-    overlappingBehavior: String,
+    overlappingBehavior: {},
     shadow: Object,
     useNodeColors: Boolean,
     verticalOffset: Number,
@@ -381,7 +381,7 @@ const DxLinkConfig = {
   props: {
     border: Object,
     color: String,
-    colorMode: String,
+    colorMode: {},
     hoverStyle: Object,
     opacity: Number
   }
@@ -560,8 +560,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 
@@ -590,14 +590,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: {},
+    verticalAlignment: {},
+    wordWrap: {}
   }
 };
 
@@ -644,7 +644,7 @@ const DxTooltipConfig = {
     customizeNodeTooltip: Function,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String],
+    format: {},
     linkTooltipTemplate: {},
     nodeTooltipTemplate: {},
     opacity: Number,
@@ -680,7 +680,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number

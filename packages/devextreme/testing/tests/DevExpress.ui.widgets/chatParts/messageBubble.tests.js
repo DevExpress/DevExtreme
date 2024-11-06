@@ -41,12 +41,14 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
         QUnit.test('template option should set message bubble content on init', function(assert) {
             const template = (data, container) => {
-                $('<h1>').text(`template text: ${data.text}`).appendTo(container);
+                $('<h1>').text(`template text: ${data.message.text}`).appendTo(container);
             };
 
             this.reinit({
                 template,
-                text: 'text'
+                templateData: {
+                    message: { text: 'text' },
+                },
             });
 
             const $bubbleContent = $(this.$element.children());
@@ -57,10 +59,12 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
         QUnit.test('template option should set message bubble content at runtime', function(assert) {
             const template = (data, container) => {
-                $('<h1>').text(`template text: ${data.text}`).appendTo(container);
+                $('<h1>').text(`template text: ${data.message.text}`).appendTo(container);
             };
             this.reinit({
-                text: 'text'
+                templateData: {
+                    message: { text: 'text' },
+                },
             });
 
             this.instance.option('template', template);
