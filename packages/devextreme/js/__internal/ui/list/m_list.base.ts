@@ -52,8 +52,6 @@ const SELECT_ALL_ITEM_SELECTOR = '.dx-list-select-all';
 const LIST_ITEM_DATA_KEY = 'dxListItemData';
 const LIST_FEEDBACK_SHOW_TIMEOUT = 70;
 
-const DEFAULT_ACTIVE_STATE_UNIT_ARRAY = [LIST_ITEM_SELECTOR, SELECT_ALL_ITEM_SELECTOR];
-
 const groupItemsGetter = compileGetter('items');
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -61,7 +59,7 @@ let _scrollView;
 
 export const ListBase = CollectionWidget.inherit({
 
-  _activeStateUnit: DEFAULT_ACTIVE_STATE_UNIT_ARRAY.join(','),
+  _activeStateUnit: [LIST_ITEM_SELECTOR, SELECT_ALL_ITEM_SELECTOR].join(','),
 
   _supportedKeys() {
     const that = this;
@@ -370,16 +368,23 @@ export const ListBase = CollectionWidget.inherit({
     return true;
   },
 
-  _init() {
+  _updateActiveStateUnit(): void {
     const { collapsibleGroups } = this.option();
 
+    const selectors = [
+      LIST_ITEM_SELECTOR,
+      SELECT_ALL_ITEM_SELECTOR,
+    ];
+
     if (collapsibleGroups) {
-      this._activeStateUnit = [
-        ...DEFAULT_ACTIVE_STATE_UNIT_ARRAY,
-        `.${LIST_GROUP_HEADER_CLASS}`,
-      ].join(',');
+      selectors.push(`.${LIST_GROUP_HEADER_CLASS}`);
     }
 
+    this._activeStateUnit = selectors.join(',');
+  },
+
+  _init() {
+    this._updateActiveStateUnit();
     this.callBase();
     this._dataController.resetDataSourcePageIndex();
     this._$container = this.$element();
@@ -1044,8 +1049,11 @@ export const ListBase = CollectionWidget.inherit({
         this._createScrollViewActions();
         break;
       case 'grouped':
-      case 'collapsibleGroups':
       case 'groupTemplate':
+        this._invalidate();
+        break;
+      case 'collapsibleGroups':
+        this._updateActiveStateUnit();
         this._invalidate();
         break;
       case 'wrapItemText':
