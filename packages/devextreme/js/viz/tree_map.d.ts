@@ -258,12 +258,12 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
          * @docid
          * @default "#d3d3d3"
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid
          * @default 1
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * @docid
@@ -343,7 +343,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
            * @docid
            * @default "#232323"
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * @docid
            * @default undefined
@@ -487,12 +487,12 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
          * @docid
          * @default "#000000"
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid
          * @default 1
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * @docid
@@ -562,7 +562,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
            * @docid
            * @default "#232323"
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * @docid
            * @default undefined
