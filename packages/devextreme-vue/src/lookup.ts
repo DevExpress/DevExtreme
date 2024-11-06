@@ -97,7 +97,7 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     applyButtonText: String,
-    applyValueMode: String,
+    applyValueMode: {},
     cancelButtonText: String,
     cleanSearchOnOpening: Boolean,
     clearButtonText: String,
@@ -123,7 +123,7 @@ const componentConfig = {
     items: Array,
     itemTemplate: {},
     label: String,
-    labelMode: String,
+    labelMode: {},
     minSearchLength: Number,
     name: String,
     nextButtonText: String,
@@ -142,7 +142,7 @@ const componentConfig = {
     onValueChanged: Function,
     opened: Boolean,
     pageLoadingText: String,
-    pageLoadMode: String,
+    pageLoadMode: {},
     placeholder: String,
     pulledDownText: String,
     pullingDownText: String,
@@ -151,7 +151,7 @@ const componentConfig = {
     rtlEnabled: Boolean,
     searchEnabled: Boolean,
     searchExpr: [Array, Function, String],
-    searchMode: String,
+    searchMode: {},
     searchPlaceholder: String,
     searchStartEvent: String,
     searchTimeout: Number,
@@ -159,7 +159,7 @@ const componentConfig = {
     showCancelButton: Boolean,
     showClearButton: Boolean,
     showDataBeforeSearch: Boolean,
-    stylingMode: String,
+    stylingMode: {},
     tabIndex: Number,
     text: String,
     useItemTextAsTitle: Boolean,
@@ -167,9 +167,9 @@ const componentConfig = {
     usePopover: Boolean,
     validationError: {},
     validationErrors: Array,
-    validationMessageMode: String,
-    validationMessagePosition: String,
-    validationStatus: String,
+    validationMessageMode: {},
+    validationMessagePosition: {},
+    validationStatus: {},
     value: {},
     valueChangeEvent: String,
     valueExpr: [Function, String],
@@ -315,8 +315,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -353,8 +353,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -438,7 +438,7 @@ const DxDropDownOptionsConfig = {
     onShowing: Function,
     onShown: Function,
     onTitleRendered: Function,
-    position: [Object, String],
+    position: {},
     rtlEnabled: Boolean,
     shading: Boolean,
     shadingColor: String,
@@ -514,14 +514,14 @@ const DxHideConfig = {
   props: {
     complete: Function,
     delay: Number,
-    direction: String,
+    direction: {},
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function,
     to: Object,
-    type: String
+    type: {}
   }
 };
 
@@ -588,8 +588,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -631,11 +631,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String],
+    at: {},
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String],
-    my: [Object, String],
+    collision: {},
+    my: {},
     of: {},
     offset: [Object, String]
   }
@@ -665,14 +665,14 @@ const DxShowConfig = {
   props: {
     complete: Function,
     delay: Number,
-    direction: String,
+    direction: {},
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function,
     to: Object,
-    type: String
+    type: {}
   }
 };
 
@@ -748,16 +748,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: {},
+    location: {},
     menuItemTemplate: {},
     options: {},
-    showText: String,
+    showText: {},
     template: {},
     text: String,
-    toolbar: String,
+    toolbar: {},
     visible: Boolean,
-    widget: String
+    widget: {}
   }
 };
 

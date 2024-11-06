@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
+import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import animationFrame from 'animation/frame';
 import pointerMock from '../../../helpers/pointerMock.js';
 import Scrollable from 'ui/scroll_view/ui.scrollable';

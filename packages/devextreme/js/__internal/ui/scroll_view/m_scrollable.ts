@@ -15,7 +15,7 @@ import { hasWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
 import scrollEvents from '@js/events/gesture/emitter.gesture.scroll';
 import { addNamespace } from '@js/events/utils/index';
-import { getElementLocationInternal } from '@js/renovation/ui/scroll_view/utils/get_element_location_internal';
+import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
 import supportUtils from '../../core/utils/m_support';
 import { deviceDependentOptions } from './m_scrollable.device';

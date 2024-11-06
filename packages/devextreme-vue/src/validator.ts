@@ -120,7 +120,7 @@ const DxAsyncRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: String,
+    type: {},
     validationCallback: Function
   }
 };
@@ -147,10 +147,10 @@ const DxCompareRuleConfig = {
   },
   props: {
     comparisonTarget: Function,
-    comparisonType: String,
+    comparisonType: {},
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String
+    type: {}
   }
 };
 
@@ -178,7 +178,7 @@ const DxCustomRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: String,
+    type: {},
     validationCallback: Function
   }
 };
@@ -204,7 +204,7 @@ const DxEmailRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String
+    type: {}
   }
 };
 
@@ -229,7 +229,7 @@ const DxNumericRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String
+    type: {}
   }
 };
 
@@ -256,7 +256,7 @@ const DxPatternRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     pattern: [RegExp, String],
-    type: String
+    type: {}
   }
 };
 
@@ -287,7 +287,7 @@ const DxRangeRuleConfig = {
     message: String,
     min: [Date, Number, String],
     reevaluate: Boolean,
-    type: String
+    type: {}
   }
 };
 
@@ -312,7 +312,7 @@ const DxRequiredRuleConfig = {
   props: {
     message: String,
     trim: Boolean,
-    type: String
+    type: {}
   }
 };
 
@@ -343,7 +343,7 @@ const DxStringLengthRuleConfig = {
     message: String,
     min: Number,
     trim: Boolean,
-    type: String
+    type: {}
   }
 };
 
@@ -375,7 +375,7 @@ const DxValidationRuleConfig = {
   },
   props: {
     comparisonTarget: Function,
-    comparisonType: String,
+    comparisonType: {},
     ignoreEmptyValue: Boolean,
     max: [Date, Number, String],
     message: String,
@@ -383,7 +383,7 @@ const DxValidationRuleConfig = {
     pattern: [RegExp, String],
     reevaluate: Boolean,
     trim: Boolean,
-    type: String,
+    type: {},
     validationCallback: Function
   }
 };

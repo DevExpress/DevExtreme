@@ -13,16 +13,16 @@ import eventsEngine from '@js/events/core/events_engine';
 import holdEvent from '@js/events/hold';
 import pointerEvents from '@js/events/pointer';
 import { addNamespace } from '@js/events/utils/index';
-import {
-  isReachedBottom, isReachedLeft, isReachedRight, isReachedTop,
-} from '@js/renovation/ui/scroll_view/utils/get_boundary_props';
-import { getScrollLeftMax } from '@js/renovation/ui/scroll_view/utils/get_scroll_left_max';
 import Button from '@js/ui/button';
 // eslint-disable-next-line import/no-named-default
 import { default as CollectionWidget } from '@js/ui/collection/ui.collection_widget.live_update';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import { current as currentTheme, isFluent, isMaterial } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
+import {
+  isReachedBottom, isReachedLeft, isReachedRight, isReachedTop,
+} from '@ts/ui/scroll_view/utils/get_boundary_props';
+import { getScrollLeftMax } from '@ts/ui/scroll_view/utils/get_scroll_left_max';
 
 import { TABS_EXPANDED_CLASS } from './constants';
 import TabsItem from './m_item';

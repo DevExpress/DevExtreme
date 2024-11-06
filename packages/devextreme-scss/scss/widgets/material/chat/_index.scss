@@ -17,14 +17,14 @@
   $chat-avatar-background-color,
 );
 @include chat-header($chat-header-padding);
-@include chat-errorlist(
-  $chat-errorlist-color,
-  $chat-errors-padding-block,
-  $chat-errors-padding-inline,
-  $chat-error-padding-block,
-  $chat-errors-row-gap,
-  $chat-error-icon-size,
-  $chat-error-content-column-gap,
+@include chat-alertlist(
+  $chat-alertlist-color,
+  $chat-alerts-padding-block,
+  $chat-alerts-padding-inline,
+  $chat-alert-padding-block,
+  $chat-alerts-row-gap,
+  $chat-alert-icon-size,
+  $chat-alert-content-column-gap,
 );
 @include chat-messagebox(
   $chat-messagebox-padding,

@@ -1,5 +1,5 @@
 import animationFrame from 'animation/frame';
-import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
+import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import 'generic_light.css!';
 import devices from '__internal/core/m_devices';
 import domUtils from '__internal/core/utils/m_dom';

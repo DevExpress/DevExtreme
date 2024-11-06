@@ -9,7 +9,8 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { CellClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, ExportingEvent, InitializedEvent } from "devextreme/ui/pivot_grid";
-import type { HeaderFilterSearchConfig } from "devextreme/common/grids";
+import type { ApplyChangesMode, HeaderFilterSearchConfig, StateStoreType } from "devextreme/common/grids";
+import type { FieldChooserLayout, ScrollMode, Mode, SearchMode } from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -94,10 +95,10 @@ const Export = Object.assign<typeof _componentExport, NestedComponentMeta>(_comp
 // PivotGrid
 type IFieldChooserProps = React.PropsWithChildren<{
   allowSearch?: boolean;
-  applyChangesMode?: "instantly" | "onDemand";
+  applyChangesMode?: ApplyChangesMode;
   enabled?: boolean;
   height?: number;
-  layout?: 0 | 1 | 2;
+  layout?: FieldChooserLayout;
   searchTimeout?: number;
   texts?: Record<string, any> | {
     allFields?: string;
@@ -313,8 +314,8 @@ const PivotGridTexts = Object.assign<typeof _componentPivotGridTexts, NestedComp
 // owners:
 // PivotGrid
 type IScrollingProps = React.PropsWithChildren<{
-  mode?: "standard" | "virtual";
-  useNative?: boolean | "auto";
+  mode?: ScrollMode;
+  useNative?: boolean | Mode;
 }>
 const _componentScrolling = (props: IScrollingProps) => {
   return React.createElement(NestedOption<IScrollingProps>, {
@@ -334,7 +335,7 @@ const Scrolling = Object.assign<typeof _componentScrolling, NestedComponentMeta>
 type ISearchProps = React.PropsWithChildren<{
   editorOptions?: any;
   enabled?: boolean;
-  mode?: "contains" | "startswith" | "equals";
+  mode?: SearchMode;
   timeout?: number;
 }>
 const _componentSearch = (props: ISearchProps) => {
@@ -358,7 +359,7 @@ type IStateStoringProps = React.PropsWithChildren<{
   enabled?: boolean;
   savingTimeout?: number;
   storageKey?: string;
-  type?: "custom" | "localStorage" | "sessionStorage";
+  type?: StateStoreType;
 }>
 const _componentStateStoring = (props: IStateStoringProps) => {
   return React.createElement(NestedOption<IStateStoringProps>, {

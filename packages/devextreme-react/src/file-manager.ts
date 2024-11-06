@@ -8,7 +8,9 @@ import dxFileManager, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ContentReadyEvent, ContextMenuItemClickEvent, ContextMenuShowingEvent, DirectoryCreatedEvent, DirectoryCreatingEvent, DisposingEvent, ErrorOccurredEvent, FileUploadedEvent, FileUploadingEvent, InitializedEvent, ItemCopiedEvent, ItemCopyingEvent, ItemDeletedEvent, ItemDeletingEvent, ItemDownloadingEvent, ItemMovedEvent, ItemMovingEvent, ItemRenamedEvent, ItemRenamingEvent, SelectedFileOpenedEvent, ToolbarItemClickEvent, dxFileManagerContextMenuItem, dxFileManagerDetailsColumn, dxFileManagerToolbarItem } from "devextreme/ui/file_manager";
+import type { ContentReadyEvent, ContextMenuItemClickEvent, ContextMenuShowingEvent, DirectoryCreatedEvent, DirectoryCreatingEvent, DisposingEvent, ErrorOccurredEvent, FileUploadedEvent, FileUploadingEvent, InitializedEvent, ItemCopiedEvent, ItemCopyingEvent, ItemDeletedEvent, ItemDeletingEvent, ItemDownloadingEvent, ItemMovedEvent, ItemMovingEvent, ItemRenamedEvent, ItemRenamingEvent, SelectedFileOpenedEvent, ToolbarItemClickEvent, dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem, dxFileManagerDetailsColumn, FileManagerPredefinedToolbarItem, FileManagerItemViewMode, dxFileManagerToolbarItem } from "devextreme/ui/file_manager";
+import type { HorizontalAlignment, DataType, SortOrder, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
+import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -85,14 +87,14 @@ const FileManager = memo(
 // owners:
 // Details
 type IColumnProps = React.PropsWithChildren<{
-  alignment?: "center" | "left" | "right";
+  alignment?: HorizontalAlignment;
   caption?: string;
   cssClass?: string;
   dataField?: string;
-  dataType?: "string" | "number" | "date" | "boolean" | "object" | "datetime";
+  dataType?: DataType;
   hidingPriority?: number;
   sortIndex?: number;
-  sortOrder?: "asc" | "desc";
+  sortOrder?: SortOrder;
   visible?: boolean;
   visibleIndex?: number;
   width?: number | string;
@@ -114,7 +116,7 @@ const Column = Object.assign<typeof _componentColumn, NestedComponentMeta>(_comp
 // owners:
 // FileManager
 type IContextMenuProps = React.PropsWithChildren<{
-  items?: Array<dxFileManagerContextMenuItem | "create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete">;
+  items?: Array<dxFileManagerContextMenuItem | FileManagerPredefinedContextMenuItem>;
 }>
 const _componentContextMenu = (props: IContextMenuProps) => {
   return React.createElement(NestedOption<IContextMenuProps>, {
@@ -142,7 +144,7 @@ type IContextMenuItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   icon?: string;
   items?: Array<dxFileManagerContextMenuItem>;
-  name?: "create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete";
+  name?: FileManagerPredefinedContextMenuItem | string;
   selectable?: boolean;
   selected?: boolean;
   text?: string;
@@ -189,14 +191,14 @@ type IFileSelectionItemProps = React.PropsWithChildren<{
   cssClass?: string;
   disabled?: boolean;
   icon?: string;
-  locateInMenu?: "always" | "auto" | "never";
-  location?: "after" | "before" | "center";
-  name?: "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator";
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
+  name?: FileManagerPredefinedToolbarItem | string;
   options?: any;
-  showText?: "always" | "inMenu";
+  showText?: ShowTextMode;
   text?: string;
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
+  widget?: ToolbarItemComponent;
 }>
 const _componentFileSelectionItem = (props: IFileSelectionItemProps) => {
   return React.createElement(NestedOption<IFileSelectionItemProps>, {
@@ -222,17 +224,17 @@ type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   icon?: string;
   items?: Array<dxFileManagerContextMenuItem>;
-  name?: "create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete" | "showNavPane" | "switchView" | "clearSelection" | "separator";
+  name?: FileManagerPredefinedContextMenuItem | string | FileManagerPredefinedToolbarItem;
   selectable?: boolean;
   selected?: boolean;
   text?: string;
   visible?: boolean;
   cssClass?: string;
-  locateInMenu?: "always" | "auto" | "never";
-  location?: "after" | "before" | "center";
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
   options?: any;
-  showText?: "always" | "inMenu";
-  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
+  showText?: ShowTextMode;
+  widget?: ToolbarItemComponent;
 }>
 const _componentItem = (props: IItemProps) => {
   return React.createElement(NestedOption<IItemProps>, {
@@ -254,7 +256,7 @@ type IItemViewProps = React.PropsWithChildren<{
   details?: Record<string, any> | {
     columns?: Array<dxFileManagerDetailsColumn | string>;
   };
-  mode?: "details" | "thumbnails";
+  mode?: FileManagerItemViewMode;
   showFolders?: boolean;
   showParentFolder?: boolean;
 }>
@@ -320,8 +322,8 @@ const Permissions = Object.assign<typeof _componentPermissions, NestedComponentM
 // owners:
 // FileManager
 type IToolbarProps = React.PropsWithChildren<{
-  fileSelectionItems?: Array<dxFileManagerToolbarItem | "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">;
-  items?: Array<dxFileManagerToolbarItem | "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">;
+  fileSelectionItems?: Array<dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem>;
+  items?: Array<dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem>;
 }>
 const _componentToolbar = (props: IToolbarProps) => {
   return React.createElement(NestedOption<IToolbarProps>, {
@@ -347,14 +349,14 @@ type IToolbarItemProps = React.PropsWithChildren<{
   cssClass?: string;
   disabled?: boolean;
   icon?: string;
-  locateInMenu?: "always" | "auto" | "never";
-  location?: "after" | "before" | "center";
-  name?: "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator";
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
+  name?: FileManagerPredefinedToolbarItem | string;
   options?: any;
-  showText?: "always" | "inMenu";
+  showText?: ShowTextMode;
   text?: string;
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
+  widget?: ToolbarItemComponent;
 }>
 const _componentToolbarItem = (props: IToolbarItemProps) => {
   return React.createElement(NestedOption<IToolbarItemProps>, {

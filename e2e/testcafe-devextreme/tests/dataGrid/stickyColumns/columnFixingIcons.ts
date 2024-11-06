@@ -8,12 +8,12 @@ import { Themes } from '../../../helpers/themes';
 import { getData } from '../helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Column Fixing`.page(
-  url(__dirname, '../container.html'),
+  url(__dirname, '../../container.html'),
 );
 
 [Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach(
   (theme) => {
-    test('Fixed columns: add icons for context menu', async (t) => {
+    test('Fixed columns: Check context menu items', async (t) => {
       const dataGrid = new DataGrid('#container');
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -24,7 +24,7 @@ fixture.disablePageReloads`Column Fixing`.page(
         .click(dataGrid.getContextMenu().getItemByOrder(4))
         .expect(
           await takeScreenshot(
-            `sticky_columns_menu_icons_(${theme}).png`,
+            `sticky_columns_context_menu_(${theme}).png`,
             dataGrid.element,
           ),
         )
@@ -39,13 +39,6 @@ fixture.disablePageReloads`Column Fixing`.page(
           width: '100%',
           columnFixing: {
             enabled: true,
-            texts: {
-              stickyPosition: 'Stick',
-            },
-          },
-          customizeColumns: (columns) => {
-            columns[1].fixed = true;
-            columns[1].fixedPosition = 'sticky';
           },
         });
       })

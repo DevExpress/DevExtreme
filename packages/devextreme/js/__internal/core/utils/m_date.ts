@@ -7,8 +7,7 @@ import { adjust } from '@js/core/utils/math';
 import {
   isDate, isDefined, isNumeric, isObject, isString,
 } from '@js/core/utils/type';
-
-import { toMilliseconds } from '../../../renovation/ui/common/utils/date/index';
+import { toMilliseconds } from '@ts/utils/toMilliseconds';
 
 const DAYS_IN_WEEK = 7;
 const THURSDAY_WEEK_NUMBER = 4;

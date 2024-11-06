@@ -35,10 +35,10 @@ interface DxBox extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    align: String,
-    crossAlign: String,
+    align: {},
+    crossAlign: {},
     dataSource: {},
-    direction: String,
+    direction: {},
     disabled: Boolean,
     elementAttr: Object,
     height: [Function, Number, String],

@@ -541,6 +541,8 @@ const Lookup = DropDownList.inherit({
     return 'auto';
   },
 
+  _allowSelectItemByTab: () => false,
+
   _popupTabHandler(e) {
     const shouldLoopFocusInsidePopup = this._shouldLoopFocusInsidePopup();
 

@@ -40,7 +40,7 @@ const componentConfig = {
     container: {},
     cursorOffset: [Object, String],
     data: {},
-    dragDirection: String,
+    dragDirection: {},
     dragTemplate: {},
     elementAttr: Object,
     group: String,

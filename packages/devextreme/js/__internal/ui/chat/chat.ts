@@ -18,7 +18,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import { applyBatch } from '@ts/data/m_array_utils';
 
-import ErrorList from './errorlist';
+import AlertList from './alertlist';
 import ChatHeader from './header';
 import type {
   MessageEnteredEvent as MessageBoxMessageEnteredEvent,
@@ -47,7 +47,7 @@ class Chat extends Widget<Properties> {
 
   _messageList!: MessageList;
 
-  _errorList!: ErrorList;
+  _alertList!: AlertList;
 
   _messageEnteredAction?: (e: Partial<MessageEnteredEvent>) => void;
 
@@ -68,7 +68,7 @@ class Chat extends Widget<Properties> {
       user: { id: new Guid().toString() },
       dayHeaderFormat: 'shortdate',
       messageTimestampFormat: 'shorttime',
-      errors: [],
+      alerts: [],
       showAvatar: true,
       showUserName: true,
       showMessageTimestamp: true,
@@ -136,7 +136,7 @@ class Chat extends Widget<Properties> {
     }
 
     this._renderMessageList();
-    this._renderErrorList();
+    this._renderAlertList();
     this._renderMessageBox();
 
     this._updateRootAria();
@@ -190,15 +190,15 @@ class Chat extends Widget<Properties> {
     });
   }
 
-  _renderErrorList(): void {
+  _renderAlertList(): void {
     const $errors = $('<div>');
 
     this.$element().append($errors);
 
-    const { errors = [] } = this.option();
+    const { alerts = [] } = this.option();
 
-    this._errorList = this._createComponent($errors, ErrorList, {
-      items: errors,
+    this._alertList = this._createComponent($errors, AlertList, {
+      items: alerts,
     });
   }
 
@@ -348,8 +348,8 @@ class Chat extends Widget<Properties> {
         // @ts-expect-error
         this._refreshDataSource();
         break;
-      case 'errors':
-        this._errorList.option('items', value ?? []);
+      case 'alerts':
+        this._alertList.option('items', value ?? []);
         break;
       case 'onMessageEntered':
         this._createMessageEnteredAction();

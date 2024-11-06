@@ -20,12 +20,12 @@
   background-image:
     repeating-linear-gradient(
       135deg,
-      rgba(244, 67, 54, 0.1),
-      rgba(244, 67, 54, 0.1) 4px,
+      rgba(247, 234, 224, 1),
+      rgba(247, 234, 224, 1) 4px,
       transparent 4px,
       transparent 9px
     );
-  color: #9b6467;
+  color: rgba(178, 74, 0, 1);
 }
 
 ::ng-deep .dx-scheduler-header-panel-cell .disable-date {
@@ -42,11 +42,11 @@
 }
 
 .dinner {
-  background: rgba(255, 193, 7, 0.2);
+  background: #FBF1EB;
 }
 
 ::ng-deep .dx-scheduler-time-panel-cell .dinner {
-  color: rgba(255, 193, 7);
+  color: #C25100;
   font-weight: 400;
   background: transparent;
 }
@@ -64,7 +64,7 @@
   -webkit-mask-position-y: 50%;
   -webkit-mask-position-x: 100%;
   margin-top: -4px;
-  background-color: #ffc107;
+  background-color: #C25100;
 }
 
 ::ng-deep .dx-scheduler-date-table-cell {
