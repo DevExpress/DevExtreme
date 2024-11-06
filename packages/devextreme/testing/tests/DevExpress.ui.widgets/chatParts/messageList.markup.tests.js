@@ -5,6 +5,7 @@ import MessageList from '__internal/ui/chat/messagelist';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 const CHAT_MESSAGELIST_CONTENT_CLASS = 'dx-chat-messagelist-content';
 const CHAT_MESSAGELIST_EMPTY_CLASS = 'dx-chat-messagelist-empty';
+const CHAT_MESSAGELIST_EMPTY_LOADING_CLASS = 'dx-chat-messagelist-empty-loading';
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
@@ -42,10 +43,22 @@ QUnit.module('MessageList', moduleConfig, () => {
 
         QUnit.test('should have empty class if there are no messages', function(assert) {
             this.reinit({
-                items: []
+                items: [],
+                isLoading: false,
             });
 
-            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_CLASS), true);
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_CLASS), true, 'should have empty class');
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS), false, 'should not have empty loading class');
+        });
+
+        QUnit.test('should have an empty loading class if there are no messages and it is loading', function(assert) {
+            this.reinit({
+                items: [],
+                isLoading: true,
+            });
+
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_CLASS), false, 'should not have empty class');
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS), true, 'should have empty loading class');
         });
 
         QUnit.test('should not have empty class if there are no messages', function(assert) {
@@ -68,6 +81,57 @@ QUnit.module('MessageList', moduleConfig, () => {
             this.instance.option('items', [{}, {}, {}]);
 
             assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_CLASS), false, 'messagelist empty class is removed');
+        });
+
+        QUnit.test('empty loading class should not be toggled when isLoading is updated at runtime in a non-empty chat', function(assert) {
+            this.reinit({
+                items: [{}],
+                isLoading: false,
+            });
+
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS), false, 'empty loading class is not present');
+
+            this.instance.option('isLoading', true);
+
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS), false, 'empty loading class is not added');
+
+            this.instance.option('isLoading', false);
+
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS), false, 'empty loading class is not added');
+        });
+
+        QUnit.test('empty loading class should not be toggled when isLoading is updated at runtime in a empty chat', function(assert) {
+            this.reinit({
+                items: [],
+                isLoading: false,
+            });
+
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS), false, 'empty loading class is not present initially');
+
+            this.instance.option('isLoading', true);
+
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS), true, 'empty loading class is added when loading is active');
+
+            this.instance.option('isLoading', false);
+
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS), false, 'empty loading class is removed when loading is inactive');
+        });
+
+        QUnit.test('empty loading class should be toggled when items are updated at runtime and loading is active', function(assert) {
+            this.reinit({
+                items: [{}],
+                isLoading: true,
+            });
+
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS), false, 'empty loading class is not added initially');
+
+            this.instance.option('items', []);
+
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS), true, 'empty loading class is added when items are empty');
+
+            this.instance.option('items', [{}, {}]);
+
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS), false, 'empty loading class is removed when items are present');
         });
 
         QUnit.test('should have content element', function(assert) {

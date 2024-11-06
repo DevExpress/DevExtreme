@@ -425,6 +425,24 @@ QUnit.module('MessageList', () => {
             const $indicator = this.$element.find(`.${SCROLLVIEW_REACHBOTTOM_INDICATOR}`);
             assert.strictEqual($indicator.is(':visible'), true);
         });
+
+        QUnit.test('loading indicator should be change visibility after change isLoading option value at runtime', function(assert) {
+            this.reinit({
+                items: [
+                    { author: { id: 'UserID' } },
+                ],
+                isLoading: true
+            });
+
+            this.instance.option('isLoading', false);
+
+            const $indicator = this.$element.find(`.${SCROLLVIEW_REACHBOTTOM_INDICATOR}`);
+            assert.strictEqual($indicator.is(':visible'), false, 'loadindicator is not visible');
+
+            this.instance.option('isLoading', true);
+
+            assert.strictEqual($indicator.is(':visible'), true, 'loadindicator is visible');
+        });
     });
 
     QUnit.module('Options', () => {

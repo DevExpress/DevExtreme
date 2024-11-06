@@ -24,6 +24,8 @@ type IChatOptionsNarrowedEvents = {
 }
 
 type IChatOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IChatOptionsNarrowedEvents> & IHtmlOptions & {
+  messageRender?: (...params: any) => React.ReactNode;
+  messageComponent?: React.ComponentType<any>;
   defaultItems?: Array<Message>;
   onItemsChange?: (value: Array<Message>) => void;
 }>
@@ -61,6 +63,14 @@ const Chat = memo(
         user: { optionName: "user", isCollectionItem: false }
       }), []);
 
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "messageTemplate",
+          render: "messageRender",
+          component: "messageComponent"
+        },
+      ]), []);
+
       return (
         React.createElement(BaseComponent<React.PropsWithChildren<IChatOptions>>, {
           WidgetClass: dxChat,
@@ -69,6 +79,7 @@ const Chat = memo(
           independentEvents,
           defaults,
           expectedChildren,
+          templateProps,
           ...props,
         })
       );

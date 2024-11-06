@@ -9521,6 +9521,10 @@ declare module DevExpress.ui {
        */
       readonly message?: Message;
     };
+    export type MessageTemplateData = {
+      readonly component: dxChat;
+      readonly message?: Message;
+    };
     /**
      * [descr:_ui_chat_OptionChangedEvent]
      */
@@ -9590,6 +9594,13 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.alerts]
      */
     alerts?: Array<DevExpress.ui.dxChat.Alert>;
+    messageTemplate?:
+      | ((
+          data: DevExpress.ui.dxChat.MessageTemplateData,
+          messageBubbleElement: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement)
+      | DevExpress.core.template
+      | null;
     /**
      * [descr:dxChatOptions.messageTimestampFormat]
      */

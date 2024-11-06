@@ -100,8 +100,18 @@ const MultiView = CollectionWidget.inherit({
     return this.option('items').length;
   },
 
+  _isAllItemsHidden() {
+    const { items } = this.option();
+
+    return items.every((_, index) => !this._isItemVisible(index));
+  },
+
   _normalizeIndex(index, direction, loop = true) {
     const count = this._itemsCount();
+
+    if (this._isAllItemsHidden()) {
+      return;
+    }
 
     if (index < 0) {
       index += count;
@@ -144,14 +154,13 @@ const MultiView = CollectionWidget.inherit({
   },
 
   _ensureSelectedItemIsVisible(): void {
-    const { items, loop, selectedIndex: currentSelectedIndex } = this.option();
+    const { loop, selectedIndex: currentSelectedIndex } = this.option();
 
     if (this._isItemVisible(currentSelectedIndex)) {
       return;
     }
 
-    const allItemsHidden = items.every((_, index) => !this._isItemVisible(index));
-    if (allItemsHidden) {
+    if (this._isAllItemsHidden()) {
       this.option('selectedIndex', 0);
       return;
     }

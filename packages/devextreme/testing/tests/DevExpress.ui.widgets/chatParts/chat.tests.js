@@ -8,6 +8,7 @@ import MessageBubble from '__internal/ui/chat/messagebubble';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
+import { data } from 'core/element_data';
 
 import { isRenderer } from 'core/utils/type';
 
@@ -1046,6 +1047,54 @@ QUnit.module('Chat', () => {
             assert.strictEqual(this.getBubbles().length, 3, 'new message should be rendered in list');
         });
 
+        QUnit.test('new message should be rendered, and the empty view should be removed after adding a single message using store.push({ type: insert }) and reloadOnChange is false', function(assert) {
+            const messages = [];
+            const timeout = 1000;
+
+            const store = new CustomStore({
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+                insert: function(message) {
+                    const d = $.Deferred();
+
+                    setTimeout(() => {
+                        d.resolve();
+                    }, timeout);
+
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+
+            assert.strictEqual(this.getEmptyView().length, 1, 'empty view is rendered');
+
+            const newMessage = { text: 'message_3' };
+            keyboardMock(this.$input)
+                .focus()
+                .type(newMessage.text);
+
+            this.$sendButton.trigger('dxclick');
+
+            store.push([{ type: 'insert', data: newMessage }]);
+
+            this.clock.tick(timeout * 2);
+
+            assert.deepEqual(this.instance.option('items'), [...messages, newMessage], 'items option should contain all messages including the new one');
+            assert.strictEqual(this.getEmptyView().length, 0, 'empty view is removed');
+            assert.strictEqual(this.getBubbles().length, 1, 'new message should be rendered in list');
+        });
+
         QUnit.test('Loading and Empty view should not be shown at the same time when the dataSource option changes', function(assert) {
             const messages = [{ text: 'message_1' }, { text: 'message_2' }];
             const timeout = 400;
@@ -1071,6 +1120,32 @@ QUnit.module('Chat', () => {
             $indicator = this.$element.find(`.${SCROLLVIEW_REACHBOTTOM_INDICATOR}`);
             assert.strictEqual($indicator.is(':visible'), false, 'loading indicator is hidden');
             assert.strictEqual(this.getEmptyView().length, 0, 'empty view was removed');
+        });
+
+        QUnit.test('Loadindicator should be hidden after load a single message', function(assert) {
+            const messages = [{ text: 'message_1' }];
+            const timeout = 400;
+
+            const store = new CustomStore({
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve(messages);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({ dataSource: store });
+
+            assert.strictEqual(this.getEmptyView().length, 0, 'empty view is not rendered');
+            let $indicator = this.$element.find(`.${SCROLLVIEW_REACHBOTTOM_INDICATOR}`);
+            assert.strictEqual($indicator.is(':visible'), true, 'loading indicator is visible');
+
+            this.clock.tick(timeout);
+
+            $indicator = this.$element.find(`.${SCROLLVIEW_REACHBOTTOM_INDICATOR}`);
+            assert.strictEqual($indicator.is(':visible'), false, 'loading indicator is hidden');
         });
     });
 });
