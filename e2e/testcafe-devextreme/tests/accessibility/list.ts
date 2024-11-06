@@ -77,6 +77,7 @@ const options: Options<Properties> = {
   selectionMode: ['all', 'multiple', 'none', 'single'],
   itemDeleteMode: ['toggle', 'context', 'slideButton', 'slideItem', 'static', 'swipe'],
   useNativeScrolling: [true, false],
+  groupTemplate: [(data) => `<div>${data.key}</div>`],
 };
 
 const configuration: Configuration = {
