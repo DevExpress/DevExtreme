@@ -24,7 +24,11 @@ import { getScrollTopMax } from '@ts/ui/scroll_view/utils/get_scroll_top_max';
 import { isElementVisible } from '../splitter/utils/layout';
 import type Chat from './chat';
 import type { MessageGroupAlignment } from './messagegroup';
-import MessageGroup from './messagegroup';
+import MessageGroup, {
+  CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS,
+  CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS,
+}
+  from './messagegroup';
 import TypingIndicator from './typingindicator';
 
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
@@ -37,8 +41,6 @@ const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message'
 const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
 const CHAT_MESSAGELIST_DAY_HEADER_CLASS = 'dx-chat-messagelist-day-header';
 
-const CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-messagegroup-alignment-start';
-const CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-messagegroup-alignment-end';
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-alignment-start';
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
 
