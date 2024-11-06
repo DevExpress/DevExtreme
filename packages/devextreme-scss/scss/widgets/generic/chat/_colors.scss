@@ -15,29 +15,34 @@ $chat-background-color: $base-bg !default;
 * $type color
 */
 $chat-border-color: $base-border-color !default;
+
+/**
+* $name 30. Avatar color
+* $type color
+*/
 $chat-avatar-color: null !default;
 
 /**
-* $name 30. Avatar background color
+* $name 40. Avatar background color
 * $type color
 */
 $chat-avatar-background-color: $base-border-color !default;
 $chat-messagebox-border-color: $base-border-color !default;
 
 /**
-* $name 40. Primary bubble color
+* $name 50. Primary bubble color
 * $type color
 */
 $chat-bubble-color-primary: null !default;
 
 /**
-* $name 50. Primary bubble background color
+* $name 60. Primary bubble background color
 * $type color
 */
 $chat-bubble-background-color-primary: null !default;
 
 /**
-* $name 60. Secondary bubble background color
+* $name 70. Secondary bubble background color
 * $type color
 */
 $chat-bubble-background-color-secondary: null !default;
@@ -50,18 +55,18 @@ $chat-messagelist-empty-message-color: null !default;
 $chat-messagelist-empty-prompt-color: null !default;
 
 /**
-* $name 70. Alert list color
+* $name 80. Alert list color
 * $type color
 */
 $chat-alertlist-color: $base-invalid-color !default;
 
 /**
-* $name 80. Typing indicator color
+* $name 90. Typing indicator color
 * $type color
 */
 $chat-typingindicator-color: null !default;
 /**
-* $name 90. Typing indicator background color
+* $name 100. Typing indicator background color
 * $type color
 */
 $chat-typingindicator-bubble-bg-color: null !default;
