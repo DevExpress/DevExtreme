@@ -1,3 +1,7 @@
+import {
+    Format,
+} from '../localization';
+
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import {
     EventInfo,
@@ -197,6 +201,12 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     dataSource?: DataSourceLike<Message> | null;
     /**
      * @docid
+     * @default 'shortdate'
+     * @public
+     */
+    dayHeaderFormat?: Format;
+    /**
+     * @docid
      * @default true
      * @public
      */
@@ -207,6 +217,12 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     alerts?: Array<Alert>;
+    /**
+     * @docid
+     * @default 'shorttime'
+     * @public
+     */
+    messageTimestampFormat?: Format;
     /**
      * @docid
      * @default []

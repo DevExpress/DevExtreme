@@ -9579,6 +9579,10 @@ declare module DevExpress.ui {
      */
     dataSource?: DevExpress.data.DataSource.DataSourceLike<DevExpress.ui.dxChat.Message> | null;
     /**
+     * [descr:dxChatOptions.dayHeaderFormat]
+     */
+    dayHeaderFormat?: Format;
+    /**
      * [descr:dxChatOptions.reloadOnChange]
      */
     reloadOnChange?: boolean;
@@ -9586,6 +9590,10 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.alerts]
      */
     alerts?: Array<DevExpress.ui.dxChat.Alert>;
+    /**
+     * [descr:dxChatOptions.messageTimestampFormat]
+     */
+    messageTimestampFormat?: Format;
     /**
      * [descr:dxChatOptions.typingUsers]
      */

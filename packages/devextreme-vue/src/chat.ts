@@ -8,6 +8,7 @@ type AccessibleOptions = Pick<Properties,
   "activeStateEnabled" |
   "alerts" |
   "dataSource" |
+  "dayHeaderFormat" |
   "disabled" |
   "elementAttr" |
   "focusStateEnabled" |
@@ -15,6 +16,7 @@ type AccessibleOptions = Pick<Properties,
   "hint" |
   "hoverStateEnabled" |
   "items" |
+  "messageTimestampFormat" |
   "onDisposing" |
   "onInitialized" |
   "onMessageEntered" |
@@ -43,6 +45,7 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     alerts: Array,
     dataSource: {},
+    dayHeaderFormat: [Object, Function, String],
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
@@ -50,6 +53,7 @@ const componentConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     items: Array,
+    messageTimestampFormat: [Object, Function, String],
     onDisposing: Function,
     onInitialized: Function,
     onMessageEntered: Function,
@@ -74,6 +78,7 @@ const componentConfig = {
     "update:activeStateEnabled": null,
     "update:alerts": null,
     "update:dataSource": null,
+    "update:dayHeaderFormat": null,
     "update:disabled": null,
     "update:elementAttr": null,
     "update:focusStateEnabled": null,
@@ -81,6 +86,7 @@ const componentConfig = {
     "update:hint": null,
     "update:hoverStateEnabled": null,
     "update:items": null,
+    "update:messageTimestampFormat": null,
     "update:onDisposing": null,
     "update:onInitialized": null,
     "update:onMessageEntered": null,
@@ -108,7 +114,9 @@ const componentConfig = {
     (this as any).$_hasAsyncTemplate = true;
     (this as any).$_expectedChildren = {
       alert: { isCollectionItem: true, optionName: "alerts" },
+      dayHeaderFormat: { isCollectionItem: false, optionName: "dayHeaderFormat" },
       item: { isCollectionItem: true, optionName: "items" },
+      messageTimestampFormat: { isCollectionItem: false, optionName: "messageTimestampFormat" },
       typingUser: { isCollectionItem: true, optionName: "typingUsers" },
       user: { isCollectionItem: false, optionName: "user" }
     };
@@ -163,6 +171,33 @@ const DxAuthor = defineComponent(DxAuthorConfig);
 
 (DxAuthor as any).$_optionName = "author";
 
+const DxDayHeaderFormatConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:currency": null,
+    "update:formatter": null,
+    "update:parser": null,
+    "update:precision": null,
+    "update:type": null,
+    "update:useCurrencyAccountingStyle": null,
+  },
+  props: {
+    currency: String,
+    formatter: Function,
+    parser: Function,
+    precision: Number,
+    type: String,
+    useCurrencyAccountingStyle: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxDayHeaderFormatConfig);
+
+const DxDayHeaderFormat = defineComponent(DxDayHeaderFormatConfig);
+
+(DxDayHeaderFormat as any).$_optionName = "dayHeaderFormat";
+
 const DxItemConfig = {
   emits: {
     "update:isActive": null,
@@ -191,6 +226,33 @@ const DxItem = defineComponent(DxItemConfig);
 (DxItem as any).$_expectedChildren = {
   author: { isCollectionItem: false, optionName: "author" }
 };
+
+const DxMessageTimestampFormatConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:currency": null,
+    "update:formatter": null,
+    "update:parser": null,
+    "update:precision": null,
+    "update:type": null,
+    "update:useCurrencyAccountingStyle": null,
+  },
+  props: {
+    currency: String,
+    formatter: Function,
+    parser: Function,
+    precision: Number,
+    type: String,
+    useCurrencyAccountingStyle: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxMessageTimestampFormatConfig);
+
+const DxMessageTimestampFormat = defineComponent(DxMessageTimestampFormatConfig);
+
+(DxMessageTimestampFormat as any).$_optionName = "messageTimestampFormat";
 
 const DxTypingUserConfig = {
   emits: {
@@ -244,7 +306,9 @@ export {
   DxChat,
   DxAlert,
   DxAuthor,
+  DxDayHeaderFormat,
   DxItem,
+  DxMessageTimestampFormat,
   DxTypingUser,
   DxUser
 };

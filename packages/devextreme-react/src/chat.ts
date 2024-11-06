@@ -53,7 +53,9 @@ const Chat = memo(
 
       const expectedChildren = useMemo(() => ({
         alert: { optionName: "alerts", isCollectionItem: true },
+        dayHeaderFormat: { optionName: "dayHeaderFormat", isCollectionItem: false },
         item: { optionName: "items", isCollectionItem: true },
+        messageTimestampFormat: { optionName: "messageTimestampFormat", isCollectionItem: false },
         typingUser: { optionName: "typingUsers", isCollectionItem: true },
         user: { optionName: "user", isCollectionItem: false }
       }), []);
@@ -117,6 +119,29 @@ const Author = Object.assign<typeof _componentAuthor, NestedComponentMeta>(_comp
 
 // owners:
 // Chat
+type IDayHeaderFormatProps = React.PropsWithChildren<{
+  currency?: string;
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
+  precision?: number;
+  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  useCurrencyAccountingStyle?: boolean;
+}>
+const _componentDayHeaderFormat = (props: IDayHeaderFormatProps) => {
+  return React.createElement(NestedOption<IDayHeaderFormatProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "dayHeaderFormat",
+    },
+  });
+};
+
+const DayHeaderFormat = Object.assign<typeof _componentDayHeaderFormat, NestedComponentMeta>(_componentDayHeaderFormat, {
+  componentType: "option",
+});
+
+// owners:
+// Chat
 type IItemProps = React.PropsWithChildren<{
   author?: ChatUser;
   id?: number | string;
@@ -138,6 +163,29 @@ const _componentItem = (props: IItemProps) => {
 };
 
 const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
+  componentType: "option",
+});
+
+// owners:
+// Chat
+type IMessageTimestampFormatProps = React.PropsWithChildren<{
+  currency?: string;
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
+  precision?: number;
+  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  useCurrencyAccountingStyle?: boolean;
+}>
+const _componentMessageTimestampFormat = (props: IMessageTimestampFormatProps) => {
+  return React.createElement(NestedOption<IMessageTimestampFormatProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "messageTimestampFormat",
+    },
+  });
+};
+
+const MessageTimestampFormat = Object.assign<typeof _componentMessageTimestampFormat, NestedComponentMeta>(_componentMessageTimestampFormat, {
   componentType: "option",
 });
 
@@ -193,8 +241,12 @@ export {
   IAlertProps,
   Author,
   IAuthorProps,
+  DayHeaderFormat,
+  IDayHeaderFormatProps,
   Item,
   IItemProps,
+  MessageTimestampFormat,
+  IMessageTimestampFormatProps,
   TypingUser,
   ITypingUserProps,
   User,
