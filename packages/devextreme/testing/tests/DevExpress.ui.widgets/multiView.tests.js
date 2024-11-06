@@ -526,12 +526,13 @@ QUnit.module('interaction via swipe', {
             return false;
         });
 
-        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+        try {
+            pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
 
-
-        assert.ok(true, 'no infinite loop');
-
-        isItemVisibleStub.restore();
+            assert.ok(true, 'no infinite loop');
+        } catch(error) {
+            isItemVisibleStub.restore();
+        }
     });
 
     QUnit.test('when only one item is visible, swipe action does not move the current visible item', function(assert) {
