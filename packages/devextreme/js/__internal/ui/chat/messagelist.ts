@@ -27,8 +27,7 @@ import type { MessageGroupAlignment } from './messagegroup';
 import MessageGroup, {
   CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS,
   CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS,
-}
-  from './messagegroup';
+} from './messagegroup';
 import TypingIndicator from './typingindicator';
 
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
