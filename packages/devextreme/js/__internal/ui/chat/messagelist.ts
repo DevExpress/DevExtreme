@@ -372,8 +372,12 @@ class MessageList extends Widget<Properties> {
   }
 
   _setLastMessageGroupClasses(): void {
-    $(`.${CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS}`).removeClass(CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS);
-    $(`.${CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS}`).removeClass(CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS);
+    this._$content
+      .find(`.${CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS}`)
+      .removeClass(CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS);
+    this._$content
+      .find(`.${CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS}`)
+      .removeClass(CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS);
 
     const $lastAlignmentStartGroup = this._$content.find(`.${CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS}`).last();
     const $lastAlignmentEndGroup = this._$content.find(`.${CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS}`).last();
