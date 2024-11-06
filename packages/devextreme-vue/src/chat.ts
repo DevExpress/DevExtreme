@@ -45,7 +45,7 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     alerts: Array,
     dataSource: {},
-    dayHeaderFormat: [Object, Function, String],
+    dayHeaderFormat: {},
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
@@ -53,7 +53,7 @@ const componentConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     items: Array,
-    messageTimestampFormat: [Object, Function, String],
+    messageTimestampFormat: {},
     onDisposing: Function,
     onInitialized: Function,
     onMessageEntered: Function,
@@ -187,7 +187,7 @@ const DxDayHeaderFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -243,7 +243,7 @@ const DxMessageTimestampFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
