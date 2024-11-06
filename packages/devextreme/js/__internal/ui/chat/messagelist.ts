@@ -37,6 +37,11 @@ const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message'
 const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
 const CHAT_MESSAGELIST_DAY_HEADER_CLASS = 'dx-chat-messagelist-day-header';
 
+const CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-messagegroup-alignment-start';
+const CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-messagegroup-alignment-end';
+const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-alignment-start';
+const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
+
 const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
 export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
 
@@ -361,8 +366,20 @@ class MessageList extends Widget<Properties> {
       }
     });
 
+    this._setLastMessageGroupClasses();
     // @ts-expect-error
     this._updateLoadingState(isLoading);
+  }
+
+  _setLastMessageGroupClasses(): void {
+    $(`.${CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS}`).removeClass(CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS);
+    $(`.${CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS}`).removeClass(CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS);
+
+    const $lastAlignmentStartGroup = this._$content.find(`.${CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS}`).last();
+    const $lastAlignmentEndGroup = this._$content.find(`.${CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS}`).last();
+
+    $lastAlignmentStartGroup.addClass(CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS);
+    $lastAlignmentEndGroup.addClass(CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS);
   }
 
   _renderMessage(message: Message): void {
@@ -391,6 +408,7 @@ class MessageList extends Widget<Properties> {
     }
 
     this._createMessageGroupComponent([message], author?.id);
+    this._setLastMessageGroupClasses();
 
     this._scrollDownContent();
   }
