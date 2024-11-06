@@ -21,11 +21,14 @@ import { GridCoreStickyColumnsDom } from './dom';
 import {
   getColumnFixedPosition,
   getStickyOffset,
+  hasFixedColumnsWithStickyPosition,
   isFirstFixedColumn,
   isFixedEdge,
   isLastFixedColumn,
+  needToDisableStickyColumn,
   normalizeOffset,
   prevColumnIsFixed,
+  processFixedColumns,
 } from './utils';
 
 const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class BaseStickyColumnsExtender extends Base {
@@ -98,8 +101,10 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
 
     $rows.forEach((row: Element, index: number) => {
       const rowIndex = isColumnHeadersView ? index : null;
-      const columns = this.getColumns(rowIndex);
       const $cells = $(row).children('td').toArray();
+      let columns = this.getColumns(rowIndex);
+
+      columns = processFixedColumns(this._columnsController, columns);
 
       $cells.forEach((cell: Element, cellIndex: number) => {
         const $cell = $(cell);
@@ -132,7 +137,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     const hasStickyColumns = this.hasStickyColumns();
     const rowIndex = rowType === 'header' ? options.rowIndex : null;
 
-    if (hasStickyColumns) {
+    if (hasStickyColumns && !needToDisableStickyColumn(this._columnsController, column)) {
       this.updateBorderCellClasses($cell, column, rowIndex);
 
       if (column.fixed) {
@@ -177,10 +182,12 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
   }
 
   protected setStickyOffsets(rowIndex?: number, offsets?: Record<number, Record<string, number>>): void {
-    let columns = this.getColumns(rowIndex);
-    let widths = this.getColumnWidths(undefined, rowIndex);
     const columnsController = this._columnsController;
     const rtlEnabled = this.option('rtlEnabled') as boolean;
+    let widths = this.getColumnWidths(undefined, rowIndex);
+    let columns = this.getColumns(rowIndex);
+
+    columns = processFixedColumns(this._columnsController, columns);
 
     if (rtlEnabled) {
       columns = rtlEnabled ? [...columns].reverse() : columns;
@@ -231,6 +238,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     }
   }
 
+  // TODO: Need to rename this method to hasFixedColumns after removing old fixed columns implementation
   public hasStickyColumns(): boolean {
     const stickyColumns = this._columnsController?.getStickyColumns();
 
@@ -262,6 +270,7 @@ const columnHeadersView = (
 
   public getContextMenuItems(options) {
     const { column } = options;
+    const columnsController = this._columnsController;
     const columnFixingOptions: any = this.option('columnFixing');
     let items: any = super.getContextMenuItems(options);
 
@@ -310,7 +319,7 @@ const columnHeadersView = (
           },
         ];
 
-        if (this.option('columnFixing.legacyMode') !== true) {
+        if (this.option('columnFixing.legacyMode') !== true && !columnsController.isVirtualMode()) {
           fixedPositionItems.push({
             text: columnFixingOptions.texts.stickyPosition,
             icon: columnFixingOptions.icons.stickyPosition,
@@ -431,9 +440,6 @@ const rowsView = (
     if (hasStickyColumns) {
       const editorFactoryController = this.getController('editorFactory');
       const $focusOverlay = editorFactoryController.getFocusOverlay();
-      const hasFixedColumnsWithStickyPosition = !!this._columnsController
-        .getStickyColumns()
-        .filter((column) => column.fixedPosition === StickyPosition.Sticky).length;
 
       if (!$focusOverlay?.hasClass(CLASSES.hidden)
         && $focusOverlay?.hasClass(CLASSES.focusedFixedCell)) {
@@ -448,7 +454,7 @@ const rowsView = (
         }
       }
 
-      if (hasFixedColumnsWithStickyPosition) {
+      if (hasFixedColumnsWithStickyPosition(this._columnsController)) {
         // @ts-expect-error
         this._columnHeadersView?.updateScrollPadding();
       }

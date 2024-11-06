@@ -19,7 +19,6 @@ const baseView = <T extends ModuleType<ColumnsView>>(Base: T) => class BaseViewV
   protected _needToSetCellWidths() {
     let result = super._needToSetCellWidths();
 
-    // @ts-expect-error
     if (!result && this._columnsController.isVirtualMode()) {
       const columns = this._columnsController.getColumns();
 
@@ -84,7 +83,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class Virtual
     // @ts-expect-error
     const deferred = super._renderCore.apply(this, arguments);
 
-    // @ts-expect-error
     if (this._columnsController.isVirtualMode()) {
       this._updateScrollLeftPosition();
     }
@@ -214,10 +212,6 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     }
   }
 
-  private isVirtualMode() {
-    return hasWindow() && this.option('scrolling.columnRenderingMode') === 'virtual';
-  }
-
   private resize() {
     this._setScrollPositionCore(this._position);
   }
@@ -330,6 +324,10 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
       offset = this._beginPageIndex * this.getColumnPageSize() - leftFixedColumnCount - 1;
     }
     return offset > 0 ? offset : 0;
+  }
+
+  public isVirtualMode(): boolean {
+    return hasWindow() && this.option('scrolling.columnRenderingMode') === 'virtual';
   }
 };
 
