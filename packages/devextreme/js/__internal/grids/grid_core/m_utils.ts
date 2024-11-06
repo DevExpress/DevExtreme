@@ -463,7 +463,7 @@ export default {
       const pointProps: any = {
         index: columnIndex,
         columnIndex,
-        item: $item.get(0),
+        item: $item?.get(0),
         x: !isVertical && rtlEnabled !== (i === cellsLength) ? offsetRight : offset.left,
         y: isVertical && i === cellsLength ? offsetBottom : offset.top,
       };
