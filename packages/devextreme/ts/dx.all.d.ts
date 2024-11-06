@@ -9594,6 +9594,9 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.alerts]
      */
     alerts?: Array<DevExpress.ui.dxChat.Alert>;
+    /**
+     * [descr:dxChatOptions.messageTemplate]
+     */
     messageTemplate?:
       | ((
           data: DevExpress.ui.dxChat.MessageTemplateData,

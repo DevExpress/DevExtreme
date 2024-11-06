@@ -239,6 +239,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
+     * [descr:dxChatOptions.messageTemplate]
+    
+     */
+    @Input()
+    get messageTemplate(): null {
+        return this._getOption('messageTemplate');
+    }
+    set messageTemplate(value: null) {
+        this._setOption('messageTemplate', value);
+    }
+
+
+    /**
      * [descr:dxChatOptions.messageTimestampFormat]
     
      */
@@ -517,6 +530,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() messageTemplateChange: EventEmitter<null>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() messageTimestampFormatChange: EventEmitter<Format | string>;
 
     /**
@@ -681,6 +701,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
             { emit: 'itemsChange' },
+            { emit: 'messageTemplateChange' },
             { emit: 'messageTimestampFormatChange' },
             { emit: 'reloadOnChangeChange' },
             { emit: 'rtlEnabledChange' },

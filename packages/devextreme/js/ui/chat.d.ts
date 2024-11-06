@@ -233,6 +233,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      */
     alerts?: Array<Alert>;
     /**
+     * @docid
      * @default null
      * @type_function_return string|Element|jQuery
      * @public
