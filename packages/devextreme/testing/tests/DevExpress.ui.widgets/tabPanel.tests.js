@@ -1121,22 +1121,18 @@ QUnit.module('keyboard navigation', {
         assert.equal(tabsFocusedIndex, $(this.instance.option('focusedElement')).index(), 'multiView focused element is equal tabs focused element');
     });
 
-    QUnit.test('should go back to first index when loop = true and root element is focused', function(assert) {
+    QUnit.test('looping should work on keyboard navigation after loop runtime change to true and swipe', function(assert) {
         this.instance.option({
             items: [1, 2, 3],
             loop: false,
             swipeEnabled: true,
-            focusStateEnabled: true
         });
         this.instance.option('loop', true);
-        this.$element.attr('tabindex', 0);
-
         const pointer = pointerMock(this.$element);
-        const keyboard = keyboardMock(this.$element);
+        const keyDownEvent = $.Event('keydown', { key: 'ArrowRight' });
 
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
-        this.instance.focus();
-        keyboard.keyDown('down').keyDown('down');
+        this.$element.trigger(keyDownEvent).trigger(keyDownEvent);
 
         assert.strictEqual(this.instance.option('selectedIndex'), 0, 'loop comes back to first element');
     });
