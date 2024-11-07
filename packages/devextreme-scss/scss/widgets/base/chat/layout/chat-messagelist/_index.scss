@@ -38,6 +38,10 @@
       }
     }
   }
+
+  .dx-scrollview-scrollbottom-indicator {
+    box-shadow: none;
+  }
 }
 
 .dx-chat-messagelist-empty {
@@ -51,6 +55,12 @@
     flex-grow: 1;
     display: flex;
     align-items: center;
+    justify-content: center;
+  }
+}
+
+.dx-chat-messagelist-empty-loading {
+  .dx-scrollable-content {
     justify-content: center;
   }
 }
