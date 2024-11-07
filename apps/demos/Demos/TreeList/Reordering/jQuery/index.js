@@ -12,7 +12,7 @@ $(() => {
     showRowLines: true,
     expandedRowKeys: [1],
     columns: [{
-      caption: 'Full Name',
+      caption: 'Employee',
       fixed: true,
       calculateCellValue(data) {
         return [data.Title,
