@@ -236,17 +236,17 @@ const HtmlEditor = Editor.inherit({
     return sanitizedHtml;
   },
 
-  _applyHtmlConverterFromHtml(value: string): string {
-    const result = isFunction(this._htmlConverter?.fromHtml)
-      ? String(this._htmlConverter.fromHtml(value))
+  _applyHtmlConverterToHtml(value: string): string {
+    const result = isFunction(this._htmlConverter?.toHtml)
+      ? String(this._htmlConverter.toHtml(value))
       : value;
 
     return result;
   },
 
-  _applyHtmlConverterToHtml(value: string): string {
-    const result = isFunction(this._htmlConverter?.toHtml)
-      ? String(this._htmlConverter.toHtml(value))
+  _applyHtmlConverterFromHtml(value: string): string {
+    const result = isFunction(this._htmlConverter?.fromHtml)
+      ? String(this._htmlConverter.fromHtml(value))
       : value;
 
     return result;
