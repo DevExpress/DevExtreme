@@ -20,6 +20,8 @@
       import { unified } from 'https://esm.sh/unified@11?bundle';
       import remarkParse from 'https://esm.sh/remark-parse@11?bundle';
       import remarkRehype from 'https://esm.sh/remark-rehype@11?bundle';
+      import rehypeRaw from 'https://esm.sh/rehype-raw@7?bundle'
+      import rehypeSanitize from 'https://esm.sh/rehype-sanitize@6?bundle'
       import rehypeStringify from 'https://esm.sh/rehype-stringify@10?bundle';
       import rehypeParse from 'https://esm.sh/rehype-parse@9?bundle';
       import rehypeRemark from 'https://esm.sh/rehype-remark@10?bundle';
@@ -28,6 +30,8 @@
       window.unified = unified;
       window.remarkParse = remarkParse;
       window.remarkRehype = remarkRehype;
+      window.rehypeRaw = rehypeRaw;
+      window.rehypeSanitize = rehypeSanitize;
       window.rehypeStringify = rehypeStringify;
       window.rehypeParse = rehypeParse;
       window.rehypeRemark = rehypeRemark;
@@ -74,7 +78,9 @@
               toHtml(value) {
                 const result = unified()
                   .use(remarkParse)
-                  .use(remarkRehype)
+                  .use(remarkRehype, { allowDangerousHtml: true })
+                  .use(rehypeRaw)
+                  .use(rehypeSanitize)
                   .use(rehypeStringify)
                   .processSync(value)
                   .toString();
@@ -97,7 +103,8 @@
               height: 300,
               converter,
               // value: '**value**',
-              value: '<div>value</div>',
+              // value: '<div>value</div>',
+              value: '<div onclick="alert(\'XSS\')">XSS is removed by rehypeSanitize</div>',
             }).dxHtmlEditor('instance');
           });
         </script>
