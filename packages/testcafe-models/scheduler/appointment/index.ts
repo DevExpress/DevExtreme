@@ -57,7 +57,7 @@ export default class Appointment {
 
   constructor(scheduler: Selector, index = 0, title?: string) {
     const element = scheduler.find(`.${CLASS.appointment}`);
-    this.element = (title ? element.withAttribute('title', title) : element).nth(index);
+    this.element = (title ? element.withText(title) : element).nth(index);
 
     const appointmentContentDate = this.element.find(`.${CLASS.appointmentContentDate}`);
 
