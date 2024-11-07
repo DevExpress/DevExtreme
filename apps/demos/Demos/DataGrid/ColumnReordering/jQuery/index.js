@@ -38,7 +38,8 @@ $(() => {
         dataField: 'State',
         fixed: true,
         fixedPosition: 'right',
-      }, 'Department', 'HomePhone', 'MobilePhone', 'Skype', 'Email',
+      },
+      'Department', 'HomePhone', 'MobilePhone', 'Skype', 'Email',
     ]
   });
 });
