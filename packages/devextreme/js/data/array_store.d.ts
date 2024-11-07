@@ -10,6 +10,7 @@ export {
 /**
  * @public
  * @deprecated Use ArrayStoreOptions from /common/data instead
+ * @namespace DevExpress.data.ArrayStore
  */
 export type Options<
     TItem = any,

@@ -6263,19 +6263,6 @@ declare module DevExpress.data {
     withCredentials?: boolean;
   }
   /**
-   * @deprecated Use ArrayStoreOptions from /common/data instead
-   */
-  export type Options<TItem = any, TKey = any> = ArrayStoreOptions<TItem, TKey>;
-  /**
-   * @public
-   * @deprecated Use CustomStoreOptions from /common/data instead
-   */
-  export type Options<TItem = any, TKey = any> = CustomStoreOptions<
-    TItem,
-    TKey
-  >;
-  /**
-   * @public
    * @deprecated Use DataSourceOptions from /common/data instead
    */
   export type Options<
@@ -6284,16 +6271,6 @@ declare module DevExpress.data {
     TItem = TMappedItem,
     TKey = any
   > = DataSourceOptions<TStoreItem, TItem, TMappedItem, TKey>;
-  /**
-   * @public
-   * @deprecated Use LocalStoreOptions from /common/data instead
-   */
-  export type Options<TItem = any, TKey = any> = LocalStoreOptions<TItem, TKey>;
-  /**
-   * @public
-   * @deprecated Use ODataStoreOptions from /common/data instead
-   */
-  export type Options<TItem = any, TKey = any> = ODataStoreOptions<TItem, TKey>;
   /**
    * [descr:PivotGridDataSource]
    */
@@ -6823,6 +6800,33 @@ declare module DevExpress.data {
      */
     url?: string;
   }
+}
+declare module DevExpress.data.ArrayStore {
+  /**
+   * @deprecated Use ArrayStoreOptions from /common/data instead
+   */
+  export type Options<TItem = any, TKey = any> = ArrayStoreOptions<TItem, TKey>;
+}
+declare module DevExpress.data.CustomStore {
+  /**
+   * @deprecated Use CustomStoreOptions from /common/data instead
+   */
+  export type Options<TItem = any, TKey = any> = CustomStoreOptions<
+    TItem,
+    TKey
+  >;
+}
+declare module DevExpress.data.LocalStore {
+  /**
+   * @deprecated Use LocalStoreOptions from /common/data instead
+   */
+  export type Options<TItem = any, TKey = any> = LocalStoreOptions<TItem, TKey>;
+}
+declare module DevExpress.data.ODataStore {
+  /**
+   * @deprecated Use ODataStoreOptions from /common/data instead
+   */
+  export type Options<TItem = any, TKey = any> = ODataStoreOptions<TItem, TKey>;
 }
 declare module DevExpress.data.PivotGridDataSource {
   /**
