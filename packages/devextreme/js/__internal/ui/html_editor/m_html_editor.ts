@@ -236,14 +236,30 @@ const HtmlEditor = Editor.inherit({
     return sanitizedHtml;
   },
 
-  _updateContainerMarkup() {
+  _applyHtmlConverterFromHtml(value: string): string {
+    const result = isFunction(this._htmlConverter?.fromHtml)
+      ? String(this._htmlConverter.fromHtml(value))
+      : value;
+
+    return result;
+  },
+
+  _applyHtmlConverterToHtml(value: string): string {
+    const result = isFunction(this._htmlConverter?.toHtml)
+      ? String(this._htmlConverter.toHtml(value))
+      : value;
+
+    return result;
+  },
+
+  _updateContainerMarkup(): void {
     const { value } = this.option();
 
     if (!value) {
       return;
     }
 
-    const html = this._htmlConverter?.toHtml?.(value) || value;
+    const html = this._applyHtmlConverterToHtml(value);
     const sanitizedHtml = this._removeXSSVulnerableHtml(html);
 
     this._$htmlContainer.html(sanitizedHtml);
@@ -440,11 +456,8 @@ const HtmlEditor = Editor.inherit({
   _textChangeHandler() {
     const { value: currentValue } = this.option();
 
-    const htmlMarkup = this._deltaConverter.toHtml();
-
-    const convertedValue = isFunction(this._htmlConverter?.fromHtml)
-      ? String(this._htmlConverter.fromHtml(htmlMarkup))
-      : htmlMarkup;
+    const html = this._deltaConverter.toHtml();
+    const convertedValue = this._applyHtmlConverterFromHtml(html);
 
     if (
       currentValue !== convertedValue
@@ -530,9 +543,7 @@ const HtmlEditor = Editor.inherit({
           if (this._isEditorUpdating) {
             this._isEditorUpdating = false;
           } else {
-            const updatedValue = isFunction(this._htmlConverter?.toHtml)
-              ? String(this._htmlConverter.toHtml(args.value))
-              : args.value;
+            const updatedValue = this._applyHtmlConverterToHtml(args.value);
 
             this._suppressValueChangeAction();
             this._updateHtmlContent(updatedValue);
