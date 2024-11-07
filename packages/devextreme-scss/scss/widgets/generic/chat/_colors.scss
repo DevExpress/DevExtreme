@@ -18,7 +18,7 @@ $chat-border-color: $base-border-color !default;
 $chat-messagebox-border-color: $chat-border-color !default;
 
 /**
-* $name 30. Avatar color
+* $name 30. Avatar text color
 * $type color
 */
 $chat-avatar-color: null !default;
@@ -30,25 +30,25 @@ $chat-avatar-color: null !default;
 $chat-avatar-background-color: $base-border-color !default;
 
 /**
-* $name 40. Bubble color
+* $name 40. Bubble text color
 * $type color
 */
 $chat-bubble-color-primary: null !default;
 
 /**
-* $name 41. Bubble background color primary
+* $name 41. Bubble background color (your messages)
 * $type color
 */
 $chat-bubble-background-color-primary: null !default;
 
 /**
-* $name 42. Bubble background color secondary
+* $name 42. Bubble background color (others' messages)
 * $type color
 */
 $chat-bubble-background-color-secondary: null !default;
 
 /**
-* $name 50. Information color
+* $name 50. Message caption color
 * $type color
 */
 $chat-information-color: null !default;
@@ -90,16 +90,17 @@ $chat-messagelist-empty-prompt-color: null !default;
 $chat-alertlist-color: $base-invalid-color !default;
 
 /**
-* $name 82. Typing indicator circle background color
-* $type color
-*/
-$chat-typingindicator-circle-bg-color: null !default;
-
-/**
-* $name 83. Typing indicator center circle background color
+* $name 82. Typing indicator central circle color
 * $type color
 */
 $chat-typingindicator-circle-bg-color-center: null !default;
+
+
+/**
+* $name 83. Typing indicator outer circles color
+* $type color
+*/
+$chat-typingindicator-circle-bg-color: null !default;
 
 @if $color == "light" {
   $chat-avatar-color: $base-text-color !default;
@@ -237,7 +238,7 @@ $chat-typingindicator-circle-bg-color-center: null !default;
 }
 
 /**
-* $name 80. Typing indicator color
+* $name 80. Typing indicator text color
 * $type color
 */
 $chat-typingindicator-color: $chat-information-color !default;
