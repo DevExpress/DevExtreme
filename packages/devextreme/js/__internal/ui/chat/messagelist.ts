@@ -1,3 +1,4 @@
+import type { DxElement, UserDefinedElement } from '@js/core/element';
 import Guid from '@js/core/guid';
 import type {
   DeepPartial,
@@ -5,6 +6,7 @@ import type {
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
+import type { template } from '@js/core/templates/template';
 import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
@@ -14,7 +16,7 @@ import { isDate, isDefined } from '@js/core/utils/type';
 import type { Format } from '@js/localization';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
-import type { Message, User } from '@js/ui/chat';
+import type { Message, MessageTemplateData, User } from '@js/ui/chat';
 import ScrollView from '@js/ui/scroll_view';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -24,18 +26,25 @@ import { getScrollTopMax } from '@ts/ui/scroll_view/utils/get_scroll_top_max';
 import { isElementVisible } from '../splitter/utils/layout';
 import type Chat from './chat';
 import type { MessageGroupAlignment } from './messagegroup';
-import MessageGroup from './messagegroup';
+import MessageGroup, {
+  CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS,
+  CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS,
+} from './messagegroup';
 import TypingIndicator from './typingindicator';
 
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 const CHAT_MESSAGELIST_CONTENT_CLASS = 'dx-chat-messagelist-content';
 const CHAT_MESSAGELIST_EMPTY_CLASS = 'dx-chat-messagelist-empty';
+const CHAT_MESSAGELIST_EMPTY_LOADING_CLASS = 'dx-chat-messagelist-empty-loading';
 
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
 const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
 const CHAT_MESSAGELIST_DAY_HEADER_CLASS = 'dx-chat-messagelist-day-header';
+
+const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-alignment-start';
+const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
 
 const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
 export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
@@ -47,13 +56,17 @@ export interface Change {
   index?: number;
 }
 
+export type MessageTemplate =
+((data: MessageTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement)
+| template
+| null;
+
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
-  // eslint-disable-next-line
-  messageTemplate: any;
-  messageTemplateData: { component?: Chat };
+  messageTemplate?: MessageTemplate;
+  messageTemplateData?: { component?: Chat };
   dayHeaderFormat?: Format;
   messageTimestampFormat?: Format;
   typingUsers: User[];
@@ -194,7 +207,9 @@ class MessageList extends Widget<Properties> {
   }
 
   _removeEmptyView(): void {
-    this.$element().removeClass(CHAT_MESSAGELIST_EMPTY_CLASS);
+    this.$element()
+      .removeClass(CHAT_MESSAGELIST_EMPTY_CLASS)
+      .removeClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS);
     this._$content.empty();
   }
 
@@ -297,6 +312,8 @@ class MessageList extends Widget<Properties> {
       return;
     }
 
+    this.$element().toggleClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS, this._isEmpty() && isLoading);
+
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._scrollView.release(!isLoading);
   }
@@ -310,7 +327,9 @@ class MessageList extends Widget<Properties> {
   _renderEmptyView(): void {
     const { isLoading } = this.option();
 
-    this.$element().toggleClass(CHAT_MESSAGELIST_EMPTY_CLASS, this._isEmpty() && !isLoading);
+    this.$element()
+      .toggleClass(CHAT_MESSAGELIST_EMPTY_CLASS, this._isEmpty() && !isLoading)
+      .toggleClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS, this._isEmpty() && isLoading);
 
     if (this._isEmpty() && !isLoading) {
       this._renderEmptyViewContent();
@@ -361,8 +380,24 @@ class MessageList extends Widget<Properties> {
       }
     });
 
+    this._setLastMessageGroupClasses();
     // @ts-expect-error
     this._updateLoadingState(isLoading);
+  }
+
+  _setLastMessageGroupClasses(): void {
+    this._$content
+      .find(`.${CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS}`)
+      .removeClass(CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS);
+    this._$content
+      .find(`.${CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS}`)
+      .removeClass(CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS);
+
+    const $lastAlignmentStartGroup = this._$content.find(`.${CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS}`).last();
+    const $lastAlignmentEndGroup = this._$content.find(`.${CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS}`).last();
+
+    $lastAlignmentStartGroup.addClass(CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS);
+    $lastAlignmentEndGroup.addClass(CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS);
   }
 
   _renderMessage(message: Message): void {
@@ -391,6 +426,7 @@ class MessageList extends Widget<Properties> {
     }
 
     this._createMessageGroupComponent([message], author?.id);
+    this._setLastMessageGroupClasses();
 
     this._scrollDownContent();
   }
@@ -504,12 +540,14 @@ class MessageList extends Widget<Properties> {
   _modifyByChanges(changes: Change[]): void {
     changes.forEach((change) => {
       switch (change.type) {
-        case 'update': {
+        case 'update':
+          break;
+        case 'insert': {
+          const { items } = this.option();
+
+          this.option('items', [...items, change.data ?? {}]);
           break;
         }
-        case 'insert':
-          this._renderMessage(change.data ?? {});
-          break;
         case 'remove':
           break;
         default:
@@ -541,6 +579,7 @@ class MessageList extends Widget<Properties> {
         this._processScrollDownContent();
         break;
       case 'isLoading':
+        this._updateLoadingState(!!value);
         break;
       default:
         super._optionChanged(args);

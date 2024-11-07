@@ -1121,6 +1121,27 @@ QUnit.module('keyboard navigation', {
         assert.equal(tabsFocusedIndex, $(this.instance.option('focusedElement')).index(), 'multiView focused element is equal tabs focused element');
     });
 
+    QUnit.test('looping should work on keyboard navigation after loop runtime change to true and swipe', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'no kbn on mobile devices');
+            return;
+        }
+
+        this.instance.option({
+            items: [1, 2, 3],
+            loop: false,
+            swipeEnabled: true,
+        });
+        this.instance.option('loop', true);
+        const pointer = pointerMock(this.$element);
+        const keyDownEvent = $.Event('keydown', { key: 'ArrowRight' });
+
+        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+        this.$element.trigger(keyDownEvent).trigger(keyDownEvent);
+
+        assert.strictEqual(this.instance.option('selectedIndex'), 0, 'loop comes back to first element');
+    });
+
     if(devices.current().deviceType === 'desktop') {
         const createWidget = ($element) => {
             const widget = $element.dxTabPanel({
