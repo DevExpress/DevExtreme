@@ -11,8 +11,9 @@ import NestedOption from "./core/nested-option";
 import type { ContentReadyEvent, CustomCommandEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemDblClickEvent, RequestEditOperationEvent, RequestLayoutUpdateEvent, DataLayoutType, Command as DiagramCommand, CustomCommand, ShapeCategory, ToolboxDisplayMode, ShapeType, dxDiagramShape, ConnectorLineEnd, ConnectorLineType, PanelVisibility } from "devextreme/ui/diagram";
 import type { Orientation, ToolbarItemLocation } from "devextreme/common";
 import type { dxSVGElement } from "devextreme/core/element";
+import type { template } from "devextreme/core/templates/template";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/common/data";
+import type { Store } from "devextreme/data/store";
 
 import type DataSource from "devextreme/data/data_source";
 
@@ -285,7 +286,7 @@ type ICustomShapeProps = React.PropsWithChildren<{
   maxWidth?: number;
   minHeight?: number;
   minWidth?: number;
-  template?: any | ((container: dxSVGElement, data: { item: dxDiagramShape }) => void);
+  template?: ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template;
   templateHeight?: number;
   templateLeft?: number;
   templateTop?: number;
@@ -295,7 +296,7 @@ type ICustomShapeProps = React.PropsWithChildren<{
   textTop?: number;
   textWidth?: number;
   title?: string;
-  toolboxTemplate?: any | ((container: dxSVGElement, data: { item: dxDiagramShape }) => void);
+  toolboxTemplate?: ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template;
   toolboxWidthToHeightRatio?: number;
   type?: string;
   render?: (...params: any) => React.ReactNode;

@@ -10,9 +10,10 @@ import NestedOption from "./core/nested-option";
 
 import type { ClickEvent, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent, dxVectorMapAnnotationConfig, MapLayerElement, VectorMapMarkerType, VectorMapLayerType, VectorMapLegendItem, VectorMapMarkerShape } from "devextreme/viz/vector_map";
 import type { DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, Palette } from "devextreme/common/charts";
+import type { template } from "devextreme/core/templates/template";
 import type { HorizontalAlignment, VerticalEdge, ExportFormat, SingleMultipleOrNone, Position, Orientation } from "devextreme/common";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/common/data";
+import type { Store } from "devextreme/data/store";
 
 import type DataSource from "devextreme/data/data_source";
 
@@ -133,11 +134,11 @@ type IAnnotationProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  template?: any | ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any);
+  template?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template;
   text?: string;
   textOverflow?: TextOverflow;
   tooltipEnabled?: boolean;
-  tooltipTemplate?: any | ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any);
+  tooltipTemplate?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template;
   type?: AnnotationType;
   width?: number;
   wordWrap?: WordWrap;
@@ -284,11 +285,11 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  template?: any | ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any);
+  template?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template;
   text?: string;
   textOverflow?: TextOverflow;
   tooltipEnabled?: boolean;
-  tooltipTemplate?: any | ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any);
+  tooltipTemplate?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template;
   type?: AnnotationType;
   width?: number;
   wordWrap?: WordWrap;
@@ -528,7 +529,7 @@ type ILegendProps = React.PropsWithChildren<{
   markerColor?: string;
   markerShape?: VectorMapMarkerShape;
   markerSize?: number;
-  markerTemplate?: any | ((legendItem: VectorMapLegendItem, element: any) => string | any);
+  markerTemplate?: ((legendItem: VectorMapLegendItem, element: any) => string | any) | template;
   orientation?: Orientation;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
@@ -859,7 +860,7 @@ type ITooltipProps = React.PropsWithChildren<{
   };
   color?: string;
   container?: any | string;
-  contentTemplate?: any | ((info: MapLayerElement, element: any) => string | any);
+  contentTemplate?: ((info: MapLayerElement, element: any) => string | any) | template;
   cornerRadius?: number;
   customizeTooltip?: ((info: MapLayerElement) => Record<string, any>);
   enabled?: boolean;

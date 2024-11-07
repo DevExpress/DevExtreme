@@ -10,10 +10,11 @@ import NestedOption from "./core/nested-option";
 
 import type { ChangeEvent, ClosedEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/color_box";
 import type { DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, ContentReadyEvent, OptionChangedEvent } from "devextreme/ui/button";
-import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
+import type { AnimationConfig, AnimationState, AnimationType } from "devextreme/animation/fx";
 import type { HorizontalAlignment, VerticalAlignment, TextEditorButtonLocation, PositionAlignment, Direction, ButtonStyle, ButtonType, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
-import type { event } from "devextreme/common/core/events/index";
-import type { EventInfo } from "devextreme/common/core/events";
+import type { CollisionResolution, PositionConfig, CollisionResolutionCombination } from "devextreme/animation/position";
+import type { event, EventInfo } from "devextreme/events/index";
+import type { template } from "devextreme/core/templates/template";
 import type { Component } from "devextreme/core/component";
 import type { dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
@@ -231,7 +232,7 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   bindingOptions?: Record<string, any>;
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string;
-  contentTemplate?: any | ((contentElement: any) => string | any);
+  contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
   disabled?: boolean;
   dragAndResizeArea?: any | string;
@@ -271,7 +272,7 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   showTitle?: boolean;
   tabIndex?: number;
   title?: string;
-  titleTemplate?: any | ((titleElement: any) => string | any);
+  titleTemplate?: ((titleElement: any) => string | any) | template;
   toolbarItems?: Array<dxPopupToolbarItem>;
   visible?: boolean;
   width?: (() => number | string) | number | string;
@@ -437,7 +438,7 @@ type IOptionsProps = React.PropsWithChildren<{
   rtlEnabled?: boolean;
   stylingMode?: ButtonStyle;
   tabIndex?: number;
-  template?: any | ((buttonData: { icon: string, text: string }, contentElement: any) => string | any);
+  template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template;
   text?: string;
   type?: ButtonType | string;
   useSubmitBehavior?: boolean;
@@ -562,10 +563,10 @@ type IToolbarItemProps = React.PropsWithChildren<{
   html?: string;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
-  menuItemTemplate?: any | (() => string | any);
+  menuItemTemplate?: (() => string | any) | template;
   options?: any;
   showText?: ShowTextMode;
-  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   toolbar?: ToolbarLocation;
   visible?: boolean;

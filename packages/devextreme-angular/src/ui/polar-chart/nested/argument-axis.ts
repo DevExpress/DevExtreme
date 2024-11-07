@@ -18,7 +18,7 @@ import {
 
 
 import { ArgumentAxisHoverMode, AxisScaleType, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, TimeInterval } from 'devextreme/common/charts';
-import { Format } from 'devextreme/common/core/localization';
+import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,

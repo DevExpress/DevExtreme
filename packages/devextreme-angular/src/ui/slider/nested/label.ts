@@ -15,7 +15,7 @@ import {
 
 
 import { VerticalEdge } from 'devextreme/common';
-import { Format } from 'devextreme/common/core/localization';
+import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,

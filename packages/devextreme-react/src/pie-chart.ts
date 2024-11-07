@@ -10,8 +10,9 @@ import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, TooltipHiddenEvent, TooltipShownEvent, dxPieChartAnnotationConfig, PieChartAnnotationLocation, dxPieChartCommonAnnotationConfig, PieChartSeriesInteractionMode, SmallValuesGroupingMode, PieChartLegendItem, PieChartLegendHoverMode, PieChartSeries } from "devextreme/viz/pie_chart";
 import type { AnimationEaseMode, DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, ChartsDataType, ChartsColor, HatchDirection, LabelPosition } from "devextreme/common/charts";
+import type { template } from "devextreme/core/templates/template";
 import type { Format as CommonFormat, ExportFormat, HorizontalAlignment, Position, Orientation, VerticalEdge } from "devextreme/common";
-import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
+import type { Format as LocalizationFormat } from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -188,11 +189,11 @@ type IAnnotationProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  template?: any | ((annotation: dxPieChartCommonAnnotationConfig | any, element: any) => string | any);
+  template?: ((annotation: dxPieChartCommonAnnotationConfig | any, element: any) => string | any) | template;
   text?: string;
   textOverflow?: TextOverflow;
   tooltipEnabled?: boolean;
-  tooltipTemplate?: any | ((annotation: dxPieChartAnnotationConfig | any, element: any) => string | any);
+  tooltipTemplate?: ((annotation: dxPieChartAnnotationConfig | any, element: any) => string | any) | template;
   type?: AnnotationType;
   width?: number;
   wordWrap?: WordWrap;
@@ -371,11 +372,11 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  template?: any | ((annotation: dxPieChartCommonAnnotationConfig | any, element: any) => string | any);
+  template?: ((annotation: dxPieChartCommonAnnotationConfig | any, element: any) => string | any) | template;
   text?: string;
   textOverflow?: TextOverflow;
   tooltipEnabled?: boolean;
-  tooltipTemplate?: any | ((annotation: dxPieChartAnnotationConfig | any, element: any) => string | any);
+  tooltipTemplate?: ((annotation: dxPieChartAnnotationConfig | any, element: any) => string | any) | template;
   type?: AnnotationType;
   width?: number;
   wordWrap?: WordWrap;
@@ -766,7 +767,7 @@ type ILegendProps = React.PropsWithChildren<{
     top?: number;
   };
   markerSize?: number;
-  markerTemplate?: any | ((legendItem: PieChartLegendItem, element: any) => string | any);
+  markerTemplate?: ((legendItem: PieChartLegendItem, element: any) => string | any) | template;
   orientation?: Orientation;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
@@ -1321,7 +1322,7 @@ type ITooltipProps = React.PropsWithChildren<{
   };
   color?: string;
   container?: any | string;
-  contentTemplate?: any | ((pointInfo: any, element: any) => string | any);
+  contentTemplate?: ((pointInfo: any, element: any) => string | any) | template;
   cornerRadius?: number;
   customizeTooltip?: ((pointInfo: any) => Record<string, any>);
   enabled?: boolean;

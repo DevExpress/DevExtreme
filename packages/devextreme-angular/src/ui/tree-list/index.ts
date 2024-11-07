@@ -23,8 +23,8 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/tree_list';
 
+import { PositionConfig } from 'devextreme/animation/position';
 import { DataStructure, DragDirection, DragHighlight, Mode, ScrollbarMode, ScrollMode, SingleMultipleOrNone, SortOrder } from 'devextreme/common';
-import { PositionConfig } from 'devextreme/common/core/animation';
 import { ApplyFilterMode, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataChange, DataRenderMode, EnterKeyAction, EnterKeyDirection, GridsEditMode, GridsEditRefreshMode, HeaderFilterSearchConfig, Pager, StartEditAction, StateStoreType } from 'devextreme/common/grids';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';

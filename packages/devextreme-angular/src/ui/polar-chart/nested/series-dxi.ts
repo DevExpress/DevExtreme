@@ -13,7 +13,7 @@ import {
 
 
 import { ChartsColor, DashStyle, Font, HatchDirection, PointInteractionMode, PointSymbol, RelativePosition, SeriesHoverMode, SeriesSelectionMode, ValueErrorBarDisplayMode, ValueErrorBarType } from 'devextreme/common/charts';
-import { Format } from 'devextreme/common/core/localization';
+import { Format } from 'devextreme/localization';
 import { PolarChartSeriesType } from 'devextreme/viz/polar_chart';
 
 import {

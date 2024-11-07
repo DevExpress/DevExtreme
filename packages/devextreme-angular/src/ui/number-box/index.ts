@@ -25,7 +25,7 @@ import {
 
 
 import { EditorStyle, LabelMode, Position, TextEditorButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { Format } from 'devextreme/common/core/localization';
+import { Format } from 'devextreme/localization';
 import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, NumberBoxPredefinedButton, NumberBoxType, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/number_box';
 
 import DxNumberBox from 'devextreme/ui/number_box';

@@ -22,10 +22,10 @@ import {
 
 import { ExportFormat, HorizontalAlignment, HorizontalEdge, Orientation, Position, SingleMultipleOrNone, VerticalEdge } from 'devextreme/common';
 import { DashStyle, Font, HatchDirection, LabelPosition, Palette, PaletteExtensionMode, ShiftLabelOverlap, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/common/core/localization';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { Format } from 'devextreme/localization';
 import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, FunnelAlgorithm, HoverChangedEvent, IncidentOccurredEvent, InitializedEvent, ItemClickEvent, LegendClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/viz/funnel';
 
 import DxFunnel from 'devextreme/viz/funnel';

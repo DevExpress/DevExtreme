@@ -23,8 +23,9 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/context_menu';
 
+import { AnimationConfig } from 'devextreme/animation/fx';
+import { PositionConfig } from 'devextreme/animation/position';
 import { SingleOrNone, SubmenuShowMode } from 'devextreme/common';
-import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';

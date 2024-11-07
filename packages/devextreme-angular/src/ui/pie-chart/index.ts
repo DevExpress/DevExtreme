@@ -24,10 +24,10 @@ import {
 
 import { ExportFormat, HorizontalAlignment, Orientation, Position, SingleOrMultiple, VerticalEdge } from 'devextreme/common';
 import { AnimationEaseMode, DashStyle, Font, Palette, PaletteExtensionMode, ShiftLabelOverlap, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/common/core/localization';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { Format } from 'devextreme/localization';
 import { DisposingEvent, DoneEvent, DrawnEvent, dxPieChartAnnotationConfig, dxPieChartCommonAnnotationConfig, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PieChartLegendHoverMode, PieChartSegmentDirection, PieChartSeries, PieChartType, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/pie_chart';
 
 import DxPieChart from 'devextreme/viz/pie_chart';

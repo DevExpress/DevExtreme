@@ -11,7 +11,8 @@ import NestedOption from "./core/nested-option";
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent } from "devextreme/viz/bullet";
 import type { DashStyle, Font as ChartsFont } from "devextreme/common/charts";
 import type { Format as CommonFormat } from "devextreme/common";
-import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
+import type { Format as LocalizationFormat } from "devextreme/localization";
+import type { template } from "devextreme/core/templates/template";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -212,7 +213,7 @@ type ITooltipProps = React.PropsWithChildren<{
   };
   color?: string;
   container?: any | string;
-  contentTemplate?: any | ((pointsInfo: any, element: any) => string | any);
+  contentTemplate?: ((pointsInfo: any, element: any) => string | any) | template;
   cornerRadius?: number;
   customizeTooltip?: ((pointsInfo: any) => Record<string, any>);
   enabled?: boolean;

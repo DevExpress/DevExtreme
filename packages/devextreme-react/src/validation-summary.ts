@@ -11,6 +11,7 @@ import NestedOption from "./core/nested-option";
 
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent } from "devextreme/ui/validation_summary";
+import type { template } from "devextreme/core/templates/template";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -89,7 +90,7 @@ const ValidationSummary = memo(
 type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   html?: string;
-  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;

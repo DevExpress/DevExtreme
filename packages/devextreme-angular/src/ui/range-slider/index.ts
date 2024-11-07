@@ -23,7 +23,7 @@ import {
 
 
 import { Position, SliderValueChangeMode, TooltipShowMode, ValidationMessageMode, ValidationStatus, VerticalEdge } from 'devextreme/common';
-import { Format } from 'devextreme/common/core/localization';
+import { Format } from 'devextreme/localization';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/range_slider';
 
 import DxRangeSlider from 'devextreme/ui/range_slider';

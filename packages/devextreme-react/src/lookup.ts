@@ -10,9 +10,11 @@ import NestedOption from "./core/nested-option";
 
 import type { ClosedEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OpenedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, ValueChangedEvent } from "devextreme/ui/lookup";
 import type { ContentReadyEvent as PopoverContentReadyEvent, DisposingEvent as PopoverDisposingEvent, InitializedEvent as PopoverInitializedEvent, HiddenEvent, HidingEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from "devextreme/ui/popover";
-import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
+import type { AnimationConfig, AnimationState, AnimationType } from "devextreme/animation/fx";
 import type { HorizontalAlignment, VerticalAlignment, Position as CommonPosition, Direction, PositionAlignment, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
-import type { event } from "devextreme/common/core/events/index";
+import type { CollisionResolution, PositionConfig, CollisionResolutionCombination } from "devextreme/animation/position";
+import type { event } from "devextreme/events/index";
+import type { template } from "devextreme/core/templates/template";
 import type { dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
@@ -202,7 +204,7 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   bindingOptions?: Record<string, any>;
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string;
-  contentTemplate?: any | ((contentElement: any) => string | any);
+  contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
   disabled?: boolean;
   enableBodyScroll?: boolean;
@@ -240,7 +242,7 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   showTitle?: boolean;
   target?: any | string;
   title?: string;
-  titleTemplate?: any | ((titleElement: any) => string | any);
+  titleTemplate?: ((titleElement: any) => string | any) | template;
   toolbarItems?: Array<dxPopupToolbarItem>;
   visible?: boolean;
   width?: (() => number | string) | number | string;
@@ -373,7 +375,7 @@ const HideEvent = Object.assign<typeof _componentHideEvent, NestedComponentMeta>
 type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   html?: string;
-  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
@@ -552,10 +554,10 @@ type IToolbarItemProps = React.PropsWithChildren<{
   html?: string;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
-  menuItemTemplate?: any | (() => string | any);
+  menuItemTemplate?: (() => string | any) | template;
   options?: any;
   showText?: ShowTextMode;
-  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   toolbar?: ToolbarLocation;
   visible?: boolean;

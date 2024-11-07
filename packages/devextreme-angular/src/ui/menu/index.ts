@@ -23,8 +23,8 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/menu';
 
+import { AnimationConfig } from 'devextreme/animation/fx';
 import { Orientation, SingleOrNone, SubmenuShowMode } from 'devextreme/common';
-import { AnimationConfig } from 'devextreme/common/core/animation';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { ContentReadyEvent, DisposingEvent, dxMenuItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SubmenuDirection, SubmenuHiddenEvent, SubmenuHidingEvent, SubmenuShowingEvent, SubmenuShownEvent } from 'devextreme/ui/menu';

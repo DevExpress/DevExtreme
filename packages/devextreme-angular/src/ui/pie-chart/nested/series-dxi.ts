@@ -13,7 +13,7 @@ import {
 
 
 import { ChartsColor, ChartsDataType, DashStyle, Font, HatchDirection, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/common/core/localization';
+import { Format } from 'devextreme/localization';
 import { PieChartSeriesInteractionMode, SmallValuesGroupingMode } from 'devextreme/viz/pie_chart';
 
 import {
