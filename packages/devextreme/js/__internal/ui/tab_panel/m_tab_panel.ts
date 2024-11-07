@@ -517,6 +517,7 @@ const TabPanel = MultiView.inherit({
         break;
       case 'loop':
         this._setTabsOption('loopItemFocus', value);
+        this.callBase(args);
         break;
       case 'badgeExpr':
         this._invalidate();

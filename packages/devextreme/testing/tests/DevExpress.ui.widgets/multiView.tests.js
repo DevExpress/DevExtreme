@@ -504,6 +504,37 @@ QUnit.module('interaction via swipe', {
         });
     });
 
+    QUnit.test('there should not be infinite loop if try swiping when all items are hidden', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: false },
+                { text: '2', visible: false },
+                { text: '3', visible: false },
+            ],
+            selectedIndex: 2,
+            loop: true,
+            swipeEnabled: true
+        });
+        const instance = $multiView.dxMultiView('instance');
+        const pointer = pointerMock($multiView);
+
+        const isItemVisibleStub = sinon.stub(instance, '_isItemVisible').callsFake(() => {
+            if(isItemVisibleStub.callCount === 20) {
+                assert.ok(false, 'infinite loop detected');
+                return true;
+            }
+            return false;
+        });
+
+        try {
+            pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+
+            assert.ok(true, 'no infinite loop');
+        } catch(error) {
+            isItemVisibleStub.restore();
+        }
+    });
+
     QUnit.test('when only one item is visible, swipe action does not move the current visible item', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [

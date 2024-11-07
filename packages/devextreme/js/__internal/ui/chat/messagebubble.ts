@@ -5,13 +5,13 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
 import type Chat from './chat';
+import type { MessageTemplate } from './messagelist';
 
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 
 export interface Properties extends WidgetOptions<MessageBubble> {
   text?: string;
-  // eslint-disable-next-line
-  template?: null | any;
+  template?: MessageTemplate;
   templateData?: { component?: Chat; message?: Message };
 }
 

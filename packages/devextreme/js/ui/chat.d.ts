@@ -1,3 +1,12 @@
+import {
+    UserDefinedElement,
+    DxElement,
+} from '../core/element';
+
+import {
+    template,
+} from '../core/templates/template';
+
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import {
     EventInfo,
@@ -151,6 +160,12 @@ export type Message = {
     typing?: boolean;
 };
 
+/** @public */
+export type MessageTemplateData = {
+    readonly component: dxChat;
+    readonly message?: Message;
+};
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
@@ -207,6 +222,13 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     alerts?: Array<Alert>;
+    /**
+     * @docid
+     * @default null
+     * @type_function_return string|Element|jQuery
+     * @public
+     */
+    messageTemplate?: ((data: MessageTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement) | template | null;
     /**
      * @docid
      * @default []

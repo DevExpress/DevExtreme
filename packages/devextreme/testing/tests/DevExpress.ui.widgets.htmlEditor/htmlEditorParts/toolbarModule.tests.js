@@ -18,6 +18,7 @@ const TOOLBAR_CLASS = 'dx-htmleditor-toolbar';
 const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
 const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
 const ACTIVE_FORMAT_CLASS = 'dx-format-active';
+const SELECTED_STATE_CLASS = 'dx-state-selected';
 const FORM_CLASS = 'dx-formdialog-form';
 const DIALOG_CLASS = 'dx-formdialog';
 const DIALOG_TARGET_ITEM_CLASS = 'dx-formdialog-field-target';
@@ -731,8 +732,10 @@ testModule('Active formats', simpleModuleConfig, () => {
         toolbar.updateFormatWidgets();
         const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
 
-        assert.equal($activeFormats.length, 1, 'Bold format button is active');
-        assert.ok($activeFormats.hasClass(BOLD_FORMAT_CLASS), 'it\'s a bold button');
+        assert.strictEqual($activeFormats.length, 1, 'Bold format button is active');
+        assert.strictEqual($activeFormats.hasClass(BOLD_FORMAT_CLASS), true, 'Button has bold format class');
+        assert.strictEqual($activeFormats.hasClass(SELECTED_STATE_CLASS), true, 'Bold format button has selected state class');
+        assert.strictEqual($activeFormats.attr('aria-pressed'), 'true', 'Bold format button has aria-pressed attr');
     });
 
     test('several simple format', function(assert) {
@@ -1564,6 +1567,8 @@ testModule('Toolbar items state update', {
 
                 const $formatItemElement = this.getFormatItemElement();
                 assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), true, `${buttonItemName} button has ${ACTIVE_FORMAT_CLASS} class`);
+                assert.strictEqual($formatItemElement.hasClass(SELECTED_STATE_CLASS), true, `${buttonItemName} button has ${SELECTED_STATE_CLASS} class`);
+                assert.strictEqual($formatItemElement.attr('aria-pressed'), 'true', `${buttonItemName} button has aria-pressed attr`);
             });
 
             test(`${buttonItemName} button if format is not applied`, function(assert) {
@@ -1577,6 +1582,8 @@ testModule('Toolbar items state update', {
 
                 const $formatItemElement = this.getFormatItemElement();
                 assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), false, `${buttonItemName} button has no ${ACTIVE_FORMAT_CLASS} class`);
+                assert.strictEqual($formatItemElement.hasClass(SELECTED_STATE_CLASS), false, `${buttonItemName} button has no ${SELECTED_STATE_CLASS} class`);
+                assert.strictEqual($formatItemElement.attr('aria-pressed'), undefined, `${buttonItemName} button has no aria-pressed attr`);
             });
         });
 
@@ -1781,6 +1788,8 @@ testModule('Toolbar items state update', {
 
                 assert.strictEqual($icon.css('borderBottomColor'), 'rgb(0, 0, 255)', `${colorItemName} button bottomBorderColor is correct`);
                 assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), true, `${colorItemName} button has ${ACTIVE_FORMAT_CLASS} class`);
+                assert.strictEqual($formatItemElement.hasClass(SELECTED_STATE_CLASS), true, `${colorItemName} button has ${SELECTED_STATE_CLASS} class`);
+                assert.strictEqual($formatItemElement.attr('aria-pressed'), 'true', `${colorItemName} button has aria-pressed attr`);
             });
 
             test(`${colorItemName} button in menu if ${colorItemName} format is not applied`, function(assert) {
@@ -1799,6 +1808,8 @@ testModule('Toolbar items state update', {
 
                 assert.strictEqual($icon.css('borderBottomColor'), 'rgba(0, 0, 0, 0)', `${colorItemName} button bottomBorderColor is transparent`);
                 assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), false, `${colorItemName} button has no ${ACTIVE_FORMAT_CLASS} class`);
+                assert.strictEqual($formatItemElement.hasClass(SELECTED_STATE_CLASS), false, `${colorItemName} button has no ${SELECTED_STATE_CLASS} class`);
+                assert.strictEqual($formatItemElement.attr('aria-pressed'), undefined, `${colorItemName} button has no aria-pressed attr`);
             });
         });
 
@@ -1814,6 +1825,8 @@ testModule('Toolbar items state update', {
 
                 const $formatItemElement = this.getFormatItemElement();
                 assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), true, `${buttonItemName} button has ${ACTIVE_FORMAT_CLASS} class`);
+                assert.strictEqual($formatItemElement.hasClass(SELECTED_STATE_CLASS), true, `${buttonItemName} button has ${SELECTED_STATE_CLASS} class`);
+                assert.strictEqual($formatItemElement.attr('aria-pressed'), 'true', `${buttonItemName} button has aria-pressed attr`);
             });
 
             test(`${buttonItemName} button in menu if format is not applied`, function(assert) {
@@ -1829,6 +1842,8 @@ testModule('Toolbar items state update', {
 
                 const $formatItemElement = this.getFormatItemElement();
                 assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), false, `${buttonItemName} button has no ${ACTIVE_FORMAT_CLASS} class`);
+                assert.strictEqual($formatItemElement.hasClass(SELECTED_STATE_CLASS), false, `${buttonItemName} button has no ${SELECTED_STATE_CLASS} class`);
+                assert.strictEqual($formatItemElement.attr('aria-pressed'), undefined, `${buttonItemName} button has no aria-pressed attr`);
             });
         });
 

@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CommandCell from 'devextreme-testcafe-models/dataGrid/commandCell';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
+import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { getData } from '../helpers/generateDataSourceData';
@@ -4806,3 +4807,34 @@ test('Cancel button in the last column cannot be focused via the Tab key (T12489
     'FirstName',
   ],
 }));
+
+test('Grids a11y: Fix the header filter and the column chooser focus issue and update VPAT', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const filterIconElement = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getFilterIcon();
+  const headerFilter = new HeaderFilter();
+  const columnChooser = dataGrid.getColumnChooser();
+  const columnChooserButton = dataGrid.getColumnChooserButton();
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .click(filterIconElement)
+    .pressKey('tab tab tab tab tab tab')
+    .expect(headerFilter.getButtons().nth(1).focused)
+    .ok()
+    .click(columnChooserButton)
+    .pressKey('tab tab tab')
+    .expect(columnChooser.content.focused)
+    .ok();
+})
+  .before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: getData(5, 3),
+      headerFilter: {
+        visible: true,
+      },
+      columnChooser: {
+        enabled: true,
+      },
+    });
+  });

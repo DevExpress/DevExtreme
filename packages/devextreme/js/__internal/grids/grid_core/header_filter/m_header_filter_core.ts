@@ -266,6 +266,7 @@ export class HeaderFilterView extends Modules.View {
         // T321243
         component.option('animation', component._getDefaultOptions().animation);
       },
+      _loopFocus: true,
     };
 
     if (!isDefined(that._popupContainer)) {
