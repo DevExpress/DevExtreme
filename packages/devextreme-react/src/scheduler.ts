@@ -9,11 +9,10 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { ViewType, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, AllDayPanelMode, AppointmentTemplateData, AppointmentTooltipTemplateData, CellAppointmentsLimit, dxSchedulerScrolling } from "devextreme/ui/scheduler";
-import type { event } from "devextreme/events/index";
+import type { event } from "devextreme/common/core/events/index";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/data/store";
+import type { Store } from "devextreme/common/data";
 import type { ScrollMode, FirstDayOfWeek, Orientation } from "devextreme/common";
-import type { template } from "devextreme/core/templates/template";
 
 import type dxSortable from "devextreme/ui/sortable";
 import type dxDraggable from "devextreme/ui/draggable";
@@ -259,13 +258,13 @@ const Scrolling = Object.assign<typeof _componentScrolling, NestedComponentMeta>
 type IViewProps = React.PropsWithChildren<{
   agendaDuration?: number;
   allDayPanelMode?: AllDayPanelMode;
-  appointmentCollectorTemplate?: ((data: { appointmentCount: number, isCompact: boolean }, collectorElement: any) => string | any) | template;
-  appointmentTemplate?: ((model: AppointmentTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template;
-  appointmentTooltipTemplate?: ((model: AppointmentTooltipTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template;
+  appointmentCollectorTemplate?: any | ((data: { appointmentCount: number, isCompact: boolean }, collectorElement: any) => string | any);
+  appointmentTemplate?: any | ((model: AppointmentTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any);
+  appointmentTooltipTemplate?: any | ((model: AppointmentTooltipTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any);
   cellDuration?: number;
-  dataCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
-  dateCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
-  dropDownAppointmentTemplate?: ((itemData: any, itemIndex: number, contentElement: any) => string | any) | template;
+  dataCellTemplate?: any | ((itemData: any, itemIndex: number, itemElement: any) => string | any);
+  dateCellTemplate?: any | ((itemData: any, itemIndex: number, itemElement: any) => string | any);
+  dropDownAppointmentTemplate?: any | ((itemData: any, itemIndex: number, contentElement: any) => string | any);
   endDayHour?: number;
   firstDayOfWeek?: FirstDayOfWeek;
   groupByDate?: boolean;
@@ -275,11 +274,11 @@ type IViewProps = React.PropsWithChildren<{
   maxAppointmentsPerCell?: CellAppointmentsLimit | number;
   name?: string;
   offset?: number;
-  resourceCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
+  resourceCellTemplate?: any | ((itemData: any, itemIndex: number, itemElement: any) => string | any);
   scrolling?: dxSchedulerScrolling;
   startDate?: Date | number | string;
   startDayHour?: number;
-  timeCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
+  timeCellTemplate?: any | ((itemData: any, itemIndex: number, itemElement: any) => string | any);
   type?: ViewType;
   appointmentCollectorRender?: (...params: any) => React.ReactNode;
   appointmentCollectorComponent?: React.ComponentType<any>;

@@ -10,8 +10,7 @@ import NestedOption from "./core/nested-option";
 
 import type { ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, SeriesClickEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, dxPolarChartAnnotationConfig, dxPolarChartCommonAnnotationConfig, PolarChartSeriesType, PolarChartSeries, ValueAxisVisualRangeUpdateMode } from "devextreme/viz/polar_chart";
 import type { AnimationEaseMode, DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, ChartsDataType, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, LabelOverlap, TimeInterval, AxisScaleType, ChartsColor, SeriesHoverMode, HatchDirection, RelativePosition, PointInteractionMode, PointSymbol, SeriesSelectionMode, ValueErrorBarDisplayMode, ValueErrorBarType, LegendItem, LegendHoverMode } from "devextreme/common/charts";
-import type { template } from "devextreme/core/templates/template";
-import type { Format as LocalizationFormat } from "devextreme/localization";
+import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { Format as CommonFormat, ExportFormat, HorizontalAlignment, Position, Orientation, VerticalEdge } from "devextreme/common";
 
 import type * as CommonChartTypes from "devextreme/common/charts";
@@ -192,11 +191,11 @@ type IAnnotationProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  template?: ((annotation: dxPolarChartCommonAnnotationConfig | any, element: any) => string | any) | template;
+  template?: any | ((annotation: dxPolarChartCommonAnnotationConfig | any, element: any) => string | any);
   text?: string;
   textOverflow?: TextOverflow;
   tooltipEnabled?: boolean;
-  tooltipTemplate?: ((annotation: dxPolarChartAnnotationConfig | any, element: any) => string | any) | template;
+  tooltipTemplate?: any | ((annotation: dxPolarChartAnnotationConfig | any, element: any) => string | any);
   type?: AnnotationType;
   value?: Date | number | string;
   width?: number;
@@ -602,11 +601,11 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  template?: ((annotation: dxPolarChartCommonAnnotationConfig | any, element: any) => string | any) | template;
+  template?: any | ((annotation: dxPolarChartCommonAnnotationConfig | any, element: any) => string | any);
   text?: string;
   textOverflow?: TextOverflow;
   tooltipEnabled?: boolean;
-  tooltipTemplate?: ((annotation: dxPolarChartAnnotationConfig | any, element: any) => string | any) | template;
+  tooltipTemplate?: any | ((annotation: dxPolarChartAnnotationConfig | any, element: any) => string | any);
   type?: AnnotationType;
   value?: Date | number | string;
   width?: number;
@@ -1475,7 +1474,7 @@ type ILegendProps = React.PropsWithChildren<{
     top?: number;
   };
   markerSize?: number;
-  markerTemplate?: ((legendItem: LegendItem, element: any) => string | any) | template;
+  markerTemplate?: any | ((legendItem: LegendItem, element: any) => string | any);
   orientation?: Orientation;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
@@ -2465,7 +2464,7 @@ type ITooltipProps = React.PropsWithChildren<{
   };
   color?: string;
   container?: any | string;
-  contentTemplate?: ((pointInfo: any, element: any) => string | any) | template;
+  contentTemplate?: any | ((pointInfo: any, element: any) => string | any);
   cornerRadius?: number;
   customizeTooltip?: ((pointInfo: any) => Record<string, any>);
   enabled?: boolean;

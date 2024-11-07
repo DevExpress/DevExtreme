@@ -11,8 +11,7 @@ import NestedOption from "./core/nested-option";
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, ItemClickEvent, LegendClickEvent, dxFunnelItem, FunnelLegendItem } from "devextreme/viz/funnel";
 import type { DashStyle, Font as ChartsFont, TextOverflow, WordWrap, HatchDirection, LabelPosition } from "devextreme/common/charts";
 import type { ExportFormat, Format as CommonFormat, HorizontalAlignment, VerticalEdge, HorizontalEdge, Position, Orientation } from "devextreme/common";
-import type { Format as LocalizationFormat } from "devextreme/localization";
-import type { template } from "devextreme/core/templates/template";
+import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -530,7 +529,7 @@ type ILegendProps = React.PropsWithChildren<{
     top?: number;
   };
   markerSize?: number;
-  markerTemplate?: ((legendItem: FunnelLegendItem, element: any) => string | any) | template;
+  markerTemplate?: any | ((legendItem: FunnelLegendItem, element: any) => string | any);
   orientation?: Orientation;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
@@ -872,7 +871,7 @@ type ITooltipProps = React.PropsWithChildren<{
   };
   color?: string;
   container?: any | string;
-  contentTemplate?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }, element: any) => string | any) | template;
+  contentTemplate?: any | ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }, element: any) => string | any);
   cornerRadius?: number;
   customizeTooltip?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => Record<string, any>);
   enabled?: boolean;

@@ -15,7 +15,6 @@ import type { ContentReadyEvent as TextBoxContentReadyEvent, DisposingEvent as T
 import type { DisposingEvent as SortableDisposingEvent, InitializedEvent as SortableInitializedEvent, AddEvent, DragChangeEvent, DragEndEvent, DragMoveEvent, DragStartEvent, OptionChangedEvent, RemoveEvent, ReorderEvent } from "devextreme/ui/sortable";
 import type { TextEditorButtonLocation, DragDirection, DragHighlight, Orientation, ButtonStyle, ButtonType, TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorStyle, ValidationMessageMode, Position, ValidationStatus } from "devextreme/common";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { template } from "devextreme/core/templates/template";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -170,7 +169,7 @@ type IItemProps = React.PropsWithChildren<{
   icon?: string;
   key?: string;
   showChevron?: boolean;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
   text?: string;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
@@ -210,7 +209,7 @@ type IItemDraggingProps = React.PropsWithChildren<{
   };
   data?: any;
   dragDirection?: DragDirection;
-  dragTemplate?: ((dragInfo: { fromIndex: number, itemData: any, itemElement: any }, containerElement: any) => string | any) | template;
+  dragTemplate?: any | ((dragInfo: { fromIndex: number, itemData: any, itemElement: any }, containerElement: any) => string | any);
   dropFeedbackMode?: DragHighlight;
   elementAttr?: Record<string, any>;
   filter?: string;
@@ -298,7 +297,7 @@ type IOptionsProps = React.PropsWithChildren<{
   rtlEnabled?: boolean;
   stylingMode?: ButtonStyle;
   tabIndex?: number;
-  template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template;
+  template?: any | ((buttonData: { icon: string, text: string }, contentElement: any) => string | any);
   text?: string;
   type?: ButtonType | string;
   useSubmitBehavior?: boolean;

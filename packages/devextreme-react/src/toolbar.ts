@@ -11,7 +11,6 @@ import NestedOption from "./core/nested-option";
 
 import type { dxToolbarItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
-import type { template } from "devextreme/core/templates/template";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -104,10 +103,10 @@ type IItemProps = React.PropsWithChildren<{
   html?: string;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
-  menuItemTemplate?: (() => string | any) | template;
+  menuItemTemplate?: any | (() => string | any);
   options?: any;
   showText?: ShowTextMode;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
   text?: string;
   visible?: boolean;
   widget?: ToolbarItemComponent;

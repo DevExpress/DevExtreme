@@ -12,10 +12,9 @@ import type { ContentReadyEvent, DisposingEvent, FocusInEvent, FocusOutEvent, In
 import type { ContentReadyEvent as FileUploaderContentReadyEvent, DisposingEvent as FileUploaderDisposingEvent, InitializedEvent as FileUploaderInitializedEvent, ValueChangedEvent as FileUploaderValueChangedEvent, BeforeSendEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, UploadHttpMethod, FileUploadMode, dxFileUploaderOptions } from "devextreme/ui/file_uploader";
 import type { ValidationStatus, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { template } from "devextreme/core/templates/template";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/data/store";
+import type { Store } from "devextreme/common/data";
 
 import type UploadInfo from "devextreme/file_management/upload_info";
 import type DataSource from "devextreme/data/data_source";
@@ -234,7 +233,7 @@ type IItemProps = React.PropsWithChildren<{
   name?: HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | string;
   selectable?: boolean;
   selected?: boolean;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
   text?: string;
   visible?: boolean;
   acceptedValues?: Array<boolean | number | string>;
@@ -244,7 +243,7 @@ type IItemProps = React.PropsWithChildren<{
   html?: string;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
-  menuItemTemplate?: (() => string | any) | template;
+  menuItemTemplate?: any | (() => string | any);
   options?: any;
   showText?: ShowTextMode;
   widget?: ToolbarItemComponent;
@@ -300,12 +299,12 @@ const MediaResizing = Object.assign<typeof _componentMediaResizing, NestedCompon
 type IMentionProps = React.PropsWithChildren<{
   dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string;
   displayExpr?: ((item: any) => string) | string;
-  itemTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
+  itemTemplate?: any | ((itemData: any, itemIndex: number, itemElement: any) => string | any);
   marker?: string;
   minSearchLength?: number;
   searchExpr?: Array<(() => any) | string> | (() => any) | string;
   searchTimeout?: number;
-  template?: ((mentionData: { id: string | number, marker: string, value: any }, contentElement: any) => string | any) | template;
+  template?: any | ((mentionData: { id: string | number, marker: string, value: any }, contentElement: any) => string | any);
   valueExpr?: (() => void) | string;
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
@@ -389,7 +388,7 @@ type ITableContextMenuItemProps = React.PropsWithChildren<{
   name?: HtmlEditorPredefinedContextMenuItem;
   selectable?: boolean;
   selected?: boolean;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
   text?: string;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
@@ -469,11 +468,11 @@ type IToolbarItemProps = React.PropsWithChildren<{
   html?: string;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
-  menuItemTemplate?: (() => string | any) | template;
+  menuItemTemplate?: any | (() => string | any);
   name?: HtmlEditorPredefinedToolbarItem | string;
   options?: any;
   showText?: ShowTextMode;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
   text?: string;
   visible?: boolean;
   widget?: ToolbarItemComponent;

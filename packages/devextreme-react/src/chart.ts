@@ -10,9 +10,8 @@ import NestedOption from "./core/nested-option";
 
 import type { ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, SeriesClickEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod, dxChartAnnotationConfig, AggregatedPointsPosition, ChartLabelDisplayMode, FinancialChartReductionLevel, chartPointObject, ChartTooltipLocation, ChartZoomAndPanMode, EventKeyModifier } from "devextreme/viz/chart";
 import type { AnimationEaseMode, DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, TimeInterval, ChartsDataType, ScaleBreak, ScaleBreakLineStyle, RelativePosition, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, ChartsAxisLabelOverlap, AxisScaleType, VisualRangeUpdateMode, ChartsColor, SeriesHoverMode, HatchDirection, PointInteractionMode, PointSymbol, SeriesSelectionMode, SeriesType, ValueErrorBarDisplayMode, ValueErrorBarType, LegendItem, LegendHoverMode } from "devextreme/common/charts";
-import type { template } from "devextreme/core/templates/template";
 import type { HorizontalAlignment, VerticalAlignment, Format as CommonFormat, Position, VerticalEdge, ExportFormat, Orientation } from "devextreme/common";
-import type { Format as LocalizationFormat } from "devextreme/localization";
+import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { ChartSeries } from "devextreme/viz/common";
 
 import type * as CommonChartTypes from "devextreme/common/charts";
@@ -247,11 +246,11 @@ type IAnnotationProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  template?: ((annotation: dxChartAnnotationConfig | any, element: any) => string | any) | template;
+  template?: any | ((annotation: dxChartAnnotationConfig | any, element: any) => string | any);
   text?: string;
   textOverflow?: TextOverflow;
   tooltipEnabled?: boolean;
-  tooltipTemplate?: ((annotation: dxChartAnnotationConfig | any, element: any) => string | any) | template;
+  tooltipTemplate?: any | ((annotation: dxChartAnnotationConfig | any, element: any) => string | any);
   type?: AnnotationType;
   value?: Date | number | string;
   width?: number;
@@ -426,7 +425,7 @@ type IArgumentAxisProps = React.PropsWithChildren<{
     position?: Position | RelativePosition;
     rotationAngle?: number;
     staggeringSpacing?: number;
-    template?: ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template;
+    template?: any | ((data: { value: Date | number | string, valueText: string }, element: any) => string | any);
     textOverflow?: TextOverflow;
     visible?: boolean;
     wordWrap?: WordWrap;
@@ -672,7 +671,7 @@ type IAxisLabelProps = React.PropsWithChildren<{
   position?: Position | RelativePosition;
   rotationAngle?: number;
   staggeringSpacing?: number;
-  template?: ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template;
+  template?: any | ((data: { value: Date | number | string, valueText: string }, element: any) => string | any);
   textOverflow?: TextOverflow;
   visible?: boolean;
   wordWrap?: WordWrap;
@@ -950,11 +949,11 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  template?: ((annotation: dxChartAnnotationConfig | any, element: any) => string | any) | template;
+  template?: any | ((annotation: dxChartAnnotationConfig | any, element: any) => string | any);
   text?: string;
   textOverflow?: TextOverflow;
   tooltipEnabled?: boolean;
-  tooltipTemplate?: ((annotation: dxChartAnnotationConfig | any, element: any) => string | any) | template;
+  tooltipTemplate?: any | ((annotation: dxChartAnnotationConfig | any, element: any) => string | any);
   type?: AnnotationType;
   value?: Date | number | string;
   width?: number;
@@ -1029,7 +1028,7 @@ type ICommonAxisSettingsProps = React.PropsWithChildren<{
     position?: Position | RelativePosition;
     rotationAngle?: number;
     staggeringSpacing?: number;
-    template?: ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template;
+    template?: any | ((data: { value: Date | number | string, valueText: string }, element: any) => string | any);
     textOverflow?: TextOverflow;
     visible?: boolean;
     wordWrap?: WordWrap;
@@ -1163,7 +1162,7 @@ type ICommonAxisSettingsLabelProps = React.PropsWithChildren<{
   position?: Position | RelativePosition;
   rotationAngle?: number;
   staggeringSpacing?: number;
-  template?: ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template;
+  template?: any | ((data: { value: Date | number | string, valueText: string }, element: any) => string | any);
   textOverflow?: TextOverflow;
   visible?: boolean;
   wordWrap?: WordWrap;
@@ -2107,7 +2106,7 @@ type ILabelProps = React.PropsWithChildren<{
   overlappingBehavior?: ChartsAxisLabelOverlap;
   rotationAngle?: number;
   staggeringSpacing?: number;
-  template?: ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template;
+  template?: any | ((data: { value: Date | number | string, valueText: string }, element: any) => string | any);
   textOverflow?: TextOverflow;
   wordWrap?: WordWrap;
   argumentFormat?: LocalizationFormat;
@@ -2177,7 +2176,7 @@ type ILegendProps = React.PropsWithChildren<{
     top?: number;
   };
   markerSize?: number;
-  markerTemplate?: ((legendItem: LegendItem, element: any) => string | any) | template;
+  markerTemplate?: any | ((legendItem: LegendItem, element: any) => string | any);
   orientation?: Orientation;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
@@ -3290,7 +3289,7 @@ type ITooltipProps = React.PropsWithChildren<{
   };
   color?: string;
   container?: any | string;
-  contentTemplate?: ((pointInfo: any, element: any) => string | any) | template;
+  contentTemplate?: any | ((pointInfo: any, element: any) => string | any);
   cornerRadius?: number;
   customizeTooltip?: ((pointInfo: any) => Record<string, any>);
   enabled?: boolean;
@@ -3452,7 +3451,7 @@ type IValueAxisProps = React.PropsWithChildren<{
     position?: Position | RelativePosition;
     rotationAngle?: number;
     staggeringSpacing?: number;
-    template?: ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template;
+    template?: any | ((data: { value: Date | number | string, valueText: string }, element: any) => string | any);
     textOverflow?: TextOverflow;
     visible?: boolean;
     wordWrap?: WordWrap;

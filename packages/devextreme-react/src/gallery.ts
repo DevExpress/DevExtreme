@@ -11,7 +11,6 @@ import NestedOption from "./core/nested-option";
 
 import type { dxGalleryItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent } from "devextreme/ui/gallery";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { template } from "devextreme/core/templates/template";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -101,7 +100,7 @@ type IItemProps = React.PropsWithChildren<{
   html?: string;
   imageAlt?: string;
   imageSrc?: string;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  template?: any | ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any);
   text?: string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
