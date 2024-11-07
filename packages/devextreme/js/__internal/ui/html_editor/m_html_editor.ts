@@ -70,6 +70,15 @@ const HtmlEditor = Editor.inherit({
     this.callBase();
     this._cleanCallback = Callbacks();
     this._contentInitializedCallback = Callbacks();
+    this._prepareHtmlConverter();
+  },
+
+  _prepareHtmlConverter(): void {
+    const { converter } = this.option();
+
+    if (converter) {
+      this._htmlConverter = converter;
+    }
   },
 
   _getAnonymousTemplateName() {
@@ -230,10 +239,14 @@ const HtmlEditor = Editor.inherit({
   _updateContainerMarkup() {
     const { value } = this.option();
 
-    if (value) {
-      const sanitizedMarkup = this._removeXSSVulnerableHtml(value);
-      this._$htmlContainer.html(sanitizedMarkup);
+    if (!value) {
+      return;
     }
+
+    const html = this._htmlConverter?.toHtml?.(value) || value;
+    const sanitizedHtml = this._removeXSSVulnerableHtml(html);
+
+    this._$htmlContainer.html(sanitizedHtml);
   },
 
   _render() {
@@ -261,12 +274,6 @@ const HtmlEditor = Editor.inherit({
       if (DeltaConverter) {
         this._deltaConverter = new DeltaConverter();
       }
-    }
-
-    const { converter } = this.option();
-
-    if (converter) {
-      this._htmlConverter = converter;
     }
   },
 
