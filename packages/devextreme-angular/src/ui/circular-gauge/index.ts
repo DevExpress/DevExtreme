@@ -22,8 +22,8 @@ import {
 
 import { ExportFormat, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 import { AnimationEaseMode, ChartsColor, DashStyle, Font, LabelOverlap, Palette, PaletteExtensionMode, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
+import { Format } from 'devextreme/common/core/localization';
 import { UserDefinedElement } from 'devextreme/core/element';
-import { Format } from 'devextreme/localization';
 import { CircularGaugeElementOrientation, CircularGaugeLabelOverlap, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/circular_gauge';
 import { GaugeIndicator } from 'devextreme/viz/gauges/base_gauge';
 

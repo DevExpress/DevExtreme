@@ -19,9 +19,8 @@ import {
 
 
 
-import { AnimationConfig } from 'devextreme/animation/fx';
-import { PositionConfig } from 'devextreme/animation/position';
 import { Position, ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
+import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
 import { ToolbarLocation } from 'devextreme/ui/popup';

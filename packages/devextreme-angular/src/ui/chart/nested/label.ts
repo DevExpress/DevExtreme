@@ -20,7 +20,7 @@ import { DOCUMENT } from '@angular/common';
 
 import { HorizontalAlignment, Position, VerticalAlignment } from 'devextreme/common';
 import { ChartsAxisLabelOverlap, DashStyle, Font, RelativePosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 import { ChartLabelDisplayMode } from 'devextreme/viz/chart';
 
 import {

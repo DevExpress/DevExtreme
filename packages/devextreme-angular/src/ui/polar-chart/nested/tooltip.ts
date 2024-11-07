@@ -15,8 +15,8 @@ import {
 
 
 import { DashStyle, Font } from 'devextreme/common/charts';
+import { Format } from 'devextreme/common/core/localization';
 import { UserDefinedElement } from 'devextreme/core/element';
-import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,

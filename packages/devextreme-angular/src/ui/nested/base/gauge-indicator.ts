@@ -7,7 +7,7 @@ import {
 
 import { HorizontalEdge, VerticalEdge } from 'devextreme/common';
 import { ChartsColor, Font, Palette } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 
 @Component({
     template: ''
