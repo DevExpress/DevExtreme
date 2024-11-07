@@ -651,7 +651,20 @@ export default function() {
     });
 
     testModule('converter option', () => {
-        test('value from toHtml must match the markup value', function(assert) {
+        test('The content should be converted on init', function(assert) {
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                converter: {
+                    toHtml: () => '<h1>Html converted</h1><p>value</p>',
+                },
+                value: 'not html value'
+            }).dxHtmlEditor('instance');
+
+            const markup = instance.$element().find(`.${CONTENT_CLASS}`).html();
+
+            assert.strictEqual(markup, '<h1>Html converted</h1><p>value</p>');
+        });
+
+        test('value from toHtml must match the markup value if value is changed on runtime', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 converter: {
                     toHtml: () => '<h1>Hi!</h1><p>Test</p>',

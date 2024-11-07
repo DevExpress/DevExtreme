@@ -498,6 +498,25 @@ testModule('API', moduleConfig, () => {
     });
 
     testModule('converter option', () => {
+        ['v', ''].forEach(initValue => {
+            test(`toHtml and fromHtml must be called the correct number of times on init if value is '${initValue}'`, function(assert) {
+                const converter = {
+                    toHtml: sinon.stub(),
+                    fromHtml: sinon.stub(),
+                };
+
+                this.options = {
+                    converter,
+                    value: initValue,
+                };
+
+                this.createEditor();
+
+                assert.strictEqual(this.options.converter.toHtml.callCount, initValue ? 1 : 0);
+                assert.strictEqual(this.options.converter.fromHtml.callCount, 0);
+            });
+        });
+
         test('toHtml and fromHtml should be called once after value option changed', function(assert) {
             const converter = {
                 toHtml: sinon.stub(),
