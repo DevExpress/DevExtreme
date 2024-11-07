@@ -10,13 +10,20 @@ test('Scheduler should have right aria attributes', async (t) => {
 
   await t.expect(
     scheduler.element.getAttribute('aria-label'),
-  ).eql('Scheduler');
+  ).eql('Scheduler. Month view');
 
   await t.expect(
     scheduler.element.getAttribute('role'),
   ).eql('group');
+
+  await scheduler.option('currentView', 'week');
+
+  await t.expect(
+    scheduler.element.getAttribute('aria-label'),
+  ).eql('Scheduler. Week view');
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource: [],
+    currentView: 'month',
   });
 });

@@ -249,7 +249,8 @@
         "dxPivotGrid-rowFieldArea": "Drop Row Fields Here",
         "dxPivotGrid-filterFieldArea": "Drop Filter Fields Here",
 
-        "dxScheduler-ariaLabel": "Scheduler",
+        "dxScheduler-ariaLabel": "Scheduler. {0} view",
+        
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",

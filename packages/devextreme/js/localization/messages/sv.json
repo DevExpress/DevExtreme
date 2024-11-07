@@ -249,7 +249,7 @@
         "dxPivotGrid-rowFieldArea": "Släpp radfält här",
         "dxPivotGrid-filterFieldArea": "Släpp filterfält här",
 
-        "dxScheduler-ariaLabel": "Scheduler",
+        "dxScheduler-ariaLabel": "Scheduler. {0} view",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
