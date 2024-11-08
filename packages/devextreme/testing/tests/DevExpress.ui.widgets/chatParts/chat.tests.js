@@ -1424,14 +1424,7 @@ QUnit.module('Chat', () => {
             assert.strictEqual(this.getEmptyView().length, 1, 'empty view is rendered');
         });
 
-        QUnit.test('emptyview should be rendered after each removal and removed after each addition from the store', function(assert) {
-            const messages = [{
-                id: 1,
-                text: 'message_1',
-                timestamp: new Date('2021/10/17'),
-                author: userFirst
-            }];
-
+        QUnit.test('emptyview should be removed after the new message is added to the empty store', function(assert) {
             const timeout = 100;
 
             const store = new CustomStore({
@@ -1439,17 +1432,8 @@ QUnit.module('Chat', () => {
                 load: function() {
                     const d = $.Deferred();
                     setTimeout(function() {
-                        d.resolve([...messages]);
+                        d.resolve([]);
                     }, timeout);
-                    return d.promise();
-                },
-                insert: function(message) {
-                    const d = $.Deferred();
-
-                    setTimeout(() => {
-                        d.resolve();
-                    }, timeout);
-
                     return d.promise();
                 },
             });
@@ -1462,22 +1446,17 @@ QUnit.module('Chat', () => {
 
             this.clock.tick(timeout);
 
-            assert.strictEqual(this.getEmptyView().length, 0, 'empty view is not rendered');
-
-            store.push([{ type: 'remove', key: 1 }]);
-            this.clock.tick(timeout);
-
-            store.push([{ type: 'insert', data: {
-                id: 1,
-                timestamp: NOW,
-                text: 'NEW MESSAGE',
-            } }]);
-            this.clock.tick(timeout);
-
-            store.push([{ type: 'remove', key: 1 }]);
-            this.clock.tick(timeout);
-
             assert.strictEqual(this.getEmptyView().length, 1, 'empty view is rendered');
+
+            store.push([{ type: 'insert', data: [{
+                id: 1,
+                text: 'message_1',
+                timestamp: new Date('2021/10/17'),
+                author: userFirst
+            }] }]);
+            this.clock.tick(timeout * 2);
+
+            assert.strictEqual(this.getEmptyView().length, 0, 'empty view is removed');
         });
 
         QUnit.test('Loading and Empty view should not be shown at the same time when the dataSource option changes', function(assert) {

@@ -102,7 +102,7 @@ class Chat extends Widget<Properties> {
       this._setOptionWithoutOptionChange('items', newItems.slice());
       this._messageList._setOptionWithoutOptionChange('items', newItems.slice());
 
-      this._messageList._renderEmptyView();
+      this._messageList._toggleEmptyView();
     } else {
       this.option('items', newItems.slice());
     }

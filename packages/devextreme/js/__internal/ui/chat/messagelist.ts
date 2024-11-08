@@ -123,7 +123,7 @@ class MessageList extends Widget<Properties> {
 
     this._renderScrollView();
     this._renderMessageListContent();
-    this._renderEmptyView();
+    this._toggleEmptyView();
     this._renderMessageGroups();
     this._renderTypingIndicator();
 
@@ -315,7 +315,7 @@ class MessageList extends Widget<Properties> {
       .appendTo(this._$scrollViewContent());
   }
 
-  _renderEmptyView(): void {
+  _toggleEmptyView(): void {
     this._getEmptyView().remove();
 
     const { isLoading } = this.option();
@@ -397,14 +397,10 @@ class MessageList extends Widget<Properties> {
     const $lastMessageGroup = this._$content.find(`.${CHAT_MESSAGEGROUP_CLASS}`).last();
 
     if ($lastMessageGroup.length) {
-      return this._getMessageGroupInstanceByElement($lastMessageGroup);
+      return MessageGroup.getInstance($lastMessageGroup) as MessageGroup;
     }
 
     return undefined;
-  }
-
-  _getMessageGroupInstanceByElement($element: dxElementWrapper): MessageGroup {
-    return MessageGroup.getInstance($element) as MessageGroup;
   }
 
   _renderMessage(message: Message): void {
@@ -484,7 +480,7 @@ class MessageList extends Widget<Properties> {
 
     const $currentMessageGroup = $targetMessage.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);
 
-    const group = this._getMessageGroupInstanceByElement($currentMessageGroup);
+    const group: MessageGroup = MessageGroup.getInstance($currentMessageGroup);
 
     const { items } = group.option();
     const newItems = items.filter((item) => item.id !== key);
@@ -549,7 +545,7 @@ class MessageList extends Widget<Properties> {
     if (shouldItemsBeUpdatedCompletely) {
       this._invalidate();
     } else {
-      this._renderEmptyView();
+      this._toggleEmptyView();
 
       const newMessage = value[value.length - 1];
 
