@@ -65,9 +65,9 @@ const componentConfig = {
     fieldChooser: Object,
     fieldPanel: Object,
     headerFilter: Object,
-    height: [Function, Number, String],
+    height: {},
     hideEmptySummaryCells: Boolean,
-    hint: String,
+    hint: {},
     loadPanel: Object,
     onCellClick: Function,
     onCellPrepared: Function,
@@ -90,7 +90,7 @@ const componentConfig = {
     tabIndex: Number,
     texts: Object,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: {},
     wordWrapEnabled: Boolean
   },
   emits: {

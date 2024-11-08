@@ -55,7 +55,7 @@ const componentConfig = {
     height: [Function, Number, String],
     hideOnOutsideClick: [Boolean, Function],
     hideOnParentScroll: Boolean,
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     indicatorSrc: String,
     maxHeight: [Function, Number, String],
@@ -269,7 +269,7 @@ const DxHideConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -375,7 +375,7 @@ const DxShowConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}

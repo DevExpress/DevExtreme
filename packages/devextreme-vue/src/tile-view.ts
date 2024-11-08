@@ -43,7 +43,7 @@ interface DxTileView extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     baseItemHeight: Number,
     baseItemWidth: Number,
@@ -53,7 +53,7 @@ const componentConfig = {
     elementAttr: Object,
     focusStateEnabled: Boolean,
     height: [Function, Number, String],
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
     itemMargin: Number,
@@ -72,7 +72,7 @@ const componentConfig = {
     showScrollbar: {},
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

@@ -44,8 +44,8 @@ const componentConfig = {
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
     items: Array,
@@ -66,7 +66,7 @@ const componentConfig = {
     title: String,
     usePopover: Boolean,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

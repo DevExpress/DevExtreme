@@ -61,14 +61,14 @@ const componentConfig = {
     elementAttr: Object,
     export: Object,
     group: Object,
-    hoverEnabled: Boolean,
-    idField: String,
+    hoverEnabled: {},
+    idField: {},
     interactWithGroup: Boolean,
     labelField: String,
     layoutAlgorithm: {},
     layoutDirection: {},
     loadingIndicator: Object,
-    maxDepth: Number,
+    maxDepth: {},
     onClick: Function,
     onDisposing: Function,
     onDrawn: Function,
@@ -83,7 +83,7 @@ const componentConfig = {
     onNodesRendering: Function,
     onOptionChanged: Function,
     onSelectionChanged: Function,
-    parentField: String,
+    parentField: {},
     pathModified: Boolean,
     redrawOnResize: Boolean,
     rtlEnabled: Boolean,
@@ -177,11 +177,11 @@ const DxBorderConfig = {
     "update:width": null,
   },
   props: {
-    color: String,
+    color: {},
     dashStyle: {},
-    opacity: Number,
+    opacity: {},
     visible: Boolean,
-    width: Number
+    width: {}
   }
 };
 
@@ -203,7 +203,7 @@ const DxColorizerConfig = {
     "update:type": null,
   },
   props: {
-    colorCodeField: String,
+    colorCodeField: {},
     colorizeGroups: Boolean,
     palette: {},
     paletteExtensionMode: {},
@@ -237,7 +237,7 @@ const DxExportConfig = {
     formats: Array,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: Function
+    svgToCanvas: {}
   }
 };
 
@@ -315,8 +315,8 @@ const DxGroupConfig = {
   props: {
     border: Object,
     color: String,
-    headerHeight: Number,
-    hoverEnabled: Boolean,
+    headerHeight: {},
+    hoverEnabled: {},
     hoverStyle: Object,
     label: Object,
     padding: Number,
@@ -371,7 +371,7 @@ const DxHoverStyleConfig = {
   },
   props: {
     border: Object,
-    color: String
+    color: {}
   }
 };
 
@@ -464,7 +464,7 @@ const DxSelectionStyleConfig = {
   },
   props: {
     border: Object,
-    color: String
+    color: {}
   }
 };
 
@@ -507,8 +507,8 @@ const DxSizeConfig = {
     "update:width": null,
   },
   props: {
-    height: Number,
-    width: Number
+    height: {},
+    width: {}
   }
 };
 
@@ -623,7 +623,7 @@ const DxTitleConfig = {
     font: Object,
     horizontalAlignment: {},
     margin: [Number, Object],
-    placeholderSize: Number,
+    placeholderSize: {},
     subtitle: [Object, String],
     text: String,
     textOverflow: {},
@@ -670,15 +670,15 @@ const DxTooltipConfig = {
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: Function,
+    customizeTooltip: {},
     enabled: Boolean,
     font: Object,
     format: {},
-    opacity: Number,
+    opacity: {},
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     shadow: Object,
-    zIndex: Number
+    zIndex: {}
   }
 };
 
@@ -708,7 +708,7 @@ const DxTooltipBorderConfig = {
   props: {
     color: String,
     dashStyle: {},
-    opacity: Number,
+    opacity: {},
     visible: Boolean,
     width: Number
   }
@@ -728,8 +728,8 @@ const DxTreeMapborderConfig = {
     "update:width": null,
   },
   props: {
-    color: String,
-    width: Number
+    color: {},
+    width: {}
   }
 };
 

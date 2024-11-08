@@ -74,7 +74,7 @@ const componentConfig = {
     theme: {},
     title: [Object, String],
     tooltip: Object,
-    value: Number,
+    value: {},
     valueIndicator: Object
   },
   emits: {
@@ -172,8 +172,8 @@ const DxBackgroundColorConfig = {
     "update:fillId": null,
   },
   props: {
-    base: String,
-    fillId: String
+    base: {},
+    fillId: {}
   }
 };
 
@@ -196,7 +196,7 @@ const DxBorderConfig = {
   props: {
     color: String,
     dashStyle: {},
-    opacity: Number,
+    opacity: {},
     visible: Boolean,
     width: Number
   }
@@ -216,8 +216,8 @@ const DxColorConfig = {
     "update:fillId": null,
   },
   props: {
-    base: String,
-    fillId: String
+    base: {},
+    fillId: {}
   }
 };
 
@@ -246,7 +246,7 @@ const DxExportConfig = {
     formats: Array,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: Function
+    svgToCanvas: {}
   }
 };
 
@@ -512,18 +512,18 @@ const DxScaleConfig = {
     "update:tickInterval": null,
   },
   props: {
-    allowDecimals: Boolean,
+    allowDecimals: {},
     customMinorTicks: Array,
     customTicks: Array,
     endValue: Number,
     label: Object,
     minorTick: Object,
-    minorTickInterval: Number,
+    minorTickInterval: {},
     orientation: {},
     scaleDivisionFactor: Number,
     startValue: Number,
     tick: Object,
-    tickInterval: Number
+    tickInterval: {}
   }
 };
 
@@ -571,8 +571,8 @@ const DxSizeConfig = {
     "update:width": null,
   },
   props: {
-    height: Number,
-    width: Number
+    height: {},
+    width: {}
   }
 };
 
@@ -637,7 +637,7 @@ const DxSubvalueIndicatorConfig = {
   props: {
     arrowLength: Number,
     backgroundColor: String,
-    baseValue: Number,
+    baseValue: {},
     beginAdaptingAtRadius: Number,
     color: [Object, String],
     horizontalOrientation: {},
@@ -677,7 +677,7 @@ const DxTextConfig = {
     "update:indent": null,
   },
   props: {
-    customizeText: Function,
+    customizeText: {},
     font: Object,
     format: {},
     indent: Number
@@ -737,7 +737,7 @@ const DxTitleConfig = {
     font: Object,
     horizontalAlignment: {},
     margin: [Number, Object],
-    placeholderSize: Number,
+    placeholderSize: {},
     subtitle: [Object, String],
     text: String,
     textOverflow: {},
@@ -785,16 +785,16 @@ const DxTooltipConfig = {
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: Function,
+    customizeTooltip: {},
     enabled: Boolean,
     font: Object,
     format: {},
     interactive: Boolean,
-    opacity: Number,
+    opacity: {},
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     shadow: Object,
-    zIndex: Number
+    zIndex: {}
   }
 };
 
@@ -837,7 +837,7 @@ const DxValueIndicatorConfig = {
   props: {
     arrowLength: Number,
     backgroundColor: String,
-    baseValue: Number,
+    baseValue: {},
     beginAdaptingAtRadius: Number,
     color: [Object, String],
     horizontalOrientation: {},

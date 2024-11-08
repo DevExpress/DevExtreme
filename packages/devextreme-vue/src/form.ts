@@ -52,7 +52,7 @@ interface DxForm extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     alignItemLabels: Boolean,
     alignItemLabelsInAllGroups: Boolean,
@@ -63,8 +63,8 @@ const componentConfig = {
     elementAttr: Object,
     focusStateEnabled: Boolean,
     formData: {},
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     items: Array,
@@ -89,9 +89,9 @@ const componentConfig = {
     showRequiredMark: Boolean,
     showValidationSummary: Boolean,
     tabIndex: Number,
-    validationGroup: String,
+    validationGroup: {},
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,
@@ -206,15 +206,15 @@ const DxButtonItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
-    buttonOptions: Object,
-    colSpan: Number,
-    cssClass: String,
+    buttonOptions: {},
+    colSpan: {},
+    cssClass: {},
     horizontalAlignment: {},
     itemType: {},
-    name: String,
+    name: {},
     verticalAlignment: {},
     visible: Boolean,
-    visibleIndex: Number
+    visibleIndex: {}
   }
 };
 
@@ -262,14 +262,14 @@ const DxButtonOptionsConfig = {
     "update:width": null,
   },
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     bindingOptions: Object,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     icon: String,
     onClick: Function,
@@ -284,9 +284,9 @@ const DxButtonOptionsConfig = {
     text: String,
     type: {},
     useSubmitBehavior: Boolean,
-    validationGroup: String,
+    validationGroup: {},
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   }
 };
 
@@ -306,10 +306,10 @@ const DxColCountByScreenConfig = {
     "update:xs": null,
   },
   props: {
-    lg: Number,
-    md: Number,
-    sm: Number,
-    xs: Number
+    lg: {},
+    md: {},
+    sm: {},
+    xs: {}
   }
 };
 
@@ -414,12 +414,12 @@ const DxEmptyItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
-    colSpan: Number,
-    cssClass: String,
+    colSpan: {},
+    cssClass: {},
     itemType: {},
-    name: String,
+    name: {},
     visible: Boolean,
-    visibleIndex: Number
+    visibleIndex: {}
   }
 };
 
@@ -453,18 +453,18 @@ const DxGroupItemConfig = {
   },
   props: {
     alignItemLabels: Boolean,
-    caption: String,
+    caption: {},
     captionTemplate: {},
     colCount: Number,
     colCountByScreen: Object,
-    colSpan: Number,
-    cssClass: String,
+    colSpan: {},
+    cssClass: {},
     items: Array,
     itemType: {},
-    name: String,
+    name: {},
     template: {},
     visible: Boolean,
-    visibleIndex: Number
+    visibleIndex: {}
   }
 };
 
@@ -521,27 +521,27 @@ const DxItemConfig = {
   props: {
     alignItemLabels: Boolean,
     badge: String,
-    buttonOptions: Object,
-    caption: String,
+    buttonOptions: {},
+    caption: {},
     captionTemplate: {},
     colCount: Number,
     colCountByScreen: Object,
-    colSpan: Number,
-    cssClass: String,
-    dataField: String,
+    colSpan: {},
+    cssClass: {},
+    dataField: {},
     disabled: Boolean,
     editorOptions: {},
     editorType: {},
-    helpText: String,
+    helpText: {},
     horizontalAlignment: {},
     html: String,
     icon: String,
-    isRequired: Boolean,
+    isRequired: {},
     items: Array,
     itemType: {},
     label: Object,
-    name: String,
-    tabPanelOptions: Object,
+    name: {},
+    tabPanelOptions: {},
     tabs: Array,
     tabTemplate: {},
     template: {},
@@ -550,7 +550,7 @@ const DxItemConfig = {
     validationRules: Array,
     verticalAlignment: {},
     visible: Boolean,
-    visibleIndex: Number
+    visibleIndex: {}
   }
 };
 
@@ -577,7 +577,7 @@ const DxLabelConfig = {
     location: {},
     showColon: Boolean,
     template: {},
-    text: String,
+    text: {},
     visible: Boolean
   }
 };
@@ -716,20 +716,20 @@ const DxSimpleItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
-    colSpan: Number,
-    cssClass: String,
-    dataField: String,
+    colSpan: {},
+    cssClass: {},
+    dataField: {},
     editorOptions: {},
     editorType: {},
-    helpText: String,
-    isRequired: Boolean,
+    helpText: {},
+    isRequired: {},
     itemType: {},
     label: Object,
-    name: String,
+    name: {},
     template: {},
     validationRules: Array,
     visible: Boolean,
-    visibleIndex: Number
+    visibleIndex: {}
   }
 };
 
@@ -804,15 +804,15 @@ const DxTabConfig = {
   },
   props: {
     alignItemLabels: Boolean,
-    badge: String,
+    badge: {},
     colCount: Number,
     colCountByScreen: Object,
     disabled: Boolean,
-    icon: String,
+    icon: {},
     items: Array,
     tabTemplate: {},
     template: {},
-    title: String
+    title: {}
   }
 };
 
@@ -840,14 +840,14 @@ const DxTabbedItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
-    colSpan: Number,
-    cssClass: String,
+    colSpan: {},
+    cssClass: {},
     itemType: {},
-    name: String,
-    tabPanelOptions: Object,
+    name: {},
+    tabPanelOptions: {},
     tabs: Array,
     visible: Boolean,
-    visibleIndex: Number
+    visibleIndex: {}
   }
 };
 
@@ -916,7 +916,7 @@ const DxTabPanelOptionsConfig = {
     "update:width": null,
   },
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     animationEnabled: Boolean,
     bindingOptions: Object,
@@ -925,8 +925,8 @@ const DxTabPanelOptionsConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     iconPosition: {},
     itemHoldTimeout: Number,
@@ -960,7 +960,7 @@ const DxTabPanelOptionsConfig = {
     tabIndex: Number,
     tabsPosition: {},
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   }
 };
 

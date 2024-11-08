@@ -51,18 +51,18 @@ interface DxGallery extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     animationDuration: Number,
     animationEnabled: Boolean,
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     indicatorEnabled: Boolean,
-    initialItemWidth: Number,
+    initialItemWidth: {},
     itemHoldTimeout: Number,
     items: Array,
     itemTemplate: {},
@@ -87,7 +87,7 @@ const componentConfig = {
     swipeEnabled: Boolean,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: {},
     wrapAround: Boolean
   },
   emits: {

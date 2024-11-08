@@ -73,7 +73,7 @@ const componentConfig = {
     fullScreen: Boolean,
     gridSize: [Number, Object],
     hasChanges: Boolean,
-    height: [Function, Number, String],
+    height: {},
     historyToolbar: Object,
     mainToolbar: Object,
     nodes: Object,
@@ -102,7 +102,7 @@ const componentConfig = {
     viewToolbar: Object,
     viewUnits: {},
     visible: Boolean,
-    width: [Function, Number, String],
+    width: {},
     zoomLevel: [Number, Object]
   },
   emits: {
@@ -442,10 +442,10 @@ const DxDefaultItemPropertiesConfig = {
     connectorLineEnd: {},
     connectorLineStart: {},
     connectorLineType: {},
-    shapeMaxHeight: Number,
-    shapeMaxWidth: Number,
-    shapeMinHeight: Number,
-    shapeMinWidth: Number,
+    shapeMaxHeight: {},
+    shapeMaxWidth: {},
+    shapeMinHeight: {},
+    shapeMinWidth: {},
     style: Object,
     textStyle: Object
   }
@@ -479,22 +479,22 @@ const DxEdgesConfig = {
     "update:zIndexExpr": null,
   },
   props: {
-    customDataExpr: [Function, String],
+    customDataExpr: {},
     dataSource: {},
     fromExpr: [Function, String],
-    fromLineEndExpr: [Function, String],
-    fromPointIndexExpr: [Function, String],
+    fromLineEndExpr: {},
+    fromPointIndexExpr: {},
     keyExpr: [Function, String],
-    lineTypeExpr: [Function, String],
-    lockedExpr: [Function, String],
-    pointsExpr: [Function, String],
-    styleExpr: [Function, String],
-    textExpr: [Function, String],
-    textStyleExpr: [Function, String],
+    lineTypeExpr: {},
+    lockedExpr: {},
+    pointsExpr: {},
+    styleExpr: {},
+    textExpr: {},
+    textStyleExpr: {},
     toExpr: [Function, String],
-    toLineEndExpr: [Function, String],
-    toPointIndexExpr: [Function, String],
-    zIndexExpr: [Function, String]
+    toLineEndExpr: {},
+    toPointIndexExpr: {},
+    zIndexExpr: {}
   }
 };
 
@@ -703,24 +703,24 @@ const DxNodesConfig = {
   props: {
     autoLayout: {},
     autoSizeEnabled: Boolean,
-    containerChildrenExpr: [Function, String],
+    containerChildrenExpr: {},
     containerKeyExpr: [Function, String],
-    customDataExpr: [Function, String],
+    customDataExpr: {},
     dataSource: {},
-    heightExpr: [Function, String],
-    imageUrlExpr: [Function, String],
-    itemsExpr: [Function, String],
+    heightExpr: {},
+    imageUrlExpr: {},
+    itemsExpr: {},
     keyExpr: [Function, String],
-    leftExpr: [Function, String],
-    lockedExpr: [Function, String],
-    parentKeyExpr: [Function, String],
-    styleExpr: [Function, String],
+    leftExpr: {},
+    lockedExpr: {},
+    parentKeyExpr: {},
+    styleExpr: {},
     textExpr: [Function, String],
-    textStyleExpr: [Function, String],
-    topExpr: [Function, String],
+    textStyleExpr: {},
+    topExpr: {},
     typeExpr: [Function, String],
-    widthExpr: [Function, String],
-    zIndexExpr: [Function, String]
+    widthExpr: {},
+    zIndexExpr: {}
   }
 };
 
@@ -867,7 +867,7 @@ const DxToolboxConfig = {
     shapeIconsPerRow: Number,
     showSearch: Boolean,
     visibility: {},
-    width: Number
+    width: {}
   }
 };
 
@@ -938,7 +938,7 @@ const DxZoomLevelConfig = {
   },
   props: {
     items: Array,
-    value: Number
+    value: {}
   }
 };
 

@@ -57,7 +57,7 @@ interface DxTabPanel extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     animationEnabled: Boolean,
     dataSource: {},
@@ -65,8 +65,8 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     iconPosition: {},
     itemHoldTimeout: Number,
@@ -100,7 +100,7 @@ const componentConfig = {
     tabIndex: Number,
     tabsPosition: {},
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

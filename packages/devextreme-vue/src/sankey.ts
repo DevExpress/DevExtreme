@@ -188,11 +188,11 @@ const DxBorderConfig = {
     "update:width": null,
   },
   props: {
-    color: String,
+    color: {},
     dashStyle: {},
-    opacity: Number,
-    visible: Boolean,
-    width: Number
+    opacity: {},
+    visible: {},
+    width: {}
   }
 };
 
@@ -221,7 +221,7 @@ const DxExportConfig = {
     formats: Array,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: Function
+    svgToCanvas: {}
   }
 };
 
@@ -317,9 +317,9 @@ const DxHoverStyleConfig = {
   },
   props: {
     border: Object,
-    color: String,
+    color: {},
     hatching: Object,
-    opacity: Number
+    opacity: {}
   }
 };
 
@@ -462,7 +462,7 @@ const DxNodeConfig = {
   },
   props: {
     border: Object,
-    color: String,
+    color: {},
     hoverStyle: Object,
     opacity: Number,
     padding: Number,
@@ -490,9 +490,9 @@ const DxSankeyborderConfig = {
     "update:width": null,
   },
   props: {
-    color: String,
-    visible: Boolean,
-    width: Number
+    color: {},
+    visible: {},
+    width: {}
   }
 };
 
@@ -535,8 +535,8 @@ const DxSizeConfig = {
     "update:width": null,
   },
   props: {
-    height: Number,
-    width: Number
+    height: {},
+    width: {}
   }
 };
 
@@ -592,7 +592,7 @@ const DxTitleConfig = {
     font: Object,
     horizontalAlignment: {},
     margin: [Number, Object],
-    placeholderSize: Number,
+    placeholderSize: {},
     subtitle: [Object, String],
     text: String,
     textOverflow: {},
@@ -640,18 +640,18 @@ const DxTooltipConfig = {
     color: String,
     container: {},
     cornerRadius: Number,
-    customizeLinkTooltip: Function,
-    customizeNodeTooltip: Function,
+    customizeLinkTooltip: {},
+    customizeNodeTooltip: {},
     enabled: Boolean,
     font: Object,
     format: {},
     linkTooltipTemplate: {},
     nodeTooltipTemplate: {},
-    opacity: Number,
+    opacity: {},
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     shadow: Object,
-    zIndex: Number
+    zIndex: {}
   }
 };
 
@@ -681,7 +681,7 @@ const DxTooltipBorderConfig = {
   props: {
     color: String,
     dashStyle: {},
-    opacity: Number,
+    opacity: {},
     visible: Boolean,
     width: Number
   }

@@ -129,7 +129,7 @@ interface DxTreeList extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     allowColumnReordering: Boolean,
     allowColumnResizing: Boolean,
@@ -141,7 +141,7 @@ const componentConfig = {
     columnChooser: Object,
     columnFixing: Object,
     columnHidingEnabled: Boolean,
-    columnMinWidth: Number,
+    columnMinWidth: {},
     columnResizingMode: {},
     columns: Array,
     columnWidth: {},
@@ -168,9 +168,9 @@ const componentConfig = {
     focusedRowKey: {},
     hasItemsExpr: [Function, String],
     headerFilter: Object,
-    height: [Function, Number, String],
+    height: {},
     highlightChanges: Boolean,
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     itemsExpr: [Function, String],
     keyboardNavigation: Object,
@@ -240,10 +240,10 @@ const componentConfig = {
     stateStoring: Object,
     syncLookupFilterValues: Boolean,
     tabIndex: Number,
-    toolbar: Object,
+    toolbar: {},
     twoWayBindingEnabled: Boolean,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: {},
     wordWrapEnabled: Boolean
   },
   emits: {
@@ -565,10 +565,10 @@ const DxColCountByScreenConfig = {
     "update:xs": null,
   },
   props: {
-    lg: Number,
-    md: Number,
-    sm: Number,
-    xs: Number
+    lg: {},
+    md: {},
+    sm: {},
+    xs: {}
   }
 };
 
@@ -674,12 +674,12 @@ const DxColumnConfig = {
     calculateDisplayValue: [Function, String],
     calculateFilterExpression: Function,
     calculateSortValue: [Function, String],
-    caption: String,
+    caption: {},
     cellTemplate: {},
     columns: Array,
-    cssClass: String,
+    cssClass: {},
     customizeText: Function,
-    dataField: String,
+    dataField: {},
     dataType: {},
     editCellTemplate: {},
     editorOptions: {},
@@ -695,26 +695,26 @@ const DxColumnConfig = {
     formItem: Object,
     headerCellTemplate: {},
     headerFilter: Object,
-    hidingPriority: Number,
-    isBand: Boolean,
+    hidingPriority: {},
+    isBand: {},
     lookup: Object,
-    minWidth: Number,
-    name: String,
-    ownerBand: Number,
+    minWidth: {},
+    name: {},
+    ownerBand: {},
     renderAsync: Boolean,
     selectedFilterOperation: {},
     setCellValue: Function,
     showEditorAlways: Boolean,
     showInColumnChooser: Boolean,
-    sortIndex: Number,
-    sortingMethod: Function,
+    sortIndex: {},
+    sortingMethod: {},
     sortOrder: {},
     trueText: String,
     type: {},
     validationRules: Array,
     visible: Boolean,
-    visibleIndex: Number,
-    width: [Number, String]
+    visibleIndex: {},
+    width: {}
   }
 };
 
@@ -769,7 +769,7 @@ const DxColumnChooserConfig = {
     enabled: Boolean,
     height: [Number, String],
     mode: {},
-    position: Object,
+    position: {},
     search: Object,
     searchTimeout: Number,
     selection: Object,
@@ -903,10 +903,10 @@ const DxColumnHeaderFilterConfig = {
     allowSelectAll: Boolean,
     dataSource: {},
     groupInterval: {},
-    height: [Number, String],
+    height: {},
     search: Object,
     searchMode: {},
-    width: [Number, String]
+    width: {}
   }
 };
 
@@ -934,7 +934,7 @@ const DxColumnHeaderFilterSearchConfig = {
     editorOptions: {},
     enabled: Boolean,
     mode: {},
-    searchExpr: [Array, Function, String],
+    searchExpr: {},
     timeout: Number
   }
 };
@@ -959,8 +959,8 @@ const DxColumnLookupConfig = {
     allowClearing: Boolean,
     calculateCellValue: Function,
     dataSource: {},
-    displayExpr: [Function, String],
-    valueExpr: String
+    displayExpr: {},
+    valueExpr: {}
   }
 };
 
@@ -1033,13 +1033,13 @@ const DxCustomOperationConfig = {
   },
   props: {
     calculateFilterExpression: Function,
-    caption: String,
+    caption: {},
     customizeText: Function,
-    dataTypes: Array,
+    dataTypes: {},
     editorTemplate: {},
     hasValue: Boolean,
-    icon: String,
-    name: String
+    icon: {},
+    name: {}
   }
 };
 
@@ -1215,9 +1215,9 @@ const DxFieldConfig = {
   },
   props: {
     calculateFilterExpression: Function,
-    caption: String,
+    caption: {},
     customizeText: Function,
-    dataField: String,
+    dataField: {},
     dataType: {},
     editorOptions: {},
     editorTemplate: {},
@@ -1225,7 +1225,7 @@ const DxFieldConfig = {
     filterOperations: Array,
     format: {},
     lookup: Object,
-    name: String,
+    name: {},
     trueText: String
   }
 };
@@ -1253,9 +1253,9 @@ const DxFieldLookupConfig = {
   },
   props: {
     allowClearing: Boolean,
-    dataSource: [Array, Object],
-    displayExpr: [Function, String],
-    valueExpr: [Function, String]
+    dataSource: {},
+    displayExpr: {},
+    valueExpr: {}
   }
 };
 
@@ -1299,7 +1299,7 @@ const DxFilterBuilderConfig = {
     "update:width": null,
   },
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     allowHierarchicalFields: Boolean,
     bindingOptions: Object,
@@ -1311,10 +1311,10 @@ const DxFilterBuilderConfig = {
     focusStateEnabled: Boolean,
     groupOperationDescriptions: Object,
     groupOperations: Array,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
-    maxGroupLevel: Number,
+    maxGroupLevel: {},
     onContentReady: Function,
     onDisposing: Function,
     onEditorPrepared: Function,
@@ -1326,7 +1326,7 @@ const DxFilterBuilderConfig = {
     tabIndex: Number,
     value: [Array, Function, String],
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   }
 };
 
@@ -1398,7 +1398,7 @@ const DxFilterBuilderPopupConfig = {
     "update:wrapperAttr": null,
   },
   props: {
-    accessKey: String,
+    accessKey: {},
     animation: Object,
     bindingOptions: Object,
     closeOnOutsideClick: [Boolean, Function],
@@ -1415,7 +1415,7 @@ const DxFilterBuilderPopupConfig = {
     height: [Function, Number, String],
     hideOnOutsideClick: [Boolean, Function],
     hideOnParentScroll: Boolean,
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     maxHeight: [Function, Number, String],
     maxWidth: [Function, Number, String],
@@ -1629,7 +1629,7 @@ const DxFormConfig = {
     "update:width": null,
   },
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     alignItemLabels: Boolean,
     alignItemLabelsInAllGroups: Boolean,
@@ -1641,8 +1641,8 @@ const DxFormConfig = {
     elementAttr: Object,
     focusStateEnabled: Boolean,
     formData: {},
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     items: Array,
@@ -1667,9 +1667,9 @@ const DxFormConfig = {
     showRequiredMark: Boolean,
     showValidationSummary: Boolean,
     tabIndex: Number,
-    validationGroup: String,
+    validationGroup: {},
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   }
 };
 
@@ -1729,20 +1729,20 @@ const DxFormItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
-    colSpan: Number,
-    cssClass: String,
-    dataField: String,
+    colSpan: {},
+    cssClass: {},
+    dataField: {},
     editorOptions: {},
     editorType: {},
-    helpText: String,
-    isRequired: Boolean,
+    helpText: {},
+    isRequired: {},
     itemType: {},
     label: Object,
-    name: String,
+    name: {},
     template: {},
     validationRules: Array,
     visible: Boolean,
-    visibleIndex: Number
+    visibleIndex: {}
   }
 };
 
@@ -1837,13 +1837,13 @@ const DxHeaderFilterConfig = {
     allowSelectAll: Boolean,
     dataSource: {},
     groupInterval: {},
-    height: [Number, String],
+    height: {},
     search: Object,
     searchMode: {},
     searchTimeout: Number,
     texts: Object,
     visible: Boolean,
-    width: [Number, String]
+    width: {}
   }
 };
 
@@ -1875,7 +1875,7 @@ const DxHideConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -1936,7 +1936,7 @@ const DxItemConfig = {
     "update:widget": null,
   },
   props: {
-    cssClass: String,
+    cssClass: {},
     disabled: Boolean,
     html: String,
     locateInMenu: {},
@@ -1998,7 +1998,7 @@ const DxLabelConfig = {
     location: {},
     showColon: Boolean,
     template: {},
-    text: String,
+    text: {},
     visible: Boolean
   }
 };
@@ -2056,8 +2056,8 @@ const DxLookupConfig = {
     allowClearing: Boolean,
     calculateCellValue: Function,
     dataSource: {},
-    displayExpr: [Function, String],
-    valueExpr: [String, Function]
+    displayExpr: {},
+    valueExpr: {}
   }
 };
 
@@ -2302,7 +2302,7 @@ const DxPopupConfig = {
     "update:wrapperAttr": null,
   },
   props: {
-    accessKey: String,
+    accessKey: {},
     animation: Object,
     bindingOptions: Object,
     closeOnOutsideClick: [Boolean, Function],
@@ -2319,7 +2319,7 @@ const DxPopupConfig = {
     height: [Function, Number, String],
     hideOnOutsideClick: [Boolean, Function],
     hideOnParentScroll: Boolean,
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     maxHeight: [Function, Number, String],
     maxWidth: [Function, Number, String],
@@ -2512,7 +2512,7 @@ const DxRowDraggingConfig = {
     dragTemplate: {},
     dropFeedbackMode: {},
     filter: String,
-    group: String,
+    group: {},
     handle: String,
     onAdd: Function,
     onDragChange: Function,
@@ -2554,7 +2554,7 @@ const DxScrollingConfig = {
     columnRenderingMode: {},
     mode: {},
     preloadEnabled: Boolean,
-    renderAsync: Boolean,
+    renderAsync: {},
     rowRenderingMode: {},
     scrollByContent: Boolean,
     scrollByThumb: Boolean,
@@ -2583,7 +2583,7 @@ const DxSearchConfig = {
     editorOptions: {},
     enabled: Boolean,
     mode: {},
-    searchExpr: [Array, Function, String],
+    searchExpr: {},
     timeout: Number
   }
 };
@@ -2668,7 +2668,7 @@ const DxShowConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -2861,7 +2861,7 @@ const DxToolbarConfig = {
   props: {
     disabled: Boolean,
     items: Array,
-    visible: Boolean
+    visible: {}
   }
 };
 
@@ -2893,7 +2893,7 @@ const DxToolbarItemConfig = {
     "update:widget": null,
   },
   props: {
-    cssClass: String,
+    cssClass: {},
     disabled: Boolean,
     html: String,
     locateInMenu: {},

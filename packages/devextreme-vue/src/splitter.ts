@@ -42,7 +42,7 @@ const componentConfig = {
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
-    height: [Function, Number, String],
+    height: {},
     hoverStateEnabled: Boolean,
     items: Array,
     itemTemplate: {},
@@ -62,7 +62,7 @@ const componentConfig = {
     rtlEnabled: Boolean,
     separatorSize: Number,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,
@@ -130,13 +130,13 @@ const DxItemConfig = {
   },
   props: {
     collapsed: Boolean,
-    collapsedSize: [Number, String],
+    collapsedSize: {},
     collapsible: Boolean,
-    maxSize: [Number, String],
-    minSize: [Number, String],
+    maxSize: {},
+    minSize: {},
     resizable: Boolean,
-    size: [Number, String],
-    splitter: Object,
+    size: {},
+    splitter: {},
     template: {},
     text: String,
     visible: Boolean

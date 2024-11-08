@@ -40,8 +40,8 @@ const componentConfig = {
   props: {
     disabled: Boolean,
     elementAttr: Object,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     isValid: Boolean,
@@ -64,7 +64,7 @@ const componentConfig = {
     validationStatus: {},
     value: {},
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

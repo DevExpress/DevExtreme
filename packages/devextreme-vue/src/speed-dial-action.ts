@@ -28,11 +28,11 @@ interface DxSpeedDialAction extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     icon: String,
     index: Number,

@@ -65,9 +65,9 @@ const componentConfig = {
     lossColor: String,
     margin: Object,
     maxColor: String,
-    maxValue: Number,
+    maxValue: {},
     minColor: String,
-    minValue: Number,
+    minValue: {},
     onDisposing: Function,
     onDrawn: Function,
     onExported: Function,
@@ -171,7 +171,7 @@ const DxBorderConfig = {
   props: {
     color: String,
     dashStyle: {},
-    opacity: Number,
+    opacity: {},
     visible: Boolean,
     width: Number
   }
@@ -291,8 +291,8 @@ const DxSizeConfig = {
     "update:width": null,
   },
   props: {
-    height: Number,
-    width: Number
+    height: {},
+    width: {}
   }
 };
 
@@ -330,16 +330,16 @@ const DxTooltipConfig = {
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: Function,
+    customizeTooltip: {},
     enabled: Boolean,
     font: Object,
     format: {},
     interactive: Boolean,
-    opacity: Number,
+    opacity: {},
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     shadow: Object,
-    zIndex: Number
+    zIndex: {}
   }
 };
 

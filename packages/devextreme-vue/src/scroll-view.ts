@@ -37,7 +37,7 @@ const componentConfig = {
     direction: {},
     disabled: Boolean,
     elementAttr: Object,
-    height: [Function, Number, String],
+    height: {},
     onDisposing: Function,
     onInitialized: Function,
     onOptionChanged: Function,
@@ -54,7 +54,7 @@ const componentConfig = {
     scrollByThumb: Boolean,
     showScrollbar: String,
     useNative: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

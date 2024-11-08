@@ -53,20 +53,20 @@ interface DxDropDownButton extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     dataSource: {},
     deferRendering: Boolean,
     disabled: Boolean,
-    displayExpr: [Function, String],
+    displayExpr: {},
     dropDownContentTemplate: {},
     dropDownOptions: Object,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
-    icon: String,
+    icon: {},
     items: Array,
     itemTemplate: {},
     keyExpr: String,
@@ -92,7 +92,7 @@ const componentConfig = {
     useItemTextAsTitle: Boolean,
     useSelectMode: Boolean,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: {},
     wrapItemText: Boolean
   },
   emits: {
@@ -296,7 +296,7 @@ const DxDropDownOptionsConfig = {
     "update:wrapperAttr": null,
   },
   props: {
-    accessKey: String,
+    accessKey: {},
     animation: Object,
     bindingOptions: Object,
     closeOnOutsideClick: [Boolean, Function],
@@ -313,7 +313,7 @@ const DxDropDownOptionsConfig = {
     height: [Function, Number, String],
     hideOnOutsideClick: [Boolean, Function],
     hideOnParentScroll: Boolean,
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     maxHeight: [Function, Number, String],
     maxWidth: [Function, Number, String],
@@ -410,7 +410,7 @@ const DxHideConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -548,7 +548,7 @@ const DxShowConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -605,7 +605,7 @@ const DxToolbarItemConfig = {
     "update:widget": null,
   },
   props: {
-    cssClass: String,
+    cssClass: {},
     disabled: Boolean,
     html: String,
     locateInMenu: {},
