@@ -94,7 +94,7 @@ interface DxLookup extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     applyButtonText: String,
     applyValueMode: {},
@@ -104,8 +104,8 @@ const componentConfig = {
     dataSource: {},
     deferRendering: Boolean,
     disabled: Boolean,
-    displayExpr: [Function, String],
-    displayValue: String,
+    displayExpr: {},
+    displayValue: {},
     dropDownCentered: Boolean,
     dropDownOptions: Object,
     elementAttr: Object,
@@ -114,8 +114,8 @@ const componentConfig = {
     fullScreen: Boolean,
     grouped: Boolean,
     groupTemplate: {},
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     inputAttr: {},
     isDirty: Boolean,
@@ -174,7 +174,7 @@ const componentConfig = {
     valueChangeEvent: String,
     valueExpr: [Function, String],
     visible: Boolean,
-    width: [Function, Number, String],
+    width: {},
     wrapItemText: Boolean
   },
   emits: {
@@ -420,10 +420,10 @@ const DxDropDownOptionsConfig = {
     disabled: Boolean,
     enableBodyScroll: Boolean,
     height: [Function, Number, String],
-    hideEvent: [Object, String],
+    hideEvent: {},
     hideOnOutsideClick: [Boolean, Function],
     hideOnParentScroll: Boolean,
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     maxHeight: [Function, Number, String],
     maxWidth: [Function, Number, String],
@@ -443,7 +443,7 @@ const DxDropDownOptionsConfig = {
     shading: Boolean,
     shadingColor: String,
     showCloseButton: Boolean,
-    showEvent: [Object, String],
+    showEvent: {},
     showTitle: Boolean,
     target: {},
     title: String,
@@ -518,7 +518,7 @@ const DxHideConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -543,8 +543,8 @@ const DxHideEventConfig = {
     "update:name": null,
   },
   props: {
-    delay: Number,
-    name: String
+    delay: {},
+    name: {}
   }
 };
 
@@ -669,7 +669,7 @@ const DxShowConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -690,8 +690,8 @@ const DxShowEventConfig = {
     "update:name": null,
   },
   props: {
-    delay: Number,
-    name: String
+    delay: {},
+    name: {}
   }
 };
 
@@ -745,7 +745,7 @@ const DxToolbarItemConfig = {
     "update:widget": null,
   },
   props: {
-    cssClass: String,
+    cssClass: {},
     disabled: Boolean,
     html: String,
     locateInMenu: {},

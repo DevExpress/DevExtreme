@@ -90,7 +90,7 @@ interface DxScheduler extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     adaptivityEnabled: Boolean,
     allDayExpr: String,
     allDayPanelMode: {},
@@ -102,11 +102,11 @@ const componentConfig = {
     crossScrollingEnabled: Boolean,
     currentDate: [Date, Number, String],
     currentView: {},
-    customizeDateNavigatorText: Function,
+    customizeDateNavigatorText: {},
     dataCellTemplate: {},
     dataSource: {},
     dateCellTemplate: {},
-    dateSerializationFormat: String,
+    dateSerializationFormat: {},
     descriptionExpr: String,
     disabled: Boolean,
     dropDownAppointmentTemplate: {},
@@ -119,12 +119,12 @@ const componentConfig = {
     focusStateEnabled: Boolean,
     groupByDate: Boolean,
     groups: Array,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     indicatorUpdateInterval: Number,
-    max: [Date, Number, String],
+    max: {},
     maxAppointmentsPerCell: {},
-    min: [Date, Number, String],
+    min: {},
     noDataText: String,
     offset: Number,
     onAppointmentAdded: Function,
@@ -167,7 +167,7 @@ const componentConfig = {
     useDropDownViewSwitcher: Boolean,
     views: Array,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,
@@ -292,7 +292,7 @@ const DxAppointmentDraggingConfig = {
   props: {
     autoScroll: Boolean,
     data: {},
-    group: String,
+    group: {},
     onAdd: Function,
     onDragEnd: Function,
     onDragMove: Function,
@@ -431,11 +431,11 @@ const DxViewConfig = {
     groups: Array,
     intervalCount: Number,
     maxAppointmentsPerCell: {},
-    name: String,
+    name: {},
     offset: Number,
     resourceCellTemplate: {},
     scrolling: Object,
-    startDate: [Date, Number, String],
+    startDate: {},
     startDayHour: Number,
     timeCellTemplate: {},
     type: {}

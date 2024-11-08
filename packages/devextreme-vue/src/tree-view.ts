@@ -74,7 +74,7 @@ interface DxTreeView extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     animationEnabled: Boolean,
     collapseIcon: {},
@@ -92,8 +92,8 @@ const componentConfig = {
     expandNodesRecursive: Boolean,
     focusStateEnabled: Boolean,
     hasItemsExpr: [Function, String],
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
     items: Array,
@@ -122,7 +122,7 @@ const componentConfig = {
     searchEnabled: Boolean,
     searchExpr: [Array, Function, String],
     searchMode: {},
-    searchTimeout: Number,
+    searchTimeout: {},
     searchValue: String,
     selectAllText: String,
     selectByClick: Boolean,
@@ -134,7 +134,7 @@ const componentConfig = {
     useNativeScrolling: Boolean,
     virtualModeEnabled: Boolean,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,
@@ -231,8 +231,8 @@ const DxButtonConfig = {
   },
   props: {
     location: {},
-    name: String,
-    options: Object
+    name: {},
+    options: {}
   }
 };
 
@@ -266,12 +266,12 @@ const DxItemConfig = {
   props: {
     disabled: Boolean,
     expanded: Boolean,
-    hasItems: Boolean,
+    hasItems: {},
     html: String,
     icon: String,
-    id: [Number, String],
+    id: {},
     items: Array,
-    parentId: [Number, String],
+    parentId: {},
     selected: Boolean,
     template: {},
     text: String,
@@ -317,14 +317,14 @@ const DxOptionsConfig = {
     "update:width": null,
   },
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     bindingOptions: Object,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     icon: String,
     onClick: Function,
@@ -339,9 +339,9 @@ const DxOptionsConfig = {
     text: String,
     type: {},
     useSubmitBehavior: Boolean,
-    validationGroup: String,
+    validationGroup: {},
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   }
 };
 
@@ -413,15 +413,15 @@ const DxSearchEditorOptionsConfig = {
     "update:width": null,
   },
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     bindingOptions: Object,
     buttons: Array,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     inputAttr: {},
     isDirty: Boolean,
@@ -468,7 +468,7 @@ const DxSearchEditorOptionsConfig = {
     value: String,
     valueChangeEvent: String,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   }
 };
 

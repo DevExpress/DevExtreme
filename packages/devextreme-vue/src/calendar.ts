@@ -51,17 +51,17 @@ interface DxCalendar extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     cellTemplate: {},
-    dateSerializationFormat: String,
+    dateSerializationFormat: {},
     disabled: Boolean,
     disabledDates: [Array, Function],
     elementAttr: Object,
     firstDayOfWeek: {},
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     isValid: Boolean,
@@ -89,7 +89,7 @@ const componentConfig = {
     value: [Array, Date, Number, String],
     visible: Boolean,
     weekNumberRule: {},
-    width: [Function, Number, String],
+    width: {},
     zoomLevel: {}
   },
   emits: {

@@ -100,7 +100,7 @@ interface DxTagBox extends AccessibleOptions {
 const componentConfig = {
   props: {
     acceptCustomValue: Boolean,
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     applyValueMode: {},
     buttons: Array,
@@ -108,7 +108,7 @@ const componentConfig = {
     dataSource: {},
     deferRendering: Boolean,
     disabled: Boolean,
-    displayExpr: [Function, String],
+    displayExpr: {},
     dropDownButtonTemplate: {},
     dropDownOptions: Object,
     elementAttr: Object,
@@ -116,9 +116,9 @@ const componentConfig = {
     focusStateEnabled: Boolean,
     grouped: Boolean,
     groupTemplate: {},
-    height: [Function, Number, String],
+    height: {},
     hideSelectedItems: Boolean,
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     inputAttr: {},
     isDirty: Boolean,
@@ -127,7 +127,7 @@ const componentConfig = {
     itemTemplate: {},
     label: String,
     labelMode: {},
-    maxDisplayedTags: Number,
+    maxDisplayedTags: {},
     maxFilterQueryLength: Number,
     maxLength: [Number, String],
     minSearchLength: Number,
@@ -184,7 +184,7 @@ const componentConfig = {
     valueChangeEvent: String,
     valueExpr: [Function, String],
     visible: Boolean,
-    width: [Function, Number, String],
+    width: {},
     wrapItemText: Boolean
   },
   emits: {
@@ -371,8 +371,8 @@ const DxButtonConfig = {
   },
   props: {
     location: {},
-    name: String,
-    options: Object
+    name: {},
+    options: {}
   }
 };
 
@@ -461,7 +461,7 @@ const DxDropDownOptionsConfig = {
     "update:wrapperAttr": null,
   },
   props: {
-    accessKey: String,
+    accessKey: {},
     animation: Object,
     bindingOptions: Object,
     closeOnOutsideClick: [Boolean, Function],
@@ -478,7 +478,7 @@ const DxDropDownOptionsConfig = {
     height: [Function, Number, String],
     hideOnOutsideClick: [Boolean, Function],
     hideOnParentScroll: Boolean,
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     maxHeight: [Function, Number, String],
     maxWidth: [Function, Number, String],
@@ -575,7 +575,7 @@ const DxHideConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -687,14 +687,14 @@ const DxOptionsConfig = {
     "update:width": null,
   },
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     bindingOptions: Object,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     icon: String,
     onClick: Function,
@@ -709,9 +709,9 @@ const DxOptionsConfig = {
     text: String,
     type: {},
     useSubmitBehavior: Boolean,
-    validationGroup: String,
+    validationGroup: {},
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   }
 };
 
@@ -772,7 +772,7 @@ const DxShowConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -829,7 +829,7 @@ const DxToolbarItemConfig = {
     "update:widget": null,
   },
   props: {
-    cssClass: String,
+    cssClass: {},
     disabled: Boolean,
     html: String,
     locateInMenu: {},

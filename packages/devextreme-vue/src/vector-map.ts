@@ -59,7 +59,7 @@ const componentConfig = {
     center: Array,
     commonAnnotationSettings: Object,
     controlBar: Object,
-    customizeAnnotation: Function,
+    customizeAnnotation: {},
     disabled: Boolean,
     elementAttr: Object,
     export: Object,
@@ -212,29 +212,29 @@ const DxAnnotationConfig = {
     border: Object,
     color: String,
     coordinates: Array,
-    customizeTooltip: Function,
+    customizeTooltip: {},
     data: {},
-    description: String,
+    description: {},
     font: Object,
-    height: Number,
+    height: {},
     image: [Object, String],
-    name: String,
-    offsetX: Number,
-    offsetY: Number,
+    name: {},
+    offsetX: {},
+    offsetY: {},
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     shadow: Object,
     template: {},
-    text: String,
+    text: {},
     textOverflow: {},
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
     type: {},
-    width: Number,
+    width: {},
     wordWrap: {},
-    x: Number,
-    y: Number
+    x: {},
+    y: {}
   }
 };
 
@@ -267,7 +267,7 @@ const DxAnnotationBorderConfig = {
     color: String,
     cornerRadius: Number,
     dashStyle: {},
-    opacity: Number,
+    opacity: {},
     visible: Boolean,
     width: Number
   }
@@ -313,7 +313,7 @@ const DxBorderConfig = {
     color: String,
     cornerRadius: Number,
     dashStyle: {},
-    opacity: Number,
+    opacity: {},
     visible: Boolean,
     width: Number
   }
@@ -365,28 +365,28 @@ const DxCommonAnnotationSettingsConfig = {
     border: Object,
     color: String,
     coordinates: Array,
-    customizeTooltip: Function,
+    customizeTooltip: {},
     data: {},
-    description: String,
+    description: {},
     font: Object,
-    height: Number,
+    height: {},
     image: [Object, String],
-    offsetX: Number,
-    offsetY: Number,
+    offsetX: {},
+    offsetY: {},
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     shadow: Object,
     template: {},
-    text: String,
+    text: {},
     textOverflow: {},
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
     type: {},
-    width: Number,
+    width: {},
     wordWrap: {},
-    x: Number,
-    y: Number
+    x: {},
+    y: {}
   }
 };
 
@@ -448,7 +448,7 @@ const DxExportConfig = {
     formats: Array,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: Function
+    svgToCanvas: {}
   }
 };
 
@@ -493,7 +493,7 @@ const DxImageConfig = {
   },
   props: {
     height: Number,
-    url: String,
+    url: {},
     width: Number
   }
 };
@@ -566,10 +566,10 @@ const DxLayerConfig = {
     borderColor: String,
     borderWidth: Number,
     color: String,
-    colorGroupingField: String,
+    colorGroupingField: {},
     colorGroups: Array,
     customize: Function,
-    dataField: String,
+    dataField: {},
     dataSource: {},
     elementType: {},
     hoveredBorderColor: String,
@@ -589,7 +589,7 @@ const DxLayerConfig = {
     selectedColor: String,
     selectionMode: {},
     size: Number,
-    sizeGroupingField: String,
+    sizeGroupingField: {},
     sizeGroups: Array,
     type: {}
   }
@@ -636,7 +636,7 @@ const DxLegendConfig = {
     "update:visible": null,
   },
   props: {
-    backgroundColor: String,
+    backgroundColor: {},
     border: Object,
     columnCount: Number,
     columnItemSpacing: Number,
@@ -648,7 +648,7 @@ const DxLegendConfig = {
     itemsAlignment: {},
     itemTextPosition: {},
     margin: [Number, Object],
-    markerColor: String,
+    markerColor: {},
     markerShape: {},
     markerSize: Number,
     markerTemplate: {},
@@ -696,7 +696,7 @@ const DxLegendTitleConfig = {
     font: Object,
     horizontalAlignment: {},
     margin: Object,
-    placeholderSize: Number,
+    placeholderSize: {},
     subtitle: [Object, String],
     text: String,
     verticalAlignment: {}
@@ -844,8 +844,8 @@ const DxSizeConfig = {
     "update:width": null,
   },
   props: {
-    height: Number,
-    width: Number
+    height: {},
+    width: {}
   }
 };
 
@@ -917,7 +917,7 @@ const DxTitleConfig = {
     font: Object,
     horizontalAlignment: {},
     margin: [Object, Number],
-    placeholderSize: Number,
+    placeholderSize: {},
     subtitle: [Object, String],
     text: String,
     textOverflow: {},
@@ -958,14 +958,14 @@ const DxTooltipConfig = {
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: Function,
+    customizeTooltip: {},
     enabled: Boolean,
     font: Object,
-    opacity: Number,
+    opacity: {},
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     shadow: Object,
-    zIndex: Number
+    zIndex: {}
   }
 };
 
@@ -994,7 +994,7 @@ const DxTooltipBorderConfig = {
   props: {
     color: String,
     dashStyle: {},
-    opacity: Number,
+    opacity: {},
     visible: Boolean,
     width: Number
   }
@@ -1024,7 +1024,7 @@ const DxVectorMapTitleConfig = {
     font: Object,
     horizontalAlignment: {},
     margin: [Number, Object],
-    placeholderSize: Number,
+    placeholderSize: {},
     subtitle: [Object, String],
     text: String,
     textOverflow: {},

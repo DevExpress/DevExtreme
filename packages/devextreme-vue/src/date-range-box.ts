@@ -92,14 +92,14 @@ interface DxDateRangeBox extends AccessibleOptions {
 const componentConfig = {
   props: {
     acceptCustomValue: Boolean,
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     applyButtonText: String,
     applyValueMode: {},
     buttons: Array,
     calendarOptions: Object,
     cancelButtonText: String,
-    dateSerializationFormat: String,
+    dateSerializationFormat: {},
     deferRendering: Boolean,
     disabled: Boolean,
     disableOutOfRangeSelection: Boolean,
@@ -115,16 +115,16 @@ const componentConfig = {
     endDatePlaceholder: String,
     endDateText: String,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     invalidEndDateMessage: String,
     invalidStartDateMessage: String,
     isDirty: Boolean,
     isValid: Boolean,
     labelMode: {},
-    max: [Date, Number, String],
-    min: [Date, Number, String],
+    max: {},
+    min: {},
     multiView: Boolean,
     onChange: Function,
     onClosed: Function,
@@ -169,7 +169,7 @@ const componentConfig = {
     value: Array,
     valueChangeEvent: String,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,
@@ -348,8 +348,8 @@ const DxButtonConfig = {
   },
   props: {
     location: {},
-    name: String,
-    options: Object
+    name: {},
+    options: {}
   }
 };
 
@@ -410,18 +410,18 @@ const DxCalendarOptionsConfig = {
     "update:zoomLevel": null,
   },
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     bindingOptions: Object,
     cellTemplate: {},
-    dateSerializationFormat: String,
+    dateSerializationFormat: {},
     disabled: Boolean,
     disabledDates: [Array, Function],
     elementAttr: Object,
     firstDayOfWeek: {},
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     isValid: Boolean,
@@ -449,7 +449,7 @@ const DxCalendarOptionsConfig = {
     value: [Array, Date, Number, String],
     visible: Boolean,
     weekNumberRule: {},
-    width: [Function, Number, String],
+    width: {},
     zoomLevel: {}
   }
 };
@@ -562,7 +562,7 @@ const DxDropDownOptionsConfig = {
     "update:wrapperAttr": null,
   },
   props: {
-    accessKey: String,
+    accessKey: {},
     animation: Object,
     bindingOptions: Object,
     closeOnOutsideClick: [Boolean, Function],
@@ -579,7 +579,7 @@ const DxDropDownOptionsConfig = {
     height: [Function, Number, String],
     hideOnOutsideClick: [Boolean, Function],
     hideOnParentScroll: Boolean,
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     maxHeight: [Function, Number, String],
     maxWidth: [Function, Number, String],
@@ -676,7 +676,7 @@ const DxHideConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -762,14 +762,14 @@ const DxOptionsConfig = {
     "update:width": null,
   },
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     bindingOptions: Object,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     icon: String,
     onClick: Function,
@@ -784,9 +784,9 @@ const DxOptionsConfig = {
     text: String,
     type: {},
     useSubmitBehavior: Boolean,
-    validationGroup: String,
+    validationGroup: {},
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   }
 };
 
@@ -847,7 +847,7 @@ const DxShowConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -904,7 +904,7 @@ const DxToolbarItemConfig = {
     "update:widget": null,
   },
   props: {
-    cssClass: String,
+    cssClass: {},
     disabled: Boolean,
     html: String,
     locateInMenu: {},

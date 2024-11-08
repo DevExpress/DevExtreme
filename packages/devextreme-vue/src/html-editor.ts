@@ -53,16 +53,16 @@ interface DxHtmlEditor extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     allowSoftLineBreak: Boolean,
-    converter: Object,
+    converter: {},
     customizeModules: Function,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     imageUpload: Object,
     isDirty: Boolean,
@@ -93,7 +93,7 @@ const componentConfig = {
     value: {},
     variables: Object,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,
@@ -259,7 +259,7 @@ const DxFileUploaderOptionsConfig = {
   props: {
     abortUpload: Function,
     accept: String,
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     allowCanceling: Boolean,
     allowedFileExtensions: Array,
@@ -270,8 +270,8 @@ const DxFileUploaderOptionsConfig = {
     dropZone: {},
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     inputAttr: {},
     invalidFileExtensionMessage: String,
@@ -321,7 +321,7 @@ const DxFileUploaderOptionsConfig = {
     validationStatus: {},
     value: Array,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   }
 };
 
@@ -345,8 +345,8 @@ const DxImageUploadConfig = {
     fileUploaderOptions: Object,
     fileUploadMode: {},
     tabs: Array,
-    uploadDirectory: String,
-    uploadUrl: String
+    uploadDirectory: {},
+    uploadUrl: {}
   }
 };
 
@@ -391,7 +391,7 @@ const DxItemConfig = {
     acceptedValues: Array,
     beginGroup: Boolean,
     closeMenuOnClick: Boolean,
-    cssClass: String,
+    cssClass: {},
     disabled: Boolean,
     formatName: {},
     formatValues: Array,
@@ -621,7 +621,7 @@ const DxToolbarItemConfig = {
   },
   props: {
     acceptedValues: Array,
-    cssClass: String,
+    cssClass: {},
     disabled: Boolean,
     formatName: {},
     formatValues: Array,

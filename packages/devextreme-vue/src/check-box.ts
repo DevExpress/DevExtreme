@@ -41,16 +41,16 @@ interface DxCheckBox extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     disabled: Boolean,
     elementAttr: Object,
     enableThreeStateBehavior: Boolean,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
-    iconSize: [Number, String],
+    iconSize: {},
     isDirty: Boolean,
     isValid: Boolean,
     name: String,
@@ -70,7 +70,7 @@ const componentConfig = {
     validationStatus: {},
     value: {},
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

@@ -43,9 +43,9 @@ const componentConfig = {
     dragDirection: {},
     dragTemplate: {},
     elementAttr: Object,
-    group: String,
+    group: {},
     handle: String,
-    height: [Function, Number, String],
+    height: {},
     onDisposing: Function,
     onDragEnd: Function,
     onDragMove: Function,
@@ -55,7 +55,7 @@ const componentConfig = {
     rtlEnabled: Boolean,
     scrollSensitivity: Number,
     scrollSpeed: Number,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

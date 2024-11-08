@@ -60,23 +60,23 @@ interface DxTextArea extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     autoResizeEnabled: Boolean,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     inputAttr: {},
     isDirty: Boolean,
     isValid: Boolean,
     label: String,
     labelMode: {},
-    maxHeight: [Number, String],
+    maxHeight: {},
     maxLength: [Number, String],
-    minHeight: [Number, String],
+    minHeight: {},
     name: String,
     onChange: Function,
     onContentReady: Function,
@@ -108,7 +108,7 @@ const componentConfig = {
     value: String,
     valueChangeEvent: String,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

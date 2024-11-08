@@ -39,7 +39,7 @@ interface DxFilterBuilder extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     allowHierarchicalFields: Boolean,
     customOperations: Array,
@@ -50,10 +50,10 @@ const componentConfig = {
     focusStateEnabled: Boolean,
     groupOperationDescriptions: Object,
     groupOperations: Array,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
-    maxGroupLevel: Number,
+    maxGroupLevel: {},
     onContentReady: Function,
     onDisposing: Function,
     onEditorPrepared: Function,
@@ -65,7 +65,7 @@ const componentConfig = {
     tabIndex: Number,
     value: [Array, Function, String],
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,
@@ -135,13 +135,13 @@ const DxCustomOperationConfig = {
   },
   props: {
     calculateFilterExpression: Function,
-    caption: String,
+    caption: {},
     customizeText: Function,
-    dataTypes: Array,
+    dataTypes: {},
     editorTemplate: {},
     hasValue: Boolean,
-    icon: String,
-    name: String
+    icon: {},
+    name: {}
   }
 };
 
@@ -172,9 +172,9 @@ const DxFieldConfig = {
   },
   props: {
     calculateFilterExpression: Function,
-    caption: String,
+    caption: {},
     customizeText: Function,
-    dataField: String,
+    dataField: {},
     dataType: {},
     editorOptions: {},
     editorTemplate: {},
@@ -182,7 +182,7 @@ const DxFieldConfig = {
     filterOperations: Array,
     format: {},
     lookup: Object,
-    name: String,
+    name: {},
     trueText: String
   }
 };
@@ -300,9 +300,9 @@ const DxLookupConfig = {
   },
   props: {
     allowClearing: Boolean,
-    dataSource: [Array, Object],
-    displayExpr: [Function, String],
-    valueExpr: [Function, String]
+    dataSource: {},
+    displayExpr: {},
+    valueExpr: {}
   }
 };
 

@@ -44,7 +44,7 @@ interface DxMap extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     apiKey: [Object, String],
     autoAdjust: Boolean,
@@ -54,7 +54,7 @@ const componentConfig = {
     elementAttr: Object,
     focusStateEnabled: Boolean,
     height: [Function, Number, String],
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     markerIconSrc: String,
     markers: Array,

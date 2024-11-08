@@ -87,20 +87,20 @@ interface DxList extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     allowItemDeleting: Boolean,
     bounceEnabled: Boolean,
     collapsibleGroups: Boolean,
     dataSource: {},
     disabled: Boolean,
-    displayExpr: [Function, String],
+    displayExpr: {},
     elementAttr: Object,
     focusStateEnabled: Boolean,
     grouped: Boolean,
     groupTemplate: {},
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     indicateLoading: Boolean,
     itemDeleteMode: {},
@@ -147,7 +147,7 @@ const componentConfig = {
     searchEnabled: Boolean,
     searchExpr: [Array, Function, String],
     searchMode: {},
-    searchTimeout: Number,
+    searchTimeout: {},
     searchValue: String,
     selectAllMode: {},
     selectAllText: String,
@@ -160,7 +160,7 @@ const componentConfig = {
     tabIndex: Number,
     useNativeScrolling: Boolean,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,
@@ -272,8 +272,8 @@ const DxButtonConfig = {
   },
   props: {
     location: {},
-    name: String,
-    options: Object
+    name: {},
+    options: {}
   }
 };
 
@@ -389,9 +389,9 @@ const DxItemDraggingConfig = {
     dropFeedbackMode: {},
     elementAttr: Object,
     filter: String,
-    group: String,
+    group: {},
     handle: String,
-    height: [Function, Number, String],
+    height: {},
     itemOrientation: {},
     moveItemOnDrop: Boolean,
     onAdd: Function,
@@ -407,7 +407,7 @@ const DxItemDraggingConfig = {
     rtlEnabled: Boolean,
     scrollSensitivity: Number,
     scrollSpeed: Number,
-    width: [Function, Number, String]
+    width: {}
   }
 };
 
@@ -471,14 +471,14 @@ const DxOptionsConfig = {
     "update:width": null,
   },
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     bindingOptions: Object,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     icon: String,
     onClick: Function,
@@ -493,9 +493,9 @@ const DxOptionsConfig = {
     text: String,
     type: {},
     useSubmitBehavior: Boolean,
-    validationGroup: String,
+    validationGroup: {},
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   }
 };
 
@@ -567,15 +567,15 @@ const DxSearchEditorOptionsConfig = {
     "update:width": null,
   },
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     bindingOptions: Object,
     buttons: Array,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     inputAttr: {},
     isDirty: Boolean,
@@ -622,7 +622,7 @@ const DxSearchEditorOptionsConfig = {
     value: String,
     valueChangeEvent: String,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   }
 };
 

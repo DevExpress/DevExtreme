@@ -38,7 +38,7 @@ interface DxPivotGridFieldChooser extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     allowSearch: Boolean,
     applyChangesMode: {},
@@ -49,7 +49,7 @@ const componentConfig = {
     focusStateEnabled: Boolean,
     headerFilter: Object,
     height: [Function, Number, String],
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     layout: {},
     onContentReady: Function,
@@ -63,7 +63,7 @@ const componentConfig = {
     tabIndex: Number,
     texts: Object,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

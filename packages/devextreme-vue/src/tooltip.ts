@@ -52,10 +52,10 @@ const componentConfig = {
     deferRendering: Boolean,
     disabled: Boolean,
     height: [Function, Number, String],
-    hideEvent: [Object, String],
+    hideEvent: {},
     hideOnOutsideClick: [Boolean, Function],
     hideOnParentScroll: Boolean,
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     maxHeight: [Function, Number, String],
     maxWidth: [Function, Number, String],
@@ -73,7 +73,7 @@ const componentConfig = {
     rtlEnabled: Boolean,
     shading: Boolean,
     shadingColor: String,
-    showEvent: [Object, String],
+    showEvent: {},
     target: {},
     visible: Boolean,
     width: [Function, Number, String],
@@ -268,7 +268,7 @@ const DxHideConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -293,8 +293,8 @@ const DxHideEventConfig = {
     "update:name": null,
   },
   props: {
-    delay: Number,
-    name: String
+    delay: {},
+    name: {}
   }
 };
 
@@ -393,7 +393,7 @@ const DxShowConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -414,8 +414,8 @@ const DxShowEventConfig = {
     "update:name": null,
   },
   props: {
-    delay: Number,
-    name: String
+    delay: {},
+    name: {}
   }
 };
 

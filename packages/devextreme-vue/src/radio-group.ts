@@ -45,15 +45,15 @@ interface DxRadioGroup extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     dataSource: {},
     disabled: Boolean,
-    displayExpr: [Function, String],
+    displayExpr: {},
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     isValid: Boolean,
@@ -77,7 +77,7 @@ const componentConfig = {
     value: {},
     valueExpr: [Function, String],
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

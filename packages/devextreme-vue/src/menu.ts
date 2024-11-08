@@ -55,7 +55,7 @@ interface DxMenu extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     adaptivityEnabled: Boolean,
     animation: Object,
@@ -66,9 +66,9 @@ const componentConfig = {
     displayExpr: [Function, String],
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: {},
     hideSubmenuOnMouseLeave: Boolean,
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     items: Array,
     itemsExpr: [Function, String],
@@ -96,7 +96,7 @@ const componentConfig = {
     submenuDirection: {},
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,
@@ -315,7 +315,7 @@ const DxHideConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -468,7 +468,7 @@ const DxShowConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
