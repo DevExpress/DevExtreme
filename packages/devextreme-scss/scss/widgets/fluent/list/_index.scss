@@ -229,6 +229,15 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
       .dx-list-item {
         @include item-states();
       }
+
+      .dx-list-group-header {
+        @include item-states();
+
+        &.dx-state-hover {
+          background-color: $list-item-hover-bg;
+          color: $list-item-hover-color;
+        }
+      }
     }
   }
 

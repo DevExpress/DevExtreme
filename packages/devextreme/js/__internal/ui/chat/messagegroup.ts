@@ -15,7 +15,9 @@ import type Chat from './chat';
 import MessageBubble from './messagebubble';
 import type { MessageTemplate } from './messagelist';
 
-const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
+export const MESSAGE_DATA_KEY = 'dxMessageData';
+
+export const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 export const CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-messagegroup-alignment-start';
 export const CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-messagegroup-alignment-end';
 const CHAT_MESSAGEGROUP_INFORMATION_CLASS = 'dx-chat-messagegroup-information';
@@ -111,7 +113,9 @@ class MessageGroup extends Widget<Properties> {
   }
 
   _renderMessageBubble(message: Message): void {
-    const $bubble = $('<div>');
+    const $bubble = $('<div>')
+      .data(MESSAGE_DATA_KEY, message);
+
     const { messageTemplate, messageTemplateData } = this.option();
 
     this._createComponent($bubble, MessageBubble, {

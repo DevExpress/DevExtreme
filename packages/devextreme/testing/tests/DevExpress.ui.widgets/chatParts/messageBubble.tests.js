@@ -46,6 +46,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
             this.reinit({
                 template,
+                text: 'text',
                 templateData: {
                     message: { text: 'text' },
                 },
@@ -62,6 +63,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
                 $('<h1>').text(`template text: ${data.message.text}`).appendTo(container);
             };
             this.reinit({
+                text: 'text',
                 templateData: {
                     message: { text: 'text' },
                 },

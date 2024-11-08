@@ -286,14 +286,38 @@ export const ListBase = CollectionWidget.inherit({
   },
 
   _refreshItemElements() {
-    if (!this.option('grouped')) {
-      this._itemElementsCache = this._getItemsContainer().children(this._itemSelector());
-    } else {
-      this._itemElementsCache = this._getItemsContainer()
+    const { grouped } = this.option();
+    const $itemsContainer = this._getItemsContainer();
+
+    if (grouped) {
+      this._itemElementsCache = $itemsContainer
         .children(`.${LIST_GROUP_CLASS}`)
         .children(`.${LIST_GROUP_BODY_CLASS}`)
         .children(this._itemSelector());
+    } else {
+      this._itemElementsCache = $itemsContainer.children(this._itemSelector());
     }
+  },
+
+  _getItemAndHeaderElements() {
+    const itemSelector = `> .${LIST_GROUP_BODY_CLASS} > ${this._itemSelector()}`;
+    const itemAndHeaderSelector = `${itemSelector}, > .${LIST_GROUP_HEADER_CLASS}`;
+
+    const $listGroup = this._getItemsContainer().children(`.${LIST_GROUP_CLASS}`);
+
+    const $items = $listGroup.find(itemAndHeaderSelector).filter(':visible');
+
+    return $items;
+  },
+
+  _getAvailableItems($itemElements) {
+    const { collapsibleGroups } = this.option();
+
+    if (collapsibleGroups) {
+      return this._getItemAndHeaderElements();
+    }
+
+    return this.callBase($itemElements);
   },
 
   _modifyByChanges() {
@@ -344,7 +368,23 @@ export const ListBase = CollectionWidget.inherit({
     return true;
   },
 
+  _updateActiveStateUnit(): void {
+    const { collapsibleGroups } = this.option();
+
+    const selectors = [
+      LIST_ITEM_SELECTOR,
+      SELECT_ALL_ITEM_SELECTOR,
+    ];
+
+    if (collapsibleGroups) {
+      selectors.push(`.${LIST_GROUP_HEADER_CLASS}`);
+    }
+
+    this._activeStateUnit = selectors.join(',');
+  },
+
   _init() {
+    this._updateActiveStateUnit();
     this.callBase();
     this._dataController.resetDataSourcePageIndex();
     this._$container = this.$element();
@@ -605,29 +645,60 @@ export const ListBase = CollectionWidget.inherit({
   },
 
   _attachGroupCollapseEvent() {
-    const eventName = addNamespace(clickEventName, this.NAME);
-    const selector = `.${LIST_GROUP_HEADER_CLASS}`;
+    const { collapsibleGroups } = this.option();
+
+    const eventNameClick = addNamespace(clickEventName, this.NAME);
+    const headerSelector = `.${LIST_GROUP_HEADER_CLASS}`;
+
     const $element = this.$element();
-    const collapsibleGroups = this.option('collapsibleGroups');
 
     $element.toggleClass(LIST_COLLAPSIBLE_GROUPS_CLASS, collapsibleGroups);
 
-    eventsEngine.off($element, eventName, selector);
+    eventsEngine.off($element, eventNameClick, headerSelector);
+
     if (collapsibleGroups) {
-      eventsEngine.on($element, eventName, selector, (e) => {
-        this._createAction((e) => {
-          const $group = $(e.event.currentTarget).parent();
-          this._collapseGroupHandler($group);
-          if (this.option('focusStateEnabled')) {
-            this.option('focusedElement', getPublicElement($group.find(`.${LIST_ITEM_CLASS}`).eq(0)));
-          }
-        }, {
-          validatingTargetName: 'element',
-        })({
-          event: e,
-        });
+      eventsEngine.on($element, eventNameClick, headerSelector, (e) => {
+        this._processGroupCollapse(e);
       });
     }
+  },
+
+  _processGroupCollapse(e): void {
+    const actionCallback = (e) => {
+      const { focusStateEnabled } = this.option();
+      const $group = $(e.event.currentTarget).parent();
+
+      this._collapseGroupHandler($group);
+
+      if (focusStateEnabled) {
+        const listItemElement = getPublicElement($group.find(`.${LIST_ITEM_CLASS}`).eq(0));
+
+        this.option({ focusedElement: listItemElement });
+      }
+    };
+
+    const actionParams = {
+      validatingTargetName: 'element',
+    };
+
+    const action = this._createAction(actionCallback, actionParams);
+
+    action({ event: e });
+  },
+
+  _enterKeyHandler(e): void {
+    const { collapsibleGroups, focusedElement } = this.option();
+    const isGroupHeader = $(focusedElement).hasClass(LIST_GROUP_HEADER_CLASS);
+
+    if (collapsibleGroups && isGroupHeader) {
+      const params = this._getHandlerExtendedParams(e, $(focusedElement));
+
+      this._processGroupCollapse(params);
+
+      return;
+    }
+
+    this.callBase(e);
   },
 
   _collapseGroupHandler($group, toggle) {
@@ -978,8 +1049,11 @@ export const ListBase = CollectionWidget.inherit({
         this._createScrollViewActions();
         break;
       case 'grouped':
-      case 'collapsibleGroups':
       case 'groupTemplate':
+        this._invalidate();
+        break;
+      case 'collapsibleGroups':
+        this._updateActiveStateUnit();
         this._invalidate();
         break;
       case 'wrapItemText':

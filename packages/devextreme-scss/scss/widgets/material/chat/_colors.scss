@@ -3,53 +3,119 @@
 
 // adduse
 
+/**
+* $name 10. Background color
+* $type color
+*/
 $chat-background-color: $base-bg !default;
-$chat-border-color: $base-border-color !default;
-$chat-messagebox-border-color: $base-border-color !default;
-$chat-avatar-color: $base-text-color !default;
-$chat-avatar-background-color: $base-border-color !default;
-$chat-bubble-color-primary: $base-text-color !default;
-$chat-bubble-background-color-primary: null !default;
-$chat-bubble-background-color-secondary: null !default;
-$chat-information-color: null !default;
 
-$chat-messagelist-day-header-color: null !default;
+/**
+* $name 20. Border color
+* $type color
+*/
+$chat-border-color: $base-border-color !default;
+$chat-messagebox-border-color: $chat-border-color !default;
+
+/**
+* $name 30. Avatar text color
+* $type color
+*/
+$chat-avatar-color: $base-text-color !default;
+
+/**
+* $name 31. Avatar background color
+* $type color
+*/
+$chat-avatar-background-color: $base-border-color !default;
+
+/**
+* $name 40. Bubble text color
+* $type color
+*/
+$chat-bubble-color-primary: $base-text-color !default;
+
+/**
+* $name 41. Bubble background color (your messages)
+* $type color
+*/
+$chat-bubble-background-color-primary: null !default;
+
+/**
+* $name 42. Bubble background color (other messages)
+* $type color
+*/
+$chat-bubble-background-color-secondary: rgba($base-inverted-bg, 0.08) !default;
+
+/**
+* $name 50. Message caption color
+* $type color
+*/
+$chat-information-color: rgba($base-inverted-bg, 0.6) !default;
+
+/**
+* $name 60. Day header color
+* $type color
+*/
+$chat-messagelist-day-header-color: rgba($base-inverted-bg, 0.6) !default;
+
+/**
+* $name 61. Empty list icon color
+* $type color
+*/
 $chat-messagelist-empty-icon-color: rgba($base-inverted-bg, 0.38) !default;
+
+/**
+* $name 62. Empty list icon background color
+* $type color
+*/
 $chat-messagelist-empty-icon-background-color: rgba($base-inverted-bg, 0.08) !default;
+
+/**
+* $name 63. Empty list message color
+* $type color
+*/
 $chat-messagelist-empty-message-color: rgba($base-inverted-bg, 0.87) !default;
+
+/**
+* $name 64. Empty list prompt color
+* $type color
+*/
 $chat-messagelist-empty-prompt-color: rgba($base-inverted-bg, 0.6) !default;
 
+/**
+* $name 70. Error color
+* $type color
+*/
 $chat-alertlist-color: $base-invalid-color !default;
 
-$chat-typingindicator-color: null !default;
-$chat-typingindicator-bubble-bg-color: null !default;
-$chat-typingindicator-circle-bg-color: null !default;
-$chat-typingindicator-circle-bg-color-center: null !default;
+/**
+* $name 80. Typing indicator text color
+* $type color
+*/
+$chat-typingindicator-color: $chat-information-color !default;
+
+/**
+* $name 81. Typing indicator background color
+* $type color
+*/
+$chat-typingindicator-bubble-bg-color: $chat-bubble-background-color-secondary !default;
+
+/**
+* $name 82. Typing indicator central circle color
+* $type color
+*/
+$chat-typingindicator-circle-bg-color-center: rgba($base-inverted-bg, 0.6) !default;
+
+/**
+* $name 83. Typing indicator outer circles color
+* $type color
+*/
+$chat-typingindicator-circle-bg-color: rgba($base-inverted-bg, 0.4) !default;
 
 @if $mode == "light" {
   $chat-bubble-background-color-primary: rgba($base-accent, 0.08) !default;
-  $chat-bubble-background-color-secondary: rgba($base-inverted-bg, 0.08) !default;
-
-  $chat-information-color: rgba(darken($base-bg, 100.00), 0.6) !default;
-
-  $chat-messagelist-day-header-color: rgba(darken($base-bg, 100.00), 0.6) !default;
-
-  $chat-typingindicator-color: $chat-information-color !default;
-  $chat-typingindicator-bubble-bg-color: $chat-bubble-background-color-secondary !default;
-  $chat-typingindicator-circle-bg-color: rgba(darken($base-bg, 100.00), 0.4) !default;
-  $chat-typingindicator-circle-bg-color-center: rgba(darken($base-bg, 100.00), 0.6) !default;
 }
 
 @else if $mode == "dark" {
   $chat-bubble-background-color-primary: rgba(lighten($base-accent, 19.22), 0.08) !default;
-  $chat-bubble-background-color-secondary: rgba(lighten(desaturate(adjust-hue($base-bg, -240), 8.47), 76.86), 0.08) !default;
-
-  $chat-information-color: rgba(lighten(desaturate(adjust-hue($base-bg, -240), 8.47), 76.86), 0.6) !default;
-
-  $chat-messagelist-day-header-color: rgba(lighten(desaturate(adjust-hue($base-bg, -240), 8.47), 76.86), 0.6) !default;
-
-  $chat-typingindicator-color: $chat-information-color !default;
-  $chat-typingindicator-bubble-bg-color: $chat-bubble-background-color-secondary !default;
-  $chat-typingindicator-circle-bg-color: rgba(lighten(desaturate(adjust-hue($base-bg, -240), 8.47), 76.86), 0.4) !default;
-  $chat-typingindicator-circle-bg-color-center: rgba(lighten(desaturate(adjust-hue($base-bg, -240), 8.47), 76.86), 0.6) !default;
 }

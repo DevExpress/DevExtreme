@@ -25,6 +25,10 @@ const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 const SCROLLVIEW_REACHBOTTOM_INDICATOR = 'dx-scrollview-scrollbottom';
+const CHAT_MESSAGELIST_DAY_HEADER_CLASS = 'dx-chat-messagelist-day-header';
+
+const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-alignment-start';
+const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -80,9 +84,10 @@ const moduleConfig = {
             return this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
         };
 
-        this.getBubbles = () => {
-            return this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
-        };
+        this.getMessageList = () => MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
+        this.getMessageGroups = () => this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
+        this.getDayHeaders = () => this.$element.find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
+        this.getBubbles = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
 
         init();
     }
@@ -128,13 +133,7 @@ QUnit.module('Chat', () => {
         });
     });
 
-    QUnit.module('MessageList integration', {
-        beforeEach: function() {
-            moduleConfig.beforeEach.apply(this, arguments);
-
-            this.getMessageList = () => MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
-        }
-    }, () => {
+    QUnit.module('MessageList integration', moduleConfig, () => {
         QUnit.test('passed currentUserId should be equal generated chat.user.id', function(assert) {
             const messageList = this.getMessageList();
 
@@ -637,13 +636,11 @@ QUnit.module('Chat', () => {
                 text: 'NEW MESSAGE',
             };
 
-            const getMessageGroups = () => this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
-
-            assert.strictEqual(getMessageGroups().length, 0);
+            assert.strictEqual(this.getMessageGroups().length, 0);
 
             this.instance.renderMessage(newMessage);
 
-            assert.strictEqual(getMessageGroups().length, 1);
+            assert.strictEqual(this.getMessageGroups().length, 1);
         });
 
         [
@@ -1044,6 +1041,7 @@ QUnit.module('Chat', () => {
             this.clock.tick(timeout * 2);
 
             assert.deepEqual(this.instance.option('items'), [...messages, newMessage], 'items option should contain all messages including the new one');
+            assert.deepEqual(this.getMessageList().option('items'), [...messages, newMessage], 'messagelist items option should contain all messages including the new one');
             assert.strictEqual(this.getBubbles().length, 3, 'new message should be rendered in list');
         });
 
@@ -1091,8 +1089,374 @@ QUnit.module('Chat', () => {
             this.clock.tick(timeout * 2);
 
             assert.deepEqual(this.instance.option('items'), [...messages, newMessage], 'items option should contain all messages including the new one');
+            assert.deepEqual(this.getMessageList().option('items'), [...messages, newMessage], 'messagelist items option should contain all messages including the new one');
             assert.strictEqual(this.getEmptyView().length, 0, 'empty view is removed');
             assert.strictEqual(this.getBubbles().length, 1, 'new message should be rendered in list');
+        });
+
+        QUnit.test('message text should be updated when using store.push({ type: "update", key: "message_id", data: { text: "new text"} })', function(assert) {
+            const messages = [{ id: 1, text: 'message_1' }, { id: 2, text: 'message_2' }, { id: 3, text: 'message_3' }];
+            const timeout = 100;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+
+            const newBubbleText = 'updated text';
+            store.push([{ type: 'update', key: 2, data: { text: 'updated text' } }]);
+
+            this.clock.tick(timeout * 2);
+
+            const expectedData = [{ id: 1, text: 'message_1' }, { id: 2, text: newBubbleText }, { id: 3, text: 'message_3' }];
+
+            assert.deepEqual(this.instance.option('items'), expectedData, 'items option should contain the same count of messages after update');
+            assert.deepEqual(this.getMessageList().option('items'), expectedData, 'messagelist items option should contain the same count of messages after update');
+            assert.strictEqual(this.getBubbles().length, 3, 'message bubble count');
+            assert.strictEqual(this.getBubbles().eq(1).text(), newBubbleText, 'message bubble text was updated');
+
+            const messageData = data(this.getBubbles().eq(1).get(0), 'dxMessageData');
+
+            assert.deepEqual(messageData, { id: 2, text: newBubbleText }, 'message bubble data was updated');
+        });
+
+        QUnit.test('Message should be removed along with its group when using store.push({ type: "remove", key: "message_id" }), and the message was the last one in the group', function(assert) {
+            const messages = [{ id: 1, text: 'message_1', author: userFirst }, { id: 2, text: 'message_2', author: userSecond }];
+            const timeout = 100;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+
+            assert.strictEqual(this.getMessageGroups().length, 2, 'messagegroup count after initialization');
+
+            store.push([{ type: 'remove', key: 2 }]);
+            assert.strictEqual(this.getBubbles().length, 2, 'message bubble was removed');
+
+            this.clock.tick(timeout * 2);
+
+            assert.strictEqual(this.getMessageGroups().length, 1, 'messagegroup count after removing item');
+            assert.deepEqual(this.instance.option('items'), [...messages.splice(0, 1)], 'items option should contain the correct messages after deletion');
+            assert.deepEqual(this.getMessageList().option('items'), this.instance.option('items'), 'messagelist items option should contain the correct messages after deletion');
+        });
+
+        QUnit.test('Message should be removed when using store.push({ type: "remove", key: "message_id" })', function(assert) {
+            const messages = [{ id: 1, text: 'message_1' }, { id: 2, text: 'message_2' }, { id: 3, text: 'message_3' }];
+            const timeout = 100;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+
+            store.push([{ type: 'remove', key: 3 }]);
+
+            this.clock.tick(timeout * 2);
+
+            assert.deepEqual(this.instance.option('items'), [...messages.splice(0, 2)], 'items option should contain the last messages after deletion');
+            assert.deepEqual(this.getMessageList().option('items'), this.instance.option('items'), 'messagelist items option should contain the last messages after deletion');
+            assert.strictEqual(this.getBubbles().length, 2, 'message bubble was removed');
+        });
+
+        QUnit.test(`${CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS} class should be moved to a previous group after removing the last one from store`, function(assert) {
+            const messages = [{
+                id: 1,
+                text: 'message_1',
+                author: userFirst
+            }, { id: 2,
+                text: 'message_2',
+                author: userSecond,
+            }, {
+                id: 3,
+                text: 'message_3',
+                author: userFirst
+            }, {
+                id: 4,
+                text: 'message_4',
+                author: userSecond,
+            }];
+
+            const timeout = 100;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                user: { id: userFirst.id },
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+            store.push([{ type: 'remove', key: 4 }]);
+
+            this.clock.tick(timeout * 2);
+
+            const $lastMessageGroup = this.$element.find(`.${CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS}`);
+
+            assert.strictEqual($lastMessageGroup.length, 1, 'only one message group has the corresponding class');
+            assert.strictEqual($lastMessageGroup.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`).text(), 'message_2', 'message group content is correct.');
+        });
+
+        QUnit.test(`${CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS} class should move to the previous group after removing the last one from the store`, function(assert) {
+            const messages = [{
+                id: 1,
+                text: 'message_1',
+                author: userFirst
+            }, { id: 2,
+                text: 'message_2',
+                author: userSecond,
+            }, {
+                id: 3,
+                text: 'message_3',
+                author: userFirst
+            }, {
+                id: 4,
+                text: 'message_4',
+                author: userSecond,
+            }];
+
+            const timeout = 100;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                user: { id: userFirst.id },
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+            store.push([{ type: 'remove', key: 3 }]);
+
+            this.clock.tick(timeout * 2);
+
+            const $lastMessageGroup = this.$element.find(`.${CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS}`);
+
+            assert.strictEqual($lastMessageGroup.length, 1, 'only one message group has the corresponding class');
+            assert.strictEqual($lastMessageGroup.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`).text(), 'message_1', 'message group content is correct.');
+        });
+
+        QUnit.test('day header element should be removed after removing all groups for the current day', function(assert) {
+            const messages = [{
+                id: 1,
+                text: 'message_1',
+                timestamp: new Date('2021/10/17'),
+                author: userFirst
+            }, { id: 2,
+                text: 'message_2',
+                timestamp: new Date('2021/10/24'),
+                author: userSecond,
+            }, {
+                id: 3,
+                text: 'message_3',
+                timestamp: new Date('2021/10/24'),
+                author: userFirst,
+            }, {
+                id: 4,
+                timestamp: new Date('2021/10/27'),
+                text: 'message_4',
+                author: userSecond,
+            }];
+
+            const timeout = 100;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                user: { id: userFirst.id },
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+
+            store.push([{ type: 'remove', key: 3 }]);
+            this.clock.tick(timeout);
+
+            assert.strictEqual(this.getDayHeaders().length, 3, 'three day header should be present');
+
+            store.push([{ type: 'remove', key: 2 }]);
+            this.clock.tick(timeout);
+
+            assert.strictEqual(this.getDayHeaders().length, 2, 'day header was removed');
+            assert.strictEqual(this.getDayHeaders().eq(0).text(), '10/17/2021', 'day header content is correct');
+            assert.strictEqual(this.getDayHeaders().eq(1).text(), '10/27/2021', 'day header content is correct');
+        });
+
+        QUnit.test('day header should be removed after the last message is deleted', function(assert) {
+            const messages = [{
+                id: 1,
+                text: 'message_1',
+                timestamp: new Date('2021/10/17'),
+                author: userFirst
+            }];
+
+            const timeout = 100;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                user: { id: userFirst.id },
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+
+            assert.strictEqual(this.getDayHeaders().length, 1, 'day header should be present');
+
+            store.push([{ type: 'remove', key: 1 }]);
+            this.clock.tick(timeout);
+
+            assert.strictEqual(this.getDayHeaders().length, 0, 'day header was removed');
+        });
+
+        QUnit.test('emptyview should be rendered after the last message is deleted from the store', function(assert) {
+            const messages = [{
+                id: 1,
+                text: 'message_1',
+                timestamp: new Date('2021/10/17'),
+                author: userFirst
+            }];
+
+            const timeout = 100;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                user: { id: userFirst.id },
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+
+            assert.strictEqual(this.getEmptyView().length, 0, 'empty view is not rendered');
+
+            store.push([{ type: 'remove', key: 1 }]);
+            this.clock.tick(timeout * 2);
+
+            assert.strictEqual(this.getEmptyView().length, 1, 'empty view is rendered');
+        });
+
+        QUnit.test('emptyview should be removed after the new message is added to the empty store', function(assert) {
+            const timeout = 100;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([]);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                user: { id: userFirst.id },
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+
+            assert.strictEqual(this.getEmptyView().length, 1, 'empty view is rendered');
+
+            store.push([{ type: 'insert', data: [{
+                id: 1,
+                text: 'message_1',
+                timestamp: new Date('2021/10/17'),
+                author: userFirst
+            }] }]);
+            this.clock.tick(timeout * 2);
+
+            assert.strictEqual(this.getEmptyView().length, 0, 'empty view is removed');
         });
 
         QUnit.test('Loading and Empty view should not be shown at the same time when the dataSource option changes', function(assert) {

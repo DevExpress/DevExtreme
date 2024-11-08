@@ -59,7 +59,6 @@ import { DxiLocationComponent } from './location-dxi';
         'author',
         'id',
         'timestamp',
-        'typing',
         'beginGroup',
         'closeMenuOnClick',
         'items',

@@ -162,6 +162,10 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
       .dx-list-item {
         @include item-states();
       }
+
+      .dx-list-group-header {
+        @include item-states();
+      }
     }
   }
 
