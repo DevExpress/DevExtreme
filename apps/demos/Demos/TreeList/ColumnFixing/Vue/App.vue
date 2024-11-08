@@ -3,55 +3,63 @@
     <DxTreeList
       id="employees"
       :data-source="employees"
-      :column-auto-width="true"
-      :show-row-lines="true"
-      :show-borders="true"
-      :expanded-row-keys="expandedRowKeys"
       key-expr="ID"
       parent-id-expr="Head_ID"
+      :column-auto-width="true"
+      :show-borders="true"
+      :show-row-lines="true"
+      :expanded-row-keys="expandedRowKeys"
     >
-      <DxColumn
-        data-field="Title"
-        caption="Position"
-      />
+      <DxColumnFixing :enabled="true"/>
       <DxColumn
         :fixed="true"
-        data-field="Full_Name"
+        :calculate-cell-value="calculateCellValue"
+        caption="Employee"
       />
       <DxColumn
-        data-field="City"
+        data-field="Position"
+        alignment="right"
       />
       <DxColumn
-        data-field="State"
+        data-field="Address"
+        :fixed="true"
+        fixed-position="sticky"
+      />
+      <DxColumn data-field="City" />
+      <DxColumn data-field="Zipcode"/>
+      <DxColumn data-field="State" />
+      <DxColumn
+        data-field="Department"
+        :fixed="true"
+        fixed-position="right"
       />
       <DxColumn
-        data-field="Mobile_Phone"
+        data-field="BirthDate"
+        data-type="date"
       />
+      <DxColumn
+        data-field="HireDate"
+        data-type="date"
+      />
+      <DxColumn data-field="HomePhone"/>
+      <DxColumn data-field="MobilePhone"/>
       <DxColumn
         data-field="Email"
+        :fixed="true"
+        fixed-position="sticky"
       />
-      <DxColumn
-        data-field="Hire_Date"
-        data-type="date"
-      />
-      <DxColumn
-        data-field="Birth_Date"
-        data-type="date"
-      />
-      <DxColumn
-        data-field="Skype"
-      />
-      <DxColumnFixing
-        :enabled="true"
-      />
+      <DxColumn data-field="Skype"/>
     </DxTreeList>
   </div>
 </template>
 <script setup lang="ts">
 import { DxTreeList, DxColumn, DxColumnFixing } from 'devextreme-vue/tree-list';
-import { employees } from './data.ts';
+import { Employee, employees } from './data.ts';
 
-const expandedRowKeys = [1, 2, 10];
+const expandedRowKeys = [1];
+function calculateCellValue(data: Employee) {
+  return [data.Title, data.FirstName, data.LastName].join(' ');
+}
 </script>
 <style scoped>
 #employees {
