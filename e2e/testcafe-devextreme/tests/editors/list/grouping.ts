@@ -40,8 +40,17 @@ test('Grouped list appearance', async (t) => {
 
   const list = new List('#container');
 
-  await t.click(list.getGroup(0).header);
-  await t.click(list.getGroup(2).header);
+  await t
+    .click(list.getItem(2).element)
+    .pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Grouped list with focused header.png', { element: '#container' });
+
+  await t
+    .click(list.getGroup(0).header)
+    .click(list.getGroup(2).header)
+    .click(list.getItem(4).element)
+    .hover(list.getGroup(1).header);
 
   await testScreenshot(t, takeScreenshot, 'Grouped list appearance.png', { element: '#container' });
 
@@ -55,23 +64,28 @@ test('Grouped list appearance', async (t) => {
 }).before(async () => createWidget('dxList', {
   width: 300,
   height: 800,
-  dataSource: [{
-    key: 'group_1',
-    items: ['item_1_1', 'item_1_2', 'item_1_3'],
-    expanded: false,
-  }, {
-    key: 'group_2',
-    items: [
-      { text: 'item_2_1', disabled: true },
-      { text: 'item_2_2', icon: 'home' },
-      { text: 'item_2_3', showChevron: true, badge: 'item_2_3' },
-      { text: 'item_2_4', badge: 'item_2_4' },
-      'item_2_5'],
-  }, {
-    key: 'group_3',
-    items: ['item_3_1', 'item_3_2', 'item_3_3'],
-    expanded: false,
-  }],
+  dataSource: [
+    {
+      key: 'group_1',
+      items: ['item_1_1', 'item_1_2', 'item_1_3'],
+      expanded: false,
+    },
+    {
+      key: 'group_2',
+      items: [
+        { text: 'item_2_1', disabled: true },
+        { text: 'item_2_2', icon: 'home' },
+        { text: 'item_2_3', showChevron: true, badge: 'item_2_3' },
+        { text: 'item_2_4', badge: 'item_2_4' },
+        'item_2_5',
+      ],
+    },
+    {
+      key: 'group_3',
+      items: ['item_3_1', 'item_3_2', 'item_3_3'],
+      expanded: false,
+    },
+  ],
   collapsibleGroups: true,
   grouped: true,
   allowItemDeleting: true,
@@ -89,7 +103,9 @@ test('Grouped list appearance', async (t) => {
 
     await t
       .click(list.getGroup(0).header)
-      .click(list.getGroup(2).header);
+      .click(list.getGroup(2).header)
+      .click(list.getItem(4).element)
+      .hover(list.getGroup(1).header);
 
     await testScreenshot(t, takeScreenshot, `Grouped list appearance with template. rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
@@ -102,24 +118,25 @@ test('Grouped list appearance', async (t) => {
     groupTemplate(data) {
       const wrapper = $('<div>');
 
-      $(`<span>${data.key}</span>`)
-        .appendTo(wrapper);
-
-      $('<div>second row</div>')
-        .appendTo(wrapper);
+      $(`<span>${data.key}</span>`).appendTo(wrapper);
+      $('<div>second row</div>').appendTo(wrapper);
 
       return wrapper;
     },
-    dataSource: [{
-      key: 'One',
-      items: ['1_1', '1_2', '1_3'],
-    }, {
-      key: 'Two',
-      items: ['2_1', '2_2', '2_3'],
-    }, {
-      key: 'Three',
-      items: ['3_1', '3_2', '3_3'],
-    }],
+    dataSource: [
+      {
+        key: 'One',
+        items: ['1_1', '1_2', '1_3'],
+      },
+      {
+        key: 'Two',
+        items: ['2_1', '2_2', '2_3'],
+      },
+      {
+        key: 'Three',
+        items: ['3_1', '3_2', '3_3'],
+      },
+    ],
     collapsibleGroups: true,
     grouped: true,
     rtlEnabled,
