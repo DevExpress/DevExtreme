@@ -395,6 +395,12 @@ const formattingOptions = ['shortdate', 'shorttime', 'yyyy-mm-dd hh:mm:ss', 'hh:
 
 const formattingControlMappings = Object.fromEntries( formattingOptions.map(option => [option, option]) ); 
 
+const formattingCommonProperties = {
+    control: 'select',
+    options: formattingOptions,
+    mapping: formattingControlMappings,
+};
+
 export const Formatting: Story = {
     args: {
         dayHeaderFormat: 'shortdate',
@@ -402,15 +408,11 @@ export const Formatting: Story = {
     },
     argTypes: {
         dayHeaderFormat: {
-            control: 'select',
-            options: [ ...formattingOptions ],
-            mapping: { ...formattingControlMappings },
+            ...formattingCommonProperties,
             defaultValue: 'shortdate',
         },
         messageTimestampFormat: {
-            control: 'select',
-            options: [ ...formattingOptions ],
-            mapping: { ...formattingControlMappings },
+            ...formattingCommonProperties,
             defaultValue: 'shorttime',
         },
     },
