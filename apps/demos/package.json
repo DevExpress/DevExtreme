@@ -15,7 +15,7 @@
         "devextreme-vue": "workspace:~"
     },
     "dependencies": {
-        "@angular/cli": "17.3.8",
+        "@angular/cli": "17.3.11",
         "@angular/common": "17.3.12",
         "@angular/compiler": "17.3.12",
         "@angular/compiler-cli": "17.3.12",
