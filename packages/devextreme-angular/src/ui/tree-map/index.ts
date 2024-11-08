@@ -194,10 +194,10 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get group(): { border?: { color?: string, width?: number }, color?: string, headerHeight?: number | undefined, hoverEnabled?: boolean | undefined, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean }, padding?: number, selectionStyle?: { border?: { color?: string, width?: number | undefined }, color?: string | undefined } } {
+    get group(): { border?: { color?: string | undefined, width?: number | undefined }, color?: string, headerHeight?: number | undefined, hoverEnabled?: boolean | undefined, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean }, padding?: number, selectionStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined } } {
         return this._getOption('group');
     }
-    set group(value: { border?: { color?: string, width?: number }, color?: string, headerHeight?: number | undefined, hoverEnabled?: boolean | undefined, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean }, padding?: number, selectionStyle?: { border?: { color?: string, width?: number | undefined }, color?: string | undefined } }) {
+    set group(value: { border?: { color?: string | undefined, width?: number | undefined }, color?: string, headerHeight?: number | undefined, hoverEnabled?: boolean | undefined, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean }, padding?: number, selectionStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined } }) {
         this._setOption('group', value);
     }
 
@@ -402,10 +402,10 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get tile(): { border?: { color?: string, width?: number }, color?: string, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, selectionStyle?: { border?: { color?: string, width?: number | undefined }, color?: string | undefined } } {
+    get tile(): { border?: { color?: string | undefined, width?: number | undefined }, color?: string, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, selectionStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined } } {
         return this._getOption('tile');
     }
-    set tile(value: { border?: { color?: string, width?: number }, color?: string, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, selectionStyle?: { border?: { color?: string, width?: number | undefined }, color?: string | undefined } }) {
+    set tile(value: { border?: { color?: string | undefined, width?: number | undefined }, color?: string, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, selectionStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined } }) {
         this._setOption('tile', value);
     }
 
@@ -614,7 +614,7 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() groupChange: EventEmitter<{ border?: { color?: string, width?: number }, color?: string, headerHeight?: number | undefined, hoverEnabled?: boolean | undefined, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean }, padding?: number, selectionStyle?: { border?: { color?: string, width?: number | undefined }, color?: string | undefined } }>;
+    @Output() groupChange: EventEmitter<{ border?: { color?: string | undefined, width?: number | undefined }, color?: string, headerHeight?: number | undefined, hoverEnabled?: boolean | undefined, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean }, padding?: number, selectionStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined } }>;
 
     /**
     
@@ -726,7 +726,7 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tileChange: EventEmitter<{ border?: { color?: string, width?: number }, color?: string, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, selectionStyle?: { border?: { color?: string, width?: number | undefined }, color?: string | undefined } }>;
+    @Output() tileChange: EventEmitter<{ border?: { color?: string | undefined, width?: number | undefined }, color?: string, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, selectionStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined } }>;
 
     /**
     
