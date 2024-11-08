@@ -391,9 +391,9 @@ export const Customization: Story = {
     }
 }
 
-const formattingOptions = ['shortdate', 'shorttime', 'yyyy-mm-dd hh:mm:ss', 'hh:mm:ss', 'longdate', 'longtime', 'invalid format'];
+const formattingOptions = ['shortdate', 'shorttime', 'yyyy-mm-dd hh:mm:ss', 'hh:mm:ss', 'longdate', 'longtime', 'invalid format', null];
 
-const formattingControlMappings = Object.fromEntries( formattingOptions.map(option => [option, option]) ); 
+const formattingControlMappings = Object.fromEntries(formattingOptions.map(option => [option, option])); 
 
 const formattingCommonProperties = {
     control: 'select',
@@ -417,16 +417,14 @@ export const Formatting: Story = {
         },
     },
     render: ({
-        width,
-        height,
         dayHeaderFormat,
         messageTimestampFormat,
     }) => {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Chat
-                    width={width}
-                    height={height}
+                    width={500}
+                    height={500}
                     items={initialMessages}
                     user={secondAuthor}
                     dayHeaderFormat={dayHeaderFormat}
