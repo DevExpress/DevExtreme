@@ -1,18 +1,14 @@
+import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
-import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-
-import type Chat from './chat';
-import type { MessageTemplate } from './messagelist';
 
 export const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 
 export interface Properties extends WidgetOptions<MessageBubble> {
   text?: string;
-  template?: MessageTemplate;
-  templateData?: { component?: Chat; message?: Message };
+  template?: ((text: string, container: Element) => void) | null;
 }
 
 class MessageBubble extends Widget<Properties> {
@@ -21,7 +17,6 @@ class MessageBubble extends Widget<Properties> {
       ...super._getDefaultOptions(),
       text: '',
       template: null,
-      templateData: {},
     };
   }
 
@@ -36,26 +31,20 @@ class MessageBubble extends Widget<Properties> {
 
   _updateContent(): void {
     const {
-      text = '', template = null, templateData,
+      text = '',
+      template,
     } = this.option();
+    const $bubbleContainer = $(this.element());
+
+    $bubbleContainer.empty();
 
     if (template) {
-      $(this.element()).empty();
-
-      const messageTemplate = this._getTemplateByOption('template');
-
-      // @ts-expect-error
-      templateData.message.text = text;
-
-      messageTemplate.render({
-        container: this.element(),
-        model: templateData,
-      });
+      template(text, getPublicElement($bubbleContainer));
 
       return;
     }
 
-    $(this.element()).text(text);
+    $bubbleContainer.text(text);
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
@@ -64,7 +53,6 @@ class MessageBubble extends Widget<Properties> {
     switch (name) {
       case 'text':
       case 'template':
-      case 'templateData':
         this._updateContent();
         break;
       default:

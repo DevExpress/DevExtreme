@@ -23,7 +23,7 @@ import type {
   TypingStartEvent as MessageBoxTypingStartEvent,
 } from './messagebox';
 import MessageBox from './messagebox';
-import type { Change } from './messagelist';
+import type { Change, Properties as MessageListProperties } from './messagelist';
 import MessageList from './messagelist';
 
 const CHAT_CLASS = 'dx-chat';
@@ -119,6 +119,18 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageList(): void {
+    const $messageList = $('<div>');
+
+    this.$element().append($messageList);
+
+    this._messageList = this._createComponent(
+      $messageList,
+      MessageList,
+      this._getMessageListOptions(),
+    );
+  }
+
+  _getMessageListOptions(): MessageListProperties {
     const {
       items = [],
       user,
@@ -132,20 +144,14 @@ class Chat extends Widget<Properties> {
       typingUsers = [],
     } = this.option();
 
-    const $messageList = $('<div>');
-
     // @ts-expect-error
     const isLoading = this._dataController.isLoading();
     const currentUserId = user?.id;
 
-    this.$element().append($messageList);
-
-    this._messageList = this._createComponent($messageList, MessageList, {
+    const options: MessageListProperties = {
       items,
       currentUserId,
       showDayHeaders,
-      messageTemplate,
-      messageTemplateData: { component: this },
       showAvatar,
       showUserName,
       showMessageTimestamp,
@@ -153,7 +159,23 @@ class Chat extends Widget<Properties> {
       messageTimestampFormat,
       typingUsers,
       isLoading,
-    });
+    };
+
+    if (messageTemplate) {
+      options.messageTemplate = (message, $container): void => {
+        const template = this._getTemplateByOption('messageTemplate');
+
+        template.render({
+          container: $container,
+          model: {
+            component: this,
+            message,
+          },
+        });
+      };
+    }
+
+    return options;
   }
 
   _renderAlertList(): void {

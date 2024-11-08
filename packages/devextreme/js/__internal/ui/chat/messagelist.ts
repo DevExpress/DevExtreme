@@ -1,4 +1,3 @@
-import type { DxElement, UserDefinedElement } from '@js/core/element';
 import Guid from '@js/core/guid';
 import type {
   DeepPartial,
@@ -6,7 +5,6 @@ import type {
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
-import type { template } from '@js/core/templates/template';
 import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
@@ -16,7 +14,7 @@ import { isDate, isDefined } from '@js/core/utils/type';
 import type { Format } from '@js/localization';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
-import type { Message, MessageTemplateData, User } from '@js/ui/chat';
+import type { Message, User } from '@js/ui/chat';
 import ScrollView from '@js/ui/scroll_view';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -24,7 +22,6 @@ import Widget from '@ts/core/widget/widget';
 import { getScrollTopMax } from '@ts/ui/scroll_view/utils/get_scroll_top_max';
 
 import { isElementVisible } from '../splitter/utils/layout';
-import type Chat from './chat';
 import MessageBubble, { CHAT_MESSAGEBUBBLE_CLASS } from './messagebubble';
 import type { MessageGroupAlignment } from './messagegroup';
 import MessageGroup, {
@@ -58,18 +55,11 @@ export interface Change {
   key?: string | number;
   index?: number;
 }
-
-export type MessageTemplate =
-((data: MessageTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement)
-| template
-| null;
-
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
-  messageTemplate?: MessageTemplate;
-  messageTemplateData?: { component?: Chat };
+  messageTemplate?: ((data: Message, messageBubbleContainer: Element) => void) | null;
   dayHeaderFormat?: Format;
   messageTimestampFormat?: Format;
   typingUsers: User[];
@@ -106,7 +96,6 @@ class MessageList extends Widget<Properties> {
       showUserName: true,
       showMessageTimestamp: true,
       messageTemplate: null,
-      messageTemplateData: {},
     };
   }
 
@@ -228,7 +217,6 @@ class MessageList extends Widget<Properties> {
       showUserName,
       showMessageTimestamp,
       messageTemplate,
-      messageTemplateData,
       messageTimestampFormat,
     } = this.option();
 
@@ -241,7 +229,6 @@ class MessageList extends Widget<Properties> {
       showUserName,
       showMessageTimestamp,
       messageTemplate,
-      messageTemplateData,
       messageTimestampFormat,
     });
   }
