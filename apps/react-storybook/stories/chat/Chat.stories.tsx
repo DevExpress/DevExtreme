@@ -391,6 +391,18 @@ export const Customization: Story = {
     }
 }
 
+const formattingOptions = ['shortdate', 'shorttime', 'yyyy-mm-dd hh:mm:ss', 'hh:mm:ss', 'longdate', 'longtime', 'none'];
+
+const formattingControlMappings = {
+    ['shortdate']: 'shortdate',
+    ['shorttime']: 'shorttime',
+    ['yyyy-mm-dd hh:mm:ss']: 'yyyy-mm-dd hh:mm:ss',
+    ['hh:mm:ss']: 'hh:mm:ss',
+    ['longdate']: 'longdate',
+    ['longtime']: 'longtime',
+    ['none']: null,
+};
+
 export const Formatting: Story = {
     args: {
         dayHeaderFormat: 'shortdate',
@@ -399,30 +411,14 @@ export const Formatting: Story = {
     argTypes: {
         dayHeaderFormat: {
             control: 'select',
-            options: ['shortdate', 'shorttime', 'yyyy-mm-dd hh:mm:ss', 'hh:mm:ss', 'longdate', 'longtime', 'none'],
-            mapping: {
-                ['shortdate']: 'shortdate',
-                ['shorttime']: 'shorttime',
-                ['yyyy-mm-dd hh:mm:ss']: 'yyyy-mm-dd hh:mm:ss',
-                ['hh:mm:ss']: 'hh:mm:ss',
-                ['longdate']: 'longdate',
-                ['longtime']: 'longtime',
-                ['none']: null,
-            },
-            defaultValue: 'shorttime',
+            options: [ ...formattingOptions ],
+            mapping: { ...formattingControlMappings },
+            defaultValue: 'shortdate',
         },
         messageTimestampFormat: {
             control: 'select',
-            options: ['shortdate', 'shorttime', 'yyyy-mm-dd hh:mm:ss', 'hh:mm:ss', 'longdate', 'longtime', 'none'],
-            mapping: {
-                ['shortdate']: 'shortdate',
-                ['shorttime']: 'shorttime',
-                ['yyyy-mm-dd hh:mm:ss']: 'yyyy-mm-dd hh:mm:ss',
-                ['hh:mm:ss']: 'hh:mm:ss',
-                ['longdate']: 'longdate',
-                ['longtime']: 'longtime',
-                ['none']: null,
-            },
+            options: [ ...formattingOptions ],
+            mapping: { ...formattingControlMappings },
             defaultValue: 'shorttime',
         },
     },
