@@ -135,10 +135,17 @@
     border-left-width: 0;
     border-right-width: 0;
   }
+}
 
-  &.dx-row-lines > td {
+.dx-datagrid-sticky-columns {
+  .dx-row.dx-row-lines + .dx-datagrid-group-footer td,
+  .dx-row.dx-group-row + .dx-datagrid-group-footer td {
     border-top: none;
-    border-bottom: none;
+  }
+
+  .dx-row.dx-row-lines + .dx-row.dx-group-row td,
+  .dx-row.dx-group-row + .dx-row.dx-group-row td {
+    border-top: none;
   }
 }
 

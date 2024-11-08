@@ -21,7 +21,6 @@ import { ColumnsView } from '@ts/grids/grid_core/views/m_columns_view';
 
 import type { EditingController } from '../../grid_core/editing/m_editing';
 import type { RowsView } from '../../grid_core/views/m_rows_view';
-import { ROW_LINES_CLASS } from '../../grid_core/views/m_rows_view';
 import AggregateCalculator from '../m_aggregate_calculator';
 import gridCore from '../m_core';
 import dataSourceAdapterProvider from '../m_data_source_adapter';
@@ -851,10 +850,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class SummaryRowsViewExtender e
     // @ts-expect-error
     const $row = super._createRow.apply(this, arguments);
 
-    if (row && row.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE) {
-      $row.addClass(DATAGRID_GROUP_FOOTER_CLASS);
-      this.option('showRowLines') && $row.addClass(ROW_LINES_CLASS);
-    }
+    row && $row.addClass(row.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE ? DATAGRID_GROUP_FOOTER_CLASS : '');
     return $row;
   }
 
