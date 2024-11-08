@@ -501,8 +501,8 @@ testModule('API', moduleConfig, () => {
         ['v', ''].forEach(initValue => {
             test(`toHtml and fromHtml must be called the correct number of times on init if value is '${initValue}'`, function(assert) {
                 const converter = {
-                    toHtml: sinon.stub(),
-                    fromHtml: sinon.stub(),
+                    toHtml: sinon.stub().callsFake((e) => e),
+                    fromHtml: sinon.stub().callsFake((e) => e),
                 };
 
                 this.options = {
@@ -517,10 +517,10 @@ testModule('API', moduleConfig, () => {
             });
         });
 
-        test('toHtml and fromHtml should be called once after value option changed', function(assert) {
+        test('toHtml and fromHtml must be called the correct number of times after value option changed', function(assert) {
             const converter = {
-                toHtml: sinon.stub(),
-                fromHtml: sinon.stub(),
+                toHtml: sinon.stub().callsFake((e) => e),
+                fromHtml: sinon.stub().callsFake((e) => e),
             };
             this.options = { converter };
 
@@ -538,14 +538,14 @@ testModule('API', moduleConfig, () => {
             const done = assert.async();
 
             const converter = {
-                toHtml: sinon.stub(),
-                fromHtml: sinon.stub(),
+                toHtml: sinon.stub().callsFake((e) => e),
+                fromHtml: sinon.stub().callsFake((e) => e),
             };
 
             this.options = {
                 converter,
                 onValueChanged: () => {
-                    assert.strictEqual(converter.toHtml.callCount, 0);
+                    assert.strictEqual(converter.toHtml.callCount, 1);
                     assert.strictEqual(converter.fromHtml.callCount, 1);
 
                     done();
@@ -654,35 +654,45 @@ testModule('API', moduleConfig, () => {
 
         test('converter option runtime change should update html converter', function(assert) {
             const firstConverter = {
-                toHtml: sinon.stub(),
-                fromHtml: sinon.stub(),
+                toHtml: sinon.stub().callsFake((e) => e),
+                fromHtml: sinon.stub().callsFake((e) => e),
             };
 
             const secondConverter = {
-                toHtml: sinon.stub(),
-                fromHtml: sinon.stub(),
+                toHtml: sinon.stub().callsFake((e) => e),
+                fromHtml: sinon.stub().callsFake((e) => e),
             };
 
             const instance = $('#htmlEditor').dxHtmlEditor({
                 converter: firstConverter,
+                value: 'value',
             }).dxHtmlEditor('instance');
 
             instance.option('converter', secondConverter);
-            instance.option('value', 'new value');
 
-            assert.strictEqual(firstConverter.toHtml.callCount, 0);
+            assert.strictEqual(firstConverter.toHtml.callCount, 1);
             assert.strictEqual(firstConverter.fromHtml.callCount, 0);
             assert.strictEqual(secondConverter.toHtml.callCount, 1);
             assert.strictEqual(secondConverter.fromHtml.callCount, 1);
         });
 
-        test('The converter methods get the correct parameters', function(assert) {
+        test('toHtml gets the correct parameters on init', function(assert) {
             const converter = {
                 toHtml: (value) => {
                     assert.strictEqual(value, 'new value');
 
                     return value;
                 },
+            };
+
+            this.options = { converter, value: 'new value' };
+
+            this.createEditor();
+        });
+
+        test('fromHtml gets the correct parameters on runtime', function(assert) {
+            const converter = {
+                toHtml: (value) => value,
                 fromHtml: (value) => {
                     assert.strictEqual(value, '<p>new value</p>');
 

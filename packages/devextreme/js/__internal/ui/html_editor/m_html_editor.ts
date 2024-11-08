@@ -531,29 +531,34 @@ const HtmlEditor = Editor.inherit({
     }
   },
 
+  _processHtmlContentUpdating(value) {
+    if (this._quillInstance) {
+      if (this._isEditorUpdating) {
+        this._isEditorUpdating = false;
+      } else {
+        const html = this._applyHtmlConverterToHtml(value);
+
+        this._suppressValueChangeAction();
+        this._updateHtmlContent(html);
+        this._resumeValueChangeAction();
+      }
+    } else {
+      this._$htmlContainer.html(value);
+    }
+  },
+
   _optionChanged(args) {
     switch (args.name) {
       case 'converter': {
         this._htmlConverter = args.value;
+
         const { value } = this.option();
-        const html = this._applyHtmlConverterToHtml(value);
-        this._updateHtmlContent(html);
+
+        this._processHtmlContentUpdating(value);
         break;
       }
       case 'value': {
-        if (this._quillInstance) {
-          if (this._isEditorUpdating) {
-            this._isEditorUpdating = false;
-          } else {
-            const html = this._applyHtmlConverterToHtml(args.value);
-
-            this._suppressValueChangeAction();
-            this._updateHtmlContent(html);
-            this._resumeValueChangeAction();
-          }
-        } else {
-          this._$htmlContainer.html(args.value);
-        }
+        this._processHtmlContentUpdating(args.value);
 
         // NOTE: value can be optimized by Quill
         const value = this.option('value');
