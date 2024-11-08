@@ -391,10 +391,8 @@ export const Customization: Story = {
     }
 }
 
-export const Formats: Story = {
+export const Formatting: Story = {
     args: {
-        width: 500,
-        height: 600,
         dayHeaderFormat: 'shortdate',
         messageTimestampFormat: 'shorttime',
     },
