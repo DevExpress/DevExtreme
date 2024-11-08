@@ -30806,11 +30806,11 @@ declare module DevExpress.ui.dxChat {
     /**
      * [descr:Message.timestamp]
      */
-    timestamp?: Date | number | string | undefined;
+    timestamp?: Date | number | string;
     /**
      * [descr:Message.author]
      */
-    author?: User | undefined;
+    author?: User;
     /**
      * [descr:Message.text]
      */
@@ -30835,7 +30835,7 @@ declare module DevExpress.ui.dxChat {
     /**
      * [descr:User.avatarAlt]
      */
-    avatarAlt?: string | undefined;
+    avatarAlt?: string;
   };
 }
 declare module DevExpress.ui.dxContextMenu {

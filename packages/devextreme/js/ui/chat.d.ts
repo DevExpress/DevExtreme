@@ -102,7 +102,7 @@ export type User = {
      * @docid
      * @public
      */
-    avatarAlt?: string | undefined;
+    avatarAlt?: string;
 };
 
 /**
@@ -138,12 +138,12 @@ export type Message = {
      * @docid
      * @public
      */
-    timestamp?: Date | number | string | undefined;
+    timestamp?: Date | number | string;
     /**
      * @docid
      * @public
      */
-    author?: User | undefined;
+    author?: User;
     /**
      * @docid
      * @public
