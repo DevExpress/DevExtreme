@@ -396,6 +396,36 @@ export const Formatting: Story = {
         dayHeaderFormat: 'shortdate',
         messageTimestampFormat: 'shorttime',
     },
+    argTypes: {
+        dayHeaderFormat: {
+            control: 'select',
+            options: ['shortdate', 'shorttime', 'yyyy-mm-dd hh:mm:ss', 'hh:mm:ss', 'longdate', 'longtime', 'none'],
+            mapping: {
+                ['shortdate']: 'shortdate',
+                ['shorttime']: 'shorttime',
+                ['yyyy-mm-dd hh:mm:ss']: 'yyyy-mm-dd hh:mm:ss',
+                ['hh:mm:ss']: 'hh:mm:ss',
+                ['longdate']: 'longdate',
+                ['longtime']: 'longtime',
+                ['none']: null,
+            },
+            defaultValue: 'shorttime',
+        },
+        messageTimestampFormat: {
+            control: 'select',
+            options: ['shortdate', 'shorttime', 'yyyy-mm-dd hh:mm:ss', 'hh:mm:ss', 'longdate', 'longtime', 'none'],
+            mapping: {
+                ['shortdate']: 'shortdate',
+                ['shorttime']: 'shorttime',
+                ['yyyy-mm-dd hh:mm:ss']: 'yyyy-mm-dd hh:mm:ss',
+                ['hh:mm:ss']: 'hh:mm:ss',
+                ['longdate']: 'longdate',
+                ['longtime']: 'longtime',
+                ['none']: null,
+            },
+            defaultValue: 'shorttime',
+        },
+    },
     render: ({
         width,
         height,
