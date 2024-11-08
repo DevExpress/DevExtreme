@@ -86,19 +86,16 @@ export type User = {
     id?: number | string;
     /**
      * @docid
-     * @default ''
      * @public
      */
     name?: string;
     /**
      * @docid
-     * @default ''
      * @public
      */
     avatarUrl?: string;
     /**
      * @docid
-     * @default undefined
      * @public
      */
     avatarAlt?: string;
@@ -117,7 +114,6 @@ export type Alert = {
     id?: number | string;
     /**
      * @docid
-     * @default ''
      * @public
      */
     message?: string;
@@ -136,28 +132,19 @@ export type Message = {
     id?: number | string;
     /**
      * @docid
-     * @default undefined
      * @public
      */
     timestamp?: Date | number | string;
     /**
      * @docid
-     * @default undefined
      * @public
      */
     author?: User;
     /**
      * @docid
-     * @default ''
      * @public
      */
     text?: string;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    typing?: boolean;
 };
 
 /** @public */
@@ -218,7 +205,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     reloadOnChange?: boolean;
     /**
      * @docid
-     * @default undefined
+     * @default []
      * @public
      */
     alerts?: Array<Alert>;
