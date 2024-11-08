@@ -194,10 +194,10 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get label(): { border?: { color?: string, visible?: boolean, width?: number }, customizeText?: Function, font?: Font, horizontalOffset?: number, overlappingBehavior?: TextOverflow, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, useNodeColors?: boolean, verticalOffset?: number, visible?: boolean } {
+    get label(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, customizeText?: Function, font?: Font, horizontalOffset?: number, overlappingBehavior?: TextOverflow, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, useNodeColors?: boolean, verticalOffset?: number, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { border?: { color?: string, visible?: boolean, width?: number }, customizeText?: Function, font?: Font, horizontalOffset?: number, overlappingBehavior?: TextOverflow, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, useNodeColors?: boolean, verticalOffset?: number, visible?: boolean }) {
+    set label(value: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, customizeText?: Function, font?: Font, horizontalOffset?: number, overlappingBehavior?: TextOverflow, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, useNodeColors?: boolean, verticalOffset?: number, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -207,10 +207,10 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get link(): { border?: { color?: string, visible?: boolean, width?: number }, color?: string, colorMode?: SankeyColorMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number }, opacity?: number } {
+    get link(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string, colorMode?: SankeyColorMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number | undefined }, opacity?: number } {
         return this._getOption('link');
     }
-    set link(value: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, colorMode?: SankeyColorMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number }, opacity?: number }) {
+    set link(value: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string, colorMode?: SankeyColorMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number | undefined }, opacity?: number }) {
         this._setOption('link', value);
     }
 
@@ -246,10 +246,10 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get node(): { border?: { color?: string, visible?: boolean, width?: number }, color?: string | undefined, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number | undefined }, opacity?: number, padding?: number, width?: number } {
+    get node(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number | undefined }, opacity?: number, padding?: number, width?: number } {
         return this._getOption('node');
     }
-    set node(value: { border?: { color?: string, visible?: boolean, width?: number }, color?: string | undefined, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number | undefined }, opacity?: number, padding?: number, width?: number }) {
+    set node(value: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number | undefined }, opacity?: number, padding?: number, width?: number }) {
         this._setOption('node', value);
     }
 
@@ -572,14 +572,14 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelChange: EventEmitter<{ border?: { color?: string, visible?: boolean, width?: number }, customizeText?: Function, font?: Font, horizontalOffset?: number, overlappingBehavior?: TextOverflow, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, useNodeColors?: boolean, verticalOffset?: number, visible?: boolean }>;
+    @Output() labelChange: EventEmitter<{ border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, customizeText?: Function, font?: Font, horizontalOffset?: number, overlappingBehavior?: TextOverflow, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, useNodeColors?: boolean, verticalOffset?: number, visible?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() linkChange: EventEmitter<{ border?: { color?: string, visible?: boolean, width?: number }, color?: string, colorMode?: SankeyColorMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number }, opacity?: number }>;
+    @Output() linkChange: EventEmitter<{ border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string, colorMode?: SankeyColorMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number | undefined }, opacity?: number }>;
 
     /**
     
@@ -600,7 +600,7 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() nodeChange: EventEmitter<{ border?: { color?: string, visible?: boolean, width?: number }, color?: string | undefined, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number | undefined }, opacity?: number, padding?: number, width?: number }>;
+    @Output() nodeChange: EventEmitter<{ border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number | undefined }, opacity?: number, padding?: number, width?: number }>;
 
     /**
     

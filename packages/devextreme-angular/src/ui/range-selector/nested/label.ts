@@ -56,10 +56,10 @@ export class DxoRangeSelectorLabelComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get border(): { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } {
+    get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }) {
+    set border(value: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 

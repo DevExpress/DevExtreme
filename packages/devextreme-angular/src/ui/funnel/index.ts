@@ -237,10 +237,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get item(): { border?: { color?: string, visible?: boolean, width?: number }, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } } {
+    get item(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } } {
         return this._getOption('item');
     }
-    set item(value: { border?: { color?: string, visible?: boolean, width?: number }, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } }) {
+    set item(value: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } }) {
         this._setOption('item', value);
     }
 
@@ -662,7 +662,7 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemChange: EventEmitter<{ border?: { color?: string, visible?: boolean, width?: number }, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } }>;
+    @Output() itemChange: EventEmitter<{ border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } }>;
 
     /**
     
