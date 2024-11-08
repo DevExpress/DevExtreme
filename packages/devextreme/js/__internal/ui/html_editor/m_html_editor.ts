@@ -238,7 +238,7 @@ const HtmlEditor = Editor.inherit({
 
   _applyHtmlConverterToHtml(value: string): string {
     const result = isFunction(this._htmlConverter?.toHtml)
-      ? String(this._htmlConverter.toHtml(value))
+      ? String(this._htmlConverter.toHtml(value) || '')
       : value;
 
     return result;
@@ -254,14 +254,13 @@ const HtmlEditor = Editor.inherit({
 
   _updateContainerMarkup(): void {
     const { value } = this.option();
+    const html = this._applyHtmlConverterToHtml(value);
 
-    if (!value) {
+    if (!html) {
       return;
     }
 
-    const html = this._applyHtmlConverterToHtml(value);
     const sanitizedHtml = this._removeXSSVulnerableHtml(html);
-
     this._$htmlContainer.html(sanitizedHtml);
   },
 
@@ -536,6 +535,9 @@ const HtmlEditor = Editor.inherit({
     switch (args.name) {
       case 'converter': {
         this._htmlConverter = args.value;
+        const { value } = this.option();
+        const html = this._applyHtmlConverterToHtml(value);
+        this._updateHtmlContent(html);
         break;
       }
       case 'value': {
@@ -543,10 +545,10 @@ const HtmlEditor = Editor.inherit({
           if (this._isEditorUpdating) {
             this._isEditorUpdating = false;
           } else {
-            const updatedValue = this._applyHtmlConverterToHtml(args.value);
+            const html = this._applyHtmlConverterToHtml(args.value);
 
             this._suppressValueChangeAction();
-            this._updateHtmlContent(updatedValue);
+            this._updateHtmlContent(html);
             this._resumeValueChangeAction();
           }
         } else {

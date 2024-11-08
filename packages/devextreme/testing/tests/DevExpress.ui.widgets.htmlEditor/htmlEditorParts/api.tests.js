@@ -512,7 +512,7 @@ testModule('API', moduleConfig, () => {
 
                 this.createEditor();
 
-                assert.strictEqual(this.options.converter.toHtml.callCount, initValue ? 1 : 0);
+                assert.strictEqual(this.options.converter.toHtml.callCount, 1);
                 assert.strictEqual(this.options.converter.fromHtml.callCount, 0);
             });
         });
@@ -528,7 +528,7 @@ testModule('API', moduleConfig, () => {
 
             this.instance.option('value', 'new value');
 
-            assert.strictEqual(this.options.converter.toHtml.callCount, 1);
+            assert.strictEqual(this.options.converter.toHtml.callCount, 2);
             assert.strictEqual(this.options.converter.fromHtml.callCount, 1);
         });
 
