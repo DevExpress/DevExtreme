@@ -390,3 +390,32 @@ export const Customization: Story = {
         );
     }
 }
+
+export const Formats: Story = {
+    args: {
+        width: 500,
+        height: 600,
+        dayHeaderFormat: 'shortdate',
+        messageTimestampFormat: 'shorttime',
+    },
+    render: ({
+        width,
+        height,
+        dayHeaderFormat,
+        messageTimestampFormat,
+    }) => {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Chat
+                    width={width}
+                    height={height}
+                    items={initialMessages}
+                    user={secondAuthor}
+                    dayHeaderFormat={dayHeaderFormat}
+                    messageTimestampFormat={messageTimestampFormat}
+                >
+                </Chat>
+            </div>
+        );
+    }
+}
