@@ -132,7 +132,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     const hasStickyColumns = this.hasStickyColumns();
     const rowIndex = rowType === 'header' ? options.rowIndex : null;
     const isSummary = rowType === 'groupFooter' || rowType === 'totalFooter' || rowType === 'group';
-    const isCommandColumn = !!column.command;
+    const isExpandColumn = column.command && column.command === 'expand';
 
     if (hasStickyColumns) {
       this.updateBorderCellClasses($cell, column, rowIndex);
@@ -146,7 +146,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
           this.addWidgetPrefix.bind(this),
         );
 
-        if (!isSummary && !isCommandColumn) {
+        if (!isSummary && !isExpandColumn) {
           switch (fixedPosition) {
             case StickyPosition.Right: {
               this._addStickyColumnBorderLeftClass(
