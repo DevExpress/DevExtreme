@@ -391,17 +391,9 @@ export const Customization: Story = {
     }
 }
 
-const formattingOptions = ['shortdate', 'shorttime', 'yyyy-mm-dd hh:mm:ss', 'hh:mm:ss', 'longdate', 'longtime', 'none'];
+const formattingOptions = ['shortdate', 'shorttime', 'yyyy-mm-dd hh:mm:ss', 'hh:mm:ss', 'longdate', 'longtime', 'invalid format'];
 
-const formattingControlMappings = {
-    ['shortdate']: 'shortdate',
-    ['shorttime']: 'shorttime',
-    ['yyyy-mm-dd hh:mm:ss']: 'yyyy-mm-dd hh:mm:ss',
-    ['hh:mm:ss']: 'hh:mm:ss',
-    ['longdate']: 'longdate',
-    ['longtime']: 'longtime',
-    ['none']: null,
-};
+const formattingControlMappings = Object.fromEntries( formattingOptions.map(option => [option, option]) ); 
 
 export const Formatting: Story = {
     args: {
