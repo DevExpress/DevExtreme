@@ -3,7 +3,7 @@ import {Chat, ChatTypes} from 'devextreme-react/chat'
 import type {Meta, StoryObj} from '@storybook/react';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
-import { firstAuthor, secondAuthor, thirdAuthor, initialMessages, longError } from './data';
+import { firstAuthor, secondAuthor, thirdAuthor, fourthAuthor, initialMessages, longError } from './data';
 import { Popup } from 'devextreme-react/popup';
 
 import './styles.css';
@@ -393,38 +393,36 @@ export const Customization: Story = {
 
 export const TypingUsers: Story = {
     args: {
-        width: 400,
-        height: 500,
-        typingUsers: [],
+        typingUsers: 'One user typing',
     },
     argTypes: {
         typingUsers: {
             control: 'select',
-            defaultValue: 'No one is typing',
+            defaultValue: 'One user typing',
             options: [
                 'No one is typing',
                 'One user typing',
                 'Two users typing',
                 'Three users typing',
+                'Multiple users typing',
             ],
             mapping: {
                 ['No one is typing']: [],
                 ['One user typing']: [ firstAuthor ],
                 ['Two users typing']: [ firstAuthor, secondAuthor ],
                 ['Three users typing']: [ firstAuthor, secondAuthor, thirdAuthor ],
+                ['Multiple users typing']: [ firstAuthor, secondAuthor, thirdAuthor, fourthAuthor ],
             },
         },
     },
     render: ({
-        width,
-        height,
         typingUsers,
     }) => {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Chat
-                    width={width}
-                    height={height}
+                    width={400}
+                    height={500}
                     items={initialMessages}
                     user={secondAuthor}
                     typingUsers={typingUsers}

@@ -17,6 +17,11 @@ export const thirdAuthor: ChatTypes.User = {
     name: "Gordon Freeman"
 };
 
+export const fourthAuthor: ChatTypes.User = {
+    id: "8adef6b1-ff40-42df-8456-f7c080e132b8",
+    name: "Crash Bandicoot"
+};
+
 const todayDate = new Date();
 
 const date = new Date();
