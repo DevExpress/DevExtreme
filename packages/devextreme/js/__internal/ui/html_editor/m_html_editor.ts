@@ -246,7 +246,7 @@ const HtmlEditor = Editor.inherit({
 
   _applyHtmlConverterFromHtml(value: string): string {
     const result = isFunction(this._htmlConverter?.fromHtml)
-      ? String(this._htmlConverter.fromHtml(value))
+      ? String(this._htmlConverter.fromHtml(value) || '')
       : value;
 
     return result;
