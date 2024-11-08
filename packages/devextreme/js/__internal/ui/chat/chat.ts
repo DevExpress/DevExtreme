@@ -9,7 +9,7 @@ import messageLocalization from '@js/localization/message';
 import type {
   Message,
   MessageEnteredEvent,
-  Properties as ChatProperties,
+  Properties,
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
@@ -29,11 +29,6 @@ import MessageList from './messagelist';
 
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
-
-type Properties = ChatProperties & {
-  dayHeaderFormat?: Format;
-  messageTimestampFormat?: Format;
-};
 
 class Chat extends Widget<Properties> {
   _messageBox!: MessageBox;
