@@ -704,14 +704,20 @@ export const ListBase = CollectionWidget.inherit({
   _collapseGroupHandler($group, toggle) {
     const deferred = Deferred();
 
-    if ($group.hasClass(LIST_GROUP_COLLAPSED_CLASS) === toggle) {
+    const $groupHeader = $group.children(`.${LIST_GROUP_HEADER_CLASS}`);
+    const collapsed = $group.hasClass(LIST_GROUP_COLLAPSED_CLASS);
+
+    this._updateGroupHeaderAriaExpanded($groupHeader, collapsed);
+
+    if (collapsed === toggle) {
       return deferred.resolve();
     }
 
     const $groupBody = $group.children(`.${LIST_GROUP_BODY_CLASS}`);
-
     const startHeight = getOuterHeight($groupBody);
+
     let endHeight = 0;
+
     if (startHeight === 0) {
       setHeight($groupBody, 'auto');
       endHeight = getOuterHeight($groupBody);
@@ -766,18 +772,17 @@ export const ListBase = CollectionWidget.inherit({
   },
 
   _setListAria() {
-    const { items, allowItemDeleting } = this.option();
+    const { items, allowItemDeleting, collapsibleGroups } = this.option();
 
     const label = allowItemDeleting
       ? messageLocalization.format('dxList-listAriaLabel-deletable')
       : messageLocalization.format('dxList-listAriaLabel');
 
-    const listArea = items?.length ? {
-      role: 'listbox',
-      label,
-    } : {
-      role: undefined,
-      label: undefined,
+    const shouldSetAria = items?.length && !collapsibleGroups;
+
+    const listArea = {
+      role: shouldSetAria ? 'listbox' : undefined,
+      label: shouldSetAria ? label : undefined,
     };
 
     this.setAria(listArea, this._$listContainer);
@@ -852,27 +857,67 @@ export const ListBase = CollectionWidget.inherit({
     }
   },
 
+  _setGroupAria($group, groupHeaderId): void {
+    const { collapsibleGroups } = this.option();
+
+    const groupAria = {
+      role: collapsibleGroups ? undefined : 'group',
+      // eslint-disable-next-line spellcheck/spell-checker
+      labelledby: collapsibleGroups ? undefined : groupHeaderId,
+    };
+
+    this.setAria(groupAria, $group);
+  },
+
+  _updateGroupHeaderAriaExpanded($groupHeader, expanded): void {
+    this.setAria({ expanded }, $groupHeader);
+  },
+
+  _setGroupHeaderAria($groupHeader, listGroupBodyId): void {
+    const { collapsibleGroups } = this.option();
+
+    const groupHeaderAria = {
+      role: collapsibleGroups ? 'button' : undefined,
+      expanded: collapsibleGroups ? true : undefined,
+      controls: collapsibleGroups ? listGroupBodyId : undefined,
+    };
+
+    this.setAria(groupHeaderAria, $groupHeader);
+  },
+
+  _setGroupBodyAria($groupBody, groupHeaderId): void {
+    const { collapsibleGroups } = this.option();
+
+    const groupHeaderAria = {
+      role: collapsibleGroups ? 'listbox' : undefined,
+      // eslint-disable-next-line spellcheck/spell-checker
+      labelledby: collapsibleGroups ? groupHeaderId : undefined,
+    };
+
+    this.setAria(groupHeaderAria, $groupBody);
+  },
+
   _renderGroup(index, group) {
     const $groupElement = $('<div>')
       .addClass(LIST_GROUP_CLASS)
       .appendTo(this._getItemsContainer());
 
-    const id = `dx-${new Guid().toString()}`;
-    const groupAria = {
-      role: 'group',
-      // eslint-disable-next-line spellcheck/spell-checker
-      labelledby: id,
-    };
-
-    this.setAria(groupAria, $groupElement);
+    const groupHeaderId = `dx-${new Guid().toString()}`;
 
     const $groupHeaderElement = $('<div>')
       .addClass(LIST_GROUP_HEADER_CLASS)
-      .attr('id', id)
+      .attr('id', groupHeaderId)
       .appendTo($groupElement);
 
-    const groupTemplateName = this.option('groupTemplate');
-    const groupTemplate = this._getTemplate(group.template || groupTemplateName, group, index, $groupHeaderElement);
+    const { groupTemplate: templateName } = this.option();
+
+    const groupTemplate = this._getTemplate(
+      group.template || templateName,
+      group,
+      index,
+      $groupHeaderElement,
+    );
+
     const renderArgs = {
       index,
       itemData: group,
@@ -887,9 +932,13 @@ export const ListBase = CollectionWidget.inherit({
 
     this._renderingGroupIndex = index;
 
+    const groupBodyId = `dx-${new Guid().toString()}`;
+
     const $groupBody = $('<div>')
       .addClass(LIST_GROUP_BODY_CLASS)
+      .attr('id', groupBodyId)
       .appendTo($groupElement);
+
     // @ts-expect-error
     each(groupItemsGetter(group) || [], (itemIndex, item) => {
       this._renderItem({ group: index, item: itemIndex }, item, $groupBody);
@@ -900,6 +949,10 @@ export const ListBase = CollectionWidget.inherit({
       groupIndex: index,
       groupData: group,
     });
+
+    this._setGroupAria($groupElement, groupHeaderId);
+    this._setGroupHeaderAria($groupHeaderElement, groupBodyId);
+    this._setGroupBodyAria($groupBody, groupHeaderId);
   },
 
   downInkRippleHandler(e) {

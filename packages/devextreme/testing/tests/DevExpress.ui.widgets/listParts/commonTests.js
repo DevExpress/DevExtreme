@@ -4628,4 +4628,183 @@ QUnit.module('Accessibility', () => {
         $switchableButton = $(`.${SWITCHABLE_DELETE_BUTTON_CLASS}`);
         checkButtonAttributes(assert, $switchableButton);
     });
+
+    [true, false].forEach(collapsibleGroups => {
+        QUnit.test(`Grouped list items element should have correct aria if collapsibleGroups: ${collapsibleGroups}`, function(assert) {
+            const $element = $('#list').dxList({
+                dataSource: [{ key: 1, items: [1] }],
+                grouped: true,
+                collapsibleGroups,
+            });
+
+            const $listItems = $element.find(`.${LIST_ITEMS_CLASS}`);
+
+            const expectedListItemsAria = {
+                role: collapsibleGroups ? undefined : 'listbox',
+                'aria-label': collapsibleGroups ? undefined : 'Items',
+            };
+
+            assert.strictEqual($listItems.attr('role'), expectedListItemsAria.role, 'role is correct');
+            assert.strictEqual($listItems.attr('aria-label'), expectedListItemsAria['aria-label'], 'aria-label is correct');
+        });
+
+        QUnit.test(`Group element should have correct aria if collapsibleGroups: ${collapsibleGroups}`, function(assert) {
+            const $element = $('#list').dxList({
+                dataSource: [{ key: 1, items: [1] }],
+                grouped: true,
+                collapsibleGroups,
+            });
+
+            const $groupElement = $element.find(`.${LIST_GROUP_CLASS}`);
+
+            const expectedGroupAria = {
+                role: collapsibleGroups ? undefined : 'group',
+                'aria-labelledby': collapsibleGroups ? false : true,
+            };
+
+            assert.strictEqual($groupElement.attr('role'), expectedGroupAria.role, 'role is correct');
+            assert.strictEqual(!!$groupElement.attr('aria-labelledby'), expectedGroupAria['aria-labelledby'], 'aria-labelledby is correct');
+        });
+
+        QUnit.test(`Group header element should have correct aria if collapsibleGroups: ${collapsibleGroups}`, function(assert) {
+            const $element = $('#list').dxList({
+                dataSource: [{ key: 1, items: [1] }],
+                grouped: true,
+                collapsibleGroups,
+            });
+
+            const $groupHeader = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+            const expectedGroupHeaderAria = {
+                role: collapsibleGroups ? 'button' : undefined,
+                'aria-expanded': collapsibleGroups ? 'true' : undefined,
+                'aria-controls': collapsibleGroups ? true : false,
+            };
+
+            assert.strictEqual($groupHeader.attr('role'), expectedGroupHeaderAria.role, 'role is correct');
+            assert.strictEqual($groupHeader.attr('aria-expanded'), expectedGroupHeaderAria['aria-expanded'], 'aria-expanded is correct');
+            assert.strictEqual(!!$groupHeader.attr('aria-controls'), expectedGroupHeaderAria['aria-controls'], 'aria-controls is correct');
+        });
+
+        QUnit.test(`Group body element should have correct aria if collapsibleGroups: ${collapsibleGroups}`, function(assert) {
+            const $element = $('#list').dxList({
+                dataSource: [{ key: 1, items: [1] }],
+                grouped: true,
+                collapsibleGroups,
+            });
+
+            const $groupBody = $element.find(`.${LIST_GROUP_BODY_CLASS}`);
+
+            const expectedGroupBodyAria = {
+                role: collapsibleGroups ? 'listbox' : undefined,
+                'aria-labelledby': collapsibleGroups ? true : false,
+            };
+
+            assert.strictEqual($groupBody.attr('role'), expectedGroupBodyAria.role, 'role is correct');
+            assert.strictEqual(!!$groupBody.attr('aria-labelledby'), expectedGroupBodyAria['aria-labelledby'], 'aria-labelledby is correct');
+        });
+
+        QUnit.test(`Grouped list items element should have correct aria if collapsibleGroups is changed in runtime, init value: ${collapsibleGroups}`, function(assert) {
+            const $element = $('#list').dxList({
+                dataSource: [{ key: 1, items: [1] }],
+                grouped: true,
+                collapsibleGroups,
+            });
+            const instance = $element.dxList('instance');
+
+            instance.option('collapsibleGroups', !collapsibleGroups);
+
+            const $listItems = $element.find(`.${LIST_ITEMS_CLASS}`);
+
+            const expectedListItemsAria = {
+                role: collapsibleGroups ? 'listbox' : undefined,
+                'aria-label': collapsibleGroups ? 'Items' : undefined,
+            };
+
+            assert.strictEqual($listItems.attr('role'), expectedListItemsAria.role, 'role is correct');
+            assert.strictEqual($listItems.attr('aria-label'), expectedListItemsAria['aria-label'], 'aria-label is correct');
+        });
+
+        QUnit.test(`Group element should have correct aria if collapsibleGroups is changed in runtime, init value: ${collapsibleGroups}`, function(assert) {
+            const $element = $('#list').dxList({
+                dataSource: [{ key: 1, items: [1] }],
+                grouped: true,
+                collapsibleGroups,
+            });
+            const instance = $element.dxList('instance');
+
+            instance.option('collapsibleGroups', !collapsibleGroups);
+
+            const $groupElement = $element.find(`.${LIST_GROUP_CLASS}`);
+
+            const expectedGroupAria = {
+                role: collapsibleGroups ? 'group' : undefined,
+                'aria-labelledby': collapsibleGroups ? true : false,
+            };
+
+            assert.strictEqual($groupElement.attr('role'), expectedGroupAria.role, 'role is correct');
+            assert.strictEqual(!!$groupElement.attr('aria-labelledby'), expectedGroupAria['aria-labelledby'], 'aria-labelledby is correct');
+        });
+
+        QUnit.test(`Group header element should have correct aria if collapsibleGroups is changed in runtime, init value: ${collapsibleGroups}`, function(assert) {
+            const $element = $('#list').dxList({
+                dataSource: [{ key: 1, items: [1] }],
+                grouped: true,
+                collapsibleGroups,
+            });
+            const instance = $element.dxList('instance');
+
+            instance.option('collapsibleGroups', !collapsibleGroups);
+
+            const $groupHeader = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+            const expectedGroupHeaderAria = {
+                role: collapsibleGroups ? undefined : 'button',
+                'aria-expanded': collapsibleGroups ? undefined : 'true',
+                'aria-controls': collapsibleGroups ? false : true,
+            };
+
+            assert.strictEqual($groupHeader.attr('role'), expectedGroupHeaderAria.role, 'role is correct');
+            assert.strictEqual($groupHeader.attr('aria-expanded'), expectedGroupHeaderAria['aria-expanded'], 'aria-expanded is correct');
+            assert.strictEqual(!!$groupHeader.attr('aria-controls'), expectedGroupHeaderAria['aria-controls'], 'aria-controls is correct');
+        });
+
+        QUnit.test(`Group body element should have correct aria if collapsibleGroups is changed in runtime, init value: ${collapsibleGroups}`, function(assert) {
+            const $element = $('#list').dxList({
+                dataSource: [{ key: 1, items: [1] }],
+                grouped: true,
+                collapsibleGroups,
+            });
+            const instance = $element.dxList('instance');
+
+            instance.option('collapsibleGroups', !collapsibleGroups);
+
+            const $groupBody = $element.find(`.${LIST_GROUP_BODY_CLASS}`);
+
+            const expectedGroupBodyAria = {
+                role: collapsibleGroups ? undefined : 'listbox',
+                'aria-labelledby': collapsibleGroups ? false : true,
+            };
+
+            assert.strictEqual($groupBody.attr('role'), expectedGroupBodyAria.role, 'role is correct');
+            assert.strictEqual(!!$groupBody.attr('aria-labelledby'), expectedGroupBodyAria['aria-labelledby'], 'aria-labelledby is correct');
+        });
+    });
+
+    QUnit.test('Group header element should have correct aria-expanded after click if collapsibleGroups: true', function(assert) {
+        const $element = $('#list').dxList({
+            dataSource: [{ key: 1, items: [1] }],
+            grouped: true,
+            collapsibleGroups: true,
+        });
+
+        const $groupHeader = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+        assert.strictEqual($groupHeader.attr('aria-expanded'), 'true', 'aria-expanded is correct');
+
+        $groupHeader.trigger('dxclick');
+        assert.strictEqual($groupHeader.attr('aria-expanded'), 'false', 'aria-expanded is changed');
+
+        $groupHeader.trigger('dxclick');
+        assert.strictEqual($groupHeader.attr('aria-expanded'), 'true', 'aria-expanded is changed');
+    });
 });
