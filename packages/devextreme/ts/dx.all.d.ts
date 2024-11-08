@@ -9529,6 +9529,10 @@ declare module DevExpress.ui {
        */
       readonly message?: Message;
     };
+    export type MessageTemplateData = {
+      readonly component: dxChat;
+      readonly message?: Message;
+    };
     /**
      * [descr:_ui_chat_OptionChangedEvent]
      */
@@ -9587,6 +9591,10 @@ declare module DevExpress.ui {
      */
     dataSource?: DevExpress.data.DataSource.DataSourceLike<DevExpress.ui.dxChat.Message> | null;
     /**
+     * [descr:dxChatOptions.dayHeaderFormat]
+     */
+    dayHeaderFormat?: Format;
+    /**
      * [descr:dxChatOptions.reloadOnChange]
      */
     reloadOnChange?: boolean;
@@ -9594,6 +9602,20 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.alerts]
      */
     alerts?: Array<DevExpress.ui.dxChat.Alert>;
+    /**
+     * [descr:dxChatOptions.messageTemplate]
+     */
+    messageTemplate?:
+      | ((
+          data: DevExpress.ui.dxChat.MessageTemplateData,
+          messageBubbleElement: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement)
+      | DevExpress.core.template
+      | null;
+    /**
+     * [descr:dxChatOptions.messageTimestampFormat]
+     */
+    messageTimestampFormat?: Format;
     /**
      * [descr:dxChatOptions.typingUsers]
      */
@@ -30793,10 +30815,6 @@ declare module DevExpress.ui.dxChat {
      * [descr:Message.text]
      */
     text?: string;
-    /**
-     * [descr:Message.typing]
-     */
-    typing?: boolean;
   };
   /**
    * [descr:User]

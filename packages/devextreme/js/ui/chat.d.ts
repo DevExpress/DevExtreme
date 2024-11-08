@@ -1,3 +1,16 @@
+import {
+    Format,
+} from '../localization';
+
+import {
+    UserDefinedElement,
+    DxElement,
+} from '../core/element';
+
+import {
+    template,
+} from '../core/templates/template';
+
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import {
     EventInfo,
@@ -77,19 +90,16 @@ export type User = {
     id?: number | string;
     /**
      * @docid
-     * @default ''
      * @public
      */
     name?: string;
     /**
      * @docid
-     * @default ''
      * @public
      */
     avatarUrl?: string;
     /**
      * @docid
-     * @default undefined
      * @public
      */
     avatarAlt?: string | undefined;
@@ -108,7 +118,6 @@ export type Alert = {
     id?: number | string;
     /**
      * @docid
-     * @default ''
      * @public
      */
     message?: string;
@@ -127,28 +136,25 @@ export type Message = {
     id?: number | string;
     /**
      * @docid
-     * @default undefined
      * @public
      */
     timestamp?: Date | number | string | undefined;
     /**
      * @docid
-     * @default undefined
      * @public
      */
     author?: User | undefined;
     /**
      * @docid
-     * @default ''
      * @public
      */
     text?: string;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    typing?: boolean;
+};
+
+/** @public */
+export type MessageTemplateData = {
+    readonly component: dxChat;
+    readonly message?: Message;
 };
 
 /**
@@ -197,16 +203,35 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     dataSource?: DataSourceLike<Message> | null;
     /**
      * @docid
+     * @default 'shortdate'
+     * @public
+     */
+    dayHeaderFormat?: Format;
+    /**
+     * @docid
      * @default true
      * @public
      */
     reloadOnChange?: boolean;
     /**
      * @docid
-     * @default undefined
+     * @default []
      * @public
      */
     alerts?: Array<Alert>;
+    /**
+     * @docid
+     * @default null
+     * @type_function_return string|Element|jQuery
+     * @public
+     */
+    messageTemplate?: ((data: MessageTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement) | template | null;
+    /**
+     * @docid
+     * @default 'shorttime'
+     * @public
+     */
+    messageTimestampFormat?: Format;
     /**
      * @docid
      * @default []

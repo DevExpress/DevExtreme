@@ -5,7 +5,6 @@ import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import type { Options as DataSourceOptions } from '@js/data/data_source';
 import DataHelperMixin from '@js/data_helper';
-import type { Format } from '@js/localization';
 import messageLocalization from '@js/localization/message';
 import type {
   Message,
@@ -34,10 +33,6 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 type Properties = ChatProperties & {
   title: string;
-  // eslint-disable-next-line
-  messageTemplate: any;
-  dayHeaderFormat?: Format;
-  messageTimestampFormat?: Format;
 };
 
 class Chat extends Widget<Properties> {
@@ -67,6 +62,7 @@ class Chat extends Widget<Properties> {
       dataSource: null,
       user: { id: new Guid().toString() },
       dayHeaderFormat: 'shortdate',
+      messageTemplate: null,
       messageTimestampFormat: 'shorttime',
       alerts: [],
       showAvatar: true,
@@ -75,7 +71,6 @@ class Chat extends Widget<Properties> {
       typingUsers: [],
       onMessageEntered: undefined,
       reloadOnChange: true,
-      messageTemplate: null,
       onTypingStart: undefined,
       onTypingEnd: undefined,
     };

@@ -5,6 +5,7 @@ import ScrollView from 'ui/scroll_view';
 import {
     generateMessages,
     userFirst,
+    userSecond,
     NOW,
     MOCK_COMPANION_USER_ID,
     MOCK_CURRENT_USER_ID,
@@ -20,6 +21,10 @@ const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
 const CHAT_MESSAGELIST_DAY_HEADER_CLASS = 'dx-chat-messagelist-day-header';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
+const CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-messagegroup-alignment-start';
+const CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-messagegroup-alignment-end';
+const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-alignment-start';
+const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 const CHAT_TYPINGINDICATOR_CLASS = 'dx-chat-typingindicator';
 const SCROLLVIEW_REACHBOTTOM_INDICATOR = 'dx-scrollview-scrollbottom';
@@ -425,6 +430,24 @@ QUnit.module('MessageList', () => {
             const $indicator = this.$element.find(`.${SCROLLVIEW_REACHBOTTOM_INDICATOR}`);
             assert.strictEqual($indicator.is(':visible'), true);
         });
+
+        QUnit.test('loading indicator should be change visibility after change isLoading option value at runtime', function(assert) {
+            this.reinit({
+                items: [
+                    { author: { id: 'UserID' } },
+                ],
+                isLoading: true
+            });
+
+            this.instance.option('isLoading', false);
+
+            const $indicator = this.$element.find(`.${SCROLLVIEW_REACHBOTTOM_INDICATOR}`);
+            assert.strictEqual($indicator.is(':visible'), false, 'loadindicator is not visible');
+
+            this.instance.option('isLoading', true);
+
+            assert.strictEqual($indicator.is(':visible'), true, 'loadindicator is visible');
+        });
     });
 
     QUnit.module('Options', () => {
@@ -749,6 +772,58 @@ QUnit.module('MessageList', () => {
             const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
 
             assert.strictEqual(messageGroup.option('messageTimestampFormat'), 'hh.mm');
+        });
+
+        [{
+            alignment: 'alignment-start',
+            expectedGroupClass: CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS,
+            expectedLastGroupClass: CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS,
+        }, {
+            alignment: 'alignment-end',
+            expectedGroupClass: CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS,
+            expectedLastGroupClass: CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS,
+        }].forEach(({ alignment, expectedGroupClass, expectedLastGroupClass, author }) => {
+            QUnit.test(`last message group with ${alignment} should have ${expectedLastGroupClass} class`, function(assert) {
+                this.reinit({
+                    items: [
+                        { text: 'a', author: userFirst },
+                        { text: 'b', author: userSecond },
+                        { text: 'c', author: userFirst },
+                        { text: 'd', author: userSecond },
+                    ],
+                    currentUserId: userFirst.id,
+                });
+
+                const $messageGroups = this.$element.find(`.${expectedGroupClass}`);
+                const $lastGroup = this.$element.find(`.${expectedLastGroupClass}`);
+
+                assert.strictEqual($messageGroups.last().hasClass(expectedLastGroupClass), true, 'last group has expected class');
+                assert.strictEqual($lastGroup.length, 1, 'only one message group has expected class');
+            });
+
+            QUnit.test(`${expectedLastGroupClass} class should be moved to a new message group on runtime message with ${alignment} add`, function(assert) {
+                this.reinit({
+                    items: [
+                        { text: 'a', author: userFirst },
+                        { text: 'b', author: userSecond },
+                    ],
+                    currentUserId: userFirst.id,
+                });
+
+                let newMessage = { text: 'c', author: userFirst };
+
+                this.instance.option({ items: [ ...this.instance.option('items'), newMessage ] });
+
+                newMessage = { text: 'd', author: userSecond };
+
+                this.instance.option({ items: [ ...this.instance.option('items'), newMessage ] });
+
+                const $messageGroups = this.$element.find(`.${expectedGroupClass}`);
+                const $lastGroup = this.$element.find(`.${expectedLastGroupClass}`);
+
+                assert.strictEqual($messageGroups.last().hasClass(expectedLastGroupClass), true, 'last group has expected class');
+                assert.strictEqual($lastGroup.length, 1, 'only one message group has expected class');
+            });
         });
     });
 
