@@ -15,7 +15,6 @@ import Avatar from '__internal/ui/chat/avatar';
 import Button from 'ui/button';
 import ColorBox from 'ui/color_box';
 import Chat from 'ui/chat';
-import ChatHeader from '__internal/ui/chat/header';
 import ChatMessageBox from '__internal/ui/chat/messagebox';
 import ChatMessageBubble from '__internal/ui/chat/messagebubble';
 import ChatMessageGroup from '__internal/ui/chat/messagegroup';
@@ -1373,13 +1372,6 @@ testComponentDefaults(Avatar,
         name: 'Unknown User',
         url: '',
         alt: '',
-    }
-);
-
-testComponentDefaults(ChatHeader,
-    {},
-    {
-        title: '',
     }
 );
 
