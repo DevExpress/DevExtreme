@@ -130,7 +130,7 @@ declare class DevicesObject {
 * @public
 */
 
-export declare const devices: DevicesObject;
+export const devices: DevicesObject;
 
 /**
  * @docid

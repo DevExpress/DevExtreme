@@ -137,7 +137,7 @@ export type AnimationConfig = {
  * @section utils
  * @namespace DevExpress
  */
-export declare const fx: {
+export const fx: {
     /**
      * @docid
      * @publicName animate(element, config)
@@ -269,7 +269,7 @@ export interface PositionConfig {
  * @namespace DevExpress
  * @public
  */
-export declare const animationPresets: {
+export const animationPresets: {
   /**
    * @docid
    * @publicName applyChanges()

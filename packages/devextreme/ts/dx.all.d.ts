@@ -569,7 +569,7 @@ declare module DevExpress {
   /**
    * [descr:animationPresets]
    */
-  export declare const animationPresets: {
+  export const animationPresets: {
     /**
      * [descr:animationPresets.applyChanges()]
      */
@@ -747,7 +747,7 @@ declare module DevExpress {
   /**
     * [descr:devices]
     */
-   export declare const devices: DevicesObject;
+   export const devices: DevicesObject;
   /**
    * [descr:DevicesObject]
    */
@@ -952,7 +952,7 @@ declare module DevExpress {
   /**
    * [descr:fx]
    */
-  export declare const fx: {
+  export const fx: {
     /**
      * [descr:fx.animate(element, config)]
      */
