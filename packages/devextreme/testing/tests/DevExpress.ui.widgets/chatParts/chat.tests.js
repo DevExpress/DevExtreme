@@ -7,6 +7,7 @@ import MessageBox, { TYPING_END_DELAY } from '__internal/ui/chat/messagebox';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
+import dataUtils from 'core/element_data';
 
 import { isRenderer } from 'core/utils/type';
 
@@ -1157,7 +1158,7 @@ QUnit.module('Chat', () => {
             assert.strictEqual(this.getBubbles().length, 3, 'message bubble count');
             assert.strictEqual(this.getBubbles().eq(1).text(), newBubbleText, 'message bubble text was updated');
 
-            const messageData = data(this.getBubbles().eq(1).get(0), 'dxMessageData');
+            const messageData = dataUtils.data(this.getBubbles().eq(1).get(0), 'dxMessageData');
 
             assert.deepEqual(messageData, { id: 2, text: newBubbleText }, 'message bubble data was updated');
         });

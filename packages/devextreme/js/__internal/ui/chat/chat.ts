@@ -23,7 +23,7 @@ import type {
   TypingStartEvent as MessageBoxTypingStartEvent,
 } from './messagebox';
 import MessageBox from './messagebox';
-import type { Change, Properties as MessageListProperties } from './messagelist';
+import type { Change, MessageTemplate, Properties as MessageListProperties } from './messagelist';
 import MessageList from './messagelist';
 
 const CHAT_CLASS = 'dx-chat';
@@ -138,7 +138,6 @@ class Chat extends Widget<Properties> {
       showAvatar = false,
       showUserName = false,
       showMessageTimestamp = false,
-      messageTemplate,
       dayHeaderFormat,
       messageTimestampFormat,
       typingUsers = [],
@@ -151,6 +150,7 @@ class Chat extends Widget<Properties> {
     const options: MessageListProperties = {
       items,
       currentUserId,
+      messageTemplate: this._getMessageTemplate(),
       showDayHeaders,
       showAvatar,
       showUserName,
@@ -161,8 +161,13 @@ class Chat extends Widget<Properties> {
       isLoading,
     };
 
+    return options;
+  }
+
+  _getMessageTemplate(): MessageTemplate {
+    const { messageTemplate } = this.option();
     if (messageTemplate) {
-      options.messageTemplate = (message, $container): void => {
+      return (message, $container): void => {
         const template = this._getTemplateByOption('messageTemplate');
 
         template.render({
@@ -175,7 +180,7 @@ class Chat extends Widget<Properties> {
       };
     }
 
-    return options;
+    return null;
   }
 
   _renderAlertList(): void {
@@ -341,11 +346,13 @@ class Chat extends Widget<Properties> {
       case 'showMessageTimestamp':
         this._messageList.option(name, !!value);
         break;
-      case 'messageTemplate':
       case 'dayHeaderFormat':
       case 'messageTimestampFormat':
       case 'typingUsers':
         this._messageList.option(name, value);
+        break;
+      case 'messageTemplate':
+        this._messageList.option(name, this._getMessageTemplate());
         break;
       case 'reloadOnChange':
         break;

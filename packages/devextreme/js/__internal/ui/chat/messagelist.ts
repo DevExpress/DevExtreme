@@ -49,6 +49,8 @@ const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-al
 const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
 export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
 
+export type MessageTemplate = ((data: Message, messageBubbleContainer: Element) => void) | null;
+
 export interface Change {
   type: 'insert' | 'update' | 'remove';
   data?: DeepPartial<Message>;
@@ -59,7 +61,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
-  messageTemplate?: ((data: Message, messageBubbleContainer: Element) => void) | null;
+  messageTemplate?: MessageTemplate;
   dayHeaderFormat?: Format;
   messageTimestampFormat?: Format;
   typingUsers: User[];

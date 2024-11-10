@@ -13,6 +13,7 @@ import Widget from '@ts/core/widget/widget';
 import Avatar from './avatar';
 import type { Properties as MessageBubbleProperties } from './messagebubble';
 import MessageBubble from './messagebubble';
+import type { MessageTemplate } from './messagelist';
 
 export const MESSAGE_DATA_KEY = 'dxMessageData';
 
@@ -32,7 +33,7 @@ export interface Properties extends WidgetOptions<MessageGroup> {
   showAvatar: boolean;
   showUserName: boolean;
   showMessageTimestamp: boolean;
-  messageTemplate?: ((data: Message, messageBubbleContainer: Element) => void) | null;
+  messageTemplate?: MessageTemplate;
   messageTimestampFormat?: Format;
 }
 

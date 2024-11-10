@@ -50,7 +50,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
             assert.strictEqual(templateSpy.callCount, 1, 'template was rendered once');
             assert.strictEqual(templateSpy.args[0][0], messageText, 'text argument is correct');
-            assert.strictEqual(templateSpy.args[0][1], this.$element.get(0), 'container element is correct');
+            assert.strictEqual($(templateSpy.args[0][1]).get(0), this.$element.get(0), 'container element is correct');
         });
 
         QUnit.test('default markup should be restored after resetting the template option at runtime', function(assert) {
