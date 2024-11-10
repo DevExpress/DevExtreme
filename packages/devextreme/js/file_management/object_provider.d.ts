@@ -6,6 +6,7 @@ import {
 /**
  * @public
  * @deprecated Use ObjectFileSystemProviderOptions from /common/file_management instead
+ * @namespace DevExpress.fileManagement.ObjectFileSystemProvider
 */
 export type Options = ObjectFileSystemProviderOptions;
 

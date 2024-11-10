@@ -6,6 +6,7 @@ import {
 /**
  * @public
  * @deprecated Use RemoteFileSystemProviderOptions from /common/file_management instead
+ * @namespace DevExpress.fileManagement.RemoteFileSystemProvider
  */
 export type Options = RemoteFileSystemProviderOptions;
 

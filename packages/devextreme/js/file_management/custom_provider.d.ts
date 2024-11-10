@@ -6,6 +6,7 @@ import {
 /**
  * @public
  * @deprecated Use CustomFileSystemProviderOptions from /common/file_management instead
+ * @namespace DevExpress.fileManagement.CustomFileSystemProvider
  */
 export type Options = CustomFileSystemProviderOptions;
 

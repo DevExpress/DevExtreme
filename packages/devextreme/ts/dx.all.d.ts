@@ -7571,20 +7571,6 @@ declare module DevExpress.fileManagement {
     itemsExpr?: string | Function;
   }
   /**
-   * @deprecated Use CustomFileSystemProviderOptions from /common/file_management instead
-   */
-  export type Options = CustomFileSystemProviderOptions;
-  /**
-   * @public
-   * @deprecated Use ObjectFileSystemProviderOptions from /common/file_management instead
-   */
-  export type Options = ObjectFileSystemProviderOptions;
-  /**
-   * @public
-   * @deprecated Use RemoteFileSystemProviderOptions from /common/file_management instead
-   */
-  export type Options = RemoteFileSystemProviderOptions;
-  /**
    * [descr:RemoteFileSystemProvider]
    */
   export class RemoteFileSystemProvider extends FileSystemProviderBase {
@@ -7650,6 +7636,24 @@ declare module DevExpress.fileManagement {
      */
     chunkIndex: number;
   }
+}
+declare module DevExpress.fileManagement.CustomFileSystemProvider {
+  /**
+   * @deprecated Use CustomFileSystemProviderOptions from /common/file_management instead
+   */
+  export type Options = CustomFileSystemProviderOptions;
+}
+declare module DevExpress.fileManagement.ObjectFileSystemProvider {
+  /**
+   * @deprecated Use ObjectFileSystemProviderOptions from /common/file_management instead
+   */
+  export type Options = ObjectFileSystemProviderOptions;
+}
+declare module DevExpress.fileManagement.RemoteFileSystemProvider {
+  /**
+   * @deprecated Use RemoteFileSystemProviderOptions from /common/file_management instead
+   */
+  export type Options = RemoteFileSystemProviderOptions;
 }
 declare module DevExpress.localization {
   /**
