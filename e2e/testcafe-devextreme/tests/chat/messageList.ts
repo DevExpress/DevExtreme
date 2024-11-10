@@ -156,8 +156,8 @@ test('Messagelist should scrolled to the latest messages after being rendered in
 test('Messagelist with loadindicator appearance on initial loading', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.debug();
   await testScreenshot(t, takeScreenshot, 'Messagelist loadindicator position on initial loading.png', { element: '#container' });
+
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
