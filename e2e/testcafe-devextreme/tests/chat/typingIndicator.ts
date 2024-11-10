@@ -3,7 +3,7 @@ import Chat from 'devextreme-testcafe-models/chat';
 import { createUser, generateMessages } from './data';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
-import { testScreenshot } from '../../helpers/themeUtils';
+import { getFullThemeName, testScreenshot } from '../../helpers/themeUtils';
 import { appendElementTo, insertStylesheetRulesToPage } from '../../helpers/domUtils';
 
 const CHAT_TYPINGINDICATOR_CIRCLE_CLASS = 'dx-chat-typingindicator-circle';
@@ -14,13 +14,29 @@ fixture.disablePageReloads`ChatTypingIndicator`
 test('Chat: typing indicator with emptyview', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Typing indicator with emptyview.png', { element: '#chat' });
+  const chat = new Chat('#container');
+
+  await testScreenshot(t, takeScreenshot, 'Typing indicator with emptyview.png', {
+    element: '#container',
+    shouldTestInCompact: true,
+    compactCallBack: async () => {
+      await chat.repaint();
+    },
+  });
+
+  const darkTheme = getFullThemeName().replace('light', 'dark');
+  await testScreenshot(t, takeScreenshot, 'Typing indicator with emptyview.png', {
+    element: '#container',
+    theme: darkTheme,
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await appendElementTo('#container', 'div', 'chat');
   await insertStylesheetRulesToPage(`.${CHAT_TYPINGINDICATOR_CIRCLE_CLASS} { animation: none !important; }`);
 
   const typingUsers = [
@@ -31,7 +47,7 @@ test('Chat: typing indicator with emptyview', async (t) => {
     width: 400,
     height: 600,
     typingUsers,
-  }, '#chat');
+  });
 });
 
 test('Chat: typing indicator with a lot of items', async (t) => {
