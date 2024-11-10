@@ -877,6 +877,60 @@ QUnit.module('MessageList', () => {
                 assert.strictEqual($lastGroup.length, 1, 'only one message group has expected class');
             });
         });
+
+        QUnit.test('messageTemplate should set bubble content on init', function(assert) {
+            const messageTemplate = ({ text }, container) => {
+                $('<h1>').text(`${text}${text}`).appendTo(container);
+            };
+
+            this.reinit({
+                items: [{ text: 'CustomText' }],
+                messageTemplate,
+            });
+
+            const $bubble = this.getBubbles();
+
+            assert.strictEqual($bubble.text(), 'CustomTextCustomText');
+        });
+
+        QUnit.test('messageTemplate should set bubble content at runtime', function(assert) {
+            const messageTemplate = ({ text }, container) => {
+                $('<h1>').text(`${text}${text}`).appendTo(container);
+            };
+
+            this.reinit({
+                items: [{ text: 'CustomText' }]
+            });
+
+            this.instance.option('messageTemplate', messageTemplate);
+
+            const $bubble = this.getBubbles();
+
+            assert.strictEqual($bubble.text(), 'CustomTextCustomText');
+        });
+
+        QUnit.test('messageTemplate function should have correct parameters', function(assert) {
+            assert.expect(3);
+
+            const timestamp = 1234567;
+            const text = 'message text';
+            const author = { name: 'UserName', id: 'UserID' };
+
+            const messageTemplate = (data) => {
+                assert.deepEqual(data.author, author, 'author parameter is passed');
+                assert.strictEqual(data.timestamp, timestamp, 'timestamp parameter is passed');
+                assert.strictEqual(data.text, text, 'text parameter is passed');
+            };
+
+            this.reinit({
+                items: [{
+                    timestamp,
+                    text,
+                    author,
+                }],
+                messageTemplate,
+            });
+        });
     });
 
     QUnit.module('TypingIndicator integration', moduleConfig, () => {
