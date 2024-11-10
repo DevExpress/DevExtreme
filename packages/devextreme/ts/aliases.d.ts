@@ -1,8 +1,8 @@
 declare module DevExpress {
-    /** @deprecated Use DevExpress.events.EventObject instead */
-    export type dxEvent = DevExpress.events.EventObject;
-    /** @deprecated Use DevExpress.events.event instead */
-    export type event = DevExpress.events.event;
+    /** @deprecated Use DevExpress.?.? instead */
+    // export type dxEvent = DevExpress.core.EventObject;
+    /** @deprecated Use DevExpress.?.? instead */
+    // export type event = DevExpress.core.event;
 }
 
 declare module DevExpress.viz {
@@ -462,8 +462,8 @@ declare module DevExpress.viz {
 }
 
 declare namespace DevExpress.data {
-    /** @deprecated Use DevExpress.data.Store.Options instead */
-    export type StoreOptions = Store.Options;
+    /** @deprecated Use DevExpress.?.?.? instead */
+    // export type StoreOptions = Store.Options;
 }
 
 // v23.1
