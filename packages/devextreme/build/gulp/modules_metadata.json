@@ -739,7 +739,7 @@
   {
     "name": "ui/widget/template",
     "exports": {
-      "Template": { "path": "ui.template", "exportAs": "type" }
+      "TemplateLegacy": { "path": "ui.template", "exportAs": "type" }
     }
   },
   {

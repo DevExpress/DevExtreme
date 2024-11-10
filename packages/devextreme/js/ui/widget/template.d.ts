@@ -8,4 +8,4 @@ import {
  * @deprecated
  * @public
  */
-export type Template = template;
+export type TemplateLegacy = template;

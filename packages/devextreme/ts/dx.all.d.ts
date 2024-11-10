@@ -30591,7 +30591,7 @@ declare module DevExpress.ui {
    * [descr:ui.template]
    * @deprecated [depNote:ui.template]
    */
-  export type Template = Template;
+  export type TemplateLegacy = Template;
   /**
    * [descr:ui.themes]
    */
