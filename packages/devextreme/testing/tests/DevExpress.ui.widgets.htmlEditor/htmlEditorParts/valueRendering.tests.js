@@ -651,12 +651,27 @@ export default function() {
     });
 
     testModule('converter option', () => {
+        [null, undefined].forEach(value => {
+            test(`The content should be correct if value is ${value} on init`, function(assert) {
+                const instance = $('#htmlEditor').dxHtmlEditor({
+                    converter: {
+                        toHtml: (e) => e,
+                    },
+                    value,
+                }).dxHtmlEditor('instance');
+
+                const markup = instance.$element().find(`.${CONTENT_CLASS}`).html();
+
+                assert.strictEqual(markup, '<p><br></p>');
+            });
+        });
+
         test('The content should be converted on init', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 converter: {
                     toHtml: () => '<h1>Html converted</h1><p>value</p>',
                 },
-                value: 'not html value'
+                value: 'not html value',
             }).dxHtmlEditor('instance');
 
             const markup = instance.$element().find(`.${CONTENT_CLASS}`).html();

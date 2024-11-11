@@ -152,6 +152,8 @@
 
         const editorInstance = $('.html-editor').dxHtmlEditor({
           height: 300,
+          // converter,
+          value: null,
           // converter: showdownTurndownConverter,
           // value: '<p><strong>value</strong></p>',
           // value: '**value**',
@@ -159,7 +161,8 @@
           // value: '<div onclick="alert(\'XSS\')">XSS is removed by rehypeSanitize</div>',
         }).dxHtmlEditor('instance');
 
-        editorInstance.option('converter', showdownTurndownConverter);
+        // editorInstance.option('converter', showdownTurndownConverter);
+        editorInstance.option('converter', converter);
       });
     </script>
   </div>
