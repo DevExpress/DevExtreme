@@ -3,7 +3,7 @@ import {Chat, ChatTypes} from 'devextreme-react/chat'
 import type {Meta, StoryObj} from '@storybook/react';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
-import { firstAuthor, secondAuthor, initialMessages, longError } from './data';
+import { firstAuthor, secondAuthor, thirdAuthor, fourthAuthor, initialMessages, longError } from './data';
 import { Popup } from 'devextreme-react/popup';
 
 import './styles.css';
@@ -384,6 +384,48 @@ export const Customization: Story = {
                     showAvatar={showAvatar}
                     showUserName={showUserName}
                     showMessageTimestamp={showMessageTimestamp}
+                >
+                </Chat>
+            </div>
+        );
+    }
+}
+
+export const TypingUsers: Story = {
+    args: {
+        typingUsers: 'One user typing',
+    },
+    argTypes: {
+        typingUsers: {
+            control: 'select',
+            defaultValue: 'One user typing',
+            options: [
+                'No one is typing',
+                'One user typing',
+                'Two users typing',
+                'Three users typing',
+                'Multiple users typing',
+            ],
+            mapping: {
+                ['No one is typing']: [],
+                ['One user typing']: [ firstAuthor ],
+                ['Two users typing']: [ firstAuthor, secondAuthor ],
+                ['Three users typing']: [ firstAuthor, secondAuthor, thirdAuthor ],
+                ['Multiple users typing']: [ firstAuthor, secondAuthor, thirdAuthor, fourthAuthor ],
+            },
+        },
+    },
+    render: ({
+        typingUsers,
+    }) => {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Chat
+                    width={400}
+                    height={500}
+                    items={initialMessages}
+                    user={secondAuthor}
+                    typingUsers={typingUsers}
                 >
                 </Chat>
             </div>

@@ -15,7 +15,6 @@ import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import ArrayStore from 'data/array_store';
 
-const CHAT_HEADER_TEXT_CLASS = 'dx-chat-header-text';
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 const CHAT_ALERTLIST_CLASS = 'dx-chat-alertlist';
@@ -31,8 +30,6 @@ const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
-
-const MOCK_CHAT_HEADER_TEXT = 'Chat title';
 
 export const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 export const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
@@ -110,26 +107,6 @@ QUnit.module('Chat', () => {
 
         QUnit.test('User id should be generated as a string if user has not been set', function(assert) {
             assert.strictEqual(typeof this.instance.option('user.id') === 'string', true);
-        });
-    });
-
-    QUnit.module('Header integration', moduleConfig, () => {
-        QUnit.test('Header text element should have correct text', function(assert) {
-            this.reinit({
-                title: MOCK_CHAT_HEADER_TEXT
-            });
-
-            const $header = this.$element.find(`.${CHAT_HEADER_TEXT_CLASS}`);
-
-            assert.strictEqual($header.text(), MOCK_CHAT_HEADER_TEXT);
-        });
-
-        QUnit.test('Header text element should have correct text after runtime change', function(assert) {
-            this.instance.option({ title: 'new title' });
-
-            const $header = this.$element.find(`.${CHAT_HEADER_TEXT_CLASS}`);
-
-            assert.strictEqual($header.text(), 'new title');
         });
     });
 

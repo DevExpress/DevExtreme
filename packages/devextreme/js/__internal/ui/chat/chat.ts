@@ -9,7 +9,7 @@ import messageLocalization from '@js/localization/message';
 import type {
   Message,
   MessageEnteredEvent,
-  Properties as ChatProperties,
+  Properties,
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
@@ -17,7 +17,6 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
 import AlertList from './alertlist';
-import ChatHeader from './header';
 import type {
   MessageEnteredEvent as MessageBoxMessageEnteredEvent,
   Properties as MessageBoxProperties,
@@ -30,13 +29,7 @@ import MessageList from './messagelist';
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-type Properties = ChatProperties & {
-  title: string;
-};
-
 class Chat extends Widget<Properties> {
-  _chatHeader?: ChatHeader;
-
   _messageBox!: MessageBox;
 
   _messageList!: MessageList;
@@ -52,7 +45,6 @@ class Chat extends Widget<Properties> {
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
-      title: '',
       showDayHeaders: true,
       activeStateEnabled: true,
       focusStateEnabled: true,
@@ -118,27 +110,12 @@ class Chat extends Widget<Properties> {
 
     super._initMarkup();
 
-    const { title } = this.option();
-
-    if (title) {
-      this._renderHeader(title);
-    }
-
     this._renderMessageList();
     this._renderAlertList();
     this._renderMessageBox();
 
     this._updateRootAria();
     this._updateMessageBoxAria();
-  }
-
-  _renderHeader(title: string): void {
-    const $header = $('<div>');
-
-    this.$element().append($header);
-    this._chatHeader = this._createComponent($header, ChatHeader, {
-      title,
-    });
   }
 
   _renderMessageList(): void {
@@ -310,19 +287,6 @@ class Chat extends Widget<Properties> {
       case 'hoverStateEnabled':
         this._messageBox.option(name, value);
         break;
-      case 'title': {
-        if (value) {
-          if (this._chatHeader) {
-            this._chatHeader.option('title', value);
-          } else {
-            this._renderHeader(value);
-          }
-        } else if (this._chatHeader) {
-          this._chatHeader.dispose();
-          this._chatHeader.$element().remove();
-        }
-        break;
-      }
       case 'user': {
         const author = value as Properties[typeof name];
 
