@@ -236,7 +236,7 @@ const HtmlEditor = Editor.inherit({
     return sanitizedHtml;
   },
 
-  _applyHtmlConverterToHtml(value: string): string {
+  _convertToHtml(value: string): string {
     const result = isFunction(this._htmlConverter?.toHtml)
       ? String(this._htmlConverter.toHtml(value) || '')
       : value;
@@ -244,7 +244,7 @@ const HtmlEditor = Editor.inherit({
     return result;
   },
 
-  _applyHtmlConverterFromHtml(value: string): string {
+  _convertFromHtml(value: string): string {
     const result = isFunction(this._htmlConverter?.fromHtml)
       ? String(this._htmlConverter.fromHtml(value) || '')
       : value;
@@ -254,7 +254,7 @@ const HtmlEditor = Editor.inherit({
 
   _updateContainerMarkup(): void {
     const { value } = this.option();
-    const html = this._applyHtmlConverterToHtml(value);
+    const html = this._convertToHtml(value);
 
     if (!html) {
       return;
@@ -456,7 +456,7 @@ const HtmlEditor = Editor.inherit({
     const { value: currentValue } = this.option();
 
     const html = this._deltaConverter.toHtml();
-    const convertedValue = this._applyHtmlConverterFromHtml(html);
+    const convertedValue = this._convertFromHtml(html);
 
     if (
       currentValue !== convertedValue
@@ -536,7 +536,7 @@ const HtmlEditor = Editor.inherit({
       if (this._isEditorUpdating) {
         this._isEditorUpdating = false;
       } else {
-        const html = this._applyHtmlConverterToHtml(value);
+        const html = this._convertToHtml(value);
 
         this._suppressValueChangeAction();
         this._updateHtmlContent(html);

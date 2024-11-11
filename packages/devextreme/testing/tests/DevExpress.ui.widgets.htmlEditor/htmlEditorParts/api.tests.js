@@ -736,6 +736,34 @@ testModule('API', moduleConfig, () => {
 
             assert.strictEqual(this.instance.option('value'), '**NEW VALUE**');
         });
+
+        [
+            { returnedValue: { value: 'value' }, expectedValue: '[object Object]' },
+            { returnedValue: ['string', { object: 'object' }], expectedValue: 'string,[object Object]' },
+            { returnedValue: NaN, expectedValue: '' },
+            { returnedValue: true, expectedValue: 'true' },
+            { returnedValue: false, expectedValue: '' },
+            { returnedValue: null, expectedValue: '' },
+            { returnedValue: undefined, expectedValue: '' },
+            { returnedValue: 4, expectedValue: '4' },
+            { returnedValue: Infinity, expectedValue: 'Infinity' },
+            { returnedValue: -Infinity, expectedValue: '-Infinity' },
+        ].forEach(({ returnedValue, expectedValue }) => {
+            test(`The value should be handled correctly if fromHtml returns an unexpected value: ${returnedValue}`, function(assert) {
+                const instance = $('#htmlEditor').dxHtmlEditor({
+                    converter: {
+                        toHtml: e => e,
+                        fromHtml: () => returnedValue,
+                    },
+                }).dxHtmlEditor('instance');
+
+                instance.option('value', 'new value');
+
+                const { value } = instance.option();
+
+                assert.strictEqual(value, expectedValue);
+            });
+        });
     });
 });
 
