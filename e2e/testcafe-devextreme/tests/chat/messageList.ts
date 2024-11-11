@@ -173,7 +173,7 @@ test('Messagelist with loadindicator appearance on initial loading', async (t) =
         load: () => new Promise<Message[]>((resolve) => {
           setTimeout(() => {
             resolve(data);
-          }, 100000);
+          }, 3000);
         }),
       }),
       width: 400,
