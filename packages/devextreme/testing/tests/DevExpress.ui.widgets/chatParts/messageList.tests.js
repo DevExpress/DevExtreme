@@ -44,6 +44,8 @@ const moduleConfig = {
 
             this.getScrollView = () => ScrollView.getInstance(this.$element.find(`.${SCROLLVIEW_CLASS}`));
             this.getDayHeaders = () => $(this.getScrollView().content()).find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
+            this.getMessageGroups = () => this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
+            this.getBubbles = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
 
             this.scrollView = this.getScrollView();
             this.$scrollViewContent = $(this.scrollView.content());
@@ -675,6 +677,56 @@ QUnit.module('MessageList', () => {
             assert.strictEqual($messageGroups.length, 2, 'correct messagegroup count');
             assert.strictEqual($firstMessageGroupBubbles.length, 3, 'correct bubble count');
             assert.strictEqual($secondMessageGroupBubbles.length, 1, 'correct bubble count');
+        });
+
+        QUnit.test('new messages should be rendered after the last group', function(assert) {
+            const items = [
+                {
+                    timestamp: '2024-09-26T14:00:00',
+                    text: 'first messagegroup',
+                    author: userFirst,
+                },
+                {
+                    timestamp: '2024-09-26T14:02:00',
+                    text: 'first messagegroup',
+                    author: userFirst,
+                },
+                {
+                    timestamp: '2024-09-26T14:05:01',
+                    text: 'first messagegroup',
+                    author: userFirst,
+                },
+                {
+                    timestamp: '2024-09-26T14:10:02',
+                    text: 'second messagegroup',
+                    author: userSecond,
+                },
+            ];
+
+            this.reinit({
+                items,
+                showDayHeaders: false,
+                currentUserId: userFirst.id,
+            });
+
+            let $messageGroups = this.getMessageGroups();
+
+            assert.strictEqual($messageGroups.length, 2, 'correct messagegroup count');
+            assert.strictEqual($messageGroups.eq(0).find(`.${CHAT_MESSAGEBUBBLE_CLASS}`).length, 3, 'correct bubble count');
+            assert.strictEqual($messageGroups.eq(1).find(`.${CHAT_MESSAGEBUBBLE_CLASS}`).length, 1, 'correct bubble count');
+
+            this.instance.option('items', [...items, {
+                timestamp: '2024-09-26T14:05:05',
+                text: 'message_text',
+                author: userFirst,
+            }]);
+
+            $messageGroups = this.getMessageGroups();
+
+            assert.strictEqual($messageGroups.length, 3, 'correct messagegroup count');
+            assert.strictEqual($messageGroups.eq(0).find(`.${CHAT_MESSAGEBUBBLE_CLASS}`).length, 3, 'correct bubble count');
+            assert.strictEqual($messageGroups.eq(1).find(`.${CHAT_MESSAGEBUBBLE_CLASS}`).length, 1, 'correct bubble count');
+            assert.strictEqual($messageGroups.eq(2).find(`.${CHAT_MESSAGEBUBBLE_CLASS}`).length, 1, 'correct bubble count');
         });
 
         QUnit.test(`new message group should not be rendered if ${MESSAGEGROUP_TIMEOUT} ms elapsed between the first and new messages at runtime`, function(assert) {

@@ -85,6 +85,15 @@ const CollectionWidget = Widget.inherit({
     });
   },
 
+  _getHandlerExtendedParams(e, target) {
+    const params = extend({}, e, {
+      target: target.get(0),
+      currentTarget: target.get(0),
+    });
+
+    return params;
+  },
+
   _enterKeyHandler(e) {
     const $itemElement = $(this.option('focusedElement'));
 
@@ -99,10 +108,7 @@ const CollectionWidget = Widget.inherit({
       });
     }
 
-    this._itemClickHandler(extend({}, e, {
-      target: $itemElement.get(0),
-      currentTarget: $itemElement.get(0),
-    }));
+    this._itemClickHandler(this._getHandlerExtendedParams(e, $itemElement));
   },
 
   _getDefaultOptions() {

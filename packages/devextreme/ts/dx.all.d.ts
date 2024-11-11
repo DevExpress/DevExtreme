@@ -30770,10 +30770,6 @@ declare module DevExpress.ui.dxChat {
      * [descr:Message.text]
      */
     text?: string;
-    /**
-     * [descr:Message.typing]
-     */
-    typing?: boolean;
   };
   /**
    * [descr:User]

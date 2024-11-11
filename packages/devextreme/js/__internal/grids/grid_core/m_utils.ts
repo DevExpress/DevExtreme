@@ -443,32 +443,37 @@ export default {
   getPointsByColumns(items, pointCreated, isVertical?, startColumnIndex = 0, needToCheckPrevPoint = false) {
     const result: any[] = [];
     const cellsLength: number = items.length;
-    let item;
-    let offset;
+    let $item;
+    let offset: { left: number; top: number } = { left: 0, top: 0 };
+    let itemRect: { width: number; height: number } = { width: 0, height: 0 };
     let columnIndex = startColumnIndex;
     let rtlEnabled;
 
     for (let i = 0; i <= cellsLength; i++) {
       if (i < cellsLength) {
-        item = items[i];
-        offset = getBoundingRect(item);
-        // @ts-expect-error
-        rtlEnabled = $(item).css('direction') === 'rtl';
+        $item = items.eq(i);
+        offset = $item.offset();
+        itemRect = getBoundingRect($item.get(0));
+        rtlEnabled = $item.css('direction') === 'rtl';
       }
+
+      const offsetRight = offset.left + itemRect.width;
+      const offsetBottom = offset.top + itemRect.height;
 
       const pointProps: any = {
         index: columnIndex,
         columnIndex,
-        item,
-        x: !isVertical && rtlEnabled !== (i === cellsLength)
-          ? offset?.right ?? 0
-          : offset?.left ?? 0,
-        y: isVertical && i === cellsLength ? offset?.bottom ?? 0 : offset?.top ?? 0,
+        item: $item?.get(0),
+        x: !isVertical && rtlEnabled !== (i === cellsLength) ? offsetRight : offset.left,
+        y: isVertical && i === cellsLength ? offsetBottom : offset.top,
       };
 
       if (!isVertical && i > 0) {
-        const prevItemOffset = getBoundingRect(items[i - 1]);
-        const prevItemOffsetX = rtlEnabled ? prevItemOffset.left : prevItemOffset.right;
+        const prevItemOffset: { left: number; top: number } = items.eq(i - 1).offset();
+        const { width: prevItemWidth }: { width: number } = getBoundingRect(items[i - 1]);
+        const prevItemOffsetX = rtlEnabled
+          ? prevItemOffset.left
+          : prevItemOffset.left + prevItemWidth;
 
         if (prevItemOffset.top < pointProps.y) {
           pointProps.y = prevItemOffset.top;

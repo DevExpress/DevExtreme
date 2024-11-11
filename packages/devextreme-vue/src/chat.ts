@@ -209,14 +209,12 @@ const DxItemConfig = {
     "update:id": null,
     "update:text": null,
     "update:timestamp": null,
-    "update:typing": null,
   },
   props: {
     author: Object,
     id: [Number, String],
     text: String,
-    timestamp: [Date, Number, String],
-    typing: Boolean
+    timestamp: [Date, Number, String]
   }
 };
 

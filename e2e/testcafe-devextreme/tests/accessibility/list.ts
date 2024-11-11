@@ -35,7 +35,7 @@ const configurationWithSimpleItems: Configuration = {
 
 testAccessibility(configurationWithSimpleItems);
 
-const groupedItems = [[
+const groupedItems = [
   {
     key: 'Mr. John Heart',
     items: ['Choose between PPO and HMO Health Plan', 'Google AdWords Strategy', 'New Brochures', 'Update NDA Agreement', 'Review Product Recall Report by Engineering Team'],
@@ -64,7 +64,7 @@ const groupedItems = [[
     key: 'Dr. Kent Samuelson',
     items: ['Update Sales Strategy Documents', 'Review Revenue Projections', 'Refund Request Template'],
   },
-]];
+];
 
 const options: Options<Properties> = {
   dataSource: [groupedItems],
