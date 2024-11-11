@@ -277,19 +277,11 @@ export class Appointment extends DOMComponent {
   }
 
   _getEndDate() {
-    const result = ExpressionUtils.getField(this.option('dataAccessors'), 'endDate', this.rawAppointment);
-    if (result) {
-      return new Date(result);
-    }
-    return result;
+    return this.option('endDate');
   }
 
   _getStartDate() {
-    const result = ExpressionUtils.getField(this.option('dataAccessors'), 'startDate', this.rawAppointment);
-    if (result) {
-      return new Date(result);
-    }
-    return result;
+    return this.option('startDate');
   }
 
   _renderAllDayClass() {
