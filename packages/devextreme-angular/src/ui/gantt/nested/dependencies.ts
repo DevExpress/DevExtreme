@@ -40,34 +40,34 @@ export class DxoGanttDependenciesComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get keyExpr(): (() => void) | string {
+    get keyExpr(): Function | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: (() => void) | string) {
+    set keyExpr(value: Function | string) {
         this._setOption('keyExpr', value);
     }
 
     @Input()
-    get predecessorIdExpr(): (() => void) | string {
+    get predecessorIdExpr(): Function | string {
         return this._getOption('predecessorIdExpr');
     }
-    set predecessorIdExpr(value: (() => void) | string) {
+    set predecessorIdExpr(value: Function | string) {
         this._setOption('predecessorIdExpr', value);
     }
 
     @Input()
-    get successorIdExpr(): (() => void) | string {
+    get successorIdExpr(): Function | string {
         return this._getOption('successorIdExpr');
     }
-    set successorIdExpr(value: (() => void) | string) {
+    set successorIdExpr(value: Function | string) {
         this._setOption('successorIdExpr', value);
     }
 
     @Input()
-    get typeExpr(): (() => void) | string {
+    get typeExpr(): Function | string {
         return this._getOption('typeExpr');
     }
-    set typeExpr(value: (() => void) | string) {
+    set typeExpr(value: Function | string) {
         this._setOption('typeExpr', value);
     }
 

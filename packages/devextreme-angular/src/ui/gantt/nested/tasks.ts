@@ -32,10 +32,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoGanttTasksComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get colorExpr(): (() => void) | string {
+    get colorExpr(): Function | string {
         return this._getOption('colorExpr');
     }
-    set colorExpr(value: (() => void) | string) {
+    set colorExpr(value: Function | string) {
         this._setOption('colorExpr', value);
     }
 
@@ -48,50 +48,50 @@ export class DxoGanttTasksComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get endExpr(): (() => void) | string {
+    get endExpr(): Function | string {
         return this._getOption('endExpr');
     }
-    set endExpr(value: (() => void) | string) {
+    set endExpr(value: Function | string) {
         this._setOption('endExpr', value);
     }
 
     @Input()
-    get keyExpr(): (() => void) | string {
+    get keyExpr(): Function | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: (() => void) | string) {
+    set keyExpr(value: Function | string) {
         this._setOption('keyExpr', value);
     }
 
     @Input()
-    get parentIdExpr(): (() => void) | string {
+    get parentIdExpr(): Function | string {
         return this._getOption('parentIdExpr');
     }
-    set parentIdExpr(value: (() => void) | string) {
+    set parentIdExpr(value: Function | string) {
         this._setOption('parentIdExpr', value);
     }
 
     @Input()
-    get progressExpr(): (() => void) | string {
+    get progressExpr(): Function | string {
         return this._getOption('progressExpr');
     }
-    set progressExpr(value: (() => void) | string) {
+    set progressExpr(value: Function | string) {
         this._setOption('progressExpr', value);
     }
 
     @Input()
-    get startExpr(): (() => void) | string {
+    get startExpr(): Function | string {
         return this._getOption('startExpr');
     }
-    set startExpr(value: (() => void) | string) {
+    set startExpr(value: Function | string) {
         this._setOption('startExpr', value);
     }
 
     @Input()
-    get titleExpr(): (() => void) | string {
+    get titleExpr(): Function | string {
         return this._getOption('titleExpr');
     }
-    set titleExpr(value: (() => void) | string) {
+    set titleExpr(value: Function | string) {
         this._setOption('titleExpr', value);
     }
 

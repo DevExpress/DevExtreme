@@ -184,10 +184,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get disabledExpr(): (() => void) | string {
+    get disabledExpr(): Function | string {
         return this._getOption('disabledExpr');
     }
-    set disabledExpr(value: (() => void) | string) {
+    set disabledExpr(value: Function | string) {
         this._setOption('disabledExpr', value);
     }
 
@@ -236,10 +236,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get expandedExpr(): (() => void) | string {
+    get expandedExpr(): Function | string {
         return this._getOption('expandedExpr');
     }
-    set expandedExpr(value: (() => void) | string) {
+    set expandedExpr(value: Function | string) {
         this._setOption('expandedExpr', value);
     }
 
@@ -301,10 +301,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get hasItemsExpr(): (() => void) | string {
+    get hasItemsExpr(): Function | string {
         return this._getOption('hasItemsExpr');
     }
-    set hasItemsExpr(value: (() => void) | string) {
+    set hasItemsExpr(value: Function | string) {
         this._setOption('hasItemsExpr', value);
     }
 
@@ -379,10 +379,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get itemsExpr(): (() => void) | string {
+    get itemsExpr(): Function | string {
         return this._getOption('itemsExpr');
     }
-    set itemsExpr(value: (() => void) | string) {
+    set itemsExpr(value: Function | string) {
         this._setOption('itemsExpr', value);
     }
 
@@ -405,10 +405,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get keyExpr(): (() => void) | string {
+    get keyExpr(): Function | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: (() => void) | string) {
+    set keyExpr(value: Function | string) {
         this._setOption('keyExpr', value);
     }
 
@@ -431,10 +431,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get parentIdExpr(): (() => void) | string {
+    get parentIdExpr(): Function | string {
         return this._getOption('parentIdExpr');
     }
-    set parentIdExpr(value: (() => void) | string) {
+    set parentIdExpr(value: Function | string) {
         this._setOption('parentIdExpr', value);
     }
 
@@ -587,10 +587,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get selectedExpr(): (() => void) | string {
+    get selectedExpr(): Function | string {
         return this._getOption('selectedExpr');
     }
-    set selectedExpr(value: (() => void) | string) {
+    set selectedExpr(value: Function | string) {
         this._setOption('selectedExpr', value);
     }
 
@@ -863,7 +863,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() disabledExprChange: EventEmitter<(() => void) | string>;
+    @Output() disabledExprChange: EventEmitter<Function | string>;
 
     /**
     
@@ -891,7 +891,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() expandedExprChange: EventEmitter<(() => void) | string>;
+    @Output() expandedExprChange: EventEmitter<Function | string>;
 
     /**
     
@@ -926,7 +926,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hasItemsExprChange: EventEmitter<(() => void) | string>;
+    @Output() hasItemsExprChange: EventEmitter<Function | string>;
 
     /**
     
@@ -968,7 +968,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsExprChange: EventEmitter<(() => void) | string>;
+    @Output() itemsExprChange: EventEmitter<Function | string>;
 
     /**
     
@@ -982,7 +982,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<(() => void) | string>;
+    @Output() keyExprChange: EventEmitter<Function | string>;
 
     /**
     
@@ -996,7 +996,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() parentIdExprChange: EventEmitter<(() => void) | string>;
+    @Output() parentIdExprChange: EventEmitter<Function | string>;
 
     /**
     
@@ -1080,7 +1080,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectedExprChange: EventEmitter<(() => void) | string>;
+    @Output() selectedExprChange: EventEmitter<Function | string>;
 
     /**
     

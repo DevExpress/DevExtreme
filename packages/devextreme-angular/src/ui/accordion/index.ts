@@ -280,10 +280,10 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get keyExpr(): (() => void) | string {
+    get keyExpr(): Function | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: (() => void) | string) {
+    set keyExpr(value: Function | string) {
         this._setOption('keyExpr', value);
     }
 
@@ -627,7 +627,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<(() => void) | string>;
+    @Output() keyExprChange: EventEmitter<Function | string>;
 
     /**
     

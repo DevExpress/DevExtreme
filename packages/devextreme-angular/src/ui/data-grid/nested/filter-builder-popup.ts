@@ -318,10 +318,10 @@ export class DxoDataGridFilterBuilderPopupComponent extends NestedOption impleme
     }
 
     @Input()
-    get position(): (() => void) | PositionAlignment | PositionConfig {
+    get position(): Function | PositionAlignment | PositionConfig {
         return this._getOption('position');
     }
-    set position(value: (() => void) | PositionAlignment | PositionConfig) {
+    set position(value: Function | PositionAlignment | PositionConfig) {
         this._setOption('position', value);
     }
 

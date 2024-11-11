@@ -464,10 +464,10 @@ export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption impl
     }
 
     @Input()
-    get uploadFile(): ((file: any, progressCallback: (() => void)) => any) {
+    get uploadFile(): ((file: any, progressCallback: Function) => any) {
         return this._getOption('uploadFile');
     }
-    set uploadFile(value: ((file: any, progressCallback: (() => void)) => any)) {
+    set uploadFile(value: ((file: any, progressCallback: Function) => any)) {
         this._setOption('uploadFile', value);
     }
 

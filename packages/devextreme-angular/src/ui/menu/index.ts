@@ -193,10 +193,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get disabledExpr(): (() => void) | string {
+    get disabledExpr(): Function | string {
         return this._getOption('disabledExpr');
     }
-    set disabledExpr(value: (() => void) | string) {
+    set disabledExpr(value: Function | string) {
         this._setOption('disabledExpr', value);
     }
 
@@ -310,10 +310,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get itemsExpr(): (() => void) | string {
+    get itemsExpr(): Function | string {
         return this._getOption('itemsExpr');
     }
-    set itemsExpr(value: (() => void) | string) {
+    set itemsExpr(value: Function | string) {
         this._setOption('itemsExpr', value);
     }
 
@@ -375,10 +375,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get selectedExpr(): (() => void) | string {
+    get selectedExpr(): Function | string {
         return this._getOption('selectedExpr');
     }
-    set selectedExpr(value: (() => void) | string) {
+    set selectedExpr(value: Function | string) {
         this._setOption('selectedExpr', value);
     }
 
@@ -636,7 +636,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() disabledExprChange: EventEmitter<(() => void) | string>;
+    @Output() disabledExprChange: EventEmitter<Function | string>;
 
     /**
     
@@ -699,7 +699,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsExprChange: EventEmitter<(() => void) | string>;
+    @Output() itemsExprChange: EventEmitter<Function | string>;
 
     /**
     
@@ -734,7 +734,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectedExprChange: EventEmitter<(() => void) | string>;
+    @Output() selectedExprChange: EventEmitter<Function | string>;
 
     /**
     

@@ -691,10 +691,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get hasItemsExpr(): (() => void) | string {
+    get hasItemsExpr(): Function | string {
         return this._getOption('hasItemsExpr');
     }
-    set hasItemsExpr(value: (() => void) | string) {
+    set hasItemsExpr(value: Function | string) {
         this._setOption('hasItemsExpr', value);
     }
 
@@ -769,10 +769,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get itemsExpr(): (() => void) | string {
+    get itemsExpr(): Function | string {
         return this._getOption('itemsExpr');
     }
-    set itemsExpr(value: (() => void) | string) {
+    set itemsExpr(value: Function | string) {
         this._setOption('itemsExpr', value);
     }
 
@@ -795,10 +795,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get keyExpr(): (() => void) | string {
+    get keyExpr(): Function | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: (() => void) | string) {
+    set keyExpr(value: Function | string) {
         this._setOption('keyExpr', value);
     }
 
@@ -860,10 +860,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get parentIdExpr(): (() => void) | string {
+    get parentIdExpr(): Function | string {
         return this._getOption('parentIdExpr');
     }
-    set parentIdExpr(value: (() => void) | string) {
+    set parentIdExpr(value: Function | string) {
         this._setOption('parentIdExpr', value);
     }
 
@@ -1771,7 +1771,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hasItemsExprChange: EventEmitter<(() => void) | string>;
+    @Output() hasItemsExprChange: EventEmitter<Function | string>;
 
     /**
     
@@ -1813,7 +1813,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsExprChange: EventEmitter<(() => void) | string>;
+    @Output() itemsExprChange: EventEmitter<Function | string>;
 
     /**
     
@@ -1827,7 +1827,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<(() => void) | string>;
+    @Output() keyExprChange: EventEmitter<Function | string>;
 
     /**
     
@@ -1862,7 +1862,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() parentIdExprChange: EventEmitter<(() => void) | string>;
+    @Output() parentIdExprChange: EventEmitter<Function | string>;
 
     /**
     

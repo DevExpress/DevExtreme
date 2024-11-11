@@ -86,10 +86,10 @@ export class DxiSchedulerResourceComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get valueExpr(): (() => void) | string {
+    get valueExpr(): Function | string {
         return this._getOption('valueExpr');
     }
-    set valueExpr(value: (() => void) | string) {
+    set valueExpr(value: Function | string) {
         this._setOption('valueExpr', value);
     }
 

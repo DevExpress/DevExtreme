@@ -380,10 +380,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get position(): (() => void) | PositionAlignment | PositionConfig {
+    get position(): Function | PositionAlignment | PositionConfig {
         return this._getOption('position');
     }
-    set position(value: (() => void) | PositionAlignment | PositionConfig) {
+    set position(value: Function | PositionAlignment | PositionConfig) {
         this._setOption('position', value);
     }
 
@@ -824,7 +824,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<(() => void) | PositionAlignment | PositionConfig>;
+    @Output() positionChange: EventEmitter<Function | PositionAlignment | PositionConfig>;
 
     /**
     

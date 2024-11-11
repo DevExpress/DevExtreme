@@ -181,10 +181,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get dependencies(): Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: (() => void) | string, predecessorIdExpr?: (() => void) | string, successorIdExpr?: (() => void) | string, typeExpr?: (() => void) | string } {
+    get dependencies(): Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, predecessorIdExpr?: Function | string, successorIdExpr?: Function | string, typeExpr?: Function | string } {
         return this._getOption('dependencies');
     }
-    set dependencies(value: Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: (() => void) | string, predecessorIdExpr?: (() => void) | string, successorIdExpr?: (() => void) | string, typeExpr?: (() => void) | string }) {
+    set dependencies(value: Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, predecessorIdExpr?: Function | string, successorIdExpr?: Function | string, typeExpr?: Function | string }) {
         this._setOption('dependencies', value);
     }
 
@@ -337,10 +337,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get resourceAssignments(): Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: (() => void) | string, resourceIdExpr?: (() => void) | string, taskIdExpr?: (() => void) | string } {
+    get resourceAssignments(): Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, resourceIdExpr?: Function | string, taskIdExpr?: Function | string } {
         return this._getOption('resourceAssignments');
     }
-    set resourceAssignments(value: Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: (() => void) | string, resourceIdExpr?: (() => void) | string, taskIdExpr?: (() => void) | string }) {
+    set resourceAssignments(value: Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, resourceIdExpr?: Function | string, taskIdExpr?: Function | string }) {
         this._setOption('resourceAssignments', value);
     }
 
@@ -350,10 +350,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get resources(): Record<string, any> | { colorExpr?: (() => void) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: (() => void) | string, textExpr?: (() => void) | string } {
+    get resources(): Record<string, any> | { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, textExpr?: Function | string } {
         return this._getOption('resources');
     }
-    set resources(value: Record<string, any> | { colorExpr?: (() => void) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: (() => void) | string, textExpr?: (() => void) | string }) {
+    set resources(value: Record<string, any> | { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, textExpr?: Function | string }) {
         this._setOption('resources', value);
     }
 
@@ -545,10 +545,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get tasks(): Record<string, any> | { colorExpr?: (() => void) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: (() => void) | string, keyExpr?: (() => void) | string, parentIdExpr?: (() => void) | string, progressExpr?: (() => void) | string, startExpr?: (() => void) | string, titleExpr?: (() => void) | string } {
+    get tasks(): Record<string, any> | { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: Function | string, keyExpr?: Function | string, parentIdExpr?: Function | string, progressExpr?: Function | string, startExpr?: Function | string, titleExpr?: Function | string } {
         return this._getOption('tasks');
     }
-    set tasks(value: Record<string, any> | { colorExpr?: (() => void) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: (() => void) | string, keyExpr?: (() => void) | string, parentIdExpr?: (() => void) | string, progressExpr?: (() => void) | string, startExpr?: (() => void) | string, titleExpr?: (() => void) | string }) {
+    set tasks(value: Record<string, any> | { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: Function | string, keyExpr?: Function | string, parentIdExpr?: Function | string, progressExpr?: Function | string, startExpr?: Function | string, titleExpr?: Function | string }) {
         this._setOption('tasks', value);
     }
 
@@ -931,7 +931,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dependenciesChange: EventEmitter<Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: (() => void) | string, predecessorIdExpr?: (() => void) | string, successorIdExpr?: (() => void) | string, typeExpr?: (() => void) | string }>;
+    @Output() dependenciesChange: EventEmitter<Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, predecessorIdExpr?: Function | string, successorIdExpr?: Function | string, typeExpr?: Function | string }>;
 
     /**
     
@@ -1015,14 +1015,14 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() resourceAssignmentsChange: EventEmitter<Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: (() => void) | string, resourceIdExpr?: (() => void) | string, taskIdExpr?: (() => void) | string }>;
+    @Output() resourceAssignmentsChange: EventEmitter<Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, resourceIdExpr?: Function | string, taskIdExpr?: Function | string }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() resourcesChange: EventEmitter<Record<string, any> | { colorExpr?: (() => void) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: (() => void) | string, textExpr?: (() => void) | string }>;
+    @Output() resourcesChange: EventEmitter<Record<string, any> | { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, textExpr?: Function | string }>;
 
     /**
     
@@ -1127,7 +1127,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tasksChange: EventEmitter<Record<string, any> | { colorExpr?: (() => void) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: (() => void) | string, keyExpr?: (() => void) | string, parentIdExpr?: (() => void) | string, progressExpr?: (() => void) | string, startExpr?: (() => void) | string, titleExpr?: (() => void) | string }>;
+    @Output() tasksChange: EventEmitter<Record<string, any> | { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: Function | string, keyExpr?: Function | string, parentIdExpr?: Function | string, progressExpr?: Function | string, startExpr?: Function | string, titleExpr?: Function | string }>;
 
     /**
     

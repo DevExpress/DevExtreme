@@ -584,10 +584,10 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get uploadFile(): ((file: any, progressCallback: (() => void)) => any) {
+    get uploadFile(): ((file: any, progressCallback: Function) => any) {
         return this._getOption('uploadFile');
     }
-    set uploadFile(value: ((file: any, progressCallback: (() => void)) => any)) {
+    set uploadFile(value: ((file: any, progressCallback: Function) => any)) {
         this._setOption('uploadFile', value);
     }
 
@@ -1111,7 +1111,7 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() uploadFileChange: EventEmitter<((file: any, progressCallback: (() => void)) => any)>;
+    @Output() uploadFileChange: EventEmitter<((file: any, progressCallback: Function) => any)>;
 
     /**
     
