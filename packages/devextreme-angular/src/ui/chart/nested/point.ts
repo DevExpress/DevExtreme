@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartPointComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string | undefined, visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -54,18 +54,18 @@ export class DxoChartPointComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get hoverStyle(): { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined } {
+    get hoverStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined }) {
+    set hoverStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined }) {
         this._setOption('hoverStyle', value);
     }
 
     @Input()
-    get image(): string | undefined | { height?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }, url?: string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined }, width?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } } {
+    get image(): Record<string, any> | string | undefined | { height?: number | Record<string, any> | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }, url?: Record<string, any> | string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined }, width?: number | Record<string, any> | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } } {
         return this._getOption('image');
     }
-    set image(value: string | undefined | { height?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }, url?: string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined }, width?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } }) {
+    set image(value: Record<string, any> | string | undefined | { height?: number | Record<string, any> | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }, url?: Record<string, any> | string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined }, width?: number | Record<string, any> | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } }) {
         this._setOption('image', value);
     }
 
@@ -78,10 +78,10 @@ export class DxoChartPointComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get selectionStyle(): { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined } {
+    get selectionStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined }) {
+    set selectionStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined }) {
         this._setOption('selectionStyle', value);
     }
 

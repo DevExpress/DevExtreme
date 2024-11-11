@@ -24,12 +24,13 @@ import {
 } from '@angular/core';
 
 
-import { ApplyValueMode, EditorStyle, LabelMode, Mode, Position, SelectAllMode, SimplifiedSearchMode, TextEditorButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
+import DataSource from 'devextreme/data/data_source';
+import { ApplyValueMode, TextEditorButton, LabelMode, SimplifiedSearchMode, SelectAllMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
 import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
-import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
+import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { dxPopupOptions } from 'devextreme/ui/popup';
 import { ChangeEvent, ClosedEvent, ContentReadyEvent, CustomItemCreatingEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, MultiTagPreparingEvent, OpenedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/tag_box';
 
 import DxTagBox from 'devextreme/ui/tag_box';
@@ -65,22 +66,22 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiTagBoxButtonModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoTagBoxOptionsModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoTagBoxDropDownOptionsModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxoTagBoxAnimationModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoTagBoxHideModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoTagBoxFromModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoTagBoxPositionModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxoTagBoxAtModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxoTagBoxBoundaryOffsetModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxiTagBoxButtonModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxoTagBoxCollisionModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxDropDownOptionsModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxFromModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxHideModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxiTagBoxItemModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxoTagBoxMyModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxoTagBoxOffsetModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoTagBoxToModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxOptionsModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxPositionModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxoTagBoxShowModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxToModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxiTagBoxToolbarItemModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxiTagBoxItemModule } from 'devextreme-angular/ui/tag-box/nested';
 
 import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
@@ -196,10 +197,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<CollectionWidgetItem | any> {
+    get dataSource(): Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<CollectionWidgetItem | any>) {
+    set dataSource(value: Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -235,10 +236,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get displayExpr(): Function | string | undefined {
+    get displayExpr(): ((item: any) => string) | string | undefined {
         return this._getOption('displayExpr');
     }
-    set displayExpr(value: Function | string | undefined) {
+    set displayExpr(value: ((item: any) => string) | string | undefined) {
         this._setOption('displayExpr', value);
     }
 
@@ -261,10 +262,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get dropDownOptions(): dxPopupOptions {
+    get dropDownOptions(): dxPopupOptions<any> {
         return this._getOption('dropDownOptions');
     }
-    set dropDownOptions(value: dxPopupOptions) {
+    set dropDownOptions(value: dxPopupOptions<any>) {
         this._setOption('dropDownOptions', value);
     }
 
@@ -274,10 +275,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -339,10 +340,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -430,10 +431,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get items(): Array<any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<any | CollectionWidgetItem> {
         return this._getOption('items');
     }
-    set items(value: Array<any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<any | CollectionWidgetItem>) {
         this._setOption('items', value);
     }
 
@@ -651,10 +652,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get searchExpr(): Function | string | Array<Function | string> {
+    get searchExpr(): Array<(() => any) | string> | (() => any) | string {
         return this._getOption('searchExpr');
     }
-    set searchExpr(value: Function | string | Array<Function | string>) {
+    set searchExpr(value: Array<(() => any) | string> | (() => any) | string) {
         this._setOption('searchExpr', value);
     }
 
@@ -716,10 +717,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get selectedItems(): Array<string | number | any> {
+    get selectedItems(): Array<any | number | string> {
         return this._getOption('selectedItems');
     }
-    set selectedItems(value: Array<string | number | any>) {
+    set selectedItems(value: Array<any | number | string>) {
         this._setOption('selectedItems', value);
     }
 
@@ -898,10 +899,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get validationMessagePosition(): Position | Mode {
+    get validationMessagePosition(): Mode | Position {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: Position | Mode) {
+    set validationMessagePosition(value: Mode | Position) {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -924,10 +925,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get value(): Array<string | number | any> {
+    get value(): Array<any | number | string> {
         return this._getOption('value');
     }
-    set value(value: Array<string | number | any>) {
+    set value(value: Array<any | number | string>) {
         this._setOption('value', value);
     }
 
@@ -952,10 +953,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get valueExpr(): Function | string {
+    get valueExpr(): ((item: any) => string | number | boolean) | string {
         return this._getOption('valueExpr');
     }
-    set valueExpr(value: Function | string) {
+    set valueExpr(value: ((item: any) => string | number | boolean) | string) {
         this._setOption('valueExpr', value);
     }
 
@@ -978,10 +979,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -1197,7 +1198,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<CollectionWidgetItem | any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -1218,7 +1219,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() displayExprChange: EventEmitter<Function | string | undefined>;
+    @Output() displayExprChange: EventEmitter<((item: any) => string) | string | undefined>;
 
     /**
     
@@ -1232,14 +1233,14 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownOptionsChange: EventEmitter<dxPopupOptions>;
+    @Output() dropDownOptionsChange: EventEmitter<dxPopupOptions<any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -1274,7 +1275,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -1323,7 +1324,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<any | CollectionWidgetItem>>;
 
     /**
     
@@ -1442,7 +1443,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchExprChange: EventEmitter<Function | string | Array<Function | string>>;
+    @Output() searchExprChange: EventEmitter<Array<(() => any) | string> | (() => any) | string>;
 
     /**
     
@@ -1477,7 +1478,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectedItemsChange: EventEmitter<Array<string | number | any>>;
+    @Output() selectedItemsChange: EventEmitter<Array<any | number | string>>;
 
     /**
     
@@ -1575,7 +1576,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<Position | Mode>;
+    @Output() validationMessagePositionChange: EventEmitter<Mode | Position>;
 
     /**
     
@@ -1589,7 +1590,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<Array<string | number | any>>;
+    @Output() valueChange: EventEmitter<Array<any | number | string>>;
 
     /**
     
@@ -1603,7 +1604,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueExprChange: EventEmitter<Function | string>;
+    @Output() valueExprChange: EventEmitter<((item: any) => string | number | boolean) | string>;
 
     /**
     
@@ -1617,7 +1618,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -1872,22 +1873,22 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxoToModule,
     DxoShowModule,
     DxiItemModule,
-    DxiTagBoxButtonModule,
-    DxoTagBoxOptionsModule,
-    DxoTagBoxDropDownOptionsModule,
     DxoTagBoxAnimationModule,
-    DxoTagBoxHideModule,
-    DxoTagBoxFromModule,
-    DxoTagBoxPositionModule,
     DxoTagBoxAtModule,
     DxoTagBoxBoundaryOffsetModule,
+    DxiTagBoxButtonModule,
     DxoTagBoxCollisionModule,
+    DxoTagBoxDropDownOptionsModule,
+    DxoTagBoxFromModule,
+    DxoTagBoxHideModule,
+    DxiTagBoxItemModule,
     DxoTagBoxMyModule,
     DxoTagBoxOffsetModule,
-    DxoTagBoxToModule,
+    DxoTagBoxOptionsModule,
+    DxoTagBoxPositionModule,
     DxoTagBoxShowModule,
+    DxoTagBoxToModule,
     DxiTagBoxToolbarItemModule,
-    DxiTagBoxItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1911,22 +1912,22 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxoToModule,
     DxoShowModule,
     DxiItemModule,
-    DxiTagBoxButtonModule,
-    DxoTagBoxOptionsModule,
-    DxoTagBoxDropDownOptionsModule,
     DxoTagBoxAnimationModule,
-    DxoTagBoxHideModule,
-    DxoTagBoxFromModule,
-    DxoTagBoxPositionModule,
     DxoTagBoxAtModule,
     DxoTagBoxBoundaryOffsetModule,
+    DxiTagBoxButtonModule,
     DxoTagBoxCollisionModule,
+    DxoTagBoxDropDownOptionsModule,
+    DxoTagBoxFromModule,
+    DxoTagBoxHideModule,
+    DxiTagBoxItemModule,
     DxoTagBoxMyModule,
     DxoTagBoxOffsetModule,
-    DxoTagBoxToModule,
+    DxoTagBoxOptionsModule,
+    DxoTagBoxPositionModule,
     DxoTagBoxShowModule,
+    DxoTagBoxToModule,
     DxiTagBoxToolbarItemModule,
-    DxiTagBoxItemModule,
     DxTemplateModule
   ]
 })

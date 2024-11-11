@@ -12,6 +12,7 @@ import {
 
 
 
+import { dxFilterBuilderField } from 'devextreme/ui/filter_builder';
 import { DataType } from 'devextreme/common';
 
 import {
@@ -28,10 +29,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiTreeListCustomOperationComponent extends CollectionNestedOption {
     @Input()
-    get calculateFilterExpression(): Function {
+    get calculateFilterExpression(): ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>) {
         return this._getOption('calculateFilterExpression');
     }
-    set calculateFilterExpression(value: Function) {
+    set calculateFilterExpression(value: ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>)) {
         this._setOption('calculateFilterExpression', value);
     }
 
@@ -44,18 +45,18 @@ export class DxiTreeListCustomOperationComponent extends CollectionNestedOption 
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
     @Input()
-    get dataTypes(): any | undefined | Array<DataType> {
+    get dataTypes(): Array<DataType> | undefined {
         return this._getOption('dataTypes');
     }
-    set dataTypes(value: any | undefined | Array<DataType>) {
+    set dataTypes(value: Array<DataType> | undefined) {
         this._setOption('dataTypes', value);
     }
 

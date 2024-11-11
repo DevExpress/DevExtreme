@@ -14,10 +14,9 @@ import {
 
 
 
+import { ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig } from 'devextreme/common/grids';
 import { PositionConfig } from 'devextreme/animation/position';
 import { SortOrder } from 'devextreme/common';
-import { ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig } from 'devextreme/common/grids';
-import { UserDefinedElement } from 'devextreme/core/element';
 
 import {
     NestedOptionHost,
@@ -41,10 +40,10 @@ export class DxoTreeListColumnChooserComponent extends NestedOption implements O
     }
 
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string | undefined {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string | undefined) {
         this._setOption('container', value);
     }
 

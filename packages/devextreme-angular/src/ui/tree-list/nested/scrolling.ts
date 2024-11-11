@@ -14,8 +14,8 @@ import {
 
 
 
-import { Mode, ScrollbarMode, ScrollMode } from 'devextreme/common';
 import { DataRenderMode } from 'devextreme/common/grids';
+import { ScrollMode, ScrollbarMode, Mode } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -95,10 +95,10 @@ export class DxoTreeListScrollingComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get useNative(): Mode | boolean {
+    get useNative(): boolean | Mode {
         return this._getOption('useNative');
     }
-    set useNative(value: Mode | boolean) {
+    set useNative(value: boolean | Mode) {
         this._setOption('useNative', value);
     }
 

@@ -29,46 +29,6 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoTreeListTextsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get fix(): string {
-        return this._getOption('fix');
-    }
-    set fix(value: string) {
-        this._setOption('fix', value);
-    }
-
-    @Input()
-    get leftPosition(): string {
-        return this._getOption('leftPosition');
-    }
-    set leftPosition(value: string) {
-        this._setOption('leftPosition', value);
-    }
-
-    @Input()
-    get rightPosition(): string {
-        return this._getOption('rightPosition');
-    }
-    set rightPosition(value: string) {
-        this._setOption('rightPosition', value);
-    }
-
-    @Input()
-    get stickyPosition(): string {
-        return this._getOption('stickyPosition');
-    }
-    set stickyPosition(value: string) {
-        this._setOption('stickyPosition', value);
-    }
-
-    @Input()
-    get unfix(): string {
-        return this._getOption('unfix');
-    }
-    set unfix(value: string) {
-        this._setOption('unfix', value);
-    }
-
-    @Input()
     get addRow(): string {
         return this._getOption('addRow');
     }
@@ -162,6 +122,46 @@ export class DxoTreeListTextsComponent extends NestedOption implements OnDestroy
     }
     set validationCancelChanges(value: string) {
         this._setOption('validationCancelChanges', value);
+    }
+
+    @Input()
+    get fix(): string {
+        return this._getOption('fix');
+    }
+    set fix(value: string) {
+        this._setOption('fix', value);
+    }
+
+    @Input()
+    get leftPosition(): string {
+        return this._getOption('leftPosition');
+    }
+    set leftPosition(value: string) {
+        this._setOption('leftPosition', value);
+    }
+
+    @Input()
+    get rightPosition(): string {
+        return this._getOption('rightPosition');
+    }
+    set rightPosition(value: string) {
+        this._setOption('rightPosition', value);
+    }
+
+    @Input()
+    get stickyPosition(): string {
+        return this._getOption('stickyPosition');
+    }
+    set stickyPosition(value: string) {
+        this._setOption('stickyPosition', value);
+    }
+
+    @Input()
+    get unfix(): string {
+        return this._getOption('unfix');
+    }
+    set unfix(value: string) {
+        this._setOption('unfix', value);
     }
 
     @Input()

@@ -8,16 +8,14 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    Output,
-    EventEmitter
+    Input
 } from '@angular/core';
 
 
 
 
-import { FirstDayOfWeek, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { CalendarSelectionMode, CalendarZoomLevel, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, WeekNumberRule } from 'devextreme/ui/calendar';
+import { DisabledDate, CalendarZoomLevel, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, CalendarSelectionMode, WeekNumberRule } from 'devextreme/ui/calendar';
+import { FirstDayOfWeek, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -49,6 +47,14 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     }
 
     @Input()
+    get bindingOptions(): Record<string, any> {
+        return this._getOption('bindingOptions');
+    }
+    set bindingOptions(value: Record<string, any>) {
+        this._setOption('bindingOptions', value);
+    }
+
+    @Input()
     get cellTemplate(): any {
         return this._getOption('cellTemplate');
     }
@@ -73,18 +79,18 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get disabledDates(): Function | Array<Date> {
+    get disabledDates(): Array<Date> | ((data: DisabledDate) => boolean) {
         return this._getOption('disabledDates');
     }
-    set disabledDates(value: Function | Array<Date>) {
+    set disabledDates(value: Array<Date> | ((data: DisabledDate) => boolean)) {
         this._setOption('disabledDates', value);
     }
 
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -105,10 +111,10 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -313,10 +319,10 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get value(): Date | number | string | Array<Date | number | string> {
+    get value(): Array<Date | number | string> | Date | number | string {
         return this._getOption('value');
     }
-    set value(value: Date | number | string | Array<Date | number | string>) {
+    set value(value: Array<Date | number | string> | Date | number | string) {
         this._setOption('value', value);
     }
 
@@ -337,10 +343,10 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -353,19 +359,6 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     }
 
 
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() valueChange: EventEmitter<Date | number | string | Array<Date | number | string>>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() zoomLevelChange: EventEmitter<CalendarZoomLevel>;
     protected get _optionPath() {
         return 'calendarOptions';
     }
@@ -374,12 +367,6 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
-        this._createEventEmitters([
-            { emit: 'valueChange' },
-            { emit: 'zoomLevelChange' }
-        ]);
-
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

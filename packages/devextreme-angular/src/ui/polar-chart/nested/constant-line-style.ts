@@ -46,10 +46,10 @@ export class DxoPolarChartConstantLineStyleComponent extends NestedOption implem
     }
 
     @Input()
-    get label(): { font?: Font, visible?: boolean } {
+    get label(): Record<string, any> | { font?: Font, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { font?: Font, visible?: boolean }) {
+    set label(value: Record<string, any> | { font?: Font, visible?: boolean }) {
         this._setOption('label', value);
     }
 

@@ -14,8 +14,9 @@ import {
 
 
 
-import { HorizontalAlignment, Orientation, Position, VerticalEdge } from 'devextreme/common';
 import { DashStyle, Font } from 'devextreme/common/charts';
+import { BarGaugeBarInfo, BarGaugeLegendItem } from 'devextreme/viz/bar_gauge';
+import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 import { Format } from 'devextreme/localization';
 
 import {
@@ -40,10 +41,10 @@ export class DxoBarGaugeLegendComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get border(): { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -64,26 +65,26 @@ export class DxoBarGaugeLegendComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get customizeHint(): Function {
+    get customizeHint(): ((arg: { item: BarGaugeBarInfo, text: string }) => string) {
         return this._getOption('customizeHint');
     }
-    set customizeHint(value: Function) {
+    set customizeHint(value: ((arg: { item: BarGaugeBarInfo, text: string }) => string)) {
         this._setOption('customizeHint', value);
     }
 
     @Input()
-    get customizeItems(): Function {
+    get customizeItems(): ((items: Array<BarGaugeLegendItem>) => Array<BarGaugeLegendItem>) {
         return this._getOption('customizeItems');
     }
-    set customizeItems(value: Function) {
+    set customizeItems(value: ((items: Array<BarGaugeLegendItem>) => Array<BarGaugeLegendItem>)) {
         this._setOption('customizeItems', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((arg: { item: BarGaugeBarInfo, text: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((arg: { item: BarGaugeBarInfo, text: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -112,10 +113,10 @@ export class DxoBarGaugeLegendComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get itemTextFormat(): Format | string | undefined {
+    get itemTextFormat(): Format | undefined {
         return this._getOption('itemTextFormat');
     }
-    set itemTextFormat(value: Format | string | undefined) {
+    set itemTextFormat(value: Format | undefined) {
         this._setOption('itemTextFormat', value);
     }
 
@@ -128,10 +129,10 @@ export class DxoBarGaugeLegendComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get margin(): number | { bottom?: number, left?: number, right?: number, top?: number } {
+    get margin(): number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number } {
         return this._getOption('margin');
     }
-    set margin(value: number | { bottom?: number, left?: number, right?: number, top?: number }) {
+    set margin(value: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }) {
         this._setOption('margin', value);
     }
 
@@ -144,10 +145,10 @@ export class DxoBarGaugeLegendComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get markerTemplate(): any | undefined {
+    get markerTemplate(): any {
         return this._getOption('markerTemplate');
     }
-    set markerTemplate(value: any | undefined) {
+    set markerTemplate(value: any) {
         this._setOption('markerTemplate', value);
     }
 
@@ -192,10 +193,10 @@ export class DxoBarGaugeLegendComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge } {
+    get title(): Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge } {
         return this._getOption('title');
     }
-    set title(value: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }) {
+    set title(value: Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }) {
         this._setOption('title', value);
     }
 

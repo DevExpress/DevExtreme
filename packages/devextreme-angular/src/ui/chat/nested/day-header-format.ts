@@ -38,18 +38,18 @@ export class DxoChatDayHeaderFormatComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get formatter(): Function {
+    get formatter(): ((value: number | Date) => string) {
         return this._getOption('formatter');
     }
-    set formatter(value: Function) {
+    set formatter(value: ((value: number | Date) => string)) {
         this._setOption('formatter', value);
     }
 
     @Input()
-    get parser(): Function {
+    get parser(): ((value: string) => number | Date) {
         return this._getOption('parser');
     }
-    set parser(value: Function) {
+    set parser(value: ((value: string) => number | Date)) {
         this._setOption('parser', value);
     }
 

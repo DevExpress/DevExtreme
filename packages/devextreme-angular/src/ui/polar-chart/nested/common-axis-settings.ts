@@ -14,7 +14,7 @@ import {
 
 
 
-import { DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap } from 'devextreme/common/charts';
+import { DashStyle, Font, DiscreteAxisDivisionMode, LabelOverlap } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -46,10 +46,10 @@ export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get constantLineStyle(): { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number } {
+    get constantLineStyle(): Record<string, any> | { color?: string, dashStyle?: DashStyle, label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number } {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }) {
+    set constantLineStyle(value: Record<string, any> | { color?: string, dashStyle?: DashStyle, label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number }) {
         this._setOption('constantLineStyle', value);
     }
 
@@ -70,10 +70,10 @@ export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get grid(): { color?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get grid(): Record<string, any> | { color?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('grid');
     }
-    set grid(value: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set grid(value: Record<string, any> | { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('grid', value);
     }
 
@@ -86,26 +86,26 @@ export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get label(): { font?: Font, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean } {
+    get label(): Record<string, any> | { font?: Font, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { font?: Font, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }) {
+    set label(value: Record<string, any> | { font?: Font, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }) {
         this._setOption('label', value);
     }
 
     @Input()
-    get minorGrid(): { color?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get minorGrid(): Record<string, any> | { color?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('minorGrid');
     }
-    set minorGrid(value: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set minorGrid(value: Record<string, any> | { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('minorGrid', value);
     }
 
     @Input()
-    get minorTick(): { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number } {
+    get minorTick(): Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('minorTick');
     }
-    set minorTick(value: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }) {
+    set minorTick(value: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('minorTick', value);
     }
 
@@ -118,18 +118,18 @@ export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get stripStyle(): { label?: { font?: Font } } {
+    get stripStyle(): Record<string, any> | { label?: Record<string, any> | { font?: Font } } {
         return this._getOption('stripStyle');
     }
-    set stripStyle(value: { label?: { font?: Font } }) {
+    set stripStyle(value: Record<string, any> | { label?: Record<string, any> | { font?: Font } }) {
         this._setOption('stripStyle', value);
     }
 
     @Input()
-    get tick(): { color?: string, length?: number, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get tick(): Record<string, any> | { color?: string, length?: number, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('tick');
     }
-    set tick(value: { color?: string, length?: number, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set tick(value: Record<string, any> | { color?: string, length?: number, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('tick', value);
     }
 

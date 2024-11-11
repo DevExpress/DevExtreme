@@ -9,8 +9,6 @@ import {
     Host,
     SkipSelf,
     Input,
-    Output,
-    EventEmitter,
     ContentChildren,
     forwardRef,
     QueryList
@@ -19,9 +17,11 @@ import {
 
 
 
-import { DataChange, GridsEditMode, GridsEditRefreshMode, NewRowPosition, StartEditAction } from 'devextreme/common/grids';
-import { Properties as dxFormOptions } from 'devextreme/ui/form';
-import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
+import dxDataGrid from 'devextreme/ui/data_grid';
+import { dxDataGridRowObject } from 'devextreme/ui/data_grid';
+import { DataChange, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction } from 'devextreme/common/grids';
+import { dxFormOptions } from 'devextreme/ui/form';
+import { dxPopupOptions } from 'devextreme/ui/popup';
 
 import {
     NestedOptionHost,
@@ -46,18 +46,18 @@ export class DxoDataGridEditingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get allowDeleting(): boolean | Function {
+    get allowDeleting(): boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean) {
         return this._getOption('allowDeleting');
     }
-    set allowDeleting(value: boolean | Function) {
+    set allowDeleting(value: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean)) {
         this._setOption('allowDeleting', value);
     }
 
     @Input()
-    get allowUpdating(): boolean | Function {
+    get allowUpdating(): boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean) {
         return this._getOption('allowUpdating');
     }
-    set allowUpdating(value: boolean | Function) {
+    set allowUpdating(value: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean)) {
         this._setOption('allowUpdating', value);
     }
 
@@ -118,10 +118,10 @@ export class DxoDataGridEditingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get popup(): dxPopupOptions {
+    get popup(): dxPopupOptions<any> {
         return this._getOption('popup');
     }
-    set popup(value: dxPopupOptions) {
+    set popup(value: dxPopupOptions<any>) {
         this._setOption('popup', value);
     }
 
@@ -150,10 +150,10 @@ export class DxoDataGridEditingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get texts(): { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string } {
+    get texts(): any | { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string } {
         return this._getOption('texts');
     }
-    set texts(value: { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }) {
+    set texts(value: any | { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }) {
         this._setOption('texts', value);
     }
 
@@ -166,26 +166,6 @@ export class DxoDataGridEditingComponent extends NestedOption implements OnDestr
     }
 
 
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() changesChange: EventEmitter<Array<DataChange>>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() editColumnNameChange: EventEmitter<string>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() editRowKeyChange: EventEmitter<any>;
     protected get _optionPath() {
         return 'editing';
     }
@@ -202,13 +182,6 @@ export class DxoDataGridEditingComponent extends NestedOption implements OnDestr
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
-        this._createEventEmitters([
-            { emit: 'changesChange' },
-            { emit: 'editColumnNameChange' },
-            { emit: 'editRowKeyChange' }
-        ]);
-
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

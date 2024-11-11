@@ -45,10 +45,10 @@ export class DxiDataGridGroupItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((itemInfo: { value: string | number | Date, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((itemInfo: { value: string | number | Date, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -93,18 +93,18 @@ export class DxiDataGridGroupItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get summaryType(): SummaryType | string | undefined {
+    get summaryType(): string | SummaryType | undefined {
         return this._getOption('summaryType');
     }
-    set summaryType(value: SummaryType | string | undefined) {
+    set summaryType(value: string | SummaryType | undefined) {
         this._setOption('summaryType', value);
     }
 
     @Input()
-    get valueFormat(): Format | string | undefined {
+    get valueFormat(): Format | undefined {
         return this._getOption('valueFormat');
     }
-    set valueFormat(value: Format | string | undefined) {
+    set valueFormat(value: Format | undefined) {
         this._setOption('valueFormat', value);
     }
 

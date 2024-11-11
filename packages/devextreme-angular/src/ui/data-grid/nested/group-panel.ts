@@ -8,9 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    Output,
-    EventEmitter
+    Input
 } from '@angular/core';
 
 
@@ -48,20 +46,14 @@ export class DxoDataGridGroupPanelComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get visible(): Mode | boolean {
+    get visible(): boolean | Mode {
         return this._getOption('visible');
     }
-    set visible(value: Mode | boolean) {
+    set visible(value: boolean | Mode) {
         this._setOption('visible', value);
     }
 
 
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() visibleChange: EventEmitter<Mode | boolean>;
     protected get _optionPath() {
         return 'groupPanel';
     }
@@ -70,11 +62,6 @@ export class DxoDataGridGroupPanelComponent extends NestedOption implements OnDe
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
-        this._createEventEmitters([
-            { emit: 'visibleChange' }
-        ]);
-
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

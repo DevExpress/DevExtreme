@@ -42,10 +42,10 @@ export class DxoDataGridToolbarComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get items(): Array<dxDataGridToolbarItem | DataGridPredefinedToolbarItem> {
+    get items(): Array<DataGridPredefinedToolbarItem | dxDataGridToolbarItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxDataGridToolbarItem | DataGridPredefinedToolbarItem>) {
+    set items(value: Array<DataGridPredefinedToolbarItem | dxDataGridToolbarItem>) {
         this._setOption('items', value);
     }
 

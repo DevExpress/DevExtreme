@@ -12,9 +12,9 @@ import {
 
 
 
-import { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
-import { FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
+import { FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
 
 import {
     NestedOptionHost,

@@ -14,8 +14,8 @@ import {
 
 
 
-import { FieldChooserLayout } from 'devextreme/common';
 import { ApplyChangesMode } from 'devextreme/common/grids';
+import { FieldChooserLayout } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -79,10 +79,10 @@ export class DxoPivotGridFieldChooserComponent extends NestedOption implements O
     }
 
     @Input()
-    get texts(): { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string } {
+    get texts(): Record<string, any> | { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string } {
         return this._getOption('texts');
     }
-    set texts(value: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }) {
+    set texts(value: Record<string, any> | { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }) {
         this._setOption('texts', value);
     }
 

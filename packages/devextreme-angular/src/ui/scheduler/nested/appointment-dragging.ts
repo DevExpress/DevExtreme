@@ -14,6 +14,10 @@ import {
 
 
 
+import dxScheduler from 'devextreme/ui/scheduler';
+import dxSortable from 'devextreme/ui/sortable';
+import dxDraggable from 'devextreme/ui/draggable';
+import { event } from 'devextreme/events/index';
 
 import {
     NestedOptionHost,
@@ -53,42 +57,42 @@ export class DxoSchedulerAppointmentDraggingComponent extends NestedOption imple
     }
 
     @Input()
-    get onAdd(): Function {
+    get onAdd(): ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void) {
         return this._getOption('onAdd');
     }
-    set onAdd(value: Function) {
+    set onAdd(value: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void)) {
         this._setOption('onAdd', value);
     }
 
     @Input()
-    get onDragEnd(): Function {
+    get onDragEnd(): ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toItemData: any }) => void) {
         return this._getOption('onDragEnd');
     }
-    set onDragEnd(value: Function) {
+    set onDragEnd(value: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toItemData: any }) => void)) {
         this._setOption('onDragEnd', value);
     }
 
     @Input()
-    get onDragMove(): Function {
+    get onDragMove(): ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void) {
         return this._getOption('onDragMove');
     }
-    set onDragMove(value: Function) {
+    set onDragMove(value: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void)) {
         this._setOption('onDragMove', value);
     }
 
     @Input()
-    get onDragStart(): Function {
+    get onDragStart(): ((e: { cancel: boolean, component: dxScheduler, event: event, fromData: any, itemData: any, itemElement: any }) => void) {
         return this._getOption('onDragStart');
     }
-    set onDragStart(value: Function) {
+    set onDragStart(value: ((e: { cancel: boolean, component: dxScheduler, event: event, fromData: any, itemData: any, itemElement: any }) => void)) {
         this._setOption('onDragStart', value);
     }
 
     @Input()
-    get onRemove(): Function {
+    get onRemove(): ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable }) => void) {
         return this._getOption('onRemove');
     }
-    set onRemove(value: Function) {
+    set onRemove(value: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable }) => void)) {
         this._setOption('onRemove', value);
     }
 

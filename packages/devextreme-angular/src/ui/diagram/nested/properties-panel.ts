@@ -34,10 +34,10 @@ import { DxiDiagramTabComponent } from './tab-dxi';
 })
 export class DxoDiagramPropertiesPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get tabs(): Array<any | { commands?: Array<CustomCommand | Command>, groups?: Array<any | { commands?: Array<CustomCommand | Command>, title?: string }>, title?: string }> {
+    get tabs(): Array<Record<string, any>> | { commands?: Array<Command | CustomCommand>, groups?: Array<Record<string, any>> | { commands?: Array<Command | CustomCommand>, title?: string }[], title?: string }[] {
         return this._getOption('tabs');
     }
-    set tabs(value: Array<any | { commands?: Array<CustomCommand | Command>, groups?: Array<any | { commands?: Array<CustomCommand | Command>, title?: string }>, title?: string }>) {
+    set tabs(value: Array<Record<string, any>> | { commands?: Array<Command | CustomCommand>, groups?: Array<Record<string, any>> | { commands?: Array<Command | CustomCommand>, title?: string }[], title?: string }[]) {
         this._setOption('tabs', value);
     }
 

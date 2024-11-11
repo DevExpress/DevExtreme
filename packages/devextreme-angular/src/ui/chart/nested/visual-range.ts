@@ -1,0 +1,89 @@
+/* tslint:disable:max-line-length */
+
+
+import {
+    Component,
+    OnInit,
+    OnDestroy,
+    NgModule,
+    Host,
+    SkipSelf,
+    Input
+} from '@angular/core';
+
+
+
+
+import { TimeInterval } from 'devextreme/common/charts';
+
+import {
+    NestedOptionHost,
+} from 'devextreme-angular/core';
+import { NestedOption } from 'devextreme-angular/core';
+
+
+@Component({
+    selector: 'dxo-chart-visual-range',
+    template: '',
+    styles: [''],
+    providers: [NestedOptionHost]
+})
+export class DxoChartVisualRangeComponent extends NestedOption implements OnDestroy, OnInit  {
+    @Input()
+    get endValue(): Date | number | string | undefined {
+        return this._getOption('endValue');
+    }
+    set endValue(value: Date | number | string | undefined) {
+        this._setOption('endValue', value);
+    }
+
+    @Input()
+    get length(): number | Record<string, any> | TimeInterval | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+        return this._getOption('length');
+    }
+    set length(value: number | Record<string, any> | TimeInterval | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+        this._setOption('length', value);
+    }
+
+    @Input()
+    get startValue(): Date | number | string | undefined {
+        return this._getOption('startValue');
+    }
+    set startValue(value: Date | number | string | undefined) {
+        this._setOption('startValue', value);
+    }
+
+
+    protected get _optionPath() {
+        return 'visualRange';
+    }
+
+
+    constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
+            @Host() optionHost: NestedOptionHost) {
+        super();
+        parentOptionHost.setNestedOption(this);
+        optionHost.setHost(this, this._fullOptionPath.bind(this));
+    }
+
+
+    ngOnInit() {
+        this._addRecreatedComponent();
+    }
+
+    ngOnDestroy() {
+        this._addRemovedOption(this._getOptionPath());
+    }
+
+
+}
+
+@NgModule({
+  declarations: [
+    DxoChartVisualRangeComponent
+  ],
+  exports: [
+    DxoChartVisualRangeComponent
+  ],
+})
+export class DxoChartVisualRangeModule { }

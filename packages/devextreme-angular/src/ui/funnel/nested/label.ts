@@ -14,9 +14,10 @@ import {
 
 
 
-import { HorizontalEdge } from 'devextreme/common';
 import { DashStyle, Font, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import { dxFunnelItem } from 'devextreme/viz/funnel';
 import { Format } from 'devextreme/localization';
+import { HorizontalEdge } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -40,26 +41,26 @@ export class DxoFunnelLabelComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get border(): { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
     @Input()
-    get connector(): { color?: string | undefined, opacity?: number, visible?: boolean, width?: number } {
+    get connector(): Record<string, any> | { color?: string | undefined, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('connector');
     }
-    set connector(value: { color?: string | undefined, opacity?: number, visible?: boolean, width?: number }) {
+    set connector(value: Record<string, any> | { color?: string | undefined, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('connector', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((itemInfo: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((itemInfo: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -72,10 +73,10 @@ export class DxoFunnelLabelComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): Format | undefined {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: Format | undefined) {
         this._setOption('format', value);
     }
 

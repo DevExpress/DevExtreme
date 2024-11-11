@@ -14,8 +14,9 @@ import {
 
 
 
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import DataSource from 'devextreme/data/data_source';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,
@@ -31,42 +32,42 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoGanttDependenciesComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): (() => void) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: (() => void) | string) {
         this._setOption('keyExpr', value);
     }
 
     @Input()
-    get predecessorIdExpr(): Function | string {
+    get predecessorIdExpr(): (() => void) | string {
         return this._getOption('predecessorIdExpr');
     }
-    set predecessorIdExpr(value: Function | string) {
+    set predecessorIdExpr(value: (() => void) | string) {
         this._setOption('predecessorIdExpr', value);
     }
 
     @Input()
-    get successorIdExpr(): Function | string {
+    get successorIdExpr(): (() => void) | string {
         return this._getOption('successorIdExpr');
     }
-    set successorIdExpr(value: Function | string) {
+    set successorIdExpr(value: (() => void) | string) {
         this._setOption('successorIdExpr', value);
     }
 
     @Input()
-    get typeExpr(): Function | string {
+    get typeExpr(): (() => void) | string {
         return this._getOption('typeExpr');
     }
-    set typeExpr(value: Function | string) {
+    set typeExpr(value: (() => void) | string) {
         this._setOption('typeExpr', value);
     }
 

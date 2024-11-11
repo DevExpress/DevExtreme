@@ -14,8 +14,9 @@ import {
 
 
 
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import DataSource from 'devextreme/data/data_source';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,
@@ -31,66 +32,66 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoGanttTasksComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get colorExpr(): Function | string {
+    get colorExpr(): (() => void) | string {
         return this._getOption('colorExpr');
     }
-    set colorExpr(value: Function | string) {
+    set colorExpr(value: (() => void) | string) {
         this._setOption('colorExpr', value);
     }
 
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
     @Input()
-    get endExpr(): Function | string {
+    get endExpr(): (() => void) | string {
         return this._getOption('endExpr');
     }
-    set endExpr(value: Function | string) {
+    set endExpr(value: (() => void) | string) {
         this._setOption('endExpr', value);
     }
 
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): (() => void) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: (() => void) | string) {
         this._setOption('keyExpr', value);
     }
 
     @Input()
-    get parentIdExpr(): Function | string {
+    get parentIdExpr(): (() => void) | string {
         return this._getOption('parentIdExpr');
     }
-    set parentIdExpr(value: Function | string) {
+    set parentIdExpr(value: (() => void) | string) {
         this._setOption('parentIdExpr', value);
     }
 
     @Input()
-    get progressExpr(): Function | string {
+    get progressExpr(): (() => void) | string {
         return this._getOption('progressExpr');
     }
-    set progressExpr(value: Function | string) {
+    set progressExpr(value: (() => void) | string) {
         this._setOption('progressExpr', value);
     }
 
     @Input()
-    get startExpr(): Function | string {
+    get startExpr(): (() => void) | string {
         return this._getOption('startExpr');
     }
-    set startExpr(value: Function | string) {
+    set startExpr(value: (() => void) | string) {
         this._setOption('startExpr', value);
     }
 
     @Input()
-    get titleExpr(): Function | string {
+    get titleExpr(): (() => void) | string {
         return this._getOption('titleExpr');
     }
-    set titleExpr(value: Function | string) {
+    set titleExpr(value: (() => void) | string) {
         this._setOption('titleExpr', value);
     }
 

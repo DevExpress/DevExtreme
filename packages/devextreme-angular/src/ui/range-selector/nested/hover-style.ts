@@ -14,7 +14,7 @@ import {
 
 
 
-import { ChartsColor, DashStyle, HatchDirection } from 'devextreme/common/charts';
+import { DashStyle, ChartsColor, HatchDirection } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoRangeSelectorHoverStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -54,10 +54,10 @@ export class DxoRangeSelectorHoverStyleComponent extends NestedOption implements
     }
 
     @Input()
-    get hatching(): { direction?: HatchDirection, opacity?: number, step?: number, width?: number } {
+    get hatching(): Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number } {
         return this._getOption('hatching');
     }
-    set hatching(value: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }) {
+    set hatching(value: Record<string, any> | { direction?: HatchDirection, opacity?: number, step?: number, width?: number }) {
         this._setOption('hatching', value);
     }
 

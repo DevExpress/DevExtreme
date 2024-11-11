@@ -14,8 +14,8 @@ import {
 
 
 
-import { TooltipShowMode, VerticalEdge } from 'devextreme/common';
 import { Format } from 'devextreme/localization';
+import { VerticalEdge, TooltipShowMode } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -39,10 +39,10 @@ export class DxoRangeSliderTooltipComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get format(): Format | string {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: Format | string) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 

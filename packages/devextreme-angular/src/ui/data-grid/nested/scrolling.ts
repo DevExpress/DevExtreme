@@ -14,9 +14,9 @@ import {
 
 
 
-import { Mode, ScrollbarMode } from 'devextreme/common';
 import { DataRenderMode } from 'devextreme/common/grids';
 import { DataGridScrollMode } from 'devextreme/ui/data_grid';
+import { ScrollbarMode, Mode } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -96,10 +96,10 @@ export class DxoDataGridScrollingComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get useNative(): Mode | boolean {
+    get useNative(): boolean | Mode {
         return this._getOption('useNative');
     }
-    set useNative(value: Mode | boolean) {
+    set useNative(value: boolean | Mode) {
         this._setOption('useNative', value);
     }
 

@@ -40,10 +40,10 @@ export class DxiMapRouteComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get locations(): Array<any | { lat?: number, lng?: number }> {
+    get locations(): Array<Record<string, any>> | { lat?: number, lng?: number }[] {
         return this._getOption('locations');
     }
-    set locations(value: Array<any | { lat?: number, lng?: number }>) {
+    set locations(value: Array<Record<string, any>> | { lat?: number, lng?: number }[]) {
         this._setOption('locations', value);
     }
 

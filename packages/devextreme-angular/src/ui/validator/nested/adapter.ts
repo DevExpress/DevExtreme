@@ -69,10 +69,10 @@ export class DxoValidatorAdapterComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get validationRequestsCallbacks(): Array<Function> {
+    get validationRequestsCallbacks(): Array<(() => void)> {
         return this._getOption('validationRequestsCallbacks');
     }
-    set validationRequestsCallbacks(value: Array<Function>) {
+    set validationRequestsCallbacks(value: Array<(() => void)>) {
         this._setOption('validationRequestsCallbacks', value);
     }
 
