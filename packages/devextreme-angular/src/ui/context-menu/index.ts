@@ -130,10 +130,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get animation(): Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig } {
+    get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
         return this._getOption('animation');
     }
-    set animation(value: Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig }) {
+    set animation(value: { hide?: AnimationConfig, show?: AnimationConfig }) {
         this._setOption('animation', value);
     }
 
@@ -418,10 +418,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get showEvent(): Record<string, any> | string | { delay?: number | undefined, name?: string | undefined } {
+    get showEvent(): string | { delay?: number | undefined, name?: string | undefined } {
         return this._getOption('showEvent');
     }
-    set showEvent(value: Record<string, any> | string | { delay?: number | undefined, name?: string | undefined }) {
+    set showEvent(value: string | { delay?: number | undefined, name?: string | undefined }) {
         this._setOption('showEvent', value);
     }
 
@@ -431,10 +431,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get showSubmenuMode(): Record<string, any> | SubmenuShowMode | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: SubmenuShowMode } {
+    get showSubmenuMode(): SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode } {
         return this._getOption('showSubmenuMode');
     }
-    set showSubmenuMode(value: Record<string, any> | SubmenuShowMode | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: SubmenuShowMode }) {
+    set showSubmenuMode(value: SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode }) {
         this._setOption('showSubmenuMode', value);
     }
 
@@ -626,7 +626,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() animationChange: EventEmitter<Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig }>;
+    @Output() animationChange: EventEmitter<{ hide?: AnimationConfig, show?: AnimationConfig }>;
 
     /**
     
@@ -780,14 +780,14 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showEventChange: EventEmitter<Record<string, any> | string | { delay?: number | undefined, name?: string | undefined }>;
+    @Output() showEventChange: EventEmitter<string | { delay?: number | undefined, name?: string | undefined }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showSubmenuModeChange: EventEmitter<Record<string, any> | SubmenuShowMode | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: SubmenuShowMode }>;
+    @Output() showSubmenuModeChange: EventEmitter<SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode }>;
 
     /**
     

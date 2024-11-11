@@ -91,10 +91,10 @@ export class DxoLinearGaugeRangeContainerComponent extends NestedOption implemen
     }
 
     @Input()
-    get width(): number | Record<string, any> | { end?: number, start?: number } {
+    get width(): number | { end?: number, start?: number } {
         return this._getOption('width');
     }
-    set width(value: number | Record<string, any> | { end?: number, start?: number }) {
+    set width(value: number | { end?: number, start?: number }) {
         this._setOption('width', value);
     }
 

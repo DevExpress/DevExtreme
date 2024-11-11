@@ -47,10 +47,10 @@ export class DxoPolarChartTitleComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get margin(): Record<string, any> | number | { bottom?: number, left?: number, right?: number, top?: number } {
+    get margin(): number | { bottom?: number, left?: number, right?: number, top?: number } {
         return this._getOption('margin');
     }
-    set margin(value: Record<string, any> | number | { bottom?: number, left?: number, right?: number, top?: number }) {
+    set margin(value: number | { bottom?: number, left?: number, right?: number, top?: number }) {
         this._setOption('margin', value);
     }
 
@@ -63,10 +63,10 @@ export class DxoPolarChartTitleComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get subtitle(): Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
+    get subtitle(): string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
         return this._getOption('subtitle');
     }
-    set subtitle(value: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
+    set subtitle(value: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
         this._setOption('subtitle', value);
     }
 

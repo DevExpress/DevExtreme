@@ -54,10 +54,10 @@ export class DxoChartZoomAndPanComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get dragBoxStyle(): Record<string, any> | { color?: string | undefined, opacity?: number | undefined } {
+    get dragBoxStyle(): { color?: string | undefined, opacity?: number | undefined } {
         return this._getOption('dragBoxStyle');
     }
-    set dragBoxStyle(value: Record<string, any> | { color?: string | undefined, opacity?: number | undefined }) {
+    set dragBoxStyle(value: { color?: string | undefined, opacity?: number | undefined }) {
         this._setOption('dragBoxStyle', value);
     }
 

@@ -45,10 +45,10 @@ export class DxiChartStripComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment } {
+    get label(): { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment }) {
+    set label(value: { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment }) {
         this._setOption('label', value);
     }
 

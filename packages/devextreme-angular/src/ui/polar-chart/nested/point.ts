@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoPolarChartPointComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): Record<string, any> | { color?: string | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -54,18 +54,18 @@ export class DxoPolarChartPointComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get hoverStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number } {
+    get hoverStyle(): { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number }) {
+    set hoverStyle(value: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number }) {
         this._setOption('hoverStyle', value);
     }
 
     @Input()
-    get image(): Record<string, any> | string | undefined | { height?: number, url?: string | undefined, width?: number } {
+    get image(): string | undefined | { height?: number, url?: string | undefined, width?: number } {
         return this._getOption('image');
     }
-    set image(value: Record<string, any> | string | undefined | { height?: number, url?: string | undefined, width?: number }) {
+    set image(value: string | undefined | { height?: number, url?: string | undefined, width?: number }) {
         this._setOption('image', value);
     }
 
@@ -78,10 +78,10 @@ export class DxoPolarChartPointComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get selectionStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number } {
+    get selectionStyle(): { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number }) {
+    set selectionStyle(value: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number }) {
         this._setOption('selectionStyle', value);
     }
 

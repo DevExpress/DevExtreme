@@ -181,10 +181,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get dependencies(): Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, predecessorIdExpr?: Function | string, successorIdExpr?: Function | string, typeExpr?: Function | string } {
+    get dependencies(): { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, predecessorIdExpr?: Function | string, successorIdExpr?: Function | string, typeExpr?: Function | string } {
         return this._getOption('dependencies');
     }
-    set dependencies(value: Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, predecessorIdExpr?: Function | string, successorIdExpr?: Function | string, typeExpr?: Function | string }) {
+    set dependencies(value: { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, predecessorIdExpr?: Function | string, successorIdExpr?: Function | string, typeExpr?: Function | string }) {
         this._setOption('dependencies', value);
     }
 
@@ -207,10 +207,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get editing(): Record<string, any> | { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskResourceUpdating?: boolean, allowTaskUpdating?: boolean, enabled?: boolean } {
+    get editing(): { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskResourceUpdating?: boolean, allowTaskUpdating?: boolean, enabled?: boolean } {
         return this._getOption('editing');
     }
-    set editing(value: Record<string, any> | { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskResourceUpdating?: boolean, allowTaskUpdating?: boolean, enabled?: boolean }) {
+    set editing(value: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskResourceUpdating?: boolean, allowTaskUpdating?: boolean, enabled?: boolean }) {
         this._setOption('editing', value);
     }
 
@@ -337,10 +337,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get resourceAssignments(): Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, resourceIdExpr?: Function | string, taskIdExpr?: Function | string } {
+    get resourceAssignments(): { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, resourceIdExpr?: Function | string, taskIdExpr?: Function | string } {
         return this._getOption('resourceAssignments');
     }
-    set resourceAssignments(value: Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, resourceIdExpr?: Function | string, taskIdExpr?: Function | string }) {
+    set resourceAssignments(value: { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, resourceIdExpr?: Function | string, taskIdExpr?: Function | string }) {
         this._setOption('resourceAssignments', value);
     }
 
@@ -350,10 +350,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get resources(): Record<string, any> | { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, textExpr?: Function | string } {
+    get resources(): { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, textExpr?: Function | string } {
         return this._getOption('resources');
     }
-    set resources(value: Record<string, any> | { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, textExpr?: Function | string }) {
+    set resources(value: { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, textExpr?: Function | string }) {
         this._setOption('resources', value);
     }
 
@@ -389,10 +389,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get scaleTypeRange(): Record<string, any> | { max?: GanttScaleType, min?: GanttScaleType } {
+    get scaleTypeRange(): { max?: GanttScaleType, min?: GanttScaleType } {
         return this._getOption('scaleTypeRange');
     }
-    set scaleTypeRange(value: Record<string, any> | { max?: GanttScaleType, min?: GanttScaleType }) {
+    set scaleTypeRange(value: { max?: GanttScaleType, min?: GanttScaleType }) {
         this._setOption('scaleTypeRange', value);
     }
 
@@ -545,10 +545,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get tasks(): Record<string, any> | { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: Function | string, keyExpr?: Function | string, parentIdExpr?: Function | string, progressExpr?: Function | string, startExpr?: Function | string, titleExpr?: Function | string } {
+    get tasks(): { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: Function | string, keyExpr?: Function | string, parentIdExpr?: Function | string, progressExpr?: Function | string, startExpr?: Function | string, titleExpr?: Function | string } {
         return this._getOption('tasks');
     }
-    set tasks(value: Record<string, any> | { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: Function | string, keyExpr?: Function | string, parentIdExpr?: Function | string, progressExpr?: Function | string, startExpr?: Function | string, titleExpr?: Function | string }) {
+    set tasks(value: { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: Function | string, keyExpr?: Function | string, parentIdExpr?: Function | string, progressExpr?: Function | string, startExpr?: Function | string, titleExpr?: Function | string }) {
         this._setOption('tasks', value);
     }
 
@@ -610,10 +610,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get validation(): Record<string, any> | { autoUpdateParentTasks?: boolean, enablePredecessorGap?: boolean, validateDependencies?: boolean } {
+    get validation(): { autoUpdateParentTasks?: boolean, enablePredecessorGap?: boolean, validateDependencies?: boolean } {
         return this._getOption('validation');
     }
-    set validation(value: Record<string, any> | { autoUpdateParentTasks?: boolean, enablePredecessorGap?: boolean, validateDependencies?: boolean }) {
+    set validation(value: { autoUpdateParentTasks?: boolean, enablePredecessorGap?: boolean, validateDependencies?: boolean }) {
         this._setOption('validation', value);
     }
 
@@ -931,7 +931,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dependenciesChange: EventEmitter<Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, predecessorIdExpr?: Function | string, successorIdExpr?: Function | string, typeExpr?: Function | string }>;
+    @Output() dependenciesChange: EventEmitter<{ dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, predecessorIdExpr?: Function | string, successorIdExpr?: Function | string, typeExpr?: Function | string }>;
 
     /**
     
@@ -945,7 +945,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editingChange: EventEmitter<Record<string, any> | { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskResourceUpdating?: boolean, allowTaskUpdating?: boolean, enabled?: boolean }>;
+    @Output() editingChange: EventEmitter<{ allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskResourceUpdating?: boolean, allowTaskUpdating?: boolean, enabled?: boolean }>;
 
     /**
     
@@ -1015,14 +1015,14 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() resourceAssignmentsChange: EventEmitter<Record<string, any> | { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, resourceIdExpr?: Function | string, taskIdExpr?: Function | string }>;
+    @Output() resourceAssignmentsChange: EventEmitter<{ dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, resourceIdExpr?: Function | string, taskIdExpr?: Function | string }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() resourcesChange: EventEmitter<Record<string, any> | { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, textExpr?: Function | string }>;
+    @Output() resourcesChange: EventEmitter<{ colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, textExpr?: Function | string }>;
 
     /**
     
@@ -1043,7 +1043,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scaleTypeRangeChange: EventEmitter<Record<string, any> | { max?: GanttScaleType, min?: GanttScaleType }>;
+    @Output() scaleTypeRangeChange: EventEmitter<{ max?: GanttScaleType, min?: GanttScaleType }>;
 
     /**
     
@@ -1127,7 +1127,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tasksChange: EventEmitter<Record<string, any> | { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: Function | string, keyExpr?: Function | string, parentIdExpr?: Function | string, progressExpr?: Function | string, startExpr?: Function | string, titleExpr?: Function | string }>;
+    @Output() tasksChange: EventEmitter<{ colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: Function | string, keyExpr?: Function | string, parentIdExpr?: Function | string, progressExpr?: Function | string, startExpr?: Function | string, titleExpr?: Function | string }>;
 
     /**
     
@@ -1162,7 +1162,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationChange: EventEmitter<Record<string, any> | { autoUpdateParentTasks?: boolean, enablePredecessorGap?: boolean, validateDependencies?: boolean }>;
+    @Output() validationChange: EventEmitter<{ autoUpdateParentTasks?: boolean, enablePredecessorGap?: boolean, validateDependencies?: boolean }>;
 
     /**
     

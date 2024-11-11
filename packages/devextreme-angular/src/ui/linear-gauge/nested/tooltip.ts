@@ -39,10 +39,10 @@ export class DxoLinearGaugeTooltipComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get border(): Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -143,10 +143,10 @@ export class DxoLinearGaugeTooltipComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get shadow(): Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number } {
+    get shadow(): { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number } {
         return this._getOption('shadow');
     }
-    set shadow(value: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }) {
+    set shadow(value: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }) {
         this._setOption('shadow', value);
     }
 

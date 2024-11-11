@@ -38,10 +38,10 @@ export class DxoRangeSelectorBackgroundComponent extends NestedOption implements
     }
 
     @Input()
-    get image(): Record<string, any> | { location?: BackgroundImageLocation, url?: string | undefined } {
+    get image(): { location?: BackgroundImageLocation, url?: string | undefined } {
         return this._getOption('image');
     }
-    set image(value: Record<string, any> | { location?: BackgroundImageLocation, url?: string | undefined }) {
+    set image(value: { location?: BackgroundImageLocation, url?: string | undefined }) {
         this._setOption('image', value);
     }
 

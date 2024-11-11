@@ -73,10 +73,10 @@ export class DxiFormTabbedItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get tabs(): Array<Record<string, any>> | { alignItemLabels?: boolean, badge?: string | undefined, colCount?: number, colCountByScreen?: Record<string, any> | { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }, disabled?: boolean, icon?: string | undefined, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate?: any, template?: any, title?: string | undefined }[] {
+    get tabs(): Array<Record<string, any>> | { alignItemLabels?: boolean, badge?: string | undefined, colCount?: number, colCountByScreen?: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }, disabled?: boolean, icon?: string | undefined, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate?: any, template?: any, title?: string | undefined }[] {
         return this._getOption('tabs');
     }
-    set tabs(value: Array<Record<string, any>> | { alignItemLabels?: boolean, badge?: string | undefined, colCount?: number, colCountByScreen?: Record<string, any> | { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }, disabled?: boolean, icon?: string | undefined, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate?: any, template?: any, title?: string | undefined }[]) {
+    set tabs(value: Array<Record<string, any>> | { alignItemLabels?: boolean, badge?: string | undefined, colCount?: number, colCountByScreen?: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }, disabled?: boolean, icon?: string | undefined, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate?: any, template?: any, title?: string | undefined }[]) {
         this._setOption('tabs', value);
     }
 

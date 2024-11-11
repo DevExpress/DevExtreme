@@ -137,10 +137,10 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): Record<string, any> | { dataField?: string, enabled?: boolean, font?: Font } {
+    get label(): { dataField?: string, enabled?: boolean, font?: Font } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { dataField?: string, enabled?: boolean, font?: Font }) {
+    set label(value: { dataField?: string, enabled?: boolean, font?: Font }) {
         this._setOption('label', value);
     }
 

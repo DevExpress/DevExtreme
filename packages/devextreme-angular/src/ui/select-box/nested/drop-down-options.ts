@@ -50,10 +50,10 @@ export class DxoSelectBoxDropDownOptionsComponent extends NestedOption implement
     }
 
     @Input()
-    get animation(): Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig } {
+    get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
         return this._getOption('animation');
     }
-    set animation(value: Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig }) {
+    set animation(value: { hide?: AnimationConfig, show?: AnimationConfig }) {
         this._setOption('animation', value);
     }
 

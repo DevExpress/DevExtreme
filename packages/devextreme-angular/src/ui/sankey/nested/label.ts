@@ -31,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoSankeyLabelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): Record<string, any> | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } {
+    get border(): { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }) {
+    set border(value: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }) {
         this._setOption('border', value);
     }
 
@@ -71,10 +71,10 @@ export class DxoSankeyLabelComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get shadow(): Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number } {
+    get shadow(): { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number } {
         return this._getOption('shadow');
     }
-    set shadow(value: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }) {
+    set shadow(value: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }) {
         this._setOption('shadow', value);
     }
 

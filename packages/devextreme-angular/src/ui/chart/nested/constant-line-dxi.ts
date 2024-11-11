@@ -61,10 +61,10 @@ export class DxiChartConstantLineComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean } {
+    get label(): { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }) {
+    set label(value: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }) {
         this._setOption('label', value);
     }
 

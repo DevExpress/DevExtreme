@@ -79,10 +79,10 @@ export class DxoTreeListFormComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get colCountByScreen(): Record<string, any> | { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined } {
+    get colCountByScreen(): { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined } {
         return this._getOption('colCountByScreen');
     }
-    set colCountByScreen(value: Record<string, any> | { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }) {
+    set colCountByScreen(value: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }) {
         this._setOption('colCountByScreen', value);
     }
 

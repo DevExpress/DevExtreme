@@ -29,10 +29,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoTreeMapHoverStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): Record<string, any> | { color?: string | undefined, width?: number | undefined } {
+    get border(): { color?: string | undefined, width?: number | undefined } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string | undefined, width?: number | undefined }) {
+    set border(value: { color?: string | undefined, width?: number | undefined }) {
         this._setOption('border', value);
     }
 

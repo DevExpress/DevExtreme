@@ -329,10 +329,10 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get headerFilter(): Record<string, any> | { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined } {
+    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined } {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: Record<string, any> | { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined }) {
+    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined }) {
         this._setOption('headerFilter', value);
     }
 
@@ -353,10 +353,10 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get lookup(): Record<string, any> | { allowClearing?: boolean, calculateCellValue?: ((rowData: any) => any), dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined, displayExpr?: ((data: any) => string) | string | undefined, valueExpr?: string | undefined } {
+    get lookup(): { allowClearing?: boolean, calculateCellValue?: ((rowData: any) => any), dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined, displayExpr?: ((data: any) => string) | string | undefined, valueExpr?: string | undefined } {
         return this._getOption('lookup');
     }
-    set lookup(value: Record<string, any> | { allowClearing?: boolean, calculateCellValue?: ((rowData: any) => any), dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined, displayExpr?: ((data: any) => string) | string | undefined, valueExpr?: string | undefined }) {
+    set lookup(value: { allowClearing?: boolean, calculateCellValue?: ((rowData: any) => any), dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined, displayExpr?: ((data: any) => string) | string | undefined, valueExpr?: string | undefined }) {
         this._setOption('lookup', value);
     }
 

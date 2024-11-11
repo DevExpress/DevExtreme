@@ -38,26 +38,26 @@ export class DxoRangeSelectorImageComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get url(): string | undefined | Record<string, any> | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined } {
+    get url(): string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined } {
         return this._getOption('url');
     }
-    set url(value: string | undefined | Record<string, any> | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined }) {
+    set url(value: string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined }) {
         this._setOption('url', value);
     }
 
     @Input()
-    get height(): number | Record<string, any> | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } {
+    get height(): number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } {
         return this._getOption('height');
     }
-    set height(value: number | Record<string, any> | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }) {
+    set height(value: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }) {
         this._setOption('height', value);
     }
 
     @Input()
-    get width(): number | Record<string, any> | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } {
+    get width(): number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } {
         return this._getOption('width');
     }
-    set width(value: number | Record<string, any> | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }) {
+    set width(value: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }) {
         this._setOption('width', value);
     }
 

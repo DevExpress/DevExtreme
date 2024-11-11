@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoRangeSelectorPointHoverStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): Record<string, any> | { color?: string | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 

@@ -56,10 +56,10 @@ export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implem
     }
 
     @Input()
-    get location(): Array<Record<string, any>> | Record<string, any> | { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }[] {
+    get location(): Array<Record<string, any>> | { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }[] {
         return this._getOption('location');
     }
-    set location(value: Array<Record<string, any>> | Record<string, any> | { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }[]) {
+    set location(value: Array<Record<string, any>> | { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }[]) {
         this._setOption('location', value);
     }
 

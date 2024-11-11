@@ -152,10 +152,10 @@ export class DxoLinearGaugeValueIndicatorComponent extends NestedOption implemen
     }
 
     @Input()
-    get text(): Record<string, any> | { customizeText?: ((indicatedValue: { value: number, valueText: string }) => string) | undefined, font?: Font, format?: Format | undefined, indent?: number } {
+    get text(): { customizeText?: ((indicatedValue: { value: number, valueText: string }) => string) | undefined, font?: Font, format?: Format | undefined, indent?: number } {
         return this._getOption('text');
     }
-    set text(value: Record<string, any> | { customizeText?: ((indicatedValue: { value: number, valueText: string }) => string) | undefined, font?: Font, format?: Format | undefined, indent?: number }) {
+    set text(value: { customizeText?: ((indicatedValue: { value: number, valueText: string }) => string) | undefined, font?: Font, format?: Format | undefined, indent?: number }) {
         this._setOption('text', value);
     }
 

@@ -46,10 +46,10 @@ export class DxoChartCommonAxisSettingsConstantLineStyleComponent extends Nested
     }
 
     @Input()
-    get label(): Record<string, any> | { font?: Font, position?: RelativePosition, visible?: boolean } {
+    get label(): { font?: Font, position?: RelativePosition, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { font?: Font, position?: RelativePosition, visible?: boolean }) {
+    set label(value: { font?: Font, position?: RelativePosition, visible?: boolean }) {
         this._setOption('label', value);
     }
 

@@ -112,10 +112,10 @@ export class DxiDataGridFieldComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get lookup(): Record<string, any> | { allowClearing?: boolean, dataSource?: Array<any> | DataSourceOptions | Store | undefined, displayExpr?: ((data: any) => string) | string | undefined, valueExpr?: ((data: any) => string | number | boolean) | string | undefined } {
+    get lookup(): { allowClearing?: boolean, dataSource?: Array<any> | DataSourceOptions | Store | undefined, displayExpr?: ((data: any) => string) | string | undefined, valueExpr?: ((data: any) => string | number | boolean) | string | undefined } {
         return this._getOption('lookup');
     }
-    set lookup(value: Record<string, any> | { allowClearing?: boolean, dataSource?: Array<any> | DataSourceOptions | Store | undefined, displayExpr?: ((data: any) => string) | string | undefined, valueExpr?: ((data: any) => string | number | boolean) | string | undefined }) {
+    set lookup(value: { allowClearing?: boolean, dataSource?: Array<any> | DataSourceOptions | Store | undefined, displayExpr?: ((data: any) => string) | string | undefined, valueExpr?: ((data: any) => string | number | boolean) | string | undefined }) {
         this._setOption('lookup', value);
     }
 

@@ -44,10 +44,10 @@ export class DxiPolarChartStripComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): Record<string, any> | { font?: Font, text?: string | undefined } {
+    get label(): { font?: Font, text?: string | undefined } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { font?: Font, text?: string | undefined }) {
+    set label(value: { font?: Font, text?: string | undefined }) {
         this._setOption('label', value);
     }
 

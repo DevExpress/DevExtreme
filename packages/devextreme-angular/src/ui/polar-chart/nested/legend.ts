@@ -39,10 +39,10 @@ export class DxoPolarChartLegendComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get border(): Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -127,10 +127,10 @@ export class DxoPolarChartLegendComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get margin(): number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number } {
+    get margin(): number | { bottom?: number, left?: number, right?: number, top?: number } {
         return this._getOption('margin');
     }
-    set margin(value: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }) {
+    set margin(value: number | { bottom?: number, left?: number, right?: number, top?: number }) {
         this._setOption('margin', value);
     }
 
@@ -191,10 +191,10 @@ export class DxoPolarChartLegendComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get title(): Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge } {
+    get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge } {
         return this._getOption('title');
     }
-    set title(value: Record<string, any> | string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }) {
+    set title(value: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }) {
         this._setOption('title', value);
     }
 

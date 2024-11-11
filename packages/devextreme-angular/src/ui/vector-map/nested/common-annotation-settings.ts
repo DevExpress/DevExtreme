@@ -64,10 +64,10 @@ export class DxoVectorMapCommonAnnotationSettingsComponent extends NestedOption 
     }
 
     @Input()
-    get border(): Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -128,10 +128,10 @@ export class DxoVectorMapCommonAnnotationSettingsComponent extends NestedOption 
     }
 
     @Input()
-    get image(): Record<string, any> | string | { height?: number, url?: string | undefined, width?: number } {
+    get image(): string | { height?: number, url?: string | undefined, width?: number } {
         return this._getOption('image');
     }
-    set image(value: Record<string, any> | string | { height?: number, url?: string | undefined, width?: number }) {
+    set image(value: string | { height?: number, url?: string | undefined, width?: number }) {
         this._setOption('image', value);
     }
 
@@ -176,10 +176,10 @@ export class DxoVectorMapCommonAnnotationSettingsComponent extends NestedOption 
     }
 
     @Input()
-    get shadow(): Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number } {
+    get shadow(): { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number } {
         return this._getOption('shadow');
     }
-    set shadow(value: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }) {
+    set shadow(value: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }) {
         this._setOption('shadow', value);
     }
 

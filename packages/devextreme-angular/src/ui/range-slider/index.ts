@@ -252,10 +252,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get label(): Record<string, any> | { format?: Format, position?: VerticalEdge, visible?: boolean } {
+    get label(): { format?: Format, position?: VerticalEdge, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { format?: Format, position?: VerticalEdge, visible?: boolean }) {
+    set label(value: { format?: Format, position?: VerticalEdge, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -382,10 +382,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get tooltip(): Record<string, any> | { enabled?: boolean, format?: Format, position?: VerticalEdge, showMode?: TooltipShowMode } {
+    get tooltip(): { enabled?: boolean, format?: Format, position?: VerticalEdge, showMode?: TooltipShowMode } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: Record<string, any> | { enabled?: boolean, format?: Format, position?: VerticalEdge, showMode?: TooltipShowMode }) {
+    set tooltip(value: { enabled?: boolean, format?: Format, position?: VerticalEdge, showMode?: TooltipShowMode }) {
         this._setOption('tooltip', value);
     }
 
@@ -642,7 +642,7 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelChange: EventEmitter<Record<string, any> | { format?: Format, position?: VerticalEdge, visible?: boolean }>;
+    @Output() labelChange: EventEmitter<{ format?: Format, position?: VerticalEdge, visible?: boolean }>;
 
     /**
     
@@ -712,7 +712,7 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<Record<string, any> | { enabled?: boolean, format?: Format, position?: VerticalEdge, showMode?: TooltipShowMode }>;
+    @Output() tooltipChange: EventEmitter<{ enabled?: boolean, format?: Format, position?: VerticalEdge, showMode?: TooltipShowMode }>;
 
     /**
     

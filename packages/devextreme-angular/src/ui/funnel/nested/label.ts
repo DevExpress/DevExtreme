@@ -41,18 +41,18 @@ export class DxoFunnelLabelComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get border(): Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } {
+    get border(): { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }) {
+    set border(value: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
     @Input()
-    get connector(): Record<string, any> | { color?: string | undefined, opacity?: number, visible?: boolean, width?: number } {
+    get connector(): { color?: string | undefined, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('connector');
     }
-    set connector(value: Record<string, any> | { color?: string | undefined, opacity?: number, visible?: boolean, width?: number }) {
+    set connector(value: { color?: string | undefined, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('connector', value);
     }
 

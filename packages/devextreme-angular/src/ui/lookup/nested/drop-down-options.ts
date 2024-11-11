@@ -39,10 +39,10 @@ import { DxiLookupToolbarItemComponent } from './toolbar-item-dxi';
 })
 export class DxoLookupDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get animation(): Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig } {
+    get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
         return this._getOption('animation');
     }
-    set animation(value: Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig }) {
+    set animation(value: { hide?: AnimationConfig, show?: AnimationConfig }) {
         this._setOption('animation', value);
     }
 
@@ -111,10 +111,10 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
     }
 
     @Input()
-    get hideEvent(): Record<string, any> | string | undefined | { delay?: number | undefined, name?: string | undefined } {
+    get hideEvent(): string | undefined | { delay?: number | undefined, name?: string | undefined } {
         return this._getOption('hideEvent');
     }
-    set hideEvent(value: Record<string, any> | string | undefined | { delay?: number | undefined, name?: string | undefined }) {
+    set hideEvent(value: string | undefined | { delay?: number | undefined, name?: string | undefined }) {
         this._setOption('hideEvent', value);
     }
 
@@ -295,10 +295,10 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
     }
 
     @Input()
-    get showEvent(): Record<string, any> | string | undefined | { delay?: number | undefined, name?: string | undefined } {
+    get showEvent(): string | undefined | { delay?: number | undefined, name?: string | undefined } {
         return this._getOption('showEvent');
     }
-    set showEvent(value: Record<string, any> | string | undefined | { delay?: number | undefined, name?: string | undefined }) {
+    set showEvent(value: string | undefined | { delay?: number | undefined, name?: string | undefined }) {
         this._setOption('showEvent', value);
     }
 

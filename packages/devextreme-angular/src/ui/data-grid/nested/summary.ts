@@ -70,10 +70,10 @@ export class DxoDataGridSummaryComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get texts(): Record<string, any> | { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string } {
+    get texts(): { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string } {
         return this._getOption('texts');
     }
-    set texts(value: Record<string, any> | { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }) {
+    set texts(value: { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }) {
         this._setOption('texts', value);
     }
 

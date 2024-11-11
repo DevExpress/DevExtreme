@@ -34,10 +34,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDiagramNodesComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get autoLayout(): DataLayoutType | Record<string, any> | { orientation?: Orientation, type?: DataLayoutType } {
+    get autoLayout(): DataLayoutType | { orientation?: Orientation, type?: DataLayoutType } {
         return this._getOption('autoLayout');
     }
-    set autoLayout(value: DataLayoutType | Record<string, any> | { orientation?: Orientation, type?: DataLayoutType }) {
+    set autoLayout(value: DataLayoutType | { orientation?: Orientation, type?: DataLayoutType }) {
         this._setOption('autoLayout', value);
     }
 

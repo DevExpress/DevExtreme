@@ -48,10 +48,10 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get breakStyle(): Record<string, any> | { color?: string, line?: ScaleBreakLineStyle, width?: number } {
+    get breakStyle(): { color?: string, line?: ScaleBreakLineStyle, width?: number } {
         return this._getOption('breakStyle');
     }
-    set breakStyle(value: Record<string, any> | { color?: string, line?: ScaleBreakLineStyle, width?: number }) {
+    set breakStyle(value: { color?: string, line?: ScaleBreakLineStyle, width?: number }) {
         this._setOption('breakStyle', value);
     }
 
@@ -64,10 +64,10 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get constantLineStyle(): Record<string, any> | { color?: string, dashStyle?: DashStyle, label?: Record<string, any> | { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } {
+    get constantLineStyle(): { color?: string, dashStyle?: DashStyle, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: Record<string, any> | { color?: string, dashStyle?: DashStyle, label?: Record<string, any> | { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }) {
+    set constantLineStyle(value: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }) {
         this._setOption('constantLineStyle', value);
     }
 
@@ -88,10 +88,10 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get grid(): Record<string, any> | { color?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get grid(): { color?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('grid');
     }
-    set grid(value: Record<string, any> | { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set grid(value: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('grid', value);
     }
 
@@ -104,10 +104,10 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get label(): Record<string, any> | { alignment?: HorizontalAlignment | undefined, displayMode?: ChartLabelDisplayMode, font?: Font, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap } {
+    get label(): { alignment?: HorizontalAlignment | undefined, displayMode?: ChartLabelDisplayMode, font?: Font, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { alignment?: HorizontalAlignment | undefined, displayMode?: ChartLabelDisplayMode, font?: Font, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }) {
+    set label(value: { alignment?: HorizontalAlignment | undefined, displayMode?: ChartLabelDisplayMode, font?: Font, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }) {
         this._setOption('label', value);
     }
 
@@ -120,18 +120,18 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get minorGrid(): Record<string, any> | { color?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get minorGrid(): { color?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('minorGrid');
     }
-    set minorGrid(value: Record<string, any> | { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set minorGrid(value: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('minorGrid', value);
     }
 
     @Input()
-    get minorTick(): Record<string, any> | { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number } {
+    get minorTick(): { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number } {
         return this._getOption('minorTick');
     }
-    set minorTick(value: Record<string, any> | { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }) {
+    set minorTick(value: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }) {
         this._setOption('minorTick', value);
     }
 
@@ -160,26 +160,26 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get stripStyle(): Record<string, any> | { label?: Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number } {
+    get stripStyle(): { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number } {
         return this._getOption('stripStyle');
     }
-    set stripStyle(value: Record<string, any> | { label?: Record<string, any> | { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }) {
+    set stripStyle(value: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }) {
         this._setOption('stripStyle', value);
     }
 
     @Input()
-    get tick(): Record<string, any> | { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number } {
+    get tick(): { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number } {
         return this._getOption('tick');
     }
-    set tick(value: Record<string, any> | { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }) {
+    set tick(value: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }) {
         this._setOption('tick', value);
     }
 
     @Input()
-    get title(): Record<string, any> | { alignment?: HorizontalAlignment, font?: Font, margin?: number, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
+    get title(): { alignment?: HorizontalAlignment, font?: Font, margin?: number, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
         return this._getOption('title');
     }
-    set title(value: Record<string, any> | { alignment?: HorizontalAlignment, font?: Font, margin?: number, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
+    set title(value: { alignment?: HorizontalAlignment, font?: Font, margin?: number, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
         this._setOption('title', value);
     }
 

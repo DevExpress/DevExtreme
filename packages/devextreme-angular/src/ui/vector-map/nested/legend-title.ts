@@ -47,10 +47,10 @@ export class DxoVectorMapLegendTitleComponent extends NestedOption implements On
     }
 
     @Input()
-    get margin(): Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number } {
+    get margin(): { bottom?: number, left?: number, right?: number, top?: number } {
         return this._getOption('margin');
     }
-    set margin(value: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }) {
+    set margin(value: { bottom?: number, left?: number, right?: number, top?: number }) {
         this._setOption('margin', value);
     }
 
@@ -63,10 +63,10 @@ export class DxoVectorMapLegendTitleComponent extends NestedOption implements On
     }
 
     @Input()
-    get subtitle(): Record<string, any> | string | { font?: Font, offset?: number, text?: string } {
+    get subtitle(): string | { font?: Font, offset?: number, text?: string } {
         return this._getOption('subtitle');
     }
-    set subtitle(value: Record<string, any> | string | { font?: Font, offset?: number, text?: string }) {
+    set subtitle(value: string | { font?: Font, offset?: number, text?: string }) {
         this._setOption('subtitle', value);
     }
 

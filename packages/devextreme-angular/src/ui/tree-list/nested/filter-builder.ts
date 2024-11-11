@@ -99,10 +99,10 @@ export class DxoTreeListFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get filterOperationDescriptions(): Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string } {
+    get filterOperationDescriptions(): { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string } {
         return this._getOption('filterOperationDescriptions');
     }
-    set filterOperationDescriptions(value: Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }) {
+    set filterOperationDescriptions(value: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }) {
         this._setOption('filterOperationDescriptions', value);
     }
 
@@ -115,10 +115,10 @@ export class DxoTreeListFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get groupOperationDescriptions(): Record<string, any> | { and?: string, notAnd?: string, notOr?: string, or?: string } {
+    get groupOperationDescriptions(): { and?: string, notAnd?: string, notOr?: string, or?: string } {
         return this._getOption('groupOperationDescriptions');
     }
-    set groupOperationDescriptions(value: Record<string, any> | { and?: string, notAnd?: string, notOr?: string, or?: string }) {
+    set groupOperationDescriptions(value: { and?: string, notAnd?: string, notOr?: string, or?: string }) {
         this._setOption('groupOperationDescriptions', value);
     }
 

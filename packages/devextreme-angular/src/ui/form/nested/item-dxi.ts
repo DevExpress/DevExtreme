@@ -177,10 +177,10 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get label(): Record<string, any> | { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean } {
+    get label(): { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean }) {
+    set label(value: { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -241,10 +241,10 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get colCountByScreen(): Record<string, any> | { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined } {
+    get colCountByScreen(): { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined } {
         return this._getOption('colCountByScreen');
     }
-    set colCountByScreen(value: Record<string, any> | { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }) {
+    set colCountByScreen(value: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }) {
         this._setOption('colCountByScreen', value);
     }
 
@@ -265,10 +265,10 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get tabs(): Array<Record<string, any>> | { alignItemLabels?: boolean, badge?: string | undefined, colCount?: number, colCountByScreen?: Record<string, any> | { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }, disabled?: boolean, icon?: string | undefined, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate?: any, template?: any, title?: string | undefined }[] {
+    get tabs(): Array<Record<string, any>> | { alignItemLabels?: boolean, badge?: string | undefined, colCount?: number, colCountByScreen?: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }, disabled?: boolean, icon?: string | undefined, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate?: any, template?: any, title?: string | undefined }[] {
         return this._getOption('tabs');
     }
-    set tabs(value: Array<Record<string, any>> | { alignItemLabels?: boolean, badge?: string | undefined, colCount?: number, colCountByScreen?: Record<string, any> | { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }, disabled?: boolean, icon?: string | undefined, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate?: any, template?: any, title?: string | undefined }[]) {
+    set tabs(value: Array<Record<string, any>> | { alignItemLabels?: boolean, badge?: string | undefined, colCount?: number, colCountByScreen?: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }, disabled?: boolean, icon?: string | undefined, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate?: any, template?: any, title?: string | undefined }[]) {
         this._setOption('tabs', value);
     }
 

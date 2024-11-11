@@ -56,18 +56,18 @@ export class DxoRangeSelectorCommonSeriesSettingsLabelComponent extends NestedOp
     }
 
     @Input()
-    get border(): Record<string, any> | { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
     @Input()
-    get connector(): Record<string, any> | { color?: string | undefined, visible?: boolean, width?: number } {
+    get connector(): { color?: string | undefined, visible?: boolean, width?: number } {
         return this._getOption('connector');
     }
-    set connector(value: Record<string, any> | { color?: string | undefined, visible?: boolean, width?: number }) {
+    set connector(value: { color?: string | undefined, visible?: boolean, width?: number }) {
         this._setOption('connector', value);
     }
 
