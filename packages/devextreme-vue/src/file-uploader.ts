@@ -77,7 +77,7 @@ const componentConfig = {
   props: {
     abortUpload: Function,
     accept: String,
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     allowCanceling: Boolean,
     allowedFileExtensions: Array,
@@ -87,8 +87,8 @@ const componentConfig = {
     dropZone: {},
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     inputAttr: {},
     invalidFileExtensionMessage: String,
@@ -138,7 +138,7 @@ const componentConfig = {
     validationStatus: {},
     value: Array,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

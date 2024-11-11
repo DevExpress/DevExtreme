@@ -18,11 +18,11 @@ interface DxValidationGroup extends AccessibleOptions {
 const componentConfig = {
   props: {
     elementAttr: Object,
-    height: [Function, Number, String],
+    height: {},
     onDisposing: Function,
     onInitialized: Function,
     onOptionChanged: Function,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

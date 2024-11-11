@@ -65,7 +65,7 @@ interface DxFileManager extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     allowedFileExtensions: Array,
     contextMenu: Object,
@@ -78,8 +78,8 @@ const componentConfig = {
     fileSystemProvider: {},
     focusedItemKey: String,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     itemView: Object,
     notifications: Object,
@@ -117,7 +117,7 @@ const componentConfig = {
     toolbar: Object,
     upload: Object,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,
@@ -218,16 +218,16 @@ const DxColumnConfig = {
   },
   props: {
     alignment: {},
-    caption: String,
-    cssClass: String,
-    dataField: String,
+    caption: {},
+    cssClass: {},
+    dataField: {},
     dataType: {},
-    hidingPriority: Number,
-    sortIndex: Number,
+    hidingPriority: {},
+    sortIndex: {},
     sortOrder: {},
     visible: Boolean,
-    visibleIndex: Number,
-    width: [Number, String]
+    visibleIndex: {},
+    width: {}
   }
 };
 
@@ -284,7 +284,7 @@ const DxContextMenuItemConfig = {
     selectable: Boolean,
     selected: Boolean,
     text: String,
-    visible: Boolean
+    visible: {}
   }
 };
 
@@ -332,7 +332,7 @@ const DxFileSelectionItemConfig = {
     "update:widget": null,
   },
   props: {
-    cssClass: String,
+    cssClass: {},
     disabled: Boolean,
     icon: String,
     locateInMenu: {},
@@ -341,7 +341,7 @@ const DxFileSelectionItemConfig = {
     options: {},
     showText: {},
     text: String,
-    visible: Boolean,
+    visible: {},
     widget: {}
   }
 };
@@ -377,7 +377,7 @@ const DxItemConfig = {
   props: {
     beginGroup: Boolean,
     closeMenuOnClick: Boolean,
-    cssClass: String,
+    cssClass: {},
     disabled: Boolean,
     icon: String,
     items: Array,
@@ -389,7 +389,7 @@ const DxItemConfig = {
     selected: Boolean,
     showText: {},
     text: String,
-    visible: Boolean,
+    visible: {},
     widget: {}
   }
 };
@@ -516,7 +516,7 @@ const DxToolbarItemConfig = {
     "update:widget": null,
   },
   props: {
-    cssClass: String,
+    cssClass: {},
     disabled: Boolean,
     icon: String,
     locateInMenu: {},
@@ -525,7 +525,7 @@ const DxToolbarItemConfig = {
     options: {},
     showText: {},
     text: String,
-    visible: Boolean,
+    visible: {},
     widget: {}
   }
 };

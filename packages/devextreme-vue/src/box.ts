@@ -41,7 +41,7 @@ const componentConfig = {
     direction: {},
     disabled: Boolean,
     elementAttr: Object,
-    height: [Function, Number, String],
+    height: {},
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
     items: Array,
@@ -56,7 +56,7 @@ const componentConfig = {
     onOptionChanged: Function,
     rtlEnabled: Boolean,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,
@@ -119,7 +119,7 @@ const DxItemConfig = {
   },
   props: {
     baseSize: [Number, String],
-    box: Object,
+    box: {},
     disabled: Boolean,
     html: String,
     ratio: Number,

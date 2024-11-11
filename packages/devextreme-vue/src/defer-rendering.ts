@@ -34,14 +34,14 @@ interface DxDeferRendering extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
-    animation: [Object, Number, String],
+    animation: {},
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     onContentReady: Function,
     onDisposing: Function,
@@ -52,10 +52,10 @@ const componentConfig = {
     renderWhen: {},
     rtlEnabled: Boolean,
     showLoadIndicator: Boolean,
-    staggerItemSelector: String,
+    staggerItemSelector: {},
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,
@@ -124,7 +124,7 @@ const DxAnimationConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}

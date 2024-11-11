@@ -276,17 +276,17 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
          * @docid
          * @default #ffffff
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid
          * @default false
          */
-        visible?: boolean;
+        visible?: boolean | undefined;
         /**
          * @docid
          * @default 2
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * @docid
@@ -300,17 +300,17 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
            * @docid
            * @default undefined
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * @docid
            * @default undefined
            */
-          visible?: boolean;
+          visible?: boolean | undefined;
           /**
            * @docid
            * @default undefined
            */
-          width?: number;
+          width?: number | undefined;
         };
         /**
          * @docid
@@ -350,17 +350,17 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
            * @docid
            * @default undefined
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * @docid
            * @default undefined
            */
-          visible?: boolean;
+          visible?: boolean | undefined;
           /**
            * @docid
            * @default undefined
            */
-          width?: number;
+          width?: number | undefined;
         };
         /**
          * @docid
@@ -431,7 +431,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
          * @docid
          * @default undefined
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid
          * @default 0.5
@@ -463,7 +463,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
        * @docid
        * @default undefined
        */
-      format?: Format;
+      format?: Format | undefined;
       /**
        * @docid
        * @default 'right'
@@ -632,7 +632,7 @@ export type Legend = BaseLegend & {
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
      * @docid dxFunnelOptions.legend.visible
      * @default false
@@ -652,7 +652,7 @@ export type Tooltip = BaseWidgetTooltip & {
      * @default undefined
      * @public
      */
-    contentTemplate?: template | ((info: { item?: Item; value?: number; valueText?: string; percent?: number; percentText?: string }, element: DxElement) => string | UserDefinedElement);
+    contentTemplate?: template | ((info: { item?: Item; value?: number; valueText?: string; percent?: number; percentText?: string }, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid dxFunnelOptions.tooltip.customizeTooltip
      * @default undefined
@@ -660,7 +660,7 @@ export type Tooltip = BaseWidgetTooltip & {
      * @type_function_return object
      * @public
      */
-    customizeTooltip?: ((info: { item?: Item; value?: number; valueText?: string; percent?: number; percentText?: string }) => any);
+    customizeTooltip?: ((info: { item?: Item; value?: number; valueText?: string; percent?: number; percentText?: string }) => any) | undefined;
 };
 /**
  * @docid

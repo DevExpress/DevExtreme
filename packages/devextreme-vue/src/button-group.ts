@@ -37,14 +37,14 @@ interface DxButtonGroup extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     buttonTemplate: {},
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     items: Array,
     keyExpr: [Function, String],
@@ -61,7 +61,7 @@ const componentConfig = {
     stylingMode: {},
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

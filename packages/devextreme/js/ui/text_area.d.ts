@@ -153,13 +153,13 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
      * @default undefined
      * @public
      */
-    maxHeight?: number | string;
+    maxHeight?: number | string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    minHeight?: number | string;
+    minHeight?: number | string | undefined;
     /**
      * @docid
      * @default true

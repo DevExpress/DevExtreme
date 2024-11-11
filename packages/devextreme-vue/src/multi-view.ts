@@ -45,7 +45,7 @@ interface DxMultiView extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     animationEnabled: Boolean,
     dataSource: {},
@@ -53,8 +53,8 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
     items: Array,
@@ -76,7 +76,7 @@ const componentConfig = {
     swipeEnabled: Boolean,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

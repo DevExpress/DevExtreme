@@ -168,7 +168,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @docid
          * @default undefined
          */
-        url?: string;
+        url?: string | undefined;
       };
       /**
        * @docid
@@ -234,7 +234,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @default undefined
        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
        */
-      barGroupWidth?: number;
+      barGroupWidth?: number | undefined;
       /**
        * @docid
        * @default 0
@@ -297,7 +297,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @default undefined
        * @notUsedInTheme
        */
-      series?: ChartSeries | Array<ChartSeries>;
+      series?: ChartSeries | Array<ChartSeries> | undefined;
       /**
        * @docid
        * @default undefined
@@ -336,22 +336,22 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @docid
          * @default undefined
          */
-        max?: number;
+        max?: number | undefined;
         /**
          * @docid
          * @default undefined
          */
-        min?: number;
+        min?: number | undefined;
         /**
          * @docid
          * @default undefined
          */
-        type?: ChartAxisScale;
+        type?: ChartAxisScale | undefined;
         /**
          * @docid
          * @default undefined
          */
-        valueType?: ChartsDataType;
+        valueType?: ChartsDataType | undefined;
       };
     };
     /**
@@ -383,13 +383,13 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @default undefined
        * @notUsedInTheme
        */
-      left?: number;
+      left?: number | undefined;
       /**
        * @docid
        * @default undefined
        * @notUsedInTheme
        */
-      right?: number;
+      right?: number | undefined;
     };
     /**
      * @docid
@@ -415,7 +415,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default undefined
        */
-      aggregationGroupWidth?: number;
+      aggregationGroupWidth?: number | undefined;
       /**
        * @docid
        * @inherits VizTimeInterval
@@ -432,7 +432,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default undefined
        */
-      allowDecimals?: boolean;
+      allowDecimals?: boolean | undefined;
       /**
        * @docid
        */
@@ -474,7 +474,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @default undefined
        * @notUsedInTheme
        */
-      endValue?: number | Date | string;
+      endValue?: number | Date | string | undefined;
       /**
        * @docid
        * @default undefined
@@ -499,7 +499,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @docid
          * @default undefined
          */
-        format?: Format;
+        format?: Format | undefined;
         /**
          * @docid
          * @default "hide"
@@ -543,7 +543,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
            * @docid
            * @default undefined
            */
-          format?: Format;
+          format?: Format | undefined;
         };
         /**
          * @docid
@@ -612,7 +612,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default undefined
        */
-      minorTickCount?: number;
+      minorTickCount?: number | undefined;
       /**
        * @docid
        * @inherits VizTimeInterval
@@ -623,7 +623,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default undefined
        */
-      placeholderHeight?: number;
+      placeholderHeight?: number | undefined;
       /**
        * @docid
        * @default true
@@ -639,7 +639,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @default undefined
        * @notUsedInTheme
        */
-      startValue?: number | Date | string;
+      startValue?: number | Date | string | undefined;
       /**
        * @docid
        */
@@ -670,12 +670,12 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default undefined
        */
-      type?: AxisScale;
+      type?: AxisScale | undefined;
       /**
        * @docid
        * @default undefined
        */
-      valueType?: ChartsDataType;
+      valueType?: ChartsDataType | undefined;
       /**
        * @docid
        * @default [1, 2, 3, 4, 5]
@@ -708,7 +708,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default undefined
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * @docid
        * @default 0.75
@@ -761,7 +761,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default undefined
        */
-      format?: Format;
+      format?: Format | undefined;
       /**
        * @docid
        * @default 'red'
@@ -782,7 +782,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @default undefined
        * @notUsedInTheme
        */
-      placeholderHeight?: number;
+      placeholderHeight?: number | undefined;
       /**
        * @docid
        * @default true

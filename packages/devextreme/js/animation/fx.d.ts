@@ -68,7 +68,7 @@ export type AnimationConfig = {
      * @default undefined
      * @public
      */
-    direction?: Direction;
+    direction?: Direction | undefined;
     /**
      * @docid
      * @default 400
@@ -92,7 +92,7 @@ export type AnimationConfig = {
      * @default undefined
      * @public
      */
-    staggerDelay?: number;
+    staggerDelay?: number | undefined;
     /**
      * @docid
      * @public

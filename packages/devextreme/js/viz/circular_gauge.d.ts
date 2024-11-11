@@ -141,7 +141,7 @@ export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    centerTemplate?: template | ((component: dxCircularGauge, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    centerTemplate?: template | ((component: dxCircularGauge, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
      * @docid
      * @type object

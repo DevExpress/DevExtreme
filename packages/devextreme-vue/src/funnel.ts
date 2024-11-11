@@ -205,12 +205,12 @@ const DxBorderConfig = {
     "update:width": null,
   },
   props: {
-    color: String,
+    color: {},
     cornerRadius: Number,
     dashStyle: {},
-    opacity: Number,
-    visible: Boolean,
-    width: Number
+    opacity: {},
+    visible: {},
+    width: {}
   }
 };
 
@@ -230,7 +230,7 @@ const DxConnectorConfig = {
     "update:width": null,
   },
   props: {
-    color: String,
+    color: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -262,7 +262,7 @@ const DxExportConfig = {
     formats: Array,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: Function
+    svgToCanvas: {}
   }
 };
 
@@ -342,7 +342,7 @@ const DxFunnelTitleConfig = {
     font: Object,
     horizontalAlignment: {},
     margin: [Number, Object],
-    placeholderSize: Number,
+    placeholderSize: {},
     subtitle: [Object, String],
     text: String,
     textOverflow: {},
@@ -474,9 +474,9 @@ const DxItemBorderConfig = {
     "update:width": null,
   },
   props: {
-    color: String,
-    visible: Boolean,
-    width: Number
+    color: {},
+    visible: {},
+    width: {}
   }
 };
 
@@ -585,7 +585,7 @@ const DxLegendConfig = {
     "update:visible": null,
   },
   props: {
-    backgroundColor: String,
+    backgroundColor: {},
     border: Object,
     columnCount: Number,
     columnItemSpacing: Number,
@@ -639,7 +639,7 @@ const DxLegendBorderConfig = {
     color: String,
     cornerRadius: Number,
     dashStyle: {},
-    opacity: Number,
+    opacity: {},
     visible: Boolean,
     width: Number
   }
@@ -667,7 +667,7 @@ const DxLegendTitleConfig = {
     font: Object,
     horizontalAlignment: {},
     margin: Object,
-    placeholderSize: Number,
+    placeholderSize: {},
     subtitle: [Object, String],
     text: String,
     verticalAlignment: {}
@@ -818,8 +818,8 @@ const DxSizeConfig = {
     "update:width": null,
   },
   props: {
-    height: Number,
-    width: Number
+    height: {},
+    width: {}
   }
 };
 
@@ -872,7 +872,7 @@ const DxTitleConfig = {
     font: Object,
     horizontalAlignment: {},
     margin: [Object, Number],
-    placeholderSize: Number,
+    placeholderSize: {},
     subtitle: [Object, String],
     text: String,
     textOverflow: {},
@@ -914,15 +914,15 @@ const DxTooltipConfig = {
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: Function,
+    customizeTooltip: {},
     enabled: Boolean,
     font: Object,
     format: {},
-    opacity: Number,
+    opacity: {},
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     shadow: Object,
-    zIndex: Number
+    zIndex: {}
   }
 };
 
@@ -952,7 +952,7 @@ const DxTooltipBorderConfig = {
   props: {
     color: String,
     dashStyle: {},
-    opacity: Number,
+    opacity: {},
     visible: Boolean,
     width: Number
   }

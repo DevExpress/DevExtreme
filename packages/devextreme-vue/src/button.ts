@@ -35,13 +35,13 @@ interface DxButton extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     icon: String,
     onClick: Function,
@@ -56,9 +56,9 @@ const componentConfig = {
     text: String,
     type: {},
     useSubmitBehavior: Boolean,
-    validationGroup: String,
+    validationGroup: {},
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

@@ -808,7 +808,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
      * @public
      */
-    barGroupWidth?: number;
+    barGroupWidth?: number | undefined;
     /**
      * @docid
      * @public
@@ -898,7 +898,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
            * @docid
            * @default undefined
            */
-          format?: Format;
+          format?: Format | undefined;
           /**
            * @docid
            * @default false
@@ -909,7 +909,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
          * @docid
          * @default undefined
          */
-        opacity?: number;
+        opacity?: number | undefined;
         /**
          * @docid
          * @default true
@@ -944,7 +944,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
          * @docid
          * @default undefined
          */
-        format?: Format;
+        format?: Format | undefined;
         /**
          * @docid
          * @default false
@@ -955,7 +955,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
        * @docid
        * @default undefined
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * @docid
        */
@@ -993,7 +993,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
            * @docid
            * @default undefined
            */
-          format?: Format;
+          format?: Format | undefined;
           /**
            * @docid
            * @default false
@@ -1004,7 +1004,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
          * @docid
          * @default undefined
          */
-        opacity?: number;
+        opacity?: number | undefined;
         /**
          * @docid
          * @default true
@@ -1028,7 +1028,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @notUsedInTheme
      * @public
      */
-    customizeAnnotation?: ((annotation: dxChartAnnotationConfig | any) => dxChartAnnotationConfig);
+    customizeAnnotation?: ((annotation: dxChartAnnotationConfig | any) => dxChartAnnotationConfig) | undefined;
     /**
      * @docid
      * @public
@@ -1058,7 +1058,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @notUsedInTheme
      * @public
      */
-    defaultPane?: string;
+    defaultPane?: string | undefined;
     /**
      * @docid
      * @type object
@@ -1197,7 +1197,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
        * @docid
        * @default undefined
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * @docid
        * @default 'top'
@@ -1222,7 +1222,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @inheritAll
      * @public
      */
-    series?: ChartSeries | Array<ChartSeries>;
+    series?: ChartSeries | Array<ChartSeries> | undefined;
     /**
      * @docid
      * @default 'single'
@@ -1299,12 +1299,12 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
          * @docid
          * @default undefined
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid
          * @default undefined
          */
-        opacity?: number;
+        opacity?: number | undefined;
       };
       /**
        * @docid
@@ -1340,7 +1340,7 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    aggregationGroupWidth?: number;
+    aggregationGroupWidth?: number | undefined;
     /**
      * @docid dxChartOptions.argumentAxis.aggregationInterval
      * @inherits VizTimeInterval
@@ -1353,7 +1353,7 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    argumentType?: ChartsDataType;
+    argumentType?: ChartsDataType | undefined;
     /**
      * @docid dxChartOptions.argumentAxis.axisDivisionFactor
      * @default 70
@@ -1417,7 +1417,7 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    linearThreshold?: number;
+    linearThreshold?: number | undefined;
     /**
      * @docid dxChartOptions.argumentAxis.logarithmBase
      * @default 10
@@ -1427,7 +1427,7 @@ export type ArgumentAxis = CommonAxisSettings & {
     /**
      * @docid dxChartOptions.argumentAxis.minVisualRangeLength
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval
+     * @type number|object|Enums.TimeInterval|undefined
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -1438,7 +1438,7 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    minorTickCount?: number;
+    minorTickCount?: number | undefined;
     /**
      * @docid dxChartOptions.argumentAxis.minorTickInterval
      * @inherits VizTimeInterval
@@ -1457,19 +1457,19 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    customPosition?: number | Date | string;
+    customPosition?: number | Date | string | undefined;
     /**
      * @docid dxChartOptions.argumentAxis.customPositionAxis
      * @default undefined
      * @public
      */
-    customPositionAxis?: string;
+    customPositionAxis?: string | undefined;
     /**
      * @docid dxChartOptions.argumentAxis.offset
      * @default undefined
      * @public
      */
-    offset?: number;
+    offset?: number | undefined;
     /**
      * @docid dxChartOptions.argumentAxis.singleWorkdays
      * @default undefined
@@ -1502,7 +1502,7 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    type?: AxisScaleType;
+    type?: AxisScaleType | undefined;
     /**
      * @docid dxChartOptions.argumentAxis.visualRange
      * @fires BaseWidgetOptions.onOptionChanged
@@ -1521,7 +1521,7 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    wholeRange?: VisualRange | Array<number | string | Date>;
+    wholeRange?: VisualRange | Array<number | string | Date> | undefined;
     /**
      * @docid dxChartOptions.argumentAxis.workWeek
      * @default [1, 2, 3, 4, 5]
@@ -1596,7 +1596,7 @@ export type ArgumentAxisConstantLines = CommonAxisSettingsConstantLineStyle & {
      * @default undefined
      * @public
      */
-    value?: number | Date | string;
+    value?: number | Date | string | undefined;
 };
 /**
  * @public
@@ -1615,7 +1615,7 @@ export type ArgumentAxisConstantLinesLabel = CommonAxisSettingsConstantLineStyle
      * @default undefined
      * @public
      */
-    text?: string;
+    text?: string | undefined;
     /**
      * @docid dxChartOptions.argumentAxis.constantLines.label.verticalAlignment
      * @default 'top'
@@ -1645,7 +1645,7 @@ export type ArgumentAxisLabel = CommonAxisSettingsLabel & {
      * @default undefined
      * @public
      */
-    format?: Format;
+    format?: Format | undefined;
 };
 /**
  * @public
@@ -1658,13 +1658,13 @@ export type ArgumentAxisStrips = CommonAxisSettingsStripStyle & {
      * @default undefined
      * @public
      */
-    color?: string;
+    color?: string | undefined;
     /**
      * @docid dxChartOptions.argumentAxis.strips.endValue
      * @default undefined
      * @public
      */
-    endValue?: number | Date | string;
+    endValue?: number | Date | string | undefined;
     /**
      * @docid dxChartOptions.argumentAxis.strips.label
      * @type object
@@ -1676,7 +1676,7 @@ export type ArgumentAxisStrips = CommonAxisSettingsStripStyle & {
      * @default undefined
      * @public
      */
-    startValue?: number | Date | string;
+    startValue?: number | Date | string | undefined;
 };
 /**
  * @public
@@ -1689,7 +1689,7 @@ export type ArgumentAxisStripsLabel = CommonAxisSettingsStripStyleLabel & {
      * @default undefined
      * @public
      */
-    text?: string;
+    text?: string | undefined;
 };
 /**
  * @public
@@ -1702,7 +1702,7 @@ export type ArgumentAxisTitle = CommonAxisSettingsTitle & {
      * @default undefined
      * @public
      */
-    text?: string;
+    text?: string | undefined;
 };
 /**
  * @public
@@ -1715,7 +1715,7 @@ export type CommonAxisSettings = {
      * @default undefined
      * @public
      */
-    allowDecimals?: boolean;
+    allowDecimals?: boolean | undefined;
     /**
      * @docid dxChartOptions.commonAxisSettings.breakStyle
      * @public
@@ -1766,7 +1766,7 @@ export type CommonAxisSettings = {
      * @default undefined
      * @public
      */
-    endOnTick?: boolean;
+    endOnTick?: boolean | undefined;
     /**
      * @docid dxChartOptions.commonAxisSettings.grid
      * @public
@@ -1781,7 +1781,7 @@ export type CommonAxisSettings = {
        * @docid dxChartOptions.commonAxisSettings.grid.opacity
        * @default undefined
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * @docid dxChartOptions.commonAxisSettings.grid.visible
        * @default false
@@ -1810,13 +1810,13 @@ export type CommonAxisSettings = {
      * @default undefined
      * @public
      */
-    maxValueMargin?: number;
+    maxValueMargin?: number | undefined;
     /**
      * @docid dxChartOptions.commonAxisSettings.minValueMargin
      * @default undefined
      * @public
      */
-    minValueMargin?: number;
+    minValueMargin?: number | undefined;
     /**
      * @docid dxChartOptions.commonAxisSettings.minorGrid
      * @public
@@ -1831,7 +1831,7 @@ export type CommonAxisSettings = {
        * @docid dxChartOptions.commonAxisSettings.minorGrid.opacity
        * @default undefined
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * @docid dxChartOptions.commonAxisSettings.minorGrid.visible
        * @default false
@@ -1884,7 +1884,7 @@ export type CommonAxisSettings = {
      * @default undefined
      * @public
      */
-    opacity?: number;
+    opacity?: number | undefined;
     /**
      * @docid dxChartOptions.commonAxisSettings.placeholderSize
      * @default null
@@ -1916,7 +1916,7 @@ export type CommonAxisSettings = {
        * @docid dxChartOptions.commonAxisSettings.tick.opacity
        * @default undefined
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * @docid dxChartOptions.commonAxisSettings.tick.shift
        * @default 3
@@ -2037,13 +2037,13 @@ export type CommonAxisSettingsLabel = {
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    template?: template | ((data: object, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    template?: template | ((data: object, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
      * @docid dxChartOptions.commonAxisSettings.label.alignment
      * @default undefined
      * @public
      */
-    alignment?: HorizontalAlignment;
+    alignment?: HorizontalAlignment | undefined;
     /**
      * @docid dxChartOptions.commonAxisSettings.label.displayMode
      * @default 'standard'
@@ -2230,7 +2230,7 @@ export type CommonPaneSettings = {
        * @docid dxChartOptions.commonPaneSettings.border.opacity
        * @default undefined
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * @docid dxChartOptions.commonPaneSettings.border.right
        * @default true
@@ -2422,13 +2422,13 @@ export type Panes = CommonPaneSettings & {
      * @default undefined
      * @public
      */
-    height?: number | string;
+    height?: number | string | undefined;
     /**
      * @docid dxChartOptions.panes.name
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
 };
 /**
  * @bublic
@@ -2494,7 +2494,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    endOnTick?: boolean;
+    endOnTick?: boolean | undefined;
     /**
      * @docid dxChartOptions.valueAxis.label
      * @type object
@@ -2506,7 +2506,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    linearThreshold?: number;
+    linearThreshold?: number | undefined;
     /**
      * @docid dxChartOptions.valueAxis.logarithmBase
      * @default 10
@@ -2522,7 +2522,7 @@ export type ValueAxis = CommonAxisSettings & {
     /**
      * @docid dxChartOptions.valueAxis.minVisualRangeLength
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval
+     * @type number|object|Enums.TimeInterval|undefined
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -2533,7 +2533,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    minorTickCount?: number;
+    minorTickCount?: number | undefined;
     /**
      * @docid dxChartOptions.valueAxis.minorTickInterval
      * @inherits VizTimeInterval
@@ -2553,13 +2553,13 @@ export type ValueAxis = CommonAxisSettings & {
      * @notUsedInTheme
      * @public
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * @docid dxChartOptions.valueAxis.pane
      * @default undefined
      * @public
      */
-    pane?: string;
+    pane?: string | undefined;
     /**
      * @docid dxChartOptions.valueAxis.position
      * @default 'left'
@@ -2571,19 +2571,19 @@ export type ValueAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    customPosition?: number | Date | string;
+    customPosition?: number | Date | string | undefined;
     /**
      * @docid dxChartOptions.valueAxis.offset
      * @default undefined
      * @public
      */
-    offset?: number;
+    offset?: number | undefined;
     /**
      * @docid dxChartOptions.valueAxis.showZero
      * @default undefined
      * @public
      */
-    showZero?: boolean;
+    showZero?: boolean | undefined;
     /**
      * @docid dxChartOptions.valueAxis.strips
      * @type Array<Object>
@@ -2597,7 +2597,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    synchronizedValue?: number;
+    synchronizedValue?: number | undefined;
     /**
      * @docid dxChartOptions.valueAxis.tickInterval
      * @inherits VizTimeInterval
@@ -2616,13 +2616,13 @@ export type ValueAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    type?: AxisScaleType;
+    type?: AxisScaleType | undefined;
     /**
      * @docid dxChartOptions.valueAxis.valueType
      * @default undefined
      * @public
      */
-    valueType?: ChartsDataType;
+    valueType?: ChartsDataType | undefined;
     /**
      * @docid dxChartOptions.valueAxis.visualRange
      * @fires BaseWidgetOptions.onOptionChanged
@@ -2641,7 +2641,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    wholeRange?: VisualRange | Array<number | string | Date>;
+    wholeRange?: VisualRange | Array<number | string | Date> | undefined;
 };
 /**
  * @public
@@ -2704,7 +2704,7 @@ export type ValueAxisConstantLines = CommonAxisSettingsConstantLineStyle & {
      * @default undefined
      * @public
      */
-    value?: number | Date | string;
+    value?: number | Date | string | undefined;
 };
 /**
  * @public
@@ -2723,7 +2723,7 @@ export type ValueAxisConstantLinesLabel = CommonAxisSettingsConstantLineStyleLab
      * @default undefined
      * @public
      */
-    text?: string;
+    text?: string | undefined;
     /**
      * @docid dxChartOptions.valueAxis.constantLines.label.verticalAlignment
      * @default 'top'
@@ -2753,7 +2753,7 @@ export type ValueAxisLabel = CommonAxisSettingsLabel & {
      * @default undefined
      * @public
      */
-    format?: Format;
+    format?: Format | undefined;
 };
 /**
  * @public
@@ -2766,13 +2766,13 @@ export type ValueAxisStrips = CommonAxisSettingsStripStyle & {
      * @default undefined
      * @public
      */
-    color?: string;
+    color?: string | undefined;
     /**
      * @docid dxChartOptions.valueAxis.strips.endValue
      * @default undefined
      * @public
      */
-    endValue?: number | Date | string;
+    endValue?: number | Date | string | undefined;
     /**
      * @docid dxChartOptions.valueAxis.strips.label
      * @type object
@@ -2784,7 +2784,7 @@ export type ValueAxisStrips = CommonAxisSettingsStripStyle & {
      * @default undefined
      * @public
      */
-    startValue?: number | Date | string;
+    startValue?: number | Date | string | undefined;
 };
 /**
  * @public
@@ -2797,7 +2797,7 @@ export type ValueAxisStripsLabel = CommonAxisSettingsStripStyleLabel & {
      * @default undefined
      * @public
      */
-    text?: string;
+    text?: string | undefined;
 };
 /**
  * @public
@@ -2810,7 +2810,7 @@ export type ValueAxisTitle = CommonAxisSettingsTitle & {
      * @default undefined
      * @public
      */
-    text?: string;
+    text?: string | undefined;
 };
 /**
  * @docid
@@ -2863,7 +2863,7 @@ export interface dxChartAnnotationConfig extends dxChartCommonAnnotationConfig {
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
 }
 
 /**
@@ -2878,7 +2878,7 @@ export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig
      * @default undefined
      * @public
      */
-    axis?: string;
+    axis?: string | undefined;
     /**
      * @docid
      * @type_function_return object
@@ -2886,21 +2886,21 @@ export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig
      * @notUsedInTheme
      * @public
      */
-    customizeTooltip?: ((annotation: dxChartAnnotationConfig | any) => any);
+    customizeTooltip?: ((annotation: dxChartAnnotationConfig | any) => any) | undefined;
     /**
      * @docid
      * @default undefined
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    template?: template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    template?: template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
      * @docid
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxChartAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
+    tooltipTemplate?: template | ((annotation: dxChartAnnotationConfig | any, element: DxElement) => string | UserDefinedElement) | undefined;
 }
 
 /**
@@ -3350,28 +3350,28 @@ export interface dxChartSeriesTypesCommonSeries {
      * @default undefined
      * @public
      */
-    axis?: string;
+    axis?: string | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.barOverlapGroup
      * @default undefined
      * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.RangeBarSeries
      * @public
      */
-    barOverlapGroup?: string;
+    barOverlapGroup?: string | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.barPadding
      * @default undefined
      * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
      * @public
      */
-    barPadding?: number;
+    barPadding?: number | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.barWidth
      * @default undefined
      * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
      * @public
      */
-    barWidth?: number;
+    barWidth?: number | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.border
      * @type object
@@ -3392,7 +3392,7 @@ export interface dxChartSeriesTypesCommonSeries {
      * @default undefined
      * @public
      */
-    color?: string | ChartsColor;
+    color?: string | ChartsColor | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.cornerRadius
      * @default 0
@@ -3458,14 +3458,14 @@ export interface dxChartSeriesTypesCommonSeries {
      * @default undefined
      * @public
      */
-    maxLabelCount?: number;
+    maxLabelCount?: number | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.minBarSize
      * @default undefined
      * @propertyOf dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.RangeBarSeries
      * @public
      */
-    minBarSize?: number;
+    minBarSize?: number | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.opacity
      * @default 0.5
@@ -3592,7 +3592,7 @@ export interface dxChartSeriesTypesCommonSeries {
        * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.highValueField
        * @default undefined
        */
-      highValueField?: string;
+      highValueField?: string | undefined;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.lineWidth
        * @default 2
@@ -3602,17 +3602,17 @@ export interface dxChartSeriesTypesCommonSeries {
        * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.lowValueField
        * @default undefined
        */
-      lowValueField?: string;
+      lowValueField?: string | undefined;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.opacity
        * @default undefined
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.type
        * @default undefined
        */
-      type?: ValueErrorBarType;
+      type?: ValueErrorBarType | undefined;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.value
        * @default 1
@@ -3649,7 +3649,7 @@ export interface dxChartSeriesTypesCommonSeriesAggregation {
      * @default undefined
      * @public
      */
-    calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => any | Array<any>);
+    calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => any | Array<any>) | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.aggregation.enabled
      * @default false
@@ -3670,14 +3670,14 @@ export interface dxChartSeriesTypesCommonSeriesBorder {
      * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
      * @public
      */
-    color?: string;
+    color?: string | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.border.dashStyle
      * @default undefined
      * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
      * @public
      */
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.border.visible
      * @default false
@@ -3707,7 +3707,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyle {
      * @default undefined
      * @public
      */
-    color?: string | ChartsColor;
+    color?: string | ChartsColor | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.dashStyle
      * @default 'solid'
@@ -3743,13 +3743,13 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyleBorder {
      * @default undefined
      * @public
      */
-    color?: string;
+    color?: string | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border.dashStyle
      * @default 'solid'
      * @public
      */
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border.visible
      * @default false
@@ -3805,7 +3805,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyle {
      * @default undefined
      * @public
      */
-    color?: string | ChartsColor;
+    color?: string | ChartsColor | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.dashStyle
      * @default 'solid'
@@ -3841,13 +3841,13 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyleBorder {
      * @default undefined
      * @public
      */
-    color?: string;
+    color?: string | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.border.dashStyle
      * @default 'solid'
      * @public
      */
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.border.visible
      * @default false

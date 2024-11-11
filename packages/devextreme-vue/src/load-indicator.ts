@@ -23,8 +23,8 @@ interface DxLoadIndicator extends AccessibleOptions {
 const componentConfig = {
   props: {
     elementAttr: Object,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     indicatorSrc: String,
     onContentReady: Function,
     onDisposing: Function,
@@ -32,7 +32,7 @@ const componentConfig = {
     onOptionChanged: Function,
     rtlEnabled: Boolean,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

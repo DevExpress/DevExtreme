@@ -25,7 +25,7 @@ const componentConfig = {
   props: {
     adapter: Object,
     elementAttr: Object,
-    height: [Function, Number, String],
+    height: {},
     name: String,
     onDisposing: Function,
     onInitialized: Function,
@@ -33,7 +33,7 @@ const componentConfig = {
     onValidated: Function,
     validationGroup: String,
     validationRules: Array,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

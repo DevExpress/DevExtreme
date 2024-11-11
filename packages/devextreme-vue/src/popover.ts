@@ -60,10 +60,10 @@ const componentConfig = {
     disabled: Boolean,
     enableBodyScroll: Boolean,
     height: [Function, Number, String],
-    hideEvent: [Object, String],
+    hideEvent: {},
     hideOnOutsideClick: [Boolean, Function],
     hideOnParentScroll: Boolean,
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     maxHeight: [Function, Number, String],
     maxWidth: [Function, Number, String],
@@ -83,7 +83,7 @@ const componentConfig = {
     shading: Boolean,
     shadingColor: String,
     showCloseButton: Boolean,
-    showEvent: [Object, String],
+    showEvent: {},
     showTitle: Boolean,
     target: {},
     title: String,
@@ -290,7 +290,7 @@ const DxHideConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -315,8 +315,8 @@ const DxHideEventConfig = {
     "update:name": null,
   },
   props: {
-    delay: Number,
-    name: String
+    delay: {},
+    name: {}
   }
 };
 
@@ -415,7 +415,7 @@ const DxShowConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -436,8 +436,8 @@ const DxShowEventConfig = {
     "update:name": null,
   },
   props: {
-    delay: Number,
-    name: String
+    delay: {},
+    name: {}
   }
 };
 
@@ -491,7 +491,7 @@ const DxToolbarItemConfig = {
     "update:widget": null,
   },
   props: {
-    cssClass: String,
+    cssClass: {},
     disabled: Boolean,
     html: String,
     locateInMenu: {},

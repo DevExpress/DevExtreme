@@ -210,17 +210,17 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
          * @docid
          * @default '#000000'
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid
          * @default false
          */
-        visible?: boolean;
+        visible?: boolean | undefined;
         /**
          * @docid
          * @default 2
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * @docid
@@ -301,17 +301,17 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
          * @docid
          * @default '#000000'
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid
          * @default false
          */
-        visible?: boolean;
+        visible?: boolean | undefined;
         /**
          * @docid
          * @default 2
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * @docid
@@ -335,23 +335,23 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
            * @docid
            * @default undefined
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * @docid
            * @default undefined
            */
-          visible?: boolean;
+          visible?: boolean | undefined;
           /**
            * @docid
            * @default undefined
            */
-          width?: number;
+          width?: number | undefined;
         };
         /**
          * @docid
          * @default undefined
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid
          */
@@ -381,7 +381,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
          * @docid
          * @default 0.5
          */
-        opacity?: number;
+        opacity?: number | undefined;
       };
       /**
        * @docid
@@ -402,23 +402,23 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
          * @docid
          * @default '#000000'
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid
          * @default false
          */
-        visible?: boolean;
+        visible?: boolean | undefined;
         /**
          * @docid
          * @default 1
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * @docid
        * @default undefined
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * @docid
        */
@@ -431,23 +431,23 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
            * @docid
            * @default undefined
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * @docid
            * @default undefined
            */
-          visible?: boolean;
+          visible?: boolean | undefined;
           /**
            * @docid
            * @default undefined
            */
-          width?: number;
+          width?: number | undefined;
         };
         /**
          * @docid
          * @default undefined
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid
          */
@@ -477,7 +477,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
          * @docid
          * @default undefined
          */
-        opacity?: number;
+        opacity?: number | undefined;
       };
       /**
        * @docid
@@ -550,7 +550,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @default undefined
      * @public
      */
-    sortData?: any;
+    sortData?: any | undefined;
     /**
      * @docid
      * @default 'source'
@@ -587,7 +587,7 @@ export type Tooltip = BaseWidgetTooltip & {
      * @type_function_return object
      * @public
      */
-    customizeLinkTooltip?: ((info: { source?: string; target?: string; weight?: number }) => any);
+    customizeLinkTooltip?: ((info: { source?: string; target?: string; weight?: number }) => any) | undefined;
     /**
      * @docid  dxSankeyOptions.tooltip.customizeNodeTooltip
      * @default undefined
@@ -595,7 +595,7 @@ export type Tooltip = BaseWidgetTooltip & {
      * @type_function_return object
      * @public
      */
-    customizeNodeTooltip?: ((info: { title?: string; label?: string; weightIn?: number; weightOut?: number }) => any);
+    customizeNodeTooltip?: ((info: { title?: string; label?: string; weightIn?: number; weightOut?: number }) => any) | undefined;
     /**
      * @docid dxSankeyOptions.tooltip.enabled
      * @default true
@@ -608,14 +608,14 @@ export type Tooltip = BaseWidgetTooltip & {
      * @default undefined
      * @public
      */
-    linkTooltipTemplate?: template | ((info: { source?: string; target?: string; weight?: number }, element: DxElement) => string | UserDefinedElement);
+    linkTooltipTemplate?: template | ((info: { source?: string; target?: string; weight?: number }, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid dxSankeyOptions.tooltip.nodeTooltipTemplate
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
      */
-    nodeTooltipTemplate?: template | ((info: { label?: string; weightIn?: number; weightOut?: number }, element: DxElement) => string | UserDefinedElement);
+    nodeTooltipTemplate?: template | ((info: { label?: string; weightIn?: number; weightOut?: number }, element: DxElement) => string | UserDefinedElement) | undefined;
 };
 /**
  * @docid

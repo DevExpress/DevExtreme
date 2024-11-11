@@ -57,7 +57,7 @@ interface DxContextMenu extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     animation: Object,
     closeOnOutsideClick: [Boolean, Function],
@@ -68,9 +68,9 @@ const componentConfig = {
     displayExpr: [Function, String],
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: {},
     hideOnOutsideClick: [Boolean, Function],
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     items: Array,
     itemsExpr: [Function, String],
@@ -100,7 +100,7 @@ const componentConfig = {
     tabIndex: Number,
     target: {},
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,
@@ -322,7 +322,7 @@ const DxHideConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -464,7 +464,7 @@ const DxShowConfig = {
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: Number,
+    staggerDelay: {},
     start: Function,
     to: Object,
     type: {}
@@ -485,8 +485,8 @@ const DxShowEventConfig = {
     "update:name": null,
   },
   props: {
-    delay: Number,
-    name: String
+    delay: {},
+    name: {}
   }
 };
 

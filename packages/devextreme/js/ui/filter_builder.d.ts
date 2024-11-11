@@ -306,7 +306,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @default undefined
      * @public
      */
-    maxGroupLevel?: number;
+    maxGroupLevel?: number | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/filter_builder:EditorPreparedEvent}
@@ -378,7 +378,7 @@ export interface dxFilterBuilderCustomOperation {
      * @default undefined
      * @public
      */
-    caption?: string;
+    caption?: string | undefined;
     /**
      * @docid
      * @type_function_param1_field field:dxFilterBuilderField:optional
@@ -390,7 +390,7 @@ export interface dxFilterBuilderCustomOperation {
      * @default undefined
      * @public
      */
-    dataTypes?: Array<DataType>;
+    dataTypes?: Array<DataType> | undefined;
     /**
      * @docid
      * @type_function_param1 conditionInfo:object
@@ -410,13 +410,13 @@ export interface dxFilterBuilderCustomOperation {
      * @default undefined
      * @public
      */
-    icon?: string;
+    icon?: string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
 }
 
 export type FilterLookupDataSource<T> = Exclude<DataSourceLike<T>, string | DataSource>;
@@ -445,7 +445,7 @@ export interface dxFilterBuilderField {
      * @default undefined
      * @public
      */
-    caption?: string;
+    caption?: string | undefined;
     /**
      * @docid
      * @public
@@ -456,7 +456,7 @@ export interface dxFilterBuilderField {
      * @default undefined
      * @public
      */
-    dataField?: string;
+    dataField?: string | undefined;
     /**
      * @docid
      * @default "string"
@@ -508,28 +508,28 @@ export interface dxFilterBuilderField {
       /**
        * @docid
        * @default undefined
-       * @type Array<any> | Store | DataSourceOptions
+       * @type Array<any> | Store | DataSourceOptions | undefined
        */
-      dataSource?: FilterLookupDataSource<any> | null;
+      dataSource?: FilterLookupDataSource<any> | null | undefined;
       /**
        * @docid
        * @default undefined
        * @type_function_param1 data:object
        */
-      displayExpr?: string | ((data: any) => string);
+      displayExpr?: string | ((data: any) => string) | undefined;
       /**
        * @docid
        * @default undefined
        * @type_function_param1 data:object
        */
-      valueExpr?: string | ((data: any) => string | number | boolean);
+      valueExpr?: string | ((data: any) => string | number | boolean) | undefined;
     };
     /**
      * @docid
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * @docid
      * @default "true"

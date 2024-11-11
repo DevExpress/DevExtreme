@@ -37,15 +37,15 @@ interface DxPagination extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     allowedPageSizes: Array,
     disabled: Boolean,
     displayMode: {},
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     infoText: String,
     itemCount: Number,
@@ -62,7 +62,7 @@ const componentConfig = {
     showPageSizeSelector: Boolean,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

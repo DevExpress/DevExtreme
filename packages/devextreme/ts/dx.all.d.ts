@@ -533,7 +533,7 @@ declare module DevExpress {
     /**
      * [descr:AnimationConfig.direction]
      */
-    direction?: DevExpress.common.Direction;
+    direction?: DevExpress.common.Direction | undefined;
     /**
      * [descr:AnimationConfig.duration]
      */
@@ -549,7 +549,7 @@ declare module DevExpress {
     /**
      * [descr:AnimationConfig.staggerDelay]
      */
-    staggerDelay?: number;
+    staggerDelay?: number | undefined;
     /**
      * [descr:AnimationConfig.start]
      */
@@ -879,7 +879,7 @@ declare module DevExpress {
     /**
      * [descr:DOMComponentOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string | (() => number | string) | undefined;
     /**
      * [descr:DOMComponentOptions.onDisposing]
      */
@@ -897,7 +897,7 @@ declare module DevExpress {
     /**
      * [descr:DOMComponentOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string | (() => number | string) | undefined;
   }
   /**
    * [descr:dxSchedulerTimeZone]
@@ -1035,11 +1035,11 @@ declare module DevExpress {
     /**
      * [descr:PdfExportGanttFont.fontObject]
      */
-    fontObject: object;
+    fontObject: object | undefined;
     /**
      * [descr:PdfExportGanttFont.name]
      */
-    name: string;
+    name: string | undefined;
     /**
      * [descr:PdfExportGanttFont.style]
      */
@@ -1047,7 +1047,7 @@ declare module DevExpress {
     /**
      * [descr:PdfExportGanttFont.weight]
      */
-    weight?: string | number;
+    weight?: string | number | undefined;
   }
   /**
    * [descr:PositionConfig]
@@ -1484,7 +1484,7 @@ declare module DevExpress.common {
     /**
      * [descr:GlobalConfig.editorStylingMode]
      */
-    editorStylingMode?: EditorStyle;
+    editorStylingMode?: EditorStyle | undefined;
     /**
      * [descr:GlobalConfig.floatingActionButtonConfig]
      */
@@ -1841,11 +1841,11 @@ declare module DevExpress.common {
     /**
      * [descr:TextEditorButton.name]
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * [descr:TextEditorButton.options]
      */
-    options?: DevExpress.ui.dxButton.Properties;
+    options?: DevExpress.ui.dxButton.Properties | undefined;
   };
   export type TextEditorButtonLocation = 'after' | 'before';
   export type ToolbarItemComponent =
@@ -1911,7 +1911,7 @@ declare module DevExpress.common.charts {
     /**
      * [descr:BaseLegend.backgroundColor]
      */
-    backgroundColor?: string;
+    backgroundColor?: string | undefined;
     /**
      * [descr:BaseLegend.border]
      */
@@ -1931,7 +1931,7 @@ declare module DevExpress.common.charts {
       /**
        * [descr:BaseLegend.border.opacity]
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * [descr:BaseLegend.border.visible]
        */
@@ -1960,11 +1960,11 @@ declare module DevExpress.common.charts {
     /**
      * [descr:BaseLegend.itemTextPosition]
      */
-    itemTextPosition?: Position;
+    itemTextPosition?: Position | undefined;
     /**
      * [descr:BaseLegend.itemsAlignment]
      */
-    itemsAlignment?: HorizontalAlignment;
+    itemsAlignment?: HorizontalAlignment | undefined;
     /**
      * [descr:BaseLegend.margin]
      */
@@ -1995,7 +1995,7 @@ declare module DevExpress.common.charts {
     /**
      * [descr:BaseLegend.orientation]
      */
-    orientation?: Orientation;
+    orientation?: Orientation | undefined;
     /**
      * [descr:BaseLegend.paddingLeftRight]
      */
@@ -2024,7 +2024,7 @@ declare module DevExpress.common.charts {
           /**
            * [descr:BaseLegend.title.horizontalAlignment]
            */
-          horizontalAlignment?: HorizontalAlignment;
+          horizontalAlignment?: HorizontalAlignment | undefined;
           /**
            * [descr:BaseLegend.title.margin]
            */
@@ -2049,7 +2049,7 @@ declare module DevExpress.common.charts {
           /**
            * [descr:BaseLegend.title.placeholderSize]
            */
-          placeholderSize?: number;
+          placeholderSize?: number | undefined;
           /**
            * [descr:BaseLegend.title.subtitle]
            */
@@ -2131,11 +2131,11 @@ declare module DevExpress.common.charts {
     /**
      * [descr:ChartsColor.base]
      */
-    base?: string;
+    base?: string | undefined;
     /**
      * [descr:ChartsColor.fillId]
      */
-    fillId?: string;
+    fillId?: string | undefined;
   };
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
@@ -2173,11 +2173,11 @@ declare module DevExpress.common.charts {
     /**
      * [descr:GradientColor.offset]
      */
-    offset: number | string;
+    offset: number | string | undefined;
     /**
      * [descr:GradientColor.color]
      */
-    color: string;
+    color: string | undefined;
   };
   export type HatchDirection = 'left' | 'none' | 'right';
   export type LabelOverlap = 'hide' | 'none';
@@ -2247,11 +2247,11 @@ declare module DevExpress.common.charts {
     /**
      * [descr:ScaleBreak.endValue]
      */
-    endValue?: number | Date | string;
+    endValue?: number | Date | string | undefined;
     /**
      * [descr:ScaleBreak.startValue]
      */
-    startValue?: number | Date | string;
+    startValue?: number | Date | string | undefined;
   };
   export type ScaleBreakLineStyle = 'straight' | 'waved';
   export type SeriesHoverMode =
@@ -2270,11 +2270,11 @@ declare module DevExpress.common.charts {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.argumentFormat]
      */
-    argumentFormat?: DevExpress.ui.Format;
+    argumentFormat?: DevExpress.ui.Format | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.backgroundColor]
      */
-    backgroundColor?: string;
+    backgroundColor?: string | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.border]
      */
@@ -2282,11 +2282,11 @@ declare module DevExpress.common.charts {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.label.border.color]
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.label.border.dashStyle]
        */
-      dashStyle?: DashStyle;
+      dashStyle?: DashStyle | undefined;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.label.border.visible]
        */
@@ -2303,7 +2303,7 @@ declare module DevExpress.common.charts {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.label.connector.color]
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.label.connector.visible]
        */
@@ -2324,7 +2324,7 @@ declare module DevExpress.common.charts {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.format]
      */
-    format?: DevExpress.ui.Format;
+    format?: DevExpress.ui.Format | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.horizontalOffset]
      */
@@ -2352,7 +2352,7 @@ declare module DevExpress.common.charts {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.displayFormat]
      */
-    displayFormat?: string;
+    displayFormat?: string | undefined;
   }
   export interface SeriesPoint {
     /**
@@ -2362,7 +2362,7 @@ declare module DevExpress.common.charts {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.point.border.color]
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.point.border.visible]
        */
@@ -2375,7 +2375,7 @@ declare module DevExpress.common.charts {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.point.color]
      */
-    color?: string | ChartsColor;
+    color?: string | ChartsColor | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.point.hoverMode]
      */
@@ -2391,7 +2391,7 @@ declare module DevExpress.common.charts {
         /**
          * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.visible]
          */
@@ -2404,17 +2404,18 @@ declare module DevExpress.common.charts {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.color]
        */
-      color?: string | ChartsColor;
+      color?: string | ChartsColor | undefined;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle.size]
        */
-      size?: number;
+      size?: number | undefined;
     };
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.point.image]
      */
     image?:
       | string
+      | undefined
       | {
           /**
            * [descr:dxChartSeriesTypes.CommonSeries.point.image.height]
@@ -2425,26 +2426,27 @@ declare module DevExpress.common.charts {
                 /**
                  * [descr:dxChartSeriesTypes.CommonSeries.point.image.height.rangeMaxPoint]
                  */
-                rangeMaxPoint?: number;
+                rangeMaxPoint?: number | undefined;
                 /**
                  * [descr:dxChartSeriesTypes.CommonSeries.point.image.height.rangeMinPoint]
                  */
-                rangeMinPoint?: number;
+                rangeMinPoint?: number | undefined;
               };
           /**
            * [descr:dxChartSeriesTypes.CommonSeries.point.image.url]
            */
           url?:
             | string
+            | undefined
             | {
                 /**
                  * [descr:dxChartSeriesTypes.CommonSeries.point.image.url.rangeMaxPoint]
                  */
-                rangeMaxPoint?: string;
+                rangeMaxPoint?: string | undefined;
                 /**
                  * [descr:dxChartSeriesTypes.CommonSeries.point.image.url.rangeMinPoint]
                  */
-                rangeMinPoint?: string;
+                rangeMinPoint?: string | undefined;
               };
           /**
            * [descr:dxChartSeriesTypes.CommonSeries.point.image.width]
@@ -2455,11 +2457,11 @@ declare module DevExpress.common.charts {
                 /**
                  * [descr:dxChartSeriesTypes.CommonSeries.point.image.width.rangeMaxPoint]
                  */
-                rangeMaxPoint?: number;
+                rangeMaxPoint?: number | undefined;
                 /**
                  * [descr:dxChartSeriesTypes.CommonSeries.point.image.width.rangeMinPoint]
                  */
-                rangeMinPoint?: number;
+                rangeMinPoint?: number | undefined;
               };
         };
     /**
@@ -2477,7 +2479,7 @@ declare module DevExpress.common.charts {
         /**
          * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.visible]
          */
@@ -2490,11 +2492,11 @@ declare module DevExpress.common.charts {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.color]
        */
-      color?: string | ChartsColor;
+      color?: string | ChartsColor | undefined;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle.size]
        */
-      size?: number;
+      size?: number | undefined;
     };
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.point.size]
@@ -2609,7 +2611,8 @@ declare module DevExpress.common.charts {
          */
         years?: number;
       }
-    | TimeInterval;
+    | TimeInterval
+    | undefined;
   export type ValueErrorBarDisplayMode = 'auto' | 'high' | 'low' | 'none';
   export type ValueErrorBarType =
     | 'fixed'
@@ -2624,7 +2627,7 @@ declare module DevExpress.common.charts {
     /**
      * [descr:VisualRange.endValue]
      */
-    endValue?: number | Date | string;
+    endValue?: number | Date | string | undefined;
     /**
      * [descr:VisualRange.length]
      */
@@ -2632,7 +2635,7 @@ declare module DevExpress.common.charts {
     /**
      * [descr:VisualRange.startValue]
      */
-    startValue?: number | Date | string;
+    startValue?: number | Date | string | undefined;
   };
   export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';
   export type WordWrap = 'normal' | 'breakWord' | 'none';
@@ -2659,7 +2662,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.alignment]
      */
-    alignment?: HorizontalAlignment;
+    alignment?: HorizontalAlignment | undefined;
     /**
      * [descr:GridBaseColumn.allowEditing]
      */
@@ -2726,11 +2729,11 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.caption]
      */
-    caption?: string;
+    caption?: string | undefined;
     /**
      * [descr:GridBaseColumn.cssClass]
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * [descr:GridBaseColumn.customizeText]
      */
@@ -2741,11 +2744,11 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.dataField]
      */
-    dataField?: string;
+    dataField?: string | undefined;
     /**
      * [descr:GridBaseColumn.dataType]
      */
-    dataType?: DataType;
+    dataType?: DataType | undefined;
     /**
      * [descr:GridBaseColumn.editorOptions]
      */
@@ -2769,7 +2772,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.filterValue]
      */
-    filterValue?: any;
+    filterValue?: any | undefined;
     /**
      * [descr:GridBaseColumn.filterValues]
      */
@@ -2781,7 +2784,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.fixedPosition]
      */
-    fixedPosition?: FixedPosition;
+    fixedPosition?: FixedPosition | undefined;
     /**
      * [descr:GridBaseColumn.formItem]
      */
@@ -2793,31 +2796,31 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.headerFilter]
      */
-    headerFilter?: ColumnHeaderFilter;
+    headerFilter?: ColumnHeaderFilter | undefined;
     /**
      * [descr:GridBaseColumn.hidingPriority]
      */
-    hidingPriority?: number;
+    hidingPriority?: number | undefined;
     /**
      * [descr:GridBaseColumn.isBand]
      */
-    isBand?: boolean;
+    isBand?: boolean | undefined;
     /**
      * [descr:GridBaseColumn.lookup]
      */
-    lookup?: ColumnLookup;
+    lookup?: ColumnLookup | undefined;
     /**
      * [descr:GridBaseColumn.minWidth]
      */
-    minWidth?: number;
+    minWidth?: number | undefined;
     /**
      * [descr:GridBaseColumn.name]
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * [descr:GridBaseColumn.ownerBand]
      */
-    ownerBand?: number;
+    ownerBand?: number | undefined;
     /**
      * [descr:GridBaseColumn.renderAsync]
      */
@@ -2825,7 +2828,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.selectedFilterOperation]
      */
-    selectedFilterOperation?: SelectedFilterOperation;
+    selectedFilterOperation?: SelectedFilterOperation | undefined;
     /**
      * [descr:GridBaseColumn.setCellValue]
      */
@@ -2847,15 +2850,17 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.sortIndex]
      */
-    sortIndex?: number;
+    sortIndex?: number | undefined;
     /**
      * [descr:GridBaseColumn.sortOrder]
      */
-    sortOrder?: SortOrder;
+    sortOrder?: SortOrder | undefined;
     /**
      * [descr:GridBaseColumn.sortingMethod]
      */
-    sortingMethod?: (this: ColumnBase, value1: any, value2: any) => number;
+    sortingMethod?:
+      | ((this: ColumnBase, value1: any, value2: any) => number)
+      | undefined;
     /**
      * [descr:GridBaseColumn.trueText]
      */
@@ -2871,11 +2876,11 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.visibleIndex]
      */
-    visibleIndex?: number;
+    visibleIndex?: number | undefined;
     /**
      * [descr:GridBaseColumn.width]
      */
-    width?: number | string;
+    width?: number | string | undefined;
   }
   /**
    * [descr:GridBaseColumnButton]
@@ -2911,7 +2916,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.columnChooser.container]
      */
-    container?: string | DevExpress.core.UserDefinedElement;
+    container?: string | DevExpress.core.UserDefinedElement | undefined;
     /**
      * [descr:GridBaseOptions.columnChooser.emptyPanelText]
      */
@@ -2931,7 +2936,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.columnChooser.position]
      */
-    position?: PositionConfig;
+    position?: PositionConfig | undefined;
     /**
      * [descr:GridBaseOptions.columnChooser.search]
      */
@@ -2956,7 +2961,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.columnChooser.sortOrder]
      */
-    sortOrder?: SortOrder;
+    sortOrder?: SortOrder | undefined;
   };
   export type ColumnChooserMode = 'dragAndDrop' | 'select';
   /**
@@ -3084,15 +3089,16 @@ declare module DevExpress.common.grids {
       | ((options: {
           component?: any;
           dataSource?: DevExpress.data.DataSource.Options | null;
-        }) => void);
+        }) => void)
+      | undefined;
     /**
      * [descr:GridBaseColumn.headerFilter.groupInterval]
      */
-    groupInterval?: HeaderFilterGroupInterval | number;
+    groupInterval?: HeaderFilterGroupInterval | number | undefined;
     /**
      * [descr:GridBaseColumn.headerFilter.height]
      */
-    height?: number | string;
+    height?: number | string | undefined;
     /**
      * [descr:GridBaseColumn.headerFilter.search]
      */
@@ -3105,7 +3111,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.headerFilter.width]
      */
-    width?: number | string;
+    width?: number | string | undefined;
   };
   /**
    * [descr:ColumnHeaderFilterSearchConfig]
@@ -3114,7 +3120,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:ColumnHeaderFilterSearchConfig.searchExpr]
      */
-    searchExpr?: string | Function | Array<string | Function>;
+    searchExpr?: string | Function | Array<string | Function> | undefined;
   };
   export type ColumnLookup = {
     /**
@@ -3130,15 +3136,16 @@ declare module DevExpress.common.grids {
           data?: any;
           key?: any;
         }) => DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>)
-      | null;
+      | null
+      | undefined;
     /**
      * [descr:GridBaseColumn.lookup.displayExpr]
      */
-    displayExpr?: string | ((data: any) => string);
+    displayExpr?: string | ((data: any) => string) | undefined;
     /**
      * [descr:GridBaseColumn.lookup.valueExpr]
      */
-    valueExpr?: string;
+    valueExpr?: string | undefined;
     /**
      * [descr:GridBaseColumn.lookup.calculateCellValue]
      */
@@ -3811,7 +3818,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.columnMinWidth]
      */
-    columnMinWidth?: number;
+    columnMinWidth?: number | undefined;
     /**
      * [descr:GridBaseOptions.columnResizingMode]
      */
@@ -3819,11 +3826,11 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.columnWidth]
      */
-    columnWidth?: number | Mode;
+    columnWidth?: number | Mode | undefined;
     /**
      * [descr:GridBaseOptions.columns]
      */
-    columns?: Array<ColumnBase<TRowData> | string>;
+    columns?: Array<ColumnBase<TRowData> | string> | undefined;
     /**
      * [descr:GridBaseOptions.dataSource]
      */
@@ -3882,7 +3889,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.focusedRowKey]
      */
-    focusedRowKey?: TKey;
+    focusedRowKey?: TKey | undefined;
     /**
      * [descr:GridBaseOptions.headerFilter]
      */
@@ -4374,11 +4381,11 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.rowDragging.boundary]
      */
-    boundary?: string | DevExpress.core.UserDefinedElement;
+    boundary?: string | DevExpress.core.UserDefinedElement | undefined;
     /**
      * [descr:GridBaseOptions.rowDragging.container]
      */
-    container?: string | DevExpress.core.UserDefinedElement;
+    container?: string | DevExpress.core.UserDefinedElement | undefined;
     /**
      * [descr:GridBaseOptions.rowDragging.cursorOffset]
      */
@@ -4397,7 +4404,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.rowDragging.data]
      */
-    data?: any;
+    data?: any | undefined;
     /**
      * [descr:GridBaseOptions.rowDragging.dragDirection]
      */
@@ -4410,7 +4417,8 @@ declare module DevExpress.common.grids {
       | ((
           dragInfo: RowDraggingTemplateData<TRowData>,
           containerElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+        ) => string | DevExpress.core.UserDefinedElement)
+      | undefined;
     /**
      * [descr:GridBaseOptions.rowDragging.dropFeedbackMode]
      */
@@ -4423,7 +4431,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.rowDragging.group]
      */
-    group?: string;
+    group?: string | undefined;
     /**
      * [descr:GridBaseOptions.rowDragging.handle]
      */
@@ -4725,7 +4733,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.scrolling.renderAsync]
      */
-    renderAsync?: boolean;
+    renderAsync?: boolean | undefined;
   }
   /**
    * [descr:SearchPanel]
@@ -5270,7 +5278,7 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.useDefaultSearch]
      */
-    useDefaultSearch?: boolean;
+    useDefaultSearch?: boolean | undefined;
   }
   /**
    * [descr:DataSource]
@@ -5555,7 +5563,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.paginate]
      */
-    paginate?: boolean;
+    paginate?: boolean | undefined;
     /**
      * [descr:DataSourceOptions.postProcess]
      */
@@ -5563,7 +5571,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.pushAggregationTimeout]
      */
-    pushAggregationTimeout?: number;
+    pushAggregationTimeout?: number | undefined;
     /**
      * [descr:DataSourceOptions.requireTotalCount]
      */
@@ -7154,7 +7162,7 @@ declare module DevExpress.excelExporter {
     /**
      * [descr:ExcelExportBaseProps.worksheet]
      */
-    worksheet?: object;
+    worksheet?: object | undefined;
     /**
      * [descr:ExcelExportBaseProps.topLeftCell]
      */
@@ -7179,7 +7187,7 @@ declare module DevExpress.excelExporter {
     /**
      * [descr:ExcelExportDataGridProps.component]
      */
-    component?: DevExpress.ui.dxDataGrid;
+    component?: DevExpress.ui.dxDataGrid | undefined;
     /**
      * [descr:ExcelExportDataGridProps.selectedRowsOnly]
      */
@@ -7204,7 +7212,7 @@ declare module DevExpress.excelExporter {
     /**
      * [descr:ExcelExportPivotGridProps.component]
      */
-    component?: DevExpress.ui.dxPivotGrid;
+    component?: DevExpress.ui.dxPivotGrid | undefined;
     /**
      * [descr:ExcelExportPivotGridProps.mergeRowFieldValues]
      */
@@ -7829,11 +7837,11 @@ declare module DevExpress.pdfExporter {
     /**
      * [descr:PdfExportDataGridProps.jsPDFDocument]
      */
-    jsPDFDocument?: object;
+    jsPDFDocument?: object | undefined;
     /**
      * [descr:PdfExportDataGridProps.component]
      */
-    component?: DevExpress.ui.dxDataGrid;
+    component?: DevExpress.ui.dxDataGrid | undefined;
     /**
      * [descr:PdfExportDataGridProps.topLeft]
      */
@@ -7850,7 +7858,7 @@ declare module DevExpress.pdfExporter {
     /**
      * [descr:PdfExportDataGridProps.columnWidths]
      */
-    columnWidths?: Array<number>;
+    columnWidths?: Array<number> | undefined;
     /**
      * [descr:PdfExportDataGridProps.indent]
      */
@@ -7925,15 +7933,15 @@ declare module DevExpress.pdfExporter {
     /**
      * [descr:PdfExportGanttProps.jsPDFDocument]
      */
-    jsPDFDocument?: object;
+    jsPDFDocument?: object | undefined;
     /**
      * [descr:PdfExportGanttProps.component]
      */
-    component?: DevExpress.ui.dxGantt;
+    component?: DevExpress.ui.dxGantt | undefined;
     /**
      * [descr:PdfExportGanttProps.format]
      */
-    format?: string | object;
+    format?: string | object | undefined;
     /**
      * [descr:PdfExportGanttProps.landscape]
      */
@@ -7941,11 +7949,11 @@ declare module DevExpress.pdfExporter {
     /**
      * [descr:PdfExportGanttProps.fileName]
      */
-    fileName?: string;
+    fileName?: string | undefined;
     /**
      * [descr:PdfExportGanttProps.margins]
      */
-    margins?: object;
+    margins?: object | undefined;
     /**
      * [descr:PdfExportGanttProps.exportMode]
      */
@@ -7973,19 +7981,19 @@ declare module DevExpress.ui {
     /**
      * [descr:ColCountResponsible.lg]
      */
-    lg?: number;
+    lg?: number | undefined;
     /**
      * [descr:ColCountResponsible.md]
      */
-    md?: number;
+    md?: number | undefined;
     /**
      * [descr:ColCountResponsible.sm]
      */
-    sm?: number;
+    sm?: number | undefined;
     /**
      * [descr:ColCountResponsible.xs]
      */
-    xs?: number;
+    xs?: number | undefined;
   }
   /**
    * [descr:CollectionWidget]
@@ -8195,7 +8203,7 @@ declare module DevExpress.ui {
     /**
      * [descr:DataExpressionMixinOptions.displayExpr]
      */
-    displayExpr?: string | ((item: any) => string);
+    displayExpr?: string | ((item: any) => string) | undefined;
     /**
      * [descr:DataExpressionMixinOptions.itemTemplate]
      */
@@ -8256,7 +8264,7 @@ declare module DevExpress.ui {
     /**
      * [descr:DateBoxBaseOptions.dateSerializationFormat]
      */
-    dateSerializationFormat?: string;
+    dateSerializationFormat?: string | undefined;
     /**
      * [descr:DateBoxBaseOptions.displayFormat]
      */
@@ -8264,11 +8272,11 @@ declare module DevExpress.ui {
     /**
      * [descr:DateBoxBaseOptions.max]
      */
-    max?: Date | number | string;
+    max?: Date | number | string | undefined;
     /**
      * [descr:DateBoxBaseOptions.min]
      */
-    min?: Date | number | string;
+    min?: Date | number | string | undefined;
     /**
      * [descr:DateBoxBaseOptions.todayButtonText]
      */
@@ -8311,11 +8319,11 @@ declare module DevExpress.ui {
     /**
      * [descr:DraggableBaseOptions.boundary]
      */
-    boundary?: string | DevExpress.core.UserDefinedElement;
+    boundary?: string | DevExpress.core.UserDefinedElement | undefined;
     /**
      * [descr:DraggableBaseOptions.container]
      */
-    container?: string | DevExpress.core.UserDefinedElement;
+    container?: string | DevExpress.core.UserDefinedElement | undefined;
     /**
      * [descr:DraggableBaseOptions.cursorOffset]
      */
@@ -8334,7 +8342,7 @@ declare module DevExpress.ui {
     /**
      * [descr:DraggableBaseOptions.data]
      */
-    data?: any;
+    data?: any | undefined;
     /**
      * [descr:DraggableBaseOptions.dragDirection]
      */
@@ -8342,7 +8350,7 @@ declare module DevExpress.ui {
     /**
      * [descr:DraggableBaseOptions.group]
      */
-    group?: string;
+    group?: string | undefined;
     /**
      * [descr:DraggableBaseOptions.handle]
      */
@@ -8539,7 +8547,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxAccordionOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string | (() => number | string) | undefined;
     /**
      * [descr:dxAccordionOptions.hoverStateEnabled]
      */
@@ -9073,7 +9081,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxBoxItem.box]
      */
-    box?: dxBoxOptions<any, TKey>;
+    box?: dxBoxOptions<any, TKey> | undefined;
     /**
      * [descr:dxBoxItem.ratio]
      */
@@ -9328,7 +9336,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonOptions.validationGroup]
      */
-    validationGroup?: string;
+    validationGroup?: string | undefined;
   }
   /**
    * [descr:dxCalendar]
@@ -9414,7 +9422,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.dateSerializationFormat]
      */
-    dateSerializationFormat?: string;
+    dateSerializationFormat?: string | undefined;
     /**
      * [descr:dxCalendarOptions.disabledDates]
      */
@@ -9424,7 +9432,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.firstDayOfWeek]
      */
-    firstDayOfWeek?: DevExpress.common.FirstDayOfWeek;
+    firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
     /**
      * [descr:dxCalendarOptions.focusStateEnabled]
      */
@@ -9631,15 +9639,21 @@ declare module DevExpress.ui {
     /**
      * [descr:dxChatOptions.onMessageEntered]
      */
-    onMessageEntered?: (e: DevExpress.ui.dxChat.MessageEnteredEvent) => void;
+    onMessageEntered?:
+      | ((e: DevExpress.ui.dxChat.MessageEnteredEvent) => void)
+      | undefined;
     /**
      * [descr:dxChatOptions.onTypingStart]
      */
-    onTypingStart?: (e: DevExpress.ui.dxChat.TypingEndEvent) => void;
+    onTypingStart?:
+      | ((e: DevExpress.ui.dxChat.TypingEndEvent) => void)
+      | undefined;
     /**
      * [descr:dxChatOptions.onTypingEnd]
      */
-    onTypingEnd?: (e: DevExpress.ui.dxChat.TypingEndEvent) => void;
+    onTypingEnd?:
+      | ((e: DevExpress.ui.dxChat.TypingEndEvent) => void)
+      | undefined;
   }
   /**
    * [descr:dxCheckBox]
@@ -9708,7 +9722,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCheckBoxOptions.iconSize]
      */
-    iconSize?: number | string;
+    iconSize?: number | string | undefined;
     /**
      * [descr:dxCheckBoxOptions.name]
      */
@@ -10098,11 +10112,11 @@ declare module DevExpress.ui {
           /**
            * [descr:dxContextMenuOptions.showEvent.delay]
            */
-          delay?: number;
+          delay?: number | undefined;
           /**
            * [descr:dxContextMenuOptions.showEvent.name]
            */
-          name?: string;
+          name?: string | undefined;
         }
       | string;
     /**
@@ -10112,7 +10126,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxContextMenuOptions.target]
      */
-    target?: string | DevExpress.core.UserDefinedElement;
+    target?: string | DevExpress.core.UserDefinedElement | undefined;
     /**
      * [descr:dxContextMenuOptions.visible]
      */
@@ -11837,15 +11851,15 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.sortByGroupSummaryInfo.groupColumn]
        */
-      groupColumn?: string;
+      groupColumn?: string | undefined;
       /**
        * [descr:dxDataGridOptions.sortByGroupSummaryInfo.sortOrder]
        */
-      sortOrder?: DevExpress.common.SortOrder;
+      sortOrder?: DevExpress.common.SortOrder | undefined;
       /**
        * [descr:dxDataGridOptions.sortByGroupSummaryInfo.summaryItem]
        */
-      summaryItem?: string | number;
+      summaryItem?: string | number | undefined;
     };
     /**
      * [descr:Summary]
@@ -11860,7 +11874,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.groupItems]
        */
-      groupItems?: Array<SummaryGroupItem>;
+      groupItems?: Array<SummaryGroupItem> | undefined;
       /**
        * [descr:dxDataGridOptions.summary.recalculateWhileEditing]
        */
@@ -11876,7 +11890,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.totalItems]
        */
-      totalItems?: Array<SummaryTotalItem>;
+      totalItems?: Array<SummaryTotalItem> | undefined;
     };
     /**
      * [descr:SummaryGroupItem]
@@ -11889,7 +11903,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.groupItems.column]
        */
-      column?: string;
+      column?: string | undefined;
       /**
        * [descr:dxDataGridOptions.summary.groupItems.customizeText]
        */
@@ -11897,15 +11911,15 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.groupItems.displayFormat]
        */
-      displayFormat?: string;
+      displayFormat?: string | undefined;
       /**
        * [descr:dxDataGridOptions.summary.groupItems.name]
        */
-      name?: string;
+      name?: string | undefined;
       /**
        * [descr:dxDataGridOptions.summary.groupItems.showInColumn]
        */
-      showInColumn?: string;
+      showInColumn?: string | undefined;
       /**
        * [descr:dxDataGridOptions.summary.groupItems.showInGroupFooter]
        */
@@ -11917,11 +11931,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.groupItems.summaryType]
        */
-      summaryType?: DevExpress.common.grids.SummaryType | string;
+      summaryType?: DevExpress.common.grids.SummaryType | string | undefined;
       /**
        * [descr:dxDataGridOptions.summary.groupItems.valueFormat]
        */
-      valueFormat?: Format;
+      valueFormat?: Format | undefined;
     };
     export type SummaryItemTextInfo = {
       readonly value?: string | number | Date;
@@ -11975,15 +11989,15 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.totalItems.alignment]
        */
-      alignment?: DevExpress.common.HorizontalAlignment;
+      alignment?: DevExpress.common.HorizontalAlignment | undefined;
       /**
        * [descr:dxDataGridOptions.summary.totalItems.column]
        */
-      column?: string;
+      column?: string | undefined;
       /**
        * [descr:dxDataGridOptions.summary.totalItems.cssClass]
        */
-      cssClass?: string;
+      cssClass?: string | undefined;
       /**
        * [descr:dxDataGridOptions.summary.totalItems.customizeText]
        */
@@ -11991,15 +12005,15 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.totalItems.displayFormat]
        */
-      displayFormat?: string;
+      displayFormat?: string | undefined;
       /**
        * [descr:dxDataGridOptions.summary.totalItems.name]
        */
-      name?: string;
+      name?: string | undefined;
       /**
        * [descr:dxDataGridOptions.summary.totalItems.showInColumn]
        */
-      showInColumn?: string;
+      showInColumn?: string | undefined;
       /**
        * [descr:dxDataGridOptions.summary.totalItems.skipEmptyValues]
        */
@@ -12007,11 +12021,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.totalItems.summaryType]
        */
-      summaryType?: DevExpress.common.grids.SummaryType | string;
+      summaryType?: DevExpress.common.grids.SummaryType | string | undefined;
       /**
        * [descr:dxDataGridOptions.summary.totalItems.valueFormat]
        */
-      valueFormat?: Format;
+      valueFormat?: Format | undefined;
     };
     /**
      * [descr:_ui_data_grid_ToolbarPreparingEvent]
@@ -12068,7 +12082,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridColumn.columns]
      */
-    columns?: Array<DevExpress.ui.dxDataGrid.Column<TRowData, TKey> | string>;
+    columns?:
+      | Array<DevExpress.ui.dxDataGrid.Column<TRowData, TKey> | string>
+      | undefined;
     /**
      * [descr:dxDataGridColumn.editCellTemplate]
      */
@@ -12096,7 +12112,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridColumn.groupIndex]
      */
-    groupIndex?: number;
+    groupIndex?: number | undefined;
     /**
      * [descr:dxDataGridColumn.headerCellTemplate]
      */
@@ -12182,7 +12198,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridOptions.columns]
      */
-    columns?: Array<DevExpress.ui.dxDataGrid.Column<TRowData, TKey> | string>;
+    columns?:
+      | Array<DevExpress.ui.dxDataGrid.Column<TRowData, TKey> | string>
+      | undefined;
     /**
      * [descr:dxDataGridOptions.customizeColumns]
      */
@@ -12208,7 +12226,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridOptions.keyExpr]
      */
-    keyExpr?: string | Array<string>;
+    keyExpr?: string | Array<string> | undefined;
     /**
      * [descr:dxDataGridOptions.masterDetail]
      */
@@ -12375,7 +12393,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridOptions.sortByGroupSummaryInfo]
      */
-    sortByGroupSummaryInfo?: Array<DevExpress.ui.dxDataGrid.SortByGroupSummaryInfoItem>;
+    sortByGroupSummaryInfo?:
+      | Array<DevExpress.ui.dxDataGrid.SortByGroupSummaryInfoItem>
+      | undefined;
     /**
      * [descr:dxDataGridOptions.summary]
      */
@@ -12383,7 +12403,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridOptions.toolbar]
      */
-    toolbar?: DevExpress.ui.dxDataGrid.Toolbar;
+    toolbar?: DevExpress.ui.dxDataGrid.Toolbar | undefined;
   };
   /**
    * @deprecated Use DevExpress.ui.dxDataGrid.Row instead
@@ -12848,7 +12868,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDeferRenderingOptions.animation]
      */
-    animation?: AnimationConfig;
+    animation?: AnimationConfig | undefined;
     /**
      * [descr:dxDeferRenderingOptions.onRendered]
      */
@@ -12860,7 +12880,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDeferRenderingOptions.renderWhen]
      */
-    renderWhen?: PromiseLike<void> | boolean;
+    renderWhen?: PromiseLike<void> | boolean | undefined;
     /**
      * [descr:dxDeferRenderingOptions.showLoadIndicator]
      */
@@ -12868,7 +12888,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDeferRenderingOptions.staggerItemSelector]
      */
-    staggerItemSelector?: string;
+    staggerItemSelector?: string | undefined;
   }
   /**
    * [descr:dxDiagram]
@@ -13616,19 +13636,19 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.defaultItemProperties.shapeMinWidth]
        */
-      shapeMinWidth?: number;
+      shapeMinWidth?: number | undefined;
       /**
        * [descr:dxDiagramOptions.defaultItemProperties.shapeMaxWidth]
        */
-      shapeMaxWidth?: number;
+      shapeMaxWidth?: number | undefined;
       /**
        * [descr:dxDiagramOptions.defaultItemProperties.shapeMinHeight]
        */
-      shapeMinHeight?: number;
+      shapeMinHeight?: number | undefined;
       /**
        * [descr:dxDiagramOptions.defaultItemProperties.shapeMaxHeight]
        */
-      shapeMaxHeight?: number;
+      shapeMaxHeight?: number | undefined;
     };
     /**
      * [descr:dxDiagramOptions.editing]
@@ -13678,7 +13698,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.edges.customDataExpr]
        */
-      customDataExpr?: string | ((data: any, value?: any) => any);
+      customDataExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.edges.dataSource]
        */
@@ -13690,11 +13710,14 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.edges.fromLineEndExpr]
        */
-      fromLineEndExpr?: string | ((data: any, value?: any) => any);
+      fromLineEndExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.edges.fromPointIndexExpr]
        */
-      fromPointIndexExpr?: string | ((data: any, value?: any) => any);
+      fromPointIndexExpr?:
+        | string
+        | ((data: any, value?: any) => any)
+        | undefined;
       /**
        * [descr:dxDiagramOptions.edges.keyExpr]
        */
@@ -13702,27 +13725,27 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.edges.lineTypeExpr]
        */
-      lineTypeExpr?: string | ((data: any, value?: any) => any);
+      lineTypeExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.edges.lockedExpr]
        */
-      lockedExpr?: string | ((data: any, value?: any) => any);
+      lockedExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.edges.pointsExpr]
        */
-      pointsExpr?: string | ((data: any, value?: any) => any);
+      pointsExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.edges.styleExpr]
        */
-      styleExpr?: string | ((data: any, value?: any) => any);
+      styleExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.edges.textExpr]
        */
-      textExpr?: string | ((data: any, value?: any) => any);
+      textExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.edges.textStyleExpr]
        */
-      textStyleExpr?: string | ((data: any, value?: any) => any);
+      textStyleExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.edges.toExpr]
        */
@@ -13730,15 +13753,15 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.edges.toLineEndExpr]
        */
-      toLineEndExpr?: string | ((data: any, value?: any) => any);
+      toLineEndExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.edges.toPointIndexExpr]
        */
-      toPointIndexExpr?: string | ((data: any, value?: any) => any);
+      toPointIndexExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.edges.zIndexExpr]
        */
-      zIndexExpr?: string | ((data: any, value?: any) => any);
+      zIndexExpr?: string | ((data: any, value?: any) => any) | undefined;
     };
     /**
      * [descr:dxDiagramOptions.export]
@@ -13798,11 +13821,14 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.nodes.containerChildrenExpr]
        */
-      containerChildrenExpr?: string | ((data: any, value?: any) => any);
+      containerChildrenExpr?:
+        | string
+        | ((data: any, value?: any) => any)
+        | undefined;
       /**
        * [descr:dxDiagramOptions.nodes.customDataExpr]
        */
-      customDataExpr?: string | ((data: any, value?: any) => any);
+      customDataExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.nodes.dataSource]
        */
@@ -13810,15 +13836,15 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.nodes.heightExpr]
        */
-      heightExpr?: string | ((data: any, value?: any) => any);
+      heightExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.nodes.imageUrlExpr]
        */
-      imageUrlExpr?: string | ((data: any, value?: any) => any);
+      imageUrlExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.nodes.itemsExpr]
        */
-      itemsExpr?: string | ((data: any, value?: any) => any);
+      itemsExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.nodes.keyExpr]
        */
@@ -13826,19 +13852,19 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.nodes.leftExpr]
        */
-      leftExpr?: string | ((data: any, value?: any) => any);
+      leftExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.nodes.lockedExpr]
        */
-      lockedExpr?: string | ((data: any, value?: any) => any);
+      lockedExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.nodes.parentKeyExpr]
        */
-      parentKeyExpr?: string | ((data: any, value?: any) => any);
+      parentKeyExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.nodes.styleExpr]
        */
-      styleExpr?: string | ((data: any, value?: any) => any);
+      styleExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.nodes.textExpr]
        */
@@ -13846,11 +13872,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.nodes.textStyleExpr]
        */
-      textStyleExpr?: string | ((data: any, value?: any) => any);
+      textStyleExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.nodes.topExpr]
        */
-      topExpr?: string | ((data: any, value?: any) => any);
+      topExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.nodes.typeExpr]
        */
@@ -13858,11 +13884,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.nodes.widthExpr]
        */
-      widthExpr?: string | ((data: any, value?: any) => any);
+      widthExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * [descr:dxDiagramOptions.nodes.zIndexExpr]
        */
-      zIndexExpr?: string | ((data: any, value?: any) => any);
+      zIndexExpr?: string | ((data: any, value?: any) => any) | undefined;
     };
     /**
      * [descr:dxDiagramOptions.hasChanges]
@@ -14084,7 +14110,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.toolbox.width]
        */
-      width?: number;
+      width?: number | undefined;
     };
     /**
      * [descr:dxDiagramOptions.units]
@@ -14107,7 +14133,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxDiagramOptions.zoomLevel.value]
            */
-          value?: number;
+          value?: number | undefined;
         };
   }
   /**
@@ -14336,7 +14362,8 @@ declare module DevExpress.ui {
       | ((
           dragInfo: DevExpress.ui.dxDraggable.DragTemplateData,
           containerElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+        ) => string | DevExpress.core.UserDefinedElement)
+      | undefined;
     /**
      * [descr:dxDraggableOptions.onDragEnd]
      */
@@ -14751,7 +14778,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownButtonOptions.displayExpr]
      */
-    displayExpr?: string | ((itemData: any) => string);
+    displayExpr?: string | ((itemData: any) => string) | undefined;
     /**
      * [descr:dxDropDownButtonOptions.dropDownContentTemplate]
      */
@@ -14776,7 +14803,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownButtonOptions.icon]
      */
-    icon?: string;
+    icon?: string | undefined;
     /**
      * [descr:dxDropDownButtonOptions.itemTemplate]
      */
@@ -15009,7 +15036,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownListOptions.displayValue]
      */
-    displayValue?: string;
+    displayValue?: string | undefined;
     /**
      * [descr:dxDropDownListOptions.groupTemplate]
      */
@@ -15549,7 +15576,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerContextMenuItem.visible]
      */
-    visible?: boolean;
+    visible?: boolean | undefined;
     /**
      * [descr:dxFileManagerContextMenuItem.template]
      */
@@ -15569,27 +15596,27 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerDetailsColumn.caption]
      */
-    caption?: string;
+    caption?: string | undefined;
     /**
      * [descr:dxFileManagerDetailsColumn.cssClass]
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * [descr:dxFileManagerDetailsColumn.dataField]
      */
-    dataField?: string;
+    dataField?: string | undefined;
     /**
      * [descr:dxFileManagerDetailsColumn.dataType]
      */
-    dataType?: DevExpress.common.DataType;
+    dataType?: DevExpress.common.DataType | undefined;
     /**
      * [descr:dxFileManagerDetailsColumn.hidingPriority]
      */
-    hidingPriority?: number;
+    hidingPriority?: number | undefined;
     /**
      * [descr:dxFileManagerDetailsColumn.sortIndex]
      */
-    sortIndex?: number;
+    sortIndex?: number | undefined;
     /**
      * [descr:dxFileManagerDetailsColumn.sortOrder]
      */
@@ -15601,11 +15628,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerDetailsColumn.visibleIndex]
      */
-    visibleIndex?: number;
+    visibleIndex?: number | undefined;
     /**
      * [descr:dxFileManagerDetailsColumn.width]
      */
-    width?: number | string;
+    width?: number | string | undefined;
   }
   /**
    * [descr:dxFileManagerOptions]
@@ -15902,7 +15929,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerToolbarItem.visible]
      */
-    visible?: boolean;
+    visible?: boolean | undefined;
     /**
      * [descr:dxFileManagerToolbarItem.html]
      */
@@ -16288,11 +16315,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileUploaderOptions.dialogTrigger]
      */
-    dialogTrigger?: string | DevExpress.core.UserDefinedElement;
+    dialogTrigger?: string | DevExpress.core.UserDefinedElement | undefined;
     /**
      * [descr:dxFileUploaderOptions.dropZone]
      */
-    dropZone?: string | DevExpress.core.UserDefinedElement;
+    dropZone?: string | DevExpress.core.UserDefinedElement | undefined;
     /**
      * [descr:dxFileUploaderOptions.uploadButtonText]
      */
@@ -16550,7 +16577,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderCustomOperation.caption]
      */
-    caption?: string;
+    caption?: string | undefined;
     /**
      * [descr:dxFilterBuilderCustomOperation.customizeText]
      */
@@ -16562,7 +16589,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderCustomOperation.dataTypes]
      */
-    dataTypes?: Array<DevExpress.common.DataType>;
+    dataTypes?: Array<DevExpress.common.DataType> | undefined;
     /**
      * [descr:dxFilterBuilderCustomOperation.editorTemplate]
      */
@@ -16579,11 +16606,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderCustomOperation.icon]
      */
-    icon?: string;
+    icon?: string | undefined;
     /**
      * [descr:dxFilterBuilderCustomOperation.name]
      */
-    name?: string;
+    name?: string | undefined;
   }
   /**
    * @deprecated Use the Field type instead
@@ -16600,7 +16627,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderField.caption]
      */
-    caption?: string;
+    caption?: string | undefined;
     /**
      * [descr:dxFilterBuilderField.customizeText]
      */
@@ -16611,7 +16638,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderField.dataField]
      */
-    dataField?: string;
+    dataField?: string | undefined;
     /**
      * [descr:dxFilterBuilderField.dataType]
      */
@@ -16654,20 +16681,26 @@ declare module DevExpress.ui {
       /**
        * [descr:dxFilterBuilderField.lookup.dataSource]
        */
-      dataSource?: DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any> | null;
+      dataSource?:
+        | DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>
+        | null
+        | undefined;
       /**
        * [descr:dxFilterBuilderField.lookup.displayExpr]
        */
-      displayExpr?: string | ((data: any) => string);
+      displayExpr?: string | ((data: any) => string) | undefined;
       /**
        * [descr:dxFilterBuilderField.lookup.valueExpr]
        */
-      valueExpr?: string | ((data: any) => string | number | boolean);
+      valueExpr?:
+        | string
+        | ((data: any) => string | number | boolean)
+        | undefined;
     };
     /**
      * [descr:dxFilterBuilderField.name]
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * [descr:dxFilterBuilderField.trueText]
      */
@@ -16777,7 +16810,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderOptions.maxGroupLevel]
      */
-    maxGroupLevel?: number;
+    maxGroupLevel?: number | undefined;
     /**
      * [descr:dxFilterBuilderOptions.onEditorPrepared]
      */
@@ -16952,15 +16985,15 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormButtonItem.buttonOptions]
      */
-    buttonOptions?: dxButtonOptions;
+    buttonOptions?: dxButtonOptions | undefined;
     /**
      * [descr:dxFormButtonItem.colSpan]
      */
-    colSpan?: number;
+    colSpan?: number | undefined;
     /**
      * [descr:dxFormButtonItem.cssClass]
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * [descr:dxFormButtonItem.horizontalAlignment]
      */
@@ -16972,7 +17005,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormButtonItem.name]
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * [descr:dxFormButtonItem.verticalAlignment]
      */
@@ -16984,7 +17017,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormButtonItem.visibleIndex]
      */
-    visibleIndex?: number;
+    visibleIndex?: number | undefined;
   }
   /**
    * @deprecated Use EmptyItem instead
@@ -16994,11 +17027,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormEmptyItem.colSpan]
      */
-    colSpan?: number;
+    colSpan?: number | undefined;
     /**
      * [descr:dxFormEmptyItem.cssClass]
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * [descr:dxFormEmptyItem.itemType]
      */
@@ -17006,7 +17039,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormEmptyItem.name]
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * [descr:dxFormEmptyItem.visible]
      */
@@ -17014,7 +17047,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormEmptyItem.visibleIndex]
      */
-    visibleIndex?: number;
+    visibleIndex?: number | undefined;
   }
   /**
    * @deprecated Use GroupItem instead
@@ -17028,7 +17061,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormGroupItem.caption]
      */
-    caption?: string;
+    caption?: string | undefined;
     /**
      * [descr:dxFormGroupItem.captionTemplate]
      */
@@ -17045,15 +17078,15 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormGroupItem.colCountByScreen]
      */
-    colCountByScreen?: any;
+    colCountByScreen?: any | undefined;
     /**
      * [descr:dxFormGroupItem.colSpan]
      */
-    colSpan?: number;
+    colSpan?: number | undefined;
     /**
      * [descr:dxFormGroupItem.cssClass]
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * [descr:dxFormGroupItem.itemType]
      */
@@ -17061,11 +17094,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormGroupItem.items]
      */
-    items?: Array<DevExpress.ui.dxForm.Item>;
+    items?: Array<DevExpress.ui.dxForm.Item> | undefined;
     /**
      * [descr:dxFormGroupItem.name]
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * [descr:dxFormGroupItem.template]
      */
@@ -17082,7 +17115,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormGroupItem.visibleIndex]
      */
-    visibleIndex?: number;
+    visibleIndex?: number | undefined;
   }
   /**
    * [descr:dxFormOptions]
@@ -17105,7 +17138,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.colCountByScreen]
      */
-    colCountByScreen?: any;
+    colCountByScreen?: any | undefined;
     /**
      * [descr:dxFormOptions.customizeItem]
      */
@@ -17117,7 +17150,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.items]
      */
-    items?: Array<DevExpress.ui.dxForm.Item>;
+    items?: Array<DevExpress.ui.dxForm.Item> | undefined;
     /**
      * [descr:dxFormOptions.labelLocation]
      */
@@ -17183,7 +17216,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.validationGroup]
      */
-    validationGroup?: string;
+    validationGroup?: string | undefined;
     /**
      * [descr:dxFormOptions.isDirty]
      */
@@ -17197,19 +17230,19 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormSimpleItem.colSpan]
      */
-    colSpan?: number;
+    colSpan?: number | undefined;
     /**
      * [descr:dxFormSimpleItem.cssClass]
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * [descr:dxFormSimpleItem.dataField]
      */
-    dataField?: string;
+    dataField?: string | undefined;
     /**
      * [descr:dxFormSimpleItem.editorOptions]
      */
-    editorOptions?: any;
+    editorOptions?: any | undefined;
     /**
      * [descr:dxFormSimpleItem.editorType]
      */
@@ -17217,11 +17250,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormSimpleItem.helpText]
      */
-    helpText?: string;
+    helpText?: string | undefined;
     /**
      * [descr:dxFormSimpleItem.isRequired]
      */
-    isRequired?: boolean;
+    isRequired?: boolean | undefined;
     /**
      * [descr:dxFormSimpleItem.itemType]
      */
@@ -17254,7 +17287,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxFormSimpleItem.label.text]
        */
-      text?: string;
+      text?: string | undefined;
       /**
        * [descr:dxFormSimpleItem.label.visible]
        */
@@ -17263,7 +17296,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormSimpleItem.name]
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * [descr:dxFormSimpleItem.template]
      */
@@ -17294,7 +17327,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormSimpleItem.visibleIndex]
      */
-    visibleIndex?: number;
+    visibleIndex?: number | undefined;
   }
   /**
    * @deprecated Use TabbedItem instead
@@ -17304,11 +17337,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormTabbedItem.colSpan]
      */
-    colSpan?: number;
+    colSpan?: number | undefined;
     /**
      * [descr:dxFormTabbedItem.cssClass]
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * [descr:dxFormTabbedItem.itemType]
      */
@@ -17316,11 +17349,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormTabbedItem.name]
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * [descr:dxFormTabbedItem.tabPanelOptions]
      */
-    tabPanelOptions?: dxTabPanelOptions;
+    tabPanelOptions?: dxTabPanelOptions | undefined;
     /**
      * [descr:dxFormTabbedItem.tabs]
      */
@@ -17332,7 +17365,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxFormTabbedItem.tabs.badge]
        */
-      badge?: string;
+      badge?: string | undefined;
       /**
        * [descr:dxFormTabbedItem.tabs.colCount]
        */
@@ -17340,7 +17373,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxFormTabbedItem.tabs.colCountByScreen]
        */
-      colCountByScreen?: any;
+      colCountByScreen?: any | undefined;
       /**
        * [descr:dxFormTabbedItem.tabs.disabled]
        */
@@ -17348,11 +17381,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxFormTabbedItem.tabs.icon]
        */
-      icon?: string;
+      icon?: string | undefined;
       /**
        * [descr:dxFormTabbedItem.tabs.items]
        */
-      items?: Array<DevExpress.ui.dxForm.Item>;
+      items?: Array<DevExpress.ui.dxForm.Item> | undefined;
       /**
        * [descr:dxFormTabbedItem.tabs.tabTemplate]
        */
@@ -17362,7 +17395,8 @@ declare module DevExpress.ui {
             tabData: any,
             tabIndex: number,
             tabElement: DevExpress.core.DxElement
-          ) => any);
+          ) => any)
+        | undefined;
       /**
        * [descr:dxFormTabbedItem.tabs.template]
        */
@@ -17372,11 +17406,12 @@ declare module DevExpress.ui {
             tabData: any,
             tabIndex: number,
             tabElement: DevExpress.core.DxElement
-          ) => any);
+          ) => any)
+        | undefined;
       /**
        * [descr:dxFormTabbedItem.tabs.title]
        */
-      title?: string;
+      title?: string | undefined;
     }>;
     /**
      * [descr:dxFormTabbedItem.visible]
@@ -17385,7 +17420,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormTabbedItem.visibleIndex]
      */
-    visibleIndex?: number;
+    visibleIndex?: number | undefined;
   }
   /**
    * [descr:dxGallery]
@@ -17555,7 +17590,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGalleryOptions.initialItemWidth]
      */
-    initialItemWidth?: number;
+    initialItemWidth?: number | undefined;
     /**
      * [descr:dxGalleryOptions.items]
      */
@@ -18567,7 +18602,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.columns]
      */
-    columns?: Array<DevExpress.ui.dxGantt.Column | string>;
+    columns?: Array<DevExpress.ui.dxGantt.Column | string> | undefined;
     /**
      * [descr:dxGanttOptions.dependencies]
      */
@@ -18870,7 +18905,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.selectedRowKey]
      */
-    selectedRowKey?: any;
+    selectedRowKey?: any | undefined;
     /**
      * [descr:dxGanttOptions.showResources]
      */
@@ -18894,7 +18929,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.firstDayOfWeek]
      */
-    firstDayOfWeek?: DevExpress.common.FirstDayOfWeek;
+    firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
     /**
      * [descr:dxGanttOptions.tasks]
      */
@@ -19027,19 +19062,19 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttStripLine.cssClass]
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * [descr:dxGanttStripLine.end]
      */
-    end?: Date | number | string | (() => Date | number | string);
+    end?: Date | number | string | (() => Date | number | string) | undefined;
     /**
      * [descr:dxGanttStripLine.start]
      */
-    start?: Date | number | string | (() => Date | number | string);
+    start?: Date | number | string | (() => Date | number | string) | undefined;
     /**
      * [descr:dxGanttStripLine.title]
      */
-    title?: string;
+    title?: string | undefined;
   }
   /**
    * [descr:dxGanttToolbar]
@@ -19343,11 +19378,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorImageUpload.uploadUrl]
      */
-    uploadUrl?: string;
+    uploadUrl?: string | undefined;
     /**
      * [descr:dxHtmlEditorImageUpload.uploadDirectory]
      */
-    uploadDirectory?: string;
+    uploadDirectory?: string | undefined;
     /**
      * [descr:dxHtmlEditorImageUpload.fileUploadMode]
      */
@@ -19372,7 +19407,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorImageUploadTabItem.name]
      */
-    name?: DevExpress.ui.dxHtmlEditor.HtmlEditorImageUploadTab;
+    name?: DevExpress.ui.dxHtmlEditor.HtmlEditorImageUploadTab | undefined;
   }
   /**
    * [descr:dxHtmlEditorMediaResizing]
@@ -19458,7 +19493,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorOptions.converter]
      */
-    converter?: DevExpress.ui.dxHtmlEditor.Converter;
+    converter?: DevExpress.ui.dxHtmlEditor.Converter | undefined;
     /**
      * [descr:dxHtmlEditorOptions.focusStateEnabled]
      */
@@ -19538,7 +19573,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorTableContextMenuItem.name]
      */
-    name?: DevExpress.ui.dxHtmlEditor.HtmlEditorPredefinedContextMenuItem;
+    name?:
+      | DevExpress.ui.dxHtmlEditor.HtmlEditorPredefinedContextMenuItem
+      | undefined;
     /**
      * [descr:dxHtmlEditorTableContextMenuItem.items]
      */
@@ -20073,7 +20110,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxListOptions.displayExpr]
      */
-    displayExpr?: string | ((item: TItem) => string);
+    displayExpr?: string | ((item: TItem) => string) | undefined;
     /**
      * [descr:dxListOptions.focusStateEnabled]
      */
@@ -20377,7 +20414,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxLoadPanelOptions.container]
      */
-    container?: string | DevExpress.core.UserDefinedElement;
+    container?: string | DevExpress.core.UserDefinedElement | undefined;
     /**
      * [descr:dxLoadPanelOptions.delay]
      */
@@ -21624,11 +21661,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxNumberBoxOptions.max]
      */
-    max?: number;
+    max?: number | undefined;
     /**
      * [descr:dxNumberBoxOptions.min]
      */
-    min?: number;
+    min?: number | undefined;
     /**
      * [descr:dxNumberBoxOptions.mode]
      */
@@ -22854,13 +22891,14 @@ declare module DevExpress.ui {
           /**
            * [descr:dxPopoverOptions.hideEvent.delay]
            */
-          delay?: number;
+          delay?: number | undefined;
           /**
            * [descr:dxPopoverOptions.hideEvent.name]
            */
-          name?: string;
+          name?: string | undefined;
         }
-      | string;
+      | string
+      | undefined;
     /**
      * [descr:dxPopoverOptions.hideOnOutsideClick]
      */
@@ -22891,13 +22929,14 @@ declare module DevExpress.ui {
           /**
            * [descr:dxPopoverOptions.showEvent.delay]
            */
-          delay?: number;
+          delay?: number | undefined;
           /**
            * [descr:dxPopoverOptions.showEvent.name]
            */
-          name?: string;
+          name?: string | undefined;
         }
-      | string;
+      | string
+      | undefined;
     /**
      * [descr:dxPopoverOptions.showTitle]
      */
@@ -22905,7 +22944,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopoverOptions.target]
      */
-    target?: string | DevExpress.core.UserDefinedElement;
+    target?: string | DevExpress.core.UserDefinedElement | undefined;
     /**
      * [descr:dxPopoverOptions.width]
      */
@@ -22989,11 +23028,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.container]
      */
-    container?: string | DevExpress.core.UserDefinedElement;
+    container?: string | DevExpress.core.UserDefinedElement | undefined;
     /**
      * [descr:dxPopupOptions.dragAndResizeArea]
      */
-    dragAndResizeArea?: string | DevExpress.core.UserDefinedElement;
+    dragAndResizeArea?: string | DevExpress.core.UserDefinedElement | undefined;
     /**
      * [descr:dxPopupOptions.dragEnabled]
      */
@@ -23415,7 +23454,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxResizableOptions.area]
      */
-    area?: string | DevExpress.core.UserDefinedElement;
+    area?: string | DevExpress.core.UserDefinedElement | undefined;
     /**
      * [descr:dxResizableOptions.handles]
      */
@@ -23580,7 +23619,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxResponsiveBoxItem.location.colspan]
            */
-          colspan?: number;
+          colspan?: number | undefined;
           /**
            * [descr:dxResponsiveBoxItem.location.row]
            */
@@ -23588,11 +23627,11 @@ declare module DevExpress.ui {
           /**
            * [descr:dxResponsiveBoxItem.location.rowspan]
            */
-          rowspan?: number;
+          rowspan?: number | undefined;
           /**
            * [descr:dxResponsiveBoxItem.location.screen]
            */
-          screen?: string;
+          screen?: string | undefined;
         }
       | Array<{
           col?: number;
@@ -23625,7 +23664,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxResponsiveBoxOptions.cols.screen]
        */
-      screen?: string;
+      screen?: string | undefined;
       /**
        * [descr:dxResponsiveBoxOptions.cols.shrink]
        */
@@ -23658,7 +23697,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxResponsiveBoxOptions.rows.screen]
        */
-      screen?: string;
+      screen?: string | undefined;
       /**
        * [descr:dxResponsiveBoxOptions.rows.shrink]
        */
@@ -24155,11 +24194,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxSchedulerOptions.appointmentDragging.data]
        */
-      data?: any;
+      data?: any | undefined;
       /**
        * [descr:dxSchedulerOptions.appointmentDragging.group]
        */
-      group?: string;
+      group?: string | undefined;
       /**
        * [descr:dxSchedulerOptions.appointmentDragging.onAdd]
        */
@@ -24238,9 +24277,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.customizeDateNavigatorText]
      */
-    customizeDateNavigatorText?: (
-      info: DevExpress.ui.dxScheduler.DateNavigatorTextInfo
-    ) => string;
+    customizeDateNavigatorText?:
+      | ((info: DevExpress.ui.dxScheduler.DateNavigatorTextInfo) => string)
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.dataCellTemplate]
      */
@@ -24268,7 +24307,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.dateSerializationFormat]
      */
-    dateSerializationFormat?: string;
+    dateSerializationFormat?: string | undefined;
     /**
      * [descr:dxSchedulerOptions.descriptionExpr]
      */
@@ -24330,7 +24369,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.firstDayOfWeek]
      */
-    firstDayOfWeek?: DevExpress.common.FirstDayOfWeek;
+    firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
     /**
      * [descr:dxSchedulerOptions.focusStateEnabled]
      */
@@ -24350,7 +24389,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.max]
      */
-    max?: Date | number | string;
+    max?: Date | number | string | undefined;
     /**
      * [descr:dxSchedulerOptions.maxAppointmentsPerCell]
      */
@@ -24360,7 +24399,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.min]
      */
-    min?: Date | number | string;
+    min?: Date | number | string | undefined;
     /**
      * [descr:dxSchedulerOptions.noDataText]
      */
@@ -24664,7 +24703,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.views.firstDayOfWeek]
            */
-          firstDayOfWeek?: DevExpress.common.FirstDayOfWeek;
+          firstDayOfWeek?: DevExpress.common.FirstDayOfWeek | undefined;
           /**
            * [descr:dxSchedulerOptions.views.groupByDate]
            */
@@ -24690,7 +24729,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.views.name]
            */
-          name?: string;
+          name?: string | undefined;
           /**
            * [descr:dxSchedulerOptions.views.resourceCellTemplate]
            */
@@ -24704,7 +24743,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.views.startDate]
            */
-          startDate?: Date | number | string;
+          startDate?: Date | number | string | undefined;
           /**
            * [descr:dxSchedulerOptions.views.startDayHour]
            */
@@ -24722,7 +24761,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.views.type]
            */
-          type?: DevExpress.ui.dxScheduler.ViewType;
+          type?: DevExpress.ui.dxScheduler.ViewType | undefined;
           /**
            * [descr:dxSchedulerOptions.views.scrolling]
            */
@@ -25681,7 +25720,8 @@ declare module DevExpress.ui {
       | ((
           dragInfo: DevExpress.ui.dxSortable.DragTemplateData,
           containerElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+        ) => string | DevExpress.core.UserDefinedElement)
+      | undefined;
     /**
      * [descr:dxSortableOptions.dropFeedbackMode]
      */
@@ -25961,23 +26001,23 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSplitterItem.splitter]
      */
-    splitter?: DevExpress.ui.dxSplitter.Properties<any, TKey>;
+    splitter?: DevExpress.ui.dxSplitter.Properties<any, TKey> | undefined;
     /**
      * [descr:dxSplitterItem.size]
      */
-    size?: number | string;
+    size?: number | string | undefined;
     /**
      * [descr:dxSplitterItem.maxSize]
      */
-    maxSize?: number | string;
+    maxSize?: number | string | undefined;
     /**
      * [descr:dxSplitterItem.minSize]
      */
-    minSize?: number | string;
+    minSize?: number | string | undefined;
     /**
      * [descr:dxSplitterItem.collapsedSize]
      */
-    collapsedSize?: number | string;
+    collapsedSize?: number | string | undefined;
     /**
      * [descr:dxSplitterItem.collapsed]
      */
@@ -26753,7 +26793,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTagBoxOptions.maxDisplayedTags]
      */
-    maxDisplayedTags?: number;
+    maxDisplayedTags?: number | undefined;
     /**
      * [descr:dxTagBoxOptions.multiline]
      */
@@ -26934,11 +26974,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTextAreaOptions.maxHeight]
      */
-    maxHeight?: number | string;
+    maxHeight?: number | string | undefined;
     /**
      * [descr:dxTextAreaOptions.minHeight]
      */
-    minHeight?: number | string;
+    minHeight?: number | string | undefined;
     /**
      * [descr:dxTextAreaOptions.spellcheck]
      */
@@ -27682,7 +27722,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxToolbarItem.cssClass]
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * [descr:dxToolbarItem.locateInMenu]
      */
@@ -29219,7 +29259,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListColumn.columns]
      */
-    columns?: Array<DevExpress.ui.dxTreeList.Column<TRowData, TKey> | string>;
+    columns?:
+      | Array<DevExpress.ui.dxTreeList.Column<TRowData, TKey> | string>
+      | undefined;
     /**
      * [descr:dxTreeListColumn.editCellTemplate]
      */
@@ -29325,7 +29367,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.columns]
      */
-    columns?: Array<DevExpress.ui.dxTreeList.Column<TRowData, TKey> | string>;
+    columns?:
+      | Array<DevExpress.ui.dxTreeList.Column<TRowData, TKey> | string>
+      | undefined;
     /**
      * [descr:dxTreeListOptions.customizeColumns]
      */
@@ -29502,7 +29546,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.toolbar]
      */
-    toolbar?: DevExpress.ui.dxTreeList.Toolbar;
+    toolbar?: DevExpress.ui.dxTreeList.Toolbar | undefined;
   };
   /**
    * @deprecated Use DevExpress.ui.dxTreeList.Row instead
@@ -29788,7 +29832,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewItem.hasItems]
      */
-    hasItems?: boolean;
+    hasItems?: boolean | undefined;
     /**
      * [descr:dxTreeViewItem.icon]
      */
@@ -29800,11 +29844,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewItem.id]
      */
-    id?: number | string;
+    id?: number | string | undefined;
     /**
      * [descr:dxTreeViewItem.parentId]
      */
-    parentId?: number | string;
+    parentId?: number | string | undefined;
     /**
      * [descr:dxTreeViewItem.selected]
      */
@@ -30436,7 +30480,8 @@ declare module DevExpress.ui {
     | ((value: number | Date) => string)
     | ((value: Date) => string)
     | ((value: number) => string)
-    | ExternalFormat;
+    | ExternalFormat
+    | undefined;
   /**
    * [descr:ui.hideToasts()]
    */
@@ -30557,7 +30602,7 @@ declare module DevExpress.ui {
     /**
      * [descr:SearchBoxMixinOptions.searchTimeout]
      */
-    searchTimeout?: number;
+    searchTimeout?: number | undefined;
     /**
      * [descr:SearchBoxMixinOptions.searchValue]
      */
@@ -30669,7 +30714,7 @@ declare module DevExpress.ui {
     /**
      * [descr:WidgetOptions.accessKey]
      */
-    accessKey?: string;
+    accessKey?: string | undefined;
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -30685,7 +30730,7 @@ declare module DevExpress.ui {
     /**
      * [descr:WidgetOptions.hint]
      */
-    hint?: string;
+    hint?: string | undefined;
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
      */
@@ -30808,7 +30853,7 @@ declare module DevExpress.ui.dxDataGrid {
     /**
      * [descr:dxDataGridToolbar.visible]
      */
-    visible?: boolean;
+    visible?: boolean | undefined;
     /**
      * [descr:dxDataGridToolbar.disabled]
      */
@@ -31102,7 +31147,7 @@ declare module DevExpress.ui.dxTreeList {
     /**
      * [descr:dxTreeListToolbar.visible]
      */
-    visible?: boolean;
+    visible?: boolean | undefined;
     /**
      * [descr:dxTreeListToolbar.disabled]
      */
@@ -31263,15 +31308,15 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseChartAnnotationConfig.argument]
      */
-    argument?: number | Date | string;
+    argument?: number | Date | string | undefined;
     /**
      * [descr:BaseChartAnnotationConfig.series]
      */
-    series?: string;
+    series?: string | undefined;
     /**
      * [descr:BaseChartAnnotationConfig.value]
      */
-    value?: number | Date | string;
+    value?: number | Date | string | undefined;
   }
   /**
    * [descr:BaseChartLegend]
@@ -31292,7 +31337,8 @@ declare module DevExpress.viz {
       | ((
           legendItem: DevExpress.common.charts.LegendItem,
           element: SVGGElement
-        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+        ) => string | DevExpress.core.UserDefinedElement<SVGElement>)
+      | undefined;
   }
   /**
    * [descr:BaseChartOptions]
@@ -31402,7 +31448,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseChartOptions.series]
      */
-    series?: any | Array<any>;
+    series?: any | Array<any> | undefined;
     /**
      * [descr:BaseChartOptions.tooltip]
      */
@@ -31416,7 +31462,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseChartOptions.tooltip.argumentFormat]
      */
-    argumentFormat?: DevExpress.ui.Format;
+    argumentFormat?: DevExpress.ui.Format | undefined;
     /**
      * [descr:BaseChartOptions.tooltip.contentTemplate]
      */
@@ -31425,11 +31471,12 @@ declare module DevExpress.viz {
       | ((
           pointInfo: any,
           element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+        ) => string | DevExpress.core.UserDefinedElement)
+      | undefined;
     /**
      * [descr:BaseChartOptions.tooltip.customizeTooltip]
      */
-    customizeTooltip?: (pointInfo: any) => any;
+    customizeTooltip?: ((pointInfo: any) => any) | undefined;
     /**
      * [descr:BaseChartOptions.tooltip.shared]
      */
@@ -31563,7 +31610,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.value]
      */
-    value?: number;
+    value?: number | undefined;
   }
   /**
    * [descr:BaseGaugeRangeContainer]
@@ -31612,7 +31659,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.scale.allowDecimals]
      */
-    allowDecimals?: boolean;
+    allowDecimals?: boolean | undefined;
     /**
      * [descr:BaseGaugeOptions.scale.customMinorTicks]
      */
@@ -31657,7 +31704,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.scale.minorTickInterval]
      */
-    minorTickInterval?: number;
+    minorTickInterval?: number | undefined;
     /**
      * [descr:BaseGaugeOptions.scale.scaleDivisionFactor]
      */
@@ -31694,7 +31741,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.scale.tickInterval]
      */
-    tickInterval?: number;
+    tickInterval?: number | undefined;
   }
   /**
    * [descr:BaseGaugeScaleLabel]
@@ -31715,7 +31762,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.scale.label.format]
      */
-    format?: DevExpress.ui.Format;
+    format?: DevExpress.ui.Format | undefined;
     /**
      * [descr:BaseGaugeOptions.scale.label.overlappingBehavior]
      */
@@ -31742,14 +31789,14 @@ declare module DevExpress.viz {
       | ((
           scaleValue: { value?: number; valueText?: string },
           element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+        ) => string | DevExpress.core.UserDefinedElement)
+      | undefined;
     /**
      * [descr:BaseGaugeOptions.tooltip.customizeTooltip]
      */
-    customizeTooltip?: (scaleValue: {
-      value?: number;
-      valueText?: string;
-    }) => any;
+    customizeTooltip?:
+      | ((scaleValue: { value?: number; valueText?: string }) => any)
+      | undefined;
     /**
      * [descr:BaseGaugeOptions.tooltip.interactive]
      */
@@ -32007,11 +32054,12 @@ declare module DevExpress.viz {
       | ((
           pointsInfo: any,
           element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+        ) => string | DevExpress.core.UserDefinedElement)
+      | undefined;
     /**
      * [descr:BaseSparklineOptions.tooltip.customizeTooltip]
      */
-    customizeTooltip?: (pointsInfo: any) => any;
+    customizeTooltip?: ((pointsInfo: any) => any) | undefined;
     /**
      * [descr:BaseSparklineOptions.tooltip.enabled]
      */
@@ -32150,7 +32198,7 @@ declare module DevExpress.viz {
       /**
        * [descr:BaseWidgetAnnotationConfig.border.opacity]
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * [descr:BaseWidgetAnnotationConfig.border.visible]
        */
@@ -32171,7 +32219,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetAnnotationConfig.description]
      */
-    description?: string;
+    description?: string | undefined;
     /**
      * [descr:BaseWidgetAnnotationConfig.font]
      */
@@ -32179,7 +32227,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetAnnotationConfig.height]
      */
-    height?: number;
+    height?: number | undefined;
     /**
      * [descr:BaseWidgetAnnotationConfig.image]
      */
@@ -32193,7 +32241,7 @@ declare module DevExpress.viz {
           /**
            * [descr:BaseWidgetAnnotationConfig.image.url]
            */
-          url?: string;
+          url?: string | undefined;
           /**
            * [descr:BaseWidgetAnnotationConfig.image.width]
            */
@@ -32202,11 +32250,11 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetAnnotationConfig.offsetX]
      */
-    offsetX?: number;
+    offsetX?: number | undefined;
     /**
      * [descr:BaseWidgetAnnotationConfig.offsetY]
      */
-    offsetY?: number;
+    offsetY?: number | undefined;
     /**
      * [descr:BaseWidgetAnnotationConfig.opacity]
      */
@@ -32247,7 +32295,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetAnnotationConfig.text]
      */
-    text?: string;
+    text?: string | undefined;
     /**
      * [descr:BaseWidgetAnnotationConfig.textOverflow]
      */
@@ -32259,11 +32307,11 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetAnnotationConfig.type]
      */
-    type?: DevExpress.common.charts.AnnotationType;
+    type?: DevExpress.common.charts.AnnotationType | undefined;
     /**
      * [descr:BaseWidgetAnnotationConfig.width]
      */
-    width?: number;
+    width?: number | undefined;
     /**
      * [descr:BaseWidgetAnnotationConfig.wordWrap]
      */
@@ -32271,11 +32319,11 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetAnnotationConfig.x]
      */
-    x?: number;
+    x?: number | undefined;
     /**
      * [descr:BaseWidgetAnnotationConfig.y]
      */
-    y?: number;
+    y?: number | undefined;
   }
   /**
    * [descr:BaseWidgetExport]
@@ -32309,10 +32357,9 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.export.svgToCanvas]
      */
-    svgToCanvas?: (
-      svg: SVGElement,
-      canvas: HTMLCanvasElement
-    ) => PromiseLike<void>;
+    svgToCanvas?:
+      | ((svg: SVGElement, canvas: HTMLCanvasElement) => PromiseLike<void>)
+      | undefined;
   }
   /**
    * [descr:BaseWidgetLoadingIndicator]
@@ -32431,7 +32478,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.size]
      */
-    size?: BaseWidgetSize;
+    size?: BaseWidgetSize | undefined;
     /**
      * [descr:BaseWidgetOptions.theme]
      */
@@ -32457,11 +32504,11 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.size.height]
      */
-    height?: number;
+    height?: number | undefined;
     /**
      * [descr:BaseWidgetOptions.size.width]
      */
-    width?: number;
+    width?: number | undefined;
   }
   /**
    * [descr:BaseWidgetTitle]
@@ -32502,7 +32549,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.title.placeholderSize]
      */
-    placeholderSize?: number;
+    placeholderSize?: number | undefined;
     /**
      * [descr:BaseWidgetOptions.title.subtitle]
      */
@@ -32571,7 +32618,7 @@ declare module DevExpress.viz {
       /**
        * [descr:BaseWidgetOptions.tooltip.border.opacity]
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * [descr:BaseWidgetOptions.tooltip.border.visible]
        */
@@ -32588,7 +32635,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.tooltip.container]
      */
-    container?: string | DevExpress.core.UserDefinedElement;
+    container?: string | DevExpress.core.UserDefinedElement | undefined;
     /**
      * [descr:BaseWidgetOptions.tooltip.cornerRadius]
      */
@@ -32604,11 +32651,11 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.tooltip.format]
      */
-    format?: DevExpress.ui.Format;
+    format?: DevExpress.ui.Format | undefined;
     /**
      * [descr:BaseWidgetOptions.tooltip.opacity]
      */
-    opacity?: number;
+    opacity?: number | undefined;
     /**
      * [descr:BaseWidgetOptions.tooltip.paddingLeftRight]
      */
@@ -32645,7 +32692,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.tooltip.zIndex]
      */
-    zIndex?: number;
+    zIndex?: number | undefined;
   }
   /**
    * [descr:chartAxisObject]
@@ -32733,11 +32780,11 @@ declare module DevExpress.viz {
     /**
      * [descr:ChartSeries.name]
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * [descr:ChartSeries.tag]
      */
-    tag?: any;
+    tag?: any | undefined;
     /**
      * [descr:ChartSeries.type]
      */
@@ -32789,7 +32836,7 @@ declare module DevExpress.viz {
     /**
      * [descr:CommonIndicator.baseValue]
      */
-    baseValue?: number;
+    baseValue?: number | undefined;
     /**
      * [descr:CommonIndicator.beginAdaptingAtRadius]
      */
@@ -32845,10 +32892,9 @@ declare module DevExpress.viz {
       /**
        * [descr:CommonIndicator.text.customizeText]
        */
-      customizeText?: (indicatedValue: {
-        value?: number;
-        valueText?: string;
-      }) => string;
+      customizeText?:
+        | ((indicatedValue: { value?: number; valueText?: string }) => string)
+        | undefined;
       /**
        * [descr:CommonIndicator.text.font]
        */
@@ -32856,7 +32902,7 @@ declare module DevExpress.viz {
       /**
        * [descr:CommonIndicator.text.format]
        */
-      format?: DevExpress.ui.Format;
+      format?: DevExpress.ui.Format | undefined;
       /**
        * [descr:CommonIndicator.text.indent]
        */
@@ -32963,7 +33009,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxBarGaugeOptions.legend.itemTextFormat]
        */
-      itemTextFormat?: DevExpress.ui.Format;
+      itemTextFormat?: DevExpress.ui.Format | undefined;
       /**
        * [descr:dxBarGaugeOptions.legend.markerTemplate]
        */
@@ -32972,7 +33018,8 @@ declare module DevExpress.viz {
         | ((
             legendItem: LegendItem,
             element: SVGGElement
-          ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+          ) => string | DevExpress.core.UserDefinedElement<SVGElement>)
+        | undefined;
       /**
        * [descr:dxBarGaugeOptions.legend.visible]
        */
@@ -33005,15 +33052,18 @@ declare module DevExpress.viz {
         | ((
             scaleValue: { value?: number; valueText?: string; index?: number },
             element: DevExpress.core.DxElement
-          ) => string | DevExpress.core.UserDefinedElement);
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
       /**
        * [descr:dxBarGaugeOptions.tooltip.customizeTooltip]
        */
-      customizeTooltip?: (scaleValue: {
-        value?: number;
-        valueText?: string;
-        index?: number;
-      }) => any;
+      customizeTooltip?:
+        | ((scaleValue: {
+            value?: number;
+            valueText?: string;
+            index?: number;
+          }) => any)
+        | undefined;
       /**
        * [descr:dxBarGaugeOptions.tooltip.interactive]
        */
@@ -33087,7 +33137,8 @@ declare module DevExpress.viz {
       | ((
           component: dxBarGauge,
           element: SVGGElement
-        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+        ) => string | DevExpress.core.UserDefinedElement<SVGElement>)
+      | undefined;
     /**
      * [descr:dxBarGaugeOptions.label]
      */
@@ -33095,7 +33146,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxBarGaugeOptions.label.connectorColor]
        */
-      connectorColor?: string;
+      connectorColor?: string | undefined;
       /**
        * [descr:dxBarGaugeOptions.label.connectorWidth]
        */
@@ -33114,7 +33165,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxBarGaugeOptions.label.format]
        */
-      format?: DevExpress.ui.Format;
+      format?: DevExpress.ui.Format | undefined;
       /**
        * [descr:dxBarGaugeOptions.label.indent]
        */
@@ -33234,7 +33285,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxBulletOptions.endScaleValue]
      */
-    endScaleValue?: number;
+    endScaleValue?: number | undefined;
     /**
      * [descr:dxBulletOptions.showTarget]
      */
@@ -33306,7 +33357,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.argumentAxis.aggregationGroupWidth]
        */
-      aggregationGroupWidth?: number;
+      aggregationGroupWidth?: number | undefined;
       /**
        * [descr:dxChartOptions.argumentAxis.aggregationInterval]
        */
@@ -33314,7 +33365,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.argumentAxis.argumentType]
        */
-      argumentType?: DevExpress.common.charts.ChartsDataType;
+      argumentType?: DevExpress.common.charts.ChartsDataType | undefined;
       /**
        * [descr:dxChartOptions.argumentAxis.axisDivisionFactor]
        */
@@ -33354,7 +33405,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.argumentAxis.linearThreshold]
        */
-      linearThreshold?: number;
+      linearThreshold?: number | undefined;
       /**
        * [descr:dxChartOptions.argumentAxis.logarithmBase]
        */
@@ -33366,7 +33417,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.argumentAxis.minorTickCount]
        */
-      minorTickCount?: number;
+      minorTickCount?: number | undefined;
       /**
        * [descr:dxChartOptions.argumentAxis.minorTickInterval]
        */
@@ -33378,15 +33429,15 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.argumentAxis.customPosition]
        */
-      customPosition?: number | Date | string;
+      customPosition?: number | Date | string | undefined;
       /**
        * [descr:dxChartOptions.argumentAxis.customPositionAxis]
        */
-      customPositionAxis?: string;
+      customPositionAxis?: string | undefined;
       /**
        * [descr:dxChartOptions.argumentAxis.offset]
        */
-      offset?: number;
+      offset?: number | undefined;
       /**
        * [descr:dxChartOptions.argumentAxis.singleWorkdays]
        */
@@ -33406,7 +33457,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.argumentAxis.type]
        */
-      type?: DevExpress.common.charts.AxisScaleType;
+      type?: DevExpress.common.charts.AxisScaleType | undefined;
       /**
        * [descr:dxChartOptions.argumentAxis.visualRange]
        */
@@ -33422,7 +33473,8 @@ declare module DevExpress.viz {
        */
       wholeRange?:
         | DevExpress.common.charts.VisualRange
-        | Array<number | string | Date>;
+        | Array<number | string | Date>
+        | undefined;
       /**
        * [descr:dxChartOptions.argumentAxis.workWeek]
        */
@@ -33464,7 +33516,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChartOptions.argumentAxis.constantLines.value]
          */
-        value?: number | Date | string;
+        value?: number | Date | string | undefined;
       };
     /**
      * [descr:dxChartArgumentAxisConstantLinesLabel]
@@ -33478,7 +33530,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChartOptions.argumentAxis.constantLines.label.text]
          */
-        text?: string;
+        text?: string | undefined;
         /**
          * [descr:dxChartOptions.argumentAxis.constantLines.label.verticalAlignment]
          */
@@ -33529,7 +33581,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.argumentAxis.label.format]
        */
-      format?: DevExpress.ui.Format;
+      format?: DevExpress.ui.Format | undefined;
     };
     /**
      * [descr:dxChartArgumentAxisStrips]
@@ -33538,11 +33590,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.argumentAxis.strips.color]
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * [descr:dxChartOptions.argumentAxis.strips.endValue]
        */
-      endValue?: number | Date | string;
+      endValue?: number | Date | string | undefined;
       /**
        * [descr:dxChartOptions.argumentAxis.strips.label]
        */
@@ -33550,7 +33602,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.argumentAxis.strips.startValue]
        */
-      startValue?: number | Date | string;
+      startValue?: number | Date | string | undefined;
     };
     /**
      * [descr:dxChartArgumentAxisStripsLabel]
@@ -33559,7 +33611,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.argumentAxis.strips.label.text]
        */
-      text?: string;
+      text?: string | undefined;
     };
     /**
      * [descr:dxChartArgumentAxisTitle]
@@ -33568,7 +33620,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.argumentAxis.title.text]
        */
-      text?: string;
+      text?: string | undefined;
     };
     export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
     export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
@@ -33599,7 +33651,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.commonAxisSettings.allowDecimals]
        */
-      allowDecimals?: boolean;
+      allowDecimals?: boolean | undefined;
       /**
        * [descr:dxChartOptions.commonAxisSettings.breakStyle]
        */
@@ -33636,7 +33688,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.commonAxisSettings.endOnTick]
        */
-      endOnTick?: boolean;
+      endOnTick?: boolean | undefined;
       /**
        * [descr:dxChartOptions.commonAxisSettings.grid]
        */
@@ -33648,7 +33700,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChartOptions.commonAxisSettings.grid.opacity]
          */
-        opacity?: number;
+        opacity?: number | undefined;
         /**
          * [descr:dxChartOptions.commonAxisSettings.grid.visible]
          */
@@ -33669,11 +33721,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.commonAxisSettings.maxValueMargin]
        */
-      maxValueMargin?: number;
+      maxValueMargin?: number | undefined;
       /**
        * [descr:dxChartOptions.commonAxisSettings.minValueMargin]
        */
-      minValueMargin?: number;
+      minValueMargin?: number | undefined;
       /**
        * [descr:dxChartOptions.commonAxisSettings.minorGrid]
        */
@@ -33685,7 +33737,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChartOptions.commonAxisSettings.minorGrid.opacity]
          */
-        opacity?: number;
+        opacity?: number | undefined;
         /**
          * [descr:dxChartOptions.commonAxisSettings.minorGrid.visible]
          */
@@ -33727,7 +33779,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.commonAxisSettings.opacity]
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * [descr:dxChartOptions.commonAxisSettings.placeholderSize]
        */
@@ -33751,7 +33803,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChartOptions.commonAxisSettings.tick.opacity]
          */
-        opacity?: number;
+        opacity?: number | undefined;
         /**
          * [descr:dxChartOptions.commonAxisSettings.tick.shift]
          */
@@ -33840,11 +33892,12 @@ declare module DevExpress.viz {
         | ((
             data: object,
             element: SVGGElement
-          ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+          ) => string | DevExpress.core.UserDefinedElement<SVGElement>)
+        | undefined;
       /**
        * [descr:dxChartOptions.commonAxisSettings.label.alignment]
        */
-      alignment?: DevExpress.common.HorizontalAlignment;
+      alignment?: DevExpress.common.HorizontalAlignment | undefined;
       /**
        * [descr:dxChartOptions.commonAxisSettings.label.displayMode]
        */
@@ -33978,7 +34031,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChartOptions.commonPaneSettings.border.opacity]
          */
-        opacity?: number;
+        opacity?: number | undefined;
         /**
          * [descr:dxChartOptions.commonPaneSettings.border.right]
          */
@@ -34196,11 +34249,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.panes.height]
        */
-      height?: number | string;
+      height?: number | string | undefined;
       /**
        * [descr:dxChartOptions.panes.name]
        */
-      name?: string;
+      name?: string | undefined;
     };
     /**
      * [descr:_viz_chart_PointClickEvent]
@@ -34303,7 +34356,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.valueAxis.endOnTick]
        */
-      endOnTick?: boolean;
+      endOnTick?: boolean | undefined;
       /**
        * [descr:dxChartOptions.valueAxis.label]
        */
@@ -34311,7 +34364,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.valueAxis.linearThreshold]
        */
-      linearThreshold?: number;
+      linearThreshold?: number | undefined;
       /**
        * [descr:dxChartOptions.valueAxis.logarithmBase]
        */
@@ -34327,7 +34380,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.valueAxis.minorTickCount]
        */
-      minorTickCount?: number;
+      minorTickCount?: number | undefined;
       /**
        * [descr:dxChartOptions.valueAxis.minorTickInterval]
        */
@@ -34339,11 +34392,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.valueAxis.name]
        */
-      name?: string;
+      name?: string | undefined;
       /**
        * [descr:dxChartOptions.valueAxis.pane]
        */
-      pane?: string;
+      pane?: string | undefined;
       /**
        * [descr:dxChartOptions.valueAxis.position]
        */
@@ -34351,15 +34404,15 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.valueAxis.customPosition]
        */
-      customPosition?: number | Date | string;
+      customPosition?: number | Date | string | undefined;
       /**
        * [descr:dxChartOptions.valueAxis.offset]
        */
-      offset?: number;
+      offset?: number | undefined;
       /**
        * [descr:dxChartOptions.valueAxis.showZero]
        */
-      showZero?: boolean;
+      showZero?: boolean | undefined;
       /**
        * [descr:dxChartOptions.valueAxis.strips]
        */
@@ -34367,7 +34420,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.valueAxis.synchronizedValue]
        */
-      synchronizedValue?: number;
+      synchronizedValue?: number | undefined;
       /**
        * [descr:dxChartOptions.valueAxis.tickInterval]
        */
@@ -34379,11 +34432,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.valueAxis.type]
        */
-      type?: DevExpress.common.charts.AxisScaleType;
+      type?: DevExpress.common.charts.AxisScaleType | undefined;
       /**
        * [descr:dxChartOptions.valueAxis.valueType]
        */
-      valueType?: DevExpress.common.charts.ChartsDataType;
+      valueType?: DevExpress.common.charts.ChartsDataType | undefined;
       /**
        * [descr:dxChartOptions.valueAxis.visualRange]
        */
@@ -34399,7 +34452,8 @@ declare module DevExpress.viz {
        */
       wholeRange?:
         | DevExpress.common.charts.VisualRange
-        | Array<number | string | Date>;
+        | Array<number | string | Date>
+        | undefined;
     };
     /**
      * [descr:dxChartValueAxisConstantLines]
@@ -34420,7 +34474,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.valueAxis.constantLines.value]
        */
-      value?: number | Date | string;
+      value?: number | Date | string | undefined;
     };
     /**
      * [descr:dxChartValueAxisConstantLinesLabel]
@@ -34434,7 +34488,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChartOptions.valueAxis.constantLines.label.text]
          */
-        text?: string;
+        text?: string | undefined;
         /**
          * [descr:dxChartOptions.valueAxis.constantLines.label.verticalAlignment]
          */
@@ -34485,7 +34539,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.valueAxis.label.format]
        */
-      format?: DevExpress.ui.Format;
+      format?: DevExpress.ui.Format | undefined;
     };
     /**
      * [descr:dxChartValueAxisStrips]
@@ -34494,11 +34548,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.valueAxis.strips.color]
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * [descr:dxChartOptions.valueAxis.strips.endValue]
        */
-      endValue?: number | Date | string;
+      endValue?: number | Date | string | undefined;
       /**
        * [descr:dxChartOptions.valueAxis.strips.label]
        */
@@ -34506,7 +34560,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.valueAxis.strips.startValue]
        */
-      startValue?: number | Date | string;
+      startValue?: number | Date | string | undefined;
     };
     /**
      * [descr:dxChartValueAxisStripsLabel]
@@ -34515,7 +34569,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.valueAxis.strips.label.text]
        */
-      text?: string;
+      text?: string | undefined;
     };
     /**
      * [descr:dxChartValueAxisTitle]
@@ -34524,7 +34578,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.valueAxis.title.text]
        */
-      text?: string;
+      text?: string | undefined;
     };
     /**
      * [descr:_viz_chart_ZoomEndEvent]
@@ -34592,7 +34646,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartAnnotationConfig.name]
      */
-    name?: string;
+    name?: string | undefined;
   }
   /**
    * [descr:dxChartCommonAnnotationConfig]
@@ -34603,11 +34657,13 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartCommonAnnotationConfig.axis]
      */
-    axis?: string;
+    axis?: string | undefined;
     /**
      * [descr:dxChartCommonAnnotationConfig.customizeTooltip]
      */
-    customizeTooltip?: (annotation: dxChartAnnotationConfig | any) => any;
+    customizeTooltip?:
+      | ((annotation: dxChartAnnotationConfig | any) => any)
+      | undefined;
     /**
      * [descr:dxChartCommonAnnotationConfig.template]
      */
@@ -34616,7 +34672,8 @@ declare module DevExpress.viz {
       | ((
           annotation: dxChartAnnotationConfig | any,
           element: SVGGElement
-        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+        ) => string | DevExpress.core.UserDefinedElement<SVGElement>)
+      | undefined;
     /**
      * [descr:dxChartCommonAnnotationConfig.tooltipTemplate]
      */
@@ -34625,7 +34682,8 @@ declare module DevExpress.viz {
       | ((
           annotation: dxChartAnnotationConfig | any,
           element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+        ) => string | DevExpress.core.UserDefinedElement)
+      | undefined;
   }
   /**
    * [descr:dxChartOptions]
@@ -34656,7 +34714,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.barGroupWidth]
      */
-    barGroupWidth?: number;
+    barGroupWidth?: number | undefined;
     /**
      * [descr:dxChartOptions.commonAnnotationSettings]
      */
@@ -34729,7 +34787,7 @@ declare module DevExpress.viz {
               /**
                * [descr:dxChartOptions.crosshair.horizontalLine.label.format]
                */
-              format?: DevExpress.ui.Format;
+              format?: DevExpress.ui.Format | undefined;
               /**
                * [descr:dxChartOptions.crosshair.horizontalLine.label.visible]
                */
@@ -34738,7 +34796,7 @@ declare module DevExpress.viz {
             /**
              * [descr:dxChartOptions.crosshair.horizontalLine.opacity]
              */
-            opacity?: number;
+            opacity?: number | undefined;
             /**
              * [descr:dxChartOptions.crosshair.horizontalLine.visible]
              */
@@ -34772,7 +34830,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChartOptions.crosshair.label.format]
          */
-        format?: DevExpress.ui.Format;
+        format?: DevExpress.ui.Format | undefined;
         /**
          * [descr:dxChartOptions.crosshair.label.visible]
          */
@@ -34781,7 +34839,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.crosshair.opacity]
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * [descr:dxChartOptions.crosshair.verticalLine]
        */
@@ -34818,7 +34876,7 @@ declare module DevExpress.viz {
               /**
                * [descr:dxChartOptions.crosshair.verticalLine.label.format]
                */
-              format?: DevExpress.ui.Format;
+              format?: DevExpress.ui.Format | undefined;
               /**
                * [descr:dxChartOptions.crosshair.verticalLine.label.visible]
                */
@@ -34827,7 +34885,7 @@ declare module DevExpress.viz {
             /**
              * [descr:dxChartOptions.crosshair.verticalLine.opacity]
              */
-            opacity?: number;
+            opacity?: number | undefined;
             /**
              * [descr:dxChartOptions.crosshair.verticalLine.visible]
              */
@@ -34846,9 +34904,9 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.customizeAnnotation]
      */
-    customizeAnnotation?: (
-      annotation: dxChartAnnotationConfig | any
-    ) => dxChartAnnotationConfig;
+    customizeAnnotation?:
+      | ((annotation: dxChartAnnotationConfig | any) => dxChartAnnotationConfig)
+      | undefined;
     /**
      * [descr:dxChartOptions.dataPrepareSettings]
      */
@@ -34869,7 +34927,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.defaultPane]
      */
-    defaultPane?: string;
+    defaultPane?: string | undefined;
     /**
      * [descr:dxChartOptions.legend]
      */
@@ -34955,7 +35013,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.scrollBar.opacity]
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * [descr:dxChartOptions.scrollBar.position]
        */
@@ -34972,7 +35030,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.series]
      */
-    series?: ChartSeries | Array<ChartSeries>;
+    series?: ChartSeries | Array<ChartSeries> | undefined;
     /**
      * [descr:dxChartOptions.seriesSelectionMode]
      */
@@ -35031,11 +35089,11 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChartOptions.zoomAndPan.dragBoxStyle.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxChartOptions.zoomAndPan.dragBoxStyle.opacity]
          */
-        opacity?: number;
+        opacity?: number | undefined;
       };
       /**
        * [descr:dxChartOptions.zoomAndPan.dragToZoom]
@@ -35414,19 +35472,19 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.axis]
      */
-    axis?: string;
+    axis?: string | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.barOverlapGroup]
      */
-    barOverlapGroup?: string;
+    barOverlapGroup?: string | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.barPadding]
      */
-    barPadding?: number;
+    barPadding?: number | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.barWidth]
      */
-    barWidth?: number;
+    barWidth?: number | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.border]
      */
@@ -35438,7 +35496,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.color]
      */
-    color?: string | DevExpress.common.charts.ChartsColor;
+    color?: string | DevExpress.common.charts.ChartsColor | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.cornerRadius]
      */
@@ -35478,11 +35536,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.maxLabelCount]
      */
-    maxLabelCount?: number;
+    maxLabelCount?: number | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.minBarSize]
      */
-    minBarSize?: number;
+    minBarSize?: number | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.opacity]
      */
@@ -35563,7 +35621,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.valueErrorBar.highValueField]
        */
-      highValueField?: string;
+      highValueField?: string | undefined;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.valueErrorBar.lineWidth]
        */
@@ -35571,15 +35629,15 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.valueErrorBar.lowValueField]
        */
-      lowValueField?: string;
+      lowValueField?: string | undefined;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.valueErrorBar.opacity]
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.valueErrorBar.type]
        */
-      type?: DevExpress.common.charts.ValueErrorBarType;
+      type?: DevExpress.common.charts.ValueErrorBarType | undefined;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.valueErrorBar.value]
        */
@@ -35605,10 +35663,12 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.aggregation.calculate]
      */
-    calculate?: (
-      aggregationInfo: chartPointAggregationInfoObject,
-      series: chartSeriesObject
-    ) => any | Array<any>;
+    calculate?:
+      | ((
+          aggregationInfo: chartPointAggregationInfoObject,
+          series: chartSeriesObject
+        ) => any | Array<any>)
+      | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.aggregation.enabled]
      */
@@ -35625,11 +35685,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.border.color]
      */
-    color?: string;
+    color?: string | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.border.dashStyle]
      */
-    dashStyle?: DevExpress.common.charts.DashStyle;
+    dashStyle?: DevExpress.common.charts.DashStyle | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.border.visible]
      */
@@ -35650,7 +35710,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.color]
      */
-    color?: string | DevExpress.common.charts.ChartsColor;
+    color?: string | DevExpress.common.charts.ChartsColor | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.dashStyle]
      */
@@ -35675,11 +35735,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border.color]
      */
-    color?: string;
+    color?: string | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border.dashStyle]
      */
-    dashStyle?: DevExpress.common.charts.DashStyle;
+    dashStyle?: DevExpress.common.charts.DashStyle | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border.visible]
      */
@@ -35721,7 +35781,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.color]
      */
-    color?: string | DevExpress.common.charts.ChartsColor;
+    color?: string | DevExpress.common.charts.ChartsColor | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.dashStyle]
      */
@@ -35746,11 +35806,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border.color]
      */
-    color?: string;
+    color?: string | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border.dashStyle]
      */
-    dashStyle?: DevExpress.common.charts.DashStyle;
+    dashStyle?: DevExpress.common.charts.DashStyle | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border.visible]
      */
@@ -36889,7 +36949,8 @@ declare module DevExpress.viz {
       | ((
           component: dxCircularGauge,
           element: SVGGElement
-        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+        ) => string | DevExpress.core.UserDefinedElement<SVGElement>)
+      | undefined;
     /**
      * [descr:dxCircularGaugeOptions.rangeContainer]
      */
@@ -37006,7 +37067,8 @@ declare module DevExpress.viz {
         | ((
             legendItem: LegendItem,
             element: SVGGElement
-          ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+          ) => string | DevExpress.core.UserDefinedElement<SVGElement>)
+        | undefined;
       /**
        * [descr:dxFunnelOptions.legend.visible]
        */
@@ -37049,17 +37111,20 @@ declare module DevExpress.viz {
               percentText?: string;
             },
             element: DevExpress.core.DxElement
-          ) => string | DevExpress.core.UserDefinedElement);
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
       /**
        * [descr:dxFunnelOptions.tooltip.customizeTooltip]
        */
-      customizeTooltip?: (info: {
-        item?: Item;
-        value?: number;
-        valueText?: string;
-        percent?: number;
-        percentText?: string;
-      }) => any;
+      customizeTooltip?:
+        | ((info: {
+            item?: Item;
+            value?: number;
+            valueText?: string;
+            percent?: number;
+            percentText?: string;
+          }) => any)
+        | undefined;
     };
   }
   /**
@@ -37166,15 +37231,15 @@ declare module DevExpress.viz {
         /**
          * [descr:dxFunnelOptions.item.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxFunnelOptions.item.border.visible]
          */
-        visible?: boolean;
+        visible?: boolean | undefined;
         /**
          * [descr:dxFunnelOptions.item.border.width]
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * [descr:dxFunnelOptions.item.hoverStyle]
@@ -37187,15 +37252,15 @@ declare module DevExpress.viz {
           /**
            * [descr:dxFunnelOptions.item.hoverStyle.border.color]
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * [descr:dxFunnelOptions.item.hoverStyle.border.visible]
            */
-          visible?: boolean;
+          visible?: boolean | undefined;
           /**
            * [descr:dxFunnelOptions.item.hoverStyle.border.width]
            */
-          width?: number;
+          width?: number | undefined;
         };
         /**
          * [descr:dxFunnelOptions.item.hoverStyle.hatching]
@@ -37230,15 +37295,15 @@ declare module DevExpress.viz {
           /**
            * [descr:dxFunnelOptions.item.selectionStyle.border.color]
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * [descr:dxFunnelOptions.item.selectionStyle.border.visible]
            */
-          visible?: boolean;
+          visible?: boolean | undefined;
           /**
            * [descr:dxFunnelOptions.item.selectionStyle.border.width]
            */
-          width?: number;
+          width?: number | undefined;
         };
         /**
          * [descr:dxFunnelOptions.item.selectionStyle.hatching]
@@ -37299,7 +37364,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxFunnelOptions.label.connector.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxFunnelOptions.label.connector.opacity]
          */
@@ -37330,7 +37395,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxFunnelOptions.label.format]
        */
-      format?: DevExpress.ui.Format;
+      format?: DevExpress.ui.Format | undefined;
       /**
        * [descr:dxFunnelOptions.label.horizontalAlignment]
        */
@@ -37663,7 +37728,8 @@ declare module DevExpress.viz {
         | ((
             legendItem: LegendItem,
             element: SVGGElement
-          ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+          ) => string | DevExpress.core.UserDefinedElement<SVGElement>)
+        | undefined;
     };
     /**
      * [descr:_viz_pie_chart_LegendClickEvent]
@@ -37736,7 +37802,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartAnnotationConfig.name]
      */
-    name?: string;
+    name?: string | undefined;
   }
   /**
    * [descr:dxPieChartCommonAnnotationConfig]
@@ -37751,15 +37817,17 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartCommonAnnotationConfig.argument]
      */
-    argument?: number | Date | string;
+    argument?: number | Date | string | undefined;
     /**
      * [descr:dxPieChartCommonAnnotationConfig.series]
      */
-    series?: string;
+    series?: string | undefined;
     /**
      * [descr:dxPieChartCommonAnnotationConfig.customizeTooltip]
      */
-    customizeTooltip?: (annotation: dxPieChartAnnotationConfig | any) => any;
+    customizeTooltip?:
+      | ((annotation: dxPieChartAnnotationConfig | any) => any)
+      | undefined;
     /**
      * [descr:dxPieChartCommonAnnotationConfig.template]
      */
@@ -37768,7 +37836,8 @@ declare module DevExpress.viz {
       | ((
           annotation: dxPieChartAnnotationConfig | any,
           element: SVGGElement
-        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+        ) => string | DevExpress.core.UserDefinedElement<SVGElement>)
+      | undefined;
     /**
      * [descr:dxPieChartCommonAnnotationConfig.tooltipTemplate]
      */
@@ -37777,7 +37846,8 @@ declare module DevExpress.viz {
       | ((
           annotation: dxPieChartAnnotationConfig | any,
           element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+        ) => string | DevExpress.core.UserDefinedElement)
+      | undefined;
   }
   /**
    * [descr:dxPieChartOptions]
@@ -37797,7 +37867,8 @@ declare module DevExpress.viz {
       | ((
           component: dxPieChart,
           element: SVGGElement
-        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+        ) => string | DevExpress.core.UserDefinedElement<SVGElement>)
+      | undefined;
     /**
      * [descr:dxPieChartOptions.commonSeriesSettings]
      */
@@ -37805,7 +37876,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.diameter]
      */
-    diameter?: number;
+    diameter?: number | undefined;
     /**
      * [descr:dxPieChartOptions.innerRadius]
      */
@@ -37839,7 +37910,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.series]
      */
-    series?: PieChartSeries | Array<PieChartSeries>;
+    series?: PieChartSeries | Array<PieChartSeries> | undefined;
     /**
      * [descr:dxPieChartOptions.seriesTemplate]
      */
@@ -37856,7 +37927,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.sizeGroup]
      */
-    sizeGroup?: string;
+    sizeGroup?: string | undefined;
     /**
      * [descr:dxPieChartOptions.startAngle]
      */
@@ -37876,9 +37947,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.customizeAnnotation]
      */
-    customizeAnnotation?: (
-      annotation: dxPieChartAnnotationConfig | any
-    ) => dxPieChartAnnotationConfig;
+    customizeAnnotation?:
+      | ((
+          annotation: dxPieChartAnnotationConfig | any
+        ) => dxPieChartAnnotationConfig)
+      | undefined;
   }
   /**
    * [descr:dxPieChartSeriesTypes]
@@ -37909,7 +37982,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.argumentType]
      */
-    argumentType?: DevExpress.common.charts.ChartsDataType;
+    argumentType?: DevExpress.common.charts.ChartsDataType | undefined;
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.border]
      */
@@ -37917,11 +37990,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.border.color]
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.border.dashStyle]
        */
-      dashStyle?: DevExpress.common.charts.DashStyle;
+      dashStyle?: DevExpress.common.charts.DashStyle | undefined;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.border.visible]
        */
@@ -37934,7 +38007,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.color]
      */
-    color?: string | DevExpress.common.charts.ChartsColor;
+    color?: string | DevExpress.common.charts.ChartsColor | undefined;
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverMode]
      */
@@ -37950,11 +38023,11 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.dashStyle]
          */
-        dashStyle?: DevExpress.common.charts.DashStyle;
+        dashStyle?: DevExpress.common.charts.DashStyle | undefined;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.visible]
          */
@@ -37967,7 +38040,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.color]
        */
-      color?: string | DevExpress.common.charts.ChartsColor;
+      color?: string | DevExpress.common.charts.ChartsColor | undefined;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching]
        */
@@ -38001,11 +38074,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentFormat]
        */
-      argumentFormat?: DevExpress.ui.Format;
+      argumentFormat?: DevExpress.ui.Format | undefined;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.backgroundColor]
        */
-      backgroundColor?: string;
+      backgroundColor?: string | undefined;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.border]
        */
@@ -38013,11 +38086,11 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.border.dashStyle]
          */
-        dashStyle?: DevExpress.common.charts.DashStyle;
+        dashStyle?: DevExpress.common.charts.DashStyle | undefined;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.border.visible]
          */
@@ -38034,7 +38107,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.connector.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.connector.visible]
          */
@@ -38055,7 +38128,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.format]
        */
-      format?: DevExpress.ui.Format;
+      format?: DevExpress.ui.Format | undefined;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.position]
        */
@@ -38083,16 +38156,16 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.displayFormat]
        */
-      displayFormat?: string;
+      displayFormat?: string | undefined;
     };
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount]
      */
-    maxLabelCount?: number;
+    maxLabelCount?: number | undefined;
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.minSegmentSize]
      */
-    minSegmentSize?: number;
+    minSegmentSize?: number | undefined;
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionMode]
      */
@@ -38108,11 +38181,11 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.dashStyle]
          */
-        dashStyle?: DevExpress.common.charts.DashStyle;
+        dashStyle?: DevExpress.common.charts.DashStyle | undefined;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.visible]
          */
@@ -38125,7 +38198,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.color]
        */
-      color?: string | DevExpress.common.charts.ChartsColor;
+      color?: string | DevExpress.common.charts.ChartsColor | undefined;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching]
        */
@@ -38167,11 +38240,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping.threshold]
        */
-      threshold?: number;
+      threshold?: number | undefined;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping.topCount]
        */
-      topCount?: number;
+      topCount?: number | undefined;
     };
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.tagField]
@@ -38216,7 +38289,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.argumentAxis.argumentType]
        */
-      argumentType?: DevExpress.common.charts.ChartsDataType;
+      argumentType?: DevExpress.common.charts.ChartsDataType | undefined;
       /**
        * [descr:dxPolarChartOptions.argumentAxis.axisDivisionFactor]
        */
@@ -38244,7 +38317,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.argumentAxis.linearThreshold]
        */
-      linearThreshold?: number;
+      linearThreshold?: number | undefined;
       /**
        * [descr:dxPolarChartOptions.argumentAxis.logarithmBase]
        */
@@ -38256,7 +38329,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.argumentAxis.minorTickCount]
        */
-      minorTickCount?: number;
+      minorTickCount?: number | undefined;
       /**
        * [descr:dxPolarChartOptions.argumentAxis.minorTickInterval]
        */
@@ -38264,11 +38337,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.argumentAxis.originValue]
        */
-      originValue?: number;
+      originValue?: number | undefined;
       /**
        * [descr:dxPolarChartOptions.argumentAxis.period]
        */
-      period?: number;
+      period?: number | undefined;
       /**
        * [descr:dxPolarChartOptions.argumentAxis.startAngle]
        */
@@ -38288,7 +38361,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.argumentAxis.type]
        */
-      type?: DevExpress.common.charts.AxisScaleType;
+      type?: DevExpress.common.charts.AxisScaleType | undefined;
     };
     /**
      * [descr:_viz_polar_chart_ArgumentAxisClickEvent]
@@ -38322,7 +38395,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartOptions.argumentAxis.constantLines.value]
          */
-        value?: number | Date | string;
+        value?: number | Date | string | undefined;
       };
     /**
      * [descr:dxPolarChartArgumentAxisConstantLinesLabel]
@@ -38332,7 +38405,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartOptions.argumentAxis.constantLines.label.text]
          */
-        text?: string;
+        text?: string | undefined;
       };
     /**
      * [descr:dxPolarChartArgumentAxisLabel]
@@ -38355,7 +38428,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.argumentAxis.label.format]
        */
-      format?: DevExpress.ui.Format;
+      format?: DevExpress.ui.Format | undefined;
     };
     /**
      * [descr:dxPolarChartArgumentAxisMinorTick]
@@ -38373,11 +38446,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.argumentAxis.strips.color]
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * [descr:dxPolarChartOptions.argumentAxis.strips.endValue]
        */
-      endValue?: number | Date | string;
+      endValue?: number | Date | string | undefined;
       /**
        * [descr:dxPolarChartOptions.argumentAxis.strips.label]
        */
@@ -38385,7 +38458,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.argumentAxis.strips.startValue]
        */
-      startValue?: number | Date | string;
+      startValue?: number | Date | string | undefined;
     };
     /**
      * [descr:dxPolarChartArgumentAxisStripsLabel]
@@ -38394,7 +38467,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.argumentAxis.strips.label.text]
        */
-      text?: string;
+      text?: string | undefined;
     };
     /**
      * [descr:dxPolarChartArgumentAxisTick]
@@ -38412,7 +38485,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.commonAxisSettings.allowDecimals]
        */
-      allowDecimals?: boolean;
+      allowDecimals?: boolean | undefined;
       /**
        * [descr:dxPolarChartOptions.commonAxisSettings.color]
        */
@@ -38428,7 +38501,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.commonAxisSettings.endOnTick]
        */
-      endOnTick?: boolean;
+      endOnTick?: boolean | undefined;
       /**
        * [descr:dxPolarChartOptions.commonAxisSettings.grid]
        */
@@ -38440,7 +38513,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartOptions.commonAxisSettings.grid.opacity]
          */
-        opacity?: number;
+        opacity?: number | undefined;
         /**
          * [descr:dxPolarChartOptions.commonAxisSettings.grid.visible]
          */
@@ -38469,7 +38542,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartOptions.commonAxisSettings.minorGrid.opacity]
          */
-        opacity?: number;
+        opacity?: number | undefined;
         /**
          * [descr:dxPolarChartOptions.commonAxisSettings.minorGrid.visible]
          */
@@ -38486,7 +38559,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.commonAxisSettings.opacity]
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * [descr:dxPolarChartOptions.commonAxisSettings.stripStyle]
        */
@@ -38617,7 +38690,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.commonAxisSettings.tick.opacity]
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * [descr:dxPolarChartOptions.commonAxisSettings.tick.visible]
        */
@@ -38843,7 +38916,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.valueAxis.linearThreshold]
        */
-      linearThreshold?: number;
+      linearThreshold?: number | undefined;
       /**
        * [descr:dxPolarChartOptions.valueAxis.logarithmBase]
        */
@@ -38851,11 +38924,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.valueAxis.maxValueMargin]
        */
-      maxValueMargin?: number;
+      maxValueMargin?: number | undefined;
       /**
        * [descr:dxPolarChartOptions.valueAxis.minValueMargin]
        */
-      minValueMargin?: number;
+      minValueMargin?: number | undefined;
       /**
        * [descr:dxPolarChartOptions.valueAxis.minVisualRangeLength]
        */
@@ -38863,7 +38936,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.valueAxis.minorTickCount]
        */
-      minorTickCount?: number;
+      minorTickCount?: number | undefined;
       /**
        * [descr:dxPolarChartOptions.valueAxis.minorTickInterval]
        */
@@ -38871,7 +38944,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.valueAxis.showZero]
        */
-      showZero?: boolean;
+      showZero?: boolean | undefined;
       /**
        * [descr:dxPolarChartOptions.valueAxis.strips]
        */
@@ -38887,7 +38960,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.valueAxis.type]
        */
-      type?: DevExpress.common.charts.AxisScaleType;
+      type?: DevExpress.common.charts.AxisScaleType | undefined;
       /**
        * [descr:dxPolarChartOptions.valueAxis.valueMarginsEnabled]
        */
@@ -38895,7 +38968,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.valueAxis.valueType]
        */
-      valueType?: DevExpress.common.charts.ChartsDataType;
+      valueType?: DevExpress.common.charts.ChartsDataType | undefined;
       /**
        * [descr:dxPolarChartOptions.valueAxis.visualRange]
        */
@@ -38911,7 +38984,8 @@ declare module DevExpress.viz {
        */
       wholeRange?:
         | DevExpress.common.charts.VisualRange
-        | Array<number | string | Date>;
+        | Array<number | string | Date>
+        | undefined;
     };
     /**
      * [descr:dxPolarChartValueAxisConstantLines]
@@ -38932,7 +39006,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.valueAxis.constantLines.value]
        */
-      value?: number | Date | string;
+      value?: number | Date | string | undefined;
     };
     /**
      * [descr:dxPolarChartValueAxisConstantLinesLabel]
@@ -38942,7 +39016,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartOptions.valueAxis.constantLines.label.text]
          */
-        text?: string;
+        text?: string | undefined;
       };
     /**
      * [descr:dxPolarChartValueAxisLabel]
@@ -38965,7 +39039,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.valueAxis.label.format]
        */
-      format?: DevExpress.ui.Format;
+      format?: DevExpress.ui.Format | undefined;
     };
     /**
      * [descr:dxPolarChartValueAxisStrips]
@@ -38974,11 +39048,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.valueAxis.strips.color]
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * [descr:dxPolarChartOptions.valueAxis.strips.endValue]
        */
-      endValue?: number | Date | string;
+      endValue?: number | Date | string | undefined;
       /**
        * [descr:dxPolarChartOptions.valueAxis.strips.label]
        */
@@ -38986,7 +39060,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.valueAxis.strips.startValue]
        */
-      startValue?: number | Date | string;
+      startValue?: number | Date | string | undefined;
     };
     /**
      * [descr:dxPolarChartValueAxisStripsLabel]
@@ -38995,7 +39069,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.valueAxis.strips.label.text]
        */
-      text?: string;
+      text?: string | undefined;
     };
     /**
      * [descr:dxPolarChartValueAxisTick]
@@ -39071,7 +39145,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartAnnotationConfig.name]
      */
-    name?: string;
+    name?: string | undefined;
   }
   /**
    * [descr:dxPolarChartCommonAnnotationConfig]
@@ -39082,15 +39156,17 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartCommonAnnotationConfig.angle]
      */
-    angle?: number;
+    angle?: number | undefined;
     /**
      * [descr:dxPolarChartCommonAnnotationConfig.radius]
      */
-    radius?: number;
+    radius?: number | undefined;
     /**
      * [descr:dxPolarChartCommonAnnotationConfig.customizeTooltip]
      */
-    customizeTooltip?: (annotation: dxPolarChartAnnotationConfig | any) => any;
+    customizeTooltip?:
+      | ((annotation: dxPolarChartAnnotationConfig | any) => any)
+      | undefined;
     /**
      * [descr:dxPolarChartCommonAnnotationConfig.template]
      */
@@ -39099,7 +39175,8 @@ declare module DevExpress.viz {
       | ((
           annotation: dxPolarChartAnnotationConfig | any,
           element: SVGGElement
-        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+        ) => string | DevExpress.core.UserDefinedElement<SVGElement>)
+      | undefined;
     /**
      * [descr:dxPolarChartCommonAnnotationConfig.tooltipTemplate]
      */
@@ -39108,7 +39185,8 @@ declare module DevExpress.viz {
       | ((
           annotation: dxPolarChartAnnotationConfig | any,
           element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+        ) => string | DevExpress.core.UserDefinedElement)
+      | undefined;
   }
   /**
    * [descr:dxPolarChartOptions]
@@ -39135,7 +39213,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.barGroupWidth]
      */
-    barGroupWidth?: number;
+    barGroupWidth?: number | undefined;
     /**
      * [descr:dxPolarChartOptions.commonAnnotationSettings]
      */
@@ -39155,9 +39233,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.customizeAnnotation]
      */
-    customizeAnnotation?: (
-      annotation: dxPolarChartAnnotationConfig | any
-    ) => dxPolarChartAnnotationConfig;
+    customizeAnnotation?:
+      | ((
+          annotation: dxPolarChartAnnotationConfig | any
+        ) => dxPolarChartAnnotationConfig)
+      | undefined;
     /**
      * [descr:dxPolarChartOptions.dataPrepareSettings]
      */
@@ -39233,7 +39313,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.series]
      */
-    series?: PolarChartSeries | Array<PolarChartSeries>;
+    series?: PolarChartSeries | Array<PolarChartSeries> | undefined;
     /**
      * [descr:dxPolarChartOptions.seriesSelectionMode]
      */
@@ -39351,11 +39431,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.barPadding]
      */
-    barPadding?: number;
+    barPadding?: number | undefined;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.barWidth]
      */
-    barWidth?: number;
+    barWidth?: number | undefined;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.border]
      */
@@ -39363,11 +39443,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.border.color]
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.border.dashStyle]
        */
-      dashStyle?: DevExpress.common.charts.DashStyle;
+      dashStyle?: DevExpress.common.charts.DashStyle | undefined;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.border.visible]
        */
@@ -39384,7 +39464,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.color]
      */
-    color?: string | DevExpress.common.charts.ChartsColor;
+    color?: string | DevExpress.common.charts.ChartsColor | undefined;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.dashStyle]
      */
@@ -39404,11 +39484,11 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.dashStyle]
          */
-        dashStyle?: DevExpress.common.charts.DashStyle;
+        dashStyle?: DevExpress.common.charts.DashStyle | undefined;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.visible]
          */
@@ -39421,7 +39501,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.color]
        */
-      color?: string | DevExpress.common.charts.ChartsColor;
+      color?: string | DevExpress.common.charts.ChartsColor | undefined;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.dashStyle]
        */
@@ -39467,11 +39547,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.maxLabelCount]
      */
-    maxLabelCount?: number;
+    maxLabelCount?: number | undefined;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.minBarSize]
      */
-    minBarSize?: number;
+    minBarSize?: number | undefined;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.opacity]
      */
@@ -39495,11 +39575,11 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.dashStyle]
          */
-        dashStyle?: DevExpress.common.charts.DashStyle;
+        dashStyle?: DevExpress.common.charts.DashStyle | undefined;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.visible]
          */
@@ -39512,7 +39592,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.color]
        */
-      color?: string | DevExpress.common.charts.ChartsColor;
+      color?: string | DevExpress.common.charts.ChartsColor | undefined;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.dashStyle]
        */
@@ -39578,7 +39658,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.highValueField]
        */
-      highValueField?: string;
+      highValueField?: string | undefined;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.lineWidth]
        */
@@ -39586,15 +39666,15 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.lowValueField]
        */
-      lowValueField?: string;
+      lowValueField?: string | undefined;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.opacity]
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.type]
        */
-      type?: DevExpress.common.charts.ValueErrorBarType;
+      type?: DevExpress.common.charts.ValueErrorBarType | undefined;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.value]
        */
@@ -39620,11 +39700,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.argumentFormat]
      */
-    argumentFormat?: DevExpress.ui.Format;
+    argumentFormat?: DevExpress.ui.Format | undefined;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.backgroundColor]
      */
-    backgroundColor?: string;
+    backgroundColor?: string | undefined;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border]
      */
@@ -39632,11 +39712,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.color]
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.dashStyle]
        */
-      dashStyle?: DevExpress.common.charts.DashStyle;
+      dashStyle?: DevExpress.common.charts.DashStyle | undefined;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.visible]
        */
@@ -39653,7 +39733,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.connector.color]
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.connector.visible]
        */
@@ -39674,7 +39754,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.format]
      */
-    format?: DevExpress.ui.Format;
+    format?: DevExpress.ui.Format | undefined;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.position]
      */
@@ -39694,7 +39774,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.displayFormat]
      */
-    displayFormat?: string;
+    displayFormat?: string | undefined;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -39707,7 +39787,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.border.color]
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.border.visible]
        */
@@ -39720,7 +39800,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.color]
      */
-    color?: string | DevExpress.common.charts.ChartsColor;
+    color?: string | DevExpress.common.charts.ChartsColor | undefined;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverMode]
      */
@@ -39736,7 +39816,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.border.visible]
          */
@@ -39749,7 +39829,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.color]
        */
-      color?: string | DevExpress.common.charts.ChartsColor;
+      color?: string | DevExpress.common.charts.ChartsColor | undefined;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.size]
        */
@@ -39760,6 +39840,7 @@ declare module DevExpress.viz {
      */
     image?:
       | string
+      | undefined
       | {
           /**
            * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image.height]
@@ -39768,7 +39849,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image.url]
            */
-          url?: string;
+          url?: string | undefined;
           /**
            * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image.width]
            */
@@ -39789,7 +39870,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.border.visible]
          */
@@ -39802,7 +39883,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.color]
        */
-      color?: string | DevExpress.common.charts.ChartsColor;
+      color?: string | DevExpress.common.charts.ChartsColor | undefined;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.size]
        */
@@ -39992,7 +40073,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxRangeSelectorOptions.background.image.url]
          */
-        url?: string;
+        url?: string | undefined;
       };
       /**
        * [descr:dxRangeSelectorOptions.background.visible]
@@ -40044,7 +40125,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.chart.barGroupWidth]
        */
-      barGroupWidth?: number;
+      barGroupWidth?: number | undefined;
       /**
        * [descr:dxRangeSelectorOptions.chart.bottomIndent]
        */
@@ -40098,7 +40179,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.chart.series]
        */
-      series?: ChartSeries | Array<ChartSeries>;
+      series?: ChartSeries | Array<ChartSeries> | undefined;
       /**
        * [descr:dxRangeSelectorOptions.chart.seriesTemplate]
        */
@@ -40131,19 +40212,19 @@ declare module DevExpress.viz {
         /**
          * [descr:dxRangeSelectorOptions.chart.valueAxis.max]
          */
-        max?: number;
+        max?: number | undefined;
         /**
          * [descr:dxRangeSelectorOptions.chart.valueAxis.min]
          */
-        min?: number;
+        min?: number | undefined;
         /**
          * [descr:dxRangeSelectorOptions.chart.valueAxis.type]
          */
-        type?: DevExpress.viz.dxRangeSelector.ChartAxisScale;
+        type?: DevExpress.viz.dxRangeSelector.ChartAxisScale | undefined;
         /**
          * [descr:dxRangeSelectorOptions.chart.valueAxis.valueType]
          */
-        valueType?: DevExpress.common.charts.ChartsDataType;
+        valueType?: DevExpress.common.charts.ChartsDataType | undefined;
       };
     };
     /**
@@ -40165,11 +40246,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.indent.left]
        */
-      left?: number;
+      left?: number | undefined;
       /**
        * [descr:dxRangeSelectorOptions.indent.right]
        */
-      right?: number;
+      right?: number | undefined;
     };
     /**
      * [descr:dxRangeSelectorOptions.onValueChanged]
@@ -40189,7 +40270,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.aggregationGroupWidth]
        */
-      aggregationGroupWidth?: number;
+      aggregationGroupWidth?: number | undefined;
       /**
        * [descr:dxRangeSelectorOptions.scale.aggregationInterval]
        */
@@ -40201,7 +40282,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.allowDecimals]
        */
-      allowDecimals?: boolean;
+      allowDecimals?: boolean | undefined;
       /**
        * [descr:dxRangeSelectorOptions.scale.breakStyle]
        */
@@ -40234,7 +40315,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.endValue]
        */
-      endValue?: number | Date | string;
+      endValue?: number | Date | string | undefined;
       /**
        * [descr:dxRangeSelectorOptions.scale.holidays]
        */
@@ -40257,7 +40338,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxRangeSelectorOptions.scale.label.format]
          */
-        format?: DevExpress.ui.Format;
+        format?: DevExpress.ui.Format | undefined;
         /**
          * [descr:dxRangeSelectorOptions.scale.label.overlappingBehavior]
          */
@@ -40297,7 +40378,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxRangeSelectorOptions.scale.marker.label.format]
            */
-          format?: DevExpress.ui.Format;
+          format?: DevExpress.ui.Format | undefined;
         };
         /**
          * [descr:dxRangeSelectorOptions.scale.marker.separatorHeight]
@@ -40352,7 +40433,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.minorTickCount]
        */
-      minorTickCount?: number;
+      minorTickCount?: number | undefined;
       /**
        * [descr:dxRangeSelectorOptions.scale.minorTickInterval]
        */
@@ -40360,7 +40441,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.placeholderHeight]
        */
-      placeholderHeight?: number;
+      placeholderHeight?: number | undefined;
       /**
        * [descr:dxRangeSelectorOptions.scale.showCustomBoundaryTicks]
        */
@@ -40372,7 +40453,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.startValue]
        */
-      startValue?: number | Date | string;
+      startValue?: number | Date | string | undefined;
       /**
        * [descr:dxRangeSelectorOptions.scale.tick]
        */
@@ -40397,11 +40478,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.type]
        */
-      type?: DevExpress.viz.dxRangeSelector.AxisScale;
+      type?: DevExpress.viz.dxRangeSelector.AxisScale | undefined;
       /**
        * [descr:dxRangeSelectorOptions.scale.valueType]
        */
-      valueType?: DevExpress.common.charts.ChartsDataType;
+      valueType?: DevExpress.common.charts.ChartsDataType | undefined;
       /**
        * [descr:dxRangeSelectorOptions.scale.workWeek]
        */
@@ -40426,7 +40507,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.shutter.color]
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * [descr:dxRangeSelectorOptions.shutter.opacity]
        */
@@ -40471,7 +40552,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.sliderMarker.format]
        */
-      format?: DevExpress.ui.Format;
+      format?: DevExpress.ui.Format | undefined;
       /**
        * [descr:dxRangeSelectorOptions.sliderMarker.invalidRangeColor]
        */
@@ -40487,7 +40568,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.sliderMarker.placeholderHeight]
        */
-      placeholderHeight?: number;
+      placeholderHeight?: number | undefined;
       /**
        * [descr:dxRangeSelectorOptions.sliderMarker.visible]
        */
@@ -40611,20 +40692,20 @@ declare module DevExpress.viz {
       /**
        * [descr:dxSankeyOptions.tooltip.customizeLinkTooltip]
        */
-      customizeLinkTooltip?: (info: {
-        source?: string;
-        target?: string;
-        weight?: number;
-      }) => any;
+      customizeLinkTooltip?:
+        | ((info: { source?: string; target?: string; weight?: number }) => any)
+        | undefined;
       /**
        * [descr:dxSankeyOptions.tooltip.customizeNodeTooltip]
        */
-      customizeNodeTooltip?: (info: {
-        title?: string;
-        label?: string;
-        weightIn?: number;
-        weightOut?: number;
-      }) => any;
+      customizeNodeTooltip?:
+        | ((info: {
+            title?: string;
+            label?: string;
+            weightIn?: number;
+            weightOut?: number;
+          }) => any)
+        | undefined;
       /**
        * [descr:dxSankeyOptions.tooltip.enabled]
        */
@@ -40637,7 +40718,8 @@ declare module DevExpress.viz {
         | ((
             info: { source?: string; target?: string; weight?: number },
             element: DevExpress.core.DxElement
-          ) => string | DevExpress.core.UserDefinedElement);
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
       /**
        * [descr:dxSankeyOptions.tooltip.nodeTooltipTemplate]
        */
@@ -40646,7 +40728,8 @@ declare module DevExpress.viz {
         | ((
             info: { label?: string; weightIn?: number; weightOut?: number },
             element: DevExpress.core.DxElement
-          ) => string | DevExpress.core.UserDefinedElement);
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
     };
   }
   /**
@@ -40780,15 +40863,15 @@ declare module DevExpress.viz {
         /**
          * [descr:dxSankeyOptions.label.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxSankeyOptions.label.border.visible]
          */
-        visible?: boolean;
+        visible?: boolean | undefined;
         /**
          * [descr:dxSankeyOptions.label.border.width]
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * [descr:dxSankeyOptions.label.customizeText]
@@ -40855,15 +40938,15 @@ declare module DevExpress.viz {
         /**
          * [descr:dxSankeyOptions.link.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxSankeyOptions.link.border.visible]
          */
-        visible?: boolean;
+        visible?: boolean | undefined;
         /**
          * [descr:dxSankeyOptions.link.border.width]
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * [descr:dxSankeyOptions.link.color]
@@ -40884,20 +40967,20 @@ declare module DevExpress.viz {
           /**
            * [descr:dxSankeyOptions.link.hoverStyle.border.color]
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * [descr:dxSankeyOptions.link.hoverStyle.border.visible]
            */
-          visible?: boolean;
+          visible?: boolean | undefined;
           /**
            * [descr:dxSankeyOptions.link.hoverStyle.border.width]
            */
-          width?: number;
+          width?: number | undefined;
         };
         /**
          * [descr:dxSankeyOptions.link.hoverStyle.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxSankeyOptions.link.hoverStyle.hatching]
          */
@@ -40922,7 +41005,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxSankeyOptions.link.hoverStyle.opacity]
          */
-        opacity?: number;
+        opacity?: number | undefined;
       };
       /**
        * [descr:dxSankeyOptions.link.opacity]
@@ -40940,20 +41023,20 @@ declare module DevExpress.viz {
         /**
          * [descr:dxSankeyOptions.node.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxSankeyOptions.node.border.visible]
          */
-        visible?: boolean;
+        visible?: boolean | undefined;
         /**
          * [descr:dxSankeyOptions.node.border.width]
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * [descr:dxSankeyOptions.node.color]
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * [descr:dxSankeyOptions.node.hoverStyle]
        */
@@ -40965,20 +41048,20 @@ declare module DevExpress.viz {
           /**
            * [descr:dxSankeyOptions.node.hoverStyle.border.color]
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * [descr:dxSankeyOptions.node.hoverStyle.border.visible]
            */
-          visible?: boolean;
+          visible?: boolean | undefined;
           /**
            * [descr:dxSankeyOptions.node.hoverStyle.border.width]
            */
-          width?: number;
+          width?: number | undefined;
         };
         /**
          * [descr:dxSankeyOptions.node.hoverStyle.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxSankeyOptions.node.hoverStyle.hatching]
          */
@@ -41003,7 +41086,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxSankeyOptions.node.hoverStyle.opacity]
          */
-        opacity?: number;
+        opacity?: number | undefined;
       };
       /**
        * [descr:dxSankeyOptions.node.opacity]
@@ -41049,7 +41132,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxSankeyOptions.sortData]
      */
-    sortData?: any;
+    sortData?: any | undefined;
     /**
      * [descr:dxSankeyOptions.sourceField]
      */
@@ -41181,7 +41264,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxSparklineOptions.maxValue]
      */
-    maxValue?: number;
+    maxValue?: number | undefined;
     /**
      * [descr:dxSparklineOptions.minColor]
      */
@@ -41189,7 +41272,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxSparklineOptions.minValue]
      */
-    minValue?: number;
+    minValue?: number | undefined;
     /**
      * [descr:dxSparklineOptions.pointColor]
      */
@@ -41368,15 +41451,18 @@ declare module DevExpress.viz {
         | ((
             info: { value?: number; valueText?: string; node?: dxTreeMapNode },
             element: DevExpress.core.DxElement
-          ) => string | DevExpress.core.UserDefinedElement);
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
       /**
        * [descr:dxTreeMapOptions.tooltip.customizeTooltip]
        */
-      customizeTooltip?: (info: {
-        value?: number;
-        valueText?: string;
-        node?: dxTreeMapNode;
-      }) => any;
+      customizeTooltip?:
+        | ((info: {
+            value?: number;
+            valueText?: string;
+            node?: dxTreeMapNode;
+          }) => any)
+        | undefined;
     };
     export type TreeMapColorizerType =
       | 'discrete'
@@ -41500,7 +41586,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxTreeMapOptions.colorizer.colorCodeField]
        */
-      colorCodeField?: string;
+      colorCodeField?: string | undefined;
       /**
        * [descr:dxTreeMapOptions.colorizer.colorizeGroups]
        */
@@ -41520,7 +41606,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxTreeMapOptions.colorizer.type]
        */
-      type?: DevExpress.viz.dxTreeMap.TreeMapColorizerType;
+      type?: DevExpress.viz.dxTreeMap.TreeMapColorizerType | undefined;
     };
     /**
      * [descr:dxTreeMapOptions.dataSource]
@@ -41537,11 +41623,11 @@ declare module DevExpress.viz {
         /**
          * [descr:dxTreeMapOptions.group.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxTreeMapOptions.group.border.width]
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * [descr:dxTreeMapOptions.group.color]
@@ -41554,11 +41640,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxTreeMapOptions.group.headerHeight]
        */
-      headerHeight?: number;
+      headerHeight?: number | undefined;
       /**
        * [descr:dxTreeMapOptions.group.hoverEnabled]
        */
-      hoverEnabled?: boolean;
+      hoverEnabled?: boolean | undefined;
       /**
        * [descr:dxTreeMapOptions.group.hoverStyle]
        */
@@ -41570,16 +41656,16 @@ declare module DevExpress.viz {
           /**
            * [descr:dxTreeMapOptions.group.hoverStyle.border.color]
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * [descr:dxTreeMapOptions.group.hoverStyle.border.width]
            */
-          width?: number;
+          width?: number | undefined;
         };
         /**
          * [descr:dxTreeMapOptions.group.hoverStyle.color]
          */
-        color?: string;
+        color?: string | undefined;
       };
       /**
        * [descr:dxTreeMapOptions.group.label]
@@ -41609,26 +41695,26 @@ declare module DevExpress.viz {
           /**
            * [descr:dxTreeMapOptions.group.selectionStyle.border.color]
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * [descr:dxTreeMapOptions.group.selectionStyle.border.width]
            */
-          width?: number;
+          width?: number | undefined;
         };
         /**
          * [descr:dxTreeMapOptions.group.selectionStyle.color]
          */
-        color?: string;
+        color?: string | undefined;
       };
     };
     /**
      * [descr:dxTreeMapOptions.hoverEnabled]
      */
-    hoverEnabled?: boolean;
+    hoverEnabled?: boolean | undefined;
     /**
      * [descr:dxTreeMapOptions.idField]
      */
-    idField?: string;
+    idField?: string | undefined;
     /**
      * [descr:dxTreeMapOptions.interactWithGroup]
      */
@@ -41658,7 +41744,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxTreeMapOptions.maxDepth]
      */
-    maxDepth?: number;
+    maxDepth?: number | undefined;
     /**
      * [descr:dxTreeMapOptions.onClick]
      */
@@ -41692,11 +41778,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxTreeMapOptions.parentField]
      */
-    parentField?: string;
+    parentField?: string | undefined;
     /**
      * [descr:dxTreeMapOptions.selectionMode]
      */
-    selectionMode?: DevExpress.common.SingleMultipleOrNone;
+    selectionMode?: DevExpress.common.SingleMultipleOrNone | undefined;
     /**
      * [descr:dxTreeMapOptions.tile]
      */
@@ -41708,11 +41794,11 @@ declare module DevExpress.viz {
         /**
          * [descr:dxTreeMapOptions.tile.border.color]
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * [descr:dxTreeMapOptions.tile.border.width]
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * [descr:dxTreeMapOptions.tile.color]
@@ -41729,16 +41815,16 @@ declare module DevExpress.viz {
           /**
            * [descr:dxTreeMapOptions.tile.hoverStyle.border.color]
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * [descr:dxTreeMapOptions.tile.hoverStyle.border.width]
            */
-          width?: number;
+          width?: number | undefined;
         };
         /**
          * [descr:dxTreeMapOptions.tile.hoverStyle.color]
          */
-        color?: string;
+        color?: string | undefined;
       };
       /**
        * [descr:dxTreeMapOptions.tile.label]
@@ -41772,16 +41858,16 @@ declare module DevExpress.viz {
           /**
            * [descr:dxTreeMapOptions.tile.selectionStyle.border.color]
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * [descr:dxTreeMapOptions.tile.selectionStyle.border.width]
            */
-          width?: number;
+          width?: number | undefined;
         };
         /**
          * [descr:dxTreeMapOptions.tile.selectionStyle.color]
          */
-        color?: string;
+        color?: string | undefined;
       };
     };
     /**
@@ -41942,7 +42028,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxVectorMapOptions.legends.markerColor]
        */
-      markerColor?: string;
+      markerColor?: string | undefined;
       /**
        * [descr:dxVectorMapOptions.legends.markerShape]
        */
@@ -41959,7 +42045,8 @@ declare module DevExpress.viz {
         | ((
             legendItem: LegendItem,
             element: SVGGElement
-          ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+          ) => string | DevExpress.core.UserDefinedElement<SVGElement>)
+        | undefined;
       /**
        * [descr:dxVectorMapOptions.legends.source]
        */
@@ -42002,11 +42089,12 @@ declare module DevExpress.viz {
         | ((
             info: MapLayerElement,
             element: DevExpress.core.DxElement
-          ) => string | DevExpress.core.UserDefinedElement);
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
       /**
        * [descr:dxVectorMapOptions.tooltip.customizeTooltip]
        */
-      customizeTooltip?: (info: MapLayerElement) => any;
+      customizeTooltip?: ((info: MapLayerElement) => any) | undefined;
       /**
        * [descr:dxVectorMapOptions.tooltip.format]
        */
@@ -42055,7 +42143,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxVectorMapAnnotationConfig.name]
      */
-    name?: string;
+    name?: string | undefined;
   }
   /**
    * [descr:dxVectorMapCommonAnnotationConfig]
@@ -42070,7 +42158,9 @@ declare module DevExpress.viz {
     /**
      * [descr:dxVectorMapCommonAnnotationConfig.customizeTooltip]
      */
-    customizeTooltip?: (annotation: dxVectorMapAnnotationConfig | any) => any;
+    customizeTooltip?:
+      | ((annotation: dxVectorMapAnnotationConfig | any) => any)
+      | undefined;
     /**
      * [descr:dxVectorMapCommonAnnotationConfig.template]
      */
@@ -42079,7 +42169,8 @@ declare module DevExpress.viz {
       | ((
           annotation: dxVectorMapAnnotationConfig | any,
           element: SVGGElement
-        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+        ) => string | DevExpress.core.UserDefinedElement<SVGElement>)
+      | undefined;
     /**
      * [descr:dxVectorMapCommonAnnotationConfig.tooltipTemplate]
      */
@@ -42088,7 +42179,8 @@ declare module DevExpress.viz {
       | ((
           annotation: dxVectorMapAnnotationConfig | any,
           element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+        ) => string | DevExpress.core.UserDefinedElement)
+      | undefined;
   }
   /**
    * [descr:dxVectorMapOptions]
@@ -42178,7 +42270,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxVectorMapOptions.layers.colorGroupingField]
            */
-          colorGroupingField?: string;
+          colorGroupingField?: string | undefined;
           /**
            * [descr:dxVectorMapOptions.layers.colorGroups]
            */
@@ -42190,7 +42282,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxVectorMapOptions.layers.dataField]
            */
-          dataField?: string;
+          dataField?: string | undefined;
           /**
            * [descr:dxVectorMapOptions.layers.dataSource]
            */
@@ -42286,7 +42378,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxVectorMapOptions.layers.sizeGroupingField]
            */
-          sizeGroupingField?: string;
+          sizeGroupingField?: string | undefined;
           /**
            * [descr:dxVectorMapOptions.layers.sizeGroups]
            */
@@ -42336,7 +42428,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxVectorMapOptions.legends]
      */
-    legends?: Array<DevExpress.viz.dxVectorMap.Legend>;
+    legends?: Array<DevExpress.viz.dxVectorMap.Legend> | undefined;
     /**
      * [descr:dxVectorMapOptions.margin]
      */
@@ -42416,9 +42508,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxVectorMapOptions.customizeAnnotation]
      */
-    customizeAnnotation?: (
-      annotation: dxVectorMapAnnotationConfig | any
-    ) => dxVectorMapAnnotationConfig;
+    customizeAnnotation?:
+      | ((
+          annotation: dxVectorMapAnnotationConfig | any
+        ) => dxVectorMapAnnotationConfig)
+      | undefined;
   }
   /**
    * [descr:viz.exportFromMarkup(markup, options)]
@@ -42615,11 +42709,11 @@ declare module DevExpress.viz {
     /**
      * [descr:PieChartSeries.name]
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * [descr:PieChartSeries.tag]
      */
-    tag?: any;
+    tag?: any | undefined;
   }
   /**
    * [descr:pieChartSeriesObject]
@@ -42670,11 +42764,11 @@ declare module DevExpress.viz {
     /**
      * [descr:PolarChartSeries.name]
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * [descr:PolarChartSeries.tag]
      */
-    tag?: any;
+    tag?: any | undefined;
     /**
      * [descr:PolarChartSeries.type]
      */

@@ -242,7 +242,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    centerTemplate?: template | ((component: dxBarGauge, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    centerTemplate?: template | ((component: dxBarGauge, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
      * @docid
      * @public
@@ -252,7 +252,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
        * @docid
        * @default undefined
        */
-      connectorColor?: string;
+      connectorColor?: string | undefined;
       /**
        * @docid
        * @default 2
@@ -272,7 +272,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
        * @docid
        * @default undefined
        */
-      format?: Format;
+      format?: Format | undefined;
       /**
        * @docid
        * @default 20
@@ -390,7 +390,7 @@ export type Legend = BaseLegend & {
      * @default undefined
      * @public
      */
-    itemTextFormat?: Format;
+    itemTextFormat?: Format | undefined;
     /**
      * @docid dxBarGaugeOptions.legend.markerTemplate
      * @default undefined
@@ -398,7 +398,7 @@ export type Legend = BaseLegend & {
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
      * @docid dxBarGaugeOptions.legend.visible
      * @default false
@@ -429,14 +429,14 @@ export type Tooltip = BaseWidgetTooltip & {
      * @default undefined
      * @public
      */
-    contentTemplate?: template | ((scaleValue: { value?: number; valueText?: string; index?: number }, element: DxElement) => string | UserDefinedElement);
+    contentTemplate?: template | ((scaleValue: { value?: number; valueText?: string; index?: number }, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid dxBarGaugeOptions.tooltip.customizeTooltip
      * @default undefined
      * @type_function_return object
      * @public
      */
-    customizeTooltip?: ((scaleValue: { value?: number; valueText?: string; index?: number }) => any);
+    customizeTooltip?: ((scaleValue: { value?: number; valueText?: string; index?: number }) => any) | undefined;
     /**
      * @docid dxBarGaugeOptions.tooltip.interactive
      * @default false

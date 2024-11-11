@@ -592,7 +592,7 @@ export interface dxTreeViewItem extends CollectionWidgetItem {
      * @default undefined
      * @public
      */
-    hasItems?: boolean;
+    hasItems?: boolean | undefined;
     /**
      * @docid
      * @public
@@ -608,13 +608,13 @@ export interface dxTreeViewItem extends CollectionWidgetItem {
      * @default undefined
      * @public
      */
-    id?: number | string;
+    id?: number | string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    parentId?: number | string;
+    parentId?: number | string | undefined;
     /**
      * @docid
      * @default false

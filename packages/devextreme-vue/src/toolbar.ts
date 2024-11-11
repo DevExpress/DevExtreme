@@ -38,7 +38,7 @@ const componentConfig = {
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
-    hint: String,
+    hint: {},
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
     items: Array,
@@ -56,7 +56,7 @@ const componentConfig = {
     onOptionChanged: Function,
     rtlEnabled: Boolean,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,
@@ -121,7 +121,7 @@ const DxItemConfig = {
     "update:widget": null,
   },
   props: {
-    cssClass: String,
+    cssClass: {},
     disabled: Boolean,
     html: String,
     locateInMenu: {},

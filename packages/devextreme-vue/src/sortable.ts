@@ -55,9 +55,9 @@ const componentConfig = {
     dropFeedbackMode: {},
     elementAttr: Object,
     filter: String,
-    group: String,
+    group: {},
     handle: String,
-    height: [Function, Number, String],
+    height: {},
     itemOrientation: {},
     moveItemOnDrop: Boolean,
     onAdd: Function,
@@ -73,7 +73,7 @@ const componentConfig = {
     rtlEnabled: Boolean,
     scrollSensitivity: Number,
     scrollSpeed: Number,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

@@ -40,8 +40,8 @@ const componentConfig = {
     closeOnOutsideClick: [Boolean, Function],
     disabled: Boolean,
     elementAttr: Object,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     maxSize: Number,
     minSize: Number,
@@ -56,7 +56,7 @@ const componentConfig = {
     shading: Boolean,
     template: {},
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

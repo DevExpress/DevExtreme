@@ -128,4 +128,4 @@ export type Format =
   ((value: number | Date) => string) |
   ((value: Date) => string) |
   ((value: number) => string) |
-  ExternalFormat;
+  ExternalFormat | undefined;

@@ -51,7 +51,7 @@ interface DxAccordion extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     animationDuration: Number,
     collapsible: Boolean,
@@ -60,8 +60,8 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
     items: Array,
@@ -88,7 +88,7 @@ const componentConfig = {
     selectedItems: Array,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

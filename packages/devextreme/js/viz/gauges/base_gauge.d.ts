@@ -126,7 +126,7 @@ export interface BaseGaugeOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @fires BaseWidgetOptions.onOptionChanged
      * @public
      */
-    value?: number;
+    value?: number | undefined;
 }
 /**
  * @hidden
@@ -227,7 +227,7 @@ export interface BaseGaugeScale {
      * @default undefined
      * @public
      */
-    allowDecimals?: boolean;
+    allowDecimals?: boolean | undefined;
     /**
      * @docid BaseGaugeOptions.scale.customMinorTicks
      * @default undefined
@@ -291,7 +291,7 @@ export interface BaseGaugeScale {
      * @default undefined
      * @public
      */
-    minorTickInterval?: number;
+    minorTickInterval?: number | undefined;
     /**
      * @docid BaseGaugeOptions.scale.scaleDivisionFactor
      * @default 17
@@ -341,7 +341,7 @@ export interface BaseGaugeScale {
      * @default undefined
      * @public
      */
-    tickInterval?: number;
+    tickInterval?: number | undefined;
 }
 /**
  * @hidden
@@ -366,7 +366,7 @@ export interface BaseGaugeScaleLabel {
      * @default undefined
      * @public
      */
-    format?: Format;
+    format?: Format | undefined;
     /**
      * @docid BaseGaugeOptions.scale.label.overlappingBehavior
      * @default 'hide'
@@ -398,14 +398,14 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
      * @default undefined
      * @public
      */
-    contentTemplate?: template | ((scaleValue: { value?: number; valueText?: string }, element: DxElement) => string | UserDefinedElement);
+    contentTemplate?: template | ((scaleValue: { value?: number; valueText?: string }, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid BaseGaugeOptions.tooltip.customizeTooltip
      * @default undefined
      * @type_function_return object
      * @public
      */
-    customizeTooltip?: ((scaleValue: { value?: number; valueText?: string }) => any);
+    customizeTooltip?: ((scaleValue: { value?: number; valueText?: string }) => any) | undefined;
     /**
      * @docid BaseGaugeOptions.tooltip.interactive
      * @default false
@@ -477,7 +477,7 @@ export interface CommonIndicator {
      * @propertyOf circularRangeBar,linearRangeBar
      * @public
      */
-    baseValue?: number;
+    baseValue?: number | undefined;
     /**
      * @docid
      * @default 50
@@ -570,7 +570,7 @@ export interface CommonIndicator {
        * @default undefined
        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
        */
-      customizeText?: ((indicatedValue: { value?: number; valueText?: string }) => string);
+      customizeText?: ((indicatedValue: { value?: number; valueText?: string }) => string) | undefined;
       /**
        * @docid
        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
@@ -582,7 +582,7 @@ export interface CommonIndicator {
        * @default undefined
        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
        */
-      format?: Format;
+      format?: Format | undefined;
       /**
        * @docid
        * @default 0

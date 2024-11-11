@@ -42,7 +42,7 @@ interface DxChat extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     alerts: Array,
     dataSource: {},
@@ -50,18 +50,18 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     items: Array,
     messageTemplate: {},
     messageTimestampFormat: {},
     onDisposing: Function,
     onInitialized: Function,
-    onMessageEntered: Function,
+    onMessageEntered: {},
     onOptionChanged: Function,
-    onTypingEnd: Function,
-    onTypingStart: Function,
+    onTypingEnd: {},
+    onTypingStart: {},
     reloadOnChange: Boolean,
     rtlEnabled: Boolean,
     showAvatar: Boolean,
@@ -71,7 +71,7 @@ const componentConfig = {
     typingUsers: Array,
     user: Object,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,

@@ -116,7 +116,7 @@ export interface ColumnBase<TRowData = any> {
    * @acceptValues undefined
    * @public
    */
-  alignment?: HorizontalAlignment;
+  alignment?: HorizontalAlignment | undefined;
   /**
    * @docid GridBaseColumn.allowEditing
    * @default true
@@ -213,13 +213,13 @@ export interface ColumnBase<TRowData = any> {
    * @default undefined
    * @public
    */
-  caption?: string;
+  caption?: string | undefined;
   /**
    * @docid GridBaseColumn.cssClass
    * @default undefined
    * @public
    */
-  cssClass?: string;
+  cssClass?: string | undefined;
   /**
    * @docid GridBaseColumn.customizeText
    * @type_function_context GridBaseColumn
@@ -232,13 +232,13 @@ export interface ColumnBase<TRowData = any> {
    * @default undefined
    * @public
    */
-  dataField?: string;
+  dataField?: string | undefined;
   /**
    * @docid GridBaseColumn.dataType
    * @default undefined
    * @public
    */
-  dataType?: DataType;
+  dataType?: DataType | undefined;
   /**
    * @docid GridBaseColumn.editorOptions
    * @public
@@ -274,7 +274,7 @@ export interface ColumnBase<TRowData = any> {
    * @fires GridBaseOptions.onOptionChanged
    * @public
    */
-  filterValue?: any;
+  filterValue?: any | undefined;
   /**
    * @docid GridBaseColumn.filterValues
    * @default undefined
@@ -293,7 +293,7 @@ export interface ColumnBase<TRowData = any> {
    * @default undefined
    * @public
    */
-  fixedPosition?: FixedPosition;
+  fixedPosition?: FixedPosition | undefined;
   /**
    * @docid GridBaseColumn.formItem
    * @type dxFormSimpleItem
@@ -312,44 +312,44 @@ export interface ColumnBase<TRowData = any> {
    * @default undefined
    * @public
    */
-  headerFilter?: ColumnHeaderFilter;
+  headerFilter?: ColumnHeaderFilter | undefined;
   /**
    * @docid GridBaseColumn.hidingPriority
    * @default undefined
    * @public
    */
-  hidingPriority?: number;
+  hidingPriority?: number | undefined;
   /**
    * @docid GridBaseColumn.isBand
    * @default undefined
    * @public
    */
-  isBand?: boolean;
+  isBand?: boolean | undefined;
   /**
    * @docid GridBaseColumn.lookup
    * @type object
    * @default undefined
    * @public
    */
-  lookup?: ColumnLookup;
+  lookup?: ColumnLookup | undefined;
   /**
    * @docid GridBaseColumn.minWidth
    * @default undefined
    * @public
    */
-  minWidth?: number;
+  minWidth?: number | undefined;
   /**
    * @docid GridBaseColumn.name
    * @default undefined
    * @public
    */
-  name?: string;
+  name?: string | undefined;
   /**
    * @docid GridBaseColumn.ownerBand
    * @default undefined
    * @public
    */
-  ownerBand?: number;
+  ownerBand?: number | undefined;
   /**
    * @docid GridBaseColumn.renderAsync
    * @default false
@@ -362,7 +362,7 @@ export interface ColumnBase<TRowData = any> {
    * @fires GridBaseOptions.onOptionChanged
    * @public
    */
-  selectedFilterOperation?: SelectedFilterOperation;
+  selectedFilterOperation?: SelectedFilterOperation | undefined;
   /**
    * @docid GridBaseColumn.setCellValue
    * @type_function_context GridBaseColumn
@@ -394,7 +394,7 @@ export interface ColumnBase<TRowData = any> {
    * @fires GridBaseOptions.onOptionChanged
    * @public
    */
-  sortIndex?: number;
+  sortIndex?: number | undefined;
   /**
    * @docid GridBaseColumn.sortOrder
    * @default undefined
@@ -402,14 +402,14 @@ export interface ColumnBase<TRowData = any> {
    * @fires GridBaseOptions.onOptionChanged
    * @public
    */
-  sortOrder?: SortOrder;
+  sortOrder?: SortOrder | undefined;
   /**
    * @docid GridBaseColumn.sortingMethod
    * @default undefined
    * @type_function_context GridBaseColumn
    * @public
    */
-  sortingMethod?: ((this: ColumnBase, value1: any, value2: any) => number);
+  sortingMethod?: ((this: ColumnBase, value1: any, value2: any) => number) | undefined;
   /**
    * @docid GridBaseColumn.trueText
    * @default "true"
@@ -435,13 +435,13 @@ export interface ColumnBase<TRowData = any> {
    * @fires GridBaseOptions.onOptionChanged
    * @public
    */
-  visibleIndex?: number;
+  visibleIndex?: number | undefined;
   /**
    * @docid GridBaseColumn.width
    * @default undefined
    * @public
    */
-  width?: number | string;
+  width?: number | string | undefined;
 }
 
 /**
@@ -490,7 +490,7 @@ export type ColumnChooser = {
      * @default undefined
      * @public
      */
-  container?: string | UserDefinedElement;
+  container?: string | UserDefinedElement | undefined;
   /**
    * @docid GridBaseOptions.columnChooser.emptyPanelText
    * @default "Drag a column here to hide it"
@@ -515,7 +515,7 @@ export type ColumnChooser = {
    * @docid GridBaseOptions.columnChooser.position
    * @default undefined
    */
-  position?: PositionConfig;
+  position?: PositionConfig | undefined;
   /**
    * @docid GridBaseOptions.columnChooser.search
    */
@@ -544,7 +544,7 @@ export type ColumnChooser = {
    * @docid GridBaseOptions.columnChooser.sortOrder
    * @default undefined
    */
-  sortOrder?: SortOrder;
+  sortOrder?: SortOrder | undefined;
 };
 
 /**
@@ -719,19 +719,19 @@ export type ColumnHeaderFilter = {
    * @docid GridBaseColumn.headerFilter.dataSource
    * @type_function_param1_field component:object
    * @default undefined
-   * @type Array<any>|Store|DataSourceOptions|Function|null
+   * @type Array<any>|Store|DataSourceOptions|Function|null|undefined
    */
-  dataSource?: FilterLookupDataSource<any> | ((options: { component?: any; dataSource?: DataSourceOptions | null }) => void);
+  dataSource?: FilterLookupDataSource<any> | ((options: { component?: any; dataSource?: DataSourceOptions | null }) => void) | undefined;
   /**
    * @docid GridBaseColumn.headerFilter.groupInterval
    * @default undefined
    */
-  groupInterval?: HeaderFilterGroupInterval | number;
+  groupInterval?: HeaderFilterGroupInterval | number | undefined;
   /**
    * @docid GridBaseColumn.headerFilter.height
    * @default undefined
    */
-  height?: number | string;
+  height?: number | string | undefined;
   /**
    * @docid GridBaseColumn.headerFilter.search
    */
@@ -746,7 +746,7 @@ export type ColumnHeaderFilter = {
    * @docid GridBaseColumn.headerFilter.width
    * @default undefined
    */
-  width?: number | string;
+  width?: number | string | undefined;
 };
 
 /**
@@ -758,10 +758,10 @@ export type ColumnHeaderFilter = {
 export type ColumnHeaderFilterSearchConfig = HeaderFilterSearchConfig & {
   /**
    * @docid
-   * @type getter|Array<getter>
+   * @type getter|Array<getter>|undefined
    * @default undefined
    */
-  searchExpr?: string | Function | Array<string | Function>;
+  searchExpr?: string | Function | Array<string | Function> | undefined;
 };
 
 /**
@@ -779,20 +779,20 @@ export type ColumnLookup = {
    * @type_function_param1_field data:object
    * @default undefined
    * @type_function_return Array<any>|Store|DataSourceOptions
-   * @type Array<any>|Store|DataSourceOptions|Function|null
+   * @type Array<any>|Store|DataSourceOptions|Function|null|undefined
    */
-  dataSource?: FilterLookupDataSource<any> | ((options: { data?: any; key?: any }) => FilterLookupDataSource<any>) | null;
+  dataSource?: FilterLookupDataSource<any> | ((options: { data?: any; key?: any }) => FilterLookupDataSource<any>) | null | undefined;
   /**
    * @docid GridBaseColumn.lookup.displayExpr
    * @default undefined
    * @type_function_param1 data:object
    */
-  displayExpr?: string | ((data: any) => string);
+  displayExpr?: string | ((data: any) => string) | undefined;
   /**
    * @docid GridBaseColumn.lookup.valueExpr
    * @default undefined
    */
-  valueExpr?: string;
+  valueExpr?: string | undefined;
   /**
    * @docid GridBaseColumn.lookup.calculateCellValue
    * @type_function_param1 rowData:object
@@ -1869,7 +1869,7 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @default undefined
    * @public
    */
-  columnMinWidth?: number;
+  columnMinWidth?: number | undefined;
   /**
    * @docid
    * @default "nextColumn"
@@ -1881,7 +1881,7 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @default undefined
    * @public
    */
-  columnWidth?: number | Mode;
+  columnWidth?: number | Mode | undefined;
   /**
    * @docid
    * @type Array<GridBaseColumn|string>
@@ -1889,7 +1889,7 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @default undefined
    * @public
    */
-  columns?: Array<ColumnBase<TRowData> | string>;
+  columns?: Array<ColumnBase<TRowData> | string> | undefined;
   /**
    * @docid
    * @default null
@@ -1981,7 +1981,7 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @fires GridBaseOptions.onFocusedRowChanged
    * @public
    */
-  focusedRowKey?: TKey;
+  focusedRowKey?: TKey | undefined;
   /**
    * @docid
    * @type object
@@ -2580,12 +2580,12 @@ export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = 
    * @docid GridBaseOptions.rowDragging.boundary
    * @default undefined
    */
-  boundary?: string | UserDefinedElement;
+  boundary?: string | UserDefinedElement | undefined;
   /**
    * @docid GridBaseOptions.rowDragging.container
    * @default undefined
    */
-  container?: string | UserDefinedElement;
+  container?: string | UserDefinedElement | undefined;
   /**
    * @docid GridBaseOptions.rowDragging.cursorOffset
    */
@@ -2605,7 +2605,7 @@ export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = 
    * @docid GridBaseOptions.rowDragging.data
    * @default undefined
    */
-  data?: any;
+  data?: any | undefined;
   /**
    * @docid GridBaseOptions.rowDragging.dragDirection
    * @default "both"
@@ -2618,7 +2618,7 @@ export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = 
    * @type_function_return string|Element|jQuery
    * @default undefined
    */
-  dragTemplate?: template | ((dragInfo: RowDraggingTemplateData<TRowData>, containerElement: DxElement) => string | UserDefinedElement);
+  dragTemplate?: template | ((dragInfo: RowDraggingTemplateData<TRowData>, containerElement: DxElement) => string | UserDefinedElement) | undefined;
   /**
    * @docid GridBaseOptions.rowDragging.dropFeedbackMode
    * @default "indicate"
@@ -2634,7 +2634,7 @@ export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = 
    * @docid GridBaseOptions.rowDragging.group
    * @default undefined
    */
-  group?: string;
+  group?: string | undefined;
   /**
    * @docid GridBaseOptions.rowDragging.handle
    * @default ""
@@ -2980,7 +2980,7 @@ export interface ScrollingBase {
    * @default undefined
    * @public
    */
-  renderAsync?: boolean;
+  renderAsync?: boolean | undefined;
 }
 
 /**

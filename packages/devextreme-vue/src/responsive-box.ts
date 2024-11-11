@@ -120,7 +120,7 @@ const DxColConfig = {
   props: {
     baseSize: [Number, String],
     ratio: Number,
-    screen: String,
+    screen: {},
     shrink: Number
   }
 };
@@ -175,10 +175,10 @@ const DxLocationConfig = {
   },
   props: {
     col: Number,
-    colspan: Number,
+    colspan: {},
     row: Number,
-    rowspan: Number,
-    screen: String
+    rowspan: {},
+    screen: {}
   }
 };
 
@@ -201,7 +201,7 @@ const DxRowConfig = {
   props: {
     baseSize: [Number, String],
     ratio: Number,
-    screen: String,
+    screen: {},
     shrink: Number
   }
 };

@@ -179,7 +179,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      * @default undefined
      * @public
      */
-    maxValue?: number;
+    maxValue?: number | undefined;
     /**
      * @docid
      * @default '#e8c267'
@@ -191,7 +191,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      * @default undefined
      * @public
      */
-    minValue?: number;
+    minValue?: number | undefined;
     /**
      * @docid
      * @default '#ffffff'

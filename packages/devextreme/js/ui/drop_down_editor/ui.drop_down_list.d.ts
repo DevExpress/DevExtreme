@@ -56,7 +56,7 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @ref
      * @public
      */
-    displayValue?: string;
+    displayValue?: string | undefined;
     /**
      * @docid
      * @default "group"

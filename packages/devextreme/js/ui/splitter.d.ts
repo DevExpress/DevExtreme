@@ -244,33 +244,33 @@ export interface dxSplitterItem<TKey = any> extends CollectionWidgetItem {
      * @docid
      * @default undefined
      * @public
-     * @type dxSplitterOptions
+     * @type dxSplitterOptions | undefined
      */
-    splitter?: Properties<any, TKey>;
+    splitter?: Properties<any, TKey> | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    size?: number | string;
+    size?: number | string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    maxSize?: number | string;
+    maxSize?: number | string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    minSize?: number | string;
+    minSize?: number | string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    collapsedSize?: number | string;
+    collapsedSize?: number | string | undefined;
     /**
      * @docid
      * @default false

@@ -168,7 +168,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
      * @default undefined
      * @public
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * @docid
      * @default 'never'

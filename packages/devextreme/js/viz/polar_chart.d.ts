@@ -316,13 +316,13 @@ export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChar
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    tag?: any;
+    tag?: any | undefined;
     /**
      * @docid
      * @default 'scatter'
@@ -369,7 +369,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
      * @public
      */
-    barGroupWidth?: number;
+    barGroupWidth?: number | undefined;
     /**
      * @docid
      * @public
@@ -402,7 +402,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @notUsedInTheme
      * @public
      */
-    customizeAnnotation?: ((annotation: dxPolarChartAnnotationConfig | any) => dxPolarChartAnnotationConfig);
+    customizeAnnotation?: ((annotation: dxPolarChartAnnotationConfig | any) => dxPolarChartAnnotationConfig) | undefined;
     /**
      * @docid
      * @public
@@ -517,7 +517,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @inheritAll
      * @public
      */
-    series?: PolarChartSeries | Array<PolarChartSeries>;
+    series?: PolarChartSeries | Array<PolarChartSeries> | undefined;
     /**
      * @docid
      * @default 'single'
@@ -590,7 +590,7 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    argumentType?: ChartsDataType;
+    argumentType?: ChartsDataType | undefined;
     /**
      * @docid dxPolarChartOptions.argumentAxis.axisDivisionFactor
      * @default 50
@@ -633,7 +633,7 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    linearThreshold?: number;
+    linearThreshold?: number | undefined;
     /**
      * @docid dxPolarChartOptions.argumentAxis.logarithmBase
      * @default 10
@@ -651,7 +651,7 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    minorTickCount?: number;
+    minorTickCount?: number | undefined;
     /**
      * @docid dxPolarChartOptions.argumentAxis.minorTickInterval
      * @inherits VizTimeInterval
@@ -664,13 +664,13 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    originValue?: number;
+    originValue?: number | undefined;
     /**
      * @docid dxPolarChartOptions.argumentAxis.period
      * @default undefined
      * @public
      */
-    period?: number;
+    period?: number | undefined;
     /**
      * @docid dxPolarChartOptions.argumentAxis.startAngle
      * @default 0
@@ -703,7 +703,7 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    type?: AxisScaleType;
+    type?: AxisScaleType | undefined;
 };
 /**
  * @public
@@ -734,7 +734,7 @@ export type ArgumentAxisConstantLines = CommonAxisSettingsConstantLineStyle & {
      * @default undefined
      * @public
      */
-    value?: number | Date | string;
+    value?: number | Date | string | undefined;
 };
 /**
  * @public
@@ -747,7 +747,7 @@ export type ArgumentAxisConstantLinesLabel = CommonAxisSettingsConstantLineStyle
      * @default undefined
      * @public
      */
-    text?: string;
+    text?: string | undefined;
 };
 /**
  * @public
@@ -771,7 +771,7 @@ export type ArgumentAxisLabel = CommonAxisSettingsLabel & {
      * @default undefined
      * @public
      */
-    format?: Format;
+    format?: Format | undefined;
 };
 /**
  * @public
@@ -797,13 +797,13 @@ export type ArgumentAxisStrips = CommonAxisSettingsStripStyle & {
      * @default undefined
      * @public
      */
-    color?: string;
+    color?: string | undefined;
     /**
      * @docid dxPolarChartOptions.argumentAxis.strips.endValue
      * @default undefined
      * @public
      */
-    endValue?: number | Date | string;
+    endValue?: number | Date | string | undefined;
     /**
      * @docid dxPolarChartOptions.argumentAxis.strips.label
      * @type object
@@ -815,7 +815,7 @@ export type ArgumentAxisStrips = CommonAxisSettingsStripStyle & {
      * @default undefined
      * @public
      */
-    startValue?: number | Date | string;
+    startValue?: number | Date | string | undefined;
 };
 /**
  * @public
@@ -828,7 +828,7 @@ export type ArgumentAxisStripsLabel = CommonAxisSettingsStripStyleLabel & {
      * @default undefined
      * @public
      */
-    text?: string;
+    text?: string | undefined;
 };
 /**
  * @public
@@ -853,7 +853,7 @@ export type CommonAxisSettings = {
      * @default undefined
      * @public
      */
-    allowDecimals?: boolean;
+    allowDecimals?: boolean | undefined;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.color
      * @default '#767676'
@@ -877,7 +877,7 @@ export type CommonAxisSettings = {
      * @default undefined
      * @public
      */
-    endOnTick?: boolean;
+    endOnTick?: boolean | undefined;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.grid
      * @public
@@ -892,7 +892,7 @@ export type CommonAxisSettings = {
        * @docid dxPolarChartOptions.commonAxisSettings.grid.opacity
        * @default undefined
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * @docid dxPolarChartOptions.commonAxisSettings.grid.visible
        * @default true
@@ -930,7 +930,7 @@ export type CommonAxisSettings = {
        * @docid dxPolarChartOptions.commonAxisSettings.minorGrid.opacity
        * @default undefined
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * @docid dxPolarChartOptions.commonAxisSettings.minorGrid.visible
        * @default true
@@ -953,7 +953,7 @@ export type CommonAxisSettings = {
      * @default undefined
      * @public
      */
-    opacity?: number;
+    opacity?: number | undefined;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.stripStyle
      * @type object
@@ -1139,7 +1139,7 @@ export type CommonAxisSettingsTick = {
      * @default undefined
      * @public
      */
-    opacity?: number;
+    opacity?: number | undefined;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.tick.visible
      * @default true
@@ -1268,7 +1268,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    linearThreshold?: number;
+    linearThreshold?: number | undefined;
     /**
      * @docid dxPolarChartOptions.valueAxis.logarithmBase
      * @default 10
@@ -1280,17 +1280,17 @@ export type ValueAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    maxValueMargin?: number;
+    maxValueMargin?: number | undefined;
     /**
      * @docid dxPolarChartOptions.valueAxis.minValueMargin
      * @default undefined
      * @public
      */
-    minValueMargin?: number;
+    minValueMargin?: number | undefined;
     /**
      * @docid dxPolarChartOptions.valueAxis.minVisualRangeLength
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval
+     * @type number|object|Enums.TimeInterval|undefined
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -1301,7 +1301,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    minorTickCount?: number;
+    minorTickCount?: number | undefined;
     /**
      * @docid dxPolarChartOptions.valueAxis.minorTickInterval
      * @inherits VizTimeInterval
@@ -1314,7 +1314,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    showZero?: boolean;
+    showZero?: boolean | undefined;
     /**
      * @docid dxPolarChartOptions.valueAxis.strips
      * @type Array<Object>
@@ -1341,7 +1341,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    type?: AxisScaleType;
+    type?: AxisScaleType | undefined;
     /**
      * @docid dxPolarChartOptions.valueAxis.valueMarginsEnabled
      * @default true
@@ -1353,7 +1353,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    valueType?: ChartsDataType;
+    valueType?: ChartsDataType | undefined;
     /**
      * @docid dxPolarChartOptions.valueAxis.visualRange
      * @fires BaseWidgetOptions.onOptionChanged
@@ -1372,7 +1372,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    wholeRange?: VisualRange | Array<number | string | Date>;
+    wholeRange?: VisualRange | Array<number | string | Date> | undefined;
 };
 /**
  * @public
@@ -1403,7 +1403,7 @@ export type ValueAxisConstantLines = CommonAxisSettingsConstantLineStyle & {
      * @default undefined
      * @public
      */
-    value?: number | Date | string;
+    value?: number | Date | string | undefined;
 };
 /**
  * @public
@@ -1416,7 +1416,7 @@ export type ValueAxisConstantLinesLabel = CommonAxisSettingsConstantLineStyleLab
      * @default undefined
      * @public
      */
-    text?: string;
+    text?: string | undefined;
 };
 /**
  * @public
@@ -1440,7 +1440,7 @@ export type ValueAxisLabel = CommonAxisSettingsLabel & {
      * @default undefined
      * @public
      */
-    format?: Format;
+    format?: Format | undefined;
 };
 /**
  * @public
@@ -1453,13 +1453,13 @@ export type ValueAxisStrips = CommonAxisSettingsStripStyle & {
      * @default undefined
      * @public
      */
-    color?: string;
+    color?: string | undefined;
     /**
      * @docid dxPolarChartOptions.valueAxis.strips.endValue
      * @default undefined
      * @public
      */
-    endValue?: number | Date | string;
+    endValue?: number | Date | string | undefined;
     /**
      * @docid dxPolarChartOptions.valueAxis.strips.label
      * @type object
@@ -1471,7 +1471,7 @@ export type ValueAxisStrips = CommonAxisSettingsStripStyle & {
      * @default undefined
      * @public
      */
-    startValue?: number | Date | string;
+    startValue?: number | Date | string | undefined;
 };
 /**
  * @public
@@ -1484,7 +1484,7 @@ export type ValueAxisStripsLabel = CommonAxisSettingsStripStyleLabel & {
      * @default undefined
      * @public
      */
-    text?: string;
+    text?: string | undefined;
 };
 /**
  * @public
@@ -1532,7 +1532,7 @@ export interface dxPolarChartAnnotationConfig extends dxPolarChartCommonAnnotati
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
 }
 
 /**
@@ -1547,13 +1547,13 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
      * @default undefined
      * @public
      */
-    angle?: number;
+    angle?: number | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    radius?: number;
+    radius?: number | undefined;
     /**
      * @docid
      * @type_function_return object
@@ -1561,7 +1561,7 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
      * @notUsedInTheme
      * @public
      */
-    customizeTooltip?: ((annotation: dxPolarChartAnnotationConfig | any) => any);
+    customizeTooltip?: ((annotation: dxPolarChartAnnotationConfig | any) => any) | undefined;
     /**
      * @docid
      * @default undefined
@@ -1569,14 +1569,14 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    template?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    template?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
      * @docid
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
+    tooltipTemplate?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: DxElement) => string | UserDefinedElement) | undefined;
 }
 
 /**
@@ -1646,14 +1646,14 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
      * @public
      */
-    barPadding?: number;
+    barPadding?: number | undefined;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.barWidth
      * @default undefined
      * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
      * @public
      */
-    barWidth?: number;
+    barWidth?: number | undefined;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.border
      * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
@@ -1665,13 +1665,13 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @default undefined
        * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.border.dashStyle
        * @default undefined
        * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
        */
-      dashStyle?: DashStyle;
+      dashStyle?: DashStyle | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.border.visible
        * @default false
@@ -1697,7 +1697,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @default undefined
      * @public
      */
-    color?: string | ChartsColor;
+    color?: string | ChartsColor | undefined;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.dashStyle
      * @default 'solid'
@@ -1726,12 +1726,12 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.color
          * @default undefined
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.dashStyle
          * @default 'solid'
          */
-        dashStyle?: DashStyle;
+        dashStyle?: DashStyle | undefined;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.visible
          * @default false
@@ -1747,7 +1747,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.color
        * @default undefined
        */
-      color?: string | ChartsColor;
+      color?: string | ChartsColor | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.dashStyle
        * @default 'solid'
@@ -1810,14 +1810,14 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @default undefined
      * @public
      */
-    maxLabelCount?: number;
+    maxLabelCount?: number | undefined;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.minBarSize
      * @default undefined
      * @propertyOf dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.barpolarseries
      * @public
      */
-    minBarSize?: number;
+    minBarSize?: number | undefined;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.opacity
      * @default 0.5
@@ -1853,12 +1853,12 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.color
          * @default undefined
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.dashStyle
          * @default 'solid'
          */
-        dashStyle?: DashStyle;
+        dashStyle?: DashStyle | undefined;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.visible
          * @default false
@@ -1874,7 +1874,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.color
        * @default undefined
        */
-      color?: string | ChartsColor;
+      color?: string | ChartsColor | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.dashStyle
        * @default 'solid'
@@ -1965,7 +1965,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.highValueField
        * @default undefined
        */
-      highValueField?: string;
+      highValueField?: string | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.lineWidth
        * @default 2
@@ -1975,17 +1975,17 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.lowValueField
        * @default undefined
        */
-      lowValueField?: string;
+      lowValueField?: string | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.opacity
        * @default undefined
        */
-      opacity?: number;
+      opacity?: number | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.type
        * @default undefined
        */
-      type?: ValueErrorBarType;
+      type?: ValueErrorBarType | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.value
        * @default 1
@@ -2020,13 +2020,13 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
      * @default undefined
      * @public
      */
-    argumentFormat?: Format;
+    argumentFormat?: Format | undefined;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.backgroundColor
      * @default undefined
      * @public
      */
-    backgroundColor?: string;
+    backgroundColor?: string | undefined;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border
      * @public
@@ -2036,12 +2036,12 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.color
        * @default  '#d3d3d3'
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.dashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyle;
+      dashStyle?: DashStyle | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.visible
        * @default false
@@ -2064,7 +2064,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
        * @default undefined
        * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.scatterpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.connector.visible
        * @default false
@@ -2097,7 +2097,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
      * @default undefined
      * @public
      */
-    format?: Format;
+    format?: Format | undefined;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.position
      * @default 'outside'
@@ -2129,7 +2129,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
      * @default undefined
      * @public
      */
-     displayFormat?: string;
+     displayFormat?: string | undefined;
 }
 /** @namespace DevExpress.viz */
 export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
@@ -2144,7 +2144,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
        * @default undefined
        * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.border.visible
        * @default false
@@ -2164,7 +2164,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
      * @public
      */
-    color?: string | ChartsColor;
+    color?: string | ChartsColor | undefined;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverMode
      * @default 'onlyPoint'
@@ -2188,7 +2188,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
          * @default undefined
          * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.border.visible
          * @default true
@@ -2207,7 +2207,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
        * @default undefined
        * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
        */
-      color?: string | ChartsColor;
+      color?: string | ChartsColor | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.size
        * @default 12
@@ -2221,7 +2221,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
      * @public
      */
-    image?: string | {
+    image?: string | undefined | {
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image.height
        * @default 30
@@ -2233,7 +2233,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
        * @default undefined
        * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
        */
-      url?: string;
+      url?: string | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image.width
        * @default 30
@@ -2264,7 +2264,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
          * @default undefined
          * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.border.visible
          * @default true
@@ -2283,7 +2283,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
        * @default undefined
        * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
        */
-      color?: string | ChartsColor;
+      color?: string | ChartsColor | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.size
        * @default 12

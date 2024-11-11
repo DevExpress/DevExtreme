@@ -261,13 +261,13 @@ export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSerie
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    tag?: any;
+    tag?: any | undefined;
 }
 /**
  * @deprecated use Properties instead
@@ -287,7 +287,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    centerTemplate?: template | ((component: dxPieChart, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    centerTemplate?: template | ((component: dxPieChart, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
      * @docid
      * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
@@ -301,7 +301,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @default undefined
      * @public
      */
-    diameter?: number;
+    diameter?: number | undefined;
     /**
      * @docid
      * @default 0.5
@@ -356,7 +356,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @inheritAll
      * @public
      */
-    series?: PieChartSeries | Array<PieChartSeries>;
+    series?: PieChartSeries | Array<PieChartSeries> | undefined;
     /**
      * @docid
      * @default undefined
@@ -379,7 +379,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @default undefined
      * @public
      */
-    sizeGroup?: string;
+    sizeGroup?: string | undefined;
     /**
      * @docid
      * @default 0
@@ -409,7 +409,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @notUsedInTheme
      * @public
      */
-    customizeAnnotation?: ((annotation: dxPieChartAnnotationConfig | any) => dxPieChartAnnotationConfig);
+    customizeAnnotation?: ((annotation: dxPieChartAnnotationConfig | any) => dxPieChartAnnotationConfig) | undefined;
 }
 
 /**
@@ -424,7 +424,7 @@ export interface dxPieChartAnnotationConfig extends dxPieChartCommonAnnotationCo
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
 }
 
 /**
@@ -445,13 +445,13 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      * @default undefined
      * @public
      */
-    argument?: number | Date | string;
+    argument?: number | Date | string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    series?: string;
+    series?: string | undefined;
     /**
      * @docid
      * @type_function_return object
@@ -459,7 +459,7 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      * @notUsedInTheme
      * @public
      */
-    customizeTooltip?: ((annotation: dxPieChartAnnotationConfig | any) => any);
+    customizeTooltip?: ((annotation: dxPieChartAnnotationConfig | any) => any) | undefined;
     /**
      * @docid
      * @default undefined
@@ -467,14 +467,14 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    template?: template | ((annotation: dxPieChartAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    template?: template | ((annotation: dxPieChartAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
      * @docid
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxPieChartAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
+    tooltipTemplate?: template | ((annotation: dxPieChartAnnotationConfig | any, element: DxElement) => string | UserDefinedElement) | undefined;
 }
 /**
  * @public
@@ -524,7 +524,7 @@ export type Legend = BaseChartLegend & {
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
 };
 /**
  * @docid
@@ -579,7 +579,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
      * @default undefined
      * @public
      */
-    argumentType?: ChartsDataType;
+    argumentType?: ChartsDataType | undefined;
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border
      * @public
@@ -589,12 +589,12 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border.color
        * @default undefined
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border.dashStyle
        * @default undefined
        */
-      dashStyle?: DashStyle;
+      dashStyle?: DashStyle | undefined;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border.visible
        * @default false
@@ -611,7 +611,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
      * @default undefined
      * @public
      */
-    color?: string | ChartsColor;
+    color?: string | ChartsColor | undefined;
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverMode
      * @default 'onlyPoint'
@@ -631,12 +631,12 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.color
            * @default undefined
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.dashStyle
            * @default undefined
            */
-          dashStyle?: DashStyle;
+          dashStyle?: DashStyle | undefined;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.visible
            * @default false
@@ -652,7 +652,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.color
        * @default undefined
        */
-      color?: string | ChartsColor;
+      color?: string | ChartsColor | undefined;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching
        */
@@ -693,12 +693,12 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentFormat
        * @default undefined
        */
-      argumentFormat?: Format;
+      argumentFormat?: Format | undefined;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.backgroundColor
        * @default undefined
        */
-      backgroundColor?: string;
+      backgroundColor?: string | undefined;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border
        */
@@ -707,12 +707,12 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.color
            * @default  '#d3d3d3'
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.dashStyle
            * @default 'solid'
            */
-          dashStyle?: DashStyle;
+          dashStyle?: DashStyle | undefined;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.visible
            * @default false
@@ -732,7 +732,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.connector.color
            * @default undefined
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.connector.visible
            * @default false
@@ -760,7 +760,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.format
        * @default undefined
        */
-      format?: Format;
+      format?: Format | undefined;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.position
        * @default 'outside'
@@ -796,20 +796,20 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @default undefined
        * @public
        */
-       displayFormat?: string;
+       displayFormat?: string | undefined;
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount
      * @default undefined
      * @public
      */
-    maxLabelCount?: number;
+    maxLabelCount?: number | undefined;
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.minSegmentSize
      * @default undefined
      * @public
      */
-    minSegmentSize?: number;
+    minSegmentSize?: number | undefined;
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionMode
      * @default 'onlyPoint'
@@ -829,12 +829,12 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.color
            * @default undefined
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.dashStyle
            * @default undefined
            */
-          dashStyle?: DashStyle;
+          dashStyle?: DashStyle | undefined;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.visible
            * @default false
@@ -850,7 +850,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.color
        * @default undefined
        */
-      color?: string | ChartsColor;
+      color?: string | ChartsColor | undefined;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching
        */
@@ -901,12 +901,12 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping.threshold
        * @default undefined
        */
-      threshold?: number;
+      threshold?: number | undefined;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping.topCount
        * @default undefined
        */
-      topCount?: number;
+      topCount?: number | undefined;
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.tagField

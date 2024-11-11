@@ -84,7 +84,7 @@ interface DxGantt extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: String,
+    accessKey: {},
     activeStateEnabled: Boolean,
     allowSelection: Boolean,
     columns: Array,
@@ -98,8 +98,8 @@ const componentConfig = {
     firstDayOfWeek: {},
     focusStateEnabled: Boolean,
     headerFilter: Object,
-    height: [Function, Number, String],
-    hint: String,
+    height: {},
+    hint: {},
     hoverStateEnabled: Boolean,
     onContentReady: Function,
     onContextMenuPreparing: Function,
@@ -155,7 +155,7 @@ const componentConfig = {
     toolbar: Object,
     validation: Object,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: {}
   },
   emits: {
     "update:isActive": null,
@@ -312,11 +312,11 @@ const DxColumnConfig = {
     calculateDisplayValue: [Function, String],
     calculateFilterExpression: Function,
     calculateSortValue: [Function, String],
-    caption: String,
+    caption: {},
     cellTemplate: {},
-    cssClass: String,
+    cssClass: {},
     customizeText: Function,
-    dataField: String,
+    dataField: {},
     dataType: {},
     encodeHtml: Boolean,
     falseText: String,
@@ -327,15 +327,15 @@ const DxColumnConfig = {
     format: {},
     headerCellTemplate: {},
     headerFilter: Object,
-    minWidth: Number,
+    minWidth: {},
     selectedFilterOperation: {},
-    sortIndex: Number,
-    sortingMethod: Function,
+    sortIndex: {},
+    sortingMethod: {},
     sortOrder: {},
     trueText: String,
     visible: Boolean,
-    visibleIndex: Number,
-    width: [Number, String]
+    visibleIndex: {},
+    width: {}
   }
 };
 
@@ -369,10 +369,10 @@ const DxColumnHeaderFilterConfig = {
     allowSelectAll: Boolean,
     dataSource: {},
     groupInterval: {},
-    height: [Number, String],
+    height: {},
     search: Object,
     searchMode: {},
-    width: [Number, String]
+    width: {}
   }
 };
 
@@ -400,7 +400,7 @@ const DxColumnHeaderFilterSearchConfig = {
     editorOptions: {},
     enabled: Boolean,
     mode: {},
-    searchExpr: [Array, Function, String],
+    searchExpr: {},
     timeout: Number
   }
 };
@@ -671,13 +671,13 @@ const DxHeaderFilterConfig = {
     allowSelectAll: Boolean,
     dataSource: {},
     groupInterval: {},
-    height: [Number, String],
+    height: {},
     search: Object,
     searchMode: {},
     searchTimeout: Number,
     texts: Object,
     visible: Boolean,
-    width: [Number, String]
+    width: {}
   }
 };
 
@@ -714,7 +714,7 @@ const DxItemConfig = {
   props: {
     beginGroup: Boolean,
     closeMenuOnClick: Boolean,
-    cssClass: String,
+    cssClass: {},
     disabled: Boolean,
     html: String,
     icon: String,
@@ -857,7 +857,7 @@ const DxSearchConfig = {
     editorOptions: {},
     enabled: Boolean,
     mode: {},
-    searchExpr: [Array, Function, String],
+    searchExpr: {},
     timeout: Number
   }
 };
@@ -903,10 +903,10 @@ const DxStripLineConfig = {
     "update:title": null,
   },
   props: {
-    cssClass: String,
-    end: [Date, Function, Number, String],
-    start: [Date, Function, Number, String],
-    title: String
+    cssClass: {},
+    end: {},
+    start: {},
+    title: {}
   }
 };
 
@@ -1009,7 +1009,7 @@ const DxToolbarItemConfig = {
     "update:widget": null,
   },
   props: {
-    cssClass: String,
+    cssClass: {},
     disabled: Boolean,
     html: String,
     locateInMenu: {},

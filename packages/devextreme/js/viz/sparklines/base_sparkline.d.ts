@@ -84,7 +84,7 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
      * @default undefined
      * @public
      */
-    contentTemplate?: template | ((pointsInfo: any, element: DxElement) => string | UserDefinedElement);
+    contentTemplate?: template | ((pointsInfo: any, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid BaseSparklineOptions.tooltip.customizeTooltip
      * @type_function_param1 pointsInfo:object
@@ -93,7 +93,7 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
      * @notUsedInTheme
      * @public
      */
-    customizeTooltip?: ((pointsInfo: any) => any);
+    customizeTooltip?: ((pointsInfo: any) => any) | undefined;
     /**
      * @docid BaseSparklineOptions.tooltip.enabled
      * @default true
