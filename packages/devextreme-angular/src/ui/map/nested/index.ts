@@ -1,5 +1,6 @@
 export * from './api-key';
 export * from './center';
+export * from './location-dxi';
 export * from './location';
 export * from './marker-dxi';
 export * from './provider-config';

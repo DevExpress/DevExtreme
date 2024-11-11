@@ -52,6 +52,7 @@ import { DxiMapMarkerModule } from 'devextreme-angular/ui/map/nested';
 import { DxoMapProviderConfigModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapRouteModule } from 'devextreme-angular/ui/map/nested';
 import { DxoMapTooltipModule } from 'devextreme-angular/ui/map/nested';
+import { DxiMapLocationModule } from 'devextreme-angular/ui/map/nested';
 
 import { DxiCenterComponent } from 'devextreme-angular/ui/nested';
 import { DxiMarkerComponent } from 'devextreme-angular/ui/nested';
@@ -770,6 +771,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     DxoMapProviderConfigModule,
     DxiMapRouteModule,
     DxoMapTooltipModule,
+    DxiMapLocationModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -792,6 +794,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     DxoMapProviderConfigModule,
     DxiMapRouteModule,
     DxoMapTooltipModule,
+    DxiMapLocationModule,
     DxTemplateModule
   ]
 })
