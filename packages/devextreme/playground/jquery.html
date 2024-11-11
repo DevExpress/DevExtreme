@@ -1,171 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <title>DevExtreme jQuery Example</title>
+    <title>DevExtreme jQuery Example</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <script type="text/javascript">
-    const currentThemeId = localStorage.getItem("currentThemeId") || "light";
+    <script type="text/javascript">
+        const currentThemeId = localStorage.getItem("currentThemeId") || "light";
 
-    const link = document.createElement("link");
-    link.href = `../artifacts/css/dx.${currentThemeId}.css`;
-    link.type = "text/css";
-    link.rel = "stylesheet";
+        const link = document.createElement("link");
+        link.href = `../artifacts/css/dx.${currentThemeId}.css`;
+        link.type = "text/css";
+        link.rel = "stylesheet";
 
-    document.getElementsByTagName("head")[0].appendChild(link);
-  </script>
-
-  <script type="module">
-    import { unified } from 'https://esm.sh/unified@11?bundle';
-    import remarkParse from 'https://esm.sh/remark-parse@11?bundle';
-    import remarkRehype from 'https://esm.sh/remark-rehype@11?bundle';
-    import rehypeRaw from 'https://esm.sh/rehype-raw@7?bundle'
-    import rehypeSanitize from 'https://esm.sh/rehype-sanitize@6?bundle'
-    import rehypeStringify from 'https://esm.sh/rehype-stringify@10?bundle';
-    import rehypeParse from 'https://esm.sh/rehype-parse@9?bundle';
-    import rehypeRemark from 'https://esm.sh/rehype-remark@10?bundle';
-    import remarkStringify from 'https://esm.sh/remark-stringify@11?bundle';
-
-    window.unified = unified;
-    window.remarkParse = remarkParse;
-    window.remarkRehype = remarkRehype;
-    window.rehypeRaw = rehypeRaw;
-    window.rehypeSanitize = rehypeSanitize;
-    window.rehypeStringify = rehypeStringify;
-    window.rehypeParse = rehypeParse;
-    window.rehypeRemark = rehypeRemark;
-    window.remarkStringify = remarkStringify;
-  </script>
-
-  <script src="https://unpkg.com/turndown@7.1.2/dist/turndown.js"></script>
-  <script src="https://unpkg.com/showdown@2.1.0/dist/showdown.js"></script>
-
-  <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
-  <!-- HtmlEditor -->
-  <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script>
-
-  <script type="text/javascript" src="../artifacts/js/cldr.js"></script>
-  <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
-  <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
-  <script type="text/javascript" src="../artifacts/js/cldr/unresolved.js"></script>
-  <script type="text/javascript" src="../artifacts/js/globalize.js"></script>
-  <script type="text/javascript" src="../artifacts/js/globalize/message.js"></script>
-  <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script>
-  <script type="text/javascript" src="../artifacts/js/globalize/currency.js"></script>
-  <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>
-
-
-  <script type="text/javascript" src="../artifacts/js/exceljs.min.js"></script>
-  <script type="text/javascript" src="../artifacts/js/FileSaver.min.js"></script>
-  <script type="text/javascript" src="../artifacts/js/jszip.min.js"></script>
-  <script type="text/javascript" src="../artifacts/js/jspdf.umd.min.js"></script>
-  <script type="text/javascript" src="../artifacts/js/jspdf.plugin.autotable.min.js"></script>
-
-
-  <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
-  <script type="text/javascript" src="./themeSelector.js"></script>
-  <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
-</head>
-
-<body class="dx-surface">
-  <div role="main">
-    <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
-
-    <select id="theme-selector" style="display: block;">
-    </select>
-    <br />
-
-    <div class="dx-viewport demo-container">
-      <div class="html-editor"></div>
-    </div>
-
-    <script>
-      $(() => {
-        const converter = {
-          toHtml(value) {
-            const result = unified()
-              .use(remarkParse)
-              .use(remarkRehype, { allowDangerousHtml: true })
-              .use(rehypeRaw)
-              .use(rehypeSanitize)
-              .use(rehypeStringify)
-              .processSync(value)
-              .toString();
-
-            return result;
-          },
-          fromHtml(value) {
-            const result = window.unified()
-              .use(rehypeParse, { fragment: true })
-              .use(rehypeRemark)
-              .use(remarkStringify)
-              .processSync(value)
-              .toString();
-
-            return result;
-          }
-        };
-
-        class ShowdownTurndownMarkdownConverter {
-          constructor() {
-            const turndown = TurndownService;
-            const showdown = window.showdown;
-
-            this.turndown = new turndown();
-
-            this.turndown.addRule('emptyLine', {
-              filter: (element) => element.nodeName.toLowerCase() === 'p' && element.innerHTML === '<br>',
-              replacement() {
-                return '<br>';
-              },
-            });
-
-            this.turndown.keep(['table']);
-
-            this.showdown = new showdown.Converter({
-              simpleLineBreaks: true,
-              strikethrough: true,
-              tables: true,
-            });
-          }
-
-          toHtml(value) {
-            let markup = this.showdown.makeHtml(value);
-
-            if (markup) {
-              markup = markup.replace(new RegExp('\\r?\\n', 'g'), '');
-            }
-
-            return markup;
-          }
-
-          fromHtml(value) {
-            const result = this.turndown.turndown(value || '');
-
-            return result;
-          }
-        }
-
-        const showdownTurndownConverter = new ShowdownTurndownMarkdownConverter();
-
-        const editorInstance = $('.html-editor').dxHtmlEditor({
-          height: 300,
-          converter,
-          // converter: showdownTurndownConverter,
-          // value: null,
-          // value: '<p><strong>value</strong></p>',
-          // value: '**value**',
-          // value: '<div>value</div>',
-          // value: '<div onclick="alert(\'XSS\')">XSS is removed by rehypeSanitize</div>',
-        }).dxHtmlEditor('instance');
-
-
-        // editorInstance.option('converter', showdownTurndownConverter);
-        // editorInstance.option('converter', converter);
-      });
+        document.getElementsByTagName("head")[0].appendChild(link);
     </script>
-  </div>
+
+    <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
+    <!-- HtmlEditor -->
+    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
+
+    <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/unresolved.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/message.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/currency.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>-->
+
+    <!--
+    <script type="text/javascript" src="../artifacts/js/exceljs.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/FileSaver.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jszip.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jspdf.umd.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jspdf.plugin.autotable.min.js"></script>
+    -->
+
+    <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./themeSelector.js"></script>
+    <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+</head>
+<body class="dx-surface">
+    <div role="main">
+        <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
+
+        <select id="theme-selector" style="display: block;">
+        </select>
+        <br />
+        <div id="button"></div>
+        <script>
+            $(function() {
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
+                });
+            });
+        </script>
+    </div>
 </body>
 </html>
