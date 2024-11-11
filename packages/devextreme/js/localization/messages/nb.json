@@ -249,6 +249,8 @@
         "dxPivotGrid-rowFieldArea": "Slipp radfelter her",
         "dxPivotGrid-filterFieldArea": "Slipp filterfelter her",
 
+        "dxScheduler-ariaLabel": "Scheduler. {0} view",
+
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 

@@ -95,6 +95,57 @@ fixture.disablePageReloads`a11y - appointment`
       ],
     });
   });
+
+  test('appointments should have accessible info about reccurence', async (t) => {
+    const scheduler = new Scheduler('#container');
+    const recurrenceIcon = scheduler.getAppointment('Website Re-Design Plan').getRecurrenceElement();
+
+    await t
+      .expect(recurrenceIcon.getAttribute('aria-label'))
+      .eql('Recurring appointment');
+  }).before(async () => {
+    await createWidget('dxScheduler', {
+      timeZone: 'America/Los_Angeles',
+      dataSource: [
+        {
+          text: 'Website Re-Design Plan',
+          startDate: new Date('2021-04-29T16:30:00.000Z'),
+          endDate: new Date('2021-04-29T18:30:00.000Z'),
+          recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10',
+        },
+      ],
+      currentView,
+      currentDate: new Date(2021, 3, 29),
+      startDayHour: 9,
+    });
+  });
+
+  test('appointments should have right role', async (t) => {
+    const scheduler = new Scheduler('#container');
+    const appt = scheduler.getAppointment('Website Re-Design Plan');
+
+    await t
+      .expect(appt.element.getAttribute('role'))
+      .eql('application');
+
+    await t
+      .expect(appt.element.getAttribute('aria-activedescendant'))
+      .eql(null);
+  }).before(async () => {
+    await createWidget('dxScheduler', {
+      timeZone: 'America/Los_Angeles',
+      dataSource: [
+        {
+          text: 'Website Re-Design Plan',
+          startDate: new Date('2021-04-29T16:30:00.000Z'),
+          endDate: new Date('2021-04-29T18:30:00.000Z'),
+        },
+      ],
+      currentView,
+      currentDate: new Date(2021, 3, 29),
+      startDayHour: 9,
+    });
+  });
 });
 
 [

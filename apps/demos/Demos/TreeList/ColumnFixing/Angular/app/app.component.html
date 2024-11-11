@@ -3,20 +3,39 @@
   [dataSource]="employees"
   keyExpr="ID"
   parentIdExpr="Head_ID"
-  [showRowLines]="true"
-  [showBorders]="true"
   [columnAutoWidth]="true"
-  [expandedRowKeys]="[1, 2, 10]"
+  [expandedRowKeys]="[1]"
+  [showBorders]="true"
+  [showRowLines]="true"
 >
   <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-
-  <dxi-column dataField="Title" caption="Position"></dxi-column>
-  <dxi-column dataField="Full_Name" [fixed]="true"></dxi-column>
+  <dxi-column
+    caption="Employee"
+    [fixed]="true"
+    [calculateCellValue]="calculateCellValue"
+  ></dxi-column>
+  <dxi-column dataField="Position" alignment="right"></dxi-column>
+  <dxi-column
+    dataField="Address"
+    [fixed]="true"
+    fixedPosition="sticky"
+  ></dxi-column>
   <dxi-column dataField="City"></dxi-column>
+  <dxi-column dataField="Zipcode"></dxi-column>
   <dxi-column dataField="State"></dxi-column>
-  <dxi-column dataField="Mobile_Phone"></dxi-column>
-  <dxi-column dataField="Email"></dxi-column>
-  <dxi-column dataField="Hire_Date" dataType="date"></dxi-column>
-  <dxi-column dataField="Birth_Date" dataType="date"></dxi-column>
+  <dxi-column
+    dataField="Department"
+    [fixed]="true"
+    fixedPosition="right"
+  ></dxi-column>
+  <dxi-column dataField="BirthDate" dataType="date"></dxi-column>
+  <dxi-column dataField="HireDate" dataType="date"></dxi-column>
+  <dxi-column dataField="HomePhone"></dxi-column>
+  <dxi-column dataField="MobilePhone"></dxi-column>
+  <dxi-column
+    dataField="Email"
+    [fixed]="true"
+    fixedPosition="sticky"
+  ></dxi-column>
   <dxi-column dataField="Skype"></dxi-column>
 </dx-tree-list>

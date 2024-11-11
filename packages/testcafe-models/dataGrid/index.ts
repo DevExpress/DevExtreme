@@ -682,7 +682,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  resizeHeader(columnIndex: number, offset: number, isRightBoundary = false): Promise<void>  {
+  resizeHeader(columnIndex: number, offset: number, needToTriggerPointerUp = true): Promise<void>  {
     const { getInstance } = this;
 
     return ClientFunction(
@@ -691,13 +691,16 @@ export default class DataGrid extends Widget {
         const $gridElement = $(gridInstance.element());
         const columnHeadersView = gridInstance.getView('columnHeadersView');
         const $header = $(columnHeadersView.getHeaderElement(columnIndex));
-        const headerOffset = $header.get(0).getBoundingClientRect();
-        const offsetX = isRightBoundary ? headerOffset.right : headerOffset.left;
+        const headerOffset = $header.offset();
+        const offsetX = headerOffset.left;
 
         triggerPointerMove($(document), offsetX, headerOffset.top + 1);
         triggerPointerDown($gridElement, offsetX, headerOffset.top + 1);
         triggerPointerMove($(document), offsetX + offset, headerOffset.top + 1);
-        triggerPointerUp($(document), offsetX + offset, headerOffset.top + 1);
+
+        if (needToTriggerPointerUp) {
+          triggerPointerUp($(document), offsetX + offset, headerOffset.top + 1);
+        }
       },
       {
         dependencies: {
@@ -707,7 +710,7 @@ export default class DataGrid extends Widget {
           triggerPointerUp,
           columnIndex,
           offset,
-          isRightBoundary,
+          needToTriggerPointerUp,
         },
       },
     )();

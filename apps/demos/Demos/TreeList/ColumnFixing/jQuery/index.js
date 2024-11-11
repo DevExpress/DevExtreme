@@ -3,25 +3,57 @@ $(() => {
     dataSource: employees,
     keyExpr: 'ID',
     parentIdExpr: 'Head_ID',
-    columns: [{
-      dataField: 'Title',
-      caption: 'Position',
-    }, {
-      dataField: 'Full_Name',
-      fixed: true,
-    }, 'City', 'State', 'Mobile_Phone', 'Email', {
-      dataField: 'Hire_Date',
-      dataType: 'date',
-    }, {
-      dataField: 'Birth_Date',
-      dataType: 'date',
-    }, 'Skype'],
     columnAutoWidth: true,
-    showRowLines: true,
     showBorders: true,
     columnFixing: {
       enabled: true,
     },
-    expandedRowKeys: [1, 2, 10],
+    showRowLines: true,
+    expandedRowKeys: [1],
+    columns: [
+      {
+        caption: 'Employee',
+        fixed: true,
+        calculateCellValue(data) {
+          return [data.Title,
+            data.FirstName, data.LastName]
+            .join(' ');
+        },
+      },
+      {
+        dataField: 'Position',
+        alignment: 'right',
+      },
+      {
+        dataField: 'Address',
+        fixed: true,
+        fixedPosition: 'sticky'
+      },
+      'City',
+      'Zipcode',
+      'State',
+      {
+        dataField: 'Department',
+        fixed: true,
+        fixedPosition: 'right',
+      },
+      {
+        dataField: 'BirthDate',
+        dataType: 'date',
+      }, {
+        dataField: 'HireDate',
+        dataType: 'date',
+      },
+      'HomePhone',
+      'MobilePhone',
+      {
+        dataField: 'Email',
+        fixed: true,
+        fixedPosition: 'sticky',
+      },
+      {
+        dataField: 'Skype',
+      },
+    ],
   });
 });

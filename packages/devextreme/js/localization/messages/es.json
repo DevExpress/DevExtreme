@@ -249,6 +249,8 @@
         "dxPivotGrid-rowFieldArea": "Arrastra campos de fila aquí",
         "dxPivotGrid-filterFieldArea": "Arrastra campos de filtro aquí",
 
+        "dxScheduler-ariaLabel": "Scheduler. {0} view",
+
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 

@@ -1,3 +1,4 @@
+import type { DxElement, UserDefinedElement } from '@js/core/element';
 import Guid from '@js/core/guid';
 import type {
   DeepPartial,
@@ -5,6 +6,7 @@ import type {
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
+import type { template } from '@js/core/templates/template';
 import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
@@ -14,7 +16,7 @@ import { isDate, isDefined } from '@js/core/utils/type';
 import type { Format } from '@js/localization';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
-import type { Message, User } from '@js/ui/chat';
+import type { Message, MessageTemplateData, User } from '@js/ui/chat';
 import ScrollView from '@js/ui/scroll_view';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -23,13 +25,20 @@ import { getScrollTopMax } from '@ts/ui/scroll_view/utils/get_scroll_top_max';
 
 import { isElementVisible } from '../splitter/utils/layout';
 import type Chat from './chat';
+import MessageBubble, { CHAT_MESSAGEBUBBLE_CLASS } from './messagebubble';
 import type { MessageGroupAlignment } from './messagegroup';
-import MessageGroup from './messagegroup';
+import MessageGroup, {
+  CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS,
+  CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS,
+  CHAT_MESSAGEGROUP_CLASS,
+  MESSAGE_DATA_KEY,
+} from './messagegroup';
 import TypingIndicator from './typingindicator';
 
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 const CHAT_MESSAGELIST_CONTENT_CLASS = 'dx-chat-messagelist-content';
 const CHAT_MESSAGELIST_EMPTY_CLASS = 'dx-chat-messagelist-empty';
+const CHAT_MESSAGELIST_EMPTY_LOADING_CLASS = 'dx-chat-messagelist-empty-loading';
 
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
@@ -37,23 +46,30 @@ const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message'
 const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
 const CHAT_MESSAGELIST_DAY_HEADER_CLASS = 'dx-chat-messagelist-day-header';
 
+const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-alignment-start';
+const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
+
 const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
 export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
 
 export interface Change {
   type: 'insert' | 'update' | 'remove';
   data?: DeepPartial<Message>;
-  key?: unknown;
+  key?: string | number;
   index?: number;
 }
+
+export type MessageTemplate =
+((data: MessageTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement)
+| template
+| null;
 
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
-  // eslint-disable-next-line
-  messageTemplate: any;
-  messageTemplateData: { component?: Chat };
+  messageTemplate?: MessageTemplate;
+  messageTemplateData?: { component?: Chat };
   dayHeaderFormat?: Format;
   messageTimestampFormat?: Format;
   typingUsers: User[];
@@ -64,8 +80,6 @@ export interface Properties extends WidgetOptions<MessageList> {
 }
 
 class MessageList extends Widget<Properties> {
-  private _messageGroups?: MessageGroup[];
-
   private _lastMessageDate?: null | string | number | Date;
 
   private _containerClientHeight!: number;
@@ -99,7 +113,6 @@ class MessageList extends Widget<Properties> {
   _init(): void {
     super._init();
 
-    this._messageGroups = [];
     this._lastMessageDate = null;
   }
 
@@ -110,7 +123,7 @@ class MessageList extends Widget<Properties> {
 
     this._renderScrollView();
     this._renderMessageListContent();
-    this._renderEmptyView();
+    this._toggleEmptyView();
     this._renderMessageGroups();
     this._renderTypingIndicator();
 
@@ -193,11 +206,6 @@ class MessageList extends Widget<Properties> {
     });
   }
 
-  _removeEmptyView(): void {
-    this.$element().removeClass(CHAT_MESSAGELIST_EMPTY_CLASS);
-    this._$content.empty();
-  }
-
   _isEmpty(): boolean {
     const { items } = this.option();
 
@@ -226,7 +234,7 @@ class MessageList extends Widget<Properties> {
 
     const $messageGroup = $('<div>').appendTo(this._$content);
 
-    const messageGroup = this._createComponent($messageGroup, MessageGroup, {
+    this._createComponent($messageGroup, MessageGroup, {
       items,
       alignment: this._messageGroupAlignment(userId),
       showAvatar,
@@ -236,8 +244,6 @@ class MessageList extends Widget<Properties> {
       messageTemplateData,
       messageTimestampFormat,
     });
-
-    this._messageGroups?.push(messageGroup);
   }
 
   _renderScrollView(): void {
@@ -297,6 +303,8 @@ class MessageList extends Widget<Properties> {
       return;
     }
 
+    this.$element().toggleClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS, this._isEmpty() && isLoading);
+
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._scrollView.release(!isLoading);
   }
@@ -307,10 +315,14 @@ class MessageList extends Widget<Properties> {
       .appendTo(this._$scrollViewContent());
   }
 
-  _renderEmptyView(): void {
+  _toggleEmptyView(): void {
+    this._getEmptyView().remove();
+
     const { isLoading } = this.option();
 
-    this.$element().toggleClass(CHAT_MESSAGELIST_EMPTY_CLASS, this._isEmpty() && !isLoading);
+    this.$element()
+      .toggleClass(CHAT_MESSAGELIST_EMPTY_CLASS, this._isEmpty() && !isLoading)
+      .toggleClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS, this._isEmpty() && isLoading);
 
     if (this._isEmpty() && !isLoading) {
       this._renderEmptyViewContent();
@@ -361,14 +373,40 @@ class MessageList extends Widget<Properties> {
       }
     });
 
+    this._setLastMessageGroupClasses();
     // @ts-expect-error
     this._updateLoadingState(isLoading);
+  }
+
+  _setLastMessageGroupClasses(): void {
+    this._$content
+      .find(`.${CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS}`)
+      .removeClass(CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS);
+    this._$content
+      .find(`.${CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS}`)
+      .removeClass(CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS);
+
+    const $lastAlignmentStartGroup = this._$content.find(`.${CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS}`).last();
+    const $lastAlignmentEndGroup = this._$content.find(`.${CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS}`).last();
+
+    $lastAlignmentStartGroup.addClass(CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS);
+    $lastAlignmentEndGroup.addClass(CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS);
+  }
+
+  _getLastMessageGroup(): MessageGroup | undefined {
+    const $lastMessageGroup = this._$content.find(`.${CHAT_MESSAGEGROUP_CLASS}`).last();
+
+    if ($lastMessageGroup.length) {
+      return MessageGroup.getInstance($lastMessageGroup) as MessageGroup;
+    }
+
+    return undefined;
   }
 
   _renderMessage(message: Message): void {
     const { author, timestamp } = message;
 
-    const lastMessageGroup = this._messageGroups?.at(-1);
+    const lastMessageGroup = this._getLastMessageGroup();
     const shouldCreateDayHeader = this._shouldAddDayHeader(timestamp);
 
     if (lastMessageGroup) {
@@ -391,8 +429,83 @@ class MessageList extends Widget<Properties> {
     }
 
     this._createMessageGroupComponent([message], author?.id);
+    this._setLastMessageGroupClasses();
 
     this._scrollDownContent();
+  }
+
+  _getMessageData(message: Element): Message {
+    // @ts-expect-error
+    return $(message).data(MESSAGE_DATA_KEY);
+  }
+
+  _findMessageElementByKey(key: string | number): dxElementWrapper {
+    const $bubbles = this.$element().find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
+
+    let result = $();
+
+    $bubbles.each((_, item) => {
+      const messageData = this._getMessageData(item);
+
+      if (messageData.id === key) {
+        result = $(item);
+        return false;
+      }
+
+      return true;
+    });
+
+    return result;
+  }
+
+  _updateMessageByKey(key: string | number | undefined, data: Message): void {
+    if (key) {
+      const $targetMessage = this._findMessageElementByKey(key);
+
+      const bubble = MessageBubble.getInstance($targetMessage);
+      bubble.option('text', data.text);
+    }
+  }
+
+  _removeMessageByKey(key: string | number | undefined): void {
+    if (!key) {
+      return;
+    }
+
+    const $targetMessage = this._findMessageElementByKey(key);
+
+    if (!$targetMessage.length) {
+      return;
+    }
+
+    const $currentMessageGroup = $targetMessage.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);
+
+    const group: MessageGroup = MessageGroup.getInstance($currentMessageGroup);
+
+    const { items } = group.option();
+    const newItems = items.filter((item) => item.id !== key);
+
+    if (newItems.length === 0) {
+      const { showDayHeaders } = this.option();
+
+      if (showDayHeaders) {
+        const $prev = group.$element().prev();
+        const $next = group.$element().next();
+
+        const shouldRemoveDayHeader = $prev.length
+          && $prev.hasClass(CHAT_MESSAGELIST_DAY_HEADER_CLASS)
+          && (($next.length && $next.hasClass(CHAT_MESSAGELIST_DAY_HEADER_CLASS)) || !$next.length);
+
+        if (shouldRemoveDayHeader) {
+          $prev.remove();
+        }
+      }
+      group.$element().remove();
+    } else {
+      group.option('items', newItems);
+    }
+
+    this._setLastMessageGroupClasses();
   }
 
   _scrollDownContent(): void {
@@ -432,9 +545,7 @@ class MessageList extends Widget<Properties> {
     if (shouldItemsBeUpdatedCompletely) {
       this._invalidate();
     } else {
-      if (!previousValue.length) {
-        this._removeEmptyView();
-      }
+      this._toggleEmptyView();
 
       const newMessage = value[value.length - 1];
 
@@ -494,8 +605,11 @@ class MessageList extends Widget<Properties> {
     return $(this._scrollView.content());
   }
 
+  _getEmptyView(): dxElementWrapper {
+    return this._$content.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
+  }
+
   _clean(): void {
-    this._messageGroups = [];
     this._lastMessageDate = null;
 
     super._clean();
@@ -504,13 +618,16 @@ class MessageList extends Widget<Properties> {
   _modifyByChanges(changes: Change[]): void {
     changes.forEach((change) => {
       switch (change.type) {
-        case 'update': {
+        case 'update':
+          this._updateMessageByKey(change.key, change.data ?? {});
+          break;
+        case 'insert': {
+          const { items } = this.option();
+          this.option('items', [...items, change.data ?? {}]);
           break;
         }
-        case 'insert':
-          this._renderMessage(change.data ?? {});
-          break;
         case 'remove':
+          this._removeMessageByKey(change.key);
           break;
         default:
           break;
@@ -541,6 +658,7 @@ class MessageList extends Widget<Properties> {
         this._processScrollDownContent();
         break;
       case 'isLoading':
+        this._updateLoadingState(!!value);
         break;
       default:
         super._optionChanged(args);
@@ -549,7 +667,7 @@ class MessageList extends Widget<Properties> {
 
   getEmptyViewId(): string | null {
     if (this._isEmpty()) {
-      const $emptyView = this._$content.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
+      const $emptyView = this._getEmptyView();
       const emptyViewId = $emptyView.attr('id') ?? null;
 
       return emptyViewId;

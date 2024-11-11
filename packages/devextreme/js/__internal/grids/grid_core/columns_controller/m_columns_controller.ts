@@ -502,6 +502,7 @@ export class ColumnsController extends modules.Controller {
     return 0;
   }
 
+  // TODO: Need to rename this method to getFixedColumns after removing old fixed columns implementation
   public getStickyColumns(rowIndex?: number): any[] {
     const visibleColumns = this.getVisibleColumns(rowIndex, true);
 
@@ -1861,6 +1862,10 @@ export class ColumnsController extends modules.Controller {
     }
 
     return columnAlignment;
+  }
+
+  public isVirtualMode(): boolean {
+    return false;
   }
 }
 

@@ -7,7 +7,6 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
-import './chatParts/header.markup.tests.js';
 import './chatParts/avatar.markup.tests.js';
 import './chatParts/messageBox.markup.tests.js';
 import './chatParts/messageBubble.markup.tests.js';

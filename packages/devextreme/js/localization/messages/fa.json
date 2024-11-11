@@ -249,6 +249,8 @@
         "dxPivotGrid-rowFieldArea": "فیلدهای مربوط به سطر را به اینجا انتقال دهید (درگ نمایید)",
         "dxPivotGrid-filterFieldArea": "فیلدهای مربوط به فیلتر را به اینجا انتقال دهید (درگ نمایید)",
 
+        "dxScheduler-ariaLabel": "Scheduler. {0} view",
+
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 

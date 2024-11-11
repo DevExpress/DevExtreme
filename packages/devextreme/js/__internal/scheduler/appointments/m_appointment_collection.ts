@@ -328,6 +328,10 @@ class SchedulerAppointments extends CollectionWidget {
     }
   }
 
+  _refreshActiveDescendant() {
+    // override to do nothing
+  }
+
   _attachAppointmentsEvents() {
     (this as any)._attachClickEvent();
     (this as any)._attachHoldEvent();

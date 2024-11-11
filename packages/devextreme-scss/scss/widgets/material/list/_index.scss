@@ -161,6 +161,15 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
       .dx-list-item {
         @include item-states();
       }
+
+      .dx-list-group-header {
+        @include item-states();
+
+        &.dx-state-hover {
+          background-color: $list-item-hover-bg;
+          color: $list-item-hover-color;
+        }
+      }
     }
   }
 

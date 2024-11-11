@@ -249,6 +249,8 @@
         "dxPivotGrid-rowFieldArea": "Zde vložte pole řádků",
         "dxPivotGrid-filterFieldArea": "Zde vložte filtr pole",
 
+        "dxScheduler-ariaLabel": "Scheduler. {0} view",
+
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 

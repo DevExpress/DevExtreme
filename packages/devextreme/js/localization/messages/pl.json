@@ -249,6 +249,8 @@
         "dxPivotGrid-rowFieldArea": "Przeciągnij pola wiersza/-y tutaj",
         "dxPivotGrid-filterFieldArea": "Przeciągnij pola filtra tutaj",
 
+        "dxScheduler-ariaLabel": "Scheduler. {0} view",
+
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 

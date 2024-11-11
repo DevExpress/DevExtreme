@@ -31,7 +31,7 @@ import { triggerResizeEvent } from '@js/events/visibility_change';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
 import { custom as customDialog } from '@js/ui/dialog';
-import type { AppointmentTooltipShowingEvent } from '@js/ui/scheduler';
+import type { AppointmentTooltipShowingEvent, ViewType } from '@js/ui/scheduler';
 import { isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
@@ -582,6 +582,7 @@ class Scheduler extends Widget<any> {
         this._header?.option(name, value);
         break;
       case 'currentView':
+        this._renderAriaAttributes();
         this._appointments.option({
           items: [],
           allowDrag: this._allowDragging(),
@@ -1305,11 +1306,42 @@ class Scheduler extends Widget<any> {
 
   _renderFocusTarget() { return noop(); }
 
+  _renderAriaAttributes() {
+    const viewTypeLocalization: Record<ViewType, string> = {
+      agenda: 'dxScheduler-switcherAgenda',
+      day: 'dxScheduler-switcherDay',
+      month: 'dxScheduler-switcherMonth',
+      week: 'dxScheduler-switcherWeek',
+      workWeek: 'dxScheduler-switcherWorkWeek',
+      timelineDay: 'dxScheduler-switcherTimelineDay',
+      timelineMonth: 'dxScheduler-switcherTimelineMonth',
+      timelineWeek: 'dxScheduler-switcherTimelineWeek',
+      timelineWorkWeek: 'dxScheduler-switcherTimelineWorkWeek',
+    };
+
+    const viewTypeLabel = messageLocalization.format(
+      viewTypeLocalization[this.currentViewType],
+    );
+
+    const label = messageLocalization.format(
+      'dxScheduler-ariaLabel',
+      // @ts-expect-error
+      viewTypeLabel,
+    );
+
+    // @ts-expect-error
+    this.setAria({
+      label,
+      role: 'group',
+    });
+  }
+
   _initMarkup() {
     // @ts-expect-error
     super._initMarkup();
 
     this._renderMainContainer();
+    this._renderAriaAttributes();
 
     this._renderHeader();
 

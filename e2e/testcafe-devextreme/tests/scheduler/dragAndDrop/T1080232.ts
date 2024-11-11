@@ -19,7 +19,7 @@ test('it should correctly drag external item to the appointment after drag appoi
     .expect((await appt01.element.boundingClientRect).top)
     .eql(208)
     .dragToElement(dragItem, appt02.element, { speed: 0.5 })
-    .expect(appt02.element.innerText)
+    .expect(appt02.element.find('.dx-item-content').getAttribute('data-status'))
     .eql('Added');
 }).before(async () => {
   await appendElementTo('#container', 'div', 'list');
@@ -72,7 +72,7 @@ test('it should correctly drag external item to the appointment after drag appoi
           group: 'resourceGroup',
           data: [newData],
           onAdd: () => {
-            element.text('Added');
+            element.attr('data-status', 'Added');
           },
         });
     },

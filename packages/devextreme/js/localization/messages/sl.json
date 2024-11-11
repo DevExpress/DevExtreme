@@ -249,6 +249,8 @@
         "dxPivotGrid-rowFieldArea": "Povleci vrstice tukaj",
         "dxPivotGrid-filterFieldArea": "Povleci filtre tukaj",
 
+        "dxScheduler-ariaLabel": "Scheduler. {0} view",
+
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 

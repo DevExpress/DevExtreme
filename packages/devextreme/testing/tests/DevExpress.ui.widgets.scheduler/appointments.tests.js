@@ -549,7 +549,7 @@ QUnit.module('Appointments', moduleOptions, () => {
         assert.strictEqual(deltaTime, -1800000, 'Delta time is OK');
     });
 
-    QUnit.test('Scheduler appointment should have aria-role \'button\'', function(assert) {
+    QUnit.test('Scheduler appointment should have aria-role \'application\'', function(assert) {
         const item = {
             itemData: {
                 text: 'Appointment 1',
@@ -565,7 +565,7 @@ QUnit.module('Appointments', moduleOptions, () => {
 
         const $appointment = instance.$element().find('.dx-scheduler-appointment');
 
-        assert.equal($appointment.attr('role'), 'button', 'role is right');
+        assert.equal($appointment.attr('role'), 'application', 'role is right');
     });
 
     QUnit.test('Split appointment by day', function(assert) {
