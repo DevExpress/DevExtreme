@@ -9,6 +9,8 @@ import {
     Host,
     SkipSelf,
     Input,
+    Output,
+    EventEmitter,
     ContentChildren,
     forwardRef,
     QueryList
@@ -310,6 +312,12 @@ export class DxoPolarChartValueAxisComponent extends NestedOption implements OnD
     }
 
 
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() visualRangeChange: EventEmitter<Array<Date | number | string> | CommonChartTypes.VisualRange>;
     protected get _optionPath() {
         return 'valueAxis';
     }
@@ -334,6 +342,11 @@ export class DxoPolarChartValueAxisComponent extends NestedOption implements OnD
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
+
+        this._createEventEmitters([
+            { emit: 'visualRangeChange' }
+        ]);
+
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

@@ -6,7 +6,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    Output,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -288,6 +290,54 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
 
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() filterValueChange: EventEmitter<any | undefined>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() filterValuesChange: EventEmitter<Array<any>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() selectedFilterOperationChange: EventEmitter<SelectedFilterOperation | undefined>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() sortIndexChange: EventEmitter<number | undefined>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() sortOrderChange: EventEmitter<SortOrder | undefined>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() visibleChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() visibleIndexChange: EventEmitter<number | undefined>;
     protected get _optionPath() {
         return 'columns';
     }
@@ -296,6 +346,17 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
+
+        this._createEventEmitters([
+            { emit: 'filterValueChange' },
+            { emit: 'filterValuesChange' },
+            { emit: 'selectedFilterOperationChange' },
+            { emit: 'sortIndexChange' },
+            { emit: 'sortOrderChange' },
+            { emit: 'visibleChange' },
+            { emit: 'visibleIndexChange' }
+        ]);
+
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

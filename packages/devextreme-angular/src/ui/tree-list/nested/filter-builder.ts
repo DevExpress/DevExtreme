@@ -9,6 +9,8 @@ import {
     Host,
     SkipSelf,
     Input,
+    Output,
+    EventEmitter,
     ContentChildren,
     forwardRef,
     QueryList
@@ -259,6 +261,12 @@ export class DxoTreeListFilterBuilderComponent extends NestedOption implements O
     }
 
 
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() valueChange: EventEmitter<Array<any> | (() => any) | string>;
     protected get _optionPath() {
         return 'filterBuilder';
     }
@@ -283,6 +291,11 @@ export class DxoTreeListFilterBuilderComponent extends NestedOption implements O
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
+
+        this._createEventEmitters([
+            { emit: 'valueChange' }
+        ]);
+
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

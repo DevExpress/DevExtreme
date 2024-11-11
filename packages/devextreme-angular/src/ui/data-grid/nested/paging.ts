@@ -8,7 +8,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    Output,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -53,6 +55,19 @@ export class DxoDataGridPagingComponent extends NestedOption implements OnDestro
     }
 
 
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() pageIndexChange: EventEmitter<number>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() pageSizeChange: EventEmitter<number>;
     protected get _optionPath() {
         return 'paging';
     }
@@ -61,6 +76,12 @@ export class DxoDataGridPagingComponent extends NestedOption implements OnDestro
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
+
+        this._createEventEmitters([
+            { emit: 'pageIndexChange' },
+            { emit: 'pageSizeChange' }
+        ]);
+
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

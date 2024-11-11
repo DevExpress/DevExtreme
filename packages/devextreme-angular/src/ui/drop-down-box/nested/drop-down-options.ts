@@ -9,6 +9,8 @@ import {
     Host,
     SkipSelf,
     Input,
+    Output,
+    EventEmitter,
     ContentChildren,
     forwardRef,
     QueryList
@@ -442,6 +444,33 @@ export class DxoDropDownBoxDropDownOptionsComponent extends NestedOption impleme
     }
 
 
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() positionChange: EventEmitter<Function | PositionAlignment | PositionConfig>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() visibleChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
     protected get _optionPath() {
         return 'dropDownOptions';
     }
@@ -458,6 +487,14 @@ export class DxoDropDownBoxDropDownOptionsComponent extends NestedOption impleme
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
+
+        this._createEventEmitters([
+            { emit: 'heightChange' },
+            { emit: 'positionChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' }
+        ]);
+
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

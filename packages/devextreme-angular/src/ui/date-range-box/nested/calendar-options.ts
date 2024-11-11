@@ -8,7 +8,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    Output,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -359,6 +361,19 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     }
 
 
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() valueChange: EventEmitter<Array<Date | number | string> | Date | number | string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() zoomLevelChange: EventEmitter<CalendarZoomLevel>;
     protected get _optionPath() {
         return 'calendarOptions';
     }
@@ -367,6 +382,12 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
+
+        this._createEventEmitters([
+            { emit: 'valueChange' },
+            { emit: 'zoomLevelChange' }
+        ]);
+
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

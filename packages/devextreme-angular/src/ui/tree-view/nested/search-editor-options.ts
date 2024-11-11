@@ -9,6 +9,8 @@ import {
     Host,
     SkipSelf,
     Input,
+    Output,
+    EventEmitter,
     ContentChildren,
     forwardRef,
     QueryList
@@ -483,6 +485,12 @@ export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implem
     }
 
 
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() valueChange: EventEmitter<string>;
     protected get _optionPath() {
         return 'searchEditorOptions';
     }
@@ -499,6 +507,11 @@ export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implem
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
+
+        this._createEventEmitters([
+            { emit: 'valueChange' }
+        ]);
+
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

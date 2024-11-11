@@ -9,6 +9,8 @@ import {
     Host,
     SkipSelf,
     Input,
+    Output,
+    EventEmitter,
     ContentChildren,
     forwardRef,
     QueryList
@@ -158,6 +160,26 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
     }
 
 
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() changesChange: EventEmitter<Array<DataChange>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() editColumnNameChange: EventEmitter<string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() editRowKeyChange: EventEmitter<any>;
     protected get _optionPath() {
         return 'editing';
     }
@@ -174,6 +196,13 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
+
+        this._createEventEmitters([
+            { emit: 'changesChange' },
+            { emit: 'editColumnNameChange' },
+            { emit: 'editRowKeyChange' }
+        ]);
+
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

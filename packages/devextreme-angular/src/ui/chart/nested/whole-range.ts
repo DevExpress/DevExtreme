@@ -8,7 +8,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    Output,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -54,6 +56,19 @@ export class DxoChartWholeRangeComponent extends NestedOption implements OnDestr
     }
 
 
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() endValueChange: EventEmitter<Date | number | string | undefined>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() startValueChange: EventEmitter<Date | number | string | undefined>;
     protected get _optionPath() {
         return 'wholeRange';
     }
@@ -62,6 +77,12 @@ export class DxoChartWholeRangeComponent extends NestedOption implements OnDestr
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
+
+        this._createEventEmitters([
+            { emit: 'endValueChange' },
+            { emit: 'startValueChange' }
+        ]);
+
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

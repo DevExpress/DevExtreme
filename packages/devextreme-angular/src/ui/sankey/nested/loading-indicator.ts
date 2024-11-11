@@ -8,7 +8,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    Output,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -70,6 +72,12 @@ export class DxoSankeyLoadingIndicatorComponent extends NestedOption implements 
     }
 
 
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() showChange: EventEmitter<boolean>;
     protected get _optionPath() {
         return 'loadingIndicator';
     }
@@ -78,6 +86,11 @@ export class DxoSankeyLoadingIndicatorComponent extends NestedOption implements 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
+
+        this._createEventEmitters([
+            { emit: 'showChange' }
+        ]);
+
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

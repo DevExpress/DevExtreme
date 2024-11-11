@@ -9,6 +9,8 @@ import {
     Host,
     SkipSelf,
     Input,
+    Output,
+    EventEmitter,
     ContentChildren,
     forwardRef,
     QueryList
@@ -399,6 +401,26 @@ export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnD
     }
 
 
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() itemsChange: EventEmitter<Array<any | dxTabPanelItem | string>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() selectedIndexChange: EventEmitter<number>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() selectedItemChange: EventEmitter<any>;
     protected get _optionPath() {
         return 'tabPanelOptions';
     }
@@ -423,6 +445,13 @@ export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnD
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
+
+        this._createEventEmitters([
+            { emit: 'itemsChange' },
+            { emit: 'selectedIndexChange' },
+            { emit: 'selectedItemChange' }
+        ]);
+
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

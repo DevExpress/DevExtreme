@@ -8,7 +8,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    Output,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -359,6 +361,12 @@ export class DxoDataGridFormComponent extends NestedOption implements OnDestroy,
     }
 
 
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() formDataChange: EventEmitter<any>;
     protected get _optionPath() {
         return 'form';
     }
@@ -367,6 +375,11 @@ export class DxoDataGridFormComponent extends NestedOption implements OnDestroy,
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
+
+        this._createEventEmitters([
+            { emit: 'formDataChange' }
+        ]);
+
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }
