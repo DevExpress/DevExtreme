@@ -62,6 +62,7 @@ export class Table extends BaseInfernoComponent<TableProps> {
         ref={tableRef}
         className={className}
         style={normalizeStyles(resultStyles)}
+        aria-hidden
       >
         <tbody>
         {

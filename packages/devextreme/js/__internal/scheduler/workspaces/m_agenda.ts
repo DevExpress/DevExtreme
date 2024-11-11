@@ -139,8 +139,8 @@ class SchedulerAgenda extends WorkSpace {
 
   _initWorkSpaceUnits() {
     this._initGroupTable();
-    this._$timePanel = $('<table>').addClass(TIME_PANEL_CLASS);
-    this._$dateTable = $('<table>').addClass(DATE_TABLE_CLASS);
+    this._$timePanel = $('<table>').attr('aria-hidden', true).addClass(TIME_PANEL_CLASS);
+    this._$dateTable = $('<table>').attr('aria-hidden', true).addClass(DATE_TABLE_CLASS);
     this._$dateTableScrollableContent = $('<div>').addClass('dx-scheduler-date-table-scrollable-content');
     this._$dateTableContainer = $('<div>').addClass('dx-scheduler-date-table-container');
   }
@@ -148,7 +148,7 @@ class SchedulerAgenda extends WorkSpace {
   _initGroupTable() {
     const groups = this.option('groups');
     if (groups && groups.length) {
-      this._$groupTable = $('<table>').addClass(GROUP_TABLE_CLASS);
+      this._$groupTable = $('<table>').attr('aria-hidden', true).addClass(GROUP_TABLE_CLASS);
     }
   }
 
