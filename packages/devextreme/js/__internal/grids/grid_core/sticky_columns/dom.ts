@@ -279,6 +279,7 @@ const noNeedToCreateReorderingPoint = (
     isRightBoundary: boolean | undefined;
   } = point;
   const $item = $(item);
+  const pointX = Math.round(point.x);
   const isSplitPoint = isDefined(isLeftBoundary) || isDefined(isRightBoundary);
   const nonFixedAreaBoundingRect = getNonFixedAreaBoundingRect($cells, $container, addWidgetPrefix);
 
@@ -290,7 +291,7 @@ const noNeedToCreateReorderingPoint = (
     return isSplitPoint && !isRightBoundary;
   }
 
-  return point.x < nonFixedAreaBoundingRect.left || point.x > nonFixedAreaBoundingRect.right;
+  return pointX < nonFixedAreaBoundingRect.left || pointX > nonFixedAreaBoundingRect.right;
 };
 
 const doesGroupCellEndInFirstColumn = ($groupCell): boolean => {
