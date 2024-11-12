@@ -184,8 +184,9 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
   protected setStickyOffsets(rowIndex?: number, offsets?: Record<number, Record<string, number>>): void {
     const columnsController = this._columnsController;
     const rtlEnabled = this.option('rtlEnabled') as boolean;
+    const showColumnHeaders = this.option('showColumnHeaders');
     let widths = this.getColumnWidths(undefined, rowIndex);
-    let columns = this.getColumns(rowIndex);
+    let columns = this.getColumns(showColumnHeaders ? rowIndex : undefined);
 
     columns = processFixedColumns(this._columnsController, columns);
 
