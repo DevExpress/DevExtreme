@@ -243,10 +243,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get messageTemplate(): any {
+    get messageTemplate(): null {
         return this._getOption('messageTemplate');
     }
-    set messageTemplate(value: any) {
+    set messageTemplate(value: null) {
         this._setOption('messageTemplate', value);
     }
 
@@ -530,7 +530,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() messageTemplateChange: EventEmitter<any>;
+    @Output() messageTemplateChange: EventEmitter<null>;
 
     /**
     

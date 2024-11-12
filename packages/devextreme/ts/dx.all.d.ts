@@ -9607,6 +9607,7 @@ declare module DevExpress.ui {
      */
     messageTemplate?:
       | DevExpress.core.template
+      | null
       | ((
           data: DevExpress.ui.dxChat.MessageTemplateData,
           messageBubbleElement: DevExpress.core.DxElement
