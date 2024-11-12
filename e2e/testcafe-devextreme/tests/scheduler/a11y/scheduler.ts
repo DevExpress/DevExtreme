@@ -27,3 +27,21 @@ test('Scheduler should have right aria attributes', async (t) => {
     currentView: 'month',
   });
 });
+
+test('Scheduler table elements have right aria attributes', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  const tables = scheduler.element.find('table');
+  await t.expect(tables.count).eql(4);
+
+  for (let i = 0; i < await tables.count; i += 1) {
+    await t.expect(
+      tables.nth(i).getAttribute('aria-hidden'),
+    ).eql('true');
+  }
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    dataSource: [],
+    currentView: 'month',
+  });
+});
