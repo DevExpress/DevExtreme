@@ -568,5 +568,5 @@ export const employees = [
     HomePhone: '5625559248',
     Department: 'Human Resources',
     MobilePhone: '5625559282',
-  }
+  },
 ];
