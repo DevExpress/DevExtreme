@@ -1,6 +1,8 @@
 export type Employee = {
   ID: number;
 
+  Head_ID: number;
+
   FirstName: string;
 
   LastName: string;
@@ -19,6 +21,8 @@ export type Employee = {
 
   State: string;
 
+  Zipcode: number;
+
   Email: string;
 
   Skype: string;
@@ -27,11 +31,14 @@ export type Employee = {
 
   DepartmentID: number;
 
+  Department: string;
+
   MobilePhone: string;
 };
 
 export const employees: Employee[] = [{
   ID: 1,
+  Head_ID: 0,
   FirstName: 'John',
   LastName: 'Heart',
   Position: 'CEO',
@@ -41,13 +48,16 @@ export const employees: Employee[] = [{
   Address: '351 S Hill St.',
   City: 'Los Angeles',
   State: 'California',
+  Zipcode: 90013,
   Email: 'jheart@dx-email.com',
   Skype: 'jheartDXskype',
   HomePhone: '(213) 555-9208',
   DepartmentID: 6,
+  Department: 'Management',
   MobilePhone: '(213) 555-9392',
 }, {
   ID: 2,
+  Head_ID: 1,
   FirstName: 'Olivia',
   LastName: 'Peyton',
   Position: 'Sales Assistant',
@@ -57,13 +67,16 @@ export const employees: Employee[] = [{
   Address: '807 W Paseo Del Mar',
   City: 'Los Angeles',
   State: 'California',
+  Zipcode: 90036,
   Email: 'oliviap@dx-email.com',
   Skype: 'oliviapDXskype',
   HomePhone: '(310) 555-2728',
   DepartmentID: 5,
+  Department: 'Human Resources',
   MobilePhone: '(818) 555-2387',
 }, {
   ID: 3,
+  Head_ID: 1,
   FirstName: 'Robert',
   LastName: 'Reagan',
   Position: 'CMO',
@@ -73,13 +86,16 @@ export const employees: Employee[] = [{
   Address: '4 Westmoreland Pl.',
   City: 'Bentonville',
   State: 'Arkansas',
+  Zipcode: 91103,
   Email: 'robertr@dx-email.com',
   Skype: 'robertrDXskype',
   HomePhone: '(818) 555-2438',
   DepartmentID: 6,
+  Department: 'Management',
   MobilePhone: '(818) 555-2387',
 }, {
   ID: 4,
+  Head_ID: 1,
   FirstName: 'Greta',
   LastName: 'Sims',
   Position: 'HR Manager',
@@ -89,13 +105,16 @@ export const employees: Employee[] = [{
   Address: '1700 S Grandview Dr.',
   State: 'Georgia',
   City: 'Atlanta',
+  Zipcode: 91803,
   Email: 'gretas@dx-email.com',
   Skype: 'gretasDXskype',
   HomePhone: '(818) 555-0976',
   DepartmentID: 5,
+  Department: 'Human Resources',
   MobilePhone: '(818) 555-6546',
 }, {
   ID: 5,
+  Head_ID: 1,
   FirstName: 'Brett',
   LastName: 'Wade',
   Position: 'IT Manager',
@@ -105,13 +124,16 @@ export const employees: Employee[] = [{
   Address: '1120 Old Mill Rd.',
   State: 'Idaho',
   City: 'Boise',
+  Zipcode: 91108,
   Email: 'brettw@dx-email.com',
   Skype: 'brettwDXskype',
   HomePhone: '(626) 555-5985',
   DepartmentID: 7,
+  Department: 'IT',
   MobilePhone: '(626) 555-0358',
 }, {
   ID: 6,
+  Head_ID: 3,
   FirstName: 'Sandra',
   LastName: 'Johnson',
   Position: 'Controller',
@@ -121,13 +143,16 @@ export const employees: Employee[] = [{
   Address: '4600 N Virginia Rd.',
   State: 'Utah',
   City: 'Beaver',
+  Zipcode: 90807,
   Email: 'sandraj@dx-email.com',
   Skype: 'sandrajDXskype',
   HomePhone: '(562) 555-8272',
   DepartmentID: 5,
+  Department: 'Human Resources',
   MobilePhone: '(562) 555-2082',
 }, {
   ID: 7,
+  Head_ID: 7,
   FirstName: 'Kevin',
   LastName: 'Carter',
   Position: 'Shipping Manager',
@@ -137,13 +162,16 @@ export const employees: Employee[] = [{
   Address: '424 N Main St.',
   State: 'California',
   City: 'San Diego',
+  Zipcode: 90012,
   Email: 'kevinc@dx-email.com',
   Skype: 'kevincDXskype',
   HomePhone: '(213) 555-8038',
   DepartmentID: 3,
+  Department: 'Shipping',
   MobilePhone: '(213) 555-2840',
 }, {
   ID: 8,
+  Head_ID: 4,
   FirstName: 'Cynthia',
   LastName: 'Stanwick',
   Position: 'HR Assistant',
@@ -153,13 +181,16 @@ export const employees: Employee[] = [{
   Address: '2211 Bonita Dr.',
   City: 'Little Rock',
   State: 'Arkansas',
+  Zipcode: 90265,
   Email: 'cindys@dx-email.com',
   Skype: 'cindysDXskype',
   HomePhone: '(818) 555-6808',
   DepartmentID: 4,
+  Department: 'Engineering',
   MobilePhone: '(818) 555-6655',
 }, {
   ID: 9,
+  Head_ID: 3,
   FirstName: 'Kent',
   LastName: 'Samuelson',
   Position: 'Ombudsman',
@@ -169,13 +200,16 @@ export const employees: Employee[] = [{
   Address: '12100 Mora Dr',
   City: 'St. Louis',
   State: 'Missouri',
+  Zipcode: 90272,
   Email: 'kents@dx-email.com',
   Skype: 'kentsDXskype',
   HomePhone: '(562) 555-1328',
   DepartmentID: 26,
+  Department: 'Human Resources',
   MobilePhone: '(562) 555-9282',
 }, {
   ID: 10,
+  Head_ID: 2,
   FirstName: 'Taylor',
   LastName: 'Riley',
   Position: 'Network Admin',
@@ -185,9 +219,11 @@ export const employees: Employee[] = [{
   Address: '7776 Torreyson Dr',
   City: 'San Jose',
   State: 'California',
+  Zipcode: 90012,
   Email: 'taylorr@dx-email.com',
   Skype: 'taylorrDXskype',
   HomePhone: '(310) 555-9712',
   DepartmentID: 5,
+  Department: 'Human Resources',
   MobilePhone: '(310) 555-7276',
 }];

@@ -17,31 +17,40 @@ $(() => {
             data.FirstName, data.LastName]
             .join(' ');
         },
-      }, {
-        dataField: 'BirthDate',
-        dataType: 'date',
-      }, {
-        dataField: 'HireDate',
-        dataType: 'date',
-      }, {
+      },
+      {
         dataField: 'Position',
         alignment: 'right',
-      }, {
+      },
+      {
         dataField: 'Address',
         width: 230,
         fixed: true,
         fixedPosition: 'sticky'
       },
       'City',
+      'Zipcode',
+      'State',
       {
-        dataField: 'State',
+        dataField: 'Department',
         fixed: true,
         fixedPosition: 'right',
       },
+      {
+        dataField: 'BirthDate',
+        dataType: 'date',
+      }, {
+        dataField: 'HireDate',
+        dataType: 'date',
+      }, 
       'HomePhone',
       'MobilePhone',
+      {
+        dataField: 'Email',
+        fixed: true,
+        fixedPosition: 'sticky',
+      },
       'Skype',
-      'Email',
     ],
   });
 });
