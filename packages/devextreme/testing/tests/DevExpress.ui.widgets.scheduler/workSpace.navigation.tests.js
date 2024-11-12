@@ -57,8 +57,8 @@ module('Workspace navigation', () => {
 
                     $element.dxSchedulerWorkSpaceMonth('instance');
 
-                    $($element).trigger('focusin');
                     const cells = $element.find('.' + CELL_CLASS);
+                    cells.eq(0).trigger('dxpointerdown');
                     assert.equal(cells.find('dx-state-focused').length, 0, 'cells is not focused');
 
                     keyboard.keyDown('down');
@@ -90,8 +90,8 @@ module('Workspace navigation', () => {
 
                     $element.dxSchedulerWorkSpaceMonth('instance');
 
-                    $($element).trigger('focusin');
                     const cells = $element.find('.' + CELL_CLASS);
+                    cells.eq(0).trigger('dxpointerdown');
 
                     keyboard.keyDown('left');
                     assert.ok(!cells.eq(0).hasClass('dx-state-focused'), 'previous cell is not focused');
@@ -111,7 +111,7 @@ module('Workspace navigation', () => {
                     $element.dxSchedulerWorkSpaceMonth('instance');
 
                     const cells = $element.find('.' + CELL_CLASS);
-                    $($element).trigger('focusin');
+                    cells.eq(0).trigger('dxpointerdown');
                     assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'cell is focused');
 
                     keyboard.keyDown('up');
@@ -132,7 +132,7 @@ module('Workspace navigation', () => {
 
                     const cells = $element.find('.' + CELL_CLASS);
 
-                    $($element).trigger('focusin');
+                    cells.eq(0).trigger('dxpointerdown');
                     keyboard.keyDown('down');
                     assert.ok(scrollToElement.getCall(0).args[0].is(cells.eq(7)), 'scrollToElement is called with right args');
 
@@ -157,7 +157,8 @@ module('Workspace navigation', () => {
                     keyboard.keyDown('enter');
                     assert.notOk(onSelectedCellsClick.called, 'enter is not handled');
 
-                    $($element).trigger('focusin');
+                    const cells = $element.find('.' + CELL_CLASS);
+                    cells.eq(0).trigger('dxpointerdown');
                     keyboard.keyDown('enter');
 
                     assert.deepEqual(onSelectedCellsClick.getCall(0).args[0], {
@@ -189,7 +190,9 @@ module('Workspace navigation', () => {
                     }, 'dxSchedulerWorkSpaceMonth');
                     const keyboard = keyboardMock($element);
 
-                    $($element).trigger('focusin');
+                    const cells = $element.find('.' + CELL_CLASS);
+                    cells.eq(0).trigger('dxpointerdown');
+
                     keyboard.keyDown('enter');
                     const cellData = updateSpy.getCall(0).args[0].cellData;
                     assert.notOk($.isEmptyObject(cellData), 'cellData is not empty');
@@ -231,7 +234,7 @@ module('Workspace navigation', () => {
 
                     const cells = $element.find('.' + CELL_CLASS);
 
-                    $($element).trigger('focusin');
+                    cells.eq(0).trigger('dxpointerdown');
                     keyboard.keyDown('right', { shiftKey: true });
 
                     assert.equal(cells.filter('.dx-state-focused').length, 2, 'right quantity of focused cells');
@@ -469,7 +472,7 @@ module('Workspace navigation', () => {
                     }, 'dxSchedulerWorkSpaceMonth');
                     const keyboard = keyboardMock($element);
 
-                    $($element.find('.' + CELL_CLASS).eq(0)).trigger('focusin');
+                    $($element.find('.' + CELL_CLASS).eq(0)).trigger('dxpointerdown');
 
                     $($element).trigger('focusin');
                     keyboard.keyDown('down', { shiftKey: true });
@@ -500,7 +503,7 @@ module('Workspace navigation', () => {
 
                     const cells = $element.find('.' + CELL_CLASS);
 
-                    $($element).trigger('focusin');
+                    cells.eq(0).trigger('dxpointerdown');
                     keyboard.keyDown('down', { shiftKey: true });
                     assert.equal(cells.filter('.dx-state-focused').length, 8, 'right quantity of focused cells');
 

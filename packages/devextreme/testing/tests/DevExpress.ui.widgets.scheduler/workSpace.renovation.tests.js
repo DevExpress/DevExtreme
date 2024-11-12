@@ -915,7 +915,7 @@ module('Renovated Render', {
 
         const keyboard = keyboardMock($element);
 
-        $($element.find('.' + CELL_CLASS).eq(0)).trigger('focusin');
+        $($element.find('.' + CELL_CLASS).eq(0)).trigger('dxpointerdown');
         $($element).trigger('focusin');
         keyboard.keyDown('enter');
 
