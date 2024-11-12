@@ -72,7 +72,7 @@ safeSizeTest('Filter row with sticky columns when there are band columns and sho
     customizeColumns(columns) {
       columns.push({
         caption: 'Band column',
-        columns: ['CustomerStoreCity', 'CustomerStoreState']
+        columns: ['CustomerStoreCity', 'CustomerStoreState'],
       });
-    }
+    },
   }));
