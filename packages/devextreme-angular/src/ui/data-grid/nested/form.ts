@@ -65,14 +65,6 @@ export class DxoDataGridFormComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get bindingOptions(): Record<string, any> {
-        return this._getOption('bindingOptions');
-    }
-    set bindingOptions(value: Record<string, any>) {
-        this._setOption('bindingOptions', value);
-    }
-
-    @Input()
     get colCount(): Mode | number {
         return this._getOption('colCount');
     }

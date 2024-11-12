@@ -61,14 +61,6 @@ export class DxoTreeListFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get bindingOptions(): Record<string, any> {
-        return this._getOption('bindingOptions');
-    }
-    set bindingOptions(value: Record<string, any>) {
-        this._setOption('bindingOptions', value);
-    }
-
-    @Input()
     get customOperations(): Array<dxFilterBuilderCustomOperation> {
         return this._getOption('customOperations');
     }

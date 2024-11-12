@@ -60,14 +60,6 @@ export class DxoSelectBoxDropDownOptionsComponent extends NestedOption implement
     }
 
     @Input()
-    get bindingOptions(): Record<string, any> {
-        return this._getOption('bindingOptions');
-    }
-    set bindingOptions(value: Record<string, any>) {
-        this._setOption('bindingOptions', value);
-    }
-
-    @Input()
     get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
         return this._getOption('closeOnOutsideClick');
     }
