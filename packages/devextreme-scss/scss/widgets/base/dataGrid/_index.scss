@@ -238,6 +238,10 @@ $datagrid-text-stub-background-image-path: null !default;
         border-left: none;
       }
     }
+
+    .dx-datagrid-content.dx-sortable {
+      overflow: visible;
+    }
   }
 
   .dx-datagrid-sticky-column, .dx-datagrid-sticky-column-left, .dx-datagrid-sticky-column-right {
