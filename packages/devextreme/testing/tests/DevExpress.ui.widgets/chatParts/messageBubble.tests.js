@@ -53,7 +53,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             assert.strictEqual($(templateSpy.args[0][1]).get(0), this.$element.get(0), 'container element is correct');
         });
 
-        QUnit.test('default markup should be restored after resetting the template option at runtime', function(assert) {
+        QUnit.test('default markup should be restored after reseting the template option at runtime', function(assert) {
             const templateSpy = sinon.spy();
             const messageText = 'message text';
 

@@ -1,6 +1,7 @@
 import $ from 'jquery';
 
 import MessageGroup from '__internal/ui/chat/messagegroup';
+import MessageBubble from '__internal/ui/chat/messagebubble';
 import ChatAvatar from '__internal/ui/chat/avatar';
 import dateLocalization from 'localization/date';
 
@@ -289,58 +290,21 @@ QUnit.module('MessageGroup', moduleConfig, () => {
             });
         });
 
-        QUnit.test('messageTemplate should set bubble content on init', function(assert) {
-            const messageTemplate = ({ text }, container) => {
-                $('<h1>').text(`${text}${text}`).appendTo(container);
+        QUnit.test('messageTemplate should be called on bubble template call', function(assert) {
+            const messageTemplate = sinon.stub();
+            const message = {
+                text: 'CustomText',
+                timestamp: 1234567,
+                author: { name: 'someName', id: 'someId' },
             };
 
             this.reinit({
-                items: [{ text: 'CustomText' }],
+                items: [message],
                 messageTemplate,
             });
 
-            const $bubble = this.getBubbles();
-
-            assert.strictEqual($bubble.text(), 'CustomTextCustomText');
-        });
-
-        QUnit.test('messageTemplate should set bubble content at runtime', function(assert) {
-            const messageTemplate = ({ text }, container) => {
-                $('<h1>').text(`${text}${text}`).appendTo(container);
-            };
-
-            this.reinit({
-                items: [{ text: 'CustomText' }]
-            });
-
-            this.instance.option('messageTemplate', messageTemplate);
-
-            const $bubble = this.getBubbles();
-
-            assert.strictEqual($bubble.text(), 'CustomTextCustomText');
-        });
-
-        QUnit.test('messageTemplate function should have correct parameters', function(assert) {
-            assert.expect(3);
-
-            const timestamp = 1234567;
-            const text = 'message text';
-            const author = { name: 'UserName', id: 'UserID' };
-
-            const messageTemplate = (data) => {
-                assert.deepEqual(data.author, author, 'author parameter is passed');
-                assert.strictEqual(data.timestamp, timestamp, 'timestamp parameter is passed');
-                assert.strictEqual(data.text, text, 'text parameter is passed');
-            };
-
-            this.reinit({
-                items: [{
-                    timestamp,
-                    text,
-                    author,
-                }],
-                messageTemplate,
-            });
+            assert.strictEqual(messageTemplate.callCount, 1, 'messageTemplate function was called on bubble template render');
+            assert.deepEqual(messageTemplate.lastCall.args[0], message, 'messageTemplate function was called with correct data');
         });
     });
 });

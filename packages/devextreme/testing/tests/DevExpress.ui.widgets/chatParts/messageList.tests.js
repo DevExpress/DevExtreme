@@ -878,58 +878,32 @@ QUnit.module('MessageList', () => {
             });
         });
 
-        QUnit.test('messageTemplate should set bubble content on init', function(assert) {
-            const messageTemplate = ({ text }, container) => {
-                $('<h1>').text(`${text}${text}`).appendTo(container);
-            };
+        QUnit.test('messageTemplate should be passed to messageGroup on init', function(assert) {
+            const messageTemplate = () => {};
 
             this.reinit({
-                items: [{ text: 'CustomText' }],
+                items: [{ text: 'text' }],
                 messageTemplate,
             });
 
-            const $bubble = this.getBubbles();
+            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
 
-            assert.strictEqual($bubble.text(), 'CustomTextCustomText');
+            assert.strictEqual(messageGroup.option('messageTemplate'), messageTemplate, 'messageTemplate is passed to messageGroup');
         });
 
-        QUnit.test('messageTemplate should set bubble content at runtime', function(assert) {
-            const messageTemplate = ({ text }, container) => {
-                $('<h1>').text(`${text}${text}`).appendTo(container);
-            };
+        QUnit.test('messageTemplate should be passed to messageGroup at runtime', function(assert) {
 
             this.reinit({
-                items: [{ text: 'CustomText' }]
+                items: [{ text: 'text' }],
             });
+
+            const messageTemplate = () => {};
 
             this.instance.option('messageTemplate', messageTemplate);
 
-            const $bubble = this.getBubbles();
+            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
 
-            assert.strictEqual($bubble.text(), 'CustomTextCustomText');
-        });
-
-        QUnit.test('messageTemplate function should have correct parameters', function(assert) {
-            assert.expect(3);
-
-            const timestamp = 1234567;
-            const text = 'message text';
-            const author = { name: 'UserName', id: 'UserID' };
-
-            const messageTemplate = (data) => {
-                assert.deepEqual(data.author, author, 'author parameter is passed');
-                assert.strictEqual(data.timestamp, timestamp, 'timestamp parameter is passed');
-                assert.strictEqual(data.text, text, 'text parameter is passed');
-            };
-
-            this.reinit({
-                items: [{
-                    timestamp,
-                    text,
-                    author,
-                }],
-                messageTemplate,
-            });
+            assert.strictEqual(messageGroup.option('messageTemplate'), messageTemplate, 'messageTemplate is passed to messageGroup');
         });
     });
 
