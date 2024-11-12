@@ -276,12 +276,24 @@ export class Appointment extends DOMComponent {
     });
   }
 
+  _getDate(date: 'endDate' | 'startDate') {
+    const result = ExpressionUtils.getField(this.option('dataAccessors'), date, this.rawAppointment);
+    if (!result) {
+      return result;
+    }
+
+    const timeZoneCalculator = this.option('timeZoneCalculator') as any;
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return timeZoneCalculator.createDate(new Date(result), { path: 'toGrid' });
+  }
+
   _getEndDate() {
-    return this.option('endDate');
+    return this._getDate('endDate');
   }
 
   _getStartDate() {
-    return this.option('startDate');
+    return this._getDate('startDate');
   }
 
   _renderAllDayClass() {

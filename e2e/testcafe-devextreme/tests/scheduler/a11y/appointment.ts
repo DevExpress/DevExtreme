@@ -380,7 +380,7 @@ test('Scheduler a11y: Appointment collector button doesn\'t have info about date
   });
 });
 
-test.only('appointment aria label should contain date with right timezone', async (t) => {
+test('appointment aria label should contain date with right timezone', async (t) => {
   const scheduler = new Scheduler('#container');
   const appt = scheduler.getAppointmentByIndex(0);
 

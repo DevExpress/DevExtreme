@@ -614,7 +614,6 @@ class SchedulerAppointments extends CollectionWidget {
         reduced: settings.appointmentReduced,
         isCompact: settings.isCompact,
         startDate: new Date(settings.info?.appointment.startDate),
-        endDate: new Date(settings.info?.appointment.endDate),
         cellWidth: this.invoke('getCellWidth'),
         cellHeight: this.invoke('getCellHeight'),
         resizableConfig: this._resizableConfig(rawAppointment, settings),
@@ -624,6 +623,7 @@ class SchedulerAppointments extends CollectionWidget {
 
         getAppointmentColor: this.option('getAppointmentColor'),
         getResourceDataAccessors: this.option('getResourceDataAccessors'),
+        timeZoneCalculator: this.option('timeZoneCalculator'),
       };
 
       if (this.isAgendaView) {
