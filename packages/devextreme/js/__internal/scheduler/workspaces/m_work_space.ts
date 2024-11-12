@@ -2554,7 +2554,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       this._createAllDayPanelElements();
     }
 
-    this._$timePanel = $('<table>').addClass(TIME_PANEL_CLASS);
+    this._$timePanel = $('<table>').addClass(TIME_PANEL_CLASS).attr('aria-hidden', true);
     this._$dateTable = $('<table>').attr('aria-hidden', true);
     this._$dateTableContainer = $('<div>').addClass('dx-scheduler-date-table-container');
     this._$groupTable = $('<div>').addClass(WORKSPACE_VERTICAL_GROUP_TABLE_CLASS);
