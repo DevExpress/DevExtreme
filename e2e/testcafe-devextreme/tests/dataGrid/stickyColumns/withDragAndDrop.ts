@@ -23,25 +23,25 @@ test('Fixed columns should work when drag and drop rows are enabled', async (t) 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
-    dataSource: getData(10, 10),
-    keyExpr: 'field_0',
-    width: 500,
-      columnFixing: {
-          enabled: true
-      },
-      showColumnHeaders: true,
-      columnAutoWidth: true,
-      rowDragging: {
-        allowReordering: true,
-        dropFeedbackMode: 'push',
-      },
-    customizeColumns: function(columns) {
-        columns[5].fixed = true;
-        columns[6].fixed = true;
+  dataSource: getData(10, 10),
+  keyExpr: 'field_0',
+  width: 500,
+  columnFixing: {
+    enabled: true,
+  },
+  showColumnHeaders: true,
+  columnAutoWidth: true,
+  rowDragging: {
+    allowReordering: true,
+    dropFeedbackMode: 'push',
+  },
+  customizeColumns(columns) {
+    columns[5].fixed = true;
+    columns[6].fixed = true;
 
-        columns[8].fixed = true;
-        columns[8].fixedPosition = 'right';
-        columns[9].fixed = true;
-        columns[9].fixedPosition = 'right';
-    },
+    columns[8].fixed = true;
+    columns[8].fixedPosition = 'right';
+    columns[9].fixed = true;
+    columns[9].fixedPosition = 'right';
+  },
 }));
