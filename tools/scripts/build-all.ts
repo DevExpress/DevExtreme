@@ -46,7 +46,7 @@ const MAJOR_VERSION = monorepoVersion.split('.').slice(0, 2).join('_');
 // Prepare metadata
 sh.cd(ROOT_DIR);
 sh.exec('pnpm run tools:discover-declarations');
-//sh.exec(`pnpm run tools make-aspnet-metadata --version ${MAJOR_VERSION}`);
+sh.exec(`pnpm run tools make-aspnet-metadata --version ${MAJOR_VERSION}`);
 
 if (!devMode) {
     injectDescriptions();
@@ -64,7 +64,7 @@ if (devMode) {
     });
 }
 
-//sh.exec(`pnpx nx build devextreme-themebuilder${devMode ? '' : ' --skipNxCache'}`);
+sh.exec(`pnpx nx build devextreme-themebuilder${devMode ? '' : ' --skipNxCache'}`);
 
 // Copy artifacts for DXBuild (Installation)
 sh.pushd(path.join(ROOT_DIR, 'packages/devextreme/artifacts'));
@@ -89,6 +89,7 @@ sh.popd();
 sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme-dist'));
     packAndCopy(NPM_DIR);
 sh.popd();
+
 sh.pushd(path.join(ROOT_DIR, 'packages', 'devextreme-themebuilder', 'dist'));
     sh.exec(`pnpm pkg set version="${devextremeNpmVersion}"`);
     packAndCopy(NPM_DIR);

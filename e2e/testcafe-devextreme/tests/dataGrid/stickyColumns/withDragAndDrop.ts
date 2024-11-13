@@ -16,7 +16,7 @@ test('Fixed columns should work when drag and drop rows are enabled', async (t) 
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('treelist_sticky_columns_with_drag_and_drop.png', dataGrid.element);
+  await takeScreenshot('datagrid_sticky_columns_with_drag_and_drop.png', dataGrid.element);
 
   // assert
   await t

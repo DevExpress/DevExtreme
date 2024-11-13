@@ -14,7 +14,7 @@ test('Fixed columns should work when drag and drop rows are enabled', async (t) 
   const treeList = new TreeList(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await takeScreenshot('data_grid_sticky_columns_with_drag_and_drop.png', treeList.element);
+  await takeScreenshot('treelist_sticky_columns_with_drag_and_drop.png', treeList.element);
 
   // assert
   await t
