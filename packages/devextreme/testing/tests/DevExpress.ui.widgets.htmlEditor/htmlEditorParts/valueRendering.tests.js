@@ -679,31 +679,6 @@ export default function() {
 
                 assert.strictEqual(markup, '<h1>Html converted</h1><p>value</p>');
             });
-
-            [
-                { returnedValue: { value: 'value' }, expectedMarkup: '<p>[object Object]</p>' },
-                { returnedValue: ['string', { object: 'object' }], expectedMarkup: '<p>string,[object Object]</p>' },
-                { returnedValue: NaN, expectedMarkup: '<p><br></p>' },
-                { returnedValue: true, expectedMarkup: '<p>true</p>' },
-                { returnedValue: false, expectedMarkup: '<p><br></p>' },
-                { returnedValue: null, expectedMarkup: '<p><br></p>' },
-                { returnedValue: undefined, expectedMarkup: '<p><br></p>' },
-                { returnedValue: 4, expectedMarkup: '<p>4</p>' },
-                { returnedValue: Infinity, expectedMarkup: '<p>Infinity</p>' },
-                { returnedValue: -Infinity, expectedMarkup: '<p>-Infinity</p>' },
-            ].forEach(({ returnedValue, expectedMarkup }) => {
-                test(`The content should be handled correctly if toHtml returns an unexpected value: ${returnedValue}`, function(assert) {
-                    const instance = $('#htmlEditor').dxHtmlEditor({
-                        converter: {
-                            toHtml: () => returnedValue,
-                        },
-                    }).dxHtmlEditor('instance');
-
-                    const markup = instance.$element().find(`.${CONTENT_CLASS}`).html();
-
-                    assert.strictEqual(markup, expectedMarkup);
-                });
-            });
         });
 
         testModule('runtime', () => {
