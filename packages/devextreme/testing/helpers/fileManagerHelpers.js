@@ -2,7 +2,7 @@ import $ from 'jquery';
 import devices from '__internal/core/m_devices';
 import { isDefined } from 'core/utils/type.js';
 import { deserializeDate } from 'core/utils/date_serialization';
-import FileSystemItem from 'file_management/file_system_item';
+import FileSystemItem from 'common/file_management/file_system_item';
 
 import FileReaderMock from './fileManager/file_reader.mock.js';
 

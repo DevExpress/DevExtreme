@@ -5,7 +5,7 @@ require('ui/popup');
 require('generic_light.css!');
 
 const $ = require('jquery');
-const positionUtils = require('animation/position');
+const positionUtils = require('common/core/animation/position');
 
 positionUtils.calculateScrollbarWidth();
 

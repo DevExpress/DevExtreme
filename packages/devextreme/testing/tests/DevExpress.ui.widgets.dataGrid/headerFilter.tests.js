@@ -4,17 +4,17 @@ import 'ui/data_grid';
 import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 
 import $ from 'jquery';
-import ArrayStore from 'data/array_store';
+import ArrayStore from 'common/data/array_store';
 import { noop } from 'core/utils/common';
-import ODataStore from 'data/odata/store';
+import ODataStore from 'common/data/odata/store';
 import devices from '__internal/core/m_devices';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 import { invertFilterExpression } from '__internal/grids/grid_core/header_filter/m_header_filter';
-import dragEvents from 'events/drag';
+import dragEvents from 'common/core/events/drag';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
 import viewPortUtils from 'core/utils/view_port';
-import fx from 'animation/fx';
-import messageLocalization from 'localization/message';
+import fx from 'common/core/animation/fx';
+import messageLocalization from 'common/core/localization/message';
 import dateSerialization from 'core/utils/date_serialization';
 import { ListSearchBoxWrapper } from '../../helpers/wrappers/searchBoxWrappers.js';
 

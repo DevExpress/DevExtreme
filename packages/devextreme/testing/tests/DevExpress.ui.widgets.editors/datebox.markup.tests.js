@@ -2,7 +2,7 @@ import $ from 'jquery';
 import support from '__internal/core/utils/m_support';
 import uiDateUtils from '__internal/ui/date_box/m_date_utils';
 import DateBox from 'ui/date_box';
-import dateLocalization from 'localization/date';
+import dateLocalization from 'common/core/localization/date';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 QUnit.testStart(function() {

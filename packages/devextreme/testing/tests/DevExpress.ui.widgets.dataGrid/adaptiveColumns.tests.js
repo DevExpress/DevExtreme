@@ -7,7 +7,7 @@ import { noop as noop } from 'core/utils/common';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import eventsEngine from 'events/core/events_engine';
+import eventsEngine from 'common/core/events/core/events_engine';
 import typeUtils from 'core/utils/type';
 import config from 'core/config';
 import renderer from 'core/renderer';

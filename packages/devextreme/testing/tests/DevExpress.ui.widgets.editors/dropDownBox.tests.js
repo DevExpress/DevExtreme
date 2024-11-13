@@ -1,14 +1,14 @@
 import $ from 'jquery';
 import renderer from 'core/renderer';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import DropDownBox from 'ui/drop_down_box';
 import typeUtils, { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
-import { normalizeKeyName } from 'events/utils/index';
-import CustomStore from 'data/custom_store';
-import { DataSource } from 'data/data_source/data_source';
+import { normalizeKeyName } from 'common/core/events/utils/index';
+import { CustomStore } from 'common/data/custom_store';
+import { DataSource } from 'common/data/data_source/data_source';
 
 import 'generic_light.css!';
 import 'ui/validator';

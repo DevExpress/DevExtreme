@@ -1,6 +1,6 @@
 const $ = require('jquery');
 const trackerModule = require('viz/range_selector/tracker');
-const DataSource = require('data/data_source/data_source').DataSource;
+const DataSource = require('common/data/data_source/data_source').DataSource;
 const seriesDataSourceModule = require('viz/range_selector/series_data_source');
 const commons = require('./rangeSelectorParts/commons.js');
 

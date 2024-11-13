@@ -3,7 +3,7 @@ import devices from '__internal/core/m_devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { validateGroup } from 'ui/validation_engine';
 import dxCheckBox from 'ui/check_box';
-import { normalizeKeyName } from 'events/utils/index';
+import { normalizeKeyName } from 'common/core/events/utils/index';
 // eslint-disable-next-line spellcheck/spell-checker
 import { rerender } from 'inferno';
 

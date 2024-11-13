@@ -1,11 +1,11 @@
 import 'intl';
-import 'localization/number';
-import { locale } from 'localization/core';
+import 'common/core/localization/number';
+import { locale } from 'common/core/localization/core';
 
 import $ from 'jquery';
 import 'ui/date_box';
 import { ExportFormat } from 'exporter/exceljs/export_format';
-import dateLocalization from 'localization/date';
+import dateLocalization from 'common/core/localization/date';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';

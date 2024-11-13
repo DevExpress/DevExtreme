@@ -1,11 +1,11 @@
 import $ from 'jquery';
-import { EdmLiteral } from 'data/odata/utils';
-import query from 'data/query';
+import { EdmLiteral } from 'common/data/odata/utils';
+import query from 'common/data/query';
 import config from 'core/config';
 import ErrorHandlingHelper from '../../helpers/data.errorHandlingHelper.js';
 import ajaxMock from '../../helpers/ajaxMock.js';
 
-import 'data/odata/query_adapter';
+import 'common/data/odata/query_adapter';
 
 const MUST_NOT_REACH_MESSAGE = 'Shouldn\'t reach this point';
 

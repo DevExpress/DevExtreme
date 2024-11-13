@@ -1,17 +1,17 @@
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import devices from '__internal/core/m_devices';
 import dataUtils from 'core/element_data';
 import config from 'core/config';
 import browser from 'core/utils/browser';
 import errors from 'core/errors';
 import { isRenderer } from 'core/utils/type';
-import { normalizeKeyName } from 'events/utils/index';
+import { normalizeKeyName } from 'common/core/events/utils/index';
 
-import ArrayStore from 'data/array_store';
-import CustomStore from 'data/custom_store';
-import Query from 'data/query';
-import { DataSource } from 'data/data_source/data_source';
+import ArrayStore from 'common/data/array_store';
+import { CustomStore } from 'common/data/custom_store';
+import Query from 'common/data/query';
+import { DataSource } from 'common/data/data_source/data_source';
 
 import themes from 'ui/themes';
 import Lookup from 'ui/lookup';

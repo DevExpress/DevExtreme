@@ -1,9 +1,9 @@
 import $ from 'jquery';
 import 'ui/file_manager';
-import fx from 'animation/fx';
-import pointerEvents from 'events/pointer';
+import fx from 'common/core/animation/fx';
+import pointerEvents from 'common/core/events/pointer';
 import localization from 'localization';
-import messageLocalization from 'localization/message';
+import messageLocalization from 'common/core/localization/message';
 import { FileManagerWrapper, createTestFileSystem, isDesktopDevice, createHugeFileSystem } from '../../../helpers/fileManagerHelpers.js';
 import { triggerCellClick } from '../../../helpers/fileManager/events.js';
 import { implementationsMap } from 'core/utils/size';

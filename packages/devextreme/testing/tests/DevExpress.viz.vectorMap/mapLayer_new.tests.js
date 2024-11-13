@@ -7,7 +7,7 @@ const controlBarModule = require('viz/vector_map/control_bar/control_bar');
 const legendModule = require('viz/vector_map/legend');
 const tooltipModule = require('viz/core/tooltip');
 const tooltipViewerModule = require('viz/vector_map/tooltip_viewer');
-const DataSource = require('data/data_source/data_source').DataSource;
+const DataSource = require('common/data/data_source/data_source').DataSource;
 const exportMenuModule = require('viz/core/export'); // TODO maybe if you test layer - you should create exact layer?
 const rendererModule = require('viz/core/renderers/renderer');
 

@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
-import messageLocalization from 'localization/message';
+import messageLocalization from 'common/core/localization/message';
 
 QUnit.testStart(function() {
     const gridMarkup = `

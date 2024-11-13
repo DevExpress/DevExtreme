@@ -1,13 +1,13 @@
 import $ from 'jquery';
 import Splitter from 'ui/splitter';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { isRenderer, isNumeric } from 'core/utils/type';
 import config from 'core/config';
-import { createEvent } from 'events/utils/index';
-import { name as DOUBLE_CLICK_EVENT } from 'events/double_click';
-import { name as CLICK_EVENT } from 'events/click';
+import { createEvent } from 'common/core/events/utils/index';
+import { name as DOUBLE_CLICK_EVENT } from 'common/core/events/double_click';
+import { name as CLICK_EVENT } from 'common/core/events/click';
 
 import 'generic_light.css!';
 

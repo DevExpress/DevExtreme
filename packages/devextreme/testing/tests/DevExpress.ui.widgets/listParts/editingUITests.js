@@ -1,20 +1,20 @@
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import errors from 'ui/widget/ui.errors';
-import translator from 'animation/translator';
-import holdEvent from 'events/hold';
+import translator from 'common/core/animation/translator';
+import holdEvent from 'common/core/events/hold';
 import { noop } from 'core/utils/common';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import pointerMock from '../../../helpers/pointerMock.js';
-import contextMenuEvent from 'events/contextmenu';
+import contextMenuEvent from 'common/core/events/contextmenu';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { registry, register } from '__internal/ui/list/m_list.edit.decorator_registry';
 import SwitchableEditDecorator from '__internal/ui/list/m_list.edit.decorator.switchable';
 import SwitchableButtonEditDecorator from '__internal/ui/list/m_list.edit.decorator.switchable.button';
 import themes from 'ui/themes';
-import { DataSource } from 'data/data_source/data_source';
-import ArrayStore from 'data/array_store';
+import { DataSource } from 'common/data/data_source/data_source';
+import ArrayStore from 'common/data/array_store';
 import { reorderingPointerMock, toSelector } from './utils.js';
 
 import 'ui/action_sheet';
