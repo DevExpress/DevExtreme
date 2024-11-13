@@ -30,7 +30,7 @@ export class AppComponent {
 
   markers: Marker[];
 
-  apiKey: APIKey = { bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC' };
+  apiKey: APIKey = { azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE' };
 
   constructor(service: Service) {
     this.markers = service.getMarkers();

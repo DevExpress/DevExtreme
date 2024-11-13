@@ -4,6 +4,7 @@
             if(options) {
                 atlas.optionsSpecified = true;
                 atlas.options = options;
+                atlas.addedControls = 2;
             }
 
             this.events = {
@@ -53,7 +54,7 @@
             };
             this.controls = {
                 add: (controls, options) => {
-                    atlas.addedControls = controls.length;
+                    atlas.addedControls += controls.length;
                     atlas.controlOptions = options;
                 },
                 remove: (controls) => {
