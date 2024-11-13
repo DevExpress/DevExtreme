@@ -10,11 +10,9 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { dxMenuItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, SubmenuHiddenEvent, SubmenuHidingEvent, SubmenuShowingEvent, SubmenuShownEvent } from "devextreme/ui/menu";
-import type { AnimationConfig, AnimationState, AnimationType } from "devextreme/animation/fx";
-import type { HorizontalAlignment, VerticalAlignment, Direction, PositionAlignment, SubmenuShowMode } from "devextreme/common";
-import type { CollisionResolution, PositionConfig, CollisionResolutionCombination } from "devextreme/animation/position";
+import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
+import type { HorizontalAlignment, VerticalAlignment, Direction, template, PositionAlignment, SubmenuShowMode } from "devextreme/common";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { template } from "devextreme/core/templates/template";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];

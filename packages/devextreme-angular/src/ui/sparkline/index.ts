@@ -21,10 +21,10 @@ import {
 
 
 import { DashStyle, Font, PointSymbol, Theme } from 'devextreme/common/charts';
+import { Format } from 'devextreme/common/core/localization';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Format } from 'devextreme/localization';
 import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, SparklineType, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/sparkline';
 
 import DxSparkline from 'devextreme/viz/sparkline';

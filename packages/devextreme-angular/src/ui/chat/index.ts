@@ -22,9 +22,9 @@ import {
 } from '@angular/core';
 
 
+import { Format } from 'devextreme/common/core/localization';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Format } from 'devextreme/localization';
 import { Alert, DisposingEvent, InitializedEvent, Message, MessageEnteredEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
 
 import DxChat from 'devextreme/ui/chat';

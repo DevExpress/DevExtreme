@@ -24,10 +24,10 @@ import {
 
 import { ExportFormat, HorizontalAlignment, Orientation, Position, SingleOrMultiple, VerticalAlignment, VerticalEdge } from 'devextreme/common';
 import { AnimationEaseMode, ArgumentAxisHoverMode, AxisScaleType, ChartsAxisLabelOverlap, ChartsColor, ChartsDataType, ChartsLabelOverlap, DashStyle, DiscreteAxisDivisionMode, Font, LegendHoverMode, Palette, PaletteExtensionMode, RelativePosition, ScaleBreak, ScaleBreakLineStyle, TextOverflow, Theme, TimeInterval, VisualRange, VisualRangeUpdateMode, WordWrap } from 'devextreme/common/charts';
+import { Format } from 'devextreme/common/core/localization';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Format } from 'devextreme/localization';
 import { AggregatedPointsPosition, ArgumentAxisClickEvent, ChartLabelDisplayMode, ChartTooltipLocation, ChartZoomAndPanMode, DisposingEvent, DoneEvent, DrawnEvent, dxChartAnnotationConfig, dxChartCommonAnnotationConfig, EventKeyModifier, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent } from 'devextreme/viz/chart';
 import { ChartSeries } from 'devextreme/viz/common';
 

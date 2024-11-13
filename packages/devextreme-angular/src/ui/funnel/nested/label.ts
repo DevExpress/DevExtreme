@@ -16,7 +16,7 @@ import {
 
 import { HorizontalEdge } from 'devextreme/common';
 import { DashStyle, Font, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 
 import {
     NestedOptionHost,
