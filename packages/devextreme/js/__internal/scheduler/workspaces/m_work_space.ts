@@ -526,7 +526,7 @@ class SchedulerWorkSpace extends WidgetObserver {
   }
 
   _focusInHandler(e) {
-    if ($(e.target).is(this._focusTarget() as any) && this._isCellClick === true) {
+    if ($(e.target).is(this._focusTarget() as any) && this._isCellClick) {
       delete this._isCellClick;
       delete this._contextMenuHandled;
       // @ts-expect-error
