@@ -337,7 +337,7 @@ $datagrid-text-stub-background-image-path: null !default;
     }
 
     .dx-datagrid-sticky-columns {
-      .dx-column-lines > td {
+      .dx-column-lines:not(.dx-datagrid-group-footer) > td {
         border-left: none;
         border-right: $datagrid-border;
 
