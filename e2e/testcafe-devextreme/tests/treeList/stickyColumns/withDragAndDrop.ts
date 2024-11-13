@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import TreeList from 'devextreme-testcafe-models/TreeList';
+import TreeList from 'devextreme-testcafe-models/treeList';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { getData } from '../../dataGrid/helpers/generateDataSourceData';
