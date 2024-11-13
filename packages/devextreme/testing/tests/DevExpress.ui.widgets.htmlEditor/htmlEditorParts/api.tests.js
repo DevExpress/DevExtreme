@@ -526,9 +526,12 @@ testModule('API', moduleConfig, () => {
 
             this.createEditor();
 
+            converter.toHtml.resetHistory();
+            converter.fromHtml.resetHistory();
+
             this.instance.option('value', 'new value');
 
-            assert.strictEqual(this.options.converter.toHtml.callCount, 2);
+            assert.strictEqual(this.options.converter.toHtml.callCount, 1);
             assert.strictEqual(this.options.converter.fromHtml.callCount, 1);
         });
 
@@ -545,7 +548,7 @@ testModule('API', moduleConfig, () => {
             this.options = {
                 converter,
                 onValueChanged: () => {
-                    assert.strictEqual(converter.toHtml.callCount, 1);
+                    assert.strictEqual(converter.toHtml.callCount, 0);
                     assert.strictEqual(converter.fromHtml.callCount, 1);
 
                     done();
@@ -553,6 +556,9 @@ testModule('API', moduleConfig, () => {
             };
 
             this.createEditor();
+
+            converter.toHtml.resetHistory();
+            converter.fromHtml.resetHistory();
 
             this.instance.focus();
 
@@ -738,9 +744,9 @@ testModule('API', moduleConfig, () => {
         [
             { returnedValue: { value: 'value' }, expectedValue: '[object Object]' },
             { returnedValue: ['string', { object: 'object' }], expectedValue: 'string,[object Object]' },
-            { returnedValue: NaN, expectedValue: '' },
+            { returnedValue: NaN, expectedValue: 'NaN' },
             { returnedValue: true, expectedValue: 'true' },
-            { returnedValue: false, expectedValue: '' },
+            { returnedValue: false, expectedValue: 'false' },
             { returnedValue: null, expectedValue: '' },
             { returnedValue: undefined, expectedValue: '' },
             { returnedValue: 4, expectedValue: '4' },
