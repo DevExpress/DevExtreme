@@ -1,5 +1,5 @@
 /* global initTree */
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import { DataSource } from 'common/data/data_source/data_source';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import $ from 'jquery';

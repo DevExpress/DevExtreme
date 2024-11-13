@@ -1,7 +1,7 @@
 import '__internal/grids/tree_list/m_widget';
 import $ from 'jquery';
 import { DataSource } from 'common/data/data_source/data_source';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import Guid from 'core/guid';
 import query from 'common/data/query';
 import { setupTreeListModules } from '../../helpers/treeListMocks.js';

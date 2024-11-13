@@ -4,7 +4,7 @@ import 'common/data/odata/store';
 import $ from 'jquery';
 import { setupDataGridModules, generateItems } from '../../helpers/dataGridMocks.js';
 import { DataSource } from 'common/data/data_source/data_source';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import clickEvent from 'common/core/events/click';

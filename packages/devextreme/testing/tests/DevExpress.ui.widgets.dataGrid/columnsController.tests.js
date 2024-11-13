@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { DataSource } from 'common/data/data_source/data_source';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import dateLocalization from 'common/core/localization/date';
 import { isFunction } from 'core/utils/type';
 import gridCore from '__internal/grids/data_grid/m_core';

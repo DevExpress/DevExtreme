@@ -9,7 +9,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import DataGrid from 'ui/data_grid';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 

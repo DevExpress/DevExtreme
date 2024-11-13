@@ -2,7 +2,7 @@ import 'generic_light.css!';
 
 import 'ui/data_grid';
 import 'ui/tag_box';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 
 import $ from 'jquery';
 import { noop } from 'core/utils/common';

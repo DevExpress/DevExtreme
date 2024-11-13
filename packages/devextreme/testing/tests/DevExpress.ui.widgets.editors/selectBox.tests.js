@@ -5,7 +5,7 @@ import devices from '__internal/core/m_devices';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { DataSource } from 'common/data/data_source/data_source';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import fx from 'common/core/animation/fx';
 import { isRenderer } from 'core/utils/type';

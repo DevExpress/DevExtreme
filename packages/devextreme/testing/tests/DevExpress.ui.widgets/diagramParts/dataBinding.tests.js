@@ -3,7 +3,7 @@ const { test } = QUnit;
 import 'ui/diagram';
 
 import DataSource from 'common/data/data_source';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import { DiagramCommand } from 'devexpress-diagram';
 import { Consts } from '../../../helpers/diagramHelpers.js';
 

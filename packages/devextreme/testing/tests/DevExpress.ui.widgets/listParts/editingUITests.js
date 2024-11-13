@@ -14,7 +14,7 @@ import SwitchableEditDecorator from '__internal/ui/list/m_list.edit.decorator.sw
 import SwitchableButtonEditDecorator from '__internal/ui/list/m_list.edit.decorator.switchable.button';
 import themes from 'ui/themes';
 import { DataSource } from 'common/data/data_source/data_source';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import { reorderingPointerMock, toSelector } from './utils.js';
 
 import 'ui/action_sheet';

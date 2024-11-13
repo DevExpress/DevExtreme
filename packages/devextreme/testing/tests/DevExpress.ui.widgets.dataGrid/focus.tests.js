@@ -4,7 +4,7 @@ import 'ui/data_grid';
 import 'common/data/odata/store';
 
 import $ from 'jquery';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import pointerEvents from 'common/core/events/pointer';
 import clickEvent from 'common/core/events/click';
 import { setupDataGridModules, generateItems } from '../../helpers/dataGridMocks.js';

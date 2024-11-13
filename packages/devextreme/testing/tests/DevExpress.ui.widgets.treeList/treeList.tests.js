@@ -19,7 +19,7 @@ import { getOuterHeight } from 'core/utils/size';
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
 import { TreeListWrapper } from '../../helpers/wrappers/dataGridWrappers.js';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import TreeList from '__internal/grids/tree_list/m_widget';
 import pointerMock from '../../helpers/pointerMock.js';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';

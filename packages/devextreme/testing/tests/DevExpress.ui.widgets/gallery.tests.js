@@ -2,7 +2,7 @@ import { getHeight, getOuterHeight, getOuterWidth, getWidth } from 'core/utils/s
 import $ from 'jquery';
 import { DataSource } from 'common/data/data_source/data_source';
 import visibilityChange from 'common/core/events/visibility_change';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import fx from 'common/core/animation/fx';
 import animationFrame from 'common/core/animation/frame';
 import resizeCallbacks from 'core/utils/resize_callbacks';

@@ -14,7 +14,7 @@ import pointerMock from '../../../helpers/pointerMock.js';
 import registerComponent from 'core/component_registrator';
 import swipeEvents from 'common/core/events/swipe';
 import themes from 'ui/themes';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import DOMComponent from 'core/dom_component';
 import List from 'ui/list';

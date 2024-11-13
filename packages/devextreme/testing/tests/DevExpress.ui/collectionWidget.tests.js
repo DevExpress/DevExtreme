@@ -5,7 +5,7 @@ import config from 'core/config';
 import registerComponent from 'core/component_registrator';
 import { DataSource } from 'common/data/data_source/data_source';
 import Store from 'common/data/abstract_store';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import { setTemplateEngine } from 'core/templates/template_engine_registry';
 import support from '__internal/core/utils/m_support';
 import holdEvent from 'common/core/events/hold';

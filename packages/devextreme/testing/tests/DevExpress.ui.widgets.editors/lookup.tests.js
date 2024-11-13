@@ -8,7 +8,7 @@ import errors from 'core/errors';
 import { isRenderer } from 'core/utils/type';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import Query from 'common/data/query';
 import { DataSource } from 'common/data/data_source/data_source';

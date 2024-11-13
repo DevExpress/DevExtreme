@@ -5,7 +5,7 @@ import commonUtils from 'core/utils/common';
 import { isFunction } from 'core/utils/type';
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 

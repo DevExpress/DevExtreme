@@ -4,7 +4,7 @@ import 'ui/data_grid';
 import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 
 import $ from 'jquery';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import { noop } from 'core/utils/common';
 import { ODataStore } from 'common/data/odata/store';
 import devices from '__internal/core/m_devices';

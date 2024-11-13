@@ -5,7 +5,7 @@ import typeUtils, { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import eventsEngine from 'common/core/events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import { DataSource } from 'common/data/data_source/data_source';
 import { CustomStore } from 'common/data/custom_store';
 import { extend } from 'core/utils/extend';

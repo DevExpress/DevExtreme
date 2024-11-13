@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import inflector from '__internal/core/utils/m_inflector';
 import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/m_data_source';

@@ -12,7 +12,7 @@ import dataUtils from 'core/element_data';
 import { isRenderer } from 'core/utils/type';
 
 import config from 'core/config';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';

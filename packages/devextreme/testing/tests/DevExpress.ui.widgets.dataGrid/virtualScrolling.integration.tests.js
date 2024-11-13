@@ -2,7 +2,7 @@ import { getHeight, getWidth } from 'core/utils/size';
 import devices from '__internal/core/m_devices';
 import commonUtils from 'core/utils/common';
 import browser from 'core/utils/browser';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import { DataSource } from 'common/data/data_source/data_source';
 import pointerEvents from 'common/core/events/pointer';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';

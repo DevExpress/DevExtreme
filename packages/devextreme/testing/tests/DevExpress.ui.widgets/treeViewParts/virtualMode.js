@@ -4,7 +4,7 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
-import ArrayStore from 'common/data/array_store';
+import { ArrayStore } from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import dblclickEvent from 'common/core/events/dblclick';
 import TreeView from 'ui/tree_view';
