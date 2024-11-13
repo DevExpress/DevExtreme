@@ -238,7 +238,7 @@ const HtmlEditor = Editor.inherit({
 
   _convertToHtml(value: string): string {
     const result = isFunction(this._htmlConverter?.toHtml)
-      ? String(this._htmlConverter.toHtml(value ?? '') || '')
+      ? String(this._htmlConverter.toHtml(value ?? '') ?? '')
       : value;
 
     return result;
@@ -246,7 +246,7 @@ const HtmlEditor = Editor.inherit({
 
   _convertFromHtml(value: string): string {
     const result = isFunction(this._htmlConverter?.fromHtml)
-      ? String(this._htmlConverter.fromHtml(value) || '')
+      ? String(this._htmlConverter.fromHtml(value) ?? '')
       : value;
 
     return result;

@@ -707,7 +707,7 @@ export default function() {
         });
 
         testModule('runtime', () => {
-            test('value from toHtml must match the markup value if value is changed on runtime', function(assert) {
+            test('markup should be updated using converter.toHtml after value option runtime change', function(assert) {
                 const instance = $('#htmlEditor').dxHtmlEditor({
                     converter: {
                         toHtml: () => '<h1>Hi!</h1><p>Test</p>',
