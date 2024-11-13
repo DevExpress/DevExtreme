@@ -1,13 +1,13 @@
-import animationFrame from 'animation/frame';
+import animationFrame from 'common/core/animation/frame';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import 'generic_light.css!';
 import devices from '__internal/core/m_devices';
 import domUtils from '__internal/core/utils/m_dom';
 import styleUtils from 'core/utils/style';
 import support from '__internal/core/utils/m_support';
-import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
+import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
-import initMobileViewport from 'mobile/init_mobile_viewport';
+import initMobileViewport from 'common/core/environment/init_mobile_viewport';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 import pointerMock from '../../../helpers/pointerMock.js';
 import {

@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import 'ui/gantt';
 import { Consts, options, data, showTaskEditDialog } from '../../../helpers/ganttHelpers.js';
-import CustomStore from 'data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 
 const { test } = QUnit;
 

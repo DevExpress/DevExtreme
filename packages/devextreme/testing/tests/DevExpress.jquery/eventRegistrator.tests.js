@@ -1,6 +1,6 @@
 define(function(require) {
     const $ = require('jquery');
-    const registerEvent = require('events/core/event_registrator');
+    const registerEvent = require('common/core/events/core/event_registrator');
     const Class = require('core/class');
 
     require('integration/jquery');

@@ -1,12 +1,12 @@
 import $ from 'jquery';
 const { test } = QUnit;
 import 'ui/file_manager';
-import FileSystemError from 'file_management/error.js';
-import CustomFileSystemProvider from 'file_management/custom_provider';
-import ObjectFileSystemProvider from 'file_management/object_provider.js';
+import FileSystemError from 'common/file_management/error.js';
+import CustomFileSystemProvider from 'common/file_management/custom_provider';
+import ObjectFileSystemProvider from 'common/file_management/object_provider.js';
 import { FileItemsController } from 'ui/file_manager/file_items_controller';
 import FileManagerBreadcrumbs from 'ui/file_manager/ui.file_manager.breadcrumbs';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { FileManagerWrapper, FileManagerBreadcrumbsWrapper, FileManagerProgressPanelWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
 import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
 import { implementationsMap } from 'core/utils/size';

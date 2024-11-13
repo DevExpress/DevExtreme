@@ -1,4 +1,4 @@
-const LocalStore = require('data/local_store');
+const LocalStore = require('common/data/local_store');
 
 const TEST_NAME = '65DFE188-D178-11E1-A097-51216288709B';
 const DX_LOCALSTORAGE_ITEM_NAME = 'dx-data-localStore-' + TEST_NAME;

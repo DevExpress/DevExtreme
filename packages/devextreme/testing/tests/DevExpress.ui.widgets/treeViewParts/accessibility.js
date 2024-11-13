@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import TreeView from 'ui/tree_view';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
-import eventsEngine from 'events/core/events_engine';
+import eventsEngine from 'common/core/events/core/events_engine';
 
 const { module, test } = QUnit;
 

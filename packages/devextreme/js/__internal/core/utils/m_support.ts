@@ -1,4 +1,4 @@
-import devices from '@js/core/devices';
+import { devices } from '@js/common/core/environment';
 import domAdapter from '@js/core/dom_adapter';
 import callOnce from '@js/core/utils/call_once';
 import { styleProp, stylePropPrefix } from '@js/core/utils/style';

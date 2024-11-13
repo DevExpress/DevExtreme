@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { dropDownEditorsList } from '../../helpers/widgetsList.js';
 import { defaultDropDownOptions } from '../../helpers/dropDownOptions.js';
 

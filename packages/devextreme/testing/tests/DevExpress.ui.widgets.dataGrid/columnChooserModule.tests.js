@@ -8,7 +8,7 @@ import devices from '__internal/core/m_devices';
 import themes from 'ui/themes';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 import publicComponentUtils from 'core/utils/public_component';
-import messageLocalization from 'localization/message';
+import messageLocalization from 'common/core/localization/message';
 import { TreeViewSearchBoxWrapper } from '../../helpers/wrappers/searchBoxWrappers.js';
 
 const device = devices.real();

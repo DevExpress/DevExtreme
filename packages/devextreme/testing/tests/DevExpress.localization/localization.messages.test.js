@@ -1,7 +1,7 @@
 const localization = require('localization');
 const dictionaries = {};
 
-dictionaries['zh-tw'] = require('localization/messages/zh-tw.json!');
+dictionaries['zh-tw'] = require('common/core/localization/messages/zh-tw.json!');
 
 QUnit.module('Locale messages of DevExtreme', {
 }, () => {

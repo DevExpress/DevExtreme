@@ -2,8 +2,8 @@ import $ from 'jquery';
 const { test } = QUnit;
 import 'ui/diagram';
 
-import DataSource from 'data/data_source';
-import ArrayStore from 'data/array_store';
+import DataSource from 'common/data/data_source';
+import ArrayStore from 'common/data/array_store';
 import { DiagramCommand } from 'devexpress-diagram';
 import { Consts } from '../../../helpers/diagramHelpers.js';
 

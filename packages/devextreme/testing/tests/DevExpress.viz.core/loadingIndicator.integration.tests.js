@@ -3,7 +3,7 @@ require('viz/tree_map/tree_map');
 const $ = require('jquery');
 const vizMocks = require('../../helpers/vizMocks.js');
 const loadingIndicatorModule = require('viz/core/loading_indicator');
-const DataSource = require('data/data_source/data_source').DataSource;
+const DataSource = require('common/data/data_source/data_source').DataSource;
 
 $('#qunit-fixture').append('<div id="test-container"></div>');
 

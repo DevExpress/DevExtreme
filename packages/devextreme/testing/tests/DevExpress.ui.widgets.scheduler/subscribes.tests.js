@@ -7,7 +7,7 @@ import {
 } from '__internal/scheduler/appointments/m_settings_generator';
 
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import dateUtils from 'core/utils/date';
 import config from 'core/config';
 

@@ -1,6 +1,6 @@
 import { when } from 'core/utils/deferred';
-import FileSystemItem from 'file_management/file_system_item';
-import CustomFileSystemProvider from 'file_management/custom_provider';
+import FileSystemItem from 'common/file_management/file_system_item';
+import CustomFileSystemProvider from 'common/file_management/custom_provider';
 import { createSampleFileItems } from '../../../helpers/fileManagerHelpers.js';
 
 const { test } = QUnit;

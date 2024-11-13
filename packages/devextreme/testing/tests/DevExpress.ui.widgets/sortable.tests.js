@@ -2,10 +2,10 @@ import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/sortable';
 import 'ui/scroll_view';
-import fx from 'animation/fx';
-import animationFrame from 'animation/frame';
+import fx from 'common/core/animation/fx';
+import animationFrame from 'common/core/animation/frame';
 import browser from 'core/utils/browser';
-import translator from 'animation/translator';
+import translator from 'common/core/animation/translator';
 import viewPort from 'core/utils/view_port';
 import devices from '__internal/core/m_devices';
 

@@ -3,7 +3,7 @@
 const $ = require('jquery');
 const vizMocks = require('../../helpers/vizMocks.js');
 const rendererModule = require('viz/core/renderers/renderer');
-const pointerEvents = require('events/pointer');
+const pointerEvents = require('common/core/events/pointer');
 
 require('viz/sparkline');
 require('viz/bullet');

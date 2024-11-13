@@ -7,7 +7,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 import localization from 'localization';
-import ja from 'localization/messages/ja.json!';
+import ja from 'common/core/localization/messages/ja.json!';
 import { Deferred } from 'core/utils/deferred';
 import dxButton from 'ui/button';
 import { isRenderer } from 'core/utils/type';

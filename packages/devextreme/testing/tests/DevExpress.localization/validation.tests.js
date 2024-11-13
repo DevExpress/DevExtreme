@@ -1,8 +1,8 @@
-require('localization/globalize/core');
-require('localization/globalize/number');
-require('localization/globalize/currency');
-require('localization/globalize/date');
-require('localization/globalize/message');
+require('common/core/localization/globalize/core');
+require('common/core/localization/globalize/number');
+require('common/core/localization/globalize/currency');
+require('common/core/localization/globalize/date');
+require('common/core/localization/globalize/message');
 const cldrData = [
     require('devextreme-cldr-data/fr.json!json')
 ];
@@ -10,7 +10,7 @@ const cldrData = [
 const ValidationEngine = require('ui/validation_engine');
 const Globalize = require('globalize');
 const localization = require('localization');
-const fr = require('localization/messages/fr.json!');
+const fr = require('common/core/localization/messages/fr.json!');
 
 cldrData.forEach(localeCldrData => {
     Globalize.load(localeCldrData);

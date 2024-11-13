@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
-import animationFrame from 'animation/frame';
+import animationFrame from 'common/core/animation/frame';
 import pointerMock from '../../../helpers/pointerMock.js';
 
 import 'generic_light.css!';

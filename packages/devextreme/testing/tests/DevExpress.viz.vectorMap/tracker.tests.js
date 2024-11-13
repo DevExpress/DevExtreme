@@ -9,7 +9,7 @@ import { noop } from 'core/utils/common';
 import vizMocks from '../../helpers/vizMocks.js';
 import trackerModule from 'viz/vector_map/tracker';
 import eventEmitterModule from 'viz/vector_map/event_emitter';
-import animationFrame from 'animation/frame';
+import animationFrame from 'common/core/animation/frame';
 
 const FOCUS_OFF_DELAY = 100;
 

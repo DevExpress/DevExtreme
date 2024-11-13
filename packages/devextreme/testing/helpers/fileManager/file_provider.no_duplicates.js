@@ -1,7 +1,7 @@
 import { Deferred } from 'core/utils/deferred';
 import { createTestFileSystem } from '../fileManagerHelpers.js';
-import CustomFileSystemProvider from 'file_management/custom_provider';
-import ObjectFileSystemProvider from 'file_management/object_provider';
+import CustomFileSystemProvider from 'common/file_management/custom_provider';
+import ObjectFileSystemProvider from 'common/file_management/object_provider';
 
 export default class NoDuplicatesFileProvider extends CustomFileSystemProvider {
     constructor(options) {
