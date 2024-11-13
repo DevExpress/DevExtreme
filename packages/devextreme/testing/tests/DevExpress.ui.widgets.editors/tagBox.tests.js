@@ -15,7 +15,7 @@ import messageLocalization from 'common/core/localization/message';
 import pointerMock from '../../helpers/pointerMock.js';
 import ArrayStore from 'common/data/array_store';
 import CustomStore from 'common/data/custom_store';
-import ODataStore from 'common/data/odata/store';
+import { ODataStore } from 'common/data/odata/store';
 import TagBox from 'ui/tag_box';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import { getWidth, getHeight } from 'core/utils/size';

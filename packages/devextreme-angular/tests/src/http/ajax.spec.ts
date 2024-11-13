@@ -8,7 +8,7 @@ import { Component, Injectable, ViewChild } from '@angular/core';
 import domAdapter from 'devextreme/core/dom_adapter';
 import { DxHttpModule } from 'devextreme-angular/http';
 import DataSource from 'devextreme/data/data_source';
-import ODataStore from 'devextreme/data/odata/store';
+import { ODataStore } from 'devextreme/data/odata/store';
 import ajax from 'devextreme/core/utils/ajax';
 import { DxFileUploaderComponent, DxFileUploaderModule } from 'devextreme-angular';
 import { Observable } from 'rxjs';

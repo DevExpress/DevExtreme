@@ -12,7 +12,7 @@ import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import translator from 'common/core/animation/translator';
 import dataUtils from 'core/element_data';
-import ODataStore from 'common/data/odata/store';
+import { ODataStore } from 'common/data/odata/store';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;

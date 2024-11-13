@@ -19,7 +19,7 @@ import { setupDataGridModules, MockDataController, MockColumnsController, MockSe
 import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import numberLocalization from 'common/core/localization/number';
 import virtualScrollingCore from '__internal/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
-import ODataStore from 'common/data/odata/store';
+import { ODataStore } from 'common/data/odata/store';
 import ArrayStore from 'common/data/array_store';
 
 const expandCellTemplate = gridCoreUtils.getExpandCellTemplate();

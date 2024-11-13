@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { EdmLiteral } from 'common/data/odata/utils';
-import ODataStore from 'common/data/odata/store';
+import { ODataStore } from 'common/data/odata/store';
 import ODataContext from 'common/data/odata/context';
 import Guid from 'core/guid';
 import config from 'core/config';
