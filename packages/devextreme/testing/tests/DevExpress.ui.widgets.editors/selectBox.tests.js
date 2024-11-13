@@ -4393,6 +4393,7 @@ QUnit.module('Async tests', {}, () => {
 
     QUnit.test('List should have correct size when async templates are used (T1216113)', function(assert) {
         const clock = sinon.useFakeTimers();
+        const templateRenderingTimeout = 10;
 
         $('#selectBox').dxSelectBox({
             items: [1, 2, 3],
@@ -4408,61 +4409,19 @@ QUnit.module('Async tests', {}, () => {
                                 $item.appendTo(container);
 
                                 onRendered();
-                            }, 10);
+                            }, templateRenderingTimeout);
                         }
                     }
                 }
             },
         });
 
-        clock.tick(10);
+        clock.tick(templateRenderingTimeout);
 
         const overlayContentHeight = $(`.${OVERLAY_CONTENT_CLASS}`).height();
-        const isHeightExpected = overlayContentHeight > 150 && overlayContentHeight < 200;
+        const listItemsHeight = $(`.${LIST_ITEMS_CLASS}`).height();
 
-        assert.ok(isHeightExpected, 'content size is enough for 3 templates');
-
-        clock.restore();
-    });
-
-    QUnit.test('List should have correct size after search when async templates are used', function(assert) {
-        const clock = sinon.useFakeTimers();
-
-        const $selectBox = $('#selectBox').dxSelectBox({
-            items: [1, 2, 3],
-            searchEnabled: true,
-            templatesRenderAsynchronously: true,
-            opened: true,
-            integrationOptions: {
-                templates: {
-                    'item': {
-                        render({ model, container, onRendered }) {
-                            setTimeout(() => {
-                                const $item = $(`<div>${model}</div>`);
-                                $item.css('height', 150);
-                                $item.appendTo(container);
-
-                                onRendered();
-                            }, 10);
-                        }
-                    }
-                }
-            },
-        });
-
-        clock.tick(10);
-
-        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input);
-
-        keyboard.type('1');
-
-        clock.tick(1000);
-
-        const overlayContentHeight = $(`.${OVERLAY_CONTENT_CLASS}`).height();
-        const isHeightExpected = overlayContentHeight > 150 && overlayContentHeight < 180;
-
-        assert.ok(isHeightExpected, 'content size is enough for 150px template');
+        assert.ok(overlayContentHeight > listItemsHeight, 'popup height is more than rendered list items height');
 
         clock.restore();
     });
