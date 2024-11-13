@@ -2,7 +2,6 @@ import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
-import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
@@ -246,12 +245,11 @@ const Tabs = CollectionWidget.inherit({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   _createItemByTemplate: function _createItemByTemplate(itemTemplate, renderArgs) {
     const { itemData, container, index } = renderArgs;
-    this._deferredTemplates[index] = Deferred();
     return itemTemplate.render({
       model: itemData,
       container,
       index,
-      onRendered: () => this._deferredTemplates[index].resolve(),
+      onRendered: this._onItemTemplateRendered(itemTemplate, renderArgs),
     });
   },
 
@@ -268,7 +266,6 @@ const Tabs = CollectionWidget.inherit({
   },
 
   _initMarkup() {
-    this._deferredTemplates = [];
     this.callBase();
 
     this.option('useInkRipple') && this._renderInkRipple();
@@ -276,13 +273,8 @@ const Tabs = CollectionWidget.inherit({
     this.$element().addClass(OVERFLOW_HIDDEN_CLASS);
   },
 
-  _render() {
-    this.callBase();
-    this._deferRenderScrolling();
-  },
-
-  _deferRenderScrolling() {
-    when.apply(this, this._deferredTemplates).done(() => this._renderScrolling());
+  _postProcessRenderItems() {
+    this._renderScrolling();
   },
 
   _renderScrolling() {
@@ -594,7 +586,6 @@ const Tabs = CollectionWidget.inherit({
   },
 
   _clean() {
-    this._deferredTemplates = [];
     this._cleanScrolling();
     this.callBase();
   },
@@ -799,7 +790,7 @@ const Tabs = CollectionWidget.inherit({
 
   _afterItemElementInserted() {
     this.callBase();
-    this._deferRenderScrolling();
+    this._planPostRenderActions();
   },
 
   _afterItemElementDeleted($item, deletedActionArgs) {
