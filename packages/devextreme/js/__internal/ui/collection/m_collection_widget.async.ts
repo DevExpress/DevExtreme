@@ -11,7 +11,9 @@ const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
 
   _render() {
     this.callBase(arguments);
-    this._renderItemsAsync();
+    when.apply(this, this._deferredItems).done(() => {
+      this._postProcessRenderItems();
+    });
   },
 
   _renderItemContent(args) {
@@ -36,15 +38,6 @@ const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
   },
 
   _postProcessRenderItems: noop,
-
-  _renderItemsAsync() {
-    const d = Deferred();
-    when.apply(this, this._deferredItems).done(() => {
-      this._postProcessRenderItems();
-      d.resolve();
-    });
-    return d.promise();
-  },
 
   _clean() {
     this.callBase();
