@@ -1,6 +1,6 @@
 define(function(require) {
     const $ = require('jquery');
-    const easing = require('animation/easing');
+    const easing = require('common/core/animation/easing');
 
     require('integration/jquery');
 

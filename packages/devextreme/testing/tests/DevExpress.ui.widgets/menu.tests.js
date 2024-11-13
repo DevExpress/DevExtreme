@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import devices from '__internal/core/m_devices';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import renderer from 'core/renderer';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
@@ -10,10 +10,10 @@ import domAdapter from '__internal/core/m_dom_adapter';
 import Menu from '__internal/ui/menu/m_menu';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fixtures from '../../helpers/positionFixtures.js';
-import CustomStore from 'data/custom_store';
-import ArrayStore from 'data/array_store';
-import eventsEngine from 'events/core/events_engine';
-import { DataSource } from 'data/data_source/data_source';
+import { CustomStore } from 'common/data/custom_store';
+import ArrayStore from 'common/data/array_store';
+import eventsEngine from 'common/core/events/core/events_engine';
+import { DataSource } from 'common/data/data_source/data_source';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 
 import 'generic_light.css!';

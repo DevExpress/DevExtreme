@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import ImageCursor from '__internal/ui/html_editor/modules/m_imageCursor';
-import { name as clickEvent } from 'events/click';
+import { name as clickEvent } from 'common/core/events/click';
 
 const moduleConfig = {
     beforeEach: function() {

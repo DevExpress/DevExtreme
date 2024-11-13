@@ -1,6 +1,6 @@
 import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';

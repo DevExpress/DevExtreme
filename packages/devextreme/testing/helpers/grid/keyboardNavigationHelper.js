@@ -1,14 +1,14 @@
 import $ from 'jquery';
 import devices from '__internal/core/m_devices';
-import { addNamespace, createEvent } from 'events/utils/index';
+import { addNamespace, createEvent } from 'common/core/events/utils/index';
 import {
     setupDataGridModules,
     MockDataController,
     MockColumnsController,
     MockSelectionController } from '../dataGridMocks.js';
-import clickEvent from 'events/click';
-import pointerEvents from 'events/pointer';
-import { keyboard } from 'events/short';
+import clickEvent from 'common/core/events/click';
+import pointerEvents from 'common/core/events/pointer';
+import { keyboard } from 'common/core/events/short';
 import DataGridWrapper from '../wrappers/dataGridWrappers.js';
 
 export const dataGridWrapper = new DataGridWrapper('#container');

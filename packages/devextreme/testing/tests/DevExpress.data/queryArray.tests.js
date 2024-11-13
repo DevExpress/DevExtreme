@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import QUERY from 'data/query';
+import QUERY from 'common/data/query';
 import ErrorHandlingHelper from '../../helpers/data.errorHandlingHelper.js';
 
 QUnit.module('Misc');

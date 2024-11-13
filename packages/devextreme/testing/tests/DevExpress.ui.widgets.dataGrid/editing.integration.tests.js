@@ -1,10 +1,10 @@
 import $ from 'jquery';
 import devices from '__internal/core/m_devices';
-import fx from 'animation/fx';
-import pointerEvents from 'events/pointer';
+import fx from 'common/core/animation/fx';
+import pointerEvents from 'common/core/events/pointer';
 import themes from 'ui/themes';
 import typeUtils from 'core/utils/type';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 import SelectBox from 'ui/select_box';
 import 'ui/text_area';
 import config from 'core/config';
@@ -18,7 +18,7 @@ import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.j
 import { generateItems } from '../../helpers/dataGridMocks.js';
 import { getOuterHeight } from 'core/utils/size';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
-import messageLocalization from 'localization/message';
+import messageLocalization from 'common/core/localization/message';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 

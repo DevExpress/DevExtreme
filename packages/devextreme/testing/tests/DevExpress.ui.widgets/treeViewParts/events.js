@@ -3,11 +3,11 @@
 import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
-import holdEvent from 'events/hold';
+import holdEvent from 'common/core/events/hold';
 import devices from '__internal/core/m_devices';
-import fx from 'animation/fx';
-import contextMenuEvent from 'events/contextmenu';
-import dblclickEvent from 'events/dblclick';
+import fx from 'common/core/animation/fx';
+import contextMenuEvent from 'common/core/events/contextmenu';
+import dblclickEvent from 'common/core/events/dblclick';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 
 const createInstance = (options) => new TreeViewTestWrapper(options);

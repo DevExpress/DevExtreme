@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import eventsEngine from 'events/core/events_engine';
-import { removeEvent } from 'events/remove';
+import eventsEngine from 'common/core/events/core/events_engine';
+import { removeEvent } from 'common/core/events/remove';
 
 QUnit.testStart(function() {
     const markup = '<div id="element"><div id="inner"></div></div>';

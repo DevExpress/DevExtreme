@@ -2,9 +2,9 @@ import $ from 'jquery';
 
 import 'ui/splitter';
 
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
-import messageLocalization from 'localization/message';
+import messageLocalization from 'common/core/localization/message';
 
 QUnit.testStart(function() {
     const markup =

@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import CustomStore from 'data/custom_store';
-import DataSource from 'data/data_source';
+import { CustomStore } from 'common/data/custom_store';
+import DataSource from 'common/data/data_source';
 import { projection } from 'viz/vector_map/projection';
 const simpleProjection = projection({
     aspectRatio: 4 / 3,

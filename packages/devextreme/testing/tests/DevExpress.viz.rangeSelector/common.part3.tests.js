@@ -4,8 +4,8 @@ import { DEBUG_stub_createIncidentOccurred, DEBUG_restore_createIncidentOccurred
 import commons from './rangeSelectorParts/commons.js';
 import slidersControllerModule from 'viz/range_selector/sliders_controller';
 import seriesDataSourceModule from 'viz/range_selector/series_data_source';
-import { DataSource } from 'data/data_source/data_source';
-import dateLocalization from 'localization/date';
+import { DataSource } from 'common/data/data_source/data_source';
+import dateLocalization from 'common/core/localization/date';
 import axisModule from 'viz/axes/base_axis';
 
 const _SeriesDataSource = seriesDataSourceModule.SeriesDataSource;

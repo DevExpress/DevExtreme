@@ -1,4 +1,11 @@
-export { default as devices } from './environment/devices';
-export { default as hideTopOverlay } from './environment/hide_top_overlay';
-export { default as initMobileViewport } from './environment/init_mobile_viewport';
-export { getTimeZones } from './environment/time_zone_utils';
+import devices from './environment/devices';
+import hideTopOverlay from './environment/hide_top_overlay';
+import initMobileViewport from './environment/init_mobile_viewport';
+import { getTimeZones } from './environment/time_zone_utils';
+
+export {
+    devices,
+    hideTopOverlay,
+    initMobileViewport,
+    getTimeZones,
+};

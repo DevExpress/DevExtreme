@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import notify from 'ui/notify';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { value as viewPort } from 'core/utils/view_port';
 import { isPlainObject } from 'core/utils/type';
 import 'generic_light.css!';

@@ -1,4 +1,4 @@
-import Store from 'data/abstract_store';
+import Store from 'common/data/abstract_store';
 
 QUnit.module('Abstract Store', function() {
     class MyStore { }

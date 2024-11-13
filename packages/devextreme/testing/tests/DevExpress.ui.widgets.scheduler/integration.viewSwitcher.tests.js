@@ -11,7 +11,7 @@ require('generic_light.css!');
 require('ui/drop_down_button');
 
 const noop = require('core/utils/common').noop;
-const DataSource = require('data/data_source/data_source').DataSource;
+const DataSource = require('common/data/data_source/data_source').DataSource;
 
 require('__internal/scheduler/m_scheduler');
 
