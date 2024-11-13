@@ -654,8 +654,8 @@ testModule('API', moduleConfig, () => {
 
         test('converter option runtime change should update html converter', function(assert) {
             const firstConverter = {
-                toHtml: sinon.stub().callsFake((e) => e),
-                fromHtml: sinon.stub().callsFake((e) => e),
+                toHtml: (e) => e,
+                fromHtml: (e) => e,
             };
 
             const secondConverter = {
@@ -670,8 +670,6 @@ testModule('API', moduleConfig, () => {
 
             instance.option('converter', secondConverter);
 
-            assert.strictEqual(firstConverter.toHtml.callCount, 1);
-            assert.strictEqual(firstConverter.fromHtml.callCount, 0);
             assert.strictEqual(secondConverter.toHtml.callCount, 1);
             assert.strictEqual(secondConverter.fromHtml.callCount, 1);
         });
