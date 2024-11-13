@@ -1143,7 +1143,7 @@ export const ListBase = CollectionWidget.inherit({
         this._invalidate();
         break;
       case '_swipeEnabled':
-        break;
+      case '_onItemsRendered':
       case 'selectByClick':
         break;
       default:
