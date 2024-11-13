@@ -48,6 +48,9 @@ const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
 
   _clean() {
     this.callBase();
+    this._deferredItems.forEach((item) => {
+      item.reject();
+    });
     this._deferredItems = [];
   },
 });
