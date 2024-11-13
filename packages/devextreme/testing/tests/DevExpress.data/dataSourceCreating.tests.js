@@ -1,8 +1,8 @@
-import { DataSource } from 'data/data_source/data_source';
-import ArrayStore from 'data/array_store';
-import CustomStore from 'data/custom_store';
-import LocalStore from 'data/local_store';
-import ODataStore from 'data/odata/store';
+import { DataSource } from 'common/data/data_source/data_source';
+import ArrayStore from 'common/data/array_store';
+import { CustomStore } from 'common/data/custom_store';
+import LocalStore from 'common/data/local_store';
+import ODataStore from 'common/data/odata/store';
 import ajaxMock from '../../helpers/ajaxMock.js';
 
 QUnit.test('no options', function(assert) {

@@ -1,7 +1,7 @@
 import { extend } from 'core/utils/extend';
-import { errors } from 'data/errors';
-import applyChanges from 'data/apply_changes';
-import { applyBatch } from 'data/array_utils';
+import { errors } from 'common/data/errors';
+import applyChanges from 'common/data/apply_changes';
+import { applyBatch } from 'common/data/array_utils';
 
 QUnit.module('Apply Changes', {
     beforeEach: function() {

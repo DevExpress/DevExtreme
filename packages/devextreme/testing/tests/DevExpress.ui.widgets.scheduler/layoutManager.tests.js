@@ -5,7 +5,7 @@ import '__internal/scheduler/m_scheduler';
 import $ from 'jquery';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import translator from 'animation/translator';
+import translator from 'common/core/animation/translator';
 
 import AppointmentLayoutManager from '__internal/scheduler/m_appointments_layout_manager';
 import BaseAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_base';
@@ -14,7 +14,7 @@ import HorizontalAppointmentsStrategy from '__internal/scheduler/appointments/re
 import HorizontalMonthLineAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_horizontal_month_line';
 import Color from 'color';
 import dataUtils from 'core/element_data';
-import CustomStore from 'data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 
 const APPOINTMENT_DEFAULT_LEFT_OFFSET = 26;

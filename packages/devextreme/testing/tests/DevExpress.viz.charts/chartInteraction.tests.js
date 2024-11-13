@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import devices from '__internal/core/m_devices';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 import errors from 'core/errors';
 
 import 'viz/chart';

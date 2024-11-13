@@ -2,7 +2,7 @@ const $ = require('jquery');
 const typeUtils = require('core/utils/type');
 const Deferred = require('core/utils/deferred').Deferred;
 const renderer = require('core/renderer');
-const eventsEngine = require('events/core/events_engine');
+const eventsEngine = require('common/core/events/core/events_engine');
 
 QUnit.module('Type checking');
 

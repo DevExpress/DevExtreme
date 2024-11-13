@@ -4,8 +4,8 @@ const $ = require('jquery');
 
 const trackerModule = require('viz/tree_map/tracker');
 const tooltipModule = require('viz/core/tooltip');
-const clickEventName = require('events/click').name;
-const pointerEvents = require('events/pointer');
+const clickEventName = require('common/core/events/click').name;
+const pointerEvents = require('common/core/events/pointer');
 
 const dxTreeMap = require('viz/tree_map/tree_map');
 

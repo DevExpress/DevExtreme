@@ -1,9 +1,9 @@
 import '../../helpers/noIntl.js';
 import sharedTests from './sharedParts/localization.shared.js';
 import localization from 'localization';
-import numberLocalization from 'localization/number';
-import dateLocalization from 'localization/date';
-import messageLocalization from 'localization/message';
+import numberLocalization from 'common/core/localization/number';
+import dateLocalization from 'common/core/localization/date';
+import messageLocalization from 'common/core/localization/message';
 import { logger } from 'core/utils/console';
 
 QUnit.module('base localization', {}, () => {

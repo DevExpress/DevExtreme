@@ -7,8 +7,8 @@ import { TemplateManager } from 'core/template_manager';
 import { noop } from 'core/utils/common';
 import publicComponentUtils from 'core/utils/public_component';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import eventsEngine from 'events/core/events_engine';
-import { triggerResizeEvent } from 'events/visibility_change';
+import eventsEngine from 'common/core/events/core/events_engine';
+import { triggerResizeEvent } from 'common/core/events/visibility_change';
 import licenseModule, { setLicenseCheckSkipCondition } from '__internal/core/license/license_validation';
 import $ from 'jquery';
 

@@ -2,15 +2,15 @@ import 'generic_light.css!';
 
 import 'ui/data_grid';
 import 'ui/tag_box';
-import ArrayStore from 'data/array_store';
+import ArrayStore from 'common/data/array_store';
 
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { value as viewPort } from 'core/utils/view_port';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import devices from '__internal/core/m_devices';
-import fx from 'animation/fx';
-import dateLocalization from 'localization/date';
+import fx from 'common/core/animation/fx';
+import dateLocalization from 'common/core/localization/date';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
 
 const device = devices.real();

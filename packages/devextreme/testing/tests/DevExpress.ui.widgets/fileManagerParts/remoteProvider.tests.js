@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import 'ui/file_manager';
-import FileSystemItem from 'file_management/file_system_item';
+import FileSystemItem from 'common/file_management/file_system_item';
 
-import RemoteFileSystemProvider from 'file_management/remote_provider';
+import RemoteFileSystemProvider from 'common/file_management/remote_provider';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 import { createSampleFileItems, generateString, createFileObject } from '../../../helpers/fileManagerHelpers.js';
 import { when } from 'core/utils/deferred';

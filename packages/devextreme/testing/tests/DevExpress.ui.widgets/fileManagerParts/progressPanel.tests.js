@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import FileUploader from 'ui/file_uploader';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { createTestFileSystem, createUploaderFiles, FileManagerProgressPanelWrapper, FileManagerWrapper } from '../../../helpers/fileManagerHelpers.js';
@@ -7,7 +7,7 @@ import FileManagerProgressPanelMock from '../../../helpers/fileManager/notificat
 import FileManagerLogger from '../../../helpers/fileManager/logger.js';
 import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
 import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
-import CustomFileSystemProvider from 'file_management/custom_provider';
+import CustomFileSystemProvider from 'common/file_management/custom_provider';
 import { implementationsMap } from 'core/utils/size';
 
 const { test } = QUnit;

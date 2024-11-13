@@ -1,8 +1,8 @@
 import { getWidth, getHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
-import fx from 'animation/fx';
-import positionUtils from 'animation/position';
-import holdEvent from 'events/hold';
+import fx from 'common/core/animation/fx';
+import positionUtils from 'common/core/animation/position';
+import holdEvent from 'common/core/events/hold';
 import pointerMock from '../../helpers/pointerMock.js';
 
 import 'generic_light.css!';

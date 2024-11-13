@@ -9,7 +9,7 @@ import Toolbar from '__internal/ui/html_editor/modules/m_toolbar';
 import FormDialog from '__internal/ui/html_editor/ui/m_formDialog';
 import { noop } from 'core/utils/common';
 import keyboardMock from '../../../helpers/keyboardMock.js';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import errors from 'ui/widget/ui.errors';
 import localization from 'localization';
 import resizeCallbacks from 'core/utils/resize_callbacks.js';

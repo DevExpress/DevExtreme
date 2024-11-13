@@ -4,7 +4,7 @@ import OldEditor from 'ui/editor/editor';
 import CheckBoxEditor from '__internal/ui/check_box/editor_base/generated_wrapper';
 import Class from 'core/class';
 import ValidationEngine from 'ui/validation_engine';
-import hoverEvents from 'events/hover';
+import hoverEvents from 'common/core/events/hover';
 import { wrapRenovatedWidget } from '../../helpers/wrapRenovatedWidget.js';
 import Validator from 'ui/validator';
 import { getOuterWidth } from 'core/utils/size';

@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import { DataSource } from 'data/data_source/data_source';
-import ArrayStore from 'data/array_store';
-import dateLocalization from 'localization/date';
+import { DataSource } from 'common/data/data_source/data_source';
+import ArrayStore from 'common/data/array_store';
+import dateLocalization from 'common/core/localization/date';
 import { isFunction } from 'core/utils/type';
 import gridCore from '__internal/grids/data_grid/m_core';
 import dataSourceAdapter from '__internal/grids/data_grid/m_data_source_adapter';
@@ -14,9 +14,9 @@ import ajaxMock from '../../helpers/ajaxMock.js';
 
 import 'ui/data_grid';
 
-import 'localization/globalize/currency';
-import 'localization/globalize/number';
-import { locale } from 'localization/core';
+import 'common/core/localization/globalize/currency';
+import 'common/core/localization/globalize/number';
+import { locale } from 'common/core/localization/core';
 
 const createMockDataSource = function(items, loadOptions) {
     loadOptions = loadOptions || {};

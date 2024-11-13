@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
-import animationFrame from 'animation/frame';
+import animationFrame from 'common/core/animation/frame';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import pointerMock from '../../../helpers/pointerMock.js';
 

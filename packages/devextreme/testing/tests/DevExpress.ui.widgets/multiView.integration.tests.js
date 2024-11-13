@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { animation, _translator } from '__internal/ui/multi_view/m_multi_view.animation';
 import 'ui/multi_view';
 

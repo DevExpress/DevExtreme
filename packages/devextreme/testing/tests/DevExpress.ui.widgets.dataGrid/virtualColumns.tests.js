@@ -2,7 +2,7 @@ import $ from 'jquery';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 import 'ui/data_grid';
 import 'generic_light.css!';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 import dataSourceAdapter from '__internal/grids/data_grid/m_data_source_adapter';
 import { getOuterWidth } from 'core/utils/size';
 

@@ -1,7 +1,7 @@
 import 'ui/data_grid';
 
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 
 const setupDataGridModules = dataGridMocks.setupDataGridModules;

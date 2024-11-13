@@ -1,11 +1,11 @@
 import $ from 'jquery';
 import { camelize } from 'core/utils/inflector';
-import translator from 'animation/translator';
+import translator from 'common/core/animation/translator';
 import dateUtils from 'core/utils/date';
 import dateSerialization from 'core/utils/date_serialization';
 import { noop } from 'core/utils/common';
-import swipeEvents from 'events/swipe';
-import fx from 'animation/fx';
+import swipeEvents from 'common/core/events/swipe';
+import fx from 'common/core/animation/fx';
 import Views from '__internal/ui/calendar/m_calendar.views';
 import Calendar from 'ui/calendar';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -13,8 +13,8 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import config from 'core/config';
 import dataUtils from 'core/element_data';
 import devices from 'core/devices.js';
-import dateLocalization from 'localization/date';
-import { normalizeKeyName } from 'events/utils/index';
+import dateLocalization from 'common/core/localization/date';
+import { normalizeKeyName } from 'common/core/events/utils/index';
 import localization from 'localization';
 
 import 'generic_light.css!';

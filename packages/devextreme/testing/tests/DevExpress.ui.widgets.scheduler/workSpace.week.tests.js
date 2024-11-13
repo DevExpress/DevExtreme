@@ -1,5 +1,5 @@
 import dateUtils from 'core/utils/date';
-import { triggerShownEvent } from 'events/visibility_change';
+import { triggerShownEvent } from 'common/core/events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 

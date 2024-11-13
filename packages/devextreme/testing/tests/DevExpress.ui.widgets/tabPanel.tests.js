@@ -1,4 +1,4 @@
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import { deferUpdate } from 'core/utils/common';
@@ -10,7 +10,7 @@ import TabPanel from 'ui/tab_panel';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
-import translator from 'animation/translator';
+import translator from 'common/core/animation/translator';
 
 
 QUnit.testStart(() => {

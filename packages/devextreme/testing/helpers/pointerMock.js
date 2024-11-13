@@ -5,8 +5,8 @@
             root.pointerMock = module.exports = factory(
                 require('jquery'),
                 require('inferno'),
-                require('events/gesture/emitter.gesture'),
-                require('events/click'));
+                require('common/core/events/gesture/emitter.gesture'),
+                require('common/core/events/click'));
         });
     } else {
         root.pointerMock = factory(jQuery, DevExpress.events.GestureEmitter, DevExpress.events.click);

@@ -1,17 +1,17 @@
 require('../../helpers/noIntl.js');
-const getNumberFormatter = require('localization/ldml/number').getFormatter;
-const getNumberFormat = require('localization/ldml/number').getFormat;
-const getDateParser = require('localization/ldml/date.parser').getParser;
-const getRegExpInfo = require('localization/ldml/date.parser').getRegExpInfo;
-const getDateFormatter = require('localization/ldml/date.formatter').getFormatter;
-const getDateFormat = require('localization/ldml/date.format').getFormat;
-const defaultDateNames = require('localization/default_date_names');
-const numberLocalization = require('localization/number');
-const dateLocalization = require('localization/date');
+const getNumberFormatter = require('common/core/localization/ldml/number').getFormatter;
+const getNumberFormat = require('common/core/localization/ldml/number').getFormat;
+const getDateParser = require('common/core/localization/ldml/date.parser').getParser;
+const getRegExpInfo = require('common/core/localization/ldml/date.parser').getRegExpInfo;
+const getDateFormatter = require('common/core/localization/ldml/date.formatter').getFormatter;
+const getDateFormat = require('common/core/localization/ldml/date.format').getFormat;
+const defaultDateNames = require('common/core/localization/default_date_names');
+const numberLocalization = require('common/core/localization/number');
+const dateLocalization = require('common/core/localization/date');
 const extend = require('core/utils/extend').extend;
 const console = require('core/utils/console').logger;
 
-require('localization/currency');
+require('common/core/localization/currency');
 
 const dateParts = extend({}, defaultDateNames, {
     getPeriodNames: function() {

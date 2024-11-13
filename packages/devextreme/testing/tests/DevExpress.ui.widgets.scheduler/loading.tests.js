@@ -1,7 +1,7 @@
 const $ = require('jquery');
 const loading = require('__internal/scheduler/m_loading');
 const viewPort = require('core/utils/view_port').value;
-const fx = require('animation/fx');
+const fx = require('common/core/animation/fx');
 const LoadPanel = require('ui/load_panel');
 
 QUnit.module('loading tests', {

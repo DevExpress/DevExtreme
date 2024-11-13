@@ -4,7 +4,7 @@ import devices from '__internal/core/m_devices';
 import { alert, confirm, custom } from 'ui/dialog';
 import domUtils from '__internal/core/utils/m_dom';
 import errors from 'ui/widget/ui.errors';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { value as viewPort } from 'core/utils/view_port';
 import domAdapter from '__internal/core/m_dom_adapter';

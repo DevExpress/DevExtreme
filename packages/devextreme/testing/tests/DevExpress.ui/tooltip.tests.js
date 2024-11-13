@@ -2,7 +2,7 @@ import $ from 'jquery';
 import Tooltip from 'ui/tooltip';
 import { show } from '__internal/ui/tooltip/m_tooltip';
 import viewPort from 'core/utils/view_port';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 
 function checkTooltip(assert) {
     const $testContent = $('.dx-popup-content').find('.test-content');
