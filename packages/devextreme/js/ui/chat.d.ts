@@ -225,7 +225,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    messageTemplate?: ((data: MessageTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement) | template | null;
+    messageTemplate?: template | null | ((data: MessageTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default 'shorttime'

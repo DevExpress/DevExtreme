@@ -15,14 +15,6 @@
         caption="Employee"
       />
       <DxColumn
-        data-field="BirthDate"
-        data-type="date"
-      />
-      <DxColumn
-        data-field="HireDate"
-        data-type="date"
-      />
-      <DxColumn
         data-field="Position"
         alignment="right"
       />
@@ -32,16 +24,30 @@
         :fixed="true"
         fixed-position="sticky"
       />
-      <DxColumn data-field="City"/>
+      <DxColumn data-field="City" />
+      <DxColumn data-field="Zipcode"/>
+      <DxColumn data-field="State" />
       <DxColumn
-        data-field="State"
+        data-field="Department"
         :fixed="true"
         fixed-position="right"
       />
+      <DxColumn
+        data-field="BirthDate"
+        data-type="date"
+      />
+      <DxColumn
+        data-field="HireDate"
+        data-type="date"
+      />
       <DxColumn data-field="HomePhone"/>
       <DxColumn data-field="MobilePhone"/>
+      <DxColumn
+        data-field="Email"
+        :fixed="true"
+        fixed-position="sticky"
+      />
       <DxColumn data-field="Skype"/>
-      <DxColumn data-field="Email"/>
     </DxDataGrid>
   </div>
 </template>

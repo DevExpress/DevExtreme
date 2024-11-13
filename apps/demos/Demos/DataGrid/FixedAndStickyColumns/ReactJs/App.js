@@ -19,14 +19,6 @@ const App = () => (
       calculateCellValue={calculateCellValue}
     />
     <Column
-      dataField="BirthDate"
-      dataType="date"
-    />
-    <Column
-      dataField="HireDate"
-      dataType="date"
-    />
-    <Column
       dataField="Position"
       alignment="right"
     />
@@ -37,15 +29,29 @@ const App = () => (
       fixedPosition="sticky"
     />
     <Column dataField="City" />
+    <Column dataField="Zipcode" />
+    <Column dataField="State" />
     <Column
-      dataField="State"
+      dataField="Department"
       fixed={true}
       fixedPosition="right"
     />
+    <Column
+      dataField="BirthDate"
+      dataType="date"
+    />
+    <Column
+      dataField="HireDate"
+      dataType="date"
+    />
     <Column dataField="HomePhone" />
     <Column dataField="MobilePhone" />
+    <Column
+      dataField="Email"
+      fixed={true}
+      fixedPosition="sticky"
+    />
     <Column dataField="Skype" />
-    <Column dataField="Email" />
   </DataGrid>
 );
 export default App;

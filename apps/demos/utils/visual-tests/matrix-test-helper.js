@@ -176,9 +176,6 @@ const SKIPPED_TESTS = {
     ],
     DataGrid: [
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
-      // It looks like we don't have a "close" button in the Fluent theme.
-      // Need need to update the behavior in Fluent or find another common way for all topics.
-      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
       // This test works only in simulated scrolling strategy!
       { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
@@ -202,7 +199,6 @@ const SKIPPED_TESTS = {
     ],
     DataGrid: [
       { demo: 'BatchEditing', themes: [THEME.fluent] },
-      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
       { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
@@ -230,7 +226,6 @@ const SKIPPED_TESTS = {
     ],
     DataGrid: [
       { demo: 'BatchEditing', themes: [THEME.fluent] },
-      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
       { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
@@ -251,7 +246,6 @@ const SKIPPED_TESTS = {
     ],
     DataGrid: [
       { demo: 'BatchEditing', themes: [THEME.fluent] },
-      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
       { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },

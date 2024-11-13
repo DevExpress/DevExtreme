@@ -379,3 +379,23 @@ test('Scheduler a11y: Appointment collector button doesn\'t have info about date
     currentDate: new Date(2021, 2, 1),
   });
 });
+
+test('appointment aria label should contain date with right timezone', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const appt = scheduler.getAppointmentByIndex(0);
+
+  await t
+    .expect(appt.element.getAttribute('aria-roledescription'))
+    .eql('March 29, 2021, ');
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    timeZone: 'America/Los_Angeles',
+    dataSource: [{
+      text: 'Install New Router in Dev Room',
+      startDate: new Date('2021-03-29T21:30:00.000Z'),
+      endDate: new Date('2021-03-29T22:30:00.000Z'),
+    }],
+    currentView: 'week',
+    currentDate: new Date(2021, 2, 28),
+  });
+});

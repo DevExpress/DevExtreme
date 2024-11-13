@@ -9606,12 +9606,12 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.messageTemplate]
      */
     messageTemplate?:
+      | DevExpress.core.template
+      | null
       | ((
           data: DevExpress.ui.dxChat.MessageTemplateData,
           messageBubbleElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement)
-      | DevExpress.core.template
-      | null;
+        ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:dxChatOptions.messageTimestampFormat]
      */

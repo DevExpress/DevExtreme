@@ -623,6 +623,7 @@ class SchedulerAppointments extends CollectionWidget {
 
         getAppointmentColor: this.option('getAppointmentColor'),
         getResourceDataAccessors: this.option('getResourceDataAccessors'),
+        timeZoneCalculator: this.option('timeZoneCalculator'),
       };
 
       if (this.isAgendaView) {
