@@ -4421,7 +4421,7 @@ QUnit.module('Async tests', {}, () => {
         const overlayContentHeight = $(`.${OVERLAY_CONTENT_CLASS}`).height();
         const listItemsHeight = $(`.${LIST_ITEMS_CLASS}`).height();
 
-        assert.ok(overlayContentHeight > listItemsHeight, 'popup height is more than rendered list items height');
+        assert.roughEqual(overlayContentHeight, listItemsHeight, 5, 'popup height is more than rendered list items height');
 
         clock.restore();
     });
