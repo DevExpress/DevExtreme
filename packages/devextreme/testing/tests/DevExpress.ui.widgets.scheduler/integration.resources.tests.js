@@ -6,7 +6,7 @@ import 'generic_light.css!';
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
 import { getOuterHeight } from 'core/utils/size';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import Color from 'color';
 import translator from 'common/core/animation/translator';
 

@@ -1,6 +1,6 @@
 import * as utils from '__internal/filter_builder/m_utils';
 import * as between from '__internal/filter_builder/m_between';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import messageLocalization from 'common/core/localization/message';
 import fields from '../../../helpers/filterBuilderTestData.js';
 import filterUtils from 'ui/shared/filtering';

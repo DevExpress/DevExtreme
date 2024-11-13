@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import ArrayStore from 'common/data/array_store';
 
 export const makeSlowDataSource = (data) => {

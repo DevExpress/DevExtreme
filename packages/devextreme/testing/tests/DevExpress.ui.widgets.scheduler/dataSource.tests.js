@@ -10,7 +10,7 @@ import ArrayStore from 'common/data/array_store';
 import fx from 'common/core/animation/fx';
 import translator from 'common/core/animation/translator';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import { noop } from 'core/utils/common';
 import pointerMock from '../../helpers/pointerMock.js';
 import dragEvents from 'common/core/events/core/events/drag';

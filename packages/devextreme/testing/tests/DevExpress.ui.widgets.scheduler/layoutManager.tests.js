@@ -14,7 +14,7 @@ import HorizontalAppointmentsStrategy from '__internal/scheduler/appointments/re
 import HorizontalMonthLineAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_horizontal_month_line';
 import Color from 'color';
 import dataUtils from 'core/element_data';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 
 const APPOINTMENT_DEFAULT_LEFT_OFFSET = 26;

@@ -7,7 +7,7 @@ import eventsEngine from 'common/core/events/core/events/core/events_engine';
 import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import dragEvents from 'common/core/events/core/events/drag';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import translator from 'common/core/animation/translator';

@@ -6,7 +6,7 @@ import AlertList from '__internal/ui/chat/alertlist';
 import MessageBox, { TYPING_END_DELAY } from '__internal/ui/chat/messagebox';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { DataSource } from 'common/data/data_source/data_source';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import dataUtils from 'core/element_data';
 
 import { isRenderer } from 'core/utils/type';

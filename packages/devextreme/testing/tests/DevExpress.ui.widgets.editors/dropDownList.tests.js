@@ -5,7 +5,7 @@ import { Template } from 'core/templates/template';
 import Guid from 'core/guid';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fx from 'common/core/animation/fx';
 import { isRenderer } from 'core/utils/type';

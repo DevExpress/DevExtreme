@@ -7,7 +7,7 @@ import { CompactAppointmentsHelper } from '__internal/scheduler/m_compact_appoin
 import Widget from 'ui/widget/ui.widget';
 import Color from 'color';
 import { DataSource } from 'common/data/data_source/data_source';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import AppointmentAdapter from '__internal/scheduler/m_appointment_adapter';
 
 import '__internal/scheduler/m_scheduler';

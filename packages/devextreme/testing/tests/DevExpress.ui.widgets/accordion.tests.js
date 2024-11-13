@@ -5,7 +5,7 @@ import { getHeight } from 'core/utils/size';
 import { deferUpdate, noop } from 'core/utils/common';
 import { extend } from 'core/utils/extend';
 import { isRenderer } from 'core/utils/type';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';
 import holdEvent from 'common/core/events/hold';
 import { triggerShownEvent } from 'common/core/events/visibility_change';

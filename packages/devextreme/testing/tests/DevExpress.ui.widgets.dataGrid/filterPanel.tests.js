@@ -2,7 +2,7 @@ import 'ui/data_grid';
 
 import $ from 'jquery';
 import { DataSource } from 'common/data/data_source/data_source';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import ArrayStore from 'common/data/array_store';
 import errors from 'ui/widget/ui.errors';

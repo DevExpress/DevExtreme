@@ -6,7 +6,7 @@ import dblclickEvent from 'common/core/events/core/events/dblclick';
 import fx from 'common/core/animation/fx';
 import AgendaAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_agenda';
 import { DataSource } from 'common/data/data_source/data_source';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import dataUtils from 'core/element_data';
 import { createWrapper, SchedulerTestWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import DataSource from 'common/data/data_source';
 import { projection } from 'viz/vector_map/projection';
 const simpleProjection = projection({

@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { logger } from 'core/utils/console';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import { ODataStore } from 'common/data/odata/store';
 import dataQuery from 'common/data/query';
 import { queryByOptions } from 'common/data/store_helper';

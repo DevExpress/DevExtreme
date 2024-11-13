@@ -10,7 +10,7 @@ import domAdapter from '__internal/core/m_dom_adapter';
 import Menu from '__internal/ui/menu/m_menu';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fixtures from '../../helpers/positionFixtures.js';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import ArrayStore from 'common/data/array_store';
 import eventsEngine from 'common/core/events/core/events_engine';
 import { DataSource } from 'common/data/data_source/data_source';

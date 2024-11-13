@@ -8,7 +8,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import Color from 'color';
 import { hide } from '__internal/ui/tooltip/m_tooltip';
 import { DataSource } from 'common/data/data_source/data_source';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import dataUtils from 'core/element_data';
 import dateSerialization from 'core/utils/date_serialization';
 import {

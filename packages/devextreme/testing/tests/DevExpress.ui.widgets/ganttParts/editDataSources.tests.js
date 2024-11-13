@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { DataSource } from 'common/data/data_source/data_source';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import ArrayStore from 'common/data/array_store';
 import 'ui/gantt';
 import { Consts, getGanttViewCore } from '../../../helpers/ganttHelpers.js';

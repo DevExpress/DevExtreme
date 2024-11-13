@@ -1,7 +1,7 @@
 import { getOuterHeight } from 'core/utils/size';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';
 
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/core/events/visibility_change';

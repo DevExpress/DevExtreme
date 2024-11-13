@@ -6,7 +6,7 @@ import { isFunction } from 'core/utils/type';
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 
 const NODE_LOAD_INDICATOR_CLASS = 'dx-treeview-node-loadindicator';

@@ -3,7 +3,7 @@ import fx from 'common/core/animation/fx';
 import config from 'core/config';
 import dataUtils from 'core/element_data';
 import { isRenderer } from 'core/utils/type';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';
 import timeZoneDataUtils from '__internal/scheduler/timezones/m_utils_timezones_data';
 

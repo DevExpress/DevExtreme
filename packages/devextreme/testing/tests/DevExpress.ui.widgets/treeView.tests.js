@@ -1,7 +1,7 @@
 /* global stripFunctions */
 
 import $ from 'jquery';
-import CustomStore from 'common/data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import ArrayStore from 'common/data/array_store';
 
 import 'ui/tree_view';
