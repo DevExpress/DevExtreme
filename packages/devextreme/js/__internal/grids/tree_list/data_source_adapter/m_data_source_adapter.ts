@@ -1,5 +1,4 @@
-import { query } from '@js/common/data';
-import { ArrayStore } from '@js/common/data';
+import { ArrayStore, query } from '@js/common/data';
 import { createObjectWithChanges } from '@js/common/data/array_utils';
 import storeHelper from '@js/common/data/store_helper';
 import { equalByValue } from '@js/core/utils/common';
