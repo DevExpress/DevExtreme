@@ -1104,8 +1104,12 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
     }
 
     &.dx-#{$widget-name}-sticky-columns {
-      .dx-row:not(.dx-row-lines, .dx-group-row) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+      .dx-row:not(.dx-row-lines, .dx-group-row, .dx-datagrid-group-footer) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
         padding-top: $material-grid-base-cell-vertical-padding + 1px;
+      }
+
+      .dx-group-row > td {
+        padding-top: $material-grid-base-cell-vertical-padding - 1px;
       }
 
       .dx-row.dx-row-lines.dx-edit-row > td {

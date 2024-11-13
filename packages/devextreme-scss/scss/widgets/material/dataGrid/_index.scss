@@ -138,14 +138,18 @@
 }
 
 .dx-datagrid-sticky-columns {
-  .dx-row.dx-row-lines + .dx-datagrid-group-footer td,
-  .dx-row.dx-group-row + .dx-datagrid-group-footer td {
-    border-top: none;
+  .dx-row.dx-row-lines, .dx-row.dx-group-row {
+    &+.dx-datagrid-group-footer td {
+      border-top: none;
+      padding-top: $material-grid-base-cell-vertical-padding + 1px;
+    }
   }
 
-  .dx-row.dx-row-lines + .dx-row.dx-group-row td,
-  .dx-row.dx-group-row + .dx-row.dx-group-row td {
-    border-top: none;
+  .dx-row.dx-row-lines, .dx-row.dx-group-row {
+    &+.dx-row.dx-group-row td {
+      padding-top: $material-grid-base-cell-vertical-padding;
+      border-top: none;
+    }
   }
 }
 

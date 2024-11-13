@@ -1012,8 +1012,12 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
   }
 
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns {
-    .dx-row:not(.dx-row-lines, .dx-group-row) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+    .dx-row:not(.dx-row-lines, .dx-group-row, .dx-datagrid-group-footer) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
       padding-top: $generic-grid-base-cell-padding + 1px;
+    }
+
+    .dx-group-row > td {
+      padding-top: $generic-grid-base-cell-padding - 1px;
     }
 
     .dx-row.dx-row-lines.dx-edit-row > td {
