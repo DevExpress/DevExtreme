@@ -368,7 +368,9 @@ const SelectBox = (DropDownList as any).inherit({
       onFocusedItemChanged: this._listFocusedItemChangeHandler.bind(this),
       _onItemsRendered: (): void => {
         this._popup.repaint();
-        this._scrollToSelectedItem();
+        if (this.option('opened')) {
+          this._scrollToSelectedItem();
+        }
       },
     });
 
