@@ -513,6 +513,7 @@ const DropDownList = DropDownEditor.inherit({
       _dataController: this._dataController,
       hoverStateEnabled: this._isDesktopDevice() ? this.option('hoverStateEnabled') : false,
       focusStateEnabled: this._isDesktopDevice() ? this.option('focusStateEnabled') : false,
+      _onItemsRendered: (): void => { this._updateListDimensions(); },
     };
 
     if (!this._canListHaveFocus()) {

@@ -9,6 +9,11 @@ const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
     this.callBase();
   },
 
+  _render() {
+    this.callBase(arguments);
+    this._renderItemsAsync();
+  },
+
   _renderItemContent(args) {
     const renderContentDeferred = Deferred();
     const itemDeferred = Deferred();
