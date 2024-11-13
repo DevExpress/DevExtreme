@@ -1,13 +1,13 @@
 import { getHeight, getWidth, getOuterWidth } from 'core/utils/size';
-import fx from 'animation/fx';
-import translator from 'animation/translator';
+import fx from 'common/core/animation/fx';
+import translator from 'common/core/animation/translator';
 import 'generic_light.css!';
 import config from 'core/config';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
-import eventsEngine from 'events/core/events_engine';
-import visibilityChange from 'events/visibility_change';
+import eventsEngine from 'common/core/events/core/events_engine';
+import visibilityChange from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import Button from 'ui/button';
 import Drawer from 'ui/drawer';

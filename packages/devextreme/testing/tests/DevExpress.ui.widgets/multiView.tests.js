@@ -1,11 +1,11 @@
-import fx from 'animation/fx';
-import translator from 'animation/translator';
+import fx from 'common/core/animation/fx';
+import translator from 'common/core/animation/translator';
 import 'generic_light.css!';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import { isRenderer } from 'core/utils/type';
-import Swipeable from 'events/gesture/swipeable';
-import { triggerShownEvent } from 'events/visibility_change';
+import Swipeable from 'common/core/events/gesture/swipeable';
+import { triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import 'ui/multi_view';
 import { animation } from '__internal/ui/multi_view/m_multi_view.animation';

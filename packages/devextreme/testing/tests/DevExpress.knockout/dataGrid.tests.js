@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import ko from 'knockout';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 import { logger } from 'core/utils/console';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import dataSourceAdapter from '__internal/grids/data_grid/m_data_source_adapter';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 

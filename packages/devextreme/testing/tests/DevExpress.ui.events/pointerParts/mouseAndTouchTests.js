@@ -1,6 +1,6 @@
 const $ = require('jquery');
-const MouseAndTouchStrategy = require('events/pointer/mouse_and_touch');
-const registerEvent = require('events/core/event_registrator');
+const MouseAndTouchStrategy = require('common/core/events/pointer/mouse_and_touch');
+const registerEvent = require('common/core/events/core/event_registrator');
 const nativePointerMock = require('../../../helpers/nativePointerMock.js');
 const special = require('../../../helpers/eventHelper.js').special;
 

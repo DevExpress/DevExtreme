@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import 'ui/file_manager';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { Consts, FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
 import { implementationsMap } from 'core/utils/size';
 

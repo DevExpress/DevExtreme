@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import Swipeable from 'events/gesture/swipeable';
-import swipeEvents from 'events/swipe';
+import Swipeable from 'common/core/events/gesture/swipeable';
+import swipeEvents from 'common/core/events/swipe';
 import pointerMock from '../../helpers/pointerMock.js';
 
 QUnit.module('swipeable', {

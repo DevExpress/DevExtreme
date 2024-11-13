@@ -5,10 +5,10 @@ import { initTestMarkup, createWrapper, isDesktopEnvironment } from '../../helpe
 import $ from 'jquery';
 import devices from '__internal/core/m_devices';
 import SelectBox from 'ui/select_box';
-import fx from 'animation/fx';
-import { DataSource } from 'data/data_source/data_source';
+import fx from 'common/core/animation/fx';
+import { DataSource } from 'common/data/data_source/data_source';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import messageLocalization from 'localization/message';
+import messageLocalization from 'common/core/localization/message';
 import { APPOINTMENT_FORM_GROUP_NAMES } from '__internal/scheduler/appointment_popup/m_form';
 import { dateToMilliseconds as toMs } from 'core/utils/date';
 import '__internal/scheduler/m_scheduler';

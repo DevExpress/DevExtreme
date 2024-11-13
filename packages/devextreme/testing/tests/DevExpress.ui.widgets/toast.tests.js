@@ -1,7 +1,7 @@
 import { getWidth, getHeight, getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { value as setViewPort } from 'core/utils/view_port';
 import Toast from 'ui/toast';
 import devices from 'core/devices.js';

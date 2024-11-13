@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import typeUtils from 'core/utils/type';
 import browser from 'core/utils/browser';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 import config from 'core/config';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';

@@ -1,6 +1,6 @@
 const $ = require('jquery');
-const converters = require('data/odata/utils').keyConverters;
-const interpretJsonFormat = require('data/odata/utils').OData__internals.interpretJsonFormat;
+const converters = require('common/data/odata/utils').keyConverters;
+const interpretJsonFormat = require('common/data/odata/utils').OData__internals.interpretJsonFormat;
 const Guid = require('core/guid');
 
 QUnit.module('OData 2');

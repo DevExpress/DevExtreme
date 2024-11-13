@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import dateSerialization from 'core/utils/date_serialization';
-import dateLocalization from 'localization/date';
+import dateLocalization from 'common/core/localization/date';
 import { isDefined, isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import windowUtils from 'core/utils/window';

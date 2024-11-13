@@ -1,6 +1,6 @@
 /* global initTree */
-import ArrayStore from 'data/array_store';
-import { DataSource } from 'data/data_source/data_source';
+import ArrayStore from 'common/data/array_store';
+import { DataSource } from 'common/data/data_source/data_source';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import $ from 'jquery';
 QUnit.module('Initialization', () => {

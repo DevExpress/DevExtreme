@@ -1,12 +1,12 @@
 import $ from 'jquery';
 import 'ui/file_manager';
 import FileUploader from 'ui/file_uploader';
-import fx from 'animation/fx';
-import pointerEvents from 'events/pointer';
-import ObjectFileSystemProvider from 'file_management/object_provider';
-import CustomFileSystemProvider from 'file_management/custom_provider';
-import FileSystemError from 'file_management/error.js';
-import ErrorCode from 'file_management/error_codes';
+import fx from 'common/core/animation/fx';
+import pointerEvents from 'common/core/events/pointer';
+import ObjectFileSystemProvider from 'common/file_management/object_provider';
+import CustomFileSystemProvider from 'common/file_management/custom_provider';
+import FileSystemError from 'common/file_management/error.js';
+import ErrorCode from 'common/file_management/error_codes';
 import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader, getDropFileEvent } from '../../../helpers/fileManagerHelpers.js';
 import NoDuplicatesFileProvider from '../../../helpers/fileManager/file_provider.no_duplicates.js';
 import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';

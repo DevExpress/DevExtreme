@@ -6,7 +6,7 @@ import { extend } from 'core/utils/extend';
 import { TemplateBase } from 'core/templates/template_base';
 import { Template } from 'core/templates/template';
 import DataHelperMixin from 'data_helper';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import config from 'core/config';

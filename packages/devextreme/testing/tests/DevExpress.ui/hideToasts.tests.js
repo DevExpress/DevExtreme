@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import notify from 'ui/notify';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import hideToasts from 'ui/toast/hide_toasts';
 
 QUnit.testStart(function() {
