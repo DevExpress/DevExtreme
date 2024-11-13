@@ -31,7 +31,7 @@ const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
 
   _onItemTemplateRendered(itemTemplate, renderArgs) {
     return () => {
-      this._deferredItems[renderArgs.index].resolve();
+      this._deferredItems[renderArgs.index]?.resolve();
     };
   },
 
