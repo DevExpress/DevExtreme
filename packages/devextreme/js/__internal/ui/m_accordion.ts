@@ -124,7 +124,7 @@ const Accordion = CollectionWidget.inherit({
   },
 
   _initMarkup() {
-    this._deferredItemsBody = [];
+    this._deferredItems = [];
     this.callBase();
 
     this.setAria({
@@ -185,7 +185,7 @@ const Accordion = CollectionWidget.inherit({
   },
 
   _afterItemElementDeleted($item, deletedActionArgs) {
-    this._deferredItemsBody.splice(deletedActionArgs.itemIndex, 1);
+    this._deferredItems.splice(deletedActionArgs.itemIndex, 1);
     this.callBase.apply(this, arguments);
   },
 
@@ -201,10 +201,10 @@ const Accordion = CollectionWidget.inherit({
       this._attachItemTitleClickAction(itemTitle);
 
       const deferred = Deferred();
-      if (isDefined(this._deferredItemsBody[args.index])) {
-        this._deferredItemsBody[args.index] = deferred;
+      if (isDefined(this._deferredItems[args.index])) {
+        this._deferredItems[args.index] = deferred;
       } else {
-        this._deferredItemsBody.push(deferred);
+        this._deferredItems.push(deferred);
       }
 
       if (!this.option('deferRendering') || this._getSelectedItemIndices().indexOf(args.index) >= 0) {
@@ -247,7 +247,7 @@ const Accordion = CollectionWidget.inherit({
     const $items = this._itemElements();
 
     iteratorUtils.each(addedSelection, (_, index) => {
-      this._deferredItemsBody[index]?.resolve();
+      this._deferredItems[index]?.resolve();
 
       const $item = $items.eq(index)
         .addClass(ACCORDION_ITEM_OPENED_CLASS)

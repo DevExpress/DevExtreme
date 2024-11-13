@@ -5,7 +5,7 @@ import CollectionWidgetEdit from './m_collection_widget.edit';
 
 const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
   _initMarkup() {
-    this._deferredItems = [];
+    this._asyncTemplateItems = [];
     this.callBase();
   },
 
@@ -17,10 +17,9 @@ const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
   _renderItemContent(args) {
     const renderContentDeferred = Deferred();
     const itemDeferred = Deferred();
-    const that = this;
 
-    this._deferredItems[args.index] = itemDeferred;
-    const $itemContent = this.callBase.call(that, args);
+    this._asyncTemplateItems[args.index] = itemDeferred;
+    const $itemContent = this.callBase(args);
 
     itemDeferred.done(() => {
       renderContentDeferred.resolve($itemContent);
@@ -31,7 +30,7 @@ const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
 
   _onItemTemplateRendered(itemTemplate, renderArgs) {
     return () => {
-      this._deferredItems[renderArgs.index]?.resolve();
+      this._asyncTemplateItems[renderArgs.index]?.resolve();
     };
   },
 
@@ -39,7 +38,7 @@ const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
 
   _planPostRenderActions() {
     const d = Deferred();
-    when.apply(this, this._deferredItems).done(() => {
+    when.apply(this, this._asyncTemplateItems).done(() => {
       this._postProcessRenderItems();
       d.resolve();
     });
@@ -48,10 +47,10 @@ const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
 
   _clean() {
     this.callBase();
-    this._deferredItems.forEach((item) => {
+    this._asyncTemplateItems.forEach((item) => {
       item.reject();
     });
-    this._deferredItems = [];
+    this._asyncTemplateItems = [];
   },
 });
 
