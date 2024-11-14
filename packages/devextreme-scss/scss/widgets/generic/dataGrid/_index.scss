@@ -138,18 +138,20 @@
 }
 
 .dx-datagrid-sticky-columns {
-  .dx-row.dx-row-lines, .dx-row.dx-group-row {
-    &+.dx-datagrid-group-footer td {
-      border-top: none;
-      padding-top: $generic-grid-base-cell-padding + 1px;
+  .dx-row.dx-datagrid-group-footer > td {
+    border-bottom: $datagrid-border;
+  }
+
+  .dx-row.dx-row-lines, .dx-row.dx-group-row, .dx-datagrid-group-footer, .dx-edit-row {
+    &+.dx-datagrid-group-footer, &+.dx-row.dx-group-row, &+.dx-master-detail-row, &+.dx-edit-row {
+      td {
+        border-top: none;
+      }
     }
   }
 
-  .dx-row.dx-row-lines, .dx-row.dx-group-row {
-    &+.dx-row.dx-group-row td {
-      padding-top: $generic-grid-base-cell-padding;
-      border-top: none;
-    }
+  .dx-row.dx-group-row:first-child td {
+    padding-top: $generic-grid-base-cell-padding;
   }
 }
 

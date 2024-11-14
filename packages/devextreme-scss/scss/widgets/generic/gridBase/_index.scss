@@ -1016,8 +1016,10 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
       padding-top: $generic-grid-base-cell-padding + 1px;
     }
 
-    .dx-group-row > td {
-      padding-top: $generic-grid-base-cell-padding - 1px;
+    .dx-data-row td:not(.dx-command-expand, .dx-editor-cell) {
+      .dx-row.dx-group-row + &, .dx-row.dx-master-detail-row + & {
+        padding-top: $generic-grid-base-cell-padding;
+      }
     }
 
     .dx-row.dx-row-lines.dx-edit-row > td {
