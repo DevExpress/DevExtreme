@@ -29,7 +29,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
         });
 
         QUnit.test('content element should have content element with correct class', function(assert) {
-            const $content = this.$element.find(`${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
+            const $content = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
 
             assert.strictEqual($content.length, 1);
         });
