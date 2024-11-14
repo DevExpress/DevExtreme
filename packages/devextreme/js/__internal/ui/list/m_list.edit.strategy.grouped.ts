@@ -1,4 +1,4 @@
-import { query } from '@js/common/data';
+import query from '@js/common/data/query';
 import storeHelper from '@js/common/data/store_helper';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';

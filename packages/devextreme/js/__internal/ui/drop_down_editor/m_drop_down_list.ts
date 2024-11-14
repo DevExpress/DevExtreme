@@ -1,7 +1,7 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
-import { query as dataQuery } from '@js/common/data';
+import dataQuery from '@js/common/data/query';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import Guid from '@js/core/guid';

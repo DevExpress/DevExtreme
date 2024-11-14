@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-dynamic-delete */
-import { ArrayStore } from '@js/common/data';
+import ArrayStore from '@js/common/data/array_store';
 import { applyBatch } from '@js/common/data/array_utils';
 import Callbacks from '@js/core/utils/callbacks';
 import { getKeyHash } from '@js/core/utils/common';
@@ -529,7 +529,6 @@ export default class DataSourceAdapter extends modules.Controller {
             options.data = this._cachedStoreData = this._cachedStoreData.concat(options.data);
           }
         }
-        // @ts-expect-error
         new ArrayStore(options.data).load(loadOptions).done((data) => {
           options.data = data;
           if (needStoreCache) {

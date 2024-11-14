@@ -5,7 +5,7 @@ import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
-import { DataHelperMixin } from '@js/common/data';
+import DataHelperMixin from '@js/common/data/data_helper';
 import Action from '@js/core/action';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';

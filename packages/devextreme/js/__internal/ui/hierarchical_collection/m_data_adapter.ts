@@ -1,4 +1,4 @@
-import { query } from '@js/common/data';
+import query from '@js/common/data/query';
 import storeHelper from '@js/common/data/store_helper';
 import Class from '@js/core/class';
 import { noop } from '@js/core/utils/common';
@@ -374,6 +374,7 @@ const DataAdapter = Class.inherit({
   },
 
   getChildrenNodes(parentKey) {
+    // @ts-expect-error
     return query(this._dataStructure, { langParams: this.options.langParams }).filter(['internalFields.parentKey', parentKey]).toArray();
   },
 
@@ -479,6 +480,7 @@ const DataAdapter = Class.inherit({
 
     dataStructure = dataStructure || this._initialDataStructure;
 
+    // @ts-expect-error
     return query(dataStructure, { langParams: this.options.langParams }).filter(criteria).toArray();
   },
 

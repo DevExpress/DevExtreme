@@ -1,4 +1,4 @@
-import { query as dataQuery } from '@js/common/data';
+import dataQuery from '@js/common/data/query';
 import storeHelper from '@js/common/data/store_helper';
 import { keysEqual } from '@js/common/data/utils';
 import { toComparable } from '@js/core/utils/data';
@@ -287,6 +287,7 @@ export class GroupingHelper extends GroupingHelperCore {
 
     if (groupCount) {
       let { data } = options;
+      // @ts-expect-error
       const query = dataQuery(data);
       storeHelper.multiLevelGroup(query, groups).enumerate().done((groupedData) => {
         data = groupedData;
