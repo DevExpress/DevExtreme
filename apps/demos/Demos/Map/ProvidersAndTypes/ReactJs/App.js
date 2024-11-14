@@ -1,7 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import Map from 'devextreme-react/map';
 import SelectBox from 'devextreme-react/select-box';
-import { mapTypes, mapProviders, mapTypeLabel, mapProviderLabel } from './data.js';
+import {
+  mapTypes, mapProviders, mapTypeLabel, mapProviderLabel,
+} from './data.js';
 
 const apiKey = {
   azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',
@@ -30,7 +32,7 @@ const App = () => {
         defaultZoom={14}
         height={400}
         width="100%"
-        provider="bing"
+        provider={mapProviderValue}
         type={mapTypeValue}
         apiKey={apiKey}
       ></Map>
