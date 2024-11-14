@@ -4396,7 +4396,7 @@ QUnit.module('Async tests', {}, () => {
         const templateRenderingTimeout = 10;
 
         $('#selectBox').dxSelectBox({
-            items: [1, 2, 3],
+            items: [1, 2],
             templatesRenderAsynchronously: true,
             opened: true,
             integrationOptions: {
