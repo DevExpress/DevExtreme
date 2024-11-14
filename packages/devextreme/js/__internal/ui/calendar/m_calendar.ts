@@ -763,12 +763,27 @@ const Calendar = Editor.inherit({
     return this.callBase().concat([this._view]);
   },
 
+  _isCalendarValueEmpty() {
+    const value = this.option('currentDate');
+
+    if (!value) return true;
+
+    const date = new Date(value);
+    return isNaN(date.getTime());
+  },
+
   _renderViews() {
     this.$element().addClass(`${CALENDAR_VIEW_CLASS}-${this.option('zoomLevel')}`);
 
-    const { currentDate, viewsCount } = this.option();
+    const { viewsCount } = this.option();
+
+    let currentDate = this.option('currentDate');
 
     this.$element().toggleClass(CALENDAR_MULTIVIEW_CLASS, viewsCount > 1);
+
+    if (this._isCalendarValueEmpty()) {
+      currentDate = new Date(new Date().setHours(0, 0, 0, 0));
+    }
 
     this._view = this._renderSpecificView(currentDate);
 
@@ -963,7 +978,13 @@ const Calendar = Editor.inherit({
   },
 
   _navigatorClickHandler(e) {
-    const { currentDate, viewsCount } = this.option();
+    const { viewsCount } = this.option();
+    let currentDate = this.option('currentDate');
+
+    if (this._isCalendarValueEmpty()) {
+      currentDate = new Date(new Date().setHours(0, 0, 0, 0));
+    }
+
     let offset = e.direction;
 
     if (viewsCount > 1) {
