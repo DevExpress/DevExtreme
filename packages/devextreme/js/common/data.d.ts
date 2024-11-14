@@ -1534,7 +1534,7 @@ export class ODataContext {
 export interface ODataStoreOptions<
     TItem = any,
     TKey = any,
-> extends StoreOptionsBase<TItem, TKey> {
+> extends AbstractStoreOptions<TItem, TKey> {
     /**
      * @docid
      * @type_function_param1_field params:object
@@ -1609,7 +1609,7 @@ export interface ODataStoreOptions<
 export class ODataStore<
     TItem = any,
     TKey = any,
-> extends StoreBase<TItem, TKey> {
+> extends AbstractStore<TItem, TKey> {
     constructor(options?: ODataStoreOptions<TItem, TKey>);
     /**
      * @docid
