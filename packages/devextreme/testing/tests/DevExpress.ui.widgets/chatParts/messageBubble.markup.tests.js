@@ -3,6 +3,7 @@ import $ from 'jquery';
 import MessageBubble from '__internal/ui/chat/messagebubble';
 
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
+const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -25,6 +26,12 @@ QUnit.module('MessageBubble', moduleConfig, () => {
     QUnit.module('Classes', moduleConfig, () => {
         QUnit.test('root element should have correct class', function(assert) {
             assert.strictEqual(this.$element.hasClass(CHAT_MESSAGEBUBBLE_CLASS), true);
+        });
+
+        QUnit.test('content element should have content element with correct class', function(assert) {
+            const $content = this.$element.find(`${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
+
+            assert.strictEqual($content.length, 1);
         });
     });
 });

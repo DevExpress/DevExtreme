@@ -5,6 +5,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
 export const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
+const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
 
 export interface Properties extends WidgetOptions<MessageBubble> {
   text?: string;
@@ -21,8 +22,13 @@ class MessageBubble extends Widget<Properties> {
   }
 
   _initMarkup(): void {
-    $(this.element())
-      .addClass(CHAT_MESSAGEBUBBLE_CLASS);
+    const $element = $(this.element());
+
+    $element.addClass(CHAT_MESSAGEBUBBLE_CLASS);
+
+    $('<div>')
+      .addClass(CHAT_MESSAGEBUBBLE_CONTENT_CLASS)
+      .appendTo($element);
 
     super._initMarkup();
 
@@ -34,7 +40,7 @@ class MessageBubble extends Widget<Properties> {
       text = '',
       template,
     } = this.option();
-    const $bubbleContainer = $(this.element());
+    const $bubbleContainer = $(this.element()).find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
 
     $bubbleContainer.empty();
 
