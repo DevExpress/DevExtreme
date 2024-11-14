@@ -1,5 +1,5 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import { ArrayStore } from '@js/common/data';
+import ArrayStore from '@js/common/data/array_store';
 import { errors } from '@js/common/data/errors';
 import Class from '@js/core/class';
 import domAdapter from '@js/core/dom_adapter';
@@ -88,7 +88,6 @@ const DomLocalStoreBackend = LocalStoreBackend.inherit({
 const localStoreBackends = {
   dom: DomLocalStoreBackend,
 };
-// @ts-expect-error
 const LocalStore = ArrayStore.inherit({
 
   ctor(options) {

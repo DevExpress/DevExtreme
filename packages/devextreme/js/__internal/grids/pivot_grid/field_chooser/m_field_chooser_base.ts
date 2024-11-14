@@ -2,7 +2,7 @@
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import localizationMessage from '@js/common/core/localization/message';
-import { ArrayStore } from '@js/common/data';
+import ArrayStore from '@js/common/data/array_store';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';

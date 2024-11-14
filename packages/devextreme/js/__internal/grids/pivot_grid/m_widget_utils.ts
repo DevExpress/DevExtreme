@@ -1,5 +1,5 @@
 import localizationDate from '@js/common/core/localization/date';
-import { ArrayStore } from '@js/common/data';
+import ArrayStore from '@js/common/data/array_store';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import domAdapter from '@js/core/dom_adapter';
 import coreAjaxUtils from '@js/core/utils/ajax';

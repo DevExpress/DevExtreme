@@ -1,6 +1,6 @@
-import { query } from '@js/common/data';
 import ArrayStore from '@js/common/data/array_store';
 import { createObjectWithChanges } from '@js/common/data/array_utils';
+import query from '@js/common/data/query';
 import storeHelper from '@js/common/data/store_helper';
 import { equalByValue } from '@js/core/utils/common';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
@@ -36,6 +36,7 @@ const getChildKeys = function (that, keys) {
 
 // @ts-expect-error
 const applySorting = (data: any[], sort: any): any => queryByOptions(
+  // @ts-expect-error
   query(data),
   {
     sort,
@@ -436,6 +437,7 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
     this.loadFromStore(loadOptions, store).done((loadedData) => {
       if (loadedData.length) {
         if (needLocalFiltering) {
+          // @ts-expect-error
           loadedData = query(loadedData).filter(filter).toArray();
         }
         this._loadParentsOrChildren(concatLoadedData(loadedData), options, needChildren).done(d.resolve).fail(d.reject);

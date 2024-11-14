@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/method-signature-style */
 import messageLocalization from '@js/common/core/localization/message';
-import { query as dataQuery } from '@js/common/data';
+import dataQuery from '@js/common/data/query';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import { compileGetter, toComparable } from '@js/core/utils/data';

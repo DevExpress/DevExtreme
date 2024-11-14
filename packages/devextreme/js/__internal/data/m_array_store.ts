@@ -1,9 +1,9 @@
-import { query as Query } from '@js/common/data';
 import Store from '@js/common/data/abstract_store';
 import {
   applyBatch, indexByKey, insert, remove, update,
 } from '@js/common/data/array_utils';
 import { errors } from '@js/common/data/errors';
+import Query from '@js/common/data/query';
 import { rejectedPromise, trivialPromise } from '@js/common/data/utils';
 
 // @ts-expect-error
@@ -26,6 +26,7 @@ const ArrayStore = Store.inherit({
   },
 
   createQuery() {
+    // @ts-expect-error
     return Query(this._array, {
       errorHandler: this._errorHandler,
     });

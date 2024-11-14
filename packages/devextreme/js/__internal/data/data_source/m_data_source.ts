@@ -1,5 +1,5 @@
-import { CustomStore } from '@js/common/data';
 import { applyBatch } from '@js/common/data/array_utils';
+import { CustomStore } from '@js/common/data/custom_store';
 import OperationManager from '@js/common/data/data_source/operation_manager';
 import {
   CANCELED_TOKEN,
@@ -373,7 +373,6 @@ export const DataSource = Class.inherit({
     delete options.refresh;
     delete options.pageIndex;
     delete options.searchString;
-    // @ts-expect-error
     const shouldForceByKey = () => (store instanceof CustomStore) && !store._byKeyViaLoad();
 
     (() => {

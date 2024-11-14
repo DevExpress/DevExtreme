@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
-import { ArrayStore, CustomStore } from '@js/common/data';
+import ArrayStore from '@js/common/data/array_store';
+import { CustomStore } from '@js/common/data/custom_store';
 import $ from '@js/core/renderer';
 import { findChanges } from '@js/core/utils/array_compare';
 import { deferRender, equalByValue } from '@js/core/utils/common';
