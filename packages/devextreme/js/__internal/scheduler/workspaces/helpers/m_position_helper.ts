@@ -239,9 +239,13 @@ class GroupStrategyBase {
     groupIndex,
     showAllDayPanel,
     isGroupedAllDayPanel,
+    isVirtualScrolling,
   }) {
     const { rowIndex } = this.viewDataProvider.getLastGroupCellPosition(groupIndex);
-    const { dateTableCellsMeta } = this.DOMMetaData;
+    const {
+      dateTableCellsMeta,
+      virtualScrollingRowGetter,
+    } = this.DOMMetaData;
     const lastGroupRow = dateTableCellsMeta[rowIndex];
 
     if (!lastGroupRow) return 0;
@@ -252,6 +256,15 @@ class GroupStrategyBase {
     // Should decrease allDayPanel amount due to the dual calculation corrections.
     if (isGroupedAllDayPanel) {
       result -= (groupIndex + 1) * this._getAllDayHeight(showAllDayPanel);
+    }
+
+    if (isVirtualScrolling) {
+      let virtualHeight = 0;
+      const virtualRows = virtualScrollingRowGetter.rowsGetter();
+      virtualRows.each((i, e) => {
+        virtualHeight += e.getBoundingClientRect().height;
+      });
+      result += virtualHeight;
     }
 
     return result;

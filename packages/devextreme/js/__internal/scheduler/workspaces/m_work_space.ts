@@ -1305,6 +1305,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     return (this.$element() as any).find(`.${cellClass}`);
   }
 
+  _getVirtualRows() {
+    return (this.$element() as any).find(`.${VIRTUAL_ROW_CLASS}`);
+  }
+
   _getFirstAndLastDataTableCell() {
     const selector = this.isVirtualScrolling()
       ? `.${DATE_TABLE_CELL_CLASS}, .${VIRTUAL_CELL_CLASS}`
@@ -1951,6 +1955,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     return this.cache.get('cellElementsMeta', () => ({
       dateTableCellsMeta: this._getDateTableDOMElementsInfo(),
       allDayPanelCellsMeta: this._getAllDayPanelDOMElementsInfo(),
+      virtualScrollingRowGetter: this._getGetVirtualRowDOMElements(),
     }));
   }
 
@@ -2000,6 +2005,15 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     return result;
+  }
+
+  _getGetVirtualRowDOMElements() {
+    if (!this.isVirtualScrolling()) {
+      return {};
+    }
+    return {
+      rowsGetter: () => this._getVirtualRows(),
+    };
   }
 
   _addCellMetaData(cellMetaDataArray, cell, parentRect) {
