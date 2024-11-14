@@ -1,4 +1,4 @@
-import { query as dataQuery } from '@js/common/data';
+import dataQuery from '@js/common/data/query';
 import {
   equalByValue,
   getKeyHash,
@@ -156,6 +156,7 @@ export default class SelectionStrategy {
           if (localFilter && !isSelectAll) {
             filteredItems = filteredItems.filter(localFilter);
           } else if (needLoadAllData) {
+            // @ts-expect-error
             filteredItems = dataQuery(filteredItems).filter(remoteFilter).toArray();
           }
 
@@ -196,6 +197,7 @@ export default class SelectionStrategy {
     let selectedItems = this.options.ignoreDisabledItems ? this.options.selectedItems : this.options.selectedItems.filter((item) => !item?.disabled);
 
     if (dataFilter) {
+      // @ts-expect-error
       selectedItems = dataQuery(selectedItems).filter(dataFilter).toArray();
     }
 

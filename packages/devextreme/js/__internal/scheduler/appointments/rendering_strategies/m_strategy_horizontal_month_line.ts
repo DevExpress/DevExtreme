@@ -1,4 +1,4 @@
-import { query } from '@js/common/data';
+import query from '@js/common/data/query';
 import dateUtils from '@js/core/utils/date';
 
 import { sortAppointmentsByStartDate } from '../data_provider/m_utils';
@@ -65,6 +65,7 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
     let result = super._getSortedPositions(map);
 
     if (!skipSorting) {
+      // @ts-expect-error
       result = query(result).sortBy('top').thenBy('left').thenBy('cellPosition')
         .thenBy('i')
         .toArray();

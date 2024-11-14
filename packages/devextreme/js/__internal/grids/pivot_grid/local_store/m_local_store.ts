@@ -1,5 +1,7 @@
-import { ArrayStore, CustomStore, query as dataQuery } from '@js/common/data';
+import ArrayStore from '@js/common/data/array_store';
+import { CustomStore } from '@js/common/data/custom_store';
 import { DataSource } from '@js/common/data/data_source/data_source';
+import dataQuery from '@js/common/data/query';
 // eslint-disable-next-line import/extensions
 import { aggregators } from '@js/common/data/utils';
 import Class from '@js/core/class';
@@ -422,6 +424,7 @@ const LocalStore = Class.inherit((function () {
 
     if (dataSource.store() instanceof CustomStore && filter) {
       filter = processFilter(filter, fieldSelectors);
+      // @ts-expect-error
       return dataQuery(dataSource.items()).filter(filter).toArray();
     }
 

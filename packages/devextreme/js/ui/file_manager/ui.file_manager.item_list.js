@@ -7,7 +7,7 @@ import eventsEngine from '../../common/core/events/core/events_engine';
 import { getImageContainer } from '../../core/utils/icon';
 import devices from '../../core/devices';
 
-import { CustomStore } from '../../common/data';
+import { CustomStore } from '../../common/data/custom_store';
 import Widget from '../widget/ui.widget';
 
 const FILE_MANAGER_FILES_VIEW_CLASS = 'dx-filemanager-files-view';

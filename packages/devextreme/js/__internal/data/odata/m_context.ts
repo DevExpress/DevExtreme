@@ -1,7 +1,7 @@
 import '@js/common/data/odata/query_adapter';
 
-import { ODataStore } from '@js/common/data';
 import RequestDispatcher from '@js/common/data/odata/request_dispatcher';
+import ODataStore from '@js/common/data/odata/store';
 import Class from '@js/core/class';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
