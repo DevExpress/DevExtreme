@@ -360,7 +360,7 @@ $datagrid-text-stub-background-image-path: null !default;
   }
 
   .dx-header-multi-row.dx-datagrid-sticky-columns {
-    .dx-column-lines > td:first-child {
+    .dx-column-lines:not(.dx-datagrid-group-footer) > td:first-child {
       border-left: none;
       border-right: $datagrid-border;
     }
