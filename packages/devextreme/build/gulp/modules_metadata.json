@@ -1,25 +1,25 @@
 [
   {
-    "name": "animation/frame",
+    "name": "common/core/animation/frame",
     "exports": {
       "cancelAnimationFrame": { "path": "utils.cancelAnimationFrame" },
       "requestAnimationFrame": { "path": "utils.requestAnimationFrame" }
     }
   },
   {
-    "name": "animation/fx",
+    "name": "common/core/animation/fx",
     "exports": {
       "default": { "path": "fx" }
     }
   },
   {
-    "name": "animation/presets",
+    "name": "common/core/animation/presets",
     "exports": {
       "default": { "path": "animationPresets" }
     }
   },
   {
-    "name": "animation/transition_executor",
+    "name": "common/core/animation/transition_executor",
     "exports": {
       "default": { "path": "TransitionExecutor" }
     }
@@ -31,15 +31,19 @@
     }
   },
   {
-    "name": "core/config",
+    "name": "common",
     "exports": {
-      "default": { "path": "config" }
+      "config": { "path": "config" },
+      "Guid": { "path": "data.Guid" },
+      "setTemplateEngine": { "path": "setTemplateEngine" }
     }
   },
   {
-    "name": "core/devices",
+    "name": "common/core/environment",
     "exports": {
-      "default": { "path": "devices" }
+      "devices": { "path": "devices" },
+      "hide_top_overlay": { "path": "hideTopOverlay" },
+      "init_mobile_viewport": { "path": "utils.initMobileViewport" }
     }
   },
   {
@@ -56,125 +60,113 @@
     }
   },
   {
-    "name": "core/guid",
-    "exports": {
-      "default": { "path": "data.Guid" }
-    }
-  },
-  {
-    "name": "core/set_template_engine",
-    "exports": {
-      "default": { "path": "setTemplateEngine" }
-    }
-  },
-  {
-    "name": "data/apply_changes",
+    "name": "common/data/apply_changes",
     "exports": {
       "default": { "path": "data.applyChanges" }
     }
   },
   {
-    "name": "data/array_store",
+    "name": "common/data/array_store",
     "exports": {
       "default": { "path": "data.ArrayStore" }
     }
   },
   {
-    "name": "data/custom_store",
+    "name": "common/data/custom_store",
     "exports": {
       "default": { "path": "data.CustomStore" }
     }
   },
   {
-    "name": "data/data_source",
+    "name": "common/data/data_source",
     "exports": {
       "default": { "path": "data.DataSource" }
     }
   },
   {
-    "name": "data/endpoint_selector",
+    "name": "common/data/endpoint_selector",
     "exports": {
       "default": { "path": "EndpointSelector" }
     }
   },
   {
-    "name": "data/errors",
+    "name": "common/data/errors",
     "exports": {
       "errorHandler": { "path": "data.errorHandler" }
     }
   },
   {
-    "name": "data/index",
+    "name": "common/data",
     "exports": {
       "LoadOptions": { "path": "data.LoadOptions", "exportAs": "type" }
     }
   },
   {
-    "name": "data/local_store",
+    "name": "common/data/local_store",
     "exports": {
       "default": { "path": "data.LocalStore" }
     }
   },
   {
-    "name": "data/odata/context",
+    "name": "common/data/odata/context",
     "exports": {
       "default": { "path": "data.ODataContext" }
     }
   },
   {
-    "name": "data/odata/store",
+    "name": "common/data/odata/store",
     "exports": {
       "default": { "path": "data.ODataStore" }
     }
   },
   {
-    "name": "data/odata/utils",
+    "name": "common/data/odata/utils",
     "exports": {
       "EdmLiteral": { "path": "data.EdmLiteral" },
       "keyConverters": { "path": "data.utils.odata.keyConverters" }
     }
   },
   {
-    "name": "data/query",
+    "name": "common/data/query",
     "exports": {
       "default": { "path": "data.query" }
     }
   },
   {
-    "name": "data/utils",
+    "name": "common/data/utils",
     "exports": {
       "base64_encode": { "path": "data.base64_encode" }
     }
   },
   {
-    "name": "events/click"
+    "name": "common/core/events/click"
   },
   {
-    "name": "events/contextmenu"
+    "name": "common/core/events/contextmenu"
   },
   {
-    "name": "events/dblclick"
+    "name": "common/core/events/dblclick"
   },
   {
-    "name": "events/drag"
+    "name": "common/core/events/drag"
   },
   {
-    "name": "events/hold"
+    "name": "common/core/events/hold"
   },
   {
-    "name": "events/hover"
+    "name": "common/core/events/hover"
   },
   {
-    "name": "events/pointer"
+    "name": "common/core/events/pointer"
   },
   {
-    "name": "events/swipe"
+    "name": "common/core/events/swipe"
   },
   {
-    "name": "events/transform"
+    "name": "common/core/events/transform"
   },
   {
-    "name": "events",
+    "name": "common/core/events",
     "exports": {
       "on": { "path": "events.on" },
       "one": { "path": "events.one" },
@@ -184,31 +176,31 @@
     }
   },
   {
-    "name": "file_management/error",
+    "name": "common/file_management/error",
     "exports": {
       "default": { "path": "fileManagement.FileSystemError" }
     }
   },
   {
-    "name": "file_management/file_system_item",
+    "name": "common/file_management/file_system_item",
     "exports": {
       "default": { "path": "fileManagement.FileSystemItem" }
     }
   },
   {
-    "name": "file_management/custom_provider",
+    "name": "common/file_management/custom_provider",
     "exports": {
       "default": { "path": "fileManagement.CustomFileSystemProvider" }
     }
   },
   {
-    "name": "file_management/object_provider",
+    "name": "common/file_management/object_provider",
     "exports": {
       "default": { "path": "fileManagement.ObjectFileSystemProvider" }
     }
   },
   {
-    "name": "file_management/remote_provider",
+    "name": "common/file_management/remote_provider",
     "exports": {
       "default": { "path": "fileManagement.RemoteFileSystemProvider" }
     }
@@ -217,7 +209,7 @@
     "name": "integration/jquery"
   },
   {
-    "name": "localization",
+    "name": "common/core/localization",
     "exports": {
       "loadMessages": { "path": "localization.loadMessages" },
       "formatMessage": { "path": "localization.formatMessage" },
@@ -226,18 +218,6 @@
       "formatDate": { "path": "localization.formatDate" },
       "parseDate": { "path": "localization.parseDate" },
       "locale": { "path": "localization.locale" }
-    }
-  },
-  {
-    "name": "mobile/hide_top_overlay",
-    "exports": {
-      "default": { "path": "hideTopOverlay" }
-    }
-  },
-  {
-    "name": "mobile/init_mobile_viewport",
-    "exports": {
-      "default": { "path": "utils.initMobileViewport" }
     }
   },
   {
