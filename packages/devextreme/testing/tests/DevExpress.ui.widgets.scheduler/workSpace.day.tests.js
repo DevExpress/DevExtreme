@@ -1,5 +1,5 @@
 import { getOuterHeight } from 'core/utils/size';
-import dragEvents from 'common/core/events/core/events/drag';
+import dragEvents from 'common/core/events/drag';
 import 'generic_light.css!';
 import $ from 'jquery';
 import resizeCallbacks from 'core/utils/resize_callbacks';

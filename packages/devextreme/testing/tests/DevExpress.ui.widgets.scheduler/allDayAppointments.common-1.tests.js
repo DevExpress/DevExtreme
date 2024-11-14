@@ -1,7 +1,7 @@
 import { getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import translator from 'common/core/animation/translator';
-import dblclickEvent from 'common/core/events/core/events/dblclick';
+import dblclickEvent from 'common/core/events/dblclick';
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
 import { CustomStore } from 'common/data/custom_store';
