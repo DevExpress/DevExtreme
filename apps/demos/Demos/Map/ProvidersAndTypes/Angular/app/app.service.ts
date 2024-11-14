@@ -6,7 +6,6 @@ export class MapSetting {
   name: string;
 }
 
-
 export type APIKey = {
   azure?: string;
 

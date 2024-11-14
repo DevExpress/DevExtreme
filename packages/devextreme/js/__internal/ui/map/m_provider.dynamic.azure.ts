@@ -171,8 +171,6 @@ const AzureProvider = DynamicProvider.inherit({
       zoom: this._option('zoom'),
       style: this._mapType(this._option('type')),
       interactive: !this._option('disabled'),
-      showFeedbackLink: true,
-      showLogo: true,
     });
 
     this.updateControls();
