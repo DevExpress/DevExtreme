@@ -338,6 +338,21 @@ const setScrollPadding = (
   });
 };
 
+const isOutsideVisibleArea = (
+  $element: dxElementWrapper,
+  $cells: dxElementWrapper,
+  $container: dxElementWrapper,
+  addWidgetPrefix,
+): boolean => {
+  const elementRect = getBoundingRect($element.get(0));
+  const elementRectLeft = Math.round(elementRect.left);
+  const elementRectRight = Math.round(elementRect.right);
+  const nonFixedAreaBoundingRect = getNonFixedAreaBoundingRect($cells, $container, addWidgetPrefix);
+
+  return elementRectLeft < nonFixedAreaBoundingRect.left
+    || elementRectRight > nonFixedAreaBoundingRect.right;
+};
+
 export const GridCoreStickyColumnsDom = {
   toggleFirstHeaderClass,
   toggleColumnNoBorderClass,
@@ -356,5 +371,6 @@ export const GridCoreStickyColumnsDom = {
   isFixedCell,
   isStickyCell,
   isStickyCellPinned,
+  isOutsideVisibleArea,
   setScrollPadding,
 };

@@ -1162,17 +1162,16 @@ const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => c
 };
 
 const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactoryFixedColumnsExtender extends Base {
-  protected getValidationOverlayContainer($cell: dxElementWrapper): dxElementWrapper {
-    const rowsViewModule = this.getView('rowsView');
+  protected getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {
     // @ts-expect-error RowsView's method
-    const isFixedColumns = rowsViewModule.isFixedColumns();
+    const isFixedColumns = this._rowsView.isFixedColumns();
 
     if (isFixedColumns) {
-      return rowsViewModule.element() as dxElementWrapper;
+      return this._rowsView.element() as dxElementWrapper;
     }
 
     // @ts-expect-error EditorFactory's method
-    return super.getValidationOverlayContainer($cell);
+    return super.getValidationMessageContainer($cell);
   }
 };
 

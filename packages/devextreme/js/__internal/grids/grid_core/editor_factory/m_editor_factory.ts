@@ -212,40 +212,11 @@ export class EditorFactory extends ViewControllerWithMixin {
     return ['focused'];
   }
 
-  /**
-   * @extended: validating
-   */
-  public focus($element?, isHideBorder?) {
-    const that = this;
-
-    if ($element === undefined) {
-      return that._$focusedElement;
-    } if ($element) {
-      // To prevent overlay flicking
-      if (!$element.is(that._$focusedElement)) {
-        // TODO: this code should be before timeout else focus is not will move to adaptive form by shift + tab key
-        that._$focusedElement && that._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
-      }
-      that._$focusedElement = $element;
-
-      clearTimeout(that._focusTimeoutID);
-      that._focusTimeoutID = setTimeout(() => {
-        delete that._focusTimeoutID;
-
-        that.renderFocusOverlay($element, isHideBorder);
-
-        $element.addClass(FOCUSED_ELEMENT_CLASS);
-        that.focused.fire($element);
-      });
-    }
+  protected getFocusOverlayContainer($focusedElement: dxElementWrapper): dxElementWrapper {
+    return $focusedElement.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
   }
 
-  public refocus() {
-    const $focus = this.focus();
-    this.focus($focus);
-  }
-
-  public updateFocusOverlay($element: dxElementWrapper, isHideBorder = false): void {
+  protected updateFocusOverlay($element: dxElementWrapper, isHideBorder = false): void {
     if (isHideBorder) {
       this._$focusOverlay.addClass(DX_HIDDEN);
     } else if ($element.length) {
@@ -254,7 +225,7 @@ export class EditorFactory extends ViewControllerWithMixin {
       const elemCoord = getBoundingRect($element.get(0));
       const isFocusedCellInvalid = $element.hasClass(this.addWidgetPrefix(CELL_INVALID_CLASS));
       const isFocusedCellModified = $element.hasClass(CELL_MODIFIED_CLASS) && !isFocusedCellInvalid;
-      const $content = $element.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
+      const $content = this.getFocusOverlayContainer($element);
 
       this._$focusOverlay
         .removeClass(DX_HIDDEN)
@@ -293,6 +264,39 @@ export class EditorFactory extends ViewControllerWithMixin {
     }
 
     this.updateFocusOverlay($element, isHideBorder);
+  }
+
+  /**
+   * @extended: validating
+   */
+  public focus($element?, isHideBorder?) {
+    const that = this;
+
+    if ($element === undefined) {
+      return that._$focusedElement;
+    } if ($element) {
+      // To prevent overlay flicking
+      if (!$element.is(that._$focusedElement)) {
+        // TODO: this code should be before timeout else focus is not will move to adaptive form by shift + tab key
+        that._$focusedElement && that._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
+      }
+      that._$focusedElement = $element;
+
+      clearTimeout(that._focusTimeoutID);
+      that._focusTimeoutID = setTimeout(() => {
+        delete that._focusTimeoutID;
+
+        that.renderFocusOverlay($element, isHideBorder);
+
+        $element.addClass(FOCUSED_ELEMENT_CLASS);
+        that.focused.fire($element);
+      });
+    }
+  }
+
+  public refocus() {
+    const $focus = this.focus();
+    this.focus($focus);
   }
 
   public resize() {
@@ -345,6 +349,10 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   public getFocusOverlay() {
     return this._$focusOverlay;
+  }
+
+  public hasOverlayElements(): boolean {
+    return !!this._$focusOverlay?.length && !this._$focusOverlay.hasClass(DX_HIDDEN);
   }
 }
 
