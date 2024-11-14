@@ -85,7 +85,7 @@ const moduleConfig = {
         this.getMessageGroups = () => this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
         this.getDayHeaders = () => this.$element.find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
         this.getBubbles = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
-        this.getBubblesContent = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
+        this.getBubblesContents = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
 
         init();
     }
@@ -257,7 +257,7 @@ QUnit.module('Chat', () => {
                     messageTemplate,
                 });
 
-                const $bubbleContent = this.getBubblesContent();
+                const $bubbleContent = this.getBubblesContents();
 
                 assert.strictEqual($bubbleContent.text(), 'text: CustomText');
             });
@@ -309,7 +309,7 @@ QUnit.module('Chat', () => {
 
                 this.instance.renderMessage({ text: 'new message' });
 
-                const $bubbleContent = this.getBubblesContent();
+                const $bubbleContent = this.getBubblesContents();
 
                 assert.strictEqual($bubbleContent.text(), 'text: new message');
             });
@@ -338,7 +338,7 @@ QUnit.module('Chat', () => {
                     messageTemplate: 'hello',
                 });
 
-                const $bubbleContent = this.getBubblesContent();
+                const $bubbleContent = this.getBubblesContents();
 
                 assert.strictEqual($bubbleContent.text(), 'hello');
             });
@@ -349,7 +349,7 @@ QUnit.module('Chat', () => {
                     messageTemplate: '<p>p text</p>',
                 });
 
-                const $bubbleContent = this.getBubblesContent();
+                const $bubbleContent = this.getBubblesContents();
                 const $bubbleContentChild = $bubbleContent.children();
 
                 assert.strictEqual($bubbleContentChild.text(), 'p text', 'template text is correct');

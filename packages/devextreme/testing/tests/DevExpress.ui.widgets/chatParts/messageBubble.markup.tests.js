@@ -28,10 +28,11 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             assert.strictEqual(this.$element.hasClass(CHAT_MESSAGEBUBBLE_CLASS), true);
         });
 
-        QUnit.test('content element should have content element with correct class', function(assert) {
+        QUnit.test('root element should have a child content element with correct class', function(assert) {
             const $content = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
 
-            assert.strictEqual($content.length, 1);
+            assert.strictEqual($content.length, 1, 'content element exist');
+            assert.strictEqual($content.parent().is(this.$element), true, 'content element is direct child of root element');
         });
     });
 });
