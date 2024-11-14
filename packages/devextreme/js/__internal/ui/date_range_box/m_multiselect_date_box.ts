@@ -1,6 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import { addNamespace } from '@js/common/core/events/utils';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 import { getWidth } from '@js/core/utils/size';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
