@@ -1,4 +1,4 @@
-import { query as dataQuery } from '@js/common/data';
+import dataQuery from '@js/common/data/query';
 import { getUniqueValues, removeDuplicates } from '@js/core/utils/array';
 import { isKeysEqual } from '@js/core/utils/array_compare';
 import { getKeyHash } from '@js/core/utils/common';
@@ -115,6 +115,7 @@ export default class StandardStrategy extends SelectionStrategy {
     if (isDeselect) {
       const { selectedItems } = this.options;
       deselectedItems = combinedFilter && keys.length !== selectedItems.length
+        // @ts-expect-error
         ? dataQuery(selectedItems).filter(combinedFilter).toArray()
         : selectedItems.slice(0);
     }

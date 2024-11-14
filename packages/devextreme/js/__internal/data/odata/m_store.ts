@@ -1,9 +1,9 @@
 import '@js/common/data/odata/query_adapter';
 
-import { query } from '@js/common/data';
 import Store from '@js/common/data/abstract_store';
 import { errors } from '@js/common/data/errors';
 import RequestDispatcher from '@js/common/data/odata/request_dispatcher';
+import query from '@js/common/data/query';
 import config from '@js/core/config';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
@@ -128,6 +128,7 @@ const ODataStore = Store.inherit({
       }
     }
 
+    // @ts-expect-error
     return query(url, queryOptions);
   },
 

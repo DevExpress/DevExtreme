@@ -1,4 +1,6 @@
-import { ArrayStore, DataHelperMixin, DataSource } from '@js/common/data';
+import ArrayStore from '@js/common/data/array_store';
+import DataHelperMixin from '@js/common/data/data_helper';
+import DataSource from '@js/common/data/data_source';
 import { ensureDefined, noop } from '@js/core/utils/common';
 import {
   compileGetter,

@@ -3,8 +3,8 @@ import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
-import { query as dataQuery } from '@js/common/data';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
+import dataQuery from '@js/common/data/query';
 import storeHelper from '@js/common/data/store_helper';
 import { compileGetter } from '@js/core/utils/data';
 import { Deferred } from '@js/core/utils/deferred';
@@ -62,6 +62,7 @@ function ungroupUTCDates(items, dateParts?, dates?) {
 
 function convertDataFromUTCToLocal(data, column) {
   const dates = ungroupUTCDates(data);
+  // @ts-expect-error
   const query = dataQuery(dates);
   const group = gridCoreUtils.getHeaderFilterGroupParameters({
     ...column,

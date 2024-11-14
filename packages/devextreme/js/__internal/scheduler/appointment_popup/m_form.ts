@@ -5,7 +5,7 @@ import '@js/ui/switch';
 import '@js/ui/select_box';
 
 import messageLocalization from '@js/common/core/localization/message';
-import { DataSource } from '@js/common/data';
+import DataSource from '@js/common/data/data_source';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
