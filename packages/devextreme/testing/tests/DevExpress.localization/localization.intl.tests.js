@@ -6,7 +6,7 @@ import numberLocalization from 'common/core/localization/number';
 import intlDateLocalization from 'common/core/localization/intl/date';
 import intlNumberLocalization from 'common/core/localization/intl/number';
 import { locale } from 'common/core/localization/core';
-import { disableIntl } from 'localization';
+import { disableIntl } from 'common/core/localization';
 import config from 'core/config';
 import ExcelJSLocalizationFormatTests from '../DevExpress.exporter/exceljsParts/exceljs.format.tests.js';
 
