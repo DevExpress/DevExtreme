@@ -42,8 +42,8 @@
     "name": "common/core/environment",
     "exports": {
       "devices": { "path": "devices" },
-      "hide_top_overlay": { "path": "hideTopOverlay" },
-      "init_mobile_viewport": { "path": "utils.initMobileViewport" }
+      "hideTopOverlay": { "path": "hideTopOverlay" },
+      "initMobileViewport": { "path": "utils.initMobileViewport" }
     }
   },
   {
@@ -90,15 +90,13 @@
     }
   },
   {
-    "name": "common/data/errors",
-    "exports": {
-      "errorHandler": { "path": "data.errorHandler" }
-    }
-  },
-  {
     "name": "common/data",
     "exports": {
-      "LoadOptions": { "path": "data.LoadOptions", "exportAs": "type" }
+      "LoadOptions": { "path": "data.LoadOptions", "exportAs": "type" },
+      "errorHandler": { "path": "data.errorHandler" },
+      "EdmLiteral": { "path": "data.EdmLiteral" },
+      "keyConverters": { "path": "data.utils.odata.keyConverters" },
+      "base64_encode": { "path": "data.base64_encode" }
     }
   },
   {
@@ -120,22 +118,9 @@
     }
   },
   {
-    "name": "common/data/odata/utils",
-    "exports": {
-      "EdmLiteral": { "path": "data.EdmLiteral" },
-      "keyConverters": { "path": "data.utils.odata.keyConverters" }
-    }
-  },
-  {
     "name": "common/data/query",
     "exports": {
       "default": { "path": "data.query" }
-    }
-  },
-  {
-    "name": "common/data/utils",
-    "exports": {
-      "base64_encode": { "path": "data.base64_encode" }
     }
   },
   {
