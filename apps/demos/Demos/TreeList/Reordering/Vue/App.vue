@@ -9,7 +9,7 @@
       :column-auto-width="true"
       :show-borders="true"
       :show-row-lines="true"
-      :expanded-row-keys="expandedRowKeys"
+      :auto-expand-all="true"
     >
       <DxColumnFixing :enabled="true"/>
       <DxColumn
@@ -58,7 +58,6 @@
 import { DxTreeList, DxColumn, DxColumnFixing } from 'devextreme-vue/tree-list';
 import { Employee, employees } from './data.ts';
 
-const expandedRowKeys = [1];
 function calculateCellValue(data: Employee) {
   return [data.Title, data.FirstName, data.LastName].join(' ');
 }
