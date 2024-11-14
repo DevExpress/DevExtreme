@@ -7,7 +7,7 @@ import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';
 import timeZoneDataUtils from '__internal/scheduler/timezones/m_utils_timezones_data';
 
-import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/core/events/visibility_change';
+import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 import { getTimeZones } from 'time_zone_utils';
