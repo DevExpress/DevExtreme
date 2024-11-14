@@ -2,7 +2,7 @@ import { getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import devices from '__internal/core/m_devices';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import dblclickEvent from 'common/core/events/core/events/dblclick';
+import dblclickEvent from 'common/core/events/dblclick';
 import fx from 'common/core/animation/fx';
 import AgendaAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_agenda';
 import { DataSource } from 'common/data/data_source/data_source';

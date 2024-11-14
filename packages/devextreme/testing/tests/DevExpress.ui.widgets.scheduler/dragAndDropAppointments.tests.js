@@ -5,7 +5,7 @@ import browser from 'core/utils/browser';
 import { DataSource } from 'common/data/data_source/data_source';
 import translator from 'common/core/animation/translator';
 import config from 'core/config';
-import dragEvents from 'common/core/events/core/events/drag';
+import dragEvents from 'common/core/events/drag';
 import dataUtils from 'core/element_data';
 import Color from 'color';
 import {
