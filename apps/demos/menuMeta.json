@@ -1993,32 +1993,6 @@
         ]
       },
       {
-        "Name": "Output Formats",
-        "Equivalents": "",
-        "Demos": [
-          {
-            "Title": "Output Formats",
-            "Name": "OutputFormats",
-            "Widget": "HtmlEditor",
-            "DemoType": "Web",
-            "Modules": "showdown&turndown"
-          }
-        ]
-      },
-      {
-        "Name": "Toolbar Customization",
-        "Equivalents": "",
-        "Demos": [
-          {
-            "Title": "Toolbar Customization",
-            "Name": "ToolbarCustomization",
-            "DocUrl": "Guide/UI_Components/HtmlEditor/Toolbar/Built-In_Controls/",
-            "Widget": "HtmlEditor",
-            "DemoType": "Web"
-          }
-        ]
-      },
-      {
         "Name": "Mentions",
         "Equivalents": "",
         "Demos": [
@@ -2045,6 +2019,33 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Markdown support",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Markdown support",
+            "Name": "MarkdownSupport",
+            "Widget": "HtmlEditor",
+            "DemoType": "Web",
+            "Modules": "unified",
+            "Badge": "New"
+          }
+        ]
+      },
+      {
+        "Name": "Toolbar Customization",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Toolbar Customization",
+            "Name": "ToolbarCustomization",
+            "DocUrl": "Guide/UI_Components/HtmlEditor/Toolbar/Built-In_Controls/",
+            "Widget": "HtmlEditor",
             "DemoType": "Web"
           }
         ]
