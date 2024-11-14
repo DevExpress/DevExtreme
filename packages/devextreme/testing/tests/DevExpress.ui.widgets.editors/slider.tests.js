@@ -3,7 +3,7 @@ import positionUtils from 'common/core/animation/position';
 import 'generic_light.css!';
 import config from 'core/config';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import { triggerShownEvent } from 'common/core/events/core/events/visibility_change';
+import { triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import { hideCallback as hideTopOverlayCallback } from 'common/core/environment/hide_callback';
 import 'ui/slider';
@@ -11,7 +11,7 @@ import SliderTooltip from '__internal/ui/slider/m_slider_tooltip';
 import SliderHandle from '__internal/ui/slider/m_slider_handle';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import { normalizeKeyName } from 'common/core/events/core/events/utils/index';
+import { normalizeKeyName } from 'common/core/events/utils/index';
 
 
 const { module, testStart, test, testInActiveWindow } = QUnit;

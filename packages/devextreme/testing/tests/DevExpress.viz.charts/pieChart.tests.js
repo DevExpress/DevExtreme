@@ -19,7 +19,7 @@ import {
 } from '../../helpers/chartMocks.js';
 import TemplateManagerModule from '__internal/core/m_template_manager';
 import graphicObjects from '__internal/common/m_charts';
-import eventsEngine from 'common/core/events/core/events/core/events_engine';
+import eventsEngine from 'common/core/events/core/events_engine';
 import devices from '__internal/core/m_devices';
 
 const LabelCtor = new vizMocks.ObjectPool(labelModule.Label);

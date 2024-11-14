@@ -16,7 +16,7 @@ QUnit.testStart(function() {
 });
 
 import fx from 'common/core/animation/fx';
-import eventsEngine from 'common/core/events/core/events/core/events_engine';
+import eventsEngine from 'common/core/events/core/events_engine';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import dataUtils from 'core/element_data';
@@ -29,7 +29,7 @@ import {
 } from 'core/utils/size';
 import { isRenderer } from 'core/utils/type';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
-import { triggerShownEvent } from 'common/core/events/core/events/visibility_change';
+import { triggerShownEvent } from 'common/core/events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 import dateLocalization from 'common/core/localization/date';

@@ -2,7 +2,7 @@ import { getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
-import dragEvents from 'common/core/events/core/events/drag';
+import dragEvents from 'common/core/events/drag';
 import { DataSource } from 'common/data/data_source/data_source';
 import dataUtils from 'core/element_data';
 import {
