@@ -15,29 +15,20 @@
     [fixed]="true"
     [calculateCellValue]="calculateCellValue"
   ></dxi-column>
-  <dxi-column dataField="BirthDate" dataType="date"></dxi-column>
   <dxi-column
-    dataField="Address"
-    [width]="190"
+    dataField="Position"
+    alignment="right"
     [fixed]="true"
-    fixedPosition="sticky"
   ></dxi-column>
+  <dxi-column dataField="Address"></dxi-column>
+  <dxi-column dataField="City"></dxi-column>
   <dxi-column dataField="Zipcode"></dxi-column>
-  <dxi-column dataField="HireDate" dataType="date"></dxi-column>
-  <dxi-column dataField="Position" alignment="right"></dxi-column>
-  <dxi-column
-    dataField="City"
-    [fixed]="true"
-    fixedPosition="right"
-  ></dxi-column>
-  <dxi-column
-    dataField="State"
-    [fixed]="true"
-    fixedPosition="right"
-  ></dxi-column>
+  <dxi-column dataField="State"></dxi-column>
   <dxi-column dataField="Department"></dxi-column>
+  <dxi-column dataField="BirthDate" dataType="date"></dxi-column>
+  <dxi-column dataField="HireDate" dataType="date"></dxi-column>
   <dxi-column dataField="HomePhone"></dxi-column>
   <dxi-column dataField="MobilePhone"></dxi-column>
-  <dxi-column dataField="Skype"></dxi-column>
   <dxi-column dataField="Email"></dxi-column>
+  <dxi-column dataField="Skype"></dxi-column>
 </dx-tree-list>
