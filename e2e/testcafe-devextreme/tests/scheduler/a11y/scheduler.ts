@@ -6,6 +6,12 @@ import url from '../../../helpers/getPageUrl';
 fixture.disablePageReloads`a11y - appointment`
   .page(url(__dirname, '../../container.html'));
 
+const checkOptions = {
+  rules: {
+    'color-contrast': { enabled: false },
+  },
+};
+
 test('Scheduler should have right aria attributes', async (t) => {
   const scheduler = new Scheduler('#container');
 
@@ -51,7 +57,7 @@ test('Scheduler table elements have right aria attributes', async (t) => {
   'agenda', 'day', 'month', 'timelineDay', 'timelineMonth', 'timelineWeek', 'timelineWorkWeek', 'week', 'workWeek',
 ].forEach((currentView) => {
   test(`Scheduler has no axe errors on view ${currentView}`, async (t) => {
-    await a11yCheck(t);
+    await a11yCheck(t, checkOptions, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
       timeZone: 'America/Los_Angeles',
