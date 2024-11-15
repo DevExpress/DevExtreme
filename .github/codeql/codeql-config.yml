@@ -9,4 +9,3 @@ paths-ignore:
   - "/packages/devextreme/artifacts/npm/devextreme-dist/**" # same as artifacts/js, removed to optimize
   - "/packages/devextreme/artifacts/npm/devextreme/cjs/**" # same as npm/devextreme/esm/**, removed to optimize
   - "/packages/devextreme-angular/dist/**"
-  - "/packages/devextreme-angular/npm/**"
