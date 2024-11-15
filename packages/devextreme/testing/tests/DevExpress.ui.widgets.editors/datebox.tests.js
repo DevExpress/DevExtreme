@@ -6110,6 +6110,11 @@ QUnit.module('DateBox number and string value support', {
     });
 
     QUnit.test('empty string value should still be able to click navigator caption in calendar (T1257679)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test does not actual for mobile devices');
+            return;
+        }
+
         const $dateBox = $('#dateBox').dxDateBox({
             type: 'date',
             value: '',
@@ -6131,10 +6136,16 @@ QUnit.module('DateBox number and string value support', {
     });
 
     QUnit.test('empty string value should still be able to click navigator buttons in calendar (T1257679)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test does not actual for mobile devices');
+            return;
+        }
+
         const $dateBox = $('#dateBox').dxDateBox({
             type: 'date',
             value: '',
         });
+
         const dateBox = $dateBox.dxDateBox('instance');
         dateBox.open();
 
