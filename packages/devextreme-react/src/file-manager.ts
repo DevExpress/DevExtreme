@@ -87,17 +87,17 @@ const FileManager = memo(
 // owners:
 // Details
 type IColumnProps = React.PropsWithChildren<{
-  alignment?: HorizontalAlignment;
-  caption?: string;
-  cssClass?: string;
-  dataField?: string;
-  dataType?: DataType;
-  hidingPriority?: number;
-  sortIndex?: number;
-  sortOrder?: SortOrder;
+  alignment?: HorizontalAlignment | undefined;
+  caption?: string | undefined;
+  cssClass?: string | undefined;
+  dataField?: string | undefined;
+  dataType?: DataType | undefined;
+  hidingPriority?: number | undefined;
+  sortIndex?: number | undefined;
+  sortOrder?: SortOrder | undefined;
   visible?: boolean;
-  visibleIndex?: number;
-  width?: number | string;
+  visibleIndex?: number | undefined;
+  width?: number | string | undefined;
 }>
 const _componentColumn = (props: IColumnProps) => {
   return React.createElement(NestedOption<IColumnProps>, {
@@ -148,7 +148,7 @@ type IContextMenuItemProps = React.PropsWithChildren<{
   selectable?: boolean;
   selected?: boolean;
   text?: string;
-  visible?: boolean;
+  visible?: boolean | undefined;
 }>
 const _componentContextMenuItem = (props: IContextMenuItemProps) => {
   return React.createElement(NestedOption<IContextMenuItemProps>, {
@@ -188,7 +188,7 @@ const Details = Object.assign<typeof _componentDetails, NestedComponentMeta>(_co
 // owners:
 // Toolbar
 type IFileSelectionItemProps = React.PropsWithChildren<{
-  cssClass?: string;
+  cssClass?: string | undefined;
   disabled?: boolean;
   icon?: string;
   locateInMenu?: LocateInMenuMode;
@@ -197,7 +197,7 @@ type IFileSelectionItemProps = React.PropsWithChildren<{
   options?: any;
   showText?: ShowTextMode;
   text?: string;
-  visible?: boolean;
+  visible?: boolean | undefined;
   widget?: ToolbarItemComponent;
 }>
 const _componentFileSelectionItem = (props: IFileSelectionItemProps) => {
@@ -228,8 +228,8 @@ type IItemProps = React.PropsWithChildren<{
   selectable?: boolean;
   selected?: boolean;
   text?: string;
-  visible?: boolean;
-  cssClass?: string;
+  visible?: boolean | undefined;
+  cssClass?: string | undefined;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
   options?: any;
@@ -346,7 +346,7 @@ const Toolbar = Object.assign<typeof _componentToolbar, NestedComponentMeta>(_co
 // owners:
 // Toolbar
 type IToolbarItemProps = React.PropsWithChildren<{
-  cssClass?: string;
+  cssClass?: string | undefined;
   disabled?: boolean;
   icon?: string;
   locateInMenu?: LocateInMenuMode;
@@ -355,7 +355,7 @@ type IToolbarItemProps = React.PropsWithChildren<{
   options?: any;
   showText?: ShowTextMode;
   text?: string;
-  visible?: boolean;
+  visible?: boolean | undefined;
   widget?: ToolbarItemComponent;
 }>
 const _componentToolbarItem = (props: IToolbarItemProps) => {

@@ -116,15 +116,15 @@ const AsyncRule = Object.assign<typeof _componentAsyncRule, NestedComponentMeta>
 // owners:
 // Form
 type IButtonItemProps = React.PropsWithChildren<{
-  buttonOptions?: dxButtonOptions;
-  colSpan?: number;
-  cssClass?: string;
+  buttonOptions?: dxButtonOptions | undefined;
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
   horizontalAlignment?: HorizontalAlignment;
   itemType?: FormItemType;
-  name?: string;
+  name?: string | undefined;
   verticalAlignment?: VerticalAlignment;
   visible?: boolean;
-  visibleIndex?: number;
+  visibleIndex?: number | undefined;
 }>
 const _componentButtonItem = (props: IButtonItemProps) => {
   return React.createElement(NestedOption<IButtonItemProps>, {
@@ -149,14 +149,14 @@ const ButtonItem = Object.assign<typeof _componentButtonItem, NestedComponentMet
 // owners:
 // ButtonItem
 type IButtonOptionsProps = React.PropsWithChildren<{
-  accessKey?: string;
+  accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string;
-  hint?: string;
+  height?: (() => number | string) | number | string | undefined;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
   onClick?: ((e: ClickEvent) => void);
@@ -171,9 +171,9 @@ type IButtonOptionsProps = React.PropsWithChildren<{
   text?: string;
   type?: ButtonType | string;
   useSubmitBehavior?: boolean;
-  validationGroup?: string;
+  validationGroup?: string | undefined;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: (() => number | string) | number | string | undefined;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
@@ -200,10 +200,10 @@ const ButtonOptions = Object.assign<typeof _componentButtonOptions, NestedCompon
 // GroupItem
 // Tab
 type IColCountByScreenProps = React.PropsWithChildren<{
-  lg?: number;
-  md?: number;
-  sm?: number;
-  xs?: number;
+  lg?: number | undefined;
+  md?: number | undefined;
+  sm?: number | undefined;
+  xs?: number | undefined;
 }>
 const _componentColCountByScreen = (props: IColCountByScreenProps) => {
   return React.createElement(NestedOption<IColCountByScreenProps>, {
@@ -297,12 +297,12 @@ const EmailRule = Object.assign<typeof _componentEmailRule, NestedComponentMeta>
 // owners:
 // Form
 type IEmptyItemProps = React.PropsWithChildren<{
-  colSpan?: number;
-  cssClass?: string;
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
   itemType?: FormItemType;
-  name?: string;
+  name?: string | undefined;
   visible?: boolean;
-  visibleIndex?: number;
+  visibleIndex?: number | undefined;
 }>
 const _componentEmptyItem = (props: IEmptyItemProps) => {
   return React.createElement(NestedOption<IEmptyItemProps>, {
@@ -325,23 +325,23 @@ const EmptyItem = Object.assign<typeof _componentEmptyItem, NestedComponentMeta>
 // Form
 type IGroupItemProps = React.PropsWithChildren<{
   alignItemLabels?: boolean;
-  caption?: string;
+  caption?: string | undefined;
   captionTemplate?: ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any) | template;
   colCount?: number;
   colCountByScreen?: Record<string, any> | {
-    lg?: number;
-    md?: number;
-    sm?: number;
-    xs?: number;
+    lg?: number | undefined;
+    md?: number | undefined;
+    sm?: number | undefined;
+    xs?: number | undefined;
   };
-  colSpan?: number;
-  cssClass?: string;
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
   items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
   itemType?: FormItemType;
-  name?: string;
+  name?: string | undefined;
   template?: ((data: { component: dxForm, formData: Record<string, any> }, itemElement: any) => string | any) | template;
   visible?: boolean;
-  visibleIndex?: number;
+  visibleIndex?: number | undefined;
   captionRender?: (...params: any) => React.ReactNode;
   captionComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;
@@ -389,55 +389,55 @@ type IItemProps = React.PropsWithChildren<{
   text?: string;
   title?: string;
   visible?: boolean;
-  colSpan?: number;
-  cssClass?: string;
-  dataField?: string;
-  editorOptions?: any;
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
+  dataField?: string | undefined;
+  editorOptions?: any | undefined;
   editorType?: FormItemComponent;
-  helpText?: string;
-  isRequired?: boolean;
+  helpText?: string | undefined;
+  isRequired?: boolean | undefined;
   itemType?: FormItemType;
   label?: Record<string, any> | {
     alignment?: HorizontalAlignment;
     location?: LabelLocation;
     showColon?: boolean;
     template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
-    text?: string;
+    text?: string | undefined;
     visible?: boolean;
   };
-  name?: string;
+  name?: string | undefined;
   validationRules?: Array<CommonTypes.ValidationRule>;
-  visibleIndex?: number;
+  visibleIndex?: number | undefined;
   alignItemLabels?: boolean;
-  caption?: string;
+  caption?: string | undefined;
   captionTemplate?: ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any) | template;
   colCount?: number;
   colCountByScreen?: Record<string, any> | {
-    lg?: number;
-    md?: number;
-    sm?: number;
-    xs?: number;
+    lg?: number | undefined;
+    md?: number | undefined;
+    sm?: number | undefined;
+    xs?: number | undefined;
   };
   items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-  tabPanelOptions?: dxTabPanelOptions;
+  tabPanelOptions?: dxTabPanelOptions | undefined;
   tabs?: Array<Record<string, any>> | {
     alignItemLabels?: boolean;
-    badge?: string;
+    badge?: string | undefined;
     colCount?: number;
     colCountByScreen?: Record<string, any> | {
-      lg?: number;
-      md?: number;
-      sm?: number;
-      xs?: number;
+      lg?: number | undefined;
+      md?: number | undefined;
+      sm?: number | undefined;
+      xs?: number | undefined;
     };
     disabled?: boolean;
-    icon?: string;
+    icon?: string | undefined;
     items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-    tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
-    template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
-    title?: string;
+    tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+    template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+    title?: string | undefined;
   }[];
-  buttonOptions?: dxButtonOptions;
+  buttonOptions?: dxButtonOptions | undefined;
   horizontalAlignment?: HorizontalAlignment;
   verticalAlignment?: VerticalAlignment;
   tabRender?: (...params: any) => React.ReactNode;
@@ -481,7 +481,7 @@ type ILabelProps = React.PropsWithChildren<{
   location?: LabelLocation;
   showColon?: boolean;
   template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
-  text?: string;
+  text?: string | undefined;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
@@ -607,27 +607,27 @@ const RequiredRule = Object.assign<typeof _componentRequiredRule, NestedComponen
 // owners:
 // Form
 type ISimpleItemProps = React.PropsWithChildren<{
-  colSpan?: number;
-  cssClass?: string;
-  dataField?: string;
-  editorOptions?: any;
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
+  dataField?: string | undefined;
+  editorOptions?: any | undefined;
   editorType?: FormItemComponent;
-  helpText?: string;
-  isRequired?: boolean;
+  helpText?: string | undefined;
+  isRequired?: boolean | undefined;
   itemType?: FormItemType;
   label?: Record<string, any> | {
     alignment?: HorizontalAlignment;
     location?: LabelLocation;
     showColon?: boolean;
     template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
-    text?: string;
+    text?: string | undefined;
     visible?: boolean;
   };
-  name?: string;
+  name?: string | undefined;
   template?: ((data: { component: dxForm, dataField: string, editorOptions: Record<string, any>, editorType: string, name: string }, itemElement: any) => string | any) | template;
   validationRules?: Array<CommonTypes.ValidationRule>;
   visible?: boolean;
-  visibleIndex?: number;
+  visibleIndex?: number | undefined;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
@@ -697,20 +697,20 @@ const StringLengthRule = Object.assign<typeof _componentStringLengthRule, Nested
 // TabbedItem
 type ITabProps = React.PropsWithChildren<{
   alignItemLabels?: boolean;
-  badge?: string;
+  badge?: string | undefined;
   colCount?: number;
   colCountByScreen?: Record<string, any> | {
-    lg?: number;
-    md?: number;
-    sm?: number;
-    xs?: number;
+    lg?: number | undefined;
+    md?: number | undefined;
+    sm?: number | undefined;
+    xs?: number | undefined;
   };
   disabled?: boolean;
-  icon?: string;
+  icon?: string | undefined;
   items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-  tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
-  template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
-  title?: string;
+  tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+  template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+  title?: string | undefined;
   tabRender?: (...params: any) => React.ReactNode;
   tabComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;
@@ -745,30 +745,30 @@ const Tab = Object.assign<typeof _componentTab, NestedComponentMeta>(_componentT
 // owners:
 // Form
 type ITabbedItemProps = React.PropsWithChildren<{
-  colSpan?: number;
-  cssClass?: string;
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
   itemType?: FormItemType;
-  name?: string;
-  tabPanelOptions?: dxTabPanelOptions;
+  name?: string | undefined;
+  tabPanelOptions?: dxTabPanelOptions | undefined;
   tabs?: Array<Record<string, any>> | {
     alignItemLabels?: boolean;
-    badge?: string;
+    badge?: string | undefined;
     colCount?: number;
     colCountByScreen?: Record<string, any> | {
-      lg?: number;
-      md?: number;
-      sm?: number;
-      xs?: number;
+      lg?: number | undefined;
+      md?: number | undefined;
+      sm?: number | undefined;
+      xs?: number | undefined;
     };
     disabled?: boolean;
-    icon?: string;
+    icon?: string | undefined;
     items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-    tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
-    template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
-    title?: string;
+    tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+    template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+    title?: string | undefined;
   }[];
   visible?: boolean;
-  visibleIndex?: number;
+  visibleIndex?: number | undefined;
 }>
 const _componentTabbedItem = (props: ITabbedItemProps) => {
   return React.createElement(NestedOption<ITabbedItemProps>, {
@@ -794,7 +794,7 @@ const TabbedItem = Object.assign<typeof _componentTabbedItem, NestedComponentMet
 // owners:
 // TabbedItem
 type ITabPanelOptionsProps = React.PropsWithChildren<{
-  accessKey?: string;
+  accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   animationEnabled?: boolean;
   bindingOptions?: Record<string, any>;
@@ -803,8 +803,8 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string;
-  hint?: string;
+  height?: (() => number | string) | number | string | undefined;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
   iconPosition?: TabsIconPosition;
   itemHoldTimeout?: number;
@@ -838,7 +838,7 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   tabIndex?: number;
   tabsPosition?: Position;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: (() => number | string) | number | string | undefined;
   defaultItems?: Array<any | dxTabPanelItem | string>;
   onItemsChange?: (value: Array<any | dxTabPanelItem | string>) => void;
   defaultSelectedIndex?: number;

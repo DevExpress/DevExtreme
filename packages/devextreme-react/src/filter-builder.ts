@@ -85,13 +85,13 @@ const FilterBuilder = memo(
 // FilterBuilder
 type ICustomOperationProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>);
-  caption?: string;
+  caption?: string | undefined;
   customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string);
-  dataTypes?: Array<DataType>;
+  dataTypes?: Array<DataType> | undefined;
   editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   hasValue?: boolean;
-  icon?: string;
-  name?: string;
+  icon?: string | undefined;
+  name?: string | undefined;
   editorRender?: (...params: any) => React.ReactNode;
   editorComponent?: React.ComponentType<any>;
 }>
@@ -118,9 +118,9 @@ const CustomOperation = Object.assign<typeof _componentCustomOperation, NestedCo
 // FilterBuilder
 type IFieldProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>);
-  caption?: string;
+  caption?: string | undefined;
   customizeText?: ((fieldInfo: { value: string | number | Date, valueText: string }) => string);
-  dataField?: string;
+  dataField?: string | undefined;
   dataType?: DataType;
   editorOptions?: any;
   editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
@@ -129,11 +129,11 @@ type IFieldProps = React.PropsWithChildren<{
   format?: LocalizationFormat;
   lookup?: Record<string, any> | {
     allowClearing?: boolean;
-    dataSource?: Array<any> | DataSourceOptions | Store;
-    displayExpr?: ((data: any) => string) | string;
-    valueExpr?: ((data: any) => string | number | boolean) | string;
+    dataSource?: Array<any> | DataSourceOptions | Store | undefined;
+    displayExpr?: ((data: any) => string) | string | undefined;
+    valueExpr?: ((data: any) => string | number | boolean) | string | undefined;
   };
-  name?: string;
+  name?: string | undefined;
   trueText?: string;
   editorRender?: (...params: any) => React.ReactNode;
   editorComponent?: React.ComponentType<any>;
@@ -239,9 +239,9 @@ const GroupOperationDescriptions = Object.assign<typeof _componentGroupOperation
 // Field
 type ILookupProps = React.PropsWithChildren<{
   allowClearing?: boolean;
-  dataSource?: Array<any> | DataSourceOptions | Store;
-  displayExpr?: ((data: any) => string) | string;
-  valueExpr?: ((data: any) => string | number | boolean) | string;
+  dataSource?: Array<any> | DataSourceOptions | Store | undefined;
+  displayExpr?: ((data: any) => string) | string | undefined;
+  valueExpr?: ((data: any) => string | number | boolean) | string | undefined;
 }>
 const _componentLookup = (props: ILookupProps) => {
   return React.createElement(NestedOption<ILookupProps>, {

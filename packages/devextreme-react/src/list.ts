@@ -122,8 +122,8 @@ const List = memo(
 // SearchEditorOptions
 type IButtonProps = React.PropsWithChildren<{
   location?: TextEditorButtonLocation;
-  name?: string;
-  options?: dxButtonOptions;
+  name?: string | undefined;
+  options?: dxButtonOptions | undefined;
 }>
 const _componentButton = (props: IButtonProps) => {
   return React.createElement(NestedOption<IButtonProps>, {
@@ -202,21 +202,21 @@ type IItemDraggingProps = React.PropsWithChildren<{
   allowReordering?: boolean;
   autoScroll?: boolean;
   bindingOptions?: Record<string, any>;
-  boundary?: any | string;
-  container?: any | string;
+  boundary?: any | string | undefined;
+  container?: any | string | undefined;
   cursorOffset?: Record<string, any> | string | {
     x?: number;
     y?: number;
   };
-  data?: any;
+  data?: any | undefined;
   dragDirection?: DragDirection;
-  dragTemplate?: ((dragInfo: { fromIndex: number, itemData: any, itemElement: any }, containerElement: any) => string | any) | template;
+  dragTemplate?: ((dragInfo: { fromIndex: number, itemData: any, itemElement: any }, containerElement: any) => string | any) | template | undefined;
   dropFeedbackMode?: DragHighlight;
   elementAttr?: Record<string, any>;
   filter?: string;
-  group?: string;
+  group?: string | undefined;
   handle?: string;
-  height?: (() => number | string) | number | string;
+  height?: (() => number | string) | number | string | undefined;
   itemOrientation?: Orientation;
   moveItemOnDrop?: boolean;
   onAdd?: ((e: AddEvent) => void);
@@ -232,7 +232,7 @@ type IItemDraggingProps = React.PropsWithChildren<{
   rtlEnabled?: boolean;
   scrollSensitivity?: number;
   scrollSpeed?: number;
-  width?: (() => number | string) | number | string;
+  width?: (() => number | string) | number | string | undefined;
   dragRender?: (...params: any) => React.ReactNode;
   dragComponent?: React.ComponentType<any>;
 }>
@@ -280,14 +280,14 @@ const MenuItem = Object.assign<typeof _componentMenuItem, NestedComponentMeta>(_
 // owners:
 // Button
 type IOptionsProps = React.PropsWithChildren<{
-  accessKey?: string;
+  accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string;
-  hint?: string;
+  height?: (() => number | string) | number | string | undefined;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
   onClick?: ((e: ClickEvent) => void);
@@ -302,9 +302,9 @@ type IOptionsProps = React.PropsWithChildren<{
   text?: string;
   type?: ButtonType | string;
   useSubmitBehavior?: boolean;
-  validationGroup?: string;
+  validationGroup?: string | undefined;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: (() => number | string) | number | string | undefined;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
@@ -329,15 +329,15 @@ const Options = Object.assign<typeof _componentOptions, NestedComponentMeta>(_co
 // owners:
 // List
 type ISearchEditorOptionsProps = React.PropsWithChildren<{
-  accessKey?: string;
+  accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   bindingOptions?: Record<string, any>;
   buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string;
-  hint?: string;
+  height?: (() => number | string) | number | string | undefined;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
   inputAttr?: any;
   isDirty?: boolean;
@@ -384,7 +384,7 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   value?: string;
   valueChangeEvent?: string;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: (() => number | string) | number | string | undefined;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
 }>

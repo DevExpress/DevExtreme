@@ -117,12 +117,12 @@ const AdaptiveLayout = Object.assign<typeof _componentAdaptiveLayout, NestedComp
 // Legend
 // Tooltip
 type IBorderProps = React.PropsWithChildren<{
-  color?: string;
-  visible?: boolean;
-  width?: number;
+  color?: string | undefined;
+  visible?: boolean | undefined;
+  width?: number | undefined;
   dashStyle?: DashStyle;
   cornerRadius?: number;
-  opacity?: number;
+  opacity?: number | undefined;
 }>
 const _componentBorder = (props: IBorderProps) => {
   return React.createElement(NestedOption<IBorderProps>, {
@@ -140,7 +140,7 @@ const Border = Object.assign<typeof _componentBorder, NestedComponentMeta>(_comp
 // owners:
 // Label
 type IConnectorProps = React.PropsWithChildren<{
-  color?: string;
+  color?: string | undefined;
   opacity?: number;
   visible?: boolean;
   width?: number;
@@ -167,7 +167,7 @@ type IExportProps = React.PropsWithChildren<{
   formats?: Array<ExportFormat>;
   margin?: number;
   printingEnabled?: boolean;
-  svgToCanvas?: ((svg: any, canvas: any) => any);
+  svgToCanvas?: ((svg: any, canvas: any) => any) | undefined;
 }>
 const _componentExport = (props: IExportProps) => {
   return React.createElement(NestedOption<IExportProps>, {
@@ -246,7 +246,7 @@ type IFunnelTitleProps = React.PropsWithChildren<{
     right?: number;
     top?: number;
   };
-  placeholderSize?: number;
+  placeholderSize?: number | undefined;
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
@@ -329,9 +329,9 @@ const Hatching = Object.assign<typeof _componentHatching, NestedComponentMeta>(_
 // Item
 type IHoverStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
-    color?: string;
-    visible?: boolean;
-    width?: number;
+    color?: string | undefined;
+    visible?: boolean | undefined;
+    width?: number | undefined;
   };
   hatching?: Record<string, any> | {
     direction?: HatchDirection;
@@ -362,15 +362,15 @@ const HoverStyle = Object.assign<typeof _componentHoverStyle, NestedComponentMet
 // Funnel
 type IItemProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
-    color?: string;
-    visible?: boolean;
-    width?: number;
+    color?: string | undefined;
+    visible?: boolean | undefined;
+    width?: number | undefined;
   };
   hoverStyle?: Record<string, any> | {
     border?: Record<string, any> | {
-      color?: string;
-      visible?: boolean;
-      width?: number;
+      color?: string | undefined;
+      visible?: boolean | undefined;
+      width?: number | undefined;
     };
     hatching?: Record<string, any> | {
       direction?: HatchDirection;
@@ -381,9 +381,9 @@ type IItemProps = React.PropsWithChildren<{
   };
   selectionStyle?: Record<string, any> | {
     border?: Record<string, any> | {
-      color?: string;
-      visible?: boolean;
-      width?: number;
+      color?: string | undefined;
+      visible?: boolean | undefined;
+      width?: number | undefined;
     };
     hatching?: Record<string, any> | {
       direction?: HatchDirection;
@@ -417,9 +417,9 @@ const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componen
 // HoverStyle
 // SelectionStyle
 type IItemBorderProps = React.PropsWithChildren<{
-  color?: string;
-  visible?: boolean;
-  width?: number;
+  color?: string | undefined;
+  visible?: boolean | undefined;
+  width?: number | undefined;
 }>
 const _componentItemBorder = (props: IItemBorderProps) => {
   return React.createElement(NestedOption<IItemBorderProps>, {
@@ -445,14 +445,14 @@ type ILabelProps = React.PropsWithChildren<{
     width?: number;
   };
   connector?: Record<string, any> | {
-    color?: string;
+    color?: string | undefined;
     opacity?: number;
     visible?: boolean;
     width?: number;
   };
   customizeText?: ((itemInfo: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => string);
   font?: ChartsFont;
-  format?: LocalizationFormat;
+  format?: LocalizationFormat | undefined;
   horizontalAlignment?: HorizontalEdge;
   horizontalOffset?: number;
   position?: LabelPosition;
@@ -505,12 +505,12 @@ const LabelBorder = Object.assign<typeof _componentLabelBorder, NestedComponentM
 // owners:
 // Funnel
 type ILegendProps = React.PropsWithChildren<{
-  backgroundColor?: string;
+  backgroundColor?: string | undefined;
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
     dashStyle?: DashStyle;
-    opacity?: number;
+    opacity?: number | undefined;
     visible?: boolean;
     width?: number;
   };
@@ -521,8 +521,8 @@ type ILegendProps = React.PropsWithChildren<{
   customizeText?: ((itemInfo: { item: dxFunnelItem, text: string }) => string);
   font?: ChartsFont;
   horizontalAlignment?: HorizontalAlignment;
-  itemsAlignment?: HorizontalAlignment;
-  itemTextPosition?: Position;
+  itemsAlignment?: HorizontalAlignment | undefined;
+  itemTextPosition?: Position | undefined;
   margin?: number | Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -530,22 +530,22 @@ type ILegendProps = React.PropsWithChildren<{
     top?: number;
   };
   markerSize?: number;
-  markerTemplate?: ((legendItem: FunnelLegendItem, element: any) => string | any) | template;
-  orientation?: Orientation;
+  markerTemplate?: ((legendItem: FunnelLegendItem, element: any) => string | any) | template | undefined;
+  orientation?: Orientation | undefined;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
   rowCount?: number;
   rowItemSpacing?: number;
   title?: Record<string, any> | string | {
     font?: ChartsFont;
-    horizontalAlignment?: HorizontalAlignment;
+    horizontalAlignment?: HorizontalAlignment | undefined;
     margin?: Record<string, any> | {
       bottom?: number;
       left?: number;
       right?: number;
       top?: number;
     };
-    placeholderSize?: number;
+    placeholderSize?: number | undefined;
     subtitle?: Record<string, any> | string | {
       font?: ChartsFont;
       offset?: number;
@@ -591,7 +591,7 @@ type ILegendBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
   dashStyle?: DashStyle;
-  opacity?: number;
+  opacity?: number | undefined;
   visible?: boolean;
   width?: number;
 }>
@@ -612,14 +612,14 @@ const LegendBorder = Object.assign<typeof _componentLegendBorder, NestedComponen
 // Legend
 type ILegendTitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: HorizontalAlignment;
+  horizontalAlignment?: HorizontalAlignment | undefined;
   margin?: Record<string, any> | {
     bottom?: number;
     left?: number;
     right?: number;
     top?: number;
   };
-  placeholderSize?: number;
+  placeholderSize?: number | undefined;
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
@@ -728,9 +728,9 @@ const Margin = Object.assign<typeof _componentMargin, NestedComponentMeta>(_comp
 // Item
 type ISelectionStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
-    color?: string;
-    visible?: boolean;
-    width?: number;
+    color?: string | undefined;
+    visible?: boolean | undefined;
+    width?: number | undefined;
   };
   hatching?: Record<string, any> | {
     direction?: HatchDirection;
@@ -782,8 +782,8 @@ const Shadow = Object.assign<typeof _componentShadow, NestedComponentMeta>(_comp
 // owners:
 // Funnel
 type ISizeProps = React.PropsWithChildren<{
-  height?: number;
-  width?: number;
+  height?: number | undefined;
+  width?: number | undefined;
 }>
 const _componentSize = (props: ISizeProps) => {
   return React.createElement(NestedOption<ISizeProps>, {
@@ -826,14 +826,14 @@ const Subtitle = Object.assign<typeof _componentSubtitle, NestedComponentMeta>(_
 // Funnel
 type ITitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: HorizontalAlignment;
+  horizontalAlignment?: HorizontalAlignment | undefined;
   margin?: Record<string, any> | number | {
     bottom?: number;
     left?: number;
     right?: number;
     top?: number;
   };
-  placeholderSize?: number;
+  placeholderSize?: number | undefined;
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
@@ -866,19 +866,19 @@ type ITooltipProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     dashStyle?: DashStyle;
-    opacity?: number;
+    opacity?: number | undefined;
     visible?: boolean;
     width?: number;
   };
   color?: string;
-  container?: any | string;
-  contentTemplate?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }, element: any) => string | any) | template;
+  container?: any | string | undefined;
+  contentTemplate?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }, element: any) => string | any) | template | undefined;
   cornerRadius?: number;
-  customizeTooltip?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => Record<string, any>);
+  customizeTooltip?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => Record<string, any>) | undefined;
   enabled?: boolean;
   font?: ChartsFont;
-  format?: LocalizationFormat;
-  opacity?: number;
+  format?: LocalizationFormat | undefined;
+  opacity?: number | undefined;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
   shadow?: Record<string, any> | {
@@ -888,7 +888,7 @@ type ITooltipProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  zIndex?: number;
+  zIndex?: number | undefined;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
 }>
@@ -922,7 +922,7 @@ const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_co
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
   dashStyle?: DashStyle;
-  opacity?: number;
+  opacity?: number | undefined;
   visible?: boolean;
   width?: number;
 }>

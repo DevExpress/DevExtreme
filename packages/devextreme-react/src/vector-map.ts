@@ -105,25 +105,25 @@ type IAnnotationProps = React.PropsWithChildren<{
     color?: string;
     cornerRadius?: number;
     dashStyle?: DashStyle;
-    opacity?: number;
+    opacity?: number | undefined;
     visible?: boolean;
     width?: number;
   };
   color?: string;
   coordinates?: Array<number>;
-  customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => Record<string, any>);
+  customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => Record<string, any>) | undefined;
   data?: any;
-  description?: string;
+  description?: string | undefined;
   font?: ChartsFont;
-  height?: number;
+  height?: number | undefined;
   image?: Record<string, any> | string | {
     height?: number;
-    url?: string;
+    url?: string | undefined;
     width?: number;
   };
-  name?: string;
-  offsetX?: number;
-  offsetY?: number;
+  name?: string | undefined;
+  offsetX?: number | undefined;
+  offsetY?: number | undefined;
   opacity?: number;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
@@ -134,16 +134,16 @@ type IAnnotationProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  template?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template;
-  text?: string;
+  template?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template | undefined;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   tooltipEnabled?: boolean;
-  tooltipTemplate?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template;
-  type?: AnnotationType;
-  width?: number;
+  tooltipTemplate?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template | undefined;
+  type?: AnnotationType | undefined;
+  width?: number | undefined;
   wordWrap?: WordWrap;
-  x?: number;
-  y?: number;
+  x?: number | undefined;
+  y?: number | undefined;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
   tooltipRender?: (...params: any) => React.ReactNode;
@@ -186,7 +186,7 @@ type IAnnotationBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
   dashStyle?: DashStyle;
-  opacity?: number;
+  opacity?: number | undefined;
   visible?: boolean;
   width?: number;
 }>
@@ -230,7 +230,7 @@ type IBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
   dashStyle?: DashStyle;
-  opacity?: number;
+  opacity?: number | undefined;
   visible?: boolean;
   width?: number;
 }>
@@ -257,24 +257,24 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
     color?: string;
     cornerRadius?: number;
     dashStyle?: DashStyle;
-    opacity?: number;
+    opacity?: number | undefined;
     visible?: boolean;
     width?: number;
   };
   color?: string;
   coordinates?: Array<number>;
-  customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => Record<string, any>);
+  customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => Record<string, any>) | undefined;
   data?: any;
-  description?: string;
+  description?: string | undefined;
   font?: ChartsFont;
-  height?: number;
+  height?: number | undefined;
   image?: Record<string, any> | string | {
     height?: number;
-    url?: string;
+    url?: string | undefined;
     width?: number;
   };
-  offsetX?: number;
-  offsetY?: number;
+  offsetX?: number | undefined;
+  offsetY?: number | undefined;
   opacity?: number;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
@@ -285,16 +285,16 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  template?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template;
-  text?: string;
+  template?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template | undefined;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   tooltipEnabled?: boolean;
-  tooltipTemplate?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template;
-  type?: AnnotationType;
-  width?: number;
+  tooltipTemplate?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template | undefined;
+  type?: AnnotationType | undefined;
+  width?: number | undefined;
   wordWrap?: WordWrap;
-  x?: number;
-  y?: number;
+  x?: number | undefined;
+  y?: number | undefined;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
   tooltipRender?: (...params: any) => React.ReactNode;
@@ -357,7 +357,7 @@ type IExportProps = React.PropsWithChildren<{
   formats?: Array<ExportFormat>;
   margin?: number;
   printingEnabled?: boolean;
-  svgToCanvas?: ((svg: any, canvas: any) => any);
+  svgToCanvas?: ((svg: any, canvas: any) => any) | undefined;
 }>
 const _componentExport = (props: IExportProps) => {
   return React.createElement(NestedOption<IExportProps>, {
@@ -406,7 +406,7 @@ const Font = Object.assign<typeof _componentFont, NestedComponentMeta>(_componen
 // Annotation
 type IImageProps = React.PropsWithChildren<{
   height?: number;
-  url?: string;
+  url?: string | undefined;
   width?: number;
 }>
 const _componentImage = (props: IImageProps) => {
@@ -451,10 +451,10 @@ type ILayerProps = React.PropsWithChildren<{
   borderColor?: string;
   borderWidth?: number;
   color?: string;
-  colorGroupingField?: string;
+  colorGroupingField?: string | undefined;
   colorGroups?: Array<number>;
   customize?: ((elements: Array<MapLayerElement>) => void);
-  dataField?: string;
+  dataField?: string | undefined;
   dataSource?: Array<any> | DataSource | DataSourceOptions | null | Record<string, any> | Store | string;
   elementType?: VectorMapMarkerType;
   hoveredBorderColor?: string;
@@ -478,7 +478,7 @@ type ILayerProps = React.PropsWithChildren<{
   selectedColor?: string;
   selectionMode?: SingleMultipleOrNone;
   size?: number;
-  sizeGroupingField?: string;
+  sizeGroupingField?: string | undefined;
   sizeGroups?: Array<number>;
   type?: VectorMapLayerType;
 }>
@@ -502,12 +502,12 @@ const Layer = Object.assign<typeof _componentLayer, NestedComponentMeta>(_compon
 // owners:
 // VectorMap
 type ILegendProps = React.PropsWithChildren<{
-  backgroundColor?: string;
+  backgroundColor?: string | undefined;
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
     dashStyle?: DashStyle;
-    opacity?: number;
+    opacity?: number | undefined;
     visible?: boolean;
     width?: number;
   };
@@ -518,19 +518,19 @@ type ILegendProps = React.PropsWithChildren<{
   customizeText?: ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string);
   font?: ChartsFont;
   horizontalAlignment?: HorizontalAlignment;
-  itemsAlignment?: HorizontalAlignment;
-  itemTextPosition?: Position;
+  itemsAlignment?: HorizontalAlignment | undefined;
+  itemTextPosition?: Position | undefined;
   margin?: number | Record<string, any> | {
     bottom?: number;
     left?: number;
     right?: number;
     top?: number;
   };
-  markerColor?: string;
+  markerColor?: string | undefined;
   markerShape?: VectorMapMarkerShape;
   markerSize?: number;
-  markerTemplate?: ((legendItem: VectorMapLegendItem, element: any) => string | any) | template;
-  orientation?: Orientation;
+  markerTemplate?: ((legendItem: VectorMapLegendItem, element: any) => string | any) | template | undefined;
+  orientation?: Orientation | undefined;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
   rowCount?: number;
@@ -541,14 +541,14 @@ type ILegendProps = React.PropsWithChildren<{
   };
   title?: Record<string, any> | string | {
     font?: ChartsFont;
-    horizontalAlignment?: HorizontalAlignment;
+    horizontalAlignment?: HorizontalAlignment | undefined;
     margin?: Record<string, any> | {
       bottom?: number;
       left?: number;
       right?: number;
       top?: number;
     };
-    placeholderSize?: number;
+    placeholderSize?: number | undefined;
     subtitle?: Record<string, any> | string | {
       font?: ChartsFont;
       offset?: number;
@@ -594,14 +594,14 @@ const Legend = Object.assign<typeof _componentLegend, NestedComponentMeta>(_comp
 // Legend
 type ILegendTitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: HorizontalAlignment;
+  horizontalAlignment?: HorizontalAlignment | undefined;
   margin?: Record<string, any> | {
     bottom?: number;
     left?: number;
     right?: number;
     top?: number;
   };
-  placeholderSize?: number;
+  placeholderSize?: number | undefined;
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
@@ -751,8 +751,8 @@ const Shadow = Object.assign<typeof _componentShadow, NestedComponentMeta>(_comp
 // owners:
 // VectorMap
 type ISizeProps = React.PropsWithChildren<{
-  height?: number;
-  width?: number;
+  height?: number | undefined;
+  width?: number | undefined;
 }>
 const _componentSize = (props: ISizeProps) => {
   return React.createElement(NestedOption<ISizeProps>, {
@@ -814,14 +814,14 @@ const Subtitle = Object.assign<typeof _componentSubtitle, NestedComponentMeta>(_
 // VectorMap
 type ITitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: HorizontalAlignment;
+  horizontalAlignment?: HorizontalAlignment | undefined;
   margin?: Record<string, any> | number | {
     bottom?: number;
     left?: number;
     right?: number;
     top?: number;
   };
-  placeholderSize?: number;
+  placeholderSize?: number | undefined;
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
@@ -854,18 +854,18 @@ type ITooltipProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     dashStyle?: DashStyle;
-    opacity?: number;
+    opacity?: number | undefined;
     visible?: boolean;
     width?: number;
   };
   color?: string;
-  container?: any | string;
-  contentTemplate?: ((info: MapLayerElement, element: any) => string | any) | template;
+  container?: any | string | undefined;
+  contentTemplate?: ((info: MapLayerElement, element: any) => string | any) | template | undefined;
   cornerRadius?: number;
-  customizeTooltip?: ((info: MapLayerElement) => Record<string, any>);
+  customizeTooltip?: ((info: MapLayerElement) => Record<string, any>) | undefined;
   enabled?: boolean;
   font?: ChartsFont;
-  opacity?: number;
+  opacity?: number | undefined;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
   shadow?: Record<string, any> | {
@@ -875,7 +875,7 @@ type ITooltipProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  zIndex?: number;
+  zIndex?: number | undefined;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
 }>
@@ -908,7 +908,7 @@ const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_co
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
   dashStyle?: DashStyle;
-  opacity?: number;
+  opacity?: number | undefined;
   visible?: boolean;
   width?: number;
 }>
@@ -936,7 +936,7 @@ type IVectorMapTitleProps = React.PropsWithChildren<{
     right?: number;
     top?: number;
   };
-  placeholderSize?: number;
+  placeholderSize?: number | undefined;
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;

@@ -87,8 +87,8 @@ const TextBox = memo(
 // TextBox
 type IButtonProps = React.PropsWithChildren<{
   location?: TextEditorButtonLocation;
-  name?: string;
-  options?: dxButtonOptions;
+  name?: string | undefined;
+  options?: dxButtonOptions | undefined;
 }>
 const _componentButton = (props: IButtonProps) => {
   return React.createElement(NestedOption<IButtonProps>, {
@@ -110,14 +110,14 @@ const Button = Object.assign<typeof _componentButton, NestedComponentMeta>(_comp
 // owners:
 // Button
 type IOptionsProps = React.PropsWithChildren<{
-  accessKey?: string;
+  accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string;
-  hint?: string;
+  height?: (() => number | string) | number | string | undefined;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
   onClick?: ((e: ClickEvent) => void);
@@ -132,9 +132,9 @@ type IOptionsProps = React.PropsWithChildren<{
   text?: string;
   type?: ButtonType | string;
   useSubmitBehavior?: boolean;
-  validationGroup?: string;
+  validationGroup?: string | undefined;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: (() => number | string) | number | string | undefined;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>

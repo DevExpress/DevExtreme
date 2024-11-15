@@ -210,11 +210,11 @@ const From = Object.assign<typeof _componentFrom, NestedComponentMeta>(_componen
 type IHideProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: Direction;
+  direction?: Direction | undefined;
   duration?: number;
   easing?: string;
   from?: AnimationState;
-  staggerDelay?: number;
+  staggerDelay?: number | undefined;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
   type?: AnimationType;
@@ -239,8 +239,8 @@ const Hide = Object.assign<typeof _componentHide, NestedComponentMeta>(_componen
 // owners:
 // Tooltip
 type IHideEventProps = React.PropsWithChildren<{
-  delay?: number;
-  name?: string;
+  delay?: number | undefined;
+  name?: string | undefined;
 }>
 const _componentHideEvent = (props: IHideEventProps) => {
   return React.createElement(NestedOption<IHideEventProps>, {
@@ -338,11 +338,11 @@ const Position = Object.assign<typeof _componentPosition, NestedComponentMeta>(_
 type IShowProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: Direction;
+  direction?: Direction | undefined;
   duration?: number;
   easing?: string;
   from?: AnimationState;
-  staggerDelay?: number;
+  staggerDelay?: number | undefined;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
   type?: AnimationType;
@@ -363,8 +363,8 @@ const Show = Object.assign<typeof _componentShow, NestedComponentMeta>(_componen
 // owners:
 // Tooltip
 type IShowEventProps = React.PropsWithChildren<{
-  delay?: number;
-  name?: string;
+  delay?: number | undefined;
+  name?: string | undefined;
 }>
 const _componentShowEvent = (props: IShowEventProps) => {
   return React.createElement(NestedOption<IShowEventProps>, {
