@@ -8,12 +8,10 @@ import dxPopover, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { Position as CommonPosition, HorizontalAlignment, VerticalAlignment, Direction, PositionAlignment, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
-import type { PositionConfig, CollisionResolution, CollisionResolutionCombination } from "devextreme/animation/position";
+import type { Position as CommonPosition, HorizontalAlignment, VerticalAlignment, Direction, PositionAlignment, ToolbarItemLocation, template, ToolbarItemComponent } from "devextreme/common";
+import type { PositionConfig, AnimationConfig, CollisionResolution, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from "devextreme/ui/popover";
-import type { AnimationConfig, AnimationState, AnimationType } from "devextreme/animation/fx";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
-import type { template } from "devextreme/core/templates/template";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { ToolbarLocation } from "devextreme/ui/popup";
 

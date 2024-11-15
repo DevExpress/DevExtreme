@@ -23,13 +23,13 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/data_grid';
 
-import { PositionConfig } from 'devextreme/animation/position';
 import { DragDirection, DragHighlight, HorizontalAlignment, Mode, ScrollbarMode, SelectAllMode, SingleMultipleOrNone, SortOrder } from 'devextreme/common';
+import { PositionConfig } from 'devextreme/common/core/animation';
+import { Format } from 'devextreme/common/core/localization';
 import { ApplyFilterMode, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataChange, DataRenderMode, EnterKeyAction, EnterKeyDirection, GridsEditMode, GridsEditRefreshMode, GroupExpandMode, HeaderFilterSearchConfig, NewRowPosition, Pager, SelectionColumnDisplayMode, StartEditAction, StateStoreType, SummaryType } from 'devextreme/common/grids';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Format } from 'devextreme/localization';
 import { AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DataGridExportFormat, DataGridScrollMode, DisposingEvent, dxDataGridColumn, dxDataGridToolbar, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, SelectionSensitivity, ToolbarPreparingEvent } from 'devextreme/ui/data_grid';
 import { Properties as dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
 import { Properties as dxFormOptions } from 'devextreme/ui/form';

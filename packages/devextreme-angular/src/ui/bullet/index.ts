@@ -18,8 +18,8 @@ import {
 
 
 import { DashStyle, Font, Theme } from 'devextreme/common/charts';
+import { Format } from 'devextreme/common/core/localization';
 import { UserDefinedElement } from 'devextreme/core/element';
-import { Format } from 'devextreme/localization';
 import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/bullet';
 
 import DxBullet from 'devextreme/viz/bullet';

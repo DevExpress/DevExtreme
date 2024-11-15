@@ -16,7 +16,7 @@ import {
 
 import { HorizontalAlignment } from 'devextreme/common';
 import { ChartsColor, DashStyle, Font, HatchDirection, PointInteractionMode, PointSymbol, RelativePosition, SeriesHoverMode, SeriesSelectionMode, SeriesType, ValueErrorBarDisplayMode, ValueErrorBarType } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 import { ChartSeriesAggregationMethod, FinancialChartReductionLevel } from 'devextreme/viz/chart';
 
 import {

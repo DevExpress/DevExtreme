@@ -14,8 +14,8 @@ import {
 
 
 
-import { AnimationState, AnimationType } from 'devextreme/animation/fx';
 import { Direction } from 'devextreme/common';
+import { AnimationState, AnimationType } from 'devextreme/common/core/animation';
 
 import {
     NestedOptionHost,
