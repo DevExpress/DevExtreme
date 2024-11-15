@@ -76,9 +76,9 @@ test('Scheduler table elements have right aria attributes', async (t) => {
         currentView,
         currentDate: new Date(2021, 3, 29),
         startDayHour: 9,
-      })
+      });
     }).after(async () => {
       await changeTheme('generic.light');
-    });;
+    });
   });
 });
