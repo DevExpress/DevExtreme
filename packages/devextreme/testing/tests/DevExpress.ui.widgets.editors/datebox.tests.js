@@ -6118,7 +6118,7 @@ QUnit.module('DateBox number and string value support', {
         dateBox.open();
 
         const calendar = $('.dx-calendar').dxCalendar('instance');
-        const $navigatorCaptionButton = calendar._$element.find(`.${CALENDAR_CAPTION_BUTTON_CLASS}`);
+        const $navigatorCaptionButton = calendar.$element().find(`.${CALENDAR_CAPTION_BUTTON_CLASS}`);
         const calendarDate = calendar.option('currentDate');
         calendarDate.setHours(0, 0, 0, 0);
         const expectedDate = new Date();
@@ -6139,9 +6139,9 @@ QUnit.module('DateBox number and string value support', {
         dateBox.open();
 
         const calendar = $('.dx-calendar').dxCalendar('instance');
-        const $navigatorCaptionButton = calendar._$element.find(`.${CALENDAR_CAPTION_BUTTON_CLASS}`);
-        const $nextButton = calendar._$element.find(`.${CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS}`);
-        const $prevButton = calendar._$element.find(`.${CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS}`);
+        const $navigatorCaptionButton = calendar.$element().find(`.${CALENDAR_CAPTION_BUTTON_CLASS}`);
+        const $nextButton = calendar.$element().find(`.${CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS}`);
+        const $prevButton = calendar.$element().find(`.${CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS}`);
 
         const today = new Date();
         const options = { year: 'numeric', month: 'long' };
