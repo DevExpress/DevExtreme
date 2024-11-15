@@ -2599,8 +2599,7 @@ QUnit.test('Pinch zoom. Big chart rendering time on start and small time in the 
 
 QUnit.module('Misc', environment);
 
-// T1049139
-QUnit.test('visualRange updating after zoomming', function(assert) {
+QUnit.test('argument axis should not restore visual range on dataSource update (T1049139)', function(assert) {
     const dataSource = [{ arg: 1960, val: 10, }, { arg: 2020, val: 20, }];
     const chart = this.createChart({
         dataSource,
@@ -2627,6 +2626,36 @@ QUnit.test('visualRange updating after zoomming', function(assert) {
 
     assert.strictEqual(Math.floor(visualRange.startValue), 2000);
     assert.strictEqual(Math.floor(visualRange.endValue), 2018);
+});
+
+QUnit.test('value axis should not restore visual range on dataSource update (T1262610)', function(assert) {
+    const dataSource = [{ arg: 2000, val: 10, }, { arg: 2010, val: 20, }];
+    const chart = this.createChart({
+        dataSource,
+        legend: {
+            visible: false,
+        },
+        series: { type: 'bar' },
+        valueAxis: {
+            visualRangeUpdateMode: 'keep',
+            visualRange: {
+                startValue: 5,
+                endValue: 25,
+            }
+        },
+        zoomAndPan: {
+            valueAxis: 'both',
+        }
+    });
+
+    this.pointer.start({ x: 200, y: 250 }).wheel(10);
+    dataSource.push({ arg: 2020, val: 15 });
+    chart.option('dataSource', dataSource);
+
+    const visualRange = chart.getValueAxis().visualRange();
+
+    assert.strictEqual(Math.floor(visualRange.startValue), 6);
+    assert.strictEqual(Math.floor(visualRange.endValue), 24);
 });
 
 QUnit.test('Do nothing if no actions allowed', function(assert) {
