@@ -123,6 +123,8 @@ export class AppointmentPopup {
   _onShowing(e) {
     this._updateForm();
 
+    e.component.$overlayContent().attr('aria-label', 'Edit appointment');
+
     const arg = {
       form: this.form.dxForm,
       popup: this.popup,
