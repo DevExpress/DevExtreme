@@ -87,7 +87,7 @@ export default class BootstrapExtractor {
     }
 
     const result = `${functions}
-${variables.replace('@import "variables-dark";', '')}
+${variables}
 ${variablesDark}
 ${this.input}
 ${this.getSetterServiceCode('!default')}
