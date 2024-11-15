@@ -21,7 +21,7 @@
     "@angular/common": ">=17.0.0",
     "@angular/core": ">=17.0.0",
     "@angular/forms": ">=17.0.0",
-    "devextreme": "workspace:~24.2.0"
+    "devextreme": "workspace:~"
   },
   "devDependencies": {
     "@angular-devkit/architect": "0.1703.8",
