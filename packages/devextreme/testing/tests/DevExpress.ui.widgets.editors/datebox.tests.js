@@ -69,6 +69,8 @@ const LIST_CLASS = 'dx-list';
 const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button';
+const CALENDAR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
+const CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS = 'dx-calendar-navigator-next-view';
 const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view';
 const DROPDOWNEDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const NUMBERBOX_CLASS = 'dx-numberbox';
@@ -6107,6 +6109,58 @@ QUnit.module('DateBox number and string value support', {
         });
     });
 
+    QUnit.test('empty string value should still be able to click navigator caption in calendar (T1257679)', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: '',
+        });
+        const dateBox = $dateBox.dxDateBox('instance');
+        dateBox.open();
+
+        const calendar = $('.dx-calendar').dxCalendar('instance');
+        const $navigatorCaptionButton = calendar._$element.find(`.${CALENDAR_CAPTION_BUTTON_CLASS}`);
+        const calendarDate = calendar.option('currentDate');
+        calendarDate.setHours(0, 0, 0, 0);
+        const expectedDate = new Date();
+        expectedDate.setHours(0, 0, 0, 0);
+
+        $($navigatorCaptionButton).trigger('dxclick');
+
+        assert.strictEqual(calendar.option('zoomLevel'), 'year', 'zoom level is changed');
+        assert.deepEqual(calendarDate, expectedDate, 'calendar current date is set to todays date');
+    });
+
+    QUnit.test('empty string value should still be able to click navigator buttons in calendar (T1257679)', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: '',
+        });
+        const dateBox = $dateBox.dxDateBox('instance');
+        dateBox.open();
+
+        const calendar = $('.dx-calendar').dxCalendar('instance');
+        const $navigatorCaptionButton = calendar._$element.find(`.${CALENDAR_CAPTION_BUTTON_CLASS}`);
+        const $nextButton = calendar._$element.find(`.${CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS}`);
+        const $prevButton = calendar._$element.find(`.${CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS}`);
+
+        const today = new Date();
+        const options = { year: 'numeric', month: 'long' };
+
+        const currentMonth = today.toLocaleDateString('en-US', options);
+        const prevMonth = new Date(today.getFullYear(), today.getMonth() - 1).toLocaleDateString('en-US', options);
+        const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1).toLocaleDateString('en-US', options);
+
+        assert.strictEqual($navigatorCaptionButton.text(), currentMonth, 'caption is correct');
+
+        $($prevButton).trigger('dxclick');
+
+        assert.strictEqual($navigatorCaptionButton.text(), prevMonth, 'caption is correct');
+
+        $($nextButton).trigger('dxclick');
+        $($nextButton).trigger('dxclick');
+
+        assert.strictEqual($navigatorCaptionButton.text(), nextMonth, 'caption is correct');
+    });
 });
 
 testModule('native picker', function() {
