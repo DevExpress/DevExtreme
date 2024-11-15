@@ -1,27 +1,12 @@
 [
   {
-    "name": "common/core/animation/frame",
+    "name": "common/core/animation",
     "exports": {
       "cancelAnimationFrame": { "path": "utils.cancelAnimationFrame" },
-      "requestAnimationFrame": { "path": "utils.requestAnimationFrame" }
-    }
-  },
-  {
-    "name": "common/core/animation/fx",
-    "exports": {
-      "default": { "path": "fx" }
-    }
-  },
-  {
-    "name": "common/core/animation/presets",
-    "exports": {
-      "default": { "path": "animationPresets" }
-    }
-  },
-  {
-    "name": "common/core/animation/transition_executor",
-    "exports": {
-      "default": { "path": "TransitionExecutor" }
+      "requestAnimationFrame": { "path": "utils.requestAnimationFrame" },
+      "fx": { "path": "fx" },
+      "animationPresets": { "path": "animationPresets" },
+      "TransitionExecutor": { "path": "TransitionExecutor" }
     }
   },
   {
@@ -60,67 +45,22 @@
     }
   },
   {
-    "name": "common/data/apply_changes",
-    "exports": {
-      "default": { "path": "data.applyChanges" }
-    }
-  },
-  {
-    "name": "common/data/array_store",
-    "exports": {
-      "default": { "path": "data.ArrayStore" }
-    }
-  },
-  {
-    "name": "common/data/custom_store",
-    "exports": {
-      "default": { "path": "data.CustomStore" }
-    }
-  },
-  {
-    "name": "common/data/data_source",
-    "exports": {
-      "default": { "path": "data.DataSource" }
-    }
-  },
-  {
-    "name": "common/data/endpoint_selector",
-    "exports": {
-      "default": { "path": "EndpointSelector" }
-    }
-  },
-  {
     "name": "common/data",
     "exports": {
       "LoadOptions": { "path": "data.LoadOptions", "exportAs": "type" },
       "errorHandler": { "path": "data.errorHandler" },
       "EdmLiteral": { "path": "data.EdmLiteral" },
       "keyConverters": { "path": "data.utils.odata.keyConverters" },
-      "base64_encode": { "path": "data.base64_encode" }
-    }
-  },
-  {
-    "name": "common/data/local_store",
-    "exports": {
-      "default": { "path": "data.LocalStore" }
-    }
-  },
-  {
-    "name": "common/data/odata/context",
-    "exports": {
-      "default": { "path": "data.ODataContext" }
-    }
-  },
-  {
-    "name": "common/data/odata/store",
-    "exports": {
-      "default": { "path": "data.ODataStore" }
-    }
-  },
-  {
-    "name": "common/data/query",
-    "exports": {
-      "default": { "path": "data.query" }
+      "base64_encode": { "path": "data.base64_encode" },
+      "applyChanges": { "path": "data.applyChanges" },
+      "ArrayStore": { "path": "data.ArrayStore" },
+      "CustomStore": { "path": "data.CustomStore" },
+      "DataSource": { "path": "data.DataSource" },
+      "EndpointSelector": { "path": "EndpointSelector" },
+      "LocalStore": { "path": "data.LocalStore" },
+      "ODataContext": { "path": "data.ODataContext" },
+      "ODataStore": { "path": "data.ODataStore" },
+      "query": { "path": "data.query" }
     }
   },
   {
@@ -161,33 +101,13 @@
     }
   },
   {
-    "name": "common/file_management/error",
+    "name": "common/file_management",
     "exports": {
-      "default": { "path": "fileManagement.FileSystemError" }
-    }
-  },
-  {
-    "name": "common/file_management/file_system_item",
-    "exports": {
-      "default": { "path": "fileManagement.FileSystemItem" }
-    }
-  },
-  {
-    "name": "common/file_management/custom_provider",
-    "exports": {
-      "default": { "path": "fileManagement.CustomFileSystemProvider" }
-    }
-  },
-  {
-    "name": "common/file_management/object_provider",
-    "exports": {
-      "default": { "path": "fileManagement.ObjectFileSystemProvider" }
-    }
-  },
-  {
-    "name": "common/file_management/remote_provider",
-    "exports": {
-      "default": { "path": "fileManagement.RemoteFileSystemProvider" }
+      "FileSystemError": { "path": "fileManagement.FileSystemError" },
+      "FileSystemItem": { "path": "fileManagement.FileSystemItem" },
+      "CustomFileSystemProvider": { "path": "fileManagement.CustomFileSystemProvider" },
+      "ObjectFileSystemProvider": { "path": "fileManagement.ObjectFileSystemProvider" },
+      "RemoteFileSystemProvider": { "path": "fileManagement.RemoteFileSystemProvider" }
     }
   },
   {
