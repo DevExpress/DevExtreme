@@ -1,6 +1,21 @@
-import PivotGridFieldChooser, { Properties } from "devextreme/ui/pivot_grid_field_chooser";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import PivotGridFieldChooser, { Properties } from "devextreme/ui/pivot_grid_field_chooser";
+import {
+ ApplyChangesMode,
+} from "devextreme/common/grids";
+import {
+ FieldChooserLayout,
+ SearchMode,
+} from "devextreme/common";
+import {
+ ContentReadyEvent,
+ ContextMenuPreparingEvent,
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+} from "devextreme/ui/pivot_grid_field_chooser";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -38,32 +53,32 @@ interface DxPivotGridFieldChooser extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: {},
+    accessKey: String,
     activeStateEnabled: Boolean,
     allowSearch: Boolean,
-    applyChangesMode: {},
-    dataSource: {},
+    applyChangesMode: String as PropType<ApplyChangesMode>,
+    dataSource: Object as PropType<null | Object>,
     disabled: Boolean,
     elementAttr: Object,
     encodeHtml: Boolean,
     focusStateEnabled: Boolean,
     headerFilter: Object,
-    height: [Function, Number, String],
-    hint: {},
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
-    layout: {},
-    onContentReady: Function,
-    onContextMenuPreparing: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    layout: Number as PropType<FieldChooserLayout>,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onContextMenuPreparing: Function as PropType<(e: ContextMenuPreparingEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     rtlEnabled: Boolean,
     searchTimeout: Number,
     state: {},
     tabIndex: Number,
     texts: Object,
     visible: Boolean,
-    width: {}
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -210,7 +225,7 @@ const DxSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: {},
+    mode: String as PropType<SearchMode>,
     timeout: Number
   }
 };

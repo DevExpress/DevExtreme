@@ -1,6 +1,10 @@
-import Pagination, { Properties } from "devextreme/ui/pagination";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import Pagination, { Properties } from "devextreme/ui/pagination";
+import {
+ DisplayMode,
+} from "devextreme/common";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -37,23 +41,23 @@ interface DxPagination extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: {},
+    accessKey: String,
     activeStateEnabled: Boolean,
-    allowedPageSizes: Array,
+    allowedPageSizes: Array as PropType<Array<number | string>>,
     disabled: Boolean,
-    displayMode: {},
+    displayMode: String as PropType<DisplayMode>,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: {},
-    hint: {},
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
     infoText: String,
     itemCount: Number,
     label: String,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    onContentReady: Function as PropType<(e: Object) => void>,
+    onDisposing: Function as PropType<(e: Object) => void>,
+    onInitialized: Function as PropType<(e: Object) => void>,
+    onOptionChanged: Function as PropType<(e: Object) => void>,
     pageIndex: Number,
     pageSize: Number,
     rtlEnabled: Boolean,
@@ -62,7 +66,7 @@ const componentConfig = {
     showPageSizeSelector: Boolean,
     tabIndex: Number,
     visible: Boolean,
-    width: {}
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

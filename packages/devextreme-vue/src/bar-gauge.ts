@@ -1,6 +1,37 @@
-import BarGauge, { Properties } from "devextreme/viz/bar_gauge";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import BarGauge, { Properties } from "devextreme/viz/bar_gauge";
+import {
+ DisposingEvent,
+ DrawnEvent,
+ ExportedEvent,
+ ExportingEvent,
+ FileSavingEvent,
+ IncidentOccurredEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ TooltipHiddenEvent,
+ TooltipShownEvent,
+} from "devextreme/viz/bar_gauge";
+import {
+ Palette,
+ PaletteExtensionMode,
+ ShiftLabelOverlap,
+ Theme,
+ AnimationEaseMode,
+ TextOverflow,
+ WordWrap,
+ DashStyle,
+} from "devextreme/common/charts";
+import {
+ HorizontalAlignment,
+ VerticalEdge,
+ ExportFormat,
+ Format,
+ Position,
+ Orientation,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -63,29 +94,29 @@ const componentConfig = {
     legend: Object,
     loadingIndicator: Object,
     margin: Object,
-    onDisposing: Function,
-    onDrawn: Function,
-    onExported: Function,
-    onExporting: Function,
-    onFileSaving: Function,
-    onIncidentOccurred: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onTooltipHidden: Function,
-    onTooltipShown: Function,
-    palette: {},
-    paletteExtensionMode: {},
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onDrawn: Function as PropType<(e: DrawnEvent) => void>,
+    onExported: Function as PropType<(e: ExportedEvent) => void>,
+    onExporting: Function as PropType<(e: ExportingEvent) => void>,
+    onFileSaving: Function as PropType<(e: FileSavingEvent) => void>,
+    onIncidentOccurred: Function as PropType<(e: IncidentOccurredEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onTooltipHidden: Function as PropType<(e: TooltipHiddenEvent) => void>,
+    onTooltipShown: Function as PropType<(e: TooltipShownEvent) => void>,
+    palette: [Array, String] as PropType<Array<string> | Palette>,
+    paletteExtensionMode: String as PropType<PaletteExtensionMode>,
     pathModified: Boolean,
     redrawOnResize: Boolean,
     relativeInnerRadius: Number,
-    resolveLabelOverlapping: {},
+    resolveLabelOverlapping: String as PropType<ShiftLabelOverlap>,
     rtlEnabled: Boolean,
     size: Object,
     startValue: Number,
-    theme: {},
+    theme: String as PropType<Theme>,
     title: [Object, String],
     tooltip: Object,
-    values: Array
+    values: Array as PropType<Array<number>>
   },
   emits: {
     "update:isActive": null,
@@ -167,7 +198,7 @@ const DxAnimationConfig = {
   },
   props: {
     duration: Number,
-    easing: {},
+    easing: String as PropType<AnimationEaseMode>,
     enabled: Boolean
   }
 };
@@ -194,14 +225,14 @@ const DxBarGaugeTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: {},
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
     margin: [Number, Object],
-    placeholderSize: {},
+    placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: {},
-    verticalAlignment: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    verticalAlignment: String as PropType<VerticalEdge>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -231,8 +262,8 @@ const DxBarGaugeTitleSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -259,8 +290,8 @@ const DxBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: {},
-    opacity: {},
+    dashStyle: String as PropType<DashStyle>,
+    opacity: Number,
     visible: Boolean,
     width: Number
   }
@@ -288,10 +319,10 @@ const DxExportConfig = {
     backgroundColor: String,
     enabled: Boolean,
     fileName: String,
-    formats: Array,
+    formats: Array as PropType<Array<ExportFormat>>,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: {}
+    svgToCanvas: Function as PropType<(svg: any, canvas: any) => any>
   }
 };
 
@@ -339,10 +370,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: {},
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -385,10 +416,10 @@ const DxItemTextFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: {},
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -412,11 +443,11 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    connectorColor: {},
+    connectorColor: String,
     connectorWidth: Number,
-    customizeText: Function,
+    customizeText: Function as PropType<(barValue: Object) => string>,
     font: Object,
-    format: {},
+    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     indent: Number,
     visible: Boolean
   }
@@ -461,28 +492,28 @@ const DxLegendConfig = {
     "update:visible": null,
   },
   props: {
-    backgroundColor: {},
+    backgroundColor: String,
     border: Object,
     columnCount: Number,
     columnItemSpacing: Number,
-    customizeHint: Function,
-    customizeItems: Function,
-    customizeText: Function,
+    customizeHint: Function as PropType<(arg: Object) => string>,
+    customizeItems: Function as PropType<(items: Array<Object>) => Array<Object>>,
+    customizeText: Function as PropType<(arg: Object) => string>,
     font: Object,
-    horizontalAlignment: {},
-    itemsAlignment: {},
-    itemTextFormat: {},
-    itemTextPosition: {},
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
+    itemsAlignment: String as PropType<HorizontalAlignment>,
+    itemTextFormat: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    itemTextPosition: String as PropType<Position>,
     margin: [Number, Object],
     markerSize: Number,
     markerTemplate: {},
-    orientation: {},
+    orientation: String as PropType<Orientation>,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     rowCount: Number,
     rowItemSpacing: Number,
     title: [Object, String],
-    verticalAlignment: {},
+    verticalAlignment: String as PropType<VerticalEdge>,
     visible: Boolean
   }
 };
@@ -516,8 +547,8 @@ const DxLegendBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: {},
-    opacity: {},
+    dashStyle: String as PropType<DashStyle>,
+    opacity: Number,
     visible: Boolean,
     width: Number
   }
@@ -543,12 +574,12 @@ const DxLegendTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: {},
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
     margin: Object,
-    placeholderSize: {},
+    placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    verticalAlignment: {}
+    verticalAlignment: String as PropType<VerticalEdge>
   }
 };
 
@@ -670,8 +701,8 @@ const DxSizeConfig = {
     "update:width": null,
   },
   props: {
-    height: {},
-    width: {}
+    height: Number,
+    width: Number
   }
 };
 
@@ -695,8 +726,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -722,14 +753,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: {},
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
     margin: [Object, Number],
-    placeholderSize: {},
+    placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: {},
-    verticalAlignment: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    verticalAlignment: String as PropType<VerticalEdge>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -767,16 +798,16 @@ const DxTooltipConfig = {
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: {},
+    customizeTooltip: Function as PropType<(scaleValue: Object) => Object>,
     enabled: Boolean,
     font: Object,
-    format: {},
+    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     interactive: Boolean,
-    opacity: {},
+    opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     shadow: Object,
-    zIndex: {}
+    zIndex: Number
   }
 };
 
@@ -805,8 +836,8 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
-    opacity: {},
+    dashStyle: String as PropType<DashStyle>,
+    opacity: Number,
     visible: Boolean,
     width: Number
   }

@@ -1,6 +1,34 @@
-import Diagram, { Properties } from "devextreme/ui/diagram";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import Diagram, { Properties } from "devextreme/ui/diagram";
+import {
+ AutoZoomMode,
+ ContentReadyEvent,
+ CustomCommandEvent,
+ DisposingEvent,
+ InitializedEvent,
+ ItemClickEvent,
+ ItemDblClickEvent,
+ OptionChangedEvent,
+ RequestEditOperationEvent,
+ RequestLayoutUpdateEvent,
+ SelectionChangedEvent,
+ Units,
+ DataLayoutType,
+ Command,
+ ShapeCategory,
+ ToolboxDisplayMode,
+ ShapeType,
+ ConnectorLineEnd,
+ ConnectorLineType,
+ PanelVisibility,
+} from "devextreme/ui/diagram";
+import {
+ PageOrientation,
+ Orientation,
+ ToolbarItemLocation,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -58,10 +86,10 @@ interface DxDiagram extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    autoZoomMode: {},
+    autoZoomMode: String as PropType<AutoZoomMode>,
     contextMenu: Object,
     contextToolbox: Object,
-    customShapes: Array,
+    customShapes: Array as PropType<Array<Object>>,
     customShapeTemplate: {},
     customShapeToolboxTemplate: {},
     defaultItemProperties: Object,
@@ -73,22 +101,22 @@ const componentConfig = {
     fullScreen: Boolean,
     gridSize: [Number, Object],
     hasChanges: Boolean,
-    height: {},
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     historyToolbar: Object,
     mainToolbar: Object,
     nodes: Object,
-    onContentReady: Function,
-    onCustomCommand: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onItemDblClick: Function,
-    onOptionChanged: Function,
-    onRequestEditOperation: Function,
-    onRequestLayoutUpdate: Function,
-    onSelectionChanged: Function,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onCustomCommand: Function as PropType<(e: CustomCommandEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
+    onItemDblClick: Function as PropType<(e: ItemDblClickEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onRequestEditOperation: Function as PropType<(e: RequestEditOperationEvent) => void>,
+    onRequestLayoutUpdate: Function as PropType<(e: RequestLayoutUpdateEvent) => void>,
+    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
     pageColor: String,
-    pageOrientation: {},
+    pageOrientation: String as PropType<PageOrientation>,
     pageSize: Object,
     propertiesPanel: Object,
     readOnly: Boolean,
@@ -97,12 +125,12 @@ const componentConfig = {
     simpleView: Boolean,
     snapToGrid: Boolean,
     toolbox: Object,
-    units: {},
+    units: String as PropType<Units>,
     useNativeScrolling: Boolean,
     viewToolbar: Object,
-    viewUnits: {},
+    viewUnits: String as PropType<Units>,
     visible: Boolean,
-    width: {},
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     zoomLevel: [Number, Object]
   },
   emits: {
@@ -197,8 +225,8 @@ const DxAutoLayoutConfig = {
     "update:type": null,
   },
   props: {
-    orientation: {},
-    type: {}
+    orientation: String as PropType<Orientation>,
+    type: String as PropType<DataLayoutType>
   }
 };
 
@@ -220,9 +248,9 @@ const DxCommandConfig = {
   },
   props: {
     icon: String,
-    items: Array,
-    location: {},
-    name: {},
+    items: Array as PropType<Array<Command | Object>>,
+    location: String as PropType<ToolbarItemLocation>,
+    name: String as PropType<Command | string>,
     text: String
   }
 };
@@ -246,9 +274,9 @@ const DxCommandItemConfig = {
   },
   props: {
     icon: String,
-    items: Array,
-    location: {},
-    name: {},
+    items: Array as PropType<Array<Command | Object>>,
+    location: String as PropType<ToolbarItemLocation>,
+    name: String as PropType<Command | string>,
     text: String
   }
 };
@@ -288,7 +316,7 @@ const DxContextMenuConfig = {
     "update:enabled": null,
   },
   props: {
-    commands: Array,
+    commands: Array as PropType<Array<Command | Object>>,
     enabled: Boolean
   }
 };
@@ -314,11 +342,11 @@ const DxContextToolboxConfig = {
     "update:width": null,
   },
   props: {
-    category: {},
-    displayMode: {},
+    category: String as PropType<ShapeCategory | string>,
+    displayMode: String as PropType<ToolboxDisplayMode>,
     enabled: Boolean,
     shapeIconsPerRow: Number,
-    shapes: Array,
+    shapes: Array as PropType<Array<ShapeType>>,
     width: Number
   }
 };
@@ -382,9 +410,9 @@ const DxCustomShapeConfig = {
     backgroundImageTop: Number,
     backgroundImageUrl: String,
     backgroundImageWidth: Number,
-    baseType: {},
+    baseType: String as PropType<ShapeType | string>,
     category: String,
-    connectionPoints: Array,
+    connectionPoints: Array as PropType<Array<Object>>,
     defaultHeight: Number,
     defaultImageUrl: String,
     defaultText: String,
@@ -439,13 +467,13 @@ const DxDefaultItemPropertiesConfig = {
     "update:textStyle": null,
   },
   props: {
-    connectorLineEnd: {},
-    connectorLineStart: {},
-    connectorLineType: {},
-    shapeMaxHeight: {},
-    shapeMaxWidth: {},
-    shapeMinHeight: {},
-    shapeMinWidth: {},
+    connectorLineEnd: String as PropType<ConnectorLineEnd>,
+    connectorLineStart: String as PropType<ConnectorLineEnd>,
+    connectorLineType: String as PropType<ConnectorLineType>,
+    shapeMaxHeight: Number,
+    shapeMaxWidth: Number,
+    shapeMinHeight: Number,
+    shapeMinWidth: Number,
     style: Object,
     textStyle: Object
   }
@@ -479,22 +507,22 @@ const DxEdgesConfig = {
     "update:zIndexExpr": null,
   },
   props: {
-    customDataExpr: {},
-    dataSource: {},
-    fromExpr: [Function, String],
-    fromLineEndExpr: {},
-    fromPointIndexExpr: {},
-    keyExpr: [Function, String],
-    lineTypeExpr: {},
-    lockedExpr: {},
-    pointsExpr: {},
-    styleExpr: {},
-    textExpr: {},
-    textStyleExpr: {},
-    toExpr: [Function, String],
-    toLineEndExpr: {},
-    toPointIndexExpr: {},
-    zIndexExpr: {}
+    customDataExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | Object | null | string>,
+    fromExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    fromLineEndExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    fromPointIndexExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    keyExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    lineTypeExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    lockedExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    pointsExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    styleExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    textExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    textStyleExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    toExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    toLineEndExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    toPointIndexExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    zIndexExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>
   }
 };
 
@@ -562,7 +590,7 @@ const DxGridSizeConfig = {
     "update:value": null,
   },
   props: {
-    items: Array,
+    items: Array as PropType<Array<number>>,
     value: Number
   }
 };
@@ -585,11 +613,11 @@ const DxGroupConfig = {
     "update:title": null,
   },
   props: {
-    category: {},
-    commands: Array,
-    displayMode: {},
+    category: String as PropType<ShapeCategory | string>,
+    commands: Array as PropType<Array<Command | Object>>,
+    displayMode: String as PropType<ToolboxDisplayMode>,
     expanded: Boolean,
-    shapes: Array,
+    shapes: Array as PropType<Array<ShapeType>>,
     title: String
   }
 };
@@ -609,7 +637,7 @@ const DxHistoryToolbarConfig = {
     "update:visible": null,
   },
   props: {
-    commands: Array,
+    commands: Array as PropType<Array<Command | Object>>,
     visible: Boolean
   }
 };
@@ -638,9 +666,9 @@ const DxItemConfig = {
   props: {
     height: Number,
     icon: String,
-    items: Array,
-    location: {},
-    name: {},
+    items: Array as PropType<Array<Command | Object>>,
+    location: String as PropType<ToolbarItemLocation>,
+    name: String as PropType<Command | string>,
     text: String,
     width: Number
   }
@@ -661,7 +689,7 @@ const DxMainToolbarConfig = {
     "update:visible": null,
   },
   props: {
-    commands: Array,
+    commands: Array as PropType<Array<Command | Object>>,
     visible: Boolean
   }
 };
@@ -701,26 +729,26 @@ const DxNodesConfig = {
     "update:zIndexExpr": null,
   },
   props: {
-    autoLayout: {},
+    autoLayout: [String, Object] as PropType<DataLayoutType | Object>,
     autoSizeEnabled: Boolean,
-    containerChildrenExpr: {},
-    containerKeyExpr: [Function, String],
-    customDataExpr: {},
-    dataSource: {},
-    heightExpr: {},
-    imageUrlExpr: {},
-    itemsExpr: {},
-    keyExpr: [Function, String],
-    leftExpr: {},
-    lockedExpr: {},
-    parentKeyExpr: {},
-    styleExpr: {},
-    textExpr: [Function, String],
-    textStyleExpr: {},
-    topExpr: {},
-    typeExpr: [Function, String],
-    widthExpr: {},
-    zIndexExpr: {}
+    containerChildrenExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    containerKeyExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    customDataExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | Object | null | string>,
+    heightExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    imageUrlExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    itemsExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    keyExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    leftExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    lockedExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    parentKeyExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    styleExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    textExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    textStyleExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    topExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    typeExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    widthExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    zIndexExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>
   }
 };
 
@@ -743,7 +771,7 @@ const DxPageSizeConfig = {
   },
   props: {
     height: Number,
-    items: Array,
+    items: Array as PropType<Array<Object>>,
     width: Number
   }
 };
@@ -788,8 +816,8 @@ const DxPropertiesPanelConfig = {
     "update:visibility": null,
   },
   props: {
-    tabs: Array,
-    visibility: {}
+    tabs: Array as PropType<Array<Object>>,
+    visibility: String as PropType<PanelVisibility>
   }
 };
 
@@ -811,8 +839,8 @@ const DxTabConfig = {
     "update:title": null,
   },
   props: {
-    commands: Array,
-    groups: Array,
+    commands: Array as PropType<Array<Command | Object>>,
+    groups: Array as PropType<Array<Object>>,
     title: String
   }
 };
@@ -837,7 +865,7 @@ const DxTabGroupConfig = {
     "update:title": null,
   },
   props: {
-    commands: Array,
+    commands: Array as PropType<Array<Command | Object>>,
     title: String
   }
 };
@@ -863,11 +891,11 @@ const DxToolboxConfig = {
     "update:width": null,
   },
   props: {
-    groups: Array,
+    groups: Array as PropType<Array<Object>>,
     shapeIconsPerRow: Number,
     showSearch: Boolean,
-    visibility: {},
-    width: {}
+    visibility: String as PropType<PanelVisibility>,
+    width: Number
   }
 };
 
@@ -892,10 +920,10 @@ const DxToolboxGroupConfig = {
     "update:title": null,
   },
   props: {
-    category: {},
-    displayMode: {},
+    category: String as PropType<ShapeCategory | string>,
+    displayMode: String as PropType<ToolboxDisplayMode>,
     expanded: Boolean,
-    shapes: Array,
+    shapes: Array as PropType<Array<ShapeType>>,
     title: String
   }
 };
@@ -915,7 +943,7 @@ const DxViewToolbarConfig = {
     "update:visible": null,
   },
   props: {
-    commands: Array,
+    commands: Array as PropType<Array<Command | Object>>,
     visible: Boolean
   }
 };
@@ -937,8 +965,8 @@ const DxZoomLevelConfig = {
     "update:value": null,
   },
   props: {
-    items: Array,
-    value: {}
+    items: Array as PropType<Array<number>>,
+    value: Number
   }
 };
 

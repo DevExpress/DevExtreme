@@ -1,6 +1,22 @@
-import FilterBuilder, { Properties } from "devextreme/ui/filter_builder";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import FilterBuilder, { Properties } from "devextreme/ui/filter_builder";
+import {
+ GroupOperation,
+ ContentReadyEvent,
+ DisposingEvent,
+ EditorPreparedEvent,
+ EditorPreparingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ ValueChangedEvent,
+ FilterBuilderOperation,
+} from "devextreme/ui/filter_builder";
+import {
+ DataType,
+ Format,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -39,33 +55,33 @@ interface DxFilterBuilder extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: {},
+    accessKey: String,
     activeStateEnabled: Boolean,
     allowHierarchicalFields: Boolean,
-    customOperations: Array,
+    customOperations: Array as PropType<Array<Object>>,
     disabled: Boolean,
     elementAttr: Object,
-    fields: Array,
+    fields: Array as PropType<Array<Object>>,
     filterOperationDescriptions: Object,
     focusStateEnabled: Boolean,
     groupOperationDescriptions: Object,
-    groupOperations: Array,
-    height: {},
-    hint: {},
+    groupOperations: Array as PropType<Array<GroupOperation>>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
-    maxGroupLevel: {},
-    onContentReady: Function,
-    onDisposing: Function,
-    onEditorPrepared: Function,
-    onEditorPreparing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onValueChanged: Function,
+    maxGroupLevel: Number,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onEditorPrepared: Function as PropType<(e: EditorPreparedEvent) => void>,
+    onEditorPreparing: Function as PropType<(e: EditorPreparingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
     rtlEnabled: Boolean,
     tabIndex: Number,
-    value: [Array, Function, String],
+    value: [Array, Function, String] as PropType<Array<any> | Function | string>,
     visible: Boolean,
-    width: {}
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -134,14 +150,14 @@ const DxCustomOperationConfig = {
     "update:name": null,
   },
   props: {
-    calculateFilterExpression: Function,
-    caption: {},
-    customizeText: Function,
-    dataTypes: {},
+    calculateFilterExpression: Function as PropType<(filterValue: any, field: Object) => (string | Function | Array<any>)>,
+    caption: String,
+    customizeText: Function as PropType<(fieldInfo: Object) => string>,
+    dataTypes: Array as PropType<Array<DataType>>,
     editorTemplate: {},
     hasValue: Boolean,
-    icon: {},
-    name: {}
+    icon: String,
+    name: String
   }
 };
 
@@ -171,18 +187,18 @@ const DxFieldConfig = {
     "update:trueText": null,
   },
   props: {
-    calculateFilterExpression: Function,
-    caption: {},
-    customizeText: Function,
-    dataField: {},
-    dataType: {},
+    calculateFilterExpression: Function as PropType<(filterValue: any, selectedFilterOperation: string) => (string | Function | Array<any>)>,
+    caption: String,
+    customizeText: Function as PropType<(fieldInfo: Object) => string>,
+    dataField: String,
+    dataType: String as PropType<DataType>,
     editorOptions: {},
     editorTemplate: {},
     falseText: String,
-    filterOperations: Array,
-    format: {},
+    filterOperations: Array as PropType<Array<FilterBuilderOperation | string>>,
+    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     lookup: Object,
-    name: {},
+    name: String,
     trueText: String
   }
 };
@@ -252,10 +268,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: {},
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -300,9 +316,9 @@ const DxLookupConfig = {
   },
   props: {
     allowClearing: Boolean,
-    dataSource: {},
-    displayExpr: {},
-    valueExpr: {}
+    dataSource: [Array, Object] as PropType<Array<any> | Object>,
+    displayExpr: [Function, String] as PropType<((data: Object) => string) | string>,
+    valueExpr: [Function, String] as PropType<((data: Object) => (string | number | Boolean)) | string>
   }
 };
 

@@ -1,6 +1,45 @@
-import VectorMap, { Properties } from "devextreme/viz/vector_map";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import VectorMap, { Properties } from "devextreme/viz/vector_map";
+import {
+ CenterChangedEvent,
+ ClickEvent,
+ DisposingEvent,
+ DrawnEvent,
+ ExportedEvent,
+ ExportingEvent,
+ FileSavingEvent,
+ IncidentOccurredEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ SelectionChangedEvent,
+ TooltipHiddenEvent,
+ TooltipShownEvent,
+ ZoomFactorChangedEvent,
+ VectorMapMarkerType,
+ VectorMapLayerType,
+ VectorMapMarkerShape,
+} from "devextreme/viz/vector_map";
+import {
+ VectorMapProjection,
+} from "devextreme/viz/vector_map/projection";
+import {
+ Theme,
+ TextOverflow,
+ AnnotationType,
+ WordWrap,
+ DashStyle,
+ Palette,
+} from "devextreme/common/charts";
+import {
+ HorizontalAlignment,
+ VerticalEdge,
+ ExportFormat,
+ SingleMultipleOrNone,
+ Position,
+ Orientation,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -53,41 +92,41 @@ interface DxVectorMap extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    annotations: Array,
+    annotations: Array as PropType<Array<any>>,
     background: Object,
-    bounds: Array,
-    center: Array,
+    bounds: Array as PropType<Array<number>>,
+    center: Array as PropType<Array<number>>,
     commonAnnotationSettings: Object,
     controlBar: Object,
-    customizeAnnotation: {},
+    customizeAnnotation: Function as PropType<(annotation: any) => Object>,
     disabled: Boolean,
     elementAttr: Object,
     export: Object,
-    layers: [Array, Object],
-    legends: Array,
+    layers: [Array, Object] as PropType<Array<Object> | Object>,
+    legends: Array as PropType<Array<Object>>,
     loadingIndicator: Object,
     maxZoomFactor: Number,
-    onCenterChanged: Function,
-    onClick: Function,
-    onDisposing: Function,
-    onDrawn: Function,
-    onExported: Function,
-    onExporting: Function,
-    onFileSaving: Function,
-    onIncidentOccurred: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onSelectionChanged: Function,
-    onTooltipHidden: Function,
-    onTooltipShown: Function,
-    onZoomFactorChanged: Function,
+    onCenterChanged: Function as PropType<(e: CenterChangedEvent) => void>,
+    onClick: Function as PropType<(e: ClickEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onDrawn: Function as PropType<(e: DrawnEvent) => void>,
+    onExported: Function as PropType<(e: ExportedEvent) => void>,
+    onExporting: Function as PropType<(e: ExportingEvent) => void>,
+    onFileSaving: Function as PropType<(e: FileSavingEvent) => void>,
+    onIncidentOccurred: Function as PropType<(e: IncidentOccurredEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
+    onTooltipHidden: Function as PropType<(e: TooltipHiddenEvent) => void>,
+    onTooltipShown: Function as PropType<(e: TooltipShownEvent) => void>,
+    onZoomFactorChanged: Function as PropType<(e: ZoomFactorChangedEvent) => void>,
     panningEnabled: Boolean,
     pathModified: Boolean,
-    projection: {},
+    projection: [Object, String] as PropType<Object | string | VectorMapProjection>,
     redrawOnResize: Boolean,
     rtlEnabled: Boolean,
     size: Object,
-    theme: {},
+    theme: String as PropType<Theme>,
     title: [Object, String],
     tooltip: Object,
     touchEnabled: Boolean,
@@ -211,30 +250,30 @@ const DxAnnotationConfig = {
     arrowWidth: Number,
     border: Object,
     color: String,
-    coordinates: Array,
-    customizeTooltip: {},
+    coordinates: Array as PropType<Array<number>>,
+    customizeTooltip: Function as PropType<(annotation: any) => Object>,
     data: {},
-    description: {},
+    description: String,
     font: Object,
-    height: {},
+    height: Number,
     image: [Object, String],
-    name: {},
-    offsetX: {},
-    offsetY: {},
+    name: String,
+    offsetX: Number,
+    offsetY: Number,
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     shadow: Object,
     template: {},
-    text: {},
-    textOverflow: {},
+    text: String,
+    textOverflow: String as PropType<TextOverflow>,
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
-    type: {},
-    width: {},
-    wordWrap: {},
-    x: {},
-    y: {}
+    type: String as PropType<AnnotationType>,
+    width: Number,
+    wordWrap: String as PropType<WordWrap>,
+    x: Number,
+    y: Number
   }
 };
 
@@ -266,8 +305,8 @@ const DxAnnotationBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: {},
-    opacity: {},
+    dashStyle: String as PropType<DashStyle>,
+    opacity: Number,
     visible: Boolean,
     width: Number
   }
@@ -312,8 +351,8 @@ const DxBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: {},
-    opacity: {},
+    dashStyle: String as PropType<DashStyle>,
+    opacity: Number,
     visible: Boolean,
     width: Number
   }
@@ -364,29 +403,29 @@ const DxCommonAnnotationSettingsConfig = {
     arrowWidth: Number,
     border: Object,
     color: String,
-    coordinates: Array,
-    customizeTooltip: {},
+    coordinates: Array as PropType<Array<number>>,
+    customizeTooltip: Function as PropType<(annotation: any) => Object>,
     data: {},
-    description: {},
+    description: String,
     font: Object,
-    height: {},
+    height: Number,
     image: [Object, String],
-    offsetX: {},
-    offsetY: {},
+    offsetX: Number,
+    offsetY: Number,
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     shadow: Object,
     template: {},
-    text: {},
-    textOverflow: {},
+    text: String,
+    textOverflow: String as PropType<TextOverflow>,
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
-    type: {},
-    width: {},
-    wordWrap: {},
-    x: {},
-    y: {}
+    type: String as PropType<AnnotationType>,
+    width: Number,
+    wordWrap: String as PropType<WordWrap>,
+    x: Number,
+    y: Number
   }
 };
 
@@ -414,11 +453,11 @@ const DxControlBarConfig = {
     borderColor: String,
     color: String,
     enabled: Boolean,
-    horizontalAlignment: {},
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
     margin: Number,
     opacity: Number,
     panVisible: Boolean,
-    verticalAlignment: {},
+    verticalAlignment: String as PropType<VerticalEdge>,
     zoomVisible: Boolean
   }
 };
@@ -445,10 +484,10 @@ const DxExportConfig = {
     backgroundColor: String,
     enabled: Boolean,
     fileName: String,
-    formats: Array,
+    formats: Array as PropType<Array<ExportFormat>>,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: {}
+    svgToCanvas: Function as PropType<(svg: any, canvas: any) => any>
   }
 };
 
@@ -493,7 +532,7 @@ const DxImageConfig = {
   },
   props: {
     height: Number,
-    url: {},
+    url: String,
     width: Number
   }
 };
@@ -566,12 +605,12 @@ const DxLayerConfig = {
     borderColor: String,
     borderWidth: Number,
     color: String,
-    colorGroupingField: {},
-    colorGroups: Array,
-    customize: Function,
-    dataField: {},
-    dataSource: {},
-    elementType: {},
+    colorGroupingField: String,
+    colorGroups: Array as PropType<Array<number>>,
+    customize: Function as PropType<(elements: Array<Object>) => void>,
+    dataField: String,
+    dataSource: [Array, Object, String] as PropType<Array<any> | Object | null | string>,
+    elementType: String as PropType<VectorMapMarkerType>,
     hoveredBorderColor: String,
     hoveredBorderWidth: Number,
     hoveredColor: String,
@@ -581,17 +620,17 @@ const DxLayerConfig = {
     minSize: Number,
     name: String,
     opacity: Number,
-    palette: {},
+    palette: [Array, String] as PropType<Array<string> | Palette>,
     paletteIndex: Number,
     paletteSize: Number,
     selectedBorderColor: String,
     selectedBorderWidth: Number,
     selectedColor: String,
-    selectionMode: {},
+    selectionMode: String as PropType<SingleMultipleOrNone>,
     size: Number,
-    sizeGroupingField: {},
-    sizeGroups: Array,
-    type: {}
+    sizeGroupingField: String,
+    sizeGroups: Array as PropType<Array<number>>,
+    type: String as PropType<VectorMapLayerType>
   }
 };
 
@@ -636,30 +675,30 @@ const DxLegendConfig = {
     "update:visible": null,
   },
   props: {
-    backgroundColor: {},
+    backgroundColor: String,
     border: Object,
     columnCount: Number,
     columnItemSpacing: Number,
-    customizeHint: Function,
-    customizeItems: Function,
-    customizeText: Function,
+    customizeHint: Function as PropType<(itemInfo: Object) => string>,
+    customizeItems: Function as PropType<(items: Array<Object>) => Array<Object>>,
+    customizeText: Function as PropType<(itemInfo: Object) => string>,
     font: Object,
-    horizontalAlignment: {},
-    itemsAlignment: {},
-    itemTextPosition: {},
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
+    itemsAlignment: String as PropType<HorizontalAlignment>,
+    itemTextPosition: String as PropType<Position>,
     margin: [Number, Object],
-    markerColor: {},
-    markerShape: {},
+    markerColor: String,
+    markerShape: String as PropType<VectorMapMarkerShape>,
     markerSize: Number,
     markerTemplate: {},
-    orientation: {},
+    orientation: String as PropType<Orientation>,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     rowCount: Number,
     rowItemSpacing: Number,
     source: Object,
     title: [Object, String],
-    verticalAlignment: {},
+    verticalAlignment: String as PropType<VerticalEdge>,
     visible: Boolean
   }
 };
@@ -694,12 +733,12 @@ const DxLegendTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: {},
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
     margin: Object,
-    placeholderSize: {},
+    placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    verticalAlignment: {}
+    verticalAlignment: String as PropType<VerticalEdge>
   }
 };
 
@@ -800,8 +839,8 @@ const DxProjectionConfig = {
   },
   props: {
     aspectRatio: Number,
-    from: Function,
-    to: Function
+    from: Function as PropType<(coordinates: Array<number>) => Array<number>>,
+    to: Function as PropType<(coordinates: Array<number>) => Array<number>>
   }
 };
 
@@ -844,8 +883,8 @@ const DxSizeConfig = {
     "update:width": null,
   },
   props: {
-    height: {},
-    width: {}
+    height: Number,
+    width: Number
   }
 };
 
@@ -888,8 +927,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -915,14 +954,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: {},
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
     margin: [Object, Number],
-    placeholderSize: {},
+    placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: {},
-    verticalAlignment: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    verticalAlignment: String as PropType<VerticalEdge>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -958,14 +997,14 @@ const DxTooltipConfig = {
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: {},
+    customizeTooltip: Function as PropType<(info: Object) => Object>,
     enabled: Boolean,
     font: Object,
-    opacity: {},
+    opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     shadow: Object,
-    zIndex: {}
+    zIndex: Number
   }
 };
 
@@ -993,8 +1032,8 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
-    opacity: {},
+    dashStyle: String as PropType<DashStyle>,
+    opacity: Number,
     visible: Boolean,
     width: Number
   }
@@ -1022,14 +1061,14 @@ const DxVectorMapTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: {},
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
     margin: [Number, Object],
-    placeholderSize: {},
+    placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: {},
-    verticalAlignment: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    verticalAlignment: String as PropType<VerticalEdge>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -1059,8 +1098,8 @@ const DxVectorMapTitleSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 

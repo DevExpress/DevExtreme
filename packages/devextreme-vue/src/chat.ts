@@ -1,6 +1,18 @@
-import Chat, { Properties } from "devextreme/ui/chat";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import Chat, { Properties } from "devextreme/ui/chat";
+import {
+ Format,
+} from "devextreme/common";
+import {
+ DisposingEvent,
+ InitializedEvent,
+ MessageEnteredEvent,
+ OptionChangedEvent,
+ TypingEndEvent,
+ TypingStartEvent,
+} from "devextreme/ui/chat";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -42,36 +54,36 @@ interface DxChat extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: {},
+    accessKey: String,
     activeStateEnabled: Boolean,
-    alerts: Array,
-    dataSource: {},
-    dayHeaderFormat: {},
+    alerts: Array as PropType<Array<Object>>,
+    dataSource: [Array, Object, String] as PropType<Array<Object> | Object | null | string>,
+    dayHeaderFormat: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: {},
-    hint: {},
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
-    items: Array,
+    items: Array as PropType<Array<Object>>,
     messageTemplate: {},
-    messageTimestampFormat: {},
-    onDisposing: Function,
-    onInitialized: Function,
-    onMessageEntered: {},
-    onOptionChanged: Function,
-    onTypingEnd: {},
-    onTypingStart: {},
+    messageTimestampFormat: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onMessageEntered: Function as PropType<(e: MessageEnteredEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onTypingEnd: Function as PropType<(e: TypingEndEvent) => void>,
+    onTypingStart: Function as PropType<(e: TypingStartEvent) => void>,
     reloadOnChange: Boolean,
     rtlEnabled: Boolean,
     showAvatar: Boolean,
     showDayHeaders: Boolean,
     showMessageTimestamp: Boolean,
     showUserName: Boolean,
-    typingUsers: Array,
+    typingUsers: Array as PropType<Array<Object>>,
     user: Object,
     visible: Boolean,
-    width: {}
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -187,10 +199,10 @@ const DxDayHeaderFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: {},
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -241,10 +253,10 @@ const DxMessageTimestampFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: {},
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };

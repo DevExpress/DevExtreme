@@ -1,6 +1,53 @@
-import Form, { Properties } from "devextreme/ui/form";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import Form, { Properties } from "devextreme/ui/form";
+import {
+ Mode,
+ ValidationRuleType,
+ HorizontalAlignment,
+ VerticalAlignment,
+ ButtonStyle,
+ ButtonType,
+ ComparisonOperator,
+ TabsIconPosition,
+ TabsStyle,
+ Position,
+} from "devextreme/common";
+import {
+ LabelLocation,
+ FormLabelMode,
+ ContentReadyEvent,
+ DisposingEvent,
+ EditorEnterKeyEvent,
+ FieldDataChangedEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ FormItemType,
+ FormItemComponent,
+} from "devextreme/ui/form";
+import {
+ ClickEvent,
+ ContentReadyEvent as ButtonContentReadyEvent,
+ DisposingEvent as ButtonDisposingEvent,
+ InitializedEvent as ButtonInitializedEvent,
+ OptionChangedEvent as ButtonOptionChangedEvent,
+} from "devextreme/ui/button";
+import {
+ ContentReadyEvent as TabPanelContentReadyEvent,
+ DisposingEvent as TabPanelDisposingEvent,
+ InitializedEvent as TabPanelInitializedEvent,
+ ItemClickEvent,
+ ItemContextMenuEvent,
+ ItemHoldEvent,
+ ItemRenderedEvent,
+ OptionChangedEvent as TabPanelOptionChangedEvent,
+ SelectionChangedEvent,
+ SelectionChangingEvent,
+ TitleClickEvent,
+ TitleHoldEvent,
+ TitleRenderedEvent,
+} from "devextreme/ui/tab_panel";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -52,46 +99,46 @@ interface DxForm extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: {},
+    accessKey: String,
     activeStateEnabled: Boolean,
     alignItemLabels: Boolean,
     alignItemLabelsInAllGroups: Boolean,
-    colCount: {},
+    colCount: [String, Number] as PropType<Mode | number>,
     colCountByScreen: Object,
-    customizeItem: Function,
+    customizeItem: Function as PropType<(item: Object) => void>,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
     formData: {},
-    height: {},
-    hint: {},
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
-    items: Array,
-    labelLocation: {},
-    labelMode: {},
+    items: Array as PropType<Array<Object>>,
+    labelLocation: String as PropType<LabelLocation>,
+    labelMode: String as PropType<FormLabelMode>,
     minColWidth: Number,
-    onContentReady: Function,
-    onDisposing: Function,
-    onEditorEnterKey: Function,
-    onFieldDataChanged: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onEditorEnterKey: Function as PropType<(e: EditorEnterKeyEvent) => void>,
+    onFieldDataChanged: Function as PropType<(e: FieldDataChangedEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     optionalMark: String,
     readOnly: Boolean,
     requiredMark: String,
     requiredMessage: String,
     rtlEnabled: Boolean,
-    screenByWidth: Function,
+    screenByWidth: Function as PropType<() => void>,
     scrollingEnabled: Boolean,
     showColonAfterLabel: Boolean,
     showOptionalMark: Boolean,
     showRequiredMark: Boolean,
     showValidationSummary: Boolean,
     tabIndex: Number,
-    validationGroup: {},
+    validationGroup: String,
     visible: Boolean,
-    width: {}
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -176,8 +223,8 @@ const DxAsyncRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: {},
-    validationCallback: Function
+    type: String as PropType<ValidationRuleType>,
+    validationCallback: Function as PropType<(options: Object) => any>
   }
 };
 
@@ -206,15 +253,15 @@ const DxButtonItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
-    buttonOptions: {},
-    colSpan: {},
-    cssClass: {},
-    horizontalAlignment: {},
-    itemType: {},
-    name: {},
-    verticalAlignment: {},
+    buttonOptions: Object,
+    colSpan: Number,
+    cssClass: String,
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
+    itemType: String as PropType<FormItemType>,
+    name: String,
+    verticalAlignment: String as PropType<VerticalAlignment>,
     visible: Boolean,
-    visibleIndex: {}
+    visibleIndex: Number
   }
 };
 
@@ -262,31 +309,31 @@ const DxButtonOptionsConfig = {
     "update:width": null,
   },
   props: {
-    accessKey: {},
+    accessKey: String,
     activeStateEnabled: Boolean,
     bindingOptions: Object,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: {},
-    hint: {},
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
-    onClick: Function,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    onClick: Function as PropType<(e: ClickEvent) => void>,
+    onContentReady: Function as PropType<(e: ButtonContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: ButtonDisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: ButtonInitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: ButtonOptionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    stylingMode: {},
+    stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
     template: {},
     text: String,
-    type: {},
+    type: String as PropType<ButtonType | string>,
     useSubmitBehavior: Boolean,
-    validationGroup: {},
+    validationGroup: String,
     visible: Boolean,
-    width: {}
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   }
 };
 
@@ -306,10 +353,10 @@ const DxColCountByScreenConfig = {
     "update:xs": null,
   },
   props: {
-    lg: {},
-    md: {},
-    sm: {},
-    xs: {}
+    lg: Number,
+    md: Number,
+    sm: Number,
+    xs: Number
   }
 };
 
@@ -330,11 +377,11 @@ const DxCompareRuleConfig = {
     "update:type": null,
   },
   props: {
-    comparisonTarget: Function,
-    comparisonType: {},
+    comparisonTarget: Function as PropType<() => any>,
+    comparisonType: String as PropType<ComparisonOperator>,
     ignoreEmptyValue: Boolean,
     message: String,
-    type: {}
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -362,8 +409,8 @@ const DxCustomRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: {},
-    validationCallback: Function
+    type: String as PropType<ValidationRuleType>,
+    validationCallback: Function as PropType<(options: Object) => Boolean>
   }
 };
 
@@ -388,7 +435,7 @@ const DxEmailRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: {}
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -414,12 +461,12 @@ const DxEmptyItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
-    colSpan: {},
-    cssClass: {},
-    itemType: {},
-    name: {},
+    colSpan: Number,
+    cssClass: String,
+    itemType: String as PropType<FormItemType>,
+    name: String,
     visible: Boolean,
-    visibleIndex: {}
+    visibleIndex: Number
   }
 };
 
@@ -453,18 +500,18 @@ const DxGroupItemConfig = {
   },
   props: {
     alignItemLabels: Boolean,
-    caption: {},
+    caption: String,
     captionTemplate: {},
     colCount: Number,
     colCountByScreen: Object,
-    colSpan: {},
-    cssClass: {},
-    items: Array,
-    itemType: {},
-    name: {},
+    colSpan: Number,
+    cssClass: String,
+    items: Array as PropType<Array<Object>>,
+    itemType: String as PropType<FormItemType>,
+    name: String,
     template: {},
     visible: Boolean,
-    visibleIndex: {}
+    visibleIndex: Number
   }
 };
 
@@ -521,36 +568,36 @@ const DxItemConfig = {
   props: {
     alignItemLabels: Boolean,
     badge: String,
-    buttonOptions: {},
-    caption: {},
+    buttonOptions: Object,
+    caption: String,
     captionTemplate: {},
     colCount: Number,
     colCountByScreen: Object,
-    colSpan: {},
-    cssClass: {},
-    dataField: {},
+    colSpan: Number,
+    cssClass: String,
+    dataField: String,
     disabled: Boolean,
     editorOptions: {},
-    editorType: {},
-    helpText: {},
-    horizontalAlignment: {},
+    editorType: String as PropType<FormItemComponent>,
+    helpText: String,
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
     html: String,
     icon: String,
-    isRequired: {},
-    items: Array,
-    itemType: {},
+    isRequired: Boolean,
+    items: Array as PropType<Array<Object>>,
+    itemType: String as PropType<FormItemType>,
     label: Object,
-    name: {},
-    tabPanelOptions: {},
-    tabs: Array,
+    name: String,
+    tabPanelOptions: Object,
+    tabs: Array as PropType<Array<Object>>,
     tabTemplate: {},
     template: {},
     text: String,
     title: String,
-    validationRules: Array,
-    verticalAlignment: {},
+    validationRules: Array as PropType<Array<Object>>,
+    verticalAlignment: String as PropType<VerticalAlignment>,
     visible: Boolean,
-    visibleIndex: {}
+    visibleIndex: Number
   }
 };
 
@@ -573,11 +620,11 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    alignment: {},
-    location: {},
+    alignment: String as PropType<HorizontalAlignment>,
+    location: String as PropType<LabelLocation>,
     showColon: Boolean,
     template: {},
-    text: {},
+    text: String,
     visible: Boolean
   }
 };
@@ -599,7 +646,7 @@ const DxNumericRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: {}
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -626,7 +673,7 @@ const DxPatternRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     pattern: [RegExp, String],
-    type: {}
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -657,7 +704,7 @@ const DxRangeRuleConfig = {
     message: String,
     min: [Date, Number, String],
     reevaluate: Boolean,
-    type: {}
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -682,7 +729,7 @@ const DxRequiredRuleConfig = {
   props: {
     message: String,
     trim: Boolean,
-    type: {}
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -716,20 +763,20 @@ const DxSimpleItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
-    colSpan: {},
-    cssClass: {},
-    dataField: {},
+    colSpan: Number,
+    cssClass: String,
+    dataField: String,
     editorOptions: {},
-    editorType: {},
-    helpText: {},
-    isRequired: {},
-    itemType: {},
+    editorType: String as PropType<FormItemComponent>,
+    helpText: String,
+    isRequired: Boolean,
+    itemType: String as PropType<FormItemType>,
     label: Object,
-    name: {},
+    name: String,
     template: {},
-    validationRules: Array,
+    validationRules: Array as PropType<Array<Object>>,
     visible: Boolean,
-    visibleIndex: {}
+    visibleIndex: Number
   }
 };
 
@@ -773,7 +820,7 @@ const DxStringLengthRuleConfig = {
     message: String,
     min: Number,
     trim: Boolean,
-    type: {}
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -804,15 +851,15 @@ const DxTabConfig = {
   },
   props: {
     alignItemLabels: Boolean,
-    badge: {},
+    badge: String,
     colCount: Number,
     colCountByScreen: Object,
     disabled: Boolean,
-    icon: {},
-    items: Array,
+    icon: String,
+    items: Array as PropType<Array<Object>>,
     tabTemplate: {},
     template: {},
-    title: {}
+    title: String
   }
 };
 
@@ -840,14 +887,14 @@ const DxTabbedItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
-    colSpan: {},
-    cssClass: {},
-    itemType: {},
-    name: {},
-    tabPanelOptions: {},
-    tabs: Array,
+    colSpan: Number,
+    cssClass: String,
+    itemType: String as PropType<FormItemType>,
+    name: String,
+    tabPanelOptions: Object,
+    tabs: Array as PropType<Array<Object>>,
     visible: Boolean,
-    visibleIndex: {}
+    visibleIndex: Number
   }
 };
 
@@ -916,38 +963,38 @@ const DxTabPanelOptionsConfig = {
     "update:width": null,
   },
   props: {
-    accessKey: {},
+    accessKey: String,
     activeStateEnabled: Boolean,
     animationEnabled: Boolean,
     bindingOptions: Object,
-    dataSource: {},
+    dataSource: [Array, Object, String] as PropType<Array<any> | Object | null | string>,
     deferRendering: Boolean,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: {},
-    hint: {},
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
-    iconPosition: {},
+    iconPosition: String as PropType<TabsIconPosition>,
     itemHoldTimeout: Number,
-    items: Array,
+    items: Array as PropType<Array<any>>,
     itemTemplate: {},
     itemTitleTemplate: {},
     loop: Boolean,
     noDataText: String,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onItemContextMenu: Function,
-    onItemHold: Function,
-    onItemRendered: Function,
-    onOptionChanged: Function,
-    onSelectionChanged: Function,
-    onSelectionChanging: Function,
-    onTitleClick: Function,
-    onTitleHold: Function,
-    onTitleRendered: Function,
+    onContentReady: Function as PropType<(e: TabPanelContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: TabPanelDisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: TabPanelInitializedEvent) => void>,
+    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
+    onItemContextMenu: Function as PropType<(e: ItemContextMenuEvent) => void>,
+    onItemHold: Function as PropType<(e: ItemHoldEvent) => void>,
+    onItemRendered: Function as PropType<(e: ItemRenderedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: TabPanelOptionChangedEvent) => void>,
+    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
+    onSelectionChanging: Function as PropType<(e: SelectionChangingEvent) => void>,
+    onTitleClick: Function as PropType<(e: TitleClickEvent) => void>,
+    onTitleHold: Function as PropType<(e: TitleHoldEvent) => void>,
+    onTitleRendered: Function as PropType<(e: TitleRenderedEvent) => void>,
     repaintChangesOnly: Boolean,
     rtlEnabled: Boolean,
     scrollByContent: Boolean,
@@ -955,12 +1002,12 @@ const DxTabPanelOptionsConfig = {
     selectedIndex: Number,
     selectedItem: {},
     showNavButtons: Boolean,
-    stylingMode: {},
+    stylingMode: String as PropType<TabsStyle>,
     swipeEnabled: Boolean,
     tabIndex: Number,
-    tabsPosition: {},
+    tabsPosition: String as PropType<Position>,
     visible: Boolean,
-    width: {}
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   }
 };
 
@@ -1025,8 +1072,8 @@ const DxValidationRuleConfig = {
     "update:validationCallback": null,
   },
   props: {
-    comparisonTarget: Function,
-    comparisonType: {},
+    comparisonTarget: Function as PropType<() => any>,
+    comparisonType: String as PropType<ComparisonOperator>,
     ignoreEmptyValue: Boolean,
     max: [Date, Number, String],
     message: String,
@@ -1034,8 +1081,8 @@ const DxValidationRuleConfig = {
     pattern: [RegExp, String],
     reevaluate: Boolean,
     trim: Boolean,
-    type: {},
-    validationCallback: Function
+    type: String as PropType<ValidationRuleType>,
+    validationCallback: Function as PropType<(options: Object) => Boolean>
   }
 };
 

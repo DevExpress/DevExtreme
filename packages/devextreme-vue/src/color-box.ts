@@ -1,6 +1,67 @@
-import ColorBox, { Properties } from "devextreme/ui/color_box";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import ColorBox, { Properties } from "devextreme/ui/color_box";
+import {
+ ApplyValueMode,
+ LabelMode,
+ EditorStyle,
+ ValidationMessageMode,
+ Mode,
+ Position,
+ ValidationStatus,
+ HorizontalAlignment,
+ VerticalAlignment,
+ TextEditorButtonLocation,
+ PositionAlignment,
+ Direction,
+ ButtonStyle,
+ ButtonType,
+ ToolbarItemLocation,
+ ToolbarItemComponent,
+} from "devextreme/common";
+import {
+ DropDownPredefinedButton,
+} from "devextreme/ui/drop_down_editor/ui.drop_down_editor";
+import {
+ ChangeEvent,
+ ClosedEvent,
+ CopyEvent,
+ CutEvent,
+ DisposingEvent,
+ EnterKeyEvent,
+ FocusInEvent,
+ FocusOutEvent,
+ InitializedEvent,
+ InputEvent,
+ KeyDownEvent,
+ KeyUpEvent,
+ OpenedEvent,
+ OptionChangedEvent,
+ PasteEvent,
+ ValueChangedEvent,
+} from "devextreme/ui/color_box";
+import {
+ CollisionResolution,
+ CollisionResolutionCombination,
+} from "devextreme/animation/position";
+import {
+ AnimationType,
+} from "devextreme/animation/fx";
+import {
+ ClickEvent,
+ ContentReadyEvent,
+ DisposingEvent as ButtonDisposingEvent,
+ InitializedEvent as ButtonInitializedEvent,
+ OptionChangedEvent as ButtonOptionChangedEvent,
+} from "devextreme/ui/button";
+import {
+ LocateInMenuMode,
+ ShowTextMode,
+} from "devextreme/ui/toolbar";
+import {
+ ToolbarLocation,
+} from "devextreme/ui/popup";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -72,11 +133,11 @@ interface DxColorBox extends AccessibleOptions {
 const componentConfig = {
   props: {
     acceptCustomValue: Boolean,
-    accessKey: {},
+    accessKey: String,
     activeStateEnabled: Boolean,
     applyButtonText: String,
-    applyValueMode: {},
-    buttons: Array,
+    applyValueMode: String as PropType<ApplyValueMode>,
+    buttons: Array as PropType<Array<DropDownPredefinedButton | Object>>,
     cancelButtonText: String,
     deferRendering: Boolean,
     disabled: Boolean,
@@ -86,32 +147,32 @@ const componentConfig = {
     elementAttr: Object,
     fieldTemplate: {},
     focusStateEnabled: Boolean,
-    height: {},
-    hint: {},
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
     isDirty: Boolean,
     isValid: Boolean,
     keyStep: Number,
     label: String,
-    labelMode: {},
+    labelMode: String as PropType<LabelMode>,
     name: String,
-    onChange: Function,
-    onClosed: Function,
-    onCopy: Function,
-    onCut: Function,
-    onDisposing: Function,
-    onEnterKey: Function,
-    onFocusIn: Function,
-    onFocusOut: Function,
-    onInitialized: Function,
-    onInput: Function,
-    onKeyDown: Function,
-    onKeyUp: Function,
-    onOpened: Function,
-    onOptionChanged: Function,
-    onPaste: Function,
-    onValueChanged: Function,
+    onChange: Function as PropType<(e: ChangeEvent) => void>,
+    onClosed: Function as PropType<(e: ClosedEvent) => void>,
+    onCopy: Function as PropType<(e: CopyEvent) => void>,
+    onCut: Function as PropType<(e: CutEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onEnterKey: Function as PropType<(e: EnterKeyEvent) => void>,
+    onFocusIn: Function as PropType<(e: FocusInEvent) => void>,
+    onFocusOut: Function as PropType<(e: FocusOutEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onInput: Function as PropType<(e: InputEvent) => void>,
+    onKeyDown: Function as PropType<(e: KeyDownEvent) => void>,
+    onKeyUp: Function as PropType<(e: KeyUpEvent) => void>,
+    onOpened: Function as PropType<(e: OpenedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onPaste: Function as PropType<(e: PasteEvent) => void>,
+    onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
     opened: Boolean,
     openOnFieldClick: Boolean,
     placeholder: String,
@@ -119,17 +180,17 @@ const componentConfig = {
     rtlEnabled: Boolean,
     showClearButton: Boolean,
     showDropDownButton: Boolean,
-    stylingMode: {},
+    stylingMode: String as PropType<EditorStyle>,
     tabIndex: Number,
     text: String,
     validationError: {},
-    validationErrors: Array,
-    validationMessageMode: {},
-    validationMessagePosition: {},
-    validationStatus: {},
+    validationErrors: Array as PropType<Array<any>>,
+    validationMessageMode: String as PropType<ValidationMessageMode>,
+    validationMessagePosition: String as PropType<Mode | Position>,
+    validationStatus: String as PropType<ValidationStatus>,
     value: String,
     visible: Boolean,
-    width: {}
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -246,8 +307,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<HorizontalAlignment>,
+    y: String as PropType<VerticalAlignment>
   }
 };
 
@@ -285,9 +346,9 @@ const DxButtonConfig = {
     "update:options": null,
   },
   props: {
-    location: {},
-    name: {},
-    options: {}
+    location: String as PropType<TextEditorButtonLocation>,
+    name: String,
+    options: Object
   }
 };
 
@@ -309,8 +370,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<CollisionResolution>,
+    y: String as PropType<CollisionResolution>
   }
 };
 
@@ -376,10 +437,10 @@ const DxDropDownOptionsConfig = {
     "update:wrapperAttr": null,
   },
   props: {
-    accessKey: {},
+    accessKey: String,
     animation: Object,
     bindingOptions: Object,
-    closeOnOutsideClick: [Boolean, Function],
+    closeOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -390,28 +451,28 @@ const DxDropDownOptionsConfig = {
     enableBodyScroll: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
-    height: [Function, Number, String],
-    hideOnOutsideClick: [Boolean, Function],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    hideOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
     hideOnParentScroll: Boolean,
-    hint: {},
+    hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String],
-    maxWidth: [Function, Number, String],
-    minHeight: [Function, Number, String],
-    minWidth: [Function, Number, String],
-    onContentReady: Function,
-    onDisposing: Function,
-    onHidden: Function,
-    onHiding: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onResize: Function,
-    onResizeEnd: Function,
-    onResizeStart: Function,
-    onShowing: Function,
-    onShown: Function,
-    onTitleRendered: Function,
-    position: {},
+    maxHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    maxWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    minHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    minWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    onContentReady: Function as PropType<(e: Object) => void>,
+    onDisposing: Function as PropType<(e: Object) => void>,
+    onHidden: Function as PropType<(e: Object) => void>,
+    onHiding: Function as PropType<(e: Object) => void>,
+    onInitialized: Function as PropType<(e: Object) => void>,
+    onOptionChanged: Function as PropType<(e: Object) => void>,
+    onResize: Function as PropType<(e: Object) => void>,
+    onResizeEnd: Function as PropType<(e: Object) => void>,
+    onResizeStart: Function as PropType<(e: Object) => void>,
+    onShowing: Function as PropType<(e: Object) => void>,
+    onShown: Function as PropType<(e: Object) => void>,
+    onTitleRendered: Function as PropType<(e: Object) => void>,
+    position: [Function, String, Object] as PropType<(() => void) | PositionAlignment | Object>,
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -422,9 +483,9 @@ const DxDropDownOptionsConfig = {
     tabIndex: Number,
     title: String,
     titleTemplate: {},
-    toolbarItems: Array,
+    toolbarItems: Array as PropType<Array<Object>>,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     wrapperAttr: {}
   }
 };
@@ -484,16 +545,16 @@ const DxHideConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: {},
+    direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: {},
-    start: Function,
+    staggerDelay: Number,
+    start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: {}
+    type: String as PropType<AnimationType>
   }
 };
 
@@ -515,8 +576,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<HorizontalAlignment>,
+    y: String as PropType<VerticalAlignment>
   }
 };
 
@@ -576,31 +637,31 @@ const DxOptionsConfig = {
     "update:width": null,
   },
   props: {
-    accessKey: {},
+    accessKey: String,
     activeStateEnabled: Boolean,
     bindingOptions: Object,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: {},
-    hint: {},
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
-    onClick: Function,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    onClick: Function as PropType<(e: ClickEvent) => void>,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: ButtonDisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: ButtonInitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: ButtonOptionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    stylingMode: {},
+    stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
     template: {},
     text: String,
-    type: {},
+    type: String as PropType<ButtonType | string>,
     useSubmitBehavior: Boolean,
-    validationGroup: {},
+    validationGroup: String,
     visible: Boolean,
-    width: {}
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   }
 };
 
@@ -623,11 +684,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: {},
+    at: [Object, String] as PropType<Object | PositionAlignment>,
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: {},
-    my: {},
+    collision: [String, Object] as PropType<CollisionResolutionCombination | Object>,
+    my: [Object, String] as PropType<Object | PositionAlignment>,
     of: {},
     offset: [Object, String]
   }
@@ -655,16 +716,16 @@ const DxShowConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: {},
+    direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
     from: Object,
-    staggerDelay: {},
-    start: Function,
+    staggerDelay: Number,
+    start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: {}
+    type: String as PropType<AnimationType>
   }
 };
 
@@ -718,19 +779,19 @@ const DxToolbarItemConfig = {
     "update:widget": null,
   },
   props: {
-    cssClass: {},
+    cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: {},
-    location: {},
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
     options: {},
-    showText: {},
+    showText: String as PropType<ShowTextMode>,
     template: {},
     text: String,
-    toolbar: {},
+    toolbar: String as PropType<ToolbarLocation>,
     visible: Boolean,
-    widget: {}
+    widget: String as PropType<ToolbarItemComponent>
   }
 };
 

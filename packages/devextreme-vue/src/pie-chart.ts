@@ -1,6 +1,53 @@
-import PieChart, { Properties } from "devextreme/viz/pie_chart";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import PieChart, { Properties } from "devextreme/viz/pie_chart";
+import {
+ DisposingEvent,
+ DoneEvent,
+ DrawnEvent,
+ ExportedEvent,
+ ExportingEvent,
+ FileSavingEvent,
+ IncidentOccurredEvent,
+ InitializedEvent,
+ LegendClickEvent,
+ OptionChangedEvent,
+ PointClickEvent,
+ PointHoverChangedEvent,
+ PointSelectionChangedEvent,
+ TooltipHiddenEvent,
+ TooltipShownEvent,
+ PieChartSegmentDirection,
+ PieChartType,
+ PieChartAnnotationLocation,
+ PieChartSeriesInteractionMode,
+ PieChartLegendHoverMode,
+ SmallValuesGroupingMode,
+} from "devextreme/viz/pie_chart";
+import {
+ Palette,
+ PaletteExtensionMode,
+ ShiftLabelOverlap,
+ Theme,
+ AnimationEaseMode,
+ TextOverflow,
+ AnnotationType,
+ WordWrap,
+ DashStyle,
+ ChartsDataType,
+ HatchDirection,
+ LabelPosition,
+} from "devextreme/common/charts";
+import {
+ SingleOrMultiple,
+ Format,
+ ExportFormat,
+ HorizontalAlignment,
+ Position,
+ Orientation,
+ VerticalEdge,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -65,15 +112,15 @@ const componentConfig = {
   props: {
     adaptiveLayout: Object,
     animation: [Boolean, Object],
-    annotations: Array,
+    annotations: Array as PropType<Array<any>>,
     centerTemplate: {},
     commonAnnotationSettings: Object,
     commonSeriesSettings: {},
-    customizeAnnotation: {},
-    customizeLabel: Function,
-    customizePoint: Function,
-    dataSource: {},
-    diameter: {},
+    customizeAnnotation: Function as PropType<(annotation: any) => Object>,
+    customizeLabel: Function as PropType<(pointInfo: Object) => Object>,
+    customizePoint: Function as PropType<(pointInfo: Object) => Object>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | Object | null | string>,
+    diameter: Number,
     disabled: Boolean,
     elementAttr: Object,
     export: Object,
@@ -82,38 +129,38 @@ const componentConfig = {
     loadingIndicator: Object,
     margin: Object,
     minDiameter: Number,
-    onDisposing: Function,
-    onDone: Function,
-    onDrawn: Function,
-    onExported: Function,
-    onExporting: Function,
-    onFileSaving: Function,
-    onIncidentOccurred: Function,
-    onInitialized: Function,
-    onLegendClick: Function,
-    onOptionChanged: Function,
-    onPointClick: Function,
-    onPointHoverChanged: Function,
-    onPointSelectionChanged: Function,
-    onTooltipHidden: Function,
-    onTooltipShown: Function,
-    palette: {},
-    paletteExtensionMode: {},
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onDone: Function as PropType<(e: DoneEvent) => void>,
+    onDrawn: Function as PropType<(e: DrawnEvent) => void>,
+    onExported: Function as PropType<(e: ExportedEvent) => void>,
+    onExporting: Function as PropType<(e: ExportingEvent) => void>,
+    onFileSaving: Function as PropType<(e: FileSavingEvent) => void>,
+    onIncidentOccurred: Function as PropType<(e: IncidentOccurredEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onLegendClick: Function as PropType<(e: LegendClickEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onPointClick: Function as PropType<(e: PointClickEvent) => void>,
+    onPointHoverChanged: Function as PropType<(e: PointHoverChangedEvent) => void>,
+    onPointSelectionChanged: Function as PropType<(e: PointSelectionChangedEvent) => void>,
+    onTooltipHidden: Function as PropType<(e: TooltipHiddenEvent) => void>,
+    onTooltipShown: Function as PropType<(e: TooltipShownEvent) => void>,
+    palette: [Array, String] as PropType<Array<string> | Palette>,
+    paletteExtensionMode: String as PropType<PaletteExtensionMode>,
     pathModified: Boolean,
-    pointSelectionMode: {},
+    pointSelectionMode: String as PropType<SingleOrMultiple>,
     redrawOnResize: Boolean,
-    resolveLabelOverlapping: {},
+    resolveLabelOverlapping: String as PropType<ShiftLabelOverlap>,
     rtlEnabled: Boolean,
-    segmentsDirection: {},
-    series: {},
+    segmentsDirection: String as PropType<PieChartSegmentDirection>,
+    series: [Array, Object] as PropType<Array<Object> | Object>,
     seriesTemplate: Object,
     size: Object,
-    sizeGroup: {},
+    sizeGroup: String,
     startAngle: Number,
-    theme: {},
+    theme: String as PropType<Theme>,
     title: [Object, String],
     tooltip: Object,
-    type: {}
+    type: String as PropType<PieChartType>
   },
   emits: {
     "update:isActive": null,
@@ -235,7 +282,7 @@ const DxAnimationConfig = {
   },
   props: {
     duration: Number,
-    easing: {},
+    easing: String as PropType<AnimationEaseMode>,
     enabled: Boolean,
     maxPointCountSupported: Number
   }
@@ -285,36 +332,36 @@ const DxAnnotationConfig = {
   },
   props: {
     allowDragging: Boolean,
-    argument: {},
+    argument: [Date, Number, String],
     arrowLength: Number,
     arrowWidth: Number,
     border: Object,
     color: String,
-    customizeTooltip: {},
+    customizeTooltip: Function as PropType<(annotation: any) => Object>,
     data: {},
-    description: {},
+    description: String,
     font: Object,
-    height: {},
+    height: Number,
     image: [Object, String],
-    location: {},
-    name: {},
-    offsetX: {},
-    offsetY: {},
+    location: String as PropType<PieChartAnnotationLocation>,
+    name: String,
+    offsetX: Number,
+    offsetY: Number,
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
-    series: {},
+    series: String,
     shadow: Object,
     template: {},
-    text: {},
-    textOverflow: {},
+    text: String,
+    textOverflow: String as PropType<TextOverflow>,
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
-    type: {},
-    width: {},
-    wordWrap: {},
-    x: {},
-    y: {}
+    type: String as PropType<AnnotationType>,
+    width: Number,
+    wordWrap: String as PropType<WordWrap>,
+    x: Number,
+    y: Number
   }
 };
 
@@ -346,8 +393,8 @@ const DxAnnotationBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: {},
-    opacity: {},
+    dashStyle: String as PropType<DashStyle>,
+    opacity: Number,
     visible: Boolean,
     width: Number
   }
@@ -372,10 +419,10 @@ const DxArgumentFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: {},
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -398,10 +445,10 @@ const DxBorderConfig = {
     "update:width": null,
   },
   props: {
-    color: {},
+    color: String,
     cornerRadius: Number,
-    dashStyle: {},
-    opacity: {},
+    dashStyle: String as PropType<DashStyle>,
+    opacity: Number,
     visible: Boolean,
     width: Number
   }
@@ -421,8 +468,8 @@ const DxColorConfig = {
     "update:fillId": null,
   },
   props: {
-    base: {},
-    fillId: {}
+    base: String,
+    fillId: String
   }
 };
 
@@ -469,35 +516,35 @@ const DxCommonAnnotationSettingsConfig = {
   },
   props: {
     allowDragging: Boolean,
-    argument: {},
+    argument: [Date, Number, String],
     arrowLength: Number,
     arrowWidth: Number,
     border: Object,
     color: String,
-    customizeTooltip: {},
+    customizeTooltip: Function as PropType<(annotation: any) => Object>,
     data: {},
-    description: {},
+    description: String,
     font: Object,
-    height: {},
+    height: Number,
     image: [Object, String],
-    location: {},
-    offsetX: {},
-    offsetY: {},
+    location: String as PropType<PieChartAnnotationLocation>,
+    offsetX: Number,
+    offsetY: Number,
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
-    series: {},
+    series: String,
     shadow: Object,
     template: {},
-    text: {},
-    textOverflow: {},
+    text: String,
+    textOverflow: String as PropType<TextOverflow>,
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
-    type: {},
-    width: {},
-    wordWrap: {},
-    x: {},
-    y: {}
+    type: String as PropType<AnnotationType>,
+    width: Number,
+    wordWrap: String as PropType<WordWrap>,
+    x: Number,
+    y: Number
   }
 };
 
@@ -528,15 +575,15 @@ const DxCommonSeriesSettingsConfig = {
   },
   props: {
     argumentField: String,
-    argumentType: {},
+    argumentType: String as PropType<ChartsDataType>,
     border: Object,
-    color: {},
-    hoverMode: {},
+    color: [Object, String],
+    hoverMode: String as PropType<PieChartSeriesInteractionMode>,
     hoverStyle: Object,
     label: Object,
-    maxLabelCount: {},
-    minSegmentSize: {},
-    selectionMode: {},
+    maxLabelCount: Number,
+    minSegmentSize: Number,
+    selectionMode: String as PropType<PieChartSeriesInteractionMode>,
     selectionStyle: Object,
     smallValuesGrouping: Object,
     tagField: String,
@@ -568,7 +615,7 @@ const DxConnectorConfig = {
     "update:width": null,
   },
   props: {
-    color: {},
+    color: String,
     visible: Boolean,
     width: Number
   }
@@ -596,10 +643,10 @@ const DxExportConfig = {
     backgroundColor: String,
     enabled: Boolean,
     fileName: String,
-    formats: Array,
+    formats: Array as PropType<Array<ExportFormat>>,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: {}
+    svgToCanvas: Function as PropType<(svg: any, canvas: any) => any>
   }
 };
 
@@ -647,10 +694,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: {},
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -671,7 +718,7 @@ const DxHatchingConfig = {
     "update:width": null,
   },
   props: {
-    direction: {},
+    direction: String as PropType<HatchDirection>,
     opacity: Number,
     step: Number,
     width: Number
@@ -695,7 +742,7 @@ const DxHoverStyleConfig = {
   },
   props: {
     border: Object,
-    color: {},
+    color: [Object, String],
     hatching: Object,
     highlight: Boolean
   }
@@ -723,7 +770,7 @@ const DxImageConfig = {
   },
   props: {
     height: Number,
-    url: {},
+    url: String,
     width: Number
   }
 };
@@ -754,20 +801,20 @@ const DxLabelConfig = {
     "update:wordWrap": null,
   },
   props: {
-    argumentFormat: {},
-    backgroundColor: {},
+    argumentFormat: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    backgroundColor: String,
     border: Object,
     connector: Object,
-    customizeText: Function,
-    displayFormat: {},
+    customizeText: Function as PropType<(pointInfo: Object) => string>,
+    displayFormat: String,
     font: Object,
-    format: {},
-    position: {},
+    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    position: String as PropType<LabelPosition>,
     radialOffset: Number,
     rotationAngle: Number,
-    textOverflow: {},
+    textOverflow: String as PropType<TextOverflow>,
     visible: Boolean,
-    wordWrap: {}
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -814,28 +861,28 @@ const DxLegendConfig = {
     "update:visible": null,
   },
   props: {
-    backgroundColor: {},
+    backgroundColor: String,
     border: Object,
     columnCount: Number,
     columnItemSpacing: Number,
-    customizeHint: Function,
-    customizeItems: Function,
-    customizeText: Function,
+    customizeHint: Function as PropType<(pointInfo: Object) => string>,
+    customizeItems: Function as PropType<(items: Array<Object>) => Array<Object>>,
+    customizeText: Function as PropType<(pointInfo: Object) => string>,
     font: Object,
-    horizontalAlignment: {},
-    hoverMode: {},
-    itemsAlignment: {},
-    itemTextPosition: {},
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
+    hoverMode: String as PropType<PieChartLegendHoverMode>,
+    itemsAlignment: String as PropType<HorizontalAlignment>,
+    itemTextPosition: String as PropType<Position>,
     margin: [Number, Object],
     markerSize: Number,
     markerTemplate: {},
-    orientation: {},
+    orientation: String as PropType<Orientation>,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     rowCount: Number,
     rowItemSpacing: Number,
     title: [Object, String],
-    verticalAlignment: {},
+    verticalAlignment: String as PropType<VerticalEdge>,
     visible: Boolean
   }
 };
@@ -868,12 +915,12 @@ const DxLegendTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: {},
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
     margin: Object,
-    placeholderSize: {},
+    placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    verticalAlignment: {}
+    verticalAlignment: String as PropType<VerticalEdge>
   }
 };
 
@@ -980,14 +1027,14 @@ const DxPieChartTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: {},
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
     margin: [Number, Object],
-    placeholderSize: {},
+    placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: {},
-    verticalAlignment: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    verticalAlignment: String as PropType<VerticalEdge>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -1017,8 +1064,8 @@ const DxPieChartTitleSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -1042,7 +1089,7 @@ const DxSelectionStyleConfig = {
   },
   props: {
     border: Object,
-    color: {},
+    color: [Object, String],
     hatching: Object,
     highlight: Boolean
   }
@@ -1083,16 +1130,16 @@ const DxSeriesConfig = {
   },
   props: {
     argumentField: String,
-    argumentType: {},
+    argumentType: String as PropType<ChartsDataType>,
     border: Object,
-    color: {},
-    hoverMode: {},
+    color: [Object, String],
+    hoverMode: String as PropType<PieChartSeriesInteractionMode>,
     hoverStyle: Object,
     label: Object,
-    maxLabelCount: {},
-    minSegmentSize: {},
-    name: {},
-    selectionMode: {},
+    maxLabelCount: Number,
+    minSegmentSize: Number,
+    name: String,
+    selectionMode: String as PropType<PieChartSeriesInteractionMode>,
     selectionStyle: Object,
     smallValuesGrouping: Object,
     tag: {},
@@ -1118,8 +1165,8 @@ const DxSeriesBorderConfig = {
     "update:width": null,
   },
   props: {
-    color: {},
-    dashStyle: {},
+    color: String,
+    dashStyle: String as PropType<DashStyle>,
     visible: Boolean,
     width: Number
   }
@@ -1139,7 +1186,7 @@ const DxSeriesTemplateConfig = {
     "update:nameField": null,
   },
   props: {
-    customizeSeries: Function,
+    customizeSeries: Function as PropType<(seriesName: any) => Object>,
     nameField: String
   }
 };
@@ -1183,8 +1230,8 @@ const DxSizeConfig = {
     "update:width": null,
   },
   props: {
-    height: {},
-    width: {}
+    height: Number,
+    width: Number
   }
 };
 
@@ -1205,9 +1252,9 @@ const DxSmallValuesGroupingConfig = {
   },
   props: {
     groupName: String,
-    mode: {},
-    threshold: {},
-    topCount: {}
+    mode: String as PropType<SmallValuesGroupingMode>,
+    threshold: Number,
+    topCount: Number
   }
 };
 
@@ -1231,8 +1278,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -1258,14 +1305,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: {},
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
     margin: [Object, Number],
-    placeholderSize: {},
+    placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: {},
-    verticalAlignment: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    verticalAlignment: String as PropType<VerticalEdge>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -1299,24 +1346,24 @@ const DxTooltipConfig = {
     "update:zIndex": null,
   },
   props: {
-    argumentFormat: {},
+    argumentFormat: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     arrowLength: Number,
     border: Object,
     color: String,
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: {},
+    customizeTooltip: Function as PropType<(pointInfo: Object) => Object>,
     enabled: Boolean,
     font: Object,
-    format: {},
+    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     interactive: Boolean,
-    opacity: {},
+    opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     shadow: Object,
     shared: Boolean,
-    zIndex: {}
+    zIndex: Number
   }
 };
 
@@ -1346,8 +1393,8 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
-    opacity: {},
+    dashStyle: String as PropType<DashStyle>,
+    opacity: Number,
     visible: Boolean,
     width: Number
   }
