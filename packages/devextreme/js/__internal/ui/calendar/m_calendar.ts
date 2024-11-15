@@ -763,15 +763,6 @@ const Calendar = Editor.inherit({
     return this.callBase().concat([this._view]);
   },
 
-  _isCalendarValueEmpty() {
-    const value = this.option('currentDate');
-
-    if (!value) return true;
-
-    const date = new Date(value);
-    return isNaN(date.getTime());
-  },
-
   _renderViews() {
     this.$element().addClass(`${CALENDAR_VIEW_CLASS}-${this.option('zoomLevel')}`);
 
@@ -973,7 +964,6 @@ const Calendar = Editor.inherit({
 
   _navigatorClickHandler(e) {
     const { currentDate, viewsCount } = this.option();
-
     let offset = e.direction;
 
     if (viewsCount > 1) {
