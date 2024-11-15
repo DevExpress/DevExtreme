@@ -20,11 +20,10 @@ import {
 } from '@angular/core';
 
 
-import { ExportFormat, HorizontalAlignment, Orientation, Position, VerticalEdge } from 'devextreme/common';
-import { AnimationEaseMode, DashStyle, Font, Palette, PaletteExtensionMode, ShiftLabelOverlap, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
-import { UserDefinedElement } from 'devextreme/core/element';
+import { AnimationEaseMode, Font, DashStyle, Palette, PaletteExtensionMode, ShiftLabelOverlap, Theme, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import { ExportFormat, HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 import { Format } from 'devextreme/localization';
-import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/bar_gauge';
+import { BarGaugeBarInfo, BarGaugeLegendItem, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/bar_gauge';
 
 import DxBarGauge from 'devextreme/viz/bar_gauge';
 
@@ -57,21 +56,27 @@ import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 
 import { DxoBarGaugeAnimationModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeBarGaugeTitleModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeBarGaugeTitleSubtitleModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeBorderModule } from 'devextreme-angular/ui/bar-gauge/nested';
 import { DxoBarGaugeExportModule } from 'devextreme-angular/ui/bar-gauge/nested';
-import { DxoBarGaugeGeometryModule } from 'devextreme-angular/ui/bar-gauge/nested';
-import { DxoBarGaugeLabelModule } from 'devextreme-angular/ui/bar-gauge/nested';
 import { DxoBarGaugeFontModule } from 'devextreme-angular/ui/bar-gauge/nested';
 import { DxoBarGaugeFormatModule } from 'devextreme-angular/ui/bar-gauge/nested';
-import { DxoBarGaugeLegendModule } from 'devextreme-angular/ui/bar-gauge/nested';
-import { DxoBarGaugeBorderModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeGeometryModule } from 'devextreme-angular/ui/bar-gauge/nested';
 import { DxoBarGaugeItemTextFormatModule } from 'devextreme-angular/ui/bar-gauge/nested';
-import { DxoBarGaugeMarginModule } from 'devextreme-angular/ui/bar-gauge/nested';
-import { DxoBarGaugeTitleModule } from 'devextreme-angular/ui/bar-gauge/nested';
-import { DxoBarGaugeSubtitleModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeLabelModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeLegendModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeLegendBorderModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeLegendTitleModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeLegendTitleSubtitleModule } from 'devextreme-angular/ui/bar-gauge/nested';
 import { DxoBarGaugeLoadingIndicatorModule } from 'devextreme-angular/ui/bar-gauge/nested';
-import { DxoBarGaugeSizeModule } from 'devextreme-angular/ui/bar-gauge/nested';
-import { DxoBarGaugeTooltipModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeMarginModule } from 'devextreme-angular/ui/bar-gauge/nested';
 import { DxoBarGaugeShadowModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeSizeModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeSubtitleModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeTitleModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeTooltipModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeTooltipBorderModule } from 'devextreme-angular/ui/bar-gauge/nested';
 
 
 
@@ -99,10 +104,10 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get animation(): { duration?: number, easing?: AnimationEaseMode, enabled?: boolean } {
+    get animation(): any | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean } {
         return this._getOption('animation');
     }
-    set animation(value: { duration?: number, easing?: AnimationEaseMode, enabled?: boolean }) {
+    set animation(value: any | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean }) {
         this._setOption('animation', value);
     }
 
@@ -151,10 +156,10 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get centerTemplate(): any | undefined {
+    get centerTemplate(): any {
         return this._getOption('centerTemplate');
     }
-    set centerTemplate(value: any | undefined) {
+    set centerTemplate(value: any) {
         this._setOption('centerTemplate', value);
     }
 
@@ -177,10 +182,10 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -203,10 +208,10 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined } {
+    get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined } {
         return this._getOption('export');
     }
-    set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }) {
+    set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }) {
         this._setOption('export', value);
     }
 
@@ -229,10 +234,10 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get label(): { connectorColor?: string | undefined, connectorWidth?: number, customizeText?: Function, font?: Font, format?: Format | string | undefined, indent?: number, visible?: boolean } {
+    get label(): { connectorColor?: string | undefined, connectorWidth?: number, customizeText?: ((barValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, indent?: number, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { connectorColor?: string | undefined, connectorWidth?: number, customizeText?: Function, font?: Font, format?: Format | string | undefined, indent?: number, visible?: boolean }) {
+    set label(value: { connectorColor?: string | undefined, connectorWidth?: number, customizeText?: ((barValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, indent?: number, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -242,10 +247,10 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get legend(): { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: Function, customizeItems?: Function, customizeText?: Function, font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextFormat?: Format | string | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any | undefined, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean } {
+    get legend(): { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((arg: { item: BarGaugeBarInfo, text: string }) => string), customizeItems?: ((items: Array<BarGaugeLegendItem>) => Array<BarGaugeLegendItem>), customizeText?: ((arg: { item: BarGaugeBarInfo, text: string }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextFormat?: Format | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean } {
         return this._getOption('legend');
     }
-    set legend(value: { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: Function, customizeItems?: Function, customizeText?: Function, font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextFormat?: Format | string | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any | undefined, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }) {
+    set legend(value: { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((arg: { item: BarGaugeBarInfo, text: string }) => string), customizeItems?: ((items: Array<BarGaugeLegendItem>) => Array<BarGaugeLegendItem>), customizeText?: ((arg: { item: BarGaugeBarInfo, text: string }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextFormat?: Format | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }) {
         this._setOption('legend', value);
     }
 
@@ -281,10 +286,10 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get palette(): Palette | string | Array<string> {
+    get palette(): Array<string> | Palette {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
 
@@ -424,10 +429,10 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
+    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { index: number, value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
+    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { index: number, value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
 
@@ -529,7 +534,7 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() animationChange: EventEmitter<{ duration?: number, easing?: AnimationEaseMode, enabled?: boolean }>;
+    @Output() animationChange: EventEmitter<any | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean }>;
 
     /**
     
@@ -557,7 +562,7 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() centerTemplateChange: EventEmitter<any | undefined>;
+    @Output() centerTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -571,7 +576,7 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -585,7 +590,7 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }>;
+    @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }>;
 
     /**
     
@@ -599,14 +604,14 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelChange: EventEmitter<{ connectorColor?: string | undefined, connectorWidth?: number, customizeText?: Function, font?: Font, format?: Format | string | undefined, indent?: number, visible?: boolean }>;
+    @Output() labelChange: EventEmitter<{ connectorColor?: string | undefined, connectorWidth?: number, customizeText?: ((barValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, indent?: number, visible?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() legendChange: EventEmitter<{ backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: Function, customizeItems?: Function, customizeText?: Function, font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextFormat?: Format | string | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any | undefined, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }>;
+    @Output() legendChange: EventEmitter<{ backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((arg: { item: BarGaugeBarInfo, text: string }) => string), customizeItems?: ((items: Array<BarGaugeLegendItem>) => Array<BarGaugeLegendItem>), customizeText?: ((arg: { item: BarGaugeBarInfo, text: string }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextFormat?: Format | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }>;
 
     /**
     
@@ -627,7 +632,7 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() paletteChange: EventEmitter<Palette | string | Array<string>>;
+    @Output() paletteChange: EventEmitter<Array<string> | Palette>;
 
     /**
     
@@ -704,7 +709,7 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
+    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { index: number, value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
 
     /**
     
@@ -832,21 +837,27 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     DxoTooltipModule,
     DxoShadowModule,
     DxoBarGaugeAnimationModule,
+    DxoBarGaugeBarGaugeTitleModule,
+    DxoBarGaugeBarGaugeTitleSubtitleModule,
+    DxoBarGaugeBorderModule,
     DxoBarGaugeExportModule,
-    DxoBarGaugeGeometryModule,
-    DxoBarGaugeLabelModule,
     DxoBarGaugeFontModule,
     DxoBarGaugeFormatModule,
-    DxoBarGaugeLegendModule,
-    DxoBarGaugeBorderModule,
+    DxoBarGaugeGeometryModule,
     DxoBarGaugeItemTextFormatModule,
-    DxoBarGaugeMarginModule,
-    DxoBarGaugeTitleModule,
-    DxoBarGaugeSubtitleModule,
+    DxoBarGaugeLabelModule,
+    DxoBarGaugeLegendModule,
+    DxoBarGaugeLegendBorderModule,
+    DxoBarGaugeLegendTitleModule,
+    DxoBarGaugeLegendTitleSubtitleModule,
     DxoBarGaugeLoadingIndicatorModule,
-    DxoBarGaugeSizeModule,
-    DxoBarGaugeTooltipModule,
+    DxoBarGaugeMarginModule,
     DxoBarGaugeShadowModule,
+    DxoBarGaugeSizeModule,
+    DxoBarGaugeSubtitleModule,
+    DxoBarGaugeTitleModule,
+    DxoBarGaugeTooltipModule,
+    DxoBarGaugeTooltipBorderModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -872,21 +883,27 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     DxoTooltipModule,
     DxoShadowModule,
     DxoBarGaugeAnimationModule,
+    DxoBarGaugeBarGaugeTitleModule,
+    DxoBarGaugeBarGaugeTitleSubtitleModule,
+    DxoBarGaugeBorderModule,
     DxoBarGaugeExportModule,
-    DxoBarGaugeGeometryModule,
-    DxoBarGaugeLabelModule,
     DxoBarGaugeFontModule,
     DxoBarGaugeFormatModule,
-    DxoBarGaugeLegendModule,
-    DxoBarGaugeBorderModule,
+    DxoBarGaugeGeometryModule,
     DxoBarGaugeItemTextFormatModule,
-    DxoBarGaugeMarginModule,
-    DxoBarGaugeTitleModule,
-    DxoBarGaugeSubtitleModule,
+    DxoBarGaugeLabelModule,
+    DxoBarGaugeLegendModule,
+    DxoBarGaugeLegendBorderModule,
+    DxoBarGaugeLegendTitleModule,
+    DxoBarGaugeLegendTitleSubtitleModule,
     DxoBarGaugeLoadingIndicatorModule,
-    DxoBarGaugeSizeModule,
-    DxoBarGaugeTooltipModule,
+    DxoBarGaugeMarginModule,
     DxoBarGaugeShadowModule,
+    DxoBarGaugeSizeModule,
+    DxoBarGaugeSubtitleModule,
+    DxoBarGaugeTitleModule,
+    DxoBarGaugeTooltipModule,
+    DxoBarGaugeTooltipBorderModule,
     DxTemplateModule
   ]
 })

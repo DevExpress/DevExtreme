@@ -17,10 +17,9 @@ import {
 } from '@angular/core';
 
 
-import { DashStyle, Font, Theme } from 'devextreme/common/charts';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { Format } from 'devextreme/localization';
 import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/bullet';
+import { Theme, DashStyle, Font } from 'devextreme/common/charts';
+import { Format } from 'devextreme/localization';
 
 import DxBullet from 'devextreme/viz/bullet';
 
@@ -42,13 +41,13 @@ import { DxoFontModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 
-import { DxoBulletMarginModule } from 'devextreme-angular/ui/bullet/nested';
-import { DxoBulletSizeModule } from 'devextreme-angular/ui/bullet/nested';
-import { DxoBulletTooltipModule } from 'devextreme-angular/ui/bullet/nested';
 import { DxoBulletBorderModule } from 'devextreme-angular/ui/bullet/nested';
 import { DxoBulletFontModule } from 'devextreme-angular/ui/bullet/nested';
 import { DxoBulletFormatModule } from 'devextreme-angular/ui/bullet/nested';
+import { DxoBulletMarginModule } from 'devextreme-angular/ui/bullet/nested';
 import { DxoBulletShadowModule } from 'devextreme-angular/ui/bullet/nested';
+import { DxoBulletSizeModule } from 'devextreme-angular/ui/bullet/nested';
+import { DxoBulletTooltipModule } from 'devextreme-angular/ui/bullet/nested';
 
 
 
@@ -101,10 +100,10 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -270,10 +269,10 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
+    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointsInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
+    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointsInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
 
@@ -389,7 +388,7 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -480,7 +479,7 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
+    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointsInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
 
     /**
     
@@ -557,13 +556,13 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     DxoFontModule,
     DxoFormatModule,
     DxoShadowModule,
-    DxoBulletMarginModule,
-    DxoBulletSizeModule,
-    DxoBulletTooltipModule,
     DxoBulletBorderModule,
     DxoBulletFontModule,
     DxoBulletFormatModule,
+    DxoBulletMarginModule,
     DxoBulletShadowModule,
+    DxoBulletSizeModule,
+    DxoBulletTooltipModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -579,13 +578,13 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     DxoFontModule,
     DxoFormatModule,
     DxoShadowModule,
-    DxoBulletMarginModule,
-    DxoBulletSizeModule,
-    DxoBulletTooltipModule,
     DxoBulletBorderModule,
     DxoBulletFontModule,
     DxoBulletFormatModule,
+    DxoBulletMarginModule,
     DxoBulletShadowModule,
+    DxoBulletSizeModule,
+    DxoBulletTooltipModule,
     DxTemplateModule
   ]
 })

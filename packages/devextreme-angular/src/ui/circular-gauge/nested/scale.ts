@@ -16,7 +16,7 @@ import {
 
 import { Font, LabelOverlap } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
-import { CircularGaugeElementOrientation, CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
+import { CircularGaugeLabelOverlap, CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
 
 import {
     NestedOptionHost,
@@ -64,10 +64,10 @@ export class DxoCircularGaugeScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get label(): { customizeText?: Function, font?: Font, format?: Format | string | undefined, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean } {
+    get label(): { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { customizeText?: Function, font?: Font, format?: Format | string | undefined, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }) {
+    set label(value: { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }) {
         this._setOption('label', value);
     }
 

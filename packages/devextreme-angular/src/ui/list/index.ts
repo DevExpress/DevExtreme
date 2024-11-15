@@ -23,12 +23,13 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/list';
 
-import { PageLoadMode, ScrollbarMode, SearchMode, SelectAllMode, SingleMultipleAllOrNone } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, dxListItem, GroupRenderedEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemDeletedEvent, ItemDeleteMode, ItemDeletingEvent, ItemHoldEvent, ItemRenderedEvent, ItemReorderedEvent, ItemSwipeEvent, ListMenuMode, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectAllValueChangedEvent, SelectionChangedEvent, SelectionChangingEvent } from 'devextreme/ui/list';
-import { Properties as dxSortableOptions } from 'devextreme/ui/sortable';
-import { Properties as dxTextBoxOptions } from 'devextreme/ui/text_box';
+import DataSource from 'devextreme/data/data_source';
+import { dxListItem, ItemDeleteMode, ListMenuMode, ContentReadyEvent, DisposingEvent, GroupRenderedEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemDeletedEvent, ItemDeletingEvent, ItemHoldEvent, ItemRenderedEvent, ItemReorderedEvent, ItemSwipeEvent, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectAllValueChangedEvent, SelectionChangedEvent, SelectionChangingEvent } from 'devextreme/ui/list';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { dxSortableOptions } from 'devextreme/ui/sortable';
+import { PageLoadMode, SearchMode, SelectAllMode, SingleMultipleAllOrNone, ScrollbarMode } from 'devextreme/common';
+import { dxTextBoxOptions } from 'devextreme/ui/text_box';
 
 import DxList from 'devextreme/ui/list';
 
@@ -51,13 +52,13 @@ import { DxoSearchEditorOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 
-import { DxoListItemDraggingModule } from 'devextreme-angular/ui/list/nested';
+import { DxiListButtonModule } from 'devextreme-angular/ui/list/nested';
 import { DxoListCursorOffsetModule } from 'devextreme-angular/ui/list/nested';
 import { DxiListItemModule } from 'devextreme-angular/ui/list/nested';
+import { DxoListItemDraggingModule } from 'devextreme-angular/ui/list/nested';
 import { DxiListMenuItemModule } from 'devextreme-angular/ui/list/nested';
-import { DxoListSearchEditorOptionsModule } from 'devextreme-angular/ui/list/nested';
-import { DxiListButtonModule } from 'devextreme-angular/ui/list/nested';
 import { DxoListOptionsModule } from 'devextreme-angular/ui/list/nested';
+import { DxoListSearchEditorOptionsModule } from 'devextreme-angular/ui/list/nested';
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 import { DxiMenuItemComponent } from 'devextreme-angular/ui/nested';
@@ -153,10 +154,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxListItem | string | any> {
+    get dataSource(): Array<any | dxListItem | string> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxListItem | string | any>) {
+    set dataSource(value: Array<any | dxListItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -179,10 +180,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get displayExpr(): Function | string | undefined {
+    get displayExpr(): ((item: any) => string) | string | undefined {
         return this._getOption('displayExpr');
     }
-    set displayExpr(value: Function | string | undefined) {
+    set displayExpr(value: ((item: any) => string) | string | undefined) {
         this._setOption('displayExpr', value);
     }
 
@@ -192,10 +193,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -244,10 +245,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -335,10 +336,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get items(): Array<string | any | { badge?: string, disabled?: boolean, html?: string, icon?: string, key?: string, showChevron?: boolean, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<any | dxListItem | string> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { badge?: string, disabled?: boolean, html?: string, icon?: string, key?: string, showChevron?: boolean, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<any | dxListItem | string>) {
         this._setOption('items', value);
     }
 
@@ -374,10 +375,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get menuItems(): Array<any | { action?: Function, text?: string }> {
+    get menuItems(): { action?: ((itemElement: any, itemData: any) => void), text?: string }[] {
         return this._getOption('menuItems');
     }
-    set menuItems(value: Array<any | { action?: Function, text?: string }>) {
+    set menuItems(value: { action?: ((itemElement: any, itemData: any) => void), text?: string }[]) {
         this._setOption('menuItems', value);
     }
 
@@ -569,10 +570,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get searchEditorOptions(): dxTextBoxOptions {
+    get searchEditorOptions(): dxTextBoxOptions<any> {
         return this._getOption('searchEditorOptions');
     }
-    set searchEditorOptions(value: dxTextBoxOptions) {
+    set searchEditorOptions(value: dxTextBoxOptions<any>) {
         this._setOption('searchEditorOptions', value);
     }
 
@@ -595,10 +596,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get searchExpr(): Function | string | Array<Function | string> {
+    get searchExpr(): Array<(() => any) | string> | (() => any) | string {
         return this._getOption('searchExpr');
     }
-    set searchExpr(value: Function | string | Array<Function | string>) {
+    set searchExpr(value: Array<(() => any) | string> | (() => any) | string) {
         this._setOption('searchExpr', value);
     }
 
@@ -790,10 +791,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -989,7 +990,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxListItem | string | any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any | dxListItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -1003,14 +1004,14 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() displayExprChange: EventEmitter<Function | string | undefined>;
+    @Output() displayExprChange: EventEmitter<((item: any) => string) | string | undefined>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -1038,7 +1039,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -1087,7 +1088,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { badge?: string, disabled?: boolean, html?: string, icon?: string, key?: string, showChevron?: boolean, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<any | dxListItem | string>>;
 
     /**
     
@@ -1108,7 +1109,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() menuItemsChange: EventEmitter<Array<any | { action?: Function, text?: string }>>;
+    @Output() menuItemsChange: EventEmitter<{ action?: ((itemElement: any, itemData: any) => void), text?: string }[]>;
 
     /**
     
@@ -1213,7 +1214,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchEditorOptionsChange: EventEmitter<dxTextBoxOptions>;
+    @Output() searchEditorOptionsChange: EventEmitter<dxTextBoxOptions<any>>;
 
     /**
     
@@ -1227,7 +1228,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchExprChange: EventEmitter<Function | string | Array<Function | string>>;
+    @Output() searchExprChange: EventEmitter<Array<(() => any) | string> | (() => any) | string>;
 
     /**
     
@@ -1332,7 +1333,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
 
 
@@ -1526,13 +1527,13 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
     DxoOptionsModule,
-    DxoListItemDraggingModule,
+    DxiListButtonModule,
     DxoListCursorOffsetModule,
     DxiListItemModule,
+    DxoListItemDraggingModule,
     DxiListMenuItemModule,
-    DxoListSearchEditorOptionsModule,
-    DxiListButtonModule,
     DxoListOptionsModule,
+    DxoListSearchEditorOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1548,13 +1549,13 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
     DxoOptionsModule,
-    DxoListItemDraggingModule,
+    DxiListButtonModule,
     DxoListCursorOffsetModule,
     DxiListItemModule,
+    DxoListItemDraggingModule,
     DxiListMenuItemModule,
-    DxoListSearchEditorOptionsModule,
-    DxiListButtonModule,
     DxoListOptionsModule,
+    DxoListSearchEditorOptionsModule,
     DxTemplateModule
   ]
 })

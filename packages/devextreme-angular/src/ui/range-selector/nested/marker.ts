@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoRangeSelectorMarkerComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get label(): { customizeText?: Function, format?: Format | string | undefined } {
+    get label(): { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format | undefined } {
         return this._getOption('label');
     }
-    set label(value: { customizeText?: Function, format?: Format | string | undefined }) {
+    set label(value: { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format | undefined }) {
         this._setOption('label', value);
     }
 

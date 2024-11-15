@@ -10,27 +10,26 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
 
 
+import dxOverlay from 'devextreme/ui/overlay';
+import DOMComponent from 'devextreme/core/dom_component';
+import dxPopup from 'devextreme/ui/popup';
 import { AnimationConfig } from 'devextreme/animation/fx';
+import { event, EventInfo } from 'devextreme/events/index';
+import { Component as CoreComponent } from 'devextreme/core/component';
+import { PositionAlignment } from 'devextreme/common';
 import { PositionConfig } from 'devextreme/animation/position';
-import { PositionAlignment, ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { ToolbarLocation } from 'devextreme/ui/popup';
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDataGridToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
@@ -57,18 +56,18 @@ export class DxoDataGridFilterBuilderPopupComponent extends NestedOption impleme
     }
 
     @Input()
-    get closeOnOutsideClick(): boolean | Function {
+    get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
         return this._getOption('closeOnOutsideClick');
     }
-    set closeOnOutsideClick(value: boolean | Function) {
+    set closeOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('closeOnOutsideClick', value);
     }
 
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string | undefined {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string | undefined) {
         this._setOption('container', value);
     }
 
@@ -97,10 +96,10 @@ export class DxoDataGridFilterBuilderPopupComponent extends NestedOption impleme
     }
 
     @Input()
-    get dragAndResizeArea(): UserDefinedElement | string | undefined {
+    get dragAndResizeArea(): any | string | undefined {
         return this._getOption('dragAndResizeArea');
     }
-    set dragAndResizeArea(value: UserDefinedElement | string | undefined) {
+    set dragAndResizeArea(value: any | string | undefined) {
         this._setOption('dragAndResizeArea', value);
     }
 
@@ -145,18 +144,18 @@ export class DxoDataGridFilterBuilderPopupComponent extends NestedOption impleme
     }
 
     @Input()
-    get height(): number | Function | string {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
     @Input()
-    get hideOnOutsideClick(): boolean | Function {
+    get hideOnOutsideClick(): boolean | ((event: event) => boolean) {
         return this._getOption('hideOnOutsideClick');
     }
-    set hideOnOutsideClick(value: boolean | Function) {
+    set hideOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('hideOnOutsideClick', value);
     }
 
@@ -185,138 +184,138 @@ export class DxoDataGridFilterBuilderPopupComponent extends NestedOption impleme
     }
 
     @Input()
-    get maxHeight(): number | Function | string {
+    get maxHeight(): (() => number | string) | number | string {
         return this._getOption('maxHeight');
     }
-    set maxHeight(value: number | Function | string) {
+    set maxHeight(value: (() => number | string) | number | string) {
         this._setOption('maxHeight', value);
     }
 
     @Input()
-    get maxWidth(): number | Function | string {
+    get maxWidth(): (() => number | string) | number | string {
         return this._getOption('maxWidth');
     }
-    set maxWidth(value: number | Function | string) {
+    set maxWidth(value: (() => number | string) | number | string) {
         this._setOption('maxWidth', value);
     }
 
     @Input()
-    get minHeight(): number | Function | string {
+    get minHeight(): (() => number | string) | number | string {
         return this._getOption('minHeight');
     }
-    set minHeight(value: number | Function | string) {
+    set minHeight(value: (() => number | string) | number | string) {
         this._setOption('minHeight', value);
     }
 
     @Input()
-    get minWidth(): number | Function | string {
+    get minWidth(): (() => number | string) | number | string {
         return this._getOption('minWidth');
     }
-    set minWidth(value: number | Function | string) {
+    set minWidth(value: (() => number | string) | number | string) {
         this._setOption('minWidth', value);
     }
 
     @Input()
-    get onContentReady(): Function {
+    get onContentReady(): ((e: EventInfo<any>) => void) {
         return this._getOption('onContentReady');
     }
-    set onContentReady(value: Function) {
+    set onContentReady(value: ((e: EventInfo<any>) => void)) {
         this._setOption('onContentReady', value);
     }
 
     @Input()
-    get onDisposing(): Function {
+    get onDisposing(): ((e: EventInfo<any>) => void) {
         return this._getOption('onDisposing');
     }
-    set onDisposing(value: Function) {
+    set onDisposing(value: ((e: EventInfo<any>) => void)) {
         this._setOption('onDisposing', value);
     }
 
     @Input()
-    get onHidden(): Function {
+    get onHidden(): ((e: EventInfo<any>) => void) {
         return this._getOption('onHidden');
     }
-    set onHidden(value: Function) {
+    set onHidden(value: ((e: EventInfo<any>) => void)) {
         this._setOption('onHidden', value);
     }
 
     @Input()
-    get onHiding(): Function {
+    get onHiding(): ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void) {
         return this._getOption('onHiding');
     }
-    set onHiding(value: Function) {
+    set onHiding(value: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void)) {
         this._setOption('onHiding', value);
     }
 
     @Input()
-    get onInitialized(): Function {
+    get onInitialized(): ((e: { component: CoreComponent<any>, element: any }) => void) {
         return this._getOption('onInitialized');
     }
-    set onInitialized(value: Function) {
+    set onInitialized(value: ((e: { component: CoreComponent<any>, element: any }) => void)) {
         this._setOption('onInitialized', value);
     }
 
     @Input()
-    get onOptionChanged(): Function {
+    get onOptionChanged(): ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void) {
         return this._getOption('onOptionChanged');
     }
-    set onOptionChanged(value: Function) {
+    set onOptionChanged(value: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)) {
         this._setOption('onOptionChanged', value);
     }
 
     @Input()
-    get onResize(): Function {
+    get onResize(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) {
         return this._getOption('onResize');
     }
-    set onResize(value: Function) {
+    set onResize(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)) {
         this._setOption('onResize', value);
     }
 
     @Input()
-    get onResizeEnd(): Function {
+    get onResizeEnd(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) {
         return this._getOption('onResizeEnd');
     }
-    set onResizeEnd(value: Function) {
+    set onResizeEnd(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)) {
         this._setOption('onResizeEnd', value);
     }
 
     @Input()
-    get onResizeStart(): Function {
+    get onResizeStart(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) {
         return this._getOption('onResizeStart');
     }
-    set onResizeStart(value: Function) {
+    set onResizeStart(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)) {
         this._setOption('onResizeStart', value);
     }
 
     @Input()
-    get onShowing(): Function {
+    get onShowing(): ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void) {
         return this._getOption('onShowing');
     }
-    set onShowing(value: Function) {
+    set onShowing(value: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void)) {
         this._setOption('onShowing', value);
     }
 
     @Input()
-    get onShown(): Function {
+    get onShown(): ((e: EventInfo<any>) => void) {
         return this._getOption('onShown');
     }
-    set onShown(value: Function) {
+    set onShown(value: ((e: EventInfo<any>) => void)) {
         this._setOption('onShown', value);
     }
 
     @Input()
-    get onTitleRendered(): Function {
+    get onTitleRendered(): ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void) {
         return this._getOption('onTitleRendered');
     }
-    set onTitleRendered(value: Function) {
+    set onTitleRendered(value: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void)) {
         this._setOption('onTitleRendered', value);
     }
 
     @Input()
-    get position(): PositionAlignment | PositionConfig | Function {
+    get position(): Function | PositionAlignment | PositionConfig {
         return this._getOption('position');
     }
-    set position(value: PositionAlignment | PositionConfig | Function) {
+    set position(value: Function | PositionAlignment | PositionConfig) {
         this._setOption('position', value);
     }
 
@@ -401,10 +400,10 @@ export class DxoDataGridFilterBuilderPopupComponent extends NestedOption impleme
     }
 
     @Input()
-    get toolbarItems(): Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, toolbar?: ToolbarLocation, visible?: boolean, widget?: ToolbarItemComponent }> {
+    get toolbarItems(): Array<dxPopupToolbarItem> {
         return this._getOption('toolbarItems');
     }
-    set toolbarItems(value: Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, toolbar?: ToolbarLocation, visible?: boolean, widget?: ToolbarItemComponent }>) {
+    set toolbarItems(value: Array<dxPopupToolbarItem>) {
         this._setOption('toolbarItems', value);
     }
 
@@ -417,10 +416,10 @@ export class DxoDataGridFilterBuilderPopupComponent extends NestedOption impleme
     }
 
     @Input()
-    get width(): number | Function | string {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -438,14 +437,14 @@ export class DxoDataGridFilterBuilderPopupComponent extends NestedOption impleme
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<PositionAlignment | PositionConfig | Function>;
+    @Output() positionChange: EventEmitter<Function | PositionAlignment | PositionConfig>;
 
     /**
     
@@ -459,19 +458,11 @@ export class DxoDataGridFilterBuilderPopupComponent extends NestedOption impleme
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
     protected get _optionPath() {
         return 'filterBuilderPopup';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiDataGridToolbarItemComponent))
-    get toolbarItemsChildren(): QueryList<DxiDataGridToolbarItemComponent> {
-        return this._getOption('toolbarItems');
-    }
-    set toolbarItemsChildren(value) {
-        this.setChildren('toolbarItems', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

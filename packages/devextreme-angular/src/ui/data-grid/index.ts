@@ -23,17 +23,21 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/data_grid';
 
+import DataSource from 'devextreme/data/data_source';
+import dxDataGrid from 'devextreme/ui/data_grid';
+import dxSortable from 'devextreme/ui/sortable';
+import dxDraggable from 'devextreme/ui/draggable';
+import { ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataChange, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, GridBase, ApplyFilterMode, GroupExpandMode, HeaderFilterSearchConfig, EnterKeyAction, EnterKeyDirection, Pager, DataRenderMode, SelectionColumnDisplayMode, StateStoreType, SummaryType } from 'devextreme/common/grids';
 import { PositionConfig } from 'devextreme/animation/position';
-import { DragDirection, DragHighlight, HorizontalAlignment, Mode, ScrollbarMode, SelectAllMode, SingleMultipleOrNone, SortOrder } from 'devextreme/common';
-import { ApplyFilterMode, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataChange, DataRenderMode, EnterKeyAction, EnterKeyDirection, GridsEditMode, GridsEditRefreshMode, GroupExpandMode, HeaderFilterSearchConfig, NewRowPosition, Pager, SelectionColumnDisplayMode, StartEditAction, StateStoreType, SummaryType } from 'devextreme/common/grids';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { SortOrder, Mode, DragDirection, DragHighlight, ScrollbarMode, SingleMultipleOrNone, SelectAllMode, HorizontalAlignment } from 'devextreme/common';
+import { dxDataGridColumn, dxDataGridRowObject, DataGridExportFormat, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, DataGridScrollMode, SelectionSensitivity, dxDataGridToolbar } from 'devextreme/ui/data_grid';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { dxFormOptions } from 'devextreme/ui/form';
+import { dxPopupOptions } from 'devextreme/ui/popup';
+import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
+import { event } from 'devextreme/events/index';
 import { Format } from 'devextreme/localization';
-import { AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DataGridExportFormat, DataGridScrollMode, DisposingEvent, dxDataGridColumn, dxDataGridToolbar, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, SelectionSensitivity, ToolbarPreparingEvent } from 'devextreme/ui/data_grid';
-import { Properties as dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
-import { Properties as dxFormOptions } from 'devextreme/ui/form';
-import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
 
 import DxDataGrid from 'devextreme/ui/data_grid';
 
@@ -113,71 +117,93 @@ import { DxoValueFormatModule } from 'devextreme-angular/ui/nested';
 import { DxiTotalItemModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 
-import { DxoDataGridColumnChooserModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridPositionModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridAnimationModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridAsyncRuleModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridAtModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridBoundaryOffsetModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridCollisionModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridMyModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridOffsetModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridSearchModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridSelectionModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridColumnFixingModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridIconsModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridTextsModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxiDataGridColumnModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridButtonModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridHeaderFilterModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridLookupModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridChangeModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridColCountByScreenModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridCollisionModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridColumnModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridColumnChooserModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridColumnChooserSearchModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridColumnChooserSelectionModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridColumnFixingModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridColumnFixingTextsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridColumnHeaderFilterModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridColumnHeaderFilterSearchModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridColumnLookupModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridCompareRuleModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridCursorOffsetModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridCustomOperationModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridCustomRuleModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridDataGridHeaderFilterModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridDataGridHeaderFilterSearchModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridDataGridHeaderFilterTextsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridDataGridSelectionModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridEditingModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridEditingTextsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridEmailRuleModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridExportModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridExportTextsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridFieldModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridFieldLookupModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridFilterBuilderModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridFilterBuilderPopupModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridFilterOperationDescriptionsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridFilterPanelModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridFilterPanelTextsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridFilterRowModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridFormModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridFormatModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridFormItemModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridLabelModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxiDataGridValidationRuleModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridEditingModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxiDataGridChangeModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridFormModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridColCountByScreenModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxiDataGridItemModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridTabPanelOptionsModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxiDataGridTabModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridButtonOptionsModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridPopupModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridAnimationModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridHideModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridFromModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridToModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridShowModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxiDataGridToolbarItemModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridExportModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridFilterBuilderModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxiDataGridCustomOperationModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxiDataGridFieldModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridFilterOperationDescriptionsModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridGroupOperationDescriptionsModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridFilterBuilderPopupModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridFilterPanelModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridFilterRowModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridOperationDescriptionsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridGroupingModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridGroupingTextsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridGroupItemModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridGroupOperationDescriptionsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridGroupPanelModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridHeaderFilterModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridHideModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridIconsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridItemModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridKeyboardNavigationModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridLabelModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridLoadPanelModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridLookupModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridMasterDetailModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridMyModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridNumericRuleModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridOffsetModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridOperationDescriptionsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridPagerModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridPagingModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridPatternRuleModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridPopupModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridPositionModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridRangeRuleModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridRemoteOperationsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridRequiredRuleModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridRowDraggingModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridCursorOffsetModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridScrollingModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridSearchModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridSearchPanelModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridSelectionModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridShowModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridSortByGroupSummaryInfoModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridSortingModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridStateStoringModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridStringLengthRuleModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridSummaryModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxiDataGridGroupItemModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridValueFormatModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxiDataGridTotalItemModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridSummaryTextsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridTextsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridToModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridToolbarModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridToolbarItemModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridTotalItemModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridValidationRuleModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridValueFormatModule } from 'devextreme-angular/ui/data-grid/nested';
 
 import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
 import { DxiSortByGroupSummaryInfoComponent } from 'devextreme-angular/ui/nested';
@@ -312,10 +338,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get columnChooser(): { allowSearch?: boolean, container?: UserDefinedElement | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string } {
+    get columnChooser(): { allowSearch?: boolean, container?: any | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string } {
         return this._getOption('columnChooser');
     }
-    set columnChooser(value: { allowSearch?: boolean, container?: UserDefinedElement | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string }) {
+    set columnChooser(value: { allowSearch?: boolean, container?: any | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string }) {
         this._setOption('columnChooser', value);
     }
 
@@ -403,10 +429,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get customizeColumns(): Function {
+    get customizeColumns(): ((columns: Array<dxDataGridColumn>) => void) {
         return this._getOption('customizeColumns');
     }
-    set customizeColumns(value: Function) {
+    set customizeColumns(value: ((columns: Array<dxDataGridColumn>) => void)) {
         this._setOption('customizeColumns', value);
     }
 
@@ -429,10 +455,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -468,10 +494,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get editing(): { allowAdding?: boolean, allowDeleting?: boolean | Function, allowUpdating?: boolean | Function, changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, newRowPosition?: NewRowPosition, popup?: dxPopupOptions, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean } {
+    get editing(): { allowAdding?: boolean, allowDeleting?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, newRowPosition?: NewRowPosition, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: any | { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean } {
         return this._getOption('editing');
     }
-    set editing(value: { allowAdding?: boolean, allowDeleting?: boolean | Function, allowUpdating?: boolean | Function, changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, newRowPosition?: NewRowPosition, popup?: dxPopupOptions, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }) {
+    set editing(value: { allowAdding?: boolean, allowDeleting?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, newRowPosition?: NewRowPosition, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: any | { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }) {
         this._setOption('editing', value);
     }
 
@@ -481,10 +507,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -533,10 +559,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterBuilderPopup(): dxPopupOptions {
+    get filterBuilderPopup(): dxPopupOptions<any> {
         return this._getOption('filterBuilderPopup');
     }
-    set filterBuilderPopup(value: dxPopupOptions) {
+    set filterBuilderPopup(value: dxPopupOptions<any>) {
         this._setOption('filterBuilderPopup', value);
     }
 
@@ -546,10 +572,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterPanel(): { customizeText?: Function, filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean } {
+    get filterPanel(): { customizeText?: ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string), filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean } {
         return this._getOption('filterPanel');
     }
-    set filterPanel(value: { customizeText?: Function, filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean }) {
+    set filterPanel(value: { customizeText?: ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string), filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean }) {
         this._setOption('filterPanel', value);
     }
 
@@ -572,10 +598,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterSyncEnabled(): Mode | boolean {
+    get filterSyncEnabled(): boolean | Mode {
         return this._getOption('filterSyncEnabled');
     }
-    set filterSyncEnabled(value: Mode | boolean) {
+    set filterSyncEnabled(value: boolean | Mode) {
         this._setOption('filterSyncEnabled', value);
     }
 
@@ -585,10 +611,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterValue(): any {
+    get filterValue(): Array<any> | (() => any) | string {
         return this._getOption('filterValue');
     }
-    set filterValue(value: any) {
+    set filterValue(value: Array<any> | (() => any) | string) {
         this._setOption('filterValue', value);
     }
 
@@ -663,10 +689,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get groupPanel(): { allowColumnDragging?: boolean, emptyPanelText?: string, visible?: Mode | boolean } {
+    get groupPanel(): { allowColumnDragging?: boolean, emptyPanelText?: string, visible?: boolean | Mode } {
         return this._getOption('groupPanel');
     }
-    set groupPanel(value: { allowColumnDragging?: boolean, emptyPanelText?: string, visible?: Mode | boolean }) {
+    set groupPanel(value: { allowColumnDragging?: boolean, emptyPanelText?: string, visible?: boolean | Mode }) {
         this._setOption('groupPanel', value);
     }
 
@@ -689,10 +715,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -754,10 +780,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get keyExpr(): string | undefined | Array<string> {
+    get keyExpr(): Array<string> | string | undefined {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: string | undefined | Array<string>) {
+    set keyExpr(value: Array<string> | string | undefined) {
         this._setOption('keyExpr', value);
     }
 
@@ -767,10 +793,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get loadPanel(): { enabled?: Mode | boolean, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
+    get loadPanel(): { enabled?: boolean | Mode, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
         return this._getOption('loadPanel');
     }
-    set loadPanel(value: { enabled?: Mode | boolean, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }) {
+    set loadPanel(value: { enabled?: boolean | Mode, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }) {
         this._setOption('loadPanel', value);
     }
 
@@ -832,10 +858,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get remoteOperations(): Mode | boolean | { filtering?: boolean, grouping?: boolean, groupPaging?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean } {
+    get remoteOperations(): boolean | Mode | { filtering?: boolean, grouping?: boolean, groupPaging?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean } {
         return this._getOption('remoteOperations');
     }
-    set remoteOperations(value: Mode | boolean | { filtering?: boolean, grouping?: boolean, groupPaging?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean }) {
+    set remoteOperations(value: boolean | Mode | { filtering?: boolean, grouping?: boolean, groupPaging?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean }) {
         this._setOption('remoteOperations', value);
     }
 
@@ -884,10 +910,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get rowDragging(): { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: UserDefinedElement | string | undefined, container?: UserDefinedElement | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any | undefined, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: Function, onDragChange?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, onReorder?: Function, scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean } {
+    get rowDragging(): { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string | undefined, container?: any | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragChange?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragEnd?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragMove?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragStart?: ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onReorder?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean } {
         return this._getOption('rowDragging');
     }
-    set rowDragging(value: { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: UserDefinedElement | string | undefined, container?: UserDefinedElement | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any | undefined, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: Function, onDragChange?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, onReorder?: Function, scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }) {
+    set rowDragging(value: { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string | undefined, container?: any | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragChange?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragEnd?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragMove?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragStart?: ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onReorder?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }) {
         this._setOption('rowDragging', value);
     }
 
@@ -925,10 +951,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get scrolling(): { columnRenderingMode?: DataRenderMode, mode?: DataGridScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: Mode | boolean } {
+    get scrolling(): { columnRenderingMode?: DataRenderMode, mode?: DataGridScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode } {
         return this._getOption('scrolling');
     }
-    set scrolling(value: { columnRenderingMode?: DataRenderMode, mode?: DataGridScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: Mode | boolean }) {
+    set scrolling(value: { columnRenderingMode?: DataRenderMode, mode?: DataGridScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode }) {
         this._setOption('scrolling', value);
     }
 
@@ -977,10 +1003,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get selectionFilter(): any {
+    get selectionFilter(): Array<any> | (() => any) | string {
         return this._getOption('selectionFilter');
     }
-    set selectionFilter(value: any) {
+    set selectionFilter(value: Array<any> | (() => any) | string) {
         this._setOption('selectionFilter', value);
     }
 
@@ -1042,10 +1068,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get sortByGroupSummaryInfo(): Array<any | { groupColumn?: string | undefined, sortOrder?: SortOrder | string | undefined, summaryItem?: number | string | undefined }> {
+    get sortByGroupSummaryInfo(): { groupColumn?: string | undefined, sortOrder?: SortOrder | undefined, summaryItem?: number | string | undefined }[] {
         return this._getOption('sortByGroupSummaryInfo');
     }
-    set sortByGroupSummaryInfo(value: Array<any | { groupColumn?: string | undefined, sortOrder?: SortOrder | string | undefined, summaryItem?: number | string | undefined }>) {
+    set sortByGroupSummaryInfo(value: { groupColumn?: string | undefined, sortOrder?: SortOrder | undefined, summaryItem?: number | string | undefined }[]) {
         this._setOption('sortByGroupSummaryInfo', value);
     }
 
@@ -1068,10 +1094,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get stateStoring(): { customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType } {
+    get stateStoring(): { customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType } {
         return this._getOption('stateStoring');
     }
-    set stateStoring(value: { customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }) {
+    set stateStoring(value: { customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }) {
         this._setOption('stateStoring', value);
     }
 
@@ -1081,10 +1107,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get summary(): { calculateCustomSummary?: Function, groupItems?: Array<any | { alignByColumn?: boolean, column?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }>, recalculateWhileEditing?: boolean, skipEmptyValues?: boolean, texts?: { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }, totalItems?: Array<any | { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }> } {
+    get summary(): { calculateCustomSummary?: ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void), groupItems?: { alignByColumn?: boolean, column?: string | undefined, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: string | SummaryType | undefined, valueFormat?: Format | undefined }[], recalculateWhileEditing?: boolean, skipEmptyValues?: boolean, texts?: { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }, totalItems?: { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: string | SummaryType | undefined, valueFormat?: Format | undefined }[] } {
         return this._getOption('summary');
     }
-    set summary(value: { calculateCustomSummary?: Function, groupItems?: Array<any | { alignByColumn?: boolean, column?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }>, recalculateWhileEditing?: boolean, skipEmptyValues?: boolean, texts?: { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }, totalItems?: Array<any | { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }> }) {
+    set summary(value: { calculateCustomSummary?: ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void), groupItems?: { alignByColumn?: boolean, column?: string | undefined, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: string | SummaryType | undefined, valueFormat?: Format | undefined }[], recalculateWhileEditing?: boolean, skipEmptyValues?: boolean, texts?: { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }, totalItems?: { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: string | SummaryType | undefined, valueFormat?: Format | undefined }[] }) {
         this._setOption('summary', value);
     }
 
@@ -1159,10 +1185,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -1568,7 +1594,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnChooserChange: EventEmitter<{ allowSearch?: boolean, container?: UserDefinedElement | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string }>;
+    @Output() columnChooserChange: EventEmitter<{ allowSearch?: boolean, container?: any | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string }>;
 
     /**
     
@@ -1617,7 +1643,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizeColumnsChange: EventEmitter<Function>;
+    @Output() customizeColumnsChange: EventEmitter<((columns: Array<dxDataGridColumn>) => void)>;
 
     /**
     
@@ -1631,7 +1657,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -1652,14 +1678,14 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editingChange: EventEmitter<{ allowAdding?: boolean, allowDeleting?: boolean | Function, allowUpdating?: boolean | Function, changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, newRowPosition?: NewRowPosition, popup?: dxPopupOptions, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }>;
+    @Output() editingChange: EventEmitter<{ allowAdding?: boolean, allowDeleting?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, newRowPosition?: NewRowPosition, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: any | { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -1687,14 +1713,14 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterBuilderPopupChange: EventEmitter<dxPopupOptions>;
+    @Output() filterBuilderPopupChange: EventEmitter<dxPopupOptions<any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterPanelChange: EventEmitter<{ customizeText?: Function, filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean }>;
+    @Output() filterPanelChange: EventEmitter<{ customizeText?: ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string), filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean }>;
 
     /**
     
@@ -1708,14 +1734,14 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterSyncEnabledChange: EventEmitter<Mode | boolean>;
+    @Output() filterSyncEnabledChange: EventEmitter<boolean | Mode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterValueChange: EventEmitter<any>;
+    @Output() filterValueChange: EventEmitter<Array<any> | (() => any) | string>;
 
     /**
     
@@ -1757,7 +1783,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() groupPanelChange: EventEmitter<{ allowColumnDragging?: boolean, emptyPanelText?: string, visible?: Mode | boolean }>;
+    @Output() groupPanelChange: EventEmitter<{ allowColumnDragging?: boolean, emptyPanelText?: string, visible?: boolean | Mode }>;
 
     /**
     
@@ -1771,7 +1797,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -1806,14 +1832,14 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<string | undefined | Array<string>>;
+    @Output() keyExprChange: EventEmitter<Array<string> | string | undefined>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() loadPanelChange: EventEmitter<{ enabled?: Mode | boolean, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
+    @Output() loadPanelChange: EventEmitter<{ enabled?: boolean | Mode, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
 
     /**
     
@@ -1848,7 +1874,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() remoteOperationsChange: EventEmitter<Mode | boolean | { filtering?: boolean, grouping?: boolean, groupPaging?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean }>;
+    @Output() remoteOperationsChange: EventEmitter<boolean | Mode | { filtering?: boolean, grouping?: boolean, groupPaging?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean }>;
 
     /**
     
@@ -1876,7 +1902,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() rowDraggingChange: EventEmitter<{ allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: UserDefinedElement | string | undefined, container?: UserDefinedElement | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any | undefined, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: Function, onDragChange?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, onReorder?: Function, scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }>;
+    @Output() rowDraggingChange: EventEmitter<{ allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string | undefined, container?: any | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragChange?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragEnd?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragMove?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragStart?: ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onReorder?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }>;
 
     /**
     
@@ -1897,7 +1923,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scrollingChange: EventEmitter<{ columnRenderingMode?: DataRenderMode, mode?: DataGridScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: Mode | boolean }>;
+    @Output() scrollingChange: EventEmitter<{ columnRenderingMode?: DataRenderMode, mode?: DataGridScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode }>;
 
     /**
     
@@ -1925,7 +1951,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionFilterChange: EventEmitter<any>;
+    @Output() selectionFilterChange: EventEmitter<Array<any> | (() => any) | string>;
 
     /**
     
@@ -1960,7 +1986,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sortByGroupSummaryInfoChange: EventEmitter<Array<any | { groupColumn?: string | undefined, sortOrder?: SortOrder | string | undefined, summaryItem?: number | string | undefined }>>;
+    @Output() sortByGroupSummaryInfoChange: EventEmitter<{ groupColumn?: string | undefined, sortOrder?: SortOrder | undefined, summaryItem?: number | string | undefined }[]>;
 
     /**
     
@@ -1974,14 +2000,14 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stateStoringChange: EventEmitter<{ customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }>;
+    @Output() stateStoringChange: EventEmitter<{ customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() summaryChange: EventEmitter<{ calculateCustomSummary?: Function, groupItems?: Array<any | { alignByColumn?: boolean, column?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }>, recalculateWhileEditing?: boolean, skipEmptyValues?: boolean, texts?: { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }, totalItems?: Array<any | { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }> }>;
+    @Output() summaryChange: EventEmitter<{ calculateCustomSummary?: ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void), groupItems?: { alignByColumn?: boolean, column?: string | undefined, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: string | SummaryType | undefined, valueFormat?: Format | undefined }[], recalculateWhileEditing?: boolean, skipEmptyValues?: boolean, texts?: { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }, totalItems?: { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: string | SummaryType | undefined, valueFormat?: Format | undefined }[] }>;
 
     /**
     
@@ -2023,7 +2049,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -2045,10 +2071,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     }
 
     @ContentChildren(DxiDataGridSortByGroupSummaryInfoComponent)
-    get sortByGroupSummaryInfoChildren(): QueryList<DxiDataGridSortByGroupSummaryInfoComponent> {
+    get sortByGroupSummaryInfosChildren(): QueryList<DxiDataGridSortByGroupSummaryInfoComponent> {
         return this._getOption('sortByGroupSummaryInfo');
     }
-    set sortByGroupSummaryInfoChildren(value) {
+    set sortByGroupSummaryInfosChildren(value) {
         this.setContentChildren('sortByGroupSummaryInfo', value, 'DxiDataGridSortByGroupSummaryInfoComponent');
         this.setChildren('sortByGroupSummaryInfo', value);
     }
@@ -2321,71 +2347,93 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoValueFormatModule,
     DxiTotalItemModule,
     DxoToolbarModule,
-    DxoDataGridColumnChooserModule,
-    DxoDataGridPositionModule,
+    DxoDataGridAnimationModule,
+    DxiDataGridAsyncRuleModule,
     DxoDataGridAtModule,
     DxoDataGridBoundaryOffsetModule,
-    DxoDataGridCollisionModule,
-    DxoDataGridMyModule,
-    DxoDataGridOffsetModule,
-    DxoDataGridSearchModule,
-    DxoDataGridSelectionModule,
-    DxoDataGridColumnFixingModule,
-    DxoDataGridIconsModule,
-    DxoDataGridTextsModule,
-    DxiDataGridColumnModule,
     DxiDataGridButtonModule,
-    DxoDataGridHeaderFilterModule,
-    DxoDataGridLookupModule,
+    DxiDataGridChangeModule,
+    DxoDataGridColCountByScreenModule,
+    DxoDataGridCollisionModule,
+    DxiDataGridColumnModule,
+    DxoDataGridColumnChooserModule,
+    DxoDataGridColumnChooserSearchModule,
+    DxoDataGridColumnChooserSelectionModule,
+    DxoDataGridColumnFixingModule,
+    DxoDataGridColumnFixingTextsModule,
+    DxoDataGridColumnHeaderFilterModule,
+    DxoDataGridColumnHeaderFilterSearchModule,
+    DxoDataGridColumnLookupModule,
+    DxiDataGridCompareRuleModule,
+    DxoDataGridCursorOffsetModule,
+    DxiDataGridCustomOperationModule,
+    DxiDataGridCustomRuleModule,
+    DxoDataGridDataGridHeaderFilterModule,
+    DxoDataGridDataGridHeaderFilterSearchModule,
+    DxoDataGridDataGridHeaderFilterTextsModule,
+    DxoDataGridDataGridSelectionModule,
+    DxoDataGridEditingModule,
+    DxoDataGridEditingTextsModule,
+    DxiDataGridEmailRuleModule,
+    DxoDataGridExportModule,
+    DxoDataGridExportTextsModule,
+    DxiDataGridFieldModule,
+    DxoDataGridFieldLookupModule,
+    DxoDataGridFilterBuilderModule,
+    DxoDataGridFilterBuilderPopupModule,
+    DxoDataGridFilterOperationDescriptionsModule,
+    DxoDataGridFilterPanelModule,
+    DxoDataGridFilterPanelTextsModule,
+    DxoDataGridFilterRowModule,
+    DxoDataGridFormModule,
     DxoDataGridFormatModule,
     DxoDataGridFormItemModule,
-    DxoDataGridLabelModule,
-    DxiDataGridValidationRuleModule,
-    DxoDataGridEditingModule,
-    DxiDataGridChangeModule,
-    DxoDataGridFormModule,
-    DxoDataGridColCountByScreenModule,
-    DxiDataGridItemModule,
-    DxoDataGridTabPanelOptionsModule,
-    DxiDataGridTabModule,
-    DxoDataGridButtonOptionsModule,
-    DxoDataGridPopupModule,
-    DxoDataGridAnimationModule,
-    DxoDataGridHideModule,
     DxoDataGridFromModule,
-    DxoDataGridToModule,
-    DxoDataGridShowModule,
-    DxiDataGridToolbarItemModule,
-    DxoDataGridExportModule,
-    DxoDataGridFilterBuilderModule,
-    DxiDataGridCustomOperationModule,
-    DxiDataGridFieldModule,
-    DxoDataGridFilterOperationDescriptionsModule,
-    DxoDataGridGroupOperationDescriptionsModule,
-    DxoDataGridFilterBuilderPopupModule,
-    DxoDataGridFilterPanelModule,
-    DxoDataGridFilterRowModule,
-    DxoDataGridOperationDescriptionsModule,
     DxoDataGridGroupingModule,
+    DxoDataGridGroupingTextsModule,
+    DxiDataGridGroupItemModule,
+    DxoDataGridGroupOperationDescriptionsModule,
     DxoDataGridGroupPanelModule,
+    DxoDataGridHeaderFilterModule,
+    DxoDataGridHideModule,
+    DxoDataGridIconsModule,
+    DxiDataGridItemModule,
     DxoDataGridKeyboardNavigationModule,
+    DxoDataGridLabelModule,
     DxoDataGridLoadPanelModule,
+    DxoDataGridLookupModule,
     DxoDataGridMasterDetailModule,
+    DxoDataGridMyModule,
+    DxiDataGridNumericRuleModule,
+    DxoDataGridOffsetModule,
+    DxoDataGridOperationDescriptionsModule,
     DxoDataGridPagerModule,
     DxoDataGridPagingModule,
+    DxiDataGridPatternRuleModule,
+    DxoDataGridPopupModule,
+    DxoDataGridPositionModule,
+    DxiDataGridRangeRuleModule,
     DxoDataGridRemoteOperationsModule,
+    DxiDataGridRequiredRuleModule,
     DxoDataGridRowDraggingModule,
-    DxoDataGridCursorOffsetModule,
     DxoDataGridScrollingModule,
+    DxoDataGridSearchModule,
     DxoDataGridSearchPanelModule,
+    DxoDataGridSelectionModule,
+    DxoDataGridShowModule,
     DxiDataGridSortByGroupSummaryInfoModule,
     DxoDataGridSortingModule,
     DxoDataGridStateStoringModule,
+    DxiDataGridStringLengthRuleModule,
     DxoDataGridSummaryModule,
-    DxiDataGridGroupItemModule,
-    DxoDataGridValueFormatModule,
-    DxiDataGridTotalItemModule,
+    DxoDataGridSummaryTextsModule,
+    DxoDataGridTextsModule,
+    DxoDataGridToModule,
     DxoDataGridToolbarModule,
+    DxiDataGridToolbarItemModule,
+    DxiDataGridTotalItemModule,
+    DxiDataGridValidationRuleModule,
+    DxoDataGridValueFormatModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -2458,71 +2506,93 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoValueFormatModule,
     DxiTotalItemModule,
     DxoToolbarModule,
-    DxoDataGridColumnChooserModule,
-    DxoDataGridPositionModule,
+    DxoDataGridAnimationModule,
+    DxiDataGridAsyncRuleModule,
     DxoDataGridAtModule,
     DxoDataGridBoundaryOffsetModule,
-    DxoDataGridCollisionModule,
-    DxoDataGridMyModule,
-    DxoDataGridOffsetModule,
-    DxoDataGridSearchModule,
-    DxoDataGridSelectionModule,
-    DxoDataGridColumnFixingModule,
-    DxoDataGridIconsModule,
-    DxoDataGridTextsModule,
-    DxiDataGridColumnModule,
     DxiDataGridButtonModule,
-    DxoDataGridHeaderFilterModule,
-    DxoDataGridLookupModule,
+    DxiDataGridChangeModule,
+    DxoDataGridColCountByScreenModule,
+    DxoDataGridCollisionModule,
+    DxiDataGridColumnModule,
+    DxoDataGridColumnChooserModule,
+    DxoDataGridColumnChooserSearchModule,
+    DxoDataGridColumnChooserSelectionModule,
+    DxoDataGridColumnFixingModule,
+    DxoDataGridColumnFixingTextsModule,
+    DxoDataGridColumnHeaderFilterModule,
+    DxoDataGridColumnHeaderFilterSearchModule,
+    DxoDataGridColumnLookupModule,
+    DxiDataGridCompareRuleModule,
+    DxoDataGridCursorOffsetModule,
+    DxiDataGridCustomOperationModule,
+    DxiDataGridCustomRuleModule,
+    DxoDataGridDataGridHeaderFilterModule,
+    DxoDataGridDataGridHeaderFilterSearchModule,
+    DxoDataGridDataGridHeaderFilterTextsModule,
+    DxoDataGridDataGridSelectionModule,
+    DxoDataGridEditingModule,
+    DxoDataGridEditingTextsModule,
+    DxiDataGridEmailRuleModule,
+    DxoDataGridExportModule,
+    DxoDataGridExportTextsModule,
+    DxiDataGridFieldModule,
+    DxoDataGridFieldLookupModule,
+    DxoDataGridFilterBuilderModule,
+    DxoDataGridFilterBuilderPopupModule,
+    DxoDataGridFilterOperationDescriptionsModule,
+    DxoDataGridFilterPanelModule,
+    DxoDataGridFilterPanelTextsModule,
+    DxoDataGridFilterRowModule,
+    DxoDataGridFormModule,
     DxoDataGridFormatModule,
     DxoDataGridFormItemModule,
-    DxoDataGridLabelModule,
-    DxiDataGridValidationRuleModule,
-    DxoDataGridEditingModule,
-    DxiDataGridChangeModule,
-    DxoDataGridFormModule,
-    DxoDataGridColCountByScreenModule,
-    DxiDataGridItemModule,
-    DxoDataGridTabPanelOptionsModule,
-    DxiDataGridTabModule,
-    DxoDataGridButtonOptionsModule,
-    DxoDataGridPopupModule,
-    DxoDataGridAnimationModule,
-    DxoDataGridHideModule,
     DxoDataGridFromModule,
-    DxoDataGridToModule,
-    DxoDataGridShowModule,
-    DxiDataGridToolbarItemModule,
-    DxoDataGridExportModule,
-    DxoDataGridFilterBuilderModule,
-    DxiDataGridCustomOperationModule,
-    DxiDataGridFieldModule,
-    DxoDataGridFilterOperationDescriptionsModule,
-    DxoDataGridGroupOperationDescriptionsModule,
-    DxoDataGridFilterBuilderPopupModule,
-    DxoDataGridFilterPanelModule,
-    DxoDataGridFilterRowModule,
-    DxoDataGridOperationDescriptionsModule,
     DxoDataGridGroupingModule,
+    DxoDataGridGroupingTextsModule,
+    DxiDataGridGroupItemModule,
+    DxoDataGridGroupOperationDescriptionsModule,
     DxoDataGridGroupPanelModule,
+    DxoDataGridHeaderFilterModule,
+    DxoDataGridHideModule,
+    DxoDataGridIconsModule,
+    DxiDataGridItemModule,
     DxoDataGridKeyboardNavigationModule,
+    DxoDataGridLabelModule,
     DxoDataGridLoadPanelModule,
+    DxoDataGridLookupModule,
     DxoDataGridMasterDetailModule,
+    DxoDataGridMyModule,
+    DxiDataGridNumericRuleModule,
+    DxoDataGridOffsetModule,
+    DxoDataGridOperationDescriptionsModule,
     DxoDataGridPagerModule,
     DxoDataGridPagingModule,
+    DxiDataGridPatternRuleModule,
+    DxoDataGridPopupModule,
+    DxoDataGridPositionModule,
+    DxiDataGridRangeRuleModule,
     DxoDataGridRemoteOperationsModule,
+    DxiDataGridRequiredRuleModule,
     DxoDataGridRowDraggingModule,
-    DxoDataGridCursorOffsetModule,
     DxoDataGridScrollingModule,
+    DxoDataGridSearchModule,
     DxoDataGridSearchPanelModule,
+    DxoDataGridSelectionModule,
+    DxoDataGridShowModule,
     DxiDataGridSortByGroupSummaryInfoModule,
     DxoDataGridSortingModule,
     DxoDataGridStateStoringModule,
+    DxiDataGridStringLengthRuleModule,
     DxoDataGridSummaryModule,
-    DxiDataGridGroupItemModule,
-    DxoDataGridValueFormatModule,
-    DxiDataGridTotalItemModule,
+    DxoDataGridSummaryTextsModule,
+    DxoDataGridTextsModule,
+    DxoDataGridToModule,
     DxoDataGridToolbarModule,
+    DxiDataGridToolbarItemModule,
+    DxiDataGridTotalItemModule,
+    DxiDataGridValidationRuleModule,
+    DxoDataGridValueFormatModule,
     DxTemplateModule
   ]
 })

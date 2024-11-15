@@ -16,9 +16,9 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
-import { HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
+import { dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -71,10 +71,10 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get items(): Array<HtmlEditorPredefinedContextMenuItem | any> {
+    get items(): Array<dxHtmlEditorTableContextMenuItem | HtmlEditorPredefinedContextMenuItem> {
         return this._getOption('items');
     }
-    set items(value: Array<HtmlEditorPredefinedContextMenuItem | any>) {
+    set items(value: Array<dxHtmlEditorTableContextMenuItem | HtmlEditorPredefinedContextMenuItem>) {
         this._setOption('items', value);
     }
 
@@ -127,10 +127,10 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get acceptedValues(): Array<string | number | boolean> {
+    get acceptedValues(): Array<boolean | number | string> {
         return this._getOption('acceptedValues');
     }
-    set acceptedValues(value: Array<string | number | boolean>) {
+    set acceptedValues(value: Array<boolean | number | string>) {
         this._setOption('acceptedValues', value);
     }
 
@@ -151,10 +151,10 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get formatValues(): Array<string | number | boolean> {
+    get formatValues(): Array<boolean | number | string> {
         return this._getOption('formatValues');
     }
-    set formatValues(value: Array<string | number | boolean>) {
+    set formatValues(value: Array<boolean | number | string>) {
         this._setOption('formatValues', value);
     }
 

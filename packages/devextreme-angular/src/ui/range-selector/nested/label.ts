@@ -15,8 +15,8 @@ import {
 
 
 import { HorizontalAlignment } from 'devextreme/common';
-import { DashStyle, Font, LabelOverlap, RelativePosition } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
+import { DashStyle, Font, RelativePosition, LabelOverlap } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -40,10 +40,10 @@ export class DxoRangeSelectorLabelComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get argumentFormat(): Format | string | undefined {
+    get argumentFormat(): Format | undefined {
         return this._getOption('argumentFormat');
     }
-    set argumentFormat(value: Format | string | undefined) {
+    set argumentFormat(value: Format | undefined) {
         this._setOption('argumentFormat', value);
     }
 
@@ -72,10 +72,10 @@ export class DxoRangeSelectorLabelComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((pointInfo: any) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((pointInfo: any) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -96,10 +96,10 @@ export class DxoRangeSelectorLabelComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): Format | undefined {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: Format | undefined) {
         this._setOption('format', value);
     }
 

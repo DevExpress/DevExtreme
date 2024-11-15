@@ -25,7 +25,8 @@ import {
 } from '@angular/core';
 
 
-import { AsyncRule, CompareRule, CustomRule, EmailRule, NumericRule, PatternRule, RangeRule, RequiredRule, StringLengthRule } from 'devextreme/common';
+import * as CommonTypes from 'devextreme/common';
+import { EventInfo } from 'devextreme/events/index';
 
 import DxValidator from 'devextreme/ui/validator';
 
@@ -44,10 +45,28 @@ import { DxoAdapterModule } from 'devextreme-angular/ui/nested';
 import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
 
 import { DxoValidatorAdapterModule } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorAsyncRuleModule } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorCompareRuleModule } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorCustomRuleModule } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorEmailRuleModule } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorNumericRuleModule } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorPatternRuleModule } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorRangeRuleModule } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorRequiredRuleModule } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorStringLengthRuleModule } from 'devextreme-angular/ui/validator/nested';
 import { DxiValidatorValidationRuleModule } from 'devextreme-angular/ui/validator/nested';
 
 import { DxiValidationRuleComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiValidatorAsyncRuleComponent } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorCompareRuleComponent } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorCustomRuleComponent } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorEmailRuleComponent } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorNumericRuleComponent } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorPatternRuleComponent } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorRangeRuleComponent } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorRequiredRuleComponent } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorStringLengthRuleComponent } from 'devextreme-angular/ui/validator/nested';
 import { DxiValidatorValidationRuleComponent } from 'devextreme-angular/ui/validator/nested';
 
 
@@ -86,10 +105,10 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -99,10 +118,10 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -138,10 +157,10 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     
      */
     @Input()
-    get validationRules(): Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule> {
+    get validationRules(): Array<CommonTypes.ValidationRule> {
         return this._getOption('validationRules');
     }
-    set validationRules(value: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>) {
+    set validationRules(value: Array<CommonTypes.ValidationRule>) {
         this._setOption('validationRules', value);
     }
 
@@ -151,10 +170,10 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -164,7 +183,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     
     
      */
-    @Output() onDisposing: EventEmitter<any>;
+    @Output() onDisposing: EventEmitter<EventInfo<any>>;
 
     /**
     
@@ -172,7 +191,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     
     
      */
-    @Output() onInitialized: EventEmitter<any>;
+    @Output() onInitialized: EventEmitter<Object>;
 
     /**
     
@@ -180,7 +199,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     
     
      */
-    @Output() onOptionChanged: EventEmitter<any>;
+    @Output() onOptionChanged: EventEmitter<Object>;
 
     /**
     
@@ -188,7 +207,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     
     
      */
-    @Output() onValidated: EventEmitter<any>;
+    @Output() onValidated: EventEmitter<Object>;
 
     /**
     
@@ -202,14 +221,14 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -230,17 +249,98 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationRulesChange: EventEmitter<Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>>;
+    @Output() validationRulesChange: EventEmitter<Array<CommonTypes.ValidationRule>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
 
 
+
+    @ContentChildren(DxiValidatorAsyncRuleComponent)
+    get asyncRulesChildren(): QueryList<DxiValidatorAsyncRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set asyncRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorAsyncRuleComponent');
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(DxiValidatorCompareRuleComponent)
+    get compareRulesChildren(): QueryList<DxiValidatorCompareRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set compareRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorCompareRuleComponent');
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(DxiValidatorCustomRuleComponent)
+    get customRulesChildren(): QueryList<DxiValidatorCustomRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set customRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorCustomRuleComponent');
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(DxiValidatorEmailRuleComponent)
+    get emailRulesChildren(): QueryList<DxiValidatorEmailRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set emailRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorEmailRuleComponent');
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(DxiValidatorNumericRuleComponent)
+    get numericRulesChildren(): QueryList<DxiValidatorNumericRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set numericRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorNumericRuleComponent');
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(DxiValidatorPatternRuleComponent)
+    get patternRulesChildren(): QueryList<DxiValidatorPatternRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set patternRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorPatternRuleComponent');
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(DxiValidatorRangeRuleComponent)
+    get rangeRulesChildren(): QueryList<DxiValidatorRangeRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set rangeRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorRangeRuleComponent');
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(DxiValidatorRequiredRuleComponent)
+    get requiredRulesChildren(): QueryList<DxiValidatorRequiredRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set requiredRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorRequiredRuleComponent');
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(DxiValidatorStringLengthRuleComponent)
+    get stringLengthRulesChildren(): QueryList<DxiValidatorStringLengthRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set stringLengthRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorStringLengthRuleComponent');
+        this.setChildren('validationRules', value);
+    }
 
     @ContentChildren(DxiValidatorValidationRuleComponent)
     get validationRulesChildren(): QueryList<DxiValidatorValidationRuleComponent> {
@@ -351,6 +451,15 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     DxoAdapterModule,
     DxiValidationRuleModule,
     DxoValidatorAdapterModule,
+    DxiValidatorAsyncRuleModule,
+    DxiValidatorCompareRuleModule,
+    DxiValidatorCustomRuleModule,
+    DxiValidatorEmailRuleModule,
+    DxiValidatorNumericRuleModule,
+    DxiValidatorPatternRuleModule,
+    DxiValidatorRangeRuleModule,
+    DxiValidatorRequiredRuleModule,
+    DxiValidatorStringLengthRuleModule,
     DxiValidatorValidationRuleModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -363,6 +472,15 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     DxoAdapterModule,
     DxiValidationRuleModule,
     DxoValidatorAdapterModule,
+    DxiValidatorAsyncRuleModule,
+    DxiValidatorCompareRuleModule,
+    DxiValidatorCustomRuleModule,
+    DxiValidatorEmailRuleModule,
+    DxiValidatorNumericRuleModule,
+    DxiValidatorPatternRuleModule,
+    DxiValidatorRangeRuleModule,
+    DxiValidatorRequiredRuleModule,
+    DxiValidatorStringLengthRuleModule,
     DxiValidatorValidationRuleModule,
     DxTemplateModule
   ]

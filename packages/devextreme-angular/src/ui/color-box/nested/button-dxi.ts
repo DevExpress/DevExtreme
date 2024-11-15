@@ -13,7 +13,7 @@ import {
 
 
 import { TextEditorButtonLocation } from 'devextreme/common';
-import { Properties as dxButtonOptions } from 'devextreme/ui/button';
+import { dxButtonOptions } from 'devextreme/ui/button';
 
 import {
     NestedOptionHost,

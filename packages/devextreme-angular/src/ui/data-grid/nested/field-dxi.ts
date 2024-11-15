@@ -13,10 +13,10 @@ import {
 
 
 import { DataType } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Format } from 'devextreme/localization';
 import { FilterBuilderOperation } from 'devextreme/ui/filter_builder';
+import { Format } from 'devextreme/localization';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,
@@ -32,10 +32,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiDataGridFieldComponent extends CollectionNestedOption {
     @Input()
-    get calculateFilterExpression(): Function {
+    get calculateFilterExpression(): ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>) {
         return this._getOption('calculateFilterExpression');
     }
-    set calculateFilterExpression(value: Function) {
+    set calculateFilterExpression(value: ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>)) {
         this._setOption('calculateFilterExpression', value);
     }
 
@@ -48,10 +48,10 @@ export class DxiDataGridFieldComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((fieldInfo: { value: string | number | Date, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((fieldInfo: { value: string | number | Date, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -104,18 +104,18 @@ export class DxiDataGridFieldComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get format(): Format | string {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: Format | string) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 
     @Input()
-    get lookup(): { allowClearing?: boolean, dataSource?: Store | DataSourceOptions | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: Function | string | undefined } {
+    get lookup(): { allowClearing?: boolean, dataSource?: Array<any> | DataSourceOptions | Store | undefined, displayExpr?: ((data: any) => string) | string | undefined, valueExpr?: ((data: any) => string | number | boolean) | string | undefined } {
         return this._getOption('lookup');
     }
-    set lookup(value: { allowClearing?: boolean, dataSource?: Store | DataSourceOptions | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: Function | string | undefined }) {
+    set lookup(value: { allowClearing?: boolean, dataSource?: Array<any> | DataSourceOptions | Store | undefined, displayExpr?: ((data: any) => string) | string | undefined, valueExpr?: ((data: any) => string | number | boolean) | string | undefined }) {
         this._setOption('lookup', value);
     }
 

@@ -24,12 +24,13 @@ import {
 } from '@angular/core';
 
 
-import { EditorStyle, LabelMode, Mode, Position, TextEditorButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ChangeEvent, ClosedEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/drop_down_box';
+import DataSource from 'devextreme/data/data_source';
 import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
-import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
+import { TextEditorButton, LabelMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { dxPopupOptions } from 'devextreme/ui/popup';
+import { ChangeEvent, ClosedEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/drop_down_box';
 
 import DxDropDownBox from 'devextreme/ui/drop_down_box';
 
@@ -64,28 +65,26 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiDropDownBoxButtonModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoDropDownBoxOptionsModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoDropDownBoxDropDownOptionsModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxAnimationModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoDropDownBoxHideModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoDropDownBoxFromModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoDropDownBoxPositionModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxAtModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxBoundaryOffsetModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxiDropDownBoxButtonModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxCollisionModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoDropDownBoxDropDownOptionsModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoDropDownBoxFromModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoDropDownBoxHideModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxMyModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxOffsetModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoDropDownBoxToModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoDropDownBoxOptionsModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoDropDownBoxPositionModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxShowModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoDropDownBoxToModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxiDropDownBoxToolbarItemModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxiDropDownBoxItemModule } from 'devextreme-angular/ui/drop-down-box/nested';
 
 import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiDropDownBoxButtonComponent } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxiDropDownBoxItemComponent } from 'devextreme-angular/ui/drop-down-box/nested';
 
 
 
@@ -182,10 +181,10 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -221,10 +220,10 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get displayExpr(): Function | string | undefined {
+    get displayExpr(): ((item: any) => string) | string | undefined {
         return this._getOption('displayExpr');
     }
-    set displayExpr(value: Function | string | undefined) {
+    set displayExpr(value: ((item: any) => string) | string | undefined) {
         this._setOption('displayExpr', value);
     }
 
@@ -234,10 +233,10 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get displayValueFormatter(): Function {
+    get displayValueFormatter(): ((value: string | Array<any>) => string) {
         return this._getOption('displayValueFormatter');
     }
-    set displayValueFormatter(value: Function) {
+    set displayValueFormatter(value: ((value: string | Array<any>) => string)) {
         this._setOption('displayValueFormatter', value);
     }
 
@@ -260,10 +259,10 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get dropDownOptions(): dxPopupOptions {
+    get dropDownOptions(): dxPopupOptions<any> {
         return this._getOption('dropDownOptions');
     }
-    set dropDownOptions(value: dxPopupOptions) {
+    set dropDownOptions(value: dxPopupOptions<any>) {
         this._setOption('dropDownOptions', value);
     }
 
@@ -273,10 +272,10 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -312,10 +311,10 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -390,10 +389,10 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get items(): Array<any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<any> {
         return this._getOption('items');
     }
-    set items(value: Array<any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<any>) {
         this._setOption('items', value);
     }
 
@@ -624,10 +623,10 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get validationMessagePosition(): Position | Mode {
+    get validationMessagePosition(): Mode | Position {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: Position | Mode) {
+    set validationMessagePosition(value: Mode | Position) {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -676,10 +675,10 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get valueExpr(): Function | string {
+    get valueExpr(): ((item: any) => string | number | boolean) | string {
         return this._getOption('valueExpr');
     }
-    set valueExpr(value: Function | string) {
+    set valueExpr(value: ((item: any) => string | number | boolean) | string) {
         this._setOption('valueExpr', value);
     }
 
@@ -702,10 +701,10 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -877,7 +876,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -898,14 +897,14 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() displayExprChange: EventEmitter<Function | string | undefined>;
+    @Output() displayExprChange: EventEmitter<((item: any) => string) | string | undefined>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() displayValueFormatterChange: EventEmitter<Function>;
+    @Output() displayValueFormatterChange: EventEmitter<((value: string | Array<any>) => string)>;
 
     /**
     
@@ -919,14 +918,14 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownOptionsChange: EventEmitter<dxPopupOptions>;
+    @Output() dropDownOptionsChange: EventEmitter<dxPopupOptions<any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -947,7 +946,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -989,7 +988,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<any>>;
 
     /**
     
@@ -1115,7 +1114,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<Position | Mode>;
+    @Output() validationMessagePositionChange: EventEmitter<Mode | Position>;
 
     /**
     
@@ -1143,7 +1142,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueExprChange: EventEmitter<Function | string>;
+    @Output() valueExprChange: EventEmitter<((item: any) => string | number | boolean) | string>;
 
     /**
     
@@ -1157,7 +1156,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -1179,15 +1178,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set buttonsChildren(value) {
         this.setContentChildren('buttons', value, 'DxiDropDownBoxButtonComponent');
         this.setChildren('buttons', value);
-    }
-
-    @ContentChildren(DxiDropDownBoxItemComponent)
-    get itemsChildren(): QueryList<DxiDropDownBoxItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiDropDownBoxItemComponent');
-        this.setChildren('items', value);
     }
 
 
@@ -1374,22 +1364,21 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxoToModule,
     DxoShowModule,
     DxiItemModule,
-    DxiDropDownBoxButtonModule,
-    DxoDropDownBoxOptionsModule,
-    DxoDropDownBoxDropDownOptionsModule,
     DxoDropDownBoxAnimationModule,
-    DxoDropDownBoxHideModule,
-    DxoDropDownBoxFromModule,
-    DxoDropDownBoxPositionModule,
     DxoDropDownBoxAtModule,
     DxoDropDownBoxBoundaryOffsetModule,
+    DxiDropDownBoxButtonModule,
     DxoDropDownBoxCollisionModule,
+    DxoDropDownBoxDropDownOptionsModule,
+    DxoDropDownBoxFromModule,
+    DxoDropDownBoxHideModule,
     DxoDropDownBoxMyModule,
     DxoDropDownBoxOffsetModule,
-    DxoDropDownBoxToModule,
+    DxoDropDownBoxOptionsModule,
+    DxoDropDownBoxPositionModule,
     DxoDropDownBoxShowModule,
+    DxoDropDownBoxToModule,
     DxiDropDownBoxToolbarItemModule,
-    DxiDropDownBoxItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1413,22 +1402,21 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxoToModule,
     DxoShowModule,
     DxiItemModule,
-    DxiDropDownBoxButtonModule,
-    DxoDropDownBoxOptionsModule,
-    DxoDropDownBoxDropDownOptionsModule,
     DxoDropDownBoxAnimationModule,
-    DxoDropDownBoxHideModule,
-    DxoDropDownBoxFromModule,
-    DxoDropDownBoxPositionModule,
     DxoDropDownBoxAtModule,
     DxoDropDownBoxBoundaryOffsetModule,
+    DxiDropDownBoxButtonModule,
     DxoDropDownBoxCollisionModule,
+    DxoDropDownBoxDropDownOptionsModule,
+    DxoDropDownBoxFromModule,
+    DxoDropDownBoxHideModule,
     DxoDropDownBoxMyModule,
     DxoDropDownBoxOffsetModule,
-    DxoDropDownBoxToModule,
+    DxoDropDownBoxOptionsModule,
+    DxoDropDownBoxPositionModule,
     DxoDropDownBoxShowModule,
+    DxoDropDownBoxToModule,
     DxiDropDownBoxToolbarItemModule,
-    DxiDropDownBoxItemModule,
     DxTemplateModule
   ]
 })

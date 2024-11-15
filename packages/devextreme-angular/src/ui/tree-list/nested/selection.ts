@@ -38,6 +38,14 @@ export class DxoTreeListSelectionComponent extends NestedOption implements OnDes
     }
 
     @Input()
+    get mode(): SingleMultipleOrNone {
+        return this._getOption('mode');
+    }
+    set mode(value: SingleMultipleOrNone) {
+        this._setOption('mode', value);
+    }
+
+    @Input()
     get recursive(): boolean {
         return this._getOption('recursive');
     }
@@ -51,14 +59,6 @@ export class DxoTreeListSelectionComponent extends NestedOption implements OnDes
     }
     set selectByClick(value: boolean) {
         this._setOption('selectByClick', value);
-    }
-
-    @Input()
-    get mode(): SingleMultipleOrNone {
-        return this._getOption('mode');
-    }
-    set mode(value: SingleMultipleOrNone) {
-        this._setOption('mode', value);
     }
 
 

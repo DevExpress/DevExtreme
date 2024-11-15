@@ -12,8 +12,8 @@ import {
 
 
 
-import { FirstDayOfWeek, Orientation } from 'devextreme/common';
 import { AllDayPanelMode, CellAppointmentsLimit, dxSchedulerScrolling, ViewType } from 'devextreme/ui/scheduler';
+import { FirstDayOfWeek, Orientation } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -213,10 +213,10 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get type(): ViewType | undefined {
+    get type(): undefined | ViewType {
         return this._getOption('type');
     }
-    set type(value: ViewType | undefined) {
+    set type(value: undefined | ViewType) {
         this._setOption('type', value);
     }
 

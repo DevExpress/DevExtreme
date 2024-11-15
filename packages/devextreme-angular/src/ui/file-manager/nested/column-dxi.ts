@@ -12,7 +12,7 @@ import {
 
 
 
-import { DataType, HorizontalAlignment, SortOrder } from 'devextreme/common';
+import { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -28,10 +28,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiFileManagerColumnComponent extends CollectionNestedOption {
     @Input()
-    get alignment(): HorizontalAlignment | string | undefined {
+    get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');
     }
-    set alignment(value: HorizontalAlignment | string | undefined) {
+    set alignment(value: HorizontalAlignment | undefined) {
         this._setOption('alignment', value);
     }
 
@@ -84,10 +84,10 @@ export class DxiFileManagerColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get sortOrder(): SortOrder | string | undefined {
+    get sortOrder(): SortOrder | undefined {
         return this._getOption('sortOrder');
     }
-    set sortOrder(value: SortOrder | string | undefined) {
+    set sortOrder(value: SortOrder | undefined) {
         this._setOption('sortOrder', value);
     }
 

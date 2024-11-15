@@ -14,6 +14,7 @@ import {
 
 
 
+import { dxSankeyNode } from 'devextreme/viz/sankey';
 import { Font, TextOverflow } from 'devextreme/common/charts';
 
 import {
@@ -38,10 +39,10 @@ export class DxoSankeyLabelComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((itemInfo: dxSankeyNode) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((itemInfo: dxSankeyNode) => string)) {
         this._setOption('customizeText', value);
     }
 

@@ -14,8 +14,8 @@ import {
 
 
 
+import { ChartsColor, Palette, Font } from 'devextreme/common/charts';
 import { HorizontalEdge, VerticalEdge } from 'devextreme/common';
-import { ChartsColor, Font, Palette } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
 
 import {
@@ -104,10 +104,10 @@ export class DxoCircularGaugeSubvalueIndicatorComponent extends NestedOption imp
     }
 
     @Input()
-    get palette(): Palette | string | Array<string> {
+    get palette(): Array<string> | Palette {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
 
@@ -152,18 +152,18 @@ export class DxoCircularGaugeSubvalueIndicatorComponent extends NestedOption imp
     }
 
     @Input()
-    get text(): { customizeText?: Function | undefined, font?: Font, format?: Format | string | undefined, indent?: number } {
+    get text(): { customizeText?: ((indicatedValue: { value: number, valueText: string }) => string) | undefined, font?: Font, format?: Format | undefined, indent?: number } {
         return this._getOption('text');
     }
-    set text(value: { customizeText?: Function | undefined, font?: Font, format?: Format | string | undefined, indent?: number }) {
+    set text(value: { customizeText?: ((indicatedValue: { value: number, valueText: string }) => string) | undefined, font?: Font, format?: Format | undefined, indent?: number }) {
         this._setOption('text', value);
     }
 
     @Input()
-    get type(): string {
+    get type(): "circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle" {
         return this._getOption('type');
     }
-    set type(value: string) {
+    set type(value: "circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle") {
         this._setOption('type', value);
     }
 

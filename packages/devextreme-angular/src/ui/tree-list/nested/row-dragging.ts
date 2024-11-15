@@ -14,8 +14,11 @@ import {
 
 
 
+import dxSortable from 'devextreme/ui/sortable';
+import dxDraggable from 'devextreme/ui/draggable';
 import { DragDirection, DragHighlight } from 'devextreme/common';
-import { UserDefinedElement } from 'devextreme/core/element';
+import { GridBase } from 'devextreme/common/grids';
+import { event } from 'devextreme/events/index';
 
 import {
     NestedOptionHost,
@@ -55,18 +58,18 @@ export class DxoTreeListRowDraggingComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get boundary(): UserDefinedElement | string | undefined {
+    get boundary(): any | string | undefined {
         return this._getOption('boundary');
     }
-    set boundary(value: UserDefinedElement | string | undefined) {
+    set boundary(value: any | string | undefined) {
         this._setOption('boundary', value);
     }
 
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string | undefined {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string | undefined) {
         this._setOption('container', value);
     }
 
@@ -95,10 +98,10 @@ export class DxoTreeListRowDraggingComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get dragTemplate(): any | undefined {
+    get dragTemplate(): any {
         return this._getOption('dragTemplate');
     }
-    set dragTemplate(value: any | undefined) {
+    set dragTemplate(value: any) {
         this._setOption('dragTemplate', value);
     }
 
@@ -135,58 +138,58 @@ export class DxoTreeListRowDraggingComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get onAdd(): Function {
+    get onAdd(): ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void) {
         return this._getOption('onAdd');
     }
-    set onAdd(value: Function) {
+    set onAdd(value: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)) {
         this._setOption('onAdd', value);
     }
 
     @Input()
-    get onDragChange(): Function {
+    get onDragChange(): ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void) {
         return this._getOption('onDragChange');
     }
-    set onDragChange(value: Function) {
+    set onDragChange(value: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)) {
         this._setOption('onDragChange', value);
     }
 
     @Input()
-    get onDragEnd(): Function {
+    get onDragEnd(): ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void) {
         return this._getOption('onDragEnd');
     }
-    set onDragEnd(value: Function) {
+    set onDragEnd(value: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)) {
         this._setOption('onDragEnd', value);
     }
 
     @Input()
-    get onDragMove(): Function {
+    get onDragMove(): ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void) {
         return this._getOption('onDragMove');
     }
-    set onDragMove(value: Function) {
+    set onDragMove(value: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)) {
         this._setOption('onDragMove', value);
     }
 
     @Input()
-    get onDragStart(): Function {
+    get onDragStart(): ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void) {
         return this._getOption('onDragStart');
     }
-    set onDragStart(value: Function) {
+    set onDragStart(value: ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void)) {
         this._setOption('onDragStart', value);
     }
 
     @Input()
-    get onRemove(): Function {
+    get onRemove(): ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void) {
         return this._getOption('onRemove');
     }
-    set onRemove(value: Function) {
+    set onRemove(value: ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)) {
         this._setOption('onRemove', value);
     }
 
     @Input()
-    get onReorder(): Function {
+    get onReorder(): ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void) {
         return this._getOption('onReorder');
     }
-    set onReorder(value: Function) {
+    set onReorder(value: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)) {
         this._setOption('onReorder', value);
     }
 

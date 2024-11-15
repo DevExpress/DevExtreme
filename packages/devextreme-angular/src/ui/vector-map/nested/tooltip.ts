@@ -15,7 +15,7 @@ import {
 
 
 import { DashStyle, Font } from 'devextreme/common/charts';
-import { UserDefinedElement } from 'devextreme/core/element';
+import { MapLayerElement } from 'devextreme/viz/vector_map';
 
 import {
     NestedOptionHost,
@@ -55,18 +55,18 @@ export class DxoVectorMapTooltipComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string | undefined {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string | undefined) {
         this._setOption('container', value);
     }
 
     @Input()
-    get contentTemplate(): any | undefined {
+    get contentTemplate(): any {
         return this._getOption('contentTemplate');
     }
-    set contentTemplate(value: any | undefined) {
+    set contentTemplate(value: any) {
         this._setOption('contentTemplate', value);
     }
 
@@ -79,10 +79,10 @@ export class DxoVectorMapTooltipComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get customizeTooltip(): Function | undefined {
+    get customizeTooltip(): ((info: MapLayerElement) => Record<string, any>) | undefined {
         return this._getOption('customizeTooltip');
     }
-    set customizeTooltip(value: Function | undefined) {
+    set customizeTooltip(value: ((info: MapLayerElement) => Record<string, any>) | undefined) {
         this._setOption('customizeTooltip', value);
     }
 

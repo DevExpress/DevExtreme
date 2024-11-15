@@ -17,8 +17,7 @@ import {
 } from '@angular/core';
 
 
-import { UserDefinedElement } from 'devextreme/core/element';
-import { DisposingEvent, InitializedEvent, OptionChangedEvent, ResizeEndEvent, ResizeEvent, ResizeHandle, ResizeStartEvent } from 'devextreme/ui/resizable';
+import { ResizeHandle, DisposingEvent, InitializedEvent, OptionChangedEvent, ResizeEvent, ResizeEndEvent, ResizeStartEvent } from 'devextreme/ui/resizable';
 
 import DxResizable from 'devextreme/ui/resizable';
 
@@ -58,10 +57,10 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get area(): UserDefinedElement | string | undefined {
+    get area(): any | string | undefined {
         return this._getOption('area');
     }
-    set area(value: UserDefinedElement | string | undefined) {
+    set area(value: any | string | undefined) {
         this._setOption('area', value);
     }
 
@@ -71,10 +70,10 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -97,10 +96,10 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get height(): number | Function | string {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -188,10 +187,10 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get width(): number | Function | string {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -248,14 +247,14 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() areaChange: EventEmitter<UserDefinedElement | string | undefined>;
+    @Output() areaChange: EventEmitter<any | string | undefined>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -269,7 +268,7 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -318,7 +317,7 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
 

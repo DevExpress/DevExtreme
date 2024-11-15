@@ -14,8 +14,8 @@ import {
 
 
 
-import { DashStyle, Font, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
+import { DashStyle, Font, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -31,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get argumentFormat(): Format | string | undefined {
+    get argumentFormat(): Format | undefined {
         return this._getOption('argumentFormat');
     }
-    set argumentFormat(value: Format | string | undefined) {
+    set argumentFormat(value: Format | undefined) {
         this._setOption('argumentFormat', value);
     }
 
@@ -63,10 +63,10 @@ export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((pointInfo: any) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((pointInfo: any) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -87,10 +87,10 @@ export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): Format | undefined {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: Format | undefined) {
         this._setOption('format', value);
     }
 

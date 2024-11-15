@@ -14,9 +14,8 @@ import {
 
 
 
-import { DashStyle, Font } from 'devextreme/common/charts';
-import { UserDefinedElement } from 'devextreme/core/element';
 import { Format } from 'devextreme/localization';
+import { DashStyle, Font } from 'devextreme/common/charts';
 import { ChartTooltipLocation } from 'devextreme/viz/chart';
 
 import {
@@ -33,10 +32,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get argumentFormat(): Format | string | undefined {
+    get argumentFormat(): Format | undefined {
         return this._getOption('argumentFormat');
     }
-    set argumentFormat(value: Format | string | undefined) {
+    set argumentFormat(value: Format | undefined) {
         this._setOption('argumentFormat', value);
     }
 
@@ -65,18 +64,18 @@ export class DxoChartTooltipComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string | undefined {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string | undefined) {
         this._setOption('container', value);
     }
 
     @Input()
-    get contentTemplate(): any | undefined {
+    get contentTemplate(): any {
         return this._getOption('contentTemplate');
     }
-    set contentTemplate(value: any | undefined) {
+    set contentTemplate(value: any) {
         this._setOption('contentTemplate', value);
     }
 
@@ -89,10 +88,10 @@ export class DxoChartTooltipComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get customizeTooltip(): Function | undefined {
+    get customizeTooltip(): ((pointInfo: any) => Record<string, any>) | undefined {
         return this._getOption('customizeTooltip');
     }
-    set customizeTooltip(value: Function | undefined) {
+    set customizeTooltip(value: ((pointInfo: any) => Record<string, any>) | undefined) {
         this._setOption('customizeTooltip', value);
     }
 
@@ -113,10 +112,10 @@ export class DxoChartTooltipComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): Format | undefined {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: Format | undefined) {
         this._setOption('format', value);
     }
 
