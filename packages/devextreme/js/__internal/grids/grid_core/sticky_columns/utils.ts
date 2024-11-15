@@ -12,10 +12,13 @@ export const getColumnFixedPosition = (
 ): StickyPosition => {
   const { fixedPosition }: { fixedPosition: StickyPosition } = column;
   const rtlEnabled = that.option('rtlEnabled');
+  // NOTE: in RTL for master-detail & group rows, command column has already right position
+  const isExceptionCommandColumn = column.command
+    && column.command === 'expand';
   const isDefaultCommandColumn = column.command
     && !gridCoreUtils.isCustomCommandColumn(that._columns, column);
 
-  if (isDefaultCommandColumn && rtlEnabled) {
+  if (isDefaultCommandColumn && rtlEnabled && !isExceptionCommandColumn) {
     return fixedPosition === StickyPosition.Right ? StickyPosition.Left : StickyPosition.Right;
   }
 

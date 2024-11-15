@@ -9,7 +9,7 @@ $(() => {
       enabled: true,
     },
     showRowLines: true,
-    expandedRowKeys: [1],
+    autoExpandAll: true,
     columns: [
       {
         caption: 'Employee',

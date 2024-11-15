@@ -88,6 +88,10 @@ $treelist-row-error-color: $datagrid-row-error-color;
         border-left: none;
       }
     }
+
+    .dx-treelist-content.dx-sortable {
+      overflow: visible;
+    }
   }
 
   .dx-treelist-sticky-column, .dx-treelist-sticky-column-left, .dx-treelist-sticky-column-right {

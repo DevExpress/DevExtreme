@@ -1,8 +1,8 @@
 $(() => {
   const map = $('#map').dxMap({
-    provider: 'bing',
+    provider: 'azure',
     apiKey: {
-      bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
+      azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',
     },
     zoom: 14,
     height: 440,
@@ -15,7 +15,7 @@ $(() => {
     }, {
       location: { lat: 40.753889, lng: -73.981389 },
     }, {
-      location: 'Brooklyn Bridge,New York,NY',
+      location: 'City Hall Park,New York,NY',
     },
     ],
     routes: [
@@ -28,7 +28,7 @@ $(() => {
           [40.782500, -73.966111],
           [40.755833, -73.986389],
           [40.753889, -73.981389],
-          'Brooklyn Bridge,New York,NY',
+          'City Hall Park,New York,NY',
         ],
 
       },

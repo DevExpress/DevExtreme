@@ -136,6 +136,8 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     const $cell = super._createCell(options);
     const hasStickyColumns = this.hasStickyColumns();
     const rowIndex = rowType === 'header' ? options.rowIndex : null;
+    const isSummary = rowType === 'groupFooter' || rowType === 'totalFooter' || rowType === 'group';
+    const isExpandColumn = column.command && column.command === 'expand';
 
     if (hasStickyColumns && !needToDisableStickyColumn(this._columnsController, column)) {
       this.updateBorderCellClasses($cell, column, rowIndex);
@@ -149,30 +151,32 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
           this.addWidgetPrefix.bind(this),
         );
 
-        switch (fixedPosition) {
-          case StickyPosition.Right: {
-            this._addStickyColumnBorderLeftClass(
-              $cell,
-              column,
-              rowIndex,
-              false,
-              StickyPosition.Right,
-            );
-            break;
-          }
-          case StickyPosition.Sticky: {
-            this._addStickyColumnBorderLeftClass($cell, column, rowIndex, true);
-            this._addStickyColumnBorderRightClass($cell, column, rowIndex, true);
-            break;
-          }
-          default: {
-            this._addStickyColumnBorderRightClass(
-              $cell,
-              column,
-              rowIndex,
-              false,
-              StickyPosition.Left,
-            );
+        if (!isSummary && !isExpandColumn) {
+          switch (fixedPosition) {
+            case StickyPosition.Right: {
+              this._addStickyColumnBorderLeftClass(
+                $cell,
+                column,
+                rowIndex,
+                false,
+                StickyPosition.Right,
+              );
+              break;
+            }
+            case StickyPosition.Sticky: {
+              this._addStickyColumnBorderLeftClass($cell, column, rowIndex, true);
+              this._addStickyColumnBorderRightClass($cell, column, rowIndex, true);
+              break;
+            }
+            default: {
+              this._addStickyColumnBorderRightClass(
+                $cell,
+                column,
+                rowIndex,
+                false,
+                StickyPosition.Left,
+              );
+            }
           }
         }
       }
@@ -206,7 +210,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
 
         const styleProps = normalizeOffset(offset);
 
-        this.setCellProperties(styleProps, visibleColumnIndex, rowIndex, true);
+        this.setCellProperties(styleProps, visibleColumnIndex, rowIndex);
       }
     });
   }
@@ -370,7 +374,7 @@ const rowsView = (
   private _getMasterDetailWidth(): number {
     // @ts-expect-error
     const componentWidth = this.component.$element().width?.() ?? 0;
-    return componentWidth - gridCoreUtils.getComponentBorderWidth(this, this._$element);
+    return componentWidth - gridCoreUtils.getComponentBorderWidth(this, this._$element) - this.getScrollbarWidth();
   }
 
   protected _renderMasterDetailCell($row, row, options): dxElementWrapper {
@@ -395,6 +399,45 @@ const rowsView = (
       $masterDetailCells,
       `${width}px`,
     );
+  }
+
+  protected setStickyOffsets(rowIndex?: number, offsets?: Record<number, Record<string, number>>) {
+    super.setStickyOffsets(rowIndex, offsets);
+    this.setStickyOffsetsForGroupCells();
+  }
+
+  private setStickyOffsetsForGroupCells() {
+    const groupColumns = this._columnsController.getGroupColumns();
+    let columns = this.getColumns();
+    let widths = this.getColumnWidths();
+    const columnsCountBeforeGroups = this._getColumnsCountBeforeGroups(columns);
+
+    const rtlEnabled = this.option('rtlEnabled');
+
+    if (rtlEnabled) {
+      columns = rtlEnabled ? [...columns].reverse() : columns;
+      widths = rtlEnabled ? [...widths].reverse() : widths;
+    }
+
+    const $tableElement = this.getTableElement()!;
+
+    groupColumns.forEach((column) => {
+      const columnIndex = columnsCountBeforeGroups + column.groupIndex + 1;
+      const visibleColumnIndex = rtlEnabled ? columns.length - columnIndex - 1 : columnIndex;
+      const offset = getStickyOffset(this._columnsController, columns, widths, visibleColumnIndex);
+      const styleProps = normalizeOffset(offset);
+
+      const $cells = $tableElement
+        .children().children('.dx-group-row')
+        .find(`.dx-group-cell[aria-colindex='${columnIndex + 1}']`);
+
+      for (let i = 0; i < $cells.length; i += 1) {
+        const cell = $cells.get(i) as HTMLElement;
+        const container = $(cell).find('.dx-datagrid-group-row-container').get(0) as HTMLElement;
+        Object.assign(cell.style, styleProps);
+        Object.assign(container.style, styleProps);
+      }
+    });
   }
 
   protected _resizeCore() {

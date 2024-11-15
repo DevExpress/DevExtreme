@@ -5,6 +5,8 @@ export class Marker {
 }
 
 export type APIKey = {
+  azure?: string;
+  
   bing?: string;
 
   google?: string;
@@ -34,7 +36,7 @@ const markers: Marker[] = [{
     lng: -73.981389,
   },
 }, {
-  location: 'Brooklyn Bridge,New York,NY',
+  location: 'City Hall Park,New York,NY',
 }];
 
 const routes: Route[] = [{
@@ -46,7 +48,7 @@ const routes: Route[] = [{
     [40.782500, -73.966111],
     [40.755833, -73.986389],
     [40.753889, -73.981389],
-    'Brooklyn Bridge,New York,NY',
+    'City Hall Park,New York,NY',
   ],
 
 }];

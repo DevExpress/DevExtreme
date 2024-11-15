@@ -34,7 +34,7 @@ export class AppComponent {
   apiKey: APIKey = {};
 
   constructor(service: Service) {
-    this.apiKey.bing = 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC';
+    this.apiKey.azure = '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE';
 
     this.customMarkerUrl = this.mapMarkerUrl = service.getMarkerUrl();
     this.originalMarkers = this.markers = service.getMarkers();

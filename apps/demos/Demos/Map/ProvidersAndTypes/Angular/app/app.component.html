@@ -4,7 +4,7 @@
   [zoom]="14"
   [height]="400"
   width="100%"
-  provider="bing"
+  [provider]="mapProviders[0].key"
   [apiKey]="apiKey"
   [type]="mapTypes[0].key"
 >
@@ -12,6 +12,17 @@
 
 <div class="options">
   <div class="caption">Options</div>
+  <div class="option">
+    <span>Map Provider</span>
+    <dx-select-box
+      [dataSource]="mapProviders"
+      displayExpr="name"
+      valueExpr="key"
+      [inputAttr]="{ 'aria-label': 'Map Provider' }"
+      [(value)]="map.provider"
+    >
+    </dx-select-box>
+  </div>
   <div class="option">
     <span>Map Type</span>
     <dx-select-box
