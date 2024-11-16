@@ -43,11 +43,7 @@ $(() => {
       }, 
       'HomePhone',
       'MobilePhone',
-      {
-        dataField: 'Email',
-        fixed: true,
-        fixedPosition: 'sticky',
-      },
+      'Email',
       'Skype',
     ],
   });
