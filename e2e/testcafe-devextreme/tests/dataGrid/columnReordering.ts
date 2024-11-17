@@ -262,3 +262,49 @@ test('Column without allowReordering should have same position after dragging to
   ],
   allowColumnReordering: false,
 }));
+
+test('The group separator should not appear when dragging a grouped column to the same position', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.drag(dataGrid.getGroupPanel().getHeader(0).element, -25, 20);
+
+  await t
+    .expect(await takeScreenshot('dragging_grouped_column_to_same_position.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
+
+  return createWidget('dxDataGrid', {
+    width: 800,
+    dataSource: [
+      {
+        field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4',
+      },
+    ],
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      {
+        dataField: 'field1',
+        width: 200,
+        groupIndex: 0,
+      }, {
+        dataField: 'field2',
+        width: 200,
+      }, {
+        dataField: 'field3',
+        width: 200,
+      }, {
+        dataField: 'field4',
+        width: 200,
+      },
+    ],
+    allowColumnReordering: false,
+  });
+}).after(async () => {
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
+});

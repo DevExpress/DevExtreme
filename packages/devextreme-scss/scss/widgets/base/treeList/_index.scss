@@ -94,8 +94,10 @@ $treelist-row-error-color: $datagrid-row-error-color;
     }
   }
 
-  .dx-treelist-sticky-column, .dx-treelist-sticky-column-left, .dx-treelist-sticky-column-right {
-    background-color: $treelist-base-background-color;
+  tr:not(.dx-treelist-drop-highlight) {
+    .dx-treelist-sticky-column, .dx-treelist-sticky-column-left, .dx-treelist-sticky-column-right {
+      background-color: $treelist-base-background-color;
+    }
   }
 }
 
