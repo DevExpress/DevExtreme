@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { getBoundingRect } from '@js/core/utils/position';
 import { setWidth } from '@js/core/utils/size';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 
@@ -683,10 +684,40 @@ const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactorySt
     );
 
     if (hasFixedColumns && isFixedCell) {
-      return this._rowsView.element() as dxElementWrapper;
+      return $cell.closest(`.${this.addWidgetPrefix(CLASSES.stickyColumns)}`);
     }
 
     return undefined;
+  }
+
+  protected updateFocusOverlaySize($element, position): void {
+    // @ts-expect-error
+    const hasFixedColumns = this._rowsView.hasStickyColumns();
+
+    if (!hasFixedColumns) {
+      super.updateFocusOverlaySize($element, position);
+    }
+  }
+
+  protected getFocusOverlaySize($element: dxElementWrapper): { width: number; height: number } {
+    // @ts-expect-error
+    const hasFixedColumns = this._rowsView.hasStickyColumns();
+
+    if (hasFixedColumns) {
+      const elementRect = getBoundingRect($element.get(0));
+      const isLastCell = GridCoreStickyColumnsDom.isLastCell($element);
+      const isFixedCell = GridCoreStickyColumnsDom.isFixedCell(
+        $element,
+        this.addWidgetPrefix.bind(this),
+      );
+
+      return {
+        width: elementRect.right - elementRect.left + (isLastCell || isFixedCell ? 0 : 1),
+        height: elementRect.bottom - elementRect.top,
+      };
+    }
+
+    return super.getFocusOverlaySize($element);
   }
 
   protected getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {

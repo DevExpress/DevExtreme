@@ -353,6 +353,16 @@ const isOutsideVisibleArea = (
     || elementRectRight > nonFixedAreaBoundingRect.right;
 };
 
+const isLastCell = ($cell: dxElementWrapper): boolean => {
+  if (!$cell.is('td')) {
+    return false;
+  }
+
+  const $lastCell = $cell.parent().children().last();
+
+  return $cell[0] === $lastCell[0];
+};
+
 export const GridCoreStickyColumnsDom = {
   toggleFirstHeaderClass,
   toggleColumnNoBorderClass,
@@ -372,5 +382,6 @@ export const GridCoreStickyColumnsDom = {
   isStickyCell,
   isStickyCellPinned,
   isOutsideVisibleArea,
+  isLastCell,
   setScrollPadding,
 };
