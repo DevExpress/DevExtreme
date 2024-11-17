@@ -45,7 +45,7 @@ $header-filter-color-empty: null !default;
 * $name 51. Selected row background color
 * $type color
 */
-$datagrid-selection-bg: null !default;
+$datagrid-selection-bg: mix($base-accent, $base-bg, 10%) !default;
 
 /**
 * $name 52. Selected row border color
@@ -180,7 +180,6 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $header-filter-color: $datagrid-columnchooser-item-color !default;
   $header-filter-color-empty: color.change($header-filter-color, $alpha: 0.72) !default;
-  $datagrid-selection-bg: color.change($base-accent, $alpha: 0.04) !default;
   $datagrid-row-error-color: $base-inverted-text-color !default;
   $datagrid-columnchooser-item-bg: $datagrid-columnchooser-bg !default;
   $datagrid-row-alternation-bg: darken($datagrid-base-background-color, 4%) !default;
@@ -195,7 +194,6 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
   $header-filter-color: $datagrid-columnchooser-item-color !default;
   $header-filter-color-empty: color.change($header-filter-color, $alpha: 0.38) !default;
-  $datagrid-selection-bg: color.change($base-accent, $alpha: 0.07) !default;
   $datagrid-row-error-color: rgba(255, 255, 255, 1) !default;
   $datagrid-columnchooser-item-bg: lighten($datagrid-columnchooser-bg, 3%) !default;
   $datagrid-row-alternation-bg: lighten($datagrid-base-background-color, 4%) !default;
