@@ -218,7 +218,9 @@ $treelist-row-error-color: $datagrid-row-error-color;
     }
 
     .dx-virtual-row > td {
-      position: relative;
+      &:not(.dx-treelist-sticky-column, .dx-treelist-sticky-column-left, .dx-treelist-sticky-column-right) {
+        position: relative;
+      }
 
       &::before {
         display: block;

@@ -1317,7 +1317,7 @@ export const resizing = (Base: ModuleType<ResizingController>) => class VirtualS
   }
 
   private hasResizeTimeout() {
-    return !!this._resizeTimeout;
+    return isDefined(this._resizeTimeout);
   }
 
   public resize(): DeferredObj<unknown> {

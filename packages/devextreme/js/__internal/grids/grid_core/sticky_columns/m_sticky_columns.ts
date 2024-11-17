@@ -1,9 +1,11 @@
 /* eslint-disable max-classes-per-file */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { getBoundingRect } from '@js/core/utils/position';
 import { setWidth } from '@js/core/utils/size';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
@@ -774,6 +776,22 @@ const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactorySt
   }
 };
 
+const resizing = (Base: ModuleType<ResizingController>) => class ResizingStickyColumnsExtender extends Base {
+  public resize(): DeferredObj<unknown> {
+    const result = super.resize();
+    // @ts-expect-error ColumnHeadersView's method
+    const hasStickyColumns = this._columnHeadersView.hasStickyColumns();
+
+    // @ts-expect-error Resizing's method
+    if (hasStickyColumns && this?.hasResizeTimeout()) {
+      // @ts-expect-error RowsView's method
+      this._rowsView.setStickyOffsets();
+    }
+
+    return result;
+  }
+};
+
 export const stickyColumnsModule = {
   extenders: {
     views: {
@@ -785,6 +803,7 @@ export const stickyColumnsModule = {
       columnsResizer,
       draggingHeader,
       editorFactory,
+      resizing,
     },
   },
 };

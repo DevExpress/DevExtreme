@@ -182,7 +182,9 @@ $datagrid-text-stub-background-image-path: null !default;
     }
 
     .dx-virtual-row > td {
-      position: relative;
+      &:not(.dx-datagrid-sticky-column, .dx-datagrid-sticky-column-left, .dx-datagrid-sticky-column-right) {
+        position: relative;
+      }
 
       &:not(.dx-datagrid-group-space)::before {
         display: block;
