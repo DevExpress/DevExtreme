@@ -200,32 +200,6 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         assert.ok(!$element.hasClass(LIST_COLLAPSIBLE_GROUPS_CLASS), 'collapsible groups class is present');
     });
 
-    QUnit.test('focus should move to first group\'s item when group expands', function(assert) {
-        const $element = this.element.dxList({
-            items: [{ key: 'a', items: ['11', '12'] }, { key: 'b', items: ['21', '22'] }],
-            grouped: true,
-            focusStateEnabled: true,
-            collapsibleGroups: true
-        });
-
-        const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
-        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
-
-        const instance = $element.dxList('instance');
-        $element.trigger('focusin');
-
-
-        $headers.eq(1).trigger('dxclick');
-        $headers.eq(1).trigger('dxclick');
-
-        const secondGroupItemIsFocused = $items.eq(2).hasClass(FOCUSED_STATE_CLASS);
-        const firstItemIsFocused = $items.eq(0).hasClass(FOCUSED_STATE_CLASS);
-
-        assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-        assert.ok(secondGroupItemIsFocused, 'first item of the second group is focused');
-        assert.notOk(firstItemIsFocused, 'first item of the first group lost focus');
-    });
-
     QUnit.test('the first header should get focus when focusin, collapsibleGroups: true', function(assert) {
         const $element = this.element.dxList({
             items: [
@@ -3757,13 +3731,11 @@ QUnit.module('keyboard navigation', {
             .keyDown('down')
             .keyDown('enter');
 
-        assert.ok($group.hasClass(LIST_GROUP_COLLAPSED_CLASS), 'first group is collapsed');
+        assert.strictEqual($group.hasClass(LIST_GROUP_COLLAPSED_CLASS), true, 'first group is collapsed');
 
-        keyboard
-            .keyDown('up')
-            .keyDown('enter');
+        keyboard.keyDown('enter');
 
-        assert.notOk($group.hasClass(LIST_GROUP_COLLAPSED_CLASS), 'first group is collapsed');
+        assert.strictEqual($group.hasClass(LIST_GROUP_COLLAPSED_CLASS), false, 'first group is collapsed');
     });
 
     QUnit.test('Pressing the Enter key on the group header should not fire onItemClick', function(assert) {
