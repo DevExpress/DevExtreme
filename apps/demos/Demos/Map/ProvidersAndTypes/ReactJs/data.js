@@ -18,12 +18,12 @@ export const mapProviders = [
     name: 'Azure',
   },
   {
-    key: 'bing',
-    name: 'Bing',
-  },
-  {
     key: 'google',
     name: 'Google',
+  },
+  {
+    key: 'bing',
+    name: 'Bing',
   },
 ];
 export const mapTypeLabel = { 'aria-label': 'Map Type' };
