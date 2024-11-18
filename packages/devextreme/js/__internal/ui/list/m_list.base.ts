@@ -671,9 +671,9 @@ export const ListBase = CollectionWidget.inherit({
       this._collapseGroupHandler($group);
 
       if (focusStateEnabled) {
-        const listItemElement = getPublicElement($group.find(`.${LIST_ITEM_CLASS}`).eq(0));
+        const groupHeader = getPublicElement($group.find(`.${LIST_GROUP_HEADER_CLASS}`));
 
-        this.option({ focusedElement: listItemElement });
+        this.option({ focusedElement: groupHeader });
       }
     };
 
