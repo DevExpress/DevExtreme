@@ -9,9 +9,8 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, DisposingEvent, InitializedEvent, RenderedEvent, ShownEvent } from "devextreme/ui/defer_rendering";
-import type { AnimationConfig, AnimationState, AnimationType } from "devextreme/animation/fx";
+import type { AnimationConfig, AnimationState, AnimationType, CollisionResolution, PositionConfig, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { Direction, HorizontalAlignment, VerticalAlignment, PositionAlignment } from "devextreme/common";
-import type { CollisionResolution, PositionConfig, CollisionResolutionCombination } from "devextreme/animation/position";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];

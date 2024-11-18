@@ -19,7 +19,7 @@ import {
 
 import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/bullet';
 import { Theme, DashStyle, Font } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 
 import DxBullet from 'devextreme/viz/bullet';
 

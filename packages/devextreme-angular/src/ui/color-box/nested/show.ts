@@ -14,7 +14,7 @@ import {
 
 
 
-import { AnimationConfig, AnimationState, AnimationType } from 'devextreme/animation/fx';
+import { AnimationConfig, AnimationState, AnimationType } from 'devextreme/common/core/animation';
 import { Direction } from 'devextreme/common';
 
 import {

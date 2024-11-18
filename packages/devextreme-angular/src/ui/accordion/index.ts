@@ -26,7 +26,7 @@ export { ExplicitTypes } from 'devextreme/ui/accordion';
 import DataSource from 'devextreme/data/data_source';
 import { dxAccordionItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, ItemTitleClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/accordion';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
+import { Store } from 'devextreme/common/data';
 
 import DxAccordion from 'devextreme/ui/accordion';
 

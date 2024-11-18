@@ -14,7 +14,7 @@ import {
 
 import { HorizontalAlignment } from 'devextreme/common';
 import { SummaryType } from 'devextreme/common/grids';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 
 import {
     NestedOptionHost,
