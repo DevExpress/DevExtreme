@@ -4678,14 +4678,15 @@ QUnit.module('Accessibility', () => {
             });
 
             const $groupElement = $element.find(`.${LIST_GROUP_CLASS}`);
+            const $headerElement = $groupElement.find(`.${LIST_GROUP_HEADER_CLASS}`);
 
             const expectedGroupAria = {
                 role: collapsibleGroups ? undefined : 'group',
-                'aria-labelledby': collapsibleGroups ? false : true,
+                'aria-labelledby': collapsibleGroups ? undefined : $headerElement.attr('id'),
             };
 
             assert.strictEqual($groupElement.attr('role'), expectedGroupAria.role, 'role is correct');
-            assert.strictEqual(!!$groupElement.attr('aria-labelledby'), expectedGroupAria['aria-labelledby'], 'aria-labelledby is correct');
+            assert.strictEqual($groupElement.attr('aria-labelledby'), expectedGroupAria['aria-labelledby'], 'aria-labelledby is correct');
         });
 
         QUnit.test(`Group header element should have correct aria if collapsibleGroups: ${collapsibleGroups}`, function(assert) {
@@ -4716,14 +4717,15 @@ QUnit.module('Accessibility', () => {
             });
 
             const $groupBody = $element.find(`.${LIST_GROUP_BODY_CLASS}`);
+            const $headerElement = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
 
             const expectedGroupBodyAria = {
                 role: collapsibleGroups ? 'listbox' : undefined,
-                'aria-labelledby': collapsibleGroups ? true : false,
+                'aria-labelledby': collapsibleGroups ? $headerElement.attr('id') : undefined,
             };
 
             assert.strictEqual($groupBody.attr('role'), expectedGroupBodyAria.role, 'role is correct');
-            assert.strictEqual(!!$groupBody.attr('aria-labelledby'), expectedGroupBodyAria['aria-labelledby'], 'aria-labelledby is correct');
+            assert.strictEqual($groupBody.attr('aria-labelledby'), expectedGroupBodyAria['aria-labelledby'], 'aria-labelledby is correct');
         });
 
         QUnit.test(`Grouped list items element should have correct aria if collapsibleGroups is changed in runtime, init value: ${collapsibleGroups}`, function(assert) {
@@ -4758,14 +4760,15 @@ QUnit.module('Accessibility', () => {
             instance.option('collapsibleGroups', !collapsibleGroups);
 
             const $groupElement = $element.find(`.${LIST_GROUP_CLASS}`);
+            const $headerElement = $groupElement.find(`.${LIST_GROUP_HEADER_CLASS}`);
 
             const expectedGroupAria = {
                 role: collapsibleGroups ? 'group' : undefined,
-                'aria-labelledby': collapsibleGroups ? true : false,
+                'aria-labelledby': collapsibleGroups ? $headerElement.attr('id') : undefined,
             };
 
             assert.strictEqual($groupElement.attr('role'), expectedGroupAria.role, 'role is correct');
-            assert.strictEqual(!!$groupElement.attr('aria-labelledby'), expectedGroupAria['aria-labelledby'], 'aria-labelledby is correct');
+            assert.strictEqual($groupElement.attr('aria-labelledby'), expectedGroupAria['aria-labelledby'], 'aria-labelledby is correct');
         });
 
         QUnit.test(`Group header element should have correct aria if collapsibleGroups is changed in runtime, init value: ${collapsibleGroups}`, function(assert) {
@@ -4778,17 +4781,19 @@ QUnit.module('Accessibility', () => {
 
             instance.option('collapsibleGroups', !collapsibleGroups);
 
-            const $groupHeader = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+            const $groupElement = $element.find(`.${LIST_GROUP_CLASS}`);
+            const $groupHeader = $groupElement.find(`.${LIST_GROUP_HEADER_CLASS}`);
+            const $groupBody = $groupElement.find(`.${LIST_GROUP_BODY_CLASS}`);
 
             const expectedGroupHeaderAria = {
                 role: collapsibleGroups ? undefined : 'button',
                 'aria-expanded': collapsibleGroups ? undefined : 'true',
-                'aria-controls': collapsibleGroups ? false : true,
+                'aria-controls': collapsibleGroups ? undefined : $groupBody.attr('id'),
             };
 
             assert.strictEqual($groupHeader.attr('role'), expectedGroupHeaderAria.role, 'role is correct');
             assert.strictEqual($groupHeader.attr('aria-expanded'), expectedGroupHeaderAria['aria-expanded'], 'aria-expanded is correct');
-            assert.strictEqual(!!$groupHeader.attr('aria-controls'), expectedGroupHeaderAria['aria-controls'], 'aria-controls is correct');
+            assert.strictEqual($groupHeader.attr('aria-controls'), expectedGroupHeaderAria['aria-controls'], 'aria-controls is correct');
         });
 
         QUnit.test(`Group body element should have correct aria if collapsibleGroups is changed in runtime, init value: ${collapsibleGroups}`, function(assert) {
@@ -4802,14 +4807,15 @@ QUnit.module('Accessibility', () => {
             instance.option('collapsibleGroups', !collapsibleGroups);
 
             const $groupBody = $element.find(`.${LIST_GROUP_BODY_CLASS}`);
+            const $headerElement = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
 
             const expectedGroupBodyAria = {
                 role: collapsibleGroups ? undefined : 'listbox',
-                'aria-labelledby': collapsibleGroups ? false : true,
+                'aria-labelledby': collapsibleGroups ? undefined : $headerElement.attr('id'),
             };
 
             assert.strictEqual($groupBody.attr('role'), expectedGroupBodyAria.role, 'role is correct');
-            assert.strictEqual(!!$groupBody.attr('aria-labelledby'), expectedGroupBodyAria['aria-labelledby'], 'aria-labelledby is correct');
+            assert.strictEqual($groupBody.attr('aria-labelledby'), expectedGroupBodyAria['aria-labelledby'], 'aria-labelledby is correct');
         });
     });
 
