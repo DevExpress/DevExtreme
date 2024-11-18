@@ -218,6 +218,27 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         assert.ok($headers.eq(0).hasClass(FOCUSED_STATE_CLASS), 'first header is focused');
     });
 
+    QUnit.test('the first header should be focused after click, if collapsibleGroups: true', function(assert) {
+        const $element = this.element.dxList({
+            items: [
+                { key: 'a', items: ['11', '12'] },
+                { key: 'b', items: ['21', '22'] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+        });
+        const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+        $element.trigger('focusin');
+
+        $headers.eq(0).trigger('dxclick');
+        assert.strictEqual($headers.eq(0).hasClass(FOCUSED_STATE_CLASS), true, 'first header is focused');
+
+        $headers.eq(0).trigger('dxclick');
+        assert.strictEqual($headers.eq(0).hasClass(FOCUSED_STATE_CLASS), true, 'first header is still focused');
+    });
+
     QUnit.test('the first header should not get focus when focusin if collapsibleGroups changes from true to false in runtime', function(assert) {
         const $element = this.element.dxList({
             items: [
@@ -253,24 +274,29 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         assert.notOk(firstItemIsFocused, 'first item has not focused class');
     });
 
-    QUnit.test('focus class should not be added to first group item when focusStateEnabled is false', function(assert) {
-        const $element = this.element.dxList({
-            items: [{ key: 'a', items: ['11', '12'] }, { key: 'b', items: ['21', '22'] }],
-            grouped: true,
-            focusStateEnabled: false,
-            collapsibleGroups: true
+    [true, false].forEach(focusStateEnabled => {
+        QUnit.test(`focus class should not be added to first group item when focusStateEnabled: ${focusStateEnabled}`, function(assert) {
+            const $element = this.element.dxList({
+                focusStateEnabled,
+                items: [
+                    { key: 'a', items: ['11', '12'] },
+                    { key: 'b', items: ['21', '22'] },
+                ],
+                grouped: true,
+                collapsibleGroups: true,
+            });
+
+            const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+            const $items = $element.find(`.${LIST_ITEM_CLASS}`);
+
+            $element.trigger('focusin');
+
+            $headers.eq(1)
+                .trigger('dxclick')
+                .trigger('dxclick');
+
+            assert.strictEqual($items.eq(2).hasClass(FOCUSED_STATE_CLASS), false, 'first item of the second group is not focused');
         });
-
-        const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
-        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
-
-        $element.trigger('focusin');
-        $headers.eq(1).trigger('dxclick');
-        $headers.eq(1).trigger('dxclick');
-
-        const secondGroupItemIsFocused = $items.eq(2).hasClass(FOCUSED_STATE_CLASS);
-
-        assert.notOk(secondGroupItemIsFocused, 'first item of the second group is focused');
     });
 
     QUnit.test('group body should be collapsed by click on header', function(assert) {
@@ -3736,6 +3762,30 @@ QUnit.module('keyboard navigation', {
         keyboard.keyDown('enter');
 
         assert.strictEqual($group.hasClass(LIST_GROUP_COLLAPSED_CLASS), false, 'first group is collapsed');
+    });
+
+    QUnit.test('the first header should be focused after pressing enter key, if collapsibleGroups: true', function(assert) {
+        const $element = $('#list').dxList({
+            items: [
+                { key: 'a', items: ['11', '12'] },
+                { key: 'b', items: ['21', '22'] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+        });
+        const keyboard = getListKeyboard($element);
+        const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+        keyboard
+            .keyDown('down')
+            .keyDown('enter');
+
+        assert.strictEqual($headers.eq(0).hasClass(FOCUSED_STATE_CLASS), true, 'first header is focused');
+
+        keyboard.keyDown('enter');
+
+        assert.strictEqual($headers.eq(0).hasClass(FOCUSED_STATE_CLASS), true, 'first header is still focused');
     });
 
     QUnit.test('Pressing the Enter key on the group header should not fire onItemClick', function(assert) {
