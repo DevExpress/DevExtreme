@@ -30,8 +30,8 @@ import { dxChartCommonSeriesSettings } from 'devextreme/viz/chart';
 import { Palette, PaletteExtensionMode, ChartsDataType, Font, TimeInterval, ScaleBreak, ScaleBreakLineStyle, DiscreteAxisDivisionMode, LabelOverlap, VisualRangeUpdateMode, Theme, TextOverflow, WordWrap } from 'devextreme/common/charts';
 import { ChartSeries } from 'devextreme/viz/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { Format } from 'devextreme/localization';
+import { Store } from 'devextreme/common/data';
+import { Format } from 'devextreme/common/core/localization';
 
 import DxRangeSelector from 'devextreme/viz/range_selector';
 

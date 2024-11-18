@@ -26,7 +26,7 @@ export { ExplicitTypes } from 'devextreme/ui/responsive_box';
 import DataSource from 'devextreme/data/data_source';
 import { dxResponsiveBoxItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/responsive_box';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
+import { Store } from 'devextreme/common/data';
 
 import DxResponsiveBox from 'devextreme/ui/responsive_box';
 

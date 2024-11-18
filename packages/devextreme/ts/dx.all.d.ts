@@ -2203,7 +2203,7 @@ declare module DevExpress.common {
    * [descr:ODataStore]
    */
   export class ODataStore<TItem = any, TKey = any> extends DevExpress.data
-    .StoreBase<TItem, TKey> {
+    .AbstractStore<TItem, TKey> {
     constructor(options?: DevExpress.data.ODataStoreOptions<TItem, TKey>);
     /**
      * [descr:ODataStore.byKey(key, extraOptions)]
@@ -6208,7 +6208,7 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ODataStoreOptions<TItem = any, TKey = any>
-    extends DevExpress.data.Store.StoreOptionsBase<TItem, TKey> {
+    extends AbstractStoreOptions<TItem, TKey> {
     /**
      * [descr:ODataStoreOptions.beforeSend]
      */
