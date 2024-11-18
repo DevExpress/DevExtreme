@@ -23,7 +23,7 @@ import {
 import { AnimationEaseMode, Font, ChartsColor, Palette, PaletteExtensionMode, LabelOverlap, Theme, TextOverflow, WordWrap, DashStyle } from 'devextreme/common/charts';
 import { ExportFormat, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, CircularGaugeElementOrientation, CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 import { GaugeIndicator } from 'devextreme/viz/gauges/base_gauge';
 
 import DxCircularGauge from 'devextreme/viz/circular_gauge';

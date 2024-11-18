@@ -14,7 +14,7 @@ import {
 
 import DataSource from 'devextreme/data/data_source';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
+import { Store } from 'devextreme/common/data';
 
 import {
     NestedOptionHost,

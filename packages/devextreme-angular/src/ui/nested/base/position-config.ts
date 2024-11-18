@@ -5,8 +5,8 @@ import {
     Component,
 } from '@angular/core';
 
-import { CollisionResolution, CollisionResolutionCombination } from 'devextreme/animation/position';
 import { HorizontalAlignment, PositionAlignment, VerticalAlignment } from 'devextreme/common';
+import { CollisionResolution, CollisionResolutionCombination } from 'devextreme/common/core/animation';
 import { UserDefinedElement } from 'devextreme/core/element';
 
 @Component({

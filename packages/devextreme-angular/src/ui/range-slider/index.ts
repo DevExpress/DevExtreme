@@ -22,7 +22,7 @@ import {
 } from '@angular/core';
 
 
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 import { VerticalEdge, TooltipShowMode, ValidationMessageMode, Position, ValidationStatus, SliderValueChangeMode } from 'devextreme/common';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/range_slider';
 

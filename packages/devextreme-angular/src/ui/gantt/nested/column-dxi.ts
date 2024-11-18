@@ -16,9 +16,9 @@ import {
 
 import { HorizontalAlignment, DataType, SearchMode, SortOrder } from 'devextreme/common';
 import { FilterOperation, FilterType, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation } from 'devextreme/common/grids';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
+import { Store } from 'devextreme/common/data';
 
 import {
     NestedOptionHost,

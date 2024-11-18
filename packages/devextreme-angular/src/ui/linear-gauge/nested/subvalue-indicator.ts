@@ -16,7 +16,7 @@ import {
 
 import { ChartsColor, Palette, Font } from 'devextreme/common/charts';
 import { HorizontalEdge, VerticalEdge } from 'devextreme/common';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 
 import {
     NestedOptionHost,

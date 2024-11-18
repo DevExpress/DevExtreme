@@ -15,7 +15,7 @@ import {
 
 
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
+import { Store } from 'devextreme/common/data';
 import { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from 'devextreme/common/grids';
 import { SearchMode } from 'devextreme/common';
 import { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';

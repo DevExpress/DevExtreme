@@ -45,8 +45,8 @@ importers:
         specifier: 6.0.2
         version: 6.0.2(@angular/compiler@17.3.12(@angular/core@17.3.12(rxjs@7.8.1)(zone.js@0.14.10)))(@angular/core@17.3.12(rxjs@7.8.1)(zone.js@0.14.10))(tslint@6.1.3(typescript@5.4.5))
       devextreme-internal-tools:
-        specifier: 16.0.0-beta.13.1
-        version: 16.0.0-beta.13.1
+        specifier: 16.0.0-beta.14
+        version: 16.0.0-beta.14
       http-server:
         specifier: 14.1.1
         version: 14.1.1
@@ -8092,8 +8092,8 @@ packages:
   devextreme-cldr-data@1.0.3:
     resolution: {integrity: sha512-xd+uWv1KzEhr+ZH/MOWfDei3GFz+NAYyKUR9HgjM9BBwPel7PpMElYp4whM+PtAjziBaTssQnA//ob5c3BovTA==}
 
-  devextreme-internal-tools@16.0.0-beta.13.1:
-    resolution: {integrity: sha512-R8AzHUjJEKqPeig61pMO65pY/vickSjXfitYSHLAmz4HMUSCNTFtITWEUos9I/pbmbQpCZps4xRf+sCyNQID+g==}
+  devextreme-internal-tools@16.0.0-beta.14:
+    resolution: {integrity: sha512-weOmt+yJvExYTmTHSjVdgjDPrPAM6KCf9UEjQPX8ni+zdY3nRqReDT8HscV3C1FEpJtPtpKuqITLxa86MaNlPQ==}
     engines: {node: '>=12.0.0'}
     hasBin: true
 
@@ -9416,7 +9416,7 @@ packages:
     resolution: {integrity: sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==}
     engines: {node: '>= 4.0'}
     os: [darwin]
-    deprecated: Upgrade to fsevents v2 to mitigate potential security issues
+    deprecated: The v1 package contains DANGEROUS / INSECURE binaries. Upgrade to safe fsevents v2
 
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
@@ -25355,7 +25355,7 @@ snapshots:
 
   devextreme-cldr-data@1.0.3: {}
 
-  devextreme-internal-tools@16.0.0-beta.13.1:
+  devextreme-internal-tools@16.0.0-beta.14:
     dependencies:
       dasherize: 2.0.0
       deepmerge: 4.3.1

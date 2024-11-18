@@ -10,9 +10,8 @@ import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, TooltipHiddenEvent, TooltipShownEvent, dxPieChartAnnotationConfig, PieChartAnnotationLocation, dxPieChartCommonAnnotationConfig, PieChartSeriesInteractionMode, SmallValuesGroupingMode, PieChartLegendItem, PieChartLegendHoverMode, PieChartSeries } from "devextreme/viz/pie_chart";
 import type { AnimationEaseMode, DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, ChartsDataType, ChartsColor, HatchDirection, LabelPosition } from "devextreme/common/charts";
-import type { template } from "devextreme/core/templates/template";
-import type { Format as CommonFormat, ExportFormat, HorizontalAlignment, Position, Orientation, VerticalEdge } from "devextreme/common";
-import type { Format as LocalizationFormat } from "devextreme/localization";
+import type { template, Format as CommonFormat, ExportFormat, HorizontalAlignment, Position, Orientation, VerticalEdge } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];

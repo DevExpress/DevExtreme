@@ -24,9 +24,9 @@ import DataSource from 'devextreme/data/data_source';
 import { Palette, PaletteExtensionMode, Font, TextOverflow, Theme, WordWrap, DashStyle } from 'devextreme/common/charts';
 import { TreeMapColorizerType, TreeMapLayoutAlgorithm, TreeMapLayoutDirection, ClickEvent, DisposingEvent, DrawnEvent, DrillEvent, ExportedEvent, ExportingEvent, FileSavingEvent, HoverChangedEvent, IncidentOccurredEvent, InitializedEvent, NodesInitializedEvent, NodesRenderingEvent, OptionChangedEvent, SelectionChangedEvent, dxTreeMapNode } from 'devextreme/viz/tree_map';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
+import { Store } from 'devextreme/common/data';
 import { ExportFormat, SingleMultipleOrNone, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 
 import DxTreeMap from 'devextreme/viz/tree_map';
 

@@ -22,10 +22,9 @@ import {
 } from '@angular/core';
 
 
-import { AnimationConfig } from 'devextreme/animation/fx';
-import { event, EventInfo } from 'devextreme/events/index';
+import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
+import { event, EventInfo } from 'devextreme/common/core/events';
 import { PositionAlignment } from 'devextreme/common';
-import { PositionConfig } from 'devextreme/animation/position';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import DxPopup from 'devextreme/ui/popup';
