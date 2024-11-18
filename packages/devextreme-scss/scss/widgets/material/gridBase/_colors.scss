@@ -70,7 +70,7 @@ $datagrid-row-focused-color: $base-text-color !default;
 * $type color
 */
 $datagrid-row-focused-bg: mix($base-accent, $base-bg, 20%) !default;
-$datagrid-hover-bg: $base-hover-bg !default;
+$datagrid-hover-bg: null !default;
 $datagrid-row-hovered-color: $base-hover-color !default;
 
 /**
@@ -183,6 +183,7 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
   $datagrid-row-error-color: $base-inverted-text-color !default;
   $datagrid-columnchooser-item-bg: $datagrid-columnchooser-bg !default;
   $datagrid-row-alternation-bg: darken($datagrid-base-background-color, 4%) !default;
+  $datagrid-hover-bg: darken($datagrid-base-background-color, 4%) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/material/color-schemes/light/grid/text-stub.png') !default;
   $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
 }
@@ -197,6 +198,7 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
   $datagrid-row-error-color: rgba(255, 255, 255, 1) !default;
   $datagrid-columnchooser-item-bg: lighten($datagrid-columnchooser-bg, 3%) !default;
   $datagrid-row-alternation-bg: lighten($datagrid-base-background-color, 4%) !default;
+  $datagrid-hover-bg: lighten($datagrid-base-background-color, 4%) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/material/color-schemes/dark/grid/text-stub.png') !default;
   $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
 }
