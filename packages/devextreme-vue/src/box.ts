@@ -3,9 +3,11 @@ import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import Box, { Properties } from "devextreme/ui/box";
+import  DataSource from "devextreme/data/data_source";
 import {
  Distribution,
  CrosswiseDistribution,
+ dxBoxItem,
  BoxDirection,
  ContentReadyEvent,
  DisposingEvent,
@@ -15,7 +17,14 @@ import {
  ItemHoldEvent,
  ItemRenderedEvent,
  OptionChangedEvent,
+ dxBoxOptions,
 } from "devextreme/ui/box";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -51,26 +60,26 @@ const componentConfig = {
   props: {
     align: String as PropType<Distribution>,
     crossAlign: String as PropType<CrosswiseDistribution>,
-    dataSource: [Array, Object, String] as PropType<Array<any> | Object | null | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxBoxItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
     direction: String as PropType<BoxDirection>,
     disabled: Boolean,
-    elementAttr: Object,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    elementAttr: Object as PropType<Record<string, any>>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
-    items: Array as PropType<Array<any>>,
+    items: Array as PropType<Array<any | dxBoxItem | string>>,
     itemTemplate: {},
-    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
-    onItemContextMenu: Function as PropType<(e: ItemContextMenuEvent) => void>,
-    onItemHold: Function as PropType<(e: ItemHoldEvent) => void>,
-    onItemRendered: Function as PropType<(e: ItemRenderedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
+    onItemContextMenu: Function as PropType<((e: ItemContextMenuEvent) => void)>,
+    onItemHold: Function as PropType<((e: ItemHoldEvent) => void)>,
+    onItemRendered: Function as PropType<((e: ItemRenderedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     rtlEnabled: Boolean,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -133,7 +142,7 @@ const DxItemConfig = {
   },
   props: {
     baseSize: [Number, String],
-    box: Object,
+    box: Object as PropType<dxBoxOptions | Record<string, any>>,
     disabled: Boolean,
     html: String,
     ratio: Number,

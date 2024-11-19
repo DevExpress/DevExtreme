@@ -2,17 +2,30 @@ import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import Chat, { Properties } from "devextreme/ui/chat";
+import  DataSource from "devextreme/data/data_source";
 import {
- Format,
-} from "devextreme/common";
-import {
+ Alert,
+ Message,
  DisposingEvent,
  InitializedEvent,
  MessageEnteredEvent,
  OptionChangedEvent,
  TypingEndEvent,
  TypingStartEvent,
+ User,
 } from "devextreme/ui/chat";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
+import {
+ Format,
+} from "devextreme/localization";
+import {
+ Format as CommonFormat,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -56,34 +69,34 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    alerts: Array as PropType<Array<Object>>,
-    dataSource: [Array, Object, String] as PropType<Array<Object> | Object | null | string>,
-    dayHeaderFormat: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    alerts: Array as PropType<Array<Alert>>,
+    dataSource: [Array, Object, String] as PropType<Array<Message> | DataSource | DataSourceOptions | null | Store | string>,
+    dayHeaderFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
-    items: Array as PropType<Array<Object>>,
+    items: Array as PropType<Array<Message>>,
     messageTemplate: {},
-    messageTimestampFormat: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onMessageEntered: Function as PropType<(e: MessageEnteredEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    onTypingEnd: Function as PropType<(e: TypingEndEvent) => void>,
-    onTypingStart: Function as PropType<(e: TypingStartEvent) => void>,
+    messageTimestampFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onMessageEntered: Function as PropType<((e: MessageEnteredEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onTypingEnd: Function as PropType<((e: TypingEndEvent) => void)>,
+    onTypingStart: Function as PropType<((e: TypingStartEvent) => void)>,
     reloadOnChange: Boolean,
     rtlEnabled: Boolean,
     showAvatar: Boolean,
     showDayHeaders: Boolean,
     showMessageTimestamp: Boolean,
     showUserName: Boolean,
-    typingUsers: Array as PropType<Array<Object>>,
-    user: Object,
+    typingUsers: Array as PropType<Array<User>>,
+    user: Object as PropType<User | Record<string, any>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -199,10 +212,10 @@ const DxDayHeaderFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function as PropType<(value: number | Date) => string>,
-    parser: Function as PropType<(value: string) => (number | Date)>,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
-    type: String as PropType<Format | string>,
+    type: String as PropType<CommonFormat | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -223,7 +236,7 @@ const DxItemConfig = {
     "update:timestamp": null,
   },
   props: {
-    author: Object,
+    author: Object as PropType<User | Record<string, any>>,
     id: [Number, String],
     text: String,
     timestamp: [Date, Number, String]
@@ -253,10 +266,10 @@ const DxMessageTimestampFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function as PropType<(value: number | Date) => string>,
-    parser: Function as PropType<(value: string) => (number | Date)>,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
-    type: String as PropType<Format | string>,
+    type: String as PropType<CommonFormat | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };

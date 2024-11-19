@@ -17,10 +17,14 @@ import {
 import {
  Theme,
  DashStyle,
+ Font,
 } from "devextreme/common/charts";
 import {
  Format,
 } from "devextreme/common";
+import {
+ Format as LocalizationFormat,
+} from "devextreme/localization";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -61,30 +65,30 @@ const componentConfig = {
   props: {
     color: String,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     endScaleValue: Number,
-    margin: Object,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onDrawn: Function as PropType<(e: DrawnEvent) => void>,
-    onExported: Function as PropType<(e: ExportedEvent) => void>,
-    onExporting: Function as PropType<(e: ExportingEvent) => void>,
-    onFileSaving: Function as PropType<(e: FileSavingEvent) => void>,
-    onIncidentOccurred: Function as PropType<(e: IncidentOccurredEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    onTooltipHidden: Function as PropType<(e: TooltipHiddenEvent) => void>,
-    onTooltipShown: Function as PropType<(e: TooltipShownEvent) => void>,
+    margin: Object as PropType<Record<string, any>>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onDrawn: Function as PropType<((e: DrawnEvent) => void)>,
+    onExported: Function as PropType<((e: ExportedEvent) => void)>,
+    onExporting: Function as PropType<((e: ExportingEvent) => void)>,
+    onFileSaving: Function as PropType<((e: FileSavingEvent) => void)>,
+    onIncidentOccurred: Function as PropType<((e: IncidentOccurredEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onTooltipHidden: Function as PropType<((e: TooltipHiddenEvent) => void)>,
+    onTooltipShown: Function as PropType<((e: TooltipShownEvent) => void)>,
     pathModified: Boolean,
     rtlEnabled: Boolean,
     showTarget: Boolean,
     showZeroLevel: Boolean,
-    size: Object,
+    size: Object as PropType<Record<string, any>>,
     startScaleValue: Number,
     target: Number,
     targetColor: String,
     targetWidth: Number,
     theme: String as PropType<Theme>,
-    tooltip: Object,
+    tooltip: Object as PropType<Record<string, any>>,
     value: Number
   },
   emits: {
@@ -202,8 +206,8 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function as PropType<(value: number | Date) => string>,
-    parser: Function as PropType<(value: string) => (number | Date)>,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
     type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
@@ -306,20 +310,20 @@ const DxTooltipConfig = {
   },
   props: {
     arrowLength: Number,
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String,
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: Function as PropType<(pointsInfo: Object) => Object>,
+    customizeTooltip: Function as PropType<((pointsInfo: any) => Record<string, any>)>,
     enabled: Boolean,
-    font: Object,
-    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    font: Object as PropType<Font | Record<string, any>>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     interactive: Boolean,
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
-    shadow: Object,
+    shadow: Object as PropType<Record<string, any>>,
     zIndex: Number
   }
 };

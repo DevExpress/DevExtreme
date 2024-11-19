@@ -15,10 +15,15 @@ import {
  TooltipShownEvent,
 } from "devextreme/viz/linear_gauge";
 import {
+ GaugeIndicator,
+} from "devextreme/viz/gauges/base_gauge";
+import {
  Theme,
  AnimationEaseMode,
  DashStyle,
+ Font,
  LabelOverlap,
+ ChartsColor,
  Palette,
  PaletteExtensionMode,
  TextOverflow,
@@ -33,6 +38,9 @@ import {
  HorizontalEdge,
  VerticalEdge,
 } from "devextreme/common";
+import {
+ Format as LocalizationFormat,
+} from "devextreme/localization";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -75,37 +83,37 @@ interface DxLinearGauge extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    animation: Object,
+    animation: Object as PropType<Record<string, any>>,
     containerBackgroundColor: String,
     disabled: Boolean,
-    elementAttr: Object,
-    export: Object,
-    geometry: Object,
-    loadingIndicator: Object,
-    margin: Object,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onDrawn: Function as PropType<(e: DrawnEvent) => void>,
-    onExported: Function as PropType<(e: ExportedEvent) => void>,
-    onExporting: Function as PropType<(e: ExportingEvent) => void>,
-    onFileSaving: Function as PropType<(e: FileSavingEvent) => void>,
-    onIncidentOccurred: Function as PropType<(e: IncidentOccurredEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    onTooltipHidden: Function as PropType<(e: TooltipHiddenEvent) => void>,
-    onTooltipShown: Function as PropType<(e: TooltipShownEvent) => void>,
+    elementAttr: Object as PropType<Record<string, any>>,
+    export: Object as PropType<Record<string, any>>,
+    geometry: Object as PropType<Record<string, any>>,
+    loadingIndicator: Object as PropType<Record<string, any>>,
+    margin: Object as PropType<Record<string, any>>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onDrawn: Function as PropType<((e: DrawnEvent) => void)>,
+    onExported: Function as PropType<((e: ExportedEvent) => void)>,
+    onExporting: Function as PropType<((e: ExportingEvent) => void)>,
+    onFileSaving: Function as PropType<((e: FileSavingEvent) => void)>,
+    onIncidentOccurred: Function as PropType<((e: IncidentOccurredEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onTooltipHidden: Function as PropType<((e: TooltipHiddenEvent) => void)>,
+    onTooltipShown: Function as PropType<((e: TooltipShownEvent) => void)>,
     pathModified: Boolean,
-    rangeContainer: Object,
+    rangeContainer: Object as PropType<Record<string, any>>,
     redrawOnResize: Boolean,
     rtlEnabled: Boolean,
-    scale: Object,
-    size: Object,
-    subvalueIndicator: Object,
+    scale: Object as PropType<Record<string, any>>,
+    size: Object as PropType<Record<string, any>>,
+    subvalueIndicator: Object as PropType<GaugeIndicator | Record<string, any>>,
     subvalues: Array as PropType<Array<number>>,
     theme: String as PropType<Theme>,
-    title: [Object, String],
-    tooltip: Object,
+    title: [Object, String] as PropType<Record<string, any> | string>,
+    tooltip: Object as PropType<Record<string, any>>,
     value: Number,
-    valueIndicator: Object
+    valueIndicator: Object as PropType<GaugeIndicator | Record<string, any>>
   },
   emits: {
     "update:isActive": null,
@@ -275,7 +283,7 @@ const DxExportConfig = {
     formats: Array as PropType<Array<ExportFormat>>,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: Function as PropType<(svg: any, canvas: any) => any>
+    svgToCanvas: Function as PropType<((svg: any, canvas: any) => any)>
   }
 };
 
@@ -323,8 +331,8 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function as PropType<(value: number | Date) => string>,
-    parser: Function as PropType<(value: string) => (number | Date)>,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
     type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
@@ -367,9 +375,9 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    customizeText: Function as PropType<(scaleValue: Object) => string>,
-    font: Object,
-    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    customizeText: Function as PropType<((scaleValue: { value: number, valueText: string }) => string)>,
+    font: Object as PropType<Font | Record<string, any>>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     indentFromTick: Number,
     overlappingBehavior: String as PropType<LabelOverlap>,
     useRangeColors: Boolean,
@@ -398,7 +406,7 @@ const DxLoadingIndicatorConfig = {
   },
   props: {
     backgroundColor: String,
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     show: Boolean,
     text: String
   }
@@ -470,7 +478,7 @@ const DxRangeConfig = {
     "update:startValue": null,
   },
   props: {
-    color: [Object, String],
+    color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
     endValue: Number,
     startValue: Number
   }
@@ -500,14 +508,14 @@ const DxRangeContainerConfig = {
     "update:width": null,
   },
   props: {
-    backgroundColor: [Object, String],
+    backgroundColor: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
     horizontalOrientation: String as PropType<HorizontalAlignment>,
     offset: Number,
     palette: [Array, String] as PropType<Array<string> | Palette>,
     paletteExtensionMode: String as PropType<PaletteExtensionMode>,
-    ranges: Array as PropType<Array<Object>>,
+    ranges: Array as PropType<Array<Record<string, any>>>,
     verticalOrientation: String as PropType<VerticalAlignment>,
-    width: [Number, Object]
+    width: [Number, Object] as PropType<number | Record<string, any>>
   }
 };
 
@@ -546,12 +554,12 @@ const DxScaleConfig = {
     customTicks: Array as PropType<Array<number>>,
     endValue: Number,
     horizontalOrientation: String as PropType<HorizontalAlignment>,
-    label: Object,
-    minorTick: Object,
+    label: Object as PropType<Record<string, any>>,
+    minorTick: Object as PropType<Record<string, any>>,
     minorTickInterval: Number,
     scaleDivisionFactor: Number,
     startValue: Number,
-    tick: Object,
+    tick: Object as PropType<Record<string, any>>,
     tickInterval: Number,
     verticalOrientation: String as PropType<VerticalAlignment>
   }
@@ -623,7 +631,7 @@ const DxSubtitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     offset: Number,
     text: String,
     textOverflow: String as PropType<TextOverflow>,
@@ -669,7 +677,7 @@ const DxSubvalueIndicatorConfig = {
     backgroundColor: String,
     baseValue: Number,
     beginAdaptingAtRadius: Number,
-    color: [Object, String],
+    color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
     horizontalOrientation: String as PropType<HorizontalEdge>,
     indentFromCenter: Number,
     length: Number,
@@ -680,7 +688,7 @@ const DxSubvalueIndicatorConfig = {
     size: Number,
     spindleGapSize: Number,
     spindleSize: Number,
-    text: Object,
+    text: Object as PropType<Record<string, any>>,
     type: String as PropType<"circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle">,
     verticalOrientation: String as PropType<VerticalEdge>,
     width: Number
@@ -707,9 +715,9 @@ const DxTextConfig = {
     "update:indent": null,
   },
   props: {
-    customizeText: Function as PropType<(indicatedValue: Object) => string>,
-    font: Object,
-    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    customizeText: Function as PropType<((indicatedValue: { value: number, valueText: string }) => string)>,
+    font: Object as PropType<Font | Record<string, any>>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     indent: Number
   }
 };
@@ -764,11 +772,11 @@ const DxTitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     horizontalAlignment: String as PropType<HorizontalAlignment>,
-    margin: [Number, Object],
+    margin: [Number, Object] as PropType<number | Record<string, any>>,
     placeholderSize: Number,
-    subtitle: [Object, String],
+    subtitle: [Object, String] as PropType<Record<string, any> | string>,
     text: String,
     textOverflow: String as PropType<TextOverflow>,
     verticalAlignment: String as PropType<VerticalEdge>,
@@ -810,20 +818,20 @@ const DxTooltipConfig = {
   },
   props: {
     arrowLength: Number,
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String,
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: Function as PropType<(scaleValue: Object) => Object>,
+    customizeTooltip: Function as PropType<((scaleValue: { value: number, valueText: string }) => Record<string, any>)>,
     enabled: Boolean,
-    font: Object,
-    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    font: Object as PropType<Font | Record<string, any>>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     interactive: Boolean,
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
-    shadow: Object,
+    shadow: Object as PropType<Record<string, any>>,
     zIndex: Number
   }
 };
@@ -869,7 +877,7 @@ const DxValueIndicatorConfig = {
     backgroundColor: String,
     baseValue: Number,
     beginAdaptingAtRadius: Number,
-    color: [Object, String],
+    color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
     horizontalOrientation: String as PropType<HorizontalEdge>,
     indentFromCenter: Number,
     length: Number,
@@ -880,7 +888,7 @@ const DxValueIndicatorConfig = {
     size: Number,
     spindleGapSize: Number,
     spindleSize: Number,
-    text: Object,
+    text: Object as PropType<Record<string, any>>,
     type: String as PropType<"circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle">,
     verticalOrientation: String as PropType<VerticalEdge>,
     width: Number

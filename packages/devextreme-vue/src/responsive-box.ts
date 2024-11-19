@@ -3,7 +3,9 @@ import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import ResponsiveBox, { Properties } from "devextreme/ui/responsive_box";
+import  DataSource from "devextreme/data/data_source";
 import {
+ dxResponsiveBoxItem,
  ContentReadyEvent,
  DisposingEvent,
  InitializedEvent,
@@ -13,6 +15,12 @@ import {
  ItemRenderedEvent,
  OptionChangedEvent,
 } from "devextreme/ui/responsive_box";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -47,29 +55,29 @@ interface DxResponsiveBox extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    cols: Array as PropType<Array<Object>>,
-    dataSource: [Array, Object, String] as PropType<Array<any> | Object | null | string>,
+    cols: Array as PropType<Array<Record<string, any>>>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxResponsiveBoxItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
     disabled: Boolean,
-    elementAttr: Object,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    elementAttr: Object as PropType<Record<string, any>>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
-    items: Array as PropType<Array<any>>,
+    items: Array as PropType<Array<any | dxResponsiveBoxItem | string>>,
     itemTemplate: {},
-    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
-    onItemContextMenu: Function as PropType<(e: ItemContextMenuEvent) => void>,
-    onItemHold: Function as PropType<(e: ItemHoldEvent) => void>,
-    onItemRendered: Function as PropType<(e: ItemRenderedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    rows: Array as PropType<Array<Object>>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
+    onItemContextMenu: Function as PropType<((e: ItemContextMenuEvent) => void)>,
+    onItemHold: Function as PropType<((e: ItemHoldEvent) => void)>,
+    onItemRendered: Function as PropType<((e: ItemRenderedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    rows: Array as PropType<Array<Record<string, any>>>,
     rtlEnabled: Boolean,
-    screenByWidth: Function as PropType<() => void>,
+    screenByWidth: Function as PropType<(() => void)>,
     singleColumnScreen: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -157,7 +165,7 @@ const DxItemConfig = {
   props: {
     disabled: Boolean,
     html: String,
-    location: [Array, Object] as PropType<Array<Object> | Object>,
+    location: [Array, Object] as PropType<Array<Record<string, any>> | Record<string, any>>,
     template: {},
     text: String,
     visible: Boolean

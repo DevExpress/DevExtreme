@@ -3,6 +3,9 @@ import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import Popover, { Properties } from "devextreme/ui/popover";
 import {
+ event,
+} from "devextreme/events/index";
+import {
  ContentReadyEvent,
  DisposingEvent,
  HiddenEvent,
@@ -23,19 +26,23 @@ import {
  ToolbarItemComponent,
 } from "devextreme/common";
 import {
+ PositionConfig,
  CollisionResolution,
  CollisionResolutionCombination,
 } from "devextreme/animation/position";
 import {
+ dxPopupToolbarItem,
+ ToolbarLocation,
+} from "devextreme/ui/popup";
+import {
+ AnimationConfig,
+ AnimationState,
  AnimationType,
 } from "devextreme/animation/fx";
 import {
  LocateInMenuMode,
  ShowTextMode,
 } from "devextreme/ui/toolbar";
-import {
- ToolbarLocation,
-} from "devextreme/ui/popup";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -87,45 +94,45 @@ interface DxPopover extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    animation: Object,
-    closeOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
+    animation: Object as PropType<Record<string, any>>,
+    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
     disabled: Boolean,
     enableBodyScroll: Boolean,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    hideEvent: [Object, String],
-    hideOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    hideEvent: [Object, String] as PropType<Record<string, any> | string>,
+    hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    maxWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    minHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    minWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onHidden: Function as PropType<(e: HiddenEvent) => void>,
-    onHiding: Function as PropType<(e: HidingEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    onShowing: Function as PropType<(e: ShowingEvent) => void>,
-    onShown: Function as PropType<(e: ShownEvent) => void>,
-    onTitleRendered: Function as PropType<(e: TitleRenderedEvent) => void>,
-    position: [String, Object] as PropType<Position | Object>,
+    maxHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    maxWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    minHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    minWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onHidden: Function as PropType<((e: HiddenEvent) => void)>,
+    onHiding: Function as PropType<((e: HidingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onShowing: Function as PropType<((e: ShowingEvent) => void)>,
+    onShown: Function as PropType<((e: ShownEvent) => void)>,
+    onTitleRendered: Function as PropType<((e: TitleRenderedEvent) => void)>,
+    position: [String, Object] as PropType<Position | PositionConfig | Record<string, any>>,
     rtlEnabled: Boolean,
     shading: Boolean,
     shadingColor: String,
     showCloseButton: Boolean,
-    showEvent: [Object, String],
+    showEvent: [Object, String] as PropType<Record<string, any> | string>,
     showTitle: Boolean,
     target: {},
     title: String,
     titleTemplate: {},
-    toolbarItems: Array as PropType<Array<Object>>,
+    toolbarItems: Array as PropType<Array<dxPopupToolbarItem>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     wrapperAttr: {}
   },
   emits: {
@@ -203,8 +210,8 @@ const DxAnimationConfig = {
     "update:show": null,
   },
   props: {
-    hide: [Object, Number, String],
-    show: [Object, Number, String]
+    hide: [Object, Number, String] as PropType<AnimationConfig | number | Record<string, any> | string>,
+    show: [Object, Number, String] as PropType<AnimationConfig | number | Record<string, any> | string>
   }
 };
 
@@ -288,7 +295,7 @@ const DxFromConfig = {
   props: {
     left: Number,
     opacity: Number,
-    position: Object,
+    position: Object as PropType<PositionConfig | Record<string, any>>,
     scale: Number,
     top: Number
   }
@@ -319,15 +326,15 @@ const DxHideConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function as PropType<($element: any, config: Object) => void>,
+    complete: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
     delay: Number,
     direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
-    from: Object,
+    from: Object as PropType<AnimationState | Record<string, any>>,
     staggerDelay: Number,
-    start: Function as PropType<($element: any, config: Object) => void>,
-    to: Object,
+    start: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
+    to: Object as PropType<AnimationState | Record<string, any>>,
     type: String as PropType<AnimationType>
   }
 };
@@ -412,13 +419,13 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String] as PropType<Object | PositionAlignment>,
+    at: [Object, String] as PropType<Record<string, any> | PositionAlignment>,
     boundary: {},
-    boundaryOffset: [Object, String],
-    collision: [String, Object] as PropType<CollisionResolutionCombination | Object>,
-    my: [Object, String] as PropType<Object | PositionAlignment>,
+    boundaryOffset: [Object, String] as PropType<Record<string, any> | string>,
+    collision: [String, Object] as PropType<CollisionResolutionCombination | Record<string, any>>,
+    my: [Object, String] as PropType<Record<string, any> | PositionAlignment>,
     of: {},
-    offset: [Object, String]
+    offset: [Object, String] as PropType<Record<string, any> | string>
   }
 };
 
@@ -444,15 +451,15 @@ const DxShowConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function as PropType<($element: any, config: Object) => void>,
+    complete: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
     delay: Number,
     direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
-    from: Object,
+    from: Object as PropType<AnimationState | Record<string, any>>,
     staggerDelay: Number,
-    start: Function as PropType<($element: any, config: Object) => void>,
-    to: Object,
+    start: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
+    to: Object as PropType<AnimationState | Record<string, any>>,
     type: String as PropType<AnimationType>
   }
 };
@@ -495,7 +502,7 @@ const DxToConfig = {
   props: {
     left: Number,
     opacity: Number,
-    position: Object,
+    position: Object as PropType<PositionConfig | Record<string, any>>,
     scale: Number,
     top: Number
   }

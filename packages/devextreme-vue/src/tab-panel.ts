@@ -3,12 +3,9 @@ import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import TabPanel, { Properties } from "devextreme/ui/tab_panel";
+import  DataSource from "devextreme/data/data_source";
 import {
- TabsIconPosition,
- TabsStyle,
- Position,
-} from "devextreme/common";
-import {
+ dxTabPanelItem,
  ContentReadyEvent,
  DisposingEvent,
  InitializedEvent,
@@ -23,6 +20,17 @@ import {
  TitleHoldEvent,
  TitleRenderedEvent,
 } from "devextreme/ui/tab_panel";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
+import {
+ TabsIconPosition,
+ TabsStyle,
+ Position,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -81,34 +89,34 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     animationEnabled: Boolean,
-    dataSource: [Array, Object, String] as PropType<Array<any> | Object | null | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxTabPanelItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
     deferRendering: Boolean,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     iconPosition: String as PropType<TabsIconPosition>,
     itemHoldTimeout: Number,
-    items: Array as PropType<Array<any>>,
+    items: Array as PropType<Array<any | dxTabPanelItem | string>>,
     itemTemplate: {},
     itemTitleTemplate: {},
     loop: Boolean,
     noDataText: String,
-    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
-    onItemContextMenu: Function as PropType<(e: ItemContextMenuEvent) => void>,
-    onItemHold: Function as PropType<(e: ItemHoldEvent) => void>,
-    onItemRendered: Function as PropType<(e: ItemRenderedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
-    onSelectionChanging: Function as PropType<(e: SelectionChangingEvent) => void>,
-    onTitleClick: Function as PropType<(e: TitleClickEvent) => void>,
-    onTitleHold: Function as PropType<(e: TitleHoldEvent) => void>,
-    onTitleRendered: Function as PropType<(e: TitleRenderedEvent) => void>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
+    onItemContextMenu: Function as PropType<((e: ItemContextMenuEvent) => void)>,
+    onItemHold: Function as PropType<((e: ItemHoldEvent) => void)>,
+    onItemRendered: Function as PropType<((e: ItemRenderedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
+    onSelectionChanging: Function as PropType<((e: SelectionChangingEvent) => void)>,
+    onTitleClick: Function as PropType<((e: TitleClickEvent) => void)>,
+    onTitleHold: Function as PropType<((e: TitleHoldEvent) => void)>,
+    onTitleRendered: Function as PropType<((e: TitleRenderedEvent) => void)>,
     repaintChangesOnly: Boolean,
     rtlEnabled: Boolean,
     scrollByContent: Boolean,
@@ -121,7 +129,7 @@ const componentConfig = {
     tabIndex: Number,
     tabsPosition: String as PropType<Position>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

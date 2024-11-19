@@ -2,9 +2,16 @@ import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import Pagination, { Properties } from "devextreme/ui/pagination";
+import  DOMComponent from "devextreme/core/dom_component";
 import {
  DisplayMode,
 } from "devextreme/common";
+import {
+ EventInfo,
+} from "devextreme/events/index";
+import {
+ Component,
+} from "devextreme/core/component";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -46,18 +53,18 @@ const componentConfig = {
     allowedPageSizes: Array as PropType<Array<number | string>>,
     disabled: Boolean,
     displayMode: String as PropType<DisplayMode>,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     infoText: String,
     itemCount: Number,
     label: String,
-    onContentReady: Function as PropType<(e: Object) => void>,
-    onDisposing: Function as PropType<(e: Object) => void>,
-    onInitialized: Function as PropType<(e: Object) => void>,
-    onOptionChanged: Function as PropType<(e: Object) => void>,
+    onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
+    onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
+    onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
+    onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
     pageIndex: Number,
     pageSize: Number,
     rtlEnabled: Boolean,
@@ -66,7 +73,7 @@ const componentConfig = {
     showPageSizeSelector: Boolean,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

@@ -3,7 +3,9 @@ import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import MultiView, { Properties } from "devextreme/ui/multi_view";
+import  DataSource from "devextreme/data/data_source";
 import {
+ dxMultiViewItem,
  ContentReadyEvent,
  DisposingEvent,
  InitializedEvent,
@@ -14,6 +16,12 @@ import {
  OptionChangedEvent,
  SelectionChangedEvent,
 } from "devextreme/ui/multi_view";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -60,35 +68,35 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     animationEnabled: Boolean,
-    dataSource: [Array, Object, String] as PropType<Array<any> | Object | null | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxMultiViewItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
     deferRendering: Boolean,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
-    items: Array as PropType<Array<any>>,
+    items: Array as PropType<Array<any | dxMultiViewItem | string>>,
     itemTemplate: {},
     loop: Boolean,
     noDataText: String,
-    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
-    onItemContextMenu: Function as PropType<(e: ItemContextMenuEvent) => void>,
-    onItemHold: Function as PropType<(e: ItemHoldEvent) => void>,
-    onItemRendered: Function as PropType<(e: ItemRenderedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
+    onItemContextMenu: Function as PropType<((e: ItemContextMenuEvent) => void)>,
+    onItemHold: Function as PropType<((e: ItemHoldEvent) => void)>,
+    onItemRendered: Function as PropType<((e: ItemRenderedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
     rtlEnabled: Boolean,
     selectedIndex: Number,
     selectedItem: {},
     swipeEnabled: Boolean,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

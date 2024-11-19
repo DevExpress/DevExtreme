@@ -2,7 +2,10 @@ import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import PieChart, { Properties } from "devextreme/viz/pie_chart";
+import  DataSource from "devextreme/data/data_source";
 import {
+ dxPieChartAnnotationConfig,
+ dxPieChartCommonAnnotationConfig,
  DisposingEvent,
  DoneEvent,
  DrawnEvent,
@@ -19,23 +22,33 @@ import {
  TooltipHiddenEvent,
  TooltipShownEvent,
  PieChartSegmentDirection,
+ PieChartSeries,
  PieChartType,
  PieChartAnnotationLocation,
  PieChartSeriesInteractionMode,
+ PieChartLegendItem,
  PieChartLegendHoverMode,
  SmallValuesGroupingMode,
 } from "devextreme/viz/pie_chart";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
 import {
  Palette,
  PaletteExtensionMode,
  ShiftLabelOverlap,
  Theme,
  AnimationEaseMode,
+ Font,
  TextOverflow,
  AnnotationType,
  WordWrap,
  DashStyle,
  ChartsDataType,
+ ChartsColor,
  HatchDirection,
  LabelPosition,
 } from "devextreme/common/charts";
@@ -48,6 +61,9 @@ import {
  Orientation,
  VerticalEdge,
 } from "devextreme/common";
+import {
+ Format as LocalizationFormat,
+} from "devextreme/localization";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -110,40 +126,40 @@ interface DxPieChart extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    adaptiveLayout: Object,
-    animation: [Boolean, Object],
-    annotations: Array as PropType<Array<any>>,
+    adaptiveLayout: Object as PropType<Record<string, any>>,
+    animation: [Boolean, Object] as PropType<boolean | Record<string, any>>,
+    annotations: Array as PropType<Array<any | dxPieChartAnnotationConfig>>,
     centerTemplate: {},
-    commonAnnotationSettings: Object,
+    commonAnnotationSettings: Object as PropType<dxPieChartCommonAnnotationConfig | Record<string, any>>,
     commonSeriesSettings: {},
-    customizeAnnotation: Function as PropType<(annotation: any) => Object>,
-    customizeLabel: Function as PropType<(pointInfo: Object) => Object>,
-    customizePoint: Function as PropType<(pointInfo: Object) => Object>,
-    dataSource: [Array, Object, String] as PropType<Array<any> | Object | null | string>,
+    customizeAnnotation: Function as PropType<((annotation: dxPieChartAnnotationConfig | any) => dxPieChartAnnotationConfig)>,
+    customizeLabel: Function as PropType<((pointInfo: any) => any)>,
+    customizePoint: Function as PropType<((pointInfo: any) => any)>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
     diameter: Number,
     disabled: Boolean,
-    elementAttr: Object,
-    export: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
+    export: Object as PropType<Record<string, any>>,
     innerRadius: Number,
-    legend: Object,
-    loadingIndicator: Object,
-    margin: Object,
+    legend: Object as PropType<Record<string, any>>,
+    loadingIndicator: Object as PropType<Record<string, any>>,
+    margin: Object as PropType<Record<string, any>>,
     minDiameter: Number,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onDone: Function as PropType<(e: DoneEvent) => void>,
-    onDrawn: Function as PropType<(e: DrawnEvent) => void>,
-    onExported: Function as PropType<(e: ExportedEvent) => void>,
-    onExporting: Function as PropType<(e: ExportingEvent) => void>,
-    onFileSaving: Function as PropType<(e: FileSavingEvent) => void>,
-    onIncidentOccurred: Function as PropType<(e: IncidentOccurredEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onLegendClick: Function as PropType<(e: LegendClickEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    onPointClick: Function as PropType<(e: PointClickEvent) => void>,
-    onPointHoverChanged: Function as PropType<(e: PointHoverChangedEvent) => void>,
-    onPointSelectionChanged: Function as PropType<(e: PointSelectionChangedEvent) => void>,
-    onTooltipHidden: Function as PropType<(e: TooltipHiddenEvent) => void>,
-    onTooltipShown: Function as PropType<(e: TooltipShownEvent) => void>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onDone: Function as PropType<((e: DoneEvent) => void)>,
+    onDrawn: Function as PropType<((e: DrawnEvent) => void)>,
+    onExported: Function as PropType<((e: ExportedEvent) => void)>,
+    onExporting: Function as PropType<((e: ExportingEvent) => void)>,
+    onFileSaving: Function as PropType<((e: FileSavingEvent) => void)>,
+    onIncidentOccurred: Function as PropType<((e: IncidentOccurredEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onLegendClick: Function as PropType<((e: LegendClickEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onPointClick: Function as PropType<((e: PointClickEvent) => void)>,
+    onPointHoverChanged: Function as PropType<((e: PointHoverChangedEvent) => void)>,
+    onPointSelectionChanged: Function as PropType<((e: PointSelectionChangedEvent) => void)>,
+    onTooltipHidden: Function as PropType<((e: TooltipHiddenEvent) => void)>,
+    onTooltipShown: Function as PropType<((e: TooltipShownEvent) => void)>,
     palette: [Array, String] as PropType<Array<string> | Palette>,
     paletteExtensionMode: String as PropType<PaletteExtensionMode>,
     pathModified: Boolean,
@@ -152,14 +168,14 @@ const componentConfig = {
     resolveLabelOverlapping: String as PropType<ShiftLabelOverlap>,
     rtlEnabled: Boolean,
     segmentsDirection: String as PropType<PieChartSegmentDirection>,
-    series: [Array, Object] as PropType<Array<Object> | Object>,
-    seriesTemplate: Object,
-    size: Object,
+    series: [Array, Object] as PropType<Array<PieChartSeries> | PieChartSeries | Record<string, any>>,
+    seriesTemplate: Object as PropType<Record<string, any>>,
+    size: Object as PropType<Record<string, any>>,
     sizeGroup: String,
     startAngle: Number,
     theme: String as PropType<Theme>,
-    title: [Object, String],
-    tooltip: Object,
+    title: [Object, String] as PropType<Record<string, any> | string>,
+    tooltip: Object as PropType<Record<string, any>>,
     type: String as PropType<PieChartType>
   },
   emits: {
@@ -335,14 +351,14 @@ const DxAnnotationConfig = {
     argument: [Date, Number, String],
     arrowLength: Number,
     arrowWidth: Number,
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String,
-    customizeTooltip: Function as PropType<(annotation: any) => Object>,
+    customizeTooltip: Function as PropType<((annotation: dxPieChartAnnotationConfig | any) => Record<string, any>)>,
     data: {},
     description: String,
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     height: Number,
-    image: [Object, String],
+    image: [Object, String] as PropType<Record<string, any> | string>,
     location: String as PropType<PieChartAnnotationLocation>,
     name: String,
     offsetX: Number,
@@ -351,7 +367,7 @@ const DxAnnotationConfig = {
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     series: String,
-    shadow: Object,
+    shadow: Object as PropType<Record<string, any>>,
     template: {},
     text: String,
     textOverflow: String as PropType<TextOverflow>,
@@ -419,8 +435,8 @@ const DxArgumentFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function as PropType<(value: number | Date) => string>,
-    parser: Function as PropType<(value: string) => (number | Date)>,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
     type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
@@ -519,14 +535,14 @@ const DxCommonAnnotationSettingsConfig = {
     argument: [Date, Number, String],
     arrowLength: Number,
     arrowWidth: Number,
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String,
-    customizeTooltip: Function as PropType<(annotation: any) => Object>,
+    customizeTooltip: Function as PropType<((annotation: dxPieChartAnnotationConfig | any) => Record<string, any>)>,
     data: {},
     description: String,
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     height: Number,
-    image: [Object, String],
+    image: [Object, String] as PropType<Record<string, any> | string>,
     location: String as PropType<PieChartAnnotationLocation>,
     offsetX: Number,
     offsetY: Number,
@@ -534,7 +550,7 @@ const DxCommonAnnotationSettingsConfig = {
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     series: String,
-    shadow: Object,
+    shadow: Object as PropType<Record<string, any>>,
     template: {},
     text: String,
     textOverflow: String as PropType<TextOverflow>,
@@ -576,16 +592,16 @@ const DxCommonSeriesSettingsConfig = {
   props: {
     argumentField: String,
     argumentType: String as PropType<ChartsDataType>,
-    border: Object,
-    color: [Object, String],
+    border: Object as PropType<Record<string, any>>,
+    color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
     hoverMode: String as PropType<PieChartSeriesInteractionMode>,
-    hoverStyle: Object,
-    label: Object,
+    hoverStyle: Object as PropType<Record<string, any>>,
+    label: Object as PropType<Record<string, any>>,
     maxLabelCount: Number,
     minSegmentSize: Number,
     selectionMode: String as PropType<PieChartSeriesInteractionMode>,
-    selectionStyle: Object,
-    smallValuesGrouping: Object,
+    selectionStyle: Object as PropType<Record<string, any>>,
+    smallValuesGrouping: Object as PropType<Record<string, any>>,
     tagField: String,
     valueField: String
   }
@@ -646,7 +662,7 @@ const DxExportConfig = {
     formats: Array as PropType<Array<ExportFormat>>,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: Function as PropType<(svg: any, canvas: any) => any>
+    svgToCanvas: Function as PropType<((svg: any, canvas: any) => any)>
   }
 };
 
@@ -694,8 +710,8 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function as PropType<(value: number | Date) => string>,
-    parser: Function as PropType<(value: string) => (number | Date)>,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
     type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
@@ -741,9 +757,9 @@ const DxHoverStyleConfig = {
     "update:highlight": null,
   },
   props: {
-    border: Object,
-    color: [Object, String],
-    hatching: Object,
+    border: Object as PropType<Record<string, any>>,
+    color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
+    hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean
   }
 };
@@ -801,14 +817,14 @@ const DxLabelConfig = {
     "update:wordWrap": null,
   },
   props: {
-    argumentFormat: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    argumentFormat: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     backgroundColor: String,
-    border: Object,
-    connector: Object,
-    customizeText: Function as PropType<(pointInfo: Object) => string>,
+    border: Object as PropType<Record<string, any>>,
+    connector: Object as PropType<Record<string, any>>,
+    customizeText: Function as PropType<((pointInfo: any) => string)>,
     displayFormat: String,
-    font: Object,
-    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    font: Object as PropType<Font | Record<string, any>>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     position: String as PropType<LabelPosition>,
     radialOffset: Number,
     rotationAngle: Number,
@@ -862,18 +878,18 @@ const DxLegendConfig = {
   },
   props: {
     backgroundColor: String,
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     columnCount: Number,
     columnItemSpacing: Number,
-    customizeHint: Function as PropType<(pointInfo: Object) => string>,
-    customizeItems: Function as PropType<(items: Array<Object>) => Array<Object>>,
-    customizeText: Function as PropType<(pointInfo: Object) => string>,
-    font: Object,
+    customizeHint: Function as PropType<((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string)>,
+    customizeItems: Function as PropType<((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>)>,
+    customizeText: Function as PropType<((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string)>,
+    font: Object as PropType<Font | Record<string, any>>,
     horizontalAlignment: String as PropType<HorizontalAlignment>,
     hoverMode: String as PropType<PieChartLegendHoverMode>,
     itemsAlignment: String as PropType<HorizontalAlignment>,
     itemTextPosition: String as PropType<Position>,
-    margin: [Number, Object],
+    margin: [Number, Object] as PropType<number | Record<string, any>>,
     markerSize: Number,
     markerTemplate: {},
     orientation: String as PropType<Orientation>,
@@ -881,7 +897,7 @@ const DxLegendConfig = {
     paddingTopBottom: Number,
     rowCount: Number,
     rowItemSpacing: Number,
-    title: [Object, String],
+    title: [Object, String] as PropType<Record<string, any> | string>,
     verticalAlignment: String as PropType<VerticalEdge>,
     visible: Boolean
   }
@@ -914,11 +930,11 @@ const DxLegendTitleConfig = {
     "update:verticalAlignment": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     horizontalAlignment: String as PropType<HorizontalAlignment>,
-    margin: Object,
+    margin: Object as PropType<Record<string, any>>,
     placeholderSize: Number,
-    subtitle: [Object, String],
+    subtitle: [Object, String] as PropType<Record<string, any> | string>,
     text: String,
     verticalAlignment: String as PropType<VerticalEdge>
   }
@@ -945,7 +961,7 @@ const DxLegendTitleSubtitleConfig = {
     "update:text": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     offset: Number,
     text: String
   }
@@ -973,7 +989,7 @@ const DxLoadingIndicatorConfig = {
   props: {
     backgroundColor: String,
     enabled: Boolean,
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     show: Boolean,
     text: String
   }
@@ -1026,11 +1042,11 @@ const DxPieChartTitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     horizontalAlignment: String as PropType<HorizontalAlignment>,
-    margin: [Number, Object],
+    margin: [Number, Object] as PropType<number | Record<string, any>>,
     placeholderSize: Number,
-    subtitle: [Object, String],
+    subtitle: [Object, String] as PropType<Record<string, any> | string>,
     text: String,
     textOverflow: String as PropType<TextOverflow>,
     verticalAlignment: String as PropType<VerticalEdge>,
@@ -1061,7 +1077,7 @@ const DxPieChartTitleSubtitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     offset: Number,
     text: String,
     textOverflow: String as PropType<TextOverflow>,
@@ -1088,9 +1104,9 @@ const DxSelectionStyleConfig = {
     "update:highlight": null,
   },
   props: {
-    border: Object,
-    color: [Object, String],
-    hatching: Object,
+    border: Object as PropType<Record<string, any>>,
+    color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
+    hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean
   }
 };
@@ -1131,17 +1147,17 @@ const DxSeriesConfig = {
   props: {
     argumentField: String,
     argumentType: String as PropType<ChartsDataType>,
-    border: Object,
-    color: [Object, String],
+    border: Object as PropType<Record<string, any>>,
+    color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
     hoverMode: String as PropType<PieChartSeriesInteractionMode>,
-    hoverStyle: Object,
-    label: Object,
+    hoverStyle: Object as PropType<Record<string, any>>,
+    label: Object as PropType<Record<string, any>>,
     maxLabelCount: Number,
     minSegmentSize: Number,
     name: String,
     selectionMode: String as PropType<PieChartSeriesInteractionMode>,
-    selectionStyle: Object,
-    smallValuesGrouping: Object,
+    selectionStyle: Object as PropType<Record<string, any>>,
+    smallValuesGrouping: Object as PropType<Record<string, any>>,
     tag: {},
     tagField: String,
     valueField: String
@@ -1186,7 +1202,7 @@ const DxSeriesTemplateConfig = {
     "update:nameField": null,
   },
   props: {
-    customizeSeries: Function as PropType<(seriesName: any) => Object>,
+    customizeSeries: Function as PropType<((seriesName: any) => PieChartSeries)>,
     nameField: String
   }
 };
@@ -1275,7 +1291,7 @@ const DxSubtitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     offset: Number,
     text: String,
     textOverflow: String as PropType<TextOverflow>,
@@ -1304,11 +1320,11 @@ const DxTitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     horizontalAlignment: String as PropType<HorizontalAlignment>,
-    margin: [Object, Number],
+    margin: [Object, Number] as PropType<Record<string, any> | number>,
     placeholderSize: Number,
-    subtitle: [Object, String],
+    subtitle: [Object, String] as PropType<Record<string, any> | string>,
     text: String,
     textOverflow: String as PropType<TextOverflow>,
     verticalAlignment: String as PropType<VerticalEdge>,
@@ -1346,22 +1362,22 @@ const DxTooltipConfig = {
     "update:zIndex": null,
   },
   props: {
-    argumentFormat: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    argumentFormat: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     arrowLength: Number,
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String,
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: Function as PropType<(pointInfo: Object) => Object>,
+    customizeTooltip: Function as PropType<((pointInfo: any) => Record<string, any>)>,
     enabled: Boolean,
-    font: Object,
-    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    font: Object as PropType<Font | Record<string, any>>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     interactive: Boolean,
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
-    shadow: Object,
+    shadow: Object as PropType<Record<string, any>>,
     shared: Boolean,
     zIndex: Number
   }

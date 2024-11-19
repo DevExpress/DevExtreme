@@ -2,6 +2,7 @@ import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import FileUploader, { Properties } from "devextreme/ui/file_uploader";
+import  UploadInfo from "devextreme/file_management/upload_info";
 import {
  BeforeSendEvent,
  ContentReadyEvent,
@@ -97,7 +98,7 @@ interface DxFileUploader extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    abortUpload: Function as PropType<(file: any, uploadInfo?: Object) => any>,
+    abortUpload: Function as PropType<((file: any, uploadInfo?: UploadInfo) => any)>,
     accept: String,
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -107,9 +108,9 @@ const componentConfig = {
     dialogTrigger: {},
     disabled: Boolean,
     dropZone: {},
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
@@ -123,20 +124,20 @@ const componentConfig = {
     minFileSize: Number,
     multiple: Boolean,
     name: String,
-    onBeforeSend: Function as PropType<(e: BeforeSendEvent) => void>,
-    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onDropZoneEnter: Function as PropType<(e: DropZoneEnterEvent) => void>,
-    onDropZoneLeave: Function as PropType<(e: DropZoneLeaveEvent) => void>,
-    onFilesUploaded: Function as PropType<(e: FilesUploadedEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    onProgress: Function as PropType<(e: ProgressEvent) => void>,
-    onUploadAborted: Function as PropType<(e: UploadAbortedEvent) => void>,
-    onUploaded: Function as PropType<(e: UploadedEvent) => void>,
-    onUploadError: Function as PropType<(e: UploadErrorEvent) => void>,
-    onUploadStarted: Function as PropType<(e: UploadStartedEvent) => void>,
-    onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
+    onBeforeSend: Function as PropType<((e: BeforeSendEvent) => void)>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onDropZoneEnter: Function as PropType<((e: DropZoneEnterEvent) => void)>,
+    onDropZoneLeave: Function as PropType<((e: DropZoneLeaveEvent) => void)>,
+    onFilesUploaded: Function as PropType<((e: FilesUploadedEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onProgress: Function as PropType<((e: ProgressEvent) => void)>,
+    onUploadAborted: Function as PropType<((e: UploadAbortedEvent) => void)>,
+    onUploaded: Function as PropType<((e: UploadedEvent) => void)>,
+    onUploadError: Function as PropType<((e: UploadErrorEvent) => void)>,
+    onUploadStarted: Function as PropType<((e: UploadStartedEvent) => void)>,
+    onValueChanged: Function as PropType<((e: ValueChangedEvent) => void)>,
     progress: Number,
     readOnly: Boolean,
     readyToUploadMessage: String,
@@ -146,11 +147,11 @@ const componentConfig = {
     tabIndex: Number,
     uploadAbortedMessage: String,
     uploadButtonText: String,
-    uploadChunk: Function as PropType<(file: any, uploadInfo: Object) => any>,
+    uploadChunk: Function as PropType<((file: any, uploadInfo: UploadInfo) => any)>,
     uploadCustomData: {},
     uploadedMessage: String,
     uploadFailedMessage: String,
-    uploadFile: Function as PropType<(file: any, progressCallback: () => void) => any>,
+    uploadFile: Function as PropType<((file: any, progressCallback: (() => void)) => any)>,
     uploadHeaders: {},
     uploadMethod: String as PropType<UploadHttpMethod>,
     uploadMode: String as PropType<FileUploadMode>,
@@ -160,7 +161,7 @@ const componentConfig = {
     validationStatus: String as PropType<ValidationStatus>,
     value: Array as PropType<Array<any>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

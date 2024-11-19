@@ -39,22 +39,22 @@ interface DxResizable extends AccessibleOptions {
 const componentConfig = {
   props: {
     area: {},
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     handles: String as PropType<ResizeHandle | string>,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     keepAspectRatio: Boolean,
     maxHeight: Number,
     maxWidth: Number,
     minHeight: Number,
     minWidth: Number,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    onResize: Function as PropType<(e: ResizeEvent) => void>,
-    onResizeEnd: Function as PropType<(e: ResizeEndEvent) => void>,
-    onResizeStart: Function as PropType<(e: ResizeStartEvent) => void>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onResize: Function as PropType<((e: ResizeEvent) => void)>,
+    onResizeEnd: Function as PropType<((e: ResizeEndEvent) => void)>,
+    onResizeStart: Function as PropType<((e: ResizeStartEvent) => void)>,
     rtlEnabled: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

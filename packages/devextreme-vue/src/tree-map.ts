@@ -2,6 +2,13 @@ import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import TreeMap, { Properties } from "devextreme/viz/tree_map";
+import  DataSource from "devextreme/data/data_source";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
 import {
  TreeMapLayoutAlgorithm,
  TreeMapLayoutDirection,
@@ -20,6 +27,7 @@ import {
  OptionChangedEvent,
  SelectionChangedEvent,
  TreeMapColorizerType,
+ dxTreeMapNode,
 } from "devextreme/viz/tree_map";
 import {
  SingleMultipleOrNone,
@@ -33,9 +41,13 @@ import {
  DashStyle,
  Palette,
  PaletteExtensionMode,
+ Font,
  TextOverflow,
  WordWrap,
 } from "devextreme/common/charts";
+import {
+ Format as LocalizationFormat,
+} from "devextreme/localization";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -90,44 +102,44 @@ const componentConfig = {
   props: {
     childrenField: String,
     colorField: String,
-    colorizer: Object,
-    dataSource: [Array, Object, String] as PropType<Array<any> | Object | null | string>,
+    colorizer: Object as PropType<Record<string, any>>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
     disabled: Boolean,
-    elementAttr: Object,
-    export: Object,
-    group: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
+    export: Object as PropType<Record<string, any>>,
+    group: Object as PropType<Record<string, any>>,
     hoverEnabled: Boolean,
     idField: String,
     interactWithGroup: Boolean,
     labelField: String,
-    layoutAlgorithm: [Function, String] as PropType<((e: Object) => void) | TreeMapLayoutAlgorithm>,
+    layoutAlgorithm: [Function, String] as PropType<(((e: { items: Array<any>, rect: Array<number>, sum: number }) => void)) | TreeMapLayoutAlgorithm>,
     layoutDirection: String as PropType<TreeMapLayoutDirection>,
-    loadingIndicator: Object,
+    loadingIndicator: Object as PropType<Record<string, any>>,
     maxDepth: Number,
-    onClick: Function as PropType<(e: ClickEvent) => void>,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onDrawn: Function as PropType<(e: DrawnEvent) => void>,
-    onDrill: Function as PropType<(e: DrillEvent) => void>,
-    onExported: Function as PropType<(e: ExportedEvent) => void>,
-    onExporting: Function as PropType<(e: ExportingEvent) => void>,
-    onFileSaving: Function as PropType<(e: FileSavingEvent) => void>,
-    onHoverChanged: Function as PropType<(e: HoverChangedEvent) => void>,
-    onIncidentOccurred: Function as PropType<(e: IncidentOccurredEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onNodesInitialized: Function as PropType<(e: NodesInitializedEvent) => void>,
-    onNodesRendering: Function as PropType<(e: NodesRenderingEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
+    onClick: Function as PropType<((e: ClickEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onDrawn: Function as PropType<((e: DrawnEvent) => void)>,
+    onDrill: Function as PropType<((e: DrillEvent) => void)>,
+    onExported: Function as PropType<((e: ExportedEvent) => void)>,
+    onExporting: Function as PropType<((e: ExportingEvent) => void)>,
+    onFileSaving: Function as PropType<((e: FileSavingEvent) => void)>,
+    onHoverChanged: Function as PropType<((e: HoverChangedEvent) => void)>,
+    onIncidentOccurred: Function as PropType<((e: IncidentOccurredEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onNodesInitialized: Function as PropType<((e: NodesInitializedEvent) => void)>,
+    onNodesRendering: Function as PropType<((e: NodesRenderingEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
     parentField: String,
     pathModified: Boolean,
     redrawOnResize: Boolean,
     rtlEnabled: Boolean,
     selectionMode: String as PropType<SingleMultipleOrNone>,
-    size: Object,
+    size: Object as PropType<Record<string, any>>,
     theme: String as PropType<Theme>,
-    tile: Object,
-    title: [Object, String],
-    tooltip: Object,
+    tile: Object as PropType<Record<string, any>>,
+    title: [Object, String] as PropType<Record<string, any> | string>,
+    tooltip: Object as PropType<Record<string, any>>,
     valueField: String
   },
   emits: {
@@ -272,7 +284,7 @@ const DxExportConfig = {
     formats: Array as PropType<Array<ExportFormat>>,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: Function as PropType<(svg: any, canvas: any) => any>
+    svgToCanvas: Function as PropType<((svg: any, canvas: any) => any)>
   }
 };
 
@@ -320,8 +332,8 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function as PropType<(value: number | Date) => string>,
-    parser: Function as PropType<(value: string) => (number | Date)>,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
     type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
@@ -348,14 +360,14 @@ const DxGroupConfig = {
     "update:selectionStyle": null,
   },
   props: {
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String,
     headerHeight: Number,
     hoverEnabled: Boolean,
-    hoverStyle: Object,
-    label: Object,
+    hoverStyle: Object as PropType<Record<string, any>>,
+    label: Object as PropType<Record<string, any>>,
     padding: Number,
-    selectionStyle: Object
+    selectionStyle: Object as PropType<Record<string, any>>
   }
 };
 
@@ -382,7 +394,7 @@ const DxGroupLabelConfig = {
     "update:visible": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     textOverflow: String as PropType<TextOverflow>,
     visible: Boolean
   }
@@ -405,7 +417,7 @@ const DxHoverStyleConfig = {
     "update:color": null,
   },
   props: {
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String
   }
 };
@@ -426,7 +438,7 @@ const DxLabelConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     textOverflow: String as PropType<TextOverflow>,
     visible: Boolean,
     wordWrap: String as PropType<WordWrap>
@@ -452,7 +464,7 @@ const DxLoadingIndicatorConfig = {
   props: {
     backgroundColor: String,
     enabled: Boolean,
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     show: Boolean,
     text: String
   }
@@ -498,7 +510,7 @@ const DxSelectionStyleConfig = {
     "update:color": null,
   },
   props: {
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String
   }
 };
@@ -564,7 +576,7 @@ const DxSubtitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     offset: Number,
     text: String,
     textOverflow: String as PropType<TextOverflow>,
@@ -592,11 +604,11 @@ const DxTileConfig = {
     "update:selectionStyle": null,
   },
   props: {
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String,
-    hoverStyle: Object,
-    label: Object,
-    selectionStyle: Object
+    hoverStyle: Object as PropType<Record<string, any>>,
+    label: Object as PropType<Record<string, any>>,
+    selectionStyle: Object as PropType<Record<string, any>>
   }
 };
 
@@ -624,7 +636,7 @@ const DxTileLabelConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     textOverflow: String as PropType<TextOverflow>,
     visible: Boolean,
     wordWrap: String as PropType<WordWrap>
@@ -655,11 +667,11 @@ const DxTitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     horizontalAlignment: String as PropType<HorizontalAlignment>,
-    margin: [Number, Object],
+    margin: [Number, Object] as PropType<number | Record<string, any>>,
     placeholderSize: Number,
-    subtitle: [Object, String],
+    subtitle: [Object, String] as PropType<Record<string, any> | string>,
     text: String,
     textOverflow: String as PropType<TextOverflow>,
     verticalAlignment: String as PropType<VerticalEdge>,
@@ -700,19 +712,19 @@ const DxTooltipConfig = {
   },
   props: {
     arrowLength: Number,
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String,
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: Function as PropType<(info: Object) => Object>,
+    customizeTooltip: Function as PropType<((info: { node: dxTreeMapNode, value: number, valueText: string }) => Record<string, any>)>,
     enabled: Boolean,
-    font: Object,
-    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    font: Object as PropType<Font | Record<string, any>>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
-    shadow: Object,
+    shadow: Object as PropType<Record<string, any>>,
     zIndex: Number
   }
 };

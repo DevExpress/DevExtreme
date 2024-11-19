@@ -2,6 +2,16 @@ import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import RadioGroup, { Properties } from "devextreme/ui/radio_group";
+import  DataSource from "devextreme/data/data_source";
+import {
+ CollectionWidgetItem,
+} from "devextreme/ui/collection/ui.collection_widget.base";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
 import {
  Orientation,
  ValidationMessageMode,
@@ -61,25 +71,25 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    dataSource: [Array, Object, String] as PropType<Array<any> | Object | null | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | CollectionWidgetItem>) | DataSource | DataSourceOptions | null | Store | string>,
     disabled: Boolean,
-    displayExpr: [Function, String] as PropType<((item: Object) => string) | string>,
-    elementAttr: Object,
+    displayExpr: [Function, String] as PropType<(((item: any) => string)) | string>,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     isValid: Boolean,
-    items: Array as PropType<Array<any>>,
+    items: Array as PropType<Array<any | CollectionWidgetItem>>,
     itemTemplate: {},
     layout: String as PropType<Orientation>,
     name: String,
-    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onValueChanged: Function as PropType<((e: ValueChangedEvent) => void)>,
     readOnly: Boolean,
     rtlEnabled: Boolean,
     tabIndex: Number,
@@ -89,9 +99,9 @@ const componentConfig = {
     validationMessagePosition: String as PropType<Position>,
     validationStatus: String as PropType<ValidationStatus>,
     value: {},
-    valueExpr: [Function, String] as PropType<((item: Object) => (string | number | Boolean)) | string>,
+    valueExpr: [Function, String] as PropType<(((item: any) => string | number | boolean)) | string>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

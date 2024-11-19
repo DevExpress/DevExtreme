@@ -3,6 +3,7 @@ import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import ButtonGroup, { Properties } from "devextreme/ui/button_group";
 import {
+ dxButtonGroupItem,
  ContentReadyEvent,
  DisposingEvent,
  InitializedEvent,
@@ -55,19 +56,19 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     buttonTemplate: {},
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
-    items: Array as PropType<Array<Object>>,
-    keyExpr: [Function, String] as PropType<(() => void) | string>,
-    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
+    items: Array as PropType<Array<dxButtonGroupItem>>,
+    keyExpr: [Function, String] as PropType<((() => void)) | string>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
     rtlEnabled: Boolean,
     selectedItemKeys: Array as PropType<Array<any>>,
     selectedItems: Array as PropType<Array<any>>,
@@ -75,7 +76,7 @@ const componentConfig = {
     stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -140,7 +141,7 @@ const DxItemConfig = {
   },
   props: {
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     hint: String,
     icon: String,
     template: {},

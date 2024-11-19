@@ -3,6 +3,9 @@ import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import Drawer, { Properties } from "devextreme/ui/drawer";
 import {
+ event,
+} from "devextreme/events/index";
+import {
  DisposingEvent,
  InitializedEvent,
  OptionChangedEvent,
@@ -46,17 +49,17 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     animationDuration: Number,
     animationEnabled: Boolean,
-    closeOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
+    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     disabled: Boolean,
-    elementAttr: Object,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    elementAttr: Object as PropType<Record<string, any>>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     maxSize: Number,
     minSize: Number,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     opened: Boolean,
     openedStateMode: String as PropType<OpenedStateMode>,
     position: String as PropType<PanelLocation>,
@@ -65,7 +68,7 @@ const componentConfig = {
     shading: Boolean,
     template: {},
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

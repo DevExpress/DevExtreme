@@ -2,6 +2,16 @@ import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import Popup, { Properties } from "devextreme/ui/popup";
+import  dxOverlay from "devextreme/ui/overlay";
+import  DOMComponent from "devextreme/core/dom_component";
+import  dxPopup from "devextreme/ui/popup";
+import {
+ event,
+ EventInfo,
+} from "devextreme/events/index";
+import {
+ Component,
+} from "devextreme/core/component";
 import {
  PositionAlignment,
  HorizontalAlignment,
@@ -11,19 +21,23 @@ import {
  ToolbarItemComponent,
 } from "devextreme/common";
 import {
+ PositionConfig,
  CollisionResolution,
  CollisionResolutionCombination,
 } from "devextreme/animation/position";
 import {
+ dxPopupToolbarItem,
+ ToolbarLocation,
+} from "devextreme/ui/popup";
+import {
+ AnimationConfig,
+ AnimationState,
  AnimationType,
 } from "devextreme/animation/fx";
 import {
  LocateInMenuMode,
  ShowTextMode,
 } from "devextreme/ui/toolbar";
-import {
- ToolbarLocation,
-} from "devextreme/ui/popup";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -85,8 +99,8 @@ interface DxPopup extends AccessibleOptions {
 const componentConfig = {
   props: {
     accessKey: String,
-    animation: Object,
-    closeOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
+    animation: Object as PropType<Record<string, any>>,
+    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -97,28 +111,28 @@ const componentConfig = {
     enableBodyScroll: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    hideOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    maxWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    minHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    minWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    onContentReady: Function as PropType<(e: Object) => void>,
-    onDisposing: Function as PropType<(e: Object) => void>,
-    onHidden: Function as PropType<(e: Object) => void>,
-    onHiding: Function as PropType<(e: Object) => void>,
-    onInitialized: Function as PropType<(e: Object) => void>,
-    onOptionChanged: Function as PropType<(e: Object) => void>,
-    onResize: Function as PropType<(e: Object) => void>,
-    onResizeEnd: Function as PropType<(e: Object) => void>,
-    onResizeStart: Function as PropType<(e: Object) => void>,
-    onShowing: Function as PropType<(e: Object) => void>,
-    onShown: Function as PropType<(e: Object) => void>,
-    onTitleRendered: Function as PropType<(e: Object) => void>,
-    position: [Function, String, Object] as PropType<(() => void) | PositionAlignment | Object>,
+    maxHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    maxWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    minHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    minWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
+    onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
+    onHidden: Function as PropType<((e: EventInfo<any>) => void)>,
+    onHiding: Function as PropType<((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void)>,
+    onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
+    onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
+    onResize: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onResizeEnd: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onResizeStart: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onShowing: Function as PropType<((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void)>,
+    onShown: Function as PropType<((e: EventInfo<any>) => void)>,
+    onTitleRendered: Function as PropType<((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void)>,
+    position: [Function, String, Object] as PropType<((() => void)) | PositionAlignment | PositionConfig | Record<string, any>>,
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -129,9 +143,9 @@ const componentConfig = {
     tabIndex: Number,
     title: String,
     titleTemplate: {},
-    toolbarItems: Array as PropType<Array<Object>>,
+    toolbarItems: Array as PropType<Array<dxPopupToolbarItem>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     wrapperAttr: {}
   },
   emits: {
@@ -216,8 +230,8 @@ const DxAnimationConfig = {
     "update:show": null,
   },
   props: {
-    hide: [Object, Number, String],
-    show: [Object, Number, String]
+    hide: [Object, Number, String] as PropType<AnimationConfig | number | Record<string, any> | string>,
+    show: [Object, Number, String] as PropType<AnimationConfig | number | Record<string, any> | string>
   }
 };
 
@@ -301,7 +315,7 @@ const DxFromConfig = {
   props: {
     left: Number,
     opacity: Number,
-    position: Object,
+    position: Object as PropType<PositionConfig | Record<string, any>>,
     scale: Number,
     top: Number
   }
@@ -332,15 +346,15 @@ const DxHideConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function as PropType<($element: any, config: Object) => void>,
+    complete: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
     delay: Number,
     direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
-    from: Object,
+    from: Object as PropType<AnimationState | Record<string, any>>,
     staggerDelay: Number,
-    start: Function as PropType<($element: any, config: Object) => void>,
-    to: Object,
+    start: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
+    to: Object as PropType<AnimationState | Record<string, any>>,
     type: String as PropType<AnimationType>
   }
 };
@@ -406,13 +420,13 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String] as PropType<Object | PositionAlignment>,
+    at: [Object, String] as PropType<Record<string, any> | PositionAlignment>,
     boundary: {},
-    boundaryOffset: [Object, String],
-    collision: [String, Object] as PropType<CollisionResolutionCombination | Object>,
-    my: [Object, String] as PropType<Object | PositionAlignment>,
+    boundaryOffset: [Object, String] as PropType<Record<string, any> | string>,
+    collision: [String, Object] as PropType<CollisionResolutionCombination | Record<string, any>>,
+    my: [Object, String] as PropType<Record<string, any> | PositionAlignment>,
     of: {},
-    offset: [Object, String]
+    offset: [Object, String] as PropType<Record<string, any> | string>
   }
 };
 
@@ -438,15 +452,15 @@ const DxShowConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function as PropType<($element: any, config: Object) => void>,
+    complete: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
     delay: Number,
     direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
-    from: Object,
+    from: Object as PropType<AnimationState | Record<string, any>>,
     staggerDelay: Number,
-    start: Function as PropType<($element: any, config: Object) => void>,
-    to: Object,
+    start: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
+    to: Object as PropType<AnimationState | Record<string, any>>,
     type: String as PropType<AnimationType>
   }
 };
@@ -470,7 +484,7 @@ const DxToConfig = {
   props: {
     left: Number,
     opacity: Number,
-    position: Object,
+    position: Object as PropType<PositionConfig | Record<string, any>>,
     scale: Number,
     top: Number
   }

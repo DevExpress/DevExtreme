@@ -4,6 +4,9 @@ import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import ValidationSummary, { Properties } from "devextreme/ui/validation_summary";
 import {
+ CollectionWidgetItem,
+} from "devextreme/ui/collection/ui.collection_widget.base";
+import {
  ContentReadyEvent,
  DisposingEvent,
  InitializedEvent,
@@ -31,15 +34,15 @@ interface DxValidationSummary extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     hoverStateEnabled: Boolean,
-    items: Array as PropType<Array<any>>,
+    items: Array as PropType<Array<any | CollectionWidgetItem | string>>,
     itemTemplate: {},
-    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     validationGroup: String
   },
   emits: {

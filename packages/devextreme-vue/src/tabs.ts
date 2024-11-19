@@ -3,13 +3,9 @@ import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import Tabs, { Properties } from "devextreme/ui/tabs";
+import  DataSource from "devextreme/data/data_source";
 import {
- TabsIconPosition,
- Orientation,
- SingleOrMultiple,
- TabsStyle,
-} from "devextreme/common";
-import {
+ dxTabsItem,
  ContentReadyEvent,
  DisposingEvent,
  InitializedEvent,
@@ -21,6 +17,18 @@ import {
  SelectionChangedEvent,
  SelectionChangingEvent,
 } from "devextreme/ui/tabs";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
+import {
+ TabsIconPosition,
+ Orientation,
+ SingleOrMultiple,
+ TabsStyle,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -72,29 +80,29 @@ interface DxTabs extends AccessibleOptions {
 const componentConfig = {
   props: {
     accessKey: String,
-    dataSource: [Array, Object, String] as PropType<Array<any> | Object | null | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxTabsItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     iconPosition: String as PropType<TabsIconPosition>,
     itemHoldTimeout: Number,
-    items: Array as PropType<Array<any>>,
+    items: Array as PropType<Array<any | dxTabsItem | string>>,
     itemTemplate: {},
-    keyExpr: [Function, String] as PropType<(() => void) | string>,
+    keyExpr: [Function, String] as PropType<((() => void)) | string>,
     noDataText: String,
-    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
-    onItemContextMenu: Function as PropType<(e: ItemContextMenuEvent) => void>,
-    onItemHold: Function as PropType<(e: ItemHoldEvent) => void>,
-    onItemRendered: Function as PropType<(e: ItemRenderedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
-    onSelectionChanging: Function as PropType<(e: SelectionChangingEvent) => void>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
+    onItemContextMenu: Function as PropType<((e: ItemContextMenuEvent) => void)>,
+    onItemHold: Function as PropType<((e: ItemHoldEvent) => void)>,
+    onItemRendered: Function as PropType<((e: ItemRenderedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
+    onSelectionChanging: Function as PropType<((e: SelectionChangingEvent) => void)>,
     orientation: String as PropType<Orientation>,
     repaintChangesOnly: Boolean,
     rtlEnabled: Boolean,
@@ -109,7 +117,7 @@ const componentConfig = {
     stylingMode: String as PropType<TabsStyle>,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

@@ -18,6 +18,9 @@ import {
  VerticalEdge,
  TooltipShowMode,
 } from "devextreme/common";
+import {
+ Format as LocalizationFormat,
+} from "devextreme/localization";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -70,24 +73,24 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     end: Number,
     endName: String,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     isValid: Boolean,
     keyStep: Number,
-    label: Object,
+    label: Object as PropType<Record<string, any>>,
     max: Number,
     min: Number,
-    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onValueChanged: Function as PropType<((e: ValueChangedEvent) => void)>,
     readOnly: Boolean,
     rtlEnabled: Boolean,
     showRange: Boolean,
@@ -95,7 +98,7 @@ const componentConfig = {
     startName: String,
     step: Number,
     tabIndex: Number,
-    tooltip: Object,
+    tooltip: Object as PropType<Record<string, any>>,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
     validationMessageMode: String as PropType<ValidationMessageMode>,
@@ -104,7 +107,7 @@ const componentConfig = {
     value: Array as PropType<Array<number>>,
     valueChangeMode: String as PropType<SliderValueChangeMode>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -182,8 +185,8 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function as PropType<(value: number | Date) => string>,
-    parser: Function as PropType<(value: string) => (number | Date)>,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
     type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
@@ -205,7 +208,7 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     position: String as PropType<VerticalEdge>,
     visible: Boolean
   }
@@ -231,7 +234,7 @@ const DxTooltipConfig = {
   },
   props: {
     enabled: Boolean,
-    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     position: String as PropType<VerticalEdge>,
     showMode: String as PropType<TooltipShowMode>
   }

@@ -2,10 +2,15 @@ import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import SelectBox, { Properties } from "devextreme/ui/select_box";
+import  DataSource from "devextreme/data/data_source";
+import  dxOverlay from "devextreme/ui/overlay";
+import  DOMComponent from "devextreme/core/dom_component";
+import  dxPopup from "devextreme/ui/popup";
 import {
  DropDownPredefinedButton,
 } from "devextreme/ui/drop_down_editor/ui.drop_down_editor";
 import {
+ TextEditorButton,
  LabelMode,
  SimplifiedSearchMode,
  EditorStyle,
@@ -23,6 +28,20 @@ import {
  ToolbarItemLocation,
  ToolbarItemComponent,
 } from "devextreme/common";
+import {
+ CollectionWidgetItem,
+} from "devextreme/ui/collection/ui.collection_widget.base";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
+import {
+ dxPopupOptions,
+ dxPopupToolbarItem,
+ ToolbarLocation,
+} from "devextreme/ui/popup";
 import {
  ChangeEvent,
  ClosedEvent,
@@ -46,13 +65,12 @@ import {
  ValueChangedEvent,
 } from "devextreme/ui/select_box";
 import {
- CollisionResolution,
- CollisionResolutionCombination,
-} from "devextreme/animation/position";
-import {
+ AnimationConfig,
+ AnimationState,
  AnimationType,
 } from "devextreme/animation/fx";
 import {
+ dxButtonOptions,
  ClickEvent,
  ContentReadyEvent as ButtonContentReadyEvent,
  DisposingEvent as ButtonDisposingEvent,
@@ -60,12 +78,21 @@ import {
  OptionChangedEvent as ButtonOptionChangedEvent,
 } from "devextreme/ui/button";
 import {
+ CollisionResolution,
+ PositionConfig,
+ CollisionResolutionCombination,
+} from "devextreme/animation/position";
+import {
+ event,
+ EventInfo,
+} from "devextreme/events/index";
+import {
+ Component,
+} from "devextreme/core/component";
+import {
  LocateInMenuMode,
  ShowTextMode,
 } from "devextreme/ui/toolbar";
-import {
- ToolbarLocation,
-} from "devextreme/ui/popup";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -161,27 +188,27 @@ const componentConfig = {
     acceptCustomValue: Boolean,
     accessKey: String,
     activeStateEnabled: Boolean,
-    buttons: Array as PropType<Array<DropDownPredefinedButton | Object>>,
+    buttons: Array as PropType<Array<DropDownPredefinedButton | TextEditorButton>>,
     customItemCreateEvent: String,
-    dataSource: [Array, Object, String] as PropType<Array<any> | Object | null | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | CollectionWidgetItem>) | DataSource | DataSourceOptions | null | Store | string>,
     deferRendering: Boolean,
     disabled: Boolean,
-    displayExpr: [Function, String] as PropType<((item: Object) => string) | string>,
+    displayExpr: [Function, String] as PropType<(((item: any) => string)) | string>,
     displayValue: String,
     dropDownButtonTemplate: {},
-    dropDownOptions: Object,
-    elementAttr: Object,
+    dropDownOptions: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
+    elementAttr: Object as PropType<Record<string, any>>,
     fieldTemplate: {},
     focusStateEnabled: Boolean,
     grouped: Boolean,
     groupTemplate: {},
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
     isDirty: Boolean,
     isValid: Boolean,
-    items: Array as PropType<Array<any>>,
+    items: Array as PropType<Array<any | CollectionWidgetItem>>,
     itemTemplate: {},
     label: String,
     labelMode: String as PropType<LabelMode>,
@@ -189,33 +216,33 @@ const componentConfig = {
     minSearchLength: Number,
     name: String,
     noDataText: String,
-    onChange: Function as PropType<(e: ChangeEvent) => void>,
-    onClosed: Function as PropType<(e: ClosedEvent) => void>,
-    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
-    onCopy: Function as PropType<(e: CopyEvent) => void>,
-    onCustomItemCreating: Function as PropType<(e: CustomItemCreatingEvent) => void>,
-    onCut: Function as PropType<(e: CutEvent) => void>,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onEnterKey: Function as PropType<(e: EnterKeyEvent) => void>,
-    onFocusIn: Function as PropType<(e: FocusInEvent) => void>,
-    onFocusOut: Function as PropType<(e: FocusOutEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onInput: Function as PropType<(e: InputEvent) => void>,
-    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
-    onKeyDown: Function as PropType<(e: KeyDownEvent) => void>,
-    onKeyUp: Function as PropType<(e: KeyUpEvent) => void>,
-    onOpened: Function as PropType<(e: OpenedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    onPaste: Function as PropType<(e: PasteEvent) => void>,
-    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
-    onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
+    onChange: Function as PropType<((e: ChangeEvent) => void)>,
+    onClosed: Function as PropType<((e: ClosedEvent) => void)>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onCopy: Function as PropType<((e: CopyEvent) => void)>,
+    onCustomItemCreating: Function as PropType<((e: CustomItemCreatingEvent) => void)>,
+    onCut: Function as PropType<((e: CutEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onEnterKey: Function as PropType<((e: EnterKeyEvent) => void)>,
+    onFocusIn: Function as PropType<((e: FocusInEvent) => void)>,
+    onFocusOut: Function as PropType<((e: FocusOutEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onInput: Function as PropType<((e: InputEvent) => void)>,
+    onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
+    onKeyDown: Function as PropType<((e: KeyDownEvent) => void)>,
+    onKeyUp: Function as PropType<((e: KeyUpEvent) => void)>,
+    onOpened: Function as PropType<((e: OpenedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onPaste: Function as PropType<((e: PasteEvent) => void)>,
+    onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
+    onValueChanged: Function as PropType<((e: ValueChangedEvent) => void)>,
     opened: Boolean,
     openOnFieldClick: Boolean,
     placeholder: String,
     readOnly: Boolean,
     rtlEnabled: Boolean,
     searchEnabled: Boolean,
-    searchExpr: [Array, Function, String] as PropType<(Array<Function | string>) | Function | string>,
+    searchExpr: [Array, Function, String] as PropType<(Array<(() => any) | string>) | ((() => any)) | string>,
     searchMode: String as PropType<SimplifiedSearchMode>,
     searchTimeout: Number,
     selectedItem: {},
@@ -235,9 +262,9 @@ const componentConfig = {
     validationStatus: String as PropType<ValidationStatus>,
     value: {},
     valueChangeEvent: String,
-    valueExpr: [Function, String] as PropType<((item: Object) => (string | number | Boolean)) | string>,
+    valueExpr: [Function, String] as PropType<(((item: any) => string | number | boolean)) | string>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     wrapItemText: Boolean
   },
   emits: {
@@ -355,8 +382,8 @@ const DxAnimationConfig = {
     "update:show": null,
   },
   props: {
-    hide: [Object, Number, String],
-    show: [Object, Number, String]
+    hide: [Object, Number, String] as PropType<AnimationConfig | number | Record<string, any> | string>,
+    show: [Object, Number, String] as PropType<AnimationConfig | number | Record<string, any> | string>
   }
 };
 
@@ -419,7 +446,7 @@ const DxButtonConfig = {
   props: {
     location: String as PropType<TextEditorButtonLocation>,
     name: String,
-    options: Object
+    options: Object as PropType<dxButtonOptions | Record<string, any>>
   }
 };
 
@@ -509,9 +536,9 @@ const DxDropDownOptionsConfig = {
   },
   props: {
     accessKey: String,
-    animation: Object,
-    bindingOptions: Object,
-    closeOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
+    animation: Object as PropType<Record<string, any>>,
+    bindingOptions: Object as PropType<Record<string, any>>,
+    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -522,28 +549,28 @@ const DxDropDownOptionsConfig = {
     enableBodyScroll: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    hideOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    maxWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    minHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    minWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    onContentReady: Function as PropType<(e: Object) => void>,
-    onDisposing: Function as PropType<(e: Object) => void>,
-    onHidden: Function as PropType<(e: Object) => void>,
-    onHiding: Function as PropType<(e: Object) => void>,
-    onInitialized: Function as PropType<(e: Object) => void>,
-    onOptionChanged: Function as PropType<(e: Object) => void>,
-    onResize: Function as PropType<(e: Object) => void>,
-    onResizeEnd: Function as PropType<(e: Object) => void>,
-    onResizeStart: Function as PropType<(e: Object) => void>,
-    onShowing: Function as PropType<(e: Object) => void>,
-    onShown: Function as PropType<(e: Object) => void>,
-    onTitleRendered: Function as PropType<(e: Object) => void>,
-    position: [Function, String, Object] as PropType<(() => void) | PositionAlignment | Object>,
+    maxHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    maxWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    minHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    minWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
+    onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
+    onHidden: Function as PropType<((e: EventInfo<any>) => void)>,
+    onHiding: Function as PropType<((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void)>,
+    onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
+    onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
+    onResize: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onResizeEnd: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onResizeStart: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onShowing: Function as PropType<((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void)>,
+    onShown: Function as PropType<((e: EventInfo<any>) => void)>,
+    onTitleRendered: Function as PropType<((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void)>,
+    position: [Function, String, Object] as PropType<((() => void)) | PositionAlignment | PositionConfig | Record<string, any>>,
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -554,9 +581,9 @@ const DxDropDownOptionsConfig = {
     tabIndex: Number,
     title: String,
     titleTemplate: {},
-    toolbarItems: Array as PropType<Array<Object>>,
+    toolbarItems: Array as PropType<Array<dxPopupToolbarItem>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     wrapperAttr: {}
   }
 };
@@ -585,7 +612,7 @@ const DxFromConfig = {
   props: {
     left: Number,
     opacity: Number,
-    position: Object,
+    position: Object as PropType<PositionConfig | Record<string, any>>,
     scale: Number,
     top: Number
   }
@@ -616,15 +643,15 @@ const DxHideConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function as PropType<($element: any, config: Object) => void>,
+    complete: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
     delay: Number,
     direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
-    from: Object,
+    from: Object as PropType<AnimationState | Record<string, any>>,
     staggerDelay: Number,
-    start: Function as PropType<($element: any, config: Object) => void>,
-    to: Object,
+    start: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
+    to: Object as PropType<AnimationState | Record<string, any>>,
     type: String as PropType<AnimationType>
   }
 };
@@ -736,19 +763,19 @@ const DxOptionsConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    bindingOptions: Object,
+    bindingOptions: Object as PropType<Record<string, any>>,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
-    onClick: Function as PropType<(e: ClickEvent) => void>,
-    onContentReady: Function as PropType<(e: ButtonContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: ButtonDisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: ButtonInitializedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: ButtonOptionChangedEvent) => void>,
+    onClick: Function as PropType<((e: ClickEvent) => void)>,
+    onContentReady: Function as PropType<((e: ButtonContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: ButtonDisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: ButtonInitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: ButtonOptionChangedEvent) => void)>,
     rtlEnabled: Boolean,
     stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
@@ -758,7 +785,7 @@ const DxOptionsConfig = {
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   }
 };
 
@@ -781,13 +808,13 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String] as PropType<Object | PositionAlignment>,
+    at: [Object, String] as PropType<Record<string, any> | PositionAlignment>,
     boundary: {},
-    boundaryOffset: [Object, String],
-    collision: [String, Object] as PropType<CollisionResolutionCombination | Object>,
-    my: [Object, String] as PropType<Object | PositionAlignment>,
+    boundaryOffset: [Object, String] as PropType<Record<string, any> | string>,
+    collision: [String, Object] as PropType<CollisionResolutionCombination | Record<string, any>>,
+    my: [Object, String] as PropType<Record<string, any> | PositionAlignment>,
     of: {},
-    offset: [Object, String]
+    offset: [Object, String] as PropType<Record<string, any> | string>
   }
 };
 
@@ -813,15 +840,15 @@ const DxShowConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function as PropType<($element: any, config: Object) => void>,
+    complete: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
     delay: Number,
     direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
-    from: Object,
+    from: Object as PropType<AnimationState | Record<string, any>>,
     staggerDelay: Number,
-    start: Function as PropType<($element: any, config: Object) => void>,
-    to: Object,
+    start: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
+    to: Object as PropType<AnimationState | Record<string, any>>,
     type: String as PropType<AnimationType>
   }
 };
@@ -845,7 +872,7 @@ const DxToConfig = {
   props: {
     left: Number,
     opacity: Number,
-    position: Object,
+    position: Object as PropType<PositionConfig | Record<string, any>>,
     scale: Number,
     top: Number
   }

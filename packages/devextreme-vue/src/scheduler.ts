@@ -2,9 +2,14 @@ import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import Scheduler, { Properties } from "devextreme/ui/scheduler";
+import  DataSource from "devextreme/data/data_source";
+import  dxScheduler from "devextreme/ui/scheduler";
+import  dxSortable from "devextreme/ui/sortable";
+import  dxDraggable from "devextreme/ui/draggable";
 import {
  AllDayPanelMode,
  ViewType,
+ dxSchedulerAppointment,
  CellAppointmentsLimit,
  AppointmentAddedEvent,
  AppointmentAddingEvent,
@@ -25,12 +30,22 @@ import {
  InitializedEvent,
  OptionChangedEvent,
  RecurrenceEditMode,
+ dxSchedulerScrolling,
 } from "devextreme/ui/scheduler";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
 import {
  FirstDayOfWeek,
  ScrollMode,
  Orientation,
 } from "devextreme/common";
+import {
+ event,
+} from "devextreme/events/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -125,23 +140,23 @@ const componentConfig = {
     allDayExpr: String,
     allDayPanelMode: String as PropType<AllDayPanelMode>,
     appointmentCollectorTemplate: {},
-    appointmentDragging: Object,
+    appointmentDragging: Object as PropType<Record<string, any>>,
     appointmentTemplate: {},
     appointmentTooltipTemplate: {},
     cellDuration: Number,
     crossScrollingEnabled: Boolean,
     currentDate: [Date, Number, String],
     currentView: String as PropType<ViewType>,
-    customizeDateNavigatorText: Function as PropType<(info: Object) => string>,
+    customizeDateNavigatorText: Function as PropType<((info: { endDate: Date, startDate: Date, text: string }) => string)>,
     dataCellTemplate: {},
-    dataSource: [Array, Object, String] as PropType<Array<Object> | Object | null | string>,
+    dataSource: [Array, Object, String] as PropType<Array<dxSchedulerAppointment> | DataSource | DataSourceOptions | null | Store | string>,
     dateCellTemplate: {},
     dateSerializationFormat: String,
     descriptionExpr: String,
     disabled: Boolean,
     dropDownAppointmentTemplate: {},
-    editing: [Boolean, Object],
-    elementAttr: Object,
+    editing: [Boolean, Object] as PropType<boolean | Record<string, any>>,
+    elementAttr: Object as PropType<Record<string, any>>,
     endDateExpr: String,
     endDateTimeZoneExpr: String,
     endDayHour: Number,
@@ -149,7 +164,7 @@ const componentConfig = {
     focusStateEnabled: Boolean,
     groupByDate: Boolean,
     groups: Array as PropType<Array<string>>,
-    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     indicatorUpdateInterval: Number,
     max: [Date, Number, String],
@@ -157,32 +172,32 @@ const componentConfig = {
     min: [Date, Number, String],
     noDataText: String,
     offset: Number,
-    onAppointmentAdded: Function as PropType<(e: AppointmentAddedEvent) => void>,
-    onAppointmentAdding: Function as PropType<(e: AppointmentAddingEvent) => void>,
-    onAppointmentClick: Function as PropType<(e: AppointmentClickEvent) => void>,
-    onAppointmentContextMenu: Function as PropType<(e: AppointmentContextMenuEvent) => void>,
-    onAppointmentDblClick: Function as PropType<(e: AppointmentDblClickEvent) => void>,
-    onAppointmentDeleted: Function as PropType<(e: AppointmentDeletedEvent) => void>,
-    onAppointmentDeleting: Function as PropType<(e: AppointmentDeletingEvent) => void>,
-    onAppointmentFormOpening: Function as PropType<(e: AppointmentFormOpeningEvent) => void>,
-    onAppointmentRendered: Function as PropType<(e: AppointmentRenderedEvent) => void>,
-    onAppointmentTooltipShowing: Function as PropType<(e: AppointmentTooltipShowingEvent) => void>,
-    onAppointmentUpdated: Function as PropType<(e: AppointmentUpdatedEvent) => void>,
-    onAppointmentUpdating: Function as PropType<(e: AppointmentUpdatingEvent) => void>,
-    onCellClick: Function as PropType<(e: CellClickEvent) => void>,
-    onCellContextMenu: Function as PropType<(e: CellContextMenuEvent) => void>,
-    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onAppointmentAdded: Function as PropType<((e: AppointmentAddedEvent) => void)>,
+    onAppointmentAdding: Function as PropType<((e: AppointmentAddingEvent) => void)>,
+    onAppointmentClick: Function as PropType<((e: AppointmentClickEvent) => void)>,
+    onAppointmentContextMenu: Function as PropType<((e: AppointmentContextMenuEvent) => void)>,
+    onAppointmentDblClick: Function as PropType<((e: AppointmentDblClickEvent) => void)>,
+    onAppointmentDeleted: Function as PropType<((e: AppointmentDeletedEvent) => void)>,
+    onAppointmentDeleting: Function as PropType<((e: AppointmentDeletingEvent) => void)>,
+    onAppointmentFormOpening: Function as PropType<((e: AppointmentFormOpeningEvent) => void)>,
+    onAppointmentRendered: Function as PropType<((e: AppointmentRenderedEvent) => void)>,
+    onAppointmentTooltipShowing: Function as PropType<((e: AppointmentTooltipShowingEvent) => void)>,
+    onAppointmentUpdated: Function as PropType<((e: AppointmentUpdatedEvent) => void)>,
+    onAppointmentUpdating: Function as PropType<((e: AppointmentUpdatingEvent) => void)>,
+    onCellClick: Function as PropType<((e: CellClickEvent) => void)>,
+    onCellContextMenu: Function as PropType<((e: CellContextMenuEvent) => void)>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     recurrenceEditMode: String as PropType<RecurrenceEditMode>,
     recurrenceExceptionExpr: String,
     recurrenceRuleExpr: String,
     remoteFiltering: Boolean,
     resourceCellTemplate: {},
-    resources: Array as PropType<Array<Object>>,
+    resources: Array as PropType<Array<Record<string, any>>>,
     rtlEnabled: Boolean,
-    scrolling: Object,
+    scrolling: Object as PropType<dxSchedulerScrolling>,
     selectedCellData: Array as PropType<Array<any>>,
     shadeUntilCurrentTime: Boolean,
     showAllDayPanel: Boolean,
@@ -195,9 +210,9 @@ const componentConfig = {
     timeCellTemplate: {},
     timeZone: String,
     useDropDownViewSwitcher: Boolean,
-    views: Array as PropType<Array<Object | string>>,
+    views: Array as PropType<Array<Record<string, any> | string>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -323,11 +338,11 @@ const DxAppointmentDraggingConfig = {
     autoScroll: Boolean,
     data: {},
     group: String,
-    onAdd: Function as PropType<(e: Object) => void>,
-    onDragEnd: Function as PropType<(e: Object) => void>,
-    onDragMove: Function as PropType<(e: Object) => void>,
-    onDragStart: Function as PropType<(e: Object) => void>,
-    onRemove: Function as PropType<(e: Object) => void>,
+    onAdd: Function as PropType<((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void)>,
+    onDragEnd: Function as PropType<((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toItemData: any }) => void)>,
+    onDragMove: Function as PropType<((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void)>,
+    onDragStart: Function as PropType<((e: { cancel: boolean, component: dxScheduler, event: event, fromData: any, itemData: any, itemElement: any }) => void)>,
+    onRemove: Function as PropType<((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable }) => void)>,
     scrollSensitivity: Number,
     scrollSpeed: Number
   }
@@ -382,12 +397,12 @@ const DxResourceConfig = {
   props: {
     allowMultiple: Boolean,
     colorExpr: String,
-    dataSource: [Array, Object, String] as PropType<Array<any> | Object | null | string>,
-    displayExpr: [Function, String] as PropType<((resource: Object) => string) | string>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
+    displayExpr: [Function, String] as PropType<(((resource: any) => string)) | string>,
     fieldExpr: String,
     label: String,
     useColorAsDefault: Boolean,
-    valueExpr: [Function, String] as PropType<(() => void) | string>
+    valueExpr: [Function, String] as PropType<((() => void)) | string>
   }
 };
 
@@ -464,7 +479,7 @@ const DxViewConfig = {
     name: String,
     offset: Number,
     resourceCellTemplate: {},
-    scrolling: Object,
+    scrolling: Object as PropType<dxSchedulerScrolling>,
     startDate: [Date, Number, String],
     startDayHour: Number,
     timeCellTemplate: {},
