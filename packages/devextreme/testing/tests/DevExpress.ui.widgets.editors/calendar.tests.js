@@ -325,6 +325,18 @@ QUnit.module('Navigator integration', {
         assert.equal($navigatorCaption.text(), 'July 2015', 'navigator caption is correct');
     });
 
+    QUnit.test('should not throw any errors if value on initialization is empty string (T1257679)', function(assert) {
+        try {
+            this.reinit({
+                value: ''
+            });
+        } catch(e) {
+            assert.ok(false, `error: ${e.message}`);
+        } finally {
+            assert.ok(true, 'there is no error');
+        }
+    });
+
     QUnit.test('navigator caption should be changed during swipe', function(assert) {
         const $element = this.$element;
         const $navigatorCaption = this.$navigatorCaption;
