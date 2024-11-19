@@ -65,9 +65,9 @@ import {
 import DxSelectBox, { DxSelectBoxTypes } from 'devextreme-vue/select-box';
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/no-webpack-loader-syntax */
-import * as deMessages from 'npm:devextreme/localization/messages/de.json!json';
-import * as ruMessages from 'npm:devextreme/localization/messages/ru.json!json';
-import { locale as dxLocale, loadMessages, formatMessage as dxFormatMessage } from 'devextreme/localization';
+import * as deMessages from 'npm:devextreme/common/core/localization/messages/de.json!json';
+import * as ruMessages from 'npm:devextreme/common/core/localization/messages/ru.json!json';
+import { locale as dxLocale, loadMessages, formatMessage as dxFormatMessage } from 'devextreme/common/core/localization';
 import service from './data.ts';
 
 type Locale = string;

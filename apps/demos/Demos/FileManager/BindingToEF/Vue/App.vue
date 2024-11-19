@@ -39,7 +39,7 @@
 import {
   DxFileManager, DxPermissions, DxItemView, DxDetails, DxColumn,
 } from 'devextreme-vue/file-manager';
-import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
+import { RemoteFileSystemProvider } from 'devextreme-vue/common/file_management';
 
 const remoteProvider = new RemoteFileSystemProvider({
   endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-db',

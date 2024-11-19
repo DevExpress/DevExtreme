@@ -175,7 +175,7 @@ const prepareConfigs = (framework)=> {
     }];
 
     additionPaths = {
-      'devextreme/localization/messages/*': 'node_modules/devextreme/localization/messages/*',
+      'devextreme/common/core/localization/messages/*': 'node_modules/devextreme/common/core/localization/messages/*',
     };
 
     packages = [

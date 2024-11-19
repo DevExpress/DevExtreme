@@ -60,7 +60,7 @@ import {
   DxTotalItem, DxDataGridTypes,
   DxPager,
 } from 'devextreme-vue/data-grid';
-import { formatDate } from 'devextreme/localization';
+import { formatDate } from 'devextreme/common/core/localization';
 import { orders } from './data.ts';
 
 const customizeDate = (itemInfo: DxDataGridTypes.SummaryItemTextInfo) => `First: ${formatDate(itemInfo.value as Date, 'MMM dd, yyyy')}`;

@@ -19,7 +19,7 @@
 <script setup lang="ts">
 /* import DxPermissions if you using <dx-permissions  */
 import { DxFileManager /* DxPermissions */ } from 'devextreme-vue/file-manager';
-import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
+import { RemoteFileSystemProvider } from 'devextreme-vue/common/file_management';
 
 const remoteProvider = new RemoteFileSystemProvider({
   endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-file-system-scripts',

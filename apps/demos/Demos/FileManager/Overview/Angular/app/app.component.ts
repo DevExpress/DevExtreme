@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
+import { RemoteFileSystemProvider } from 'devextreme-angular/common/file_management';
 import { DxPopupModule } from 'devextreme-angular';
 import { DxFileManagerModule, DxFileManagerTypes } from 'devextreme-angular/ui/file-manager';
 
