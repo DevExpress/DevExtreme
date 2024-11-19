@@ -4,7 +4,7 @@ import SelectBox from 'devextreme-react/select-box';
 import List, { ListTypes } from 'devextreme-react/list';
 import CheckBox from 'devextreme-react/check-box';
 
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-react/common/data';
 
 import {
   tasks,

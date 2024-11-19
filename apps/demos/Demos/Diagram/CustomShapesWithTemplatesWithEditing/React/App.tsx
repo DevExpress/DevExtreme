@@ -15,7 +15,7 @@ import {
 import { Popup } from 'devextreme-react/popup';
 import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-react/common/data';
 import CustomShapeTemplate from './CustomShapeTemplate.tsx';
 import CustomShapeToolboxTemplate from './CustomShapeToolboxTemplate.tsx';
 import service, { Employee } from './data.ts';

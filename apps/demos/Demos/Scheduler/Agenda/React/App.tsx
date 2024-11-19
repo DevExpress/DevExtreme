@@ -1,6 +1,6 @@
 import React from 'react';
 import Scheduler, { Resource, SchedulerTypes } from 'devextreme-react/scheduler';
-import ArrayStore from "devextreme/data/array_store"
+import { ArrayStore } from "devextreme-react/common/data"
 import { assignees, data, priorities } from './data.ts';
 
 const currentDate = new Date(2021, 4, 11);

@@ -16,7 +16,7 @@ import Chart, {
   Margin,
   HorizontalLine,
 } from 'devextreme-react/chart';
-import CustomStore from 'devextreme/data/custom_store';
+import { CustomStore } from 'devextreme-react/common/data';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import TooltipTemplate from './TooltipTemplate.js';
 

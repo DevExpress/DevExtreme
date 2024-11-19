@@ -1,5 +1,5 @@
 import React from 'react';
-import Query from 'devextreme/data/query';
+import { query as Query } from 'devextreme-react/common/data';
 import { moviesData } from './data.js';
 
 const getMovieById = (id) => Query(moviesData).filter(['id', id]).toArray()[0];

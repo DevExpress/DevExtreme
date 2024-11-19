@@ -1,4 +1,4 @@
-testUtils.importAnd(() => ['devextreme/ui/data_grid', 'devextreme/data/data_source'], () => [DevExpress.ui.dxDataGrid, DevExpress.data.DataSource], (dxDataGrid, DataSource) => new Promise((resolve) => {
+testUtils.importAnd(() => ['devextreme/ui/data_grid', 'devextreme/common/data/data_source'], () => [DevExpress.ui.dxDataGrid, DevExpress.data.DataSource], (dxDataGrid, DataSource) => new Promise((resolve) => {
   let i = 0;
   const intervalId = setInterval(() => {
     i += 1;

@@ -10,7 +10,7 @@ import {
   DxSwitchModule,
   DxNumberBoxModule,
 } from 'devextreme-angular';
-import Query from 'devextreme/data/query';
+import { query as Query } from 'devextreme-angular/common/data';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import { DxNumberBoxTypes } from 'devextreme-angular/ui/number-box';
 import { Appointment, Service, MovieData } from './app.service';
