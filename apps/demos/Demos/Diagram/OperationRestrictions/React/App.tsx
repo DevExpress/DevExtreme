@@ -3,7 +3,7 @@ import Diagram, {
   CustomShape, Nodes, AutoLayout, ContextToolbox, Toolbox, PropertiesPanel, Group, DiagramTypes,
 } from 'devextreme-react/diagram';
 import notify from 'devextreme/ui/notify';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-react/common/data';
 import service from './data.ts';
 
 const shapes = ['team', 'employee'];

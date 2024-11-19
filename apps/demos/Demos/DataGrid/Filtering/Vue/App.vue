@@ -106,7 +106,7 @@ import {
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { DataSourceOptions } from 'devextreme-vue/common/data';
 import { orders, Order } from './data.ts';
 
 const applyFilterTypes = [

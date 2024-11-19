@@ -7,8 +7,8 @@ import {
 import { Button } from 'devextreme-react/button';
 import { SelectBox, SelectBoxTypes } from 'devextreme-react/select-box';
 
-import CustomStore from 'devextreme/data/custom_store';
-import { formatDate } from 'devextreme/localization';
+import { CustomStore } from 'devextreme-react/common/data';
+import { formatDate } from 'devextreme/common/core/localization';
 import 'whatwg-fetch';
 
 const refreshModeLabel = { 'aria-label': 'Refresh Mode' };

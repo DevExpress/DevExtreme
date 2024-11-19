@@ -5,8 +5,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 
 import { DxSparklineModule, DxSelectBoxModule } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
-import CustomStore from 'devextreme/data/custom_store';
+import { DataSource, CustomStore } from 'devextreme-angular/common/data';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

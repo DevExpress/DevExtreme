@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSelectBoxModule, DxListModule, DxTemplateModule } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-angular/common/data';
 
 import { Product, Service } from './app.service';
 

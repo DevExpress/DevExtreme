@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-angular/common/data';
 
 export class Product {
   ProductID: number;

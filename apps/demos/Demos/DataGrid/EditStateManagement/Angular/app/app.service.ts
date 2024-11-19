@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
-import applyChanges from 'devextreme/data/apply_changes';
+import { applyChanges } from 'devextreme-angular/common/data';
 
 export class Order {
   OrderID: number;

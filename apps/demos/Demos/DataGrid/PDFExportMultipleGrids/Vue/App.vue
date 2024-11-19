@@ -84,10 +84,10 @@ import DxButton from 'devextreme-vue/button';
 import DxTabPanel, { DxItem } from 'devextreme-vue/tab-panel';
 import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
 
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { DataSourceOptions } from 'devextreme-vue/common/data';
 import { exportDataGrid, DataGridCell, Cell } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
-import 'devextreme/data/odata/store';
+import 'devextreme-vue/common/data/odata/store';
 
 const priceGridRef = ref<DxDataGrid | null>(null);
 const ratingGridRef = ref<DxDataGrid | null>(null);

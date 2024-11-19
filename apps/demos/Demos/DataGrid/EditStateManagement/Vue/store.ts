@@ -1,7 +1,7 @@
 import { createStore } from 'vuex';
 import 'whatwg-fetch';
 
-import applyChanges from 'devextreme/data/apply_changes';
+import { applyChanges } from 'devextreme-vue/common/data';
 import { DataChange } from 'devextreme/ui/data_grid';
 
 // @ts-expect-error due to specific build options need to add .ts extension

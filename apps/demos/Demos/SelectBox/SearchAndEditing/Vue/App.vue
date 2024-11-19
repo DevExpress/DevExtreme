@@ -108,7 +108,7 @@ import { ref } from 'vue';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxNumberBox } from 'devextreme-vue/number-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-vue/common/data';
 import { products, simpleProducts } from './data.ts';
 
 const productsDataSource = new DataSource({

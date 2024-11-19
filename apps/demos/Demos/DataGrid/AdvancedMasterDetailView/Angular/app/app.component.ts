@@ -5,7 +5,7 @@ import {
   DxDataGridModule, DxFormModule, DxSelectBoxModule, DxTabPanelModule,
 } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-angular/common/data';
 import { DetailViewComponent } from './detail-view/detail-view.component';
 
 if (!/localhost/.test(document.location.host)) {

@@ -95,8 +95,8 @@ import {
 } from 'devextreme-vue/data-grid';
 import { DxButton } from 'devextreme-vue/button';
 import { DxSelectBox } from 'devextreme-vue/select-box';
-import CustomStore from 'devextreme/data/custom_store';
-import { formatDate } from 'devextreme/localization';
+import { CustomStore } from 'devextreme-vue/common/data';
+import { formatDate } from 'devextreme/common/core/localization';
 import 'whatwg-fetch';
 
 const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';

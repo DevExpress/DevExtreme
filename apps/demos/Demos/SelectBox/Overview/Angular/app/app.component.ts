@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import notify from 'devextreme/ui/notify';
 import { DxSelectBoxModule, DxTextBoxModule, DxTemplateModule } from 'devextreme-angular';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-angular/common/data';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Product, Service } from './app.service';
 

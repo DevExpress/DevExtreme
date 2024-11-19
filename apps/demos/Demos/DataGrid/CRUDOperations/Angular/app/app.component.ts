@@ -4,8 +4,8 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
 import { lastValueFrom, Observable } from 'rxjs';
 import { DxDataGridModule, DxSelectBoxModule, DxButtonModule } from 'devextreme-angular';
-import CustomStore from 'devextreme/data/custom_store';
-import { formatDate } from 'devextreme/localization';
+import { CustomStore } from 'devextreme-angular/common/data';
+import { formatDate } from 'devextreme/common/core/localization';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

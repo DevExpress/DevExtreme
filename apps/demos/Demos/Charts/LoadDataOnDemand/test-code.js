@@ -1,4 +1,4 @@
-testUtils.importAnd(() => ['devextreme/viz/chart', 'devextreme/data/data_source'], () => [DevExpress.viz.dxChart, DevExpress.data.DataSource], (dxChart, DataSource) => {
+testUtils.importAnd(() => ['devextreme/viz/chart', 'devextreme/common/data/data_source'], () => [DevExpress.viz.dxChart, DevExpress.data.DataSource], (dxChart, DataSource) => {
   window.checkReady = function () {
     const dataSource = dxChart.getInstance(document.querySelector('#chart')).getDataSource();
     return dataSource ? dataSource.items().length > 0 : false;
