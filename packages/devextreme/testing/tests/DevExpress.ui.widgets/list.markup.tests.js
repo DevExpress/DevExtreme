@@ -183,12 +183,12 @@ QUnit.module('List markup', {}, () => {
         assert.equal($groupBody.children('.' + LIST_ITEM_CLASS).length, 1, 'there are items in items wrapper');
     });
 
-    QUnit.test('Group should have aria-labelledby attribute equal to caption id', function(assert) {
+    QUnit.test('Group should have aria-label attribute equal to caption text', function(assert) {
         const $list = $('#list').dxList({
             items: [
                 {
                     key: 'a',
-                    items: ['0', '1']
+                    items: ['0', '1'],
                 }
             ],
             grouped: true,
@@ -198,8 +198,7 @@ QUnit.module('List markup', {}, () => {
         const $caption = $groups.eq(0).find(`.${LIST_GROUP_HEADER_CLASS}`);
 
         assert.strictEqual($groups.length, 1);
-        assert.ok($groups.get(0).hasAttribute('aria-labelledby'), 'group has aria-labelledby attribute');
-        assert.strictEqual($groups.eq(0).attr('aria-labelledby'), $caption.eq(0).attr('id'), 'aria-labelledby and id of caption are equal');
+        assert.strictEqual($groups.eq(0).attr('aria-label'), $caption.eq(0).text(), 'aria-label and text of caption are equal');
     });
 
     QUnit.test('next button showing', function(assert) {

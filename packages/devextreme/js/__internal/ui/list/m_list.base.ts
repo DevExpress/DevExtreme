@@ -857,13 +857,13 @@ export const ListBase = CollectionWidget.inherit({
     }
   },
 
-  _setGroupAria($group, groupHeaderId): void {
+  _setGroupAria($group, groupHeaderText): void {
     const { collapsibleGroups } = this.option();
 
     const groupAria = {
       role: collapsibleGroups ? undefined : 'group',
       // eslint-disable-next-line spellcheck/spell-checker
-      labelledby: collapsibleGroups ? undefined : groupHeaderId,
+      label: collapsibleGroups ? undefined : groupHeaderText,
     };
 
     this.setAria(groupAria, $group);
@@ -885,13 +885,13 @@ export const ListBase = CollectionWidget.inherit({
     this.setAria(groupHeaderAria, $groupHeader);
   },
 
-  _setGroupBodyAria($groupBody, groupHeaderId): void {
+  _setGroupBodyAria($groupBody, groupHeaderText): void {
     const { collapsibleGroups } = this.option();
 
     const groupHeaderAria = {
       role: collapsibleGroups ? 'listbox' : undefined,
       // eslint-disable-next-line spellcheck/spell-checker
-      labelledby: collapsibleGroups ? groupHeaderId : undefined,
+      label: collapsibleGroups ? groupHeaderText : undefined,
     };
 
     this.setAria(groupHeaderAria, $groupBody);
@@ -902,11 +902,8 @@ export const ListBase = CollectionWidget.inherit({
       .addClass(LIST_GROUP_CLASS)
       .appendTo(this._getItemsContainer());
 
-    const groupHeaderId = `dx-${new Guid().toString()}`;
-
     const $groupHeaderElement = $('<div>')
       .addClass(LIST_GROUP_HEADER_CLASS)
-      .attr('id', groupHeaderId)
       .appendTo($groupElement);
 
     const { groupTemplate: templateName } = this.option();
@@ -950,9 +947,11 @@ export const ListBase = CollectionWidget.inherit({
       groupData: group,
     });
 
-    this._setGroupAria($groupElement, groupHeaderId);
+    const groupHeaderText = $groupHeaderElement.text();
+
+    this._setGroupAria($groupElement, groupHeaderText);
     this._setGroupHeaderAria($groupHeaderElement, groupBodyId);
-    this._setGroupBodyAria($groupBody, groupHeaderId);
+    this._setGroupBodyAria($groupBody, groupHeaderText);
   },
 
   downInkRippleHandler(e) {
