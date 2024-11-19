@@ -3839,6 +3839,31 @@ QUnit.module('keyboard navigation', {
         assert.ok($items.eq(0).hasClass(FOCUSED_STATE_CLASS));
     });
 
+    QUnit.test('The focus should move from the first to the second header if the first grappa was collapsed', function(assert) {
+        const $element = $('#list').dxList({
+            items: [
+                { key: 'a', items: [1] },
+                { key: 'b', items: [2] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+        });
+
+        const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+        $headers.eq(0).trigger('dxclick');
+
+        assert.ok($headers.eq(0).hasClass(FOCUSED_STATE_CLASS));
+
+        const keyboard = getListKeyboard($element);
+
+        keyboard.keyDown('down');
+
+        assert.notOk($headers.eq(0).hasClass(FOCUSED_STATE_CLASS));
+        assert.ok($headers.eq(1).hasClass(FOCUSED_STATE_CLASS));
+    });
+
     QUnit.test('list scroll to focused item after press up/down arrows', function(assert) {
         assert.expect(2);
 
