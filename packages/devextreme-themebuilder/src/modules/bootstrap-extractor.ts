@@ -96,14 +96,6 @@ ${this.getCollectorServiceCode()}`;
     return result;
   }
 
-  async lessProcessor(): Promise<string> {
-    return Promise.resolve(
-      this.getSetterServiceCode()
-      + this.input
-      + this.getCollectorServiceCode(),
-    );
-  }
-
   getVariables(variables: string): string {
     return variables.replace(/^@import "variables-dark";.*$/gm, '');
   }

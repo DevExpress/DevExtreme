@@ -57,20 +57,6 @@ ${setterServiceCode}
 ${collectorServiceCode}`);
   });
 
-  test('lessProcessor', async () => {
-    const testLessString = 'test string';
-    const setterServiceCode = 'setter';
-    const collectorServiceCode = 'collector';
-    const extractor = new BootstrapExtractor(testLessString, 3);
-    extractor.getSetterServiceCode = (): string => setterServiceCode;
-    extractor.getCollectorServiceCode = (): string => collectorServiceCode;
-
-    expect(await extractor.lessProcessor())
-      .toBe(setterServiceCode
-        + testLessString
-        + collectorServiceCode);
-  });
-
   test('getSetterServiceCode', () => {
     const extractor = new BootstrapExtractor('', 4);
     extractor.meta = {
