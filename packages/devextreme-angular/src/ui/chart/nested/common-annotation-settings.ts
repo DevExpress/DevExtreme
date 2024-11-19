@@ -7,28 +7,38 @@ import {
     OnDestroy,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
+import { DOCUMENT } from '@angular/common';
 
 
-
-import { AnnotationType, DashStyle, Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextreme/common/charts';
+import { dxChartAnnotationConfig } from 'devextreme/viz/chart';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxo-chart-common-annotation-settings',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxoChartCommonAnnotationSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartCommonAnnotationSettingsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
+    IDxTemplateHost {
     @Input()
     get allowDragging(): boolean {
         return this._getOption('allowDragging');
@@ -86,10 +96,10 @@ export class DxoChartCommonAnnotationSettingsComponent extends NestedOption impl
     }
 
     @Input()
-    get customizeTooltip(): Function | undefined {
+    get customizeTooltip(): ((annotation: dxChartAnnotationConfig | any) => Record<string, any>) | undefined {
         return this._getOption('customizeTooltip');
     }
-    set customizeTooltip(value: Function | undefined) {
+    set customizeTooltip(value: ((annotation: dxChartAnnotationConfig | any) => Record<string, any>) | undefined) {
         this._setOption('customizeTooltip', value);
     }
 
@@ -190,10 +200,10 @@ export class DxoChartCommonAnnotationSettingsComponent extends NestedOption impl
     }
 
     @Input()
-    get template(): any | undefined {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: any | undefined) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 
@@ -222,10 +232,10 @@ export class DxoChartCommonAnnotationSettingsComponent extends NestedOption impl
     }
 
     @Input()
-    get tooltipTemplate(): any | undefined {
+    get tooltipTemplate(): any {
         return this._getOption('tooltipTemplate');
     }
-    set tooltipTemplate(value: any | undefined) {
+    set tooltipTemplate(value: any) {
         this._setOption('tooltipTemplate', value);
     }
 
@@ -284,10 +294,22 @@ export class DxoChartCommonAnnotationSettingsComponent extends NestedOption impl
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

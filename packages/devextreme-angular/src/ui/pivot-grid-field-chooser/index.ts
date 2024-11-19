@@ -20,10 +20,10 @@ import {
 } from '@angular/core';
 
 
-import { FieldChooserLayout } from 'devextreme/common';
-import { ApplyChangesMode, HeaderFilterSearchConfig } from 'devextreme/common/grids';
-import { ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/pivot_grid_field_chooser';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
+import { ApplyChangesMode, HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import { FieldChooserLayout } from 'devextreme/common';
+import { ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/pivot_grid_field_chooser';
 
 import DxPivotGridFieldChooser from 'devextreme/ui/pivot_grid_field_chooser';
 
@@ -43,6 +43,8 @@ import { DxoSearchModule } from 'devextreme-angular/ui/nested';
 import { DxoTextsModule } from 'devextreme-angular/ui/nested';
 
 import { DxoPivotGridFieldChooserHeaderFilterModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
+import { DxoPivotGridFieldChooserHeaderFilterTextsModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
+import { DxoPivotGridFieldChooserPivotGridFieldChooserTextsModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
 import { DxoPivotGridFieldChooserSearchModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
 import { DxoPivotGridFieldChooserTextsModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
 
@@ -123,10 +125,10 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     
      */
     @Input()
-    get dataSource(): PivotGridDataSource | null {
+    get dataSource(): null | PivotGridDataSource {
         return this._getOption('dataSource');
     }
-    set dataSource(value: PivotGridDataSource | null) {
+    set dataSource(value: null | PivotGridDataSource) {
         this._setOption('dataSource', value);
     }
 
@@ -149,10 +151,10 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -201,10 +203,10 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     
      */
     @Input()
-    get height(): number | Function | string {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -331,10 +333,10 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -411,7 +413,7 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<PivotGridDataSource | null>;
+    @Output() dataSourceChange: EventEmitter<null | PivotGridDataSource>;
 
     /**
     
@@ -425,7 +427,7 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -453,7 +455,7 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -523,7 +525,7 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
 
 
@@ -618,6 +620,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     DxoSearchModule,
     DxoTextsModule,
     DxoPivotGridFieldChooserHeaderFilterModule,
+    DxoPivotGridFieldChooserHeaderFilterTextsModule,
+    DxoPivotGridFieldChooserPivotGridFieldChooserTextsModule,
     DxoPivotGridFieldChooserSearchModule,
     DxoPivotGridFieldChooserTextsModule,
     DxIntegrationModule,
@@ -632,6 +636,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     DxoSearchModule,
     DxoTextsModule,
     DxoPivotGridFieldChooserHeaderFilterModule,
+    DxoPivotGridFieldChooserHeaderFilterTextsModule,
+    DxoPivotGridFieldChooserPivotGridFieldChooserTextsModule,
     DxoPivotGridFieldChooserSearchModule,
     DxoPivotGridFieldChooserTextsModule,
     DxTemplateModule

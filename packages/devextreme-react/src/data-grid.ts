@@ -90,7 +90,7 @@ type IDataGridOptions<TRowData = any, TKey = any> = React.PropsWithChildren<Repl
   defaultFilterValue?: Array<any> | (() => any) | string;
   defaultFocusedColumnIndex?: number;
   defaultFocusedRowIndex?: number;
-  defaultFocusedRowKey?: any;
+  defaultFocusedRowKey?: any | undefined;
   defaultGroupPanel?: Record<string, any>;
   defaultPaging?: Record<string, any>;
   defaultSearchPanel?: Record<string, any>;
@@ -102,7 +102,7 @@ type IDataGridOptions<TRowData = any, TKey = any> = React.PropsWithChildren<Repl
   onFilterValueChange?: (value: Array<any> | (() => any) | string) => void;
   onFocusedColumnIndexChange?: (value: number) => void;
   onFocusedRowIndexChange?: (value: number) => void;
-  onFocusedRowKeyChange?: (value: any) => void;
+  onFocusedRowKeyChange?: (value: any | undefined) => void;
   onGroupPanelChange?: (value: Record<string, any>) => void;
   onPagingChange?: (value: Record<string, any>) => void;
   onSearchPanelChange?: (value: Record<string, any>) => void;
@@ -356,10 +356,10 @@ const Change = Object.assign<typeof _componentChange, NestedComponentMeta>(_comp
 // owners:
 // Form
 type IColCountByScreenProps = React.PropsWithChildren<{
-  lg?: number;
-  md?: number;
-  sm?: number;
-  xs?: number;
+  lg?: number | undefined;
+  md?: number | undefined;
+  sm?: number | undefined;
+  xs?: number | undefined;
 }>
 const _componentColCountByScreen = (props: IColCountByScreenProps) => {
   return React.createElement(NestedOption<IColCountByScreenProps>, {
@@ -396,7 +396,7 @@ const Collision = Object.assign<typeof _componentCollision, NestedComponentMeta>
 // owners:
 // DataGrid
 type IColumnProps = React.PropsWithChildren<{
-  alignment?: HorizontalAlignment;
+  alignment?: HorizontalAlignment | undefined;
   allowEditing?: boolean;
   allowExporting?: boolean;
   allowFiltering?: boolean;
@@ -415,81 +415,81 @@ type IColumnProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | (() => any) | Array<any>);
   calculateGroupValue?: ((rowData: any) => any) | string;
   calculateSortValue?: ((rowData: any) => any) | string;
-  caption?: string;
+  caption?: string | undefined;
   cellTemplate?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, oldValue: any, row: dxDataGridRowObject, rowIndex: number, rowType: string, text: string, value: any, watch: (() => void) }) => any) | template;
   columns?: Array<dxDataGridColumn | string>;
-  cssClass?: string;
+  cssClass?: string | undefined;
   customizeText?: ((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string);
-  dataField?: string;
-  dataType?: DataType;
+  dataField?: string | undefined;
+  dataType?: DataType | undefined;
   editCellTemplate?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, row: dxDataGridRowObject, rowIndex: number, rowType: string, setValue(newValue, newText): any, text: string, value: any, watch: (() => void) }) => any) | template;
   editorOptions?: any;
   encodeHtml?: boolean;
   falseText?: string;
   filterOperations?: Array<FilterOperation | string>;
   filterType?: FilterType;
-  filterValue?: any;
+  filterValue?: any | undefined;
   filterValues?: Array<any>;
   fixed?: boolean;
-  fixedPosition?: FixedPosition;
+  fixedPosition?: FixedPosition | undefined;
   format?: LocalizationFormat;
   formItem?: dxFormSimpleItem;
   groupCellTemplate?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, groupContinuedMessage: string, groupContinuesMessage: string, row: dxDataGridRowObject, rowIndex: number, summaryItems: Array<any>, text: string, value: any }) => any) | template;
-  groupIndex?: number;
+  groupIndex?: number | undefined;
   headerCellTemplate?: ((columnHeader: any, headerInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid }) => any) | template;
   headerFilter?: Record<string, any> | {
     allowSearch?: boolean;
     allowSelectAll?: boolean;
-    dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
-    groupInterval?: HeaderFilterGroupInterval | number;
-    height?: number | string;
+    dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
+    groupInterval?: HeaderFilterGroupInterval | number | undefined;
+    height?: number | string | undefined;
     search?: ColumnHeaderFilterSearchConfig;
     searchMode?: SearchMode;
-    width?: number | string;
+    width?: number | string | undefined;
   };
-  hidingPriority?: number;
-  isBand?: boolean;
+  hidingPriority?: number | undefined;
+  isBand?: boolean | undefined;
   lookup?: Record<string, any> | {
     allowClearing?: boolean;
     calculateCellValue?: ((rowData: any) => any);
-    dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store;
-    displayExpr?: ((data: any) => string) | string;
-    valueExpr?: string;
+    dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined;
+    displayExpr?: ((data: any) => string) | string | undefined;
+    valueExpr?: string | undefined;
   };
-  minWidth?: number;
-  name?: string;
-  ownerBand?: number;
+  minWidth?: number | undefined;
+  name?: string | undefined;
+  ownerBand?: number | undefined;
   renderAsync?: boolean;
-  selectedFilterOperation?: SelectedFilterOperation;
+  selectedFilterOperation?: SelectedFilterOperation | undefined;
   setCellValue?: ((newData: any, value: any, currentRowData: any) => any);
   showEditorAlways?: boolean;
   showInColumnChooser?: boolean;
   showWhenGrouped?: boolean;
-  sortIndex?: number;
-  sortingMethod?: ((value1: any, value2: any) => number);
-  sortOrder?: SortOrder;
+  sortIndex?: number | undefined;
+  sortingMethod?: ((value1: any, value2: any) => number) | undefined;
+  sortOrder?: SortOrder | undefined;
   trueText?: string;
   type?: DataGridCommandColumnType;
   validationRules?: Array<CommonTypes.ValidationRule>;
   visible?: boolean;
-  visibleIndex?: number;
-  width?: number | string;
-  defaultFilterValue?: any;
-  onFilterValueChange?: (value: any) => void;
+  visibleIndex?: number | undefined;
+  width?: number | string | undefined;
+  defaultFilterValue?: any | undefined;
+  onFilterValueChange?: (value: any | undefined) => void;
   defaultFilterValues?: Array<any>;
   onFilterValuesChange?: (value: Array<any>) => void;
-  defaultGroupIndex?: number;
-  onGroupIndexChange?: (value: number) => void;
-  defaultSelectedFilterOperation?: SelectedFilterOperation;
-  onSelectedFilterOperationChange?: (value: SelectedFilterOperation) => void;
-  defaultSortIndex?: number;
-  onSortIndexChange?: (value: number) => void;
-  defaultSortOrder?: SortOrder;
-  onSortOrderChange?: (value: SortOrder) => void;
+  defaultGroupIndex?: number | undefined;
+  onGroupIndexChange?: (value: number | undefined) => void;
+  defaultSelectedFilterOperation?: SelectedFilterOperation | undefined;
+  onSelectedFilterOperationChange?: (value: SelectedFilterOperation | undefined) => void;
+  defaultSortIndex?: number | undefined;
+  onSortIndexChange?: (value: number | undefined) => void;
+  defaultSortOrder?: SortOrder | undefined;
+  onSortOrderChange?: (value: SortOrder | undefined) => void;
   defaultVisible?: boolean;
   onVisibleChange?: (value: boolean) => void;
-  defaultVisibleIndex?: number;
-  onVisibleIndexChange?: (value: number) => void;
+  defaultVisibleIndex?: number | undefined;
+  onVisibleIndexChange?: (value: number | undefined) => void;
   cellRender?: (...params: any) => React.ReactNode;
   cellComponent?: React.ComponentType<any>;
   editCellRender?: (...params: any) => React.ReactNode;
@@ -563,16 +563,16 @@ const Column = Object.assign<typeof _componentColumn, NestedComponentMeta>(_comp
 // DataGrid
 type IColumnChooserProps = React.PropsWithChildren<{
   allowSearch?: boolean;
-  container?: any | string;
+  container?: any | string | undefined;
   emptyPanelText?: string;
   enabled?: boolean;
   height?: number | string;
   mode?: ColumnChooserMode;
-  position?: PositionConfig;
+  position?: PositionConfig | undefined;
   search?: ColumnChooserSearchConfig;
   searchTimeout?: number;
   selection?: ColumnChooserSelectionConfig;
-  sortOrder?: SortOrder;
+  sortOrder?: SortOrder | undefined;
   title?: string;
   width?: number | string;
 }>
@@ -700,12 +700,12 @@ const ColumnFixingTexts = Object.assign<typeof _componentColumnFixingTexts, Nest
 type IColumnHeaderFilterProps = React.PropsWithChildren<{
   allowSearch?: boolean;
   allowSelectAll?: boolean;
-  dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
-  groupInterval?: HeaderFilterGroupInterval | number;
-  height?: number | string;
+  dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
+  groupInterval?: HeaderFilterGroupInterval | number | undefined;
+  height?: number | string | undefined;
   search?: ColumnHeaderFilterSearchConfig;
   searchMode?: SearchMode;
-  width?: number | string;
+  width?: number | string | undefined;
 }>
 const _componentColumnHeaderFilter = (props: IColumnHeaderFilterProps) => {
   return React.createElement(NestedOption<IColumnHeaderFilterProps>, {
@@ -730,7 +730,7 @@ type IColumnHeaderFilterSearchProps = React.PropsWithChildren<{
   editorOptions?: any;
   enabled?: boolean;
   mode?: SearchMode;
-  searchExpr?: Array<(() => any) | string> | (() => any) | string;
+  searchExpr?: Array<(() => any) | string> | (() => any) | string | undefined;
   timeout?: number;
 }>
 const _componentColumnHeaderFilterSearch = (props: IColumnHeaderFilterSearchProps) => {
@@ -751,9 +751,9 @@ const ColumnHeaderFilterSearch = Object.assign<typeof _componentColumnHeaderFilt
 type IColumnLookupProps = React.PropsWithChildren<{
   allowClearing?: boolean;
   calculateCellValue?: ((rowData: any) => any);
-  dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store;
-  displayExpr?: ((data: any) => string) | string;
-  valueExpr?: string;
+  dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined;
+  displayExpr?: ((data: any) => string) | string | undefined;
+  valueExpr?: string | undefined;
 }>
 const _componentColumnLookup = (props: IColumnLookupProps) => {
   return React.createElement(NestedOption<IColumnLookupProps>, {
@@ -818,13 +818,13 @@ const CursorOffset = Object.assign<typeof _componentCursorOffset, NestedComponen
 // FilterBuilder
 type ICustomOperationProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>);
-  caption?: string;
+  caption?: string | undefined;
   customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string);
-  dataTypes?: Array<DataType>;
+  dataTypes?: Array<DataType> | undefined;
   editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   hasValue?: boolean;
-  icon?: string;
-  name?: string;
+  icon?: string | undefined;
+  name?: string | undefined;
   editorRender?: (...params: any) => React.ReactNode;
   editorComponent?: React.ComponentType<any>;
 }>
@@ -1142,9 +1142,9 @@ const ExportTexts = Object.assign<typeof _componentExportTexts, NestedComponentM
 // FilterBuilder
 type IFieldProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>);
-  caption?: string;
+  caption?: string | undefined;
   customizeText?: ((fieldInfo: { value: string | number | Date, valueText: string }) => string);
-  dataField?: string;
+  dataField?: string | undefined;
   dataType?: DataType;
   editorOptions?: any;
   editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
@@ -1153,11 +1153,11 @@ type IFieldProps = React.PropsWithChildren<{
   format?: LocalizationFormat;
   lookup?: Record<string, any> | {
     allowClearing?: boolean;
-    dataSource?: Array<any> | DataSourceOptions | Store;
-    displayExpr?: ((data: any) => string) | string;
-    valueExpr?: ((data: any) => string | number | boolean) | string;
+    dataSource?: Array<any> | DataSourceOptions | Store | undefined;
+    displayExpr?: ((data: any) => string) | string | undefined;
+    valueExpr?: ((data: any) => string | number | boolean) | string | undefined;
   };
-  name?: string;
+  name?: string | undefined;
   trueText?: string;
   editorRender?: (...params: any) => React.ReactNode;
   editorComponent?: React.ComponentType<any>;
@@ -1190,9 +1190,9 @@ const Field = Object.assign<typeof _componentField, NestedComponentMeta>(_compon
 // Field
 type IFieldLookupProps = React.PropsWithChildren<{
   allowClearing?: boolean;
-  dataSource?: Array<any> | DataSourceOptions | Store;
-  displayExpr?: ((data: any) => string) | string;
-  valueExpr?: ((data: any) => string | number | boolean) | string;
+  dataSource?: Array<any> | DataSourceOptions | Store | undefined;
+  displayExpr?: ((data: any) => string) | string | undefined;
+  valueExpr?: ((data: any) => string | number | boolean) | string | undefined;
 }>
 const _componentFieldLookup = (props: IFieldLookupProps) => {
   return React.createElement(NestedOption<IFieldLookupProps>, {
@@ -1210,7 +1210,7 @@ const FieldLookup = Object.assign<typeof _componentFieldLookup, NestedComponentM
 // owners:
 // DataGrid
 type IFilterBuilderProps = React.PropsWithChildren<{
-  accessKey?: string;
+  accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   allowHierarchicalFields?: boolean;
   bindingOptions?: Record<string, any>;
@@ -1241,10 +1241,10 @@ type IFilterBuilderProps = React.PropsWithChildren<{
     or?: string;
   };
   groupOperations?: Array<GroupOperation>;
-  height?: (() => number | string) | number | string;
-  hint?: string;
+  height?: (() => number | string) | number | string | undefined;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
-  maxGroupLevel?: number;
+  maxGroupLevel?: number | undefined;
   onContentReady?: ((e: FilterBuilderContentReadyEvent) => void);
   onDisposing?: ((e: FilterBuilderDisposingEvent) => void);
   onEditorPrepared?: ((e: FilterBuilderEditorPreparedEvent) => void);
@@ -1256,7 +1256,7 @@ type IFilterBuilderProps = React.PropsWithChildren<{
   tabIndex?: number;
   value?: Array<any> | (() => any) | string;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: (() => number | string) | number | string | undefined;
   defaultValue?: Array<any> | (() => any) | string;
   onValueChange?: (value: Array<any> | (() => any) | string) => void;
 }>
@@ -1285,18 +1285,18 @@ const FilterBuilder = Object.assign<typeof _componentFilterBuilder, NestedCompon
 // owners:
 // DataGrid
 type IFilterBuilderPopupProps = React.PropsWithChildren<{
-  accessKey?: string;
+  accessKey?: string | undefined;
   animation?: Record<string, any> | {
     hide?: AnimationConfig;
     show?: AnimationConfig;
   };
   bindingOptions?: Record<string, any>;
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
-  container?: any | string;
+  container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
   disabled?: boolean;
-  dragAndResizeArea?: any | string;
+  dragAndResizeArea?: any | string | undefined;
   dragEnabled?: boolean;
   dragOutsideBoundary?: boolean;
   enableBodyScroll?: boolean;
@@ -1305,7 +1305,7 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   height?: (() => number | string) | number | string;
   hideOnOutsideClick?: boolean | ((event: event) => boolean);
   hideOnParentScroll?: boolean;
-  hint?: string;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
   maxHeight?: (() => number | string) | number | string;
   maxWidth?: (() => number | string) | number | string;
@@ -1507,25 +1507,25 @@ const FilterRow = Object.assign<typeof _componentFilterRow, NestedComponentMeta>
 // owners:
 // Editing
 type IFormProps = React.PropsWithChildren<{
-  accessKey?: string;
+  accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   alignItemLabels?: boolean;
   alignItemLabelsInAllGroups?: boolean;
   bindingOptions?: Record<string, any>;
   colCount?: Mode | number;
   colCountByScreen?: Record<string, any> | {
-    lg?: number;
-    md?: number;
-    sm?: number;
-    xs?: number;
+    lg?: number | undefined;
+    md?: number | undefined;
+    sm?: number | undefined;
+    xs?: number | undefined;
   };
   customizeItem?: ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => void);
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
   formData?: any;
-  height?: (() => number | string) | number | string;
-  hint?: string;
+  height?: (() => number | string) | number | string | undefined;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
   isDirty?: boolean;
   items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
@@ -1550,9 +1550,9 @@ type IFormProps = React.PropsWithChildren<{
   showRequiredMark?: boolean;
   showValidationSummary?: boolean;
   tabIndex?: number;
-  validationGroup?: string;
+  validationGroup?: string | undefined;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: (() => number | string) | number | string | undefined;
   defaultFormData?: any;
   onFormDataChange?: (value: any) => void;
 }>
@@ -1602,27 +1602,27 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 // owners:
 // Column
 type IFormItemProps = React.PropsWithChildren<{
-  colSpan?: number;
-  cssClass?: string;
-  dataField?: string;
-  editorOptions?: any;
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
+  dataField?: string | undefined;
+  editorOptions?: any | undefined;
   editorType?: FormItemComponent;
-  helpText?: string;
-  isRequired?: boolean;
+  helpText?: string | undefined;
+  isRequired?: boolean | undefined;
   itemType?: FormItemType;
   label?: Record<string, any> | {
     alignment?: HorizontalAlignment;
     location?: LabelLocation;
     showColon?: boolean;
     template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
-    text?: string;
+    text?: string | undefined;
     visible?: boolean;
   };
-  name?: string;
+  name?: string | undefined;
   template?: ((data: { component: dxForm, dataField: string, editorOptions: Record<string, any>, editorType: string, name: string }, itemElement: any) => string | any) | template;
   validationRules?: Array<CommonTypes.ValidationRule>;
   visible?: boolean;
-  visibleIndex?: number;
+  visibleIndex?: number | undefined;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
@@ -1740,15 +1740,15 @@ const GroupingTexts = Object.assign<typeof _componentGroupingTexts, NestedCompon
 // Summary
 type IGroupItemProps = React.PropsWithChildren<{
   alignByColumn?: boolean;
-  column?: string;
+  column?: string | undefined;
   customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string);
-  displayFormat?: string;
-  name?: string;
-  showInColumn?: string;
+  displayFormat?: string | undefined;
+  name?: string | undefined;
+  showInColumn?: string | undefined;
   showInGroupFooter?: boolean;
   skipEmptyValues?: boolean;
-  summaryType?: string | SummaryType;
-  valueFormat?: LocalizationFormat;
+  summaryType?: string | SummaryType | undefined;
+  valueFormat?: LocalizationFormat | undefined;
 }>
 const _componentGroupItem = (props: IGroupItemProps) => {
   return React.createElement(NestedOption<IGroupItemProps>, {
@@ -1819,12 +1819,12 @@ const GroupPanel = Object.assign<typeof _componentGroupPanel, NestedComponentMet
 type IHeaderFilterProps = React.PropsWithChildren<{
   allowSearch?: boolean;
   allowSelectAll?: boolean;
-  dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
-  groupInterval?: HeaderFilterGroupInterval | number;
-  height?: number | string;
+  dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
+  groupInterval?: HeaderFilterGroupInterval | number | undefined;
+  height?: number | string | undefined;
   search?: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig;
   searchMode?: SearchMode;
-  width?: number | string;
+  width?: number | string | undefined;
   searchTimeout?: number;
   texts?: Record<string, any> | {
     cancel?: string;
@@ -1851,11 +1851,11 @@ const HeaderFilter = Object.assign<typeof _componentHeaderFilter, NestedComponen
 type IHideProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: Direction;
+  direction?: Direction | undefined;
   duration?: number;
   easing?: string;
   from?: AnimationState;
-  staggerDelay?: number;
+  staggerDelay?: number | undefined;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
   type?: AnimationType;
@@ -1902,7 +1902,7 @@ const Icons = Object.assign<typeof _componentIcons, NestedComponentMeta>(_compon
 // owners:
 // Toolbar
 type IItemProps = React.PropsWithChildren<{
-  cssClass?: string;
+  cssClass?: string | undefined;
   disabled?: boolean;
   html?: string;
   locateInMenu?: LocateInMenuMode;
@@ -1971,7 +1971,7 @@ type ILabelProps = React.PropsWithChildren<{
   location?: LabelLocation;
   showColon?: boolean;
   template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
-  text?: string;
+  text?: string | undefined;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
@@ -2026,9 +2026,9 @@ const LoadPanel = Object.assign<typeof _componentLoadPanel, NestedComponentMeta>
 type ILookupProps = React.PropsWithChildren<{
   allowClearing?: boolean;
   calculateCellValue?: ((rowData: any) => any);
-  dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store;
-  displayExpr?: ((data: any) => string) | string;
-  valueExpr?: string | ((data: any) => string | number | boolean);
+  dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined;
+  displayExpr?: ((data: any) => string) | string | undefined;
+  valueExpr?: string | undefined | ((data: any) => string | number | boolean);
 }>
 const _componentLookup = (props: ILookupProps) => {
   return React.createElement(NestedOption<ILookupProps>, {
@@ -2243,18 +2243,18 @@ const PatternRule = Object.assign<typeof _componentPatternRule, NestedComponentM
 // owners:
 // Editing
 type IPopupProps = React.PropsWithChildren<{
-  accessKey?: string;
+  accessKey?: string | undefined;
   animation?: Record<string, any> | {
     hide?: AnimationConfig;
     show?: AnimationConfig;
   };
   bindingOptions?: Record<string, any>;
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
-  container?: any | string;
+  container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
   disabled?: boolean;
-  dragAndResizeArea?: any | string;
+  dragAndResizeArea?: any | string | undefined;
   dragEnabled?: boolean;
   dragOutsideBoundary?: boolean;
   enableBodyScroll?: boolean;
@@ -2263,7 +2263,7 @@ type IPopupProps = React.PropsWithChildren<{
   height?: (() => number | string) | number | string;
   hideOnOutsideClick?: boolean | ((event: event) => boolean);
   hideOnParentScroll?: boolean;
-  hint?: string;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
   maxHeight?: (() => number | string) | number | string;
   maxWidth?: (() => number | string) | number | string;
@@ -2465,18 +2465,18 @@ type IRowDraggingProps = React.PropsWithChildren<{
   allowDropInsideItem?: boolean;
   allowReordering?: boolean;
   autoScroll?: boolean;
-  boundary?: any | string;
-  container?: any | string;
+  boundary?: any | string | undefined;
+  container?: any | string | undefined;
   cursorOffset?: Record<string, any> | string | {
     x?: number;
     y?: number;
   };
-  data?: any;
+  data?: any | undefined;
   dragDirection?: DragDirection;
-  dragTemplate?: ((dragInfo: { itemData: any, itemElement: any }, containerElement: any) => string | any) | template;
+  dragTemplate?: ((dragInfo: { itemData: any, itemElement: any }, containerElement: any) => string | any) | template | undefined;
   dropFeedbackMode?: DragHighlight;
   filter?: string;
-  group?: string;
+  group?: string | undefined;
   handle?: string;
   onAdd?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void);
   onDragChange?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void);
@@ -2518,7 +2518,7 @@ type IScrollingProps = React.PropsWithChildren<{
   columnRenderingMode?: DataRenderMode;
   mode?: DataGridScrollMode;
   preloadEnabled?: boolean;
-  renderAsync?: boolean;
+  renderAsync?: boolean | undefined;
   rowRenderingMode?: DataRenderMode;
   scrollByContent?: boolean;
   scrollByThumb?: boolean;
@@ -2546,7 +2546,7 @@ type ISearchProps = React.PropsWithChildren<{
   editorOptions?: any;
   enabled?: boolean;
   mode?: SearchMode;
-  searchExpr?: Array<(() => any) | string> | (() => any) | string;
+  searchExpr?: Array<(() => any) | string> | (() => any) | string | undefined;
   timeout?: number;
 }>
 const _componentSearch = (props: ISearchProps) => {
@@ -2622,11 +2622,11 @@ const Selection = Object.assign<typeof _componentSelection, NestedComponentMeta>
 type IShowProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: Direction;
+  direction?: Direction | undefined;
   duration?: number;
   easing?: string;
   from?: AnimationState;
-  staggerDelay?: number;
+  staggerDelay?: number | undefined;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
   type?: AnimationType;
@@ -2647,9 +2647,9 @@ const Show = Object.assign<typeof _componentShow, NestedComponentMeta>(_componen
 // owners:
 // DataGrid
 type ISortByGroupSummaryInfoProps = React.PropsWithChildren<{
-  groupColumn?: string;
-  sortOrder?: SortOrder;
-  summaryItem?: number | string;
+  groupColumn?: string | undefined;
+  sortOrder?: SortOrder | undefined;
+  summaryItem?: number | string | undefined;
 }>
 const _componentSortByGroupSummaryInfo = (props: ISortByGroupSummaryInfoProps) => {
   return React.createElement(NestedOption<ISortByGroupSummaryInfoProps>, {
@@ -2744,15 +2744,15 @@ type ISummaryProps = React.PropsWithChildren<{
   calculateCustomSummary?: ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void);
   groupItems?: Array<Record<string, any>> | {
     alignByColumn?: boolean;
-    column?: string;
+    column?: string | undefined;
     customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string);
-    displayFormat?: string;
-    name?: string;
-    showInColumn?: string;
+    displayFormat?: string | undefined;
+    name?: string | undefined;
+    showInColumn?: string | undefined;
     showInGroupFooter?: boolean;
     skipEmptyValues?: boolean;
-    summaryType?: string | SummaryType;
-    valueFormat?: LocalizationFormat;
+    summaryType?: string | SummaryType | undefined;
+    valueFormat?: LocalizationFormat | undefined;
   }[];
   recalculateWhileEditing?: boolean;
   skipEmptyValues?: boolean;
@@ -2768,16 +2768,16 @@ type ISummaryProps = React.PropsWithChildren<{
     sumOtherColumn?: string;
   };
   totalItems?: Array<Record<string, any>> | {
-    alignment?: HorizontalAlignment;
-    column?: string;
-    cssClass?: string;
+    alignment?: HorizontalAlignment | undefined;
+    column?: string | undefined;
+    cssClass?: string | undefined;
     customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string);
-    displayFormat?: string;
-    name?: string;
-    showInColumn?: string;
+    displayFormat?: string | undefined;
+    name?: string | undefined;
+    showInColumn?: string | undefined;
     skipEmptyValues?: boolean;
-    summaryType?: string | SummaryType;
-    valueFormat?: LocalizationFormat;
+    summaryType?: string | SummaryType | undefined;
+    valueFormat?: LocalizationFormat | undefined;
   }[];
 }>
 const _componentSummary = (props: ISummaryProps) => {
@@ -2914,7 +2914,7 @@ const To = Object.assign<typeof _componentTo, NestedComponentMeta>(_componentTo,
 type IToolbarProps = React.PropsWithChildren<{
   disabled?: boolean;
   items?: Array<DataGridPredefinedToolbarItem | dxDataGridToolbarItem>;
-  visible?: boolean;
+  visible?: boolean | undefined;
 }>
 const _componentToolbar = (props: IToolbarProps) => {
   return React.createElement(NestedOption<IToolbarProps>, {
@@ -2935,7 +2935,7 @@ const Toolbar = Object.assign<typeof _componentToolbar, NestedComponentMeta>(_co
 // owners:
 // Popup
 type IToolbarItemProps = React.PropsWithChildren<{
-  cssClass?: string;
+  cssClass?: string | undefined;
   disabled?: boolean;
   html?: string;
   locateInMenu?: LocateInMenuMode;
@@ -2979,16 +2979,16 @@ const ToolbarItem = Object.assign<typeof _componentToolbarItem, NestedComponentM
 // owners:
 // Summary
 type ITotalItemProps = React.PropsWithChildren<{
-  alignment?: HorizontalAlignment;
-  column?: string;
-  cssClass?: string;
+  alignment?: HorizontalAlignment | undefined;
+  column?: string | undefined;
+  cssClass?: string | undefined;
   customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string);
-  displayFormat?: string;
-  name?: string;
-  showInColumn?: string;
+  displayFormat?: string | undefined;
+  name?: string | undefined;
+  showInColumn?: string | undefined;
   skipEmptyValues?: boolean;
-  summaryType?: string | SummaryType;
-  valueFormat?: LocalizationFormat;
+  summaryType?: string | SummaryType | undefined;
+  valueFormat?: LocalizationFormat | undefined;
 }>
 const _componentTotalItem = (props: ITotalItemProps) => {
   return React.createElement(NestedOption<ITotalItemProps>, {

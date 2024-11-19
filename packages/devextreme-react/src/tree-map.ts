@@ -97,10 +97,10 @@ const TreeMap = memo(
 // SelectionStyle
 // Tooltip
 type IBorderProps = React.PropsWithChildren<{
-  color?: string;
-  width?: number;
+  color?: string | undefined;
+  width?: number | undefined;
   dashStyle?: DashStyle;
-  opacity?: number;
+  opacity?: number | undefined;
   visible?: boolean;
 }>
 const _componentBorder = (props: IBorderProps) => {
@@ -119,12 +119,12 @@ const Border = Object.assign<typeof _componentBorder, NestedComponentMeta>(_comp
 // owners:
 // TreeMap
 type IColorizerProps = React.PropsWithChildren<{
-  colorCodeField?: string;
+  colorCodeField?: string | undefined;
   colorizeGroups?: boolean;
   palette?: Array<string> | Palette;
   paletteExtensionMode?: PaletteExtensionMode;
   range?: Array<number>;
-  type?: TreeMapColorizerType;
+  type?: TreeMapColorizerType | undefined;
 }>
 const _componentColorizer = (props: IColorizerProps) => {
   return React.createElement(NestedOption<IColorizerProps>, {
@@ -148,7 +148,7 @@ type IExportProps = React.PropsWithChildren<{
   formats?: Array<ExportFormat>;
   margin?: number;
   printingEnabled?: boolean;
-  svgToCanvas?: ((svg: any, canvas: any) => any);
+  svgToCanvas?: ((svg: any, canvas: any) => any) | undefined;
 }>
 const _componentExport = (props: IExportProps) => {
   return React.createElement(NestedOption<IExportProps>, {
@@ -217,18 +217,18 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 // TreeMap
 type IGroupProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
-    color?: string;
-    width?: number;
+    color?: string | undefined;
+    width?: number | undefined;
   };
   color?: string;
-  headerHeight?: number;
-  hoverEnabled?: boolean;
+  headerHeight?: number | undefined;
+  hoverEnabled?: boolean | undefined;
   hoverStyle?: Record<string, any> | {
     border?: Record<string, any> | {
-      color?: string;
-      width?: number;
+      color?: string | undefined;
+      width?: number | undefined;
     };
-    color?: string;
+    color?: string | undefined;
   };
   label?: Record<string, any> | {
     font?: ChartsFont;
@@ -238,10 +238,10 @@ type IGroupProps = React.PropsWithChildren<{
   padding?: number;
   selectionStyle?: Record<string, any> | {
     border?: Record<string, any> | {
-      color?: string;
-      width?: number;
+      color?: string | undefined;
+      width?: number | undefined;
     };
-    color?: string;
+    color?: string | undefined;
   };
 }>
 const _componentGroup = (props: IGroupProps) => {
@@ -293,10 +293,10 @@ const GroupLabel = Object.assign<typeof _componentGroupLabel, NestedComponentMet
 // Tile
 type IHoverStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
-    color?: string;
-    width?: number;
+    color?: string | undefined;
+    width?: number | undefined;
   };
-  color?: string;
+  color?: string | undefined;
 }>
 const _componentHoverStyle = (props: IHoverStyleProps) => {
   return React.createElement(NestedOption<IHoverStyleProps>, {
@@ -389,10 +389,10 @@ const Margin = Object.assign<typeof _componentMargin, NestedComponentMeta>(_comp
 // Tile
 type ISelectionStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
-    color?: string;
-    width?: number;
+    color?: string | undefined;
+    width?: number | undefined;
   };
-  color?: string;
+  color?: string | undefined;
 }>
 const _componentSelectionStyle = (props: ISelectionStyleProps) => {
   return React.createElement(NestedOption<ISelectionStyleProps>, {
@@ -432,8 +432,8 @@ const Shadow = Object.assign<typeof _componentShadow, NestedComponentMeta>(_comp
 // owners:
 // TreeMap
 type ISizeProps = React.PropsWithChildren<{
-  height?: number;
-  width?: number;
+  height?: number | undefined;
+  width?: number | undefined;
 }>
 const _componentSize = (props: ISizeProps) => {
   return React.createElement(NestedOption<ISizeProps>, {
@@ -477,16 +477,16 @@ const Subtitle = Object.assign<typeof _componentSubtitle, NestedComponentMeta>(_
 // TreeMap
 type ITileProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
-    color?: string;
-    width?: number;
+    color?: string | undefined;
+    width?: number | undefined;
   };
   color?: string;
   hoverStyle?: Record<string, any> | {
     border?: Record<string, any> | {
-      color?: string;
-      width?: number;
+      color?: string | undefined;
+      width?: number | undefined;
     };
-    color?: string;
+    color?: string | undefined;
   };
   label?: Record<string, any> | {
     font?: ChartsFont;
@@ -496,10 +496,10 @@ type ITileProps = React.PropsWithChildren<{
   };
   selectionStyle?: Record<string, any> | {
     border?: Record<string, any> | {
-      color?: string;
-      width?: number;
+      color?: string | undefined;
+      width?: number | undefined;
     };
-    color?: string;
+    color?: string | undefined;
   };
 }>
 const _componentTile = (props: ITileProps) => {
@@ -558,7 +558,7 @@ type ITitleProps = React.PropsWithChildren<{
     right?: number;
     top?: number;
   };
-  placeholderSize?: number;
+  placeholderSize?: number | undefined;
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
@@ -596,19 +596,19 @@ type ITooltipProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     dashStyle?: DashStyle;
-    opacity?: number;
+    opacity?: number | undefined;
     visible?: boolean;
     width?: number;
   };
   color?: string;
-  container?: any | string;
-  contentTemplate?: ((info: { node: dxTreeMapNode, value: number, valueText: string }, element: any) => string | any) | template;
+  container?: any | string | undefined;
+  contentTemplate?: ((info: { node: dxTreeMapNode, value: number, valueText: string }, element: any) => string | any) | template | undefined;
   cornerRadius?: number;
-  customizeTooltip?: ((info: { node: dxTreeMapNode, value: number, valueText: string }) => Record<string, any>);
+  customizeTooltip?: ((info: { node: dxTreeMapNode, value: number, valueText: string }) => Record<string, any>) | undefined;
   enabled?: boolean;
   font?: ChartsFont;
-  format?: LocalizationFormat;
-  opacity?: number;
+  format?: LocalizationFormat | undefined;
+  opacity?: number | undefined;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
   shadow?: Record<string, any> | {
@@ -618,7 +618,7 @@ type ITooltipProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  zIndex?: number;
+  zIndex?: number | undefined;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
 }>
@@ -652,7 +652,7 @@ const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_co
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
   dashStyle?: DashStyle;
-  opacity?: number;
+  opacity?: number | undefined;
   visible?: boolean;
   width?: number;
 }>
@@ -677,8 +677,8 @@ const TooltipBorder = Object.assign<typeof _componentTooltipBorder, NestedCompon
 // HoverStyle
 // SelectionStyle
 type ITreeMapborderProps = React.PropsWithChildren<{
-  color?: string;
-  width?: number;
+  color?: string | undefined;
+  width?: number | undefined;
 }>
 const _componentTreeMapborder = (props: ITreeMapborderProps) => {
   return React.createElement(NestedOption<ITreeMapborderProps>, {

@@ -22,13 +22,14 @@ import {
 } from '@angular/core';
 
 
-import { ExportFormat, HorizontalAlignment, Orientation, Position, SingleOrMultiple, VerticalAlignment, VerticalEdge } from 'devextreme/common';
-import { AnimationEaseMode, ArgumentAxisHoverMode, AxisScaleType, ChartsAxisLabelOverlap, ChartsColor, ChartsDataType, ChartsLabelOverlap, DashStyle, DiscreteAxisDivisionMode, Font, LegendHoverMode, Palette, PaletteExtensionMode, RelativePosition, ScaleBreak, ScaleBreakLineStyle, TextOverflow, Theme, TimeInterval, VisualRange, VisualRangeUpdateMode, WordWrap } from 'devextreme/common/charts';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import DataSource from 'devextreme/data/data_source';
+import * as CommonChartTypes from 'devextreme/common/charts';
+import { AnimationEaseMode, TimeInterval, ChartsDataType, ScaleBreak, ScaleBreakLineStyle, DashStyle, Font, RelativePosition, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, ChartsAxisLabelOverlap, TextOverflow, WordWrap, AxisScaleType, VisualRangeUpdateMode, ChartsColor, SeriesHoverMode, HatchDirection, PointInteractionMode, PointSymbol, SeriesSelectionMode, SeriesType, ValueErrorBarDisplayMode, ValueErrorBarType, SeriesLabel, SeriesPoint, LegendItem, LegendHoverMode, Palette, PaletteExtensionMode, ChartsLabelOverlap, Theme } from 'devextreme/common/charts';
+import { dxChartAnnotationConfig, AggregatedPointsPosition, ChartLabelDisplayMode, dxChartCommonAnnotationConfig, chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod, FinancialChartReductionLevel, chartPointObject, ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, ChartTooltipLocation, ChartZoomAndPanMode, EventKeyModifier } from 'devextreme/viz/chart';
+import { HorizontalAlignment, VerticalAlignment, Position, ExportFormat, Orientation, VerticalEdge, SingleOrMultiple } from 'devextreme/common';
 import { Format } from 'devextreme/localization';
-import { AggregatedPointsPosition, ArgumentAxisClickEvent, ChartLabelDisplayMode, ChartTooltipLocation, ChartZoomAndPanMode, DisposingEvent, DoneEvent, DrawnEvent, dxChartAnnotationConfig, dxChartCommonAnnotationConfig, EventKeyModifier, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent } from 'devextreme/viz/chart';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 import { ChartSeries } from 'devextreme/viz/common';
 
 import DxChart from 'devextreme/viz/chart';
@@ -130,89 +131,97 @@ import { DxoZoomAndPanModule } from 'devextreme-angular/ui/nested';
 import { DxoDragBoxStyleModule } from 'devextreme-angular/ui/nested';
 
 import { DxoChartAdaptiveLayoutModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartAggregationModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartAggregationIntervalModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartAnimationModule } from 'devextreme-angular/ui/chart/nested';
 import { DxiChartAnnotationModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartBorderModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartFontModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartImageModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartShadowModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartAnnotationBorderModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartAnnotationImageModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartArgumentAxisModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartAggregationIntervalModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartArgumentFormatModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartAxisConstantLineStyleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartAxisConstantLineStyleLabelModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartAxisLabelModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartAxisTitleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartBackgroundColorModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartBorderModule } from 'devextreme-angular/ui/chart/nested';
 import { DxiChartBreakModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartBreakStyleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartChartTitleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartChartTitleSubtitleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartColorModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCommonAnnotationSettingsModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCommonAxisSettingsModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCommonAxisSettingsConstantLineStyleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCommonAxisSettingsConstantLineStyleLabelModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCommonAxisSettingsLabelModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCommonAxisSettingsTitleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCommonPaneSettingsModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCommonSeriesSettingsModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCommonSeriesSettingsHoverStyleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCommonSeriesSettingsLabelModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCommonSeriesSettingsSelectionStyleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartConnectorModule } from 'devextreme-angular/ui/chart/nested';
 import { DxiChartConstantLineModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartLabelModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartConstantLineLabelModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartConstantLineStyleModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartGridModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCrosshairModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartDataPrepareSettingsModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartDragBoxStyleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartExportModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartFontModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartFormatModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartGridModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartHatchingModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartHeightModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartHorizontalLineModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartHorizontalLineLabelModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartHoverStyleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartImageModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartLabelModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartLegendModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartLegendTitleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartLegendTitleSubtitleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartLengthModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartLoadingIndicatorModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartMarginModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartMinorGridModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartMinorTickModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartMinorTickIntervalModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartMinVisualRangeLengthModule } from 'devextreme-angular/ui/chart/nested';
+import { DxiChartPaneModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartPaneBorderModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartPointModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartPointBorderModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartPointHoverStyleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartPointImageModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartPointSelectionStyleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartReductionModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartScrollBarModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartSelectionStyleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxiChartSeriesModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartSeriesBorderModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartSeriesTemplateModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartShadowModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartSizeModule } from 'devextreme-angular/ui/chart/nested';
 import { DxiChartStripModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartStripLabelModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartStripStyleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartStripStyleLabelModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartSubtitleModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartTickModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartTickIntervalModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartTitleModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartCommonAnnotationSettingsModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartCommonAxisSettingsModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartCommonPaneSettingsModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartBackgroundColorModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartCommonSeriesSettingsModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartAggregationModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartAreaModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartHoverStyleModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartHatchingModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartConnectorModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartPointModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartHeightModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartUrlModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartWidthModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartSelectionStyleModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartReductionModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartValueErrorBarModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartBarModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartBubbleModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartCandlestickModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartColorModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartFullstackedareaModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartFullstackedbarModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartFullstackedlineModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartFullstackedsplineModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartFullstackedsplineareaModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartArgumentFormatModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartLineModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartRangeareaModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartRangebarModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartScatterModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartSplineModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartSplineareaModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartStackedareaModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartStackedbarModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartStackedlineModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartStackedsplineModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartStackedsplineareaModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartStepareaModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartSteplineModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartStockModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartCrosshairModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartHorizontalLineModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartVerticalLineModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartDataPrepareSettingsModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartExportModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartLegendModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartMarginModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartSubtitleModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartLoadingIndicatorModule } from 'devextreme-angular/ui/chart/nested';
-import { DxiChartPaneModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartScrollBarModule } from 'devextreme-angular/ui/chart/nested';
-import { DxiChartSeriesModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartSeriesTemplateModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartSizeModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartTooltipModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartTooltipBorderModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartUrlModule } from 'devextreme-angular/ui/chart/nested';
 import { DxiChartValueAxisModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartValueErrorBarModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartVerticalLineModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartVisualRangeModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartWholeRangeModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartWidthModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartZoomAndPanModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoChartDragBoxStyleModule } from 'devextreme-angular/ui/chart/nested';
 
 import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
 import { DxiPaneComponent } from 'devextreme-angular/ui/nested';
@@ -287,10 +296,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get annotations(): Array<dxChartAnnotationConfig | any> {
+    get annotations(): Array<any | dxChartAnnotationConfig> {
         return this._getOption('annotations');
     }
-    set annotations(value: Array<dxChartAnnotationConfig | any>) {
+    set annotations(value: Array<any | dxChartAnnotationConfig>) {
         this._setOption('annotations', value);
     }
 
@@ -300,10 +309,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get argumentAxis(): { aggregateByCategory?: boolean, aggregatedPointsPosition?: AggregatedPointsPosition, aggregationGroupWidth?: number | undefined, aggregationInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, argumentType?: ChartsDataType | undefined, axisDivisionFactor?: number, breaks?: Array<ScaleBreak>, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<number | string | Date>, color?: string, constantLines?: Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string | undefined, width?: number }>, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, customPosition?: Date | number | string | undefined, customPositionAxis?: string | undefined, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, holidays?: Array<Date | string | number>, hoverMode?: ArgumentAxisHoverMode, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, customizeHint?: Function, customizeText?: Function, displayMode?: ChartLabelDisplayMode, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: RelativePosition | Position, rotationAngle?: number, staggeringSpacing?: number, template?: any | undefined, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, linearThreshold?: number | undefined, logarithmBase?: number, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number | undefined, minVisualRangeLength?: TimeInterval | number | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, offset?: number | undefined, opacity?: number | undefined, placeholderSize?: number, position?: Position, singleWorkdays?: Array<Date | string | number>, strips?: Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string | undefined }>, stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, title?: string | { alignment?: HorizontalAlignment, font?: Font, margin?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, type?: AxisScaleType | undefined, valueMarginsEnabled?: boolean, visible?: boolean, visualRange?: VisualRange | Array<number | string | Date>, visualRangeUpdateMode?: VisualRangeUpdateMode, wholeRange?: VisualRange | undefined | Array<number | string | Date>, width?: number, workdaysOnly?: boolean, workWeek?: Array<number> } {
+    get argumentAxis(): { aggregateByCategory?: boolean, aggregatedPointsPosition?: AggregatedPointsPosition, aggregationGroupWidth?: number | undefined, aggregationInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, argumentType?: ChartsDataType | undefined, axisDivisionFactor?: number, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[], breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, color?: string, constantLines?: { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string | undefined, width?: number }[], constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, customPosition?: Date | number | string | undefined, customPositionAxis?: string | undefined, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, holidays?: Array<Date | string> | Array<number>, hoverMode?: ArgumentAxisHoverMode, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string), customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string), displayMode?: ChartLabelDisplayMode, font?: Font, format?: Format | undefined, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, linearThreshold?: number | undefined, logarithmBase?: number, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number | undefined, minVisualRangeLength?: number | TimeInterval | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, offset?: number | undefined, opacity?: number | undefined, placeholderSize?: number, position?: Position, singleWorkdays?: Array<Date | string> | Array<number>, strips?: { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string | undefined }[], stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, title?: string | { alignment?: HorizontalAlignment, font?: Font, margin?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, type?: AxisScaleType | undefined, valueMarginsEnabled?: boolean, visible?: boolean, visualRange?: Array<Date | number | string> | CommonChartTypes.VisualRange, visualRangeUpdateMode?: VisualRangeUpdateMode, wholeRange?: Array<Date | number | string> | undefined | CommonChartTypes.VisualRange, width?: number, workdaysOnly?: boolean, workWeek?: Array<number> } {
         return this._getOption('argumentAxis');
     }
-    set argumentAxis(value: { aggregateByCategory?: boolean, aggregatedPointsPosition?: AggregatedPointsPosition, aggregationGroupWidth?: number | undefined, aggregationInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, argumentType?: ChartsDataType | undefined, axisDivisionFactor?: number, breaks?: Array<ScaleBreak>, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<number | string | Date>, color?: string, constantLines?: Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string | undefined, width?: number }>, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, customPosition?: Date | number | string | undefined, customPositionAxis?: string | undefined, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, holidays?: Array<Date | string | number>, hoverMode?: ArgumentAxisHoverMode, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, customizeHint?: Function, customizeText?: Function, displayMode?: ChartLabelDisplayMode, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: RelativePosition | Position, rotationAngle?: number, staggeringSpacing?: number, template?: any | undefined, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, linearThreshold?: number | undefined, logarithmBase?: number, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number | undefined, minVisualRangeLength?: TimeInterval | number | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, offset?: number | undefined, opacity?: number | undefined, placeholderSize?: number, position?: Position, singleWorkdays?: Array<Date | string | number>, strips?: Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string | undefined }>, stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, title?: string | { alignment?: HorizontalAlignment, font?: Font, margin?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, type?: AxisScaleType | undefined, valueMarginsEnabled?: boolean, visible?: boolean, visualRange?: VisualRange | Array<number | string | Date>, visualRangeUpdateMode?: VisualRangeUpdateMode, wholeRange?: VisualRange | undefined | Array<number | string | Date>, width?: number, workdaysOnly?: boolean, workWeek?: Array<number> }) {
+    set argumentAxis(value: { aggregateByCategory?: boolean, aggregatedPointsPosition?: AggregatedPointsPosition, aggregationGroupWidth?: number | undefined, aggregationInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, argumentType?: ChartsDataType | undefined, axisDivisionFactor?: number, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[], breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, color?: string, constantLines?: { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string | undefined, width?: number }[], constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, customPosition?: Date | number | string | undefined, customPositionAxis?: string | undefined, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, holidays?: Array<Date | string> | Array<number>, hoverMode?: ArgumentAxisHoverMode, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string), customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string), displayMode?: ChartLabelDisplayMode, font?: Font, format?: Format | undefined, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, linearThreshold?: number | undefined, logarithmBase?: number, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number | undefined, minVisualRangeLength?: number | TimeInterval | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, offset?: number | undefined, opacity?: number | undefined, placeholderSize?: number, position?: Position, singleWorkdays?: Array<Date | string> | Array<number>, strips?: { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string | undefined }[], stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, title?: string | { alignment?: HorizontalAlignment, font?: Font, margin?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, type?: AxisScaleType | undefined, valueMarginsEnabled?: boolean, visible?: boolean, visualRange?: Array<Date | number | string> | CommonChartTypes.VisualRange, visualRangeUpdateMode?: VisualRangeUpdateMode, wholeRange?: Array<Date | number | string> | undefined | CommonChartTypes.VisualRange, width?: number, workdaysOnly?: boolean, workWeek?: Array<number> }) {
         this._setOption('argumentAxis', value);
     }
 
@@ -365,10 +374,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get commonAxisSettings(): { aggregatedPointsPosition?: AggregatedPointsPosition, allowDecimals?: boolean | undefined, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, color?: string, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, displayMode?: ChartLabelDisplayMode, font?: Font, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: RelativePosition | Position, rotationAngle?: number, staggeringSpacing?: number, template?: any | undefined, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minValueMargin?: number | undefined, opacity?: number | undefined, placeholderSize?: number, stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, title?: { alignment?: HorizontalAlignment, font?: Font, margin?: number, textOverflow?: TextOverflow, wordWrap?: WordWrap }, valueMarginsEnabled?: boolean, visible?: boolean, width?: number } {
+    get commonAxisSettings(): { aggregatedPointsPosition?: AggregatedPointsPosition, allowDecimals?: boolean | undefined, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, color?: string, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, displayMode?: ChartLabelDisplayMode, font?: Font, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minValueMargin?: number | undefined, opacity?: number | undefined, placeholderSize?: number, stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, title?: { alignment?: HorizontalAlignment, font?: Font, margin?: number, textOverflow?: TextOverflow, wordWrap?: WordWrap }, valueMarginsEnabled?: boolean, visible?: boolean, width?: number } {
         return this._getOption('commonAxisSettings');
     }
-    set commonAxisSettings(value: { aggregatedPointsPosition?: AggregatedPointsPosition, allowDecimals?: boolean | undefined, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, color?: string, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, displayMode?: ChartLabelDisplayMode, font?: Font, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: RelativePosition | Position, rotationAngle?: number, staggeringSpacing?: number, template?: any | undefined, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minValueMargin?: number | undefined, opacity?: number | undefined, placeholderSize?: number, stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, title?: { alignment?: HorizontalAlignment, font?: Font, margin?: number, textOverflow?: TextOverflow, wordWrap?: WordWrap }, valueMarginsEnabled?: boolean, visible?: boolean, width?: number }) {
+    set commonAxisSettings(value: { aggregatedPointsPosition?: AggregatedPointsPosition, allowDecimals?: boolean | undefined, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, color?: string, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, displayMode?: ChartLabelDisplayMode, font?: Font, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minValueMargin?: number | undefined, opacity?: number | undefined, placeholderSize?: number, stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, title?: { alignment?: HorizontalAlignment, font?: Font, margin?: number, textOverflow?: TextOverflow, wordWrap?: WordWrap }, valueMarginsEnabled?: boolean, visible?: boolean, width?: number }) {
         this._setOption('commonAxisSettings', value);
     }
 
@@ -391,10 +400,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get commonSeriesSettings(): any {
+    get commonSeriesSettings(): { aggregation?: { calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>) | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod }, area?: any, argumentField?: string, axis?: string | undefined, bar?: any, barOverlapGroup?: string | undefined, barPadding?: number | undefined, barWidth?: number | undefined, border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, bubble?: any, candlestick?: any, closeValueField?: string, color?: ChartsColor | string | undefined, cornerRadius?: number, dashStyle?: DashStyle, fullstackedarea?: any, fullstackedbar?: any, fullstackedline?: any, fullstackedspline?: any, fullstackedsplinearea?: any, highValueField?: string, hoverMode?: SeriesHoverMode, hoverStyle?: { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, dashStyle?: DashStyle, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }, ignoreEmptyPoints?: boolean, innerColor?: string, label?: { alignment?: HorizontalAlignment, argumentFormat?: Format | undefined, backgroundColor?: string | undefined, border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string | undefined, font?: Font, format?: Format | undefined, horizontalOffset?: number, position?: RelativePosition, rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean }, line?: any, lowValueField?: string, maxLabelCount?: number | undefined, minBarSize?: number | undefined, opacity?: number, openValueField?: string, pane?: string, point?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, hoverMode?: PointInteractionMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined }, image?: string | undefined | { height?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }, url?: string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined }, width?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } }, selectionMode?: PointInteractionMode, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined }, size?: number, symbol?: PointSymbol, visible?: boolean }, rangearea?: any, rangebar?: any, rangeValue1Field?: string, rangeValue2Field?: string, reduction?: { color?: string, level?: FinancialChartReductionLevel }, scatter?: any, selectionMode?: SeriesSelectionMode, selectionStyle?: { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, dashStyle?: DashStyle, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }, showInLegend?: boolean, sizeField?: string, spline?: any, splinearea?: any, stack?: string, stackedarea?: any, stackedbar?: any, stackedline?: any, stackedspline?: any, stackedsplinearea?: any, steparea?: any, stepline?: any, stock?: any, tagField?: string, type?: SeriesType, valueErrorBar?: { color?: string, displayMode?: ValueErrorBarDisplayMode, edgeLength?: number, highValueField?: string | undefined, lineWidth?: number, lowValueField?: string | undefined, opacity?: number | undefined, type?: undefined | ValueErrorBarType, value?: number }, valueField?: string, visible?: boolean, width?: number } {
         return this._getOption('commonSeriesSettings');
     }
-    set commonSeriesSettings(value: any) {
+    set commonSeriesSettings(value: { aggregation?: { calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>) | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod }, area?: any, argumentField?: string, axis?: string | undefined, bar?: any, barOverlapGroup?: string | undefined, barPadding?: number | undefined, barWidth?: number | undefined, border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, bubble?: any, candlestick?: any, closeValueField?: string, color?: ChartsColor | string | undefined, cornerRadius?: number, dashStyle?: DashStyle, fullstackedarea?: any, fullstackedbar?: any, fullstackedline?: any, fullstackedspline?: any, fullstackedsplinearea?: any, highValueField?: string, hoverMode?: SeriesHoverMode, hoverStyle?: { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, dashStyle?: DashStyle, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }, ignoreEmptyPoints?: boolean, innerColor?: string, label?: { alignment?: HorizontalAlignment, argumentFormat?: Format | undefined, backgroundColor?: string | undefined, border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string | undefined, font?: Font, format?: Format | undefined, horizontalOffset?: number, position?: RelativePosition, rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean }, line?: any, lowValueField?: string, maxLabelCount?: number | undefined, minBarSize?: number | undefined, opacity?: number, openValueField?: string, pane?: string, point?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, hoverMode?: PointInteractionMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined }, image?: string | undefined | { height?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }, url?: string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined }, width?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } }, selectionMode?: PointInteractionMode, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined }, size?: number, symbol?: PointSymbol, visible?: boolean }, rangearea?: any, rangebar?: any, rangeValue1Field?: string, rangeValue2Field?: string, reduction?: { color?: string, level?: FinancialChartReductionLevel }, scatter?: any, selectionMode?: SeriesSelectionMode, selectionStyle?: { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, dashStyle?: DashStyle, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }, showInLegend?: boolean, sizeField?: string, spline?: any, splinearea?: any, stack?: string, stackedarea?: any, stackedbar?: any, stackedline?: any, stackedspline?: any, stackedsplinearea?: any, steparea?: any, stepline?: any, stock?: any, tagField?: string, type?: SeriesType, valueErrorBar?: { color?: string, displayMode?: ValueErrorBarDisplayMode, edgeLength?: number, highValueField?: string | undefined, lineWidth?: number, lowValueField?: string | undefined, opacity?: number | undefined, type?: undefined | ValueErrorBarType, value?: number }, valueField?: string, visible?: boolean, width?: number }) {
         this._setOption('commonSeriesSettings', value);
     }
 
@@ -417,10 +426,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get crosshair(): { color?: string, dashStyle?: DashStyle, enabled?: boolean, horizontalLine?: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, verticalLine?: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }, width?: number } {
+    get crosshair(): { color?: string, dashStyle?: DashStyle, enabled?: boolean, horizontalLine?: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, verticalLine?: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }, width?: number } {
         return this._getOption('crosshair');
     }
-    set crosshair(value: { color?: string, dashStyle?: DashStyle, enabled?: boolean, horizontalLine?: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, verticalLine?: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }, width?: number }) {
+    set crosshair(value: { color?: string, dashStyle?: DashStyle, enabled?: boolean, horizontalLine?: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, verticalLine?: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }, width?: number }) {
         this._setOption('crosshair', value);
     }
 
@@ -430,10 +439,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get customizeAnnotation(): Function | undefined {
+    get customizeAnnotation(): ((annotation: dxChartAnnotationConfig | any) => dxChartAnnotationConfig) | undefined {
         return this._getOption('customizeAnnotation');
     }
-    set customizeAnnotation(value: Function | undefined) {
+    set customizeAnnotation(value: ((annotation: dxChartAnnotationConfig | any) => dxChartAnnotationConfig) | undefined) {
         this._setOption('customizeAnnotation', value);
     }
 
@@ -443,10 +452,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get customizeLabel(): Function {
+    get customizeLabel(): ((pointInfo: any) => SeriesLabel) {
         return this._getOption('customizeLabel');
     }
-    set customizeLabel(value: Function) {
+    set customizeLabel(value: ((pointInfo: any) => SeriesLabel)) {
         this._setOption('customizeLabel', value);
     }
 
@@ -456,10 +465,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get customizePoint(): Function {
+    get customizePoint(): ((pointInfo: any) => SeriesPoint) {
         return this._getOption('customizePoint');
     }
-    set customizePoint(value: Function) {
+    set customizePoint(value: ((pointInfo: any) => SeriesPoint)) {
         this._setOption('customizePoint', value);
     }
 
@@ -469,10 +478,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get dataPrepareSettings(): { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | Function } {
+    get dataPrepareSettings(): { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: any, b: any) => number) } {
         return this._getOption('dataPrepareSettings');
     }
-    set dataPrepareSettings(value: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | Function }) {
+    set dataPrepareSettings(value: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: any, b: any) => number) }) {
         this._setOption('dataPrepareSettings', value);
     }
 
@@ -482,10 +491,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -521,10 +530,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -534,10 +543,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined } {
+    get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined } {
         return this._getOption('export');
     }
-    set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }) {
+    set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }) {
         this._setOption('export', value);
     }
 
@@ -547,10 +556,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get legend(): { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: Function, customizeItems?: Function, customizeText?: Function, font?: Font, horizontalAlignment?: HorizontalAlignment, hoverMode?: LegendHoverMode, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any | undefined, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, position?: RelativePosition, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean } {
+    get legend(): { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string), customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>), customizeText?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, hoverMode?: LegendHoverMode, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, position?: RelativePosition, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean } {
         return this._getOption('legend');
     }
-    set legend(value: { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: Function, customizeItems?: Function, customizeText?: Function, font?: Font, horizontalAlignment?: HorizontalAlignment, hoverMode?: LegendHoverMode, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any | undefined, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, position?: RelativePosition, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }) {
+    set legend(value: { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string), customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>), customizeText?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, hoverMode?: LegendHoverMode, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, position?: RelativePosition, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }) {
         this._setOption('legend', value);
     }
 
@@ -625,10 +634,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get palette(): Palette | string | Array<string> {
+    get palette(): Array<string> | Palette {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
 
@@ -651,10 +660,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get panes(): Array<any | { backgroundColor?: ChartsColor | string, border?: { bottom?: boolean, color?: string, dashStyle?: DashStyle, left?: boolean, opacity?: number | undefined, right?: boolean, top?: boolean, visible?: boolean, width?: number }, height?: number | string | undefined, name?: string | undefined }> {
+    get panes(): { backgroundColor?: ChartsColor | string, border?: { bottom?: boolean, color?: string, dashStyle?: DashStyle, left?: boolean, opacity?: number | undefined, right?: boolean, top?: boolean, visible?: boolean, width?: number }, height?: number | string | undefined, name?: string | undefined }[] {
         return this._getOption('panes');
     }
-    set panes(value: Array<any | { backgroundColor?: ChartsColor | string, border?: { bottom?: boolean, color?: string, dashStyle?: DashStyle, left?: boolean, opacity?: number | undefined, right?: boolean, top?: boolean, visible?: boolean, width?: number }, height?: number | string | undefined, name?: string | undefined }>) {
+    set panes(value: { backgroundColor?: ChartsColor | string, border?: { bottom?: boolean, color?: string, dashStyle?: DashStyle, left?: boolean, opacity?: number | undefined, right?: boolean, top?: boolean, visible?: boolean, width?: number }, height?: number | string | undefined, name?: string | undefined }[]) {
         this._setOption('panes', value);
     }
 
@@ -768,10 +777,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get series(): ChartSeries | any | undefined | Array<ChartSeries | any> {
+    get series(): Array<ChartSeries> | ChartSeries | undefined {
         return this._getOption('series');
     }
-    set series(value: ChartSeries | any | undefined | Array<ChartSeries | any>) {
+    set series(value: Array<ChartSeries> | ChartSeries | undefined) {
         this._setOption('series', value);
     }
 
@@ -794,10 +803,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get seriesTemplate(): { customizeSeries?: Function, nameField?: string } {
+    get seriesTemplate(): any {
         return this._getOption('seriesTemplate');
     }
-    set seriesTemplate(value: { customizeSeries?: Function, nameField?: string }) {
+    set seriesTemplate(value: any) {
         this._setOption('seriesTemplate', value);
     }
 
@@ -872,10 +881,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get tooltip(): { argumentFormat?: Format | string | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, location?: ChartTooltipLocation, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined } {
+    get tooltip(): { argumentFormat?: Format | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, location?: ChartTooltipLocation, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { argumentFormat?: Format | string | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, location?: ChartTooltipLocation, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined }) {
+    set tooltip(value: { argumentFormat?: Format | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, location?: ChartTooltipLocation, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
 
@@ -885,10 +894,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get valueAxis(): Array<any | { aggregatedPointsPosition?: AggregatedPointsPosition, allowDecimals?: boolean | undefined, autoBreaksEnabled?: boolean, axisDivisionFactor?: number, breaks?: Array<ScaleBreak>, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<number | string | Date>, color?: string, constantLines?: Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string | undefined, width?: number }>, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, customPosition?: Date | number | string | undefined, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, customizeHint?: Function, customizeText?: Function, displayMode?: ChartLabelDisplayMode, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: RelativePosition | Position, rotationAngle?: number, staggeringSpacing?: number, template?: any | undefined, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, linearThreshold?: number | undefined, logarithmBase?: number, maxAutoBreakCount?: number, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number | undefined, minVisualRangeLength?: TimeInterval | number | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, multipleAxesSpacing?: number, name?: string | undefined, offset?: number | undefined, opacity?: number | undefined, pane?: string | undefined, placeholderSize?: number, position?: Position, showZero?: boolean | undefined, strips?: Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string | undefined }>, stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, synchronizedValue?: number | undefined, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, title?: string | { alignment?: HorizontalAlignment, font?: Font, margin?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, type?: AxisScaleType | undefined, valueMarginsEnabled?: boolean, valueType?: ChartsDataType | undefined, visible?: boolean, visualRange?: VisualRange | Array<number | string | Date>, visualRangeUpdateMode?: VisualRangeUpdateMode, wholeRange?: VisualRange | undefined | Array<number | string | Date>, width?: number }> {
+    get valueAxis(): { aggregatedPointsPosition?: AggregatedPointsPosition, allowDecimals?: boolean | undefined, autoBreaksEnabled?: boolean, axisDivisionFactor?: number, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[], breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, color?: string, constantLines?: { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string | undefined, width?: number }[], constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, customPosition?: Date | number | string | undefined, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, customizeHint?: ((axisValue: { value: Date | number | string, valueText: string }) => string), customizeText?: ((axisValue: { value: Date | number | string, valueText: string }) => string), displayMode?: ChartLabelDisplayMode, font?: Font, format?: Format | undefined, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, linearThreshold?: number | undefined, logarithmBase?: number, maxAutoBreakCount?: number, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number | undefined, minVisualRangeLength?: number | TimeInterval | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, multipleAxesSpacing?: number, name?: string | undefined, offset?: number | undefined, opacity?: number | undefined, pane?: string | undefined, placeholderSize?: number, position?: Position, showZero?: boolean | undefined, strips?: { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string | undefined }[], stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, synchronizedValue?: number | undefined, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, title?: string | { alignment?: HorizontalAlignment, font?: Font, margin?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, type?: AxisScaleType | undefined, valueMarginsEnabled?: boolean, valueType?: ChartsDataType | undefined, visible?: boolean, visualRange?: Array<Date | number | string> | CommonChartTypes.VisualRange, visualRangeUpdateMode?: VisualRangeUpdateMode, wholeRange?: Array<Date | number | string> | undefined | CommonChartTypes.VisualRange, width?: number }[] {
         return this._getOption('valueAxis');
     }
-    set valueAxis(value: Array<any | { aggregatedPointsPosition?: AggregatedPointsPosition, allowDecimals?: boolean | undefined, autoBreaksEnabled?: boolean, axisDivisionFactor?: number, breaks?: Array<ScaleBreak>, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<number | string | Date>, color?: string, constantLines?: Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string | undefined, width?: number }>, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, customPosition?: Date | number | string | undefined, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, customizeHint?: Function, customizeText?: Function, displayMode?: ChartLabelDisplayMode, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: RelativePosition | Position, rotationAngle?: number, staggeringSpacing?: number, template?: any | undefined, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, linearThreshold?: number | undefined, logarithmBase?: number, maxAutoBreakCount?: number, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number | undefined, minVisualRangeLength?: TimeInterval | number | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, multipleAxesSpacing?: number, name?: string | undefined, offset?: number | undefined, opacity?: number | undefined, pane?: string | undefined, placeholderSize?: number, position?: Position, showZero?: boolean | undefined, strips?: Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string | undefined }>, stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, synchronizedValue?: number | undefined, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, title?: string | { alignment?: HorizontalAlignment, font?: Font, margin?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, type?: AxisScaleType | undefined, valueMarginsEnabled?: boolean, valueType?: ChartsDataType | undefined, visible?: boolean, visualRange?: VisualRange | Array<number | string | Date>, visualRangeUpdateMode?: VisualRangeUpdateMode, wholeRange?: VisualRange | undefined | Array<number | string | Date>, width?: number }>) {
+    set valueAxis(value: { aggregatedPointsPosition?: AggregatedPointsPosition, allowDecimals?: boolean | undefined, autoBreaksEnabled?: boolean, axisDivisionFactor?: number, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[], breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, color?: string, constantLines?: { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string | undefined, width?: number }[], constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, customPosition?: Date | number | string | undefined, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, customizeHint?: ((axisValue: { value: Date | number | string, valueText: string }) => string), customizeText?: ((axisValue: { value: Date | number | string, valueText: string }) => string), displayMode?: ChartLabelDisplayMode, font?: Font, format?: Format | undefined, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, linearThreshold?: number | undefined, logarithmBase?: number, maxAutoBreakCount?: number, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number | undefined, minVisualRangeLength?: number | TimeInterval | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, multipleAxesSpacing?: number, name?: string | undefined, offset?: number | undefined, opacity?: number | undefined, pane?: string | undefined, placeholderSize?: number, position?: Position, showZero?: boolean | undefined, strips?: { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string | undefined }[], stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, synchronizedValue?: number | undefined, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, title?: string | { alignment?: HorizontalAlignment, font?: Font, margin?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, type?: AxisScaleType | undefined, valueMarginsEnabled?: boolean, valueType?: ChartsDataType | undefined, visible?: boolean, visualRange?: Array<Date | number | string> | CommonChartTypes.VisualRange, visualRangeUpdateMode?: VisualRangeUpdateMode, wholeRange?: Array<Date | number | string> | undefined | CommonChartTypes.VisualRange, width?: number }[]) {
         this._setOption('valueAxis', value);
     }
 
@@ -1099,14 +1108,14 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() annotationsChange: EventEmitter<Array<dxChartAnnotationConfig | any>>;
+    @Output() annotationsChange: EventEmitter<Array<any | dxChartAnnotationConfig>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() argumentAxisChange: EventEmitter<{ aggregateByCategory?: boolean, aggregatedPointsPosition?: AggregatedPointsPosition, aggregationGroupWidth?: number | undefined, aggregationInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, argumentType?: ChartsDataType | undefined, axisDivisionFactor?: number, breaks?: Array<ScaleBreak>, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<number | string | Date>, color?: string, constantLines?: Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string | undefined, width?: number }>, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, customPosition?: Date | number | string | undefined, customPositionAxis?: string | undefined, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, holidays?: Array<Date | string | number>, hoverMode?: ArgumentAxisHoverMode, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, customizeHint?: Function, customizeText?: Function, displayMode?: ChartLabelDisplayMode, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: RelativePosition | Position, rotationAngle?: number, staggeringSpacing?: number, template?: any | undefined, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, linearThreshold?: number | undefined, logarithmBase?: number, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number | undefined, minVisualRangeLength?: TimeInterval | number | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, offset?: number | undefined, opacity?: number | undefined, placeholderSize?: number, position?: Position, singleWorkdays?: Array<Date | string | number>, strips?: Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string | undefined }>, stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, title?: string | { alignment?: HorizontalAlignment, font?: Font, margin?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, type?: AxisScaleType | undefined, valueMarginsEnabled?: boolean, visible?: boolean, visualRange?: VisualRange | Array<number | string | Date>, visualRangeUpdateMode?: VisualRangeUpdateMode, wholeRange?: VisualRange | undefined | Array<number | string | Date>, width?: number, workdaysOnly?: boolean, workWeek?: Array<number> }>;
+    @Output() argumentAxisChange: EventEmitter<{ aggregateByCategory?: boolean, aggregatedPointsPosition?: AggregatedPointsPosition, aggregationGroupWidth?: number | undefined, aggregationInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, argumentType?: ChartsDataType | undefined, axisDivisionFactor?: number, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[], breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, color?: string, constantLines?: { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string | undefined, width?: number }[], constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, customPosition?: Date | number | string | undefined, customPositionAxis?: string | undefined, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, holidays?: Array<Date | string> | Array<number>, hoverMode?: ArgumentAxisHoverMode, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string), customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string), displayMode?: ChartLabelDisplayMode, font?: Font, format?: Format | undefined, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, linearThreshold?: number | undefined, logarithmBase?: number, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number | undefined, minVisualRangeLength?: number | TimeInterval | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, offset?: number | undefined, opacity?: number | undefined, placeholderSize?: number, position?: Position, singleWorkdays?: Array<Date | string> | Array<number>, strips?: { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string | undefined }[], stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, title?: string | { alignment?: HorizontalAlignment, font?: Font, margin?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, type?: AxisScaleType | undefined, valueMarginsEnabled?: boolean, visible?: boolean, visualRange?: Array<Date | number | string> | CommonChartTypes.VisualRange, visualRangeUpdateMode?: VisualRangeUpdateMode, wholeRange?: Array<Date | number | string> | undefined | CommonChartTypes.VisualRange, width?: number, workdaysOnly?: boolean, workWeek?: Array<number> }>;
 
     /**
     
@@ -1141,7 +1150,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() commonAxisSettingsChange: EventEmitter<{ aggregatedPointsPosition?: AggregatedPointsPosition, allowDecimals?: boolean | undefined, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, color?: string, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, displayMode?: ChartLabelDisplayMode, font?: Font, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: RelativePosition | Position, rotationAngle?: number, staggeringSpacing?: number, template?: any | undefined, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minValueMargin?: number | undefined, opacity?: number | undefined, placeholderSize?: number, stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, title?: { alignment?: HorizontalAlignment, font?: Font, margin?: number, textOverflow?: TextOverflow, wordWrap?: WordWrap }, valueMarginsEnabled?: boolean, visible?: boolean, width?: number }>;
+    @Output() commonAxisSettingsChange: EventEmitter<{ aggregatedPointsPosition?: AggregatedPointsPosition, allowDecimals?: boolean | undefined, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, color?: string, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, displayMode?: ChartLabelDisplayMode, font?: Font, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minValueMargin?: number | undefined, opacity?: number | undefined, placeholderSize?: number, stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, title?: { alignment?: HorizontalAlignment, font?: Font, margin?: number, textOverflow?: TextOverflow, wordWrap?: WordWrap }, valueMarginsEnabled?: boolean, visible?: boolean, width?: number }>;
 
     /**
     
@@ -1155,7 +1164,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() commonSeriesSettingsChange: EventEmitter<any>;
+    @Output() commonSeriesSettingsChange: EventEmitter<{ aggregation?: { calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>) | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod }, area?: any, argumentField?: string, axis?: string | undefined, bar?: any, barOverlapGroup?: string | undefined, barPadding?: number | undefined, barWidth?: number | undefined, border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, bubble?: any, candlestick?: any, closeValueField?: string, color?: ChartsColor | string | undefined, cornerRadius?: number, dashStyle?: DashStyle, fullstackedarea?: any, fullstackedbar?: any, fullstackedline?: any, fullstackedspline?: any, fullstackedsplinearea?: any, highValueField?: string, hoverMode?: SeriesHoverMode, hoverStyle?: { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, dashStyle?: DashStyle, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }, ignoreEmptyPoints?: boolean, innerColor?: string, label?: { alignment?: HorizontalAlignment, argumentFormat?: Format | undefined, backgroundColor?: string | undefined, border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string | undefined, font?: Font, format?: Format | undefined, horizontalOffset?: number, position?: RelativePosition, rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean }, line?: any, lowValueField?: string, maxLabelCount?: number | undefined, minBarSize?: number | undefined, opacity?: number, openValueField?: string, pane?: string, point?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, hoverMode?: PointInteractionMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined }, image?: string | undefined | { height?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }, url?: string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined }, width?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } }, selectionMode?: PointInteractionMode, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined }, size?: number, symbol?: PointSymbol, visible?: boolean }, rangearea?: any, rangebar?: any, rangeValue1Field?: string, rangeValue2Field?: string, reduction?: { color?: string, level?: FinancialChartReductionLevel }, scatter?: any, selectionMode?: SeriesSelectionMode, selectionStyle?: { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, dashStyle?: DashStyle, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }, showInLegend?: boolean, sizeField?: string, spline?: any, splinearea?: any, stack?: string, stackedarea?: any, stackedbar?: any, stackedline?: any, stackedspline?: any, stackedsplinearea?: any, steparea?: any, stepline?: any, stock?: any, tagField?: string, type?: SeriesType, valueErrorBar?: { color?: string, displayMode?: ValueErrorBarDisplayMode, edgeLength?: number, highValueField?: string | undefined, lineWidth?: number, lowValueField?: string | undefined, opacity?: number | undefined, type?: undefined | ValueErrorBarType, value?: number }, valueField?: string, visible?: boolean, width?: number }>;
 
     /**
     
@@ -1169,42 +1178,42 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() crosshairChange: EventEmitter<{ color?: string, dashStyle?: DashStyle, enabled?: boolean, horizontalLine?: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, verticalLine?: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }, width?: number }>;
+    @Output() crosshairChange: EventEmitter<{ color?: string, dashStyle?: DashStyle, enabled?: boolean, horizontalLine?: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, verticalLine?: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }, width?: number }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizeAnnotationChange: EventEmitter<Function | undefined>;
+    @Output() customizeAnnotationChange: EventEmitter<((annotation: dxChartAnnotationConfig | any) => dxChartAnnotationConfig) | undefined>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizeLabelChange: EventEmitter<Function>;
+    @Output() customizeLabelChange: EventEmitter<((pointInfo: any) => SeriesLabel)>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizePointChange: EventEmitter<Function>;
+    @Output() customizePointChange: EventEmitter<((pointInfo: any) => SeriesPoint)>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataPrepareSettingsChange: EventEmitter<{ checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | Function }>;
+    @Output() dataPrepareSettingsChange: EventEmitter<{ checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: any, b: any) => number) }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -1225,21 +1234,21 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }>;
+    @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() legendChange: EventEmitter<{ backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: Function, customizeItems?: Function, customizeText?: Function, font?: Font, horizontalAlignment?: HorizontalAlignment, hoverMode?: LegendHoverMode, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any | undefined, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, position?: RelativePosition, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }>;
+    @Output() legendChange: EventEmitter<{ backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string), customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>), customizeText?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, hoverMode?: LegendHoverMode, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, position?: RelativePosition, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }>;
 
     /**
     
@@ -1281,7 +1290,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() paletteChange: EventEmitter<Palette | string | Array<string>>;
+    @Output() paletteChange: EventEmitter<Array<string> | Palette>;
 
     /**
     
@@ -1295,7 +1304,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() panesChange: EventEmitter<Array<any | { backgroundColor?: ChartsColor | string, border?: { bottom?: boolean, color?: string, dashStyle?: DashStyle, left?: boolean, opacity?: number | undefined, right?: boolean, top?: boolean, visible?: boolean, width?: number }, height?: number | string | undefined, name?: string | undefined }>>;
+    @Output() panesChange: EventEmitter<{ backgroundColor?: ChartsColor | string, border?: { bottom?: boolean, color?: string, dashStyle?: DashStyle, left?: boolean, opacity?: number | undefined, right?: boolean, top?: boolean, visible?: boolean, width?: number }, height?: number | string | undefined, name?: string | undefined }[]>;
 
     /**
     
@@ -1358,7 +1367,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() seriesChange: EventEmitter<ChartSeries | any | undefined | Array<ChartSeries | any>>;
+    @Output() seriesChange: EventEmitter<Array<ChartSeries> | ChartSeries | undefined>;
 
     /**
     
@@ -1372,7 +1381,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() seriesTemplateChange: EventEmitter<{ customizeSeries?: Function, nameField?: string }>;
+    @Output() seriesTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1414,14 +1423,14 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ argumentFormat?: Format | string | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, location?: ChartTooltipLocation, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined }>;
+    @Output() tooltipChange: EventEmitter<{ argumentFormat?: Format | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, location?: ChartTooltipLocation, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueAxisChange: EventEmitter<Array<any | { aggregatedPointsPosition?: AggregatedPointsPosition, allowDecimals?: boolean | undefined, autoBreaksEnabled?: boolean, axisDivisionFactor?: number, breaks?: Array<ScaleBreak>, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<number | string | Date>, color?: string, constantLines?: Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string | undefined, width?: number }>, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, customPosition?: Date | number | string | undefined, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, customizeHint?: Function, customizeText?: Function, displayMode?: ChartLabelDisplayMode, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: RelativePosition | Position, rotationAngle?: number, staggeringSpacing?: number, template?: any | undefined, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, linearThreshold?: number | undefined, logarithmBase?: number, maxAutoBreakCount?: number, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number | undefined, minVisualRangeLength?: TimeInterval | number | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, multipleAxesSpacing?: number, name?: string | undefined, offset?: number | undefined, opacity?: number | undefined, pane?: string | undefined, placeholderSize?: number, position?: Position, showZero?: boolean | undefined, strips?: Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string | undefined }>, stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, synchronizedValue?: number | undefined, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, title?: string | { alignment?: HorizontalAlignment, font?: Font, margin?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, type?: AxisScaleType | undefined, valueMarginsEnabled?: boolean, valueType?: ChartsDataType | undefined, visible?: boolean, visualRange?: VisualRange | Array<number | string | Date>, visualRangeUpdateMode?: VisualRangeUpdateMode, wholeRange?: VisualRange | undefined | Array<number | string | Date>, width?: number }>>;
+    @Output() valueAxisChange: EventEmitter<{ aggregatedPointsPosition?: AggregatedPointsPosition, allowDecimals?: boolean | undefined, autoBreaksEnabled?: boolean, axisDivisionFactor?: number, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[], breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, color?: string, constantLines?: { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string | undefined, width?: number }[], constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, customPosition?: Date | number | string | undefined, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, customizeHint?: ((axisValue: { value: Date | number | string, valueText: string }) => string), customizeText?: ((axisValue: { value: Date | number | string, valueText: string }) => string), displayMode?: ChartLabelDisplayMode, font?: Font, format?: Format | undefined, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, linearThreshold?: number | undefined, logarithmBase?: number, maxAutoBreakCount?: number, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number | undefined, minVisualRangeLength?: number | TimeInterval | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, multipleAxesSpacing?: number, name?: string | undefined, offset?: number | undefined, opacity?: number | undefined, pane?: string | undefined, placeholderSize?: number, position?: Position, showZero?: boolean | undefined, strips?: { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string | undefined }[], stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, synchronizedValue?: number | undefined, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, title?: string | { alignment?: HorizontalAlignment, font?: Font, margin?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, type?: AxisScaleType | undefined, valueMarginsEnabled?: boolean, valueType?: ChartsDataType | undefined, visible?: boolean, visualRange?: Array<Date | number | string> | CommonChartTypes.VisualRange, visualRangeUpdateMode?: VisualRangeUpdateMode, wholeRange?: Array<Date | number | string> | undefined | CommonChartTypes.VisualRange, width?: number }[]>;
 
     /**
     
@@ -1461,10 +1470,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     }
 
     @ContentChildren(DxiChartValueAxisComponent)
-    get valueAxisChildren(): QueryList<DxiChartValueAxisComponent> {
+    get valueAxesChildren(): QueryList<DxiChartValueAxisComponent> {
         return this._getOption('valueAxis');
     }
-    set valueAxisChildren(value) {
+    set valueAxesChildren(value) {
         this.setContentChildren('valueAxis', value, 'DxiChartValueAxisComponent');
         this.setChildren('valueAxis', value);
     }
@@ -1736,89 +1745,97 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     DxoZoomAndPanModule,
     DxoDragBoxStyleModule,
     DxoChartAdaptiveLayoutModule,
+    DxoChartAggregationModule,
+    DxoChartAggregationIntervalModule,
     DxoChartAnimationModule,
     DxiChartAnnotationModule,
-    DxoChartBorderModule,
-    DxoChartFontModule,
-    DxoChartImageModule,
-    DxoChartShadowModule,
+    DxoChartAnnotationBorderModule,
+    DxoChartAnnotationImageModule,
     DxoChartArgumentAxisModule,
-    DxoChartAggregationIntervalModule,
+    DxoChartArgumentFormatModule,
+    DxoChartAxisConstantLineStyleModule,
+    DxoChartAxisConstantLineStyleLabelModule,
+    DxoChartAxisLabelModule,
+    DxoChartAxisTitleModule,
+    DxoChartBackgroundColorModule,
+    DxoChartBorderModule,
     DxiChartBreakModule,
     DxoChartBreakStyleModule,
+    DxoChartChartTitleModule,
+    DxoChartChartTitleSubtitleModule,
+    DxoChartColorModule,
+    DxoChartCommonAnnotationSettingsModule,
+    DxoChartCommonAxisSettingsModule,
+    DxoChartCommonAxisSettingsConstantLineStyleModule,
+    DxoChartCommonAxisSettingsConstantLineStyleLabelModule,
+    DxoChartCommonAxisSettingsLabelModule,
+    DxoChartCommonAxisSettingsTitleModule,
+    DxoChartCommonPaneSettingsModule,
+    DxoChartCommonSeriesSettingsModule,
+    DxoChartCommonSeriesSettingsHoverStyleModule,
+    DxoChartCommonSeriesSettingsLabelModule,
+    DxoChartCommonSeriesSettingsSelectionStyleModule,
+    DxoChartConnectorModule,
     DxiChartConstantLineModule,
-    DxoChartLabelModule,
+    DxoChartConstantLineLabelModule,
     DxoChartConstantLineStyleModule,
-    DxoChartGridModule,
+    DxoChartCrosshairModule,
+    DxoChartDataPrepareSettingsModule,
+    DxoChartDragBoxStyleModule,
+    DxoChartExportModule,
+    DxoChartFontModule,
     DxoChartFormatModule,
+    DxoChartGridModule,
+    DxoChartHatchingModule,
+    DxoChartHeightModule,
+    DxoChartHorizontalLineModule,
+    DxoChartHorizontalLineLabelModule,
+    DxoChartHoverStyleModule,
+    DxoChartImageModule,
+    DxoChartLabelModule,
+    DxoChartLegendModule,
+    DxoChartLegendTitleModule,
+    DxoChartLegendTitleSubtitleModule,
+    DxoChartLengthModule,
+    DxoChartLoadingIndicatorModule,
+    DxoChartMarginModule,
     DxoChartMinorGridModule,
     DxoChartMinorTickModule,
     DxoChartMinorTickIntervalModule,
     DxoChartMinVisualRangeLengthModule,
+    DxiChartPaneModule,
+    DxoChartPaneBorderModule,
+    DxoChartPointModule,
+    DxoChartPointBorderModule,
+    DxoChartPointHoverStyleModule,
+    DxoChartPointImageModule,
+    DxoChartPointSelectionStyleModule,
+    DxoChartReductionModule,
+    DxoChartScrollBarModule,
+    DxoChartSelectionStyleModule,
+    DxiChartSeriesModule,
+    DxoChartSeriesBorderModule,
+    DxoChartSeriesTemplateModule,
+    DxoChartShadowModule,
+    DxoChartSizeModule,
     DxiChartStripModule,
+    DxoChartStripLabelModule,
     DxoChartStripStyleModule,
+    DxoChartStripStyleLabelModule,
+    DxoChartSubtitleModule,
     DxoChartTickModule,
     DxoChartTickIntervalModule,
     DxoChartTitleModule,
-    DxoChartCommonAnnotationSettingsModule,
-    DxoChartCommonAxisSettingsModule,
-    DxoChartCommonPaneSettingsModule,
-    DxoChartBackgroundColorModule,
-    DxoChartCommonSeriesSettingsModule,
-    DxoChartAggregationModule,
-    DxoChartAreaModule,
-    DxoChartHoverStyleModule,
-    DxoChartHatchingModule,
-    DxoChartConnectorModule,
-    DxoChartPointModule,
-    DxoChartHeightModule,
-    DxoChartUrlModule,
-    DxoChartWidthModule,
-    DxoChartSelectionStyleModule,
-    DxoChartReductionModule,
-    DxoChartValueErrorBarModule,
-    DxoChartBarModule,
-    DxoChartBubbleModule,
-    DxoChartCandlestickModule,
-    DxoChartColorModule,
-    DxoChartFullstackedareaModule,
-    DxoChartFullstackedbarModule,
-    DxoChartFullstackedlineModule,
-    DxoChartFullstackedsplineModule,
-    DxoChartFullstackedsplineareaModule,
-    DxoChartArgumentFormatModule,
-    DxoChartLineModule,
-    DxoChartRangeareaModule,
-    DxoChartRangebarModule,
-    DxoChartScatterModule,
-    DxoChartSplineModule,
-    DxoChartSplineareaModule,
-    DxoChartStackedareaModule,
-    DxoChartStackedbarModule,
-    DxoChartStackedlineModule,
-    DxoChartStackedsplineModule,
-    DxoChartStackedsplineareaModule,
-    DxoChartStepareaModule,
-    DxoChartSteplineModule,
-    DxoChartStockModule,
-    DxoChartCrosshairModule,
-    DxoChartHorizontalLineModule,
-    DxoChartVerticalLineModule,
-    DxoChartDataPrepareSettingsModule,
-    DxoChartExportModule,
-    DxoChartLegendModule,
-    DxoChartMarginModule,
-    DxoChartSubtitleModule,
-    DxoChartLoadingIndicatorModule,
-    DxiChartPaneModule,
-    DxoChartScrollBarModule,
-    DxiChartSeriesModule,
-    DxoChartSeriesTemplateModule,
-    DxoChartSizeModule,
     DxoChartTooltipModule,
+    DxoChartTooltipBorderModule,
+    DxoChartUrlModule,
     DxiChartValueAxisModule,
+    DxoChartValueErrorBarModule,
+    DxoChartVerticalLineModule,
+    DxoChartVisualRangeModule,
+    DxoChartWholeRangeModule,
+    DxoChartWidthModule,
     DxoChartZoomAndPanModule,
-    DxoChartDragBoxStyleModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1912,89 +1929,97 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     DxoZoomAndPanModule,
     DxoDragBoxStyleModule,
     DxoChartAdaptiveLayoutModule,
+    DxoChartAggregationModule,
+    DxoChartAggregationIntervalModule,
     DxoChartAnimationModule,
     DxiChartAnnotationModule,
-    DxoChartBorderModule,
-    DxoChartFontModule,
-    DxoChartImageModule,
-    DxoChartShadowModule,
+    DxoChartAnnotationBorderModule,
+    DxoChartAnnotationImageModule,
     DxoChartArgumentAxisModule,
-    DxoChartAggregationIntervalModule,
+    DxoChartArgumentFormatModule,
+    DxoChartAxisConstantLineStyleModule,
+    DxoChartAxisConstantLineStyleLabelModule,
+    DxoChartAxisLabelModule,
+    DxoChartAxisTitleModule,
+    DxoChartBackgroundColorModule,
+    DxoChartBorderModule,
     DxiChartBreakModule,
     DxoChartBreakStyleModule,
+    DxoChartChartTitleModule,
+    DxoChartChartTitleSubtitleModule,
+    DxoChartColorModule,
+    DxoChartCommonAnnotationSettingsModule,
+    DxoChartCommonAxisSettingsModule,
+    DxoChartCommonAxisSettingsConstantLineStyleModule,
+    DxoChartCommonAxisSettingsConstantLineStyleLabelModule,
+    DxoChartCommonAxisSettingsLabelModule,
+    DxoChartCommonAxisSettingsTitleModule,
+    DxoChartCommonPaneSettingsModule,
+    DxoChartCommonSeriesSettingsModule,
+    DxoChartCommonSeriesSettingsHoverStyleModule,
+    DxoChartCommonSeriesSettingsLabelModule,
+    DxoChartCommonSeriesSettingsSelectionStyleModule,
+    DxoChartConnectorModule,
     DxiChartConstantLineModule,
-    DxoChartLabelModule,
+    DxoChartConstantLineLabelModule,
     DxoChartConstantLineStyleModule,
-    DxoChartGridModule,
+    DxoChartCrosshairModule,
+    DxoChartDataPrepareSettingsModule,
+    DxoChartDragBoxStyleModule,
+    DxoChartExportModule,
+    DxoChartFontModule,
     DxoChartFormatModule,
+    DxoChartGridModule,
+    DxoChartHatchingModule,
+    DxoChartHeightModule,
+    DxoChartHorizontalLineModule,
+    DxoChartHorizontalLineLabelModule,
+    DxoChartHoverStyleModule,
+    DxoChartImageModule,
+    DxoChartLabelModule,
+    DxoChartLegendModule,
+    DxoChartLegendTitleModule,
+    DxoChartLegendTitleSubtitleModule,
+    DxoChartLengthModule,
+    DxoChartLoadingIndicatorModule,
+    DxoChartMarginModule,
     DxoChartMinorGridModule,
     DxoChartMinorTickModule,
     DxoChartMinorTickIntervalModule,
     DxoChartMinVisualRangeLengthModule,
+    DxiChartPaneModule,
+    DxoChartPaneBorderModule,
+    DxoChartPointModule,
+    DxoChartPointBorderModule,
+    DxoChartPointHoverStyleModule,
+    DxoChartPointImageModule,
+    DxoChartPointSelectionStyleModule,
+    DxoChartReductionModule,
+    DxoChartScrollBarModule,
+    DxoChartSelectionStyleModule,
+    DxiChartSeriesModule,
+    DxoChartSeriesBorderModule,
+    DxoChartSeriesTemplateModule,
+    DxoChartShadowModule,
+    DxoChartSizeModule,
     DxiChartStripModule,
+    DxoChartStripLabelModule,
     DxoChartStripStyleModule,
+    DxoChartStripStyleLabelModule,
+    DxoChartSubtitleModule,
     DxoChartTickModule,
     DxoChartTickIntervalModule,
     DxoChartTitleModule,
-    DxoChartCommonAnnotationSettingsModule,
-    DxoChartCommonAxisSettingsModule,
-    DxoChartCommonPaneSettingsModule,
-    DxoChartBackgroundColorModule,
-    DxoChartCommonSeriesSettingsModule,
-    DxoChartAggregationModule,
-    DxoChartAreaModule,
-    DxoChartHoverStyleModule,
-    DxoChartHatchingModule,
-    DxoChartConnectorModule,
-    DxoChartPointModule,
-    DxoChartHeightModule,
-    DxoChartUrlModule,
-    DxoChartWidthModule,
-    DxoChartSelectionStyleModule,
-    DxoChartReductionModule,
-    DxoChartValueErrorBarModule,
-    DxoChartBarModule,
-    DxoChartBubbleModule,
-    DxoChartCandlestickModule,
-    DxoChartColorModule,
-    DxoChartFullstackedareaModule,
-    DxoChartFullstackedbarModule,
-    DxoChartFullstackedlineModule,
-    DxoChartFullstackedsplineModule,
-    DxoChartFullstackedsplineareaModule,
-    DxoChartArgumentFormatModule,
-    DxoChartLineModule,
-    DxoChartRangeareaModule,
-    DxoChartRangebarModule,
-    DxoChartScatterModule,
-    DxoChartSplineModule,
-    DxoChartSplineareaModule,
-    DxoChartStackedareaModule,
-    DxoChartStackedbarModule,
-    DxoChartStackedlineModule,
-    DxoChartStackedsplineModule,
-    DxoChartStackedsplineareaModule,
-    DxoChartStepareaModule,
-    DxoChartSteplineModule,
-    DxoChartStockModule,
-    DxoChartCrosshairModule,
-    DxoChartHorizontalLineModule,
-    DxoChartVerticalLineModule,
-    DxoChartDataPrepareSettingsModule,
-    DxoChartExportModule,
-    DxoChartLegendModule,
-    DxoChartMarginModule,
-    DxoChartSubtitleModule,
-    DxoChartLoadingIndicatorModule,
-    DxiChartPaneModule,
-    DxoChartScrollBarModule,
-    DxiChartSeriesModule,
-    DxoChartSeriesTemplateModule,
-    DxoChartSizeModule,
     DxoChartTooltipModule,
+    DxoChartTooltipBorderModule,
+    DxoChartUrlModule,
     DxiChartValueAxisModule,
+    DxoChartValueErrorBarModule,
+    DxoChartVerticalLineModule,
+    DxoChartVisualRangeModule,
+    DxoChartWholeRangeModule,
+    DxoChartWidthModule,
     DxoChartZoomAndPanModule,
-    DxoChartDragBoxStyleModule,
     DxTemplateModule
   ]
 })

@@ -17,19 +17,29 @@ import {
 
 
 
-import { AsyncRule, CompareRule, CustomRule, DataType, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, SearchMode, SortOrder, StringLengthRule } from 'devextreme/common';
-import { ColumnHeaderFilterSearchConfig, FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, SelectedFilterOperation } from 'devextreme/common/grids';
-import { Store } from 'devextreme/data';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import * as CommonTypes from 'devextreme/common';
+import { HorizontalAlignment, DataType, SearchMode, SortOrder } from 'devextreme/common';
+import { DataGridPredefinedColumnButton, dxDataGridColumnButton, dxDataGridColumn, DataGridCommandColumnType } from 'devextreme/ui/data_grid';
+import { FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation } from 'devextreme/common/grids';
 import { Format } from 'devextreme/localization';
-import { DataGridCommandColumnType, DataGridPredefinedColumnButton, dxDataGridColumn, dxDataGridColumnButton } from 'devextreme/ui/data_grid';
-import { SimpleItem } from 'devextreme/ui/form';
+import { dxFormSimpleItem } from 'devextreme/ui/form';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+import { DxiDataGridAsyncRuleComponent } from './async-rule-dxi';
 import { DxiDataGridButtonComponent } from './button-dxi';
+import { DxiDataGridCompareRuleComponent } from './compare-rule-dxi';
+import { DxiDataGridCustomRuleComponent } from './custom-rule-dxi';
+import { DxiDataGridEmailRuleComponent } from './email-rule-dxi';
+import { DxiDataGridNumericRuleComponent } from './numeric-rule-dxi';
+import { DxiDataGridPatternRuleComponent } from './pattern-rule-dxi';
+import { DxiDataGridRangeRuleComponent } from './range-rule-dxi';
+import { DxiDataGridRequiredRuleComponent } from './required-rule-dxi';
+import { DxiDataGridStringLengthRuleComponent } from './string-length-rule-dxi';
 import { DxiDataGridValidationRuleComponent } from './validation-rule-dxi';
 
 
@@ -41,10 +51,10 @@ import { DxiDataGridValidationRuleComponent } from './validation-rule-dxi';
 })
 export class DxiDataGridColumnComponent extends CollectionNestedOption {
     @Input()
-    get alignment(): HorizontalAlignment | string | undefined {
+    get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');
     }
-    set alignment(value: HorizontalAlignment | string | undefined) {
+    set alignment(value: HorizontalAlignment | undefined) {
         this._setOption('alignment', value);
     }
 
@@ -153,42 +163,42 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get calculateCellValue(): Function {
+    get calculateCellValue(): ((rowData: any) => any) {
         return this._getOption('calculateCellValue');
     }
-    set calculateCellValue(value: Function) {
+    set calculateCellValue(value: ((rowData: any) => any)) {
         this._setOption('calculateCellValue', value);
     }
 
     @Input()
-    get calculateDisplayValue(): Function | string {
+    get calculateDisplayValue(): ((rowData: any) => any) | string {
         return this._getOption('calculateDisplayValue');
     }
-    set calculateDisplayValue(value: Function | string) {
+    set calculateDisplayValue(value: ((rowData: any) => any) | string) {
         this._setOption('calculateDisplayValue', value);
     }
 
     @Input()
-    get calculateFilterExpression(): Function {
+    get calculateFilterExpression(): ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | (() => any) | Array<any>) {
         return this._getOption('calculateFilterExpression');
     }
-    set calculateFilterExpression(value: Function) {
+    set calculateFilterExpression(value: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | (() => any) | Array<any>)) {
         this._setOption('calculateFilterExpression', value);
     }
 
     @Input()
-    get calculateGroupValue(): Function | string {
+    get calculateGroupValue(): ((rowData: any) => any) | string {
         return this._getOption('calculateGroupValue');
     }
-    set calculateGroupValue(value: Function | string) {
+    set calculateGroupValue(value: ((rowData: any) => any) | string) {
         this._setOption('calculateGroupValue', value);
     }
 
     @Input()
-    get calculateSortValue(): Function | string {
+    get calculateSortValue(): ((rowData: any) => any) | string {
         return this._getOption('calculateSortValue');
     }
-    set calculateSortValue(value: Function | string) {
+    set calculateSortValue(value: ((rowData: any) => any) | string) {
         this._setOption('calculateSortValue', value);
     }
 
@@ -225,10 +235,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -329,18 +339,18 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get format(): Format | string {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: Format | string) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 
     @Input()
-    get formItem(): SimpleItem {
+    get formItem(): dxFormSimpleItem {
         return this._getOption('formItem');
     }
-    set formItem(value: SimpleItem) {
+    set formItem(value: dxFormSimpleItem) {
         this._setOption('formItem', value);
     }
 
@@ -369,10 +379,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined } {
+    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined } {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined }) {
+    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined }) {
         this._setOption('headerFilter', value);
     }
 
@@ -393,10 +403,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get lookup(): { allowClearing?: boolean, calculateCellValue?: Function, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: string | undefined } {
+    get lookup(): { allowClearing?: boolean, calculateCellValue?: ((rowData: any) => any), dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined, displayExpr?: ((data: any) => string) | string | undefined, valueExpr?: string | undefined } {
         return this._getOption('lookup');
     }
-    set lookup(value: { allowClearing?: boolean, calculateCellValue?: Function, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: string | undefined }) {
+    set lookup(value: { allowClearing?: boolean, calculateCellValue?: ((rowData: any) => any), dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined, displayExpr?: ((data: any) => string) | string | undefined, valueExpr?: string | undefined }) {
         this._setOption('lookup', value);
     }
 
@@ -441,10 +451,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get setCellValue(): Function {
+    get setCellValue(): ((newData: any, value: any, currentRowData: any) => any) {
         return this._getOption('setCellValue');
     }
-    set setCellValue(value: Function) {
+    set setCellValue(value: ((newData: any, value: any, currentRowData: any) => any)) {
         this._setOption('setCellValue', value);
     }
 
@@ -481,18 +491,18 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get sortingMethod(): Function | undefined {
+    get sortingMethod(): ((value1: any, value2: any) => number) | undefined {
         return this._getOption('sortingMethod');
     }
-    set sortingMethod(value: Function | undefined) {
+    set sortingMethod(value: ((value1: any, value2: any) => number) | undefined) {
         this._setOption('sortingMethod', value);
     }
 
     @Input()
-    get sortOrder(): SortOrder | string | undefined {
+    get sortOrder(): SortOrder | undefined {
         return this._getOption('sortOrder');
     }
-    set sortOrder(value: SortOrder | string | undefined) {
+    set sortOrder(value: SortOrder | undefined) {
         this._setOption('sortOrder', value);
     }
 
@@ -513,10 +523,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get validationRules(): Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule> {
+    get validationRules(): Array<CommonTypes.ValidationRule> {
         return this._getOption('validationRules');
     }
-    set validationRules(value: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>) {
+    set validationRules(value: Array<CommonTypes.ValidationRule>) {
         this._setOption('validationRules', value);
     }
 
@@ -585,7 +595,7 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sortOrderChange: EventEmitter<SortOrder | string | undefined>;
+    @Output() sortOrderChange: EventEmitter<SortOrder | undefined>;
 
     /**
     
@@ -605,6 +615,14 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
 
+    @ContentChildren(forwardRef(() => DxiDataGridAsyncRuleComponent))
+    get asyncRulesChildren(): QueryList<DxiDataGridAsyncRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set asyncRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
     @ContentChildren(forwardRef(() => DxiDataGridButtonComponent))
     get buttonsChildren(): QueryList<DxiDataGridButtonComponent> {
         return this._getOption('buttons');
@@ -613,12 +631,68 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
         this.setChildren('buttons', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiDataGridColumnComponent))
-    get columnsChildren(): QueryList<DxiDataGridColumnComponent> {
-        return this._getOption('columns');
+    @ContentChildren(forwardRef(() => DxiDataGridCompareRuleComponent))
+    get compareRulesChildren(): QueryList<DxiDataGridCompareRuleComponent> {
+        return this._getOption('validationRules');
     }
-    set columnsChildren(value) {
-        this.setChildren('columns', value);
+    set compareRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDataGridCustomRuleComponent))
+    get customRulesChildren(): QueryList<DxiDataGridCustomRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set customRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDataGridEmailRuleComponent))
+    get emailRulesChildren(): QueryList<DxiDataGridEmailRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set emailRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDataGridNumericRuleComponent))
+    get numericRulesChildren(): QueryList<DxiDataGridNumericRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set numericRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDataGridPatternRuleComponent))
+    get patternRulesChildren(): QueryList<DxiDataGridPatternRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set patternRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDataGridRangeRuleComponent))
+    get rangeRulesChildren(): QueryList<DxiDataGridRangeRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set rangeRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDataGridRequiredRuleComponent))
+    get requiredRulesChildren(): QueryList<DxiDataGridRequiredRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set requiredRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDataGridStringLengthRuleComponent))
+    get stringLengthRulesChildren(): QueryList<DxiDataGridStringLengthRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set stringLengthRulesChildren(value) {
+        this.setChildren('validationRules', value);
     }
 
     @ContentChildren(forwardRef(() => DxiDataGridValidationRuleComponent))

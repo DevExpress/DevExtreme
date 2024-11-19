@@ -50,7 +50,7 @@ describe('BootstrapExtractor', () => {
 
     expect(await extractor.sassProcessor())
       .toBe(`${functions.toString()}
-${variables.toString()}
+${extractor.getVariables(variables.toString())}
 ${variablesDark.toString()}
 ${testSassString}
 ${setterServiceCode}

@@ -113,19 +113,19 @@ const Converter = Object.assign<typeof _componentConverter, NestedComponentMeta>
 type IFileUploaderOptionsProps = React.PropsWithChildren<{
   abortUpload?: ((file: any, uploadInfo?: UploadInfo) => any);
   accept?: string;
-  accessKey?: string;
+  accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   allowCanceling?: boolean;
   allowedFileExtensions?: Array<string>;
   bindingOptions?: Record<string, any>;
   chunkSize?: number;
-  dialogTrigger?: any | string;
+  dialogTrigger?: any | string | undefined;
   disabled?: boolean;
-  dropZone?: any | string;
+  dropZone?: any | string | undefined;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string;
-  hint?: string;
+  height?: (() => number | string) | number | string | undefined;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
   inputAttr?: any;
   invalidFileExtensionMessage?: string;
@@ -175,7 +175,7 @@ type IFileUploaderOptionsProps = React.PropsWithChildren<{
   validationStatus?: ValidationStatus;
   value?: Array<any>;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: (() => number | string) | number | string | undefined;
   defaultValue?: Array<any>;
   onValueChange?: (value: Array<any>) => void;
 }>
@@ -201,8 +201,8 @@ type IImageUploadProps = React.PropsWithChildren<{
   fileUploaderOptions?: dxFileUploaderOptions;
   fileUploadMode?: HtmlEditorImageUploadMode;
   tabs?: Array<dxHtmlEditorImageUploadTabItem | HtmlEditorImageUploadTab>;
-  uploadDirectory?: string;
-  uploadUrl?: string;
+  uploadDirectory?: string | undefined;
+  uploadUrl?: string | undefined;
 }>
 const _componentImageUpload = (props: IImageUploadProps) => {
   return React.createElement(NestedOption<IImageUploadProps>, {
@@ -231,14 +231,14 @@ type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   icon?: string;
   items?: Array<dxHtmlEditorTableContextMenuItem | HtmlEditorPredefinedContextMenuItem>;
-  name?: HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | string;
+  name?: HtmlEditorPredefinedContextMenuItem | undefined | HtmlEditorPredefinedToolbarItem | string;
   selectable?: boolean;
   selected?: boolean;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
   acceptedValues?: Array<boolean | number | string>;
-  cssClass?: string;
+  cssClass?: string | undefined;
   formatName?: HtmlEditorPredefinedToolbarItem | string;
   formatValues?: Array<boolean | number | string>;
   html?: string;
@@ -338,7 +338,7 @@ const Mention = Object.assign<typeof _componentMention, NestedComponentMeta>(_co
 // owners:
 // ImageUpload
 type ITabProps = React.PropsWithChildren<{
-  name?: HtmlEditorImageUploadTab;
+  name?: HtmlEditorImageUploadTab | undefined;
 }>
 const _componentTab = (props: ITabProps) => {
   return React.createElement(NestedOption<ITabProps>, {
@@ -386,7 +386,7 @@ type ITableContextMenuItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   icon?: string;
   items?: Array<dxHtmlEditorTableContextMenuItem | HtmlEditorPredefinedContextMenuItem>;
-  name?: HtmlEditorPredefinedContextMenuItem;
+  name?: HtmlEditorPredefinedContextMenuItem | undefined;
   selectable?: boolean;
   selected?: boolean;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
@@ -462,7 +462,7 @@ const Toolbar = Object.assign<typeof _componentToolbar, NestedComponentMeta>(_co
 // Toolbar
 type IToolbarItemProps = React.PropsWithChildren<{
   acceptedValues?: Array<boolean | number | string>;
-  cssClass?: string;
+  cssClass?: string | undefined;
   disabled?: boolean;
   formatName?: HtmlEditorPredefinedToolbarItem | string;
   formatValues?: Array<boolean | number | string>;

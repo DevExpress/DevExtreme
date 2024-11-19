@@ -38,27 +38,19 @@ export class DxoPivotGridHeaderFilterComponent extends NestedOption implements O
     }
 
     @Input()
-    get height(): number {
-        return this._getOption('height');
-    }
-    set height(value: number) {
-        this._setOption('height', value);
-    }
-
-    @Input()
-    get width(): number {
-        return this._getOption('width');
-    }
-    set width(value: number) {
-        this._setOption('width', value);
-    }
-
-    @Input()
     get allowSelectAll(): boolean {
         return this._getOption('allowSelectAll');
     }
     set allowSelectAll(value: boolean) {
         this._setOption('allowSelectAll', value);
+    }
+
+    @Input()
+    get height(): number {
+        return this._getOption('height');
+    }
+    set height(value: number) {
+        this._setOption('height', value);
     }
 
     @Input()
@@ -91,6 +83,14 @@ export class DxoPivotGridHeaderFilterComponent extends NestedOption implements O
     }
     set texts(value: { cancel?: string, emptyValue?: string, ok?: string }) {
         this._setOption('texts', value);
+    }
+
+    @Input()
+    get width(): number {
+        return this._getOption('width');
+    }
+    set width(value: number) {
+        this._setOption('width', value);
     }
 
 

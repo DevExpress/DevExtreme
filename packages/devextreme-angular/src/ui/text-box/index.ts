@@ -24,8 +24,8 @@ import {
 } from '@angular/core';
 
 
-import { EditorStyle, LabelMode, MaskMode, Position, TextBoxPredefinedButton, TextEditorButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, TextBoxType, ValueChangedEvent } from 'devextreme/ui/text_box';
+import { TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorStyle, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
+import { TextBoxType, ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/text_box';
 
 import DxTextBox from 'devextreme/ui/text_box';
 
@@ -110,10 +110,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get buttons(): Array<TextBoxPredefinedButton | TextEditorButton | string> {
+    get buttons(): Array<string | TextBoxPredefinedButton | TextEditorButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<TextBoxPredefinedButton | TextEditorButton | string>) {
+    set buttons(value: Array<string | TextBoxPredefinedButton | TextEditorButton>) {
         this._setOption('buttons', value);
     }
 
@@ -136,10 +136,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -162,10 +162,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -591,10 +591,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -737,7 +737,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonsChange: EventEmitter<Array<TextBoxPredefinedButton | TextEditorButton | string>>;
+    @Output() buttonsChange: EventEmitter<Array<string | TextBoxPredefinedButton | TextEditorButton>>;
 
     /**
     
@@ -751,7 +751,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -765,7 +765,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -996,7 +996,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     

@@ -20,12 +20,11 @@ import {
 } from '@angular/core';
 
 
-import { ExportFormat, HorizontalAlignment, Orientation, VerticalAlignment, VerticalEdge } from 'devextreme/common';
-import { AnimationEaseMode, ChartsColor, DashStyle, Font, LabelOverlap, Palette, PaletteExtensionMode, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
-import { UserDefinedElement } from 'devextreme/core/element';
+import { AnimationEaseMode, Font, ChartsColor, Palette, PaletteExtensionMode, LabelOverlap, Theme, TextOverflow, WordWrap, DashStyle } from 'devextreme/common/charts';
+import { ExportFormat, Orientation, HorizontalAlignment, VerticalAlignment, VerticalEdge } from 'devextreme/common';
+import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/linear_gauge';
 import { Format } from 'devextreme/localization';
 import { GaugeIndicator } from 'devextreme/viz/gauges/base_gauge';
-import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/linear_gauge';
 
 import DxLinearGauge from 'devextreme/viz/linear_gauge';
 
@@ -67,30 +66,30 @@ import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 import { DxoValueIndicatorModule } from 'devextreme-angular/ui/nested';
 
 import { DxoLinearGaugeAnimationModule } from 'devextreme-angular/ui/linear-gauge/nested';
-import { DxoLinearGaugeExportModule } from 'devextreme-angular/ui/linear-gauge/nested';
-import { DxoLinearGaugeGeometryModule } from 'devextreme-angular/ui/linear-gauge/nested';
-import { DxoLinearGaugeLoadingIndicatorModule } from 'devextreme-angular/ui/linear-gauge/nested';
-import { DxoLinearGaugeFontModule } from 'devextreme-angular/ui/linear-gauge/nested';
-import { DxoLinearGaugeMarginModule } from 'devextreme-angular/ui/linear-gauge/nested';
-import { DxoLinearGaugeRangeContainerModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoLinearGaugeBackgroundColorModule } from 'devextreme-angular/ui/linear-gauge/nested';
-import { DxiLinearGaugeRangeModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeBorderModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoLinearGaugeColorModule } from 'devextreme-angular/ui/linear-gauge/nested';
-import { DxoLinearGaugeWidthModule } from 'devextreme-angular/ui/linear-gauge/nested';
-import { DxoLinearGaugeScaleModule } from 'devextreme-angular/ui/linear-gauge/nested';
-import { DxoLinearGaugeLabelModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeExportModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeFontModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoLinearGaugeFormatModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeGeometryModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeLabelModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeLoadingIndicatorModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeMarginModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoLinearGaugeMinorTickModule } from 'devextreme-angular/ui/linear-gauge/nested';
-import { DxoLinearGaugeTickModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxiLinearGaugeRangeModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeRangeContainerModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeScaleModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeShadowModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoLinearGaugeSizeModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeSubtitleModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoLinearGaugeSubvalueIndicatorModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoLinearGaugeTextModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeTickModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoLinearGaugeTitleModule } from 'devextreme-angular/ui/linear-gauge/nested';
-import { DxoLinearGaugeSubtitleModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoLinearGaugeTooltipModule } from 'devextreme-angular/ui/linear-gauge/nested';
-import { DxoLinearGaugeBorderModule } from 'devextreme-angular/ui/linear-gauge/nested';
-import { DxoLinearGaugeShadowModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoLinearGaugeValueIndicatorModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeWidthModule } from 'devextreme-angular/ui/linear-gauge/nested';
 
 
 
@@ -157,10 +156,10 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -170,10 +169,10 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined } {
+    get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined } {
         return this._getOption('export');
     }
-    set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }) {
+    set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }) {
         this._setOption('export', value);
     }
 
@@ -235,10 +234,10 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get rangeContainer(): { backgroundColor?: ChartsColor | string, horizontalOrientation?: HorizontalAlignment, offset?: number, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, ranges?: Array<any | { color?: ChartsColor | string, endValue?: number, startValue?: number }>, verticalOrientation?: VerticalAlignment, width?: number | { end?: number, start?: number } } {
+    get rangeContainer(): { backgroundColor?: ChartsColor | string, horizontalOrientation?: HorizontalAlignment, offset?: number, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, ranges?: { color?: ChartsColor | string, endValue?: number, startValue?: number }[], verticalOrientation?: VerticalAlignment, width?: number | { end?: number, start?: number } } {
         return this._getOption('rangeContainer');
     }
-    set rangeContainer(value: { backgroundColor?: ChartsColor | string, horizontalOrientation?: HorizontalAlignment, offset?: number, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, ranges?: Array<any | { color?: ChartsColor | string, endValue?: number, startValue?: number }>, verticalOrientation?: VerticalAlignment, width?: number | { end?: number, start?: number } }) {
+    set rangeContainer(value: { backgroundColor?: ChartsColor | string, horizontalOrientation?: HorizontalAlignment, offset?: number, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, ranges?: { color?: ChartsColor | string, endValue?: number, startValue?: number }[], verticalOrientation?: VerticalAlignment, width?: number | { end?: number, start?: number } }) {
         this._setOption('rangeContainer', value);
     }
 
@@ -274,10 +273,10 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get scale(): { allowDecimals?: boolean | undefined, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, horizontalOrientation?: HorizontalAlignment, label?: { customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined, verticalOrientation?: VerticalAlignment } {
+    get scale(): { allowDecimals?: boolean | undefined, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, horizontalOrientation?: HorizontalAlignment, label?: { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined, verticalOrientation?: VerticalAlignment } {
         return this._getOption('scale');
     }
-    set scale(value: { allowDecimals?: boolean | undefined, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, horizontalOrientation?: HorizontalAlignment, label?: { customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined, verticalOrientation?: VerticalAlignment }) {
+    set scale(value: { allowDecimals?: boolean | undefined, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, horizontalOrientation?: HorizontalAlignment, label?: { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined, verticalOrientation?: VerticalAlignment }) {
         this._setOption('scale', value);
     }
 
@@ -300,10 +299,10 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get subvalueIndicator(): GaugeIndicator {
+    get subvalueIndicator(): GaugeIndicator | { type?: "rectangle" | "circle" | "rhombus" | "rangeBar" | "triangleMarker" | "textCloud" } {
         return this._getOption('subvalueIndicator');
     }
-    set subvalueIndicator(value: GaugeIndicator) {
+    set subvalueIndicator(value: GaugeIndicator | { type?: "rectangle" | "circle" | "rhombus" | "rangeBar" | "triangleMarker" | "textCloud" }) {
         this._setOption('subvalueIndicator', value);
     }
 
@@ -352,10 +351,10 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
+    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
+    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
 
@@ -378,10 +377,10 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get valueIndicator(): GaugeIndicator {
+    get valueIndicator(): GaugeIndicator | { type?: "rectangle" | "circle" | "rhombus" | "rangeBar" | "triangleMarker" | "textCloud" } {
         return this._getOption('valueIndicator');
     }
-    set valueIndicator(value: GaugeIndicator) {
+    set valueIndicator(value: GaugeIndicator | { type?: "rectangle" | "circle" | "rhombus" | "rangeBar" | "triangleMarker" | "textCloud" }) {
         this._setOption('valueIndicator', value);
     }
 
@@ -491,14 +490,14 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }>;
+    @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }>;
 
     /**
     
@@ -533,7 +532,7 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() rangeContainerChange: EventEmitter<{ backgroundColor?: ChartsColor | string, horizontalOrientation?: HorizontalAlignment, offset?: number, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, ranges?: Array<any | { color?: ChartsColor | string, endValue?: number, startValue?: number }>, verticalOrientation?: VerticalAlignment, width?: number | { end?: number, start?: number } }>;
+    @Output() rangeContainerChange: EventEmitter<{ backgroundColor?: ChartsColor | string, horizontalOrientation?: HorizontalAlignment, offset?: number, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, ranges?: { color?: ChartsColor | string, endValue?: number, startValue?: number }[], verticalOrientation?: VerticalAlignment, width?: number | { end?: number, start?: number } }>;
 
     /**
     
@@ -554,7 +553,7 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scaleChange: EventEmitter<{ allowDecimals?: boolean | undefined, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, horizontalOrientation?: HorizontalAlignment, label?: { customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined, verticalOrientation?: VerticalAlignment }>;
+    @Output() scaleChange: EventEmitter<{ allowDecimals?: boolean | undefined, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, horizontalOrientation?: HorizontalAlignment, label?: { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined, verticalOrientation?: VerticalAlignment }>;
 
     /**
     
@@ -568,7 +567,7 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() subvalueIndicatorChange: EventEmitter<GaugeIndicator>;
+    @Output() subvalueIndicatorChange: EventEmitter<GaugeIndicator | { type?: "rectangle" | "circle" | "rhombus" | "rangeBar" | "triangleMarker" | "textCloud" }>;
 
     /**
     
@@ -596,7 +595,7 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
+    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
 
     /**
     
@@ -610,7 +609,7 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueIndicatorChange: EventEmitter<GaugeIndicator>;
+    @Output() valueIndicatorChange: EventEmitter<GaugeIndicator | { type?: "rectangle" | "circle" | "rhombus" | "rangeBar" | "triangleMarker" | "textCloud" }>;
 
 
 
@@ -732,30 +731,30 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     DxoShadowModule,
     DxoValueIndicatorModule,
     DxoLinearGaugeAnimationModule,
-    DxoLinearGaugeExportModule,
-    DxoLinearGaugeGeometryModule,
-    DxoLinearGaugeLoadingIndicatorModule,
-    DxoLinearGaugeFontModule,
-    DxoLinearGaugeMarginModule,
-    DxoLinearGaugeRangeContainerModule,
     DxoLinearGaugeBackgroundColorModule,
-    DxiLinearGaugeRangeModule,
+    DxoLinearGaugeBorderModule,
     DxoLinearGaugeColorModule,
-    DxoLinearGaugeWidthModule,
-    DxoLinearGaugeScaleModule,
-    DxoLinearGaugeLabelModule,
+    DxoLinearGaugeExportModule,
+    DxoLinearGaugeFontModule,
     DxoLinearGaugeFormatModule,
+    DxoLinearGaugeGeometryModule,
+    DxoLinearGaugeLabelModule,
+    DxoLinearGaugeLoadingIndicatorModule,
+    DxoLinearGaugeMarginModule,
     DxoLinearGaugeMinorTickModule,
-    DxoLinearGaugeTickModule,
+    DxiLinearGaugeRangeModule,
+    DxoLinearGaugeRangeContainerModule,
+    DxoLinearGaugeScaleModule,
+    DxoLinearGaugeShadowModule,
     DxoLinearGaugeSizeModule,
+    DxoLinearGaugeSubtitleModule,
     DxoLinearGaugeSubvalueIndicatorModule,
     DxoLinearGaugeTextModule,
+    DxoLinearGaugeTickModule,
     DxoLinearGaugeTitleModule,
-    DxoLinearGaugeSubtitleModule,
     DxoLinearGaugeTooltipModule,
-    DxoLinearGaugeBorderModule,
-    DxoLinearGaugeShadowModule,
     DxoLinearGaugeValueIndicatorModule,
+    DxoLinearGaugeWidthModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -790,30 +789,30 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     DxoShadowModule,
     DxoValueIndicatorModule,
     DxoLinearGaugeAnimationModule,
-    DxoLinearGaugeExportModule,
-    DxoLinearGaugeGeometryModule,
-    DxoLinearGaugeLoadingIndicatorModule,
-    DxoLinearGaugeFontModule,
-    DxoLinearGaugeMarginModule,
-    DxoLinearGaugeRangeContainerModule,
     DxoLinearGaugeBackgroundColorModule,
-    DxiLinearGaugeRangeModule,
+    DxoLinearGaugeBorderModule,
     DxoLinearGaugeColorModule,
-    DxoLinearGaugeWidthModule,
-    DxoLinearGaugeScaleModule,
-    DxoLinearGaugeLabelModule,
+    DxoLinearGaugeExportModule,
+    DxoLinearGaugeFontModule,
     DxoLinearGaugeFormatModule,
+    DxoLinearGaugeGeometryModule,
+    DxoLinearGaugeLabelModule,
+    DxoLinearGaugeLoadingIndicatorModule,
+    DxoLinearGaugeMarginModule,
     DxoLinearGaugeMinorTickModule,
-    DxoLinearGaugeTickModule,
+    DxiLinearGaugeRangeModule,
+    DxoLinearGaugeRangeContainerModule,
+    DxoLinearGaugeScaleModule,
+    DxoLinearGaugeShadowModule,
     DxoLinearGaugeSizeModule,
+    DxoLinearGaugeSubtitleModule,
     DxoLinearGaugeSubvalueIndicatorModule,
     DxoLinearGaugeTextModule,
+    DxoLinearGaugeTickModule,
     DxoLinearGaugeTitleModule,
-    DxoLinearGaugeSubtitleModule,
     DxoLinearGaugeTooltipModule,
-    DxoLinearGaugeBorderModule,
-    DxoLinearGaugeShadowModule,
     DxoLinearGaugeValueIndicatorModule,
+    DxoLinearGaugeWidthModule,
     DxTemplateModule
   ]
 })

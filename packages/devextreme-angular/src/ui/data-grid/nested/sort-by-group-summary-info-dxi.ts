@@ -36,10 +36,10 @@ export class DxiDataGridSortByGroupSummaryInfoComponent extends CollectionNested
     }
 
     @Input()
-    get sortOrder(): SortOrder | string | undefined {
+    get sortOrder(): SortOrder | undefined {
         return this._getOption('sortOrder');
     }
-    set sortOrder(value: SortOrder | string | undefined) {
+    set sortOrder(value: SortOrder | undefined) {
         this._setOption('sortOrder', value);
     }
 

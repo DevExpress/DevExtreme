@@ -1,3 +1,4 @@
+export * from './annotation-border';
 export * from './annotation-dxi';
 export * from './background';
 export * from './border';
@@ -9,6 +10,8 @@ export * from './image';
 export * from './label';
 export * from './layer-dxi';
 export * from './legend-dxi';
+export * from './legend-title-subtitle';
+export * from './legend-title';
 export * from './loading-indicator';
 export * from './margin';
 export * from './projection';
@@ -17,5 +20,8 @@ export * from './size';
 export * from './source';
 export * from './subtitle';
 export * from './title';
+export * from './tooltip-border';
 export * from './tooltip';
+export * from './vector-map-title-subtitle';
+export * from './vector-map-title';
 

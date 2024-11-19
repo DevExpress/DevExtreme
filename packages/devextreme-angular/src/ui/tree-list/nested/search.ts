@@ -46,14 +46,6 @@ export class DxoTreeListSearchComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get timeout(): number {
-        return this._getOption('timeout');
-    }
-    set timeout(value: number) {
-        this._setOption('timeout', value);
-    }
-
-    @Input()
     get mode(): SearchMode {
         return this._getOption('mode');
     }
@@ -62,11 +54,19 @@ export class DxoTreeListSearchComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get searchExpr(): Function | string | undefined | Array<Function | string> {
+    get searchExpr(): Array<(() => any) | string> | (() => any) | string | undefined {
         return this._getOption('searchExpr');
     }
-    set searchExpr(value: Function | string | undefined | Array<Function | string>) {
+    set searchExpr(value: Array<(() => any) | string> | (() => any) | string | undefined) {
         this._setOption('searchExpr', value);
+    }
+
+    @Input()
+    get timeout(): number {
+        return this._getOption('timeout');
+    }
+    set timeout(value: number) {
+        this._setOption('timeout', value);
     }
 
 

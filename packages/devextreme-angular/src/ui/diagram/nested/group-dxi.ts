@@ -6,22 +6,18 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { Command, CustomCommand, ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
+import { Command, CustomCommand, ShapeCategory, ToolboxDisplayMode, ShapeType } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiDiagramCommandComponent } from './command-dxi';
 
 
 @Component({
@@ -32,10 +28,10 @@ import { DxiDiagramCommandComponent } from './command-dxi';
 })
 export class DxiDiagramGroupComponent extends CollectionNestedOption {
     @Input()
-    get commands(): Array<CustomCommand | Command> {
+    get commands(): Array<Command | CustomCommand> {
         return this._getOption('commands');
     }
-    set commands(value: Array<CustomCommand | Command>) {
+    set commands(value: Array<Command | CustomCommand>) {
         this._setOption('commands', value);
     }
 
@@ -72,10 +68,10 @@ export class DxiDiagramGroupComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get shapes(): Array<ShapeType | string> {
+    get shapes(): Array<ShapeType> {
         return this._getOption('shapes');
     }
-    set shapes(value: Array<ShapeType | string>) {
+    set shapes(value: Array<ShapeType>) {
         this._setOption('shapes', value);
     }
 
@@ -84,14 +80,6 @@ export class DxiDiagramGroupComponent extends CollectionNestedOption {
         return 'groups';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiDiagramCommandComponent))
-    get commandsChildren(): QueryList<DxiDiagramCommandComponent> {
-        return this._getOption('commands');
-    }
-    set commandsChildren(value) {
-        this.setChildren('commands', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

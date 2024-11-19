@@ -134,7 +134,7 @@ type IBarGaugeTitleProps = React.PropsWithChildren<{
     right?: number;
     top?: number;
   };
-  placeholderSize?: number;
+  placeholderSize?: number | undefined;
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
@@ -198,7 +198,7 @@ type IBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
   dashStyle?: DashStyle;
-  opacity?: number;
+  opacity?: number | undefined;
   visible?: boolean;
   width?: number;
 }>
@@ -224,7 +224,7 @@ type IExportProps = React.PropsWithChildren<{
   formats?: Array<ExportFormat>;
   margin?: number;
   printingEnabled?: boolean;
-  svgToCanvas?: ((svg: any, canvas: any) => any);
+  svgToCanvas?: ((svg: any, canvas: any) => any) | undefined;
 }>
 const _componentExport = (props: IExportProps) => {
   return React.createElement(NestedOption<IExportProps>, {
@@ -337,11 +337,11 @@ const ItemTextFormat = Object.assign<typeof _componentItemTextFormat, NestedComp
 // owners:
 // BarGauge
 type ILabelProps = React.PropsWithChildren<{
-  connectorColor?: string;
+  connectorColor?: string | undefined;
   connectorWidth?: number;
   customizeText?: ((barValue: { value: number, valueText: string }) => string);
   font?: ChartsFont;
-  format?: LocalizationFormat;
+  format?: LocalizationFormat | undefined;
   indent?: number;
   visible?: boolean;
 }>
@@ -365,12 +365,12 @@ const Label = Object.assign<typeof _componentLabel, NestedComponentMeta>(_compon
 // owners:
 // BarGauge
 type ILegendProps = React.PropsWithChildren<{
-  backgroundColor?: string;
+  backgroundColor?: string | undefined;
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
     dashStyle?: DashStyle;
-    opacity?: number;
+    opacity?: number | undefined;
     visible?: boolean;
     width?: number;
   };
@@ -381,9 +381,9 @@ type ILegendProps = React.PropsWithChildren<{
   customizeText?: ((arg: { item: BarGaugeBarInfo, text: string }) => string);
   font?: ChartsFont;
   horizontalAlignment?: HorizontalAlignment;
-  itemsAlignment?: HorizontalAlignment;
-  itemTextFormat?: LocalizationFormat;
-  itemTextPosition?: Position;
+  itemsAlignment?: HorizontalAlignment | undefined;
+  itemTextFormat?: LocalizationFormat | undefined;
+  itemTextPosition?: Position | undefined;
   margin?: number | Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -391,22 +391,22 @@ type ILegendProps = React.PropsWithChildren<{
     top?: number;
   };
   markerSize?: number;
-  markerTemplate?: ((legendItem: BarGaugeLegendItem, element: any) => string | any) | template;
-  orientation?: Orientation;
+  markerTemplate?: ((legendItem: BarGaugeLegendItem, element: any) => string | any) | template | undefined;
+  orientation?: Orientation | undefined;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
   rowCount?: number;
   rowItemSpacing?: number;
   title?: Record<string, any> | string | {
     font?: ChartsFont;
-    horizontalAlignment?: HorizontalAlignment;
+    horizontalAlignment?: HorizontalAlignment | undefined;
     margin?: Record<string, any> | {
       bottom?: number;
       left?: number;
       right?: number;
       top?: number;
     };
-    placeholderSize?: number;
+    placeholderSize?: number | undefined;
     subtitle?: Record<string, any> | string | {
       font?: ChartsFont;
       offset?: number;
@@ -453,7 +453,7 @@ type ILegendBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
   dashStyle?: DashStyle;
-  opacity?: number;
+  opacity?: number | undefined;
   visible?: boolean;
   width?: number;
 }>
@@ -474,14 +474,14 @@ const LegendBorder = Object.assign<typeof _componentLegendBorder, NestedComponen
 // Legend
 type ILegendTitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: HorizontalAlignment;
+  horizontalAlignment?: HorizontalAlignment | undefined;
   margin?: Record<string, any> | {
     bottom?: number;
     left?: number;
     right?: number;
     top?: number;
   };
-  placeholderSize?: number;
+  placeholderSize?: number | undefined;
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
@@ -610,8 +610,8 @@ const Shadow = Object.assign<typeof _componentShadow, NestedComponentMeta>(_comp
 // owners:
 // BarGauge
 type ISizeProps = React.PropsWithChildren<{
-  height?: number;
-  width?: number;
+  height?: number | undefined;
+  width?: number | undefined;
 }>
 const _componentSize = (props: ISizeProps) => {
   return React.createElement(NestedOption<ISizeProps>, {
@@ -654,14 +654,14 @@ const Subtitle = Object.assign<typeof _componentSubtitle, NestedComponentMeta>(_
 // BarGauge
 type ITitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: HorizontalAlignment;
+  horizontalAlignment?: HorizontalAlignment | undefined;
   margin?: Record<string, any> | number | {
     bottom?: number;
     left?: number;
     right?: number;
     top?: number;
   };
-  placeholderSize?: number;
+  placeholderSize?: number | undefined;
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
@@ -694,20 +694,20 @@ type ITooltipProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     dashStyle?: DashStyle;
-    opacity?: number;
+    opacity?: number | undefined;
     visible?: boolean;
     width?: number;
   };
   color?: string;
-  container?: any | string;
-  contentTemplate?: ((scaleValue: { index: number, value: number, valueText: string }, element: any) => string | any) | template;
+  container?: any | string | undefined;
+  contentTemplate?: ((scaleValue: { index: number, value: number, valueText: string }, element: any) => string | any) | template | undefined;
   cornerRadius?: number;
-  customizeTooltip?: ((scaleValue: { index: number, value: number, valueText: string }) => Record<string, any>);
+  customizeTooltip?: ((scaleValue: { index: number, value: number, valueText: string }) => Record<string, any>) | undefined;
   enabled?: boolean;
   font?: ChartsFont;
-  format?: LocalizationFormat;
+  format?: LocalizationFormat | undefined;
   interactive?: boolean;
-  opacity?: number;
+  opacity?: number | undefined;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
   shadow?: Record<string, any> | {
@@ -717,7 +717,7 @@ type ITooltipProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  zIndex?: number;
+  zIndex?: number | undefined;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
 }>
@@ -751,7 +751,7 @@ const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_co
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
   dashStyle?: DashStyle;
-  opacity?: number;
+  opacity?: number | undefined;
   visible?: boolean;
   width?: number;
 }>

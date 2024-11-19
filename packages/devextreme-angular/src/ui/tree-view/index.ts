@@ -23,11 +23,12 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/tree_view';
 
+import DataSource from 'devextreme/data/data_source';
+import { dxTreeViewNode, dxTreeViewItem, TreeViewExpandEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, ItemSelectionChangedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, TreeViewCheckBoxMode } from 'devextreme/ui/tree_view';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 import { DataStructure, ScrollDirection, SearchMode, SingleOrMultiple } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Properties as dxTextBoxOptions } from 'devextreme/ui/text_box';
-import { ContentReadyEvent, DisposingEvent, dxTreeViewItem, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, ItemSelectionChangedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, TreeViewCheckBoxMode, TreeViewExpandEvent } from 'devextreme/ui/tree_view';
+import { dxTextBoxOptions } from 'devextreme/ui/text_box';
 
 import DxTreeView from 'devextreme/ui/tree_view';
 
@@ -47,10 +48,10 @@ import { DxoSearchEditorOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 
-import { DxiTreeViewItemModule } from 'devextreme-angular/ui/tree-view/nested';
-import { DxoTreeViewSearchEditorOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
 import { DxiTreeViewButtonModule } from 'devextreme-angular/ui/tree-view/nested';
+import { DxiTreeViewItemModule } from 'devextreme-angular/ui/tree-view/nested';
 import { DxoTreeViewOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
+import { DxoTreeViewSearchEditorOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
@@ -131,10 +132,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get createChildren(): Function {
+    get createChildren(): ((parentNode: dxTreeViewNode) => any | Array<Record<string, any>>) {
         return this._getOption('createChildren');
     }
-    set createChildren(value: Function) {
+    set createChildren(value: ((parentNode: dxTreeViewNode) => any | Array<Record<string, any>>)) {
         this._setOption('createChildren', value);
     }
 
@@ -144,10 +145,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxTreeViewItem> {
+    get dataSource(): Array<dxTreeViewItem> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxTreeViewItem>) {
+    set dataSource(value: Array<dxTreeViewItem> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -196,10 +197,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get displayExpr(): Function | string {
+    get displayExpr(): ((item: any) => string) | string {
         return this._getOption('displayExpr');
     }
-    set displayExpr(value: Function | string) {
+    set displayExpr(value: ((item: any) => string) | string) {
         this._setOption('displayExpr', value);
     }
 
@@ -209,10 +210,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -313,10 +314,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -482,10 +483,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get searchEditorOptions(): dxTextBoxOptions {
+    get searchEditorOptions(): dxTextBoxOptions<any> {
         return this._getOption('searchEditorOptions');
     }
-    set searchEditorOptions(value: dxTextBoxOptions) {
+    set searchEditorOptions(value: dxTextBoxOptions<any>) {
         this._setOption('searchEditorOptions', value);
     }
 
@@ -508,10 +509,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get searchExpr(): Function | string | Array<Function | string> {
+    get searchExpr(): Array<(() => any) | string> | (() => any) | string {
         return this._getOption('searchExpr');
     }
-    set searchExpr(value: Function | string | Array<Function | string>) {
+    set searchExpr(value: Array<(() => any) | string> | (() => any) | string) {
         this._setOption('searchExpr', value);
     }
 
@@ -690,10 +691,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -834,14 +835,14 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() createChildrenChange: EventEmitter<Function>;
+    @Output() createChildrenChange: EventEmitter<((parentNode: dxTreeViewNode) => any | Array<Record<string, any>>)>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxTreeViewItem>>;
+    @Output() dataSourceChange: EventEmitter<Array<dxTreeViewItem> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -869,14 +870,14 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() displayExprChange: EventEmitter<Function | string>;
+    @Output() displayExprChange: EventEmitter<((item: any) => string) | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -932,7 +933,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -1023,7 +1024,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchEditorOptionsChange: EventEmitter<dxTextBoxOptions>;
+    @Output() searchEditorOptionsChange: EventEmitter<dxTextBoxOptions<any>>;
 
     /**
     
@@ -1037,7 +1038,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchExprChange: EventEmitter<Function | string | Array<Function | string>>;
+    @Output() searchExprChange: EventEmitter<Array<(() => any) | string> | (() => any) | string>;
 
     /**
     
@@ -1135,7 +1136,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
 
 
@@ -1288,10 +1289,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
     DxoOptionsModule,
-    DxiTreeViewItemModule,
-    DxoTreeViewSearchEditorOptionsModule,
     DxiTreeViewButtonModule,
+    DxiTreeViewItemModule,
     DxoTreeViewOptionsModule,
+    DxoTreeViewSearchEditorOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1304,10 +1305,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
     DxoOptionsModule,
-    DxiTreeViewItemModule,
-    DxoTreeViewSearchEditorOptionsModule,
     DxiTreeViewButtonModule,
+    DxiTreeViewItemModule,
     DxoTreeViewOptionsModule,
+    DxoTreeViewSearchEditorOptionsModule,
     DxTemplateModule
   ]
 })

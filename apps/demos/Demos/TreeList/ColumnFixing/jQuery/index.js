@@ -43,17 +43,11 @@ $(() => {
       }, {
         dataField: 'HireDate',
         dataType: 'date',
-      },
+      }, 
       'HomePhone',
       'MobilePhone',
-      {
-        dataField: 'Email',
-        fixed: true,
-        fixedPosition: 'sticky',
-      },
-      {
-        dataField: 'Skype',
-      },
+      'Email',
+      'Skype',
     ],
   });
 });

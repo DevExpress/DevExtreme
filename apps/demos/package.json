@@ -1,6 +1,6 @@
 {
     "name": "devextreme-demos",
-    "version": "24.2.0",
+    "version": "24.2.2",
     "description": "",
     "repository": {
         "type": "git",
@@ -8,11 +8,11 @@
     },
     "author": "Developer Express Inc.",
     "peerDependencies": {
-        "devextreme": "workspace:~24.2.0",
-        "devextreme-angular": "workspace:~24.2.0",
-        "devextreme-dist": "workspace:~24.2.0",
-        "devextreme-react": "workspace:~24.2.0",
-        "devextreme-vue": "workspace:~24.2.0"
+        "devextreme": "workspace:~",
+        "devextreme-angular": "workspace:~",
+        "devextreme-dist": "workspace:~",
+        "devextreme-react": "workspace:~",
+        "devextreme-vue": "workspace:~"
     },
     "dependencies": {
         "@angular/cli": "17.3.8",

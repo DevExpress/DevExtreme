@@ -14,8 +14,9 @@ import {
 
 
 
-import { HorizontalAlignment, Orientation, Position, VerticalEdge } from 'devextreme/common';
 import { DashStyle, Font } from 'devextreme/common/charts';
+import { dxFunnelItem, FunnelLegendItem } from 'devextreme/viz/funnel';
+import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -63,26 +64,26 @@ export class DxoFunnelLegendComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get customizeHint(): Function {
+    get customizeHint(): ((itemInfo: { item: dxFunnelItem, text: string }) => string) {
         return this._getOption('customizeHint');
     }
-    set customizeHint(value: Function) {
+    set customizeHint(value: ((itemInfo: { item: dxFunnelItem, text: string }) => string)) {
         this._setOption('customizeHint', value);
     }
 
     @Input()
-    get customizeItems(): Function {
+    get customizeItems(): ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>) {
         return this._getOption('customizeItems');
     }
-    set customizeItems(value: Function) {
+    set customizeItems(value: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>)) {
         this._setOption('customizeItems', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((itemInfo: { item: dxFunnelItem, text: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((itemInfo: { item: dxFunnelItem, text: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -135,10 +136,10 @@ export class DxoFunnelLegendComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get markerTemplate(): any | undefined {
+    get markerTemplate(): any {
         return this._getOption('markerTemplate');
     }
-    set markerTemplate(value: any | undefined) {
+    set markerTemplate(value: any) {
         this._setOption('markerTemplate', value);
     }
 

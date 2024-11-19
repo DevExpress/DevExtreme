@@ -14,8 +14,8 @@ import {
 
 
 
-import { Store } from 'devextreme/data';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,
@@ -39,34 +39,34 @@ export class DxoTreeListLookupComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get calculateCellValue(): Function {
+    get calculateCellValue(): ((rowData: any) => any) {
         return this._getOption('calculateCellValue');
     }
-    set calculateCellValue(value: Function) {
+    set calculateCellValue(value: ((rowData: any) => any)) {
         this._setOption('calculateCellValue', value);
     }
 
     @Input()
-    get dataSource(): Store | DataSourceOptions | Function | null | undefined | Array<any> {
+    get dataSource(): Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSourceOptions | Function | null | undefined | Array<any>) {
+    set dataSource(value: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined) {
         this._setOption('dataSource', value);
     }
 
     @Input()
-    get displayExpr(): Function | string | undefined {
+    get displayExpr(): ((data: any) => string) | string | undefined {
         return this._getOption('displayExpr');
     }
-    set displayExpr(value: Function | string | undefined) {
+    set displayExpr(value: ((data: any) => string) | string | undefined) {
         this._setOption('displayExpr', value);
     }
 
     @Input()
-    get valueExpr(): string | undefined | Function {
+    get valueExpr(): string | undefined | ((data: any) => string | number | boolean) {
         return this._getOption('valueExpr');
     }
-    set valueExpr(value: string | undefined | Function) {
+    set valueExpr(value: string | undefined | ((data: any) => string | number | boolean)) {
         this._setOption('valueExpr', value);
     }
 

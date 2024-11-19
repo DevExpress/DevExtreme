@@ -20,12 +20,11 @@ import {
 
 
 import { AnimationConfig } from 'devextreme/animation/fx';
-import { PositionConfig } from 'devextreme/animation/position';
-import { Position, ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
-import { UserDefinedElement } from 'devextreme/core/element';
+import { event } from 'devextreme/events/index';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
-import { ToolbarLocation } from 'devextreme/ui/popup';
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import { Position } from 'devextreme/common';
+import { PositionConfig } from 'devextreme/animation/position';
+import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import {
     NestedOptionHost,
@@ -50,18 +49,18 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
     }
 
     @Input()
-    get closeOnOutsideClick(): boolean | Function {
+    get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
         return this._getOption('closeOnOutsideClick');
     }
-    set closeOnOutsideClick(value: boolean | Function) {
+    set closeOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('closeOnOutsideClick', value);
     }
 
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string | undefined {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string | undefined) {
         this._setOption('container', value);
     }
 
@@ -98,10 +97,10 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
     }
 
     @Input()
-    get height(): number | Function | string {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -114,10 +113,10 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
     }
 
     @Input()
-    get hideOnOutsideClick(): boolean | Function {
+    get hideOnOutsideClick(): boolean | ((event: event) => boolean) {
         return this._getOption('hideOnOutsideClick');
     }
-    set hideOnOutsideClick(value: boolean | Function) {
+    set hideOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('hideOnOutsideClick', value);
     }
 
@@ -146,34 +145,34 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
     }
 
     @Input()
-    get maxHeight(): number | Function | string {
+    get maxHeight(): (() => number | string) | number | string {
         return this._getOption('maxHeight');
     }
-    set maxHeight(value: number | Function | string) {
+    set maxHeight(value: (() => number | string) | number | string) {
         this._setOption('maxHeight', value);
     }
 
     @Input()
-    get maxWidth(): number | Function | string {
+    get maxWidth(): (() => number | string) | number | string {
         return this._getOption('maxWidth');
     }
-    set maxWidth(value: number | Function | string) {
+    set maxWidth(value: (() => number | string) | number | string) {
         this._setOption('maxWidth', value);
     }
 
     @Input()
-    get minHeight(): number | Function | string {
+    get minHeight(): (() => number | string) | number | string {
         return this._getOption('minHeight');
     }
-    set minHeight(value: number | Function | string) {
+    set minHeight(value: (() => number | string) | number | string) {
         this._setOption('minHeight', value);
     }
 
     @Input()
-    get minWidth(): number | Function | string {
+    get minWidth(): (() => number | string) | number | string {
         return this._getOption('minWidth');
     }
-    set minWidth(value: number | Function | string) {
+    set minWidth(value: (() => number | string) | number | string) {
         this._setOption('minWidth', value);
     }
 
@@ -306,10 +305,10 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
     }
 
     @Input()
-    get target(): UserDefinedElement | string | undefined {
+    get target(): any | string | undefined {
         return this._getOption('target');
     }
-    set target(value: UserDefinedElement | string | undefined) {
+    set target(value: any | string | undefined) {
         this._setOption('target', value);
     }
 
@@ -330,10 +329,10 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
     }
 
     @Input()
-    get toolbarItems(): Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, toolbar?: ToolbarLocation, visible?: boolean, widget?: ToolbarItemComponent }> {
+    get toolbarItems(): Array<dxPopupToolbarItem> {
         return this._getOption('toolbarItems');
     }
-    set toolbarItems(value: Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, toolbar?: ToolbarLocation, visible?: boolean, widget?: ToolbarItemComponent }>) {
+    set toolbarItems(value: Array<dxPopupToolbarItem>) {
         this._setOption('toolbarItems', value);
     }
 
@@ -346,10 +345,10 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
     }
 
     @Input()
-    get width(): number | Function | string {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -367,7 +366,7 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -388,7 +387,7 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
     protected get _optionPath() {
         return 'dropDownOptions';
     }

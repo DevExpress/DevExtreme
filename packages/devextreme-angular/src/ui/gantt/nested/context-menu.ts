@@ -17,13 +17,13 @@ import {
 
 
 
-import { dxContextMenuItem } from 'devextreme/ui/context_menu';
-import { GanttPredefinedContextMenuItem } from 'devextreme/ui/gantt';
+import { dxGanttContextMenuItem, GanttPredefinedContextMenuItem } from 'devextreme/ui/gantt';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiGanttContextMenuItemComponent } from './context-menu-item-dxi';
 import { DxiGanttItemComponent } from './item-dxi';
 
 
@@ -43,10 +43,10 @@ export class DxoGanttContextMenuComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get items(): Array<GanttPredefinedContextMenuItem | any | { beginGroup?: boolean, closeMenuOnClick?: boolean, disabled?: boolean, icon?: string, items?: Array<dxContextMenuItem>, name?: GanttPredefinedContextMenuItem | string, selectable?: boolean, selected?: boolean, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<dxGanttContextMenuItem | GanttPredefinedContextMenuItem> {
         return this._getOption('items');
     }
-    set items(value: Array<GanttPredefinedContextMenuItem | any | { beginGroup?: boolean, closeMenuOnClick?: boolean, disabled?: boolean, icon?: string, items?: Array<dxContextMenuItem>, name?: GanttPredefinedContextMenuItem | string, selectable?: boolean, selected?: boolean, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<dxGanttContextMenuItem | GanttPredefinedContextMenuItem>) {
         this._setOption('items', value);
     }
 
@@ -55,6 +55,14 @@ export class DxoGanttContextMenuComponent extends NestedOption implements OnDest
         return 'contextMenu';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiGanttContextMenuItemComponent))
+    get contextMenuItemsChildren(): QueryList<DxiGanttContextMenuItemComponent> {
+        return this._getOption('items');
+    }
+    set contextMenuItemsChildren(value) {
+        this.setChildren('items', value);
+    }
 
     @ContentChildren(forwardRef(() => DxiGanttItemComponent))
     get itemsChildren(): QueryList<DxiGanttItemComponent> {

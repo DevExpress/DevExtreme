@@ -72,7 +72,7 @@ sh.pushd(path.join(ROOT_DIR, 'packages/devextreme/artifacts'));
 sh.popd();
 
 // TODO: maybe we should add bootstrap to vendors
-const BOOTSTRAP_DIR = path.join(ROOT_DIR, 'packages', 'devextreme', 'node_modules', 'bootstrap', 'dist');
+const BOOTSTRAP_DIR = path.join(ROOT_DIR, 'packages', 'devextreme-themebuilder', 'node_modules', 'bootstrap', 'dist');
 sh.cp([path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.js'), path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.min.js')], JS_ARTIFACTS);
 sh.cp([path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.css'), path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.min.css')], CSS_ARTIFACTS);
 

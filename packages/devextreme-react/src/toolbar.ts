@@ -99,7 +99,7 @@ const Toolbar = memo(
 // owners:
 // Toolbar
 type IItemProps = React.PropsWithChildren<{
-  cssClass?: string;
+  cssClass?: string | undefined;
   disabled?: boolean;
   html?: string;
   locateInMenu?: LocateInMenuMode;

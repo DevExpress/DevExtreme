@@ -15,7 +15,6 @@ import {
 
 
 import { DashStyle, Font } from 'devextreme/common/charts';
-import { UserDefinedElement } from 'devextreme/core/element';
 import { Format } from 'devextreme/localization';
 
 import {
@@ -56,18 +55,18 @@ export class DxoBarGaugeTooltipComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string | undefined {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string | undefined) {
         this._setOption('container', value);
     }
 
     @Input()
-    get contentTemplate(): any | undefined {
+    get contentTemplate(): any {
         return this._getOption('contentTemplate');
     }
-    set contentTemplate(value: any | undefined) {
+    set contentTemplate(value: any) {
         this._setOption('contentTemplate', value);
     }
 
@@ -80,10 +79,10 @@ export class DxoBarGaugeTooltipComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get customizeTooltip(): Function | undefined {
+    get customizeTooltip(): ((scaleValue: { index: number, value: number, valueText: string }) => Record<string, any>) | undefined {
         return this._getOption('customizeTooltip');
     }
-    set customizeTooltip(value: Function | undefined) {
+    set customizeTooltip(value: ((scaleValue: { index: number, value: number, valueText: string }) => Record<string, any>) | undefined) {
         this._setOption('customizeTooltip', value);
     }
 
@@ -104,10 +103,10 @@ export class DxoBarGaugeTooltipComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): Format | undefined {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: Format | undefined) {
         this._setOption('format', value);
     }
 

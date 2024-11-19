@@ -16,9 +16,9 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
-import { ToolbarLocation } from 'devextreme/ui/popup';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
+import { ToolbarLocation } from 'devextreme/ui/popup';
 
 import {
     NestedOptionHost,

@@ -250,6 +250,7 @@
         "dxPivotGrid-filterFieldArea": "Pudota suodatinkentät tähän",
 
         "dxScheduler-ariaLabel": "Scheduler. {0} view",
+        
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
@@ -301,6 +302,8 @@
         "dxScheduler-recurrenceRepeatOnDate": "päivämäärällä",
         "dxScheduler-recurrenceRepeatCount": "esiintymiä",
         "dxScheduler-allDay": "Koko päivä",
+
+        "dxScheduler-ariaEditForm": "Edit form",
 
         "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
         "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",

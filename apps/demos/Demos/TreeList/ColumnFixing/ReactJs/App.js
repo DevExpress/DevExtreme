@@ -47,11 +47,7 @@ const App = () => (
     />
     <Column dataField="HomePhone" />
     <Column dataField="MobilePhone" />
-    <Column
-      dataField="Email"
-      fixed={true}
-      fixedPosition="sticky"
-    />
+    <Column dataField="Email" />
     <Column dataField="Skype" />
   </TreeList>
 );

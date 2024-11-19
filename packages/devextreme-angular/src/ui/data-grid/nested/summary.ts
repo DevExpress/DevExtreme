@@ -17,9 +17,10 @@ import {
 
 
 
-import { HorizontalAlignment } from 'devextreme/common';
+import dxDataGrid from 'devextreme/ui/data_grid';
 import { SummaryType } from 'devextreme/common/grids';
 import { Format } from 'devextreme/localization';
+import { HorizontalAlignment } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -37,18 +38,18 @@ import { DxiDataGridTotalItemComponent } from './total-item-dxi';
 })
 export class DxoDataGridSummaryComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get calculateCustomSummary(): Function {
+    get calculateCustomSummary(): ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void) {
         return this._getOption('calculateCustomSummary');
     }
-    set calculateCustomSummary(value: Function) {
+    set calculateCustomSummary(value: ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void)) {
         this._setOption('calculateCustomSummary', value);
     }
 
     @Input()
-    get groupItems(): Array<any | { alignByColumn?: boolean, column?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }> {
+    get groupItems(): { alignByColumn?: boolean, column?: string | undefined, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: string | SummaryType | undefined, valueFormat?: Format | undefined }[] {
         return this._getOption('groupItems');
     }
-    set groupItems(value: Array<any | { alignByColumn?: boolean, column?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }>) {
+    set groupItems(value: { alignByColumn?: boolean, column?: string | undefined, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: string | SummaryType | undefined, valueFormat?: Format | undefined }[]) {
         this._setOption('groupItems', value);
     }
 
@@ -77,10 +78,10 @@ export class DxoDataGridSummaryComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get totalItems(): Array<any | { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }> {
+    get totalItems(): { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: string | SummaryType | undefined, valueFormat?: Format | undefined }[] {
         return this._getOption('totalItems');
     }
-    set totalItems(value: Array<any | { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }>) {
+    set totalItems(value: { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: string | SummaryType | undefined, valueFormat?: Format | undefined }[]) {
         this._setOption('totalItems', value);
     }
 

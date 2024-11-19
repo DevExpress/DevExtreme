@@ -10,7 +10,7 @@ $(() => {
     name: 'Hybrid Map',
   }];
 
-  const mapProviders = ['Azure', 'Bing', 'Google'];
+  const mapProviders = ['Azure', 'Google', 'Bing'];
 
   const map = $('#map').dxMap({
     center: '40.7061, -73.9969',

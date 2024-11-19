@@ -25,6 +25,7 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 import { DxiDiagramItemComponent } from './item-dxi';
+import { DxiDiagramPageSizeItemComponent } from './page-size-item-dxi';
 
 
 @Component({
@@ -43,10 +44,10 @@ export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get items(): Array<any | { height?: number, text?: string, width?: number }> {
+    get items(): { height?: number, text?: string, width?: number }[] {
         return this._getOption('items');
     }
-    set items(value: Array<any | { height?: number, text?: string, width?: number }>) {
+    set items(value: { height?: number, text?: string, width?: number }[]) {
         this._setOption('items', value);
     }
 
@@ -82,6 +83,14 @@ export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestr
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDiagramPageSizeItemComponent))
+    get pageSizeItemsChildren(): QueryList<DxiDiagramPageSizeItemComponent> {
+        return this._getOption('items');
+    }
+    set pageSizeItemsChildren(value) {
         this.setChildren('items', value);
     }
 

@@ -22,8 +22,8 @@ import {
 } from '@angular/core';
 
 
-import { Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { CompleteEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/progress_bar';
+import { ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import DxProgressBar from 'devextreme/ui/progress_bar';
 
@@ -89,10 +89,10 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -102,10 +102,10 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -232,10 +232,10 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get statusFormat(): Function | string {
+    get statusFormat(): ((ratio: number, value: number) => string) | string {
         return this._getOption('statusFormat');
     }
-    set statusFormat(value: Function | string) {
+    set statusFormat(value: ((ratio: number, value: number) => string) | string) {
         this._setOption('statusFormat', value);
     }
 
@@ -310,10 +310,10 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get value(): number | false {
+    get value(): false | number {
         return this._getOption('value');
     }
-    set value(value: number | false) {
+    set value(value: false | number) {
         this._setOption('value', value);
     }
 
@@ -336,10 +336,10 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -403,14 +403,14 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -480,7 +480,7 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() statusFormatChange: EventEmitter<Function | string>;
+    @Output() statusFormatChange: EventEmitter<((ratio: number, value: number) => string) | string>;
 
     /**
     
@@ -522,7 +522,7 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<number | false>;
+    @Output() valueChange: EventEmitter<false | number>;
 
     /**
     
@@ -536,7 +536,7 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     

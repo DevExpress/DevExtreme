@@ -14,8 +14,8 @@ import {
 
 
 
-import { HorizontalAlignment, Orientation, Position, VerticalEdge } from 'devextreme/common';
-import { DashStyle, Font, LegendHoverMode } from 'devextreme/common/charts';
+import { DashStyle, LegendItem, Font, LegendHoverMode } from 'devextreme/common/charts';
+import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -63,26 +63,26 @@ export class DxoPolarChartLegendComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get customizeHint(): Function {
+    get customizeHint(): ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string) {
         return this._getOption('customizeHint');
     }
-    set customizeHint(value: Function) {
+    set customizeHint(value: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string)) {
         this._setOption('customizeHint', value);
     }
 
     @Input()
-    get customizeItems(): Function {
+    get customizeItems(): ((items: Array<LegendItem>) => Array<LegendItem>) {
         return this._getOption('customizeItems');
     }
-    set customizeItems(value: Function) {
+    set customizeItems(value: ((items: Array<LegendItem>) => Array<LegendItem>)) {
         this._setOption('customizeItems', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -143,10 +143,10 @@ export class DxoPolarChartLegendComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get markerTemplate(): any | undefined {
+    get markerTemplate(): any {
         return this._getOption('markerTemplate');
     }
-    set markerTemplate(value: any | undefined) {
+    set markerTemplate(value: any) {
         this._setOption('markerTemplate', value);
     }
 

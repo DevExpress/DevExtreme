@@ -23,16 +23,20 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/tree_list';
 
+import DataSource from 'devextreme/data/data_source';
+import dxTreeList from 'devextreme/ui/tree_list';
+import dxSortable from 'devextreme/ui/sortable';
+import dxDraggable from 'devextreme/ui/draggable';
+import { ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataChange, GridsEditMode, GridsEditRefreshMode, StartEditAction, GridBase, ApplyFilterMode, HeaderFilterSearchConfig, EnterKeyAction, EnterKeyDirection, Pager, DataRenderMode, StateStoreType } from 'devextreme/common/grids';
 import { PositionConfig } from 'devextreme/animation/position';
-import { DataStructure, DragDirection, DragHighlight, Mode, ScrollbarMode, ScrollMode, SingleMultipleOrNone, SortOrder } from 'devextreme/common';
-import { ApplyFilterMode, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataChange, DataRenderMode, EnterKeyAction, EnterKeyDirection, GridsEditMode, GridsEditRefreshMode, HeaderFilterSearchConfig, Pager, StartEditAction, StateStoreType } from 'devextreme/common/grids';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Properties as dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
-import { Properties as dxFormOptions } from 'devextreme/ui/form';
-import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
-import { AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, dxTreeListColumn, dxTreeListToolbar, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, TreeListFilterMode } from 'devextreme/ui/tree_list';
+import { SortOrder, Mode, DataStructure, DragDirection, DragHighlight, ScrollMode, ScrollbarMode, SingleMultipleOrNone } from 'devextreme/common';
+import { dxTreeListColumn, dxTreeListRowObject, TreeListFilterMode, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, dxTreeListToolbar } from 'devextreme/ui/tree_list';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { dxFormOptions } from 'devextreme/ui/form';
+import { dxPopupOptions } from 'devextreme/ui/popup';
+import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
+import { event } from 'devextreme/events/index';
 
 import DxTreeList from 'devextreme/ui/tree_list';
 
@@ -103,62 +107,81 @@ import { DxoSortingModule } from 'devextreme-angular/ui/nested';
 import { DxoStateStoringModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 
-import { DxoTreeListColumnChooserModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListPositionModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListAnimationModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListAsyncRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListAtModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListBoundaryOffsetModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListCollisionModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListMyModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListOffsetModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListSearchModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListSelectionModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListColumnFixingModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListIconsModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListTextsModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListColumnModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListButtonModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListHeaderFilterModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListLookupModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListChangeModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColCountByScreenModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListCollisionModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListColumnModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColumnChooserModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColumnChooserSearchModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColumnChooserSelectionModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColumnFixingModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColumnFixingTextsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColumnHeaderFilterModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColumnHeaderFilterSearchModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColumnLookupModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListCompareRuleModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListCursorOffsetModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListCustomOperationModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListCustomRuleModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListEditingModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListEditingTextsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListEmailRuleModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListFieldModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListFieldLookupModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListFilterBuilderModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListFilterBuilderPopupModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListFilterOperationDescriptionsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListFilterPanelModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListFilterPanelTextsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListFilterRowModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListFormModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListFormatModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListFormItemModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListLabelModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListValidationRuleModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListEditingModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListChangeModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListFormModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListColCountByScreenModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListItemModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListTabPanelOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListTabModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListButtonOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListPopupModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListAnimationModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListHideModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListFromModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListToModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListShowModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListToolbarItemModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListFilterBuilderModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListCustomOperationModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListFieldModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListFilterOperationDescriptionsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListGroupOperationDescriptionsModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListFilterBuilderPopupModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListFilterPanelModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListFilterRowModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListOperationDescriptionsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListHeaderFilterModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListHideModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListIconsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListKeyboardNavigationModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListLabelModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListLoadPanelModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListLookupModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListMyModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListNumericRuleModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListOffsetModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListOperationDescriptionsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListPagerModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListPagingModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListPatternRuleModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListPopupModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListPositionModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListRangeRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListRemoteOperationsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListRequiredRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListRowDraggingModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListCursorOffsetModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListScrollingModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListSearchModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListSearchPanelModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListSelectionModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListShowModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListSortingModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListStateStoringModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListStringLengthRuleModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListTextsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListToModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListToolbarModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListToolbarItemModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListTreeListHeaderFilterModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListTreeListHeaderFilterSearchModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListTreeListHeaderFilterTextsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListTreeListSelectionModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListValidationRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 
 import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
 
@@ -304,10 +327,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get columnChooser(): { allowSearch?: boolean, container?: UserDefinedElement | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string } {
+    get columnChooser(): { allowSearch?: boolean, container?: any | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string } {
         return this._getOption('columnChooser');
     }
-    set columnChooser(value: { allowSearch?: boolean, container?: UserDefinedElement | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string }) {
+    set columnChooser(value: { allowSearch?: boolean, container?: any | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string }) {
         this._setOption('columnChooser', value);
     }
 
@@ -395,10 +418,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get customizeColumns(): Function {
+    get customizeColumns(): ((columns: Array<dxTreeListColumn>) => void) {
         return this._getOption('customizeColumns');
     }
-    set customizeColumns(value: Function) {
+    set customizeColumns(value: ((columns: Array<dxTreeListColumn>) => void)) {
         this._setOption('customizeColumns', value);
     }
 
@@ -408,10 +431,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -460,10 +483,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get editing(): { allowAdding?: boolean | Function, allowDeleting?: boolean | Function, allowUpdating?: boolean | Function, changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean } {
+    get editing(): { allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean } {
         return this._getOption('editing');
     }
-    set editing(value: { allowAdding?: boolean | Function, allowDeleting?: boolean | Function, allowUpdating?: boolean | Function, changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }) {
+    set editing(value: { allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }) {
         this._setOption('editing', value);
     }
 
@@ -473,10 +496,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -538,10 +561,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterBuilderPopup(): dxPopupOptions {
+    get filterBuilderPopup(): dxPopupOptions<any> {
         return this._getOption('filterBuilderPopup');
     }
-    set filterBuilderPopup(value: dxPopupOptions) {
+    set filterBuilderPopup(value: dxPopupOptions<any>) {
         this._setOption('filterBuilderPopup', value);
     }
 
@@ -564,10 +587,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterPanel(): { customizeText?: Function, filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean } {
+    get filterPanel(): { customizeText?: ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string), filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean } {
         return this._getOption('filterPanel');
     }
-    set filterPanel(value: { customizeText?: Function, filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean }) {
+    set filterPanel(value: { customizeText?: ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string), filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean }) {
         this._setOption('filterPanel', value);
     }
 
@@ -590,10 +613,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterSyncEnabled(): Mode | boolean {
+    get filterSyncEnabled(): boolean | Mode {
         return this._getOption('filterSyncEnabled');
     }
-    set filterSyncEnabled(value: Mode | boolean) {
+    set filterSyncEnabled(value: boolean | Mode) {
         this._setOption('filterSyncEnabled', value);
     }
 
@@ -603,10 +626,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterValue(): any {
+    get filterValue(): Array<any> | (() => any) | string {
         return this._getOption('filterValue');
     }
-    set filterValue(value: any) {
+    set filterValue(value: Array<any> | (() => any) | string) {
         this._setOption('filterValue', value);
     }
 
@@ -694,10 +717,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -785,10 +808,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get loadPanel(): { enabled?: Mode | boolean, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
+    get loadPanel(): { enabled?: boolean | Mode, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
         return this._getOption('loadPanel');
     }
-    set loadPanel(value: { enabled?: Mode | boolean, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }) {
+    set loadPanel(value: { enabled?: boolean | Mode, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }) {
         this._setOption('loadPanel', value);
     }
 
@@ -915,10 +938,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get rowDragging(): { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: UserDefinedElement | string | undefined, container?: UserDefinedElement | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any | undefined, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: Function, onDragChange?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, onReorder?: Function, scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean } {
+    get rowDragging(): { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string | undefined, container?: any | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragChange?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragEnd?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragMove?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragStart?: ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onReorder?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean } {
         return this._getOption('rowDragging');
     }
-    set rowDragging(value: { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: UserDefinedElement | string | undefined, container?: UserDefinedElement | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any | undefined, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: Function, onDragChange?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, onReorder?: Function, scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }) {
+    set rowDragging(value: { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string | undefined, container?: any | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragChange?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragEnd?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragMove?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragStart?: ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onReorder?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }) {
         this._setOption('rowDragging', value);
     }
 
@@ -941,10 +964,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get scrolling(): { columnRenderingMode?: DataRenderMode, mode?: ScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: Mode | boolean } {
+    get scrolling(): { columnRenderingMode?: DataRenderMode, mode?: ScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode } {
         return this._getOption('scrolling');
     }
-    set scrolling(value: { columnRenderingMode?: DataRenderMode, mode?: ScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: Mode | boolean }) {
+    set scrolling(value: { columnRenderingMode?: DataRenderMode, mode?: ScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode }) {
         this._setOption('scrolling', value);
     }
 
@@ -1058,10 +1081,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get stateStoring(): { customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType } {
+    get stateStoring(): { customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType } {
         return this._getOption('stateStoring');
     }
-    set stateStoring(value: { customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }) {
+    set stateStoring(value: { customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }) {
         this._setOption('stateStoring', value);
     }
 
@@ -1136,10 +1159,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -1552,7 +1575,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnChooserChange: EventEmitter<{ allowSearch?: boolean, container?: UserDefinedElement | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string }>;
+    @Output() columnChooserChange: EventEmitter<{ allowSearch?: boolean, container?: any | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string }>;
 
     /**
     
@@ -1601,14 +1624,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizeColumnsChange: EventEmitter<Function>;
+    @Output() customizeColumnsChange: EventEmitter<((columns: Array<dxTreeListColumn>) => void)>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -1636,14 +1659,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editingChange: EventEmitter<{ allowAdding?: boolean | Function, allowDeleting?: boolean | Function, allowUpdating?: boolean | Function, changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }>;
+    @Output() editingChange: EventEmitter<{ allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -1678,7 +1701,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterBuilderPopupChange: EventEmitter<dxPopupOptions>;
+    @Output() filterBuilderPopupChange: EventEmitter<dxPopupOptions<any>>;
 
     /**
     
@@ -1692,7 +1715,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterPanelChange: EventEmitter<{ customizeText?: Function, filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean }>;
+    @Output() filterPanelChange: EventEmitter<{ customizeText?: ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string), filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean }>;
 
     /**
     
@@ -1706,14 +1729,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterSyncEnabledChange: EventEmitter<Mode | boolean>;
+    @Output() filterSyncEnabledChange: EventEmitter<boolean | Mode>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterValueChange: EventEmitter<any>;
+    @Output() filterValueChange: EventEmitter<Array<any> | (() => any) | string>;
 
     /**
     
@@ -1762,7 +1785,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -1811,7 +1834,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() loadPanelChange: EventEmitter<{ enabled?: Mode | boolean, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
+    @Output() loadPanelChange: EventEmitter<{ enabled?: boolean | Mode, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
 
     /**
     
@@ -1881,7 +1904,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() rowDraggingChange: EventEmitter<{ allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: UserDefinedElement | string | undefined, container?: UserDefinedElement | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any | undefined, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: Function, onDragChange?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, onReorder?: Function, scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }>;
+    @Output() rowDraggingChange: EventEmitter<{ allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string | undefined, container?: any | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragChange?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragEnd?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragMove?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragStart?: ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onReorder?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }>;
 
     /**
     
@@ -1895,7 +1918,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scrollingChange: EventEmitter<{ columnRenderingMode?: DataRenderMode, mode?: ScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: Mode | boolean }>;
+    @Output() scrollingChange: EventEmitter<{ columnRenderingMode?: DataRenderMode, mode?: ScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode }>;
 
     /**
     
@@ -1958,7 +1981,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stateStoringChange: EventEmitter<{ customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }>;
+    @Output() stateStoringChange: EventEmitter<{ customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }>;
 
     /**
     
@@ -2000,7 +2023,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -2268,62 +2291,81 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoSortingModule,
     DxoStateStoringModule,
     DxoToolbarModule,
-    DxoTreeListColumnChooserModule,
-    DxoTreeListPositionModule,
+    DxoTreeListAnimationModule,
+    DxiTreeListAsyncRuleModule,
     DxoTreeListAtModule,
     DxoTreeListBoundaryOffsetModule,
-    DxoTreeListCollisionModule,
-    DxoTreeListMyModule,
-    DxoTreeListOffsetModule,
-    DxoTreeListSearchModule,
-    DxoTreeListSelectionModule,
-    DxoTreeListColumnFixingModule,
-    DxoTreeListIconsModule,
-    DxoTreeListTextsModule,
-    DxiTreeListColumnModule,
     DxiTreeListButtonModule,
-    DxoTreeListHeaderFilterModule,
-    DxoTreeListLookupModule,
+    DxiTreeListChangeModule,
+    DxoTreeListColCountByScreenModule,
+    DxoTreeListCollisionModule,
+    DxiTreeListColumnModule,
+    DxoTreeListColumnChooserModule,
+    DxoTreeListColumnChooserSearchModule,
+    DxoTreeListColumnChooserSelectionModule,
+    DxoTreeListColumnFixingModule,
+    DxoTreeListColumnFixingTextsModule,
+    DxoTreeListColumnHeaderFilterModule,
+    DxoTreeListColumnHeaderFilterSearchModule,
+    DxoTreeListColumnLookupModule,
+    DxiTreeListCompareRuleModule,
+    DxoTreeListCursorOffsetModule,
+    DxiTreeListCustomOperationModule,
+    DxiTreeListCustomRuleModule,
+    DxoTreeListEditingModule,
+    DxoTreeListEditingTextsModule,
+    DxiTreeListEmailRuleModule,
+    DxiTreeListFieldModule,
+    DxoTreeListFieldLookupModule,
+    DxoTreeListFilterBuilderModule,
+    DxoTreeListFilterBuilderPopupModule,
+    DxoTreeListFilterOperationDescriptionsModule,
+    DxoTreeListFilterPanelModule,
+    DxoTreeListFilterPanelTextsModule,
+    DxoTreeListFilterRowModule,
+    DxoTreeListFormModule,
     DxoTreeListFormatModule,
     DxoTreeListFormItemModule,
-    DxoTreeListLabelModule,
-    DxiTreeListValidationRuleModule,
-    DxoTreeListEditingModule,
-    DxiTreeListChangeModule,
-    DxoTreeListFormModule,
-    DxoTreeListColCountByScreenModule,
-    DxiTreeListItemModule,
-    DxoTreeListTabPanelOptionsModule,
-    DxiTreeListTabModule,
-    DxoTreeListButtonOptionsModule,
-    DxoTreeListPopupModule,
-    DxoTreeListAnimationModule,
-    DxoTreeListHideModule,
     DxoTreeListFromModule,
-    DxoTreeListToModule,
-    DxoTreeListShowModule,
-    DxiTreeListToolbarItemModule,
-    DxoTreeListFilterBuilderModule,
-    DxiTreeListCustomOperationModule,
-    DxiTreeListFieldModule,
-    DxoTreeListFilterOperationDescriptionsModule,
     DxoTreeListGroupOperationDescriptionsModule,
-    DxoTreeListFilterBuilderPopupModule,
-    DxoTreeListFilterPanelModule,
-    DxoTreeListFilterRowModule,
-    DxoTreeListOperationDescriptionsModule,
+    DxoTreeListHeaderFilterModule,
+    DxoTreeListHideModule,
+    DxoTreeListIconsModule,
+    DxiTreeListItemModule,
     DxoTreeListKeyboardNavigationModule,
+    DxoTreeListLabelModule,
     DxoTreeListLoadPanelModule,
+    DxoTreeListLookupModule,
+    DxoTreeListMyModule,
+    DxiTreeListNumericRuleModule,
+    DxoTreeListOffsetModule,
+    DxoTreeListOperationDescriptionsModule,
     DxoTreeListPagerModule,
     DxoTreeListPagingModule,
+    DxiTreeListPatternRuleModule,
+    DxoTreeListPopupModule,
+    DxoTreeListPositionModule,
+    DxiTreeListRangeRuleModule,
     DxoTreeListRemoteOperationsModule,
+    DxiTreeListRequiredRuleModule,
     DxoTreeListRowDraggingModule,
-    DxoTreeListCursorOffsetModule,
     DxoTreeListScrollingModule,
+    DxoTreeListSearchModule,
     DxoTreeListSearchPanelModule,
+    DxoTreeListSelectionModule,
+    DxoTreeListShowModule,
     DxoTreeListSortingModule,
     DxoTreeListStateStoringModule,
+    DxiTreeListStringLengthRuleModule,
+    DxoTreeListTextsModule,
+    DxoTreeListToModule,
     DxoTreeListToolbarModule,
+    DxiTreeListToolbarItemModule,
+    DxoTreeListTreeListHeaderFilterModule,
+    DxoTreeListTreeListHeaderFilterSearchModule,
+    DxoTreeListTreeListHeaderFilterTextsModule,
+    DxoTreeListTreeListSelectionModule,
+    DxiTreeListValidationRuleModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -2387,62 +2429,81 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoSortingModule,
     DxoStateStoringModule,
     DxoToolbarModule,
-    DxoTreeListColumnChooserModule,
-    DxoTreeListPositionModule,
+    DxoTreeListAnimationModule,
+    DxiTreeListAsyncRuleModule,
     DxoTreeListAtModule,
     DxoTreeListBoundaryOffsetModule,
-    DxoTreeListCollisionModule,
-    DxoTreeListMyModule,
-    DxoTreeListOffsetModule,
-    DxoTreeListSearchModule,
-    DxoTreeListSelectionModule,
-    DxoTreeListColumnFixingModule,
-    DxoTreeListIconsModule,
-    DxoTreeListTextsModule,
-    DxiTreeListColumnModule,
     DxiTreeListButtonModule,
-    DxoTreeListHeaderFilterModule,
-    DxoTreeListLookupModule,
+    DxiTreeListChangeModule,
+    DxoTreeListColCountByScreenModule,
+    DxoTreeListCollisionModule,
+    DxiTreeListColumnModule,
+    DxoTreeListColumnChooserModule,
+    DxoTreeListColumnChooserSearchModule,
+    DxoTreeListColumnChooserSelectionModule,
+    DxoTreeListColumnFixingModule,
+    DxoTreeListColumnFixingTextsModule,
+    DxoTreeListColumnHeaderFilterModule,
+    DxoTreeListColumnHeaderFilterSearchModule,
+    DxoTreeListColumnLookupModule,
+    DxiTreeListCompareRuleModule,
+    DxoTreeListCursorOffsetModule,
+    DxiTreeListCustomOperationModule,
+    DxiTreeListCustomRuleModule,
+    DxoTreeListEditingModule,
+    DxoTreeListEditingTextsModule,
+    DxiTreeListEmailRuleModule,
+    DxiTreeListFieldModule,
+    DxoTreeListFieldLookupModule,
+    DxoTreeListFilterBuilderModule,
+    DxoTreeListFilterBuilderPopupModule,
+    DxoTreeListFilterOperationDescriptionsModule,
+    DxoTreeListFilterPanelModule,
+    DxoTreeListFilterPanelTextsModule,
+    DxoTreeListFilterRowModule,
+    DxoTreeListFormModule,
     DxoTreeListFormatModule,
     DxoTreeListFormItemModule,
-    DxoTreeListLabelModule,
-    DxiTreeListValidationRuleModule,
-    DxoTreeListEditingModule,
-    DxiTreeListChangeModule,
-    DxoTreeListFormModule,
-    DxoTreeListColCountByScreenModule,
-    DxiTreeListItemModule,
-    DxoTreeListTabPanelOptionsModule,
-    DxiTreeListTabModule,
-    DxoTreeListButtonOptionsModule,
-    DxoTreeListPopupModule,
-    DxoTreeListAnimationModule,
-    DxoTreeListHideModule,
     DxoTreeListFromModule,
-    DxoTreeListToModule,
-    DxoTreeListShowModule,
-    DxiTreeListToolbarItemModule,
-    DxoTreeListFilterBuilderModule,
-    DxiTreeListCustomOperationModule,
-    DxiTreeListFieldModule,
-    DxoTreeListFilterOperationDescriptionsModule,
     DxoTreeListGroupOperationDescriptionsModule,
-    DxoTreeListFilterBuilderPopupModule,
-    DxoTreeListFilterPanelModule,
-    DxoTreeListFilterRowModule,
-    DxoTreeListOperationDescriptionsModule,
+    DxoTreeListHeaderFilterModule,
+    DxoTreeListHideModule,
+    DxoTreeListIconsModule,
+    DxiTreeListItemModule,
     DxoTreeListKeyboardNavigationModule,
+    DxoTreeListLabelModule,
     DxoTreeListLoadPanelModule,
+    DxoTreeListLookupModule,
+    DxoTreeListMyModule,
+    DxiTreeListNumericRuleModule,
+    DxoTreeListOffsetModule,
+    DxoTreeListOperationDescriptionsModule,
     DxoTreeListPagerModule,
     DxoTreeListPagingModule,
+    DxiTreeListPatternRuleModule,
+    DxoTreeListPopupModule,
+    DxoTreeListPositionModule,
+    DxiTreeListRangeRuleModule,
     DxoTreeListRemoteOperationsModule,
+    DxiTreeListRequiredRuleModule,
     DxoTreeListRowDraggingModule,
-    DxoTreeListCursorOffsetModule,
     DxoTreeListScrollingModule,
+    DxoTreeListSearchModule,
     DxoTreeListSearchPanelModule,
+    DxoTreeListSelectionModule,
+    DxoTreeListShowModule,
     DxoTreeListSortingModule,
     DxoTreeListStateStoringModule,
+    DxiTreeListStringLengthRuleModule,
+    DxoTreeListTextsModule,
+    DxoTreeListToModule,
     DxoTreeListToolbarModule,
+    DxiTreeListToolbarItemModule,
+    DxoTreeListTreeListHeaderFilterModule,
+    DxoTreeListTreeListHeaderFilterSearchModule,
+    DxoTreeListTreeListHeaderFilterTextsModule,
+    DxoTreeListTreeListSelectionModule,
+    DxiTreeListValidationRuleModule,
     DxTemplateModule
   ]
 })

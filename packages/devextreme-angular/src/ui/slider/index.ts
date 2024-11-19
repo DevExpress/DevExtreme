@@ -22,8 +22,8 @@ import {
 } from '@angular/core';
 
 
-import { Position, SliderValueChangeMode, TooltipShowMode, ValidationMessageMode, ValidationStatus, VerticalEdge } from 'devextreme/common';
 import { Format } from 'devextreme/localization';
+import { VerticalEdge, TooltipShowMode, ValidationMessageMode, Position, ValidationStatus, SliderValueChangeMode } from 'devextreme/common';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/slider';
 
 import DxSlider from 'devextreme/ui/slider';
@@ -47,8 +47,8 @@ import { DxoLabelModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 
-import { DxoSliderLabelModule } from 'devextreme-angular/ui/slider/nested';
 import { DxoSliderFormatModule } from 'devextreme-angular/ui/slider/nested';
+import { DxoSliderLabelModule } from 'devextreme-angular/ui/slider/nested';
 import { DxoSliderTooltipModule } from 'devextreme-angular/ui/slider/nested';
 
 
@@ -122,10 +122,10 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -148,10 +148,10 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -226,10 +226,10 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get label(): { format?: Format | string, position?: VerticalEdge, visible?: boolean } {
+    get label(): { format?: Format, position?: VerticalEdge, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { format?: Format | string, position?: VerticalEdge, visible?: boolean }) {
+    set label(value: { format?: Format, position?: VerticalEdge, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -343,10 +343,10 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get tooltip(): { enabled?: boolean, format?: Format | string, position?: VerticalEdge, showMode?: TooltipShowMode } {
+    get tooltip(): { enabled?: boolean, format?: Format, position?: VerticalEdge, showMode?: TooltipShowMode } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { enabled?: boolean, format?: Format | string, position?: VerticalEdge, showMode?: TooltipShowMode }) {
+    set tooltip(value: { enabled?: boolean, format?: Format, position?: VerticalEdge, showMode?: TooltipShowMode }) {
         this._setOption('tooltip', value);
     }
 
@@ -460,10 +460,10 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -533,7 +533,7 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -547,7 +547,7 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -589,7 +589,7 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelChange: EventEmitter<{ format?: Format | string, position?: VerticalEdge, visible?: boolean }>;
+    @Output() labelChange: EventEmitter<{ format?: Format, position?: VerticalEdge, visible?: boolean }>;
 
     /**
     
@@ -652,7 +652,7 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ enabled?: boolean, format?: Format | string, position?: VerticalEdge, showMode?: TooltipShowMode }>;
+    @Output() tooltipChange: EventEmitter<{ enabled?: boolean, format?: Format, position?: VerticalEdge, showMode?: TooltipShowMode }>;
 
     /**
     
@@ -715,7 +715,7 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -849,8 +849,8 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
     DxoLabelModule,
     DxoFormatModule,
     DxoTooltipModule,
-    DxoSliderLabelModule,
     DxoSliderFormatModule,
+    DxoSliderLabelModule,
     DxoSliderTooltipModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -863,8 +863,8 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
     DxoLabelModule,
     DxoFormatModule,
     DxoTooltipModule,
-    DxoSliderLabelModule,
     DxoSliderFormatModule,
+    DxoSliderLabelModule,
     DxoSliderTooltipModule,
     DxTemplateModule
   ]

@@ -17,7 +17,6 @@ import {
 
 
 
-import { UserDefinedElement } from 'devextreme/core/element';
 import { dxHtmlEditorToolbarItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
 
 import {
@@ -25,6 +24,7 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 import { DxiHtmlEditorItemComponent } from './item-dxi';
+import { DxiHtmlEditorToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
@@ -35,10 +35,10 @@ import { DxiHtmlEditorItemComponent } from './item-dxi';
 })
 export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get container(): UserDefinedElement | string {
+    get container(): any | string {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string) {
+    set container(value: any | string) {
         this._setOption('container', value);
     }
 
@@ -69,6 +69,14 @@ export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDes
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiHtmlEditorToolbarItemComponent))
+    get toolbarItemsChildren(): QueryList<DxiHtmlEditorToolbarItemComponent> {
+        return this._getOption('items');
+    }
+    set toolbarItemsChildren(value) {
         this.setChildren('items', value);
     }
 

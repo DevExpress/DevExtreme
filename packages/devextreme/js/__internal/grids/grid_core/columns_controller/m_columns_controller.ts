@@ -531,7 +531,7 @@ export class ColumnsController extends modules.Controller {
           const prevColumn = visibleColumns[j - 1];
           const column = visibleColumns[j];
 
-          if (!column.fixed) {
+          if (!column.fixed || column.fixedPosition === StickyPosition.Sticky) {
             if (i === 0) {
               if (column.isBand && column.colspan) {
                 transparentColspan += column.colspan;

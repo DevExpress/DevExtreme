@@ -31,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoCircularGaugeTextComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get customizeText(): Function | undefined {
+    get customizeText(): ((indicatedValue: { value: number, valueText: string }) => string) | undefined {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function | undefined) {
+    set customizeText(value: ((indicatedValue: { value: number, valueText: string }) => string) | undefined) {
         this._setOption('customizeText', value);
     }
 
@@ -47,10 +47,10 @@ export class DxoCircularGaugeTextComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): Format | undefined {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: Format | undefined) {
         this._setOption('format', value);
     }
 
