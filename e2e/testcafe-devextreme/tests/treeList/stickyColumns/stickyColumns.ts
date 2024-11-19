@@ -107,6 +107,7 @@ fixture.disablePageReloads`Sticky columns - Drag and Drop`
         width: 850,
         autoExpandAll: true,
         columnAutoWidth: true,
+        hoverStateEnabled: true,
         customizeColumns(columns) {
           columns[5].fixed = true;
           columns[6].fixed = true;
