@@ -147,22 +147,6 @@ const getPrevColumn = function (
     .find((col) => col.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
 };
 
-const prevColumnIsFixedCore = function (
-  that: ColumnsController,
-  column,
-  visibleColumns,
-  rowIndex: number | null,
-): boolean {
-  const prevColumn = getPrevColumn(that, column, visibleColumns, rowIndex);
-  const fixedPosition = getColumnFixedPosition(that, column);
-
-  return !!prevColumn?.fixed && !needToDisableStickyColumn(that, prevColumn)
-    && (!column.fixed
-      || fixedPosition === StickyPosition.Sticky
-      || fixedPosition !== getColumnFixedPosition(that, prevColumn)
-    );
-};
-
 export const getStickyOffset = function (
   that: ColumnsController,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -228,7 +212,20 @@ export const getStickyOffset = function (
   return result;
 };
 
-export const prevColumnIsFixed = function (
+const needToRemoveColumnBorderCore = function (
+  that: ColumnsController,
+  column,
+  visibleColumns,
+  rowIndex: number | null,
+): boolean {
+  const prevColumn = getPrevColumn(that, column, visibleColumns, rowIndex);
+  const fixedPosition = getColumnFixedPosition(that, column);
+
+  return !!prevColumn?.fixed && !needToDisableStickyColumn(that, prevColumn)
+    && (!column.fixed || fixedPosition === StickyPosition.Sticky);
+};
+
+export const needToRemoveColumnBorder = function (
   that: ColumnsController,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   column,
@@ -241,10 +238,11 @@ export const prevColumnIsFixed = function (
   if (parentColumn) {
     const isFirstColumn = that.isFirstColumn(column, rowIndex, true);
 
-    return isFirstColumn && prevColumnIsFixedCore(that, parentColumn, that.getVisibleColumns(0), 0);
+    return isFirstColumn
+      && needToRemoveColumnBorderCore(that, parentColumn, that.getVisibleColumns(0), 0);
   }
 
-  return prevColumnIsFixedCore(that, column, visibleColumns, rowIndex);
+  return needToRemoveColumnBorderCore(that, column, visibleColumns, rowIndex);
 };
 
 export const normalizeOffset = function (offset: Record<string, number>): CSSStyleDeclaration {

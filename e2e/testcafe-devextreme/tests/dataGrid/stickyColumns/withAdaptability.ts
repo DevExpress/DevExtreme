@@ -84,6 +84,35 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     },
     columnHidingEnabled: true,
   }));
+
+  safeSizeTest(`Fixed columns should be displayed correctly when the grid has a small width  (rtlEnabled = ${rtlEnabled})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    await t.expect(dataGrid.isReady()).ok();
+
+    await takeScreenshot(`adaptability_fixed_columns_with_small_grid_width_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+    ...defaultConfig,
+    width: 350,
+    rtlEnabled,
+    customizeColumns(columns) {
+      columns.forEach((column, index) => {
+        if (!column.fixed) {
+          column.hidingPriority = index;
+        } else {
+          column.allowHiding = false;
+        }
+
+        column.width = 200;
+      });
+    },
+    columnHidingEnabled: true,
+  }));
 });
 
 safeSizeTest('Sticky columns with sticky positions when columnHidingEnabled = false and columns have hidingPriority', async (t) => {

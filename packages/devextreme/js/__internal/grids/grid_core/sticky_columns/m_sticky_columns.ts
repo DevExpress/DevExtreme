@@ -34,8 +34,8 @@ import {
   isFixedEdge,
   isLastFixedColumn,
   needToDisableStickyColumn,
+  needToRemoveColumnBorder,
   normalizeOffset,
-  prevColumnIsFixed,
   processFixedColumns,
 } from './utils';
 
@@ -89,7 +89,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
   ): void {
     const columnsController = this._columnsController;
     const isRowsView = this.name === 'rowsView';
-    const prevCellIsFixed = prevColumnIsFixed(
+    const needToRemoveBorder = needToRemoveColumnBorder(
       columnsController,
       column,
       rowIndex,
@@ -98,7 +98,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     const isFirstColumn = columnsController?.isFirstColumn(column, rowIndex);
 
     GridCoreStickyColumnsDom
-      .toggleColumnNoBorderClass($cell, prevCellIsFixed, this.addWidgetPrefix.bind(this));
+      .toggleColumnNoBorderClass($cell, needToRemoveBorder, this.addWidgetPrefix.bind(this));
     GridCoreStickyColumnsDom
       .toggleFirstHeaderClass($cell, isFirstColumn, this.addWidgetPrefix.bind(this));
   }
