@@ -1179,6 +1179,20 @@ QUnit.module('Menu - selection', {
         assert.equal($items.find('.' + DX_MENU_ITEM_TEXT_CLASS).text(), 'item3');
     });
 
+    QUnit.test('should be able to unselect current selected item (T1253750)', function(assert) {
+        const menu = createMenu({
+            items: [
+                { text: 'menu item 1', selectable: true },
+            ],
+        });
+        const item = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+
+        menu.instance.selectItem(item[0]);
+        assert.ok(item.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
+        menu.instance.unselectItem(item[0]);
+        assert.notOk(item.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
+    });
+
     QUnit.test('Selection in different submenus', function(assert) {
         const items = [
             { text: 'root1', items: [{ text: 'item1-1' }] },
