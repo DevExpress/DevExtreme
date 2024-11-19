@@ -27,7 +27,7 @@ class CalendarSingleSelectionStrategy extends CalendarSelectionStrategy {
   }
 
   getDefaultCurrentDate() {
-    return this.dateOption('value');
+    return this.dateOption('value') || new Date();
   }
 
   restoreValue(): void {
