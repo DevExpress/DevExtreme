@@ -1201,7 +1201,7 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
 
     await t.hover(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(13).element);
 
-    await takeScreenshot(`header_hover_with_fixed_columns_(${theme}).png`, dataGrid.element);
+    await takeScreenshot(`datagrid_header_hover_with_fixed_columns_(${theme}).png`, dataGrid.element);
 
     await t
       .expect(compareResults.isValid())
@@ -1238,7 +1238,7 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
 
     await t.hover(dataGrid.getDataRow(1).element);
 
-    await takeScreenshot(`row_hover_with_fixed_columns_(${theme}).png`, dataGrid.element);
+    await takeScreenshot(`datagrid_row_hover_with_fixed_columns_(${theme}).png`, dataGrid.element);
 
     await t
       .expect(compareResults.isValid())

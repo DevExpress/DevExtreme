@@ -20,7 +20,7 @@ fixture.disablePageReloads`Sticky columns - Drag and Drop`
 
     await t.hover(treeList.getHeaders().getHeaderRow(0).getHeaderCell(13).element);
 
-    await takeScreenshot(`header_hover_with_fixed_columns_(${theme}).png`, treeList.element);
+    await takeScreenshot(`treelist_header_hover_with_fixed_columns_(${theme}).png`, treeList.element);
 
     await t
       .expect(compareResults.isValid())
@@ -71,7 +71,7 @@ fixture.disablePageReloads`Sticky columns - Drag and Drop`
 
     await t.hover(treeList.getDataRow(1).element);
 
-    await takeScreenshot(`row_hover_with_fixed_columns_(${theme}).png`, treeList.element);
+    await takeScreenshot(`treelist_row_hover_with_fixed_columns_(${theme}).png`, treeList.element);
 
     await t
       .expect(compareResults.isValid())
