@@ -273,7 +273,9 @@ const AzureProvider = DynamicProvider.inherit({
         position: 'top-right',
       });
     } else {
-      this._map.controls.remove(this._map.controls.getControls());
+      const allControls = this._map.controls.getControls();
+      const controlsToRemove = allControls.slice(2);
+      this._map.controls.remove(controlsToRemove);
     }
 
     return Promise.resolve();

@@ -940,7 +940,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         padding: $grid-masterdetail-padding;
       }
       > .dx-#{$widget-name}-group-space,
-      .dx-master-detail-cell {
+      .dx-master-detail-cell:not(.dx-row-lines) {
         border-top: $datagrid-border;
         border-bottom: $datagrid-border;
       }
@@ -1133,10 +1133,16 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     }
 
     &.dx-#{$widget-name}-sticky-columns {
-      .dx-row:not(.dx-row-lines) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+      .dx-row:not(.dx-row-lines, .dx-group-row, .dx-datagrid-group-footer) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
         padding-top: $fluent-grid-base-cell-vertical-padding + 1px;
       }
-  
+
+      .dx-data-row td:not(.dx-command-expand, .dx-editor-cell) {
+        .dx-row.dx-group-row + &, .dx-row.dx-master-detail-row + & {
+          padding-top: $fluent-grid-base-cell-vertical-padding;
+        }
+      }
+
       .dx-row.dx-row-lines.dx-edit-row > td {
         border-top-width: 0;
       }

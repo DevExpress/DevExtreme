@@ -20,12 +20,12 @@ import {
 } from '@angular/core';
 
 
-import { DashStyle, Font, PointSymbol, Theme } from 'devextreme/common/charts';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import DataSource from 'devextreme/data/data_source';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, SparklineType } from 'devextreme/viz/sparkline';
+import { PointSymbol, Theme, DashStyle, Font } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
-import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, SparklineType, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/sparkline';
 
 import DxSparkline from 'devextreme/viz/sparkline';
 
@@ -48,13 +48,13 @@ import { DxoFontModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 
-import { DxoSparklineMarginModule } from 'devextreme-angular/ui/sparkline/nested';
-import { DxoSparklineSizeModule } from 'devextreme-angular/ui/sparkline/nested';
-import { DxoSparklineTooltipModule } from 'devextreme-angular/ui/sparkline/nested';
 import { DxoSparklineBorderModule } from 'devextreme-angular/ui/sparkline/nested';
 import { DxoSparklineFontModule } from 'devextreme-angular/ui/sparkline/nested';
 import { DxoSparklineFormatModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoSparklineMarginModule } from 'devextreme-angular/ui/sparkline/nested';
 import { DxoSparklineShadowModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoSparklineSizeModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoSparklineTooltipModule } from 'devextreme-angular/ui/sparkline/nested';
 
 
 
@@ -121,10 +121,10 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -147,10 +147,10 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -407,10 +407,10 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
+    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointsInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
+    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointsInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
 
@@ -572,7 +572,7 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -586,7 +586,7 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -726,7 +726,7 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
+    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointsInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
 
     /**
     
@@ -866,13 +866,13 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     DxoFontModule,
     DxoFormatModule,
     DxoShadowModule,
-    DxoSparklineMarginModule,
-    DxoSparklineSizeModule,
-    DxoSparklineTooltipModule,
     DxoSparklineBorderModule,
     DxoSparklineFontModule,
     DxoSparklineFormatModule,
+    DxoSparklineMarginModule,
     DxoSparklineShadowModule,
+    DxoSparklineSizeModule,
+    DxoSparklineTooltipModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -888,13 +888,13 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     DxoFontModule,
     DxoFormatModule,
     DxoShadowModule,
-    DxoSparklineMarginModule,
-    DxoSparklineSizeModule,
-    DxoSparklineTooltipModule,
     DxoSparklineBorderModule,
     DxoSparklineFontModule,
     DxoSparklineFormatModule,
+    DxoSparklineMarginModule,
     DxoSparklineShadowModule,
+    DxoSparklineSizeModule,
+    DxoSparklineTooltipModule,
     DxTemplateModule
   ]
 })

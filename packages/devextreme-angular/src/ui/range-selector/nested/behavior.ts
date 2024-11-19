@@ -14,8 +14,8 @@ import {
 
 
 
-import { SliderValueChangeMode } from 'devextreme/common';
 import { ValueChangedCallMode } from 'devextreme/viz/range_selector';
+import { SliderValueChangeMode } from 'devextreme/common';
 
 import {
     NestedOptionHost,

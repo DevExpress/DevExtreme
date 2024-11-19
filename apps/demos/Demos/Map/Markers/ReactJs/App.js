@@ -6,7 +6,7 @@ import { markersData } from './data.js';
 
 const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
 const apiKey = {
-  bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
+  azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',
 };
 const App = () => {
   const [currentMarkersData, setCurrentMarkersData] = useState(markersData);
@@ -36,7 +36,7 @@ const App = () => {
         controls={true}
         markerIconSrc={currentMarkerUrl}
         markers={currentMarkersData}
-        provider="bing"
+        provider="azure"
         apiKey={apiKey}
       ></Map>
       <div className="options">

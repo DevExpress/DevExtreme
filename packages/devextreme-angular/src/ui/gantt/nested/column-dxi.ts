@@ -14,11 +14,11 @@ import {
 
 
 
-import { DataType, HorizontalAlignment, SearchMode, SortOrder } from 'devextreme/common';
-import { ColumnHeaderFilterSearchConfig, FilterOperation, FilterType, HeaderFilterGroupInterval, SelectedFilterOperation } from 'devextreme/common/grids';
-import { Store } from 'devextreme/data';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { HorizontalAlignment, DataType, SearchMode, SortOrder } from 'devextreme/common';
+import { FilterOperation, FilterType, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation } from 'devextreme/common/grids';
 import { Format } from 'devextreme/localization';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,
@@ -34,10 +34,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiGanttColumnComponent extends CollectionNestedOption {
     @Input()
-    get alignment(): HorizontalAlignment | string | undefined {
+    get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');
     }
-    set alignment(value: HorizontalAlignment | string | undefined) {
+    set alignment(value: HorizontalAlignment | undefined) {
         this._setOption('alignment', value);
     }
 
@@ -66,34 +66,34 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get calculateCellValue(): Function {
+    get calculateCellValue(): ((rowData: any) => any) {
         return this._getOption('calculateCellValue');
     }
-    set calculateCellValue(value: Function) {
+    set calculateCellValue(value: ((rowData: any) => any)) {
         this._setOption('calculateCellValue', value);
     }
 
     @Input()
-    get calculateDisplayValue(): Function | string {
+    get calculateDisplayValue(): ((rowData: any) => any) | string {
         return this._getOption('calculateDisplayValue');
     }
-    set calculateDisplayValue(value: Function | string) {
+    set calculateDisplayValue(value: ((rowData: any) => any) | string) {
         this._setOption('calculateDisplayValue', value);
     }
 
     @Input()
-    get calculateFilterExpression(): Function {
+    get calculateFilterExpression(): ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | (() => any) | Array<any>) {
         return this._getOption('calculateFilterExpression');
     }
-    set calculateFilterExpression(value: Function) {
+    set calculateFilterExpression(value: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | (() => any) | Array<any>)) {
         this._setOption('calculateFilterExpression', value);
     }
 
     @Input()
-    get calculateSortValue(): Function | string {
+    get calculateSortValue(): ((rowData: any) => any) | string {
         return this._getOption('calculateSortValue');
     }
-    set calculateSortValue(value: Function | string) {
+    set calculateSortValue(value: ((rowData: any) => any) | string) {
         this._setOption('calculateSortValue', value);
     }
 
@@ -122,10 +122,10 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -194,10 +194,10 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get format(): Format | string {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: Format | string) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 
@@ -210,10 +210,10 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined } {
+    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined } {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined }) {
+    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined }) {
         this._setOption('headerFilter', value);
     }
 
@@ -242,18 +242,18 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get sortingMethod(): Function | undefined {
+    get sortingMethod(): ((value1: any, value2: any) => number) | undefined {
         return this._getOption('sortingMethod');
     }
-    set sortingMethod(value: Function | undefined) {
+    set sortingMethod(value: ((value1: any, value2: any) => number) | undefined) {
         this._setOption('sortingMethod', value);
     }
 
     @Input()
-    get sortOrder(): SortOrder | string | undefined {
+    get sortOrder(): SortOrder | undefined {
         return this._getOption('sortOrder');
     }
-    set sortOrder(value: SortOrder | string | undefined) {
+    set sortOrder(value: SortOrder | undefined) {
         this._setOption('sortOrder', value);
     }
 
@@ -323,7 +323,7 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sortOrderChange: EventEmitter<SortOrder | string | undefined>;
+    @Output() sortOrderChange: EventEmitter<SortOrder | undefined>;
 
     /**
     

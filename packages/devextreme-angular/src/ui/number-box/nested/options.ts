@@ -7,29 +7,38 @@ import {
     OnDestroy,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
+import { DOCUMENT } from '@angular/common';
 
 
-
-import { ButtonStyle, ButtonType } from 'devextreme/common';
 import { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/button';
+import { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxo-number-box-options',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxoNumberBoxOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoNumberBoxOptionsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
+    IDxTemplateHost {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -55,10 +64,10 @@ export class DxoNumberBoxOptionsComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -71,10 +80,10 @@ export class DxoNumberBoxOptionsComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -215,10 +224,10 @@ export class DxoNumberBoxOptionsComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -229,10 +238,22 @@ export class DxoNumberBoxOptionsComponent extends NestedOption implements OnDest
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

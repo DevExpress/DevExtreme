@@ -10,19 +10,16 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
 
 
-import { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
 import { dxContextMenuItem } from 'devextreme/ui/context_menu';
 import { GanttPredefinedContextMenuItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -199,14 +196,6 @@ export class DxiGanttItemComponent extends CollectionNestedOption implements Aft
         return 'items';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiGanttItemComponent))
-    get itemsChildren(): QueryList<DxiGanttItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

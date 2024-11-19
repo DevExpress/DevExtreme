@@ -14,7 +14,7 @@ import {
 
 
 
-import { AnimationState, AnimationType } from 'devextreme/animation/fx';
+import { AnimationConfig, AnimationState, AnimationType } from 'devextreme/animation/fx';
 import { Direction } from 'devextreme/common';
 
 import {
@@ -31,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoColorBoxShowComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get complete(): Function {
+    get complete(): (($element: any, config: AnimationConfig) => void) {
         return this._getOption('complete');
     }
-    set complete(value: Function) {
+    set complete(value: (($element: any, config: AnimationConfig) => void)) {
         this._setOption('complete', value);
     }
 
@@ -87,10 +87,10 @@ export class DxoColorBoxShowComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get start(): Function {
+    get start(): (($element: any, config: AnimationConfig) => void) {
         return this._getOption('start');
     }
-    set start(value: Function) {
+    set start(value: (($element: any, config: AnimationConfig) => void)) {
         this._setOption('start', value);
     }
 

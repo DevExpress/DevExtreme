@@ -2,11 +2,14 @@ import $ from 'jquery';
 
 import MessageBubble from '__internal/ui/chat/messagebubble';
 
+const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
+
 const moduleConfig = {
     beforeEach: function() {
         const init = (options = {}) => {
             this.instance = new MessageBubble($('#component'), options);
             this.$element = $(this.instance.$element());
+            this.$content = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
         };
 
         this.reinit = (options) => {
@@ -50,7 +53,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
             assert.strictEqual(templateSpy.callCount, 1, 'template was rendered once');
             assert.strictEqual(templateSpy.args[0][0], messageText, 'text argument is correct');
-            assert.strictEqual($(templateSpy.args[0][1]).get(0), this.$element.get(0), 'container element is correct');
+            assert.strictEqual($(templateSpy.args[0][1]).get(0), this.$content.get(0), 'container element is correct');
         });
 
         QUnit.test('default markup should be restored after reseting the template option at runtime', function(assert) {
@@ -80,10 +83,10 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
             this.instance.option('template', template);
 
-            const $bubbleContent = $(this.$element.children());
+            const $bubbleContentChild = $(this.$content.children());
 
-            assert.strictEqual($bubbleContent.prop('tagName'), 'H1', 'content tag is correct');
-            assert.strictEqual($bubbleContent.text(), 'template text: text', 'content text is correct');
+            assert.strictEqual($bubbleContentChild.prop('tagName'), 'H1', 'content tag is correct');
+            assert.strictEqual($bubbleContentChild.text(), 'template text: text', 'content text is correct');
         });
     });
 });

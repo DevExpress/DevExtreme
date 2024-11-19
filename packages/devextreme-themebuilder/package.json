@@ -1,6 +1,6 @@
 {
   "name": "devextreme-themebuilder",
-  "version": "24.2.0",
+  "version": "24.2.2",
   "description": "DevExtreme ThemeBuilder",
   "keywords": [
     "devextreme",
@@ -21,7 +21,7 @@
     "pack": "cd dist && pnpm pack"
   },
   "peerDependencies": {
-    "bootstrap": "npm:bootstrap@^5.3.0"
+    "bootstrap": "npm:bootstrap@^5.3.3"
   },
   "dependencies": {
     "autoprefixer": "^10.4.7",

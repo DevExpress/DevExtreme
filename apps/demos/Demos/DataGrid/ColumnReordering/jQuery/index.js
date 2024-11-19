@@ -8,38 +8,38 @@ $(() => {
     columnFixing: {
       enabled: true,
     },
-    columns: [{
-      caption: 'Employee',
-      fixed: true,
-      calculateCellValue(data) {
-        return [data.Title,
-          data.FirstName, data.LastName]
-          .join(' ');
-      },
-      }, {
-        dataField: 'BirthDate',
-        dataType: 'date',
-      }, {
-        dataField: 'Address',
-        width: 190,
+    columns: [
+      {
+        caption: 'Employee',
         fixed: true,
-        fixedPosition: 'sticky',
-      }, 'Zipcode', {
-        dataField: 'HireDate',
-        dataType: 'date',
-      }, {
+        calculateCellValue(data) {
+          return [data.Title,
+            data.FirstName, data.LastName]
+            .join(' ');
+        },
+      },
+      {
         dataField: 'Position',
         alignment: 'right',
-      }, {
-        dataField: 'City',
         fixed: true,
-        fixedPosition: 'right',
-      }, {
-        dataField: 'State',
-        fixed: true,
-        fixedPosition: 'right',
       },
-      'Department', 'HomePhone', 'MobilePhone', 'Skype', 'Email',
+      'Address',
+      'City',
+      'Zipcode',
+      'State',
+      'Department',
+      {
+        dataField: 'BirthDate',
+        dataType: 'date',
+      },
+      {
+        dataField: 'HireDate',
+        dataType: 'date',
+      },
+      'HomePhone',
+      'MobilePhone',
+      'Email',
+      'Skype',
     ]
   });
 });

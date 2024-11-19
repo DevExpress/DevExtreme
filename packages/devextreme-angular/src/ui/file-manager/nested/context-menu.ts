@@ -23,6 +23,7 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiFileManagerContextMenuItemComponent } from './context-menu-item-dxi';
 import { DxiFileManagerItemComponent } from './item-dxi';
 
 
@@ -46,6 +47,14 @@ export class DxoFileManagerContextMenuComponent extends NestedOption implements 
         return 'contextMenu';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiFileManagerContextMenuItemComponent))
+    get contextMenuItemsChildren(): QueryList<DxiFileManagerContextMenuItemComponent> {
+        return this._getOption('items');
+    }
+    set contextMenuItemsChildren(value) {
+        this.setChildren('items', value);
+    }
 
     @ContentChildren(forwardRef(() => DxiFileManagerItemComponent))
     get itemsChildren(): QueryList<DxiFileManagerItemComponent> {

@@ -22,10 +22,11 @@ import {
 } from '@angular/core';
 
 
+import DataSource from 'devextreme/data/data_source';
+import { dxGanttColumn, dxGanttContextMenu, dxGanttFilterRow, dxGanttHeaderFilter, ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, DependencyDeletedEvent, DependencyDeletingEvent, DependencyInsertedEvent, DependencyInsertingEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ResourceAssignedEvent, ResourceAssigningEvent, ResourceDeletedEvent, ResourceDeletingEvent, ResourceInsertedEvent, ResourceInsertingEvent, ResourceManagerDialogShowingEvent, ResourceUnassignedEvent, ResourceUnassigningEvent, ScaleCellPreparedEvent, SelectionChangedEvent, TaskClickEvent, TaskDblClickEvent, TaskDeletedEvent, TaskDeletingEvent, TaskEditDialogShowingEvent, TaskInsertedEvent, TaskInsertingEvent, TaskMovingEvent, TaskUpdatedEvent, TaskUpdatingEvent, GanttScaleType, dxGanttSorting, dxGanttStripLine, GanttTaskTitlePosition, dxGanttToolbar } from 'devextreme/ui/gantt';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 import { FirstDayOfWeek } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, DependencyDeletedEvent, DependencyDeletingEvent, DependencyInsertedEvent, DependencyInsertingEvent, DisposingEvent, dxGanttColumn, dxGanttContextMenu, dxGanttFilterRow, dxGanttHeaderFilter, dxGanttSorting, dxGanttStripLine, dxGanttToolbar, GanttScaleType, GanttTaskTitlePosition, InitializedEvent, OptionChangedEvent, ResourceAssignedEvent, ResourceAssigningEvent, ResourceDeletedEvent, ResourceDeletingEvent, ResourceInsertedEvent, ResourceInsertingEvent, ResourceManagerDialogShowingEvent, ResourceUnassignedEvent, ResourceUnassigningEvent, ScaleCellPreparedEvent, SelectionChangedEvent, TaskClickEvent, TaskDblClickEvent, TaskDeletedEvent, TaskDeletingEvent, TaskEditDialogShowingEvent, TaskInsertedEvent, TaskInsertingEvent, TaskMovingEvent, TaskUpdatedEvent, TaskUpdatingEvent } from 'devextreme/ui/gantt';
 
 import DxGantt from 'devextreme/ui/gantt';
 
@@ -61,23 +62,29 @@ import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 import { DxoValidationModule } from 'devextreme-angular/ui/nested';
 
 import { DxiGanttColumnModule } from 'devextreme-angular/ui/gantt/nested';
-import { DxoGanttFormatModule } from 'devextreme-angular/ui/gantt/nested';
-import { DxoGanttHeaderFilterModule } from 'devextreme-angular/ui/gantt/nested';
-import { DxoGanttSearchModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttColumnHeaderFilterModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttColumnHeaderFilterSearchModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttContextMenuModule } from 'devextreme-angular/ui/gantt/nested';
-import { DxiGanttItemModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxiGanttContextMenuItemModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttDependenciesModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttEditingModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttFilterRowModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttFormatModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttGanttHeaderFilterModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttGanttHeaderFilterSearchModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttHeaderFilterModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxiGanttItemModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttOperationDescriptionsModule } from 'devextreme-angular/ui/gantt/nested';
-import { DxoGanttTextsModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttResourceAssignmentsModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttResourcesModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttScaleTypeRangeModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttSearchModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttSortingModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxiGanttStripLineModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttTasksModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttTextsModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttToolbarModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxiGanttToolbarItemModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttValidationModule } from 'devextreme-angular/ui/gantt/nested';
 
 import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
@@ -174,10 +181,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get dependencies(): { dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, keyExpr?: Function | string, predecessorIdExpr?: Function | string, successorIdExpr?: Function | string, typeExpr?: Function | string } {
+    get dependencies(): { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, predecessorIdExpr?: Function | string, successorIdExpr?: Function | string, typeExpr?: Function | string } {
         return this._getOption('dependencies');
     }
-    set dependencies(value: { dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, keyExpr?: Function | string, predecessorIdExpr?: Function | string, successorIdExpr?: Function | string, typeExpr?: Function | string }) {
+    set dependencies(value: { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, predecessorIdExpr?: Function | string, successorIdExpr?: Function | string, typeExpr?: Function | string }) {
         this._setOption('dependencies', value);
     }
 
@@ -213,10 +220,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -291,10 +298,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -330,10 +337,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get resourceAssignments(): { dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, keyExpr?: Function | string, resourceIdExpr?: Function | string, taskIdExpr?: Function | string } {
+    get resourceAssignments(): { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, resourceIdExpr?: Function | string, taskIdExpr?: Function | string } {
         return this._getOption('resourceAssignments');
     }
-    set resourceAssignments(value: { dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, keyExpr?: Function | string, resourceIdExpr?: Function | string, taskIdExpr?: Function | string }) {
+    set resourceAssignments(value: { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, resourceIdExpr?: Function | string, taskIdExpr?: Function | string }) {
         this._setOption('resourceAssignments', value);
     }
 
@@ -343,10 +350,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get resources(): { colorExpr?: Function | string, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, keyExpr?: Function | string, textExpr?: Function | string } {
+    get resources(): { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, textExpr?: Function | string } {
         return this._getOption('resources');
     }
-    set resources(value: { colorExpr?: Function | string, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, keyExpr?: Function | string, textExpr?: Function | string }) {
+    set resources(value: { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, textExpr?: Function | string }) {
         this._setOption('resources', value);
     }
 
@@ -538,10 +545,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get tasks(): { colorExpr?: Function | string, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, endExpr?: Function | string, keyExpr?: Function | string, parentIdExpr?: Function | string, progressExpr?: Function | string, startExpr?: Function | string, titleExpr?: Function | string } {
+    get tasks(): { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: Function | string, keyExpr?: Function | string, parentIdExpr?: Function | string, progressExpr?: Function | string, startExpr?: Function | string, titleExpr?: Function | string } {
         return this._getOption('tasks');
     }
-    set tasks(value: { colorExpr?: Function | string, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, endExpr?: Function | string, keyExpr?: Function | string, parentIdExpr?: Function | string, progressExpr?: Function | string, startExpr?: Function | string, titleExpr?: Function | string }) {
+    set tasks(value: { colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: Function | string, keyExpr?: Function | string, parentIdExpr?: Function | string, progressExpr?: Function | string, startExpr?: Function | string, titleExpr?: Function | string }) {
         this._setOption('tasks', value);
     }
 
@@ -629,10 +636,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -924,7 +931,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dependenciesChange: EventEmitter<{ dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, keyExpr?: Function | string, predecessorIdExpr?: Function | string, successorIdExpr?: Function | string, typeExpr?: Function | string }>;
+    @Output() dependenciesChange: EventEmitter<{ dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, predecessorIdExpr?: Function | string, successorIdExpr?: Function | string, typeExpr?: Function | string }>;
 
     /**
     
@@ -945,7 +952,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -987,7 +994,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -1008,14 +1015,14 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() resourceAssignmentsChange: EventEmitter<{ dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, keyExpr?: Function | string, resourceIdExpr?: Function | string, taskIdExpr?: Function | string }>;
+    @Output() resourceAssignmentsChange: EventEmitter<{ dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, resourceIdExpr?: Function | string, taskIdExpr?: Function | string }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() resourcesChange: EventEmitter<{ colorExpr?: Function | string, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, keyExpr?: Function | string, textExpr?: Function | string }>;
+    @Output() resourcesChange: EventEmitter<{ colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: Function | string, textExpr?: Function | string }>;
 
     /**
     
@@ -1120,7 +1127,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tasksChange: EventEmitter<{ colorExpr?: Function | string, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, endExpr?: Function | string, keyExpr?: Function | string, parentIdExpr?: Function | string, progressExpr?: Function | string, startExpr?: Function | string, titleExpr?: Function | string }>;
+    @Output() tasksChange: EventEmitter<{ colorExpr?: Function | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: Function | string, keyExpr?: Function | string, parentIdExpr?: Function | string, progressExpr?: Function | string, startExpr?: Function | string, titleExpr?: Function | string }>;
 
     /**
     
@@ -1169,7 +1176,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
 
 
@@ -1366,23 +1373,29 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     DxoToolbarModule,
     DxoValidationModule,
     DxiGanttColumnModule,
-    DxoGanttFormatModule,
-    DxoGanttHeaderFilterModule,
-    DxoGanttSearchModule,
+    DxoGanttColumnHeaderFilterModule,
+    DxoGanttColumnHeaderFilterSearchModule,
     DxoGanttContextMenuModule,
-    DxiGanttItemModule,
+    DxiGanttContextMenuItemModule,
     DxoGanttDependenciesModule,
     DxoGanttEditingModule,
     DxoGanttFilterRowModule,
+    DxoGanttFormatModule,
+    DxoGanttGanttHeaderFilterModule,
+    DxoGanttGanttHeaderFilterSearchModule,
+    DxoGanttHeaderFilterModule,
+    DxiGanttItemModule,
     DxoGanttOperationDescriptionsModule,
-    DxoGanttTextsModule,
     DxoGanttResourceAssignmentsModule,
     DxoGanttResourcesModule,
     DxoGanttScaleTypeRangeModule,
+    DxoGanttSearchModule,
     DxoGanttSortingModule,
     DxiGanttStripLineModule,
     DxoGanttTasksModule,
+    DxoGanttTextsModule,
     DxoGanttToolbarModule,
+    DxiGanttToolbarItemModule,
     DxoGanttValidationModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -1412,23 +1425,29 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     DxoToolbarModule,
     DxoValidationModule,
     DxiGanttColumnModule,
-    DxoGanttFormatModule,
-    DxoGanttHeaderFilterModule,
-    DxoGanttSearchModule,
+    DxoGanttColumnHeaderFilterModule,
+    DxoGanttColumnHeaderFilterSearchModule,
     DxoGanttContextMenuModule,
-    DxiGanttItemModule,
+    DxiGanttContextMenuItemModule,
     DxoGanttDependenciesModule,
     DxoGanttEditingModule,
     DxoGanttFilterRowModule,
+    DxoGanttFormatModule,
+    DxoGanttGanttHeaderFilterModule,
+    DxoGanttGanttHeaderFilterSearchModule,
+    DxoGanttHeaderFilterModule,
+    DxiGanttItemModule,
     DxoGanttOperationDescriptionsModule,
-    DxoGanttTextsModule,
     DxoGanttResourceAssignmentsModule,
     DxoGanttResourcesModule,
     DxoGanttScaleTypeRangeModule,
+    DxoGanttSearchModule,
     DxoGanttSortingModule,
     DxiGanttStripLineModule,
     DxoGanttTasksModule,
+    DxoGanttTextsModule,
     DxoGanttToolbarModule,
+    DxiGanttToolbarItemModule,
     DxoGanttValidationModule,
     DxTemplateModule
   ]

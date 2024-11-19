@@ -23,10 +23,11 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/splitter';
 
+import DataSource from 'devextreme/data/data_source';
+import { dxSplitterItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemRenderedEvent, OptionChangedEvent, ResizeEvent, ResizeEndEvent, ResizeStartEvent } from 'devextreme/ui/splitter';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 import { Orientation } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, dxSplitterItem, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemRenderedEvent, OptionChangedEvent, Properties as dxSplitterOptions, ResizeEndEvent, ResizeEvent, ResizeStartEvent } from 'devextreme/ui/splitter';
 
 import DxSplitter from 'devextreme/ui/splitter';
 
@@ -45,7 +46,6 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoSplitterModule } from 'devextreme-angular/ui/nested';
 
 import { DxiSplitterItemModule } from 'devextreme-angular/ui/splitter/nested';
-import { DxoSplitterSplitterModule } from 'devextreme-angular/ui/splitter/nested';
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
@@ -87,10 +87,10 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxSplitterItem> {
+    get dataSource(): Array<dxSplitterItem> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxSplitterItem>) {
+    set dataSource(value: Array<dxSplitterItem> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -113,10 +113,10 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -126,10 +126,10 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -152,10 +152,10 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get items(): Array<any | { collapsed?: boolean, collapsedSize?: number | string | undefined, collapsible?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<dxSplitterItem> {
         return this._getOption('items');
     }
-    set items(value: Array<any | { collapsed?: boolean, collapsedSize?: number | string | undefined, collapsible?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<dxSplitterItem>) {
         this._setOption('items', value);
     }
 
@@ -230,10 +230,10 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -345,7 +345,7 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxSplitterItem>>;
+    @Output() dataSourceChange: EventEmitter<Array<dxSplitterItem> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -359,14 +359,14 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -380,7 +380,7 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<any | { collapsed?: boolean, collapsedSize?: number | string | undefined, collapsible?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<dxSplitterItem>>;
 
     /**
     
@@ -422,7 +422,7 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
 
 
@@ -536,7 +536,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     DxiItemModule,
     DxoSplitterModule,
     DxiSplitterItemModule,
-    DxoSplitterSplitterModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -548,7 +547,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     DxiItemModule,
     DxoSplitterModule,
     DxiSplitterItemModule,
-    DxoSplitterSplitterModule,
     DxTemplateModule
   ]
 })

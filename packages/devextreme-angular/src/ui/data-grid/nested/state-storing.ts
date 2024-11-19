@@ -30,18 +30,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDataGridStateStoringComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get customLoad(): Function {
+    get customLoad(): (() => any) {
         return this._getOption('customLoad');
     }
-    set customLoad(value: Function) {
+    set customLoad(value: (() => any)) {
         this._setOption('customLoad', value);
     }
 
     @Input()
-    get customSave(): Function {
+    get customSave(): ((gridState: any) => void) {
         return this._getOption('customSave');
     }
-    set customSave(value: Function) {
+    set customSave(value: ((gridState: any) => void)) {
         this._setOption('customSave', value);
     }
 

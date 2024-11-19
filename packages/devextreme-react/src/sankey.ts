@@ -116,11 +116,11 @@ const AdaptiveLayout = Object.assign<typeof _componentAdaptiveLayout, NestedComp
 // HoverStyle
 // Tooltip
 type IBorderProps = React.PropsWithChildren<{
-  color?: string;
-  visible?: boolean;
-  width?: number;
+  color?: string | undefined;
+  visible?: boolean | undefined;
+  width?: number | undefined;
   dashStyle?: DashStyle;
-  opacity?: number;
+  opacity?: number | undefined;
 }>
 const _componentBorder = (props: IBorderProps) => {
   return React.createElement(NestedOption<IBorderProps>, {
@@ -144,7 +144,7 @@ type IExportProps = React.PropsWithChildren<{
   formats?: Array<ExportFormat>;
   margin?: number;
   printingEnabled?: boolean;
-  svgToCanvas?: ((svg: any, canvas: any) => any);
+  svgToCanvas?: ((svg: any, canvas: any) => any) | undefined;
 }>
 const _componentExport = (props: IExportProps) => {
   return React.createElement(NestedOption<IExportProps>, {
@@ -235,18 +235,18 @@ const Hatching = Object.assign<typeof _componentHatching, NestedComponentMeta>(_
 // Node
 type IHoverStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
-    color?: string;
-    visible?: boolean;
-    width?: number;
+    color?: string | undefined;
+    visible?: boolean | undefined;
+    width?: number | undefined;
   };
-  color?: string;
+  color?: string | undefined;
   hatching?: Record<string, any> | {
     direction?: HatchDirection;
     opacity?: number;
     step?: number;
     width?: number;
   };
-  opacity?: number;
+  opacity?: number | undefined;
 }>
 const _componentHoverStyle = (props: IHoverStyleProps) => {
   return React.createElement(NestedOption<IHoverStyleProps>, {
@@ -265,9 +265,9 @@ const HoverStyle = Object.assign<typeof _componentHoverStyle, NestedComponentMet
 // Sankey
 type ILabelProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
-    color?: string;
-    visible?: boolean;
-    width?: number;
+    color?: string | undefined;
+    visible?: boolean | undefined;
+    width?: number | undefined;
   };
   customizeText?: ((itemInfo: dxSankeyNode) => string);
   font?: ChartsFont;
@@ -307,26 +307,26 @@ const Label = Object.assign<typeof _componentLabel, NestedComponentMeta>(_compon
 // Sankey
 type ILinkProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
-    color?: string;
-    visible?: boolean;
-    width?: number;
+    color?: string | undefined;
+    visible?: boolean | undefined;
+    width?: number | undefined;
   };
   color?: string;
   colorMode?: SankeyColorMode;
   hoverStyle?: Record<string, any> | {
     border?: Record<string, any> | {
-      color?: string;
-      visible?: boolean;
-      width?: number;
+      color?: string | undefined;
+      visible?: boolean | undefined;
+      width?: number | undefined;
     };
-    color?: string;
+    color?: string | undefined;
     hatching?: Record<string, any> | {
       direction?: HatchDirection;
       opacity?: number;
       step?: number;
       width?: number;
     };
-    opacity?: number;
+    opacity?: number | undefined;
   };
   opacity?: number;
 }>
@@ -404,25 +404,25 @@ const Margin = Object.assign<typeof _componentMargin, NestedComponentMeta>(_comp
 // Sankey
 type INodeProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
-    color?: string;
-    visible?: boolean;
-    width?: number;
+    color?: string | undefined;
+    visible?: boolean | undefined;
+    width?: number | undefined;
   };
-  color?: string;
+  color?: string | undefined;
   hoverStyle?: Record<string, any> | {
     border?: Record<string, any> | {
-      color?: string;
-      visible?: boolean;
-      width?: number;
+      color?: string | undefined;
+      visible?: boolean | undefined;
+      width?: number | undefined;
     };
-    color?: string;
+    color?: string | undefined;
     hatching?: Record<string, any> | {
       direction?: HatchDirection;
       opacity?: number;
       step?: number;
       width?: number;
     };
-    opacity?: number;
+    opacity?: number | undefined;
   };
   opacity?: number;
   padding?: number;
@@ -453,9 +453,9 @@ const Node = Object.assign<typeof _componentNode, NestedComponentMeta>(_componen
 // Node
 // HoverStyle
 type ISankeyborderProps = React.PropsWithChildren<{
-  color?: string;
-  visible?: boolean;
-  width?: number;
+  color?: string | undefined;
+  visible?: boolean | undefined;
+  width?: number | undefined;
 }>
 const _componentSankeyborder = (props: ISankeyborderProps) => {
   return React.createElement(NestedOption<ISankeyborderProps>, {
@@ -496,8 +496,8 @@ const Shadow = Object.assign<typeof _componentShadow, NestedComponentMeta>(_comp
 // owners:
 // Sankey
 type ISizeProps = React.PropsWithChildren<{
-  height?: number;
-  width?: number;
+  height?: number | undefined;
+  width?: number | undefined;
 }>
 const _componentSize = (props: ISizeProps) => {
   return React.createElement(NestedOption<ISizeProps>, {
@@ -548,7 +548,7 @@ type ITitleProps = React.PropsWithChildren<{
     right?: number;
     top?: number;
   };
-  placeholderSize?: number;
+  placeholderSize?: number | undefined;
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
@@ -586,21 +586,21 @@ type ITooltipProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     dashStyle?: DashStyle;
-    opacity?: number;
+    opacity?: number | undefined;
     visible?: boolean;
     width?: number;
   };
   color?: string;
-  container?: any | string;
+  container?: any | string | undefined;
   cornerRadius?: number;
-  customizeLinkTooltip?: ((info: { source: string, target: string, weight: number }) => Record<string, any>);
-  customizeNodeTooltip?: ((info: { label: string, title: string, weightIn: number, weightOut: number }) => Record<string, any>);
+  customizeLinkTooltip?: ((info: { source: string, target: string, weight: number }) => Record<string, any>) | undefined;
+  customizeNodeTooltip?: ((info: { label: string, title: string, weightIn: number, weightOut: number }) => Record<string, any>) | undefined;
   enabled?: boolean;
   font?: ChartsFont;
-  format?: LocalizationFormat;
-  linkTooltipTemplate?: ((info: { source: string, target: string, weight: number }, element: any) => string | any) | template;
-  nodeTooltipTemplate?: ((info: { label: string, weightIn: number, weightOut: number }, element: any) => string | any) | template;
-  opacity?: number;
+  format?: LocalizationFormat | undefined;
+  linkTooltipTemplate?: ((info: { source: string, target: string, weight: number }, element: any) => string | any) | template | undefined;
+  nodeTooltipTemplate?: ((info: { label: string, weightIn: number, weightOut: number }, element: any) => string | any) | template | undefined;
+  opacity?: number | undefined;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
   shadow?: Record<string, any> | {
@@ -610,7 +610,7 @@ type ITooltipProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  zIndex?: number;
+  zIndex?: number | undefined;
   linkTooltipRender?: (...params: any) => React.ReactNode;
   linkTooltipComponent?: React.ComponentType<any>;
   nodeTooltipRender?: (...params: any) => React.ReactNode;
@@ -650,7 +650,7 @@ const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_co
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
   dashStyle?: DashStyle;
-  opacity?: number;
+  opacity?: number | undefined;
   visible?: boolean;
   width?: number;
 }>

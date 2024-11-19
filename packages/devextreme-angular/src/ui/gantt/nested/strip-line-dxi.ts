@@ -35,18 +35,18 @@ export class DxiGanttStripLineComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get end(): Date | number | Function | string | undefined {
+    get end(): Date | (() => Date | number | string) | number | string | undefined {
         return this._getOption('end');
     }
-    set end(value: Date | number | Function | string | undefined) {
+    set end(value: Date | (() => Date | number | string) | number | string | undefined) {
         this._setOption('end', value);
     }
 
     @Input()
-    get start(): Date | number | Function | string | undefined {
+    get start(): Date | (() => Date | number | string) | number | string | undefined {
         return this._getOption('start');
     }
-    set start(value: Date | number | Function | string | undefined) {
+    set start(value: Date | (() => Date | number | string) | number | string | undefined) {
         this._setOption('start', value);
     }
 

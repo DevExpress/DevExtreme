@@ -22,13 +22,16 @@ import {
 } from '@angular/core';
 
 
-import { ExportFormat, HorizontalAlignment, SliderValueChangeMode, VerticalEdge } from 'devextreme/common';
-import { ChartsDataType, DiscreteAxisDivisionMode, Font, LabelOverlap, Palette, PaletteExtensionMode, ScaleBreak, ScaleBreakLineStyle, TextOverflow, Theme, TimeInterval, VisualRange, VisualRangeUpdateMode, WordWrap } from 'devextreme/common/charts';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Format } from 'devextreme/localization';
+import DataSource from 'devextreme/data/data_source';
+import * as CommonChartTypes from 'devextreme/common/charts';
+import { BackgroundImageLocation, ValueChangedCallMode, ChartAxisScale, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, AxisScale } from 'devextreme/viz/range_selector';
+import { SliderValueChangeMode, ExportFormat, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
+import { dxChartCommonSeriesSettings } from 'devextreme/viz/chart';
+import { Palette, PaletteExtensionMode, ChartsDataType, Font, TimeInterval, ScaleBreak, ScaleBreakLineStyle, DiscreteAxisDivisionMode, LabelOverlap, VisualRangeUpdateMode, Theme, TextOverflow, WordWrap } from 'devextreme/common/charts';
 import { ChartSeries } from 'devextreme/viz/common';
-import { AxisScale, BackgroundImageLocation, ChartAxisScale, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, ValueChangedCallMode, ValueChangedEvent } from 'devextreme/viz/range_selector';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { Format } from 'devextreme/localization';
 
 import DxRangeSelector from 'devextreme/viz/range_selector';
 
@@ -118,76 +121,66 @@ import { DxoSliderMarkerModule } from 'devextreme-angular/ui/nested';
 import { DxoTitleModule } from 'devextreme-angular/ui/nested';
 import { DxoSubtitleModule } from 'devextreme-angular/ui/nested';
 
-import { DxoRangeSelectorBackgroundModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorImageModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorBehaviorModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorChartModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorCommonSeriesSettingsModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorAggregationModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorAreaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorBorderModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorHoverStyleModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorHatchingModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorLabelModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorConnectorModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorPointModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorHeightModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorUrlModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorWidthModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorSelectionStyleModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorReductionModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorValueErrorBarModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorBarModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorBubbleModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorCandlestickModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorColorModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorFullstackedareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorFullstackedbarModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorFullstackedlineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorFullstackedsplineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorFullstackedsplineareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorArgumentFormatModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorFontModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorFormatModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorLineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorRangeareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorRangebarModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorScatterModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorSplineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorSplineareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorStackedareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorStackedbarModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorStackedlineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorStackedsplineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorStackedsplineareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorStepareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorSteplineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorStockModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorDataPrepareSettingsModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxiRangeSelectorSeriesModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorSeriesTemplateModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorValueAxisModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorExportModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorIndentModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorLoadingIndicatorModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorMarginModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorScaleModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorAggregationIntervalModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorArgumentFormatModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorBackgroundModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorBackgroundImageModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorBehaviorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorBorderModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxiRangeSelectorBreakModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorBreakStyleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorChartModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorColorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorCommonSeriesSettingsModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorCommonSeriesSettingsHoverStyleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorCommonSeriesSettingsLabelModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorCommonSeriesSettingsSelectionStyleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorConnectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorDataPrepareSettingsModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorExportModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorFontModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorFormatModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorHatchingModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorHeightModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorHoverStyleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorImageModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorIndentModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorLabelModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorLengthModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorLoadingIndicatorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorMarginModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorMarkerModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorMarkerLabelModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorMaxRangeModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorMinorTickModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorMinorTickIntervalModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorMinRangeModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorTickModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorTickIntervalModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorPointModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorPointBorderModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorPointHoverStyleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorPointImageModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorPointSelectionStyleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorReductionModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorScaleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorScaleLabelModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorSelectionStyleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxiRangeSelectorSeriesModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorSeriesBorderModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorSeriesTemplateModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorShutterModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorSizeModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorSliderHandleModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorSliderMarkerModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorTitleModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorSubtitleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorTickModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorTickIntervalModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorTitleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorUrlModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorValueModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorValueAxisModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorValueErrorBarModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorWidthModule } from 'devextreme-angular/ui/range-selector/nested';
 
 
 
@@ -248,10 +241,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get chart(): { barGroupPadding?: number, barGroupWidth?: number | undefined, bottomIndent?: number, commonSeriesSettings?: any, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | Function }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, series?: ChartSeries | any | undefined | Array<ChartSeries | any>, seriesTemplate?: { customizeSeries?: Function, nameField?: string }, topIndent?: number, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number | undefined, min?: number | undefined, type?: ChartAxisScale | undefined, valueType?: ChartsDataType | undefined } } {
+    get chart(): { barGroupPadding?: number, barGroupWidth?: number | undefined, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, series?: Array<ChartSeries> | ChartSeries | undefined, seriesTemplate?: any, topIndent?: number, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number | undefined, min?: number | undefined, type?: ChartAxisScale | undefined, valueType?: ChartsDataType | undefined } } {
         return this._getOption('chart');
     }
-    set chart(value: { barGroupPadding?: number, barGroupWidth?: number | undefined, bottomIndent?: number, commonSeriesSettings?: any, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | Function }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, series?: ChartSeries | any | undefined | Array<ChartSeries | any>, seriesTemplate?: { customizeSeries?: Function, nameField?: string }, topIndent?: number, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number | undefined, min?: number | undefined, type?: ChartAxisScale | undefined, valueType?: ChartsDataType | undefined } }) {
+    set chart(value: { barGroupPadding?: number, barGroupWidth?: number | undefined, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, series?: Array<ChartSeries> | ChartSeries | undefined, seriesTemplate?: any, topIndent?: number, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number | undefined, min?: number | undefined, type?: ChartAxisScale | undefined, valueType?: ChartsDataType | undefined } }) {
         this._setOption('chart', value);
     }
 
@@ -274,10 +267,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -313,10 +306,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -326,10 +319,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined } {
+    get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined } {
         return this._getOption('export');
     }
-    set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }) {
+    set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }) {
         this._setOption('export', value);
     }
 
@@ -417,10 +410,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get scale(): { aggregateByCategory?: boolean, aggregationGroupWidth?: number | undefined, aggregationInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, breaks?: Array<ScaleBreak>, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<number | string | Date>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string | undefined, holidays?: Array<Date | string | number>, label?: { customizeText?: Function, font?: Font, format?: Format | string | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: Function, format?: Format | string | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number | undefined, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string | number>, startValue?: Date | number | string | undefined, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale | undefined, valueType?: ChartsDataType | undefined, workdaysOnly?: boolean, workWeek?: Array<number> } {
+    get scale(): { aggregateByCategory?: boolean, aggregationGroupWidth?: number | undefined, aggregationInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[], breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string | undefined, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number | undefined, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: Date | number | string | undefined, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale | undefined, valueType?: ChartsDataType | undefined, workdaysOnly?: boolean, workWeek?: Array<number> } {
         return this._getOption('scale');
     }
-    set scale(value: { aggregateByCategory?: boolean, aggregationGroupWidth?: number | undefined, aggregationInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, breaks?: Array<ScaleBreak>, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<number | string | Date>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string | undefined, holidays?: Array<Date | string | number>, label?: { customizeText?: Function, font?: Font, format?: Format | string | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: Function, format?: Format | string | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number | undefined, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string | number>, startValue?: Date | number | string | undefined, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale | undefined, valueType?: ChartsDataType | undefined, workdaysOnly?: boolean, workWeek?: Array<number> }) {
+    set scale(value: { aggregateByCategory?: boolean, aggregationGroupWidth?: number | undefined, aggregationInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[], breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string | undefined, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number | undefined, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: Date | number | string | undefined, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale | undefined, valueType?: ChartsDataType | undefined, workdaysOnly?: boolean, workWeek?: Array<number> }) {
         this._setOption('scale', value);
     }
 
@@ -495,10 +488,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get sliderMarker(): { color?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number | undefined, visible?: boolean } {
+    get sliderMarker(): { color?: string, customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number | undefined, visible?: boolean } {
         return this._getOption('sliderMarker');
     }
-    set sliderMarker(value: { color?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number | undefined, visible?: boolean }) {
+    set sliderMarker(value: { color?: string, customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number | undefined, visible?: boolean }) {
         this._setOption('sliderMarker', value);
     }
 
@@ -534,10 +527,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get value(): VisualRange | Array<number | string | Date> {
+    get value(): Array<Date | number | string> | CommonChartTypes.VisualRange {
         return this._getOption('value');
     }
-    set value(value: VisualRange | Array<number | string | Date>) {
+    set value(value: Array<Date | number | string> | CommonChartTypes.VisualRange) {
         this._setOption('value', value);
     }
 
@@ -632,7 +625,7 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() chartChange: EventEmitter<{ barGroupPadding?: number, barGroupWidth?: number | undefined, bottomIndent?: number, commonSeriesSettings?: any, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | Function }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, series?: ChartSeries | any | undefined | Array<ChartSeries | any>, seriesTemplate?: { customizeSeries?: Function, nameField?: string }, topIndent?: number, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number | undefined, min?: number | undefined, type?: ChartAxisScale | undefined, valueType?: ChartsDataType | undefined } }>;
+    @Output() chartChange: EventEmitter<{ barGroupPadding?: number, barGroupWidth?: number | undefined, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, series?: Array<ChartSeries> | ChartSeries | undefined, seriesTemplate?: any, topIndent?: number, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number | undefined, min?: number | undefined, type?: ChartAxisScale | undefined, valueType?: ChartsDataType | undefined } }>;
 
     /**
     
@@ -646,7 +639,7 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -667,14 +660,14 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }>;
+    @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }>;
 
     /**
     
@@ -723,7 +716,7 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scaleChange: EventEmitter<{ aggregateByCategory?: boolean, aggregationGroupWidth?: number | undefined, aggregationInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, breaks?: Array<ScaleBreak>, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<number | string | Date>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string | undefined, holidays?: Array<Date | string | number>, label?: { customizeText?: Function, font?: Font, format?: Format | string | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: Function, format?: Format | string | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number | undefined, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string | number>, startValue?: Date | number | string | undefined, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale | undefined, valueType?: ChartsDataType | undefined, workdaysOnly?: boolean, workWeek?: Array<number> }>;
+    @Output() scaleChange: EventEmitter<{ aggregateByCategory?: boolean, aggregationGroupWidth?: number | undefined, aggregationInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[], breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string | undefined, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number | undefined, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: Date | number | string | undefined, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale | undefined, valueType?: ChartsDataType | undefined, workdaysOnly?: boolean, workWeek?: Array<number> }>;
 
     /**
     
@@ -765,7 +758,7 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sliderMarkerChange: EventEmitter<{ color?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number | undefined, visible?: boolean }>;
+    @Output() sliderMarkerChange: EventEmitter<{ color?: string, customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number | undefined, visible?: boolean }>;
 
     /**
     
@@ -786,7 +779,7 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<VisualRange | Array<number | string | Date>>;
+    @Output() valueChange: EventEmitter<Array<Date | number | string> | CommonChartTypes.VisualRange>;
 
     /**
     
@@ -984,76 +977,66 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     DxoSliderMarkerModule,
     DxoTitleModule,
     DxoSubtitleModule,
-    DxoRangeSelectorBackgroundModule,
-    DxoRangeSelectorImageModule,
-    DxoRangeSelectorBehaviorModule,
-    DxoRangeSelectorChartModule,
-    DxoRangeSelectorCommonSeriesSettingsModule,
     DxoRangeSelectorAggregationModule,
-    DxoRangeSelectorAreaModule,
-    DxoRangeSelectorBorderModule,
-    DxoRangeSelectorHoverStyleModule,
-    DxoRangeSelectorHatchingModule,
-    DxoRangeSelectorLabelModule,
-    DxoRangeSelectorConnectorModule,
-    DxoRangeSelectorPointModule,
-    DxoRangeSelectorHeightModule,
-    DxoRangeSelectorUrlModule,
-    DxoRangeSelectorWidthModule,
-    DxoRangeSelectorSelectionStyleModule,
-    DxoRangeSelectorReductionModule,
-    DxoRangeSelectorValueErrorBarModule,
-    DxoRangeSelectorBarModule,
-    DxoRangeSelectorBubbleModule,
-    DxoRangeSelectorCandlestickModule,
-    DxoRangeSelectorColorModule,
-    DxoRangeSelectorFullstackedareaModule,
-    DxoRangeSelectorFullstackedbarModule,
-    DxoRangeSelectorFullstackedlineModule,
-    DxoRangeSelectorFullstackedsplineModule,
-    DxoRangeSelectorFullstackedsplineareaModule,
-    DxoRangeSelectorArgumentFormatModule,
-    DxoRangeSelectorFontModule,
-    DxoRangeSelectorFormatModule,
-    DxoRangeSelectorLineModule,
-    DxoRangeSelectorRangeareaModule,
-    DxoRangeSelectorRangebarModule,
-    DxoRangeSelectorScatterModule,
-    DxoRangeSelectorSplineModule,
-    DxoRangeSelectorSplineareaModule,
-    DxoRangeSelectorStackedareaModule,
-    DxoRangeSelectorStackedbarModule,
-    DxoRangeSelectorStackedlineModule,
-    DxoRangeSelectorStackedsplineModule,
-    DxoRangeSelectorStackedsplineareaModule,
-    DxoRangeSelectorStepareaModule,
-    DxoRangeSelectorSteplineModule,
-    DxoRangeSelectorStockModule,
-    DxoRangeSelectorDataPrepareSettingsModule,
-    DxiRangeSelectorSeriesModule,
-    DxoRangeSelectorSeriesTemplateModule,
-    DxoRangeSelectorValueAxisModule,
-    DxoRangeSelectorExportModule,
-    DxoRangeSelectorIndentModule,
-    DxoRangeSelectorLoadingIndicatorModule,
-    DxoRangeSelectorMarginModule,
-    DxoRangeSelectorScaleModule,
     DxoRangeSelectorAggregationIntervalModule,
+    DxoRangeSelectorArgumentFormatModule,
+    DxoRangeSelectorBackgroundModule,
+    DxoRangeSelectorBackgroundImageModule,
+    DxoRangeSelectorBehaviorModule,
+    DxoRangeSelectorBorderModule,
     DxiRangeSelectorBreakModule,
     DxoRangeSelectorBreakStyleModule,
+    DxoRangeSelectorChartModule,
+    DxoRangeSelectorColorModule,
+    DxoRangeSelectorCommonSeriesSettingsModule,
+    DxoRangeSelectorCommonSeriesSettingsHoverStyleModule,
+    DxoRangeSelectorCommonSeriesSettingsLabelModule,
+    DxoRangeSelectorCommonSeriesSettingsSelectionStyleModule,
+    DxoRangeSelectorConnectorModule,
+    DxoRangeSelectorDataPrepareSettingsModule,
+    DxoRangeSelectorExportModule,
+    DxoRangeSelectorFontModule,
+    DxoRangeSelectorFormatModule,
+    DxoRangeSelectorHatchingModule,
+    DxoRangeSelectorHeightModule,
+    DxoRangeSelectorHoverStyleModule,
+    DxoRangeSelectorImageModule,
+    DxoRangeSelectorIndentModule,
+    DxoRangeSelectorLabelModule,
+    DxoRangeSelectorLengthModule,
+    DxoRangeSelectorLoadingIndicatorModule,
+    DxoRangeSelectorMarginModule,
     DxoRangeSelectorMarkerModule,
+    DxoRangeSelectorMarkerLabelModule,
     DxoRangeSelectorMaxRangeModule,
     DxoRangeSelectorMinorTickModule,
     DxoRangeSelectorMinorTickIntervalModule,
     DxoRangeSelectorMinRangeModule,
-    DxoRangeSelectorTickModule,
-    DxoRangeSelectorTickIntervalModule,
+    DxoRangeSelectorPointModule,
+    DxoRangeSelectorPointBorderModule,
+    DxoRangeSelectorPointHoverStyleModule,
+    DxoRangeSelectorPointImageModule,
+    DxoRangeSelectorPointSelectionStyleModule,
+    DxoRangeSelectorReductionModule,
+    DxoRangeSelectorScaleModule,
+    DxoRangeSelectorScaleLabelModule,
+    DxoRangeSelectorSelectionStyleModule,
+    DxiRangeSelectorSeriesModule,
+    DxoRangeSelectorSeriesBorderModule,
+    DxoRangeSelectorSeriesTemplateModule,
     DxoRangeSelectorShutterModule,
     DxoRangeSelectorSizeModule,
     DxoRangeSelectorSliderHandleModule,
     DxoRangeSelectorSliderMarkerModule,
-    DxoRangeSelectorTitleModule,
     DxoRangeSelectorSubtitleModule,
+    DxoRangeSelectorTickModule,
+    DxoRangeSelectorTickIntervalModule,
+    DxoRangeSelectorTitleModule,
+    DxoRangeSelectorUrlModule,
+    DxoRangeSelectorValueModule,
+    DxoRangeSelectorValueAxisModule,
+    DxoRangeSelectorValueErrorBarModule,
+    DxoRangeSelectorWidthModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1132,76 +1115,66 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     DxoSliderMarkerModule,
     DxoTitleModule,
     DxoSubtitleModule,
-    DxoRangeSelectorBackgroundModule,
-    DxoRangeSelectorImageModule,
-    DxoRangeSelectorBehaviorModule,
-    DxoRangeSelectorChartModule,
-    DxoRangeSelectorCommonSeriesSettingsModule,
     DxoRangeSelectorAggregationModule,
-    DxoRangeSelectorAreaModule,
-    DxoRangeSelectorBorderModule,
-    DxoRangeSelectorHoverStyleModule,
-    DxoRangeSelectorHatchingModule,
-    DxoRangeSelectorLabelModule,
-    DxoRangeSelectorConnectorModule,
-    DxoRangeSelectorPointModule,
-    DxoRangeSelectorHeightModule,
-    DxoRangeSelectorUrlModule,
-    DxoRangeSelectorWidthModule,
-    DxoRangeSelectorSelectionStyleModule,
-    DxoRangeSelectorReductionModule,
-    DxoRangeSelectorValueErrorBarModule,
-    DxoRangeSelectorBarModule,
-    DxoRangeSelectorBubbleModule,
-    DxoRangeSelectorCandlestickModule,
-    DxoRangeSelectorColorModule,
-    DxoRangeSelectorFullstackedareaModule,
-    DxoRangeSelectorFullstackedbarModule,
-    DxoRangeSelectorFullstackedlineModule,
-    DxoRangeSelectorFullstackedsplineModule,
-    DxoRangeSelectorFullstackedsplineareaModule,
-    DxoRangeSelectorArgumentFormatModule,
-    DxoRangeSelectorFontModule,
-    DxoRangeSelectorFormatModule,
-    DxoRangeSelectorLineModule,
-    DxoRangeSelectorRangeareaModule,
-    DxoRangeSelectorRangebarModule,
-    DxoRangeSelectorScatterModule,
-    DxoRangeSelectorSplineModule,
-    DxoRangeSelectorSplineareaModule,
-    DxoRangeSelectorStackedareaModule,
-    DxoRangeSelectorStackedbarModule,
-    DxoRangeSelectorStackedlineModule,
-    DxoRangeSelectorStackedsplineModule,
-    DxoRangeSelectorStackedsplineareaModule,
-    DxoRangeSelectorStepareaModule,
-    DxoRangeSelectorSteplineModule,
-    DxoRangeSelectorStockModule,
-    DxoRangeSelectorDataPrepareSettingsModule,
-    DxiRangeSelectorSeriesModule,
-    DxoRangeSelectorSeriesTemplateModule,
-    DxoRangeSelectorValueAxisModule,
-    DxoRangeSelectorExportModule,
-    DxoRangeSelectorIndentModule,
-    DxoRangeSelectorLoadingIndicatorModule,
-    DxoRangeSelectorMarginModule,
-    DxoRangeSelectorScaleModule,
     DxoRangeSelectorAggregationIntervalModule,
+    DxoRangeSelectorArgumentFormatModule,
+    DxoRangeSelectorBackgroundModule,
+    DxoRangeSelectorBackgroundImageModule,
+    DxoRangeSelectorBehaviorModule,
+    DxoRangeSelectorBorderModule,
     DxiRangeSelectorBreakModule,
     DxoRangeSelectorBreakStyleModule,
+    DxoRangeSelectorChartModule,
+    DxoRangeSelectorColorModule,
+    DxoRangeSelectorCommonSeriesSettingsModule,
+    DxoRangeSelectorCommonSeriesSettingsHoverStyleModule,
+    DxoRangeSelectorCommonSeriesSettingsLabelModule,
+    DxoRangeSelectorCommonSeriesSettingsSelectionStyleModule,
+    DxoRangeSelectorConnectorModule,
+    DxoRangeSelectorDataPrepareSettingsModule,
+    DxoRangeSelectorExportModule,
+    DxoRangeSelectorFontModule,
+    DxoRangeSelectorFormatModule,
+    DxoRangeSelectorHatchingModule,
+    DxoRangeSelectorHeightModule,
+    DxoRangeSelectorHoverStyleModule,
+    DxoRangeSelectorImageModule,
+    DxoRangeSelectorIndentModule,
+    DxoRangeSelectorLabelModule,
+    DxoRangeSelectorLengthModule,
+    DxoRangeSelectorLoadingIndicatorModule,
+    DxoRangeSelectorMarginModule,
     DxoRangeSelectorMarkerModule,
+    DxoRangeSelectorMarkerLabelModule,
     DxoRangeSelectorMaxRangeModule,
     DxoRangeSelectorMinorTickModule,
     DxoRangeSelectorMinorTickIntervalModule,
     DxoRangeSelectorMinRangeModule,
-    DxoRangeSelectorTickModule,
-    DxoRangeSelectorTickIntervalModule,
+    DxoRangeSelectorPointModule,
+    DxoRangeSelectorPointBorderModule,
+    DxoRangeSelectorPointHoverStyleModule,
+    DxoRangeSelectorPointImageModule,
+    DxoRangeSelectorPointSelectionStyleModule,
+    DxoRangeSelectorReductionModule,
+    DxoRangeSelectorScaleModule,
+    DxoRangeSelectorScaleLabelModule,
+    DxoRangeSelectorSelectionStyleModule,
+    DxiRangeSelectorSeriesModule,
+    DxoRangeSelectorSeriesBorderModule,
+    DxoRangeSelectorSeriesTemplateModule,
     DxoRangeSelectorShutterModule,
     DxoRangeSelectorSizeModule,
     DxoRangeSelectorSliderHandleModule,
     DxoRangeSelectorSliderMarkerModule,
-    DxoRangeSelectorTitleModule,
     DxoRangeSelectorSubtitleModule,
+    DxoRangeSelectorTickModule,
+    DxoRangeSelectorTickIntervalModule,
+    DxoRangeSelectorTitleModule,
+    DxoRangeSelectorUrlModule,
+    DxoRangeSelectorValueModule,
+    DxoRangeSelectorValueAxisModule,
+    DxoRangeSelectorValueErrorBarModule,
+    DxoRangeSelectorWidthModule,
     DxTemplateModule
   ]
 })

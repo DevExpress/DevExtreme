@@ -250,6 +250,7 @@
         "dxPivotGrid-filterFieldArea": "Filtre Alanlarını Buraya Bırak",
 
         "dxScheduler-ariaLabel": "Scheduler. {0} view",
+        
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
@@ -301,6 +302,8 @@
         "dxScheduler-recurrenceRepeatOnDate": "tarihinde",
         "dxScheduler-recurrenceRepeatCount": "olaylar",
         "dxScheduler-allDay": "Tüm gün",
+
+        "dxScheduler-ariaEditForm": "Edit form",
 
         "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
         "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",

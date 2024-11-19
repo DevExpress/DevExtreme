@@ -47,10 +47,10 @@ export class DxoTreeMapColorizerComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get palette(): Palette | string | Array<string> {
+    get palette(): Array<string> | Palette {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
 

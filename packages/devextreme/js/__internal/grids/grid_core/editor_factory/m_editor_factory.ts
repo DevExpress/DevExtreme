@@ -191,7 +191,7 @@ export class EditorFactory extends ViewControllerWithMixin {
     });
   }
 
-  private _updateFocusOverlaySize($element, position) {
+  protected updateFocusOverlaySize($element, position): void {
     $element.hide();
 
     // @ts-expect-error
@@ -210,6 +210,70 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   protected callbackNames() {
     return ['focused'];
+  }
+
+  protected getFocusOverlayContainer($focusedElement: dxElementWrapper): dxElementWrapper {
+    return $focusedElement.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
+  }
+
+  protected getFocusOverlaySize($element: dxElementWrapper): { width: number; height: number } {
+    const elementRect = getBoundingRect($element.get(0));
+
+    return {
+      width: elementRect.right - elementRect.left + 1,
+      height: elementRect.bottom - elementRect.top + 1,
+    };
+  }
+
+  protected updateFocusOverlay($element: dxElementWrapper, isHideBorder = false): void {
+    if (isHideBorder) {
+      this._$focusOverlay.addClass(DX_HIDDEN);
+    } else if ($element.length) {
+      // align "right bottom" for Mozilla
+      const align = browser.mozilla ? 'right bottom' : 'left top';
+      const isFocusedCellInvalid = $element.hasClass(this.addWidgetPrefix(CELL_INVALID_CLASS));
+      const isFocusedCellModified = $element.hasClass(CELL_MODIFIED_CLASS) && !isFocusedCellInvalid;
+      const $content = this.getFocusOverlayContainer($element);
+      const focusOverlaySize = this.getFocusOverlaySize($element);
+
+      this._$focusOverlay
+        .removeClass(DX_HIDDEN)
+        .toggleClass(FOCUSED_CELL_INVALID_CLASS, isFocusedCellInvalid)
+        .toggleClass(FOCUSED_CELL_MODIFIED_CLASS, isFocusedCellModified)
+        .appendTo($content);
+
+      setOuterHeight(this._$focusOverlay, focusOverlaySize.height);
+      setOuterWidth(this._$focusOverlay, focusOverlaySize.width);
+
+      const focusOverlayPosition = {
+        precise: true,
+        my: align,
+        at: align,
+        of: $element,
+        boundary: $content.length && $content,
+      };
+
+      this.updateFocusOverlaySize(this._$focusOverlay, focusOverlayPosition);
+      // @ts-expect-error
+      positionUtils.setup(this._$focusOverlay, focusOverlayPosition);
+
+      this._$focusOverlay.css('visibility', 'visible'); // for ios
+    }
+  }
+
+  /**
+   * @extended: focus
+   */
+  protected renderFocusOverlay($element, isHideBorder) {
+    if (!gridCoreUtils.isElementInCurrentGrid(this, $element)) {
+      return;
+    }
+
+    if (!this._$focusOverlay) {
+      this._$focusOverlay = $('<div>').addClass(this.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
+    }
+
+    this.updateFocusOverlay($element, isHideBorder);
   }
 
   /**
@@ -243,56 +307,6 @@ export class EditorFactory extends ViewControllerWithMixin {
   public refocus() {
     const $focus = this.focus();
     this.focus($focus);
-  }
-
-  public updateFocusOverlay($element: dxElementWrapper, isHideBorder = false): void {
-    if (isHideBorder) {
-      this._$focusOverlay.addClass(DX_HIDDEN);
-    } else if ($element.length) {
-      // align "right bottom" for Mozilla
-      const align = browser.mozilla ? 'right bottom' : 'left top';
-      const elemCoord = getBoundingRect($element.get(0));
-      const isFocusedCellInvalid = $element.hasClass(this.addWidgetPrefix(CELL_INVALID_CLASS));
-      const isFocusedCellModified = $element.hasClass(CELL_MODIFIED_CLASS) && !isFocusedCellInvalid;
-      const $content = $element.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
-
-      this._$focusOverlay
-        .removeClass(DX_HIDDEN)
-        .toggleClass(FOCUSED_CELL_INVALID_CLASS, isFocusedCellInvalid)
-        .toggleClass(FOCUSED_CELL_MODIFIED_CLASS, isFocusedCellModified)
-        .appendTo($content);
-      setOuterHeight(this._$focusOverlay, elemCoord.bottom - elemCoord.top + 1);
-      setOuterWidth(this._$focusOverlay, elemCoord.right - elemCoord.left + 1);
-
-      const focusOverlayPosition = {
-        precise: true,
-        my: align,
-        at: align,
-        of: $element,
-        boundary: $content.length && $content,
-      };
-
-      this._updateFocusOverlaySize(this._$focusOverlay, focusOverlayPosition);
-      // @ts-expect-error
-      positionUtils.setup(this._$focusOverlay, focusOverlayPosition);
-
-      this._$focusOverlay.css('visibility', 'visible'); // for ios
-    }
-  }
-
-  /**
-   * @extended: focus
-   */
-  protected renderFocusOverlay($element, isHideBorder) {
-    if (!gridCoreUtils.isElementInCurrentGrid(this, $element)) {
-      return;
-    }
-
-    if (!this._$focusOverlay) {
-      this._$focusOverlay = $('<div>').addClass(this.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
-    }
-
-    this.updateFocusOverlay($element, isHideBorder);
   }
 
   public resize() {
@@ -345,6 +359,10 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   public getFocusOverlay() {
     return this._$focusOverlay;
+  }
+
+  public hasOverlayElements(): boolean {
+    return !!this._$focusOverlay?.length && !this._$focusOverlay.hasClass(DX_HIDDEN);
   }
 }
 

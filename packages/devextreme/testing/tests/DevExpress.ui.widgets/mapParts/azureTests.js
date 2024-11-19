@@ -404,11 +404,11 @@ QUnit.module('basic options', moduleConfig, () => {
         }).dxMap('instance');
 
         mapReadyDeferred.done(() => {
-            assert.strictEqual(atlas.addedControls, 4, 'four controls are added');
+            assert.strictEqual(atlas.addedControls, 6, 'two copyright and four map controls are added');
             assert.strictEqual(atlas.controlOptions.position, 'top-right', 'controls position is correct');
 
             map.option('onUpdated', () => {
-                assert.strictEqual(atlas.addedControls, 0, 'controls are removed');
+                assert.strictEqual(atlas.addedControls, 2, 'only two copyright controls remains');
 
                 done();
             });

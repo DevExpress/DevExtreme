@@ -14,9 +14,9 @@ import {
 
 
 
-import { HorizontalAlignment, Orientation, Position, VerticalEdge } from 'devextreme/common';
 import { DashStyle, Font } from 'devextreme/common/charts';
-import { PieChartLegendHoverMode } from 'devextreme/viz/pie_chart';
+import { PieChartLegendItem, PieChartLegendHoverMode } from 'devextreme/viz/pie_chart';
+import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -64,26 +64,26 @@ export class DxoPieChartLegendComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get customizeHint(): Function {
+    get customizeHint(): ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string) {
         return this._getOption('customizeHint');
     }
-    set customizeHint(value: Function) {
+    set customizeHint(value: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string)) {
         this._setOption('customizeHint', value);
     }
 
     @Input()
-    get customizeItems(): Function {
+    get customizeItems(): ((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>) {
         return this._getOption('customizeItems');
     }
-    set customizeItems(value: Function) {
+    set customizeItems(value: ((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>)) {
         this._setOption('customizeItems', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -144,10 +144,10 @@ export class DxoPieChartLegendComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get markerTemplate(): any | undefined {
+    get markerTemplate(): any {
         return this._getOption('markerTemplate');
     }
-    set markerTemplate(value: any | undefined) {
+    set markerTemplate(value: any) {
         this._setOption('markerTemplate', value);
     }
 

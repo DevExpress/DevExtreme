@@ -163,8 +163,8 @@ const Scheduler = memo(
 // Scheduler
 type IAppointmentDraggingProps = React.PropsWithChildren<{
   autoScroll?: boolean;
-  data?: any;
-  group?: string;
+  data?: any | undefined;
+  group?: string | undefined;
   onAdd?: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void);
   onDragEnd?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toItemData: any }) => void);
   onDragMove?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void);
@@ -267,20 +267,20 @@ type IViewProps = React.PropsWithChildren<{
   dateCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
   dropDownAppointmentTemplate?: ((itemData: any, itemIndex: number, contentElement: any) => string | any) | template;
   endDayHour?: number;
-  firstDayOfWeek?: FirstDayOfWeek;
+  firstDayOfWeek?: FirstDayOfWeek | undefined;
   groupByDate?: boolean;
   groupOrientation?: Orientation;
   groups?: Array<string>;
   intervalCount?: number;
   maxAppointmentsPerCell?: CellAppointmentsLimit | number;
-  name?: string;
+  name?: string | undefined;
   offset?: number;
   resourceCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
   scrolling?: dxSchedulerScrolling;
-  startDate?: Date | number | string;
+  startDate?: Date | number | string | undefined;
   startDayHour?: number;
   timeCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
-  type?: ViewType;
+  type?: undefined | ViewType;
   appointmentCollectorRender?: (...params: any) => React.ReactNode;
   appointmentCollectorComponent?: React.ComponentType<any>;
   appointmentRender?: (...params: any) => React.ReactNode;

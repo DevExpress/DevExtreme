@@ -19,7 +19,7 @@ import {
 
 
 
-import { ContentReadyEvent, DisposingEvent, dxFilterBuilderCustomOperation, dxFilterBuilderField, EditorPreparedEvent, EditorPreparingEvent, GroupOperation, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
+import { dxFilterBuilderCustomOperation, dxFilterBuilderField, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
 
 import {
     NestedOptionHost,
@@ -77,10 +77,10 @@ export class DxoDataGridFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -117,18 +117,18 @@ export class DxoDataGridFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get groupOperations(): any | Array<GroupOperation> {
+    get groupOperations(): Array<GroupOperation> {
         return this._getOption('groupOperations');
     }
-    set groupOperations(value: any | Array<GroupOperation>) {
+    set groupOperations(value: Array<GroupOperation>) {
         this._setOption('groupOperations', value);
     }
 
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -229,10 +229,10 @@ export class DxoDataGridFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get value(): any {
+    get value(): Array<any> | (() => any) | string {
         return this._getOption('value');
     }
-    set value(value: any) {
+    set value(value: Array<any> | (() => any) | string) {
         this._setOption('value', value);
     }
 
@@ -245,10 +245,10 @@ export class DxoDataGridFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -258,7 +258,7 @@ export class DxoDataGridFilterBuilderComponent extends NestedOption implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<any>;
+    @Output() valueChange: EventEmitter<Array<any> | (() => any) | string>;
     protected get _optionPath() {
         return 'filterBuilder';
     }

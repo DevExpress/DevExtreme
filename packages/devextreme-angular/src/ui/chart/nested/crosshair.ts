@@ -15,6 +15,7 @@ import {
 
 
 import { DashStyle, Font } from 'devextreme/common/charts';
+import { chartPointObject } from 'devextreme/viz/chart';
 import { Format } from 'devextreme/localization';
 
 import {
@@ -55,18 +56,18 @@ export class DxoChartCrosshairComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get horizontalLine(): boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get horizontalLine(): boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('horizontalLine');
     }
-    set horizontalLine(value: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set horizontalLine(value: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('horizontalLine', value);
     }
 
     @Input()
-    get label(): { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean } {
+    get label(): { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }) {
+    set label(value: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -79,10 +80,10 @@ export class DxoChartCrosshairComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get verticalLine(): boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get verticalLine(): boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('verticalLine');
     }
-    set verticalLine(value: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set verticalLine(value: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('verticalLine', value);
     }
 

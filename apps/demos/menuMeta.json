@@ -5401,19 +5401,22 @@
           {
             "Title": "Providers and Types",
             "Name": "ProvidersAndTypes",
-            "Widget": "Map"
+            "Widget": "Map",
+            "Badge": "Updated"
           },
           {
             "Title": "Markers",
             "Name": "Markers",
             "DocUrl": "Guide/UI_Components/Map/Configure_Markers/",
-            "Widget": "Map"
+            "Widget": "Map",
+            "Badge": "Updated"
           },
           {
             "Title": "Routes",
             "Name": "Routes",
             "DocUrl": "Guide/UI_Components/Map/Configure_Routes/",
-            "Widget": "Map"
+            "Widget": "Map",
+            "Badge": "Updated"
           }
         ]
       },

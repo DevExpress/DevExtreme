@@ -46,8 +46,8 @@ jobs:
           corepack enable
           pnpm install
 
-      - name: Build npm packages
-        run: pnpm run all:build
+      # - name: Build npm packages
+      #   run: pnpm run all:build
 
       - name: Get head SHA
         id: get-head-sha

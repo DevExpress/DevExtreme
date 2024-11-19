@@ -92,7 +92,7 @@ const Box = memo(
 // Box
 type IItemProps = React.PropsWithChildren<{
   baseSize?: number | string;
-  box?: dxBoxOptions;
+  box?: dxBoxOptions | undefined;
   disabled?: boolean;
   html?: string;
   ratio?: number;

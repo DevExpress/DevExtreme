@@ -5,7 +5,7 @@ import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { equalByValue } from '@js/core/utils/common';
+import { equalByValue, getKeyHash } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 // @ts-expect-error
 import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
@@ -131,7 +131,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   protected _saveEditorHandler: any;
 
-  private _internalState: any;
+  private _internalState!: Map<unknown, any>;
 
   protected _refocusEditCell: any;
 
@@ -193,7 +193,7 @@ class EditingControllerImpl extends modules.ViewController {
     this._updateEditButtons();
 
     if (!this._internalState) {
-      this._internalState = [];
+      this._internalState = new Map();
     }
 
     this.component._optionsByReference[EDITING_EDITROWKEY_OPTION_NAME] = true;
@@ -272,7 +272,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   private _getInternalData(key) {
-    return this._internalState.filter((item) => equalByValue(item.key, key))[0];
+    return this._internalState.get(getKeyHash(key));
   }
 
   public _addInternalData(params) {
@@ -282,7 +282,7 @@ class EditingControllerImpl extends modules.ViewController {
       return extend(internalData, params);
     }
 
-    this._internalState.push(params);
+    this._internalState.set(getKeyHash(params.key), params);
     return params;
   }
 
@@ -1329,12 +1329,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   private _removeInternalData(key) {
-    const internalData = this._getInternalData(key);
-    const index = this._internalState.indexOf(internalData);
-
-    if (index > -1) {
-      this._internalState.splice(index, 1);
-    }
+    this._internalState.delete(getKeyHash(key));
   }
 
   private _updateInsertAfterOrBeforeKeys(changes, index) {
@@ -1770,8 +1765,7 @@ class EditingControllerImpl extends modules.ViewController {
     return deferred.promise();
   }
 
-  // @ts-expect-error
-  private _resolveAfterSave(deferred, { cancel, error } = {}) {
+  private _resolveAfterSave(deferred, { cancel = undefined, error = undefined } = {}) {
     // @ts-expect-error
     when(this._afterSaveEditData(cancel)).done(() => {
       deferred.resolve(error);
@@ -1860,7 +1854,6 @@ class EditingControllerImpl extends modules.ViewController {
     }).done(() => {
       this._resolveAfterSave(deferred);
     }).fail((error) => {
-      // @ts-expect-error
       this._resolveAfterSave(deferred, { error });
     });
   }

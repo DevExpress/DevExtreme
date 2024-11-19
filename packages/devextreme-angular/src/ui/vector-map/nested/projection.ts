@@ -37,18 +37,18 @@ export class DxoVectorMapProjectionComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get from(): Function {
+    get from(): ((coordinates: Array<number>) => Array<number>) {
         return this._getOption('from');
     }
-    set from(value: Function) {
+    set from(value: ((coordinates: Array<number>) => Array<number>)) {
         this._setOption('from', value);
     }
 
     @Input()
-    get to(): Function {
+    get to(): ((coordinates: Array<number>) => Array<number>) {
         return this._getOption('to');
     }
-    set to(value: Function) {
+    set to(value: ((coordinates: Array<number>) => Array<number>)) {
         this._setOption('to', value);
     }
 

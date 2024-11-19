@@ -1,6 +1,6 @@
 {
   "name": "devextreme",
-  "version": "24.2.0",
+  "version": "24.2.2",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
     "html5",
@@ -65,7 +65,6 @@
     "axe-core": "4.10.0",
     "babel-plugin-add-module-exports": "1.0.4",
     "babel-plugin-inferno": "6.7.1",
-    "bootstrap": "5.3.2",
     "cldr-core": "41.0.0",
     "cldr-numbers-full": "41.0.0",
     "cldrjs": "0.5.5",

@@ -8,3 +8,14 @@ export const mapTypes = [{
   key: 'hybrid',
   name: 'Hybrid Map',
 }];
+
+export const mapProviders = [{
+  key: 'azure',
+  name: 'Azure',
+}, {
+  key: 'google',
+  name: 'Google',
+}, {
+  key: 'bing',
+  name: 'Bing',
+}];

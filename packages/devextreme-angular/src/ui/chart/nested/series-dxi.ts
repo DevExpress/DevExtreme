@@ -12,10 +12,10 @@ import {
 
 
 
+import { chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod, FinancialChartReductionLevel } from 'devextreme/viz/chart';
+import { DashStyle, ChartsColor, SeriesHoverMode, HatchDirection, Font, RelativePosition, PointInteractionMode, PointSymbol, SeriesSelectionMode, SeriesType, ValueErrorBarDisplayMode, ValueErrorBarType } from 'devextreme/common/charts';
 import { HorizontalAlignment } from 'devextreme/common';
-import { ChartsColor, DashStyle, Font, HatchDirection, PointInteractionMode, PointSymbol, RelativePosition, SeriesHoverMode, SeriesSelectionMode, SeriesType, ValueErrorBarDisplayMode, ValueErrorBarType } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
-import { ChartSeriesAggregationMethod, FinancialChartReductionLevel } from 'devextreme/viz/chart';
 
 import {
     NestedOptionHost,
@@ -31,10 +31,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiChartSeriesComponent extends CollectionNestedOption {
     @Input()
-    get aggregation(): { calculate?: Function | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
+    get aggregation(): { calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>) | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');
     }
-    set aggregation(value: { calculate?: Function | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod }) {
+    set aggregation(value: { calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>) | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod }) {
         this._setOption('aggregation', value);
     }
 
@@ -159,10 +159,10 @@ export class DxiChartSeriesComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): { alignment?: HorizontalAlignment, argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, horizontalOffset?: number, position?: RelativePosition, rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean } {
+    get label(): { alignment?: HorizontalAlignment, argumentFormat?: Format | undefined, backgroundColor?: string | undefined, border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string | undefined, font?: Font, format?: Format | undefined, horizontalOffset?: number, position?: RelativePosition, rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { alignment?: HorizontalAlignment, argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, horizontalOffset?: number, position?: RelativePosition, rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean }) {
+    set label(value: { alignment?: HorizontalAlignment, argumentFormat?: Format | undefined, backgroundColor?: string | undefined, border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string | undefined, font?: Font, format?: Format | undefined, horizontalOffset?: number, position?: RelativePosition, rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -319,10 +319,10 @@ export class DxiChartSeriesComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get valueErrorBar(): { color?: string, displayMode?: ValueErrorBarDisplayMode, edgeLength?: number, highValueField?: string | undefined, lineWidth?: number, lowValueField?: string | undefined, opacity?: number | undefined, type?: ValueErrorBarType | undefined, value?: number } {
+    get valueErrorBar(): { color?: string, displayMode?: ValueErrorBarDisplayMode, edgeLength?: number, highValueField?: string | undefined, lineWidth?: number, lowValueField?: string | undefined, opacity?: number | undefined, type?: undefined | ValueErrorBarType, value?: number } {
         return this._getOption('valueErrorBar');
     }
-    set valueErrorBar(value: { color?: string, displayMode?: ValueErrorBarDisplayMode, edgeLength?: number, highValueField?: string | undefined, lineWidth?: number, lowValueField?: string | undefined, opacity?: number | undefined, type?: ValueErrorBarType | undefined, value?: number }) {
+    set valueErrorBar(value: { color?: string, displayMode?: ValueErrorBarDisplayMode, edgeLength?: number, highValueField?: string | undefined, lineWidth?: number, lowValueField?: string | undefined, opacity?: number | undefined, type?: undefined | ValueErrorBarType, value?: number }) {
         this._setOption('valueErrorBar', value);
     }
 

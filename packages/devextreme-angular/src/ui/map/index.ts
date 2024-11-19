@@ -22,7 +22,7 @@ import {
 } from '@angular/core';
 
 
-import { ClickEvent, DisposingEvent, InitializedEvent, MapProvider, MapType, MarkerAddedEvent, MarkerRemovedEvent, OptionChangedEvent, ReadyEvent, RouteAddedEvent, RouteMode, RouteRemovedEvent } from 'devextreme/ui/map';
+import { ClickEvent, DisposingEvent, InitializedEvent, MarkerAddedEvent, MarkerRemovedEvent, OptionChangedEvent, ReadyEvent, RouteAddedEvent, RouteRemovedEvent, MapProvider, RouteMode, MapType } from 'devextreme/ui/map';
 
 import DxMap from 'devextreme/ui/map';
 
@@ -46,18 +46,18 @@ import { DxoProviderConfigModule } from 'devextreme-angular/ui/nested';
 import { DxiRouteModule } from 'devextreme-angular/ui/nested';
 
 import { DxoMapApiKeyModule } from 'devextreme-angular/ui/map/nested';
-import { DxiMapCenterModule } from 'devextreme-angular/ui/map/nested';
+import { DxoMapCenterModule } from 'devextreme-angular/ui/map/nested';
+import { DxoMapLocationModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapMarkerModule } from 'devextreme-angular/ui/map/nested';
-import { DxiMapLocationModule } from 'devextreme-angular/ui/map/nested';
-import { DxoMapTooltipModule } from 'devextreme-angular/ui/map/nested';
 import { DxoMapProviderConfigModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapRouteModule } from 'devextreme-angular/ui/map/nested';
+import { DxoMapTooltipModule } from 'devextreme-angular/ui/map/nested';
+import { DxiMapLocationModule } from 'devextreme-angular/ui/map/nested';
 
 import { DxiCenterComponent } from 'devextreme-angular/ui/nested';
 import { DxiMarkerComponent } from 'devextreme-angular/ui/nested';
 import { DxiRouteComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiMapCenterComponent } from 'devextreme-angular/ui/map/nested';
 import { DxiMapMarkerComponent } from 'devextreme-angular/ui/map/nested';
 import { DxiMapRouteComponent } from 'devextreme-angular/ui/map/nested';
 
@@ -136,10 +136,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get center(): string | Array<number | { lat?: number, lng?: number }> {
+    get center(): Array<number> | string | { lat?: number, lng?: number }[] {
         return this._getOption('center');
     }
-    set center(value: string | Array<number | { lat?: number, lng?: number }>) {
+    set center(value: Array<number> | string | { lat?: number, lng?: number }[]) {
         this._setOption('center', value);
     }
 
@@ -175,10 +175,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -201,10 +201,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get height(): number | Function | string {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -253,10 +253,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get markers(): Array<any | { iconSrc?: string, location?: string | Array<number | { lat?: number, lng?: number }>, onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }> {
+    get markers(): { iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }[] {
         return this._getOption('markers');
     }
-    set markers(value: Array<any | { iconSrc?: string, location?: string | Array<number | { lat?: number, lng?: number }>, onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }>) {
+    set markers(value: { iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }[]) {
         this._setOption('markers', value);
     }
 
@@ -292,10 +292,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get routes(): Array<any | { color?: string, locations?: Array<any | { lat?: number, lng?: number }>, mode?: RouteMode, opacity?: number, weight?: number }> {
+    get routes(): { color?: string, locations?: { lat?: number, lng?: number }[], mode?: RouteMode, opacity?: number, weight?: number }[] {
         return this._getOption('routes');
     }
-    set routes(value: Array<any | { color?: string, locations?: Array<any | { lat?: number, lng?: number }>, mode?: RouteMode, opacity?: number, weight?: number }>) {
+    set routes(value: { color?: string, locations?: { lat?: number, lng?: number }[], mode?: RouteMode, opacity?: number, weight?: number }[]) {
         this._setOption('routes', value);
     }
 
@@ -357,10 +357,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get width(): number | Function | string {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -482,7 +482,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() centerChange: EventEmitter<string | Array<number | { lat?: number, lng?: number }>>;
+    @Output() centerChange: EventEmitter<Array<number> | string | { lat?: number, lng?: number }[]>;
 
     /**
     
@@ -503,7 +503,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -517,7 +517,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -545,7 +545,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() markersChange: EventEmitter<Array<any | { iconSrc?: string, location?: string | Array<number | { lat?: number, lng?: number }>, onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }>>;
+    @Output() markersChange: EventEmitter<{ iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }[]>;
 
     /**
     
@@ -566,7 +566,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() routesChange: EventEmitter<Array<any | { color?: string, locations?: Array<any | { lat?: number, lng?: number }>, mode?: RouteMode, opacity?: number, weight?: number }>>;
+    @Output() routesChange: EventEmitter<{ color?: string, locations?: { lat?: number, lng?: number }[], mode?: RouteMode, opacity?: number, weight?: number }[]>;
 
     /**
     
@@ -601,7 +601,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -612,15 +612,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
 
 
-
-    @ContentChildren(DxiMapCenterComponent)
-    get centerChildren(): QueryList<DxiMapCenterComponent> {
-        return this._getOption('center');
-    }
-    set centerChildren(value) {
-        this.setContentChildren('center', value, 'DxiMapCenterComponent');
-        this.setChildren('center', value);
-    }
 
     @ContentChildren(DxiMapMarkerComponent)
     get markersChildren(): QueryList<DxiMapMarkerComponent> {
@@ -774,12 +765,13 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     DxoProviderConfigModule,
     DxiRouteModule,
     DxoMapApiKeyModule,
-    DxiMapCenterModule,
+    DxoMapCenterModule,
+    DxoMapLocationModule,
     DxiMapMarkerModule,
-    DxiMapLocationModule,
-    DxoMapTooltipModule,
     DxoMapProviderConfigModule,
     DxiMapRouteModule,
+    DxoMapTooltipModule,
+    DxiMapLocationModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -796,12 +788,13 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     DxoProviderConfigModule,
     DxiRouteModule,
     DxoMapApiKeyModule,
-    DxiMapCenterModule,
+    DxoMapCenterModule,
+    DxoMapLocationModule,
     DxiMapMarkerModule,
-    DxiMapLocationModule,
-    DxoMapTooltipModule,
     DxoMapProviderConfigModule,
     DxiMapRouteModule,
+    DxoMapTooltipModule,
+    DxiMapLocationModule,
     DxTemplateModule
   ]
 })

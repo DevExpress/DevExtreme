@@ -18,10 +18,10 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
+import { Font, RelativePosition, ChartsAxisLabelOverlap, TextOverflow, WordWrap, DashStyle } from 'devextreme/common/charts';
 import { HorizontalAlignment, Position, VerticalAlignment } from 'devextreme/common';
-import { ChartsAxisLabelOverlap, DashStyle, Font, RelativePosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
 import { ChartLabelDisplayMode } from 'devextreme/viz/chart';
+import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -66,14 +66,6 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
     }
 
     @Input()
-    get text(): string | undefined {
-        return this._getOption('text');
-    }
-    set text(value: string | undefined) {
-        this._setOption('text', value);
-    }
-
-    @Input()
     get verticalAlignment(): VerticalAlignment {
         return this._getOption('verticalAlignment');
     }
@@ -90,6 +82,14 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
     }
 
     @Input()
+    get text(): string | undefined {
+        return this._getOption('text');
+    }
+    set text(value: string | undefined) {
+        this._setOption('text', value);
+    }
+
+    @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');
     }
@@ -98,18 +98,18 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
     }
 
     @Input()
-    get customizeHint(): Function {
+    get customizeHint(): ((argument: { value: Date | number | string, valueText: string }) => string) {
         return this._getOption('customizeHint');
     }
-    set customizeHint(value: Function) {
+    set customizeHint(value: ((argument: { value: Date | number | string, valueText: string }) => string)) {
         this._setOption('customizeHint', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((argument: { value: Date | number | string, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((argument: { value: Date | number | string, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -122,10 +122,10 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): Format | undefined {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: Format | undefined) {
         this._setOption('format', value);
     }
 
@@ -162,10 +162,10 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
     }
 
     @Input()
-    get template(): any | undefined {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: any | undefined) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 
@@ -186,10 +186,10 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
     }
 
     @Input()
-    get argumentFormat(): Format | string | undefined {
+    get argumentFormat(): Format | undefined {
         return this._getOption('argumentFormat');
     }
-    set argumentFormat(value: Format | string | undefined) {
+    set argumentFormat(value: Format | undefined) {
         this._setOption('argumentFormat', value);
     }
 

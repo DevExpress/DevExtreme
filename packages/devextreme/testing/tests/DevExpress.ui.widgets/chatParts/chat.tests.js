@@ -18,6 +18,7 @@ const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 const CHAT_ALERTLIST_CLASS = 'dx-chat-alertlist';
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
+const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
 const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
@@ -84,6 +85,7 @@ const moduleConfig = {
         this.getMessageGroups = () => this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
         this.getDayHeaders = () => this.$element.find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
         this.getBubbles = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
+        this.getBubblesContents = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
 
         init();
     }
@@ -255,9 +257,9 @@ QUnit.module('Chat', () => {
                     messageTemplate,
                 });
 
-                const $bubble = this.getBubbles();
+                const $bubbleContent = this.getBubblesContents();
 
-                assert.strictEqual($bubble.text(), 'text: CustomText');
+                assert.strictEqual($bubbleContent.text(), 'text: CustomText');
             });
 
             QUnit.test('messageTemplate should set bubble content at runtime', function(assert) {
@@ -271,9 +273,9 @@ QUnit.module('Chat', () => {
 
                 this.instance.option('messageTemplate', messageTemplate);
 
-                const $bubble = this.getBubbles();
+                const $bubbleContent = this.getBubbles();
 
-                assert.strictEqual($bubble.text(), 'text: CustomText');
+                assert.strictEqual($bubbleContent.text(), 'text: CustomText');
             });
 
             QUnit.test('messageTemplate function should have correct parameters', function(assert) {
@@ -307,9 +309,9 @@ QUnit.module('Chat', () => {
 
                 this.instance.renderMessage({ text: 'new message' });
 
-                const $bubble = this.getBubbles();
+                const $bubbleContent = this.getBubblesContents();
 
-                assert.strictEqual($bubble.text(), 'text: new message');
+                assert.strictEqual($bubbleContent.text(), 'text: new message');
             });
 
             QUnit.test('messageTemplate should not have excess call count', function(assert) {
@@ -336,9 +338,9 @@ QUnit.module('Chat', () => {
                     messageTemplate: 'hello',
                 });
 
-                const $bubble = this.getBubbles();
+                const $bubbleContent = this.getBubblesContents();
 
-                assert.strictEqual($bubble.text(), 'hello');
+                assert.strictEqual($bubbleContent.text(), 'hello');
             });
 
             QUnit.test('messageTemplate specified as a string with a html element should set bubble content', function(assert) {
@@ -347,11 +349,11 @@ QUnit.module('Chat', () => {
                     messageTemplate: '<p>p text</p>',
                 });
 
-                const $bubble = this.getBubbles();
-                const $bubbleContent = $bubble.children();
+                const $bubbleContent = this.getBubblesContents();
+                const $bubbleContentChild = $bubbleContent.children();
 
-                assert.strictEqual($bubbleContent.text(), 'p text', 'template text is correct');
-                assert.strictEqual($bubbleContent.prop('tagName'), 'P', 'templte tag element is correct');
+                assert.strictEqual($bubbleContentChild.text(), 'p text', 'template text is correct');
+                assert.strictEqual($bubbleContentChild.prop('tagName'), 'P', 'templte tag element is correct');
             });
         });
 

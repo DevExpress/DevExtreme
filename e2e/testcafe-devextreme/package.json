@@ -1,6 +1,6 @@
 {
   "name": "devextreme-testcafe-tests",
-  "version": "24.2.0",
+  "version": "24.2.2",
   "scripts": {
     "test": "node ./runner.js",
     "lint": "eslint --ext .js,.ts .",
@@ -11,7 +11,7 @@
     "@testcafe-community/axe": "3.5.0",
     "@types/jquery": "3.5.29",
     "axe-core": "4.10.0",
-    "devextreme": "workspace:~24.2.0",
+    "devextreme": "workspace:~",
     "devextreme-screenshot-comparer": "2.0.17",
     "devextreme-testcafe-models": "workspace:*",
     "minimist": "1.2.8",

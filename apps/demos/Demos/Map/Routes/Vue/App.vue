@@ -7,7 +7,7 @@
       :markers="markersData"
       v-model:routes="routes"
       width="100%"
-      provider="bing"
+      provider="azure"
       :api-key="apiKey"
     />
     <div class="options">
@@ -43,7 +43,7 @@ const routes = ref(routesData);
 const routeModes = ['driving', 'walking'];
 const routeColors = ['blue', 'green', 'red'];
 const apiKey = {
-  bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
+  azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',
 };
 
 function updateRoutesMode({ value: mode }) {

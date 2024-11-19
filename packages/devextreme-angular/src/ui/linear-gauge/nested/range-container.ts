@@ -17,8 +17,8 @@ import {
 
 
 
-import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import { ChartsColor, Palette, PaletteExtensionMode } from 'devextreme/common/charts';
+import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -59,10 +59,10 @@ export class DxoLinearGaugeRangeContainerComponent extends NestedOption implemen
     }
 
     @Input()
-    get palette(): Palette | string | Array<string> {
+    get palette(): Array<string> | Palette {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
 
@@ -75,10 +75,10 @@ export class DxoLinearGaugeRangeContainerComponent extends NestedOption implemen
     }
 
     @Input()
-    get ranges(): Array<any | { color?: ChartsColor | string, endValue?: number, startValue?: number }> {
+    get ranges(): { color?: ChartsColor | string, endValue?: number, startValue?: number }[] {
         return this._getOption('ranges');
     }
-    set ranges(value: Array<any | { color?: ChartsColor | string, endValue?: number, startValue?: number }>) {
+    set ranges(value: { color?: ChartsColor | string, endValue?: number, startValue?: number }[]) {
         this._setOption('ranges', value);
     }
 
