@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import FileManager, {
   Permissions, ItemView, Details, Column, FileManagerTypes,
 } from 'devextreme-react/file-manager';
-import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
+import { RemoteFileSystemProvider } from 'devextreme-react/common/file_management';
 
 const remoteProvider = new RemoteFileSystemProvider({
   endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-db',

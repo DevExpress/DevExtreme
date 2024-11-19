@@ -36,7 +36,7 @@
 import { ref } from 'vue';
 import { DxFileManager, DxPermissions } from 'devextreme-vue/file-manager';
 import { DxPopup } from 'devextreme-vue/popup';
-import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
+import { RemoteFileSystemProvider } from 'devextreme-vue/common/file_management';
 
 const popupVisible = ref(false);
 const imageItemToDisplay = ref({} as Record<string, any>);

@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { DxFileManagerModule } from 'devextreme-angular';
-import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
+import { RemoteFileSystemProvider } from 'devextreme-angular/common/file_management';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

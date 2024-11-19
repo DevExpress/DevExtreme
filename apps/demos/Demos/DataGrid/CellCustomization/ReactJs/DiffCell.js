@@ -1,6 +1,6 @@
 import React from 'react';
-import 'devextreme/localization/globalize/currency';
-import { formatNumber } from 'devextreme/localization';
+import 'devextreme/common/core/localization/globalize/currency';
+import { formatNumber } from 'devextreme/common/core/localization';
 
 const getGridCellData = (gridData) => gridData.data[gridData.column.caption.toLowerCase()];
 const DiffCell = (cellData) => {
