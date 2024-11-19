@@ -1,5 +1,4 @@
 import * as sass from 'sass-embedded';
-import less from 'less';
 import { promises as fs, existsSync } from 'fs';
 import bootstrap5meta from '../data/bootstrap-metadata/bootstrap5-metadata';
 
@@ -47,15 +46,6 @@ export default class BootstrapExtractor {
       sass.compileStringAsync(input)
         .then((data) => resolve(data.css.toString()))
         .catch((error: sass.Exception) => reject(error.message));
-    });
-  }
-
-  static async lessRender(input: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      less.render(
-        input,
-        (error, result) => (error ? reject(error.message) : resolve(result.css)),
-      );
     });
   }
 
