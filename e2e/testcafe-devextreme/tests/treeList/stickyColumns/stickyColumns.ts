@@ -22,7 +22,7 @@ fixture.disablePageReloads`Sticky columns - Drag and Drop`
 
     await t.hover(headerCell.element);
 
-    await t.expect(headerCell.isHovered).ok();
+    await t.expect(headerCell.isHovered()).ok();
 
     await takeScreenshot(`treelist_header_hover_with_fixed_columns_(${theme}).png`, treeList.element);
 

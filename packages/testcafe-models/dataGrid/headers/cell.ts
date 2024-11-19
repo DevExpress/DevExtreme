@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
 
@@ -18,13 +18,16 @@ export default class HeaderCell {
 
   isHidden: Promise<boolean>;
 
-  isHovered: Promise<boolean>;
+  isHovered(): Promise<boolean> {
+    return ClientFunction((element) => {
+      return element() === document.querySelector("td:hover");
+    })(this.element);
+  }
 
   constructor(headerRow: Selector, index: number, widgetName: string) {
     this.element = headerRow.find(`td[aria-colindex='${index + 1}']`);
     this.isFocused = this.element.focused;
     this.isHidden = this.element.hasClass(Widget.addClassPrefix(widgetName, CLASS.hiddenColumn));
-    this.isHovered = this.element.hasClass(CLASS.stateHover);
   }
 
   getFilterIcon(): Selector {

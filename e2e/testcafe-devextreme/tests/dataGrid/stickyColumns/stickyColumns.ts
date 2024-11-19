@@ -1193,7 +1193,7 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
   },
 }));
 
-[Themes.materialBlue].forEach((theme) => {
+[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
   safeSizeTest(`Header hover should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -1203,7 +1203,7 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
 
     await t.hover(headerCell.element);
 
-    await t.expect(headerCell.isHovered).ok();
+    await t.expect(headerCell.isHovered()).ok();
 
     await takeScreenshot(`datagrid_header_hover_with_fixed_columns_(${theme}).png`, dataGrid.element);
 
