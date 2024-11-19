@@ -1,5 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import TreeList from 'devextreme-testcafe-models/treeList';
+import { Selector } from 'testcafe';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { changeTheme } from '../../../helpers/changeTheme';
@@ -15,10 +16,13 @@ fixture.disablePageReloads`Sticky columns - Drag and Drop`
   safeSizeTest(`Header hover should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const treeList = new TreeList(TREE_LIST_SELECTOR);
+    const headerCell = treeList.getHeaders().getHeaderRow(0).getHeaderCell(13);
 
     await t.expect(treeList.isReady()).ok();
 
-    await t.hover(treeList.getHeaders().getHeaderRow(0).getHeaderCell(13).element);
+    await t.hover(headerCell.element);
+
+    await t.expect(headerCell.isHovered).ok();
 
     await takeScreenshot(`treelist_header_hover_with_fixed_columns_(${theme}).png`, treeList.element);
 
@@ -59,17 +63,21 @@ fixture.disablePageReloads`Sticky columns - Drag and Drop`
         },
       });
     })
-    .after(async () => {
+    .after(async (t) => {
+      await t.hover(Selector('body'));
       await changeTheme(Themes.genericLight);
     });
 
   safeSizeTest(`Row hover should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const treeList = new TreeList(TREE_LIST_SELECTOR);
+    const dataRow = treeList.getDataRow(1);
 
     await t.expect(treeList.isReady()).ok();
 
-    await t.hover(treeList.getDataRow(1).element);
+    await t.hover(dataRow.element);
+
+    await t.expect(dataRow.isHovered).ok();
 
     await takeScreenshot(`treelist_row_hover_with_fixed_columns_(${theme}).png`, treeList.element);
 
@@ -110,7 +118,8 @@ fixture.disablePageReloads`Sticky columns - Drag and Drop`
         },
       });
     })
-    .after(async () => {
+    .after(async (t) => {
+      await t.hover(Selector('body'));
       await changeTheme(Themes.genericLight);
     });
 });

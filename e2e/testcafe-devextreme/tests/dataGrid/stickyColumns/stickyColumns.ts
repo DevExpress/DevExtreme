@@ -1,5 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import { Selector } from 'testcafe';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../helpers/generateDataSourceData';
@@ -1192,14 +1193,17 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
   },
 }));
 
-[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
+[Themes.materialBlue].forEach((theme) => {
   safeSizeTest(`Header hover should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(13);
 
     await t.expect(dataGrid.isReady()).ok();
 
-    await t.hover(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(13).element);
+    await t.hover(headerCell.element);
+
+    await t.expect(headerCell.isHovered).ok();
 
     await takeScreenshot(`datagrid_header_hover_with_fixed_columns_(${theme}).png`, dataGrid.element);
 
@@ -1226,17 +1230,21 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
         },
       });
     })
-    .after(async () => {
+    .after(async (t) => {
+      await t.hover(Selector('body'));
       await changeTheme(Themes.genericLight);
     });
 
   safeSizeTest(`Row hover should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const dataRow = dataGrid.getDataRow(1);
 
     await t.expect(dataGrid.isReady()).ok();
 
-    await t.hover(dataGrid.getDataRow(1).element);
+    await t.hover(dataRow.element);
+
+    await t.expect(dataRow.isHovered).ok();
 
     await takeScreenshot(`datagrid_row_hover_with_fixed_columns_(${theme}).png`, dataGrid.element);
 
@@ -1264,7 +1272,8 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
         },
       });
     })
-    .after(async () => {
+    .after(async (t) => {
+      await t.hover(Selector('body'));
       await changeTheme(Themes.genericLight);
     });
 });

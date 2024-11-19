@@ -6,6 +6,7 @@ const CLASS = {
   hiddenColumn: 'hidden-column',
   filterMenu: 'dx-header-filter-menu',
   list: 'dx-list',
+  stateHover: 'dx-state-hover',
 };
 
 export default class HeaderCell {
@@ -17,10 +18,13 @@ export default class HeaderCell {
 
   isHidden: Promise<boolean>;
 
+  isHovered: Promise<boolean>;
+
   constructor(headerRow: Selector, index: number, widgetName: string) {
     this.element = headerRow.find(`td[aria-colindex='${index + 1}']`);
     this.isFocused = this.element.focused;
     this.isHidden = this.element.hasClass(Widget.addClassPrefix(widgetName, CLASS.hiddenColumn));
+    this.isHovered = this.element.hasClass(CLASS.stateHover);
   }
 
   getFilterIcon(): Selector {
