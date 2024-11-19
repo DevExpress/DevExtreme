@@ -764,9 +764,6 @@ const DateBox = DropDownEditor.inherit({
 
   dateOption(optionName, value) {
     if (arguments.length === 1) {
-      if (this.option(optionName) === '') {
-        return null;
-      }
       return dateSerialization.deserializeDate(this.option(optionName));
     }
 

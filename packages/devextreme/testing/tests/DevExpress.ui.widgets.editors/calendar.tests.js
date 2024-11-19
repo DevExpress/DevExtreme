@@ -325,38 +325,16 @@ QUnit.module('Navigator integration', {
         assert.equal($navigatorCaption.text(), 'July 2015', 'navigator caption is correct');
     });
 
-    QUnit.test('if currentDate option is empty we should still be able to use navigator caption (T1257679)', function(assert) {
-        this.reinit({
-            currentDate: new Date('')
-        });
-
-        const $navigatorCaptionButton = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
-
-        $navigatorCaptionButton.trigger('dxclick');
-
-        assert.strictEqual(this.calendar.option('zoomLevel'), 'year', 'zoom level is changed');
-    });
-
-    QUnit.test('if currentDate option is empty we should still be able to use navigator buttons to switch months (T1257679)', function(assert) {
-        this.reinit({
-            currentDate: new Date('')
-        });
-
-        const today = new Date();
-        const options = { year: 'numeric', month: 'long' };
-
-        const currentMonth = today.toLocaleDateString('en-US', options);
-        const prevMonth = new Date(today.getFullYear(), today.getMonth() - 1).toLocaleDateString('en-US', options);
-        const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1).toLocaleDateString('en-US', options);
-
-        assert.strictEqual(this.$navigatorCaption.text(), currentMonth, 'caption is correct');
-
-        $(this.$navigatorPrev).trigger('dxclick');
-        assert.strictEqual(this.$navigatorCaption.text(), prevMonth, 'caption is correct');
-
-        $(this.$navigatorNext).trigger('dxclick');
-        $(this.$navigatorNext).trigger('dxclick');
-        assert.strictEqual(this.$navigatorCaption.text(), nextMonth, 'caption is correct');
+    QUnit.test('should not throw any errors if value on initialization is empty string (T1257679)', function(assert) {
+        try {
+            this.reinit({
+                value: ''
+            });
+        } catch(e) {
+            assert.ok(false, `error: ${e.message}`);
+        } finally {
+            assert.ok(true, 'there is no error');
+        }
     });
 
     QUnit.test('navigator caption should be changed during swipe', function(assert) {

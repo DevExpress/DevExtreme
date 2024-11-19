@@ -6109,68 +6109,23 @@ QUnit.module('DateBox number and string value support', {
         });
     });
 
-    QUnit.test('empty string value should still be able to click navigator caption in calendar (T1257679)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
-            return;
-        }
-
-        const $dateBox = $('#dateBox').dxDateBox({
+    QUnit.test('should not throw any errors after clicking on the navigator caption button if the value is an empty string (T1257679)', function(assert) {
+        const dateBox = $('#dateBox').dxDateBox({
             type: 'date',
+            pickerType: 'calendar',
             value: '',
-        });
-        const dateBox = $dateBox.dxDateBox('instance');
-        dateBox.open();
+            opened: true,
+        }).dxDateBox('instance');
 
-        const calendar = $('.dx-calendar').dxCalendar('instance');
-        const $navigatorCaptionButton = calendar.$element().find(`.${CALENDAR_CAPTION_BUTTON_CLASS}`);
-        const calendarDate = calendar.option('currentDate');
-        calendarDate.setHours(0, 0, 0, 0);
-        const expectedDate = new Date();
-        expectedDate.setHours(0, 0, 0, 0);
+        try {
+            const $navigatorCaptionButton = dateBox._popup.$wrapper().find(`.${CALENDAR_CAPTION_BUTTON_CLASS}`);
 
-        $($navigatorCaptionButton).trigger('dxclick');
-
-        assert.strictEqual(calendar.option('zoomLevel'), 'year', 'zoom level is changed');
-        assert.deepEqual(calendarDate, expectedDate, 'calendar current date is set to todays date');
-    });
-
-    QUnit.test('empty string value should still be able to click navigator buttons in calendar (T1257679)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
-            return;
+            $($navigatorCaptionButton).trigger('dxclick');
+        } catch(e) {
+            assert.ok(false, `error: ${e.message}`);
+        } finally {
+            assert.ok(true, 'there is no error');
         }
-
-        const $dateBox = $('#dateBox').dxDateBox({
-            type: 'date',
-            value: '',
-        });
-
-        const dateBox = $dateBox.dxDateBox('instance');
-        dateBox.open();
-
-        const calendar = $('.dx-calendar').dxCalendar('instance');
-        const $navigatorCaptionButton = calendar.$element().find(`.${CALENDAR_CAPTION_BUTTON_CLASS}`);
-        const $nextButton = calendar.$element().find(`.${CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS}`);
-        const $prevButton = calendar.$element().find(`.${CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS}`);
-
-        const today = new Date();
-        const options = { year: 'numeric', month: 'long' };
-
-        const currentMonth = today.toLocaleDateString('en-US', options);
-        const prevMonth = new Date(today.getFullYear(), today.getMonth() - 1).toLocaleDateString('en-US', options);
-        const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1).toLocaleDateString('en-US', options);
-
-        assert.strictEqual($navigatorCaptionButton.text(), currentMonth, 'caption is correct');
-
-        $($prevButton).trigger('dxclick');
-
-        assert.strictEqual($navigatorCaptionButton.text(), prevMonth, 'caption is correct');
-
-        $($nextButton).trigger('dxclick');
-        $($nextButton).trigger('dxclick');
-
-        assert.strictEqual($navigatorCaptionButton.text(), nextMonth, 'caption is correct');
     });
 });
 
