@@ -842,6 +842,10 @@ export const ListBase = CollectionWidget.inherit({
     }
   },
 
+  _getElementClassToSkipRefreshId() {
+    return LIST_GROUP_HEADER_CLASS;
+  },
+
   _attachSwipeEvent($itemElement) {
     const endEventName = addNamespace(swipeEventEnd, this.NAME);
 
