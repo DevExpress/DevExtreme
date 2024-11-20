@@ -13,6 +13,11 @@ import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
+import {
+  isAdaptiveItem,
+  isGroupFooterRow,
+  isGroupRow as isGroupRowElement,
+} from '../keyboard_navigation/m_keyboard_navigation_utils';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
@@ -768,8 +773,14 @@ const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactorySt
     if (!isHideBorder) {
       const isFixedCell = GridCoreStickyColumnsDom
         .isFixedCell($element, this.addWidgetPrefix.bind(this));
+      this._$focusOverlay.toggleClass(CLASSES.focusedFixedElement, isFixedCell);
+      const isGroupElement = isGroupRowElement($element);
+      const isGroupFooterRowElement = isGroupFooterRow($element);
+      const isAdaptiveElement = isAdaptiveItem($element);
 
-      this._$focusOverlay.toggleClass(CLASSES.focusedFixedCell, isFixedCell);
+      if (isFixedCell || isGroupElement || isGroupFooterRowElement || isAdaptiveElement) {
+        this._$focusOverlay.toggleClass(CLASSES.focusedFixedElement, true);
+      }
     }
 
     super.updateFocusOverlay($element, isHideBorder);
