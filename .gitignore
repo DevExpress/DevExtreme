@@ -30,6 +30,7 @@ node_modules
 .DS_Store
 Thumbs.db
 
+.cache
 .nx/cache
 .nx/workspace-data
 nx-cloud.env
