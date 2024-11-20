@@ -59,6 +59,17 @@ export const processFixedColumns = function (
   });
 };
 
+const areNextOnlyFixedOrHiddenColumns = function (columns): boolean {
+  return !columns
+    .some(({
+      fixed,
+      visibleWidth,
+    }: {
+      fixed: boolean;
+      visibleWidth: string | number;
+    }) => !fixed && visibleWidth !== HIDDEN_COLUMNS_WIDTH);
+};
+
 const getStickyOffsetCore = function (
   columns,
   widths: number[],
@@ -76,19 +87,17 @@ const getStickyOffsetCore = function (
     ? widths.slice(columnIndex + 1) : widths.slice(0, columnIndex).reverse();
   let offset = 0;
   let adjacentStickyColumnIndex = 0;
-  let nonAdjacentStickyColumnCount = targetColumnIsSticky && processedColumns.length ? 1 : 0;
+  let nonAdjacentStickyColumnCount = !areNextOnlyFixedOrHiddenColumns(processedColumns)
+    && targetColumnIsSticky && processedColumns.length ? 1 : 0;
 
   processedColumns.forEach((col, colIndex: number) => {
     if (col.fixed && (!isDefined(offsets) || column.ownerBand === col.ownerBand)) {
       const columnIsSticky = col.fixedPosition === StickyPosition.Sticky;
-      const areNextOnlyFixedColumns = !processedColumns.slice(colIndex + 1)
-        .some(({ fixed }: { fixed: boolean }) => !fixed);
 
       offset += processedWidths[colIndex];
 
-      if (colIndex === 0 && areNextOnlyFixedColumns) {
-        nonAdjacentStickyColumnCount = 0;
-      } else if (targetColumnIsSticky && columnIsSticky && !areNextOnlyFixedColumns) {
+      if (targetColumnIsSticky && columnIsSticky
+        && !areNextOnlyFixedOrHiddenColumns(processedColumns.slice(colIndex + 1))) {
         if (colIndex !== adjacentStickyColumnIndex) {
           nonAdjacentStickyColumnCount += 1;
           adjacentStickyColumnIndex = colIndex + 1;
@@ -144,7 +153,8 @@ const getPrevColumn = function (
 
   return visibleColumns?.slice(0, visibleColumnIndex)
     .reverse()
-    .find((col) => col.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
+    .find((col) => col.visibleWidth !== HIDDEN_COLUMNS_WIDTH
+      && (!col.isBand || !!that.getVisibleDataColumnsByBandColumn(col.index).length));
 };
 
 export const getStickyOffset = function (
@@ -219,10 +229,13 @@ const needToRemoveColumnBorderCore = function (
   rowIndex: number | null,
 ): boolean {
   const prevColumn = getPrevColumn(that, column, visibleColumns, rowIndex);
-  const fixedPosition = getColumnFixedPosition(that, column);
-
+  const columnFixedPosition = getColumnFixedPosition(that, column);
+  const prevColumnFixedPosition = prevColumn && getColumnFixedPosition(that, prevColumn);
   return !!prevColumn?.fixed && !needToDisableStickyColumn(that, prevColumn)
-    && (!column.fixed || fixedPosition === StickyPosition.Sticky);
+    && (!column.fixed
+      || columnFixedPosition === StickyPosition.Sticky
+      || prevColumnFixedPosition === StickyPosition.Sticky
+    );
 };
 
 export const needToRemoveColumnBorder = function (

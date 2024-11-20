@@ -1257,6 +1257,11 @@ const columns = (
   protected _isColumnVisible(column) {
     return super._isColumnVisible(column) && !column.adaptiveHidden;
   }
+
+  public getVisibleDataColumnsByBandColumn(bandColumnIndex: number) {
+    return super.getVisibleDataColumnsByBandColumn(bandColumnIndex)
+      .filter((column) => column.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
+  }
 };
 
 const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResizingControllerExtender extends Base {

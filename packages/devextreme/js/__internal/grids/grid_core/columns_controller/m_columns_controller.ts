@@ -1782,6 +1782,15 @@ export class ColumnsController extends modules.Controller {
     return result;
   }
 
+  public getVisibleDataColumnsByBandColumn(bandColumnIndex: number) {
+    const that = this;
+    const bandColumnsCache = that.getBandColumnsCache();
+    const result = this.getChildrenByBandColumn(bandColumnIndex, bandColumnsCache.columnChildrenByIndex);
+
+    return result
+      .filter((column) => !column.isBand && column.visible);
+  }
+
   public isParentBandColumn(columnIndex, bandColumnIndex) {
     let result = false;
     const column = this._columns[columnIndex];
