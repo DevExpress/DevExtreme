@@ -43,6 +43,7 @@ const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const STATIC_DELETE_BUTTON_CLASS = 'dx-list-static-delete-button';
 const TOGGLE_DELETE_SWITCH_CLASS = 'dx-list-toggle-delete-switch';
 const SWITCHABLE_DELETE_BUTTON_CLASS = 'dx-list-switchable-delete-button';
+const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const isDeviceDesktop = function(assert) {
@@ -3862,6 +3863,79 @@ QUnit.module('keyboard navigation', {
 
         assert.notOk($headers.eq(0).hasClass(FOCUSED_STATE_CLASS));
         assert.ok($headers.eq(1).hasClass(FOCUSED_STATE_CLASS));
+    });
+
+    QUnit.test('header id should not be changed or reset when focusing the header', function(assert) {
+        const $element = $('#list').dxList({
+            items: [
+                { key: 'a', items: [1] },
+                { key: 'b', items: [2] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+        });
+
+        const $header = $element.find(`.${LIST_GROUP_HEADER_CLASS}`).eq(0);
+        const initialHeaderId = $header.attr('id');
+
+        $header.trigger('dxclick');
+
+        const finalHeaderId = $header.attr('id');
+
+        assert.strictEqual(finalHeaderId, initialHeaderId, 'header id is not changed');
+        assert.strictEqual(finalHeaderId !== undefined, true, 'header id is not undefined');
+    });
+
+    QUnit.test('header id should not be changed or reset when focusing the next element', function(assert) {
+        const $element = $('#list').dxList({
+            items: [
+                { key: 'a', items: [1] },
+                { key: 'b', items: [2] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+        });
+
+        const keyboard = getListKeyboard($element);
+        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
+        const $header = $element.find(`.${LIST_GROUP_HEADER_CLASS}`).eq(0);
+        const initialHeaderId = $header.attr('id');
+
+        keyboard
+            .keyDown('down')
+            .keyDown('down');
+
+        const finalHeaderId = $header.attr('id');
+
+        assert.strictEqual($items.eq(0).hasClass(FOCUSED_STATE_CLASS), true, '1st list item is focused');
+        assert.strictEqual(finalHeaderId, initialHeaderId, 'header id is not changed');
+        assert.strictEqual(finalHeaderId !== undefined, true, 'header id is not undefined');
+    });
+
+    QUnit.test('header id should be equivalent to content aria-activedescendant when focusing the header', function(assert) {
+        const $element = $('#list').dxList({
+            items: [
+                { key: 'a', items: [1] },
+                { key: 'b', items: [2] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+        });
+
+        const keyboard = getListKeyboard($element);
+
+        const $content = $element.find(`.${SCROLLVIEW_CONTENT_CLASS}`);
+        const $header = $element.find(`.${LIST_GROUP_HEADER_CLASS}`).eq(0);
+
+        keyboard.keyDown('down');
+
+        const contentActivedescendant = $content.attr('aria-activedescendant');
+        const headerId = $header.attr('id');
+
+        assert.strictEqual(headerId === contentActivedescendant, true, 'header id is equal to content aria-activedescendant');
     });
 
     QUnit.test('list scroll to focused item after press up/down arrows', function(assert) {
