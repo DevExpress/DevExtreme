@@ -32,12 +32,8 @@ import {
  ValueAxisVisualRangeUpdateMode,
 } from "devextreme/viz/polar_chart";
 import {
- DataSourceOptions,
-} from "devextreme/data/data_source";
-import {
- Store,
-} from "devextreme/data/store";
-import {
+ SeriesLabel,
+ SeriesPoint,
  Palette,
  PaletteExtensionMode,
  LabelOverlap,
@@ -65,6 +61,12 @@ import {
  ValueErrorBarDisplayMode,
  ValueErrorBarType,
 } from "devextreme/common/charts";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
 import {
  SingleOrMultiple,
  Format,
@@ -159,8 +161,8 @@ const componentConfig = {
     commonSeriesSettings: Object as PropType<Record<string, any>>,
     containerBackgroundColor: String,
     customizeAnnotation: Function as PropType<((annotation: dxPolarChartAnnotationConfig | any) => dxPolarChartAnnotationConfig)>,
-    customizeLabel: Function as PropType<((pointInfo: any) => any)>,
-    customizePoint: Function as PropType<((pointInfo: any) => any)>,
+    customizeLabel: Function as PropType<((pointInfo: any) => SeriesLabel)>,
+    customizePoint: Function as PropType<((pointInfo: any) => SeriesPoint)>,
     dataPrepareSettings: Object as PropType<Record<string, any>>,
     dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
     disabled: Boolean,

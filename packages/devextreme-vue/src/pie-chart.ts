@@ -31,12 +31,8 @@ import {
  SmallValuesGroupingMode,
 } from "devextreme/viz/pie_chart";
 import {
- DataSourceOptions,
-} from "devextreme/data/data_source";
-import {
- Store,
-} from "devextreme/data/store";
-import {
+ SeriesLabel,
+ SeriesPoint,
  Palette,
  PaletteExtensionMode,
  ShiftLabelOverlap,
@@ -52,6 +48,12 @@ import {
  HatchDirection,
  LabelPosition,
 } from "devextreme/common/charts";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
 import {
  SingleOrMultiple,
  Format,
@@ -133,8 +135,8 @@ const componentConfig = {
     commonAnnotationSettings: Object as PropType<dxPieChartCommonAnnotationConfig | Record<string, any>>,
     commonSeriesSettings: {},
     customizeAnnotation: Function as PropType<((annotation: dxPieChartAnnotationConfig | any) => dxPieChartAnnotationConfig)>,
-    customizeLabel: Function as PropType<((pointInfo: any) => any)>,
-    customizePoint: Function as PropType<((pointInfo: any) => any)>,
+    customizeLabel: Function as PropType<((pointInfo: any) => SeriesLabel)>,
+    customizePoint: Function as PropType<((pointInfo: any) => SeriesPoint)>,
     dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
     diameter: Number,
     disabled: Boolean,

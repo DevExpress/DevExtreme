@@ -54,6 +54,7 @@ import {
  chartPointAggregationInfoObject,
  chartSeriesObject,
  ChartSeriesAggregationMethod,
+ dxChartCommonSeriesSettings,
  FinancialChartReductionLevel,
 } from "devextreme/viz/chart";
 import {
@@ -461,7 +462,7 @@ const DxChartConfig = {
     barGroupPadding: Number,
     barGroupWidth: Number,
     bottomIndent: Number,
-    commonSeriesSettings: Object as PropType<any | Record<string, any>>,
+    commonSeriesSettings: Object as PropType<dxChartCommonSeriesSettings | Record<string, any>>,
     dataPrepareSettings: Object as PropType<Record<string, any>>,
     maxBubbleSize: Number,
     minBubbleSize: Number,

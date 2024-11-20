@@ -39,12 +39,8 @@ import {
  EventKeyModifier,
 } from "devextreme/viz/chart";
 import {
- DataSourceOptions,
-} from "devextreme/data/data_source";
-import {
- Store,
-} from "devextreme/data/store";
-import {
+ SeriesLabel,
+ SeriesPoint,
  Palette,
  PaletteExtensionMode,
  ChartsLabelOverlap,
@@ -77,6 +73,12 @@ import {
  ValueErrorBarDisplayMode,
  ValueErrorBarType,
 } from "devextreme/common/charts";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
 import {
  SingleOrMultiple,
  Position,
@@ -192,8 +194,8 @@ const componentConfig = {
     containerBackgroundColor: String,
     crosshair: Object as PropType<Record<string, any>>,
     customizeAnnotation: Function as PropType<((annotation: dxChartAnnotationConfig | any) => dxChartAnnotationConfig)>,
-    customizeLabel: Function as PropType<((pointInfo: any) => any)>,
-    customizePoint: Function as PropType<((pointInfo: any) => any)>,
+    customizeLabel: Function as PropType<((pointInfo: any) => SeriesLabel)>,
+    customizePoint: Function as PropType<((pointInfo: any) => SeriesPoint)>,
     dataPrepareSettings: Object as PropType<Record<string, any>>,
     dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
     defaultPane: String,
