@@ -3840,7 +3840,7 @@ QUnit.module('keyboard navigation', {
         assert.ok($items.eq(0).hasClass(FOCUSED_STATE_CLASS));
     });
 
-    QUnit.test('The focus should move from the first to the second header if the first grappa was collapsed', function(assert) {
+    QUnit.test('The focus should move from the first to the second header if the first group was collapsed', function(assert) {
         const $element = $('#list').dxList({
             items: [
                 { key: 'a', items: [1] },
