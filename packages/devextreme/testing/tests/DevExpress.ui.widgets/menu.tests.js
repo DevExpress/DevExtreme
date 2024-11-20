@@ -1179,6 +1179,22 @@ QUnit.module('Menu - selection', {
         assert.equal($items.find('.' + DX_MENU_ITEM_TEXT_CLASS).text(), 'item3');
     });
 
+    QUnit.test('should be able to select an item via .selectItem() (T1253750)', function(assert) {
+        const menu = createMenu({
+            items: [
+                {
+                    text: 'menu item 1',
+                    selectable: true,
+                },
+            ],
+        });
+        const item = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        menu.instance.selectItem(item[0]);
+
+        assert.strictEqual(item.hasClass(DX_MENU_ITEM_SELECTED_CLASS), true, 'item has the selected class after initialization');
+    });
+
     QUnit.test('should be able to unselect currently selected item (T1253750)', function(assert) {
         const menu = createMenu({
             items: [
