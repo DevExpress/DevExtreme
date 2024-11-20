@@ -70,7 +70,6 @@ const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button';
 const CALENDAR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
-const CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS = 'dx-calendar-navigator-next-view';
 const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view';
 const DROPDOWNEDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const NUMBERBOX_CLASS = 'dx-numberbox';
