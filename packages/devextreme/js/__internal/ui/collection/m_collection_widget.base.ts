@@ -390,9 +390,9 @@ const CollectionWidget = Widget.inherit({
 
   _getElementClassToSkipRefreshId: noop,
 
-  _shouldSkipRefreshId($target) {
-    const elementClassToSkipRefreshId = this._getElementClassToSkipRefreshId();
-    const shouldSkipRefreshId = $target.hasClass(elementClassToSkipRefreshId);
+  _shouldSkipRefreshId(target) {
+    const elementClass = this._getElementClassToSkipRefreshId() ?? '';
+    const shouldSkipRefreshId = $(target).hasClass(elementClass);
 
     return shouldSkipRefreshId;
   },
