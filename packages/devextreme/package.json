@@ -134,7 +134,7 @@
     "intl": "1.2.5",
     "jest-each": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
-    "jest-environment-node": "26.6.2",
+    "jest-environment-node": "29.7.0",
     "jquery": "3.7.1",
     "jquery.tmpl": "0.0.2",
     "jspdf": "2.5.1",
