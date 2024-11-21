@@ -15,7 +15,7 @@ import type { ValidationStatus, template, ToolbarItemLocation, ToolbarItemCompon
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/common/data";
+import type { Store } from "devextreme/common/data/store_base";
 
 import type DataSource from "devextreme/data/data_source";
 

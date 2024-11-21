@@ -1,6 +1,6 @@
 import applyChanges from './data/apply_changes';
 import ArrayStore from './data/array_store';
-import { CustomStore } from './data/custom_store';
+import { CustomStore, isGroupItemsArray, isItemsArray, isLoadResultObject } from './data/custom_store';
 import DataSource from './data/data_source';
 import EndpointSelector from './data/endpoint_selector';
 import { errorHandler, setErrorHandler } from './data/errors';
@@ -16,6 +16,9 @@ export {
     applyChanges,
     ArrayStore,
     CustomStore,
+    isGroupItemsArray,
+    isItemsArray,
+    isLoadResultObject,
     DataSource,
     EndpointSelector,
     errorHandler,

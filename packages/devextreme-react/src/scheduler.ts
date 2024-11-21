@@ -11,7 +11,7 @@ import NestedOption from "./core/nested-option";
 import type { ViewType, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, AllDayPanelMode, AppointmentTemplateData, AppointmentTooltipTemplateData, CellAppointmentsLimit, dxSchedulerScrolling } from "devextreme/ui/scheduler";
 import type { event } from "devextreme/common/core/events";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/common/data";
+import type { Store } from "devextreme/common/data/store_base";
 import type { ScrollMode, template, FirstDayOfWeek, Orientation } from "devextreme/common";
 
 import type dxSortable from "devextreme/ui/sortable";

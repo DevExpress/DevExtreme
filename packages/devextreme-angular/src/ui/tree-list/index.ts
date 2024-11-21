@@ -32,7 +32,7 @@ import { PositionConfig } from 'devextreme/common/core/animation';
 import { SortOrder, Mode, DataStructure, DragDirection, DragHighlight, ScrollMode, ScrollbarMode, SingleMultipleOrNone } from 'devextreme/common';
 import { dxTreeListColumn, dxTreeListRowObject, TreeListFilterMode, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, dxTreeListToolbar } from 'devextreme/ui/tree_list';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data';
+import { Store } from 'devextreme/common/data/store_base';
 import { dxFormOptions } from 'devextreme/ui/form';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';

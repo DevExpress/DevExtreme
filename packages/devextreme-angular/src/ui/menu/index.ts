@@ -27,7 +27,7 @@ import DataSource from 'devextreme/data/data_source';
 import { AnimationConfig } from 'devextreme/common/core/animation';
 import { dxMenuItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SubmenuHiddenEvent, SubmenuHidingEvent, SubmenuShowingEvent, SubmenuShownEvent, SubmenuDirection } from 'devextreme/ui/menu';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data';
+import { Store } from 'devextreme/common/data/store_base';
 import { Orientation, SingleOrNone, SubmenuShowMode } from 'devextreme/common';
 
 import DxMenu from 'devextreme/ui/menu';

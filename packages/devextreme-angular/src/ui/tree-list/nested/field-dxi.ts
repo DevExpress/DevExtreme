@@ -16,7 +16,7 @@ import { DataType } from 'devextreme/common';
 import { FilterBuilderOperation } from 'devextreme/ui/filter_builder';
 import { Format } from 'devextreme/common/core/localization';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data';
+import { Store } from 'devextreme/common/data/store_base';
 
 import {
     NestedOptionHost,
