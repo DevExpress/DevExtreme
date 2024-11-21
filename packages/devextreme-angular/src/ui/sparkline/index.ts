@@ -22,7 +22,7 @@ import {
 
 import DataSource from 'devextreme/data/data_source';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data';
+import { Store } from 'devextreme/common/data/store_base';
 import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, SparklineType } from 'devextreme/viz/sparkline';
 import { PointSymbol, Theme, DashStyle, Font } from 'devextreme/common/charts';
 import { Format } from 'devextreme/common/core/localization';

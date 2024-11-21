@@ -1392,7 +1392,7 @@ declare module DevExpress.common {
    * [descr:CustomStore]
    */
   export class CustomStore<TItem = any, TKey = any> extends DevExpress.data
-    .StoreBase<TItem, TKey> {
+    .Store<TItem, TKey> {
     constructor(options?: DevExpress.data.CustomStoreOptions<TItem, TKey>);
     /**
      * [descr:CustomStore.byKey(key, extraOptions)]
@@ -2049,7 +2049,7 @@ declare module DevExpress.common {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  type KeySelector<T> =
+  export type KeySelector<T> =
     | string
     | ((source: T) => string | number | Date | Object);
   export type LabelMode = 'static' | 'floating' | 'hidden' | 'outside';
@@ -2505,7 +2505,7 @@ declare module DevExpress.common {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  type SelectionDescriptor<T> = {
+  export type SelectionDescriptor<T> = {
     selector: KeySelector<T>;
   };
   export type SimplifiedSearchMode = 'contains' | 'startswith';
@@ -2523,7 +2523,7 @@ declare module DevExpress.common {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  type StoreBaseEventName =
+  type StoreEventName =
     | 'loaded'
     | 'loading'
     | 'inserted'
@@ -5784,7 +5784,7 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export class AbstractStore<TItem = any, TKey = any> extends StoreBase<
+  export class AbstractStore<TItem = any, TKey = any> extends Store<
     TItem,
     TKey
   > {
@@ -5812,10 +5812,10 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  interface AbstractStoreOptions<TItem = any, TKey = any>
-    extends DevExpress.data.Store.StoreOptionsBase<TItem, TKey> {
+  export interface AbstractStoreOptions<TItem = any, TKey = any>
+    extends DevExpress.data.Store.StoreOptions<TItem, TKey> {
     /**
-     * [descr:StoreOptions.onLoaded]
+     * [descr:DevExpress.data.Store.StoreOptions.onLoaded]
      */
     onLoaded?: (result: Array<TItem>, loadOptions: LoadOptions<TItem>) => void;
   }
@@ -5847,7 +5847,7 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface CustomStoreOptions<TItem = any, TKey = any>
-    extends DevExpress.data.Store.StoreOptionsBase<TItem, TKey> {
+    extends DevExpress.data.Store.StoreOptions<TItem, TKey> {
     /**
      * [descr:CustomStoreOptions.byKey]
      */
@@ -6702,46 +6702,44 @@ declare module DevExpress.data {
    * [descr:Store]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export class StoreBase<TItem = any, TKey = any> {
-    constructor(options?: DevExpress.data.Store.StoreOptionsBase<TItem, TKey>);
+  export class Store<TItem = any, TKey = any> {
+    constructor(options?: DevExpress.data.Store.StoreOptions<TItem, TKey>);
     /**
-     * [descr:StoreBase.insert(values)]
+     * [descr:Store.insert(values)]
      */
     insert(values: TItem): DevExpress.core.utils.DxExtendedPromise<TItem>;
     /**
-     * [descr:StoreBase.key()]
+     * [descr:Store.key()]
      */
     key(): string | Array<string>;
     /**
-     * [descr:StoreBase.keyOf(obj)]
+     * [descr:Store.keyOf(obj)]
      */
     keyOf(obj: TItem): TKey;
     /**
-     * [descr:StoreBase.off(eventName)]
+     * [descr:Store.off(eventName)]
      */
-    off(eventName: DevExpress.common.StoreBaseEventName): this;
+    off(eventName: DevExpress.common.StoreEventName): this;
     /**
-     * [descr:StoreBase.off(eventName, eventHandler)]
+     * [descr:Store.off(eventName, eventHandler)]
      */
     off(
-      eventName: DevExpress.common.StoreBaseEventName,
+      eventName: DevExpress.common.StoreEventName,
       eventHandler: Function
     ): this;
     /**
-     * [descr:StoreBase.on(eventName, eventHandler)]
+     * [descr:Store.on(eventName, eventHandler)]
      */
     on(
-      eventName: DevExpress.common.StoreBaseEventName,
+      eventName: DevExpress.common.StoreEventName,
       eventHandler: Function
     ): this;
     /**
-     * [descr:StoreBase.on(events)]
+     * [descr:Store.on(events)]
      */
-    on(
-      events: { [key in DevExpress.common.StoreBaseEventName]?: Function }
-    ): this;
+    on(events: { [key in DevExpress.common.StoreEventName]?: Function }): this;
     /**
-     * [descr:StoreBase.push(changes)]
+     * [descr:Store.push(changes)]
      */
     push(
       changes: Array<{
@@ -6752,11 +6750,11 @@ declare module DevExpress.data {
       }>
     ): void;
     /**
-     * [descr:StoreBase.remove(key)]
+     * [descr:Store.remove(key)]
      */
     remove(key: TKey): DevExpress.core.utils.DxPromise<void>;
     /**
-     * [descr:StoreBase.totalCount(options)]
+     * [descr:Store.totalCount(options)]
      */
     totalCount(obj: {
       filter?:
@@ -6767,7 +6765,7 @@ declare module DevExpress.data {
         | Array<DevExpress.common.GroupDescriptor<TItem>>;
     }): DevExpress.core.utils.DxPromise<number>;
     /**
-     * [descr:StoreBase.update(key, values)]
+     * [descr:Store.update(key, values)]
      */
     update(
       key: TKey,
@@ -6848,7 +6846,7 @@ declare module DevExpress.data.Store {
    * [descr:StoreOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type StoreOptionsBase<TItem = any, TKey = any> = {
+  export type StoreOptions<TItem = any, TKey = any> = {
     /**
      * [descr:StoreOptions.errorHandler]
      */

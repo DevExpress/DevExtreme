@@ -12,7 +12,7 @@ import type { ContentReadyEvent, CustomCommandEvent, DisposingEvent, Initialized
 import type { Orientation, ToolbarItemLocation, template } from "devextreme/common";
 import type { dxSVGElement } from "devextreme/core/element";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/common/data";
+import type { Store } from "devextreme/common/data/store_base";
 
 import type DataSource from "devextreme/data/data_source";
 

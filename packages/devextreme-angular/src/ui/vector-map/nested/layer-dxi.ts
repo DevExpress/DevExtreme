@@ -15,7 +15,7 @@ import {
 import DataSource from 'devextreme/data/data_source';
 import { MapLayerElement, VectorMapMarkerType, VectorMapLayerType } from 'devextreme/viz/vector_map';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data';
+import { Store } from 'devextreme/common/data/store_base';
 import { Font, Palette } from 'devextreme/common/charts';
 import { SingleMultipleOrNone } from 'devextreme/common';
 

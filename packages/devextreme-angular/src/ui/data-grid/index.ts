@@ -32,7 +32,7 @@ import { PositionConfig } from 'devextreme/common/core/animation';
 import { SortOrder, Mode, DragDirection, DragHighlight, ScrollbarMode, SingleMultipleOrNone, SelectAllMode, HorizontalAlignment } from 'devextreme/common';
 import { dxDataGridColumn, dxDataGridRowObject, DataGridExportFormat, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, DataGridScrollMode, SelectionSensitivity, dxDataGridToolbar } from 'devextreme/ui/data_grid';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data';
+import { Store } from 'devextreme/common/data/store_base';
 import { dxFormOptions } from 'devextreme/ui/form';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';

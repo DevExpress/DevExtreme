@@ -462,7 +462,7 @@ declare namespace DevExpress.viz {
 
 declare namespace DevExpress.data {
   /** @deprecated Use DevExpress.data.Store.Options instead */
-  export type StoreOptions = Store.StoreOptionsBase;
+  export type StoreOptions = Store.StoreOptions;
 }
 
 // v23.1
