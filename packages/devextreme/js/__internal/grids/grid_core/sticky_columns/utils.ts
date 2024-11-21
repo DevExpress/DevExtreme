@@ -59,18 +59,23 @@ export const processFixedColumns = function (
   });
 };
 
-const areNextOnlyFixedOrHiddenColumns = function (columns): boolean {
-  return !columns
-    .some(({
-      fixed,
-      visibleWidth,
-    }: {
-      fixed: boolean;
-      visibleWidth: string | number;
-    }) => !fixed && visibleWidth !== HIDDEN_COLUMNS_WIDTH);
+const isVisibleColumn = function (
+  that: ColumnsController,
+  column,
+): boolean {
+  return column.visibleWidth !== HIDDEN_COLUMNS_WIDTH
+  && (!column.isBand || !!that.getVisibleDataColumnsByBandColumn(column.index).length);
+};
+
+const areNextOnlyFixedOrHiddenColumns = function (
+  that: ColumnsController,
+  columns,
+): boolean {
+  return !columns.some((column) => !column.fixed && isVisibleColumn(that, column));
 };
 
 const getStickyOffsetCore = function (
+  that: ColumnsController,
   columns,
   widths: number[],
   columnIndex: number,
@@ -87,7 +92,7 @@ const getStickyOffsetCore = function (
     ? widths.slice(columnIndex + 1) : widths.slice(0, columnIndex).reverse();
   let offset = 0;
   let adjacentStickyColumnIndex = 0;
-  let nonAdjacentStickyColumnCount = !areNextOnlyFixedOrHiddenColumns(processedColumns)
+  let nonAdjacentStickyColumnCount = !areNextOnlyFixedOrHiddenColumns(that, processedColumns)
     && targetColumnIsSticky && processedColumns.length ? 1 : 0;
 
   processedColumns.forEach((col, colIndex: number) => {
@@ -97,7 +102,7 @@ const getStickyOffsetCore = function (
       offset += processedWidths[colIndex];
 
       if (targetColumnIsSticky && columnIsSticky
-        && !areNextOnlyFixedOrHiddenColumns(processedColumns.slice(colIndex + 1))) {
+        && !areNextOnlyFixedOrHiddenColumns(that, processedColumns.slice(colIndex + 1))) {
         if (colIndex !== adjacentStickyColumnIndex) {
           nonAdjacentStickyColumnCount += 1;
           adjacentStickyColumnIndex = colIndex + 1;
@@ -105,7 +110,7 @@ const getStickyOffsetCore = function (
           adjacentStickyColumnIndex += 1;
         }
       }
-    } else if (col.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
+    } else if (!isVisibleColumn(that, col)) {
       adjacentStickyColumnIndex += 1;
     }
   });
@@ -153,8 +158,7 @@ const getPrevColumn = function (
 
   return visibleColumns?.slice(0, visibleColumnIndex)
     .reverse()
-    .find((col) => col.visibleWidth !== HIDDEN_COLUMNS_WIDTH
-      && (!col.isBand || !!that.getVisibleDataColumnsByBandColumn(col.index).length));
+    .find((col) => isVisibleColumn(that, col));
 };
 
 export const getStickyOffset = function (
@@ -174,6 +178,7 @@ export const getStickyOffset = function (
     switch (fixedPosition) {
       case StickyPosition.Sticky: {
         const offsetLeft = getStickyOffsetCore(
+          that,
           columns,
           widths,
           columnIndex,
@@ -182,6 +187,7 @@ export const getStickyOffset = function (
         );
 
         const offsetRight = getStickyOffsetCore(
+          that,
           columns,
           widths,
           columnIndex,
@@ -195,6 +201,7 @@ export const getStickyOffset = function (
       }
       case StickyPosition.Right: {
         const offsetRight = getStickyOffsetCore(
+          that,
           columns,
           widths,
           columnIndex,
@@ -207,6 +214,7 @@ export const getStickyOffset = function (
       }
       default: {
         const offsetLeft = getStickyOffsetCore(
+          that,
           columns,
           widths,
           columnIndex,
