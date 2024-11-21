@@ -690,10 +690,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get searchExpr(): Array<Function | string> | Function | string {
+    get searchExpr(): Array<(() => any) | string> | (() => any) | string {
         return this._getOption('searchExpr');
     }
-    set searchExpr(value: Array<Function | string> | Function | string) {
+    set searchExpr(value: Array<(() => any) | string> | (() => any) | string) {
         this._setOption('searchExpr', value);
     }
 
@@ -1433,7 +1433,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchExprChange: EventEmitter<Array<Function | string> | Function | string>;
+    @Output() searchExprChange: EventEmitter<Array<(() => any) | string> | (() => any) | string>;
 
     /**
     
