@@ -5,4 +5,4 @@ export {
     isLoadResultObject,
     LoadResult,
     LoadResultObject,
-} from "devextreme/common/data";
+} from "../data";
