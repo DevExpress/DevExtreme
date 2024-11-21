@@ -18,91 +18,103 @@ $chat-border-color: $base-border-color !default;
 $chat-messagebox-border-color: $chat-border-color !default;
 
 /**
-* $name 30. Avatar text color
+* $name 30. Text color
 * $type color
 */
 $chat-avatar-color: null !default;
 
 /**
-* $name 31. Avatar background color
+* $name 31. Background color
 * $type color
 */
 $chat-avatar-background-color: $base-border-color !default;
 
 /**
-* $name 40. Bubble text color (your messages)
+* $name 40. Text color (sent messages)
 * $type color
 */
 $chat-bubble-color-primary: null !default;
 
 /**
-* $name 41. Bubble background color (your messages)
+* $name 41. Background color (sent messages)
 * $type color
 */
 $chat-bubble-background-color-primary: null !default;
 
 /**
-* $name 42. Bubble text color (other messages)
+* $name 42. Text color (received messages)
 * $type color
 */
 $chat-bubble-color-secondary: null !default;
 
 /**
-* $name 43. Bubble background color (other messages)
+* $name 43. Background color (received messages)
 * $type color
 */
 $chat-bubble-background-color-secondary: null !default;
 
 /**
-* $name 50. Message caption color
+* $name 50. User name color
 * $type color
 */
-$chat-information-color: null !default;
+$chat-information-author-name-color: null !default;
 
 /**
-* $name 60. Day header color
+* $name 51. Timestamp color
+* $type color
+*/
+$chat-information-timestamp-color: null !default;
+
+/**
+* $name 52. Day header color
 * $type color
 */
 $chat-messagelist-day-header-color: null !default;
 
 /**
-* $name 61. Empty list icon color
-* $type color
-*/
-$chat-messagelist-empty-icon-color: null !default;
-
-/**
-* $name 62. Empty list icon background color
-* $type color
-*/
-$chat-messagelist-empty-icon-background-color: null !default;
-
-/**
-* $name 63. Empty list message color
-* $type color
-*/
-$chat-messagelist-empty-message-color: null !default;
-
-/**
-* $name 64. Empty list prompt color
-* $type color
-*/
-$chat-messagelist-empty-prompt-color: null !default;
-
-/**
-* $name 70. Error color
+* $name 55. Alert color
 * $type color
 */
 $chat-alertlist-color: $base-invalid-color !default;
 
 /**
-* $name 82. Typing indicator central circle color
+* $name 65. Icon color
+* $type color
+*/
+$chat-messagelist-empty-icon-color: null !default;
+
+/**
+* $name 66. Icon background color
+* $type color
+*/
+$chat-messagelist-empty-icon-background-color: null !default;
+
+/**
+* $name 67. Title color
+* $type color
+*/
+$chat-messagelist-empty-message-color: null !default;
+
+/**
+* $name 68. Subtitle color
+* $type color
+*/
+$chat-messagelist-empty-prompt-color: null !default;
+
+/**
+* $name 80. Text color
+* $type color
+*/
+$chat-typingindicator-color: null !default;
+
+/**
+* $name 82. Central circle color
 * $type color
 */
 $chat-typingindicator-circle-bg-color-center: null !default;
 
 /**
-* $name 83. Typing indicator outer circles color
+* $name 83. Outer circles color
 * $type color
 */
 $chat-typingindicator-circle-bg-color: null !default;
@@ -113,7 +125,9 @@ $chat-typingindicator-circle-bg-color: null !default;
   $chat-bubble-color-secondary: $base-text-color !default;
   $chat-bubble-background-color-primary: color.change(darken($base-accent, 5%), $alpha: 0.1) !default;
   $chat-bubble-background-color-secondary: darken($base-element-bg, 4%) !default;
-  $chat-information-color: darken($base-bg, 41.57) !default;
+  $chat-information-author-name-color: darken($base-bg, 41.57) !default;
+  $chat-information-timestamp-color: darken($base-bg, 41.57) !default;
+  $chat-typingindicator-color: darken($base-bg, 41.57) !default;
 
   $chat-messagelist-day-header-color: darken($base-bg, 41.57) !default;
   $chat-messagelist-empty-icon-color: lighten($base-icon-color, 46.67) !default;
@@ -131,7 +145,9 @@ $chat-typingindicator-circle-bg-color: null !default;
   $chat-bubble-color-secondary: $base-text-color !default;
   $chat-bubble-background-color-primary: color.change(darken($base-accent, 5%), $alpha: 0.1) !default;
   $chat-bubble-background-color-secondary: lighten($base-element-bg, 4%) !default;
-  $chat-information-color: lighten($base-bg, 32.55) !default;
+  $chat-information-author-name-color: lighten($base-bg, 32.55) !default;
+  $chat-information-timestamp-color: lighten($base-bg, 32.55) !default;
+  $chat-typingindicator-color: lighten($base-bg, 32.55) !default;
   
   $chat-messagelist-day-header-color: lighten($base-bg, 32.55) !default;
   $chat-messagelist-empty-icon-color: darken($base-icon-color, 37.25) !default;
@@ -149,7 +165,9 @@ $chat-typingindicator-circle-bg-color: null !default;
   $chat-bubble-color-secondary: $base-text-color !default;
   $chat-bubble-background-color-primary: color.change(darken($base-accent, 5%), $alpha: 0.1) !default;
   $chat-bubble-background-color-secondary: darken($base-element-bg, 4%) !default;
-  $chat-information-color: darken($base-bg, 41.57) !default;
+  $chat-information-author-name-color: darken($base-bg, 41.57) !default;
+  $chat-information-timestamp-color: darken($base-bg, 41.57) !default;
+  $chat-typingindicator-color: darken($base-bg, 41.57) !default;
   
   $chat-messagelist-day-header-color: darken($base-bg, 41.57) !default;
   $chat-messagelist-empty-icon-color: $base-icon-color !default;
@@ -167,7 +185,9 @@ $chat-typingindicator-circle-bg-color: null !default;
   $chat-bubble-color-secondary: $base-inverted-text-color !default;
   $chat-bubble-background-color-primary: $base-inverted-bg !default;
   $chat-bubble-background-color-secondary: $base-hover-color !default;
-  $chat-information-color: $base-text-color !default;
+  $chat-information-author-name-color: $base-text-color !default;
+  $chat-information-timestamp-color: $base-text-color !default;
+  $chat-typingindicator-color: $base-text-color !default;
   
   $chat-messagelist-day-header-color: $base-text-color !default;
   $chat-messagelist-empty-icon-color: $base-bg !default;
@@ -185,7 +205,9 @@ $chat-typingindicator-circle-bg-color: null !default;
   $chat-bubble-color-secondary: $base-text-color !default;
   $chat-bubble-background-color-primary: color.change(darken($base-accent, 5%), $alpha: 0.1) !default;
   $chat-bubble-background-color-secondary: lighten($base-element-bg, 4%) !default;
-  $chat-information-color: lighten($base-bg, 32.55) !default;
+  $chat-information-author-name-color: lighten($base-bg, 32.55) !default;
+  $chat-information-timestamp-color: lighten($base-bg, 32.55) !default;
+  $chat-typingindicator-color: lighten($base-bg, 32.55) !default;
   
   $chat-messagelist-day-header-color: lighten($base-bg, 32.55) !default;
   $chat-messagelist-empty-icon-color: $base-icon-color !default;
@@ -203,7 +225,9 @@ $chat-typingindicator-circle-bg-color: null !default;
   $chat-bubble-color-secondary: $base-text-color !default;
   $chat-bubble-background-color-primary: color.change(darken($base-accent, 5%), $alpha: 0.1) !default;
   $chat-bubble-background-color-secondary: lighten($base-element-bg, 4%) !default;
-  $chat-information-color: lighten($base-bg, 32.55) !default;
+  $chat-information-author-name-color: lighten($base-bg, 32.55) !default;
+  $chat-information-timestamp-color: lighten($base-bg, 32.55) !default;
+  $chat-typingindicator-color: lighten($base-bg, 32.55) !default;
   
   $chat-messagelist-day-header-color: lighten($base-bg, 32.55) !default;
   $chat-messagelist-empty-icon-color: darken($base-icon-color, 37.25) !default;
@@ -221,7 +245,9 @@ $chat-typingindicator-circle-bg-color: null !default;
   $chat-bubble-color-secondary: $base-text-color !default;
   $chat-bubble-background-color-primary: color.change(darken($base-accent, 5%), $alpha: 0.1) !default;
   $chat-bubble-background-color-secondary: darken($base-element-bg, 4%) !default;
-  $chat-information-color: darken($base-bg, 41.57) !default;
+  $chat-information-author-name-color: darken($base-bg, 41.57) !default;
+  $chat-information-timestamp-color: darken($base-bg, 41.57) !default;
+  $chat-typingindicator-color: darken($base-bg, 41.57) !default;
   
   $chat-messagelist-day-header-color: darken($base-bg, 41.57) !default;
   $chat-messagelist-empty-icon-color: $base-icon-color !default;
@@ -239,7 +265,9 @@ $chat-typingindicator-circle-bg-color: null !default;
   $chat-bubble-color-secondary: $base-text-color !default;
   $chat-bubble-background-color-primary: color.change(darken($base-accent, 5%), $alpha: 0.1) !default;
   $chat-bubble-background-color-secondary: darken($base-element-bg, 4%) !default;
-  $chat-information-color: darken($base-bg, 41.57) !default;
+  $chat-information-author-name-color: darken($base-bg, 41.57) !default;
+  $chat-information-timestamp-color: darken($base-bg, 41.57) !default;
+  $chat-typingindicator-color: darken($base-bg, 41.57) !default;
   
   $chat-messagelist-day-header-color: darken($base-bg, 41.57) !default;
   $chat-messagelist-empty-icon-color: $base-icon-color !default;
@@ -252,13 +280,7 @@ $chat-typingindicator-circle-bg-color: null !default;
 }
 
 /**
-* $name 80. Typing indicator text color
-* $type color
-*/
-$chat-typingindicator-color: $chat-information-color !default;
-
-/**
-* $name 81. Typing indicator background color
+* $name 81. Background color
 * $type color
 */
 $chat-typingindicator-bubble-bg-color: $chat-bubble-background-color-secondary !default;
