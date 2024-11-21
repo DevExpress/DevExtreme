@@ -700,7 +700,7 @@ export type DataSourceLike<TItem, TKey = any> =
     DataSourceOptionsStub<any, any, TItem> |
     DataSource<TItem, TKey>;
 
-interface DataSourceOptionsStub<
+export interface DataSourceOptionsStub<
     TStoreItem = any,
     TMappedItem = TStoreItem,
     TItem = TMappedItem,

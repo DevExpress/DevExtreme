@@ -53,7 +53,6 @@ export default class AbstractStore<
   load(options: LoadOptions<TItem>): DxExtendedPromise<Array<TItem>>;
 }
 
-
 export type {
   /**
    * @namespace DevExpress.data
