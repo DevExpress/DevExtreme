@@ -1,0 +1,20 @@
+.demo-container {
+  display: flex;
+  gap: 20px;
+}
+
+::ng-deep .dx-chat {
+  height: 810px;
+}
+
+::ng-deep .dx-avatar {
+  border: 1px solid var(--dx-color-border);
+}
+
+::ng-deep .dx-chat-messagegroup.dx-chat-messagegroup-alignment-end {
+  padding-left: 44px;
+}
+
+::ng-deep .dx-chat-messagegroup .dx-chat-messagegroup-content {
+  max-width: 82.5%;
+}

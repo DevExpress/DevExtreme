@@ -600,10 +600,10 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get searchExpr(): Array<(() => any) | string> | (() => any) | string {
+    get searchExpr(): Array<Function | string> | Function | string {
         return this._getOption('searchExpr');
     }
-    set searchExpr(value: Array<(() => any) | string> | (() => any) | string) {
+    set searchExpr(value: Array<Function | string> | Function | string) {
         this._setOption('searchExpr', value);
     }
 
@@ -1332,7 +1332,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchExprChange: EventEmitter<Array<(() => any) | string> | (() => any) | string>;
+    @Output() searchExprChange: EventEmitter<Array<Function | string> | Function | string>;
 
     /**
     

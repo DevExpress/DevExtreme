@@ -30,7 +30,7 @@ $chat-avatar-color: null !default;
 $chat-avatar-background-color: $base-border-color !default;
 
 /**
-* $name 40. Bubble text color
+* $name 40. Bubble text color (your messages)
 * $type color
 */
 $chat-bubble-color-primary: null !default;
@@ -42,7 +42,13 @@ $chat-bubble-color-primary: null !default;
 $chat-bubble-background-color-primary: null !default;
 
 /**
-* $name 42. Bubble background color (other messages)
+* $name 42. Bubble text color (other messages)
+* $type color
+*/
+$chat-bubble-color-secondary: null !default;
+
+/**
+* $name 43. Bubble background color (other messages)
 * $type color
 */
 $chat-bubble-background-color-secondary: null !default;
@@ -95,7 +101,6 @@ $chat-alertlist-color: $base-invalid-color !default;
 */
 $chat-typingindicator-circle-bg-color-center: null !default;
 
-
 /**
 * $name 83. Typing indicator outer circles color
 * $type color
@@ -105,6 +110,7 @@ $chat-typingindicator-circle-bg-color: null !default;
 @if $color == "light" {
   $chat-avatar-color: $base-text-color !default;
   $chat-bubble-color-primary: $base-text-color !default;
+  $chat-bubble-color-secondary: $base-text-color !default;
   $chat-bubble-background-color-primary: color.change(darken($base-accent, 5%), $alpha: 0.1) !default;
   $chat-bubble-background-color-secondary: darken($base-element-bg, 4%) !default;
   $chat-information-color: darken($base-bg, 41.57) !default;
@@ -122,6 +128,7 @@ $chat-typingindicator-circle-bg-color: null !default;
 @if $color == "dark" {
   $chat-avatar-color: $base-text-color !default;
   $chat-bubble-color-primary: $base-text-color !default;
+  $chat-bubble-color-secondary: $base-text-color !default;
   $chat-bubble-background-color-primary: color.change(darken($base-accent, 5%), $alpha: 0.1) !default;
   $chat-bubble-background-color-secondary: lighten($base-element-bg, 4%) !default;
   $chat-information-color: lighten($base-bg, 32.55) !default;
@@ -139,6 +146,7 @@ $chat-typingindicator-circle-bg-color: null !default;
 @if $color == "carmine" {
   $chat-avatar-color: $base-text-color !default;
   $chat-bubble-color-primary: $base-text-color !default;
+  $chat-bubble-color-secondary: $base-text-color !default;
   $chat-bubble-background-color-primary: color.change(darken($base-accent, 5%), $alpha: 0.1) !default;
   $chat-bubble-background-color-secondary: darken($base-element-bg, 4%) !default;
   $chat-information-color: darken($base-bg, 41.57) !default;
@@ -156,6 +164,7 @@ $chat-typingindicator-circle-bg-color: null !default;
 @if $color == "contrast" {
   $chat-avatar-color: $base-inverted-text-color !default;
   $chat-bubble-color-primary: $base-inverted-text-color !default;
+  $chat-bubble-color-secondary: $base-inverted-text-color !default;
   $chat-bubble-background-color-primary: $base-inverted-bg !default;
   $chat-bubble-background-color-secondary: $base-hover-color !default;
   $chat-information-color: $base-text-color !default;
@@ -173,6 +182,7 @@ $chat-typingindicator-circle-bg-color: null !default;
 @if $color == "darkmoon" {
   $chat-avatar-color: $base-text-color !default;
   $chat-bubble-color-primary: $base-text-color !default;
+  $chat-bubble-color-secondary: $base-text-color !default;
   $chat-bubble-background-color-primary: color.change(darken($base-accent, 5%), $alpha: 0.1) !default;
   $chat-bubble-background-color-secondary: lighten($base-element-bg, 4%) !default;
   $chat-information-color: lighten($base-bg, 32.55) !default;
@@ -190,6 +200,7 @@ $chat-typingindicator-circle-bg-color: null !default;
 @if $color == "darkviolet" {
   $chat-avatar-color: $base-text-color !default;
   $chat-bubble-color-primary: $base-text-color !default;
+  $chat-bubble-color-secondary: $base-text-color !default;
   $chat-bubble-background-color-primary: color.change(darken($base-accent, 5%), $alpha: 0.1) !default;
   $chat-bubble-background-color-secondary: lighten($base-element-bg, 4%) !default;
   $chat-information-color: lighten($base-bg, 32.55) !default;
@@ -206,6 +217,8 @@ $chat-typingindicator-circle-bg-color: null !default;
 
 @if $color == "greenmist" {
   $chat-avatar-color: $base-text-color !default;
+  $chat-bubble-color-primary: $base-text-color !default;
+  $chat-bubble-color-secondary: $base-text-color !default;
   $chat-bubble-background-color-primary: color.change(darken($base-accent, 5%), $alpha: 0.1) !default;
   $chat-bubble-background-color-secondary: darken($base-element-bg, 4%) !default;
   $chat-information-color: darken($base-bg, 41.57) !default;
@@ -223,6 +236,7 @@ $chat-typingindicator-circle-bg-color: null !default;
 @if $color == "softblue" {
   $chat-avatar-color: $base-text-color !default;
   $chat-bubble-color-primary: $base-text-color !default;
+  $chat-bubble-color-secondary: $base-text-color !default;
   $chat-bubble-background-color-primary: color.change(darken($base-accent, 5%), $alpha: 0.1) !default;
   $chat-bubble-background-color-secondary: darken($base-element-bg, 4%) !default;
   $chat-information-color: darken($base-bg, 41.57) !default;

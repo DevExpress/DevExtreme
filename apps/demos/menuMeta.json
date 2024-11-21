@@ -2052,6 +2052,27 @@
     ]
   },
   {
+    "Name": "Chat",
+    "Breadcrumb": true,
+    "Equivalents": "dxChat, dx-chat, chat",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "Guide/UI_Components/Chat/Overview/",
+            "Widget": "Chat",
+            "DemoType": "Web",
+            "Badge": "New"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "Name": "Diagram",
     "Equivalents": "dxDiagram, dx-diagram, graph, flow, process, orgchart",
     "Groups": [

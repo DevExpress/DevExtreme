@@ -22,6 +22,9 @@
   
   .dx-chat-messagegroup-alignment-start {
     grid-template-columns: $messagegroup-start-template;
+  }
+
+  .dx-chat-messagegroup-alignment-start:has(.dx-avatar) {
     column-gap: $messagegroup-start-gap;
   }
   

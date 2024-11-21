@@ -30,7 +30,7 @@ $chat-avatar-color: $base-text-color !default;
 $chat-avatar-background-color: $base-active-bg !default;
 
 /**
-* $name 40. Bubble text color
+* $name 40. Bubble text color (your messages)
 * $type color
 */
 $chat-bubble-color-primary: $base-text-color !default;
@@ -42,7 +42,13 @@ $chat-bubble-color-primary: $base-text-color !default;
 $chat-bubble-background-color-primary: null !default;
 
 /**
-* $name 42. Bubble background color (other messages)
+* $name 42. Bubble text color (other messages)
+* $type color
+*/
+$chat-bubble-color-secondary: $base-text-color !default;
+
+/**
+* $name 43. Bubble background color (other messages)
 * $type color
 */
 $chat-bubble-background-color-secondary: $base-border-color !default;

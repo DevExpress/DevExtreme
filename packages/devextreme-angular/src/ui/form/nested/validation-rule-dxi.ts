@@ -92,10 +92,10 @@ export class DxiFormValidationRuleComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get comparisonTarget(): (() => any) {
+    get comparisonTarget(): Function {
         return this._getOption('comparisonTarget');
     }
-    set comparisonTarget(value: (() => any)) {
+    set comparisonTarget(value: Function) {
         this._setOption('comparisonTarget', value);
     }
 

@@ -13,9 +13,9 @@ export const mapProviders = [{
   key: 'azure',
   name: 'Azure',
 }, {
-  key: 'bing',
-  name: 'Bing',
-}, {
   key: 'google',
   name: 'Google',
+}, {
+  key: 'bing',
+  name: 'Bing',
 }];

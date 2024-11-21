@@ -1045,7 +1045,7 @@ class Menu extends MenuBase {
 
   unselectItem(itemElement): void {
     this._hideSubmenu(this._visibleSubmenu);
-    super.selectItem(itemElement);
+    super.unselectItem(itemElement);
   }
 }
 
