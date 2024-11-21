@@ -54,10 +54,10 @@ export class DxoGanttColumnHeaderFilterSearchComponent extends NestedOption impl
     }
 
     @Input()
-    get searchExpr(): Array<(() => any) | string> | (() => any) | string | undefined {
+    get searchExpr(): Array<Function | string> | Function | string | undefined {
         return this._getOption('searchExpr');
     }
-    set searchExpr(value: Array<(() => any) | string> | (() => any) | string | undefined) {
+    set searchExpr(value: Array<Function | string> | Function | string | undefined) {
         this._setOption('searchExpr', value);
     }
 
