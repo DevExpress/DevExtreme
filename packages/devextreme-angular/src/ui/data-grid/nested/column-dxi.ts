@@ -179,10 +179,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get calculateFilterExpression(): ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | Function | Array<any>) {
+    get calculateFilterExpression(): ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | (() => any) | Array<any>) {
         return this._getOption('calculateFilterExpression');
     }
-    set calculateFilterExpression(value: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | Function | Array<any>)) {
+    set calculateFilterExpression(value: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | (() => any) | Array<any>)) {
         this._setOption('calculateFilterExpression', value);
     }
 

@@ -54,10 +54,10 @@ export class DxoTreeListSearchComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get searchExpr(): Array<Function | string> | Function | string | undefined {
+    get searchExpr(): Array<(() => any) | string> | (() => any) | string | undefined {
         return this._getOption('searchExpr');
     }
-    set searchExpr(value: Array<Function | string> | Function | string | undefined) {
+    set searchExpr(value: Array<(() => any) | string> | (() => any) | string | undefined) {
         this._setOption('searchExpr', value);
     }
 
