@@ -23,7 +23,7 @@ import {
 import DataSource from 'devextreme/data/data_source';
 import { VerticalAlignment, ExportFormat, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data';
+import { Store } from 'devextreme/common/data/store_base';
 import { dxSankeyNode, SankeyColorMode, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LinkClickEvent, LinkHoverEvent, NodeClickEvent, NodeHoverEvent, OptionChangedEvent } from 'devextreme/viz/sankey';
 import { Font, TextOverflow, HatchDirection, Palette, PaletteExtensionMode, Theme, WordWrap, DashStyle } from 'devextreme/common/charts';
 import { Format } from 'devextreme/common/core/localization';

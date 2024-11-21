@@ -1,10 +1,10 @@
 export {
   /**
-   * @deprecated Use StoreOptionsBase from /common/data instead
+   * @deprecated Use StoreOptions from /common/data instead
    */
-  StoreOptionsBase as Options,
+  StoreOptions as Options,
   /**
-   * @deprecated Use StoreBase from /common/data instead
+   * @deprecated Use Store from /common/data instead
    */
-  StoreBase as Store,
-} from '../common/data';
+  Store,
+} from '../common/data/store_base';

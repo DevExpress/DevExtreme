@@ -25,7 +25,7 @@ import {
 import DataSource from 'devextreme/data/data_source';
 import { Alert, Message, DisposingEvent, InitializedEvent, MessageEnteredEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data';
+import { Store } from 'devextreme/common/data/store_base';
 import { Format } from 'devextreme/common/core/localization';
 
 import DxChat from 'devextreme/ui/chat';

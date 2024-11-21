@@ -18,7 +18,7 @@ import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, templa
 import type { event, EventInfo } from "devextreme/common/core/events";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/common/data";
+import type { Store } from "devextreme/common/data/store_base";
 import type { dxPopupOptions, dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
 import type { Component } from "devextreme/core/component";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
