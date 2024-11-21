@@ -1133,8 +1133,22 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     }
 
     &.dx-#{$widget-name}-sticky-columns {
-      .dx-row:not(.dx-row-lines, .dx-group-row, .dx-datagrid-group-footer) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+      .dx-row:not(.dx-row-lines, .dx-group-row, .dx-#{$widget-name}-group-footer, .dx-edit-row, .dx-selection, .dx-row-focused) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
         padding-top: $fluent-grid-base-cell-vertical-padding + 1px;
+      }
+
+      .dx-selection.dx-row:not(.dx-edit-row) > td:not(.dx-editor-cell, .dx-master-detail-cell),
+      .dx-row-focused.dx-row:not(.dx-edit-row) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+        padding-bottom: $fluent-grid-base-cell-vertical-padding - 1px;
+      }
+
+      .dx-row.dx-edit-row > td.dx-command-edit {
+        padding-top: $fluent-grid-base-cell-vertical-padding - 1px;
+      }
+  
+      .dx-row.dx-edit-row > td:not(.dx-master-detail-cell) .dx-texteditor-input {
+        height: $fluent-grid-base-cell-height - 2px;
+        line-height: $fluent-grid-base-cell-height - 2px;
       }
 
       .dx-data-row td:not(.dx-command-expand, .dx-editor-cell) {
