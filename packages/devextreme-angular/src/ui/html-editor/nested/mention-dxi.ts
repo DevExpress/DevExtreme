@@ -79,10 +79,10 @@ export class DxiHtmlEditorMentionComponent extends CollectionNestedOption implem
     }
 
     @Input()
-    get searchExpr(): Array<Function | string> | Function | string {
+    get searchExpr(): Array<(() => any) | string> | (() => any) | string {
         return this._getOption('searchExpr');
     }
-    set searchExpr(value: Array<Function | string> | Function | string) {
+    set searchExpr(value: Array<(() => any) | string> | (() => any) | string) {
         this._setOption('searchExpr', value);
     }
 

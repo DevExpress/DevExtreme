@@ -32,10 +32,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiFilterBuilderFieldComponent extends CollectionNestedOption {
     @Input()
-    get calculateFilterExpression(): ((filterValue: any, selectedFilterOperation: string) => string | Function | Array<any>) {
+    get calculateFilterExpression(): ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>) {
         return this._getOption('calculateFilterExpression');
     }
-    set calculateFilterExpression(value: ((filterValue: any, selectedFilterOperation: string) => string | Function | Array<any>)) {
+    set calculateFilterExpression(value: ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>)) {
         this._setOption('calculateFilterExpression', value);
     }
 

@@ -28,10 +28,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiFormCompareRuleComponent extends CollectionNestedOption {
     @Input()
-    get comparisonTarget(): Function {
+    get comparisonTarget(): (() => any) {
         return this._getOption('comparisonTarget');
     }
-    set comparisonTarget(value: Function) {
+    set comparisonTarget(value: (() => any)) {
         this._setOption('comparisonTarget', value);
     }
 

@@ -29,10 +29,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiTreeListCustomOperationComponent extends CollectionNestedOption {
     @Input()
-    get calculateFilterExpression(): ((filterValue: any, field: dxFilterBuilderField) => string | Function | Array<any>) {
+    get calculateFilterExpression(): ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>) {
         return this._getOption('calculateFilterExpression');
     }
-    set calculateFilterExpression(value: ((filterValue: any, field: dxFilterBuilderField) => string | Function | Array<any>)) {
+    set calculateFilterExpression(value: ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>)) {
         this._setOption('calculateFilterExpression', value);
     }
 

@@ -626,10 +626,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterValue(): Array<any> | Function | string {
+    get filterValue(): Array<any> | (() => any) | string {
         return this._getOption('filterValue');
     }
-    set filterValue(value: Array<any> | Function | string) {
+    set filterValue(value: Array<any> | (() => any) | string) {
         this._setOption('filterValue', value);
     }
 
@@ -1081,10 +1081,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get stateStoring(): { customLoad?: Function, customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType } {
+    get stateStoring(): { customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType } {
         return this._getOption('stateStoring');
     }
-    set stateStoring(value: { customLoad?: Function, customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }) {
+    set stateStoring(value: { customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }) {
         this._setOption('stateStoring', value);
     }
 
@@ -1736,7 +1736,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterValueChange: EventEmitter<Array<any> | Function | string>;
+    @Output() filterValueChange: EventEmitter<Array<any> | (() => any) | string>;
 
     /**
     
@@ -1981,7 +1981,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stateStoringChange: EventEmitter<{ customLoad?: Function, customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }>;
+    @Output() stateStoringChange: EventEmitter<{ customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }>;
 
     /**
     
