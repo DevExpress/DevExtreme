@@ -39,6 +39,7 @@ window.config = {
   paths: {
     'project:': '../../../../',
     'npm:': '../../../../node_modules/',
+    'bundles:': '../../../../bundles/',
   },
   map: {
     'vue': 'npm:vue/dist/vue.esm-browser.js',
@@ -56,15 +57,15 @@ window.config = {
     'devextreme-aspnet-data-nojquery': 'npm:devextreme-aspnet-data-nojquery/index.js',
     /**/
 
-    /** unified */
-    'unified': 'npm:unified/index.js',
-    'rehype-parse': 'npm:rehype-parse/index.js',
-    'rehype-remark': 'npm:rehype-remark/index.js',
-    'rehype-stringify': 'npm:rehype-stringify/index.js',
-    'remark-parse': 'npm:remark-parse/index.js',
-    'remark-rehype': 'npm:remark-rehype/index.js',
-    'remark-stringify': 'npm:remark-stringify/index.js',
-    /**/
+    /* Unified bundles */
+    'unified': 'bundles:unified/unified.bundle.js',
+    'remark-parse': 'bundles:unified/remark-parse.bundle.js',
+    'remark-rehype': 'bundles:unified/remark-rehype.bundle.js',
+    'remark-stringify': 'bundles:unified/remark-stringify.bundle.js',
+    'rehype-parse': 'bundles:unified/rehype-parse.bundle.js',
+    'rehype-remark': 'bundles:unified/rehype-remark.bundle.js',
+    'rehype-stringify': 'bundles:unified/rehype-stringify.bundle.js',
+    /* ---- */
 
     /** globalize--vue&react */
     'globalize': 'npm:globalize/dist/globalize',
