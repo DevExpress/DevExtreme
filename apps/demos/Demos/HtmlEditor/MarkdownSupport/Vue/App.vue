@@ -83,6 +83,7 @@ const converter = {
 .dx-htmleditor-content img {
   vertical-align: middle;
   padding-right: 10px;
+  margin-bottom: 22px;
 }
 
 .value-title {
