@@ -1,3 +1,8 @@
+.dx-scheduler-group-header,
+.dx-scheduler-date-table-cell {
+  position: relative;
+}
+
 .dx-scheduler-date-table-other-month.dx-scheduler-date-table-cell {
   opacity: 1;
   color: rgba(0, 0, 0, 0.3) !important;
@@ -27,11 +32,6 @@
   color: rgba(255, 255, 255, 1);
 }
 
-.dx-template-wrapper,
-.dx-scheduler-date-table-cell {
-  position: relative;
-}
-
 .dx-scheduler-date-table-cell .dx-template-wrapper {
   position: absolute;
   height: 100%;
@@ -40,11 +40,32 @@
 }
 
 .avatar {
-  width: 155px;
+  width: 124px;
   float: left;
   overflow: hidden;
   position: relative;
-  height: 125px;
+  height: 124px;
+  border: 1px solid rgba(0, 0, 0, 0.24);
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.avatar[title="John Heart"] img {
+  position: relative;
+  width: 126px;
+  height: 130px;
+  object-fit: contain;
+  top: 5px;
+  left: 3px;
+}
+
+.avatar[title="Sandra Johnson"] img {
+  position: relative;
+  width: 126px;
+  height: 130px;
+  object-fit: contain;
+  top: 5px;
+  left: 3px;
 }
 
 .name {
@@ -77,9 +98,14 @@
 }
 
 .day-cell {
+  width: 100%;
   height: 100%;
   background-position: center center;
   background-repeat: no-repeat;
+}
+
+.dx-scheduler-appointment {
+  color: rgba(255, 255, 255, 1);
 }
 
 .employee-1 {
@@ -109,3 +135,4 @@
 .training-background-2 {
   background-image: url("../../../../images/gym/icon-fitball.png");
 }
+

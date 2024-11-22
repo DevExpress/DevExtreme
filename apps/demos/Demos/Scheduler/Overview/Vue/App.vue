@@ -82,9 +82,13 @@ const dataSource = data;
 
 .dx-scheduler-date-table-cell .dx-template-wrapper {
   position: absolute;
-  width: 100%;
   height: 100%;
+  width: 100%;
   padding-right: 6px;
+}
+
+.dx-scheduler-appointment {
+  color: rgba(255, 255, 255, 1);
 }
 
 </style>

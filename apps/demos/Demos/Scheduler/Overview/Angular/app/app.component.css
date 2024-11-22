@@ -1,3 +1,8 @@
+::ng-deep .dx-scheduler-group-header-content,
+::ng-deep .dx-scheduler-date-table-cell {
+  position: relative;
+}
+
 ::ng-deep .dx-scheduler-date-table-other-month.dx-scheduler-date-table-cell {
   opacity: 1;
   color: rgba(0, 0, 0, 0.3) !important;
@@ -27,11 +32,6 @@
   color: rgba(255, 255, 255, 1);
 }
 
-::ng-deep .dx-scheduler-group-header-content,
-::ng-deep .dx-scheduler-date-table-cell {
-  position: relative;
-}
-
 ::ng-deep .dx-scheduler-date-table-cell .dx-template-wrapper {
   position: absolute;
   height: 100%;
@@ -40,11 +40,32 @@
 }
 
 ::ng-deep .avatar {
-  width: 155px;
+  width: 124px;
   float: left;
   overflow: hidden;
   position: relative;
-  height: 125px;
+  height: 124px;
+  border: 1px solid rgba(0, 0, 0, 0.24);
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+::ng-deep .avatar[title="John Heart"] img {
+  position: relative;
+  width: 126px;
+  height: 130px;
+  object-fit: contain;
+  top: 5px;
+  left: 3px;
+}
+
+::ng-deep .avatar[title="Sandra Johnson"] img {
+  position: relative;
+  width: 126px;
+  height: 130px;
+  object-fit: contain;
+  top: 5px;
+  left: 3px;
 }
 
 ::ng-deep .name {
@@ -69,12 +90,22 @@
   font-size: 11pt;
   font-weight: normal;
   padding: 25px 20px;
+  color: #707070;
+}
+
+::ng-deep .dx-color-scheme-contrast .info {
+  color: #fff;
 }
 
 ::ng-deep .day-cell {
+  width: 100%;
   height: 100%;
   background-position: center center;
   background-repeat: no-repeat;
+}
+
+::ng-deep .dx-scheduler-appointment {
+  color: rgba(255, 255, 255, 1);
 }
 
 ::ng-deep .employee-1 {

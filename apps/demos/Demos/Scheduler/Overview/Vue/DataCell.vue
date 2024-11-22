@@ -43,6 +43,7 @@ function getCurrentTraining(date, employeeID) {
 </script>
 <style>
 .day-cell {
+  width: 100%;
   height: 100%;
   background-position: center center;
   background-repeat: no-repeat;

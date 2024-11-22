@@ -40,11 +40,32 @@
 }
 
 .avatar {
-  width: 155px;
+  width: 124px;
   float: left;
   overflow: hidden;
   position: relative;
-  height: 125px;
+  height: 124px;
+  border: 1px solid rgba(0, 0, 0, 0.24);
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.avatar[title="John Heart"] img {
+  position: relative;
+  width: 126px;
+  height: 130px;
+  object-fit: contain;
+  top: 5px;
+  left: 3px;
+}
+
+.avatar[title="Sandra Johnson"] img {
+  position: relative;
+  width: 126px;
+  height: 130px;
+  object-fit: contain;
+  top: 5px;
+  left: 3px;
 }
 
 .name {
@@ -81,6 +102,10 @@
   height: 100%;
   background-position: center center;
   background-repeat: no-repeat;
+}
+
+.dx-scheduler-appointment {
+  color: rgba(255, 255, 255, 1);
 }
 
 .employee-1 {
