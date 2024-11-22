@@ -231,6 +231,13 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
         line-height: $generic-base-inline-block-height;
       }
     }
+
+    .dx-#{$widget-name}-drop-highlight {
+      & > td {
+        background-color: $datagrid-drop-highlight-bg;
+        color: $datagrid-drop-highlight-color;
+      }
+    }
   }
 
   .dx-#{$widget-name}-edit-popup .dx-error-message {
@@ -411,13 +418,6 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
 
   .dx-#{$widget-name}-columns-separator-transparent {
     background-color: transparent;
-  }
-
-  .dx-#{$widget-name}-drop-highlight {
-    & > td {
-      background-color: $datagrid-drop-highlight-bg;
-      color: $datagrid-drop-highlight-color;
-    }
   }
 
   .dx-#{$widget-name}-focus-overlay {

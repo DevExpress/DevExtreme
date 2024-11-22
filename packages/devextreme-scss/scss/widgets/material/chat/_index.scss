@@ -48,7 +48,8 @@
   $chat-messagegroup-alignment-start-gap,
   $chat-messagegroup-padding,
   $chat-information-font-size,
-  $chat-information-color,
+  $chat-information-author-name-color,
+  $chat-information-timestamp-color,
   $chat-information-gap,
 );
 @include chat-messagelist-empty(

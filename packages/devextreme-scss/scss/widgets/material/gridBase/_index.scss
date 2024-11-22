@@ -346,6 +346,24 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
         @include dx-icon-sizing($material-base-icon-size);
       }
     }
+
+    .dx-#{$widget-name}-drop-highlight {
+      & > td {
+        background-color: $datagrid-drop-highlight-bg;
+        color: $datagrid-drop-highlight-color;
+
+        .dx-header-filter {
+          color: $datagrid-drop-highlight-color;
+        }
+
+        .dx-checkbox {
+          .dx-checkbox-icon {
+            background-color: $datagrid-drop-highlight-color;
+            color: $datagrid-drop-highlight-bg;
+          }
+        }
+      }
+    }
   }
 
   .dx-#{$widget-name}-edit-popup {
@@ -586,24 +604,6 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
 
   .dx-#{$widget-name}-columns-separator-transparent {
     background-color: transparent;
-  }
-
-  .dx-#{$widget-name}-drop-highlight {
-    & > td {
-      background-color: $datagrid-drop-highlight-bg;
-      color: $datagrid-drop-highlight-color;
-
-      .dx-header-filter {
-        color: $datagrid-drop-highlight-color;
-      }
-
-      .dx-checkbox {
-        .dx-checkbox-icon {
-          background-color: $datagrid-drop-highlight-color;
-          color: $datagrid-drop-highlight-bg;
-        }
-      }
-    }
   }
 
   .dx-#{$widget-name}-focus-overlay:after {

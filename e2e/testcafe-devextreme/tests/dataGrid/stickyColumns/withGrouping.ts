@@ -4,6 +4,9 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { defaultConfig } from './data';
+import { MouseAction, MouseUpEvents } from '../../../helpers/mouseUpEvents';
+import { changeTheme } from '../../../helpers/changeTheme';
+import { Themes } from '../../../helpers/themes';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -176,3 +179,63 @@ safeSizeTest('Sticky columns with grouping - overflow of group cell', async (t) 
     }],
   },
 }));
+
+[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
+  safeSizeTest(`The header row should be highlighted correctly when dragging column when there are fixed columns and allowColumnReordering=false (${theme} theme)`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
+
+    await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 200, 35);
+
+    await t
+      .expect(await takeScreenshot(`header_row_highlight_with_fixed_columns_(${theme}).png`, dataGrid.element))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [900, 800]).before(async () => {
+    await changeTheme(theme);
+    await MouseUpEvents.disable(MouseAction.dragToOffset);
+
+    return createWidget('dxDataGrid', {
+      ...defaultConfig,
+      customizeColumns(columns) {
+        columns[2].groupIndex = 0;
+      },
+      groupPanel: {
+        visible: true,
+      },
+      allowColumnReordering: false,
+    });
+  }).after(async () => {
+    await MouseUpEvents.enable(MouseAction.dragToOffset);
+    await changeTheme(Themes.genericLight);
+  });
+});
+
+safeSizeTest('The group separator should be visible when dragging a fixed column into the group panel', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+
+  await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element, 100, -50);
+
+  await t
+    .expect(await takeScreenshot('dragging_fixed_column_to_group_panel.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [900, 800]).before(async () => {
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
+
+  return createWidget('dxDataGrid', {
+    ...defaultConfig,
+    customizeColumns(columns) {
+      columns[2].groupIndex = 0;
+    },
+    groupPanel: {
+      visible: true,
+    },
+    allowColumnReordering: false,
+  });
+}).after(async () => {
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
+});
