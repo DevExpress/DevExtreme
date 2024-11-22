@@ -5,8 +5,8 @@ import { DxSelectBoxModule, DxDataGridModule } from 'devextreme-angular';
 
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 
-import deMessages from 'npm:devextreme/localization/messages/de.json!json';
-import ruMessages from 'npm:devextreme/localization/messages/ru.json!json';
+import deMessages from 'npm:devextreme/common/core/localization/messages/de.json!json';
+import ruMessages from 'npm:devextreme/common/core/localization/messages/ru.json!json';
 import { Locale, Payment, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
