@@ -4,6 +4,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { getData } from '../helpers/generateDataSourceData';
 import { Themes } from '../../../helpers/themes';
+import { changeTheme } from '../../../helpers/changeTheme';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -11,9 +12,12 @@ fixture.disablePageReloads`FixedColumns - appearance`
   .page(url(__dirname, '../../container.html'));
 
 [
-  Themes.genericLight, Themes.genericLightCompact,
-  Themes.materialBlue, Themes.materialBlueCompact,
-  Themes.fluentBlue, Themes.fluentBlueCompact,
+  Themes.genericLight,
+  Themes.genericLightCompact,
+  Themes.materialBlue,
+  Themes.materialBlueCompact,
+  Themes.fluentBlue,
+  Themes.fluentBlueCompact,
 ].forEach(
   (theme) => {
     test('Row height for selected, focus and edit state should not differ from the default one', async (t) => {
@@ -37,37 +41,43 @@ fixture.disablePageReloads`FixedColumns - appearance`
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }).before(async () => createWidget('dxDataGrid', {
-      dataSource: getData(13, 40),
-      keyExpr: 'field_0',
-      columnFixing: {
-        enabled: true,
-      },
-      groupPanel: {
-        visible: true,
-      },
-      editing: {
-        allowUpdating: true,
-        mode: 'row',
-      },
-      showColumnHeaders: true,
-      columnAutoWidth: true,
-      allowColumnReordering: true,
-      allowColumnResizing: true,
-      focusedRowEnabled: true,
-      showRowLines: false,
-      selection: {
-        mode: 'multiple',
-      },
-      customizeColumns(columns) {
-        columns[5].fixed = true;
-        columns[6].fixed = true;
+    }).before(async () => {
+      await changeTheme(theme);
 
-        columns[11].fixed = true;
-        columns[11].fixedPosition = 'right';
-        columns[12].fixed = true;
-        columns[12].fixedPosition = 'right';
-      },
-    }));
+      return createWidget('dxDataGrid', {
+        dataSource: getData(13, 40),
+        keyExpr: 'field_0',
+        columnFixing: {
+          enabled: true,
+        },
+        groupPanel: {
+          visible: true,
+        },
+        editing: {
+          allowUpdating: true,
+          mode: 'row',
+        },
+        showColumnHeaders: true,
+        columnAutoWidth: true,
+        allowColumnReordering: true,
+        allowColumnResizing: true,
+        focusedRowEnabled: true,
+        showRowLines: false,
+        selection: {
+          mode: 'multiple',
+        },
+        customizeColumns(columns) {
+          columns[5].fixed = true;
+          columns[6].fixed = true;
+
+          columns[11].fixed = true;
+          columns[11].fixedPosition = 'right';
+          columns[12].fixed = true;
+          columns[12].fixedPosition = 'right';
+        },
+      });
+    }).after(async () => {
+      await changeTheme(Themes.genericLight);
+    });
   },
 );
