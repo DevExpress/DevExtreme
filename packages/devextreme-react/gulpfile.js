@@ -97,6 +97,8 @@ gulp.task(NPM_PREPARE_MODULES, (done) => {
     ['common'],
     ['core', ['template', 'config', 'nested-option', 'component', 'extension-component']],
     ['common/core'],
+    ['common/data'],
+    ['common/export'],
     ['common/core/events'],
   ];
   const modulesImportsFromIndex = fs.readFileSync(

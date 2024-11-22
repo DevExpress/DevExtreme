@@ -109,6 +109,7 @@ const prepareConfigs = (framework)=> {
   let modulesMap = {};
 
   let main = `devextreme-${framework}/index.js`;
+  let common = framework === 'react' ? `devextreme-${framework}/common/bag.js` : '';
   let minify = true;
 
   if (framework === 'angular') {
@@ -128,6 +129,7 @@ const prepareConfigs = (framework)=> {
     // eslint-disable-next-line spellcheck/spell-checker
     if (currentPackage.module?.startsWith('fesm2022')) {
       main = `devextreme-${framework}`;
+      common = '';
       minify = false;
 
       prepareDevextremexAngularFiles();
@@ -195,6 +197,10 @@ const prepareConfigs = (framework)=> {
       'devextreme/bundles/dx.custom.config.js',
       main,
   );
+
+  if (common) {
+    packages.push(common);
+  }
 
   return {
     builderConfig,

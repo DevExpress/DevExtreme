@@ -3,6 +3,7 @@
 /* Core (dx.module-core.js) */
 /* eslint-disable import/no-commonjs */
 const DevExpress = require('../../../bundles/modules/core');
+require('../../../bundles/modules/core.legacy');
 
 /* Integrations (dx.module-core.js) */
 
