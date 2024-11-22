@@ -2,6 +2,8 @@ const bundleConfig = {
   bundles: {
     'devextreme.react.systemjs.js': [
       'devextreme/*',
+      'devextreme/data/*',
+      'devextreme/data/odata/*',
       'devextreme/animation/*',
       'devextreme/common/*',
       'devextreme/core/*',
