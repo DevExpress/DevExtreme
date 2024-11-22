@@ -246,10 +246,8 @@ $datagrid-text-stub-background-image-path: null !default;
     }
   }
 
-  .dx-row:not(.dx-datagrid-drop-highlight, .dx-row-alt) {
-    .dx-datagrid-sticky-column, .dx-datagrid-sticky-column-left, .dx-datagrid-sticky-column-right {
-      background-color: $datagrid-base-background-color;
-    }
+  .dx-datagrid-sticky-column, .dx-datagrid-sticky-column-left, .dx-datagrid-sticky-column-right {
+    background-color: $datagrid-base-background-color;
   }
 }
 
