@@ -8121,6 +8121,9 @@ packages:
   device-specs@1.0.1:
     resolution: {integrity: sha512-rxns/NDZfbdYumnn801z9uo8kWIz3Eld7Bk/F0V9zw4sZemSoD93+gxHEonLdxYulkws4iCMt7ZP8zuM8EzUSg==}
 
+  devlop@1.1.0:
+    resolution: {integrity: sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==}
+
   devtools-protocol@0.0.1354347:
     resolution: {integrity: sha512-BlmkSqV0V84E2WnEnoPnwyix57rQxAM5SKJjf4TbYOCGLAWtz8CDH8RIaGOjPgPCXo2Mce3kxSY497OySidY3Q==}
 
@@ -25381,6 +25384,10 @@ snapshots:
       tslib: 2.6.3
 
   device-specs@1.0.1: {}
+
+  devlop@1.1.0:
+    dependencies:
+      dequal: 2.0.3
 
   devtools-protocol@0.0.1354347: {}
 
