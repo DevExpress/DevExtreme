@@ -126,6 +126,100 @@ safeSizeTest('Headers navigation by Shift and Tab keys when there are fixed colu
   },
 }));
 
+safeSizeTest('Headers navigation by Tab key when there are fixed columns and adaptability is enabled', async (t) => {
+  // arrange
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const headers = dataGrid.getHeaders();
+  const headerRow = headers.getHeaderRow(0);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await t.click(headerRow.getHeaderCell(0).element);
+
+  // assert
+  await t
+    .expect(headerRow.getHeaderCell(0).isFocused)
+    .ok();
+
+  // act
+  await navigateToNextCell(t, headerRow.getHeaderCell(1));
+  await navigateToNextCell(t, headerRow.getHeaderCell(2));
+  await navigateToNextCell(t, headerRow.getHeaderCell(3));
+
+  await takeScreenshot('fixed_columns_and_adaptability_headers_navigation_by_tab_1.png', dataGrid.element);
+
+  // act
+  await navigateToNextCell(t, headerRow.getHeaderCell(4));
+  await navigateToNextCell(t, headerRow.getHeaderCell(6));
+
+  await takeScreenshot('fixed_columns_and_adaptability_headers_navigation_by_tab_2.png', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  ...defaultConfig,
+  width: 650,
+  columnWidth: 150,
+  customizeColumns(columns) {
+    columns[4].width = 125;
+    columns[4].fixed = true;
+    columns[4].fixedPosition = 'sticky';
+    columns[5].hidingPriority = 0;
+  },
+}));
+
+safeSizeTest('Headers navigation by Shift and Tab keys when there are fixed columns and adaptability is enabled', async (t) => {
+  // arrange
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const headers = dataGrid.getHeaders();
+  const headerRow = headers.getHeaderRow(0);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await t.click(headerRow.getHeaderCell(6).element);
+
+  // assert
+  await t
+    .expect(headerRow.getHeaderCell(6).isFocused)
+    .ok();
+
+  // act
+  await navigateToPrevCell(t, headerRow.getHeaderCell(4));
+
+  await takeScreenshot('fixed_columns_and_adaptability_headers_navigation_by_shift_and_tab_1.png', dataGrid.element);
+
+  // act
+  await navigateToPrevCell(t, headerRow.getHeaderCell(3));
+
+  await takeScreenshot('fixed_columns_and_adaptability_headers_navigation_by_shift_and_tab_2.png', dataGrid.element);
+
+  // act
+  await navigateToPrevCell(t, headerRow.getHeaderCell(2));
+  await navigateToPrevCell(t, headerRow.getHeaderCell(1));
+  await navigateToPrevCell(t, headerRow.getHeaderCell(0));
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  ...defaultConfig,
+  width: 650,
+  columnWidth: 150,
+  customizeColumns(columns) {
+    columns[4].width = 125;
+    columns[4].fixed = true;
+    columns[4].fixedPosition = 'sticky';
+    columns[5].hidingPriority = 0;
+  },
+}));
+
 safeSizeTest('Band headers navigation by Tab key when there are fixed columns', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

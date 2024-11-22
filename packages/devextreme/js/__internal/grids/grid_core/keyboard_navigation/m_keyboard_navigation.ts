@@ -198,6 +198,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     super.dispose();
     this._resetFocusedView();
     keyboard.off(this._rowsViewKeyDownListener);
+    keyboard.off(this._columnHeadersViewKeyDownListener);
     eventsEngine.off(
       domAdapter.getDocument(),
       addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'),
@@ -400,7 +401,9 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   private unsubscribeFromColumnHeadersViewKeyDownEvent(): void {
-    keyboard.off(this._columnHeadersViewKeyDownListener);
+    if (this._columnHeadersViewKeyDownListener) {
+      keyboard.off(this._columnHeadersViewKeyDownListener);
+    }
   }
 
   private subscribeToColumnHeadersViewKeyDownEvent(): void {
@@ -410,7 +413,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   private initColumnHeadersViewKeyDownHandler(): void {
-    this._columnHeadersViewKeyDownListener && this.unsubscribeFromColumnHeadersViewKeyDownEvent();
+    this.unsubscribeFromColumnHeadersViewKeyDownEvent();
     this.subscribeToColumnHeadersViewKeyDownEvent();
   }
 
