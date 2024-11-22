@@ -4,16 +4,19 @@ import babel from '@rollup/plugin-babel';
 import fs from 'fs-extra';
 
 const baseDir = './node_modules/devextreme-angular/fesm2022/';
-const componentNames = fs.readdirSync(baseDir)
+const fileNames = fs.readdirSync(baseDir)
     .filter((fileName) => fileName.indexOf('mjs.map') !== -1)
-    .filter((fileName) => fileName.indexOf('devextreme-angular-ui') === 0)
+    .filter((fileName) =>
+        fileName.indexOf('devextreme-angular-ui') === 0
+        || fileName.indexOf('devextreme-angular-common') === 0
+    )
     .map((fileName) => fileName.replace('.mjs.map', ''));
 
 const inputs = {
     'devextreme-angular': `${baseDir}devextreme-angular.mjs`,
     'devextreme-angular-core': `${baseDir}devextreme-angular-core.mjs`,
     'devextreme-angular-http': `${baseDir}devextreme-angular-http.mjs`,
-    ...componentNames.reduce((acc, name) => {
+    ...fileNames.reduce((acc, name) => {
         acc[name] = `${baseDir}${name}.mjs`;
 
         return acc;

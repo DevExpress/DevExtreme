@@ -19,6 +19,17 @@ const bundleConfig = {
       'devextreme/ui/pivot_grid/*',
       'devextreme/viz/*',
       'devextreme/viz/vector_map/*',
+      'devextreme/common/*',
+      'devextreme/common/data/*',
+      'devextreme/common/data/odata/*',
+      'devextreme/common/export/*',
+      'devextreme/common/file_management/*',
+      'devextreme/common/core/*',
+      'devextreme/common/core/animation/*',
+      'devextreme/common/core/environment/*',
+      'devextreme/common/core/events/*',
+      'devextreme/common/core/localization/*',
+      'devextreme/common/core/localization/globalize/*',
       'devextreme-react/*',
       'devextreme-react/core/*',
       'devextreme-react/common/*',
@@ -32,7 +43,7 @@ const bundleConfig = {
   },
   map: {
     'devextreme.react.systemjs.js': '../../../../../bundles/devextreme.react.systemjs.js',
-    'devextreme/localization/messages': 'npm:devextreme/localization/messages',
+    'devextreme/common/core/localization/messages': 'npm:devextreme/common/core/localization/messages',
   },
   packages: {
     'react': {
