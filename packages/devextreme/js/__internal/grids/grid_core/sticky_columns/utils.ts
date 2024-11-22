@@ -74,6 +74,7 @@ const areNextOnlyFixedOrHiddenColumns = function (
   return !columns.some((column) => !column.fixed && isVisibleColumn(that, column));
 };
 
+// TODO Add description for this method
 const getStickyOffsetCore = function (
   that: ColumnsController,
   columns,
@@ -86,25 +87,25 @@ const getStickyOffsetCore = function (
   const isChildColumn = isDefined(column.ownerBand);
   const targetColumnIsRight = fixedPosition === StickyPosition.Right;
   const targetColumnIsSticky = column.fixedPosition === StickyPosition.Sticky;
-  const processedColumns = targetColumnIsRight
+  const nextOrPrevColumns = targetColumnIsRight
     ? columns.slice(columnIndex + 1) : columns.slice(0, columnIndex).reverse();
-  const processedWidths = targetColumnIsRight
+  const nextOrPrevColumnWidths = targetColumnIsRight
     ? widths.slice(columnIndex + 1) : widths.slice(0, columnIndex).reverse();
   let offset = 0;
   let adjacentStickyColumnIndex = 0;
-  let nonAdjacentStickyColumnCount = !areNextOnlyFixedOrHiddenColumns(that, processedColumns)
-    && targetColumnIsSticky && processedColumns.length ? 1 : 0;
+  let nonSiblingStickyColumnCount = !areNextOnlyFixedOrHiddenColumns(that, nextOrPrevColumns)
+    && targetColumnIsSticky && nextOrPrevColumns.length ? 1 : 0;
 
-  processedColumns.forEach((col, colIndex: number) => {
+  nextOrPrevColumns.forEach((col, colIndex: number) => {
     if (col.fixed && (!isDefined(offsets) || column.ownerBand === col.ownerBand)) {
       const columnIsSticky = col.fixedPosition === StickyPosition.Sticky;
 
-      offset += processedWidths[colIndex];
+      offset += nextOrPrevColumnWidths[colIndex];
 
       if (targetColumnIsSticky && columnIsSticky
-        && !areNextOnlyFixedOrHiddenColumns(that, processedColumns.slice(colIndex + 1))) {
+        && !areNextOnlyFixedOrHiddenColumns(that, nextOrPrevColumns.slice(colIndex + 1))) {
         if (colIndex !== adjacentStickyColumnIndex) {
-          nonAdjacentStickyColumnCount += 1;
+          nonSiblingStickyColumnCount += 1;
           adjacentStickyColumnIndex = colIndex + 1;
         } else {
           adjacentStickyColumnIndex += 1;
@@ -121,7 +122,7 @@ const getStickyOffsetCore = function (
     return offset;
   }
 
-  return offset - (nonAdjacentStickyColumnCount * STICKY_BORDER_WIDTH);
+  return offset - (nonSiblingStickyColumnCount * STICKY_BORDER_WIDTH);
 };
 
 const isFirstOrLastColumn = function (
