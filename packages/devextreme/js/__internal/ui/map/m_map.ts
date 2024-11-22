@@ -180,8 +180,14 @@ const Map = Widget.inherit({
 
     this._saveRendered('markers');
     this._saveRendered('routes');
-    this._provider = new PROVIDERS[this.option('provider')](this, this._$container);
+    this._provider = new PROVIDERS[this._getProviderName()](this, this._$container);
     this._queueAsyncAction('render', this._rendered.markers, this._rendered.routes);
+  },
+
+  _getProviderName() {
+    const { provider } = this.option();
+
+    return PROVIDERS[provider] ? provider : 'google';
   },
 
   _renderShield() {

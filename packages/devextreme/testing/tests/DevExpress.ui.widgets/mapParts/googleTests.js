@@ -646,6 +646,26 @@ QUnit.test('should not throw an error if providerConfig is undefined', function(
     });
 });
 
+QUnit.test('map should use google as a default provider if spicified provider does not exist', function(assert) {
+    const map = $('#map').dxMap({
+        provider: 'invalid',
+    }).dxMap('instance');
+
+    assert.strictEqual(map._provider instanceof GoogleProvider, true, 'google provider is used');
+});
+
+QUnit.test('map should not throw errors if spicified provider does not exist', function(assert) {
+    try {
+        $('#map').dxMap({
+            provider: 'invalid',
+        });
+    } catch(error) {
+        assert.ok(false, `error is thrown ${error}`);
+    } finally {
+        assert.ok(true, 'no errors are thrown');
+    }
+});
+
 QUnit.test('marker icon can be specified using either markerIconSrc or marker.iconSrc options', function(assert) {
     const done = assert.async();
     const d = $.Deferred();
