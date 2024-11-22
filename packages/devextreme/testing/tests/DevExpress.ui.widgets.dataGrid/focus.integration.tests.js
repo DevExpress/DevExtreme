@@ -657,7 +657,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $(dataGrid.getRowElement(0)).find('.dx-command-edit > .dx-link-edit').trigger(pointerEvents.up).click();
         this.clock.tick(10);
 
-        navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)) }) });
+        navigationController._rowsViewKeyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)) }) });
 
         $(dataGrid.getCellElement(0, 1)).trigger(pointerEvents.up);
         this.clock.tick(10);
@@ -1038,7 +1038,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // act
         dataGrid.focus(dataGrid.getCellElement(1, 2));
         const keyboardController = dataGrid.getController('keyboardNavigation');
-        keyboardController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(':focus').get(0) }) });
+        keyboardController._rowsViewKeyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(':focus').get(0) }) });
         this.clock.tick(10);
 
         const $cell = $(dataGrid.element()).find('.dx-focused');
@@ -2144,7 +2144,7 @@ QUnit.module('View\'s focus', {
 
         // act
         const navigationController = this.dataGrid.getController('keyboardNavigation');
-        navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(this.dataGrid.getCellElement(0, 0)) }) });
+        navigationController._rowsViewKeyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(this.dataGrid.getCellElement(0, 0)) }) });
         this.clock.tick(10);
 
         // assert
@@ -4451,7 +4451,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         this.clock.tick(10);
 
         $(dataGrid.$element()).find('.dx-textbox').dxTextBox('instance').option('value', 'Test');
-        navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.$element()).find('input').get(0) }) });
+        navigationController._rowsViewKeyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.$element()).find('input').get(0) }) });
         this.clock.tick(10);
 
         // assert
@@ -4498,7 +4498,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         this.clock.tick(10);
 
         $(dataGrid.$element()).find('.dx-textbox').dxTextBox('instance').option('value', 'Test');
-        navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.$element()).find('input').get(0) }) });
+        navigationController._rowsViewKeyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.$element()).find('input').get(0) }) });
         this.clock.tick(10);
 
         // assert
@@ -4563,7 +4563,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         });
         const keyboardNavigationController = dataGrid.getController('keyboardNavigation');
         const triggerTabPress = function($target, isShiftPressed) {
-            keyboardNavigationController._keyDownHandler({
+            keyboardNavigationController._rowsViewKeyDownHandler({
                 key: 'Tab',
                 keyName: 'tab',
                 shift: !!isShiftPressed,
@@ -4636,7 +4636,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         });
         const keyboardNavigationController = dataGrid.getController('keyboardNavigation');
         const triggerTabPress = function($target, isShiftPressed) {
-            keyboardNavigationController._keyDownHandler({
+            keyboardNavigationController._rowsViewKeyDownHandler({
                 key: 'Tab',
                 keyName: 'tab',
                 shift: !!isShiftPressed,
@@ -4723,7 +4723,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 }, 'lastName']
         });
         const triggerTabPress = function(target) {
-            const keyboardListenerId = dataGrid.getController('keyboardNavigation')._keyDownListener;
+            const keyboardListenerId = dataGrid.getController('keyboardNavigation')._rowsViewKeyDownListener;
 
             keyboard._getProcessor(keyboardListenerId).process({
                 key: 'Tab',

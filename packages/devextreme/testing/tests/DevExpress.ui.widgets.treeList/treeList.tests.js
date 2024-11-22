@@ -283,14 +283,14 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         this.clock.tick(10);
 
         // act
-        navigationController._keyDownHandler({ keyName: 'rightArrow', key: 'ArrowRight', ctrl: true, originalEvent: $.Event('keydown', { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
+        navigationController._rowsViewKeyDownHandler({ keyName: 'rightArrow', key: 'ArrowRight', ctrl: true, originalEvent: $.Event('keydown', { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
         this.clock.tick(10);
 
         // assert
         assert.ok(treeList.isRowExpanded(2), 'second row is expanded');
 
         // act
-        navigationController._keyDownHandler({ keyName: 'leftArrow', key: 'ArrowLeft', ctrl: true, originalEvent: $.Event('keydown', { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
+        navigationController._rowsViewKeyDownHandler({ keyName: 'leftArrow', key: 'ArrowLeft', ctrl: true, originalEvent: $.Event('keydown', { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
         this.clock.tick(10);
 
         // assert
