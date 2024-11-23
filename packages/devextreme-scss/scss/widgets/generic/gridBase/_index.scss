@@ -491,10 +491,6 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
     touch-action: pinch-zoom;
     border-bottom: $datagrid-border;
 
-    .dx-#{$widget-name}-content {
-      margin-bottom: -1px;
-    }
-
     .dx-#{$widget-name}-table {
       .dx-#{$widget-name}-borders & {
         border-bottom-width: 1px;
@@ -502,6 +498,10 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
 
       .dx-row > td {
         border-bottom: $datagrid-border;
+      }
+
+      .dx-row:last-child > td {
+          border-bottom-width: 0;
       }
     }
   }

@@ -676,10 +676,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     touch-action: pinch-zoom;
     border-bottom: $datagrid-border;
 
-    .dx-#{$widget-name}-content {
-      margin-bottom: -1px;
-    }
-
     .dx-#{$widget-name}-table {
       .dx-#{$widget-name}-borders & {
         border-bottom-width: 1px;
@@ -706,6 +702,10 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
             background-color: $datagrid-hover-bg;
           }
         }
+      }
+
+      .dx-row:last-child > td {
+        border-bottom-width: 0;
       }
     }
 
