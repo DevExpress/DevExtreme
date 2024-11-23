@@ -826,7 +826,7 @@ const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => c
             $(this._columnHeadersView.getContent())[0],
             scrollable.scrollOffset(),
             scrollPadding,
-            'dx-datagrid-table',
+            this.addWidgetPrefix('table'),
           );
 
           scrollable.scrollTo({ x: scrollPosition });
