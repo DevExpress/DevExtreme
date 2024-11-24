@@ -1019,7 +1019,7 @@ QUnit.module('Behavior', moduleConfig, () => {
 
         const $cell = $(getCurrentViewInstance(calendar).$element().find('*[data-value="2025/11/01"]'));
 
-        assert.ok($cell.hasClass(CALENDAR_CELL_IN_RANGE_CLASS));
+        assert.ok($cell.hasClass(CALENDAR_CELL_IN_RANGE_CLASS), 'cell is highlighted');
     });
 
     ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
