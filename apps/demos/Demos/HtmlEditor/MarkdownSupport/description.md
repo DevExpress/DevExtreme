@@ -1,4 +1,4 @@
-Our HtmlEditor outputs the markup in HTML format.
+DevExtreme HTML Editor outputs the markup in HTML format. To convert the output to Markdown, use the [unified](https://github.com/unifiedjs/unified) plugin library.
 
-The HtmlEditor stores the markup in the [value](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/#value) property. In this demo, the value is displayed under the HtmlEditor.
+HTML Editor includes a [converter](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/converter/) option. Define the converter with [toHtml](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/converter/#toHtml) and [fromHtml](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/converter/#fromHtml) functions and assign it to the converter property, as shown in this demo.
 <!--split-->
