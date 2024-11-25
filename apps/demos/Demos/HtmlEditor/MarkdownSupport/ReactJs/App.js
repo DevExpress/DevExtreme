@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import HtmlEditor, { Toolbar, Item } from 'devextreme-react/html-editor';
-import { unified } from "unified";
-import remarkParse from "remark-parse";
-import remarkRehype from "remark-rehype";
-import remarkStringify from "remark-stringify";
-import rehypeParse from "rehype-parse";
-import rehypeRemark from "rehype-remark";
-import rehypeStringify from "rehype-stringify";
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import remarkStringify from 'remark-stringify';
+import rehypeParse from 'rehype-parse';
+import rehypeRemark from 'rehype-remark';
+import rehypeStringify from 'rehype-stringify';
 import { markup } from './data.js';
 
 const headerValues = [false, 1, 2, 3, 4, 5];
