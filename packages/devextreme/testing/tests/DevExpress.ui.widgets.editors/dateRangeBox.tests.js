@@ -1009,9 +1009,9 @@ QUnit.module('Behavior', moduleConfig, () => {
             value: ['2025-01-01', '2025-12-31'],
             min: new Date('2025-01-01'),
             max: new Date('2025-12-31'),
-            multiView: true
+            multiView: true,
+            opened: true
         });
-        this.$startDateInput.trigger('click');
         $(`.${CALENDAR_CELL_CLASS}`).eq(3).trigger('dxclick');
 
         const calendar = this.instance.getStartDateBox()._strategy._widget;
