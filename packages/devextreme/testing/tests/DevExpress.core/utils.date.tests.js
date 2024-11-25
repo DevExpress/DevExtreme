@@ -107,6 +107,12 @@ QUnit.test('getIntervalByString second', function(assert) {
     assert.deepEqual(this.getDateIntervalByString('second'), { seconds: 1 });
 });
 
+QUnit.test('addDateInterval should decrement month correctly (T1253076)', function(assert) {
+    const newDate = dateUtils.addDateInterval(new Date(2025, 12, 0), 'month', -1);
+
+    assert.deepEqual(newDate, new Date(2025, 11, 0));
+});
+
 QUnit.test('add negative Interval number', function(assert) {
     // arrange, act
     const newNumber = dateUtils.addInterval(11, 5, true);
