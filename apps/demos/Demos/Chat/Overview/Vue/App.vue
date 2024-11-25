@@ -30,14 +30,6 @@
     .dx-avatar {
         border: 1px solid var(--dx-color-border);
     }
-
-    .dx-chat-messagegroup.dx-chat-messagegroup-alignment-end {
-        padding-left: 44px;
-    }
-
-    .dx-chat-messagegroup .dx-chat-messagegroup-content {
-        max-width: 82.5%;
-    }
 </style>
 
 <script setup lang="ts">
