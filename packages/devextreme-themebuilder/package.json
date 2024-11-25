@@ -26,7 +26,6 @@
   "dependencies": {
     "autoprefixer": "^10.4.7",
     "clean-css": "^5.3.0",
-    "less": "^3.13.1",
     "postcss": "^8.2.6",
     "sass-embedded": "1.66.0"
   },
@@ -35,7 +34,6 @@
     "@types/dependency-tree": "7.2.0",
     "@types/filing-cabinet": "2.5.3",
     "@types/fs-extra": "11.0.4",
-    "@types/less": "3.0.6",
     "@types/node": "20.11.17",
     "eslint": "8.56.0",
     "eslint-config-airbnb-base": "15.0.0",
