@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+import {
+  describe, expect, it, jest,
+} from '@jest/globals';
+
 import { getElementTransform } from './get_element_style';
 import { getTranslateValues } from './get_translate_values';
 
 jest.mock('./get_element_style', () => ({
-  ...jest.requireActual('./get_element_style'),
+  ...jest.requireActual<any>('./get_element_style'),
   getElementTransform: jest.fn(() => ''),
 }));
 

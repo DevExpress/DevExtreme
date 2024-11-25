@@ -203,19 +203,19 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   };
   bindingOptions?: Record<string, any>;
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
-  container?: any | string;
+  container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
   disabled?: boolean;
   enableBodyScroll?: boolean;
   height?: (() => number | string) | number | string;
-  hideEvent?: Record<string, any> | string | {
-    delay?: number;
-    name?: string;
+  hideEvent?: Record<string, any> | string | undefined | {
+    delay?: number | undefined;
+    name?: string | undefined;
   };
   hideOnOutsideClick?: boolean | ((event: event) => boolean);
   hideOnParentScroll?: boolean;
-  hint?: string;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
   maxHeight?: (() => number | string) | number | string;
   maxWidth?: (() => number | string) | number | string;
@@ -235,12 +235,12 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   shading?: boolean;
   shadingColor?: string;
   showCloseButton?: boolean;
-  showEvent?: Record<string, any> | string | {
-    delay?: number;
-    name?: string;
+  showEvent?: Record<string, any> | string | undefined | {
+    delay?: number | undefined;
+    name?: string | undefined;
   };
   showTitle?: boolean;
-  target?: any | string;
+  target?: any | string | undefined;
   title?: string;
   titleTemplate?: ((titleElement: any) => string | any) | template;
   toolbarItems?: Array<dxPopupToolbarItem>;
@@ -325,11 +325,11 @@ const From = Object.assign<typeof _componentFrom, NestedComponentMeta>(_componen
 type IHideProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: Direction;
+  direction?: Direction | undefined;
   duration?: number;
   easing?: string;
   from?: AnimationState;
-  staggerDelay?: number;
+  staggerDelay?: number | undefined;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
   type?: AnimationType;
@@ -354,8 +354,8 @@ const Hide = Object.assign<typeof _componentHide, NestedComponentMeta>(_componen
 // owners:
 // DropDownOptions
 type IHideEventProps = React.PropsWithChildren<{
-  delay?: number;
-  name?: string;
+  delay?: number | undefined;
+  name?: string | undefined;
 }>
 const _componentHideEvent = (props: IHideEventProps) => {
   return React.createElement(NestedOption<IHideEventProps>, {
@@ -483,11 +483,11 @@ const Position = Object.assign<typeof _componentPosition, NestedComponentMeta>(_
 type IShowProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: Direction;
+  direction?: Direction | undefined;
   duration?: number;
   easing?: string;
   from?: AnimationState;
-  staggerDelay?: number;
+  staggerDelay?: number | undefined;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
   type?: AnimationType;
@@ -508,8 +508,8 @@ const Show = Object.assign<typeof _componentShow, NestedComponentMeta>(_componen
 // owners:
 // DropDownOptions
 type IShowEventProps = React.PropsWithChildren<{
-  delay?: number;
-  name?: string;
+  delay?: number | undefined;
+  name?: string | undefined;
 }>
 const _componentShowEvent = (props: IShowEventProps) => {
   return React.createElement(NestedOption<IShowEventProps>, {
@@ -549,7 +549,7 @@ const To = Object.assign<typeof _componentTo, NestedComponentMeta>(_componentTo,
 // owners:
 // DropDownOptions
 type IToolbarItemProps = React.PropsWithChildren<{
-  cssClass?: string;
+  cssClass?: string | undefined;
   disabled?: boolean;
   html?: string;
   locateInMenu?: LocateInMenuMode;

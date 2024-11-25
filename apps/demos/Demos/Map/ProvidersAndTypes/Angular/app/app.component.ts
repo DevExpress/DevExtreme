@@ -25,12 +25,18 @@ if (window && window.config.packageConfigPaths) {
 
 export class AppComponent {
   mapTypes: MapSetting[];
+  mapProviders: MapSetting[];
 
   apiKey: APIKey = {};
 
   constructor(service: Service) {
     this.mapTypes = service.getMapTypes();
-    this.apiKey.bing = 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC';
+    this.mapProviders = service.getMapProviders();
+    this.apiKey = {
+      azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',
+      bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
+      google: 'AIzaSyBIw1-l1otL9v1bY-OR4p9w21l1VLu9L2k',
+    };
   }
 }
 

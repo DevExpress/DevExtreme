@@ -651,18 +651,129 @@ export default function() {
     });
 
     testModule('converter option', () => {
-        test('value from toHtml must match the markup value', function(assert) {
-            const instance = $('#htmlEditor').dxHtmlEditor({
-                converter: {
-                    toHtml: () => '<h1>Hi!</h1><p>Test</p>',
+        testModule('init', () => {
+            [null, undefined].forEach(value => {
+                test(`The content should be correct if initial value is ${value}`, function(assert) {
+                    const instance = $('#htmlEditor').dxHtmlEditor({
+                        converter: {
+                            toHtml: (e) => e,
+                        },
+                        value,
+                    }).dxHtmlEditor('instance');
+
+                    const markup = instance.$element().find(`.${CONTENT_CLASS}`).html();
+
+                    assert.strictEqual(markup, '<p><br></p>');
+                });
+            });
+
+            test('The content should be converted correctly', function(assert) {
+                const instance = $('#htmlEditor').dxHtmlEditor({
+                    converter: {
+                        toHtml: () => '<h1>Html converted</h1><p>value</p>',
+                    },
+                    value: 'not html value',
+                }).dxHtmlEditor('instance');
+
+                const markup = instance.$element().find(`.${CONTENT_CLASS}`).html();
+
+                assert.strictEqual(markup, '<h1>Html converted</h1><p>value</p>');
+            });
+        });
+
+        testModule('runtime', () => {
+            test('markup should be updated using converter.toHtml after value option runtime change', function(assert) {
+                const instance = $('#htmlEditor').dxHtmlEditor({
+                    converter: {
+                        toHtml: () => '<h1>Hi!</h1><p>Test</p>',
+                    },
+                }).dxHtmlEditor('instance');
+
+                instance.option('value', 'new value');
+
+                const markup = instance.$element().find(`.${CONTENT_CLASS}`).html();
+
+                assert.strictEqual(markup, '<h1>Hi!</h1><p>Test</p>');
+            });
+        });
+
+        testModule('markdown external support', {
+            converter: {
+                toHtml: (markdownValue) => {
+                    const htmlMarkup = markdownValue.replace('**', '<strong>', 1).replace('**', '</strong>', 1);
+                    return `<p>${htmlMarkup}</p>`;
                 },
-            }).dxHtmlEditor('instance');
+                fromHtml: (htmlMarkup) => {
+                    const markdownValue = htmlMarkup
+                        .slice(3, -4)
+                        .replace('<strong>', '**').replace('</strong>', '**');
+                    return markdownValue;
+                }
+            }
+        }, () => {
+            test('correct markup is rendered on init if markdown value is passed and converter is specified', function(assert) {
+                const instance = $('#htmlEditor').dxHtmlEditor({
+                    converter: this.converter,
+                    value: '**bold** text'
+                }).dxHtmlEditor('instance');
 
-            instance.option('value', 'new value');
 
-            const markup = instance.$element().find(`.${CONTENT_CLASS}`).html();
+                const markup = instance.$element().find(`.${CONTENT_CLASS}`).html();
+                assert.strictEqual(markup, '<p><strong>bold</strong> text</p>');
+            });
 
-            assert.strictEqual(markup, '<h1>Hi!</h1><p>Test</p>');
+            test('correct markup is rendered after markdown value is changed if converter is specified', function(assert) {
+                const instance = $('#htmlEditor').dxHtmlEditor({
+                    converter: this.converter,
+                }).dxHtmlEditor('instance');
+
+                instance.option('value', '**bold** text');
+
+                const markup = instance.$element().find(`.${CONTENT_CLASS}`).html();
+                assert.strictEqual(markup, '<p><strong>bold</strong> text</p>');
+            });
+
+            test('correct markup is rendered after converter is specified at runtime and value is set in markdown format', function(assert) {
+                const instance = $('#htmlEditor').dxHtmlEditor({
+                    value: '**bold** text'
+                }).dxHtmlEditor('instance');
+
+                instance.option('converter', this.converter);
+
+                const markup = instance.$element().find(`.${CONTENT_CLASS}`).html();
+                assert.strictEqual(markup, '<p><strong>bold</strong> text</p>');
+            });
+
+            test('markdown value is correctly updated after character typing if converter is specified', function(assert) {
+                const instance = $('#htmlEditor').dxHtmlEditor({
+                    converter: this.converter,
+                    value: '**bold** text',
+                    onValueChanged: (e) => {
+                        const markup = instance.$element().find(`.${CONTENT_CLASS}`).html();
+                        assert.strictEqual(markup, '<p><strong>bold NEW</strong> text</p>');
+                        assert.strictEqual(instance.option('value'), '**bold NEW** text');
+                    }
+                }).dxHtmlEditor('instance');
+                instance.focus();
+
+                const $content = $(instance.$element().find(`.${CONTENT_CLASS}`));
+                const $strongTextElement = $content.find('strong');
+                $strongTextElement.text('bold NEW');
+            });
+
+            test('markdown value is correctly updated after format applying if converter is specified', function(assert) {
+                const instance = $('#htmlEditor').dxHtmlEditor({
+                    converter: this.converter,
+                    value: '**bold** text'
+                }).dxHtmlEditor('instance');
+
+                instance.setSelection(4, 9);
+                instance.format('bold', true);
+
+                const markup = instance.$element().find(`.${CONTENT_CLASS}`).html();
+                assert.strictEqual(markup, '<p><strong>bold text</strong></p>');
+                assert.strictEqual(instance.option('value'), '**bold text**');
+            });
         });
     });
 }

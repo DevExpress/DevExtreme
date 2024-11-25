@@ -1,2 +1,2 @@
-The Map component can display markers on&nbsp;the map. The collection of&nbsp;displayed markers is&nbsp;declared in&nbsp;the **markers** array. Markers can include tooltips that provide additional information.
+The Map component can display markers on the map. The collection of displayed markers is declared in the [markers](/Documentation/ApiReference/UI_Components/dxMap/Configuration/markers/) array. Markers can include tooltips that provide additional information.
 <!--split-->

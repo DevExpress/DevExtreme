@@ -1198,20 +1198,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     styleProps: CSSStyleDeclaration,
     $row: dxElementWrapper,
     visibleCellIndex: number,
-    includeGroupCell: boolean,
   ) {
-    const groupSelector = includeGroupCell
-      ? `td[aria-colindex='${visibleCellIndex + 1}']`
-      : `td[aria-colindex='${visibleCellIndex + 1}']:not(.${GROUP_CELL_CLASS})`;
-
-    let $cell = $row.hasClass(GROUP_ROW_CLASS)
-      ? $row.find(groupSelector)
+    const $cell = $row.hasClass(GROUP_ROW_CLASS)
+      ? $row.find(`td[aria-colindex='${visibleCellIndex + 1}']:not(.${GROUP_CELL_CLASS})`)
       : $row.find('td').eq(visibleCellIndex);
-
-    if ($cell.is(`.${GROUP_CELL_CLASS}`)) {
-      // @ts-expect-error
-      $cell = $cell.add($cell.find(`.${this.addWidgetPrefix(GROUP_ROW_CONTAINER)}`));
-    }
 
     for (let i = 0; i < $cell.length; i += 1) {
       const cell = $cell.get(i) as HTMLElement;
@@ -1224,7 +1214,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     styleProps: CSSStyleDeclaration,
     columnIndex: number,
     rowIndex?: number,
-    includeGroupCell = false,
   ) {
     const $tableElement = this.getTableElement();
 
@@ -1235,13 +1224,13 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const $rows = $tableElement.children().children('.dx-row').not(`.${DETAIL_ROW_CLASS}`);
 
     if (isDefined(rowIndex)) {
-      this.setCellPropertiesCore(styleProps, $rows.eq(rowIndex), columnIndex, includeGroupCell);
+      this.setCellPropertiesCore(styleProps, $rows.eq(rowIndex), columnIndex);
     } else {
       for (let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
         const visibleIndex = this.getVisibleColumnIndex(columnIndex, rowIndex);
 
         if (visibleIndex >= 0) {
-          this.setCellPropertiesCore(styleProps, $rows.eq(rowIndex), visibleIndex, includeGroupCell);
+          this.setCellPropertiesCore(styleProps, $rows.eq(rowIndex), visibleIndex);
         }
       }
     }

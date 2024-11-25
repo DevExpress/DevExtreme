@@ -2,7 +2,6 @@ import React from 'react';
 import { TreeList, Column, ColumnFixing } from 'devextreme-react/tree-list';
 import { employees } from './data.js';
 
-const expandedRowKeys = [1];
 const calculateCellValue = (data) => [data.Title, data.FirstName, data.LastName].join(' ');
 const App = () => (
   <TreeList
@@ -13,7 +12,7 @@ const App = () => (
     columnAutoWidth={true}
     showBorders={true}
     showRowLines={true}
-    defaultExpandedRowKeys={expandedRowKeys}
+    autoExpandAll={true}
   >
     <ColumnFixing enabled={true} />
     <Column
@@ -48,11 +47,7 @@ const App = () => (
     />
     <Column dataField="HomePhone" />
     <Column dataField="MobilePhone" />
-    <Column
-      dataField="Email"
-      fixed={true}
-      fixedPosition="sticky"
-    />
+    <Column dataField="Email" />
     <Column dataField="Skype" />
   </TreeList>
 );

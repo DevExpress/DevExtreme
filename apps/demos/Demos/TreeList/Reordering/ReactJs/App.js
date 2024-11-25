@@ -2,7 +2,6 @@ import React from 'react';
 import { TreeList, Column, ColumnFixing } from 'devextreme-react/tree-list';
 import { employees } from './data.js';
 
-const expandedRowKeys = [1];
 const calculateCellValue = (data) => [data.Title, data.FirstName, data.LastName].join(' ');
 const App = () => (
   <TreeList
@@ -14,7 +13,7 @@ const App = () => (
     columnAutoWidth={true}
     showBorders={true}
     showRowLines={true}
-    defaultExpandedRowKeys={expandedRowKeys}
+    autoExpandAll={true}
   >
     <ColumnFixing enabled={true} />
     <Column
@@ -23,39 +22,27 @@ const App = () => (
       calculateCellValue={calculateCellValue}
     />
     <Column
+      dataField="Position"
+      alignment="right"
+      fixed={true}
+    />
+    <Column dataField="Address" />
+    <Column dataField="City" />
+    <Column dataField="Zipcode" />
+    <Column dataField="State" />
+    <Column dataField="Department" />
+    <Column
       dataField="BirthDate"
       dataType="date"
     />
     <Column
-      dataField="Address"
-      width={190}
-      fixed={true}
-      fixedPosition="sticky"
-    />
-    <Column dataField="Zipcode" />
-    <Column
       dataField="HireDate"
       dataType="date"
     />
-    <Column
-      dataField="Position"
-      alignment="right"
-    />
-    <Column
-      dataField="City"
-      fixed={true}
-      fixedPosition="right"
-    />
-    <Column
-      dataField="State"
-      fixed={true}
-      fixedPosition="right"
-    />
-    <Column dataField="Department" />
     <Column dataField="HomePhone" />
     <Column dataField="MobilePhone" />
-    <Column dataField="Skype" />
     <Column dataField="Email" />
+    <Column dataField="Skype" />
   </TreeList>
 );
 export default App;

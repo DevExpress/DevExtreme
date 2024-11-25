@@ -1,3 +1,8 @@
+import {
+  afterEach,
+  describe, expect, it, jest,
+} from '@jest/globals';
+
 import * as validationFunctions from './common/validation_functions';
 import type { SchedulerOptions } from './types';
 import {
@@ -11,11 +16,7 @@ describe('endDayHourMustBeGreaterThanStartDayHour', () => {
     startDayHour: 0,
     endDayHour: 24,
   } as SchedulerOptions;
-  let mock: jest.SpyInstance<unknown> | null = null;
-
-  beforeEach(() => {
-    mock = jest.spyOn(validationFunctions, 'greaterThan');
-  });
+  const mock = jest.spyOn(validationFunctions, 'greaterThan');
 
   afterEach(() => {
     mock?.mockReset();
@@ -58,11 +59,7 @@ describe('visibleIntervalMustBeDivisibleByCellDuration', () => {
     startDayHour: 0,
     endDayHour: 24,
   } as SchedulerOptions;
-  let mock: jest.SpyInstance<unknown> | null = null;
-
-  beforeEach(() => {
-    mock = jest.spyOn(validationFunctions, 'divisibleBy');
-  });
+  const mock = jest.spyOn(validationFunctions, 'divisibleBy');
 
   afterEach(() => {
     mock?.mockReset();
@@ -107,11 +104,7 @@ describe('cellDurationMustBeLessThanVisibleInterval', () => {
     startDayHour: 0,
     endDayHour: 24,
   } as SchedulerOptions;
-  let mock: jest.SpyInstance<unknown> | null = null;
-
-  beforeEach(() => {
-    mock = jest.spyOn(validationFunctions, 'lessThan');
-  });
+  const mock = jest.spyOn(validationFunctions, 'lessThan');
 
   afterEach(() => {
     mock?.mockReset();

@@ -7,8 +7,6 @@ const CHAT_TYPINGINDICATOR_TEXT_CLASS = 'dx-chat-typingindicator-text';
 const CHAT_TYPINGINDICATOR_BUBBLE_CLASS = 'dx-chat-typingindicator-bubble';
 const CHAT_TYPINGINDICATOR_CIRCLE_CLASS = 'dx-chat-typingindicator-circle';
 
-const AVATAR_CLASS = 'dx-avatar';
-
 const moduleConfig = {
     beforeEach: function() {
         const init = (options = {}) => {
@@ -34,12 +32,6 @@ QUnit.module('TypingIndicator', moduleConfig, () => {
     });
 
     QUnit.module('Render', () => {
-        QUnit.test('root element should contain avatar element', function(assert) {
-            const $avatar = this.$element.find(`.${AVATAR_CLASS}`);
-
-            assert.strictEqual($avatar.length, 1);
-        });
-
         QUnit.test('root element should contain text element', function(assert) {
             const $text = this.$element.find(`.${CHAT_TYPINGINDICATOR_TEXT_CLASS}`);
 

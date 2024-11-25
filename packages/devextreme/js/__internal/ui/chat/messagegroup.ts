@@ -11,7 +11,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
 import Avatar from './avatar';
-import type Chat from './chat';
+import type { Properties as MessageBubbleProperties } from './messagebubble';
 import MessageBubble from './messagebubble';
 import type { MessageTemplate } from './messagelist';
 
@@ -34,7 +34,6 @@ export interface Properties extends WidgetOptions<MessageGroup> {
   showUserName: boolean;
   showMessageTimestamp: boolean;
   messageTemplate?: MessageTemplate;
-  messageTemplateData?: { component?: Chat };
   messageTimestampFormat?: Format;
 }
 
@@ -54,7 +53,6 @@ class MessageGroup extends Widget<Properties> {
       showUserName: true,
       showMessageTimestamp: true,
       messageTemplate: null,
-      messageTemplateData: {},
       messageTimestampFormat: 'shorttime',
     };
   }
@@ -116,18 +114,25 @@ class MessageGroup extends Widget<Properties> {
     const $bubble = $('<div>')
       .data(MESSAGE_DATA_KEY, message);
 
-    const { messageTemplate, messageTemplateData } = this.option();
-
-    this._createComponent($bubble, MessageBubble, {
-      text: message.text,
-      template: messageTemplate,
-      templateData: {
-        ...messageTemplateData,
-        message,
-      },
-    });
+    this._createComponent($bubble, MessageBubble, this._getMessageBubbleOptions(message));
 
     this._$messageBubbleContainer.append($bubble);
+  }
+
+  _getMessageBubbleOptions(message: Message): MessageBubbleProperties {
+    const options: MessageBubbleProperties = {
+      text: message.text,
+    };
+
+    const { messageTemplate } = this.option();
+
+    if (messageTemplate) {
+      options.template = (text, container): void => {
+        messageTemplate({ ...message, text }, container);
+      };
+    }
+
+    return options;
   }
 
   _renderMessageBubbles(items: Message[]): void {

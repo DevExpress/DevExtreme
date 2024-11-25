@@ -15,39 +15,27 @@
         caption="Employee"
       />
       <DxColumn
+        data-field="Position"
+        alignment="right"
+        :fixed="true"
+      />
+      <DxColumn data-field="Address"/>
+      <DxColumn data-field="City"/>
+      <DxColumn data-field="Zipcode"/>
+      <DxColumn data-field="State"/>
+      <DxColumn data-field="Department"/>
+      <DxColumn
         data-field="BirthDate"
         data-type="date"
       />
       <DxColumn
-        :width="190"
-        data-field="Address"
-        :fixed="true"
-        fixedPosition="sticky"
-      />
-      <DxColumn data-field="Zipcode"/>
-      <DxColumn
         data-field="HireDate"
         data-type="date"
       />
-      <DxColumn
-        data-field="Position"
-        alignment="right"
-      />
-      <DxColumn
-        data-field="City"
-        :fixed="true"
-        fixedPosition="right"
-      />
-      <DxColumn
-        data-field="State"
-        :fixed="true"
-        fixedPosition="right"
-      />
-      <DxColumn data-field="Department"/>
       <DxColumn data-field="HomePhone"/>
       <DxColumn data-field="MobilePhone"/>
-      <DxColumn data-field="Skype"/>
       <DxColumn data-field="Email"/>
+      <DxColumn data-field="Skype"/>
     </DxDataGrid>
   </div>
 </template>

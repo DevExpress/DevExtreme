@@ -47,10 +47,10 @@ export class DxoBarGaugeLabelComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((barValue: { value: number, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((barValue: { value: number, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -63,10 +63,10 @@ export class DxoBarGaugeLabelComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): Format | undefined {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: Format | undefined) {
         this._setOption('format', value);
     }
 

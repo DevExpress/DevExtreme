@@ -15,7 +15,6 @@ import {
 
 
 import { DragDirection, DragHighlight, Orientation } from 'devextreme/common';
-import { UserDefinedElement } from 'devextreme/core/element';
 import { AddEvent, DisposingEvent, DragChangeEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent, RemoveEvent, ReorderEvent } from 'devextreme/ui/sortable';
 
 import {
@@ -56,18 +55,18 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get boundary(): UserDefinedElement | string | undefined {
+    get boundary(): any | string | undefined {
         return this._getOption('boundary');
     }
-    set boundary(value: UserDefinedElement | string | undefined) {
+    set boundary(value: any | string | undefined) {
         this._setOption('boundary', value);
     }
 
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string | undefined {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string | undefined) {
         this._setOption('container', value);
     }
 
@@ -96,10 +95,10 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get dragTemplate(): any | undefined {
+    get dragTemplate(): any {
         return this._getOption('dragTemplate');
     }
-    set dragTemplate(value: any | undefined) {
+    set dragTemplate(value: any) {
         this._setOption('dragTemplate', value);
     }
 
@@ -112,10 +111,10 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -144,10 +143,10 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -272,10 +271,10 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 

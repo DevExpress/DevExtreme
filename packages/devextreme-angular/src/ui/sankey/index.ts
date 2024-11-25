@@ -20,13 +20,13 @@ import {
 } from '@angular/core';
 
 
-import { ExportFormat, HorizontalAlignment, VerticalAlignment, VerticalEdge } from 'devextreme/common';
-import { DashStyle, Font, HatchDirection, Palette, PaletteExtensionMode, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import DataSource from 'devextreme/data/data_source';
+import { VerticalAlignment, ExportFormat, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { dxSankeyNode, SankeyColorMode, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LinkClickEvent, LinkHoverEvent, NodeClickEvent, NodeHoverEvent, OptionChangedEvent } from 'devextreme/viz/sankey';
+import { Font, TextOverflow, HatchDirection, Palette, PaletteExtensionMode, Theme, WordWrap, DashStyle } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
-import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LinkClickEvent, LinkHoverEvent, NodeClickEvent, NodeHoverEvent, OptionChangedEvent, SankeyColorMode } from 'devextreme/viz/sankey';
 
 import DxSankey from 'devextreme/viz/sankey';
 
@@ -60,22 +60,24 @@ import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 
 import { DxoSankeyAdaptiveLayoutModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoSankeyExportModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoSankeyLabelModule } from 'devextreme-angular/ui/sankey/nested';
 import { DxoSankeyBorderModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoSankeyExportModule } from 'devextreme-angular/ui/sankey/nested';
 import { DxoSankeyFontModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoSankeyShadowModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoSankeyLinkModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoSankeyHoverStyleModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoSankeyFormatModule } from 'devextreme-angular/ui/sankey/nested';
 import { DxoSankeyHatchingModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoSankeyHoverStyleModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoSankeyLabelModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoSankeyLinkModule } from 'devextreme-angular/ui/sankey/nested';
 import { DxoSankeyLoadingIndicatorModule } from 'devextreme-angular/ui/sankey/nested';
 import { DxoSankeyMarginModule } from 'devextreme-angular/ui/sankey/nested';
 import { DxoSankeyNodeModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoSankeySankeyborderModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoSankeyShadowModule } from 'devextreme-angular/ui/sankey/nested';
 import { DxoSankeySizeModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoSankeyTitleModule } from 'devextreme-angular/ui/sankey/nested';
 import { DxoSankeySubtitleModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoSankeyTitleModule } from 'devextreme-angular/ui/sankey/nested';
 import { DxoSankeyTooltipModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoSankeyFormatModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoSankeyTooltipBorderModule } from 'devextreme-angular/ui/sankey/nested';
 
 
 
@@ -116,10 +118,10 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get alignment(): VerticalAlignment | Array<VerticalAlignment> {
+    get alignment(): Array<VerticalAlignment> | VerticalAlignment {
         return this._getOption('alignment');
     }
-    set alignment(value: VerticalAlignment | Array<VerticalAlignment>) {
+    set alignment(value: Array<VerticalAlignment> | VerticalAlignment) {
         this._setOption('alignment', value);
     }
 
@@ -129,10 +131,10 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -155,10 +157,10 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -168,10 +170,10 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined } {
+    get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined } {
         return this._getOption('export');
     }
-    set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }) {
+    set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }) {
         this._setOption('export', value);
     }
 
@@ -194,10 +196,10 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get label(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, customizeText?: Function, font?: Font, horizontalOffset?: number, overlappingBehavior?: TextOverflow, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, useNodeColors?: boolean, verticalOffset?: number, visible?: boolean } {
+    get label(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, customizeText?: ((itemInfo: dxSankeyNode) => string), font?: Font, horizontalOffset?: number, overlappingBehavior?: TextOverflow, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, useNodeColors?: boolean, verticalOffset?: number, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, customizeText?: Function, font?: Font, horizontalOffset?: number, overlappingBehavior?: TextOverflow, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, useNodeColors?: boolean, verticalOffset?: number, visible?: boolean }) {
+    set label(value: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, customizeText?: ((itemInfo: dxSankeyNode) => string), font?: Font, horizontalOffset?: number, overlappingBehavior?: TextOverflow, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, useNodeColors?: boolean, verticalOffset?: number, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -259,10 +261,10 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get palette(): Palette | string | Array<string> {
+    get palette(): Array<string> | Palette {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
 
@@ -402,10 +404,10 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, cornerRadius?: number, customizeLinkTooltip?: Function | undefined, customizeNodeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, linkTooltipTemplate?: any | undefined, nodeTooltipTemplate?: any | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
+    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, cornerRadius?: number, customizeLinkTooltip?: ((info: { source: string, target: string, weight: number }) => Record<string, any>) | undefined, customizeNodeTooltip?: ((info: { label: string, title: string, weightIn: number, weightOut: number }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, linkTooltipTemplate?: any, nodeTooltipTemplate?: any, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, cornerRadius?: number, customizeLinkTooltip?: Function | undefined, customizeNodeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, linkTooltipTemplate?: any | undefined, nodeTooltipTemplate?: any | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
+    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, cornerRadius?: number, customizeLinkTooltip?: ((info: { source: string, target: string, weight: number }) => Record<string, any>) | undefined, customizeNodeTooltip?: ((info: { label: string, title: string, weightIn: number, weightOut: number }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, linkTooltipTemplate?: any, nodeTooltipTemplate?: any, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
 
@@ -530,14 +532,14 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() alignmentChange: EventEmitter<VerticalAlignment | Array<VerticalAlignment>>;
+    @Output() alignmentChange: EventEmitter<Array<VerticalAlignment> | VerticalAlignment>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -551,14 +553,14 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }>;
+    @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }>;
 
     /**
     
@@ -572,7 +574,7 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelChange: EventEmitter<{ border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, customizeText?: Function, font?: Font, horizontalOffset?: number, overlappingBehavior?: TextOverflow, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, useNodeColors?: boolean, verticalOffset?: number, visible?: boolean }>;
+    @Output() labelChange: EventEmitter<{ border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, customizeText?: ((itemInfo: dxSankeyNode) => string), font?: Font, horizontalOffset?: number, overlappingBehavior?: TextOverflow, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, useNodeColors?: boolean, verticalOffset?: number, visible?: boolean }>;
 
     /**
     
@@ -607,7 +609,7 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() paletteChange: EventEmitter<Palette | string | Array<string>>;
+    @Output() paletteChange: EventEmitter<Array<string> | Palette>;
 
     /**
     
@@ -684,7 +686,7 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, cornerRadius?: number, customizeLinkTooltip?: Function | undefined, customizeNodeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, linkTooltipTemplate?: any | undefined, nodeTooltipTemplate?: any | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
+    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, cornerRadius?: number, customizeLinkTooltip?: ((info: { source: string, target: string, weight: number }) => Record<string, any>) | undefined, customizeNodeTooltip?: ((info: { label: string, title: string, weightIn: number, weightOut: number }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, linkTooltipTemplate?: any, nodeTooltipTemplate?: any, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
 
     /**
     
@@ -815,22 +817,24 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     DxoTooltipModule,
     DxoFormatModule,
     DxoSankeyAdaptiveLayoutModule,
-    DxoSankeyExportModule,
-    DxoSankeyLabelModule,
     DxoSankeyBorderModule,
+    DxoSankeyExportModule,
     DxoSankeyFontModule,
-    DxoSankeyShadowModule,
-    DxoSankeyLinkModule,
-    DxoSankeyHoverStyleModule,
+    DxoSankeyFormatModule,
     DxoSankeyHatchingModule,
+    DxoSankeyHoverStyleModule,
+    DxoSankeyLabelModule,
+    DxoSankeyLinkModule,
     DxoSankeyLoadingIndicatorModule,
     DxoSankeyMarginModule,
     DxoSankeyNodeModule,
+    DxoSankeySankeyborderModule,
+    DxoSankeyShadowModule,
     DxoSankeySizeModule,
-    DxoSankeyTitleModule,
     DxoSankeySubtitleModule,
+    DxoSankeyTitleModule,
     DxoSankeyTooltipModule,
-    DxoSankeyFormatModule,
+    DxoSankeyTooltipBorderModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -857,22 +861,24 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     DxoTooltipModule,
     DxoFormatModule,
     DxoSankeyAdaptiveLayoutModule,
-    DxoSankeyExportModule,
-    DxoSankeyLabelModule,
     DxoSankeyBorderModule,
+    DxoSankeyExportModule,
     DxoSankeyFontModule,
-    DxoSankeyShadowModule,
-    DxoSankeyLinkModule,
-    DxoSankeyHoverStyleModule,
+    DxoSankeyFormatModule,
     DxoSankeyHatchingModule,
+    DxoSankeyHoverStyleModule,
+    DxoSankeyLabelModule,
+    DxoSankeyLinkModule,
     DxoSankeyLoadingIndicatorModule,
     DxoSankeyMarginModule,
     DxoSankeyNodeModule,
+    DxoSankeySankeyborderModule,
+    DxoSankeyShadowModule,
     DxoSankeySizeModule,
-    DxoSankeyTitleModule,
     DxoSankeySubtitleModule,
+    DxoSankeyTitleModule,
     DxoSankeyTooltipModule,
-    DxoSankeyFormatModule,
+    DxoSankeyTooltipBorderModule,
     DxTemplateModule
   ]
 })

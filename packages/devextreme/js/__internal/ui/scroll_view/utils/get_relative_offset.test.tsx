@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { describe, expect, it } from '@jest/globals';
+
 import { getRelativeOffset } from './get_relative_offset';
 
 describe('getRelativeOffset(targetElementClass, sourceElement)', () => {

@@ -4,7 +4,8 @@
   $messagegroup-start-gap,
   $messagegroup-padding,
   $information-font-size,
-  $information-color,
+  $information-author-name-color,
+  $information-timestamp-color,
   $information-gap
 ) {
   .dx-chat-messagegroup {
@@ -22,12 +23,19 @@
   
   .dx-chat-messagegroup-alignment-start {
     grid-template-columns: $messagegroup-start-template;
+  }
+
+  .dx-chat-messagegroup-alignment-start:has(.dx-avatar) {
     column-gap: $messagegroup-start-gap;
   }
   
-  .dx-chat-messagegroup-time,
+  .dx-chat-messagegroup-time {
+    font-size: $information-font-size;
+    color: $information-timestamp-color;
+  }
+
   .dx-chat-messagegroup-author-name {
     font-size: $information-font-size;
-    color: $information-color;
+    color: $information-author-name-color;
   }
 }

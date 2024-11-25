@@ -23,13 +23,14 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/context_menu';
 
+import DataSource from 'devextreme/data/data_source';
 import { AnimationConfig } from 'devextreme/animation/fx';
+import { event } from 'devextreme/events/index';
+import { dxContextMenuItem, ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, PositioningEvent, SelectionChangedEvent, ShowingEvent, ShownEvent, ContextSubmenuDirection } from 'devextreme/ui/context_menu';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 import { PositionConfig } from 'devextreme/animation/position';
 import { SingleOrNone, SubmenuShowMode } from 'devextreme/common';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, ContextSubmenuDirection, DisposingEvent, dxContextMenuItem, HiddenEvent, HidingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, PositioningEvent, SelectionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/context_menu';
 
 import DxContextMenu from 'devextreme/ui/context_menu';
 
@@ -61,20 +62,20 @@ import { DxoShowSubmenuModeModule } from 'devextreme-angular/ui/nested';
 import { DxoDelayModule } from 'devextreme-angular/ui/nested';
 
 import { DxoContextMenuAnimationModule } from 'devextreme-angular/ui/context-menu/nested';
-import { DxoContextMenuHideModule } from 'devextreme-angular/ui/context-menu/nested';
-import { DxoContextMenuFromModule } from 'devextreme-angular/ui/context-menu/nested';
-import { DxoContextMenuPositionModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoContextMenuAtModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoContextMenuBoundaryOffsetModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoContextMenuCollisionModule } from 'devextreme-angular/ui/context-menu/nested';
+import { DxoContextMenuDelayModule } from 'devextreme-angular/ui/context-menu/nested';
+import { DxoContextMenuFromModule } from 'devextreme-angular/ui/context-menu/nested';
+import { DxoContextMenuHideModule } from 'devextreme-angular/ui/context-menu/nested';
+import { DxiContextMenuItemModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoContextMenuMyModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoContextMenuOffsetModule } from 'devextreme-angular/ui/context-menu/nested';
-import { DxoContextMenuToModule } from 'devextreme-angular/ui/context-menu/nested';
+import { DxoContextMenuPositionModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoContextMenuShowModule } from 'devextreme-angular/ui/context-menu/nested';
-import { DxiContextMenuItemModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoContextMenuShowEventModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoContextMenuShowSubmenuModeModule } from 'devextreme-angular/ui/context-menu/nested';
-import { DxoContextMenuDelayModule } from 'devextreme-angular/ui/context-menu/nested';
+import { DxoContextMenuToModule } from 'devextreme-angular/ui/context-menu/nested';
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
@@ -144,10 +145,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get closeOnOutsideClick(): boolean | Function {
+    get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
         return this._getOption('closeOnOutsideClick');
     }
-    set closeOnOutsideClick(value: boolean | Function) {
+    set closeOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('closeOnOutsideClick', value);
     }
 
@@ -170,10 +171,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxContextMenuItem> {
+    get dataSource(): Array<dxContextMenuItem> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxContextMenuItem>) {
+    set dataSource(value: Array<dxContextMenuItem> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -209,10 +210,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get displayExpr(): Function | string {
+    get displayExpr(): ((item: any) => string) | string {
         return this._getOption('displayExpr');
     }
-    set displayExpr(value: Function | string) {
+    set displayExpr(value: ((item: any) => string) | string) {
         this._setOption('displayExpr', value);
     }
 
@@ -222,10 +223,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -248,10 +249,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -261,10 +262,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get hideOnOutsideClick(): boolean | Function {
+    get hideOnOutsideClick(): boolean | ((event: event) => boolean) {
         return this._getOption('hideOnOutsideClick');
     }
-    set hideOnOutsideClick(value: boolean | Function) {
+    set hideOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('hideOnOutsideClick', value);
     }
 
@@ -469,10 +470,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get target(): UserDefinedElement | string | undefined {
+    get target(): any | string | undefined {
         return this._getOption('target');
     }
-    set target(value: UserDefinedElement | string | undefined) {
+    set target(value: any | string | undefined) {
         this._setOption('target', value);
     }
 
@@ -495,10 +496,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -632,7 +633,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() closeOnOutsideClickChange: EventEmitter<boolean | Function>;
+    @Output() closeOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
 
     /**
     
@@ -646,7 +647,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxContextMenuItem>>;
+    @Output() dataSourceChange: EventEmitter<Array<dxContextMenuItem> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -667,14 +668,14 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() displayExprChange: EventEmitter<Function | string>;
+    @Output() displayExprChange: EventEmitter<((item: any) => string) | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -688,14 +689,14 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hideOnOutsideClickChange: EventEmitter<boolean | Function>;
+    @Output() hideOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
 
     /**
     
@@ -807,7 +808,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() targetChange: EventEmitter<UserDefinedElement | string | undefined>;
+    @Output() targetChange: EventEmitter<any | string | undefined>;
 
     /**
     
@@ -821,7 +822,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
 
 
@@ -967,20 +968,20 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     DxoShowSubmenuModeModule,
     DxoDelayModule,
     DxoContextMenuAnimationModule,
-    DxoContextMenuHideModule,
-    DxoContextMenuFromModule,
-    DxoContextMenuPositionModule,
     DxoContextMenuAtModule,
     DxoContextMenuBoundaryOffsetModule,
     DxoContextMenuCollisionModule,
+    DxoContextMenuDelayModule,
+    DxoContextMenuFromModule,
+    DxoContextMenuHideModule,
+    DxiContextMenuItemModule,
     DxoContextMenuMyModule,
     DxoContextMenuOffsetModule,
-    DxoContextMenuToModule,
+    DxoContextMenuPositionModule,
     DxoContextMenuShowModule,
-    DxiContextMenuItemModule,
     DxoContextMenuShowEventModule,
     DxoContextMenuShowSubmenuModeModule,
-    DxoContextMenuDelayModule,
+    DxoContextMenuToModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1005,20 +1006,20 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     DxoShowSubmenuModeModule,
     DxoDelayModule,
     DxoContextMenuAnimationModule,
-    DxoContextMenuHideModule,
-    DxoContextMenuFromModule,
-    DxoContextMenuPositionModule,
     DxoContextMenuAtModule,
     DxoContextMenuBoundaryOffsetModule,
     DxoContextMenuCollisionModule,
+    DxoContextMenuDelayModule,
+    DxoContextMenuFromModule,
+    DxoContextMenuHideModule,
+    DxiContextMenuItemModule,
     DxoContextMenuMyModule,
     DxoContextMenuOffsetModule,
-    DxoContextMenuToModule,
+    DxoContextMenuPositionModule,
     DxoContextMenuShowModule,
-    DxiContextMenuItemModule,
     DxoContextMenuShowEventModule,
     DxoContextMenuShowSubmenuModeModule,
-    DxoContextMenuDelayModule,
+    DxoContextMenuToModule,
     DxTemplateModule
   ]
 })

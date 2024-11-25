@@ -15,7 +15,6 @@ import {
 
 
 import { DashStyle, Font } from 'devextreme/common/charts';
-import { UserDefinedElement } from 'devextreme/core/element';
 import { Format } from 'devextreme/localization';
 
 import {
@@ -56,10 +55,10 @@ export class DxoSankeyTooltipComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string | undefined {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string | undefined) {
         this._setOption('container', value);
     }
 
@@ -72,18 +71,18 @@ export class DxoSankeyTooltipComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get customizeLinkTooltip(): Function | undefined {
+    get customizeLinkTooltip(): ((info: { source: string, target: string, weight: number }) => Record<string, any>) | undefined {
         return this._getOption('customizeLinkTooltip');
     }
-    set customizeLinkTooltip(value: Function | undefined) {
+    set customizeLinkTooltip(value: ((info: { source: string, target: string, weight: number }) => Record<string, any>) | undefined) {
         this._setOption('customizeLinkTooltip', value);
     }
 
     @Input()
-    get customizeNodeTooltip(): Function | undefined {
+    get customizeNodeTooltip(): ((info: { label: string, title: string, weightIn: number, weightOut: number }) => Record<string, any>) | undefined {
         return this._getOption('customizeNodeTooltip');
     }
-    set customizeNodeTooltip(value: Function | undefined) {
+    set customizeNodeTooltip(value: ((info: { label: string, title: string, weightIn: number, weightOut: number }) => Record<string, any>) | undefined) {
         this._setOption('customizeNodeTooltip', value);
     }
 
@@ -104,26 +103,26 @@ export class DxoSankeyTooltipComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): Format | undefined {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: Format | undefined) {
         this._setOption('format', value);
     }
 
     @Input()
-    get linkTooltipTemplate(): any | undefined {
+    get linkTooltipTemplate(): any {
         return this._getOption('linkTooltipTemplate');
     }
-    set linkTooltipTemplate(value: any | undefined) {
+    set linkTooltipTemplate(value: any) {
         this._setOption('linkTooltipTemplate', value);
     }
 
     @Input()
-    get nodeTooltipTemplate(): any | undefined {
+    get nodeTooltipTemplate(): any {
         return this._getOption('nodeTooltipTemplate');
     }
-    set nodeTooltipTemplate(value: any | undefined) {
+    set nodeTooltipTemplate(value: any) {
         this._setOption('nodeTooltipTemplate', value);
     }
 

@@ -86,18 +86,18 @@ export class DxoDiagramDefaultItemPropertiesComponent extends NestedOption imple
     }
 
     @Input()
-    get style(): any {
+    get style(): Record<string, any> {
         return this._getOption('style');
     }
-    set style(value: any) {
+    set style(value: Record<string, any>) {
         this._setOption('style', value);
     }
 
     @Input()
-    get textStyle(): any {
+    get textStyle(): Record<string, any> {
         return this._getOption('textStyle');
     }
-    set textStyle(value: any) {
+    set textStyle(value: Record<string, any>) {
         this._setOption('textStyle', value);
     }
 

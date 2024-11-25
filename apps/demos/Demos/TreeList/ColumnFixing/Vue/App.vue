@@ -8,7 +8,7 @@
       :column-auto-width="true"
       :show-borders="true"
       :show-row-lines="true"
-      :expanded-row-keys="expandedRowKeys"
+      :auto-expand-all="true"
     >
       <DxColumnFixing :enabled="true"/>
       <DxColumn
@@ -26,7 +26,7 @@
         fixed-position="sticky"
       />
       <DxColumn data-field="City" />
-      <DxColumn data-field="Zipcode"/>
+      <DxColumn data-field="Zipcode" />
       <DxColumn data-field="State" />
       <DxColumn
         data-field="Department"
@@ -41,14 +41,10 @@
         data-field="HireDate"
         data-type="date"
       />
-      <DxColumn data-field="HomePhone"/>
-      <DxColumn data-field="MobilePhone"/>
-      <DxColumn
-        data-field="Email"
-        :fixed="true"
-        fixed-position="sticky"
-      />
-      <DxColumn data-field="Skype"/>
+      <DxColumn data-field="HomePhone" />
+      <DxColumn data-field="MobilePhone" />
+      <DxColumn data-field="Email" />
+      <DxColumn data-field="Skype" />
     </DxTreeList>
   </div>
 </template>
@@ -56,7 +52,6 @@
 import { DxTreeList, DxColumn, DxColumnFixing } from 'devextreme-vue/tree-list';
 import { Employee, employees } from './data.ts';
 
-const expandedRowKeys = [1];
 function calculateCellValue(data: Employee) {
   return [data.Title, data.FirstName, data.LastName].join(' ');
 }

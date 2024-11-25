@@ -2,6 +2,11 @@
  * @jest-environment node
  */
 import {
+  afterEach, beforeEach,
+  describe, expect, jest, test,
+} from '@jest/globals';
+
+import {
   setLicenseCheckSkipCondition,
   validateLicense,
 } from './license_validation';

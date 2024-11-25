@@ -4,11 +4,10 @@ import Chat from 'ui/chat';
 import MessageList from '__internal/ui/chat/messagelist';
 import AlertList from '__internal/ui/chat/alertlist';
 import MessageBox, { TYPING_END_DELAY } from '__internal/ui/chat/messagebox';
-import MessageBubble from '__internal/ui/chat/messagebubble';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
-import { data } from 'core/element_data';
+import dataUtils from 'core/element_data';
 
 import { isRenderer } from 'core/utils/type';
 
@@ -19,6 +18,7 @@ const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 const CHAT_ALERTLIST_CLASS = 'dx-chat-alertlist';
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
+const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
 const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
@@ -85,6 +85,7 @@ const moduleConfig = {
         this.getMessageGroups = () => this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
         this.getDayHeaders = () => this.$element.find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
         this.getBubbles = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
+        this.getBubblesContents = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
 
         init();
     }
@@ -245,34 +246,115 @@ QUnit.module('Chat', () => {
             });
         });
 
-        QUnit.test('Chat should pass messageTemplate to messageList on init', function(assert) {
-            const messageTemplate = () => { return $('<div>'); };
-            this.reinit({
-                messageTemplate,
+        QUnit.module('messageTemplate', () => {
+            QUnit.test('messageTemplate should set bubble content on init', function(assert) {
+                const messageTemplate = (data, container) => {
+                    $('<h1>').text(`text: ${data.message.text}`).appendTo(container);
+                };
+
+                this.reinit({
+                    items: [{ text: 'CustomText' }],
+                    messageTemplate,
+                });
+
+                const $bubbleContent = this.getBubblesContents();
+
+                assert.strictEqual($bubbleContent.text(), 'text: CustomText');
             });
 
-            const messageList = this.getMessageList();
-            assert.strictEqual(messageList.option('messageTemplate'), messageTemplate, 'messageTemplate is passed on init');
-        });
+            QUnit.test('messageTemplate should set bubble content at runtime', function(assert) {
+                const messageTemplate = (data, container) => {
+                    $('<h1>').text(`text: ${data.message.text}`).appendTo(container);
+                };
 
-        QUnit.test('Chat should pass messageTemplate to messageList at runtime', function(assert) {
-            this.reinit({ });
+                this.reinit({
+                    items: [{ text: 'CustomText' }]
+                });
 
-            const messageTemplate = () => { return $('<div>'); };
+                this.instance.option('messageTemplate', messageTemplate);
 
-            this.instance.option('messageTemplate', messageTemplate);
+                const $bubbleContent = this.getBubbles();
 
-            const messageList = this.getMessageList();
+                assert.strictEqual($bubbleContent.text(), 'text: CustomText');
+            });
 
-            assert.strictEqual(messageList.option('messageTemplate'), messageTemplate, 'messageTemplate is passed on runtime');
-        });
+            QUnit.test('messageTemplate function should have correct parameters', function(assert) {
+                assert.expect(2);
 
-        QUnit.test('Chat should pass messageTemplateData with chat instance to messageList', function(assert) {
-            this.reinit({ });
+                const message = {
+                    timestamp: 1234567,
+                    text: 'message text',
+                    author: { name: 'UserName', id: 'UserID' },
+                };
 
-            const messageList = this.getMessageList();
-            const messageTemplateData = messageList.option('messageTemplateData');
-            assert.strictEqual(messageTemplateData.component, this.instance, 'messageTemplateData with chat instance is passed to messageList');
+                const messageTemplate = (data) => {
+                    assert.strictEqual(data.component instanceof Chat, true, 'component is passed');
+                    assert.deepEqual(data.message, message, 'message parameter is passed');
+                };
+
+                this.reinit({
+                    items: [message],
+                    messageTemplate,
+                });
+            });
+
+            QUnit.test('messageTemplate should set bubble content on runtime message add', function(assert) {
+                const messageTemplate = (data, container) => {
+                    $('<h1>').text(`text: ${data.message.text}`).appendTo(container);
+                };
+
+                this.reinit({
+                    messageTemplate,
+                });
+
+                this.instance.renderMessage({ text: 'new message' });
+
+                const $bubbleContent = this.getBubblesContents();
+
+                assert.strictEqual($bubbleContent.text(), 'text: new message');
+            });
+
+            QUnit.test('messageTemplate should not have excess call count', function(assert) {
+                const messageTemplate = sinon.stub();
+
+                this.reinit({
+                    messageTemplate,
+                    items: [
+                        { text: 'a' },
+                        { text: 'b' },
+                    ]
+                });
+
+                assert.strictEqual(messageTemplate.callCount, 2, 'no excess renders on init');
+
+                this.instance.renderMessage({ text: 'c' });
+
+                assert.strictEqual(messageTemplate.callCount, 3, 'no excess renders on runtime message add');
+            });
+
+            QUnit.test('messageTemplate specified as a string text should set bubble content', function(assert) {
+                this.reinit({
+                    items: [{ text: 'a' }],
+                    messageTemplate: 'hello',
+                });
+
+                const $bubbleContent = this.getBubblesContents();
+
+                assert.strictEqual($bubbleContent.text(), 'hello');
+            });
+
+            QUnit.test('messageTemplate specified as a string with a html element should set bubble content', function(assert) {
+                this.reinit({
+                    items: [{ text: 'CustomText' }],
+                    messageTemplate: '<p>p text</p>',
+                });
+
+                const $bubbleContent = this.getBubblesContents();
+                const $bubbleContentChild = $bubbleContent.children();
+
+                assert.strictEqual($bubbleContentChild.text(), 'p text', 'template text is correct');
+                assert.strictEqual($bubbleContentChild.prop('tagName'), 'P', 'templte tag element is correct');
+            });
         });
 
         QUnit.test('dayHeaderFormat option value should be passed to messageList on init', function(assert) {
@@ -361,31 +443,6 @@ QUnit.module('Chat', () => {
             const alertList = this.getAlertList();
 
             assert.deepEqual(alertList.option('items'), newAlerts, 'items value is updated');
-        });
-    });
-
-    QUnit.module('MessageBubble integration', {
-        beforeEach: function() {
-            moduleConfig.beforeEach.apply(this, arguments);
-
-            this.getMessageBubbles = () => MessageBubble.getInstance(this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`));
-        }
-    }, () => {
-        QUnit.test('MessageBubble should have messageTemplateData with correct fields', function(assert) {
-            const message = {
-                text: 'text',
-                author: userFirst,
-            };
-
-            this.reinit({
-                items: [message],
-            });
-
-            const messageBubble = this.getMessageBubbles();
-            const messageTemplateData = messageBubble.option('templateData');
-
-            assert.strictEqual(messageTemplateData.component, this.instance, 'messageTemplateData includes chat instance');
-            assert.deepEqual(messageTemplateData.message, message, 'messageTemplateData includes message field');
         });
     });
 
@@ -1105,7 +1162,7 @@ QUnit.module('Chat', () => {
             assert.strictEqual(this.getBubbles().length, 3, 'message bubble count');
             assert.strictEqual(this.getBubbles().eq(1).text(), newBubbleText, 'message bubble text was updated');
 
-            const messageData = data(this.getBubbles().eq(1).get(0), 'dxMessageData');
+            const messageData = dataUtils.data(this.getBubbles().eq(1).get(0), 'dxMessageData');
 
             assert.deepEqual(messageData, { id: 2, text: newBubbleText }, 'message bubble data was updated');
         });

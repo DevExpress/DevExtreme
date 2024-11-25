@@ -206,8 +206,8 @@ const BoundaryOffset = Object.assign<typeof _componentBoundaryOffset, NestedComp
 // TagBox
 type IButtonProps = React.PropsWithChildren<{
   location?: TextEditorButtonLocation;
-  name?: string;
-  options?: dxButtonOptions;
+  name?: string | undefined;
+  options?: dxButtonOptions | undefined;
 }>
 const _componentButton = (props: IButtonProps) => {
   return React.createElement(NestedOption<IButtonProps>, {
@@ -248,18 +248,18 @@ const Collision = Object.assign<typeof _componentCollision, NestedComponentMeta>
 // owners:
 // TagBox
 type IDropDownOptionsProps = React.PropsWithChildren<{
-  accessKey?: string;
+  accessKey?: string | undefined;
   animation?: Record<string, any> | {
     hide?: AnimationConfig;
     show?: AnimationConfig;
   };
   bindingOptions?: Record<string, any>;
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
-  container?: any | string;
+  container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
   disabled?: boolean;
-  dragAndResizeArea?: any | string;
+  dragAndResizeArea?: any | string | undefined;
   dragEnabled?: boolean;
   dragOutsideBoundary?: boolean;
   enableBodyScroll?: boolean;
@@ -268,7 +268,7 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   height?: (() => number | string) | number | string;
   hideOnOutsideClick?: boolean | ((event: event) => boolean);
   hideOnParentScroll?: boolean;
-  hint?: string;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
   maxHeight?: (() => number | string) | number | string;
   maxWidth?: (() => number | string) | number | string;
@@ -377,11 +377,11 @@ const From = Object.assign<typeof _componentFrom, NestedComponentMeta>(_componen
 type IHideProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: Direction;
+  direction?: Direction | undefined;
   duration?: number;
   easing?: string;
   from?: AnimationState;
-  staggerDelay?: number;
+  staggerDelay?: number | undefined;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
   type?: AnimationType;
@@ -474,14 +474,14 @@ const Offset = Object.assign<typeof _componentOffset, NestedComponentMeta>(_comp
 // owners:
 // Button
 type IOptionsProps = React.PropsWithChildren<{
-  accessKey?: string;
+  accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string;
-  hint?: string;
+  height?: (() => number | string) | number | string | undefined;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
   onClick?: ((e: ClickEvent) => void);
@@ -496,9 +496,9 @@ type IOptionsProps = React.PropsWithChildren<{
   text?: string;
   type?: ButtonType | string;
   useSubmitBehavior?: boolean;
-  validationGroup?: string;
+  validationGroup?: string | undefined;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: (() => number | string) | number | string | undefined;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
@@ -565,11 +565,11 @@ const Position = Object.assign<typeof _componentPosition, NestedComponentMeta>(_
 type IShowProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: Direction;
+  direction?: Direction | undefined;
   duration?: number;
   easing?: string;
   from?: AnimationState;
-  staggerDelay?: number;
+  staggerDelay?: number | undefined;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
   type?: AnimationType;
@@ -612,7 +612,7 @@ const To = Object.assign<typeof _componentTo, NestedComponentMeta>(_componentTo,
 // owners:
 // DropDownOptions
 type IToolbarItemProps = React.PropsWithChildren<{
-  cssClass?: string;
+  cssClass?: string | undefined;
   disabled?: boolean;
   html?: string;
   locateInMenu?: LocateInMenuMode;

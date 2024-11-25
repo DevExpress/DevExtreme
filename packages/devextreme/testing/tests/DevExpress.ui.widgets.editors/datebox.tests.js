@@ -69,6 +69,7 @@ const LIST_CLASS = 'dx-list';
 const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button';
+const CALENDAR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
 const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view';
 const DROPDOWNEDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const NUMBERBOX_CLASS = 'dx-numberbox';
@@ -6107,6 +6108,24 @@ QUnit.module('DateBox number and string value support', {
         });
     });
 
+    QUnit.test('should not throw any errors after clicking on the navigator caption button if the value is an empty string (T1257679)', function(assert) {
+        const dateBox = $('#dateBox').dxDateBox({
+            type: 'date',
+            pickerType: 'calendar',
+            value: '',
+            opened: true,
+        }).dxDateBox('instance');
+
+        try {
+            const $navigatorCaptionButton = dateBox._popup.$wrapper().find(`.${CALENDAR_CAPTION_BUTTON_CLASS}`);
+
+            $($navigatorCaptionButton).trigger('dxclick');
+        } catch(e) {
+            assert.ok(false, `error: ${e.message}`);
+        } finally {
+            assert.ok(true, 'there is no error');
+        }
+    });
 });
 
 testModule('native picker', function() {

@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
 
 import { createTimeZoneCalculator } from '../../timezone_calculator';

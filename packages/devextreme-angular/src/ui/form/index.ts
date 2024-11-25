@@ -23,7 +23,7 @@ import {
 
 
 import { Mode } from 'devextreme/common';
-import { ButtonItem, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, EmptyItem, FieldDataChangedEvent, FormLabelMode, GroupItem, InitializedEvent, LabelLocation, OptionChangedEvent, SimpleItem, TabbedItem } from 'devextreme/ui/form';
+import { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/form';
 
 import DxForm from 'devextreme/ui/form';
 
@@ -46,17 +46,37 @@ import { DxoTabPanelOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiTabModule } from 'devextreme-angular/ui/nested';
 import { DxoButtonOptionsModule } from 'devextreme-angular/ui/nested';
 
+import { DxiFormAsyncRuleModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormButtonItemModule } from 'devextreme-angular/ui/form/nested';
+import { DxoFormButtonOptionsModule } from 'devextreme-angular/ui/form/nested';
 import { DxoFormColCountByScreenModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormCompareRuleModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormCustomRuleModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormEmailRuleModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormEmptyItemModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormGroupItemModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormItemModule } from 'devextreme-angular/ui/form/nested';
 import { DxoFormLabelModule } from 'devextreme-angular/ui/form/nested';
-import { DxiFormValidationRuleModule } from 'devextreme-angular/ui/form/nested';
-import { DxoFormTabPanelOptionsModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormNumericRuleModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormPatternRuleModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormRangeRuleModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormRequiredRuleModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormSimpleItemModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormStringLengthRuleModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormTabModule } from 'devextreme-angular/ui/form/nested';
-import { DxoFormButtonOptionsModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormTabbedItemModule } from 'devextreme-angular/ui/form/nested';
+import { DxoFormTabPanelOptionsModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormTabPanelOptionsItemModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormValidationRuleModule } from 'devextreme-angular/ui/form/nested';
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiFormButtonItemComponent } from 'devextreme-angular/ui/form/nested';
+import { DxiFormEmptyItemComponent } from 'devextreme-angular/ui/form/nested';
+import { DxiFormGroupItemComponent } from 'devextreme-angular/ui/form/nested';
 import { DxiFormItemComponent } from 'devextreme-angular/ui/form/nested';
+import { DxiFormSimpleItemComponent } from 'devextreme-angular/ui/form/nested';
+import { DxiFormTabbedItemComponent } from 'devextreme-angular/ui/form/nested';
 
 
 /**
@@ -159,10 +179,10 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get customizeItem(): Function {
+    get customizeItem(): ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => void) {
         return this._getOption('customizeItem');
     }
-    set customizeItem(value: Function) {
+    set customizeItem(value: ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => void)) {
         this._setOption('customizeItem', value);
     }
 
@@ -185,10 +205,10 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -224,10 +244,10 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -276,10 +296,10 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get items(): Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem> {
+    get items(): Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem> {
         return this._getOption('items');
     }
-    set items(value: Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>) {
+    set items(value: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>) {
         this._setOption('items', value);
     }
 
@@ -510,10 +530,10 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -612,7 +632,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizeItemChange: EventEmitter<Function>;
+    @Output() customizeItemChange: EventEmitter<((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => void)>;
 
     /**
     
@@ -626,7 +646,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -647,7 +667,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -675,7 +695,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>>;
+    @Output() itemsChange: EventEmitter<Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>>;
 
     /**
     
@@ -801,10 +821,37 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
 
 
+
+    @ContentChildren(DxiFormButtonItemComponent)
+    get buttonItemsChildren(): QueryList<DxiFormButtonItemComponent> {
+        return this._getOption('items');
+    }
+    set buttonItemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiFormButtonItemComponent');
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(DxiFormEmptyItemComponent)
+    get emptyItemsChildren(): QueryList<DxiFormEmptyItemComponent> {
+        return this._getOption('items');
+    }
+    set emptyItemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiFormEmptyItemComponent');
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(DxiFormGroupItemComponent)
+    get groupItemsChildren(): QueryList<DxiFormGroupItemComponent> {
+        return this._getOption('items');
+    }
+    set groupItemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiFormGroupItemComponent');
+        this.setChildren('items', value);
+    }
 
     @ContentChildren(DxiFormItemComponent)
     get itemsChildren(): QueryList<DxiFormItemComponent> {
@@ -812,6 +859,24 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     }
     set itemsChildren(value) {
         this.setContentChildren('items', value, 'DxiFormItemComponent');
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(DxiFormSimpleItemComponent)
+    get simpleItemsChildren(): QueryList<DxiFormSimpleItemComponent> {
+        return this._getOption('items');
+    }
+    set simpleItemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiFormSimpleItemComponent');
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(DxiFormTabbedItemComponent)
+    get tabbedItemsChildren(): QueryList<DxiFormTabbedItemComponent> {
+        return this._getOption('items');
+    }
+    set tabbedItemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiFormTabbedItemComponent');
         this.setChildren('items', value);
     }
 
@@ -932,13 +997,28 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     DxoTabPanelOptionsModule,
     DxiTabModule,
     DxoButtonOptionsModule,
+    DxiFormAsyncRuleModule,
+    DxiFormButtonItemModule,
+    DxoFormButtonOptionsModule,
     DxoFormColCountByScreenModule,
+    DxiFormCompareRuleModule,
+    DxiFormCustomRuleModule,
+    DxiFormEmailRuleModule,
+    DxiFormEmptyItemModule,
+    DxiFormGroupItemModule,
     DxiFormItemModule,
     DxoFormLabelModule,
-    DxiFormValidationRuleModule,
-    DxoFormTabPanelOptionsModule,
+    DxiFormNumericRuleModule,
+    DxiFormPatternRuleModule,
+    DxiFormRangeRuleModule,
+    DxiFormRequiredRuleModule,
+    DxiFormSimpleItemModule,
+    DxiFormStringLengthRuleModule,
     DxiFormTabModule,
-    DxoFormButtonOptionsModule,
+    DxiFormTabbedItemModule,
+    DxoFormTabPanelOptionsModule,
+    DxiFormTabPanelOptionsItemModule,
+    DxiFormValidationRuleModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -954,13 +1034,28 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     DxoTabPanelOptionsModule,
     DxiTabModule,
     DxoButtonOptionsModule,
+    DxiFormAsyncRuleModule,
+    DxiFormButtonItemModule,
+    DxoFormButtonOptionsModule,
     DxoFormColCountByScreenModule,
+    DxiFormCompareRuleModule,
+    DxiFormCustomRuleModule,
+    DxiFormEmailRuleModule,
+    DxiFormEmptyItemModule,
+    DxiFormGroupItemModule,
     DxiFormItemModule,
     DxoFormLabelModule,
-    DxiFormValidationRuleModule,
-    DxoFormTabPanelOptionsModule,
+    DxiFormNumericRuleModule,
+    DxiFormPatternRuleModule,
+    DxiFormRangeRuleModule,
+    DxiFormRequiredRuleModule,
+    DxiFormSimpleItemModule,
+    DxiFormStringLengthRuleModule,
     DxiFormTabModule,
-    DxoFormButtonOptionsModule,
+    DxiFormTabbedItemModule,
+    DxoFormTabPanelOptionsModule,
+    DxiFormTabPanelOptionsItemModule,
+    DxiFormValidationRuleModule,
     DxTemplateModule
   ]
 })

@@ -12,8 +12,9 @@ import {
 
 
 
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import DataSource from 'devextreme/data/data_source';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,
@@ -45,18 +46,18 @@ export class DxiSchedulerResourceComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
     @Input()
-    get displayExpr(): Function | string {
+    get displayExpr(): ((resource: any) => string) | string {
         return this._getOption('displayExpr');
     }
-    set displayExpr(value: Function | string) {
+    set displayExpr(value: ((resource: any) => string) | string) {
         this._setOption('displayExpr', value);
     }
 

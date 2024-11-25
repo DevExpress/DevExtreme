@@ -148,7 +148,7 @@ const Gantt = memo(
 // owners:
 // Gantt
 type IColumnProps = React.PropsWithChildren<{
-  alignment?: HorizontalAlignment;
+  alignment?: HorizontalAlignment | undefined;
   allowFiltering?: boolean;
   allowHeaderFiltering?: boolean;
   allowSorting?: boolean;
@@ -156,53 +156,53 @@ type IColumnProps = React.PropsWithChildren<{
   calculateDisplayValue?: ((rowData: any) => any) | string;
   calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | (() => any) | Array<any>);
   calculateSortValue?: ((rowData: any) => any) | string;
-  caption?: string;
+  caption?: string | undefined;
   cellTemplate?: ((cellElement: any, cellInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList, data: Record<string, any>, displayValue: any, oldValue: any, row: dxTreeListRowObject, rowIndex: number, rowType: string, text: string, value: any, watch: (() => void) }) => any) | template;
-  cssClass?: string;
+  cssClass?: string | undefined;
   customizeText?: ((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string);
-  dataField?: string;
-  dataType?: DataType;
+  dataField?: string | undefined;
+  dataType?: DataType | undefined;
   encodeHtml?: boolean;
   falseText?: string;
   filterOperations?: Array<FilterOperation | string>;
   filterType?: FilterType;
-  filterValue?: any;
+  filterValue?: any | undefined;
   filterValues?: Array<any>;
   format?: LocalizationFormat;
   headerCellTemplate?: ((columnHeader: any, headerInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList }) => any) | template;
   headerFilter?: Record<string, any> | {
     allowSearch?: boolean;
     allowSelectAll?: boolean;
-    dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
-    groupInterval?: HeaderFilterGroupInterval | number;
-    height?: number | string;
+    dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
+    groupInterval?: HeaderFilterGroupInterval | number | undefined;
+    height?: number | string | undefined;
     search?: ColumnHeaderFilterSearchConfig;
     searchMode?: SearchMode;
-    width?: number | string;
+    width?: number | string | undefined;
   };
-  minWidth?: number;
-  selectedFilterOperation?: SelectedFilterOperation;
-  sortIndex?: number;
-  sortingMethod?: ((value1: any, value2: any) => number);
-  sortOrder?: SortOrder;
+  minWidth?: number | undefined;
+  selectedFilterOperation?: SelectedFilterOperation | undefined;
+  sortIndex?: number | undefined;
+  sortingMethod?: ((value1: any, value2: any) => number) | undefined;
+  sortOrder?: SortOrder | undefined;
   trueText?: string;
   visible?: boolean;
-  visibleIndex?: number;
-  width?: number | string;
-  defaultFilterValue?: any;
-  onFilterValueChange?: (value: any) => void;
+  visibleIndex?: number | undefined;
+  width?: number | string | undefined;
+  defaultFilterValue?: any | undefined;
+  onFilterValueChange?: (value: any | undefined) => void;
   defaultFilterValues?: Array<any>;
   onFilterValuesChange?: (value: Array<any>) => void;
-  defaultSelectedFilterOperation?: SelectedFilterOperation;
-  onSelectedFilterOperationChange?: (value: SelectedFilterOperation) => void;
-  defaultSortIndex?: number;
-  onSortIndexChange?: (value: number) => void;
-  defaultSortOrder?: SortOrder;
-  onSortOrderChange?: (value: SortOrder) => void;
+  defaultSelectedFilterOperation?: SelectedFilterOperation | undefined;
+  onSelectedFilterOperationChange?: (value: SelectedFilterOperation | undefined) => void;
+  defaultSortIndex?: number | undefined;
+  onSortIndexChange?: (value: number | undefined) => void;
+  defaultSortOrder?: SortOrder | undefined;
+  onSortOrderChange?: (value: SortOrder | undefined) => void;
   defaultVisible?: boolean;
   onVisibleChange?: (value: boolean) => void;
-  defaultVisibleIndex?: number;
-  onVisibleIndexChange?: (value: number) => void;
+  defaultVisibleIndex?: number | undefined;
+  onVisibleIndexChange?: (value: number | undefined) => void;
   cellRender?: (...params: any) => React.ReactNode;
   cellComponent?: React.ComponentType<any>;
   headerCellRender?: (...params: any) => React.ReactNode;
@@ -250,12 +250,12 @@ const Column = Object.assign<typeof _componentColumn, NestedComponentMeta>(_comp
 type IColumnHeaderFilterProps = React.PropsWithChildren<{
   allowSearch?: boolean;
   allowSelectAll?: boolean;
-  dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
-  groupInterval?: HeaderFilterGroupInterval | number;
-  height?: number | string;
+  dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
+  groupInterval?: HeaderFilterGroupInterval | number | undefined;
+  height?: number | string | undefined;
   search?: ColumnHeaderFilterSearchConfig;
   searchMode?: SearchMode;
-  width?: number | string;
+  width?: number | string | undefined;
 }>
 const _componentColumnHeaderFilter = (props: IColumnHeaderFilterProps) => {
   return React.createElement(NestedOption<IColumnHeaderFilterProps>, {
@@ -280,7 +280,7 @@ type IColumnHeaderFilterSearchProps = React.PropsWithChildren<{
   editorOptions?: any;
   enabled?: boolean;
   mode?: SearchMode;
-  searchExpr?: Array<(() => any) | string> | (() => any) | string;
+  searchExpr?: Array<(() => any) | string> | (() => any) | string | undefined;
   timeout?: number;
 }>
 const _componentColumnHeaderFilterSearch = (props: IColumnHeaderFilterSearchProps) => {
@@ -511,12 +511,12 @@ const GanttHeaderFilterSearch = Object.assign<typeof _componentGanttHeaderFilter
 type IHeaderFilterProps = React.PropsWithChildren<{
   allowSearch?: boolean;
   allowSelectAll?: boolean;
-  dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
-  groupInterval?: HeaderFilterGroupInterval | number;
-  height?: number | string;
+  dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
+  groupInterval?: HeaderFilterGroupInterval | number | undefined;
+  height?: number | string | undefined;
   search?: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig;
   searchMode?: SearchMode;
-  width?: number | string;
+  width?: number | string | undefined;
   searchTimeout?: number;
   texts?: dxGanttHeaderFilterTexts;
   visible?: boolean;
@@ -549,7 +549,7 @@ type IItemProps = React.PropsWithChildren<{
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
-  cssClass?: string;
+  cssClass?: string | undefined;
   html?: string;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
@@ -681,7 +681,7 @@ type ISearchProps = React.PropsWithChildren<{
   editorOptions?: any;
   enabled?: boolean;
   mode?: SearchMode;
-  searchExpr?: Array<(() => any) | string> | (() => any) | string;
+  searchExpr?: Array<(() => any) | string> | (() => any) | string | undefined;
   timeout?: number;
 }>
 const _componentSearch = (props: ISearchProps) => {
@@ -722,10 +722,10 @@ const Sorting = Object.assign<typeof _componentSorting, NestedComponentMeta>(_co
 // owners:
 // Gantt
 type IStripLineProps = React.PropsWithChildren<{
-  cssClass?: string;
-  end?: Date | (() => Date | number | string) | number | string;
-  start?: Date | (() => Date | number | string) | number | string;
-  title?: string;
+  cssClass?: string | undefined;
+  end?: Date | (() => Date | number | string) | number | string | undefined;
+  start?: Date | (() => Date | number | string) | number | string | undefined;
+  title?: string | undefined;
 }>
 const _componentStripLine = (props: IStripLineProps) => {
   return React.createElement(NestedOption<IStripLineProps>, {
@@ -811,7 +811,7 @@ const Toolbar = Object.assign<typeof _componentToolbar, NestedComponentMeta>(_co
 // owners:
 // Toolbar
 type IToolbarItemProps = React.PropsWithChildren<{
-  cssClass?: string;
+  cssClass?: string | undefined;
   disabled?: boolean;
   html?: string;
   locateInMenu?: LocateInMenuMode;

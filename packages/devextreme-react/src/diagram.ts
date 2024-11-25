@@ -336,10 +336,10 @@ type IDefaultItemPropertiesProps = React.PropsWithChildren<{
   connectorLineEnd?: ConnectorLineEnd;
   connectorLineStart?: ConnectorLineEnd;
   connectorLineType?: ConnectorLineType;
-  shapeMaxHeight?: number;
-  shapeMaxWidth?: number;
-  shapeMinHeight?: number;
-  shapeMinWidth?: number;
+  shapeMaxHeight?: number | undefined;
+  shapeMaxWidth?: number | undefined;
+  shapeMinHeight?: number | undefined;
+  shapeMinWidth?: number | undefined;
   style?: Record<string, any>;
   textStyle?: Record<string, any>;
 }>
@@ -359,22 +359,22 @@ const DefaultItemProperties = Object.assign<typeof _componentDefaultItemProperti
 // owners:
 // Diagram
 type IEdgesProps = React.PropsWithChildren<{
-  customDataExpr?: ((data: any, value: any) => any) | string;
+  customDataExpr?: ((data: any, value: any) => any) | string | undefined;
   dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string;
   fromExpr?: ((data: any, value: any) => any) | string;
-  fromLineEndExpr?: ((data: any, value: any) => any) | string;
-  fromPointIndexExpr?: ((data: any, value: any) => any) | string;
+  fromLineEndExpr?: ((data: any, value: any) => any) | string | undefined;
+  fromPointIndexExpr?: ((data: any, value: any) => any) | string | undefined;
   keyExpr?: ((data: any, value: any) => any) | string;
-  lineTypeExpr?: ((data: any, value: any) => any) | string;
-  lockedExpr?: ((data: any, value: any) => any) | string;
-  pointsExpr?: ((data: any, value: any) => any) | string;
-  styleExpr?: ((data: any, value: any) => any) | string;
-  textExpr?: ((data: any, value: any) => any) | string;
-  textStyleExpr?: ((data: any, value: any) => any) | string;
+  lineTypeExpr?: ((data: any, value: any) => any) | string | undefined;
+  lockedExpr?: ((data: any, value: any) => any) | string | undefined;
+  pointsExpr?: ((data: any, value: any) => any) | string | undefined;
+  styleExpr?: ((data: any, value: any) => any) | string | undefined;
+  textExpr?: ((data: any, value: any) => any) | string | undefined;
+  textStyleExpr?: ((data: any, value: any) => any) | string | undefined;
   toExpr?: ((data: any, value: any) => any) | string;
-  toLineEndExpr?: ((data: any, value: any) => any) | string;
-  toPointIndexExpr?: ((data: any, value: any) => any) | string;
-  zIndexExpr?: ((data: any, value: any) => any) | string;
+  toLineEndExpr?: ((data: any, value: any) => any) | string | undefined;
+  toPointIndexExpr?: ((data: any, value: any) => any) | string | undefined;
+  zIndexExpr?: ((data: any, value: any) => any) | string | undefined;
 }>
 const _componentEdges = (props: IEdgesProps) => {
   return React.createElement(NestedOption<IEdgesProps>, {
@@ -560,24 +560,24 @@ type INodesProps = React.PropsWithChildren<{
     type?: DataLayoutType;
   };
   autoSizeEnabled?: boolean;
-  containerChildrenExpr?: ((data: any, value: any) => any) | string;
+  containerChildrenExpr?: ((data: any, value: any) => any) | string | undefined;
   containerKeyExpr?: ((data: any, value: any) => any) | string;
-  customDataExpr?: ((data: any, value: any) => any) | string;
+  customDataExpr?: ((data: any, value: any) => any) | string | undefined;
   dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string;
-  heightExpr?: ((data: any, value: any) => any) | string;
-  imageUrlExpr?: ((data: any, value: any) => any) | string;
-  itemsExpr?: ((data: any, value: any) => any) | string;
+  heightExpr?: ((data: any, value: any) => any) | string | undefined;
+  imageUrlExpr?: ((data: any, value: any) => any) | string | undefined;
+  itemsExpr?: ((data: any, value: any) => any) | string | undefined;
   keyExpr?: ((data: any, value: any) => any) | string;
-  leftExpr?: ((data: any, value: any) => any) | string;
-  lockedExpr?: ((data: any, value: any) => any) | string;
-  parentKeyExpr?: ((data: any, value: any) => any) | string;
-  styleExpr?: ((data: any, value: any) => any) | string;
+  leftExpr?: ((data: any, value: any) => any) | string | undefined;
+  lockedExpr?: ((data: any, value: any) => any) | string | undefined;
+  parentKeyExpr?: ((data: any, value: any) => any) | string | undefined;
+  styleExpr?: ((data: any, value: any) => any) | string | undefined;
   textExpr?: ((data: any, value: any) => any) | string;
-  textStyleExpr?: ((data: any, value: any) => any) | string;
-  topExpr?: ((data: any, value: any) => any) | string;
+  textStyleExpr?: ((data: any, value: any) => any) | string | undefined;
+  topExpr?: ((data: any, value: any) => any) | string | undefined;
   typeExpr?: ((data: any, value: any) => any) | string;
-  widthExpr?: ((data: any, value: any) => any) | string;
-  zIndexExpr?: ((data: any, value: any) => any) | string;
+  widthExpr?: ((data: any, value: any) => any) | string | undefined;
+  zIndexExpr?: ((data: any, value: any) => any) | string | undefined;
 }>
 const _componentNodes = (props: INodesProps) => {
   return React.createElement(NestedOption<INodesProps>, {
@@ -746,7 +746,7 @@ type IToolboxProps = React.PropsWithChildren<{
   shapeIconsPerRow?: number;
   showSearch?: boolean;
   visibility?: PanelVisibility;
-  width?: number;
+  width?: number | undefined;
 }>
 const _componentToolbox = (props: IToolboxProps) => {
   return React.createElement(NestedOption<IToolboxProps>, {
@@ -814,9 +814,9 @@ const ViewToolbar = Object.assign<typeof _componentViewToolbar, NestedComponentM
 // Diagram
 type IZoomLevelProps = React.PropsWithChildren<{
   items?: Array<number>;
-  value?: number;
-  defaultValue?: number;
-  onValueChange?: (value: number) => void;
+  value?: number | undefined;
+  defaultValue?: number | undefined;
+  onValueChange?: (value: number | undefined) => void;
 }>
 const _componentZoomLevel = (props: IZoomLevelProps) => {
   return React.createElement(NestedOption<IZoomLevelProps>, {

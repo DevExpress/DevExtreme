@@ -524,6 +524,7 @@ class FilterBuilder extends Widget<any> {
     const getFullCaption = function (item, items) {
       return allowHierarchicalFields ? getCaptionWithParents(item, items) : item.caption;
     };
+    condition[0] = item.name || item.dataField;
 
     const $fieldButton = this._createButtonWithMenu({
       caption: getFullCaption(item, items),

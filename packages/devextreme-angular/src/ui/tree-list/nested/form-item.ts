@@ -7,6 +7,10 @@ import {
     OnDestroy,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
     Input,
     ContentChildren,
@@ -14,26 +18,41 @@ import {
     QueryList
 } from '@angular/core';
 
+import { DOCUMENT } from '@angular/common';
 
 
-
-import { AsyncRule, CompareRule, CustomRule, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, StringLengthRule } from 'devextreme/common';
+import * as CommonTypes from 'devextreme/common';
 import { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/form';
+import { HorizontalAlignment } from 'devextreme/common';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiTreeListAsyncRuleComponent } from './async-rule-dxi';
+import { DxiTreeListCompareRuleComponent } from './compare-rule-dxi';
+import { DxiTreeListCustomRuleComponent } from './custom-rule-dxi';
+import { DxiTreeListEmailRuleComponent } from './email-rule-dxi';
+import { DxiTreeListNumericRuleComponent } from './numeric-rule-dxi';
+import { DxiTreeListPatternRuleComponent } from './pattern-rule-dxi';
+import { DxiTreeListRangeRuleComponent } from './range-rule-dxi';
+import { DxiTreeListRequiredRuleComponent } from './required-rule-dxi';
+import { DxiTreeListStringLengthRuleComponent } from './string-length-rule-dxi';
 import { DxiTreeListValidationRuleComponent } from './validation-rule-dxi';
 
 
 @Component({
     selector: 'dxo-tree-list-form-item',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxoTreeListFormItemComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListFormItemComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
+    IDxTemplateHost {
     @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');
@@ -123,10 +142,10 @@ export class DxoTreeListFormItemComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get validationRules(): Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule> {
+    get validationRules(): Array<CommonTypes.ValidationRule> {
         return this._getOption('validationRules');
     }
-    set validationRules(value: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>) {
+    set validationRules(value: Array<CommonTypes.ValidationRule>) {
         this._setOption('validationRules', value);
     }
 
@@ -152,6 +171,78 @@ export class DxoTreeListFormItemComponent extends NestedOption implements OnDest
     }
 
 
+    @ContentChildren(forwardRef(() => DxiTreeListAsyncRuleComponent))
+    get asyncRulesChildren(): QueryList<DxiTreeListAsyncRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set asyncRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListCompareRuleComponent))
+    get compareRulesChildren(): QueryList<DxiTreeListCompareRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set compareRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListCustomRuleComponent))
+    get customRulesChildren(): QueryList<DxiTreeListCustomRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set customRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListEmailRuleComponent))
+    get emailRulesChildren(): QueryList<DxiTreeListEmailRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set emailRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListNumericRuleComponent))
+    get numericRulesChildren(): QueryList<DxiTreeListNumericRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set numericRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListPatternRuleComponent))
+    get patternRulesChildren(): QueryList<DxiTreeListPatternRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set patternRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListRangeRuleComponent))
+    get rangeRulesChildren(): QueryList<DxiTreeListRangeRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set rangeRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListRequiredRuleComponent))
+    get requiredRulesChildren(): QueryList<DxiTreeListRequiredRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set requiredRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListStringLengthRuleComponent))
+    get stringLengthRulesChildren(): QueryList<DxiTreeListStringLengthRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set stringLengthRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
     @ContentChildren(forwardRef(() => DxiTreeListValidationRuleComponent))
     get validationRulesChildren(): QueryList<DxiTreeListValidationRuleComponent> {
         return this._getOption('validationRules');
@@ -161,10 +252,22 @@ export class DxoTreeListFormItemComponent extends NestedOption implements OnDest
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

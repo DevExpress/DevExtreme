@@ -18,9 +18,9 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type IChatOptionsNarrowedEvents = {
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
-  onMessageEntered?: ((e: MessageEnteredEvent) => void);
-  onTypingEnd?: ((e: TypingEndEvent) => void);
-  onTypingStart?: ((e: TypingStartEvent) => void);
+  onMessageEntered?: ((e: MessageEnteredEvent) => void) | undefined;
+  onTypingEnd?: ((e: TypingEndEvent) => void) | undefined;
+  onTypingStart?: ((e: TypingStartEvent) => void) | undefined;
 }
 
 type IChatOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IChatOptionsNarrowedEvents> & IHtmlOptions & {

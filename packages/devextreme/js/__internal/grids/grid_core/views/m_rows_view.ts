@@ -41,13 +41,13 @@ const GROUP_ROW_CLASS = 'dx-group-row';
 const GROUP_CELL_CLASS = 'dx-group-cell';
 const DATA_ROW_CLASS = 'dx-data-row';
 const FREE_SPACE_CLASS = 'dx-freespace-row';
-const ROW_LINES_CLASS = 'dx-row-lines';
 const COLUMN_LINES_CLASS = 'dx-column-lines';
 const ROW_ALTERNATION_CLASS = 'dx-row-alt';
 const LAST_ROW_BORDER = 'dx-last-row-border';
 const EMPTY_CLASS = 'dx-empty';
 const ROW_INSERTED_ANIMATION_CLASS = 'row-inserted-animation';
 const CONTENT_FIXED_CLASS = 'content-fixed';
+export const ROW_LINES_CLASS = 'dx-row-lines';
 
 const LOADPANEL_HIDE_TIMEOUT = 200;
 
@@ -676,7 +676,7 @@ export class RowsView extends ColumnsView {
     this.executeAction('onRowDblClick', extend({}, e, item));
   }
 
-  private _getColumnsCountBeforeGroups(columns) {
+  protected _getColumnsCountBeforeGroups(columns) {
     for (let i = 0; i < columns.length; i++) {
       if (columns[i].type === 'groupExpand') {
         return i;
@@ -734,6 +734,7 @@ export class RowsView extends ColumnsView {
         expandColumn = {
           command: 'expand',
           cssClass: columns[i].cssClass,
+          fixed: columns[i].fixed,
         };
       }
 

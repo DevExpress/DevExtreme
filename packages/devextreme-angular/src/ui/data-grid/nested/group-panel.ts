@@ -48,10 +48,10 @@ export class DxoDataGridGroupPanelComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get visible(): Mode | boolean {
+    get visible(): boolean | Mode {
         return this._getOption('visible');
     }
-    set visible(value: Mode | boolean) {
+    set visible(value: boolean | Mode) {
         this._setOption('visible', value);
     }
 
@@ -61,7 +61,7 @@ export class DxoDataGridGroupPanelComponent extends NestedOption implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() visibleChange: EventEmitter<Mode | boolean>;
+    @Output() visibleChange: EventEmitter<boolean | Mode>;
     protected get _optionPath() {
         return 'groupPanel';
     }

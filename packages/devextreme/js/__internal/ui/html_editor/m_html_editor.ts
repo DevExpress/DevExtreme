@@ -70,6 +70,15 @@ const HtmlEditor = Editor.inherit({
     this.callBase();
     this._cleanCallback = Callbacks();
     this._contentInitializedCallback = Callbacks();
+    this._prepareHtmlConverter();
+  },
+
+  _prepareHtmlConverter(): void {
+    const { converter } = this.option();
+
+    if (converter) {
+      this._htmlConverter = converter;
+    }
   },
 
   _getAnonymousTemplateName() {
@@ -227,13 +236,32 @@ const HtmlEditor = Editor.inherit({
     return sanitizedHtml;
   },
 
-  _updateContainerMarkup() {
-    const { value } = this.option();
+  _convertToHtml(value: string): string {
+    const result = isFunction(this._htmlConverter?.toHtml)
+      ? String(this._htmlConverter.toHtml(value ?? '') ?? '')
+      : value;
 
-    if (value) {
-      const sanitizedMarkup = this._removeXSSVulnerableHtml(value);
-      this._$htmlContainer.html(sanitizedMarkup);
+    return result;
+  },
+
+  _convertFromHtml(value: string): string {
+    const result = isFunction(this._htmlConverter?.fromHtml)
+      ? String(this._htmlConverter.fromHtml(value) ?? '')
+      : value;
+
+    return result;
+  },
+
+  _updateContainerMarkup(): void {
+    const { value } = this.option();
+    const html = this._convertToHtml(value);
+
+    if (!html) {
+      return;
     }
+
+    const sanitizedHtml = this._removeXSSVulnerableHtml(html);
+    this._$htmlContainer.html(sanitizedHtml);
   },
 
   _render() {
@@ -261,12 +289,6 @@ const HtmlEditor = Editor.inherit({
       if (DeltaConverter) {
         this._deltaConverter = new DeltaConverter();
       }
-    }
-
-    const { converter } = this.option();
-
-    if (converter) {
-      this._htmlConverter = converter;
     }
   },
 
@@ -433,11 +455,8 @@ const HtmlEditor = Editor.inherit({
   _textChangeHandler() {
     const { value: currentValue } = this.option();
 
-    const htmlMarkup = this._deltaConverter.toHtml();
-
-    const convertedValue = isFunction(this._htmlConverter?.fromHtml)
-      ? String(this._htmlConverter.fromHtml(htmlMarkup))
-      : htmlMarkup;
+    const html = this._deltaConverter.toHtml();
+    const convertedValue = this._convertFromHtml(html);
 
     if (
       currentValue !== convertedValue
@@ -512,28 +531,34 @@ const HtmlEditor = Editor.inherit({
     }
   },
 
+  _processHtmlContentUpdating(value) {
+    if (this._quillInstance) {
+      if (this._isEditorUpdating) {
+        this._isEditorUpdating = false;
+      } else {
+        const html = this._convertToHtml(value);
+
+        this._suppressValueChangeAction();
+        this._updateHtmlContent(html);
+        this._resumeValueChangeAction();
+      }
+    } else {
+      this._$htmlContainer.html(value);
+    }
+  },
+
   _optionChanged(args) {
     switch (args.name) {
       case 'converter': {
         this._htmlConverter = args.value;
+
+        const { value } = this.option();
+
+        this._processHtmlContentUpdating(value);
         break;
       }
       case 'value': {
-        if (this._quillInstance) {
-          if (this._isEditorUpdating) {
-            this._isEditorUpdating = false;
-          } else {
-            const updatedValue = isFunction(this._htmlConverter?.toHtml)
-              ? String(this._htmlConverter.toHtml(args.value))
-              : args.value;
-
-            this._suppressValueChangeAction();
-            this._updateHtmlContent(updatedValue);
-            this._resumeValueChangeAction();
-          }
-        } else {
-          this._$htmlContainer.html(args.value);
-        }
+        this._processHtmlContentUpdating(args.value);
 
         // NOTE: value can be optimized by Quill
         const value = this.option('value');

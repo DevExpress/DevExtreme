@@ -9,7 +9,7 @@ $(() => {
       enabled: true,
     },
     showRowLines: true,
-    expandedRowKeys: [1],
+    autoExpandAll: true,
     columns: [
       {
         caption: 'Employee',
@@ -43,17 +43,11 @@ $(() => {
       }, {
         dataField: 'HireDate',
         dataType: 'date',
-      },
+      }, 
       'HomePhone',
       'MobilePhone',
-      {
-        dataField: 'Email',
-        fixed: true,
-        fixedPosition: 'sticky',
-      },
-      {
-        dataField: 'Skype',
-      },
+      'Email',
+      'Skype',
     ],
   });
 });

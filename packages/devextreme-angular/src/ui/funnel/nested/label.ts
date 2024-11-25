@@ -14,9 +14,10 @@ import {
 
 
 
-import { HorizontalEdge } from 'devextreme/common';
 import { DashStyle, Font, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import { dxFunnelItem } from 'devextreme/viz/funnel';
 import { Format } from 'devextreme/localization';
+import { HorizontalEdge } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -56,10 +57,10 @@ export class DxoFunnelLabelComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((itemInfo: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((itemInfo: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -72,10 +73,10 @@ export class DxoFunnelLabelComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): Format | undefined {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: Format | undefined) {
         this._setOption('format', value);
     }
 

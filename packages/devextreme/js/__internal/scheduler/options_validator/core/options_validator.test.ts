@@ -1,3 +1,7 @@
+import {
+  describe, expect, it, jest,
+} from '@jest/globals';
+
 import { OptionsValidator } from './options_validator';
 import { Validator } from './validator';
 

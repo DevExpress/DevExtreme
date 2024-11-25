@@ -877,6 +877,34 @@ QUnit.module('MessageList', () => {
                 assert.strictEqual($lastGroup.length, 1, 'only one message group has expected class');
             });
         });
+
+        QUnit.test('messageTemplate should be passed to messageGroup on init', function(assert) {
+            const messageTemplate = () => {};
+
+            this.reinit({
+                items: [{ text: 'text' }],
+                messageTemplate,
+            });
+
+            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
+
+            assert.strictEqual(messageGroup.option('messageTemplate'), messageTemplate, 'messageTemplate is passed to messageGroup');
+        });
+
+        QUnit.test('messageTemplate should be passed to messageGroup at runtime', function(assert) {
+
+            this.reinit({
+                items: [{ text: 'text' }],
+            });
+
+            const messageTemplate = () => {};
+
+            this.instance.option('messageTemplate', messageTemplate);
+
+            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
+
+            assert.strictEqual(messageGroup.option('messageTemplate'), messageTemplate, 'messageTemplate is passed to messageGroup');
+        });
     });
 
     QUnit.module('TypingIndicator integration', moduleConfig, () => {

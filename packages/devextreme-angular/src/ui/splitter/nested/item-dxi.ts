@@ -16,7 +16,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
+import { dxSplitterOptions } from 'devextreme/ui/splitter';
 
 import {
     NestedOptionHost,

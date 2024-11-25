@@ -9,7 +9,6 @@
     >
       <DxColumnFixing :enabled="true"/>
       <DxColumn
-        :width="230"
         :fixed="true"
         :calculate-cell-value="calculateCellValue"
         caption="Employee"
@@ -19,13 +18,12 @@
         alignment="right"
       />
       <DxColumn
-        :width="230"
         data-field="Address"
         :fixed="true"
         fixed-position="sticky"
       />
       <DxColumn data-field="City" />
-      <DxColumn data-field="Zipcode"/>
+      <DxColumn data-field="Zipcode" />
       <DxColumn data-field="State" />
       <DxColumn
         data-field="Department"
@@ -40,14 +38,10 @@
         data-field="HireDate"
         data-type="date"
       />
-      <DxColumn data-field="HomePhone"/>
-      <DxColumn data-field="MobilePhone"/>
-      <DxColumn
-        data-field="Email"
-        :fixed="true"
-        fixed-position="sticky"
-      />
-      <DxColumn data-field="Skype"/>
+      <DxColumn data-field="HomePhone" />
+      <DxColumn data-field="MobilePhone" />
+      <DxColumn data-field="Email" />
+      <DxColumn data-field="Skype" />
     </DxDataGrid>
   </div>
 </template>

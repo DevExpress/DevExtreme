@@ -84,6 +84,153 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     },
     columnHidingEnabled: true,
   }));
+
+  safeSizeTest(`Fixed columns should be displayed correctly when the grid has a small width  (rtlEnabled = ${rtlEnabled})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    await t.expect(dataGrid.isReady()).ok();
+
+    await takeScreenshot(`adaptability_fixed_columns_with_small_grid_width_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+    ...defaultConfig,
+    width: 350,
+    rtlEnabled,
+    customizeColumns(columns) {
+      columns.forEach((column, index) => {
+        if (!column.fixed) {
+          column.hidingPriority = index;
+        } else {
+          column.allowHiding = false;
+        }
+
+        column.width = 200;
+      });
+    },
+    columnHidingEnabled: true,
+  }));
+
+  safeSizeTest(`Sticky column pinned to the left should be displayed correctly when hidden column between sticky column and fixed column (rtlEnabled = ${rtlEnabled})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const scrollLeft = rtlEnabled ? -10000 : 10000;
+
+    await t.expect(dataGrid.isReady()).ok();
+
+    await takeScreenshot(`hidden_column_between_sticky_column_and_left_fixed_column_1_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+
+    await dataGrid.scrollTo(t, { x: scrollLeft });
+
+    await takeScreenshot(`hidden_column_between_sticky_column_and_left_fixed_column_2_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+    ...defaultConfig,
+    width: 800,
+    rtlEnabled,
+    columnWidth: 200,
+    customizeColumns(columns) {
+      columns[1].hidingPriority = 0;
+      columns[2].fixed = true;
+      columns[2].fixedPosition = 'sticky';
+    },
+  }));
+
+  safeSizeTest(`Sticky column pinned to the left should be displayed correctly when banded hidden column between sticky column and fixed column (rtlEnabled = ${rtlEnabled})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const scrollLeft = rtlEnabled ? -10000 : 10000;
+
+    await t.expect(dataGrid.isReady()).ok();
+
+    await takeScreenshot(`banded_hidden_column_between_sticky_column_and_left_fixed_column_1_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+
+    await dataGrid.scrollTo(t, { x: scrollLeft });
+
+    await takeScreenshot(`banded_hidden_column_between_sticky_column_and_left_fixed_column_2_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+    ...defaultConfig,
+    width: 800,
+    rtlEnabled,
+    columnWidth: 200,
+    customizeColumns(columns) {
+      columns[1] = {
+        caption: 'Band Columns',
+        columns: [{ dataField: 'OrderDate', hidingPriority: 0 }],
+      };
+      columns[2].fixed = true;
+      columns[2].fixedPosition = 'sticky';
+    },
+  }));
+
+  safeSizeTest(`Sticky column pinned to the right should be displayed correctly when hidden column between sticky column and fixed column (rtlEnabled = ${rtlEnabled})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const scrollLeft = rtlEnabled ? -10000 : 10000;
+
+    await t.expect(dataGrid.isReady()).ok();
+
+    await takeScreenshot(`hidden_column_between_sticky_column_and_right_fixed_column_1_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+
+    await dataGrid.scrollTo(t, { x: scrollLeft });
+
+    await takeScreenshot(`hidden_column_between_sticky_column_and_right_fixed_column_2_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+    ...defaultConfig,
+    width: 800,
+    rtlEnabled,
+    columnWidth: 200,
+    customizeColumns(columns) {
+      columns[4].fixed = true;
+      columns[4].fixedPosition = 'sticky';
+      columns[5].hidingPriority = 0;
+    },
+  }));
+
+  safeSizeTest(`Sticky column pinned to the right should be displayed correctly when banded hidden column between sticky column and fixed column (rtlEnabled = ${rtlEnabled})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const scrollLeft = rtlEnabled ? -10000 : 10000;
+
+    await t.expect(dataGrid.isReady()).ok();
+
+    await takeScreenshot(`banded_hidden_column_between_sticky_column_and_right_fixed_column_1_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+
+    await dataGrid.scrollTo(t, { x: scrollLeft });
+
+    await takeScreenshot(`banded_hidden_column_between_sticky_column_and_right_fixed_column_2_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+    ...defaultConfig,
+    width: 800,
+    rtlEnabled,
+    columnWidth: 200,
+    customizeColumns(columns) {
+      columns[4].fixed = true;
+      columns[4].fixedPosition = 'sticky';
+      columns[5] = {
+        caption: 'Band Columns',
+        columns: [{ dataField: 'SaleAmount', hidingPriority: 0 }],
+      };
+    },
+  }));
 });
 
 safeSizeTest('Sticky columns with sticky positions when columnHidingEnabled = false and columns have hidingPriority', async (t) => {

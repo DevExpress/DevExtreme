@@ -10,7 +10,6 @@ $(() => {
     columns: [
       {
         caption: 'Employee',
-        width: 230,
         fixed: true,
         calculateCellValue(data) {
           return [data.Title,
@@ -24,7 +23,6 @@ $(() => {
       },
       {
         dataField: 'Address',
-        width: 230,
         fixed: true,
         fixedPosition: 'sticky'
       },
@@ -45,11 +43,7 @@ $(() => {
       }, 
       'HomePhone',
       'MobilePhone',
-      {
-        dataField: 'Email',
-        fixed: true,
-        fixedPosition: 'sticky',
-      },
+      'Email',
       'Skype',
     ],
   });

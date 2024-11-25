@@ -2883,6 +2883,76 @@ QUnit.module('Column reordering points', {
         assert.deepEqual(pointsByColumns[3], { columnIndex: 7, index: 7, x: 425, y: 0 }, 'fourth point');
         assert.deepEqual(pointsByColumns[4], { columnIndex: 8, index: 8, x: 525, y: 0 }, 'fifth point');
     });
+
+    QUnit.module('Floating point column widths', {
+        beforeEach: function() {
+            this.checkPoint = (point, assert, expectedValues, message = 'point') => {
+                assert.roughEqual(point.x, expectedValues.x, 1, `${message} - x`);
+                assert.strictEqual(point.y, expectedValues.y, `${message} - y`);
+                assert.strictEqual(point.index, expectedValues.index, `${message} - index`);
+                assert.strictEqual(point.columnIndex, expectedValues.columnIndex, `${message} - columnIndex`);
+            };
+        },
+    }, () => {
+        QUnit.test('should get the correct points for non-fixed columns when there are left and right fixed columns', function(assert) {
+            // arrange
+            this.columns.forEach((column) => {
+                column.width += 0.5;
+            });
+
+            this.setupDataGrid();
+
+            this.columnHeadersView.render(this.gridContainer);
+            this.columnHeadersView.resize();
+
+            // act
+            const pointsByColumns = this.draggingHeaderController._generatePointsByColumns({
+                columnElements: this.columnHeadersView.getColumnElements(),
+                columns: this.columnsController.getVisibleColumns(),
+                sourceColumn: this.columns[4],
+                targetDraggingPanel: this.columnHeadersView,
+                sourceLocation: 'headers',
+            });
+
+            // assert
+            assert.equal(pointsByColumns.length, 3, 'point count');
+            this.checkPoint(pointsByColumns[0], assert, { columnIndex: 3, index: 3, x: 276.5, y: 0 }, 'first point');
+            this.checkPoint(pointsByColumns[1], assert, { columnIndex: 4, index: 4, x: 402, y: 0 }, 'second point');
+            this.checkPoint(pointsByColumns[2], assert, { columnIndex: 5, index: 5, x: 502.5, y: 0 }, 'third point');
+        });
+
+        QUnit.test('should get the correct points for non-fixed columns when there are left and right fixed columns and scroll position is at the end', function(assert) {
+            // arrange
+            this.columns.forEach((column) => {
+                column.width += 0.8;
+            });
+
+            this.setupDataGrid();
+
+            this.columnHeadersView.render(this.gridContainer);
+            this.columnHeadersView.resize();
+            const $dataGridContent = $(this.columnHeadersView.element()).children();
+            $dataGridContent.scrollLeft(1000);
+
+            // assert
+            assert.ok($dataGridContent.scrollLeft() > 300, 'content scroll left');
+
+            // act
+            const pointsByColumns = this.draggingHeaderController._generatePointsByColumns({
+                columnElements: this.columnHeadersView.getColumnElements(),
+                columns: this.columnsController.getVisibleColumns(),
+                sourceColumn: this.columns[6],
+                targetDraggingPanel: this.columnHeadersView,
+                sourceLocation: 'headers',
+            });
+
+            // assert
+            assert.equal(pointsByColumns.length, 3, 'point count');
+            this.checkPoint(pointsByColumns[0], assert, { columnIndex: 6, index: 6, x: 295.78125, y: 0 }, 'first point');
+            this.checkPoint(pointsByColumns[1], assert, { columnIndex: 7, index: 7, x: 396.578125, y: 0 }, 'second point');
+            this.checkPoint(pointsByColumns[2], assert, { columnIndex: 8, index: 8, x: 522.375, y: 0 }, 'third point');
+        });
+    });
 });
 
 QUnit.module('Column reordering points (rtlEnabled = true)', {

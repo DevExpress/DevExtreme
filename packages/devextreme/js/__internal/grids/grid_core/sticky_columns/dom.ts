@@ -279,6 +279,7 @@ const noNeedToCreateReorderingPoint = (
     isRightBoundary: boolean | undefined;
   } = point;
   const $item = $(item);
+  const pointX = Math.round(point.x);
   const isSplitPoint = isDefined(isLeftBoundary) || isDefined(isRightBoundary);
   const nonFixedAreaBoundingRect = getNonFixedAreaBoundingRect($cells, $container, addWidgetPrefix);
 
@@ -290,7 +291,7 @@ const noNeedToCreateReorderingPoint = (
     return isSplitPoint && !isRightBoundary;
   }
 
-  return point.x < nonFixedAreaBoundingRect.left || point.x > nonFixedAreaBoundingRect.right;
+  return pointX < nonFixedAreaBoundingRect.left || pointX > nonFixedAreaBoundingRect.right;
 };
 
 const doesGroupCellEndInFirstColumn = ($groupCell): boolean => {
@@ -337,6 +338,31 @@ const setScrollPadding = (
   });
 };
 
+const isOutsideVisibleArea = (
+  $element: dxElementWrapper,
+  $cells: dxElementWrapper,
+  $container: dxElementWrapper,
+  addWidgetPrefix,
+): boolean => {
+  const elementRect = getBoundingRect($element.get(0));
+  const elementRectLeft = Math.round(elementRect.left);
+  const elementRectRight = Math.round(elementRect.right);
+  const nonFixedAreaBoundingRect = getNonFixedAreaBoundingRect($cells, $container, addWidgetPrefix);
+
+  return elementRectLeft < nonFixedAreaBoundingRect.left
+    || elementRectRight > nonFixedAreaBoundingRect.right;
+};
+
+const isLastCell = ($cell: dxElementWrapper): boolean => {
+  if (!$cell.is('td')) {
+    return false;
+  }
+
+  const $lastCell = $cell.parent().children().last();
+
+  return $cell[0] === $lastCell[0];
+};
+
 export const GridCoreStickyColumnsDom = {
   toggleFirstHeaderClass,
   toggleColumnNoBorderClass,
@@ -355,5 +381,7 @@ export const GridCoreStickyColumnsDom = {
   isFixedCell,
   isStickyCell,
   isStickyCellPinned,
+  isOutsideVisibleArea,
+  isLastCell,
   setScrollPadding,
 };

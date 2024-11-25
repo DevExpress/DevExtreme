@@ -18,8 +18,8 @@ import {
 
 
 import { AnimationConfig } from 'devextreme/animation/fx';
-import { DxPromise } from 'devextreme/core/utils/deferred';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, RenderedEvent, ShownEvent } from 'devextreme/ui/defer_rendering';
+import { DxPromise } from 'devextreme/core/utils/deferred';
 
 import DxDeferRendering from 'devextreme/ui/defer_rendering';
 
@@ -44,13 +44,13 @@ import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 
 import { DxoDeferRenderingAnimationModule } from 'devextreme-angular/ui/defer-rendering/nested';
-import { DxoDeferRenderingFromModule } from 'devextreme-angular/ui/defer-rendering/nested';
-import { DxoDeferRenderingPositionModule } from 'devextreme-angular/ui/defer-rendering/nested';
 import { DxoDeferRenderingAtModule } from 'devextreme-angular/ui/defer-rendering/nested';
 import { DxoDeferRenderingBoundaryOffsetModule } from 'devextreme-angular/ui/defer-rendering/nested';
 import { DxoDeferRenderingCollisionModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoDeferRenderingFromModule } from 'devextreme-angular/ui/defer-rendering/nested';
 import { DxoDeferRenderingMyModule } from 'devextreme-angular/ui/defer-rendering/nested';
 import { DxoDeferRenderingOffsetModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoDeferRenderingPositionModule } from 'devextreme-angular/ui/defer-rendering/nested';
 import { DxoDeferRenderingToModule } from 'devextreme-angular/ui/defer-rendering/nested';
 
 
@@ -129,10 +129,10 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -155,10 +155,10 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -194,10 +194,10 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     
      */
     @Input()
-    get renderWhen(): DxPromise | boolean | undefined {
+    get renderWhen(): boolean | DxPromise | undefined {
         return this._getOption('renderWhen');
     }
-    set renderWhen(value: DxPromise | boolean | undefined) {
+    set renderWhen(value: boolean | DxPromise | undefined) {
         this._setOption('renderWhen', value);
     }
 
@@ -272,10 +272,10 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -360,7 +360,7 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -374,7 +374,7 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -395,7 +395,7 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() renderWhenChange: EventEmitter<DxPromise | boolean | undefined>;
+    @Output() renderWhenChange: EventEmitter<boolean | DxPromise | undefined>;
 
     /**
     
@@ -437,7 +437,7 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
 
 
@@ -505,13 +505,13 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     DxoOffsetModule,
     DxoToModule,
     DxoDeferRenderingAnimationModule,
-    DxoDeferRenderingFromModule,
-    DxoDeferRenderingPositionModule,
     DxoDeferRenderingAtModule,
     DxoDeferRenderingBoundaryOffsetModule,
     DxoDeferRenderingCollisionModule,
+    DxoDeferRenderingFromModule,
     DxoDeferRenderingMyModule,
     DxoDeferRenderingOffsetModule,
+    DxoDeferRenderingPositionModule,
     DxoDeferRenderingToModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -531,13 +531,13 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     DxoOffsetModule,
     DxoToModule,
     DxoDeferRenderingAnimationModule,
-    DxoDeferRenderingFromModule,
-    DxoDeferRenderingPositionModule,
     DxoDeferRenderingAtModule,
     DxoDeferRenderingBoundaryOffsetModule,
     DxoDeferRenderingCollisionModule,
+    DxoDeferRenderingFromModule,
     DxoDeferRenderingMyModule,
     DxoDeferRenderingOffsetModule,
+    DxoDeferRenderingPositionModule,
     DxoDeferRenderingToModule,
     DxTemplateModule
   ]

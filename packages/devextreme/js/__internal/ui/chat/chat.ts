@@ -23,7 +23,7 @@ import type {
   TypingStartEvent as MessageBoxTypingStartEvent,
 } from './messagebox';
 import MessageBox from './messagebox';
-import type { Change } from './messagelist';
+import type { Change, MessageTemplate, Properties as MessageListProperties } from './messagelist';
 import MessageList from './messagelist';
 
 const CHAT_CLASS = 'dx-chat';
@@ -119,6 +119,18 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageList(): void {
+    const $messageList = $('<div>');
+
+    this.$element().append($messageList);
+
+    this._messageList = this._createComponent(
+      $messageList,
+      MessageList,
+      this._getMessageListOptions(),
+    );
+  }
+
+  _getMessageListOptions(): MessageListProperties {
     const {
       items = [],
       user,
@@ -126,26 +138,20 @@ class Chat extends Widget<Properties> {
       showAvatar = false,
       showUserName = false,
       showMessageTimestamp = false,
-      messageTemplate,
       dayHeaderFormat,
       messageTimestampFormat,
       typingUsers = [],
     } = this.option();
 
-    const $messageList = $('<div>');
-
     // @ts-expect-error
     const isLoading = this._dataController.isLoading();
     const currentUserId = user?.id;
 
-    this.$element().append($messageList);
-
-    this._messageList = this._createComponent($messageList, MessageList, {
+    const options: MessageListProperties = {
       items,
       currentUserId,
+      messageTemplate: this._getMessageTemplate(),
       showDayHeaders,
-      messageTemplate,
-      messageTemplateData: { component: this },
       showAvatar,
       showUserName,
       showMessageTimestamp,
@@ -153,7 +159,28 @@ class Chat extends Widget<Properties> {
       messageTimestampFormat,
       typingUsers,
       isLoading,
-    });
+    };
+
+    return options;
+  }
+
+  _getMessageTemplate(): MessageTemplate {
+    const { messageTemplate } = this.option();
+    if (messageTemplate) {
+      return (message, $container): void => {
+        const template = this._getTemplateByOption('messageTemplate');
+
+        template.render({
+          container: $container,
+          model: {
+            component: this,
+            message,
+          },
+        });
+      };
+    }
+
+    return null;
   }
 
   _renderAlertList(): void {
@@ -319,11 +346,13 @@ class Chat extends Widget<Properties> {
       case 'showMessageTimestamp':
         this._messageList.option(name, !!value);
         break;
-      case 'messageTemplate':
       case 'dayHeaderFormat':
       case 'messageTimestampFormat':
       case 'typingUsers':
         this._messageList.option(name, value);
+        break;
+      case 'messageTemplate':
+        this._messageList.option(name, this._getMessageTemplate());
         break;
       case 'reloadOnChange':
         break;

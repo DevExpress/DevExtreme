@@ -19,7 +19,8 @@ import {
 
 
 
-import { AxisScaleType, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, TimeInterval, VisualRange } from 'devextreme/common/charts';
+import * as CommonChartTypes from 'devextreme/common/charts';
+import { DashStyle, Font, DiscreteAxisDivisionMode, LabelOverlap, TimeInterval, AxisScaleType, ChartsDataType } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
 import { ValueAxisVisualRangeUpdateMode } from 'devextreme/viz/polar_chart';
 
@@ -55,10 +56,10 @@ export class DxoPolarChartValueAxisComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get categories(): Array<number | string | Date> {
+    get categories(): Array<Date | number | string> {
         return this._getOption('categories');
     }
-    set categories(value: Array<number | string | Date>) {
+    set categories(value: Array<Date | number | string>) {
         this._setOption('categories', value);
     }
 
@@ -71,10 +72,10 @@ export class DxoPolarChartValueAxisComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get constantLines(): Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, text?: string | undefined, visible?: boolean }, value?: Date | number | string | undefined, width?: number }> {
+    get constantLines(): { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, text?: string | undefined, visible?: boolean }, value?: Date | number | string | undefined, width?: number }[] {
         return this._getOption('constantLines');
     }
-    set constantLines(value: Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, text?: string | undefined, visible?: boolean }, value?: Date | number | string | undefined, width?: number }>) {
+    set constantLines(value: { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, text?: string | undefined, visible?: boolean }, value?: Date | number | string | undefined, width?: number }[]) {
         this._setOption('constantLines', value);
     }
 
@@ -119,10 +120,10 @@ export class DxoPolarChartValueAxisComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get label(): { customizeHint?: Function, customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean } {
+    get label(): { customizeHint?: ((axisValue: { value: Date | number | string, valueText: string }) => string), customizeText?: ((axisValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { customizeHint?: Function, customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }) {
+    set label(value: { customizeHint?: ((axisValue: { value: Date | number | string, valueText: string }) => string), customizeText?: ((axisValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -175,10 +176,10 @@ export class DxoPolarChartValueAxisComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get minorTickInterval(): TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get minorTickInterval(): number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('minorTickInterval');
     }
-    set minorTickInterval(value: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set minorTickInterval(value: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('minorTickInterval', value);
     }
 
@@ -191,10 +192,10 @@ export class DxoPolarChartValueAxisComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get minVisualRangeLength(): TimeInterval | number | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get minVisualRangeLength(): number | TimeInterval | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('minVisualRangeLength');
     }
-    set minVisualRangeLength(value: TimeInterval | number | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set minVisualRangeLength(value: number | TimeInterval | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('minVisualRangeLength', value);
     }
 
@@ -215,10 +216,10 @@ export class DxoPolarChartValueAxisComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get strips(): Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, text?: string | undefined }, startValue?: Date | number | string | undefined }> {
+    get strips(): { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, text?: string | undefined }, startValue?: Date | number | string | undefined }[] {
         return this._getOption('strips');
     }
-    set strips(value: Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, text?: string | undefined }, startValue?: Date | number | string | undefined }>) {
+    set strips(value: { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, text?: string | undefined }, startValue?: Date | number | string | undefined }[]) {
         this._setOption('strips', value);
     }
 
@@ -239,10 +240,10 @@ export class DxoPolarChartValueAxisComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get tickInterval(): TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get tickInterval(): number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('tickInterval');
     }
-    set tickInterval(value: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set tickInterval(value: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('tickInterval', value);
     }
 
@@ -279,10 +280,10 @@ export class DxoPolarChartValueAxisComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get visualRange(): VisualRange | Array<number | string | Date> {
+    get visualRange(): Array<Date | number | string> | CommonChartTypes.VisualRange {
         return this._getOption('visualRange');
     }
-    set visualRange(value: VisualRange | Array<number | string | Date>) {
+    set visualRange(value: Array<Date | number | string> | CommonChartTypes.VisualRange) {
         this._setOption('visualRange', value);
     }
 
@@ -295,10 +296,10 @@ export class DxoPolarChartValueAxisComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get wholeRange(): VisualRange | undefined | Array<number | string | Date> {
+    get wholeRange(): Array<Date | number | string> | undefined | CommonChartTypes.VisualRange {
         return this._getOption('wholeRange');
     }
-    set wholeRange(value: VisualRange | undefined | Array<number | string | Date>) {
+    set wholeRange(value: Array<Date | number | string> | undefined | CommonChartTypes.VisualRange) {
         this._setOption('wholeRange', value);
     }
 
@@ -316,7 +317,7 @@ export class DxoPolarChartValueAxisComponent extends NestedOption implements OnD
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() visualRangeChange: EventEmitter<VisualRange | Array<number | string | Date>>;
+    @Output() visualRangeChange: EventEmitter<Array<Date | number | string> | CommonChartTypes.VisualRange>;
     protected get _optionPath() {
         return 'valueAxis';
     }

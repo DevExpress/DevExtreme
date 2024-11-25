@@ -95,7 +95,7 @@ const ResponsiveBox = memo(
 type IColProps = React.PropsWithChildren<{
   baseSize?: number | string;
   ratio?: number;
-  screen?: string;
+  screen?: string | undefined;
   shrink?: number;
 }>
 const _componentCol = (props: IColProps) => {
@@ -119,10 +119,10 @@ type IItemProps = React.PropsWithChildren<{
   html?: string;
   location?: Array<Record<string, any>> | Record<string, any> | {
     col?: number;
-    colspan?: number;
+    colspan?: number | undefined;
     row?: number;
-    rowspan?: number;
-    screen?: string;
+    rowspan?: number | undefined;
+    screen?: string | undefined;
   }[];
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
@@ -156,10 +156,10 @@ const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componen
 // Item
 type ILocationProps = React.PropsWithChildren<{
   col?: number;
-  colspan?: number;
+  colspan?: number | undefined;
   row?: number;
-  rowspan?: number;
-  screen?: string;
+  rowspan?: number | undefined;
+  screen?: string | undefined;
 }>
 const _componentLocation = (props: ILocationProps) => {
   return React.createElement(NestedOption<ILocationProps>, {
@@ -180,7 +180,7 @@ const Location = Object.assign<typeof _componentLocation, NestedComponentMeta>(_
 type IRowProps = React.PropsWithChildren<{
   baseSize?: number | string;
   ratio?: number;
-  screen?: string;
+  screen?: string | undefined;
   shrink?: number;
 }>
 const _componentRow = (props: IRowProps) => {

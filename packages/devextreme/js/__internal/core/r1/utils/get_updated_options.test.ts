@@ -1,3 +1,7 @@
+import {
+  describe, expect, it,
+} from '@jest/globals';
+
 import { getUpdatedOptions } from './get_updated_options';
 
 describe('get_updated_options', () => {

@@ -22,12 +22,12 @@ import {
 } from '@angular/core';
 
 
-import { ExportFormat, HorizontalAlignment, Orientation, Position, SingleMultipleOrNone, VerticalEdge } from 'devextreme/common';
-import { DashStyle, Font, Palette, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { CenterChangedEvent, ClickEvent, DisposingEvent, DrawnEvent, dxVectorMapAnnotationConfig, dxVectorMapCommonAnnotationConfig, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, SelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, VectorMapLayerType, VectorMapMarkerShape, VectorMapMarkerType, ZoomFactorChangedEvent } from 'devextreme/viz/vector_map';
+import DataSource from 'devextreme/data/data_source';
+import { dxVectorMapAnnotationConfig, dxVectorMapCommonAnnotationConfig, MapLayerElement, VectorMapMarkerType, VectorMapLayerType, VectorMapLegendItem, VectorMapMarkerShape, CenterChangedEvent, ClickEvent, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, SelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomFactorChangedEvent } from 'devextreme/viz/vector_map';
+import { HorizontalAlignment, VerticalEdge, ExportFormat, SingleMultipleOrNone, Position, Orientation } from 'devextreme/common';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { Font, Palette, DashStyle, Theme, TextOverflow, WordWrap } from 'devextreme/common/charts';
 import { VectorMapProjection, VectorMapProjectionConfig } from 'devextreme/viz/vector_map/projection';
 
 import DxVectorMap from 'devextreme/viz/vector_map';
@@ -65,25 +65,31 @@ import { DxoSizeModule } from 'devextreme-angular/ui/nested';
 import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 
 import { DxiVectorMapAnnotationModule } from 'devextreme-angular/ui/vector-map/nested';
-import { DxoVectorMapBorderModule } from 'devextreme-angular/ui/vector-map/nested';
-import { DxoVectorMapFontModule } from 'devextreme-angular/ui/vector-map/nested';
-import { DxoVectorMapImageModule } from 'devextreme-angular/ui/vector-map/nested';
-import { DxoVectorMapShadowModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapAnnotationBorderModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxoVectorMapBackgroundModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapBorderModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxoVectorMapCommonAnnotationSettingsModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxoVectorMapControlBarModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxoVectorMapExportModule } from 'devextreme-angular/ui/vector-map/nested';
-import { DxiVectorMapLayerModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapFontModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapImageModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxoVectorMapLabelModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxiVectorMapLayerModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxiVectorMapLegendModule } from 'devextreme-angular/ui/vector-map/nested';
-import { DxoVectorMapMarginModule } from 'devextreme-angular/ui/vector-map/nested';
-import { DxoVectorMapSourceModule } from 'devextreme-angular/ui/vector-map/nested';
-import { DxoVectorMapTitleModule } from 'devextreme-angular/ui/vector-map/nested';
-import { DxoVectorMapSubtitleModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapLegendTitleModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapLegendTitleSubtitleModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxoVectorMapLoadingIndicatorModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapMarginModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxoVectorMapProjectionModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapShadowModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxoVectorMapSizeModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapSourceModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapSubtitleModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapTitleModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxoVectorMapTooltipModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapTooltipBorderModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapVectorMapTitleModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapVectorMapTitleSubtitleModule } from 'devextreme-angular/ui/vector-map/nested';
 
 import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
 import { DxiLayerComponent } from 'devextreme-angular/ui/nested';
@@ -117,10 +123,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get annotations(): Array<dxVectorMapAnnotationConfig | any> {
+    get annotations(): Array<any | dxVectorMapAnnotationConfig> {
         return this._getOption('annotations');
     }
-    set annotations(value: Array<dxVectorMapAnnotationConfig | any>) {
+    set annotations(value: Array<any | dxVectorMapAnnotationConfig>) {
         this._setOption('annotations', value);
     }
 
@@ -195,10 +201,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get customizeAnnotation(): Function | undefined {
+    get customizeAnnotation(): ((annotation: dxVectorMapAnnotationConfig | any) => dxVectorMapAnnotationConfig) | undefined {
         return this._getOption('customizeAnnotation');
     }
-    set customizeAnnotation(value: Function | undefined) {
+    set customizeAnnotation(value: ((annotation: dxVectorMapAnnotationConfig | any) => dxVectorMapAnnotationConfig) | undefined) {
         this._setOption('customizeAnnotation', value);
     }
 
@@ -221,10 +227,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -234,10 +240,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined } {
+    get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined } {
         return this._getOption('export');
     }
-    set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }) {
+    set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }) {
         this._setOption('export', value);
     }
 
@@ -247,10 +253,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get layers(): Array<any | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string | undefined, colorGroups?: Array<number>, customize?: Function, dataField?: string | undefined, dataSource?: Store | DataSource | DataSourceOptions | any | null | string | Array<any>, elementType?: VectorMapMarkerType, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, hoverEnabled?: boolean, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Palette | string | Array<string>, paletteIndex?: number, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: SingleMultipleOrNone, size?: number, sizeGroupingField?: string | undefined, sizeGroups?: Array<number>, type?: VectorMapLayerType }> {
+    get layers(): { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string | undefined, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => void), dataField?: string | undefined, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Record<string, any> | Store | string, elementType?: VectorMapMarkerType, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, hoverEnabled?: boolean, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | Palette, paletteIndex?: number, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: SingleMultipleOrNone, size?: number, sizeGroupingField?: string | undefined, sizeGroups?: Array<number>, type?: VectorMapLayerType }[] {
         return this._getOption('layers');
     }
-    set layers(value: Array<any | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string | undefined, colorGroups?: Array<number>, customize?: Function, dataField?: string | undefined, dataSource?: Store | DataSource | DataSourceOptions | any | null | string | Array<any>, elementType?: VectorMapMarkerType, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, hoverEnabled?: boolean, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Palette | string | Array<string>, paletteIndex?: number, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: SingleMultipleOrNone, size?: number, sizeGroupingField?: string | undefined, sizeGroups?: Array<number>, type?: VectorMapLayerType }>) {
+    set layers(value: { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string | undefined, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => void), dataField?: string | undefined, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Record<string, any> | Store | string, elementType?: VectorMapMarkerType, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, hoverEnabled?: boolean, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | Palette, paletteIndex?: number, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: SingleMultipleOrNone, size?: number, sizeGroupingField?: string | undefined, sizeGroups?: Array<number>, type?: VectorMapLayerType }[]) {
         this._setOption('layers', value);
     }
 
@@ -260,10 +266,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get legends(): Array<any | { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: Function, customizeItems?: Function, customizeText?: Function, font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerColor?: string | undefined, markerShape?: VectorMapMarkerShape, markerSize?: number, markerTemplate?: any | undefined, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, source?: { grouping?: string, layer?: string }, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }> {
+    get legends(): { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string), customizeItems?: ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>), customizeText?: ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerColor?: string | undefined, markerShape?: VectorMapMarkerShape, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, source?: { grouping?: string, layer?: string }, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }[] {
         return this._getOption('legends');
     }
-    set legends(value: Array<any | { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: Function, customizeItems?: Function, customizeText?: Function, font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerColor?: string | undefined, markerShape?: VectorMapMarkerShape, markerSize?: number, markerTemplate?: any | undefined, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, source?: { grouping?: string, layer?: string }, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }>) {
+    set legends(value: { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string), customizeItems?: ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>), customizeText?: ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerColor?: string | undefined, markerShape?: VectorMapMarkerShape, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, source?: { grouping?: string, layer?: string }, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }[]) {
         this._setOption('legends', value);
     }
 
@@ -325,10 +331,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get projection(): VectorMapProjection | VectorMapProjectionConfig | any | string {
+    get projection(): Record<string, any> | string | VectorMapProjection | VectorMapProjectionConfig {
         return this._getOption('projection');
     }
-    set projection(value: VectorMapProjection | VectorMapProjectionConfig | any | string) {
+    set projection(value: Record<string, any> | string | VectorMapProjection | VectorMapProjectionConfig) {
         this._setOption('projection', value);
     }
 
@@ -403,10 +409,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
+    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: MapLayerElement) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
+    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: MapLayerElement) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
 
@@ -579,7 +585,7 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() annotationsChange: EventEmitter<Array<dxVectorMapAnnotationConfig | any>>;
+    @Output() annotationsChange: EventEmitter<Array<any | dxVectorMapAnnotationConfig>>;
 
     /**
     
@@ -621,7 +627,7 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizeAnnotationChange: EventEmitter<Function | undefined>;
+    @Output() customizeAnnotationChange: EventEmitter<((annotation: dxVectorMapAnnotationConfig | any) => dxVectorMapAnnotationConfig) | undefined>;
 
     /**
     
@@ -635,28 +641,28 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }>;
+    @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() layersChange: EventEmitter<Array<any | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string | undefined, colorGroups?: Array<number>, customize?: Function, dataField?: string | undefined, dataSource?: Store | DataSource | DataSourceOptions | any | null | string | Array<any>, elementType?: VectorMapMarkerType, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, hoverEnabled?: boolean, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Palette | string | Array<string>, paletteIndex?: number, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: SingleMultipleOrNone, size?: number, sizeGroupingField?: string | undefined, sizeGroups?: Array<number>, type?: VectorMapLayerType }>>;
+    @Output() layersChange: EventEmitter<{ borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string | undefined, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => void), dataField?: string | undefined, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Record<string, any> | Store | string, elementType?: VectorMapMarkerType, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, hoverEnabled?: boolean, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | Palette, paletteIndex?: number, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: SingleMultipleOrNone, size?: number, sizeGroupingField?: string | undefined, sizeGroups?: Array<number>, type?: VectorMapLayerType }[]>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() legendsChange: EventEmitter<Array<any | { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: Function, customizeItems?: Function, customizeText?: Function, font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerColor?: string | undefined, markerShape?: VectorMapMarkerShape, markerSize?: number, markerTemplate?: any | undefined, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, source?: { grouping?: string, layer?: string }, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }>>;
+    @Output() legendsChange: EventEmitter<{ backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string), customizeItems?: ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>), customizeText?: ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerColor?: string | undefined, markerShape?: VectorMapMarkerShape, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, source?: { grouping?: string, layer?: string }, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }[]>;
 
     /**
     
@@ -691,7 +697,7 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() projectionChange: EventEmitter<VectorMapProjection | VectorMapProjectionConfig | any | string>;
+    @Output() projectionChange: EventEmitter<Record<string, any> | string | VectorMapProjection | VectorMapProjectionConfig>;
 
     /**
     
@@ -733,7 +739,7 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
+    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: MapLayerElement) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
 
     /**
     
@@ -953,25 +959,31 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     DxoSizeModule,
     DxoTooltipModule,
     DxiVectorMapAnnotationModule,
-    DxoVectorMapBorderModule,
-    DxoVectorMapFontModule,
-    DxoVectorMapImageModule,
-    DxoVectorMapShadowModule,
+    DxoVectorMapAnnotationBorderModule,
     DxoVectorMapBackgroundModule,
+    DxoVectorMapBorderModule,
     DxoVectorMapCommonAnnotationSettingsModule,
     DxoVectorMapControlBarModule,
     DxoVectorMapExportModule,
-    DxiVectorMapLayerModule,
+    DxoVectorMapFontModule,
+    DxoVectorMapImageModule,
     DxoVectorMapLabelModule,
+    DxiVectorMapLayerModule,
     DxiVectorMapLegendModule,
-    DxoVectorMapMarginModule,
-    DxoVectorMapSourceModule,
-    DxoVectorMapTitleModule,
-    DxoVectorMapSubtitleModule,
+    DxoVectorMapLegendTitleModule,
+    DxoVectorMapLegendTitleSubtitleModule,
     DxoVectorMapLoadingIndicatorModule,
+    DxoVectorMapMarginModule,
     DxoVectorMapProjectionModule,
+    DxoVectorMapShadowModule,
     DxoVectorMapSizeModule,
+    DxoVectorMapSourceModule,
+    DxoVectorMapSubtitleModule,
+    DxoVectorMapTitleModule,
     DxoVectorMapTooltipModule,
+    DxoVectorMapTooltipBorderModule,
+    DxoVectorMapVectorMapTitleModule,
+    DxoVectorMapVectorMapTitleSubtitleModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1001,25 +1013,31 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     DxoSizeModule,
     DxoTooltipModule,
     DxiVectorMapAnnotationModule,
-    DxoVectorMapBorderModule,
-    DxoVectorMapFontModule,
-    DxoVectorMapImageModule,
-    DxoVectorMapShadowModule,
+    DxoVectorMapAnnotationBorderModule,
     DxoVectorMapBackgroundModule,
+    DxoVectorMapBorderModule,
     DxoVectorMapCommonAnnotationSettingsModule,
     DxoVectorMapControlBarModule,
     DxoVectorMapExportModule,
-    DxiVectorMapLayerModule,
+    DxoVectorMapFontModule,
+    DxoVectorMapImageModule,
     DxoVectorMapLabelModule,
+    DxiVectorMapLayerModule,
     DxiVectorMapLegendModule,
-    DxoVectorMapMarginModule,
-    DxoVectorMapSourceModule,
-    DxoVectorMapTitleModule,
-    DxoVectorMapSubtitleModule,
+    DxoVectorMapLegendTitleModule,
+    DxoVectorMapLegendTitleSubtitleModule,
     DxoVectorMapLoadingIndicatorModule,
+    DxoVectorMapMarginModule,
     DxoVectorMapProjectionModule,
+    DxoVectorMapShadowModule,
     DxoVectorMapSizeModule,
+    DxoVectorMapSourceModule,
+    DxoVectorMapSubtitleModule,
+    DxoVectorMapTitleModule,
     DxoVectorMapTooltipModule,
+    DxoVectorMapTooltipBorderModule,
+    DxoVectorMapVectorMapTitleModule,
+    DxoVectorMapVectorMapTitleSubtitleModule,
     DxTemplateModule
   ]
 })

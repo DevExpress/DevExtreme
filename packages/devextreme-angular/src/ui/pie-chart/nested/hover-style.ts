@@ -14,7 +14,7 @@ import {
 
 
 
-import { ChartsColor, DashStyle, HatchDirection } from 'devextreme/common/charts';
+import { DashStyle, ChartsColor, HatchDirection } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,

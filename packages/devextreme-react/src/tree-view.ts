@@ -99,8 +99,8 @@ const TreeView = memo(
 // SearchEditorOptions
 type IButtonProps = React.PropsWithChildren<{
   location?: TextEditorButtonLocation;
-  name?: string;
-  options?: dxButtonOptions;
+  name?: string | undefined;
+  options?: dxButtonOptions | undefined;
 }>
 const _componentButton = (props: IButtonProps) => {
   return React.createElement(NestedOption<IButtonProps>, {
@@ -124,12 +124,12 @@ const Button = Object.assign<typeof _componentButton, NestedComponentMeta>(_comp
 type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   expanded?: boolean;
-  hasItems?: boolean;
+  hasItems?: boolean | undefined;
   html?: string;
   icon?: string;
-  id?: number | string;
+  id?: number | string | undefined;
   items?: Array<dxTreeViewItem>;
-  parentId?: number | string;
+  parentId?: number | string | undefined;
   selected?: boolean;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
@@ -159,14 +159,14 @@ const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componen
 // owners:
 // Button
 type IOptionsProps = React.PropsWithChildren<{
-  accessKey?: string;
+  accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string;
-  hint?: string;
+  height?: (() => number | string) | number | string | undefined;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
   onClick?: ((e: ClickEvent) => void);
@@ -181,9 +181,9 @@ type IOptionsProps = React.PropsWithChildren<{
   text?: string;
   type?: ButtonType | string;
   useSubmitBehavior?: boolean;
-  validationGroup?: string;
+  validationGroup?: string | undefined;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: (() => number | string) | number | string | undefined;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
@@ -208,15 +208,15 @@ const Options = Object.assign<typeof _componentOptions, NestedComponentMeta>(_co
 // owners:
 // TreeView
 type ISearchEditorOptionsProps = React.PropsWithChildren<{
-  accessKey?: string;
+  accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   bindingOptions?: Record<string, any>;
   buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string;
-  hint?: string;
+  height?: (() => number | string) | number | string | undefined;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
   inputAttr?: any;
   isDirty?: boolean;
@@ -263,7 +263,7 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   value?: string;
   valueChangeEvent?: string;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: (() => number | string) | number | string | undefined;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
 }>

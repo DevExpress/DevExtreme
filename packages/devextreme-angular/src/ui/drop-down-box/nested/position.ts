@@ -14,9 +14,8 @@ import {
 
 
 
-import { CollisionResolution, CollisionResolutionCombination } from 'devextreme/animation/position';
-import { HorizontalAlignment, PositionAlignment, VerticalAlignment } from 'devextreme/common';
-import { UserDefinedElement } from 'devextreme/core/element';
+import { PositionAlignment, HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import { CollisionResolutionCombination, CollisionResolution } from 'devextreme/animation/position';
 
 import {
     NestedOptionHost,
@@ -40,10 +39,10 @@ export class DxoDropDownBoxPositionComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get boundary(): UserDefinedElement | string | Window {
+    get boundary(): any | string {
         return this._getOption('boundary');
     }
-    set boundary(value: UserDefinedElement | string | Window) {
+    set boundary(value: any | string) {
         this._setOption('boundary', value);
     }
 
@@ -72,10 +71,10 @@ export class DxoDropDownBoxPositionComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get of(): UserDefinedElement | string | Window {
+    get of(): any | string {
         return this._getOption('of');
     }
-    set of(value: UserDefinedElement | string | Window) {
+    set of(value: any | string) {
         this._setOption('of', value);
     }
 

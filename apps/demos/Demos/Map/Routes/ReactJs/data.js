@@ -1,27 +1,15 @@
 export const markersData = [
   {
     location: [40.755833, -73.986389],
-    tooltip: {
-      text: 'Times Square',
-    },
   },
   {
     location: '40.7825, -73.966111',
-    tooltip: {
-      text: 'Central Park',
-    },
   },
   {
     location: { lat: 40.753889, lng: -73.981389 },
-    tooltip: {
-      text: 'Fifth Avenue',
-    },
   },
   {
-    location: 'Brooklyn Bridge,New York,NY',
-    tooltip: {
-      text: 'Brooklyn Bridge',
-    },
+    location: 'City Hall Park,New York,NY',
   },
 ];
 export const routesData = [
@@ -33,6 +21,7 @@ export const routesData = [
       [40.7825, -73.966111],
       [40.755833, -73.986389],
       [40.753889, -73.981389],
+      ['City Hall Park,New York,NY'],
     ],
   },
 ];

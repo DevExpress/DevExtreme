@@ -14,10 +14,10 @@ import {
 
 
 
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from 'devextreme/common/grids';
 import { SearchMode } from 'devextreme/common';
-import { ColumnHeaderFilterSearchConfig, HeaderFilterGroupInterval, HeaderFilterSearchConfig } from 'devextreme/common/grids';
-import { Store } from 'devextreme/data';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
 
 import {
@@ -50,10 +50,10 @@ export class DxoGanttHeaderFilterComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get dataSource(): Store | DataSourceOptions | Function | null | undefined | Array<any> {
+    get dataSource(): Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSourceOptions | Function | null | undefined | Array<any>) {
+    set dataSource(value: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined) {
         this._setOption('dataSource', value);
     }
 

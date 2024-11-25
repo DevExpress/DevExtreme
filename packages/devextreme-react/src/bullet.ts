@@ -76,7 +76,7 @@ const Bullet = memo(
 type IBorderProps = React.PropsWithChildren<{
   color?: string;
   dashStyle?: DashStyle;
-  opacity?: number;
+  opacity?: number | undefined;
   visible?: boolean;
   width?: number;
 }>
@@ -184,8 +184,8 @@ const Shadow = Object.assign<typeof _componentShadow, NestedComponentMeta>(_comp
 // owners:
 // Bullet
 type ISizeProps = React.PropsWithChildren<{
-  height?: number;
-  width?: number;
+  height?: number | undefined;
+  width?: number | undefined;
 }>
 const _componentSize = (props: ISizeProps) => {
   return React.createElement(NestedOption<ISizeProps>, {
@@ -207,20 +207,20 @@ type ITooltipProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     dashStyle?: DashStyle;
-    opacity?: number;
+    opacity?: number | undefined;
     visible?: boolean;
     width?: number;
   };
   color?: string;
-  container?: any | string;
-  contentTemplate?: ((pointsInfo: any, element: any) => string | any) | template;
+  container?: any | string | undefined;
+  contentTemplate?: ((pointsInfo: any, element: any) => string | any) | template | undefined;
   cornerRadius?: number;
-  customizeTooltip?: ((pointsInfo: any) => Record<string, any>);
+  customizeTooltip?: ((pointsInfo: any) => Record<string, any>) | undefined;
   enabled?: boolean;
   font?: ChartsFont;
-  format?: LocalizationFormat;
+  format?: LocalizationFormat | undefined;
   interactive?: boolean;
-  opacity?: number;
+  opacity?: number | undefined;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
   shadow?: Record<string, any> | {
@@ -230,7 +230,7 @@ type ITooltipProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  zIndex?: number;
+  zIndex?: number | undefined;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
 }>

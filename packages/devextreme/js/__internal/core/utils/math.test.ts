@@ -1,3 +1,6 @@
+import {
+  describe, expect, it,
+} from '@jest/globals';
 import { shiftIntegerByModule } from '@ts/core/utils/math';
 import each from 'jest-each';
 

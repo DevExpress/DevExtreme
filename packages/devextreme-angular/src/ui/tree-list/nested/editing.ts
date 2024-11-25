@@ -19,9 +19,11 @@ import {
 
 
 
+import dxTreeList from 'devextreme/ui/tree_list';
+import { dxTreeListRowObject } from 'devextreme/ui/tree_list';
 import { DataChange, GridsEditMode, GridsEditRefreshMode, StartEditAction } from 'devextreme/common/grids';
-import { Properties as dxFormOptions } from 'devextreme/ui/form';
-import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
+import { dxFormOptions } from 'devextreme/ui/form';
+import { dxPopupOptions } from 'devextreme/ui/popup';
 
 import {
     NestedOptionHost,
@@ -38,26 +40,26 @@ import { DxiTreeListChangeComponent } from './change-dxi';
 })
 export class DxoTreeListEditingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get allowAdding(): boolean | Function {
+    get allowAdding(): boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean) {
         return this._getOption('allowAdding');
     }
-    set allowAdding(value: boolean | Function) {
+    set allowAdding(value: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean)) {
         this._setOption('allowAdding', value);
     }
 
     @Input()
-    get allowDeleting(): boolean | Function {
+    get allowDeleting(): boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean) {
         return this._getOption('allowDeleting');
     }
-    set allowDeleting(value: boolean | Function) {
+    set allowDeleting(value: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean)) {
         this._setOption('allowDeleting', value);
     }
 
     @Input()
-    get allowUpdating(): boolean | Function {
+    get allowUpdating(): boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean) {
         return this._getOption('allowUpdating');
     }
-    set allowUpdating(value: boolean | Function) {
+    set allowUpdating(value: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean)) {
         this._setOption('allowUpdating', value);
     }
 
@@ -110,10 +112,10 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get popup(): dxPopupOptions {
+    get popup(): dxPopupOptions<any> {
         return this._getOption('popup');
     }
-    set popup(value: dxPopupOptions) {
+    set popup(value: dxPopupOptions<any>) {
         this._setOption('popup', value);
     }
 

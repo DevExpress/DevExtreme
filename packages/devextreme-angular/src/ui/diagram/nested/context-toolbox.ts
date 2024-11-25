@@ -14,7 +14,7 @@ import {
 
 
 
-import { ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
+import { ShapeCategory, ToolboxDisplayMode, ShapeType } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
@@ -62,10 +62,10 @@ export class DxoDiagramContextToolboxComponent extends NestedOption implements O
     }
 
     @Input()
-    get shapes(): Array<ShapeType | string> {
+    get shapes(): Array<ShapeType> {
         return this._getOption('shapes');
     }
-    set shapes(value: Array<ShapeType | string>) {
+    set shapes(value: Array<ShapeType>) {
         this._setOption('shapes', value);
     }
 

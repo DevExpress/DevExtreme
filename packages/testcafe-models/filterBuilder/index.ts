@@ -3,7 +3,7 @@ import type { WidgetName } from '../types';
 import Widget from '../internal/widget';
 import Field from './field';
 
-type FieldType = 'item' | 'groupOperation' | 'itemOperation' | 'itemAction';
+type FieldType = 'item' | 'groupOperation' | 'itemOperation' | 'itemAction' | 'itemValue';
 const CLASS = {
   root: 'dx-filterbuilder',
   group: 'dx-filterbuilder-group',

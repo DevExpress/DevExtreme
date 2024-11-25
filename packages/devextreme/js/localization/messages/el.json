@@ -250,6 +250,7 @@
         "dxPivotGrid-filterFieldArea": "Τοποθετήστε τα πεδία φίλτρων εδώ",
 
         "dxScheduler-ariaLabel": "Scheduler. {0} view",
+        
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
@@ -301,6 +302,8 @@
         "dxScheduler-recurrenceRepeatOnDate": "στην ημερομηνία",
         "dxScheduler-recurrenceRepeatCount": "περιστατικό(α)",
         "dxScheduler-allDay": "Όλη μέρα",
+
+        "dxScheduler-ariaEditForm": "Edit form",
 
         "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
         "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",

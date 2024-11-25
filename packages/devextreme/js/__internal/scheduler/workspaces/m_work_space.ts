@@ -526,7 +526,7 @@ class SchedulerWorkSpace extends WidgetObserver {
   }
 
   _focusInHandler(e) {
-    if ($(e.target).is(this._focusTarget() as any) && this._isCellClick !== false) {
+    if ($(e.target).is(this._focusTarget() as any) && this._isCellClick) {
       delete this._isCellClick;
       delete this._contextMenuHandled;
       // @ts-expect-error
@@ -2536,10 +2536,10 @@ class SchedulerWorkSpace extends WidgetObserver {
   _initWorkSpaceUnits() {
     this._$headerPanelContainer = $('<div>').addClass('dx-scheduler-header-panel-container');
     this._$headerTablesContainer = $('<div>').addClass('dx-scheduler-header-tables-container');
-    this._$headerPanel = $('<table>');
+    this._$headerPanel = $('<table>').attr('aria-hidden', true);
     this._$thead = $('<thead>').appendTo(this._$headerPanel);
     this._$headerPanelEmptyCell = $('<div>').addClass('dx-scheduler-header-panel-empty-cell');
-    this._$allDayTable = $('<table>');
+    this._$allDayTable = $('<table>').attr('aria-hidden', true);
 
     this._$fixedContainer = $('<div>').addClass(FIXED_CONTAINER_CLASS);
     this._$allDayContainer = $('<div>').addClass(ALL_DAY_CONTAINER_CLASS);
@@ -2554,8 +2554,8 @@ class SchedulerWorkSpace extends WidgetObserver {
       this._createAllDayPanelElements();
     }
 
-    this._$timePanel = $('<table>').addClass(TIME_PANEL_CLASS);
-    this._$dateTable = $('<table>');
+    this._$timePanel = $('<table>').addClass(TIME_PANEL_CLASS).attr('aria-hidden', true);
+    this._$dateTable = $('<table>').attr('aria-hidden', true);
     this._$dateTableContainer = $('<div>').addClass('dx-scheduler-date-table-container');
     this._$groupTable = $('<div>').addClass(WORKSPACE_VERTICAL_GROUP_TABLE_CLASS);
   }
@@ -2918,7 +2918,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._allDayTitles.push($allDayTitle);
 
-        this._$allDayTable = $('<table>');
+        this._$allDayTable = $('<table>').attr('aria-hidden', true);
         this._allDayTables.push(this._$allDayTable);
 
         this._$allDayPanel = $('<div>')
@@ -2933,7 +2933,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         .text(messageLocalization.format('dxScheduler-allDay'))
         .appendTo(this.$element());
 
-      this._$allDayTable = $('<table>');
+      this._$allDayTable = $('<table>').attr('aria-hidden', true);
 
       this._$allDayPanel = $('<div>')
         .addClass(ALL_DAY_PANEL_CLASS)
