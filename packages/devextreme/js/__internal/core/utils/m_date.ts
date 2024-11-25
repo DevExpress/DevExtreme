@@ -234,7 +234,11 @@ function addDateInterval(value, interval, dir) {
     result.setMonth(result.getMonth() + 3 * intervalObject.quarters * dir);
   }
   if (intervalObject.months) {
-    result.setMonth(result.getMonth() + intervalObject.months * dir);
+    const targetMonth = result.getMonth() + intervalObject.months * dir;
+    result.setDate(1);
+    result.setMonth(targetMonth);
+    // eslint-disable-next-line max-len
+    result.setDate(Math.min(result.getDate(), new Date(result.getFullYear(), result.getMonth() + 1, 0).getDate()));
   }
   if (intervalObject.weeks) {
     result.setDate(result.getDate() + 7 * intervalObject.weeks * dir);
