@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { ODataStore } from 'devextreme-react/common/data/';
+import { ODataStore } from 'devextreme-react/common/data';
 import DataGrid, {
   Column,
   Grouping,

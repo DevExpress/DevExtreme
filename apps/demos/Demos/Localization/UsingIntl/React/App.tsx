@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import DataGrid, { Column, Editing, FilterRow } from 'devextreme-react/data-grid';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 
-import deMessages from 'devextreme/common/core/localization/messages/de.json';
-import ruMessages from 'devextreme/common/core/localization/messages/ru.json';
-import { locale, loadMessages, formatMessage } from 'devextreme/common/core/localization';
+import deMessages from 'devextreme/localization/messages/de.json';
+import ruMessages from 'devextreme/localization/messages/ru.json';
+import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 
 import service from './data.ts';
 
