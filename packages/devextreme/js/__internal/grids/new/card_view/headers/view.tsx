@@ -12,6 +12,7 @@ export class HeadersView extends View {
         columns={columns}
         onReorder={this.onReorder.bind(this)}
         onAdd={this.onAdd.bind(this)}
+        onHeaderRemoveButtonClicked={this.onHeaderCloseButtonClick.bind(this)}
       />
     ),
     [this.columnsController.visibleColumns],
@@ -23,6 +24,16 @@ export class HeadersView extends View {
     private readonly columnsController: ColumnsController,
   ) {
     super();
+  }
+
+  public onHeaderCloseButtonClick(name: string): void {
+    const index = this.getColumnIndexByName(name);
+
+    this.columnsController.columns.updateFunc((columns) => {
+      const newColumns = columns.slice();
+      newColumns[index] = { ...newColumns[index], visible: false };
+      return newColumns;
+    });
   }
 
   public onReorder(visibleFromIndex: number, visibleToIndex: number): void {
@@ -54,5 +65,15 @@ export class HeadersView extends View {
       newColumns.splice(toIndex, 0, { ...column, visible: true });
       return newColumns;
     });
+  }
+
+  private getColumnIndexByName(name: string): number {
+    const cs = this.columnsController.columns.unreactive_get();
+    const targetColumn = cs.filter((c) => c.name === name)[0];
+
+    if (!targetColumn) {
+      return -1;
+    }
+    return cs.indexOf(targetColumn);
   }
 }
