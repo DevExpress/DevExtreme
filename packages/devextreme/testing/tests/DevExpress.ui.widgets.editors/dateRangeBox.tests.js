@@ -1011,11 +1011,10 @@ QUnit.module('Behavior', moduleConfig, () => {
             max: new Date('2025-12-31'),
             multiView: true
         });
-
         this.$startDateInput.trigger('click');
-        const calendar = this.getCalendar();
-
         $(`.${CALENDAR_CELL_CLASS}`).eq(3).trigger('dxclick');
+
+        const calendar = this.instance.getStartDateBox()._strategy._widget;
 
         const $cell = $(getCurrentViewInstance(calendar).$element().find('*[data-value="2025/11/01"]'));
 
