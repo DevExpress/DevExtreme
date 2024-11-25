@@ -117,6 +117,7 @@ window.config = {
     'devextreme': 'npm:devextreme/cjs',
     'devextreme-react': 'npm:devextreme-react/cjs',
 
+    /* Bundles for Unified */
     'unified': 'bundles:unified/unified.bundle.js',
     'remark-parse': 'bundles:unified/remark-parse.bundle.js',
     'remark-rehype': 'bundles:unified/remark-rehype.bundle.js',

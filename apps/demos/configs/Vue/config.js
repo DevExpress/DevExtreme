@@ -57,16 +57,6 @@ window.config = {
     'devextreme-aspnet-data-nojquery': 'npm:devextreme-aspnet-data-nojquery/index.js',
     /**/
 
-    /* Unified bundles */
-    'unified': 'bundles:unified/unified.bundle.js',
-    'remark-parse': 'bundles:unified/remark-parse.bundle.js',
-    'remark-rehype': 'bundles:unified/remark-rehype.bundle.js',
-    'remark-stringify': 'bundles:unified/remark-stringify.bundle.js',
-    'rehype-parse': 'bundles:unified/rehype-parse.bundle.js',
-    'rehype-remark': 'bundles:unified/rehype-remark.bundle.js',
-    'rehype-stringify': 'bundles:unified/rehype-stringify.bundle.js',
-    /* ---- */
-
     /** globalize--vue&react */
     'globalize': 'npm:globalize/dist/globalize',
     'json': 'npm:systemjs-plugin-json/json.js',
@@ -125,6 +115,16 @@ window.config = {
 
     'devextreme': 'npm:devextreme/cjs',
     'devextreme-vue': 'npm:devextreme-vue/cjs',
+
+    /* Bundles for Unified */
+    'unified': 'bundles:unified/unified.bundle.js',
+    'remark-parse': 'bundles:unified/remark-parse.bundle.js',
+    'remark-rehype': 'bundles:unified/remark-rehype.bundle.js',
+    'remark-stringify': 'bundles:unified/remark-stringify.bundle.js',
+    'rehype-parse': 'bundles:unified/rehype-parse.bundle.js',
+    'rehype-remark': 'bundles:unified/rehype-remark.bundle.js',
+    'rehype-stringify': 'bundles:unified/rehype-stringify.bundle.js',
+
     'jszip': 'npm:jszip/dist/jszip.min.js',
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram/dist/dx-diagram.js',

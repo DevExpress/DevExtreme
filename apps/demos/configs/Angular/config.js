@@ -182,6 +182,7 @@ window.config = {
       return acc;
     }, {}),
 
+    /* Bundles for Unified */
     'unified': 'bundles:unified/unified.bundle.js',
     'remark-parse': 'bundles:unified/remark-parse.bundle.js',
     'remark-rehype': 'bundles:unified/remark-rehype.bundle.js',
