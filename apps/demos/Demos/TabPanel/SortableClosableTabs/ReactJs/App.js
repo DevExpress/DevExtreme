@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import Button from 'devextreme-react/button';
 import Sortable from 'devextreme-react/sortable';
 import TabPanel from 'devextreme-react/tab-panel';
-import 'devextreme-react/common/data/odata/store';
+import 'devextreme/data/odata/store';
 import service from './data.js';
 import EmployeeTemplate from './EmployeeTemplate.js';
 

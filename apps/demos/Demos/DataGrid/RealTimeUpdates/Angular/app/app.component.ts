@@ -4,7 +4,8 @@ import {
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule, DxSliderModule } from 'devextreme-angular';
-import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
+import DataSource from 'devextreme/data/data_source';
+import ArrayStore from 'devextreme/data/array_store';
 import { Product, Order, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

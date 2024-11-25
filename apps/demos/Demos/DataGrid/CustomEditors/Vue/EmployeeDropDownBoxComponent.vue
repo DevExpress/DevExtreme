@@ -44,7 +44,7 @@ import {
   DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DxDropDownBox, { DxDropDownBoxTypes } from 'devextreme-vue/drop-down-box';
-import { CustomStore } from 'devextreme-vue/common/data';
+import CustomStore from 'devextreme/data/custom_store';
 
 const props = defineProps<{
   value: number,

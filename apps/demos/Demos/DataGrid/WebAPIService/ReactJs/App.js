@@ -1,5 +1,5 @@
 import React from 'react';
-import 'devextreme-react/common/data/odata/store';
+import 'devextreme/data/odata/store';
 import {
   Column,
   DataGrid,

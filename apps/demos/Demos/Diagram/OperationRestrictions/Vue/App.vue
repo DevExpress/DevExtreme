@@ -68,7 +68,7 @@ import {
   DxGroup,
 } from 'devextreme-vue/diagram';
 import notify from 'devextreme/ui/notify';
-import { ArrayStore } from 'devextreme-vue/common/data';
+import ArrayStore from 'devextreme/data/array_store';
 import service from './data.ts';
 
 const orgItemsDataSource = new ArrayStore({

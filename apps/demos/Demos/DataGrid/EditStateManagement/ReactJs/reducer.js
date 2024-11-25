@@ -1,4 +1,4 @@
-import { applyChanges } from 'devextreme-react/common/data';
+import applyChanges from 'devextreme/data/apply_changes';
 import {
   FETCH_PENDING,
   FETCH_SUCCESS,

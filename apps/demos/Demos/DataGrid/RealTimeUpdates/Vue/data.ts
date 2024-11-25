@@ -1,4 +1,4 @@
-import { ArrayStore } from 'devextreme-vue/common/data';
+import ArrayStore from 'devextreme/data/array_store';
 
 export type Product = {
   ProductID: number;

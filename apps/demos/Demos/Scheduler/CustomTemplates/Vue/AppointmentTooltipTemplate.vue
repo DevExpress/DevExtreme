@@ -14,7 +14,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { query as Query } from 'devextreme-vue/common/data';
+import Query from 'devextreme/data/query';
 import DxScheduler, { DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import { moviesData } from './data.ts';
 

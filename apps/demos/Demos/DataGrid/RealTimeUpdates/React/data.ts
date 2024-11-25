@@ -1,4 +1,4 @@
-import { ArrayStore } from 'devextreme-react/common/data';
+import ArrayStore from 'devextreme/data/array_store';
 
 const cities = ['Los Angeles', 'Denver', 'Bentonville', 'Atlanta', 'Reno', 'Beaver', 'Malibu', 'Phoenix', 'San Diego', 'Little Rock', 'Pasadena', 'Boise', 'San Jose', 'Chatsworth', 'San Fernando', 'South Pasadena', 'San Fernando Valley', 'La Canada', 'St. Louis'];
 

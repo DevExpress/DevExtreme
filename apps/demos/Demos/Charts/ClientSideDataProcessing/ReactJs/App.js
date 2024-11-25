@@ -1,5 +1,6 @@
 import React from 'react';
-import { DataSource, CustomStore } from 'devextreme-react/common/data';
+import DataSource from 'devextreme/data/data_source';
+import CustomStore from 'devextreme/data/custom_store';
 import Chart, {
   ValueAxis,
   Label,

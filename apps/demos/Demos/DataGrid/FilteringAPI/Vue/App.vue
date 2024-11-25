@@ -58,8 +58,8 @@ import {
   DxPager,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox, { DxSelectBoxTypes } from 'devextreme-vue/select-box';
-import 'devextreme-vue/common/data/odata/store';
-import { DataSourceOptions } from 'devextreme-vue/common/data';
+import 'devextreme/data/odata/store';
+import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 
 const dataSource: DataSourceOptions = {
   store: {

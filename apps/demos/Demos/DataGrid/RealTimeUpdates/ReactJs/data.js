@@ -1,4 +1,4 @@
-import { ArrayStore } from 'devextreme-react/common/data';
+import ArrayStore from 'devextreme/data/array_store';
 
 const cities = [
   'Los Angeles',

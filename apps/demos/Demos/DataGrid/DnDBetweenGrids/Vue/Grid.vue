@@ -39,7 +39,8 @@
 import {
   DxDataGrid, DxColumn, DxRowDragging, DxScrolling, DxLookup, DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
-import { CustomStore, DataSource } from 'devextreme-vue/common/data';
+import CustomStore from 'devextreme/data/custom_store';
+import DataSource from 'devextreme/data/data_source';
 
 const props = defineProps<{
   tasksStore: CustomStore

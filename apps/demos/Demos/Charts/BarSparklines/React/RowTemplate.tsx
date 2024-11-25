@@ -4,7 +4,7 @@ import React from 'react';
 import Sparkline, {
   Tooltip,
 } from 'devextreme-react/sparkline';
-import { DataSource } from 'devextreme-react/common/data';
+import DataSource from 'devextreme/data/data_source';
 
 interface RowTemplateProps {
   key: number;
