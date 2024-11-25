@@ -10,7 +10,7 @@ import {
   DxFilterBuilderComponent,
   DxFilterBuilderModule,
 } from 'devextreme-angular';
-import { DataSource } from 'devextreme-angular/common/data';
+import DataSource from 'devextreme/data/data_source';
 import { Fields, Filter, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

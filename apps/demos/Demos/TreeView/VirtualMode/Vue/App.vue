@@ -12,7 +12,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ODataStore, DataSource } from 'devextreme-vue/common/data';
+import DataSource from 'devextreme/data/data_source';
+import ODataStore from 'devextreme/data/odata/store';
 import DxTreeView from 'devextreme-vue/tree-view';
 
 const dataSource = new DataSource({

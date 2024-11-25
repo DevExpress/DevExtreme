@@ -4,7 +4,7 @@ import {
 } from 'devextreme-react/data-grid';
 import { NumberBox, NumberBoxTypes } from 'devextreme-react/number-box';
 import { CheckBox, CheckBoxTypes } from 'devextreme-react/check-box';
-import 'devextreme-react/common/data/odata/store';
+import 'devextreme/data/odata/store';
 
 const focusedRowKeyLabel = { 'aria-label': 'Focused Row Key' };
 

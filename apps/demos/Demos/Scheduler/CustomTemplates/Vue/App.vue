@@ -52,7 +52,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxScheduler, { DxResource, DxSchedulerTypes } from 'devextreme-vue/scheduler';
-import { query as Query } from 'devextreme-vue/common/data';
+import Query from 'devextreme/data/query';
 import AppointmentTemplate from './AppointmentTemplate.vue';
 import AppointmentTooltipTemplate from './AppointmentTooltipTemplate.vue';
 import { data, moviesData, theatreData } from './data.ts';

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { query as Query } from 'devextreme-react/common/data';
+import Query from 'devextreme/data/query';
 import { SchedulerTypes } from 'devextreme-react/scheduler';
 
 import { moviesData } from './data.ts';

@@ -4,7 +4,8 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { DxAutocompleteModule, DxTemplateModule } from 'devextreme-angular';
-import { CustomStore, ODataStore } from 'devextreme-angular/common/data';
+import CustomStore from 'devextreme/data/custom_store';
+import ODataStore from 'devextreme/data/odata/store';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

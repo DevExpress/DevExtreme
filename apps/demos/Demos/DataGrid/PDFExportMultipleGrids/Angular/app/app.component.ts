@@ -8,8 +8,8 @@ import {
   DxButtonModule, DxTabPanelModule, DxDataGridModule, DxDataGridComponent,
 } from 'devextreme-angular';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
-import { DataSourceOptions as DataSourceConfig } from 'devextreme-angular/common/data';
-import 'devextreme-angular/common/data/odata/store';
+import { Options as DataSourceConfig } from 'devextreme/data/data_source';
+import 'devextreme/data/odata/store';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

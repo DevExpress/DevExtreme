@@ -54,7 +54,7 @@ import DxChart, {
   DxLoadingIndicator,
   DxLegend,
 } from 'devextreme-vue/chart';
-import { DataSource } from 'devextreme-vue/common/data';
+import DataSource from 'devextreme/data/data_source';
 import 'whatwg-fetch';
 
 const HALFDAY = 43200000;

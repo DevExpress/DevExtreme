@@ -52,7 +52,7 @@ import { ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxList from 'devextreme-vue/list';
 import DxCheckBox from 'devextreme-vue/check-box';
-import { ArrayStore } from 'devextreme-vue/common/data';
+import ArrayStore from 'devextreme/data/array_store';
 import { tasks } from './data.ts';
 
 const dataSource = new ArrayStore({

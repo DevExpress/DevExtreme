@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import 'devextreme-angular/common/data/odata/store';
-import { DataSource } from 'devextreme-angular/common/data';
+import 'devextreme/data/odata/store';
+import DataSource from 'devextreme/data/data_source';
 
 @Injectable()
 export class Service {

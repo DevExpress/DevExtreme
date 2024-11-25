@@ -4,7 +4,7 @@ import TabPanel, { Item } from 'devextreme-react/tab-panel';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
-import 'devextreme-react/common/data/odata/store';
+import 'devextreme/data/odata/store';
 
 const priceDataSource = {
   store: {

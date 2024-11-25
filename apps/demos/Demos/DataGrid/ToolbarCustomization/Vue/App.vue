@@ -95,7 +95,7 @@ import {
 } from 'devextreme-vue/data-grid';
 import { DxSelectBox, DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { DxButton } from 'devextreme-vue/button';
-import { query } from 'devextreme-vue/common/data';
+import query from 'devextreme/data/query';
 import { orders } from './data.ts';
 
 const getGroupCount = (groupField: string) => query(orders)

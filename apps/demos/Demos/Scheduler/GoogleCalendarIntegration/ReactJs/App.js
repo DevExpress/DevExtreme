@@ -1,7 +1,7 @@
 import 'whatwg-fetch';
 import React from 'react';
 import Scheduler from 'devextreme-react/scheduler';
-import { CustomStore } from 'devextreme-react/common/data';
+import CustomStore from 'devextreme/data/custom_store';
 // eslint-disable-next-line space-before-function-paren
 const getData = async (_, requestOptions) => {
   const GOOGLE_CALENDAR_URL = 'https://www.googleapis.com/calendar/v3/calendars/';
