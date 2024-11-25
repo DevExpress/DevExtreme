@@ -5,10 +5,13 @@
   $background-color-secondary,
   $color-primary,
   $background-color-primary,
-  $bubble-container-gap
+  $bubble-container-gap,
+  $chat-avatar-size,
+  $chat-messagegroup-alignment-start-gap
 ) {
   .dx-chat-messagegroup-content {
     row-gap: $bubble-container-gap;
+    padding-left: $chat-avatar-size + $chat-messagegroup-alignment-start-gap
   }
 
   .dx-chat-messagebubble {
