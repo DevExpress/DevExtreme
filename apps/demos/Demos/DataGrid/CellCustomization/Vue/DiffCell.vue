@@ -5,7 +5,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { formatNumber } from 'devextreme/common/core/localization';
+import { formatNumber } from 'devextreme/localization';
 import { DxDataGridTypes } from 'devextreme-vue/data-grid';
 
 import { WeekData, DiffValueProperties } from './data.ts';

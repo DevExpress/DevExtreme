@@ -1,6 +1,6 @@
 import React from 'react';
-import 'devextreme/common/core/localization/globalize/currency';
-import { formatNumber } from 'devextreme/common/core/localization';
+import 'devextreme/localization/globalize/currency';
+import { formatNumber } from 'devextreme/localization';
 import { DataGridTypes } from 'devextreme-react/data-grid';
 
 const getGridCellData = (gridData: DataGridTypes.ColumnCellTemplateData) => gridData.data[gridData.column.caption.toLowerCase()];
