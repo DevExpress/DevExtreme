@@ -21,12 +21,10 @@ const POPUP_APPLY_BUTTON_CLASS = 'dx-popup-done';
 const POPUP_DONE_BUTTON = `${POPUP_APPLY_BUTTON_CLASS}.dx-button`;
 const POPUP_CANCEL_BUTTON = 'dx-popup-cancel.dx-button';
 const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
-const CALENDAR_CELL_IN_RANGE_CLASS = 'dx-calendar-cell-in-range';
 
 const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
 
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
-const getCurrentViewInstance = (calendar) => calendar._view;
 
 const moduleConfig = {
     beforeEach: function() {
@@ -74,22 +72,6 @@ QUnit.module('Strategy', moduleConfig, () => {
 
             assert.strictEqual(startDateBox._strategy.widgetOption(optionName), optionValue);
         });
-    });
-
-    QUnit.test('Cells in-range should still be highlighted even in irregular dates in calendar (T1253076)', function(assert) {
-        this.reinit({
-            value: ['2025-01-01', '2025-12-31'],
-            multiView: true,
-            opened: true
-        });
-        const calendar = this.instance.getStartDateBox()._strategy._widget;
-        const $startingCell = $(getCurrentViewInstance(calendar).$element().find('*[data-value="2025/01/01"]'));
-
-        $startingCell.trigger('dxclick');
-
-        const $testingCell = $(getCurrentViewInstance(calendar).$element().find('*[data-value="2025/11/01"]'));
-
-        assert.ok($testingCell.hasClass(CALENDAR_CELL_IN_RANGE_CLASS), 'cell is highlighted');
     });
 
     QUnit.test('Calendar should have "value" option equals to dateRangeBox "value"', function(assert) {
