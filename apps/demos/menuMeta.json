@@ -2076,6 +2076,19 @@
             ]
           }
         ]
+      },
+      {
+        "Name": "AI and Chatbot Integration",
+        "Equivalents": "AI, Chatbot, Assistant",
+        "Demos": [
+          {
+            "Title": "AI and Chatbot Integration",
+            "Name": "AIAndChatbotIntegration",
+            "Widget": "Chat",
+            "DemoType": "Web",
+            "Badge": "New"
+          }
+        ]
       }
     ]
   },
