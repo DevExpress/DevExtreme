@@ -28,7 +28,6 @@ const bundleConfig = {
       'devextreme/common/data/*',
       'devextreme/common/data/odata/*',
       'devextreme/common/export/*',
-      'devextreme/common/file_management/*',
       'devextreme/common/core/*',
       'devextreme/common/core/animation/*',
       'devextreme/common/core/environment/*',

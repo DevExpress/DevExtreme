@@ -1,7 +1,7 @@
 import { Deferred } from 'core/utils/deferred';
 import { createTestFileSystem, stubFileReader } from '../fileManagerHelpers.js';
-import CustomFileSystemProvider from 'common/file_management/custom_provider';
-import ObjectFileSystemProvider from 'common/file_management/object_provider';
+import CustomFileSystemProvider from 'file_management/custom_provider';
+import ObjectFileSystemProvider from 'file_management/object_provider';
 
 export default class SlowFileProvider extends CustomFileSystemProvider {
     constructor(options) {

@@ -1,7 +1,7 @@
 import { Deferred } from 'core/utils/deferred';
 
-import FileSystemProviderBase from 'common/file_management/provider_base';
-import ErrorCode from 'common/file_management/error_codes';
+import FileSystemProviderBase from 'file_management/provider_base';
+import ErrorCode from 'file_management/error_codes';
 
 const DEFAULT_DELAY = 2000;
 

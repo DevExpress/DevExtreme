@@ -7,7 +7,7 @@ import FileManagerProgressPanelMock from '../../../helpers/fileManager/notificat
 import FileManagerLogger from '../../../helpers/fileManager/logger.js';
 import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
 import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
-import CustomFileSystemProvider from 'common/file_management/custom_provider';
+import CustomFileSystemProvider from 'file_management/custom_provider';
 import { implementationsMap } from 'core/utils/size';
 
 const { test } = QUnit;

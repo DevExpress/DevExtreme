@@ -22,7 +22,7 @@ import {
 } from '@angular/core';
 
 
-import { UploadInfo } from 'devextreme/common/file_management';
+import UploadInfo from 'devextreme/file_management/upload_info';
 import { BeforeSendEvent, ContentReadyEvent, DisposingEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, InitializedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, ValueChangedEvent, UploadHttpMethod, FileUploadMode } from 'devextreme/ui/file_uploader';
 import { ValidationStatus } from 'devextreme/common';
 

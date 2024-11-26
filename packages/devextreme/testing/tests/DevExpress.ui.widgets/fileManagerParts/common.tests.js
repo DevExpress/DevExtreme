@@ -1,6 +1,6 @@
 const { test } = QUnit;
-import { getPathParts, getEscapedFileName } from 'common/file_management/utils';
-import FileSystemItem from 'common/file_management/file_system_item';
+import { getPathParts, getEscapedFileName } from 'file_management/utils';
+import FileSystemItem from 'file_management/file_system_item';
 
 QUnit.module('Common tests', () => {
     test('getPathParts() function must correctly separate path string', function(assert) {

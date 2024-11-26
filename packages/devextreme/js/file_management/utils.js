@@ -1,4 +1,4 @@
-import { each } from '../../core/utils/iterator';
+import { each } from '../core/utils/iterator';
 
 export const PATH_SEPARATOR = '/';
 

@@ -15,7 +15,7 @@ import {
     ChangedOptionInfo,
 } from '../common/core/events';
 
-import { FileSystemItem } from '../common/file_management';
+import FileSystemItem from '../file_management/file_system_item';
 
 import {
     Item as dxContextMenuItem,

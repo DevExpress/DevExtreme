@@ -10,5 +10,4 @@ export * as customStore from './data/custom-store';
 export * as export from './export';
 export * as pdfExport from './export/pdf';
 export * as excelExport from './export/excel';
-export * as file_management from './file_management';
 export * as grids from './grids';

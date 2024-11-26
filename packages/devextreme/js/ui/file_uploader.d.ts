@@ -14,7 +14,7 @@ import Editor, {
     EditorOptions,
 } from './editor/editor';
 
-import { UploadInfo } from '../common/file_management';
+import UploadInfo from '../file_management/upload_info';
 
 /** @public */
 export type FileUploadMode = 'instantly' | 'useButtons' | 'useForm';
