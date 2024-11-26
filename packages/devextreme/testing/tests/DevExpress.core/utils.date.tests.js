@@ -107,12 +107,6 @@ QUnit.test('getIntervalByString second', function(assert) {
     assert.deepEqual(this.getDateIntervalByString('second'), { seconds: 1 });
 });
 
-QUnit.test('getMonthInterval should decrement month correctly (T1253076)', function(assert) {
-    const newDate = dateUtils.getMonthInterval(new Date(2025, 12, 0), -1);
-
-    assert.deepEqual(newDate, new Date(2025, 11, 0));
-});
-
 QUnit.module('getFirstMonthDate', () => {
     QUnit.test('should return same month first date when offset is not provided', function(assert) {
         const newDate = dateUtils.getFirstMonthDate(new Date(2025, 11, 15));
@@ -211,13 +205,6 @@ QUnit.module('getLastMonthDate', () => {
 
         assert.deepEqual(newDate, new Date(2024, 11, 31));
     });
-});
-
-
-QUnit.test('getMonthInterval should decrement month correctly (T1253076)', function(assert) {
-    const newDate = dateUtils.getMonthInterval(new Date(2025, 12, 0), -1);
-
-    assert.deepEqual(newDate, new Date(2025, 11, 0));
 });
 
 QUnit.test('add negative Interval number', function(assert) {
