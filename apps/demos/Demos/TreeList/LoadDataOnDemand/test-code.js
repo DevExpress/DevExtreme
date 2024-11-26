@@ -234,7 +234,7 @@ testUtils.importAnd(() => 'devextreme/ui/tree_list', () => DevExpress.ui.dxTreeL
     },
   });
 
-  // NOTE: Ensure, that 'React' can't restore `DataSourse`.
+  // NOTE: Ensure that 'React' can't restore `DataSourse`.
   const option = instance.option;
   // eslint-disable-next-line consistent-return
   instance.option = function () {
