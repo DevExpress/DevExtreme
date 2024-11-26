@@ -222,6 +222,21 @@ const getDatesDifferences = function (date1, date2) {
   return differences;
 };
 
+function getMonthInterval(value, dir) {
+  const result = new Date(value.getTime());
+  const originalDate = result.getDate();
+  const targetMonth = result.getMonth() + dir;
+
+  result.setDate(1);
+  result.setMonth(targetMonth);
+
+  const lastDayOfTargetMonth = new Date(result.getFullYear(), result.getMonth() + 1, 0).getDate();
+
+  result.setDate(Math.min(originalDate, lastDayOfTargetMonth));
+
+  return result;
+}
+
 function addDateInterval(value, interval, dir) {
   const result = new Date(value.getTime());
   const intervalObject = isString(interval) ? getDateIntervalByString(interval.toLowerCase())
@@ -234,12 +249,7 @@ function addDateInterval(value, interval, dir) {
     result.setMonth(result.getMonth() + 3 * intervalObject.quarters * dir);
   }
   if (intervalObject.months) {
-    const originalDate = result.getDate();
-    const targetMonth = result.getMonth() + intervalObject.months * dir;
-    result.setDate(1);
-    result.setMonth(targetMonth);
-    const lastDayOfTargetMonth = new Date(result.getFullYear(), result.getMonth() + 1, 0).getDate();
-    result.setDate(Math.min(originalDate, lastDayOfTargetMonth));
+    result.setMonth(result.getMonth() + intervalObject.months * dir);
   }
   if (intervalObject.weeks) {
     result.setDate(result.getDate() + 7 * intervalObject.weeks * dir);
@@ -764,6 +774,7 @@ const dateUtils = {
   sameDecade,
   sameCentury,
   sameView,
+  getMonthInterval,
   getDifferenceInMonth,
   getDifferenceInMonthForCells,
   getFirstYearInDecade,

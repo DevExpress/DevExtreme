@@ -40,7 +40,6 @@ const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const CALENDAR_CONTOURED_CELL_CLASS = 'dx-calendar-contoured-date';
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
-const CALENDAR_CELL_IN_RANGE_CLASS = 'dx-calendar-cell-in-range';
 const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view';
 const BUTTON_SELECTOR = '.dx-button';
 const TEXTBOX_SELECTOR = '.dx-textbox';
@@ -53,7 +52,6 @@ const getButtonsContainers = $element => $element.find(`> .${DROP_DOWN_EDITOR_BU
 const getButtons = $element => $element.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
 const getClearButton = $element => getButtonsContainers($element).find(`.${CLEAR_BUTTON}`);
 const getPopup = dateBox => dateBox._popup;
-const getCurrentViewInstance = (calendar) => calendar._view;
 
 
 const moduleConfig = {
@@ -1002,23 +1000,6 @@ QUnit.module('Behavior', moduleConfig, () => {
         assert.strictEqual(this.instance.option('opened'), true, 'dateRangeBox is opened');
         assert.strictEqual(endDateBox.option('opened'), true, 'endDateBox opened option has correct value');
         assert.strictEqual(startDateBox.option('opened'), true, 'startDateBox is opened');
-    });
-
-    QUnit.test('Cells in-range should be highlighted when pressing previous button in calendar (T1253076)', function(assert) {
-        this.reinit({
-            value: ['2025-01-01', '2025-12-31'],
-            min: new Date('2025-01-01'),
-            max: new Date('2025-12-31'),
-            multiView: true,
-            opened: true
-        });
-        $(`.${CALENDAR_CELL_CLASS}`).eq(3).trigger('dxclick');
-
-        const calendar = this.instance.getStartDateBox()._strategy._widget;
-
-        const $cell = $(getCurrentViewInstance(calendar).$element().find('*[data-value="2025/11/01"]'));
-
-        assert.ok($cell.hasClass(CALENDAR_CELL_IN_RANGE_CLASS), 'cell is highlighted');
     });
 
     ['startDateBox', 'endDateBox'].forEach((dateBoxName) => {
