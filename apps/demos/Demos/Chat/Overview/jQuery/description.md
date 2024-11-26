@@ -22,6 +22,6 @@ Each message includes information about the sender ([author](/Documentation/ApiR
 
 ## Events
 
-If a user enters a message, the Chat raises the [messageEntered](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#onMessageEntered) event. Use the event handler to process the message. For example, you can simply display the message in the message feed and send the message to the server for storage.
+If a user enters a message, the Chat raises the [messageEntered](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#onMessageEntered) event. Use the event handler to process the message. For example, you can display the message in the message feed and send the message to the server for storage.
 
 When users start or finish typing, the Chat raises [typingStart](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#onTypingStart) and [typingEnd](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#onTypingEnd) events. Use these events to manage the [typingUsers](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#typingUsers) array. The Chat uses this array to display a list of active users.
