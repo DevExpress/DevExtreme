@@ -5,7 +5,7 @@ const markup = `## ![HtmlEditor](../../../../images/widgets/HtmlEditor.svg) Form
 Lists:
 
 1. Use numbers followed by a period for an ordered list.
-2. Use a single asterisk for a bullet list.
+1. Use a single asterisk for a bullet list.
 
 Formats:
 
