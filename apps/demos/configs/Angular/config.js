@@ -148,6 +148,7 @@ window.config = {
   paths: {
     'npm:': '../../../../node_modules/',
     'bundles:': '../../../../bundles/',
+    'externals:': '../../../../bundles/externals/',
   },
   map: {
     'ts': 'npm:plugin-typescript/lib/plugin.js',
@@ -183,14 +184,15 @@ window.config = {
     }, {}),
 
     /* Bundles for Unified */
-    'unified': 'bundles:unified/unified.bundle.js',
-    'remark-parse': 'bundles:unified/remark-parse.bundle.js',
-    'remark-rehype': 'bundles:unified/remark-rehype.bundle.js',
-    'remark-stringify': 'bundles:unified/remark-stringify.bundle.js',
-    'rehype-parse': 'bundles:unified/rehype-parse.bundle.js',
-    'rehype-remark': 'bundles:unified/rehype-remark.bundle.js',
-    'rehype-stringify': 'bundles:unified/rehype-stringify.bundle.js',
+    'unified': 'externals:unified/unified.bundle.js',
+    'remark-parse': 'externals:unified/remark-parse.bundle.js',
+    'remark-rehype': 'externals:unified/remark-rehype.bundle.js',
+    'remark-stringify': 'externals:unified/remark-stringify.bundle.js',
+    'rehype-parse': 'externals:unified/rehype-parse.bundle.js',
+    'rehype-remark': 'externals:unified/rehype-remark.bundle.js',
+    'rehype-stringify': 'externals:unified/rehype-stringify.bundle.js',
 
+    'openai': 'externals:openai.bundle.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
     'tslib': 'npm:tslib/tslib.js',
     'rxjs': 'npm:rxjs/dist/bundles/rxjs.umd.js',

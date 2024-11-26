@@ -3,7 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import babel from '@rollup/plugin-babel';
 
 const NG_BASE_DIR = './node_modules/';
-const OUTPUT_DIR = './bundles/unified/';
+const OUTPUT_DIR = './bundles/externals/';
 const format = 'es';
 const plugins = [
   resolve(),
@@ -21,9 +21,20 @@ const plugins = [
 
 export default [
   {
+    input: NG_BASE_DIR + `openai/index.js`,
+    output: {
+      file: OUTPUT_DIR + `openai.bundle.js`,
+      format: 'umd',
+      name: 'openai',
+      globals: { },
+    },
+    external: [],
+    plugins,
+  },
+  {
     input: NG_BASE_DIR + `unified/index.js`,
     output: {
-      file: OUTPUT_DIR + `unified.bundle.js`,
+      file: OUTPUT_DIR + `unified/unified.bundle.js`,
       format,
       name: 'unified',
       globals: { },
@@ -34,7 +45,7 @@ export default [
   {
     input: NG_BASE_DIR + `remark-parse/index.js`,
     output: {
-      file: OUTPUT_DIR + `remark-parse.bundle.js`,
+      file: OUTPUT_DIR + `unified/remark-parse.bundle.js`,
       format,
       name: 'remarkParse',
       globals: { },
@@ -45,7 +56,7 @@ export default [
   {
     input: NG_BASE_DIR + `remark-rehype/index.js`,
     output: {
-      file: OUTPUT_DIR + `remark-rehype.bundle.js`,
+      file: OUTPUT_DIR + `unified/remark-rehype.bundle.js`,
       format,
       name: 'remarkRehype',
       globals: { },
@@ -56,7 +67,7 @@ export default [
   {
     input: NG_BASE_DIR + `remark-stringify/index.js`,
     output: {
-      file: OUTPUT_DIR + `remark-stringify.bundle.js`,
+      file: OUTPUT_DIR + `unified/remark-stringify.bundle.js`,
       format,
       name: 'remarkStringify',
       globals: { },
@@ -67,7 +78,7 @@ export default [
   {
     input: NG_BASE_DIR + `rehype-stringify/index.js`,
     output: {
-      file: OUTPUT_DIR + `rehype-stringify.bundle.js`,
+      file: OUTPUT_DIR + `unified/rehype-stringify.bundle.js`,
       format,
       name: 'rehypeStringify',
       globals: { },
@@ -78,7 +89,7 @@ export default [
   {
     input: NG_BASE_DIR + `rehype-parse/index.js`,
     output: {
-      file: OUTPUT_DIR + `rehype-parse.bundle.js`,
+      file: OUTPUT_DIR + `unified/rehype-parse.bundle.js`,
       format,
       name: 'rehypeParse',
       globals: { },
@@ -89,7 +100,7 @@ export default [
   {
     input: NG_BASE_DIR + `rehype-remark/index.js`,
     output: {
-      file: OUTPUT_DIR + `rehype-remark.bundle.js`,
+      file: OUTPUT_DIR + `unified/rehype-remark.bundle.js`,
       format,
       name: 'rehypeRemark',
       globals: { },
