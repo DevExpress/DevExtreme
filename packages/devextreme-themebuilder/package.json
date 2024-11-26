@@ -21,7 +21,7 @@
     "pack": "cd dist && pnpm pack"
   },
   "peerDependencies": {
-    "bootstrap": "npm:bootstrap@^5.3.3"
+    "bootstrap": "^5.3.3"
   },
   "dependencies": {
     "autoprefixer": "^10.4.7",
