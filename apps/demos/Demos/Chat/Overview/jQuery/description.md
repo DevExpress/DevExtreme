@@ -1,4 +1,4 @@
-CChat is an interactive interface that allows users to send and receive messages in real time.
+Chat is an interactive interface that allows users to send and receive messages in real time.
 
 To get started with the DevExtreme Chat component, refer to the following step-by-step tutorial: [Getting Started with Chat](/Documentation/Guide/UI_Components/Chat/Getting_Started_with_Chat/).
 
