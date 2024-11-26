@@ -113,6 +113,113 @@ QUnit.test('getMonthInterval should decrement month correctly (T1253076)', funct
     assert.deepEqual(newDate, new Date(2025, 11, 0));
 });
 
+QUnit.module('getFirstMonthDate', () => {
+    QUnit.test('should return same month first date when offset is not provided', function(assert) {
+        const newDate = dateUtils.getFirstMonthDate(new Date(2025, 11, 15));
+
+        assert.deepEqual(newDate, new Date(2025, 11, 1));
+    });
+
+    QUnit.test('should return same month first date when offset is 0', function(assert) {
+        const newDate = dateUtils.getFirstMonthDate(new Date(2025, 11, 15), 0);
+
+        assert.deepEqual(newDate, new Date(2025, 11, 1));
+    });
+
+    QUnit.test('should decrease month correctly', function(assert) {
+        const newDate = dateUtils.getFirstMonthDate(new Date(2025, 11, 31), -1);
+
+        assert.deepEqual(newDate, new Date(2025, 10, 1));
+    });
+
+    QUnit.test('should increase month correctly', function(assert) {
+        const newDate = dateUtils.getFirstMonthDate(new Date(2025, 8, 30), 1);
+
+        assert.deepEqual(newDate, new Date(2025, 9, 1));
+    });
+
+    QUnit.test('should decrease month correctly when offset is less than -1', function(assert) {
+        const newDate = dateUtils.getFirstMonthDate(new Date(2025, 11, 15), -2);
+
+        assert.deepEqual(newDate, new Date(2025, 9, 1));
+    });
+
+    QUnit.test('should increase month correctly when offset is greater than 1', function(assert) {
+        const newDate = dateUtils.getFirstMonthDate(new Date(2025, 8, 15), 2);
+
+        assert.deepEqual(newDate, new Date(2025, 10, 1));
+    });
+
+    QUnit.test('should assign correct new date when current year is increased', function(assert) {
+        const newDate = dateUtils.getFirstMonthDate(new Date(2025, 11, 15), 1);
+
+        assert.deepEqual(newDate, new Date(2026, 0, 1));
+    });
+
+    QUnit.test('should assign correct new date when current year is decreased', function(assert) {
+        const newDate = dateUtils.getFirstMonthDate(new Date(2025, 0, 1), -1);
+
+        assert.deepEqual(newDate, new Date(2024, 11, 1));
+    });
+});
+
+QUnit.module('getLastMonthDate', () => {
+    QUnit.test('should return same month last date when offset is not provided', function(assert) {
+        const newDate = dateUtils.getLastMonthDate(new Date(2025, 11, 15));
+
+        assert.deepEqual(newDate, new Date(2025, 11, 31));
+    });
+
+    QUnit.test('should return same month last date when offset is 0', function(assert) {
+        const newDate = dateUtils.getLastMonthDate(new Date(2025, 11, 15), 0);
+
+        assert.deepEqual(newDate, new Date(2025, 11, 31));
+    });
+
+    QUnit.test('should decrease month correctly', function(assert) {
+        const newDate = dateUtils.getLastMonthDate(new Date(2025, 11, 31), -1);
+
+        assert.deepEqual(newDate, new Date(2025, 10, 30));
+    });
+
+    QUnit.test('should increase month correctly', function(assert) {
+        const newDate = dateUtils.getLastMonthDate(new Date(2025, 8, 30), 1);
+
+        assert.deepEqual(newDate, new Date(2025, 9, 31));
+    });
+
+    QUnit.test('should decrease month correctly when offset is less than -1', function(assert) {
+        const newDate = dateUtils.getLastMonthDate(new Date(2025, 11, 15), -2);
+
+        assert.deepEqual(newDate, new Date(2025, 9, 31));
+    });
+
+    QUnit.test('should increase month correctly when offset is greater than 1', function(assert) {
+        const newDate = dateUtils.getLastMonthDate(new Date(2025, 8, 15), 2);
+
+        assert.deepEqual(newDate, new Date(2025, 10, 30));
+    });
+
+    QUnit.test('should assign correct new date when current year is increased', function(assert) {
+        const newDate = dateUtils.getLastMonthDate(new Date(2025, 11, 15), 1);
+
+        assert.deepEqual(newDate, new Date(2026, 0, 31));
+    });
+
+    QUnit.test('should assign correct new date when current year is decreased', function(assert) {
+        const newDate = dateUtils.getLastMonthDate(new Date(2025, 0, 1), -1);
+
+        assert.deepEqual(newDate, new Date(2024, 11, 31));
+    });
+});
+
+
+QUnit.test('getMonthInterval should decrement month correctly (T1253076)', function(assert) {
+    const newDate = dateUtils.getMonthInterval(new Date(2025, 12, 0), -1);
+
+    assert.deepEqual(newDate, new Date(2025, 11, 0));
+});
+
 QUnit.test('add negative Interval number', function(assert) {
     // arrange, act
     const newNumber = dateUtils.addInterval(11, 5, true);

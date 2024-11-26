@@ -222,21 +222,6 @@ const getDatesDifferences = function (date1, date2) {
   return differences;
 };
 
-function getMonthInterval(value, dir) {
-  const result = new Date(value.getTime());
-  const originalDate = result.getDate();
-  const targetMonth = result.getMonth() + dir;
-
-  result.setDate(1);
-  result.setMonth(targetMonth);
-
-  const lastDayOfTargetMonth = new Date(result.getFullYear(), result.getMonth() + 1, 0).getDate();
-
-  result.setDate(Math.min(originalDate, lastDayOfTargetMonth));
-
-  return result;
-}
-
 function addDateInterval(value, interval, dir) {
   const result = new Date(value.getTime());
   const intervalObject = isString(interval) ? getDateIntervalByString(interval.toLowerCase())
@@ -487,14 +472,24 @@ const getShortDateFormat = function () {
   return 'yyyy/MM/dd';
 };
 
-const getFirstMonthDate = function (date) {
+const getFirstMonthDate = function (date, offset = 0) {
   if (!isDefined(date)) return;
-  return createDateWithFullYear(date.getFullYear(), date.getMonth(), 1);
+
+  const currentDate = new Date(date.getTime());
+  const month = currentDate.getMonth() + offset;
+  currentDate.setMonth(month);
+
+  return createDateWithFullYear(currentDate.getFullYear(), month, 1);
 };
 
-const getLastMonthDate = function (date) {
+const getLastMonthDate = function (date, offset = 0) {
   if (!isDefined(date)) return;
-  return createDateWithFullYear(date.getFullYear(), date.getMonth() + 1, 0);
+
+  const currentDate = new Date(date.getTime());
+  const month = currentDate.getMonth() + offset;
+  currentDate.setMonth(month);
+
+  return createDateWithFullYear(currentDate.getFullYear(), month + 1, 0);
 };
 
 function getFirstWeekDate(date, firstDayOfWeek) {
@@ -774,7 +769,6 @@ const dateUtils = {
   sameDecade,
   sameCentury,
   sameView,
-  getMonthInterval,
   getDifferenceInMonth,
   getDifferenceInMonthForCells,
   getFirstYearInDecade,
