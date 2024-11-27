@@ -95,7 +95,7 @@
     }
 
     function userChatTypingStart() {
-        supportChatTypingUsers.value = [currentUser];
+        supportChatTypingUsers.value = [currentUser.value];
     }
     
     function userChatTypingEnd() {
@@ -103,7 +103,7 @@
     }
     
     function supportChatTypingStart() {
-        userChatTypingUsers.value = [supportAgent];
+        userChatTypingUsers.value = [supportAgent.value];
     }
     
     function supportChatTypingEnd() {
