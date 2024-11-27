@@ -162,6 +162,20 @@ exports[`common initial render should be successfull 1`] = `
         class="dx-gridcore-header-item"
       >
         A
+        <div
+          aria-label="Close"
+          class="dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-icon dx-gridcore-header-item-button"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="dx-button-content"
+          >
+            <i
+              class="dx-icon dx-icon-close"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>
