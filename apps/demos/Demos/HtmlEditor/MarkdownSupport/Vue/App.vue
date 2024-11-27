@@ -38,11 +38,6 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import {
-  DxHtmlEditor,
-  DxToolbar,
-  DxItem,
-} from 'devextreme-vue/html-editor';
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
@@ -50,7 +45,11 @@ import remarkStringify from "remark-stringify";
 import rehypeParse from "rehype-parse";
 import rehypeRemark from "rehype-remark";
 import rehypeStringify from "rehype-stringify";
-
+import {
+  DxHtmlEditor,
+  DxToolbar,
+  DxItem,
+} from 'devextreme-vue/html-editor';
 import { markup } from './data.ts';
 
 const valueContent = ref(markup);

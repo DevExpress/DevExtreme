@@ -1,7 +1,6 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxHtmlEditorModule } from 'devextreme-angular/ui/html-editor';
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
@@ -9,7 +8,7 @@ import remarkStringify from "remark-stringify";
 import rehypeParse from "rehype-parse";
 import rehypeRemark from "rehype-remark";
 import rehypeStringify from "rehype-stringify";
-
+import { DxHtmlEditorModule } from 'devextreme-angular/ui/html-editor';
 import { Service } from './app.service';
 
 interface Converter {
