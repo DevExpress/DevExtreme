@@ -36,7 +36,7 @@ $(() => {
     {
       timestamp: getTimestamp(date, -7),
       author: supportAgent,
-      text: "I can help with that. Can you please confirm your UserID for security purposes?"
+      text: "I can help you with that. Can you please confirm your UserID for security purposes?"
     },
     {
       timestamp: getTimestamp(date, 1),
@@ -46,7 +46,7 @@ $(() => {
     {
       timestamp: getTimestamp(date, 1),
       author: supportAgent,
-      text: "✅ Instructions to restore access have been sent to the email address registered to your account."
+      text: "✅ Instructions to restore access have been sent to the email address associated with your account."
     },
   ];
 

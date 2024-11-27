@@ -50,7 +50,7 @@ export class AppService {
       {
         timestamp: this.getTimestamp(this.date, -7),
         author: this.supportAgent,
-        text: 'I can help with that. Can you please confirm your UserID for security purposes?'
+        text: 'I can help you with that. Can you please confirm your UserID for security purposes?'
       },
       {
         timestamp: this.getTimestamp(this.date, 1),
@@ -60,7 +60,7 @@ export class AppService {
       {
         timestamp: this.getTimestamp(this.date, 1),
         author: this.supportAgent,
-        text: '✅ Instructions to restore access have been sent to the email address registered to your account.'
+        text: '✅ Instructions to restore access have been sent to the email address associated with your account.'
       },
     ];
 
