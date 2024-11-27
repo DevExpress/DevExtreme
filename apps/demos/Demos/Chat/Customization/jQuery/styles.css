@@ -1,0 +1,53 @@
+.dx-viewport {
+    padding: 20px;
+    min-width: 780px;
+    border: 1px solid var(--dx-color-border);
+    border-radius: 8px;
+  }
+  
+  .demo-container {
+      min-width: 720px;
+      display: flex;
+      gap: 20px;
+  }
+  
+  .chat-container {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      align-items: center;
+      justify-content: center;
+  }
+  
+  .options {
+      padding: 20px;
+      min-width: 280px;
+      background-color: rgba(191, 191, 191, 0.15);
+  }
+  
+  #chat {
+    max-width: 480px;
+  }
+  
+  .caption {
+      font-size: 18px;
+      font-weight: 500;
+  }
+  
+  .option-group {
+      padding: 10px 0;
+      border-bottom: 1px solid lightgray;
+  }
+  
+  .option-group:last-child {
+      border-bottom: none;
+  }
+  
+  .option {
+      margin: 20px 0;
+  }
+  
+  .dx-avatar {
+      border: 1px solid var(--dx-color-border);
+  }
+  

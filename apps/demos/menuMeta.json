@@ -2076,6 +2076,20 @@
             ]
           }
         ]
+      },
+      {
+        "Name": "Customization",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Customization",
+            "Name": "Customization",
+            "DocUrl": "Guide/UI_Components/Chat/Customization/",
+            "Widget": "Chat",
+            "DemoType": "Web",
+            "Badge": "New"
+          }
+        ]
       }
     ]
   },
