@@ -4,7 +4,7 @@ export {
    */
   getTimeZones,
   /**
-   * @deprecated Use dxSchedulerTimeZone from common/core/environment instead
+   * @deprecated Use SchedulerTimeZone from common/core/environment instead
    */
-  dxSchedulerTimeZone,
+  SchedulerTimeZone as dxSchedulerTimeZone,
 } from './common/core/environment';

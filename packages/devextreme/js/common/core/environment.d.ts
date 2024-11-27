@@ -152,7 +152,7 @@ export function initMobileViewport(options: { allowZoom?: boolean; allowPan?: bo
  * @docid
  * @public
  */
-export interface dxSchedulerTimeZone {
+export interface SchedulerTimeZone {
   /**
    * @docid
    */
@@ -175,4 +175,4 @@ export interface dxSchedulerTimeZone {
 * @static
 * @public
 */
-export function getTimeZones(date?: Date): Array<dxSchedulerTimeZone>;
+export function getTimeZones(date?: Date): Array<SchedulerTimeZone>;

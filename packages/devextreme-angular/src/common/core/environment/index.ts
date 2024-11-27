@@ -2,8 +2,8 @@ export {
     Device,
     devices,
     DevicesObject,
-    dxSchedulerTimeZone,
     getTimeZones,
     hideTopOverlay,
     initMobileViewport,
+    SchedulerTimeZone,
 } from 'devextreme/common/core/environment';

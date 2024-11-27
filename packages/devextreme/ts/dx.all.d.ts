@@ -1661,23 +1661,6 @@ declare module DevExpress.common {
   export type DxEvent<TNativeEvent = Event> = {} extends EventType
     ? EventObject & TNativeEvent
     : EventType;
-  /**
-   * [descr:dxSchedulerTimeZone]
-   */
-  export interface dxSchedulerTimeZone {
-    /**
-     * [descr:dxSchedulerTimeZone.id]
-     */
-    id: string;
-    /**
-     * [descr:dxSchedulerTimeZone.offset]
-     */
-    offset: number;
-    /**
-     * [descr:dxSchedulerTimeZone.title]
-     */
-    title: string;
-  }
   export type EditorStyle = 'outlined' | 'underlined' | 'filled';
   /**
    * [descr:EmailRule]
@@ -2472,6 +2455,23 @@ declare module DevExpress.common {
    * @deprecated [depNote:ResolvedData]
    */
   export type ResolvedData<TItem = any> = LoadResult<TItem>;
+  /**
+   * [descr:SchedulerTimeZone]
+   */
+  export interface SchedulerTimeZone {
+    /**
+     * [descr:SchedulerTimeZone.id]
+     */
+    id: string;
+    /**
+     * [descr:SchedulerTimeZone.offset]
+     */
+    offset: number;
+    /**
+     * [descr:SchedulerTimeZone.title]
+     */
+    title: string;
+  }
   export type Scrollable =
     DevExpress.core.OmitInternal<DevExpress.ui.dxScrollable>;
   export type ScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
@@ -31162,7 +31162,7 @@ declare module DevExpress.utils {
    */
   export function getTimeZones(
     date?: Date
-  ): Array<DevExpress.common.dxSchedulerTimeZone>;
+  ): Array<DevExpress.common.SchedulerTimeZone>;
   /**
    * [descr:utils.initMobileViewport(options)]
    */
