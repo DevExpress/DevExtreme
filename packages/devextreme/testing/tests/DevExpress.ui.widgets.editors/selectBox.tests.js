@@ -4390,6 +4390,41 @@ QUnit.module('Async tests', {}, () => {
             this.clock.restore();
         }
     });
+
+    QUnit.test('List should have correct size when async templates are used (T1216113)', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const templateRenderingTimeout = 10;
+
+        $('#selectBox').dxSelectBox({
+            items: [1, 2],
+            templatesRenderAsynchronously: true,
+            opened: true,
+            integrationOptions: {
+                templates: {
+                    'item': {
+                        render({ model, container, onRendered }) {
+                            setTimeout(() => {
+                                const $item = $(`<div>${model}</div>`);
+                                $item.css('height', 50);
+                                $item.appendTo(container);
+
+                                onRendered();
+                            }, templateRenderingTimeout);
+                        }
+                    }
+                }
+            },
+        });
+
+        clock.tick(templateRenderingTimeout);
+
+        const overlayContentHeight = $(`.${OVERLAY_CONTENT_CLASS}`).height();
+        const listItemsHeight = $(`.${LIST_ITEMS_CLASS}`).height();
+
+        assert.roughEqual(overlayContentHeight, listItemsHeight, 5, 'popup height is more than rendered list items height');
+
+        clock.restore();
+    });
 });
 
 QUnit.module('regressions', moduleSetup, () => {

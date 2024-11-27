@@ -12,6 +12,7 @@ import {
 } from './chat.tests.js';
 import MessageGroup from '__internal/ui/chat/messagegroup';
 import TypingIndicator from '__internal/ui/chat/typingindicator';
+import devices from '__internal/core/m_devices';
 import localization from 'localization';
 import dateLocalization from 'localization/date';
 
@@ -28,6 +29,7 @@ const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-al
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 const CHAT_TYPINGINDICATOR_CLASS = 'dx-chat-typingindicator';
 const SCROLLVIEW_REACHBOTTOM_INDICATOR = 'dx-scrollview-scrollbottom';
+const SCROLLABLE_CONTENT = 'dx-scrollable-content';
 
 const MS_IN_DAY = 86400000;
 
@@ -65,6 +67,17 @@ QUnit.module('MessageList', () => {
     QUnit.module('Render', moduleConfig, () => {
         QUnit.test('should be initialized with correct type', function(assert) {
             assert.ok(this.instance instanceof MessageList);
+        });
+
+        QUnit.test('scrollable content box-sizing value should be border-box', function(assert) {
+            if(devices.real().platform !== 'ios') {
+                assert.ok(true, 'test does not actual other than ios');
+                return;
+            }
+            const $scrollableContent = this.$element.find(`.${SCROLLABLE_CONTENT}`);
+            const scrollBoxSizing = $scrollableContent.css('box-sizing');
+
+            assert.strictEqual(scrollBoxSizing, 'border-box', 'scrollable content has right box-sizing value');
         });
 
         QUnit.test('should not be any errors if the items contain undefined values', function(assert) {

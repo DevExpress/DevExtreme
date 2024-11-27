@@ -180,7 +180,6 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
 
   _render(): void {
     super._render();
-    this._renderItemsAsync();
 
     this._updateDimensionsInMaterial();
   }

@@ -193,6 +193,8 @@ export const ListBase = CollectionWidget.inherit({
 
       showChevronExpr(data) { return data ? data.showChevron : undefined; },
       badgeExpr(data) { return data ? data.badge : undefined; },
+
+      _onItemsRendered: () => {},
     });
   },
 
@@ -651,6 +653,10 @@ export const ListBase = CollectionWidget.inherit({
 
     this._refreshItemElements();
     this._updateLoadingState(true);
+  },
+
+  _postProcessRenderItems() {
+    this.option('_onItemsRendered')();
   },
 
   _attachGroupCollapseEvent() {
@@ -1150,7 +1156,7 @@ export const ListBase = CollectionWidget.inherit({
         this._invalidate();
         break;
       case '_swipeEnabled':
-        break;
+      case '_onItemsRendered':
       case 'selectByClick':
         break;
       default:

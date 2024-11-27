@@ -606,6 +606,7 @@ class Splitter extends CollectionWidget<Properties> {
     const { itemData } = args;
 
     if (itemData.splitter) {
+      this._onItemTemplateRendered(itemTemplate, args)();
       return itemTemplate.source
         ? itemTemplate.source()
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
