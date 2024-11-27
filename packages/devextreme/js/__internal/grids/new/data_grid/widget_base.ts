@@ -8,9 +8,9 @@ import { GridCoreNewBase } from '@ts/grids/new/grid_core/widget_base';
 import { Content } from './content_view/content_view_content';
 import { MainView } from './main_view';
 import { OptionsController } from './options_controller';
-import type { Properties } from './types';
+import type { Options } from './types';
 
-class DataGridNew extends GridCoreNewBase<Properties> {
+class DataGridNew extends GridCoreNewBase<Options> {
   protected _registerDIContext(): void {
     super._registerDIContext();
     this.diContext.register(ContentBase, Content);

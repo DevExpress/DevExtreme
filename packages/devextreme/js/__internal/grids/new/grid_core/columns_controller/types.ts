@@ -12,8 +12,6 @@ export interface Column extends Pick<Required<ColumnBase>, 'alignment' | 'dataTy
   fieldTemplate?: unknown;
 }
 
-export type ColumnProperties = Partial<Column> | string;
-
 export interface Cell {
   value: unknown;
   column: Column;
@@ -23,8 +21,4 @@ export interface DataRow {
   cells: Cell[];
 
   key: unknown;
-}
-
-export interface ColumnsControllerProperties {
-  columns?: ColumnProperties[];
 }

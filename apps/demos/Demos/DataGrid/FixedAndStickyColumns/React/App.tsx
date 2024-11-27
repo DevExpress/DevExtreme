@@ -16,7 +16,6 @@ const App = () => (
     <ColumnFixing enabled={true} />
     <Column
       caption="Employee"
-      width={230}
       fixed={true}
       calculateCellValue={calculateCellValue}
     />
@@ -26,7 +25,6 @@ const App = () => (
     />
     <Column
       dataField="Address"
-      width={230}
       fixed={true}
       fixedPosition="sticky"
     />
@@ -48,11 +46,7 @@ const App = () => (
     />
     <Column dataField="HomePhone" />
     <Column dataField="MobilePhone" />
-    <Column
-      dataField="Email"
-      fixed={true}
-      fixedPosition="sticky"
-    />
+    <Column dataField="Email" />
     <Column dataField="Skype" />
   </DataGrid>
 );

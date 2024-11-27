@@ -16,7 +16,7 @@ export const CLASSES = {
   firstHeader: 'first-header',
   columnNoBorder: 'column-no-border',
   groupRowContainer: 'group-row-container',
-  focusedFixedCell: 'dx-focused-fixed-cell',
+  focusedFixedElement: 'dx-focused-fixed-element',
   focused: 'dx-focused',
   hidden: 'dx-hidden',
 };

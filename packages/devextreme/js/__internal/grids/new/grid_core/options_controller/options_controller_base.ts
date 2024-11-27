@@ -5,7 +5,7 @@ import { Component } from '@js/core/component';
 import { getPathParts } from '@js/core/utils/data';
 import type { ChangedOptionInfo } from '@js/events';
 import type {
-  Gettable, Observable, Subscribable, Updatable,
+  Gettable, Subscribable, SubsGetsUpd, Updatable,
 } from '@ts/core/reactive/index';
 import { computed, state } from '@ts/core/reactive/index';
 
@@ -68,7 +68,7 @@ function getValue<T>(obj: unknown, path: string): T {
 export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
   private readonly isControlledMode = false;
 
-  private readonly props: Observable<TProps>;
+  private readonly props: SubsGetsUpd<TProps>;
 
   private readonly defaults: TDefaultProps;
 
@@ -77,7 +77,6 @@ export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
   constructor(
     private readonly component: Component<TProps>,
   ) {
-    // @ts-expect-error
     this.props = state(component.option());
     // @ts-expect-error
     this.defaults = component._getDefaultOptions();
@@ -107,7 +106,14 @@ export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
     name: TProp,
   ): SubsGets<PropertyWithDefaults<TProps, TDefaultProps, TProp>> {
     const obs = computed(
-      (props) => getValue(props, name) ?? getValue(this.defaults, name),
+      (props) => {
+        const value = getValue(props, name);
+        // NOTE: it is better not to use '??' operator,
+        // because result will be different if value is 'null'.
+        // Some code works differently if undefined is passed instead of null,
+        // for example dataSource getter-setter .filter()
+        return value !== undefined ? value : getValue(this.defaults, name);
+      },
       [this.props],
     );
 

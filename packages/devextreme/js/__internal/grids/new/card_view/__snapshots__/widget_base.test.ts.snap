@@ -2,7 +2,7 @@
 
 exports[`common initial render should be successfull 1`] = `
 <div
-  class="dx-widget"
+  class="dx-widget dx-cardview"
 >
   <div
     class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection"
@@ -169,6 +169,14 @@ exports[`common initial render should be successfull 1`] = `
     class="dx-gridcore-error-row"
   />
   <div
+    class="dx-overlay dx-widget dx-state-invisible dx-visibility-change-handler dx-loadpanel"
+  >
+    <div
+      class="dx-overlay-content"
+      style="width: 222px; height: 90px;"
+    />
+  </div>
+  <div
     class="dx-scrollable dx-visibility-change-handler dx-scrollable-vertical dx-scrollable-simulated"
   >
     <div
@@ -187,7 +195,9 @@ exports[`common initial render should be successfull 1`] = `
             tabindex="0"
           >
             <div
-              class="dx-cardview-content"
+              class="dx-cardview-content dx-cardview-content-grid"
+              style="--dx-cardview-cardsperrow: 3;"
+              tabindex="0"
             >
               <div
                 class="dx-cardview-card"
@@ -205,7 +215,7 @@ exports[`common initial render should be successfull 1`] = `
                       role="presentation"
                     >
                       <div
-                        class="dx-item dx-toolbar-item dx-toolbar-button"
+                        class="dx-item dx-toolbar-item dx-toolbar-button dx-toolbar-item-auto-hide"
                       >
                         <div
                           class="dx-item-content dx-toolbar-item-content"
@@ -254,7 +264,7 @@ exports[`common initial render should be successfull 1`] = `
                       role="presentation"
                     >
                       <div
-                        class="dx-item dx-toolbar-item dx-toolbar-button"
+                        class="dx-item dx-toolbar-item dx-toolbar-button dx-toolbar-item-auto-hide"
                       >
                         <div
                           class="dx-item-content dx-toolbar-item-content"
@@ -276,7 +286,7 @@ exports[`common initial render should be successfull 1`] = `
                         </div>
                       </div>
                       <div
-                        class="dx-item dx-toolbar-item dx-toolbar-button"
+                        class="dx-item dx-toolbar-item dx-toolbar-button dx-toolbar-item-auto-hide"
                       >
                         <div
                           class="dx-item-content dx-toolbar-item-content"
@@ -298,7 +308,7 @@ exports[`common initial render should be successfull 1`] = `
                         </div>
                       </div>
                       <div
-                        class="dx-item dx-toolbar-item dx-toolbar-button"
+                        class="dx-item dx-toolbar-item dx-toolbar-button dx-toolbar-item-auto-hide"
                       >
                         <div
                           class="dx-item-content dx-toolbar-item-content"
@@ -316,6 +326,26 @@ exports[`common initial render should be successfull 1`] = `
                                 class="dx-icon dx-icon-remove"
                               />
                             </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="dx-toolbar-button dx-toolbar-menu-container dx-state-invisible"
+                      >
+                        <div
+                          aria-expanded="false"
+                          aria-haspopup="true"
+                          aria-label="overflow"
+                          class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-icon dx-dropdownmenu dx-dropdownmenu-button"
+                          role="button"
+                          tabindex="0"
+                        >
+                          <div
+                            class="dx-button-content"
+                          >
+                            <i
+                              class="dx-icon dx-icon-overflow"
+                            />
                           </div>
                         </div>
                       </div>
@@ -394,8 +424,9 @@ exports[`common initial render should be successfull 1`] = `
           class="dx-page-indexes"
         >
           <div
+            aria-current="page"
             aria-label="Page 1"
-            class="dx-page"
+            class="dx-page dx-selection"
             role="button"
             tabindex="0"
           >

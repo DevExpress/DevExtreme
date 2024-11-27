@@ -1,4 +1,5 @@
-import { Button } from '@ts/grids/new/grid_core/inferno_wrappers/button';
+import { Toast } from '@ts/grids/new/grid_core/inferno_wrappers/toast';
+import { createRef } from 'inferno';
 
 export const CLASSES = {
   errorRow: 'dx-gridcore-error-row',
@@ -14,19 +15,16 @@ export interface ErrorRowProperties {
 }
 
 export function ErrorRow(props: ErrorRowProperties): JSX.Element {
+  const ref = createRef<HTMLDivElement>();
+
   return (
-    <div className={CLASSES.errorRow}>
-      {props.errors.map((error, index) => (
-        <div className={CLASSES.error}>
-          <div className={CLASSES.text}>
-            {error}
-          </div>
-          <Button
-            icon='close'
-            elementAttr={{ class: CLASSES.button }}
-            onClick={(): void => { props.onRemoveButtonClicked?.(index); }}
-          />
-        </div>
+    <div ref={ref} className={CLASSES.errorRow}>
+      {props.errors.map((error) => (
+        <Toast
+          key={error}
+          visible={true}
+          message={error}
+        />
       ))}
     </div>
   );

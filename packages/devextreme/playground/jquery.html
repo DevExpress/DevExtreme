@@ -17,6 +17,12 @@
         document.getElementsByTagName("head")[0].appendChild(link);
     </script>
 
+    <!-- <style>
+        .dx-cardview-content.dx-cardview-content-grid {
+            --dx-cardview-cardsperrow: 3 !important;
+        }
+    </style> -->
+
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
     <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
@@ -93,13 +99,19 @@
                 },
             });
 
-            $(function () {
                 $("#cardview").dxCardView({
                     accessKey: 'q',
                     dataSource: store,
-                    width: "70%",
-                    height: 300,
+                    width: "100%",
+                    // width: 700,
+                    height: 500,
                     keyExpr: 'OrderNumber',
+                    cardsPerRow: 'auto',
+                    paging: {
+                        pageSize: 12,
+                    },
+                    cardMinWidth: 250,
+                    cardMaxWidth: 600,
                     fieldTemplate({ defaultTemplate, ...props}, index) {
                         const el = $('<div>')
                         if (index % 2) {
@@ -123,12 +135,11 @@
                         'Employee',
                         'SaleAmount',
                     ],
-                    filterPanelVisible: true,
+                    filterPanel: {visible: true},
                     onInitialized(e) {
                         window.cardView = e.component;
                     }
                 });
-            });
         </script>
     </div>
 </body>

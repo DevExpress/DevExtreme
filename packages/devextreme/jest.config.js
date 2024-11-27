@@ -11,6 +11,10 @@ module.exports = {
         'node_modules'
     ],
     preset: 'ts-jest',
+    reporters: [
+        'default',
+        ['jest-json-reporter', {}],
+    ],
     testMatch: [
         // TODO: change to '<rootDir>/**/*.test.(ts|tsx)' after removing renovation
         '<rootDir>/js/__internal/**/*.test.(ts|tsx)',

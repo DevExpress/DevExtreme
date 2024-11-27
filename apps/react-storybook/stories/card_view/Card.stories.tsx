@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { Card as InfernoCard } from "devextreme/esm/__internal/grids/new/card_view/content_view/card";
+import { Card as InfernoCard } from "devextreme/esm/__internal/grids/new/card_view/content_view/content/card/card";
 import { wrapInfernoWithReact } from "../utils";
 
 interface Props {

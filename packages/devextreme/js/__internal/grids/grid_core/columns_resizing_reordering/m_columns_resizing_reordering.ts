@@ -570,7 +570,7 @@ export class DraggingHeaderView extends modules.View {
         columns: targetDraggingPanel.getColumns(rowIndex),
         columnElements,
         isVerticalOrientation,
-        startColumnIndex: targetLocation === 'headers' && $(columnElements[0]).index(),
+        startColumnIndex: targetLocation === 'headers' ? $(columnElements[0]).index() : 0,
       }));
 
       pointsByTarget[targetLocation] = pointsByColumns;

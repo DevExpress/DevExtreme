@@ -1,5 +1,5 @@
 import { PureComponent } from '@ts/grids/new/grid_core/core/pure_component';
-import type { InfernoNode } from 'inferno';
+import type { InfernoNode, RefObject } from 'inferno';
 
 export const CLASSES = {
   field: 'dx-cardview-field',
@@ -13,12 +13,14 @@ export interface FieldProps {
   value: unknown;
 
   alignment: 'right' | 'center' | 'left';
+
+  elementRef?: RefObject<HTMLDivElement>;
 }
 
 export class Field extends PureComponent<FieldProps> {
   render(): InfernoNode {
     return (
-      <div className={CLASSES.field} tabIndex={0}>
+      <div className={CLASSES.field} tabIndex={0} ref={this.props.elementRef}>
         <span className={CLASSES.fieldName}>{this.props.title}: </span>
         <span
           style={{ 'text-align': this.props.alignment }}

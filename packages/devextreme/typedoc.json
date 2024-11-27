@@ -1,0 +1,3 @@
+{
+  "plugin": [ "jest-typedoc-plugin"]
+}

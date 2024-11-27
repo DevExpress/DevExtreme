@@ -1,0 +1,21 @@
+<div class="demo-container">
+  <dx-chat
+    [user]="currentUser"
+    [items]="messages$ | async"
+    [typingUsers]="userChatTypingUsers$ | async"
+    (onMessageEntered)="onMessageEntered($event)"
+    (onTypingStart)="userChatOnTypingStart()"
+    (onTypingEnd)="userChatOnTypingEnd()"
+  >
+  </dx-chat>
+
+  <dx-chat
+    [user]="supportAgent"
+    [items]="messages$ | async"
+    [typingUsers]="supportChatTypingUsers$ | async"
+    (onMessageEntered)="onMessageEntered($event)"
+    (onTypingStart)="supportChatOnTypingStart()"
+    (onTypingEnd)="supportChatOnTypingEnd()"
+  >
+  </dx-chat>
+</div>

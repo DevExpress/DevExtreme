@@ -4,7 +4,7 @@ import { computed, state } from '@ts/core/reactive/index';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { View } from '../core/view4';
-import { HeaderPanelController } from '../header_panel/controller';
+import { ToolbarController } from '../toolbar/controller';
 import type { ColumnChooserProps } from './column_chooser';
 import { ColumnChooser } from './column_chooser';
 
@@ -20,10 +20,10 @@ export class ColumnsChooserView extends View<ColumnChooserProps> {
     [this.columns.nonVisibleColumns],
   );
 
-  public static dependencies = [HeaderPanelController, ColumnsController] as const;
+  public static dependencies = [ToolbarController, ColumnsController] as const;
 
   constructor(
-    private readonly headerPanel: HeaderPanelController,
+    private readonly headerPanel: ToolbarController,
     private readonly columns: ColumnsController,
   ) {
     super();

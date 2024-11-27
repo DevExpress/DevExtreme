@@ -3,17 +3,17 @@
 import $ from '@js/core/renderer';
 import { render } from 'inferno';
 
-import { HeaderPanelController } from '../header_panel/controller';
 import { OptionsController } from '../options_controller/options_controller';
+import { ToolbarController } from '../toolbar/controller';
 import { SearchField } from './search_field';
 
 export class Search {
-  public static dependencies = [HeaderPanelController, OptionsController] as const;
+  public static dependencies = [ToolbarController, OptionsController] as const;
 
   public readonly searchText = this.options.twoWay('searchText');
 
   constructor(
-    private readonly headerPanel: HeaderPanelController,
+    private readonly headerPanel: ToolbarController,
     private readonly options: OptionsController,
   ) {
     this.headerPanel.addDefaultItem({

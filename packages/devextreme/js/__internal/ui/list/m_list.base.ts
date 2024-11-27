@@ -305,7 +305,7 @@ export const ListBase = CollectionWidget.inherit({
 
     const $listGroup = this._getItemsContainer().children(`.${LIST_GROUP_CLASS}`);
 
-    const $items = $listGroup.find(itemAndHeaderSelector).filter(':visible');
+    const $items = $listGroup.find(itemAndHeaderSelector);
 
     return $items;
   },
@@ -314,7 +314,16 @@ export const ListBase = CollectionWidget.inherit({
     const { collapsibleGroups } = this.option();
 
     if (collapsibleGroups) {
-      return this._getItemAndHeaderElements();
+      const $elements = this._getItemAndHeaderElements();
+      const $visibleItems = $elements.filter((_, element) => {
+        if ($(element).hasClass(LIST_GROUP_HEADER_CLASS)) {
+          return true;
+        }
+
+        return !$(element).closest(`.${LIST_GROUP_CLASS}`).hasClass(LIST_GROUP_COLLAPSED_CLASS);
+      });
+
+      return $visibleItems;
     }
 
     return this.callBase($itemElements);
@@ -671,9 +680,9 @@ export const ListBase = CollectionWidget.inherit({
       this._collapseGroupHandler($group);
 
       if (focusStateEnabled) {
-        const listItemElement = getPublicElement($group.find(`.${LIST_ITEM_CLASS}`).eq(0));
+        const groupHeader = getPublicElement($group.find(`.${LIST_GROUP_HEADER_CLASS}`));
 
-        this.option({ focusedElement: listItemElement });
+        this.option({ focusedElement: groupHeader });
       }
     };
 
@@ -831,6 +840,10 @@ export const ListBase = CollectionWidget.inherit({
     if (this.option('_swipeEnabled')) {
       this._attachSwipeEvent($(args.itemElement));
     }
+  },
+
+  _getElementClassToSkipRefreshId() {
+    return LIST_GROUP_HEADER_CLASS;
   },
 
   _attachSwipeEvent($itemElement) {

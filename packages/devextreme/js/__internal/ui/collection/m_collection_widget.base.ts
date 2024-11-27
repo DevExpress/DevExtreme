@@ -388,12 +388,39 @@ const CollectionWidget = Widget.inherit({
     this._updateParentActiveDescendant();
   },
 
+  _getElementClassToSkipRefreshId: noop,
+
+  _shouldSkipRefreshId(target) {
+    const elementClass = this._getElementClassToSkipRefreshId() ?? '';
+    const shouldSkipRefreshId = $(target).hasClass(elementClass);
+
+    return shouldSkipRefreshId;
+  },
+
   _refreshActiveDescendant($target) {
-    this.setAria('activedescendant', isDefined(this.option('focusedElement')) ? this.getFocusedItemId() : null, $target);
+    const { focusedElement } = this.option();
+
+    if (isDefined(focusedElement)) {
+      const shouldSetExistingId = this._shouldSkipRefreshId(focusedElement);
+      const id = shouldSetExistingId ? $(focusedElement).attr('id') : this.getFocusedItemId();
+
+      this.setAria('activedescendant', id, $target);
+
+      return;
+    }
+
+    this.setAria('activedescendant', null, $target);
   },
 
   _refreshItemId($target, needCleanItemId) {
-    if (!needCleanItemId && this.option('focusedElement')) {
+    const { focusedElement } = this.option();
+    const shouldSkipRefreshId = this._shouldSkipRefreshId($target);
+
+    if (shouldSkipRefreshId) {
+      return;
+    }
+
+    if (!needCleanItemId && focusedElement) {
       this.setAria('id', this.getFocusedItemId(), $target);
     } else {
       this.setAria('id', null, $target);

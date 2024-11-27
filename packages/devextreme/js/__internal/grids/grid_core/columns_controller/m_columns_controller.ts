@@ -531,7 +531,7 @@ export class ColumnsController extends modules.Controller {
           const prevColumn = visibleColumns[j - 1];
           const column = visibleColumns[j];
 
-          if (!column.fixed) {
+          if (!column.fixed || column.fixedPosition === StickyPosition.Sticky) {
             if (i === 0) {
               if (column.isBand && column.colspan) {
                 transparentColspan += column.colspan;
@@ -1780,6 +1780,15 @@ export class ColumnsController extends modules.Controller {
     }
 
     return result;
+  }
+
+  public getVisibleDataColumnsByBandColumn(bandColumnIndex: number) {
+    const that = this;
+    const bandColumnsCache = that.getBandColumnsCache();
+    const result = this.getChildrenByBandColumn(bandColumnIndex, bandColumnsCache.columnChildrenByIndex);
+
+    return result
+      .filter((column) => !column.isBand && column.visible);
   }
 
   public isParentBandColumn(columnIndex, bandColumnIndex) {

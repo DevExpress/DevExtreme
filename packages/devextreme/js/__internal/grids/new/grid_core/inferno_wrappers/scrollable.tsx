@@ -1,10 +1,15 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { Properties as ScrollableProperties } from '@js/ui/scroll_view/ui.scrollable';
 import dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import { createPortal, type InfernoNode } from 'inferno';
 
 import { InfernoWrapper } from './widget_wrapper';
 
-export class Scrollable extends InfernoWrapper<ScrollableProperties, dxScrollable> {
+interface Props extends ScrollableProperties {
+  scrollTop?: number;
+}
+
+export class Scrollable extends InfernoWrapper<Props, dxScrollable> {
   private readonly contentRef: { current?: HTMLDivElement } = {};
 
   public render(): InfernoNode {
@@ -23,10 +28,24 @@ export class Scrollable extends InfernoWrapper<ScrollableProperties, dxScrollabl
     return dxScrollable;
   }
 
+  private updateScrollTop(): void {
+    this.component?.scrollTo(this.props.scrollTop);
+  }
+
   public componentDidMount(): void {
     super.componentDidMount();
     // @ts-expect-error
     this.contentRef.current = this.component.$content().get(0);
     this.setState({});
+    this.updateScrollTop();
+  }
+
+  public componentDidUpdate(prevProps: Props): void {
+    super.componentDidUpdate(prevProps);
+    this.updateScrollTop();
+  }
+
+  public clientHeight(): number {
+    return this.component!.clientHeight();
   }
 }

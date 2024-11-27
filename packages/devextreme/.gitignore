@@ -13,3 +13,4 @@ node_modules
 RawLog.txt
 testing/CompletedSuites.txt
 /coverage
+/docs

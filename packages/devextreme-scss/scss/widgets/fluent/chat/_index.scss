@@ -35,6 +35,7 @@
 @include chat-messagebubble(
   $chat-bubble-padding,
   $chat-bubble-border-radius,
+  $chat-bubble-color-secondary,
   $chat-bubble-background-color-secondary,
   $chat-bubble-color-primary,
   $chat-bubble-background-color-primary,
@@ -46,7 +47,8 @@
   $chat-messagegroup-alignment-start-gap,
   $chat-messagegroup-padding,
   $chat-information-font-size,
-  $chat-information-color,
+  $chat-information-author-name-color,
+  $chat-information-timestamp-color,
   $chat-information-gap,
 );
 @include chat-messagelist-empty(
@@ -72,7 +74,6 @@
   $chat-typingindicator-template,
   $chat-typingindicator-padding,
   $chat-typingindicator-row-gap,
-  $chat-typingindicator-column-gap,
   $chat-typingindicator-font-size,
   $chat-typingindicator-color,
   $chat-typingindicator-bubble-padding-block,

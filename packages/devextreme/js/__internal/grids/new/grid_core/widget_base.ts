@@ -4,38 +4,37 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable spellcheck/spell-checker */
 // eslint-disable-next-line max-classes-per-file
-import browser from '@js/core/utils/browser';
-import { isMaterialBased } from '@js/ui/themes';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
 import type { Subscription } from '@ts/core/reactive/index';
-import { ColumnsChooserView } from '@ts/grids/new/grid_core/columns_chooser/view';
-import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
-import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
-import { EditingController } from '@ts/grids/new/grid_core/editing/controller';
-import { HeaderPanelController } from '@ts/grids/new/grid_core/header_panel/controller';
-import { HeaderPanelView } from '@ts/grids/new/grid_core/header_panel/view';
-import { MainView } from '@ts/grids/new/grid_core/main_view';
-import { PagerView } from '@ts/grids/new/grid_core/pager';
-import { Search } from '@ts/grids/new/grid_core/search/controller';
 import { render } from 'inferno';
 
+import { ColumnsChooserView } from './columns_chooser/view';
+import { CompatibilityColumnsController } from './columns_controller/compatibility';
+import * as ColumnsControllerModule from './columns_controller/index';
 import { StatusView } from './content_view/status_view/status_view';
 import * as DataControllerModule from './data_controller/index';
+import { EditingController } from './editing/controller';
 import { ErrorController } from './error_controller/error_controller';
 import { FilterPanelView } from './filtering/filter_panel/filter_panel';
-import type { Properties } from './types';
+import { MainView } from './main_view';
+import { defaultOptions, defaultOptionsRules, type Options } from './options';
+import { PagerView } from './pager';
+import { Search } from './search/controller';
+import { ToolbarController } from './toolbar/controller';
+import { ToolbarView } from './toolbar/view';
+import { WidgetMock } from './widget_mock';
 
 export class GridCoreNewBase<
-  TProperties extends Properties = Properties,
+  TProperties extends Options = Options,
 > extends Widget<TProperties> {
   protected renderSubscription?: Subscription;
 
   protected diContext!: DIContext;
 
-  private dataController!: DataController;
+  private dataController!: DataControllerModule.DataController;
 
-  private columnsController!: ColumnsController;
+  private columnsController!: ColumnsControllerModule.ColumnsController;
 
   private editingController!: EditingController;
 
@@ -43,9 +42,9 @@ export class GridCoreNewBase<
 
   private columnsChooser!: ColumnsChooserView;
 
-  private headerPanelController!: HeaderPanelController;
+  private toolbarController!: ToolbarController;
 
-  private headerPanelView!: HeaderPanelView;
+  private toolbarView!: ToolbarView;
 
   private errorController!: ErrorController;
 
@@ -53,10 +52,12 @@ export class GridCoreNewBase<
 
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
-    this.diContext.register(DataController);
-    this.diContext.register(ColumnsController);
-    this.diContext.register(HeaderPanelController);
-    this.diContext.register(HeaderPanelView);
+    this.diContext.register(DataControllerModule.DataController);
+    this.diContext.register(DataControllerModule.CompatibilityDataController);
+    this.diContext.register(ColumnsControllerModule.ColumnsController);
+    this.diContext.register(ColumnsControllerModule.CompatibilityColumnsController);
+    this.diContext.register(ToolbarController);
+    this.diContext.register(ToolbarView);
     this.diContext.register(EditingController);
     this.diContext.register(PagerView);
     this.diContext.register(ColumnsChooserView);
@@ -66,12 +67,20 @@ export class GridCoreNewBase<
     this.diContext.register(ErrorController);
   }
 
+  protected _initWidgetMock() {
+    this.diContext.registerInstance(WidgetMock, new WidgetMock(
+      this,
+      this.diContext.get(DataControllerModule.CompatibilityDataController),
+      this.diContext.get(CompatibilityColumnsController),
+    ));
+  }
+
   protected _initDIContext(): void {
     this.columnsChooser = this.diContext.get(ColumnsChooserView);
-    this.dataController = this.diContext.get(DataController);
-    this.columnsController = this.diContext.get(ColumnsController);
-    this.headerPanelController = this.diContext.get(HeaderPanelController);
-    this.headerPanelView = this.diContext.get(HeaderPanelView);
+    this.dataController = this.diContext.get(DataControllerModule.DataController);
+    this.columnsController = this.diContext.get(ColumnsControllerModule.ColumnsController);
+    this.toolbarController = this.diContext.get(ToolbarController);
+    this.toolbarView = this.diContext.get(ToolbarView);
     this.editingController = this.diContext.get(EditingController);
     this.pagerView = this.diContext.get(PagerView);
     this.search = this.diContext.get(Search);
@@ -82,6 +91,7 @@ export class GridCoreNewBase<
     // @ts-expect-error
     super._init();
     this._registerDIContext();
+    this._initWidgetMock();
     this._initDIContext();
   }
 
@@ -91,55 +101,14 @@ export class GridCoreNewBase<
     return {
       // @ts-expect-error
       ...super._getDefaultOptions() as {},
-      ...DataControllerModule.defaultOptions,
-      searchText: '',
-      editingChanges: [],
-      toolbar: {
-        visible: true,
-      },
+      ...defaultOptions,
     };
   }
 
   protected _defaultOptionsRules() {
     // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return super._defaultOptionsRules().concat([
-      {
-        device() {
-          // @ts-expect-error
-          return isMaterialBased();
-        },
-        options: {
-          headerFilter: {
-            height: 315,
-          },
-          editing: {
-            useIcons: true,
-          },
-          selection: {
-            showCheckBoxesMode: 'always',
-          },
-        },
-      },
-      {
-        device() {
-          return browser.webkit;
-        },
-        options: {
-          loadingTimeout: 30, // T344031
-          loadPanel: {
-            animation: {
-              show: {
-                easing: 'cubic-bezier(1, 0, 1, 0)',
-                duration: 500,
-                from: { opacity: 0 },
-                to: { opacity: 1 },
-              },
-            },
-          },
-        },
-      },
-    ]);
+    return super._defaultOptionsRules().concat(defaultOptionsRules);
   }
 
   protected _initMarkup(): void {

@@ -1993,32 +1993,6 @@
         ]
       },
       {
-        "Name": "Output Formats",
-        "Equivalents": "",
-        "Demos": [
-          {
-            "Title": "Output Formats",
-            "Name": "OutputFormats",
-            "Widget": "HtmlEditor",
-            "DemoType": "Web",
-            "Modules": "showdown&turndown"
-          }
-        ]
-      },
-      {
-        "Name": "Toolbar Customization",
-        "Equivalents": "",
-        "Demos": [
-          {
-            "Title": "Toolbar Customization",
-            "Name": "ToolbarCustomization",
-            "DocUrl": "Guide/UI_Components/HtmlEditor/Toolbar/Built-In_Controls/",
-            "Widget": "HtmlEditor",
-            "DemoType": "Web"
-          }
-        ]
-      },
-      {
         "Name": "Mentions",
         "Equivalents": "",
         "Demos": [
@@ -2046,6 +2020,54 @@
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
             "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Markdown support",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Markdown support",
+            "Name": "MarkdownSupport",
+            "Widget": "HtmlEditor",
+            "DemoType": "Web",
+            "Modules": "unified",
+            "Badge": "New"
+          }
+        ]
+      },
+      {
+        "Name": "Toolbar Customization",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Toolbar Customization",
+            "Name": "ToolbarCustomization",
+            "DocUrl": "Guide/UI_Components/HtmlEditor/Toolbar/Built-In_Controls/",
+            "Widget": "HtmlEditor",
+            "DemoType": "Web"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Chat",
+    "Breadcrumb": true,
+    "Equivalents": "dxChat, dx-chat, chat",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "Guide/UI_Components/Chat/Overview/",
+            "Widget": "Chat",
+            "DemoType": "Web",
+            "Badge": "New"
           }
         ]
       }
@@ -5401,19 +5423,22 @@
           {
             "Title": "Providers and Types",
             "Name": "ProvidersAndTypes",
-            "Widget": "Map"
+            "Widget": "Map",
+            "Badge": "Updated"
           },
           {
             "Title": "Markers",
             "Name": "Markers",
             "DocUrl": "Guide/UI_Components/Map/Configure_Markers/",
-            "Widget": "Map"
+            "Widget": "Map",
+            "Badge": "Updated"
           },
           {
             "Title": "Routes",
             "Name": "Routes",
             "DocUrl": "Guide/UI_Components/Map/Configure_Routes/",
-            "Widget": "Map"
+            "Widget": "Map",
+            "Badge": "Updated"
           }
         ]
       },

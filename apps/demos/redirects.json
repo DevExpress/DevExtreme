@@ -43,5 +43,6 @@
     { "Widget": "Slideout", "Name": "Overview", "NewWidget": "Drawer", "NewName": "LeftOrRightPosition" },
     { "Widget": "Reporting", "Name": "PollingReport", "NewWidget": "Reporting", "NewName": "EmployeePerformanceReview" },
     { "Widget": "Common", "Name": "StylingMode", "NewWidget": "Common", "NewName": "EditorAppearanceVariants" },
-	{ "Widget": "TreeList", "Name": "UsingHeaderFilter", "NewWidget": "TreeList", "NewName": "ColumnHeaderFilter" }
+	{ "Widget": "TreeList", "Name": "UsingHeaderFilter", "NewWidget": "TreeList", "NewName": "ColumnHeaderFilter" },
+    { "Widget": "HtmlEditor", "Name": "OutputFormats", "NewWidget": "HtmlEditor", "NewName": "MarkdownSupport" }
 ]

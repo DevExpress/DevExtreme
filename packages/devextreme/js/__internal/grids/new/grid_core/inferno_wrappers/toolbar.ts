@@ -17,12 +17,18 @@ export class Toolbar extends InfernoWrapper<dxToolbarOptions, dxToolbar> {
     ) {
       props.items?.forEach((item, index) => {
         if (props.items![index] !== prevProps.items![index]) {
-          this.component?.option(`items[${index}]`, props.items![index]);
+          const prevItem = prevProps.items![index];
+
+          Object.keys(item).forEach((key) => {
+            if (item[key] !== prevItem[key]) {
+              this.component?.option(`items[${index}].${key}`, props.items![index][key]);
+            }
+          });
         }
       });
       const propsToUpdate = { ...props };
       delete propsToUpdate.items;
-      super.updateComponentOptions(prevProps, props);
+      super.updateComponentOptions(prevProps, propsToUpdate);
     } else {
       super.updateComponentOptions(prevProps, props);
     }

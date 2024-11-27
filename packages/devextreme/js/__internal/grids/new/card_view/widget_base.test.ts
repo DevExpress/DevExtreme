@@ -8,6 +8,7 @@ describe('common', () => {
     it('should be successfull', () => {
       const container = document.createElement('div');
       const cardView = new CardView(container, {
+        keyExpr: 'a',
         dataSource: [{ a: 'a' }],
       });
 

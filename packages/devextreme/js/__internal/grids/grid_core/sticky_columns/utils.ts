@@ -59,7 +59,24 @@ export const processFixedColumns = function (
   });
 };
 
+const isVisibleColumn = function (
+  that: ColumnsController,
+  column,
+): boolean {
+  return column.visibleWidth !== HIDDEN_COLUMNS_WIDTH
+  && (!column.isBand || !!that.getVisibleDataColumnsByBandColumn(column.index).length);
+};
+
+const areNextOnlyFixedOrHiddenColumns = function (
+  that: ColumnsController,
+  columns,
+): boolean {
+  return !columns.some((column) => !column.fixed && isVisibleColumn(that, column));
+};
+
+// TODO Add description for this method
 const getStickyOffsetCore = function (
+  that: ColumnsController,
   columns,
   widths: number[],
   columnIndex: number,
@@ -70,33 +87,31 @@ const getStickyOffsetCore = function (
   const isChildColumn = isDefined(column.ownerBand);
   const targetColumnIsRight = fixedPosition === StickyPosition.Right;
   const targetColumnIsSticky = column.fixedPosition === StickyPosition.Sticky;
-  const processedColumns = targetColumnIsRight
+  const nextOrPrevColumns = targetColumnIsRight
     ? columns.slice(columnIndex + 1) : columns.slice(0, columnIndex).reverse();
-  const processedWidths = targetColumnIsRight
+  const nextOrPrevColumnWidths = targetColumnIsRight
     ? widths.slice(columnIndex + 1) : widths.slice(0, columnIndex).reverse();
   let offset = 0;
   let adjacentStickyColumnIndex = 0;
-  let nonAdjacentStickyColumnCount = targetColumnIsSticky && processedColumns.length ? 1 : 0;
+  let nonSiblingStickyColumnCount = !areNextOnlyFixedOrHiddenColumns(that, nextOrPrevColumns)
+    && targetColumnIsSticky && nextOrPrevColumns.length ? 1 : 0;
 
-  processedColumns.forEach((col, colIndex: number) => {
+  nextOrPrevColumns.forEach((col, colIndex: number) => {
     if (col.fixed && (!isDefined(offsets) || column.ownerBand === col.ownerBand)) {
       const columnIsSticky = col.fixedPosition === StickyPosition.Sticky;
-      const areNextOnlyFixedColumns = !processedColumns.slice(colIndex + 1)
-        .some(({ fixed }: { fixed: boolean }) => !fixed);
 
-      offset += processedWidths[colIndex];
+      offset += nextOrPrevColumnWidths[colIndex];
 
-      if (colIndex === 0 && areNextOnlyFixedColumns) {
-        nonAdjacentStickyColumnCount = 0;
-      } else if (targetColumnIsSticky && columnIsSticky && !areNextOnlyFixedColumns) {
+      if (targetColumnIsSticky && columnIsSticky
+        && !areNextOnlyFixedOrHiddenColumns(that, nextOrPrevColumns.slice(colIndex + 1))) {
         if (colIndex !== adjacentStickyColumnIndex) {
-          nonAdjacentStickyColumnCount += 1;
+          nonSiblingStickyColumnCount += 1;
           adjacentStickyColumnIndex = colIndex + 1;
         } else {
           adjacentStickyColumnIndex += 1;
         }
       }
-    } else if (col.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
+    } else if (!isVisibleColumn(that, col)) {
       adjacentStickyColumnIndex += 1;
     }
   });
@@ -107,7 +122,7 @@ const getStickyOffsetCore = function (
     return offset;
   }
 
-  return offset - (nonAdjacentStickyColumnCount * STICKY_BORDER_WIDTH);
+  return offset - (nonSiblingStickyColumnCount * STICKY_BORDER_WIDTH);
 };
 
 const isFirstOrLastColumn = function (
@@ -144,23 +159,7 @@ const getPrevColumn = function (
 
   return visibleColumns?.slice(0, visibleColumnIndex)
     .reverse()
-    .find((col) => col.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
-};
-
-const prevColumnIsFixedCore = function (
-  that: ColumnsController,
-  column,
-  visibleColumns,
-  rowIndex: number | null,
-): boolean {
-  const prevColumn = getPrevColumn(that, column, visibleColumns, rowIndex);
-  const fixedPosition = getColumnFixedPosition(that, column);
-
-  return !!prevColumn?.fixed && !needToDisableStickyColumn(that, prevColumn)
-    && (!column.fixed
-      || fixedPosition === StickyPosition.Sticky
-      || fixedPosition !== getColumnFixedPosition(that, prevColumn)
-    );
+    .find((col) => isVisibleColumn(that, col));
 };
 
 export const getStickyOffset = function (
@@ -180,6 +179,7 @@ export const getStickyOffset = function (
     switch (fixedPosition) {
       case StickyPosition.Sticky: {
         const offsetLeft = getStickyOffsetCore(
+          that,
           columns,
           widths,
           columnIndex,
@@ -188,6 +188,7 @@ export const getStickyOffset = function (
         );
 
         const offsetRight = getStickyOffsetCore(
+          that,
           columns,
           widths,
           columnIndex,
@@ -201,6 +202,7 @@ export const getStickyOffset = function (
       }
       case StickyPosition.Right: {
         const offsetRight = getStickyOffsetCore(
+          that,
           columns,
           widths,
           columnIndex,
@@ -213,6 +215,7 @@ export const getStickyOffset = function (
       }
       default: {
         const offsetLeft = getStickyOffsetCore(
+          that,
           columns,
           widths,
           columnIndex,
@@ -228,7 +231,23 @@ export const getStickyOffset = function (
   return result;
 };
 
-export const prevColumnIsFixed = function (
+const needToRemoveColumnBorderCore = function (
+  that: ColumnsController,
+  column,
+  visibleColumns,
+  rowIndex: number | null,
+): boolean {
+  const prevColumn = getPrevColumn(that, column, visibleColumns, rowIndex);
+  const columnFixedPosition = getColumnFixedPosition(that, column);
+  const prevColumnFixedPosition = prevColumn && getColumnFixedPosition(that, prevColumn);
+  return !!prevColumn?.fixed && !needToDisableStickyColumn(that, prevColumn)
+    && (!column.fixed
+      || columnFixedPosition === StickyPosition.Sticky
+      || prevColumnFixedPosition === StickyPosition.Sticky
+    );
+};
+
+export const needToRemoveColumnBorder = function (
   that: ColumnsController,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   column,
@@ -241,10 +260,11 @@ export const prevColumnIsFixed = function (
   if (parentColumn) {
     const isFirstColumn = that.isFirstColumn(column, rowIndex, true);
 
-    return isFirstColumn && prevColumnIsFixedCore(that, parentColumn, that.getVisibleColumns(0), 0);
+    return isFirstColumn
+      && needToRemoveColumnBorderCore(that, parentColumn, that.getVisibleColumns(0), 0);
   }
 
-  return prevColumnIsFixedCore(that, column, visibleColumns, rowIndex);
+  return needToRemoveColumnBorderCore(that, column, visibleColumns, rowIndex);
 };
 
 export const normalizeOffset = function (offset: Record<string, number>): CSSStyleDeclaration {

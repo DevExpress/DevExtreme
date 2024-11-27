@@ -314,10 +314,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get value(): Array<any> | (() => any) | string {
+    get value(): Array<any> | Function | string {
         return this._getOption('value');
     }
-    set value(value: Array<any> | (() => any) | string) {
+    set value(value: Array<any> | Function | string) {
         this._setOption('value', value);
     }
 
@@ -527,7 +527,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<Array<any> | (() => any) | string>;
+    @Output() valueChange: EventEmitter<Array<any> | Function | string>;
 
     /**
     

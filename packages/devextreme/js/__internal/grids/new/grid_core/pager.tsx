@@ -9,12 +9,14 @@ export class PagerView extends View {
   public vdom = computed(
     (pageIndex, pageSize, pageCount) => <div>
       <Pager
-        pageIndex={pageIndex}
-        pageIndexChanged={this.dataController.pageIndex.update}
+        // TODO: fix the '??'
+        pageIndex={(pageIndex ?? 0) + 1}
+        pageIndexChanged={
+          (value): void => this.dataController.pageIndex.update(value - 1)
+        }
         pageSize={pageSize}
         pageSizeChanged={this.dataController.pageSize.update}
         gridCompatibility={false}
-        pageSizes={[2, 6, 18]}
         pageCount={pageCount}
         // @ts-expect-error
         _skipValidation={true}

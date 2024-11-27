@@ -1,40 +1,7 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import type { DataType } from '@js/common';
 import { captionize } from '@js/core/utils/inflector';
 
-import type { Column, ColumnProperties } from './types';
-
-const defaultColumnProperties = {
-  dataType: 'string',
-  calculateCellValue(data): unknown {
-    // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return data[this.dataField!];
-  },
-  alignment: 'left',
-  visible: true,
-} satisfies Partial<Column>;
-
-const defaultColumnPropertiesByDataType: Record<DataType, Exclude<ColumnProperties, string>> = {
-  boolean: {
-    alignment: 'center',
-  },
-  string: {
-
-  },
-  date: {
-
-  },
-  datetime: {
-
-  },
-  number: {
-    alignment: 'right',
-  },
-  object: {
-
-  },
-};
+import { type ColumnProperties, defaultColumnProperties, defaultColumnPropertiesByDataType } from './options';
+import type { Column } from './types';
 
 export function normalizeColumn(column: ColumnProperties, index: number): Column {
   let col = column;

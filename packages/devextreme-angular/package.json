@@ -24,10 +24,10 @@
     "devextreme": "workspace:~"
   },
   "devDependencies": {
-    "@angular-devkit/architect": "0.1703.8",
-    "@angular-devkit/schematics": "17.3.8",
+    "@angular-devkit/architect": "0.1703.11",
+    "@angular-devkit/schematics": "17.3.11",
     "@angular/animations": "17.3.12",
-    "@angular/cli": "17.3.8",
+    "@angular/cli": "17.3.11",
     "@angular/common": "17.3.12",
     "@angular/compiler": "17.3.12",
     "@angular/compiler-cli": "17.3.12",
@@ -56,7 +56,7 @@
     "karma-junit-reporter": "^2.0.1",
     "karma-webpack": "5.0.1",
     "ng-packagr": "17.3.0",
-    "puppeteer": "~23.1.1",
+    "puppeteer": "~23.6.1",
     "reflect-metadata": "0.1.13",
     "rxjs": "7.8.1",
     "stream-browserify": "3.0.0",

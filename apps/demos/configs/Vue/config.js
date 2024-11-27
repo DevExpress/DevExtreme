@@ -56,9 +56,14 @@ window.config = {
     'devextreme-aspnet-data-nojquery': 'npm:devextreme-aspnet-data-nojquery/index.js',
     /**/
 
-    /** showdown&turndown */
-    'showdown': 'npm:showdown/dist/showdown.js',
-    'turndown': 'npm:turndown/lib/turndown.browser.umd.js',
+    /** unified */
+    'unified': 'npm:unified/index.js',
+    'rehype-parse': 'npm:rehype-parse/index.js',
+    'rehype-remark': 'npm:rehype-remark/index.js',
+    'rehype-stringify': 'npm:rehype-stringify/index.js',
+    'remark-parse': 'npm:remark-parse/index.js',
+    'remark-rehype': 'npm:remark-rehype/index.js',
+    'remark-stringify': 'npm:remark-stringify/index.js',
     /**/
 
     /** globalize--vue&react */

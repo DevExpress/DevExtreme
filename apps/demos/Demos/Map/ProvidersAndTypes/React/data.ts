@@ -15,11 +15,11 @@ export const mapProviders: { key: MapProvider, name: string }[] = [{
   key: 'azure',
   name: 'Azure',
 }, {
-  key: 'bing',
-  name: 'Bing',
-}, {
   key: 'google',
   name: 'Google',
+}, {
+  key: 'bing',
+  name: 'Bing',
 }];
 
 export const mapTypeLabel = { 'aria-label': 'Map Type' };

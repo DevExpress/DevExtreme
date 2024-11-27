@@ -303,6 +303,8 @@
         "dxScheduler-recurrenceRepeatCount": "occurrence(s)",
         "dxScheduler-allDay": "All day",
 
+        "dxScheduler-ariaEditForm": "Edit form",
+
         "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
         "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
 

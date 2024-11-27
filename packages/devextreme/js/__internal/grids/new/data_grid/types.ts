@@ -1,5 +1,5 @@
-import type { Properties as BaseProperties } from '@ts/grids/new/grid_core/types';
+import type { Options as BaseProperties } from '@ts/grids/new/grid_core/options';
 
-export interface Properties extends BaseProperties {
+export interface Options extends BaseProperties {
 
 }

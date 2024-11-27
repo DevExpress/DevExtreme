@@ -5,7 +5,7 @@ import dxCardView, {
     Properties
 } from "devextreme/ui/card_view";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 type ICardViewOptions = React.PropsWithChildren<Properties & IHtmlOptions>
@@ -53,15 +53,18 @@ type IPagingProps = React.PropsWithChildren<{
   pageIndex?: number;
   pageSize?: number;
 }>
-const _componentPaging = memo(
-  (props: IPagingProps) => {
-    return React.createElement(NestedOption<IPagingProps>, { ...props });
-  }
-);
+const _componentPaging = (props: IPagingProps) => {
+  return React.createElement(NestedOption<IPagingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "paging",
+    },
+  });
+};
 
-const Paging: typeof _componentPaging & IElementDescriptor = Object.assign(_componentPaging, {
-  OptionName: "paging",
-})
+const Paging = Object.assign<typeof _componentPaging, NestedComponentMeta>(_componentPaging, {
+  componentType: "option",
+});
 
 export default CardView;
 export {

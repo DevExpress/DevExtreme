@@ -1,9 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import type { DataSourceLike } from '@js/data/data_source';
-import DataSource from '@js/data/data_source';
-import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
 import type { Subscribable } from '@ts/core/reactive/index';
 import {
   computed, effect, state,
@@ -12,28 +9,7 @@ import {
 // import { EditingController } from '../editing/controller';
 // import type { Change } from '../editing/types';
 import { OptionsController } from '../options_controller/options_controller';
-
-export function normalizeDataSource(
-  dataSourceLike: DataSourceLike<unknown, unknown> | null | undefined,
-  keyExpr: string | string[] | undefined,
-): DataSource<unknown, unknown> {
-  if (dataSourceLike instanceof DataSource) {
-    return dataSourceLike;
-  }
-
-  if (Array.isArray(dataSourceLike)) {
-    dataSourceLike = {
-      store: {
-        type: 'array',
-        data: dataSourceLike,
-        key: keyExpr,
-      },
-    };
-  }
-
-  // TODO: research making second param not required
-  return new DataSource(normalizeDataSourceOptions(dataSourceLike, undefined));
-}
+import { normalizeDataSource } from './utils';
 
 export class DataController {
   private readonly dataSourceConfiguration = this.options.oneWay('dataSource');
@@ -62,7 +38,7 @@ export class DataController {
   public readonly isLoading: Subscribable<boolean> = this._isLoading;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public readonly filter = state<any>(undefined);
+  public readonly filter = this.options.twoWay('filterValue');
 
   // public itemsWithChanges = computed(
   //   (items, changes: Change[] | undefined) => items.map((item) => (changes ?? []).filter(
@@ -88,6 +64,8 @@ export class DataController {
       (dataSource) => {
         const changedCallback = (): void => {
           this._items.update(dataSource.items());
+          this.pageIndex.update(dataSource.pageIndex());
+          this.pageSize.update(dataSource.pageSize());
           this._totalCount.update(dataSource.totalCount());
         };
         const loadingChangedCallback = (): void => {
@@ -108,15 +86,32 @@ export class DataController {
     );
 
     effect(
-      (pageIndex, pageSize, dataSource, filter) => {
-        dataSource.pageIndex(pageIndex!);
-        dataSource.requireTotalCount(true);
-        dataSource.pageSize(pageSize!);
-        dataSource.filter(filter);
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        dataSource.load();
+      (dataSource, pageIndex, pageSize, filter) => {
+        let someParamChanged = false;
+        if (dataSource.pageIndex() !== pageIndex) {
+          dataSource.pageIndex(pageIndex!);
+          someParamChanged ||= true;
+        }
+        if (dataSource.pageSize() !== pageSize) {
+          dataSource.pageSize(pageSize!);
+          someParamChanged ||= true;
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
+        if (dataSource.requireTotalCount() !== true) {
+          dataSource.requireTotalCount(true);
+          someParamChanged ||= true;
+        }
+        if (dataSource.filter() !== filter) {
+          dataSource.filter(filter);
+          someParamChanged ||= true;
+        }
+
+        if (someParamChanged || !dataSource.isLoaded()) {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          dataSource.load();
+        }
       },
-      [this.pageIndex, this.pageSize, this.dataSource, this.filter],
+      [this.dataSource, this.pageIndex, this.pageSize, this.filter],
     );
   }
 

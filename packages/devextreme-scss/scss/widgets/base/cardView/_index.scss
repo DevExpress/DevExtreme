@@ -2,22 +2,49 @@
 @use './sizes' as *;
 @use '../gridCore/error_row';
 
-.dx-cardview-content {
+.dx-cardview {
   display: flex;
-  flex-wrap: wrap;
-  column-gap: $cardview-content-view-column-gap;
-  row-gap: $cardview-content-view-row-gap;
+  flex-direction: column;
+
+  > .dx-scrollable {
+    height: auto
+  }
+}
+
+.dx-cardview-content {
+  &-grid {
+    display: grid;
+    column-gap: $cardview-content-view-column-gap;
+    row-gap: $cardview-content-view-row-gap;
+    grid-template-columns: repeat(var(--dx-cardview-cardsperrow), 1fr);
+
+    .dx-cardview-card {
+    }
+  }
+
+  &-flex {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: $cardview-content-view-column-gap;
+    row-gap: $cardview-content-view-row-gap;
+
+    .dx-cardview-card {
+      // NOTE: comes from equestion `cardViewWidth = cardWidth * cardCount + gapWidth * (cardCount - 1)`
+      width: calc((100% - ($cardview-content-view-column-gap * (var(--dx-cardview-cardsperrow) - 1))) / var(--dx-cardview-cardsperrow));
+    }
+  }
 }
 
 .dx-cardview-card {
-  width: 300px;
+  min-width: fit-content;
   border: 1px solid black;
   padding: 15px 30px;
 }
 
 .dx-cardview-field span {
   display: inline-block;
-  width: 50%; 
+  width: 50%;
+  white-space: nowrap;
 }
 
 .dx-gridcore-headers {

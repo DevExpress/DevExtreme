@@ -250,6 +250,7 @@
         "dxPivotGrid-filterFieldArea": "拖動篩選欄位到此處",
 
         "dxScheduler-ariaLabel": "Scheduler. {0} view",
+        
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
@@ -301,6 +302,8 @@
         "dxScheduler-recurrenceRepeatOnDate": "於日期",
         "dxScheduler-recurrenceRepeatCount": "事件",
         "dxScheduler-allDay": "全天",
+
+        "dxScheduler-ariaEditForm": "Edit form",
 
         "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
         "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",

@@ -22,39 +22,27 @@ const App = () => (
       calculateCellValue={calculateCellValue}
     />
     <Column
+      dataField="Position"
+      alignment="right"
+      fixed={true}
+    />
+    <Column dataField="Address" />
+    <Column dataField="City" />
+    <Column dataField="Zipcode" />
+    <Column dataField="State" />
+    <Column dataField="Department" />
+    <Column
       dataField="BirthDate"
       dataType="date"
     />
     <Column
-      dataField="Address"
-      width={190}
-      fixed={true}
-      fixedPosition="sticky"
-    />
-    <Column dataField="Zipcode" />
-    <Column
       dataField="HireDate"
       dataType="date"
     />
-    <Column
-      dataField="Position"
-      alignment="right"
-    />
-    <Column
-      dataField="City"
-      fixed={true}
-      fixedPosition="right"
-    />
-    <Column
-      dataField="State"
-      fixed={true}
-      fixedPosition="right"
-    />
-    <Column dataField="Department" />
     <Column dataField="HomePhone" />
     <Column dataField="MobilePhone" />
-    <Column dataField="Skype" />
     <Column dataField="Email" />
+    <Column dataField="Skype" />
   </TreeList>
 );
 export default App;

@@ -1,4 +1,7 @@
-import type { Properties as BaseProperties } from '@ts/grids/new/grid_core/types';
+import type { Options as BaseOptions } from '@ts/grids/new/grid_core/options';
 
-export type Properties =
-  BaseProperties;
+export type Options =
+  BaseOptions & {
+    cardsPerRow?: number | 'auto';
+    cardMinWidth?: number;
+  };

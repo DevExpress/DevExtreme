@@ -230,6 +230,13 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
         line-height: $generic-base-inline-block-height;
       }
     }
+
+    .dx-#{$widget-name}-drop-highlight {
+      & > td {
+        background-color: $datagrid-drop-highlight-bg;
+        color: $datagrid-drop-highlight-color;
+      }
+    }
   }
 
   .dx-#{$widget-name}-edit-popup .dx-error-message {
@@ -410,13 +417,6 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
 
   .dx-#{$widget-name}-columns-separator-transparent {
     background-color: transparent;
-  }
-
-  .dx-#{$widget-name}-drop-highlight {
-    & > td {
-      background-color: $datagrid-drop-highlight-bg;
-      color: $datagrid-drop-highlight-color;
-    }
   }
 
   .dx-#{$widget-name}-focus-overlay {

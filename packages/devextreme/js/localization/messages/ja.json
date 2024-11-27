@@ -250,6 +250,7 @@
         "dxPivotGrid-filterFieldArea": "フィルター フィールドをこちらへドラッグ＆ドロップ",
 
         "dxScheduler-ariaLabel": "Scheduler. {0} view",
+        
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
@@ -301,6 +302,8 @@
         "dxScheduler-recurrenceRepeatOnDate": "次の日付に終了",
         "dxScheduler-recurrenceRepeatCount": "出現",
         "dxScheduler-allDay": "終日イベント",
+
+        "dxScheduler-ariaEditForm": "Edit form",
 
         "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
         "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
