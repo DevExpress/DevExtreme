@@ -2151,6 +2151,24 @@ QUnit.module('Options', {
                 assert.ok($cell.hasClass(CALENDAR_CELL_IN_RANGE_CLASS));
             });
 
+
+            QUnit.test(`Cells between startDate and endDate should have ${CALENDAR_CELL_IN_RANGE_CLASS} class even after currentDate runtime change (T1253076)`, function(assert) {
+                this.reinit({
+                    value: ['2025/01/01', '2025/12/31'],
+                    selectionMode: 'range',
+                    viewsCount: 2,
+                });
+
+                this.calendar.option('currentDate', new Date('2025-12-31'));
+
+                const $prevButton = $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS)));
+                $prevButton.trigger('dxclick');
+
+                const $cell = $(getCurrentViewInstance(this.calendar).$element().find('*[data-value="2025/11/01"]'));
+
+                assert.ok($cell.hasClass(CALENDAR_CELL_IN_RANGE_CLASS), 'cell is highlighted');
+            });
+
             QUnit.test('Should reselect startDate and clear endDate on click when both value are defined', function(assert) {
                 const expectedValue = [new Date('2023/01/11'), null];
                 const $cell = $(getCurrentViewInstance(this.calendar).$element().find('*[data-value="2023/01/11"]'));
