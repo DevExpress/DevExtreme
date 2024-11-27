@@ -117,8 +117,8 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
 
     const { currentDate, viewsCount } = this.calendar.option();
     const isAdditionalViewDate = this.calendar._isAdditionalViewDate(currentDate);
-    const firstDateInViews = dateUtils.getFirstMonthDate(dateUtils.addDateInterval(currentDate, 'month', isAdditionalViewDate ? -2 : -1));
-    const lastDateInViews = dateUtils.getLastMonthDate(dateUtils.addDateInterval(currentDate, 'month', isAdditionalViewDate ? 1 : viewsCount));
+    const firstDateInViews = dateUtils.getFirstMonthDate(currentDate, isAdditionalViewDate ? -2 : -1);
+    const lastDateInViews = dateUtils.getLastMonthDate(currentDate, isAdditionalViewDate ? 1 : viewsCount);
 
     // @ts-expect-error
     const rangeStartDate = new Date(Math.max(firstDateInViews, startDate));
