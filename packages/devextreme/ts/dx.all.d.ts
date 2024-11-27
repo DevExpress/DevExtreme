@@ -1772,11 +1772,6 @@ declare module DevExpress.common {
     stopPropagation(): void;
   };
   /**
-   * [descr:handler(event, extraParameters)]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export function eventsHandler(event: DxEvent, extraParameters: any): boolean;
-  /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface EventType {}
@@ -6924,6 +6919,14 @@ declare module DevExpress.data.utils.odata {
   export var keyConverters: any;
 }
 declare module DevExpress.events {
+  /**
+   * [descr:handler(event, extraParameters)]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export function eventsHandler(
+    event: DevExpress.common.DxEvent,
+    extraParameters: any
+  ): boolean;
   /**
    * [descr:events.off(element)]
    */

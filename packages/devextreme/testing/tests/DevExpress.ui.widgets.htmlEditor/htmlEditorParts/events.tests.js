@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import 'ui/html_editor';
 import { deferUpdate } from 'core/utils/common';
-import { Event as dxEvent } from 'common/core/events/index';
+import { Event as dxEvent } from 'common/core/events';
 
 import devices from '__internal/core/m_devices';
 import eventsEngine from 'common/core/events/core/events_engine';

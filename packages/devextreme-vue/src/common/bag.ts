@@ -2,7 +2,6 @@ export * as common from './index';
 export * as animation from './core/animation';
 export * as environment from './core/environment';
 export * as events from './core/events';
-export * as eventsIndex from './core/events/index';
 export * as localization from './core/localization';
 export * as charts from './charts';
 export * as data from './data';

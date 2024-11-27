@@ -3,7 +3,7 @@ import './converters/m_delta';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import scrollEvents from '@js/common/core/events/gesture/emitter.gesture.scroll';
 // @ts-expect-error
-import { Event as dxEvent } from '@js/common/core/events/index';
+import { Event as dxEvent } from '@js/common/core/events';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';

@@ -1,3 +1,5 @@
+import { DxEvent } from '../common/core/events';
+
 export {
   /**
    * @deprecated Use on from /common/core/events instead
@@ -64,18 +66,19 @@ export {
    */
   EventType,
   /**
-   * @deprecated Use dxEvent from /common/core/events/index instead
+   * @deprecated Use dxEvent from /common/core/events instead
    */
   dxEvent,
   /**
-   * @deprecated Use event from /common/core/events/index instead
+   * @deprecated Use event from /common/core/events instead
    */
   event,
 } from '../common/core/events';
 
-export {
-  /**
-   * @deprecated Use eventsHandler from /common/core/events/index instead
-   */
-  eventsHandler,
-} from '../common/core/events/index';
+/**
+ * @docid
+ * @publicName handler(event, extraParameters)
+ * @param2 extraParameters:object
+ * @hidden
+ */
+export function eventsHandler(event: DxEvent, extraParameters: any): boolean;

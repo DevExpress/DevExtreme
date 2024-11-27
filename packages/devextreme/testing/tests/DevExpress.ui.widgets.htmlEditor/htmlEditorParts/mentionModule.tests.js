@@ -5,7 +5,7 @@ import Mentions from '__internal/ui/html_editor/modules/m_mentions';
 
 import { noop } from 'core/utils/common';
 import devices from '__internal/core/m_devices';
-import { Event as dxEvent } from 'common/core/events/index';
+import { Event as dxEvent } from 'common/core/events';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import Quill from 'devextreme-quill';
 
