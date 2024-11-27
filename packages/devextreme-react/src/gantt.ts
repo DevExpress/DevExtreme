@@ -14,7 +14,7 @@ import type { dxTreeListColumn, dxTreeListRowObject } from "devextreme/ui/tree_l
 import type { FilterOperation, FilterType, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation, HeaderFilterSearchConfig } from "devextreme/common/grids";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/common/data/store_base";
+import type { Store } from "devextreme/data/store";
 import type { dxContextMenuItem } from "devextreme/ui/context_menu";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";

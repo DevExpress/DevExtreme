@@ -1399,7 +1399,7 @@ declare module DevExpress.common {
      */
     byKey(
       key: TKey,
-      extraOptions?: DevExpress.data.LoadOptions<TItem>
+      extraOptions?: DevExpress.data.BaseLoadOptions<TItem>
     ): DevExpress.core.utils.DxPromise<TItem>;
     /**
      * [descr:CustomStore.clearRawDataCache()]
@@ -1413,7 +1413,7 @@ declare module DevExpress.common {
      * [descr:CustomStore.load(options)]
      */
     load(
-      options: DevExpress.data.LoadOptions<TItem>
+      options: DevExpress.data.BaseLoadOptions<TItem>
     ): DevExpress.core.utils.DxExtendedPromise<LoadResult<TItem>>;
   }
   /**
@@ -1449,20 +1449,30 @@ declare module DevExpress.common {
     /**
      * [descr:DataSource.filter()]
      */
-    filter(): FilterDescriptor | Array<FilterDescriptor>;
+    filter():
+      | DevExpress.data.FilterDescriptor
+      | Array<DevExpress.data.FilterDescriptor>;
     /**
      * [descr:DataSource.filter(filterExpr)]
      */
-    filter(filterExpr: FilterDescriptor | Array<FilterDescriptor>): void;
+    filter(
+      filterExpr:
+        | DevExpress.data.FilterDescriptor
+        | Array<DevExpress.data.FilterDescriptor>
+    ): void;
     /**
      * [descr:DataSource.group()]
      */
-    group(): GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
+    group():
+      | DevExpress.data.GroupDescriptor<TItem>
+      | Array<DevExpress.data.GroupDescriptor<TItem>>;
     /**
      * [descr:DataSource.group(groupExpr)]
      */
     group(
-      groupExpr: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>
+      groupExpr:
+        | DevExpress.data.GroupDescriptor<TItem>
+        | Array<DevExpress.data.GroupDescriptor<TItem>>
     ): void;
     /**
      * [descr:DataSource.isLastPage()]
@@ -1491,7 +1501,7 @@ declare module DevExpress.common {
     /**
      * [descr:DataSource.loadOptions()]
      */
-    loadOptions(): DevExpress.data.LoadOptions<TItem>;
+    loadOptions(): DevExpress.data.BaseLoadOptions<TItem>;
     /**
      * [descr:DataSource.off(eventName)]
      */
@@ -1571,19 +1581,25 @@ declare module DevExpress.common {
     /**
      * [descr:DataSource.select()]
      */
-    select(): SelectDescriptor<TItem>;
+    select(): DevExpress.data.SelectDescriptor<TItem>;
     /**
      * [descr:DataSource.select(expr)]
      */
-    select(expr: SelectDescriptor<TItem>): void;
+    select(expr: DevExpress.data.SelectDescriptor<TItem>): void;
     /**
      * [descr:DataSource.sort()]
      */
-    sort(): SortDescriptor<TItem> | Array<SortDescriptor<TItem>>;
+    sort():
+      | DevExpress.data.SortDescriptor<TItem>
+      | Array<DevExpress.data.SortDescriptor<TItem>>;
     /**
      * [descr:DataSource.sort(sortExpr)]
      */
-    sort(sortExpr: SortDescriptor<TItem> | Array<SortDescriptor<TItem>>): void;
+    sort(
+      sortExpr:
+        | DevExpress.data.SortDescriptor<TItem>
+        | Array<DevExpress.data.SortDescriptor<TItem>>
+    ): void;
     /**
      * [descr:DataSource.store()]
      */
@@ -1617,8 +1633,12 @@ declare module DevExpress.common {
   > {
     customQueryParams?: any;
     expand?: Array<string> | string;
-    filter?: FilterDescriptor | Array<FilterDescriptor>;
-    group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
+    filter?:
+      | DevExpress.data.FilterDescriptor
+      | Array<DevExpress.data.FilterDescriptor>;
+    group?:
+      | DevExpress.data.GroupDescriptor<TItem>
+      | Array<DevExpress.data.GroupDescriptor<TItem>>;
     map?: (dataItem: TStoreItem) => TMappedItem;
     onChanged?: (e: { readonly changes?: Array<TMappedItem> }) => void;
     onLoadError?: (error: { readonly message?: string }) => void;
@@ -1630,10 +1650,12 @@ declare module DevExpress.common {
     requireTotalCount?: boolean;
     reshapeOnPush?: boolean;
     searchExpr?: string | Function | Array<string | Function>;
-    searchOperation?: SearchOperation;
+    searchOperation?: DevExpress.data.SearchOperation;
     searchValue?: any;
-    select?: SelectDescriptor<TItem>;
-    sort?: SortDescriptor<TItem> | Array<SortDescriptor<TItem>>;
+    select?: DevExpress.data.SelectDescriptor<TItem>;
+    sort?:
+      | DevExpress.data.SortDescriptor<TItem>
+      | Array<DevExpress.data.SortDescriptor<TItem>>;
     store?:
       | Array<TStoreItem>
       | DevExpress.data.utils.Store<TStoreItem, any>
@@ -1770,10 +1792,6 @@ declare module DevExpress.common {
    */
   type ExternalFormat = Intl.DateTimeFormatOptions | Intl.NumberFormatOptions;
   export type FieldChooserLayout = 0 | 1 | 2;
-  /**
-   * [descr:FilterDescriptor]
-   */
-  export type FilterDescriptor = any;
   export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
   export type Format =
     | 'billions'
@@ -1932,24 +1950,6 @@ declare module DevExpress.common {
     licensingDocLink?: string;
   };
   /**
-   * [descr:GroupDescriptor]
-   */
-  export type GroupDescriptor<T> =
-    | KeySelector<T>
-    | (OrderingDescriptor<T> & {
-        groupInterval?: number | GroupingInterval;
-        isExpanded?: boolean;
-      });
-  export type GroupingInterval =
-    | 'year'
-    | 'quarter'
-    | 'month'
-    | 'day'
-    | 'dayOfWeek'
-    | 'hour'
-    | 'minute'
-    | 'second';
-  /**
    * [descr:GroupItem]
    */
   export type GroupItem<TItem = any> = {
@@ -2024,12 +2024,6 @@ declare module DevExpress.common {
      */
     readonly itemIndex: number;
   }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type KeySelector<T> =
-    | string
-    | ((source: T) => string | number | Date | Object);
   export type LabelMode = 'static' | 'floating' | 'hidden' | 'outside';
   /**
    * [descr:LangParams]
@@ -2203,12 +2197,6 @@ declare module DevExpress.common {
       customQueryParams?: any;
     }): Query;
   }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  type OrderingDescriptor<T> = SelectionDescriptor<T> & {
-    desc?: boolean;
-  };
   export type Orientation = 'horizontal' | 'vertical';
   export type PageLoadMode = 'nextButton' | 'scrollBottom';
   export type PageOrientation = 'portrait' | 'landscape';
@@ -2478,31 +2466,7 @@ declare module DevExpress.common {
   export type ScrollDirection = 'both' | 'horizontal' | 'vertical';
   export type ScrollMode = 'standard' | 'virtual';
   export type SearchMode = 'contains' | 'startswith' | 'equals';
-  export type SearchOperation =
-    | '='
-    | '<>'
-    | '>'
-    | '>='
-    | '<'
-    | '<='
-    | 'startswith'
-    | 'endswith'
-    | 'contains'
-    | 'notcontains';
   export type SelectAllMode = 'allPages' | 'page';
-  /**
-   * [descr:SelectDescriptor]
-   */
-  export type SelectDescriptor<T> =
-    | string
-    | Array<string>
-    | ((source: T) => any);
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type SelectionDescriptor<T> = {
-    selector: KeySelector<T>;
-  };
   export type SimplifiedSearchMode = 'contains' | 'startswith';
   export type SingleMultipleAllOrNone = 'single' | 'multiple' | 'all' | 'none';
   export type SingleMultipleOrNone = 'single' | 'multiple' | 'none';
@@ -2510,26 +2474,7 @@ declare module DevExpress.common {
   export type SingleOrNone = 'single' | 'none';
   export type SliderValueChangeMode = 'onHandleMove' | 'onHandleRelease';
   export type Sortable = DevExpress.core.OmitInternal<DevExpress.ui.dxSortable>;
-  /**
-   * [descr:SortDescriptor]
-   */
-  export type SortDescriptor<T> = KeySelector<T> | OrderingDescriptor<T>;
   export type SortOrder = 'asc' | 'desc';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  type StoreEventName =
-    | 'loaded'
-    | 'loading'
-    | 'inserted'
-    | 'inserting'
-    | 'updated'
-    | 'updating'
-    | 'push'
-    | 'removed'
-    | 'removing'
-    | 'modified'
-    | 'modifying';
   export type StoreType = 'array' | 'local' | 'odata';
   /**
    * [descr:StringLengthRule]
@@ -2561,14 +2506,6 @@ declare module DevExpress.common {
     type: 'stringLength';
   };
   export type SubmenuShowMode = 'onClick' | 'onHover';
-  /**
-   * [descr:SummaryDescriptor]
-   */
-  export type SummaryDescriptor<T> =
-    | KeySelector<T>
-    | (SelectionDescriptor<T> & {
-        summaryType?: 'sum' | 'avg' | 'min' | 'max' | 'count';
-      });
   export type TabsIconPosition = 'top' | 'end' | 'bottom' | 'start';
   export type TabsStyle = 'primary' | 'secondary';
   export type TextBoxPredefinedButton = 'clear';
@@ -5792,7 +5729,7 @@ declare module DevExpress.data {
      * [descr:Store.load(options)]
      */
     load(
-      options: LoadOptions<TItem>
+      options: BaseLoadOptions<TItem>
     ): DevExpress.core.utils.DxExtendedPromise<Array<TItem>>;
   }
   module AbstractStore {
@@ -5808,11 +5745,14 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface AbstractStoreOptions<TItem = any, TKey = any>
-    extends DevExpress.data.Store.StoreOptions<TItem, TKey> {
+    extends DevExpress.data.Store.Options<TItem, TKey> {
     /**
-     * [descr:DevExpress.data.Store.StoreOptions.onLoaded]
+     * [descr:StoreOptions.onLoaded]
      */
-    onLoaded?: (result: Array<TItem>, loadOptions: LoadOptions<TItem>) => void;
+    onLoaded?: (
+      result: Array<TItem>,
+      loadOptions: BaseLoadOptions<TItem>
+    ) => void;
   }
   /**
    * [descr:Utils.applyChanges(data, changes, options)]
@@ -5838,17 +5778,98 @@ declare module DevExpress.data {
    */
   export function base64_encode(input: string | Array<number>): string;
   /**
+   * [descr:LoadOptions]
+   */
+  export interface BaseLoadOptions<T = any> {
+    /**
+     * [descr:BaseLoadOptions.customQueryParams]
+     */
+    customQueryParams?: any;
+    /**
+     * [descr:BaseLoadOptions.startDate]
+     */
+    startDate?: Date;
+    /**
+     * [descr:BaseLoadOptions.endDate]
+     */
+    endDate?: Date;
+    /**
+     * [descr:BaseLoadOptions.expand]
+     */
+    expand?: Array<string>;
+    /**
+     * [descr:BaseLoadOptions.filter]
+     */
+    filter?: FilterDescriptor | Array<FilterDescriptor>;
+    /**
+     * [descr:BaseLoadOptions.group]
+     */
+    group?: GroupDescriptor<T> | Array<GroupDescriptor<T>>;
+    /**
+     * [descr:BaseLoadOptions.groupSummary]
+     */
+    groupSummary?: SummaryDescriptor<T> | Array<SummaryDescriptor<T>>;
+    /**
+     * [descr:BaseLoadOptions.parentIds]
+     */
+    parentIds?: Array<any>;
+    /**
+     * [descr:BaseLoadOptions.requireGroupCount]
+     */
+    requireGroupCount?: boolean;
+    /**
+     * [descr:BaseLoadOptions.requireTotalCount]
+     */
+    requireTotalCount?: boolean;
+    /**
+     * [descr:BaseLoadOptions.searchExpr]
+     */
+    searchExpr?: string | Function | Array<string | Function>;
+    /**
+     * [descr:BaseLoadOptions.searchOperation]
+     */
+    searchOperation?: SearchOperation;
+    /**
+     * [descr:BaseLoadOptions.searchValue]
+     */
+    searchValue?: any;
+    /**
+     * [descr:BaseLoadOptions.select]
+     */
+    select?: SelectDescriptor<T>;
+    /**
+     * [descr:BaseLoadOptions.skip]
+     */
+    skip?: number;
+    /**
+     * [descr:BaseLoadOptions.sort]
+     */
+    sort?: SortDescriptor<T> | Array<SortDescriptor<T>>;
+    /**
+     * [descr:BaseLoadOptions.take]
+     */
+    take?: number;
+    /**
+     * [descr:BaseLoadOptions.totalSummary]
+     */
+    totalSummary?: SummaryDescriptor<T> | Array<SummaryDescriptor<T>>;
+    /**
+     * [descr:BaseLoadOptions.userData]
+     */
+    userData?: any;
+  }
+  /**
    * [descr:CustomStoreOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface CustomStoreOptions<TItem = any, TKey = any>
-    extends DevExpress.data.Store.StoreOptions<TItem, TKey> {
+    extends DevExpress.data.Store.Options<TItem, TKey> {
     /**
      * [descr:CustomStoreOptions.byKey]
      */
     byKey?: (
       key: TKey,
-      extraOptions?: LoadOptions<TItem>
+      extraOptions?: BaseLoadOptions<TItem>
     ) => PromiseLike<TItem>;
     /**
      * [descr:CustomStoreOptions.cacheRawData]
@@ -5862,7 +5883,7 @@ declare module DevExpress.data {
      * [descr:CustomStoreOptions.load]
      */
     load: (
-      options: LoadOptions<TItem>
+      options: BaseLoadOptions<TItem>
     ) => DevExpress.common.LoadFunctionResult<
       DevExpress.common.LoadResult<TItem>
     >;
@@ -5875,7 +5896,7 @@ declare module DevExpress.data {
      */
     onLoaded?: (
       result: DevExpress.common.LoadResult<TItem>,
-      loadOptions: LoadOptions<TItem>
+      loadOptions: BaseLoadOptions<TItem>
     ) => void;
     /**
      * [descr:CustomStoreOptions.remove]
@@ -5885,12 +5906,8 @@ declare module DevExpress.data {
      * [descr:CustomStoreOptions.totalCount]
      */
     totalCount?: (loadOptions: {
-      filter?:
-        | DevExpress.common.FilterDescriptor
-        | Array<DevExpress.common.FilterDescriptor>;
-      group?:
-        | DevExpress.common.GroupDescriptor<TItem>
-        | Array<DevExpress.common.GroupDescriptor<TItem>>;
+      filter?: FilterDescriptor | Array<FilterDescriptor>;
+      group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     }) => PromiseLike<number>;
     /**
      * [descr:CustomStoreOptions.update]
@@ -5922,15 +5939,11 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.filter]
      */
-    filter?:
-      | DevExpress.common.FilterDescriptor
-      | Array<DevExpress.common.FilterDescriptor>;
+    filter?: FilterDescriptor | Array<FilterDescriptor>;
     /**
      * [descr:DataSourceOptions.group]
      */
-    group?:
-      | DevExpress.common.GroupDescriptor<TItem>
-      | Array<DevExpress.common.GroupDescriptor<TItem>>;
+    group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     /**
      * [descr:DataSourceOptions.langParams]
      */
@@ -5982,7 +5995,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.searchOperation]
      */
-    searchOperation?: DevExpress.common.SearchOperation;
+    searchOperation?: SearchOperation;
     /**
      * [descr:DataSourceOptions.searchValue]
      */
@@ -5990,13 +6003,11 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.select]
      */
-    select?: DevExpress.common.SelectDescriptor<TItem>;
+    select?: SelectDescriptor<TItem>;
     /**
      * [descr:DataSourceOptions.sort]
      */
-    sort?:
-      | DevExpress.common.SortDescriptor<TItem>
-      | Array<DevExpress.common.SortDescriptor<TItem>>;
+    sort?: SortDescriptor<TItem> | Array<SortDescriptor<TItem>>;
     /**
      * [descr:DataSourceOptions.store]
      */
@@ -6021,6 +6032,28 @@ declare module DevExpress.data {
    */
   export function errorHandler(e: Error): void;
   /**
+   * [descr:FilterDescriptor]
+   */
+  export type FilterDescriptor = any;
+  /**
+   * [descr:GroupDescriptor]
+   */
+  export type GroupDescriptor<T> =
+    | KeySelector<T>
+    | (OrderingDescriptor<T> & {
+        groupInterval?: number | GroupingInterval;
+        isExpanded?: boolean;
+      });
+  export type GroupingInterval =
+    | 'year'
+    | 'quarter'
+    | 'month'
+    | 'day'
+    | 'dayOfWeek'
+    | 'hour'
+    | 'minute'
+    | 'second';
+  /**
    * [descr:Guid]
    */
   export class Guid {
@@ -6036,96 +6069,11 @@ declare module DevExpress.data {
     valueOf(): string;
   }
   /**
-   * [descr:LoadOptions]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface LoadOptions<T = any> {
-    /**
-     * [descr:LoadOptions.customQueryParams]
-     */
-    customQueryParams?: any;
-    /**
-     * [descr:LoadOptions.startDate]
-     */
-    startDate?: Date;
-    /**
-     * [descr:LoadOptions.endDate]
-     */
-    endDate?: Date;
-    /**
-     * [descr:LoadOptions.expand]
-     */
-    expand?: Array<string>;
-    /**
-     * [descr:LoadOptions.filter]
-     */
-    filter?:
-      | DevExpress.common.FilterDescriptor
-      | Array<DevExpress.common.FilterDescriptor>;
-    /**
-     * [descr:LoadOptions.group]
-     */
-    group?:
-      | DevExpress.common.GroupDescriptor<T>
-      | Array<DevExpress.common.GroupDescriptor<T>>;
-    /**
-     * [descr:LoadOptions.groupSummary]
-     */
-    groupSummary?:
-      | DevExpress.common.SummaryDescriptor<T>
-      | Array<DevExpress.common.SummaryDescriptor<T>>;
-    /**
-     * [descr:LoadOptions.parentIds]
-     */
-    parentIds?: Array<any>;
-    /**
-     * [descr:LoadOptions.requireGroupCount]
-     */
-    requireGroupCount?: boolean;
-    /**
-     * [descr:LoadOptions.requireTotalCount]
-     */
-    requireTotalCount?: boolean;
-    /**
-     * [descr:LoadOptions.searchExpr]
-     */
-    searchExpr?: string | Function | Array<string | Function>;
-    /**
-     * [descr:LoadOptions.searchOperation]
-     */
-    searchOperation?: DevExpress.common.SearchOperation;
-    /**
-     * [descr:LoadOptions.searchValue]
-     */
-    searchValue?: any;
-    /**
-     * [descr:LoadOptions.select]
-     */
-    select?: DevExpress.common.SelectDescriptor<T>;
-    /**
-     * [descr:LoadOptions.skip]
-     */
-    skip?: number;
-    /**
-     * [descr:LoadOptions.sort]
-     */
-    sort?:
-      | DevExpress.common.SortDescriptor<T>
-      | Array<DevExpress.common.SortDescriptor<T>>;
-    /**
-     * [descr:LoadOptions.take]
-     */
-    take?: number;
-    /**
-     * [descr:LoadOptions.totalSummary]
-     */
-    totalSummary?:
-      | DevExpress.common.SummaryDescriptor<T>
-      | Array<DevExpress.common.SummaryDescriptor<T>>;
-    /**
-     * [descr:LoadOptions.userData]
-     */
-    userData?: any;
-  }
+  export type KeySelector<T> =
+    | string
+    | ((source: T) => string | number | Date | Object);
   /**
    * [descr:LocalStoreOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -6275,6 +6223,12 @@ declare module DevExpress.data {
     TItem = TMappedItem,
     TKey = any
   > = DataSourceOptions<TStoreItem, TItem, TMappedItem, TKey>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type OrderingDescriptor<T> = SelectionDescriptor<T> & {
+    desc?: boolean;
+  };
   /**
    * [descr:PivotGridDataSource]
    */
@@ -6689,10 +6643,38 @@ declare module DevExpress.data {
     url: string,
     queryOptions: any
   ): DevExpress.common.Query;
+  export type SearchOperation =
+    | '='
+    | '<>'
+    | '>'
+    | '>='
+    | '<'
+    | '<='
+    | 'startswith'
+    | 'endswith'
+    | 'contains'
+    | 'notcontains';
+  /**
+   * [descr:SelectDescriptor]
+   */
+  export type SelectDescriptor<T> =
+    | string
+    | Array<string>
+    | ((source: T) => any);
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type SelectionDescriptor<T> = {
+    selector: KeySelector<T>;
+  };
   /**
    * [descr:Utils.setErrorHandler]
    */
   export function setErrorHandler(handler: (e: Error) => void): void;
+  /**
+   * [descr:SortDescriptor]
+   */
+  export type SortDescriptor<T> = KeySelector<T> | OrderingDescriptor<T>;
   /**
    * [descr:Store]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -6714,25 +6696,19 @@ declare module DevExpress.data {
     /**
      * [descr:Store.off(eventName)]
      */
-    off(eventName: DevExpress.common.StoreEventName): this;
+    off(eventName: StoreEventName): this;
     /**
      * [descr:Store.off(eventName, eventHandler)]
      */
-    off(
-      eventName: DevExpress.common.StoreEventName,
-      eventHandler: Function
-    ): this;
+    off(eventName: StoreEventName, eventHandler: Function): this;
     /**
      * [descr:Store.on(eventName, eventHandler)]
      */
-    on(
-      eventName: DevExpress.common.StoreEventName,
-      eventHandler: Function
-    ): this;
+    on(eventName: StoreEventName, eventHandler: Function): this;
     /**
      * [descr:Store.on(events)]
      */
-    on(events: { [key in DevExpress.common.StoreEventName]?: Function }): this;
+    on(events: { [key in StoreEventName]?: Function }): this;
     /**
      * [descr:Store.push(changes)]
      */
@@ -6752,12 +6728,8 @@ declare module DevExpress.data {
      * [descr:Store.totalCount(options)]
      */
     totalCount(obj: {
-      filter?:
-        | DevExpress.common.FilterDescriptor
-        | Array<DevExpress.common.FilterDescriptor>;
-      group?:
-        | DevExpress.common.GroupDescriptor<TItem>
-        | Array<DevExpress.common.GroupDescriptor<TItem>>;
+      filter?: FilterDescriptor | Array<FilterDescriptor>;
+      group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     }): DevExpress.core.utils.DxPromise<number>;
     /**
      * [descr:Store.update(key, values)]
@@ -6767,6 +6739,29 @@ declare module DevExpress.data {
       values: DevExpress.core.DeepPartial<TItem>
     ): DevExpress.core.utils.DxExtendedPromise<TItem>;
   }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type StoreEventName =
+    | 'loaded'
+    | 'loading'
+    | 'inserted'
+    | 'inserting'
+    | 'updated'
+    | 'updating'
+    | 'push'
+    | 'removed'
+    | 'removing'
+    | 'modified'
+    | 'modifying';
+  /**
+   * [descr:SummaryDescriptor]
+   */
+  export type SummaryDescriptor<T> =
+    | KeySelector<T>
+    | (SelectionDescriptor<T> & {
+        summaryType?: 'sum' | 'avg' | 'min' | 'max' | 'count';
+      });
   /**
    * [descr:XmlaStore]
    */
@@ -6838,10 +6833,14 @@ declare module DevExpress.data.PivotGridDataSource {
 }
 declare module DevExpress.data.Store {
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type Options<TItem, TKey> = StoreOptions<TItem, TKey>;
+  /**
    * [descr:StoreOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type StoreOptions<TItem = any, TKey = any> = {
+  type StoreOptions<TItem = any, TKey = any> = {
     /**
      * [descr:StoreOptions.errorHandler]
      */
@@ -6861,7 +6860,7 @@ declare module DevExpress.data.Store {
     /**
      * [descr:StoreOptions.onLoading]
      */
-    onLoading?: (loadOptions: LoadOptions<TItem>) => void;
+    onLoading?: (loadOptions: BaseLoadOptions<TItem>) => void;
     /**
      * [descr:StoreOptions.onModified]
      */

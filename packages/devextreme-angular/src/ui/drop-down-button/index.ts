@@ -25,7 +25,7 @@ import {
 import DataSource from 'devextreme/data/data_source';
 import { dxDropDownButtonItem, ButtonClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/drop_down_button';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data/store_base';
+import { Store } from 'devextreme/data/store';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { ButtonStyle, ButtonType } from 'devextreme/common';
 

@@ -8,11 +8,11 @@ export {
   /**
    * @deprecated Use StoreOptions from common/data/abstract_store instead
    */
-  StoreOptions,
+  StoreOptionsBase as StoreOptions,
   /**
    * @deprecated Use Store from common/data/abstract_store instead
    */
-  Store,
+  StoreBase as Store,
 } from '../common/data/abstract_store';
 
 /**

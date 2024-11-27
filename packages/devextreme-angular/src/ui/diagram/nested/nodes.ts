@@ -18,7 +18,7 @@ import DataSource from 'devextreme/data/data_source';
 import { DataLayoutType } from 'devextreme/ui/diagram';
 import { Orientation } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data/store_base';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,

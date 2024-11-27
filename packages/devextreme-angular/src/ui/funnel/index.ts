@@ -23,7 +23,7 @@ import {
 import DataSource from 'devextreme/data/data_source';
 import { FunnelAlgorithm, dxFunnelItem, FunnelLegendItem, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, HoverChangedEvent, IncidentOccurredEvent, InitializedEvent, ItemClickEvent, LegendClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/viz/funnel';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data/store_base';
+import { Store } from 'devextreme/data/store';
 import { ExportFormat, HorizontalEdge, HorizontalAlignment, Position, Orientation, VerticalEdge, SingleMultipleOrNone } from 'devextreme/common';
 import { HatchDirection, DashStyle, Font, LabelPosition, TextOverflow, WordWrap, Palette, PaletteExtensionMode, ShiftLabelOverlap, Theme } from 'devextreme/common/charts';
 import { Format } from 'devextreme/common/core/localization';

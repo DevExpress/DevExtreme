@@ -24,7 +24,7 @@ import { FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, 
 import { Format } from 'devextreme/common/core/localization';
 import { dxFormSimpleItem } from 'devextreme/ui/form';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data/store_base';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,

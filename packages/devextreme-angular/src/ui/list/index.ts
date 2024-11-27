@@ -26,7 +26,7 @@ export { ExplicitTypes } from 'devextreme/ui/list';
 import DataSource from 'devextreme/data/data_source';
 import { dxListItem, ItemDeleteMode, ListMenuMode, ContentReadyEvent, DisposingEvent, GroupRenderedEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemDeletedEvent, ItemDeletingEvent, ItemHoldEvent, ItemRenderedEvent, ItemReorderedEvent, ItemSwipeEvent, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectAllValueChangedEvent, SelectionChangedEvent, SelectionChangingEvent } from 'devextreme/ui/list';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data/store_base';
+import { Store } from 'devextreme/data/store';
 import { dxSortableOptions } from 'devextreme/ui/sortable';
 import { PageLoadMode, SearchMode, SelectAllMode, SingleMultipleAllOrNone, ScrollbarMode } from 'devextreme/common';
 import { dxTextBoxOptions } from 'devextreme/ui/text_box';

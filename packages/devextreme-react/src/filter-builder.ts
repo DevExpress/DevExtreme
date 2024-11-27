@@ -12,7 +12,7 @@ import type { ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPrep
 import type { DataType, template, Format as CommonFormat } from "devextreme/common";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/common/data/store_base";
+import type { Store } from "devextreme/data/store";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];

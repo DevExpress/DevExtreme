@@ -11,10 +11,14 @@ import type {
     SelectDescriptor,
     FilterDescriptor,
     SummaryDescriptor,
-    LoadOptions,
+} from '../data';
+
+import type {
     Store as StoreBase,
-    StoreOptions as StoreOptionsBase,
-} from './data/store_base';
+    Options as StoreOptionsBase,
+} from '../data/store';
+
+import type { BaseLoadOptions as LoadOptions } from '../data/load_options';
 
 /**
  * @docid Utils.applyChanges

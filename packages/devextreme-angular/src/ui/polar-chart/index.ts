@@ -28,7 +28,7 @@ import { AnimationEaseMode, ChartsDataType, DashStyle, Font, DiscreteAxisDivisio
 import { dxPolarChartAnnotationConfig, dxPolarChartCommonAnnotationConfig, PolarChartSeriesType, ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, PolarChartSeries, ValueAxisVisualRangeUpdateMode } from 'devextreme/viz/polar_chart';
 import { Format } from 'devextreme/common/core/localization';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data/store_base';
+import { Store } from 'devextreme/data/store';
 import { ExportFormat, HorizontalAlignment, Position, Orientation, VerticalEdge, SingleOrMultiple } from 'devextreme/common';
 
 import DxPolarChart from 'devextreme/viz/polar_chart';

@@ -14,7 +14,7 @@ import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as 
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ComparisonOperator, TabsIconPosition, TabsStyle, Position } from "devextreme/common";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/common/data/store_base";
+import type { Store } from "devextreme/data/store";
 
 import type DataSource from "devextreme/data/data_source";
 

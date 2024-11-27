@@ -18,7 +18,7 @@ import { DOCUMENT } from '@angular/common';
 
 import DataSource from 'devextreme/data/data_source';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data/store_base';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,

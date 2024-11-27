@@ -28,7 +28,7 @@ import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animatio
 import { event } from 'devextreme/common/core/events';
 import { dxContextMenuItem, ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, PositioningEvent, SelectionChangedEvent, ShowingEvent, ShownEvent, ContextSubmenuDirection } from 'devextreme/ui/context_menu';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data/store_base';
+import { Store } from 'devextreme/data/store';
 import { SingleOrNone, SubmenuShowMode } from 'devextreme/common';
 
 import DxContextMenu from 'devextreme/ui/context_menu';

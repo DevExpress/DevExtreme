@@ -12,7 +12,7 @@ import type { ClickEvent, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEv
 import type { DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, Palette } from "devextreme/common/charts";
 import type { template, HorizontalAlignment, VerticalEdge, ExportFormat, SingleMultipleOrNone, Position, Orientation } from "devextreme/common";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/common/data/store_base";
+import type { Store } from "devextreme/data/store";
 
 import type DataSource from "devextreme/data/data_source";
 

@@ -17,7 +17,7 @@ import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as Form
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/common/data/store_base";
+import type { Store } from "devextreme/data/store";
 import type { dxPopupOptions, dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
 import type { event, EventInfo } from "devextreme/common/core/events";
 import type { Component } from "devextreme/core/component";

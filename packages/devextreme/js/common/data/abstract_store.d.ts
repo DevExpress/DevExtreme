@@ -2,10 +2,10 @@ import {
   DxExtendedPromise,
 } from '../../core/utils/deferred';
 import {
-  Store,
-  StoreOptions,
-  LoadOptions,
-} from './store_base';
+  Store as StoreBase,
+  Options as StoreOptionsBase,
+} from '../../data/store';
+import { BaseLoadOptions as LoadOptions } from '../../data/load_options';
 
 export type Options<
   TItem = any,
@@ -18,7 +18,7 @@ export type Options<
 export interface AbstractStoreOptions<
   TItem = any,
   TKey = any,
-  > extends StoreOptions<TItem, TKey> {
+  > extends StoreOptionsBase<TItem, TKey> {
   /**
    * @docid StoreOptions.onLoaded
    * @type_function_param2 loadOptions:LoadOptions
@@ -34,7 +34,7 @@ export interface AbstractStoreOptions<
 export default class AbstractStore<
   TItem = any,
   TKey = any,
-  > extends Store<TItem, TKey> {
+  > extends StoreBase<TItem, TKey> {
   constructor(options?: Options<TItem, TKey>);
   /**
    * @docid Store.load()
@@ -58,11 +58,11 @@ export type {
    * @namespace DevExpress.data
    * @deprecated Use Options from data/store instead
    */
-  StoreOptions,
+  StoreOptionsBase,
 
   /**
    * @namespace DevExpress.data
    * @deprecated Use Store from data/store instead
    */
-  Store,
-} from './store_base';
+  StoreBase,
+};

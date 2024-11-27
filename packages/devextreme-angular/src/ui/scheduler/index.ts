@@ -29,7 +29,7 @@ import DataSource from 'devextreme/data/data_source';
 import { AllDayPanelMode, ViewType, dxSchedulerAppointment, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, RecurrenceEditMode, dxSchedulerScrolling } from 'devextreme/ui/scheduler';
 import { event } from 'devextreme/common/core/events';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data/store_base';
+import { Store } from 'devextreme/data/store';
 import { FirstDayOfWeek, Orientation } from 'devextreme/common';
 
 import DxScheduler from 'devextreme/ui/scheduler';

@@ -29,7 +29,7 @@ import { dxChartAnnotationConfig, AggregatedPointsPosition, ChartLabelDisplayMod
 import { HorizontalAlignment, VerticalAlignment, Position, ExportFormat, Orientation, VerticalEdge, SingleOrMultiple } from 'devextreme/common';
 import { Format } from 'devextreme/common/core/localization';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data/store_base';
+import { Store } from 'devextreme/data/store';
 import { ChartSeries } from 'devextreme/viz/common';
 
 import DxChart from 'devextreme/viz/chart';

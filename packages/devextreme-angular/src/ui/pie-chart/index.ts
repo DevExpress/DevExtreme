@@ -27,7 +27,7 @@ import { AnimationEaseMode, ChartsDataType, DashStyle, ChartsColor, HatchDirecti
 import { dxPieChartAnnotationConfig, dxPieChartCommonAnnotationConfig, PieChartSeriesInteractionMode, SmallValuesGroupingMode, PieChartLegendItem, PieChartLegendHoverMode, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, PieChartSegmentDirection, PieChartSeries, PieChartType } from 'devextreme/viz/pie_chart';
 import { Format } from 'devextreme/common/core/localization';
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data/store_base';
+import { Store } from 'devextreme/data/store';
 import { ExportFormat, HorizontalAlignment, Position, Orientation, VerticalEdge, SingleOrMultiple } from 'devextreme/common';
 
 import DxPieChart from 'devextreme/viz/pie_chart';

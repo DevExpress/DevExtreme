@@ -15,7 +15,7 @@ import {
 
 
 import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/common/data/store_base';
+import { Store } from 'devextreme/data/store';
 import { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig } from 'devextreme/common/grids';
 import { SearchMode } from 'devextreme/common';
 
