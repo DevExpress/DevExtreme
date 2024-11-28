@@ -13,10 +13,10 @@ const currentUser = {
 const supportAgent = {
     id: "d16d1a4c-5c67-4e20-b70e-2991c22747c3",
     name: "Support Agent",
-    avatarUrl: "https://raw.githubusercontent.com/DevExpress/DevExtreme/refs/heads/24_2/apps/demos/images/petersmith.png",
+    avatarUrl: "../../../../images/petersmith.png",
 };
 
-let messages = [
+const messages = [
     {
         timestamp: getTimestamp(date, -9),
         author: supportAgent,
@@ -35,7 +35,7 @@ let messages = [
     {
         timestamp: getTimestamp(date, -7),
         author: supportAgent,
-        text: "I can help with that. Can you please confirm your UserID for security purposes?"
+        text: "I can help you with that. Can you please confirm your UserID for security purposes?"
     },
     {
         timestamp: getTimestamp(date, 1),
@@ -45,9 +45,9 @@ let messages = [
     {
         timestamp: getTimestamp(date, 1),
         author: supportAgent,
-        text: "✅ Instructions to restore access have been sent to the email address registered to your account."
+        text: "✅ Instructions to restore access have been sent to the email address associated with your account."
     },
 ];
 
-const dayHeaderFormat = 'dd/MM/yyyy';
+const dayHeaderFormat = ['dd/MM/yyyy', 'dd.MM.yyyy', 'MMMM dd, yyyy', 'EEEE, MMMM dd']
 const messageTimestampFormat = 'hh:mm a';

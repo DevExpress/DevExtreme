@@ -1,6 +1,6 @@
-$(async () => {
+$(() => {
   const chat = $('#chat').dxChat({
-    height: 712,
+    height: 710,
     items: messages,
     user: currentUser,
     dayHeaderFormat,
@@ -51,8 +51,8 @@ $(async () => {
   });
 
   $('#day-headers-format').dxSelectBox({
-    items: [dayHeaderFormat, 'dd.MM.yyyy', 'MMMM dd, yyyy', 'EEEE, MMMM dd'],
-    value: dayHeaderFormat,
+    items: dayHeaderFormat,
+    value: dayHeaderFormat[0],
     inputAttr: { 'aria-label': 'Day Headers Format' },
     onValueChanged(data) {
       chat.option('dayHeaderFormat', data.value);
