@@ -2,7 +2,7 @@ const getTimestamp = function(date, offsetMinutes = 0) {
     return date.getTime() + offsetMinutes * 60000;
 }
 
-const date = new Date(2025,10,27);
+const date = new Date(2024,10,27);
 
 const currentUser = {
     id: "c94c0e76-fb49-4b9b-8f07-9f93ed93b4f3",
