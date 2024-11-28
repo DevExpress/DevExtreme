@@ -472,14 +472,24 @@ const getShortDateFormat = function () {
   return 'yyyy/MM/dd';
 };
 
-const getFirstMonthDate = function (date) {
+const getFirstMonthDate = function (date, offset = 0) {
   if (!isDefined(date)) return;
-  return createDateWithFullYear(date.getFullYear(), date.getMonth(), 1);
+
+  const currentDate = new Date(date.getTime());
+  const month = currentDate.getMonth() + offset;
+  currentDate.setMonth(month);
+
+  return createDateWithFullYear(currentDate.getFullYear(), month, 1);
 };
 
-const getLastMonthDate = function (date) {
+const getLastMonthDate = function (date, offset = 0) {
   if (!isDefined(date)) return;
-  return createDateWithFullYear(date.getFullYear(), date.getMonth() + 1, 0);
+
+  const currentDate = new Date(date.getTime());
+  const month = currentDate.getMonth() + offset;
+  currentDate.setMonth(month);
+
+  return createDateWithFullYear(currentDate.getFullYear(), month + 1, 0);
 };
 
 function getFirstWeekDate(date, firstDayOfWeek) {

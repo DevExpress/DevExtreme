@@ -1993,32 +1993,6 @@
         ]
       },
       {
-        "Name": "Output Formats",
-        "Equivalents": "",
-        "Demos": [
-          {
-            "Title": "Output Formats",
-            "Name": "OutputFormats",
-            "Widget": "HtmlEditor",
-            "DemoType": "Web",
-            "Modules": "showdown&turndown"
-          }
-        ]
-      },
-      {
-        "Name": "Toolbar Customization",
-        "Equivalents": "",
-        "Demos": [
-          {
-            "Title": "Toolbar Customization",
-            "Name": "ToolbarCustomization",
-            "DocUrl": "Guide/UI_Components/HtmlEditor/Toolbar/Built-In_Controls/",
-            "Widget": "HtmlEditor",
-            "DemoType": "Web"
-          }
-        ]
-      },
-      {
         "Name": "Mentions",
         "Equivalents": "",
         "Demos": [
@@ -2048,6 +2022,33 @@
             "DemoType": "Web"
           }
         ]
+      },
+      {
+        "Name": "Markdown Support",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Markdown Support",
+            "Name": "MarkdownSupport",
+            "Widget": "HtmlEditor",
+            "DemoType": "Web",
+            "Modules": "unified",
+            "Badge": "Updated"
+          }
+        ]
+      },
+      {
+        "Name": "Toolbar Customization",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Toolbar Customization",
+            "Name": "ToolbarCustomization",
+            "DocUrl": "Guide/UI_Components/HtmlEditor/Toolbar/Built-In_Controls/",
+            "Widget": "HtmlEditor",
+            "DemoType": "Web"
+          }
+        ]
       }
     ]
   },
@@ -2066,7 +2067,13 @@
             "DocUrl": "Guide/UI_Components/Chat/Overview/",
             "Widget": "Chat",
             "DemoType": "Web",
-            "Badge": "New"
+            "Badge": "New",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/ChatData.cs",
+              "/Models/Chat/User.cs",
+              "/Models/Chat/Message.cs",
+              "/ViewModels/ChatViewModel.cs"
+            ]
           }
         ]
       }
@@ -2308,7 +2315,7 @@
     "Groups": [
       {
         "Name": "Overview",
-        "Equivalents": "",
+        "Equivalents": "Human-to-Human Interaction, Peer-to-Peer Communication, P2P",
         "Demos": [
           {
             "Title": "Overview",

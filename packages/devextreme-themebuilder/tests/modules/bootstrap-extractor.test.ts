@@ -23,17 +23,6 @@ describe('BootstrapExtractor', () => {
     .rejects
     .toMatch(/^Error: expected "{"\./));
 
-  test('lessRender', async () => {
-    const less = '@var: red; div { color: @var;}';
-    const css = 'div {\n  color: red;\n}\n';
-
-    return expect(await BootstrapExtractor.lessRender(less)).toBe(css);
-  });
-
-  test('lessRender (error)', async () => expect(BootstrapExtractor.lessRender('0'))
-    .rejects
-    .toBe('Unrecognised input. Possibly missing something'));
-
   test('sassProcessor (bootstrap5)', async () => {
     const testSassString = 'test string';
     const setterServiceCode = 'setter';
@@ -55,20 +44,6 @@ ${variablesDark.toString()}
 ${testSassString}
 ${setterServiceCode}
 ${collectorServiceCode}`);
-  });
-
-  test('lessProcessor', async () => {
-    const testLessString = 'test string';
-    const setterServiceCode = 'setter';
-    const collectorServiceCode = 'collector';
-    const extractor = new BootstrapExtractor(testLessString, 3);
-    extractor.getSetterServiceCode = (): string => setterServiceCode;
-    extractor.getCollectorServiceCode = (): string => collectorServiceCode;
-
-    expect(await extractor.lessProcessor())
-      .toBe(setterServiceCode
-        + testLessString
-        + collectorServiceCode);
   });
 
   test('getSetterServiceCode', () => {

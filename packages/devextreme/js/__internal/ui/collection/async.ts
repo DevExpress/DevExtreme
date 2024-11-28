@@ -11,7 +11,12 @@ declare class Async<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TKey = any,
 > extends CollectionWidgetEdit<TProperties> {
-  _renderItemsAsync(): void;
+  _onItemTemplateRendered(
+    itemTemplate: { source: () => unknown },
+    args: { itemData: unknown }
+  ): () => void;
+
+  _planPostRenderActions(): void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

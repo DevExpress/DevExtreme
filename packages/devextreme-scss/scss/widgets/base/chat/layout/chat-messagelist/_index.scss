@@ -19,6 +19,7 @@
     &.dx-scrollable-native-ios {
       .dx-scrollable-content {
         min-height: 100%;
+        box-sizing: border-box;
       }
     }
   }

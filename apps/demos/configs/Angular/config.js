@@ -148,6 +148,7 @@ window.config = {
   paths: {
     'npm:': '../../../../node_modules/',
     'bundles:': '../../../../bundles/',
+    'externals:': '../../../../bundles/externals/',
   },
   map: {
     'ts': 'npm:plugin-typescript/lib/plugin.js',
@@ -182,6 +183,16 @@ window.config = {
       return acc;
     }, {}),
 
+    /* Bundles for Unified */
+    'unified': 'externals:unified/unified.bundle.js',
+    'remark-parse': 'externals:unified/remark-parse.bundle.js',
+    'remark-rehype': 'externals:unified/remark-rehype.bundle.js',
+    'remark-stringify': 'externals:unified/remark-stringify.bundle.js',
+    'rehype-parse': 'externals:unified/rehype-parse.bundle.js',
+    'rehype-remark': 'externals:unified/rehype-remark.bundle.js',
+    'rehype-stringify': 'externals:unified/rehype-stringify.bundle.js',
+
+    'openai': 'externals:openai.bundle.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
     'tslib': 'npm:tslib/tslib.js',
     'rxjs': 'npm:rxjs/dist/bundles/rxjs.umd.js',
@@ -193,11 +204,6 @@ window.config = {
 
     /** devextreme-aspnet-data-nojquery */
     'devextreme-aspnet-data-nojquery': 'npm:devextreme-aspnet-data-nojquery/index.js',
-    /**/
-
-    /** showdown&turndown */
-    'showdown': 'npm:showdown/dist/showdown.js',
-    'turndown': 'npm:turndown/lib/turndown.browser.umd.js',
     /**/
 
     /** globalize */

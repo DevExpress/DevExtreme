@@ -9,7 +9,7 @@ import { indexByKey, insert, update } from '@js/data/array_utils';
 // @ts-expect-error
 import { keysEqual } from '@js/data/utils';
 
-import CollectionWidget from './m_collection_widget.edit';
+import CollectionWidget from './m_collection_widget.async';
 
 const PRIVATE_KEY_FIELD = '__dx_key__';
 

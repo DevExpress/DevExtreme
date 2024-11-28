@@ -20,11 +20,11 @@
     "devextreme-angular": "workspace:~",
     "rxjs": "7.8.1",
     "tslib": "^2.6.1",
-    "zone.js": "0.13.3"
+    "zone.js": "0.14.10"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "17.3.8",
-    "@angular/cli": "17.3.8",
+    "@angular/cli": "17.3.11",
     "@angular/language-service": "17.3.12",
     "@angular/platform-server": "17.3.12",
     "@types/jasmine": "5.1.4",

@@ -17,7 +17,7 @@ $chat-messagegroup-gap: 4px !default;
 $chat-messagegroup-padding: null !default;
 $chat-information-gap: 8px !default;
 $chat-avatar-size: 32px !default;
-$chat-messagegroup-alignment-start-template: auto 1fr !default;
+$chat-messagegroup-alignment-start-template: auto 82.5% 1fr !default;
 $chat-messagegroup-alignment-start-gap: 12px !default;
 $chat-header-padding: 20px !default;
 $chat-information-font-size: 12px !default;
@@ -36,6 +36,7 @@ $chat-messagelist-empty-message-font-size: null !default;
 $chat-messagelist-empty-prompt-font-size: null !default;
 $chat-messagelist-day-header-padding-bottom: 12px !default;
 $chat-messagelist-day-header-first-padding-top: 20px !default;
+$chat-messagelist-day-header-font-size: 12px !default;
 
 $chat-typingindicator-template: $chat-messagegroup-alignment-start-template !default;
 $chat-typingindicator-padding: null !default;

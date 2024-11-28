@@ -1,7 +1,7 @@
 import type { CollectionWidgetOptions, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import CollectionWidgetLiveUpdate from '@js/ui/collection/ui.collection_widget.live_update';
 
-import CollectionWidgetEdit from './edit';
+import CollectionWidgetAsync from './async';
 
 declare class LiveUpdate<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -10,7 +10,7 @@ declare class LiveUpdate<
     TItem extends ItemLike = any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TKey = any,
-> extends CollectionWidgetEdit<TProperties> {
+> extends CollectionWidgetAsync<TProperties> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

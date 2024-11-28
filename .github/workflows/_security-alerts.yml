@@ -30,7 +30,7 @@ jobs:
     needs: [ fetch ]
 
     steps:
-      - uses: dawidd6/action-download-artifact@v3
+      - uses: dawidd6/action-download-artifact@v6
         with:
           name: dependabot_alerts.json
           if_no_artifact_found: warn

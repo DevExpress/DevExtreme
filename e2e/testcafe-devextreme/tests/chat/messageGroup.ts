@@ -156,6 +156,9 @@ test('Messagegroup scenarios in RTL mode', async (t) => {
       width: 250,
       height: 400,
     }, chatId);
+
+    const chat = new Chat(chatId);
+    await chat.repaint(); // NOTE: WA to make it stable in Material theme.
   });
 
   await testScreenshot(t, takeScreenshot, 'Messagegroup appearance in RTL mode.png', { element: '#container' });

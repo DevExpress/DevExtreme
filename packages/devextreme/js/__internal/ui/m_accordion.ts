@@ -125,7 +125,6 @@ const Accordion = CollectionWidget.inherit({
 
   _initMarkup() {
     this._deferredItems = [];
-    this._deferredTemplateItems = [];
     this.callBase();
 
     this.setAria({
@@ -141,12 +140,8 @@ const Accordion = CollectionWidget.inherit({
     });
   },
 
-  _render() {
-    this.callBase();
-
-    when.apply(this, this._deferredTemplateItems).done(() => {
-      this._updateItemHeights(true);
-    });
+  _postProcessRenderItems() {
+    this._updateItemHeights(true);
   },
 
   _itemDataKey() {
@@ -195,38 +190,34 @@ const Accordion = CollectionWidget.inherit({
   },
 
   _renderItemContent(args) {
-    this._deferredTemplateItems[args.index] = Deferred();
-
-    const itemTitle = this.callBase(extend({}, args, {
+    const itemTitleDeferred = this.callBase(extend({}, args, {
       contentClass: ACCORDION_ITEM_TITLE_CLASS,
       templateProperty: 'titleTemplate',
       defaultTemplateName: this.option('itemTitleTemplate'),
     }));
 
-    this._attachItemTitleClickAction(itemTitle);
+    const callBase = this.callBase.bind(this);
+    itemTitleDeferred.done((itemTitle) => {
+      this._attachItemTitleClickAction(itemTitle);
 
-    const deferred = Deferred();
-    if (isDefined(this._deferredItems[args.index])) {
-      this._deferredItems[args.index] = deferred;
-    } else {
-      this._deferredItems.push(deferred);
-    }
+      const deferred = Deferred();
+      if (isDefined(this._deferredItems[args.index])) {
+        this._deferredItems[args.index] = deferred;
+      } else {
+        this._deferredItems.push(deferred);
+      }
 
-    if (!this.option('deferRendering') || this._getSelectedItemIndices().indexOf(args.index) >= 0) {
-      deferred.resolve();
-    }
+      if (!this.option('deferRendering') || this._getSelectedItemIndices().indexOf(args.index) >= 0) {
+        deferred.resolve();
+      }
 
-    deferred.done(this.callBase.bind(this, extend({}, args, {
-      contentClass: ACCORDION_ITEM_BODY_CLASS,
-      container: getPublicElement($('<div>').appendTo($(itemTitle).parent())),
-    })));
-  },
-
-  _onItemTemplateRendered(_, renderArgs) {
-    return () => {
-      const item = this._deferredTemplateItems[renderArgs.index];
-      item && item.resolve();
-    };
+      deferred.done(() => {
+        callBase(extend({}, args, {
+          contentClass: ACCORDION_ITEM_BODY_CLASS,
+          container: getPublicElement($('<div>').appendTo($(itemTitle).parent())),
+        }));
+      });
+    });
   },
 
   _attachItemTitleClickAction(itemTitle) {
@@ -383,10 +374,6 @@ const Accordion = CollectionWidget.inherit({
   },
 
   _clean() {
-    this._deferredTemplateItems.forEach((item) => {
-      item.reject();
-    });
-    this._deferredTemplateItems = [];
     clearTimeout(this._animationTimer);
     this.callBase();
   },
