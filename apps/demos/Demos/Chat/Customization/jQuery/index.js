@@ -9,12 +9,7 @@ $(async () => {
         },
         messageTimestampFormat,
     }).dxChat('instance');
-    setTimeout(()=>{
-        console.log(chat.option('dayHeaderFormat'));
-        
-    },2000)
 
-      // options
     $('#chat-disabled').dxCheckBox({
         value: false,
         text: 'Disable Chat',
