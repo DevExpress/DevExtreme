@@ -41,6 +41,8 @@ window.config = {
   },
   paths: {
     'npm:': '../../../node_modules/',
+    'bundles:': '../../../../bundles/',
+    'externals:': '../../../../bundles/externals/',
   },
   defaultExtension: 'js',
   map: {
@@ -58,16 +60,6 @@ window.config = {
 
     /** devextreme-aspnet-data-nojquery */
     'devextreme-aspnet-data-nojquery': 'npm:devextreme-aspnet-data-nojquery/index.js',
-    /**/
-
-    /** unified */
-    'unified': 'npm:unified/index.js',
-    'rehype-parse': 'npm:rehype-parse/index.js',
-    'rehype-remark': 'npm:rehype-remark/index.js',
-    'rehype-stringify': 'npm:rehype-stringify/index.js',
-    'remark-parse': 'npm:remark-parse/index.js',
-    'remark-rehype': 'npm:remark-rehype/index.js',
-    'remark-stringify': 'npm:remark-stringify/index.js',
     /**/
 
     /** html-react-parser */
@@ -126,6 +118,17 @@ window.config = {
 
     'devextreme': 'npm:devextreme/cjs',
     'devextreme-react': 'npm:devextreme-react/cjs',
+
+    /* Unified bundles */
+    'unified': 'externals:unified/unified.bundle.js',
+    'remark-parse': 'externals:unified/remark-parse.bundle.js',
+    'remark-rehype': 'externals:unified/remark-rehype.bundle.js',
+    'remark-stringify': 'externals:unified/remark-stringify.bundle.js',
+    'rehype-parse': 'externals:unified/rehype-parse.bundle.js',
+    'rehype-remark': 'externals:unified/rehype-remark.bundle.js',
+    'rehype-stringify': 'externals:unified/rehype-stringify.bundle.js',
+
+    'openai': 'externals:openai.bundle.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram/dist/dx-diagram.js',

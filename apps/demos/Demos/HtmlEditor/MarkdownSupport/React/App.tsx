@@ -1,4 +1,11 @@
 import React, { useCallback, useState } from 'react';
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
+import remarkStringify from "remark-stringify";
+import rehypeParse from "rehype-parse";
+import rehypeRemark from "rehype-remark";
+import rehypeStringify from "rehype-stringify";
 import HtmlEditor, { Toolbar, Item } from 'devextreme-react/html-editor';
 import { markup } from './data.ts';
 
@@ -10,13 +17,9 @@ const headerOptions = {
 };
 const converter = {
   toHtml(value) {
-    // @ts-expect-error
     const result = unified()
-      // @ts-expect-error
       .use(remarkParse)
-      // @ts-expect-error
       .use(remarkRehype)
-      // @ts-expect-error
       .use(rehypeStringify)
       .processSync(value)
       .toString();
@@ -24,13 +27,9 @@ const converter = {
     return result;
   },
   fromHtml(value) {
-    // @ts-expect-error
     const result = unified()
-      // @ts-expect-error
       .use(rehypeParse)
-      // @ts-expect-error
       .use(rehypeRemark)
-      // @ts-expect-error
       .use(remarkStringify)
       .processSync(value)
       .toString();
