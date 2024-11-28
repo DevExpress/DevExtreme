@@ -211,7 +211,7 @@ QUnit.module('MessageList', moduleConfig, () => {
             },
             {
                 attribute: 'aria-relevant',
-                expectedValue: 'additions',
+                expectedValue: 'additions text',
             },
         ].forEach(({ attribute, expectedValue }) => {
             QUnit.test(`element should have correct attribute ${attribute}`, function(assert) {

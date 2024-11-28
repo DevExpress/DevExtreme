@@ -564,7 +564,7 @@ class MessageList extends Widget<Properties> {
       atomic: 'false',
       label: messageLocalization.format('dxChat-messageListAriaLabel'),
       live: 'polite',
-      relevant: 'additions',
+      relevant: 'additions text',
     };
 
     this.setAria(aria);
