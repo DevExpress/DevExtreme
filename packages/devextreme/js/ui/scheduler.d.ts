@@ -534,7 +534,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @fires dxSchedulerOptions.onOptionChanged
      * @public
      */
-    currentView?: ViewType;
+    currentView?: ViewType | string;
     /**
      * @docid
      * @type_function_param1 info:object

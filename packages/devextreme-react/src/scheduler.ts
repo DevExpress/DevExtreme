@@ -61,9 +61,9 @@ type ISchedulerOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, I
   timeCellRender?: (...params: any) => React.ReactNode;
   timeCellComponent?: React.ComponentType<any>;
   defaultCurrentDate?: Date | number | string;
-  defaultCurrentView?: ViewType;
+  defaultCurrentView?: string | ViewType;
   onCurrentDateChange?: (value: Date | number | string) => void;
-  onCurrentViewChange?: (value: ViewType) => void;
+  onCurrentViewChange?: (value: string | ViewType) => void;
 }>
 
 interface SchedulerRef {
