@@ -35,28 +35,12 @@
 <script setup lang="ts">
     import { ref } from 'vue';
     import DxChat from 'devextreme-vue/chat';
-
-    const date = new Date();
-    date.setHours(0, 0, 0, 0);
-
-    function getTimestamp(date, offsetMinutes = 0) {
-        return date.getTime() + offsetMinutes * 60000;
-    }
-
-    const currentUser = ref({
-        id: "c94c0e76-fb49-4b9b-8f07-9f93ed93b4f3",
-        name: "John Doe",
-    });
-
-    const supportAgent = ref({
-        id: "d16d1a4c-5c67-4e20-b7v0e-2991c22747c3",
-        name: "Support Agent",
-        avatarUrl: "../../../../images/petersmith.png",
-    });
+    import { messages, supportAgent, currentUser } from './data.ts';
 
     const userChatTypingUsers = ref([]);
     const supportChatTypingUsers = ref([]);
 
+<<<<<<< Updated upstream
     const messages = ref([
         {
             timestamp: getTimestamp(date, -9),
@@ -90,6 +74,8 @@
         },
     ]);
 
+=======
+>>>>>>> Stashed changes
     function onMessageEntered(event) {
         messages.value = [...messages.value, event.message];
     }
