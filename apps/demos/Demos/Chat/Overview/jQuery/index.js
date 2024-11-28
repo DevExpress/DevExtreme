@@ -1,4 +1,5 @@
 $(() => {
+<<<<<<< Updated upstream
   const getTimestamp = function (date, offsetMinutes = 0) {
     return date.getTime() + offsetMinutes * 60000;
   }
@@ -50,6 +51,8 @@ $(() => {
     },
   ];
 
+=======
+>>>>>>> Stashed changes
   function onMessageEntered({ message }) {
     userChat.renderMessage(message);
     supportChat.renderMessage(message);
