@@ -18,7 +18,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../common/core/events';
-import { DataSource, DataSourceLike } from '../common/data';
+import { DataSource, DataSourceLike } from '../data/data_source';
 
 /**
  * @docid _ui_chat_DisposingEvent

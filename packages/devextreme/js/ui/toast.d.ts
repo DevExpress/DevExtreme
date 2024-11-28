@@ -4,12 +4,13 @@ import {
 } from '../common/core/animation';
 
 import {
-    DxEvent,
     Cancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../common/core/events';
+
+import { DxEvent } from '../events';
 
 import dxOverlay, {
     dxOverlayAnimation,

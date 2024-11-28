@@ -12,13 +12,14 @@ import {
 } from '../common';
 
 import {
-    DxEvent,
     Cancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../common/core/events';
+
+import { DxEvent } from '../events';
 
 import dxDraggable, {
     DraggableBase,

@@ -12,12 +12,13 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    DxEvent,
     Cancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../common/core/events';
+
+import { DxEvent } from '../events';
 
 import dxPopup, {
     dxPopupAnimation,

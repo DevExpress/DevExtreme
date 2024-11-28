@@ -1,8 +1,6 @@
-import { FilterDescriptor, GroupDescriptor } from '../data';
-import { BaseLoadOptions as LoadOptions } from './load_options';
-import { DxPromise } from '../common';
+import { FilterDescriptor, GroupDescriptor, LoadOptions } from '../data';
 import { DeepPartial } from '../core';
-import { DxExtendedPromise } from '../core/utils/deferred';
+import { DxExtendedPromise, DxPromise } from '../core/utils/deferred';
 
 /**
  * @docid StoreOptions

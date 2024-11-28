@@ -6,7 +6,6 @@ import { errors } from '@js/common/data/errors';
 import Query from '@js/common/data/query';
 import { rejectedPromise, trivialPromise } from '@js/common/data/utils';
 
-// @ts-expect-error
 const ArrayStore = Store.inherit({
   ctor(options) {
     if (Array.isArray(options)) {

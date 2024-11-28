@@ -1,46 +1,279 @@
-export {
+import { ExportLoadPanel } from './exporter/export_load_panel';
+import dxPivotGrid, { Cell } from './ui/pivot_grid';
+import dxDataGrid, { Column } from './ui/data_grid';
+import { DxPromise } from './core/utils/deferred';
+
+/**
+ * @docid
+ * @namespace DevExpress.excelExporter
+ * @type object
+ */
+export interface CellAddress {
   /**
-   * @deprecated Use DataGridCell from common/export/excel instead
+   * @docid
+   * @public
    */
-  DataGridCell,
+  row?: number;
   /**
-   * @deprecated Use ExcelDataGridCell from common/export/excel instead
+   * @docid
+   * @public
    */
-  ExcelDataGridCell,
+  column?: number;
+}
+
+/**
+* @docid
+* @namespace DevExpress.excelExporter
+* @type object
+*/
+export interface CellRange {
   /**
-   * @deprecated Use PivotGridCell from common/export/excel instead
+   * @docid
+   * @public
    */
-  PivotGridCell,
+  from?: CellAddress;
   /**
-   * @deprecated Use ExcelPivotGridCell from common/export/excel instead
+   * @docid
+   * @public
    */
-  ExcelPivotGridCell,
+  to?: CellAddress;
+}
+
+/**
+ * @docid
+ * @namespace DevExpress.excelExporter
+ * @hidden
+ */
+export interface ExcelExportBaseProps {
   /**
-   * @deprecated Use CellAddress from common/export/excel instead
+   * @docid
+   * @default undefined
+   * @public
    */
-  CellAddress,
+  worksheet?: object | undefined;
   /**
-   * @deprecated Use CellRange from common/export/excel instead
+   * @docid
+   * @default { row: 1, column: 1 }
+   * @public
    */
-  CellRange,
+  topLeftCell?: CellAddress | string;
+  /**
+   * @docid
+   * @default true
+   * @public
+   */
+  keepColumnWidths?: boolean;
+  /**
+   * @docid
+   * @public
+   */
+  loadPanel?: ExportLoadPanel;
+  /**
+   * @docid
+   * @default false
+   * @public
+   */
+   encodeExecutableContent?: boolean;
+}
+
+/**
+ * @docid
+ * @namespace DevExpress.excelExporter
+ * @inherits ExcelExportBaseProps
+ */
+export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  component?: dxPivotGrid | undefined;
+  /**
+   * @docid
+   * @default true
+   * @public
+   */
+  mergeRowFieldValues?: boolean;
+  /**
+   * @docid
+   * @default true
+   * @public
+   */
+  mergeColumnFieldValues?: boolean;
+  /**
+   * @docid
+   * @default false
+   * @public
+   */
+  exportFilterFieldHeaders?: boolean;
+  /**
+   * @docid
+   * @default false
+   * @public
+   */
+  exportDataFieldHeaders?: boolean;
+  /**
+   * @docid
+   * @default false
+   * @public
+   */
+  exportColumnFieldHeaders?: boolean;
+  /**
+   * @docid
+   * @default false
+   * @public
+   */
+  exportRowFieldHeaders?: boolean;
+  /**
+   * @docid
+   * @type_function_param1_field pivotCell:ExcelPivotGridCell
+   * @type_function_param1_field excelCell:Object
+   * @public
+   */
+  customizeCell?: ((options: { pivotCell?: PivotGridCell; excelCell?: any }) => void);
+}
+
+/**
+ * @namespace DevExpress.excelExporter
+ * @deprecated Use DataGridCell instead
+ */
+export interface ExcelDataGridCell {
+  /**
+   * @docid
+   * @public
+   * @type dxDataGridColumn
+   */
+  column?: Column;
+  /**
+   * @docid
+   * @public
+   */
+  data?: any;
+  /**
+   * @docid
+   * @public
+   */
+  groupIndex?: number;
+  /**
+   * @docid
+   * @public
+   */
+  groupSummaryItems?: Array<{
     /**
-   * @deprecated Use ExcelExportBaseProps from common/export/excel instead
-   */
-  ExcelExportBaseProps,
+     * @docid
+     */
+    name?: string;
+    /**
+     * @docid
+     */
+    value?: any;
+  }>;
   /**
-   * @deprecated Use ExcelExportDataGridProps from common/export/excel instead
+   * @docid
+   * @public
    */
-  ExcelExportDataGridProps,
+  rowType?: string;
   /**
-   * @deprecated Use ExcelExportPivotGridProps from common/export/excel instead
+   * @docid
+   * @public
    */
-  ExcelExportPivotGridProps,
+  totalSummaryItemName?: string;
   /**
-   * @deprecated Use exportDataGrid from common/export/excel instead
+   * @docid
+   * @public
    */
-  exportDataGrid,
-  /**
-   * @deprecated Use exportPivotGrid from common/export/excel instead
-   */
-  exportPivotGrid,
-} from './common/export/excel';
+  value?: any;
+}
+
+/**
+ * @public
+ * @namespace DevExpress.excelExporter
+ */
+export type PivotGridCell = ExcelPivotGridCell;
+
+/**
+ * @namespace DevExpress.excelExporter
+ * @deprecated Use PivotGridCell instead
+ */
+export interface ExcelPivotGridCell extends Cell {
+    /**
+     * @docid
+     * @public
+     */
+    area?: 'column' | 'row' | 'data';
+    /**
+     * @docid
+     * @public
+     */
+    rowIndex?: number;
+    /**
+     * @docid
+     * @public
+     */
+    columnIndex?: number;
+    /**
+     * @docid
+     * @public
+     */
+    headerType?: 'column' | 'row' | 'data' | 'filter';
+}
+
+/**
+ * @public
+ * @namespace DevExpress.excelExporter
+ */
+export type DataGridCell = ExcelDataGridCell;
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.excelExporter
+ * @inherits ExcelExportBaseProps
+ */
+export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    component?: dxDataGrid | undefined;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    selectedRowsOnly?: boolean;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    autoFilterEnabled?: boolean;
+    /**
+     * @docid
+     * @type_function_param1_field gridCell:ExcelDataGridCell
+     * @type_function_param1_field excelCell:Object
+     * @public
+     */
+    customizeCell?: ((options: { gridCell?: DataGridCell; excelCell?: any }) => void);
+}
+
+/**
+ * @docid excelExporter.exportDataGrid
+ * @publicName exportDataGrid(options)
+ * @return Promise<CellRange>
+ * @namespace DevExpress.excelExporter
+ * @static
+ * @public
+ */
+export function exportDataGrid(options: ExcelExportDataGridProps): DxPromise<CellRange>;
+
+/**
+ * @docid excelExporter.exportPivotGrid
+ * @publicName exportPivotGrid(options)
+ * @return Promise<CellRange>
+ * @namespace DevExpress.excelExporter
+ * @static
+ * @public
+ */
+export function exportPivotGrid(options: ExcelExportPivotGridProps): DxPromise<CellRange>;

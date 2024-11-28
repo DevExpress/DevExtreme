@@ -10,16 +10,17 @@ import {
     ScrollMode,
 } from '../common';
 
-import { DataSource, DataSourceLike } from '../common/data';
+import { DataSource, DataSourceLike } from '../data/data_source';
 
 import {
-    DxEvent,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
     Cancelable,
 } from '../common/core/events';
+
+import { DxEvent } from '../events';
 
 import {
     CollectionWidgetItem,

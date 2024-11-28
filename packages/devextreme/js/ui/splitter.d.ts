@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { DataSourceLike } from '../common/data';
+import { DataSourceLike } from '../data/data_source';
 
 import {
     Cancelable,

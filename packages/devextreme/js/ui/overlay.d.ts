@@ -16,10 +16,11 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    DxEvent,
     Cancelable,
     EventInfo,
 } from '../common/core/events';
+
+import { DxEvent } from '../events';
 
 import Widget, {
     WidgetOptions,

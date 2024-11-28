@@ -1,9 +1,10 @@
 import {
-    DxEvent,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../common/core/events';
+
+import { DxEvent } from '../events';
 
 import PivotGridDataSource, {
     Field,

@@ -1,4 +1,4 @@
-import { DataSource, DataSourceLike } from '../common/data';
+import { DataSource, DataSourceLike } from '../data/data_source';
 
 import {
     UserDefinedElement,

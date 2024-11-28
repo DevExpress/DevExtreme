@@ -1,4 +1,4 @@
-import { DataSourceLike } from '../common/data';
+import { DataSourceLike } from '../data/data_source';
 import {
     PositionConfig,
 } from '../common/core/animation';
@@ -12,7 +12,6 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    DxEvent,
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -20,6 +19,8 @@ import {
     ChangedOptionInfo,
     ItemInfo,
 } from '../common/core/events';
+
+import { DxEvent } from '../events';
 
 import dxMenuBase, {
     dxMenuBaseOptions,

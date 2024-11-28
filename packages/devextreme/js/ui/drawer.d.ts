@@ -11,11 +11,12 @@ import {
 } from '../common';
 
 import {
-    DxEvent,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../common/core/events';
+
+import { DxEvent } from '../events';
 
 import Widget, {
     WidgetOptions,

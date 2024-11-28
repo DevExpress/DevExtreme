@@ -13,8 +13,6 @@ import {
   Sortable,
   SortOrder,
   ValidationRule,
-  PagerBase,
-  DxPromise,
   template,
 } from '../common';
 
@@ -32,13 +30,17 @@ import {
   DataSource,
   DataSourceOptions,
   DataSourceLike,
-} from './data';
+} from '../data/data_source';
 
 import {
   Cancelable,
   EventInfo,
   NativeEventInfo,
 } from './core/events';
+
+import {
+  DxPromise,
+} from '../core/utils/deferred';
 
 import {
   Format,
@@ -66,6 +68,7 @@ import {
   WidgetOptions,
 } from '../ui/widget/ui.widget';
 import { PositionConfig } from './core/animation';
+import { PagerBase } from '../ui/pagination';
 
 /**
  * @docid

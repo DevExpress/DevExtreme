@@ -224,7 +224,7 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
     pendingDeferred.reject(errors.Error('E4009'));
   });
 }
-// @ts-expect-error
+
 const CustomStore = Store.inherit({
   ctor(options) {
     options = options || {};

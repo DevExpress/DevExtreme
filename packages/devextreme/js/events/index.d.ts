@@ -1,79 +1,360 @@
-import { DxEvent } from '../common/core/events';
+import { DxElement } from '../core/element';
+
+/**
+ * @docid
+ * @section commonObjectStructures
+ * @public
+ */
+type EventObject = {
+  /**
+   * @docid
+   * @public
+   */
+  currentTarget: Element;
+
+  /**
+   * @docid
+   * @public
+   */
+  data: any;
+
+  /**
+   * @docid
+   * @public
+   */
+  delegateTarget: Element;
+
+  /**
+   * @docid
+   * @public
+   */
+  target: Element;
+  /**
+   * @docid
+   * @publicName isDefaultPrevented()
+   * @public
+   */
+  isDefaultPrevented(): boolean;
+  /**
+   * @docid
+   * @publicName isImmediatePropagationStopped()
+   * @public
+   */
+  isImmediatePropagationStopped(): boolean;
+  /**
+   * @docid
+   * @publicName isPropagationStopped()
+   * @public
+   */
+  isPropagationStopped(): boolean;
+  /**
+   * @docid
+   * @publicName preventDefault()
+   * @public
+   */
+  preventDefault(): void;
+  /**
+   * @docid
+   * @publicName stopImmediatePropagation()
+   * @public
+   */
+  stopImmediatePropagation(): void;
+  /**
+   * @docid
+   * @publicName stopPropagation()
+   * @public
+   */
+  stopPropagation(): void;
+};
+
+/* eslint-disable @typescript-eslint/no-empty-interface */
+interface EventExtension { }
+interface EventType { }
+/* eslint-enable @typescript-eslint/no-empty-interface */
+
+/**
+ * @docid
+ * @type EventObject|jQuery.Event
+ * 
+ */
+type DxEvent<TNativeEvent = Event> = {} extends EventType ? (EventObject & TNativeEvent) : EventType;
+
+/** @deprecated EventObject */
+type dxEvent = EventObject;
+
+/**
+ * @docid
+ * @type EventObject|jQuery.Event
+ * @hidden
+ * @deprecated DxEvent
+ */
+type event = DxEvent;
+
+/**
+ * @docid eventsMethods.triggerHandler
+ * @publicName triggerHandler(element, event)
+ * @namespace DevExpress.events
+ * @param2 event:string|event
+ * @hidden
+ */
+declare function triggerHandler(element: Element | Array<Element>, event: string | DxEvent): void;
+
+/**
+ * @docid eventsMethods.triggerHandler
+ * @publicName triggerHandler(element, event, extraParameters)
+ * @namespace DevExpress.events
+ * @param2 event:string|event
+ * @param3 extraParameters:object
+ * @hidden
+ */
+declare function triggerHandler(element: Element | Array<Element>, event: string | DxEvent, extraParameters: any): void;
+
+/**
+ * @docid
+ * @public
+ */
+export interface InitializedEventInfo<TComponent> {
+  /**
+   * @docid
+   * @type this
+   */
+  readonly component?: TComponent;
+  /** @docid */
+  readonly element?: DxElement;
+}
+
+/**
+ * @docid
+ * @public
+ */
+export interface EventInfo<TComponent> {
+  /**
+   * @docid
+   * @type this
+   */
+  readonly component: TComponent;
+  /** @docid */
+  readonly element: DxElement;
+  /**
+   * @docid
+   * @hidden
+   */
+  readonly model?: any;
+}
+
+/**
+* @docid
+* @public
+*/
+export interface NativeEventInfo<TComponent, TNativeEvent = Event> {
+  /**
+   * @docid
+   * @type this
+   */
+  readonly component: TComponent;
+  /** @docid */
+  readonly element: DxElement;
+  /**
+   * @docid
+   * @hidden
+   */
+  readonly model?: any;
+  /**
+   * @docid
+   * @type event
+   */
+  readonly event?: DxEvent<TNativeEvent>;
+}
+
+/**
+ * @docid
+ * @public
+ */
+export interface ChangedOptionInfo {
+  /** @docid */
+  readonly name: string;
+  /** @docid */
+  readonly fullName: string;
+  /** @docid */
+  readonly value?: any;
+  /** @docid */
+  readonly previousValue?: any;
+}
+
+/**
+* @docid
+* @public
+*/
+export interface ItemInfo<TItemData = any> {
+  /**
+   * @docid
+   * @type object
+   */
+  readonly itemData?: TItemData;
+  /** @docid */
+  readonly itemElement: DxElement;
+  /** @docid */
+  readonly itemIndex: number;
+}
+
+/**
+ * @docid
+ * @public
+ */
+export interface Cancelable {
+  /** @docid */
+  cancel?: boolean;
+}
+
+/**
+* @docid
+* @public
+*/
+export type AsyncCancelable = {
+  /**
+   * @docid
+   * @type boolean|Promise<boolean>
+   */
+  cancel: boolean | PromiseLike<boolean>;
+};
+
+/**
+ * @docid eventsMethods.off
+ * @publicName off(element)
+ * @namespace DevExpress.events
+ * @public
+ */
+export function off(element: Element | Array<Element>): void;
+
+/**
+ * @docid eventsMethods.off
+ * @publicName off(element, eventName)
+ * @namespace DevExpress.events
+ * @public
+ */
+export function off(element: Element | Array<Element>, eventName: string): void;
+
+/**
+ * @docid eventsMethods.off
+ * @publicName off(element, eventName, handler)
+ * @namespace DevExpress.events
+ * @public
+ */
+export function off(element: Element | Array<Element>, eventName: string, handler: Function): void;
+
+/**
+ * @docid eventsMethods.off
+ * @publicName off(element, eventName, selector)
+ * @namespace DevExpress.events
+ * @public
+ */
+export function off(element: Element | Array<Element>, eventName: string, selector: string): void;
+
+/**
+ * @docid eventsMethods.off
+ * @publicName off(element, eventName, selector, handler)
+ * @namespace DevExpress.events
+ * @public
+ */
+export function off(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
+
+/**
+ * @docid eventsMethods.on
+ * @publicName on(element, eventName, data, handler)
+ * @namespace DevExpress.events
+ * @param3 data:object
+ * @public
+ */
+export function on(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
+
+/**
+ * @docid eventsMethods.on
+ * @publicName on(element, eventName, handler)
+ * @namespace DevExpress.events
+ * @public
+ */
+export function on(element: Element | Array<Element>, eventName: string, handler: Function): void;
+
+/**
+ * @docid eventsMethods.on
+ * @publicName on(element, eventName, selector, data, handler)
+ * @namespace DevExpress.events
+ * @param4 data:object
+ * @public
+ */
+export function on(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
+
+/**
+ * @docid eventsMethods.on
+ * @publicName on(element, eventName, selector, handler)
+ * @namespace DevExpress.events
+ * @public
+ */
+export function on(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
+
+/**
+ * @docid eventsMethods.one
+ * @publicName one(element, eventName, data, handler)
+ * @namespace DevExpress.events
+ * @param3 data:object
+ * @public
+ */
+export function one(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
+
+/**
+ * @docid eventsMethods.one
+ * @publicName one(element, eventName, handler)
+ * @namespace DevExpress.events
+ * @public
+ */
+export function one(element: Element | Array<Element>, eventName: string, handler: Function): void;
+
+/**
+ * @docid eventsMethods.one
+ * @publicName one(element, eventName, selector, data, handler)
+ * @namespace DevExpress.events
+ * @param4 data:object
+ * @public
+ */
+export function one(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
+
+/**
+ * @docid eventsMethods.one
+ * @publicName one(element, eventName, selector, handler)
+ * @namespace DevExpress.events
+ * @public
+ */
+export function one(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
+
+/**
+ * @docid eventsMethods.trigger
+ * @publicName trigger(element, event)
+ * @namespace DevExpress.events
+ * @param2 event:string|event
+ * @public
+ */
+export function trigger(element: Element | Array<Element>, event: string | DxEvent): void;
+
+/**
+ * @docid eventsMethods.trigger
+ * @publicName trigger(element, event, extraParameters)
+ * @namespace DevExpress.events
+ * @param2 event:string|event
+ * @param3 extraParameters:object
+ * @public
+ */
+export function trigger(element: Element | Array<Element>, event: string | DxEvent, extraParameters: any): void;
+
 
 export {
-  /**
-   * @deprecated Use on from /common/core/events instead
-   */
-  on,
-  /**
-   * @deprecated Use one from /common/core/events instead
-   */
-  one,
-  /**
-   * @deprecated Use off from /common/core/events instead
-   */
-  off,
-  /**
-   * @deprecated Use trigger from /common/core/events instead
-   */
-  trigger,
-  /**
-   * @deprecated Use triggerHandler from /common/core/events instead
-   */
-  triggerHandler,
-  /**
-   * @deprecated Use DxEvent from /common/core/events instead
-   */
   DxEvent,
-  /**
-   * @deprecated Use InitializedEventInfo from /common/core/events instead
-   */
-  InitializedEventInfo,
-  /**
-   * @deprecated Use EventInfo from /common/core/events instead
-   */
-  EventInfo,
-  /**
-   * @deprecated Use NativeEventInfo from /common/core/events instead
-   */
-  NativeEventInfo,
-  /**
-   * @deprecated Use ChangedOptionInfo from /common/core/events instead
-   */
-  ChangedOptionInfo,
-  /**
-   * @deprecated Use ItemInfo from /common/core/events instead
-   */
-  ItemInfo,
-  /**
-   * @deprecated Use Cancelable from /common/core/events instead
-   */
-  Cancelable,
-  /**
-   * @deprecated Use AsyncCancelable from /common/core/events instead
-   */
-  AsyncCancelable,
-  /**
-   * @deprecated Use EventObject from /common/core/events instead
-   */
-  EventObject,
-  /**
-   * @deprecated Use EventExtension from /common/core/events instead
-   */
   EventExtension,
-  /**
-   * @deprecated Use EventType from /common/core/events instead
-   */
   EventType,
-  /**
-   * @deprecated Use dxEvent from /common/core/events instead
-   */
   dxEvent,
-  /**
-   * @deprecated Use event from /common/core/events instead
-   */
   event,
-} from '../common/core/events';
+  triggerHandler,
+  EventObject,
+};
 
 /**
  * @docid

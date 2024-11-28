@@ -2,7 +2,7 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 
 import type { DataSource, DataSourceOptions } from '../../../common/data';
-import type Store from '../../../common/data/abstract_store';
+import type Store from '../../../data/abstract_store';
 import LegacySelectBox from '../../../ui/select_box';
 import { DomComponentWrapper } from '../../core/r1/dom_component_wrapper';
 import type { EventCallback } from '../../core/r1/event_callback';

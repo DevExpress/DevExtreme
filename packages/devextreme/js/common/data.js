@@ -7,7 +7,6 @@ import { errorHandler, setErrorHandler } from './data/errors';
 import LocalStore from './data/local_store';
 import query from './data/query';
 import { base64_encode, compileGetter, compileSetter } from './data/utils';
-import DataHelperMixin from './data/data_helper';
 import ODataContext from './data/odata/context';
 import ODataStore from './data/odata/store';
 import { EdmLiteral, keyConverters } from './data/odata/utils';
@@ -28,7 +27,6 @@ export {
     base64_encode,
     compileGetter,
     compileSetter,
-    DataHelperMixin,
     ODataContext,
     ODataStore,
     EdmLiteral,

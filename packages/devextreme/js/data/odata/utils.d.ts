@@ -1,10 +1,23 @@
-export {
+/**
+ * @docid
+ * @namespace DevExpress.data
+ * @public
+ */
+export class EdmLiteral {
+  constructor(value: string);
   /**
-   * @deprecated Use EdmLiteral from /common/data instead
+   * @docid
+   * @publicName valueOf()
+   * @public
    */
-  EdmLiteral,
-  /**
-   * @deprecated Use keyConverters from /common/data instead
-   */
-  keyConverters,
-} from '../../common/data';
+  valueOf(): string;
+}
+
+/**
+ * @const Utils.keyConverters
+ * @publicName odata.keyConverters
+ * @namespace DevExpress.data.utils.odata
+ * @public
+ */
+// eslint-disable-next-line vars-on-top, import/no-mutable-exports, no-var, @typescript-eslint/init-declarations, @typescript-eslint/no-explicit-any
+export var keyConverters: any;

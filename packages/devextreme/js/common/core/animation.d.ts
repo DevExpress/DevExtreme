@@ -6,8 +6,11 @@ import {
   PositionAlignment,
   VerticalAlignment,
   Direction,
-  DxPromise,
 } from '../../common';
+
+import {
+  DxPromise,
+} from '../../core/utils/deferred';
 
 export type AnimationType = 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
 

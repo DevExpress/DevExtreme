@@ -15,7 +15,6 @@ import type dxDraggable from './ui/draggable';
 import type dxScrollable from './ui/scroll_view/ui.scrollable';
 import type dxSortable from './ui/sortable';
 import type { Properties as ButtonProperties } from './ui/button';
-import { PromiseType } from './core/utils/deferred';
 import { UserDefinedElement } from './core/element';
 
 /**
@@ -853,58 +852,6 @@ export type VerticalEdge = 'bottom' | 'top';
  * @namespace DevExpress.common
  */
 export type DisplayMode = 'adaptive' | 'compact' | 'full';
-
-/**
- * @docid
- * @hidden
- * @namespace DevExpress.common
- */
-export type PagerBase = {
-  /**
-   * @docid
-   * @public
-   * @default "adaptive"
-   */
-  displayMode?: DisplayMode;
-  /**
-   * @docid
-   * @public
-   * @default "Page {0} of {1} ({2} items)"
-   */
-  infoText?: string;
-  /**
-   * @docid
-   * @public
-   * @default false
-   */
-  showInfo?: boolean;
-  /**
-   * @docid
-   * @public
-   * @default false
-   */
-  showNavigationButtons?: boolean;
-  /**
-   * @docid
-   * @public
-   * @default false
-   */
-  showPageSizeSelector?: boolean;
-  /**
-   * @docid
-   * @public
-   * @default "Page Navigation"
-   */
-  label?: string;
-};
-
-/**
- * @docid
- * @type Promise<void>
- * @namespace DevExpress.core.utils
- */
-// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-export type DxPromise<T = void> = {} extends PromiseType<T> ? Promise<T> : PromiseType<T>;
 
 /**
  * @docid

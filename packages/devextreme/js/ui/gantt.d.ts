@@ -1,17 +1,18 @@
-import { DataSourceLike } from '../common/data';
+import { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
 import {
-    DxEvent,
     Cancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../common/core/events';
+
+import { DxEvent } from '../events';
 
 import {
     Column as TreeListColumn,

@@ -40,7 +40,7 @@ const mergeFieldTypesWithKeyType = (fieldTypes, keyType) => {
 
   return result;
 };
-// @ts-expect-error
+
 const ODataStore = Store.inherit({
 
   ctor(options) {

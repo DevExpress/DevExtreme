@@ -1,4 +1,4 @@
-import { DataSourceLike } from '../common/data';
+import { DataSourceLike } from '../data/data_source';
 
 import {
   EventInfo,

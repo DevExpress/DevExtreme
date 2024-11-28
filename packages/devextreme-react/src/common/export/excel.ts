@@ -1,10 +1,6 @@
 export {
-    CellAddress,
-    CellRange,
     DataGridCell,
-    ExcelExportBaseProps,
     ExcelExportDataGridProps,
-    ExcelExportPivotGridProps,
     exportDataGrid,
     exportPivotGrid,
     PivotGridCell,
