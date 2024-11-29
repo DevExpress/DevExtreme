@@ -1,3 +1,3 @@
-import { ODataStore } from '../../common/data';
+import ODataStore from '../../common/data/odata/store';
 
 export default ODataStore;

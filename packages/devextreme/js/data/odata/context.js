@@ -1,3 +1,3 @@
-import { ODataContext } from '../../common/data';
+import ODataContext from '../../common/data/odata/context';
 
 export default ODataContext;

@@ -1,3 +1,3 @@
-import { CustomStore } from '../common/data';
+import { CustomStore } from '../common/data/custom_store';
 
 export default CustomStore;

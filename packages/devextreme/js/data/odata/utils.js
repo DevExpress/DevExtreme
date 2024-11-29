@@ -1,1 +1,1 @@
-export { EdmLiteral, keyConverters } from '../../common/data';
+export { EdmLiteral, keyConverters } from '../../common/data/odata/utils';

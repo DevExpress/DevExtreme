@@ -1,15 +1,16 @@
 import applyChanges from './data/apply_changes';
-import ArrayStore from './data/array_store';
-import { CustomStore, isGroupItemsArray, isItemsArray, isLoadResultObject } from './data/custom_store';
-import DataSource from './data/data_source';
-import EndpointSelector from './data/endpoint_selector';
+import ArrayStore from '../data/array_store';
+import { isGroupItemsArray, isItemsArray, isLoadResultObject } from './data/custom_store';
+import CustomStore from '../data/custom_store';
+import DataSource from '../data/data_source';
+import EndpointSelector from '../data/endpoint_selector';
 import { errorHandler, setErrorHandler } from './data/errors';
-import LocalStore from './data/local_store';
+import LocalStore from '../data/local_store';
 import query from './data/query';
 import { base64_encode, compileGetter, compileSetter } from './data/utils';
-import ODataContext from './data/odata/context';
-import ODataStore from './data/odata/store';
-import { EdmLiteral, keyConverters } from './data/odata/utils';
+import ODataContext from '../data/odata/context';
+import ODataStore from '../data/odata/store';
+import { EdmLiteral, keyConverters } from '../data/odata/utils';
 
 export {
     applyChanges,

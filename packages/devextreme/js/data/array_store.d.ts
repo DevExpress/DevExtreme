@@ -17,6 +17,15 @@ export interface ArrayStoreOptions<
      */
     data?: Array<TItem>;
 }
+
+/**
+ * @deprecated Use ArrayStoreOptions from /common/data instead
+ */
+export type Options<
+    TItem = any,
+    TKey = any,
+> = ArrayStoreOptions<TItem, TKey>;
+
 /**
  * @docid
  * @inherits Store
@@ -50,12 +59,3 @@ export default class ArrayStore<
      */
     createQuery(): Query;
 }
-
-/**
- * @deprecated Use ArrayStoreOptions from /common/data instead
- * @namespace DevExpress.data.ArrayStore
- */
-export type Options<
-    TItem = any,
-    TKey = any,
-> = ArrayStoreOptions<TItem, TKey>;
