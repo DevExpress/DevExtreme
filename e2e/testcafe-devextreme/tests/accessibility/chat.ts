@@ -34,6 +34,7 @@ const items: Message[] = [
 const options: Options<Properties> = {
   items: [[], items],
   user: [userWithAvatar, userWithoutAvatar],
+  typingUsers: [[], [userWithAvatar]],
 };
 
 const created = async (t: TestController): Promise<void> => {

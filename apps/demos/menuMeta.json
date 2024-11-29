@@ -2059,7 +2059,7 @@
     "Groups": [
       {
         "Name": "Overview",
-        "Equivalents": "",
+        "Equivalents": "Human-to-Human Interaction, Peer-to-Peer Communication, P2P",
         "Demos": [
           {
             "Title": "Overview",
@@ -2074,6 +2074,20 @@
               "/Models/Chat/Message.cs",
               "/ViewModels/ChatViewModel.cs"
             ]
+          }
+        ]
+      },
+      {
+        "Name": "Customization",
+        "Equivalents": "Settings, Options",
+        "Demos": [
+          {
+            "Title": "Customization",
+            "Name": "Customization",
+            "DocUrl": "Guide/UI_Components/Chat/Customization/",
+            "Widget": "Chat",
+            "DemoType": "Web",
+            "Badge": "New"
           }
         ]
       },

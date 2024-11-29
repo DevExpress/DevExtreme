@@ -1,9 +1,3 @@
-import { AzureOpenAI } from 'https://esm.sh/openai';
-import { unified } from 'https://esm.sh/unified@11?bundle';
-import remarkParse from 'https://esm.sh/remark-parse@11?bundle';
-import remarkRehype from 'https://esm.sh/remark-rehype@11?bundle';
-import rehypeStringify from 'https://esm.sh/rehype-stringify@10?bundle';
-
 $(() => {
   const store = [];
   let messages = [];

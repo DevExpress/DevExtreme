@@ -16,7 +16,7 @@ const supportAgent = {
   avatarUrl: '../../../../images/petersmith.png',
 };
 
-const initialMessages = [
+const messages = [
   {
     timestamp: getTimestamp(date, -9),
     author: supportAgent,
@@ -48,3 +48,6 @@ const initialMessages = [
     text: '✅ Instructions to restore access have been sent to the email address associated with your account.',
   },
 ];
+
+const dayHeaderFormat = ['dd/MM/yyyy', 'dd.MM.yyyy', 'MMMM dd, yyyy', 'EEEE, MMMM dd'];
+const messageTimestampFormat = ['hh:mm a', 'hh:mm:ss a', 'HH:mm', 'HH:mm:ss'];
