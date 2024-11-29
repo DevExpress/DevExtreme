@@ -214,7 +214,7 @@ const SKIPPED_TESTS = {
     Scheduler: [
       'CustomDragAndDrop',
     ],
-    Pagination: ['Overview'],
+    Pagination: [{ demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] }],
   },
   Vue: {
     Charts: [
