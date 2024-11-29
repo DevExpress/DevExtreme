@@ -1,45 +1,38 @@
 .demo-container {
-    min-width: 720px;
-    display: flex;
-    gap: 20px;
+  min-width: 720px;
+  display: flex;
+  gap: 20px;
 }
 
 .chat-container {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
 }
 
 .options {
-    padding: 20px;
-    min-width: 280px;
-    background-color: rgba(191, 191, 191, 0.15);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-width: 280px;
+  background-color: rgba(191, 191, 191, 0.15);
+  gap: 16px;
 }
 
 .dx-chat {
-max-width: 480px;
+  max-width: 480px;
 }
 
 .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: var(--dx-font-size-sm);
+  font-weight: 500;
 }
 
-.option-group {
-    padding: 10px 0;
-    border-bottom: 1px solid var(--dx-color-border);
-}
-
-.option-group:last-child {
-    border-bottom: none;
-}
-
-.option {
-    margin: 20px 0;
+.option-separator {
+  border-bottom: 1px solid var(--dx-color-border);
 }
 
 .dx-avatar {
-    border: 1px solid var(--dx-color-border);
+  border: 1px solid var(--dx-color-border);
 }

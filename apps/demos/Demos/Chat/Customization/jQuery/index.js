@@ -3,11 +3,11 @@ $(() => {
     height: 710,
     items: messages,
     user: currentUser,
-    dayHeaderFormat,
+    dayHeaderFormat: dayHeaderFormat[0],
     onMessageEntered({ component, message }) {
       component.renderMessage(message);
     },
-    messageTimestampFormat,
+    messageTimestampFormat: messageTimestampFormat[0],
   }).dxChat('instance');
 
   $('#chat-disabled').dxCheckBox({
@@ -60,8 +60,8 @@ $(() => {
   });
 
   $('#message-timestamp-format').dxSelectBox({
-    items: [messageTimestampFormat, 'hh:mm:ss a', 'HH:mm', 'HH:mm:ss'],
-    value: messageTimestampFormat,
+    items: messageTimestampFormat,
+    value: messageTimestampFormat[0],
     inputAttr: { 'aria-label': 'Message Timestamp Format' },
     onValueChanged(data) {
       chat.option('messageTimestampFormat', data.value);
