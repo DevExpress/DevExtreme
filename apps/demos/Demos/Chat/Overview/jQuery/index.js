@@ -20,7 +20,7 @@ $(() => {
     userChat.option('typingUsers', []);
   }
 
-  const userChat = $("#user-chat").dxChat({
+  const userChat = $('#user-chat').dxChat({
     items: initialMessages,
     user: currentUser,
     onMessageEntered,
@@ -28,7 +28,7 @@ $(() => {
     onTypingEnd: userChatTypingEnd,
   }).dxChat('instance');
 
-  const supportChat = $("#support-chat").dxChat({
+  const supportChat = $('#support-chat').dxChat({
     items: initialMessages,
     user: supportAgent,
     onMessageEntered,
