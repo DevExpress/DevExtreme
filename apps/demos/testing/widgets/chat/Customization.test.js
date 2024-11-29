@@ -4,21 +4,27 @@ import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture('Chat.Customization')
-  .page('http://localhost:8080/')
+  .page('http://localhost:8080/apps/demos/Demos/Chat/Customization/jQuery/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Chat', 'Customization', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
-  test('Customization', async (t) => {
+// runManualTest('Chat', 'Customization', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+  test('Sending Message', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const dayHeaderFormatOption = ['dd_MM_yyyy', 'dd.MM.yyyy', 'MMMM dd, yyyy', 'EEEE, MMMM dd'];
-    const messageTimestampOption = ['hh:mm a', 'hh:mm:ss a', 'HH:mm', 'HH:mm:ss'];
 
     await t
         .typeText('.dx-texteditor-input','testing')
         .pressKey('enter');
     await testScreenshot(t, takeScreenshot, 'Chat after sending a message.png');
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  });
+
+  test('Test showAvatar', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, 'Chat when showAvatar = true.png');
 
@@ -28,7 +34,12 @@ runManualTest('Chat', 'Customization', ['jQuery'/* , 'React', 'Vue', 'Angular' *
     await testScreenshot(t, takeScreenshot, 'Chat when showAvatar = false.png');
 
     await t
-        .click('#show-avatar');
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  });
+
+  test('Test showUsername', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, 'Chat when showUsername = true.png');
 
@@ -38,7 +49,12 @@ runManualTest('Chat', 'Customization', ['jQuery'/* , 'React', 'Vue', 'Angular' *
     await testScreenshot(t, takeScreenshot, 'Chat when showUsername = false.png');
 
     await t
-        .click('#show-user-name');
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  });
+
+  test('Test showDayHeaders', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, 'Chat when showDayHeaders = true.png');
 
@@ -48,14 +64,27 @@ runManualTest('Chat', 'Customization', ['jQuery'/* , 'React', 'Vue', 'Angular' *
     await testScreenshot(t, takeScreenshot, 'Chat when showDayHeaders = false.png');
 
     await t
-    .click('#show-day-headers');
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  });
 
-    dayHeaderFormatOption.forEach(async(element, index) => {
+  test('Test dayHeaderFormat', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const option = ['dd_MM_yyyy', 'dd.MM.yyyy', 'MMMM dd, yyyy', 'EEEE, MMMM dd'];
+
+    for (let index = 0; index < 4; index++) {        
         await t
-        .click('#day-headers-format')
-        .click(Selector('.dx-list-item').nth(index));
-        await testScreenshot(t, takeScreenshot, `Chat when dayHeaderFormat = ${element}.png`);
-    });
+            .click('#day-headers-format')
+            .click(Selector('.dx-list-item').nth(index));
+            await testScreenshot(t, takeScreenshot, `Chat when dayHeaderFormat = ${option[index]}.png`);
+    }
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  });
+
+  test('Test showMessageTimestamp', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, 'Chat when showMessageTimestamp = true.png');
 
@@ -65,14 +94,27 @@ runManualTest('Chat', 'Customization', ['jQuery'/* , 'React', 'Vue', 'Angular' *
     await testScreenshot(t, takeScreenshot, 'Chat when showMessageTimestamp = false.png');
 
     await t
-    .click('#show-message-timestamp');
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  });
 
-    messageTimestampOption.forEach(async(element, index) => {
+  test('Test messageTimestampFormat', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const option = ['hh_mm a', 'hh_mm_ss a', 'HH_mm', 'HH_mm_ss'];
+
+    for (let index = 0; index < 4; index++) {        
         await t
-        .click('#message-timestamp-format')
-        .click(Selector('.dx-list-item').nth(index));
-        await testScreenshot(t, takeScreenshot, `Chat when messageTimestampFormat = ${element}.png`);
-    });
+            .click('#message-timestamp-format')
+            .click(Selector('.dx-list-item').nth(index));
+            await testScreenshot(t, takeScreenshot, `Chat when messageTimestampFormat = ${option[index]}.png`);
+    }
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  });
+
+  test('Disable Chat', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, 'Chat when disabled = false.png');
 
@@ -85,4 +127,4 @@ runManualTest('Chat', 'Customization', ['jQuery'/* , 'React', 'Vue', 'Angular' *
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   });
-});
+// });
