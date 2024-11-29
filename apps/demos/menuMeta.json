@@ -2056,6 +2056,7 @@
     "Name": "Chat",
     "Breadcrumb": true,
     "Equivalents": "dxChat, dx-chat, chat",
+    "Badge": "New",
     "Groups": [
       {
         "Name": "Overview",
@@ -2067,7 +2068,6 @@
             "DocUrl": "Guide/UI_Components/Chat/Overview/",
             "Widget": "Chat",
             "DemoType": "Web",
-            "Badge": "New",
             "MvcAdditionalFiles": [
               "/Models/SampleData/ChatData.cs",
               "/Models/Chat/User.cs",
@@ -2086,8 +2086,7 @@
             "Name": "Customization",
             "DocUrl": "Guide/UI_Components/Chat/Customization/",
             "Widget": "Chat",
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           }
         ]
       },
@@ -2099,8 +2098,7 @@
             "Title": "AI and Chatbot Integration",
             "Name": "AIAndChatbotIntegration",
             "Widget": "Chat",
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           }
         ]
       }
