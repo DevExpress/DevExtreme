@@ -43,7 +43,23 @@ $(() => {
     }, 10000);
   }
 
+  function toggleDisabledState(disabled) {
+    const $button = instance.element().find(`.${CHAT_MESSAGEBOX_BUTTON_CLASS}`);
+    const $textArea = instance.element().find(`.${CHAT_MESSAGEBOX_TEXTAREA_CLASS}`);
+    const buttonInstance = $button.dxButton('instance');
+    const textAreaInstance = $textArea.dxTextArea('instance');
+
+    buttonInstance.option({ disabled });
+    textAreaInstance.option({ disabled });
+
+    if (!disabled) {
+      textAreaInstance.focus();
+    }
+  };
+
   async function processMessageSending() {
+    toggleDisabledState(true);
+
     instance.option({ typingUsers: [assistant] });
 
     try {
@@ -59,10 +75,14 @@ $(() => {
     } catch {
       instance.option({ typingUsers: [] });
       alertLimitReached();
+    } finally {
+      toggleDisabledState(false);
     }
   }
 
   async function regenerate() {
+    toggleDisabledState(true);
+
     try {
       const aiResponse = await getAIResponse(messages.slice(0, -1));
 
@@ -71,6 +91,8 @@ $(() => {
     } catch {
       updateLastMessage(messages.at(-1).content);
       alertLimitReached();
+    } finally {
+      toggleDisabledState(false);
     }
   }
 
