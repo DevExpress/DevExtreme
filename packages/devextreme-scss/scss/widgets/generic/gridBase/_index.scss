@@ -32,6 +32,7 @@ $generic-grid-base-checkbox-icon-size: 16px;
 $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
 $grid-masterdetail-padding: 20px;
 $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-height;
+$generic-grid-base-cell-input-height: round($generic-base-line-height * $generic-base-font-size) + 2 * $generic-grid-base-cell-padding;
 
 @mixin dx-set-checkbox-border-color-as-background() {
   @if $generic-color-postfix == ".contrast" {
@@ -247,7 +248,7 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
   .dx-#{$widget-name}-rowsview {
     .dx-texteditor-input {
       padding: $generic-grid-base-cell-padding;
-      min-height: round($generic-base-line-height * $generic-base-font-size) + 2 * $generic-grid-base-cell-padding;
+      min-height: $generic-grid-base-cell-input-height;
     }
 
     .dx-numberbox,
@@ -1012,8 +1013,22 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
   }
 
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns {
-    .dx-row:not(.dx-row-lines, .dx-group-row, .dx-datagrid-group-footer) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+    .dx-row:not(.dx-row-lines, .dx-group-row, .dx-#{$widget-name}-group-footer, .dx-edit-row, .dx-selection, .dx-row-focused) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
       padding-top: $generic-grid-base-cell-padding + 1px;
+    }
+
+    .dx-selection.dx-row:not(.dx-edit-row) > td:not(.dx-editor-cell, .dx-master-detail-cell),
+    .dx-row-focused.dx-row:not(.dx-edit-row) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+      padding-bottom: $generic-grid-base-cell-padding - 1px;
+    }
+
+    .dx-row.dx-edit-row > td.dx-command-edit {
+      padding-top: $generic-grid-base-cell-padding - 1px;
+    }
+
+    .dx-row.dx-edit-row > td:not(.dx-master-detail-cell) .dx-texteditor-input {
+      padding-bottom: $generic-grid-base-cell-padding - 1px;
+      min-height: $generic-grid-base-cell-input-height - 2px;
     }
 
     .dx-data-row td:not(.dx-command-expand, .dx-editor-cell) {

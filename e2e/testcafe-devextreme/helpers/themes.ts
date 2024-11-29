@@ -36,9 +36,15 @@ export const Themes = {
   materialTealCompact: 'material.teal.light.compact',
   materialTealDarkCompact: 'material.teal.dark.compact',
   fluentBlue: 'fluent.blue.light',
+  fluentBlueCompact: 'fluent.blue.light.compact',
   fluentBlueDark: 'fluent.blue.dark',
+  fluentBlueDarkCompact: 'fluent.blue.dark.compact',
   // eslint-disable-next-line spellcheck/spell-checker
   fluentSaaS: 'fluent.saas.light',
   // eslint-disable-next-line spellcheck/spell-checker
+  fluentSaaSCompact: 'fluent.saas.light.compact',
+  // eslint-disable-next-line spellcheck/spell-checker
   fluentSaaSDark: 'fluent.saas.dark',
+  // eslint-disable-next-line spellcheck/spell-checker
+  fluentSaaSDarkCompact: 'fluent.saas.dark.compact',
 };
