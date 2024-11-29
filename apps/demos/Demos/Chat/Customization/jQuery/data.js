@@ -51,4 +51,3 @@ const messages = [
 
 const dayHeaderFormat = ['dd/MM/yyyy', 'dd.MM.yyyy', 'MMMM dd, yyyy', 'EEEE, MMMM dd']
 const messageTimestampFormat = 'hh:mm a';
-    
