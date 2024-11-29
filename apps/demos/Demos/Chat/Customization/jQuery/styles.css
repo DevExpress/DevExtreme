@@ -1,10 +1,3 @@
-.dx-viewport {
-    padding: 20px;
-    min-width: 780px;
-    border: 1px solid var(--dx-color-border);
-    border-radius: 8px;
-}
-
 .demo-container {
     min-width: 720px;
     display: flex;
@@ -25,7 +18,7 @@
     background-color: rgba(191, 191, 191, 0.15);
 }
 
-#chat {
+.dx-chat {
 max-width: 480px;
 }
 
@@ -36,7 +29,7 @@ max-width: 480px;
 
 .option-group {
     padding: 10px 0;
-    border-bottom: 1px solid lightgray;
+    border-bottom: 1px solid var(--dx-color-border);
 }
 
 .option-group:last-child {
