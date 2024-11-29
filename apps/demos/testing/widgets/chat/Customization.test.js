@@ -6,7 +6,7 @@ import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils'
 fixture('Chat.Customization')
   .page('http://localhost:8080/')
   .before(async (ctx) => {
-    ctx.initialWindowSize = [900, 600];
+    ctx.initialWindowSize = [900, 800];
   });
 
 runManualTest('Chat', 'Customization', ['jQuery'], (test) => {
@@ -43,8 +43,8 @@ runManualTest('Chat', 'Customization', ['jQuery'], (test) => {
         .click('#show-day-headers');
     
     await t
-        .click('#day-headers-format')
-        .click(Selector('.dx-list-item').nth(2))
+        .click('#message-timestamp-format')
+        .click(Selector('.dx-list-item').nth(1))
         .wait(200);
 
     await testScreenshot(t, takeScreenshot, `chat_customization_day_headers_format_is_changed.png`);
@@ -57,11 +57,9 @@ runManualTest('Chat', 'Customization', ['jQuery'], (test) => {
     await t
         .click('#show-message-timestamp');
 
-    await t.eval(() => location.reload());
-
     await t
-        .click('#message-timestamp-format')
-        .click(Selector('.dx-list-item').nth(1))
+        .click('#day-headers-format')
+        .click(Selector('.dx-list-item').nth(2))
         .wait(200);
 
     await testScreenshot(t, takeScreenshot, `chat_customization_message_timestamp_format_is_changed.png`);
