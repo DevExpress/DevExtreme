@@ -52,7 +52,7 @@ runManualTest('Chat', 'Customization', ['jQuery'/* , 'React', 'Vue', 'Angular' *
 
     dayHeaderFormatOption.forEach(async(element, index) => {
         await t
-        .click('#message-timestamp-format')
+        .click('#day-headers-format')
         .click(Selector('.dx-list-item').nth(index));
         await testScreenshot(t, takeScreenshot, `Chat when dayHeaderFormat = ${element}.png`);
     });
