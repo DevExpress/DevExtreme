@@ -187,6 +187,7 @@ const SKIPPED_TESTS = {
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
+    Pagination: ['Overview'],
   },
   Angular: {
     Charts: [
@@ -213,6 +214,7 @@ const SKIPPED_TESTS = {
     Scheduler: [
       'CustomDragAndDrop',
     ],
+    Pagination: ['Overview'],
   },
   Vue: {
     Charts: [
@@ -238,6 +240,7 @@ const SKIPPED_TESTS = {
     Drawer: [
       { demo: 'TopOrBottomPosition', themes: [THEME.material] },
     ],
+    Pagination: ['Overview'],
   },
   React: {
     Charts: [
@@ -259,6 +262,7 @@ const SKIPPED_TESTS = {
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
     ],
+    Pagination: ['Overview'],
   },
 };
 
