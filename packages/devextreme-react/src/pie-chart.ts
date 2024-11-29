@@ -1262,6 +1262,9 @@ const _componentSubtitle = (props: ISubtitleProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "subtitle",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
     },
   });
 };
@@ -1300,6 +1303,12 @@ const _componentTitle = (props: ITitleProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "title",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false },
+        legendTitleSubtitle: { optionName: "subtitle", isCollectionItem: false },
+        margin: { optionName: "margin", isCollectionItem: false },
+        pieChartTitleSubtitle: { optionName: "subtitle", isCollectionItem: false }
+      },
     },
   });
 };

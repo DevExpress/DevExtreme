@@ -902,6 +902,13 @@ prepareConfigurationComponentConfig(DxHoverStyleConfig);
 const DxHoverStyle = defineComponent(DxHoverStyleConfig);
 
 (DxHoverStyle as any).$_optionName = "hoverStyle";
+(DxHoverStyle as any).$_expectedChildren = {
+  border: { isCollectionItem: false, optionName: "border" },
+  color: { isCollectionItem: false, optionName: "color" },
+  hatching: { isCollectionItem: false, optionName: "hatching" },
+  pointBorder: { isCollectionItem: false, optionName: "border" },
+  seriesBorder: { isCollectionItem: false, optionName: "border" }
+};
 
 const DxImageConfig = {
   emits: {
@@ -925,6 +932,11 @@ prepareConfigurationComponentConfig(DxImageConfig);
 const DxImage = defineComponent(DxImageConfig);
 
 (DxImage as any).$_optionName = "image";
+(DxImage as any).$_expectedChildren = {
+  height: { isCollectionItem: false, optionName: "height" },
+  url: { isCollectionItem: false, optionName: "url" },
+  width: { isCollectionItem: false, optionName: "width" }
+};
 
 const DxIndentConfig = {
   emits: {
@@ -993,6 +1005,14 @@ prepareConfigurationComponentConfig(DxLabelConfig);
 const DxLabel = defineComponent(DxLabelConfig);
 
 (DxLabel as any).$_optionName = "label";
+(DxLabel as any).$_expectedChildren = {
+  argumentFormat: { isCollectionItem: false, optionName: "argumentFormat" },
+  border: { isCollectionItem: false, optionName: "border" },
+  connector: { isCollectionItem: false, optionName: "connector" },
+  font: { isCollectionItem: false, optionName: "font" },
+  format: { isCollectionItem: false, optionName: "format" },
+  seriesBorder: { isCollectionItem: false, optionName: "border" }
+};
 
 const DxLengthConfig = {
   emits: {
@@ -1565,6 +1585,13 @@ prepareConfigurationComponentConfig(DxSelectionStyleConfig);
 const DxSelectionStyle = defineComponent(DxSelectionStyleConfig);
 
 (DxSelectionStyle as any).$_optionName = "selectionStyle";
+(DxSelectionStyle as any).$_expectedChildren = {
+  border: { isCollectionItem: false, optionName: "border" },
+  color: { isCollectionItem: false, optionName: "color" },
+  hatching: { isCollectionItem: false, optionName: "hatching" },
+  pointBorder: { isCollectionItem: false, optionName: "border" },
+  seriesBorder: { isCollectionItem: false, optionName: "border" }
+};
 
 const DxSeriesConfig = {
   emits: {

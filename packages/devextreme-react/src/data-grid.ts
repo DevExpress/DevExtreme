@@ -1838,6 +1838,11 @@ const _componentHeaderFilter = (props: IHeaderFilterProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "headerFilter",
+      ExpectedChildren: {
+        columnHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
+        dataGridHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
+        dataGridHeaderFilterTexts: { optionName: "texts", isCollectionItem: false }
+      },
     },
   });
 };

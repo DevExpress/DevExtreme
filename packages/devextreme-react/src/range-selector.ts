@@ -909,6 +909,13 @@ const _componentHoverStyle = (props: IHoverStyleProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "hoverStyle",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        color: { optionName: "color", isCollectionItem: false },
+        hatching: { optionName: "hatching", isCollectionItem: false },
+        pointBorder: { optionName: "border", isCollectionItem: false },
+        seriesBorder: { optionName: "border", isCollectionItem: false }
+      },
     },
   });
 };
@@ -940,6 +947,11 @@ const _componentImage = (props: IImageProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "image",
+      ExpectedChildren: {
+        height: { optionName: "height", isCollectionItem: false },
+        url: { optionName: "url", isCollectionItem: false },
+        width: { optionName: "width", isCollectionItem: false }
+      },
     },
   });
 };
@@ -1004,6 +1016,14 @@ const _componentLabel = (props: ILabelProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "label",
+      ExpectedChildren: {
+        argumentFormat: { optionName: "argumentFormat", isCollectionItem: false },
+        border: { optionName: "border", isCollectionItem: false },
+        connector: { optionName: "connector", isCollectionItem: false },
+        font: { optionName: "font", isCollectionItem: false },
+        format: { optionName: "format", isCollectionItem: false },
+        seriesBorder: { optionName: "border", isCollectionItem: false }
+      },
     },
   });
 };
@@ -1643,6 +1663,13 @@ const _componentSelectionStyle = (props: ISelectionStyleProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "selectionStyle",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        color: { optionName: "color", isCollectionItem: false },
+        hatching: { optionName: "hatching", isCollectionItem: false },
+        pointBorder: { optionName: "border", isCollectionItem: false },
+        seriesBorder: { optionName: "border", isCollectionItem: false }
+      },
     },
   });
 };

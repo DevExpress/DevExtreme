@@ -1537,6 +1537,11 @@ const _componentHeaderFilter = (props: IHeaderFilterProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "headerFilter",
+      ExpectedChildren: {
+        columnHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
+        treeListHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
+        treeListHeaderFilterTexts: { optionName: "texts", isCollectionItem: false }
+      },
     },
   });
 };

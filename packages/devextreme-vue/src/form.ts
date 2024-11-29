@@ -560,6 +560,23 @@ const DxItem = defineComponent(DxItemConfig);
 
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
+(DxItem as any).$_expectedChildren = {
+  AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
+  buttonOptions: { isCollectionItem: false, optionName: "buttonOptions" },
+  colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" },
+  CompareRule: { isCollectionItem: true, optionName: "validationRules" },
+  CustomRule: { isCollectionItem: true, optionName: "validationRules" },
+  EmailRule: { isCollectionItem: true, optionName: "validationRules" },
+  label: { isCollectionItem: false, optionName: "label" },
+  NumericRule: { isCollectionItem: true, optionName: "validationRules" },
+  PatternRule: { isCollectionItem: true, optionName: "validationRules" },
+  RangeRule: { isCollectionItem: true, optionName: "validationRules" },
+  RequiredRule: { isCollectionItem: true, optionName: "validationRules" },
+  StringLengthRule: { isCollectionItem: true, optionName: "validationRules" },
+  tab: { isCollectionItem: true, optionName: "tabs" },
+  tabPanelOptions: { isCollectionItem: false, optionName: "tabPanelOptions" },
+  validationRule: { isCollectionItem: true, optionName: "validationRules" }
+};
 
 const DxLabelConfig = {
   emits: {

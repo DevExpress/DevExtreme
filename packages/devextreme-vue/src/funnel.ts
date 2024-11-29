@@ -853,6 +853,9 @@ prepareConfigurationComponentConfig(DxSubtitleConfig);
 const DxSubtitle = defineComponent(DxSubtitleConfig);
 
 (DxSubtitle as any).$_optionName = "subtitle";
+(DxSubtitle as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxTitleConfig = {
   emits: {
@@ -886,6 +889,12 @@ prepareConfigurationComponentConfig(DxTitleConfig);
 const DxTitle = defineComponent(DxTitleConfig);
 
 (DxTitle as any).$_optionName = "title";
+(DxTitle as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" },
+  funnelTitleSubtitle: { isCollectionItem: false, optionName: "subtitle" },
+  legendTitleSubtitle: { isCollectionItem: false, optionName: "subtitle" },
+  margin: { isCollectionItem: false, optionName: "margin" }
+};
 
 const DxTooltipConfig = {
   emits: {
