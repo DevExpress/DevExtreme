@@ -3,7 +3,7 @@ import {
 } from '../core/utils/deferred';
 import {
   Store as StoreBase,
-  Options as StoreOptionsBase,
+  StoreOptions as StoreOptionsBase,
 } from './store';
 import { LoadOptions } from '../data';
 
@@ -58,12 +58,6 @@ export default class AbstractStore<
 
 
 export {
-  /**
-   * @deprecated Use StoreOptions from common/data/abstract_store instead
-   */
   StoreOptionsBase as StoreOptions,
-  /**
-   * @deprecated Use Store from common/data/abstract_store instead
-   */
   StoreBase as Store,
 };

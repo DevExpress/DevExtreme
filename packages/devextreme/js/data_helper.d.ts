@@ -1,4 +1,4 @@
-import DataSource from './data/data_source';
+import { DataSource } from './common/data';
 
 /**
  * @docid

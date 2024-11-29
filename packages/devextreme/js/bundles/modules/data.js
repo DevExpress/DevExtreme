@@ -28,7 +28,7 @@ Object.defineProperty(DevExpress.data, '_errorHandler', {
 DevExpress.data.setErrorHandler = require('../../common/data/errors').setErrorHandler;
 DevExpress.data.DataSource = require('../../common/data/data_source');
 DevExpress.data.query = require('../../common/data/query');
-DevExpress.data.Store = require('../../common/data/abstract_store');
+DevExpress.data.Store = require('../../data/abstract_store');
 DevExpress.data.ArrayStore = require('../../common/data/array_store');
 DevExpress.data.CustomStore = require('../../common/data/custom_store').CustomStore;
 DevExpress.data.LocalStore = require('../../common/data/local_store');

@@ -2,8 +2,6 @@ export {
     AsyncCancelable,
     Cancelable,
     ChangedOptionInfo,
-    DxEvent,
-    event,
     EventInfo,
     EventObject,
     InitializedEventInfo,
@@ -13,5 +11,4 @@ export {
     on,
     one,
     trigger,
-    triggerHandler,
 } from 'devextreme/common/core/events';

@@ -1,7 +1,7 @@
 /* eslint-disable prefer-destructuring */
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
-import Store from '@js/common/data/abstract_store';
+import Store from '@js/data/abstract_store';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import type { ColumnBase } from '@js/common/grids';

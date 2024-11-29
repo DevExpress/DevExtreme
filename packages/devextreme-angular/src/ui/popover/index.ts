@@ -23,7 +23,7 @@ import {
 
 
 import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
-import { event } from 'devextreme/common/core/events';
+import { event } from 'devextreme/events/index';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
 import { Position } from 'devextreme/common';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';

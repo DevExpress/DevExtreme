@@ -1,14 +1,6 @@
+import { EndpointSelector } from '../common/data';
+
 /**
- * @docid
- * @namespace DevExpress
- * @public
+ * @deprecated Use EndpointSelector from /common/data instead
  */
-export class EndpointSelector {
-  constructor(options: any);
-  /**
-   * @docid
-   * @publicName urlFor(key)
-   * @public
-   */
-  urlFor(key: string): string;
-}
+export default EndpointSelector;

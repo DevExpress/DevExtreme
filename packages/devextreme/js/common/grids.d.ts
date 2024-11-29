@@ -29,8 +29,9 @@ import {
 import {
   DataSource,
   DataSourceOptions,
-  DataSourceLike,
-} from '../data/data_source';
+} from './data';
+
+import { DataSourceLike } from '../data/data_source';
 
 import {
   Cancelable,

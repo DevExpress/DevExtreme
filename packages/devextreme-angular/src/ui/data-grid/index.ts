@@ -36,7 +36,7 @@ import { Store } from 'devextreme/data/store';
 import { dxFormOptions } from 'devextreme/ui/form';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
-import { event } from 'devextreme/common/core/events';
+import { event } from 'devextreme/events/index';
 import { Format } from 'devextreme/common/core/localization';
 
 import DxDataGrid from 'devextreme/ui/data_grid';

@@ -1,4 +1,4 @@
-import Store from '@js/common/data/abstract_store';
+import Store from '@js/data/abstract_store';
 import ArrayStore from '@js/common/data/array_store';
 import { CustomStore } from '@js/common/data/custom_store';
 import { normalizeSortingInfo } from '@js/common/data/utils';

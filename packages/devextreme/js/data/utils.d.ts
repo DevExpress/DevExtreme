@@ -1,7 +1,6 @@
-/**
- * @docid Utils.base64_encode
- * @publicName base64_encode(input)
- * @namespace DevExpress.data
- * @public
- */
-export declare function base64_encode(input: string | Array<number>): string;
+export {
+  /**
+   * @deprecated Use base64_encode from /common/data instead
+   */
+  base64_encode,
+} from '../common/data';

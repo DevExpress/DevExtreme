@@ -12,7 +12,8 @@ import type { ChangeEvent, ClosedEvent, ContentReadyEvent, CustomItemCreatingEve
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { HorizontalAlignment, VerticalAlignment, TextEditorButtonLocation, template, PositionAlignment, Direction, ButtonStyle, ButtonType, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
-import type { event, EventInfo } from "devextreme/common/core/events";
+import type { event } from "devextreme/events/index";
+import type { EventInfo } from "devextreme/common/core/events";
 import type { Component } from "devextreme/core/component";
 import type { dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
@@ -272,9 +273,9 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   maxWidth?: (() => number | string) | number | string;
   minHeight?: (() => number | string) | number | string;
   minWidth?: (() => number | string) | number | string;
-  onContentReady?: ((e: EventInfo<any>) => void);
-  onDisposing?: ((e: EventInfo<any>) => void);
-  onHidden?: ((e: EventInfo<any>) => void);
+  onContentReady?: ((e: EventInfo<any> | { component: any, element: any, model: any }) => void);
+  onDisposing?: ((e: EventInfo<any> | { component: any, element: any, model: any }) => void);
+  onHidden?: ((e: EventInfo<any> | { component: any, element: any, model: any }) => void);
   onHiding?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
   onInitialized?: ((e: { component: Component<any>, element: any }) => void);
   onOptionChanged?: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void);
@@ -282,7 +283,7 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   onResizeEnd?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
   onResizeStart?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
   onShowing?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
-  onShown?: ((e: EventInfo<any>) => void);
+  onShown?: ((e: EventInfo<any> | { component: any, element: any, model: any }) => void);
   onTitleRendered?: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void);
   position?: (() => void) | PositionAlignment | PositionConfig;
   resizeEnabled?: boolean;

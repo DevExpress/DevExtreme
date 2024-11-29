@@ -1,4 +1,4 @@
-import Store from '@js/common/data/abstract_store';
+import Store from '@js/data/abstract_store';
 import arrayQuery from '@js/common/data/array_query';
 import { applyBatch } from '@js/common/data/array_utils';
 import { errors } from '@js/common/data/errors';
@@ -225,6 +225,7 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
   });
 }
 
+// @ts-expect-error
 const CustomStore = Store.inherit({
   ctor(options) {
     options = options || {};

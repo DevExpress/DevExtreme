@@ -4,7 +4,7 @@ import typeUtils from 'core/utils/type';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import ajaxMock from '../../helpers/ajaxMock.js';
 import { DataSource } from 'common/data/data_source/data_source';
-import Store from 'common/data/abstract_store';
+import Store from 'data/abstract_store';
 import ArrayStore from 'common/data/array_store';
 import ODataStore from 'common/data/odata/store';
 import AggregateCalculator from '__internal/grids/data_grid/m_aggregate_calculator';

@@ -1,6 +1,6 @@
 import '@js/common/data/odata/query_adapter';
 
-import Store from '@js/common/data/abstract_store';
+import Store from '@js/data/abstract_store';
 import { errors } from '@js/common/data/errors';
 import RequestDispatcher from '@js/common/data/odata/request_dispatcher';
 import query from '@js/common/data/query';
@@ -41,6 +41,7 @@ const mergeFieldTypesWithKeyType = (fieldTypes, keyType) => {
   return result;
 };
 
+// @ts-expect-error
 const ODataStore = Store.inherit({
 
   ctor(options) {

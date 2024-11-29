@@ -1,4 +1,4 @@
-import Store from '@js/common/data/abstract_store';
+import Store from '@js/data/abstract_store';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import Class from '@js/core/class';
 import { EventsStrategy } from '@js/core/events_strategy';

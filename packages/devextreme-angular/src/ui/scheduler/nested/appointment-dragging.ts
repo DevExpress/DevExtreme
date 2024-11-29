@@ -17,7 +17,7 @@ import {
 import dxScheduler from 'devextreme/ui/scheduler';
 import dxSortable from 'devextreme/ui/sortable';
 import dxDraggable from 'devextreme/ui/draggable';
-import { event } from 'devextreme/common/core/events';
+import { event } from 'devextreme/events/index';
 
 import {
     NestedOptionHost,
