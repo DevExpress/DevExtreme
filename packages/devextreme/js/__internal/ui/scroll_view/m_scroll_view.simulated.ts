@@ -107,9 +107,13 @@ const ScrollViewScroller = Scroller.inherit({
   },
 
   _isReachBottom() {
+    return this._reachBottomEnabled && this.isBottomReached();
+  },
+
+  isBottomReached() {
     const containerEl = this._$container.get(0);
 
-    return this._reachBottomEnabled && Math.round(this._bottomBoundary - Math.ceil(containerEl.scrollTop)) <= 1;
+    return Math.round(this._bottomBoundary - Math.ceil(containerEl.scrollTop)) <= 1;
   },
 
   _scrollComplete() {
@@ -320,6 +324,10 @@ const SimulatedScrollViewStrategy = SimulatedStrategy.inherit({
     const location = this.callBase();
     location.top += getHeight(this._$topPocket);
     return location;
+  },
+
+  isBottomReached() {
+    return this._scrollers.vertical.isBottomReached();
   },
 
   dispose() {
