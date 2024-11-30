@@ -14,20 +14,16 @@ runManualTest('Chat', 'Customization', ['jQuery'], (test) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-        .click('#message-timestamp-format')
+        .click('#day-headers-format')
         .click(Selector('.dx-list-item').nth(2))
         .wait(500);
+
+    await testScreenshot(t, takeScreenshot, `chat_customization_day_headers_format_is_changed.png`);
 
     await t
         .click('#show-day-headers');
 
     await testScreenshot(t, takeScreenshot, 'chat_customization_day_headers_is_hidden.png');
-
-    await t
-        .typeText('.dx-texteditor-input','testing')
-        .pressKey('enter');
-
-    await testScreenshot(t, takeScreenshot, 'chat_customization_message_sent.png');
 
     await t
         .click('#show-avatar');
@@ -45,11 +41,9 @@ runManualTest('Chat', 'Customization', ['jQuery'], (test) => {
     await t
         .click('#show-user-name');
 
-    await testScreenshot(t, takeScreenshot, `chat_customization_day_headers_format_is_changed.png`);
-
     await t
-        .click('#day-headers-format')
-        .click(Selector('.dx-list-item').nth(6))
+        .click('#message-timestamp-format')
+        .click(Selector('.dx-list-item').nth(5))
         .wait(500);
 
     await testScreenshot(t, takeScreenshot, `chat_customization_message_timestamp_format_is_changed.png`);
@@ -58,11 +52,13 @@ runManualTest('Chat', 'Customization', ['jQuery'], (test) => {
         .click('#show-message-timestamp');
 
     await testScreenshot(t, takeScreenshot, 'chat_customization_message_timestamps_is_hidden.png');
-
+       
     await t
+        .typeText('.dx-texteditor-input','testing')
+        .pressKey('enter')
         .click('#chat-disabled');
 
-    await testScreenshot(t, takeScreenshot, 'chat_customization_is_disabled.png');
+    await testScreenshot(t, takeScreenshot, 'chat_customization_is_disabled_after_sent.png');
 
     await t
       .expect(compareResults.isValid())
