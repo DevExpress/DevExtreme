@@ -1,6 +1,6 @@
 import React from "react";
 import Pagination from "devextreme-react/pagination";
-import { customers } from "./data.js";
+import { customers } from "./data.ts";
 
 const columns = ["CompanyName", "City", "State", "Phone", "Fax"];
 
