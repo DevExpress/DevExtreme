@@ -1,5 +1,4 @@
 import React from "react";
-import Text from "./Text.js";
 import Pagination from "devextreme-react/pagination";
 import { customers } from "./data.js";
 
@@ -9,7 +8,6 @@ const App = () => {
   return (
     <>
       <Pagination />
-      <Text />
     </>
   );
 };
