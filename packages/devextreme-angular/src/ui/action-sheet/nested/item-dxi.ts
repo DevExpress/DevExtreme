@@ -16,8 +16,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { NativeEventInfo } from 'devextreme/common/core/events';
-import { DxEvent } from 'devextreme/events/index';
+import { NativeEventInfo } from 'devextreme/events/index';
 import { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import {
@@ -55,10 +54,10 @@ export class DxiActionSheetItemComponent extends CollectionNestedOption implemen
     }
 
     @Input()
-    get onClick(): ((e: NativeEventInfo<any> | { component: any, element: any, event: DxEvent, model: any }) => void) {
+    get onClick(): ((e: NativeEventInfo<any>) => void) {
         return this._getOption('onClick');
     }
-    set onClick(value: ((e: NativeEventInfo<any> | { component: any, element: any, event: DxEvent, model: any }) => void)) {
+    set onClick(value: ((e: NativeEventInfo<any>) => void)) {
         this._setOption('onClick', value);
     }
 

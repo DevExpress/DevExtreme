@@ -15,12 +15,11 @@ import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEven
 import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, dxFormSimpleItem, dxFormOptions, OptionChangedEvent as FormOptionChangedEvent, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent, FormItemType } from "devextreme/ui/form";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, DataType, Format as CommonFormat, SearchMode, SortOrder, ComparisonOperator, PositionAlignment, Mode, Direction, ToolbarItemLocation, ToolbarItemComponent, DisplayMode, DragDirection, DragHighlight, ScrollMode, ScrollbarMode, SingleMultipleOrNone } from "devextreme/common";
-import type { event } from "devextreme/events/index";
+import type { event, EventInfo } from "devextreme/events/index";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 import type { dxPopupOptions, dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
-import type { EventInfo } from "devextreme/common/core/events";
 import type { Component } from "devextreme/core/component";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
@@ -1119,9 +1118,9 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   maxWidth?: (() => number | string) | number | string;
   minHeight?: (() => number | string) | number | string;
   minWidth?: (() => number | string) | number | string;
-  onContentReady?: ((e: EventInfo<any> | { component: any, element: any, model: any }) => void);
-  onDisposing?: ((e: EventInfo<any> | { component: any, element: any, model: any }) => void);
-  onHidden?: ((e: EventInfo<any> | { component: any, element: any, model: any }) => void);
+  onContentReady?: ((e: EventInfo<any>) => void);
+  onDisposing?: ((e: EventInfo<any>) => void);
+  onHidden?: ((e: EventInfo<any>) => void);
   onHiding?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
   onInitialized?: ((e: { component: Component<any>, element: any }) => void);
   onOptionChanged?: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void);
@@ -1129,7 +1128,7 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   onResizeEnd?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
   onResizeStart?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
   onShowing?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
-  onShown?: ((e: EventInfo<any> | { component: any, element: any, model: any }) => void);
+  onShown?: ((e: EventInfo<any>) => void);
   onTitleRendered?: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void);
   position?: (() => void) | PositionAlignment | PositionConfig;
   resizeEnabled?: boolean;
@@ -1945,9 +1944,9 @@ type IPopupProps = React.PropsWithChildren<{
   maxWidth?: (() => number | string) | number | string;
   minHeight?: (() => number | string) | number | string;
   minWidth?: (() => number | string) | number | string;
-  onContentReady?: ((e: EventInfo<any> | { component: any, element: any, model: any }) => void);
-  onDisposing?: ((e: EventInfo<any> | { component: any, element: any, model: any }) => void);
-  onHidden?: ((e: EventInfo<any> | { component: any, element: any, model: any }) => void);
+  onContentReady?: ((e: EventInfo<any>) => void);
+  onDisposing?: ((e: EventInfo<any>) => void);
+  onHidden?: ((e: EventInfo<any>) => void);
   onHiding?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
   onInitialized?: ((e: { component: Component<any>, element: any }) => void);
   onOptionChanged?: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void);
@@ -1955,7 +1954,7 @@ type IPopupProps = React.PropsWithChildren<{
   onResizeEnd?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
   onResizeStart?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
   onShowing?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
-  onShown?: ((e: EventInfo<any> | { component: any, element: any, model: any }) => void);
+  onShown?: ((e: EventInfo<any>) => void);
   onTitleRendered?: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void);
   position?: (() => void) | PositionAlignment | PositionConfig;
   resizeEnabled?: boolean;

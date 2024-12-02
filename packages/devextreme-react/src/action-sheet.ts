@@ -10,8 +10,7 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { dxActionSheetItem, CancelClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent } from "devextreme/ui/action_sheet";
-import type { NativeEventInfo } from "devextreme/common/core/events";
-import type { DxEvent } from "devextreme/events/index";
+import type { NativeEventInfo } from "devextreme/events/index";
 import type { ButtonStyle, template, ButtonType } from "devextreme/common";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 
@@ -99,7 +98,7 @@ const ActionSheet = memo(
 type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   icon?: string;
-  onClick?: ((e: NativeEventInfo<any> | { component: any, element: any, event: DxEvent, model: any }) => void);
+  onClick?: ((e: NativeEventInfo<any>) => void);
   stylingMode?: ButtonStyle;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;

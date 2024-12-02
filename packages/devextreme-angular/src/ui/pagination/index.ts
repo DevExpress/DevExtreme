@@ -21,7 +21,7 @@ import {
 
 
 import { DisplayMode } from 'devextreme/common';
-import { EventInfo } from 'devextreme/common/core/events';
+import { EventInfo } from 'devextreme/events/index';
 
 import DxPagination from 'devextreme/ui/pagination';
 

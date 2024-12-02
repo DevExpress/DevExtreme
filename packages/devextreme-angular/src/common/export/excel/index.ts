@@ -1,6 +1,7 @@
 export {
     DataGridCell,
-    ExcelExportDataGridProps,
+    ExcelExportDataGridOptions,
+    ExcelExportPivotGridOptions,
     exportDataGrid,
     exportPivotGrid,
     PivotGridCell,

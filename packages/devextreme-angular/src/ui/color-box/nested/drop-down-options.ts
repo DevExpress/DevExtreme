@@ -23,8 +23,7 @@ import dxOverlay from 'devextreme/ui/overlay';
 import DOMComponent from 'devextreme/core/dom_component';
 import dxPopup from 'devextreme/ui/popup';
 import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
-import { event } from 'devextreme/events/index';
-import { EventInfo } from 'devextreme/common/core/events';
+import { event, EventInfo } from 'devextreme/events/index';
 import { Component as CoreComponent } from 'devextreme/core/component';
 import { PositionAlignment } from 'devextreme/common';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
@@ -220,26 +219,26 @@ export class DxoColorBoxDropDownOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get onContentReady(): ((e: EventInfo<any> | { component: any, element: any, model: any }) => void) {
+    get onContentReady(): ((e: EventInfo<any>) => void) {
         return this._getOption('onContentReady');
     }
-    set onContentReady(value: ((e: EventInfo<any> | { component: any, element: any, model: any }) => void)) {
+    set onContentReady(value: ((e: EventInfo<any>) => void)) {
         this._setOption('onContentReady', value);
     }
 
     @Input()
-    get onDisposing(): ((e: EventInfo<any> | { component: any, element: any, model: any }) => void) {
+    get onDisposing(): ((e: EventInfo<any>) => void) {
         return this._getOption('onDisposing');
     }
-    set onDisposing(value: ((e: EventInfo<any> | { component: any, element: any, model: any }) => void)) {
+    set onDisposing(value: ((e: EventInfo<any>) => void)) {
         this._setOption('onDisposing', value);
     }
 
     @Input()
-    get onHidden(): ((e: EventInfo<any> | { component: any, element: any, model: any }) => void) {
+    get onHidden(): ((e: EventInfo<any>) => void) {
         return this._getOption('onHidden');
     }
-    set onHidden(value: ((e: EventInfo<any> | { component: any, element: any, model: any }) => void)) {
+    set onHidden(value: ((e: EventInfo<any>) => void)) {
         this._setOption('onHidden', value);
     }
 
@@ -300,10 +299,10 @@ export class DxoColorBoxDropDownOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get onShown(): ((e: EventInfo<any> | { component: any, element: any, model: any }) => void) {
+    get onShown(): ((e: EventInfo<any>) => void) {
         return this._getOption('onShown');
     }
-    set onShown(value: ((e: EventInfo<any> | { component: any, element: any, model: any }) => void)) {
+    set onShown(value: ((e: EventInfo<any>) => void)) {
         this._setOption('onShown', value);
     }
 
