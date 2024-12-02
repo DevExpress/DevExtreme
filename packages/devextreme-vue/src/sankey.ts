@@ -1,6 +1,50 @@
-import Sankey, { Properties } from "devextreme/viz/sankey";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import Sankey, { Properties } from "devextreme/viz/sankey";
+import  DataSource from "devextreme/data/data_source";
+import {
+ VerticalAlignment,
+ ExportFormat,
+ Format,
+ HorizontalAlignment,
+ VerticalEdge,
+} from "devextreme/common";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
+import {
+ DisposingEvent,
+ DrawnEvent,
+ ExportedEvent,
+ ExportingEvent,
+ FileSavingEvent,
+ IncidentOccurredEvent,
+ InitializedEvent,
+ LinkClickEvent,
+ LinkHoverEvent,
+ NodeClickEvent,
+ NodeHoverEvent,
+ OptionChangedEvent,
+ dxSankeyNode,
+ SankeyColorMode,
+} from "devextreme/viz/sankey";
+import {
+ Palette,
+ PaletteExtensionMode,
+ Theme,
+ DashStyle,
+ HatchDirection,
+ Font,
+ TextOverflow,
+ WordWrap,
+} from "devextreme/common/charts";
+import {
+ Format as LocalizationFormat,
+} from "devextreme/localization";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -49,42 +93,42 @@ interface DxSankey extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    adaptiveLayout: Object,
-    alignment: {},
-    dataSource: {},
+    adaptiveLayout: Object as PropType<Record<string, any>>,
+    alignment: [Array, String] as PropType<Array<VerticalAlignment> | VerticalAlignment>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
     disabled: Boolean,
-    elementAttr: Object,
-    export: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
+    export: Object as PropType<Record<string, any>>,
     hoverEnabled: Boolean,
-    label: Object,
-    link: Object,
-    loadingIndicator: Object,
-    margin: Object,
-    node: Object,
-    onDisposing: Function,
-    onDrawn: Function,
-    onExported: Function,
-    onExporting: Function,
-    onFileSaving: Function,
-    onIncidentOccurred: Function,
-    onInitialized: Function,
-    onLinkClick: Function,
-    onLinkHoverChanged: Function,
-    onNodeClick: Function,
-    onNodeHoverChanged: Function,
-    onOptionChanged: Function,
-    palette: {},
-    paletteExtensionMode: {},
+    label: Object as PropType<Record<string, any>>,
+    link: Object as PropType<Record<string, any>>,
+    loadingIndicator: Object as PropType<Record<string, any>>,
+    margin: Object as PropType<Record<string, any>>,
+    node: Object as PropType<Record<string, any>>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onDrawn: Function as PropType<((e: DrawnEvent) => void)>,
+    onExported: Function as PropType<((e: ExportedEvent) => void)>,
+    onExporting: Function as PropType<((e: ExportingEvent) => void)>,
+    onFileSaving: Function as PropType<((e: FileSavingEvent) => void)>,
+    onIncidentOccurred: Function as PropType<((e: IncidentOccurredEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onLinkClick: Function as PropType<((e: LinkClickEvent) => void)>,
+    onLinkHoverChanged: Function as PropType<((e: LinkHoverEvent) => void)>,
+    onNodeClick: Function as PropType<((e: NodeClickEvent) => void)>,
+    onNodeHoverChanged: Function as PropType<((e: NodeHoverEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    palette: [Array, String] as PropType<Array<string> | Palette>,
+    paletteExtensionMode: String as PropType<PaletteExtensionMode>,
     pathModified: Boolean,
     redrawOnResize: Boolean,
     rtlEnabled: Boolean,
-    size: Object,
+    size: Object as PropType<Record<string, any>>,
     sortData: {},
     sourceField: String,
     targetField: String,
-    theme: {},
-    title: [Object, String],
-    tooltip: Object,
+    theme: String as PropType<Theme>,
+    title: [Object, String] as PropType<Record<string, any> | string>,
+    tooltip: Object as PropType<Record<string, any>>,
     weightField: String
   },
   emits: {
@@ -188,11 +232,11 @@ const DxBorderConfig = {
     "update:width": null,
   },
   props: {
-    color: {},
-    dashStyle: {},
-    opacity: {},
-    visible: {},
-    width: {}
+    color: String,
+    dashStyle: String as PropType<DashStyle>,
+    opacity: Number,
+    visible: Boolean,
+    width: Number
   }
 };
 
@@ -218,10 +262,10 @@ const DxExportConfig = {
     backgroundColor: String,
     enabled: Boolean,
     fileName: String,
-    formats: Array,
+    formats: Array as PropType<Array<ExportFormat>>,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: {}
+    svgToCanvas: Function as PropType<((svg: any, canvas: any) => any)>
   }
 };
 
@@ -269,10 +313,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
-    type: {},
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -293,7 +337,7 @@ const DxHatchingConfig = {
     "update:width": null,
   },
   props: {
-    direction: {},
+    direction: String as PropType<HatchDirection>,
     opacity: Number,
     step: Number,
     width: Number
@@ -316,10 +360,10 @@ const DxHoverStyleConfig = {
     "update:opacity": null,
   },
   props: {
-    border: Object,
-    color: {},
-    hatching: Object,
-    opacity: {}
+    border: Object as PropType<Record<string, any>>,
+    color: String,
+    hatching: Object as PropType<Record<string, any>>,
+    opacity: Number
   }
 };
 
@@ -344,12 +388,12 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    border: Object,
-    customizeText: Function,
-    font: Object,
+    border: Object as PropType<Record<string, any>>,
+    customizeText: Function as PropType<((itemInfo: dxSankeyNode) => string)>,
+    font: Object as PropType<Font | Record<string, any>>,
     horizontalOffset: Number,
-    overlappingBehavior: {},
-    shadow: Object,
+    overlappingBehavior: String as PropType<TextOverflow>,
+    shadow: Object as PropType<Record<string, any>>,
     useNodeColors: Boolean,
     verticalOffset: Number,
     visible: Boolean
@@ -379,10 +423,10 @@ const DxLinkConfig = {
     "update:opacity": null,
   },
   props: {
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String,
-    colorMode: {},
-    hoverStyle: Object,
+    colorMode: String as PropType<SankeyColorMode>,
+    hoverStyle: Object as PropType<Record<string, any>>,
     opacity: Number
   }
 };
@@ -411,7 +455,7 @@ const DxLoadingIndicatorConfig = {
   props: {
     backgroundColor: String,
     enabled: Boolean,
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     show: Boolean,
     text: String
   }
@@ -461,9 +505,9 @@ const DxNodeConfig = {
     "update:width": null,
   },
   props: {
-    border: Object,
-    color: {},
-    hoverStyle: Object,
+    border: Object as PropType<Record<string, any>>,
+    color: String,
+    hoverStyle: Object as PropType<Record<string, any>>,
     opacity: Number,
     padding: Number,
     width: Number
@@ -490,9 +534,9 @@ const DxSankeyborderConfig = {
     "update:width": null,
   },
   props: {
-    color: {},
-    visible: {},
-    width: {}
+    color: String,
+    visible: Boolean,
+    width: Number
   }
 };
 
@@ -535,8 +579,8 @@ const DxSizeConfig = {
     "update:width": null,
   },
   props: {
-    height: {},
-    width: {}
+    height: Number,
+    width: Number
   }
 };
 
@@ -557,11 +601,11 @@ const DxSubtitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     offset: Number,
     text: String,
-    textOverflow: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -589,15 +633,15 @@ const DxTitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
-    horizontalAlignment: {},
-    margin: [Number, Object],
-    placeholderSize: {},
-    subtitle: [Object, String],
+    font: Object as PropType<Font | Record<string, any>>,
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
+    margin: [Number, Object] as PropType<number | Record<string, any>>,
+    placeholderSize: Number,
+    subtitle: [Object, String] as PropType<Record<string, any> | string>,
     text: String,
-    textOverflow: {},
-    verticalAlignment: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    verticalAlignment: String as PropType<VerticalEdge>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -636,22 +680,22 @@ const DxTooltipConfig = {
   },
   props: {
     arrowLength: Number,
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String,
     container: {},
     cornerRadius: Number,
-    customizeLinkTooltip: {},
-    customizeNodeTooltip: {},
+    customizeLinkTooltip: Function as PropType<((info: { source: string, target: string, weight: number }) => Record<string, any>)>,
+    customizeNodeTooltip: Function as PropType<((info: { label: string, title: string, weightIn: number, weightOut: number }) => Record<string, any>)>,
     enabled: Boolean,
-    font: Object,
-    format: {},
+    font: Object as PropType<Font | Record<string, any>>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     linkTooltipTemplate: {},
     nodeTooltipTemplate: {},
-    opacity: {},
+    opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
-    shadow: Object,
-    zIndex: {}
+    shadow: Object as PropType<Record<string, any>>,
+    zIndex: Number
   }
 };
 
@@ -680,8 +724,8 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
-    opacity: {},
+    dashStyle: String as PropType<DashStyle>,
+    opacity: Number,
     visible: Boolean,
     width: Number
   }

@@ -1,7 +1,34 @@
 export { ExplicitTypes } from "devextreme/ui/tabs";
-import Tabs, { Properties } from "devextreme/ui/tabs";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import Tabs, { Properties } from "devextreme/ui/tabs";
+import  DataSource from "devextreme/data/data_source";
+import {
+ dxTabsItem,
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ ItemClickEvent,
+ ItemContextMenuEvent,
+ ItemHoldEvent,
+ ItemRenderedEvent,
+ OptionChangedEvent,
+ SelectionChangedEvent,
+ SelectionChangingEvent,
+} from "devextreme/ui/tabs";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
+import {
+ TabsIconPosition,
+ Orientation,
+ SingleOrMultiple,
+ TabsStyle,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -52,45 +79,45 @@ interface DxTabs extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: {},
-    dataSource: {},
+    accessKey: String,
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxTabsItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: {},
-    hint: {},
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
-    iconPosition: {},
+    iconPosition: String as PropType<TabsIconPosition>,
     itemHoldTimeout: Number,
-    items: Array,
+    items: Array as PropType<Array<any | dxTabsItem | string>>,
     itemTemplate: {},
-    keyExpr: [Function, String],
+    keyExpr: [Function, String] as PropType<((() => void)) | string>,
     noDataText: String,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onItemContextMenu: Function,
-    onItemHold: Function,
-    onItemRendered: Function,
-    onOptionChanged: Function,
-    onSelectionChanged: Function,
-    onSelectionChanging: Function,
-    orientation: {},
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
+    onItemContextMenu: Function as PropType<((e: ItemContextMenuEvent) => void)>,
+    onItemHold: Function as PropType<((e: ItemHoldEvent) => void)>,
+    onItemRendered: Function as PropType<((e: ItemRenderedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
+    onSelectionChanging: Function as PropType<((e: SelectionChangingEvent) => void)>,
+    orientation: String as PropType<Orientation>,
     repaintChangesOnly: Boolean,
     rtlEnabled: Boolean,
     scrollByContent: Boolean,
     scrollingEnabled: Boolean,
     selectedIndex: Number,
     selectedItem: {},
-    selectedItemKeys: Array,
-    selectedItems: Array,
-    selectionMode: {},
+    selectedItemKeys: Array as PropType<Array<any>>,
+    selectedItems: Array as PropType<Array<any>>,
+    selectionMode: String as PropType<SingleOrMultiple>,
     showNavButtons: Boolean,
-    stylingMode: {},
+    stylingMode: String as PropType<TabsStyle>,
     tabIndex: Number,
     visible: Boolean,
-    width: {}
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
