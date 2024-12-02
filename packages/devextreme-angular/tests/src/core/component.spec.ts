@@ -147,6 +147,10 @@ describe('DevExtreme Angular widget', () => {
         expect(config().buyNowLink).toBe('https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx');
     });
 
+    it('correctly sets the help link', () => {
+        expect(config().licensingDocLink).toBe('https://go.devexpress.com/Licensing_Documentation_DevExtremeAngular.aspx');
+    });
+
     it('should be disposed', () => {
         let testSpy = spyOn(TestContainerComponent.prototype, 'testMethod');
 

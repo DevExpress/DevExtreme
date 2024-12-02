@@ -1546,6 +1546,7 @@ declare module DevExpress.common {
      */
     licenseKey?: string;
     buyNowLink?: string;
+    licensingDocLink?: string;
   };
   /**
    * [descr:GroupItem]
