@@ -2,8 +2,6 @@ $(() => {
   const pagination = $('#pagination')
     .dxPagination({
       showInfo: true,
-      lightModeEnabled: false,
-      pagesNavigatorVisible: true,
       showNavigationButtons: true,
       allowedPageSizes: [4, 6],
       itemCount: employees.length,
