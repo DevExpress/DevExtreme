@@ -5,6 +5,7 @@ const apiKey = 'DEMO';
 const REGENERATION_TEXT = 'Regeneration...';
 const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
+const MILLISECONDS_PER_MINUTE = 1000 * 60;
 const user = {
   id: 'user',
 };

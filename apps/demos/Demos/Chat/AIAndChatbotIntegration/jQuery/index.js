@@ -40,7 +40,7 @@ $(() => {
 
     setTimeout(() => {
       instance.option({ alerts: [] });
-    }, 10000);
+    }, MILLISECONDS_PER_MINUTE);
   }
 
   function toggleDisabledState(disabled) {
@@ -192,7 +192,7 @@ $(() => {
           stylingMode: 'text',
           hint: 'Copy',
           onClick: ({ component }) => {
-            navigator.clipboard.writeText($textElement.text());
+            navigator.clipboard?.writeText($textElement.text());
             component.option({ icon: 'check' });
             setTimeout(() => {
               component.option({ icon: 'copy' });
