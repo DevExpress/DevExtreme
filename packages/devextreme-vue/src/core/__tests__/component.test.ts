@@ -183,6 +183,10 @@ describe('component rendering', () => {
     expect(config().buyNowLink).toBe('https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeVue.aspx');
   });
 
+  it('correctly sets the help link', () => {
+    expect(config().licensingDocLink).toBe('https://go.devexpress.com/Licensing_Documentation_DevExtremeVue.aspx');
+  });
+
   describe('options', () => {
     it('watch prop changing to undefined', (done) => {
       const wrapper = mount(TestComponent, {

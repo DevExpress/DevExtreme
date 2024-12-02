@@ -1340,6 +1340,13 @@ prepareConfigurationComponentConfig(DxHoverStyleConfig);
 const DxHoverStyle = defineComponent(DxHoverStyleConfig);
 
 (DxHoverStyle as any).$_optionName = "hoverStyle";
+(DxHoverStyle as any).$_expectedChildren = {
+  border: { isCollectionItem: false, optionName: "border" },
+  color: { isCollectionItem: false, optionName: "color" },
+  hatching: { isCollectionItem: false, optionName: "hatching" },
+  pointBorder: { isCollectionItem: false, optionName: "border" },
+  seriesBorder: { isCollectionItem: false, optionName: "border" }
+};
 
 const DxImageConfig = {
   emits: {
@@ -1408,6 +1415,14 @@ prepareConfigurationComponentConfig(DxLabelConfig);
 const DxLabel = defineComponent(DxLabelConfig);
 
 (DxLabel as any).$_optionName = "label";
+(DxLabel as any).$_expectedChildren = {
+  argumentFormat: { isCollectionItem: false, optionName: "argumentFormat" },
+  border: { isCollectionItem: false, optionName: "border" },
+  connector: { isCollectionItem: false, optionName: "connector" },
+  font: { isCollectionItem: false, optionName: "font" },
+  format: { isCollectionItem: false, optionName: "format" },
+  seriesBorder: { isCollectionItem: false, optionName: "border" }
+};
 
 const DxLegendConfig = {
   emits: {
@@ -1950,6 +1965,13 @@ prepareConfigurationComponentConfig(DxSelectionStyleConfig);
 const DxSelectionStyle = defineComponent(DxSelectionStyleConfig);
 
 (DxSelectionStyle as any).$_optionName = "selectionStyle";
+(DxSelectionStyle as any).$_expectedChildren = {
+  border: { isCollectionItem: false, optionName: "border" },
+  color: { isCollectionItem: false, optionName: "color" },
+  hatching: { isCollectionItem: false, optionName: "hatching" },
+  pointBorder: { isCollectionItem: false, optionName: "border" },
+  seriesBorder: { isCollectionItem: false, optionName: "border" }
+};
 
 const DxSeriesConfig = {
   emits: {
@@ -2212,6 +2234,9 @@ prepareConfigurationComponentConfig(DxSubtitleConfig);
 const DxSubtitle = defineComponent(DxSubtitleConfig);
 
 (DxSubtitle as any).$_optionName = "subtitle";
+(DxSubtitle as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxTickConfig = {
   emits: {
@@ -2305,6 +2330,12 @@ prepareConfigurationComponentConfig(DxTitleConfig);
 const DxTitle = defineComponent(DxTitleConfig);
 
 (DxTitle as any).$_optionName = "title";
+(DxTitle as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" },
+  legendTitleSubtitle: { isCollectionItem: false, optionName: "subtitle" },
+  margin: { isCollectionItem: false, optionName: "margin" },
+  polarChartTitleSubtitle: { isCollectionItem: false, optionName: "subtitle" }
+};
 
 const DxTooltipConfig = {
   emits: {

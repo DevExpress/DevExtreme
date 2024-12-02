@@ -388,6 +388,7 @@ export type GlobalConfig = {
    */
   licenseKey?: string;
   buyNowLink?: string;
+  licensingDocLink?: string;
 };
 
 /**

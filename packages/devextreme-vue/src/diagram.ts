@@ -600,6 +600,9 @@ const DxGroup = defineComponent(DxGroupConfig);
 
 (DxGroup as any).$_optionName = "groups";
 (DxGroup as any).$_isCollectionItem = true;
+(DxGroup as any).$_expectedChildren = {
+  command: { isCollectionItem: true, optionName: "commands" }
+};
 
 const DxHistoryToolbarConfig = {
   emits: {

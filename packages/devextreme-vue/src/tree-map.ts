@@ -403,6 +403,9 @@ prepareConfigurationComponentConfig(DxLabelConfig);
 const DxLabel = defineComponent(DxLabelConfig);
 
 (DxLabel as any).$_optionName = "label";
+(DxLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxLoadingIndicatorConfig = {
   emits: {

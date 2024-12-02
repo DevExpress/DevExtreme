@@ -686,6 +686,11 @@ prepareConfigurationComponentConfig(DxHeaderFilterConfig);
 const DxHeaderFilter = defineComponent(DxHeaderFilterConfig);
 
 (DxHeaderFilter as any).$_optionName = "headerFilter";
+(DxHeaderFilter as any).$_expectedChildren = {
+  columnHeaderFilterSearch: { isCollectionItem: false, optionName: "search" },
+  ganttHeaderFilterSearch: { isCollectionItem: false, optionName: "search" },
+  texts: { isCollectionItem: false, optionName: "texts" }
+};
 
 const DxItemConfig = {
   emits: {

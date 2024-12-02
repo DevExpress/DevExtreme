@@ -47,6 +47,7 @@ const includeAttrs = ['id', 'class', 'style'];
 
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeVue.aspx',
+  licensingDocLink: 'https://go.devexpress.com/Licensing_Documentation_DevExtremeVue.aspx',
 });
 
 function getAttrs(attrs, dxClasses: string[]) {

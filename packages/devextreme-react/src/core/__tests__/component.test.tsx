@@ -125,6 +125,10 @@ describe('rendering', () => {
     it('correctly sets the buy now link', () => {
       expect(config().buyNowLink).toBe('https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeReact.aspx');
     });
+
+    it('correctly sets the help link', () => {
+      expect(config().licensingDocLink).toBe('https://go.devexpress.com/Licensing_Documentation_DevExtremeReact.aspx');
+    });
   });
 
   describe('nested full components', () => {

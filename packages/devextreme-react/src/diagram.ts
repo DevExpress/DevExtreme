@@ -474,6 +474,9 @@ const _componentGroup = (props: IGroupProps) => {
     elementDescriptor: {
       OptionName: "groups",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        command: { optionName: "commands", isCollectionItem: true }
+      },
     },
   });
 };
