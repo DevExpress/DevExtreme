@@ -9,6 +9,7 @@ ui.dxAccordion = require('../../../ui/accordion');
 ui.dxContextMenu = require('../../../ui/context_menu');
 ui.dxDataGrid = require('../../../ui/data_grid');
 ui.dxTreeList = require('../../../ui/tree_list');
+ui.dxCardView = require('../../../ui/card_view');
 ui.dxMenu = require('../../../ui/menu');
 ui.dxPivotGrid = require('../../../ui/pivot_grid');
 ui.dxPivotGridFieldChooser = require('../../../ui/pivot_grid_field_chooser');
