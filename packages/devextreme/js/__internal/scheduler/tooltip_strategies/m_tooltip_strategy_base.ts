@@ -40,6 +40,8 @@ export class TooltipStrategyBase {
   }
 
   _showCore(target, dataList) {
+    const describedByValue = $(target).attr('aria-describedby') as string;
+
     if (!this._tooltip) {
       this._tooltip = this._createTooltip(target, dataList);
     } else {
@@ -49,6 +51,8 @@ export class TooltipStrategyBase {
 
     this._prepareBeforeVisibleChanged(dataList);
     this._tooltip.option('visible', true);
+
+    $(target).attr('aria-describedby', describedByValue);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
