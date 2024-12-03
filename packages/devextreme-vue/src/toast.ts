@@ -4,7 +4,7 @@ import { prepareComponentConfig } from "./core/index";
 import Toast, { Properties } from "devextreme/ui/toast";
 import {
  event,
-} from "devextreme/events/index";
+} from "devextreme/events/events.types";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -18,14 +18,12 @@ import {
 } from "devextreme/ui/toast";
 import {
  PositionConfig,
- CollisionResolution,
- CollisionResolutionCombination,
-} from "devextreme/animation/position";
-import {
  AnimationConfig,
+ CollisionResolution,
  AnimationState,
  AnimationType,
-} from "devextreme/animation/fx";
+ CollisionResolutionCombination,
+} from "devextreme/common/core/animation";
 import {
  HorizontalAlignment,
  VerticalAlignment,

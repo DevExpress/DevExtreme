@@ -17,7 +17,7 @@ import {
 } from "devextreme/ui/responsive_box";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -56,7 +56,7 @@ interface DxResponsiveBox extends AccessibleOptions {
 const componentConfig = {
   props: {
     cols: Array as PropType<Array<Record<string, any>>>,
-    dataSource: [Array, Object, String] as PropType<(Array<any | dxResponsiveBoxItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxResponsiveBoxItem | string>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,

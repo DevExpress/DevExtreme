@@ -3,17 +3,76 @@ import { DxExtendedPromise, DxPromise } from '../core/utils/deferred';
 import AbstractStore, { AbstractStoreOptions } from '../data/abstract_store';
 
 import type {
-    SearchOperation,
-    GroupingInterval,
-    SortDescriptor,
-    GroupDescriptor,
-    SelectDescriptor,
-    FilterDescriptor,
-    SummaryDescriptor,
-    LoadOptions,
     Store as StoreBase,
     StoreOptions as StoreOptionsBase,
 } from '../data/store';
+
+import type {
+    SearchOperation as SearchOperationInternal,
+    GroupingInterval as GroupingIntervalInternal,
+    SortDescriptor as SortDescriptorInternal,
+    GroupDescriptor as GroupDescriptorInternal,
+    SelectDescriptor as SelectDescriptorInternal,
+    FilterDescriptor as FilterDescriptorInternal,
+    SummaryDescriptor as SummaryDescriptorInternal,
+    LoadOptions as LoadOptionsInternal,
+} from './data.types';
+
+/**
+ * @public
+ */
+export type SearchOperation = SearchOperationInternal;
+
+/**
+ * @public
+ */
+export type GroupingInterval = GroupingIntervalInternal;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @skip
+ */
+export type SortDescriptor<T> = SortDescriptorInternal<T>;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @skip
+ */
+export type GroupDescriptor<T> = GroupDescriptorInternal<T>;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @skip
+ */
+export type SelectDescriptor<T> = SelectDescriptorInternal<T>;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ */
+export type FilterDescriptor = FilterDescriptorInternal;
+
+/**
+ * @public
+ * @docid
+ * @namespace DevExpress.data
+ * @type object
+ */
+export type LoadOptions<T = any> = LoadOptionsInternal<T>;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ */
+export type SummaryDescriptor<T> = SummaryDescriptorInternal<T>;
 
 /**
  * @docid Utils.applyChanges
@@ -690,17 +749,6 @@ export class DataSource<
      */
     totalCount(): number;
 }
-
-export type {
-    SearchOperation,
-    GroupingInterval,
-    SortDescriptor,
-    GroupDescriptor,
-    SelectDescriptor,
-    FilterDescriptor,
-    LoadOptions,
-    SummaryDescriptor,
-};
 
 /**
  * @docid

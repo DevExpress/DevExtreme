@@ -19,7 +19,7 @@ import {
 } from "devextreme/ui/toolbar";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -60,7 +60,7 @@ interface DxToolbar extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    dataSource: [Array, Object, String] as PropType<(Array<any | dxToolbarItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxToolbarItem | string>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     hint: String,

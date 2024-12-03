@@ -1,4 +1,64 @@
-import { EventObject } from '../common/core/events.types';
+export type EventObjectInternal = {
+  /**
+   * @docid
+   * @public
+   */
+  currentTarget: Element;
+
+  /**
+   * @docid
+   * @public
+   */
+  data: any;
+
+  /**
+   * @docid
+   * @public
+   */
+  delegateTarget: Element;
+
+  /**
+   * @docid
+   * @public
+   */
+  target: Element;
+  /**
+   * @docid
+   * @publicName isDefaultPrevented()
+   * @public
+   */
+  isDefaultPrevented(): boolean;
+  /**
+   * @docid
+   * @publicName isImmediatePropagationStopped()
+   * @public
+   */
+  isImmediatePropagationStopped(): boolean;
+  /**
+   * @docid
+   * @publicName isPropagationStopped()
+   * @public
+   */
+  isPropagationStopped(): boolean;
+  /**
+   * @docid
+   * @publicName preventDefault()
+   * @public
+   */
+  preventDefault(): void;
+  /**
+   * @docid
+   * @publicName stopImmediatePropagation()
+   * @public
+   */
+  stopImmediatePropagation(): void;
+  /**
+   * @docid
+   * @publicName stopPropagation()
+   * @public
+   */
+  stopPropagation(): void;
+};
 
 /**
  * @docid
@@ -18,10 +78,10 @@ export interface EventType { }
  * @type EventObject|jQuery.Event
  * 
  */
-export type DxEvent<TNativeEvent = Event> = {} extends EventType ? (EventObject & TNativeEvent) : EventType;
+export type DxEvent<TNativeEvent = Event> = {} extends EventType ? (EventObjectInternal & TNativeEvent) : EventType;
 
 /** @deprecated EventObject */
-export type dxEvent = EventObject;
+export type dxEvent = EventObjectInternal;
 
 /**
  * @docid

@@ -44,6 +44,7 @@ export interface PdfExportGanttFont {
  * @docid
  * @public
  * @namespace DevExpress.pdfExporter
+ * @type object
  */
 export interface PdfExportGanttOptions {
   /**
@@ -110,6 +111,7 @@ export interface PdfExportGanttOptions {
  * @docid
  * @public
  * @namespace DevExpress.pdfExporter
+ * @type object
  */
 export interface PdfExportDataGridOptions {
   /**

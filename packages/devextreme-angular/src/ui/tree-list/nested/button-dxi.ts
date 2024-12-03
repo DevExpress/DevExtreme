@@ -18,7 +18,7 @@ import { DOCUMENT } from '@angular/common';
 
 import dxTreeList from 'devextreme/ui/tree_list';
 import { dxTreeListColumn, dxTreeListRowObject, TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
-import { event } from 'devextreme/events/index';
+import { event } from 'devextreme/events/events.types';
 
 import {
     NestedOptionHost,

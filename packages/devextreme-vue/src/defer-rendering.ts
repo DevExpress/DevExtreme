@@ -6,7 +6,10 @@ import {
  AnimationConfig,
  AnimationState,
  AnimationType,
-} from "devextreme/animation/fx";
+ CollisionResolution,
+ PositionConfig,
+ CollisionResolutionCombination,
+} from "devextreme/common/core/animation";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -21,11 +24,6 @@ import {
  VerticalAlignment,
  PositionAlignment,
 } from "devextreme/common";
-import {
- CollisionResolution,
- PositionConfig,
- CollisionResolutionCombination,
-} from "devextreme/animation/position";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

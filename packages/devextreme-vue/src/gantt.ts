@@ -72,10 +72,10 @@ import {
 } from "devextreme/common/grids";
 import {
  Format,
-} from "devextreme/localization";
+} from "devextreme/common/core/localization";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -452,7 +452,7 @@ const DxColumnHeaderFilterConfig = {
   props: {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
-    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store>,
+    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store | Record<string, any>>,
     groupInterval: [String, Number] as PropType<HeaderFilterGroupInterval | number>,
     height: [Number, String],
     search: Object as PropType<ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig | Record<string, any>>,
@@ -568,7 +568,7 @@ const DxDependenciesConfig = {
     "update:typeExpr": null,
   },
   props: {
-    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     keyExpr: [Function, String] as PropType<((() => void)) | string>,
     predecessorIdExpr: [Function, String] as PropType<((() => void)) | string>,
     successorIdExpr: [Function, String] as PropType<((() => void)) | string>,
@@ -754,7 +754,7 @@ const DxHeaderFilterConfig = {
   props: {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
-    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store>,
+    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store | Record<string, any>>,
     groupInterval: [String, Number] as PropType<HeaderFilterGroupInterval | number>,
     height: [Number, String],
     search: Object as PropType<ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig | Record<string, any>>,
@@ -878,7 +878,7 @@ const DxResourceAssignmentsConfig = {
     "update:taskIdExpr": null,
   },
   props: {
-    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     keyExpr: [Function, String] as PropType<((() => void)) | string>,
     resourceIdExpr: [Function, String] as PropType<((() => void)) | string>,
     taskIdExpr: [Function, String] as PropType<((() => void)) | string>
@@ -902,7 +902,7 @@ const DxResourcesConfig = {
   },
   props: {
     colorExpr: [Function, String] as PropType<((() => void)) | string>,
-    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     keyExpr: [Function, String] as PropType<((() => void)) | string>,
     textExpr: [Function, String] as PropType<((() => void)) | string>
   }
@@ -1022,7 +1022,7 @@ const DxTasksConfig = {
   },
   props: {
     colorExpr: [Function, String] as PropType<((() => void)) | string>,
-    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     endExpr: [Function, String] as PropType<((() => void)) | string>,
     keyExpr: [Function, String] as PropType<((() => void)) | string>,
     parentIdExpr: [Function, String] as PropType<((() => void)) | string>,

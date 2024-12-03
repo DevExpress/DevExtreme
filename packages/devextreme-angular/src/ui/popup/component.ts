@@ -23,7 +23,8 @@ import {
 
 
 import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
-import { event, EventInfo } from 'devextreme/events/index';
+import { event } from 'devextreme/events/events.types';
+import { EventInfo } from 'devextreme/common/core/events';
 import { PositionAlignment } from 'devextreme/common';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 

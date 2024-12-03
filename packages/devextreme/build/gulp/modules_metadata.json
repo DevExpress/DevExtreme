@@ -96,7 +96,12 @@
       "on": { "path": "events.on" },
       "one": { "path": "events.one" },
       "off": { "path": "events.off" },
-      "trigger": { "path": "events.trigger" },
+      "trigger": { "path": "events.trigger" }
+    }
+  },
+  {
+    "name": "events",
+    "exports": {
       "triggerHandler": { "path": "events.triggerHandler" }
     }
   },

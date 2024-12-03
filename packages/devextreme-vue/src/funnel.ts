@@ -22,7 +22,7 @@ import {
 } from "devextreme/viz/funnel";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -50,7 +50,7 @@ import {
 } from "devextreme/common";
 import {
  Format as LocalizationFormat,
-} from "devextreme/localization";
+} from "devextreme/common/core/localization";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -108,7 +108,7 @@ const componentConfig = {
     algorithm: String as PropType<FunnelAlgorithm>,
     argumentField: String,
     colorField: String,
-    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     export: Object as PropType<Record<string, any>>,

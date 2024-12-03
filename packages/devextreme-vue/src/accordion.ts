@@ -19,7 +19,7 @@ import {
 } from "devextreme/ui/accordion";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -76,7 +76,7 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     animationDuration: Number,
     collapsible: Boolean,
-    dataSource: [Array, Object, String] as PropType<(Array<any | dxAccordionItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxAccordionItem | string>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     deferRendering: Boolean,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,

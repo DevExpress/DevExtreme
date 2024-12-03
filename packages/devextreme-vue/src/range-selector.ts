@@ -5,7 +5,7 @@ import RangeSelector, { Properties } from "devextreme/viz/range_selector";
 import  DataSource from "devextreme/data/data_source";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -69,7 +69,7 @@ import {
 } from "devextreme/viz/common";
 import {
  Format as LocalizationFormat,
-} from "devextreme/localization";
+} from "devextreme/common/core/localization";
 import  * as CommonChartTypes from "devextreme/common/charts";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
@@ -120,7 +120,7 @@ const componentConfig = {
     behavior: Object as PropType<Record<string, any>>,
     chart: Object as PropType<Record<string, any>>,
     containerBackgroundColor: String,
-    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     dataSourceField: String,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,

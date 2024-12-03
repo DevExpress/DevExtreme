@@ -8,7 +8,7 @@ import {
 } from "devextreme/common";
 import {
  EventInfo,
-} from "devextreme/events/index";
+} from "devextreme/common/core/events";
 import {
  Component,
 } from "devextreme/core/component";

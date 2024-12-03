@@ -49,7 +49,7 @@ import {
 } from "devextreme/common";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";

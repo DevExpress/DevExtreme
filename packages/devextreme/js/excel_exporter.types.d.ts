@@ -5,6 +5,7 @@ import { Column } from './ui/data_grid';
 /**
  * @docid
  * @namespace DevExpress.excelExporter
+ * @type object
  * @hidden
  */
 export interface ExcelExportBaseOptions {

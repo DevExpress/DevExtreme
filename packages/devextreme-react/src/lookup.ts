@@ -12,7 +12,7 @@ import type { ClosedEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, 
 import type { ContentReadyEvent as PopoverContentReadyEvent, DisposingEvent as PopoverDisposingEvent, InitializedEvent as PopoverInitializedEvent, HiddenEvent, HidingEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from "devextreme/ui/popover";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { HorizontalAlignment, VerticalAlignment, template, Position as CommonPosition, Direction, PositionAlignment, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
-import type { event } from "devextreme/events/index";
+import type { event } from "devextreme/events/events.types";
 import type { dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";

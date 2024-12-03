@@ -1,6 +1,14 @@
 import { DxElement } from '../../core/element';
-import { DxEvent } from '../../events/events.types';
-import { EventObject } from './events.types';
+import { EventObjectInternal, EventType } from '../../events/events.types';
+
+type DxEvent<TNativeEvent = Event> = {} extends EventType ? (EventObjectInternal & TNativeEvent) : EventType;
+
+/**
+ * @docid
+ * @section commonObjectStructures
+ * @public
+ */
+export type EventObject = EventObjectInternal;
 
 /**
  * @docid
@@ -237,7 +245,3 @@ export function trigger(element: Element | Array<Element>, event: string | DxEve
  * @public
  */
 export function trigger(element: Element | Array<Element>, event: string | DxEvent, extraParameters: any): void;
-
-export {
-  EventObject,
-};

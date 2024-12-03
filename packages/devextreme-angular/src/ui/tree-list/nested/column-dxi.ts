@@ -155,10 +155,10 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get calculateFilterExpression(): ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | (() => any) | Array<any>) {
+    get calculateFilterExpression(): ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | Function | Array<any>) {
         return this._getOption('calculateFilterExpression');
     }
-    set calculateFilterExpression(value: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | (() => any) | Array<any>)) {
+    set calculateFilterExpression(value: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | Function | Array<any>)) {
         this._setOption('calculateFilterExpression', value);
     }
 

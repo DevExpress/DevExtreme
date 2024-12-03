@@ -52,9 +52,12 @@ import {
 } from "devextreme/ui/color_box";
 import {
  AnimationConfig,
+ CollisionResolution,
+ PositionConfig,
  AnimationState,
  AnimationType,
-} from "devextreme/animation/fx";
+ CollisionResolutionCombination,
+} from "devextreme/common/core/animation";
 import {
  dxButtonOptions,
  ClickEvent,
@@ -64,14 +67,11 @@ import {
  OptionChangedEvent as ButtonOptionChangedEvent,
 } from "devextreme/ui/button";
 import {
- CollisionResolution,
- PositionConfig,
- CollisionResolutionCombination,
-} from "devextreme/animation/position";
-import {
  event,
+} from "devextreme/events/events.types";
+import {
  EventInfo,
-} from "devextreme/events/index";
+} from "devextreme/common/core/events";
 import {
  Component,
 } from "devextreme/core/component";

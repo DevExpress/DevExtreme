@@ -2,7 +2,7 @@ declare namespace DevExpress {
   /** @deprecated Use DevExpress.common.EventObject instead */
   export type dxEvent = common.EventObject;
   /** @deprecated Use DevExpress.common.event instead */
-  export type event = common.event;
+  export type event = events.event;
 }
 
 declare namespace DevExpress.viz {

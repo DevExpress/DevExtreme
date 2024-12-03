@@ -4,7 +4,7 @@ import { prepareComponentConfig } from "./core/index";
 import Tooltip, { Properties } from "devextreme/ui/tooltip";
 import {
  event,
-} from "devextreme/events/index";
+} from "devextreme/events/events.types";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -24,14 +24,12 @@ import {
 } from "devextreme/common";
 import {
  PositionConfig,
- CollisionResolution,
- CollisionResolutionCombination,
-} from "devextreme/animation/position";
-import {
  AnimationConfig,
+ CollisionResolution,
  AnimationState,
  AnimationType,
-} from "devextreme/animation/fx";
+ CollisionResolutionCombination,
+} from "devextreme/common/core/animation";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

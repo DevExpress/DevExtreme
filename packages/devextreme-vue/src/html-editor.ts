@@ -61,7 +61,7 @@ import {
 } from "devextreme/ui/toolbar";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -518,7 +518,7 @@ const DxMentionConfig = {
     "update:valueExpr": null,
   },
   props: {
-    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     displayExpr: [Function, String] as PropType<(((item: any) => string)) | string>,
     itemTemplate: {},
     marker: String,
@@ -718,7 +718,7 @@ const DxVariablesConfig = {
     "update:escapeChar": null,
   },
   props: {
-    dataSource: [Array, Object, String] as PropType<Array<string> | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<Array<string> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     escapeChar: [Array, String] as PropType<Array<string> | string>
   }
 };

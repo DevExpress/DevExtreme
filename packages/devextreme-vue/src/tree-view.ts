@@ -25,7 +25,7 @@ import {
 } from "devextreme/ui/tree_view";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -150,7 +150,7 @@ const componentConfig = {
     animationEnabled: Boolean,
     collapseIcon: String as PropType<null | string>,
     createChildren: Function as PropType<((parentNode: dxTreeViewNode) => any | Array<Record<string, any>>)>,
-    dataSource: [Array, Object, String] as PropType<Array<dxTreeViewItem> | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<Array<dxTreeViewItem> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     dataStructure: String as PropType<DataStructure>,
     disabled: Boolean,
     disabledExpr: [Function, String] as PropType<((() => void)) | string>,

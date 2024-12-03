@@ -6,7 +6,6 @@ export * as localization from './core/localization';
 export * as charts from './charts';
 export * as data from './data';
 export * as customStore from './data/custom-store';
-export * as export from './export';
 export * as pdfExport from './export/pdf';
 export * as excelExport from './export/excel';
 export * as grids from './grids';

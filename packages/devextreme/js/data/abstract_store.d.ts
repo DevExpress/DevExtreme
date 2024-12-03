@@ -5,7 +5,7 @@ import {
   Store as StoreBase,
   StoreOptions as StoreOptionsBase,
 } from './store';
-import { LoadOptions } from '../data';
+import { LoadOptions } from '.';
 
 /**
  * @deprecated Use AbstractStoreOptions instead
@@ -55,7 +55,6 @@ export default class AbstractStore<
    */
   load(options: LoadOptions<TItem>): DxExtendedPromise<Array<TItem>>;
 }
-
 
 export {
   StoreOptionsBase as StoreOptions,

@@ -26,6 +26,7 @@ export type PivotGridCell = ExcelPivotGridCell;
  * @public
  * @namespace DevExpress.excelExporter
  * @inherits ExcelExportBaseOptions
+ * @type object
  */
 export interface ExcelExportDataGridOptions extends ExcelExportBaseOptions {
     /**
@@ -60,6 +61,7 @@ export interface ExcelExportDataGridOptions extends ExcelExportBaseOptions {
  * @public
  * @namespace DevExpress.excelExporter
  * @inherits ExcelExportBaseOptions
+ * @type object
  */
 export interface ExcelExportPivotGridOptions extends ExcelExportBaseOptions {
     /**

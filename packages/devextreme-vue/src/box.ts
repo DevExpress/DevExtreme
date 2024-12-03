@@ -21,7 +21,7 @@ import {
 } from "devextreme/ui/box";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -60,7 +60,7 @@ const componentConfig = {
   props: {
     align: String as PropType<Distribution>,
     crossAlign: String as PropType<CrosswiseDistribution>,
-    dataSource: [Array, Object, String] as PropType<(Array<any | dxBoxItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxBoxItem | string>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     direction: String as PropType<BoxDirection>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,

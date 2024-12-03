@@ -16,13 +16,13 @@ import {
 } from "devextreme/ui/chat";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
 import {
  Format,
-} from "devextreme/localization";
+} from "devextreme/common/core/localization";
 import {
  Format as CommonFormat,
 } from "devextreme/common";
@@ -70,7 +70,7 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     alerts: Array as PropType<Array<Alert>>,
-    dataSource: [Array, Object, String] as PropType<Array<Message> | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<Array<Message> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     dayHeaderFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,

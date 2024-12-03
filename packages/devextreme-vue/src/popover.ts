@@ -4,7 +4,7 @@ import { prepareComponentConfig } from "./core/index";
 import Popover, { Properties } from "devextreme/ui/popover";
 import {
  event,
-} from "devextreme/events/index";
+} from "devextreme/events/events.types";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -27,18 +27,16 @@ import {
 } from "devextreme/common";
 import {
  PositionConfig,
+ AnimationConfig,
  CollisionResolution,
+ AnimationState,
+ AnimationType,
  CollisionResolutionCombination,
-} from "devextreme/animation/position";
+} from "devextreme/common/core/animation";
 import {
  dxPopupToolbarItem,
  ToolbarLocation,
 } from "devextreme/ui/popup";
-import {
- AnimationConfig,
- AnimationState,
- AnimationType,
-} from "devextreme/animation/fx";
 import {
  LocateInMenuMode,
  ShowTextMode,
