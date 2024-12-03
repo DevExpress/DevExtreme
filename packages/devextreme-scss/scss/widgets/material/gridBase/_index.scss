@@ -642,7 +642,6 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
   .dx-#{$widget-name}-headers {
     color: $datagrid-columnchooser-item-color;
     touch-action: pinch-zoom;
-    border-bottom: $datagrid-border;
 
     .dx-#{$widget-name}-table {
       .dx-#{$widget-name}-borders & {
@@ -675,10 +674,6 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
             background-color: $datagrid-hover-bg;
           }
         }
-      }
-
-      .dx-row:last-child > td, td[rowspan] {
-        border-bottom-width: 0;
       }
     }
 
