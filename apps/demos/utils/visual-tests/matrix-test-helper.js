@@ -328,7 +328,14 @@ export function runManualTestCore(testObject, product, demo, framework, callback
     return;
   }
 
-  const test = testObject.page(`http://localhost:8080/apps/demos/Demos/${product}/${demo}/${framework}/`);
+  const clientScriptSource = globalReadFrom(__dirname, `../../Demos/${product}/${demo}/client-script.js`, (x) => [{ content: x }]) || [];
+
+  const test = testObject
+    .clientScripts([
+      { module: 'mockdate' },
+      ...clientScriptSource
+    ])
+    .page(`http://localhost:8080/apps/demos/Demos/${product}/${demo}/${framework}/`);
 
   test.before?.(async (t) => {
     const [width, height] = t.fixtureCtx.initialWindowSize;
