@@ -515,8 +515,8 @@
         "Equivalents": "",
         "Demos": [
           {
-            "Title": "Columns based on a Data Source",
-            "Name": "ColumnsBasedOnADataSource",
+            "Title": "Auto-Populated Columns",
+            "Name": "AutoPopulatedColumns",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridColumnsController.cs",
@@ -567,7 +567,7 @@
           },
           {
             "Title": "Command Column Configuration",
-            "Name": "CommandColumnCustomization",
+            "Name": "CommandColumnConfiguration",
             "Widget": "DataGrid",
             "Equivalents": "button column",
             "MvcAdditionalFiles": [
@@ -948,7 +948,7 @@
           },
           {
             "Title": "Columns Hiding Priority",
-            "Name": "GridColumnsHidingPriority",
+            "Name": "ColumnsHidingPriority",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Models/Order.cs",
@@ -1252,7 +1252,7 @@
         "Demos": [
           {
             "Title": "Search Panel",
-            "Name": "UsingSearchPanel",
+            "Name": "SearchPanel",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/TreeListTasksController.cs",
@@ -1264,7 +1264,7 @@
           },
           {
             "Title": "Filter Row",
-            "Name": "UsingFilterRow",
+            "Name": "FilterRow",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Models/TreeList/Employee.cs",
@@ -1861,7 +1861,7 @@
           },
           {
             "Title": "Drill-Down",
-            "Name": "ChartsDrillDown",
+            "Name": "BarDrillDown",
             "Widget": "Charts",
             "DemoType": "Viz",
             "MvcAdditionalFiles": [
@@ -1895,7 +1895,7 @@
           },
           {
             "Title": "Bar Color Customization",
-            "Name": "ColorEachBar",
+            "Name": "BarColorCustomization",
             "DocUrl": "Guide/UI_Components/Chart/Data_Binding/Bind_Series_to_Data/#Using_a_Series_Template",
             "Widget": "Charts",
             "DemoType": "Viz",
@@ -1987,7 +1987,7 @@
           },
           {
             "Title": "Center Label Customization",
-            "Name": "DoughnutWithCustomLabelInCenter",
+            "Name": "CenterLabelCustomization",
             "MvcAdditionalFiles": [
               "/Models/SampleData/DoughnutWithCustomLabelInCenterData.cs"
             ],
@@ -2067,7 +2067,7 @@
           },
           {
             "Title": "Resolve Label Overlap",
-            "Name": "AxisLabelsOverlapping",
+            "Name": "ResolveLabelOverlap",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "overlappingBehavior"
@@ -2146,21 +2146,21 @@
           },
           {
             "Title": "Equal Size Pies",
-            "Name": "PiesWithEqualSize",
+            "Name": "EqualSizePies",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "sizeGroup"
           },
           {
             "Title": "Label Customization",
-            "Name": "PieWithCustomLabels",
+            "Name": "LabelCustomization",
             "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
           },
           {
             "Title": "Small Value Groups",
-            "Name": "PieWithSmallValuesGrouped",
+            "Name": "SmallValueGroups",
             "DocUrl": "Guide/UI_Components/PieChart/Series/Group_Smaller_Points/",
             "Credits": "www.wikipedia.org",
             "Widget": "Charts",
@@ -2172,7 +2172,7 @@
           },
           {
             "Title": "Resolve Label Overlap",
-            "Name": "PieWithResolvedLabelOverlapping",
+            "Name": "PieResolveLabelOverlap",
             "DocUrl": "Guide/UI_Components/PieChart/Point_Labels/Resolve_Overlapping/",
             "Credits": "www.wikipedia.org",
             "Widget": "Charts",
@@ -2187,7 +2187,7 @@
           },
           {
             "Title": "Annotations",
-            "Name": "PieWithAnnotations",
+            "Name": "PieAnnotations",
             "DocUrl": "",
             "Widget": "Charts",
             "MvcDescription": "",
@@ -2202,7 +2202,7 @@
           },
           {
             "Title": "Custom Fill Styles",
-            "Name": "PieWithCustomStyles",
+            "Name": "CustomFillStyles",
             "DocUrl": "",
             "Widget": "Charts",
             "MvcDescription": "",
@@ -2932,7 +2932,7 @@
           },
           {
             "Title": "Range Bar Base Value",
-            "Name": "BaseValueForRangeBar",
+            "Name": "RangeBarBaseValue",
             "DocUrl": "ApiReference/UI_Components/dxLinearGauge/Indicator_Types/RangeBar/#baseValue",
             "Widget": "Gauges",
             "DemoType": "Viz"
@@ -2946,7 +2946,7 @@
           },
           {
             "Title": "Subvalue Indicators Runtime Customization",
-            "Name": "VariableNumberOfSubvalueIndicators",
+            "Name": "SubvalueIndicatorsRuntimeCustomization",
             "DocUrl": "ApiReference/UI_Components/dxLinearGauge/Methods/",
             "Widget": "Gauges",
             "MvcAdditionalFiles": [
@@ -3721,18 +3721,18 @@
           },
           {
             "Title": "Item Customization",
-            "Name": "CustomizeItem",
+            "Name": "ItemCustomization",
             "Widget": "Form"
           },
           {
             "Title": "Grouping",
-            "Name": "GroupedFields",
+            "Name": "Grouping",
             "Widget": "Form"
           },
           {
             "Title": "Adaptability",
             "Equivalents": "adaptive",
-            "Name": "ColumnsAdaptability",
+            "Name": "Adaptability",
             "Widget": "Form",
             "DemoType": "Adaptivity"
           },
@@ -4003,14 +4003,14 @@
           },
           {
             "Title": "Calculation",
-            "Name": "UseRangeSelectionForCalculation",
+            "Name": "Calculation",
             "DocUrl": "Guide/UI_Components/RangeSelector/Range_Changing/#Handle_the_Range_Changing_Event",
             "Widget": "RangeSelector",
             "DemoType": "Viz"
           },
           {
             "Title": "Filter",
-            "Name": "UseRangeSelectionForFiltering",
+            "Name": "Filter",
             "DocUrl": "Guide/UI_Components/RangeSelector/Range_Changing/#Handle_the_Range_Changing_Event",
             "Widget": "RangeSelector",
             "MvcAdditionalFiles": [
@@ -4021,14 +4021,14 @@
           },
           {
             "Title": "Background Image",
-            "Name": "ImageOnBackground",
+            "Name": "BackgroundImage",
             "DocUrl": "Guide/UI_Components/RangeSelector/Visual_Elements/#Background/Displaying_an_Image",
             "Widget": "RangeSelector",
             "DemoType": "Viz"
           },
           {
             "Title": "Embedded Chart",
-            "Name": "ChartOnBackground",
+            "Name": "EmbeddedChart",
             "DocUrl": "Guide/UI_Components/RangeSelector/Visual_Elements/#Background/Displaying_a_Chart",
             "Widget": "RangeSelector",
             "MvcAdditionalFiles": [
@@ -4039,7 +4039,7 @@
           },
           {
             "Title": "Embedded Chart (Customized)",
-            "Name": "CustomizedChartOnBackground",
+            "Name": "EmbeddedChartCustomized",
             "DocUrl": "Guide/UI_Components/RangeSelector/Visual_Elements/#Background/Displaying_a_Chart",
             "Widget": "RangeSelector",
             "MvcAdditionalFiles": [
@@ -4049,7 +4049,7 @@
           },
           {
             "Title": "Embedded Chart (Series Template)",
-            "Name": "ChartOnBackgroundWithSeriesTemplate",
+            "Name": "EmbeddedChartSeriesTemplate",
             "DocUrl": "ApiReference/UI_Components/dxRangeSelector/Configuration/chart/",
             "Widget": "RangeSelector",
             "MvcAdditionalFiles": [
@@ -4283,7 +4283,7 @@
           },
           {
             "Title": "Grouping",
-            "Name": "GroupedItems",
+            "Name": "Grouping",
             "Widget": "SelectBox",
             "MvcAdditionalFiles": [
               "/Models/ElectronicsItem.cs",
@@ -4312,7 +4312,7 @@
           },
           {
             "Title": "Grouping",
-            "Name": "GroupedItems",
+            "Name": "Grouping",
             "Widget": "TagBox",
             "MvcAdditionalFiles": [
               "/Models/ElectronicsItem.cs",
@@ -4476,7 +4476,7 @@
         "Demos": [
           {
             "Title": "Item Deletion",
-            "Name": "ListEditingAndAPI",
+            "Name": "ItemDeletion",
             "Widget": "List",
             "MvcAdditionalFiles": [
               "/Models/InMemoryListDataContext.cs",
@@ -4487,7 +4487,7 @@
           },
           {
             "Title": "Grouping",
-            "Name": "GroupedList",
+            "Name": "Grouping",
             "Widget": "List",
             "MvcAdditionalFiles": [
               "/Models/SampleData/ListGroupedData.cs"
@@ -4510,7 +4510,7 @@
           },
           {
             "Title": "Search",
-            "Name": "ListWithSearchBar",
+            "Name": "Search",
             "Widget": "List",
             "MvcAdditionalFiles": [
               "/Models/ListProduct.cs",
@@ -4519,7 +4519,7 @@
           },
           {
             "Title": "Selection",
-            "Name": "ListSelection",
+            "Name": "Selection",
             "Widget": "List",
             "MvcAdditionalFiles": [
               "/Models/ListItem.cs",
@@ -4528,7 +4528,7 @@
           },
           {
             "Title": "Drag & Drop",
-            "Name": "ItemDragging",
+            "Name": "DragAndDrop",
             "DocUrl": "",
             "Widget": "List",
             "MvcAdditionalFiles": [
@@ -4725,7 +4725,7 @@
           },
           {
             "Title": "Chunk Upload",
-            "Name": "ChunkUploading",
+            "Name": "ChunkUpload",
             "DocUrl": "",
             "Widget": "FileUploader",
             "MvcAdditionalFiles": [
@@ -5058,7 +5058,7 @@
           },
           {
             "Title": "Drag & Drop",
-            "Name": "SortableClosableTabs",
+            "Name": "DragAndDrop",
             "Widget": "TabPanel",
             "Equivalents": "Tab Drag and Drop",
             "MvcAdditionalFiles": [
