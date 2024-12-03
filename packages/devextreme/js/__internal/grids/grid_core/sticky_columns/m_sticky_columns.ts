@@ -790,6 +790,10 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingStickyC
 };
 
 const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => class KeyboardNavigationStickyColumnsExtender extends Base {
+  // TODO Salimov: Most likely, we will need to remove the subscription
+  // for headers after we implement sticky headers (pqKdLLL1).
+  // Perhaps the headers will be rendered in the same table with data cells.
+  // And this code will no longer be needed.
   protected headerTabKeyHandler({ originalEvent, shift }) {
     // @ts-expect-error columnHeadersView's method
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
