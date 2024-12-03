@@ -3220,7 +3220,7 @@
         "Demos": [
           {
             "Title": "Grouping by Resources",
-            "Name": "GroupOrientation",
+            "Name": "GroupingByResources",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [
               "/Models/EmployeeTask.cs",
@@ -3246,7 +3246,7 @@
         "Demos": [
           {
             "Title": "Templates",
-            "Name": "CustomTemplates",
+            "Name": "Templates",
             "Credits": "www.wikipedia.org",
             "Widget": "Scheduler",
             "Modules": "globalize--vue&react",
@@ -3264,7 +3264,7 @@
           },
           {
             "Title": "Individual Views Customization",
-            "Name": "CustomizeIndividualViews",
+            "Name": "IndividualViewsCustomization",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [
               "/Views/Scheduler/_DateCellTemplate.cshtml",
@@ -3275,7 +3275,7 @@
           },
           {
             "Title": "Custom View Duration",
-            "Name": "IncreaseViewDuration",
+            "Name": "CustomViewDuration",
             "DocUrl": "ApiReference/UI_Components/dxScheduler/Configuration/views/#intervalCount",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [
@@ -3286,7 +3286,7 @@
           },
           {
             "Title": "Appointment Count per Cell",
-            "Name": "LimitAppointmentCountPerCell",
+            "Name": "AppointmentCountPerCell",
             "Widget": "Scheduler",
             "Modules": "globalize--vue&react",
             "MvcAdditionalFiles": [
@@ -3297,7 +3297,7 @@
           },
           {
             "Title": "Context Menu",
-            "Name": "ContextMenuIntegration",
+            "Name": "ContextMenu",
             "DocUrl": "ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentContextMenu",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [
