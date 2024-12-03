@@ -1,7 +1,27 @@
 export { ExplicitTypes } from "devextreme/ui/gallery";
-import Gallery, { Properties } from "devextreme/ui/gallery";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import Gallery, { Properties } from "devextreme/ui/gallery";
+import  DataSource from "devextreme/data/data_source";
+import {
+ dxGalleryItem,
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ ItemClickEvent,
+ ItemContextMenuEvent,
+ ItemHoldEvent,
+ ItemRenderedEvent,
+ OptionChangedEvent,
+ SelectionChangedEvent,
+} from "devextreme/ui/gallery";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -51,32 +71,32 @@ interface DxGallery extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: {},
+    accessKey: String,
     animationDuration: Number,
     animationEnabled: Boolean,
-    dataSource: {},
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxGalleryItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: {},
-    hint: {},
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
     indicatorEnabled: Boolean,
-    initialItemWidth: {},
+    initialItemWidth: Number,
     itemHoldTimeout: Number,
-    items: Array,
+    items: Array as PropType<Array<any | dxGalleryItem | string>>,
     itemTemplate: {},
     loop: Boolean,
     noDataText: String,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onItemContextMenu: Function,
-    onItemHold: Function,
-    onItemRendered: Function,
-    onOptionChanged: Function,
-    onSelectionChanged: Function,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
+    onItemContextMenu: Function as PropType<((e: ItemContextMenuEvent) => void)>,
+    onItemHold: Function as PropType<((e: ItemHoldEvent) => void)>,
+    onItemRendered: Function as PropType<((e: ItemRenderedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
     rtlEnabled: Boolean,
     selectedIndex: Number,
     selectedItem: {},
@@ -87,7 +107,7 @@ const componentConfig = {
     swipeEnabled: Boolean,
     tabIndex: Number,
     visible: Boolean,
-    width: {},
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     wrapAround: Boolean
   },
   emits: {

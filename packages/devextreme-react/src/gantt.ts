@@ -526,6 +526,11 @@ const _componentHeaderFilter = (props: IHeaderFilterProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "headerFilter",
+      ExpectedChildren: {
+        columnHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
+        ganttHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
+        texts: { optionName: "texts", isCollectionItem: false }
+      },
     },
   });
 };

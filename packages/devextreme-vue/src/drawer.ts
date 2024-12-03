@@ -1,6 +1,18 @@
-import Drawer, { Properties } from "devextreme/ui/drawer";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import Drawer, { Properties } from "devextreme/ui/drawer";
+import {
+ event,
+} from "devextreme/events/index";
+import {
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ OpenedStateMode,
+ PanelLocation,
+ RevealMode,
+} from "devextreme/ui/drawer";
 
 type AccessibleOptions = Pick<Properties,
   "activeStateEnabled" |
@@ -37,26 +49,26 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     animationDuration: Number,
     animationEnabled: Boolean,
-    closeOnOutsideClick: [Boolean, Function],
+    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     disabled: Boolean,
-    elementAttr: Object,
-    height: {},
-    hint: {},
+    elementAttr: Object as PropType<Record<string, any>>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
     maxSize: Number,
     minSize: Number,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     opened: Boolean,
-    openedStateMode: {},
-    position: {},
-    revealMode: {},
+    openedStateMode: String as PropType<OpenedStateMode>,
+    position: String as PropType<PanelLocation>,
+    revealMode: String as PropType<RevealMode>,
     rtlEnabled: Boolean,
     shading: Boolean,
     template: {},
     visible: Boolean,
-    width: {}
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

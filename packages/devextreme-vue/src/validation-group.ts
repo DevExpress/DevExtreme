@@ -1,6 +1,12 @@
-import ValidationGroup, { Properties } from "devextreme/ui/validation_group";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import ValidationGroup, { Properties } from "devextreme/ui/validation_group";
+import {
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+} from "devextreme/ui/validation_group";
 
 type AccessibleOptions = Pick<Properties,
   "elementAttr" |
@@ -17,12 +23,12 @@ interface DxValidationGroup extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    elementAttr: Object,
-    height: {},
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    width: {}
+    elementAttr: Object as PropType<Record<string, any>>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

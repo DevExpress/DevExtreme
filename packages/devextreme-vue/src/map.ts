@@ -1,6 +1,21 @@
-import Map, { Properties } from "devextreme/ui/map";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import Map, { Properties } from "devextreme/ui/map";
+import {
+ ClickEvent,
+ DisposingEvent,
+ InitializedEvent,
+ MarkerAddedEvent,
+ MarkerRemovedEvent,
+ OptionChangedEvent,
+ ReadyEvent,
+ RouteAddedEvent,
+ RouteRemovedEvent,
+ MapProvider,
+ MapType,
+ RouteMode,
+} from "devextreme/ui/map";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -44,37 +59,37 @@ interface DxMap extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: {},
+    accessKey: String,
     activeStateEnabled: Boolean,
-    apiKey: [Object, String],
+    apiKey: [Object, String] as PropType<Record<string, any> | string>,
     autoAdjust: Boolean,
-    center: [Array, Object, String],
+    center: [Array, Object, String] as PropType<Array<number> | Record<string, any> | string>,
     controls: Boolean,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: {},
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
     markerIconSrc: String,
-    markers: Array,
-    onClick: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onMarkerAdded: Function,
-    onMarkerRemoved: Function,
-    onOptionChanged: Function,
-    onReady: Function,
-    onRouteAdded: Function,
-    onRouteRemoved: Function,
-    provider: {},
-    providerConfig: Object,
-    routes: Array,
+    markers: Array as PropType<Array<Record<string, any>>>,
+    onClick: Function as PropType<((e: ClickEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onMarkerAdded: Function as PropType<((e: MarkerAddedEvent) => void)>,
+    onMarkerRemoved: Function as PropType<((e: MarkerRemovedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onReady: Function as PropType<((e: ReadyEvent) => void)>,
+    onRouteAdded: Function as PropType<((e: RouteAddedEvent) => void)>,
+    onRouteRemoved: Function as PropType<((e: RouteRemovedEvent) => void)>,
+    provider: String as PropType<MapProvider>,
+    providerConfig: Object as PropType<Record<string, any>>,
+    routes: Array as PropType<Array<Record<string, any>>>,
     rtlEnabled: Boolean,
     tabIndex: Number,
-    type: {},
+    type: String as PropType<MapType>,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     zoom: Number
   },
   emits: {
@@ -208,9 +223,9 @@ const DxMarkerConfig = {
   },
   props: {
     iconSrc: String,
-    location: [Array, Object, String],
-    onClick: Function,
-    tooltip: [Object, String]
+    location: [Array, Object, String] as PropType<Array<number> | Record<string, any> | string>,
+    onClick: Function as PropType<(() => void)>,
+    tooltip: [Object, String] as PropType<Record<string, any> | string>
   }
 };
 
@@ -256,8 +271,8 @@ const DxRouteConfig = {
   },
   props: {
     color: String,
-    locations: Array,
-    mode: {},
+    locations: Array as PropType<Array<Record<string, any>>>,
+    mode: String as PropType<RouteMode>,
     opacity: Number,
     weight: Number
   }

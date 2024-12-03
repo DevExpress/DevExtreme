@@ -325,6 +325,9 @@ const _componentLabel = (props: ILabelProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "label",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
     },
   });
 };

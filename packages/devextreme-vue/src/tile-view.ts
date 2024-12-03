@@ -1,7 +1,30 @@
 export { ExplicitTypes } from "devextreme/ui/tile_view";
-import TileView, { Properties } from "devextreme/ui/tile_view";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import TileView, { Properties } from "devextreme/ui/tile_view";
+import  DataSource from "devextreme/data/data_source";
+import {
+ dxTileViewItem,
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ ItemClickEvent,
+ ItemContextMenuEvent,
+ ItemHoldEvent,
+ ItemRenderedEvent,
+ OptionChangedEvent,
+} from "devextreme/ui/tile_view";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
+import {
+ Orientation,
+ ScrollbarMode,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -43,36 +66,36 @@ interface DxTileView extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: {},
+    accessKey: String,
     activeStateEnabled: Boolean,
     baseItemHeight: Number,
     baseItemWidth: Number,
-    dataSource: {},
-    direction: {},
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxTileViewItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
+    direction: String as PropType<Orientation>,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hint: {},
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
     itemMargin: Number,
-    items: Array,
+    items: Array as PropType<Array<any | dxTileViewItem | string>>,
     itemTemplate: {},
     noDataText: String,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onItemContextMenu: Function,
-    onItemHold: Function,
-    onItemRendered: Function,
-    onOptionChanged: Function,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
+    onItemContextMenu: Function as PropType<((e: ItemContextMenuEvent) => void)>,
+    onItemHold: Function as PropType<((e: ItemHoldEvent) => void)>,
+    onItemRendered: Function as PropType<((e: ItemRenderedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     rtlEnabled: Boolean,
-    showScrollbar: {},
+    showScrollbar: String as PropType<ScrollbarMode>,
     tabIndex: Number,
     visible: Boolean,
-    width: {}
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

@@ -641,7 +641,14 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const $transparentColumnElement = that.getTransparentColumnElement();
     if (columnElements && $transparentColumnElement && $transparentColumnElement.length) {
       const transparentColumnIndex = getTransparentColumnIndex(that.getFixedColumns());
-      columnElements.splice(transparentColumnIndex, $transparentColumnElement.get(0).colSpan, $transparentColumnElement.get(0));
+      [].splice.apply(
+        columnElements,
+        [
+          transparentColumnIndex,
+          $transparentColumnElement.get(0)?.colSpan,
+          $transparentColumnElement.get(0) as never,
+        ],
+      );
     }
 
     return columnElements;
