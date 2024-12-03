@@ -14,49 +14,49 @@ runManualTest('Chat', 'Customization', ['jQuery'], (test) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-        .click('#day-headers-format')
-        .click(Selector('.dx-list-item').nth(2))
-        .wait(500);
+      .click('#day-headers-format')
+      .click(Selector('.dx-list-item').nth(2))
+      .wait(500);
 
-    await testScreenshot(t, takeScreenshot, `chat_customization_day_headers_format_is_changed.png`);
+    await testScreenshot(t, takeScreenshot, 'chat_customization_day_headers_format_is_changed.png');
 
     await t
-        .click('#show-day-headers');
+      .click('#show-day-headers');
 
     await testScreenshot(t, takeScreenshot, 'chat_customization_day_headers_is_hidden.png');
 
     await t
-        .click('#show-avatar');
+      .click('#show-avatar');
 
     await testScreenshot(t, takeScreenshot, 'chat_customization_avatar_is_hidden.png');
 
     await t
-        .click('#show-avatar');
-    
+      .click('#show-avatar');
+
     await t
-        .click('#show-user-name');
+      .click('#show-user-name');
 
     await testScreenshot(t, takeScreenshot, 'chat_customization_username_is_hidden.png');
 
     await t
-        .click('#show-user-name');
+      .click('#show-user-name');
 
     await t
-        .click('#message-timestamp-format')
-        .click(Selector('.dx-list-item').nth(5))
-        .wait(500);
+      .click('#message-timestamp-format')
+      .click(Selector('.dx-list-item').nth(5))
+      .wait(500);
 
-    await testScreenshot(t, takeScreenshot, `chat_customization_message_timestamp_format_is_changed.png`);
+    await testScreenshot(t, takeScreenshot, 'chat_customization_message_timestamp_format_is_changed.png');
 
     await t
-        .click('#show-message-timestamp');
+      .click('#show-message-timestamp');
 
     await testScreenshot(t, takeScreenshot, 'chat_customization_message_timestamps_is_hidden.png');
-       
+
     await t
-        .typeText('.dx-texteditor-input','testing')
-        .pressKey('enter')
-        .click('#chat-disabled');
+      .typeText('.dx-texteditor-input', 'testing')
+      .pressKey('enter')
+      .click('#chat-disabled');
 
     await testScreenshot(t, takeScreenshot, 'chat_customization_is_disabled_after_sent.png');
 
