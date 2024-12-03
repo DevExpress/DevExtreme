@@ -70,7 +70,7 @@ $(() => {
 
         messages.push({ role: 'assistant', content: aiResponse });
 
-        renderMessage(aiResponse);
+        renderAssistantMessage(aiResponse);
       }, 200);
     } catch {
       instance.option({ typingUsers: [] });
@@ -96,7 +96,7 @@ $(() => {
     }
   }
 
-  function renderMessage(text) {
+  function renderAssistantMessage(text) {
     const message = {
       id: Date.now(),
       timestamp: new Date(),
