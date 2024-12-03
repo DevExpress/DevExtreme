@@ -39,15 +39,11 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoDataSourceModule } from 'devextreme-angular/ui/nested';
-import { DxiFieldModule } from 'devextreme-angular/ui/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/nested';
-import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
-import { DxoStoreModule } from 'devextreme-angular/ui/nested';
 import { DxoExportModule } from 'devextreme-angular/ui/nested';
 import { DxoFieldChooserModule } from 'devextreme-angular/ui/nested';
 import { DxoTextsModule } from 'devextreme-angular/ui/nested';
 import { DxoFieldPanelModule } from 'devextreme-angular/ui/nested';
+import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
 import { DxoSearchModule } from 'devextreme-angular/ui/nested';
 import { DxoLoadPanelModule } from 'devextreme-angular/ui/nested';
 import { DxoScrollingModule } from 'devextreme-angular/ui/nested';
@@ -893,15 +889,11 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
 @NgModule({
   imports: [
-    DxoDataSourceModule,
-    DxiFieldModule,
-    DxoFormatModule,
-    DxoHeaderFilterModule,
-    DxoStoreModule,
     DxoExportModule,
     DxoFieldChooserModule,
     DxoTextsModule,
     DxoFieldPanelModule,
+    DxoHeaderFilterModule,
     DxoSearchModule,
     DxoLoadPanelModule,
     DxoScrollingModule,
@@ -927,15 +919,11 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
   ],
   exports: [
     DxPivotGridComponent,
-    DxoDataSourceModule,
-    DxiFieldModule,
-    DxoFormatModule,
-    DxoHeaderFilterModule,
-    DxoStoreModule,
     DxoExportModule,
     DxoFieldChooserModule,
     DxoTextsModule,
     DxoFieldPanelModule,
+    DxoHeaderFilterModule,
     DxoSearchModule,
     DxoLoadPanelModule,
     DxoScrollingModule,
