@@ -49,6 +49,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
       onShown: this._onShown.bind(this),
       contentTemplate: this._getContentTemplate(dataList),
       wrapperAttr: { class: APPOINTMENT_TOOLTIP_WRAPPER_CLASS },
+      _loopFocus: true,
     });
   }
 

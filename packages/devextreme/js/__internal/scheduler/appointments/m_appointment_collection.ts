@@ -465,6 +465,10 @@ class SchedulerAppointments extends CollectionWidget {
     const $target = $(e.currentTarget);
     const data = (this as any)._getItemData($target);
 
+    if ($target.is('.dx-scheduler-appointment-collector')) {
+      return;
+    }
+
     if (e.type === 'keydown' || isFakeClickEvent(e)) {
       this.notifyObserver('showEditAppointmentPopup', { data, target: $target });
       return;
