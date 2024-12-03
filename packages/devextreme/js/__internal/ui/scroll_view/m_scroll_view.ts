@@ -40,6 +40,7 @@ const scrollViewServerConfig = {
   release: noop,
   refresh: noop,
   scrollOffset: () => ({ top: 0, left: 0 }),
+  isBottomReached: () => false,
   _optionChanged(args) {
     if (args.name !== 'onUpdated') {
       return this.callBase.apply(this, arguments);
@@ -306,6 +307,10 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
   finishLoading() {
     this._loadPanel.hide();
     this._unlock();
+  },
+
+  isBottomReached() {
+    return this._strategy.isBottomReached();
   },
 
   _dispose() {
