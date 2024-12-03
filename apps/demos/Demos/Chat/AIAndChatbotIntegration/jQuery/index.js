@@ -43,22 +43,18 @@ $(() => {
     }, MILLISECONDS_PER_MINUTE);
   }
 
-  function toggleDisabledState(disabled) {
-    const $button = instance.element().find(`.${CHAT_MESSAGEBOX_BUTTON_CLASS}`);
-    const $textArea = instance.element().find(`.${CHAT_MESSAGEBOX_TEXTAREA_CLASS}`);
-    const buttonInstance = $button.dxButton('instance');
-    const textAreaInstance = $textArea.dxTextArea('instance');
+  function toggleDisabledState(disabled, event) {
+    instance.element().toggleClass(CHAT_DISABLED_CLASS, disabled);
 
-    buttonInstance.option({ disabled });
-    textAreaInstance.option({ disabled });
-
-    if (!disabled) {
-      textAreaInstance.focus();
+    if (disabled) {
+      event?.target.blur();
+    } else {
+      event?.target.focus();
     }
   };
 
-  async function processMessageSending() {
-    toggleDisabledState(true);
+  async function processMessageSending(event) {
+    toggleDisabledState(true, event);
 
     instance.option({ typingUsers: [assistant] });
 
@@ -76,7 +72,7 @@ $(() => {
       instance.option({ typingUsers: [] });
       alertLimitReached();
     } finally {
-      toggleDisabledState(false);
+      toggleDisabledState(false, event);
     }
   }
 
@@ -163,12 +159,12 @@ $(() => {
     user,
     height: 710,
     onMessageEntered: (e) => {
-      const { message } = e;
+      const { message, event } = e;
 
       customStore.push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
       messages.push({ role: 'user', content: message.text });
 
-      processMessageSending();
+      processMessageSending(event);
     },
     messageTemplate: (data, element) => {
       const { message } = data;
