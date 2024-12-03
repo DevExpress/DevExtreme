@@ -1,10 +1,10 @@
-import Store from '@js/data/abstract_store';
 import {
   applyBatch, indexByKey, insert, remove, update,
 } from '@js/common/data/array_utils';
 import { errors } from '@js/common/data/errors';
 import Query from '@js/common/data/query';
 import { rejectedPromise, trivialPromise } from '@js/common/data/utils';
+import Store from '@js/data/abstract_store';
 
 // @ts-expect-error
 const ArrayStore = Store.inherit({

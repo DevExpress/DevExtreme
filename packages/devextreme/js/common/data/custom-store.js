@@ -1,5 +1,5 @@
 export {
-  isLoadResultObject,
-  isGroupItemsArray,
-  isItemsArray,
+    isLoadResultObject,
+    isGroupItemsArray,
+    isItemsArray,
 } from './custom_store';

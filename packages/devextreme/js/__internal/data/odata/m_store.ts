@@ -1,12 +1,12 @@
 import '@js/common/data/odata/query_adapter';
 
-import Store from '@js/data/abstract_store';
 import { errors } from '@js/common/data/errors';
 import RequestDispatcher from '@js/common/data/odata/request_dispatcher';
 import query from '@js/common/data/query';
 import config from '@js/core/config';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
+import Store from '@js/data/abstract_store';
 
 import {
   convertPrimitiveValue,

@@ -1,4 +1,3 @@
-import Store from '@js/data/abstract_store';
 import arrayQuery from '@js/common/data/array_query';
 import { applyBatch } from '@js/common/data/array_utils';
 import { errors } from '@js/common/data/errors';
@@ -13,6 +12,7 @@ import $ from '@js/core/renderer';
 // @ts-expect-error
 import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
 import { isFunction } from '@js/core/utils/type';
+import Store from '@js/data/abstract_store';
 
 const TOTAL_COUNT = 'totalCount';
 const LOAD = 'load';

@@ -1,4 +1,3 @@
-import Store from '@js/data/abstract_store';
 import ArrayStore from '@js/common/data/array_store';
 import { CustomStore } from '@js/common/data/custom_store';
 import { normalizeSortingInfo } from '@js/common/data/utils';
@@ -6,6 +5,7 @@ import ajaxUtils from '@js/core/utils/ajax';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { isPlainObject } from '@js/core/utils/type';
+import Store from '@js/data/abstract_store';
 
 export const CANCELED_TOKEN = 'canceled';
 
