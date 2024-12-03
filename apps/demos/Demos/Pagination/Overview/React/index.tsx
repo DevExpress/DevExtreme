@@ -5,5 +5,5 @@ import App from './App.tsx';
 
 ReactDOM.render(
   <App />,
-  document.getElementById('app'),
+  document.querySelector('.container'),
 );
