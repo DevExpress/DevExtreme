@@ -1329,7 +1329,7 @@
           },
           {
             "Title": "Fixed and Sticky Columns",
-            "Name": "ColumnFixing",
+            "Name": "FixedAndStickyColumns",
             "Equivalents": "fixed column, frozen column, pinned column",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
@@ -1548,7 +1548,7 @@
         "Demos": [
           {
             "Title": "Filtering",
-            "Name": "HeaderFilter",
+            "Name": "Filtering",
             "Widget": "PivotGrid",
             "DemoType": "Web"
           }
@@ -1644,7 +1644,7 @@
         "Demos": [
           {
             "Title": "Customization",
-            "Name": "LayoutCustomization",
+            "Name": "Customization",
             "Widget": "PivotGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/PivotGridDataController.cs",
