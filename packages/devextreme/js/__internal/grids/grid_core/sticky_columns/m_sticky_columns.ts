@@ -799,7 +799,6 @@ const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => c
       const $cell = $(originalEvent.target).closest('td');
       const $nextCell = GridCoreStickyColumnsDom.getNextHeaderCell(
         $cell,
-        this.addWidgetPrefix.bind(this),
         shift ? 'previous' : 'next',
       );
       const isFixedCell = GridCoreStickyColumnsDom

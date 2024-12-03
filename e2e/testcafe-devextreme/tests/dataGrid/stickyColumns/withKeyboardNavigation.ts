@@ -313,6 +313,57 @@ safeSizeTest('Band headers navigation by Shift and Tab key when there are fixed 
   },
 }));
 
+safeSizeTest('Band headers navigation by Tab key when there are fixed and command columns', async (t) => {
+  // arrange
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const headers = dataGrid.getHeaders();
+  const firstHeaderRow = headers.getHeaderRow(0);
+  const secondHeaderRow = headers.getHeaderRow(1);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await t.click(firstHeaderRow.getHeaderCell(0).element);
+
+  // assert
+  await t
+    .expect(firstHeaderRow.getHeaderCell(0).isFocused)
+    .ok();
+
+  // act
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(1));
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(2));
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(3));
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(4));
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(5));
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(6));
+
+  await takeScreenshot('fixed_and_command_columns_band_headers_navigation_by_tab_1.png', dataGrid.element);
+
+  // act
+  await navigateToNextCell(t, secondHeaderRow.getHeaderCell(0));
+
+  await takeScreenshot('fixed_and_command_columns_band_headers_navigation_by_tab_2.png', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  ...defaultConfig,
+  width: 600,
+  editing: {
+    allowUpdating: true,
+  },
+  customizeColumns(columns) {
+    columns[3] = {
+      caption: 'Band columns',
+      columns: [{ dataField: 'CustomerStoreCity', width: 150 }],
+    };
+  },
+}));
+
 safeSizeTest('Data cells navigation by Tab key when there are fixed columns', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

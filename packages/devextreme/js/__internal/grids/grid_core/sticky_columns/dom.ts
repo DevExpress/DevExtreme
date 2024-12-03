@@ -4,7 +4,6 @@ import $ from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
 
-import { CLASSES as ADAPTIVITY_CLASSES } from '../adaptivity/const';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import { CLASSES, StickyPosition } from './const';
 import { isFixedEdge } from './utils';
@@ -325,14 +324,10 @@ const isLastCell = ($cell: dxElementWrapper): boolean => {
   return $cell[0] === $lastCell[0];
 };
 
-const needToSkipHeaderCell = (
-  $cell: dxElementWrapper,
-  addWidgetPrefix,
-): boolean => $cell.hasClass(addWidgetPrefix(ADAPTIVITY_CLASSES.hiddenColumn));
+const needToSkipHeaderCell = ($cell: dxElementWrapper): boolean => !$cell.is('[tabindex]');
 
 const getNextHeaderCell = (
   $cell: dxElementWrapper,
-  addWidgetPrefix,
   direction = 'next',
 ): dxElementWrapper => {
   let $nextCell = $cell;
@@ -348,7 +343,7 @@ const getNextHeaderCell = (
         $nextCell = direction === 'next' ? $nextRow.children().first() : $nextRow.children().last();
       }
     }
-  } while (needToSkipHeaderCell($nextCell, addWidgetPrefix));
+  } while ($nextCell.length && needToSkipHeaderCell($nextCell));
 
   return $nextCell;
 };
