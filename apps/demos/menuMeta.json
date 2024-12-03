@@ -172,7 +172,7 @@
         "Demos": [
           {
             "Title": "Row Editing",
-            "Name": "RowEditingAndEditingEvents",
+            "Name": "RowEditing",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
@@ -187,7 +187,7 @@
           },
           {
             "Title": "Cell Editing",
-            "Name": "CellEditingAndEditingAPI",
+            "Name": "CellEditing",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
@@ -309,7 +309,7 @@
           },
           {
             "Title": "Remote CRUD Operations",
-            "Name": "CRUDOperations",
+            "Name": "RemoteCRUDOperations",
             "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Custom_Data_Sources/",
             "Widget": "DataGrid",
             "DemoType": "Web",
@@ -357,7 +357,7 @@
           },
           {
             "Title": "New Record Position",
-            "Name": "CustomNewRecordPosition",
+            "Name": "NewRecordPosition",
             "DocUrl": "",
             "Widget": "DataGrid",
             "MvcDescription": "",
@@ -515,7 +515,7 @@
         "Equivalents": "",
         "Demos": [
           {
-            "Title": "Auto-Populated Columns",
+            "Title": "Columns based on a Data Source",
             "Name": "ColumnsBasedOnADataSource",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
@@ -859,7 +859,7 @@
         "Demos": [
           {
             "Title": "Column",
-            "Name": "ColumnTemplate",
+            "Name": "Column",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Models/DataGrid/Employee.cs",
@@ -869,7 +869,7 @@
           },
           {
             "Title": "Row",
-            "Name": "RowTemplate",
+            "Name": "Row",
             "Widget": "DataGrid",
             "Modules": "globalize--vue&react",
             "MvcAdditionalFiles": [
@@ -894,7 +894,7 @@
           },
           {
             "Title": "Cell",
-            "Name": "CellCustomization",
+            "Name": "Cell",
             "DocUrl": "Guide/UI_Components/DataGrid/Columns/Customize_Cells/#Customize_the_Appearance",
             "Widget": "DataGrid",
             "Modules": "globalize--vue&react",
@@ -906,7 +906,7 @@
           },
           {
             "Title": "Toolbar",
-            "Name": "ToolbarCustomization",
+            "Name": "Toolbar",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Models/Order.cs",
