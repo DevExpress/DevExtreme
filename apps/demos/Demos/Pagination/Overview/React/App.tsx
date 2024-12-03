@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import Pagination from 'devextreme-react/pagination';
 import EmployeeGallery from './EmployeesGallery.tsx';
+
 import { employees } from './data.ts';
 
 const PAGE_SIZES = [4, 6];
 
 const App = () => {
-  const [pageSize, setPageSize] = useState<number>(4);
-  const [pageIndex, setPageIndex] = useState<number>(1);
+  const [pageSize, setPageSize] = useState(4);
+  const [pageIndex, setPageIndex] = useState(1);
 
   return (
     <>

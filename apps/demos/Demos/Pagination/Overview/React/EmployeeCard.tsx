@@ -1,13 +1,5 @@
 import React from 'react';
-
-interface Employee {
-  ID: number;
-  FullName: string;
-  Title: string;
-  Employee_Picture: string;
-  Picture: string;
-  MobilePhone: string;
-}
+import { Employee } from './data';
 
 interface EmployeeCardProps {
   employee: Employee;

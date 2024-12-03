@@ -1,4 +1,13 @@
-export const employees = [
+export interface Employee {
+  ID: number;
+  FullName: string;
+  Title: string;
+  Employee_Picture: string;
+  Picture: string;
+  MobilePhone: string;
+}
+
+export const employees: Employee[] = [
   {
     ID: 1,
     FullName: 'John Heart',
