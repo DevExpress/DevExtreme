@@ -1,11 +1,7 @@
 body {
   padding: 0;
   margin: 0;
-  background-color: var(--dx-color-main-bg);
   overflow-x: hidden;
-  font-size: var(--dx-font-size);
-  line-height: var(--dx-line-height);
-  color: var(--dx-color-text);
 }
 
 .demo-container {
