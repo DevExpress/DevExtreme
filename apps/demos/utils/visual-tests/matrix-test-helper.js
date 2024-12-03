@@ -190,8 +190,14 @@ const SKIPPED_TESTS = {
     Pagination: ['Overview'],
   },
   Angular: {
+    Common: [
+      { demo: 'EditorAppearanceVariants', themes: [THEME.generic, THEME.material] },
+    ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'Crosshair', themes: [THEME.material, THEME.fluent] },
+      { demo: 'CustomAnnotations', themes: [THEME.material, THEME.fluent] },
+      { demo: 'LoadDataOnDemand', themes: [THEME.fluent] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
@@ -200,12 +206,21 @@ const SKIPPED_TESTS = {
     ],
     DataGrid: [
       { demo: 'BatchEditing', themes: [THEME.fluent] },
+      { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material] },
+      { demo: 'MasterDetailAPI', themes: [THEME.generic, THEME.material] },
+      { demo: 'DataValidation', themes: [THEME.material] },
       { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
+      { demo: 'Filtering', themes: [THEME.material, THEME.fluent] },
+      { demo: 'FilteringAPI', themes: [THEME.generic, THEME.fluent] },
+      { demo: 'GroupSummaries', themes: [THEME.fluent ] },
+      { demo: 'RecordPaging', themes: [THEME.fluent ] },
+      { demo: 'RowSelection', themes: [THEME.fluent ] },
+      { demo: 'MultipleSelection', themes: [THEME.fluent ] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
-      { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RemoteGrouping', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'RowEditingAndEditingEvents', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
     Form: [
       'CustomizeItem',
@@ -214,7 +229,16 @@ const SKIPPED_TESTS = {
     Scheduler: [
       'CustomDragAndDrop',
     ],
+    Popup: [
+      { demo: 'Scrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Pagination: [{ demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] }],
+    Sortable: [
+      { demo: 'Kanban', themes: [THEME.fluent] },
+    ],
+    PivotGrid: [
+      { demo: 'IntegratedFieldChooser', themes: [THEME.generic] },
+    ]
   },
   Vue: {
     Charts: [
@@ -232,8 +256,8 @@ const SKIPPED_TESTS = {
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
-      { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RowEditingAndEditingEvents', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'FilteringAPI', themes: [THEME.material] },
       'StatePersistence',
     ],
@@ -241,6 +265,9 @@ const SKIPPED_TESTS = {
       { demo: 'TopOrBottomPosition', themes: [THEME.material] },
     ],
     Pagination: ['Overview'],
+    Toolbar: [
+      { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ]
   },
   React: {
     Charts: [
@@ -253,8 +280,8 @@ const SKIPPED_TESTS = {
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
-      { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RowEditingAndEditingEvents', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'Filtering', themes: [THEME.fluent, THEME.material] },
       { demo: 'RecordGrouping', themes: [THEME.material] },
     ],
