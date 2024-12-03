@@ -1,40 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { ClientFunction } from 'testcafe';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { defaultConfig } from './data';
 
-function getScrollPadding(scrollContainer, paddingSide): Promise<string> {
-  return ClientFunction((element, side) => element().style[`scrollPadding${side}`])(scrollContainer, paddingSide);
-}
-
-function cellIsVisibleInViewport(cell, scrollContainer): Promise<boolean> {
-  return ClientFunction((element, container) => {
-    const cellElement = element();
-    const cellRect = cellElement.getBoundingClientRect();
-    const scrollContainerElement = container();
-    const scrollPaddingLeft = parseFloat(scrollContainerElement.style.scrollPaddingLeft);
-    const scrollPaddingRight = parseFloat(scrollContainerElement.style.scrollPaddingRight);
-    const {
-      left: scrollContainerOffsetLeft,
-      right: scrollContainerOffsetRight,
-    }: { left: number; right: number } = scrollContainerElement.getBoundingClientRect();
-
-    if (cellRect.right < (scrollContainerOffsetLeft + scrollPaddingLeft)) {
-      return false;
-    }
-
-    if (cellRect.left > (scrollContainerOffsetRight - scrollPaddingRight)) {
-      return false;
-    }
-
-    return true;
-  })(cell, scrollContainer);
-}
-
-const navigateToNextCell = async (t, $headerCell, scrollContainer) => {
+const navigateToNextCell = async (t, $headerCell) => {
   // act
   await t
     .pressKey('tab');
@@ -42,12 +13,10 @@ const navigateToNextCell = async (t, $headerCell, scrollContainer) => {
   // assert
   await t
     .expect($headerCell.isFocused)
-    .ok()
-    .expect(cellIsVisibleInViewport($headerCell.element, scrollContainer))
     .ok();
 };
 
-const navigateToPrevCell = async (t, $headerCell, scrollContainer) => {
+const navigateToPrevCell = async (t, $headerCell) => {
   // act
   await t
     .pressKey('shift+tab');
@@ -55,23 +24,7 @@ const navigateToPrevCell = async (t, $headerCell, scrollContainer) => {
   // assert
   await t
     .expect($headerCell.isFocused)
-    .ok()
-    .expect(cellIsVisibleInViewport($headerCell.element, scrollContainer))
     .ok();
-};
-
-const checkScrollPadding = async (
-  t,
-  scrollContainer,
-  scrollPaddingLeft,
-  scrollPaddingRight,
-) => {
-  // assert
-  await t
-    .expect(getScrollPadding(scrollContainer, 'Left'))
-    .eql(scrollPaddingLeft)
-    .expect(getScrollPadding(scrollContainer, 'Right'))
-    .eql(scrollPaddingRight);
 };
 
 const DATA_GRID_SELECTOR = '#container';
@@ -84,13 +37,9 @@ safeSizeTest('Headers navigation by Tab key when there are fixed columns', async
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const headers = dataGrid.getHeaders();
-  const headersScrollContainer = headers.getContent();
   const headerRow = headers.getHeaderRow(0);
 
   await t.expect(dataGrid.isReady()).ok();
-
-  // assert
-  await checkScrollPadding(t, headersScrollContainer, '130px', '285px');
 
   // act
   await t.click(headerRow.getHeaderCell(0).element);
@@ -101,24 +50,20 @@ safeSizeTest('Headers navigation by Tab key when there are fixed columns', async
     .ok();
 
   // act
-  await navigateToNextCell(t, headerRow.getHeaderCell(1), headersScrollContainer);
-  await navigateToNextCell(t, headerRow.getHeaderCell(2), headersScrollContainer);
-  await navigateToNextCell(t, headerRow.getHeaderCell(3), headersScrollContainer);
-
-  // assert
-  await checkScrollPadding(t, headersScrollContainer, '130px', '160px');
+  await navigateToNextCell(t, headerRow.getHeaderCell(1));
+  await navigateToNextCell(t, headerRow.getHeaderCell(2));
+  await navigateToNextCell(t, headerRow.getHeaderCell(3));
 
   await takeScreenshot('fixed_columns_headers_navigation_by_tab_1.png', dataGrid.element);
 
   // act
-  await navigateToNextCell(t, headerRow.getHeaderCell(4), headersScrollContainer);
-  await navigateToNextCell(t, headerRow.getHeaderCell(5), headersScrollContainer);
-  await navigateToNextCell(t, headerRow.getHeaderCell(6), headersScrollContainer);
-
-  // assert
-  await checkScrollPadding(t, headersScrollContainer, '255px', '160px');
+  await navigateToNextCell(t, headerRow.getHeaderCell(4));
+  await navigateToNextCell(t, headerRow.getHeaderCell(5));
 
   await takeScreenshot('fixed_columns_headers_navigation_by_tab_2.png', dataGrid.element);
+
+  // act
+  await navigateToNextCell(t, headerRow.getHeaderCell(6));
 
   // assert
   await t
@@ -126,7 +71,7 @@ safeSizeTest('Headers navigation by Tab key when there are fixed columns', async
     .ok(compareResults.errorMessages());
 }, [900, 800]).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
-  width: 550,
+  width: 600,
   customizeColumns(columns) {
     columns[4].width = 125;
     columns[4].fixed = true;
@@ -139,13 +84,9 @@ safeSizeTest('Headers navigation by Shift and Tab keys when there are fixed colu
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const headers = dataGrid.getHeaders();
-  const headersScrollContainer = headers.getContent();
   const headerRow = headers.getHeaderRow(0);
 
   await t.expect(dataGrid.isReady()).ok();
-
-  // assert
-  await checkScrollPadding(t, headersScrollContainer, '130px', '285px');
 
   // act
   await t.click(headerRow.getHeaderCell(6).element);
@@ -156,24 +97,20 @@ safeSizeTest('Headers navigation by Shift and Tab keys when there are fixed colu
     .ok();
 
   // act
-  await navigateToPrevCell(t, headerRow.getHeaderCell(5), headersScrollContainer);
-
-  // assert
-  await checkScrollPadding(t, headersScrollContainer, '130px', '160px');
+  await navigateToPrevCell(t, headerRow.getHeaderCell(5));
 
   await takeScreenshot('fixed_columns_headers_navigation_by_shift_and_tab_1.png', dataGrid.element);
 
   // act
-  await navigateToPrevCell(t, headerRow.getHeaderCell(4), headersScrollContainer);
-  await navigateToPrevCell(t, headerRow.getHeaderCell(3), headersScrollContainer);
-  await navigateToPrevCell(t, headerRow.getHeaderCell(2), headersScrollContainer);
-  await navigateToPrevCell(t, headerRow.getHeaderCell(1), headersScrollContainer);
-  await navigateToPrevCell(t, headerRow.getHeaderCell(0), headersScrollContainer);
-
-  // assert
-  await checkScrollPadding(t, headersScrollContainer, '130px', '285px');
+  await navigateToPrevCell(t, headerRow.getHeaderCell(4));
+  await navigateToPrevCell(t, headerRow.getHeaderCell(3));
+  await navigateToPrevCell(t, headerRow.getHeaderCell(2));
+  await navigateToPrevCell(t, headerRow.getHeaderCell(1));
 
   await takeScreenshot('fixed_columns_headers_navigation_by_shift_and_tab_2.png', dataGrid.element);
+
+  // act
+  await navigateToPrevCell(t, headerRow.getHeaderCell(0));
 
   // assert
   await t
@@ -189,28 +126,176 @@ safeSizeTest('Headers navigation by Shift and Tab keys when there are fixed colu
   },
 }));
 
-safeSizeTest('Data cells navigation by Tab key when there are fixed columns', async (t) => {
+safeSizeTest('Headers navigation by Tab key when there are fixed columns and adaptability is enabled', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const scrollContainer = dataGrid.getScrollContainer();
+  const headers = dataGrid.getHeaders();
+  const headerRow = headers.getHeaderRow(0);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await t.click(headerRow.getHeaderCell(0).element);
+
+  // assert
+  await t
+    .expect(headerRow.getHeaderCell(0).isFocused)
+    .ok();
+
+  // act
+  await navigateToNextCell(t, headerRow.getHeaderCell(1));
+  await navigateToNextCell(t, headerRow.getHeaderCell(2));
+  await navigateToNextCell(t, headerRow.getHeaderCell(3));
+
+  await takeScreenshot('fixed_columns_and_adaptability_headers_navigation_by_tab_1.png', dataGrid.element);
+
+  // act
+  await navigateToNextCell(t, headerRow.getHeaderCell(4));
+  await navigateToNextCell(t, headerRow.getHeaderCell(6));
+
+  await takeScreenshot('fixed_columns_and_adaptability_headers_navigation_by_tab_2.png', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  ...defaultConfig,
+  width: 650,
+  columnWidth: 150,
+  customizeColumns(columns) {
+    columns[4].width = 125;
+    columns[4].fixed = true;
+    columns[4].fixedPosition = 'sticky';
+    columns[5].hidingPriority = 0;
+  },
+}));
+
+safeSizeTest('Headers navigation by Shift and Tab keys when there are fixed columns and adaptability is enabled', async (t) => {
+  // arrange
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const headers = dataGrid.getHeaders();
+  const headerRow = headers.getHeaderRow(0);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await t.click(headerRow.getHeaderCell(6).element);
+
+  // assert
+  await t
+    .expect(headerRow.getHeaderCell(6).isFocused)
+    .ok();
+
+  // act
+  await navigateToPrevCell(t, headerRow.getHeaderCell(4));
+
+  await takeScreenshot('fixed_columns_and_adaptability_headers_navigation_by_shift_and_tab_1.png', dataGrid.element);
+
+  // act
+  await navigateToPrevCell(t, headerRow.getHeaderCell(3));
+
+  await takeScreenshot('fixed_columns_and_adaptability_headers_navigation_by_shift_and_tab_2.png', dataGrid.element);
+
+  // act
+  await navigateToPrevCell(t, headerRow.getHeaderCell(2));
+  await navigateToPrevCell(t, headerRow.getHeaderCell(1));
+  await navigateToPrevCell(t, headerRow.getHeaderCell(0));
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  ...defaultConfig,
+  width: 650,
+  columnWidth: 150,
+  customizeColumns(columns) {
+    columns[4].width = 125;
+    columns[4].fixed = true;
+    columns[4].fixedPosition = 'sticky';
+    columns[5].hidingPriority = 0;
+  },
+}));
+
+safeSizeTest('Band headers navigation by Tab key when there are fixed columns', async (t) => {
+  // arrange
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const headers = dataGrid.getHeaders();
+  const firstHeaderRow = headers.getHeaderRow(0);
+  const secondHeaderRow = headers.getHeaderRow(1);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await t.click(firstHeaderRow.getHeaderCell(0).element);
+
+  // assert
+  await t
+    .expect(firstHeaderRow.getHeaderCell(0).isFocused)
+    .ok();
+
+  // act
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(1));
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(2));
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(3));
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(4));
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(5));
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(6));
+
+  await takeScreenshot('fixed_columns_band_headers_navigation_by_tab_1.png', dataGrid.element);
+
+  // act
+  await navigateToNextCell(t, secondHeaderRow.getHeaderCell(0));
+
+  await takeScreenshot('fixed_columns_band_headers_navigation_by_tab_2.png', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  ...defaultConfig,
+  width: 600,
+  customizeColumns(columns) {
+    columns[3] = {
+      caption: 'Band columns',
+      columns: [{ dataField: 'CustomerStoreCity', width: 150 }],
+    };
+  },
+}));
+
+safeSizeTest('Band headers navigation by Shift and Tab key when there are fixed columns', async (t) => {
+  // arrange
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const headers = dataGrid.getHeaders();
+  const firstHeaderRow = headers.getHeaderRow(0);
+  const secondHeaderRow = headers.getHeaderRow(1);
 
   await t.expect(dataGrid.isReady()).ok();
 
   // act
   await t.click(dataGrid.getDataCell(0, 0).element);
-  await navigateToNextCell(t, dataGrid.getDataCell(0, 1), scrollContainer);
-  await navigateToNextCell(t, dataGrid.getDataCell(0, 2), scrollContainer);
-  await navigateToNextCell(t, dataGrid.getDataCell(0, 3), scrollContainer);
+  await navigateToPrevCell(t, secondHeaderRow.getHeaderCell(0));
 
-  await takeScreenshot('fixed_columns_data_cells_navigation_by_tab_1.png', dataGrid.element);
+  await takeScreenshot('fixed_columns_band_headers_navigation_by_shift_and_tab_1.png', dataGrid.element);
 
   // act
-  await navigateToNextCell(t, dataGrid.getDataCell(0, 4), scrollContainer);
-  await navigateToNextCell(t, dataGrid.getDataCell(0, 5), scrollContainer);
-  await navigateToNextCell(t, dataGrid.getDataCell(0, 6), scrollContainer);
+  await navigateToPrevCell(t, firstHeaderRow.getHeaderCell(6));
+  await navigateToPrevCell(t, firstHeaderRow.getHeaderCell(5));
+  await navigateToPrevCell(t, firstHeaderRow.getHeaderCell(4));
+  await navigateToPrevCell(t, firstHeaderRow.getHeaderCell(3));
+  await navigateToPrevCell(t, firstHeaderRow.getHeaderCell(2));
+  await navigateToPrevCell(t, firstHeaderRow.getHeaderCell(1));
 
-  await takeScreenshot('fixed_columns_data_cells_navigation_by_tab_2.png', dataGrid.element);
+  await takeScreenshot('fixed_columns_band_headers_navigation_by_shift_and_tab_2.png', dataGrid.element);
+
+  // act
+  await navigateToPrevCell(t, firstHeaderRow.getHeaderCell(0));
 
   // assert
   await t
@@ -219,6 +304,97 @@ safeSizeTest('Data cells navigation by Tab key when there are fixed columns', as
 }, [900, 800]).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   width: 550,
+  columnWidth: 200,
+  customizeColumns(columns) {
+    columns[5] = {
+      caption: 'Band columns',
+      columns: [{ dataField: 'SaleAmount', width: 150 }],
+    };
+  },
+}));
+
+safeSizeTest('Band headers navigation by Tab key when there are fixed and command columns', async (t) => {
+  // arrange
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const headers = dataGrid.getHeaders();
+  const firstHeaderRow = headers.getHeaderRow(0);
+  const secondHeaderRow = headers.getHeaderRow(1);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await t.click(firstHeaderRow.getHeaderCell(0).element);
+
+  // assert
+  await t
+    .expect(firstHeaderRow.getHeaderCell(0).isFocused)
+    .ok();
+
+  // act
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(1));
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(2));
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(3));
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(4));
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(5));
+  await navigateToNextCell(t, firstHeaderRow.getHeaderCell(6));
+
+  await takeScreenshot('fixed_and_command_columns_band_headers_navigation_by_tab_1.png', dataGrid.element);
+
+  // act
+  await navigateToNextCell(t, secondHeaderRow.getHeaderCell(0));
+
+  await takeScreenshot('fixed_and_command_columns_band_headers_navigation_by_tab_2.png', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  ...defaultConfig,
+  width: 600,
+  editing: {
+    allowUpdating: true,
+  },
+  customizeColumns(columns) {
+    columns[3] = {
+      caption: 'Band columns',
+      columns: [{ dataField: 'CustomerStoreCity', width: 150 }],
+    };
+  },
+}));
+
+safeSizeTest('Data cells navigation by Tab key when there are fixed columns', async (t) => {
+  // arrange
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await t.click(dataGrid.getDataCell(0, 0).element);
+  await navigateToNextCell(t, dataGrid.getDataCell(0, 1));
+  await navigateToNextCell(t, dataGrid.getDataCell(0, 2));
+  await navigateToNextCell(t, dataGrid.getDataCell(0, 3));
+
+  await takeScreenshot('fixed_columns_data_cells_navigation_by_tab_1.png', dataGrid.element);
+
+  // act
+  await navigateToNextCell(t, dataGrid.getDataCell(0, 4));
+  await navigateToNextCell(t, dataGrid.getDataCell(0, 5));
+
+  await takeScreenshot('fixed_columns_data_cells_navigation_by_tab_2.png', dataGrid.element);
+
+  // act
+  await navigateToNextCell(t, dataGrid.getDataCell(0, 6));
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  ...defaultConfig,
+  width: 600,
   customizeColumns(columns) {
     columns[4].width = 125;
     columns[4].fixed = true;
@@ -230,24 +406,25 @@ safeSizeTest('Data cells navigation by Shift and Tab keys when there are fixed c
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const scrollContainer = dataGrid.getScrollContainer();
 
   await t.expect(dataGrid.isReady()).ok();
 
   // act
   await t.click(dataGrid.getDataCell(0, 6).element);
-  await navigateToPrevCell(t, dataGrid.getDataCell(0, 5), scrollContainer);
-  await navigateToPrevCell(t, dataGrid.getDataCell(0, 4), scrollContainer);
+  await navigateToPrevCell(t, dataGrid.getDataCell(0, 5));
 
   await takeScreenshot('fixed_columns_data_cells_navigation_by_shift_and_tab_1.png', dataGrid.element);
 
   // act
-  await navigateToPrevCell(t, dataGrid.getDataCell(0, 3), scrollContainer);
-  await navigateToPrevCell(t, dataGrid.getDataCell(0, 2), scrollContainer);
-  await navigateToPrevCell(t, dataGrid.getDataCell(0, 1), scrollContainer);
-  await navigateToPrevCell(t, dataGrid.getDataCell(0, 0), scrollContainer);
+  await navigateToPrevCell(t, dataGrid.getDataCell(0, 4));
+  await navigateToPrevCell(t, dataGrid.getDataCell(0, 3));
+  await navigateToPrevCell(t, dataGrid.getDataCell(0, 2));
+  await navigateToPrevCell(t, dataGrid.getDataCell(0, 1));
 
   await takeScreenshot('fixed_columns_data_cells_navigation_by_shift_and_tab_2.png', dataGrid.element);
+
+  // act
+  await navigateToPrevCell(t, dataGrid.getDataCell(0, 0));
 
   // assert
   await t
@@ -255,10 +432,10 @@ safeSizeTest('Data cells navigation by Shift and Tab keys when there are fixed c
     .ok(compareResults.errorMessages());
 }, [900, 800]).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
-  width: 550,
+  width: 625,
   customizeColumns(columns) {
-    columns[3].width = 125;
-    columns[3].fixed = true;
-    columns[3].fixedPosition = 'sticky';
+    columns[4].width = 125;
+    columns[4].fixed = true;
+    columns[4].fixedPosition = 'sticky';
   },
 }));
