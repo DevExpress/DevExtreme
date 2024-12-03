@@ -1,4 +1,12 @@
 [
+    { "Widget": "Charts", "Name": "SeriesTemplates", "NewWidget": "Charts", "NewName": "DynamicSeries" },
+    { "Widget": "Charts", "Name": "APISelectAPoint", "NewWidget": "Charts", "NewName": "PointSelectionAPI" },
+    { "Widget": "Charts", "Name": "APIDisplayATooltip", "NewWidget": "Charts", "NewName": "TooltipAPI" },
+    { "Widget": "Charts", "Name": "TooltipHTMLSupport", "NewWidget": "Charts", "NewName": "TooltipCustomization" },
+    { "Widget": "Charts", "Name": "ZoomingOnAreaSelection", "NewWidget": "Charts", "NewName": "AreaSelectionZooming" },
+    { "Widget": "Charts", "Name": "DiscreteAggregation", "NewWidget": "Charts", "NewName": "DiscretePointsAggregation" },
+    { "Widget": "Charts", "Name": "AxisLabelsTemplates", "NewWidget": "Charts", "NewName": "AxisLabelCustomization" },
+    { "Widget": "Charts", "Name": "CustomLegendMarkers", "NewWidget": "Charts", "NewName": "LegendMarkersCustomization" },
     { "Widget": "Data_Grid", "NewWidget": "DataGrid" },
     { "Widget": "DataGrid", "Name": "FilterBuilder", "NewWidget": "DataGrid", "NewName": "FilterPanel" },
     { "Widget": "DataGrid", "Name": "CustomizeCommandColumns", "NewWidget": "DataGrid", "NewName": "CommandColumnCustomization" },
@@ -15,6 +23,10 @@
     { "Widget": "DataGrid", "Name": "RowTemplate", "NewWidget": "DataGrid", "NewName": "Row" },
     { "Widget": "DataGrid", "Name": "CellCustomization", "NewWidget": "DataGrid", "NewName": "Cell" },
     { "Widget": "DataGrid", "Name": "ToolbarCustomization", "NewWidget": "DataGrid", "NewName": "Toolbar" },
+    { "Widget": "Gantt", "Name": "ChartAppearance", "NewWidget": "Gantt", "NewName": "Appearance" },
+    { "Widget": "Gauges", "Name": "UpdateCircularGaugeDataAtRuntime", "NewWidget": "Gauges", "NewName": "CircularGauge" },
+    { "Widget": "Gauges", "Name": "UpdateLinearGaugeDataAtRuntime", "NewWidget": "Gauges", "NewName": "LinearGauge" },
+    { "Widget": "Gauges", "Name": "UpdateBarGaugeDataAtRuntime", "NewWidget": "Gauges", "NewName": "BarGauge" },
     { "Widget": "Tree_List", "NewWidget": "TreeList" },
     { "Widget": "TreeList", "Name": "ColumnFixing", "NewWidget": "TreeList", "NewName": "FixedAndStickyColumns" },
     { "Widget": "Responsive_Box", "NewWidget": "ResponsiveBox" },
@@ -46,7 +58,7 @@
     { "Widget": "Text_Box", "NewWidget": "TextBox" },
     { "Widget": "Tile_View", "NewWidget": "TileView" },
     { "Widget": "Tree_View", "NewWidget": "TreeView" },
-    { "Widget": "Vector_Map", "NewWidget": "VectorMap" },
+    { "Widget": "TreeView", "Name": "DragAndDropPlainDataStructure", "NewWidget": "TreeView", "NewName": "PlainDataStructure" },
 	{ "Widget": "Scheduler", "Name": "AdaptiveAppointments", "NewWidget": "Scheduler", "NewName": "LimitAppointmentCountPerCell" },
 	{ "Widget": "Scheduler", "Name": "CustomTemplates", "NewWidget": "Scheduler", "NewName": "Templates" },
 	{ "Widget": "Scheduler", "Name": "CustomTemplatesCustomizeIndividualViews", "NewWidget": "Scheduler", "NewName": "IndividualViewsCustomization" },
@@ -61,5 +73,7 @@
     { "Widget": "Reporting", "Name": "PollingReport", "NewWidget": "Reporting", "NewName": "EmployeePerformanceReview" },
     { "Widget": "Common", "Name": "StylingMode", "NewWidget": "Common", "NewName": "EditorAppearanceVariants" },
 	{ "Widget": "TreeList", "Name": "UsingHeaderFilter", "NewWidget": "TreeList", "NewName": "ColumnHeaderFilter" },
-    { "Widget": "HtmlEditor", "Name": "OutputFormats", "NewWidget": "HtmlEditor", "NewName": "MarkdownSupport" }
+    { "Widget": "HtmlEditor", "Name": "OutputFormats", "NewWidget": "HtmlEditor", "NewName": "MarkdownSupport" },
+    { "Widget": "Vector_Map", "NewWidget": "VectorMap" },
+    { "Widget": "VectorMap", "Name": "TooltipHTMLSupport", "NewWidget": "VectorMap", "NewName": "TooltipsCustomization" }
 ]

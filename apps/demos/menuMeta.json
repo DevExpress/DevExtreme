@@ -1739,7 +1739,7 @@
           },
           {
             "Title": "Dynamic Series",
-            "Name": "SeriesTemplates",
+            "Name": "DynamicSeries",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
               "/Models/OilProduction.cs",
@@ -2493,7 +2493,7 @@
           },
           {
             "Title": "Discrete Points Aggregation",
-            "Name": "DiscreteAggregation",
+            "Name": "DiscretePointsAggregation",
             "Widget": "Charts",
             "DemoType": "Viz"
           }
@@ -2505,7 +2505,7 @@
         "Demos": [
           {
             "Title": "Tooltip API",
-            "Name": "APIDisplayATooltip",
+            "Name": "TooltipAPI",
             "DocUrl": "Guide/UI_Components/Chart/Tooltips/Show_and_Hide_a_Tooltip/",
             "Credits": "www.wikipedia.org",
             "Widget": "Charts",
@@ -2513,7 +2513,7 @@
           },
           {
             "Title": "Tooltip Customization",
-            "Name": "TooltipHTMLSupport",
+            "Name": "TooltipCustomization",
             "Credits": "en.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz",
@@ -2549,7 +2549,7 @@
           },
           {
             "Title": "Point Selection API",
-            "Name": "APISelectAPoint",
+            "Name": "PointSelectionAPI",
             "DocUrl": "Guide/UI_Components/Chart/Series_Points/Selection/",
             "Widget": "Charts",
             "DemoType": "Viz",
@@ -2563,7 +2563,7 @@
         "Demos": [
           {
             "Title": "Axis Label Customization",
-            "Name": "AxisLabelsTemplates",
+            "Name": "AxisLabelCustomization",
             "Widget": "Charts",
             "MvcDescription": "",
             "NetCoreDescription": "",
@@ -2589,7 +2589,7 @@
           },
           {
             "Title": "Legend Markers Customization",
-            "Name": "CustomLegendMarkers",
+            "Name": "LegendMarkersCustomization",
             "MvcAdditionalFiles": [
               "/Models/SampleData/CustomLegendMarkersSampleData.cs"
             ],
@@ -2639,7 +2639,7 @@
         "Demos": [
           {
             "Title": "Area Selection Zooming",
-            "Name": "ZoomingOnAreaSelection",
+            "Name": "AreaSelectionZooming",
             "DocUrl": "Guide/UI_Components/Chart/Zooming_and_Panning/",
             "Widget": "Charts",
             "DemoType": "Viz",
@@ -2741,7 +2741,7 @@
         "Demos": [
           {
             "Title": "Circular Gauge",
-            "Name": "UpdateCircularGaugeDataAtRuntime",
+            "Name": "CircularGauge",
             "DocUrl": "ApiReference/UI_Components/dxCircularGauge/",
             "Widget": "Gauges",
             "MvcAdditionalFiles": [
@@ -2752,7 +2752,7 @@
           },
           {
             "Title": "Linear Gauge",
-            "Name": "UpdateLinearGaugeDataAtRuntime",
+            "Name": "LinearGauge",
             "DocUrl": "ApiReference/UI_Components/dxLinearGauge/",
             "Widget": "Gauges",
             "MvcAdditionalFiles": [
@@ -2764,7 +2764,7 @@
           },
           {
             "Title": "Bar Gauge",
-            "Name": "UpdateBarGaugeDataAtRuntime",
+            "Name": "BarGauge",
             "DocUrl": "ApiReference/UI_Components/dxBarGauge/",
             "Widget": "Gauges",
             "MvcAdditionalFiles": [
@@ -3498,7 +3498,7 @@
         "Demos": [
           {
             "Title": "Appearance",
-            "Name": "ChartAppearance",
+            "Name": "Appearance",
             "Widget": "Gantt",
             "DemoType": "Web",
             "WideDemo": true,
@@ -5246,7 +5246,7 @@
             "Demos": [
               {
                 "Title": "Plain Data Structure",
-                "Name": "DragAndDropPlainDataStructure",
+                "Name": "PlainDataStructure",
                 "Widget": "TreeView",
                 "MvcAdditionalFiles": [
                   "/Models/TreeView/FileSystemItem.cs",
@@ -5894,7 +5894,7 @@
               },
               {
                 "Title": "Tooltips Customization",
-                "Name": "TooltipHTMLSupport",
+                "Name": "TooltipsCustomization",
                 "Credits": "www.wikipedia.org",
                 "Widget": "VectorMap",
                 "Modules": "vectormap",
