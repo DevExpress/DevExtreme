@@ -9,6 +9,7 @@ import support from '__internal/core/utils/m_support';
 const stubComponent = {
     option: sinon.stub().returns('stubOption'),
     focus: sinon.stub(),
+    setAria: () => {},
 };
 const stubCreateComponent = sinon.stub().returns(stubComponent);
 const stubShowAppointmentPopup = sinon.stub();
