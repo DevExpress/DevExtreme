@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule, DxPaginationModule } from 'devextreme-angular';
-import { Customer, Employee, Service } from './app.service';
+import { Employee, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,26 +21,28 @@ if (window && window.config.packageConfigPaths) {
   providers: [Service],
 })
 export class AppComponent {
-  customers: Customer[];
   employees: Employee[];
+
   pageEmployees: Employee[];
+
   itemCount: number;
 
   readonly allowedPageSizes = [4, 6];
 
   showInfo = true;
+
   showNavigationButtons = true;
+
   pageIndex = 1;
+  
   pageSize = 4;
 
   onPageIndexChange(val) {
-    console.log('pageIndex: ', val);
     this.pageIndex = val;
     this.setPageEmployees();
   }
 
   onPageSizeChange(val) {
-    console.log('pageSize: ', val);
     this.pageSize = val;
     this.setPageEmployees();
   }
@@ -50,7 +52,6 @@ export class AppComponent {
   }
 
   constructor(service: Service) {
-    this.customers = service.getCustomers();
     this.employees = service.getEmployees();
     this.itemCount = this.employees.length;
     this.setPageEmployees();
