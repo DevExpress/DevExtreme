@@ -53,7 +53,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
       _loopFocus: this._extraOptions._loopFocus,
     });
 
-    tooltip.setAria({
+    tooltip.setAria?.({
       role: 'dialog',
       label: messageLocalization.format('dxScheduler-appointmentListAriaLabel'),
     });
