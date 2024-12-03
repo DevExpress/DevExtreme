@@ -10,30 +10,6 @@ $(() => {
     messageTimestampFormat: messageTimestampFormat[0],
   }).dxChat('instance');
 
-  $('#chat-disabled').dxCheckBox({
-    value: false,
-    text: 'Disable Chat',
-    onValueChanged(data) {
-      chat.option('disabled', data.value);
-    },
-  });
-
-  $('#show-day-headers').dxCheckBox({
-    value: true,
-    text: 'Show Day Headers',
-    onValueChanged(data) {
-      chat.option('showDayHeaders', data.value);
-    },
-  });
-
-  $('#show-message-timestamp').dxCheckBox({
-    value: true,
-    text: 'Show Message Timestamp',
-    onValueChanged(data) {
-      chat.option('showMessageTimestamp', data.value);
-    },
-  });
-
   $('#show-avatar').dxCheckBox({
     value: true,
     text: 'Show Avatar',
@@ -50,6 +26,14 @@ $(() => {
     },
   });
 
+  $('#show-day-headers').dxCheckBox({
+    value: true,
+    text: 'Show Day Headers',
+    onValueChanged(data) {
+      chat.option('showDayHeaders', data.value);
+    },
+  });
+
   $('#day-headers-format').dxSelectBox({
     items: dayHeaderFormat,
     value: dayHeaderFormat[0],
@@ -59,12 +43,28 @@ $(() => {
     },
   });
 
+  $('#show-message-timestamp').dxCheckBox({
+    value: true,
+    text: 'Show Message Timestamp',
+    onValueChanged(data) {
+      chat.option('showMessageTimestamp', data.value);
+    },
+  });
+
   $('#message-timestamp-format').dxSelectBox({
     items: messageTimestampFormat,
     value: messageTimestampFormat[0],
     inputAttr: { 'aria-label': 'Message Timestamp Format' },
     onValueChanged(data) {
       chat.option('messageTimestampFormat', data.value);
+    },
+  });
+
+  $('#chat-disabled').dxCheckBox({
+    value: false,
+    text: 'Disable Chat',
+    onValueChanged(data) {
+      chat.option('disabled', data.value);
     },
   });
 });
