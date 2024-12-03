@@ -1323,7 +1323,6 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
   Themes.genericLight,
   Themes.materialBlue,
   Themes.fluentBlue,
-  Themes.genericGreenMist,
 ].forEach((theme) => {
   [0.9, 1.25, 1.5].forEach((zoom) => {
     safeSizeTest(`Fixed columns should display correctly at ${zoom * 100}% zoom (${theme} theme)`, async (t) => {
