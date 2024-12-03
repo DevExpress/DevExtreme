@@ -3,6 +3,7 @@ import Pagination from 'devextreme-react/pagination';
 import EmployeeGallery from './EmployeesGallery.js';
 import { employees } from './data.js';
 
+const PAGE_SIZES = [4, 6];
 const App = () => {
   const [pageSize, setPageSize] = useState(4);
   const [pageIndex, setPageIndex] = useState(1);
@@ -16,18 +17,12 @@ const App = () => {
       <Pagination
         showInfo
         showNavigationButtons
-        allowedPageSizes={[4, 6]}
+        allowedPageSizes={PAGE_SIZES}
         itemCount={employees.length}
         pageIndex={pageIndex}
         pageSize={pageSize}
-        onOptionChanged={(evt) => {
-          if (evt.name === 'pageSize') {
-            setPageSize(evt.value);
-          }
-          if (evt.name === 'pageIndex') {
-            setPageIndex(evt.value);
-          }
-        }}
+        onPageIndexChange={setPageIndex}
+        onPageSizeChange={setPageSize}
       />
     </React.Fragment>
   );

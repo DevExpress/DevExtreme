@@ -7,7 +7,10 @@ const EmployeeGallery = ({ employees, pageSize, pageIndex }) => {
   return (
     <div className={`employees ${cardsNumber}`}>
       {pageEmployees.map((employee) => (
-        <EmployeeCard employee={employee} />
+        <EmployeeCard
+          key={employee.ID}
+          employee={employee}
+        />
       ))}
     </div>
   );

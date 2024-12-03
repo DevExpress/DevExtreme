@@ -1,6 +1,19 @@
 import React from 'react';
 
-const EmployeeCard = ({ employee }) => {
+interface Employee {
+  ID: number;
+  FullName: string;
+  Title: string;
+  Employee_Picture: string;
+  Picture: string;
+  MobilePhone: string;
+}
+
+interface EmployeeCardProps {
+  employee: Employee;
+}
+
+const EmployeeCard = ({ employee }: EmployeeCardProps) => {
   return (
     <div className="employees__card">
       <div className="employees__img-wrapper">
