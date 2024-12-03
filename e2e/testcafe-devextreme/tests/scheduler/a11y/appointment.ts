@@ -130,7 +130,7 @@ fixture.disablePageReloads`a11y - appointment`
     });
   });
 
-  test.only('appointments should have right role', async (t) => {
+  test('appointments should have right role', async (t) => {
     const scheduler = new Scheduler('#container');
     const appt = scheduler.getAppointment('Website Re-Design Plan');
     const contentId = await appt.element.find('.dx-scheduler-appointment-content').getAttribute('id');
