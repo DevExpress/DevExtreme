@@ -1,7 +1,29 @@
-<dx-data-grid
+<!-- <dx-data-grid
   id="gridContainer"
   [dataSource]="customers"
   [columns]="['CompanyName', 'City', 'State', 'Phone', 'Fax']"
   [showBorders]="true"
->
-</dx-data-grid>
+  >
+  </dx-data-grid> -->
+
+<div class="container">
+  <div class="employees" [ngClass]="pageSize === 4 ? 'employees--forth' : 'employees--six' ">
+    @for (employee of pageEmployees; track employee.ID) {
+      <div class="employees__card">
+        <div>{{ employee.FullName }}</div>
+      </div>
+    }
+  </div>
+
+  <dx-pagination
+    [showInfo]="showInfo"
+    [showNavigationButtons]="showNavigationButtons"
+    [allowedPageSizes]="allowedPageSizes"
+    [itemCount]="itemCount"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    (pageIndexChange)="onPageIndexChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)"
+  >
+  </dx-pagination>
+</div>
