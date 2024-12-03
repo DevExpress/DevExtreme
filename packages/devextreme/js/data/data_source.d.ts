@@ -1,4 +1,14 @@
-import { DataSource, DataSourceOptions, FilterDescriptor, GroupDescriptor, SearchOperation, SelectDescriptor, SortDescriptor, Store, StoreOptions } from '../common/data';
+import {
+    DataSource,
+    DataSourceOptions,
+    FilterDescriptor,
+    GroupDescriptor,
+    SearchOperation,
+    SelectDescriptor,
+    SortDescriptor,
+    Store,
+    StoreOptions,
+} from '../common/data';
 
 export {
   /**
