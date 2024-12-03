@@ -1,8 +1,9 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxDataGridModule, DxPaginationModule } from 'devextreme-angular';
+import { DxPaginationModule } from 'devextreme-angular';
 import { Employee, Service } from './app.service';
+import { EmployeeCard } from './employee-card/employee-card.component';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -61,10 +62,9 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxDataGridModule,
     DxPaginationModule,
   ],
-  declarations: [AppComponent],
+  declarations: [AppComponent, EmployeeCard],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
