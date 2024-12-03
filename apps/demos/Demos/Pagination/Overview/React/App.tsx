@@ -1,13 +1,32 @@
-import React from "react";
-import Pagination from "devextreme-react/pagination";
-import { customers } from "./data.ts";
+import React, { useState } from 'react';
+import Pagination from 'devextreme-react/pagination';
+import EmployeeGallery from './EmployeesGallery.tsx';
 
-const columns = ["CompanyName", "City", "State", "Phone", "Fax"];
+import { employees } from './data.ts';
+
+const PAGE_SIZES = [4, 6];
 
 const App = () => {
+  const [pageSize, setPageSize] = useState(4);
+  const [pageIndex, setPageIndex] = useState(1);
+
   return (
     <>
-      <Pagination />
+      <EmployeeGallery
+        employees={employees}
+        pageSize={pageSize}
+        pageIndex={pageIndex}
+      />
+      <Pagination
+        showInfo
+        showNavigationButtons
+        allowedPageSizes={PAGE_SIZES}
+        itemCount={employees.length}
+        pageIndex={pageIndex}
+        pageSize={pageSize}
+        onPageIndexChange={setPageIndex}
+        onPageSizeChange={setPageSize}
+      />
     </>
   );
 };

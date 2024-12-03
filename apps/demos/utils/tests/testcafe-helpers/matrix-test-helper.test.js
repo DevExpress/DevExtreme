@@ -20,6 +20,7 @@ const testStub = {
     page() { return this; },
   },
   page() { return this; },
+  clientScripts() { return this; }
 };
 
 function updateChanges(value, options) {

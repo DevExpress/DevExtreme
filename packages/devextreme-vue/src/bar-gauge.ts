@@ -1,6 +1,43 @@
-import BarGauge, { Properties } from "devextreme/viz/bar_gauge";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import BarGauge, { Properties } from "devextreme/viz/bar_gauge";
+import {
+ DisposingEvent,
+ DrawnEvent,
+ ExportedEvent,
+ ExportingEvent,
+ FileSavingEvent,
+ IncidentOccurredEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ TooltipHiddenEvent,
+ TooltipShownEvent,
+ BarGaugeBarInfo,
+ BarGaugeLegendItem,
+} from "devextreme/viz/bar_gauge";
+import {
+ Palette,
+ PaletteExtensionMode,
+ ShiftLabelOverlap,
+ Theme,
+ AnimationEaseMode,
+ Font,
+ TextOverflow,
+ WordWrap,
+ DashStyle,
+} from "devextreme/common/charts";
+import {
+ HorizontalAlignment,
+ VerticalEdge,
+ ExportFormat,
+ Format,
+ Position,
+ Orientation,
+} from "devextreme/common";
+import {
+ Format as LocalizationFormat,
+} from "devextreme/localization";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -55,37 +92,37 @@ const componentConfig = {
     baseValue: Number,
     centerTemplate: {},
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     endValue: Number,
-    export: Object,
-    geometry: Object,
-    label: Object,
-    legend: Object,
-    loadingIndicator: Object,
-    margin: Object,
-    onDisposing: Function,
-    onDrawn: Function,
-    onExported: Function,
-    onExporting: Function,
-    onFileSaving: Function,
-    onIncidentOccurred: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onTooltipHidden: Function,
-    onTooltipShown: Function,
-    palette: {},
-    paletteExtensionMode: {},
+    export: Object as PropType<Record<string, any>>,
+    geometry: Object as PropType<Record<string, any>>,
+    label: Object as PropType<Record<string, any>>,
+    legend: Object as PropType<Record<string, any>>,
+    loadingIndicator: Object as PropType<Record<string, any>>,
+    margin: Object as PropType<Record<string, any>>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onDrawn: Function as PropType<((e: DrawnEvent) => void)>,
+    onExported: Function as PropType<((e: ExportedEvent) => void)>,
+    onExporting: Function as PropType<((e: ExportingEvent) => void)>,
+    onFileSaving: Function as PropType<((e: FileSavingEvent) => void)>,
+    onIncidentOccurred: Function as PropType<((e: IncidentOccurredEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onTooltipHidden: Function as PropType<((e: TooltipHiddenEvent) => void)>,
+    onTooltipShown: Function as PropType<((e: TooltipShownEvent) => void)>,
+    palette: [Array, String] as PropType<Array<string> | Palette>,
+    paletteExtensionMode: String as PropType<PaletteExtensionMode>,
     pathModified: Boolean,
     redrawOnResize: Boolean,
     relativeInnerRadius: Number,
-    resolveLabelOverlapping: {},
+    resolveLabelOverlapping: String as PropType<ShiftLabelOverlap>,
     rtlEnabled: Boolean,
-    size: Object,
+    size: Object as PropType<Record<string, any>>,
     startValue: Number,
-    theme: {},
-    title: [Object, String],
-    tooltip: Object,
-    values: Array
+    theme: String as PropType<Theme>,
+    title: [Object, String] as PropType<Record<string, any> | string>,
+    tooltip: Object as PropType<Record<string, any>>,
+    values: Array as PropType<Array<number>>
   },
   emits: {
     "update:isActive": null,
@@ -167,7 +204,7 @@ const DxAnimationConfig = {
   },
   props: {
     duration: Number,
-    easing: {},
+    easing: String as PropType<AnimationEaseMode>,
     enabled: Boolean
   }
 };
@@ -193,15 +230,15 @@ const DxBarGaugeTitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
-    horizontalAlignment: {},
-    margin: [Number, Object],
-    placeholderSize: {},
-    subtitle: [Object, String],
+    font: Object as PropType<Font | Record<string, any>>,
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
+    margin: [Number, Object] as PropType<number | Record<string, any>>,
+    placeholderSize: Number,
+    subtitle: [Object, String] as PropType<Record<string, any> | string>,
     text: String,
-    textOverflow: {},
-    verticalAlignment: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    verticalAlignment: String as PropType<VerticalEdge>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -228,11 +265,11 @@ const DxBarGaugeTitleSubtitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     offset: Number,
     text: String,
-    textOverflow: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -259,8 +296,8 @@ const DxBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: {},
-    opacity: {},
+    dashStyle: String as PropType<DashStyle>,
+    opacity: Number,
     visible: Boolean,
     width: Number
   }
@@ -288,10 +325,10 @@ const DxExportConfig = {
     backgroundColor: String,
     enabled: Boolean,
     fileName: String,
-    formats: Array,
+    formats: Array as PropType<Array<ExportFormat>>,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: {}
+    svgToCanvas: Function as PropType<((svg: any, canvas: any) => any)>
   }
 };
 
@@ -339,10 +376,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
-    type: {},
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -385,10 +422,10 @@ const DxItemTextFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
-    type: {},
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -412,11 +449,11 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    connectorColor: {},
+    connectorColor: String,
     connectorWidth: Number,
-    customizeText: Function,
-    font: Object,
-    format: {},
+    customizeText: Function as PropType<((barValue: { value: number, valueText: string }) => string)>,
+    font: Object as PropType<Font | Record<string, any>>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     indent: Number,
     visible: Boolean
   }
@@ -461,28 +498,28 @@ const DxLegendConfig = {
     "update:visible": null,
   },
   props: {
-    backgroundColor: {},
-    border: Object,
+    backgroundColor: String,
+    border: Object as PropType<Record<string, any>>,
     columnCount: Number,
     columnItemSpacing: Number,
-    customizeHint: Function,
-    customizeItems: Function,
-    customizeText: Function,
-    font: Object,
-    horizontalAlignment: {},
-    itemsAlignment: {},
-    itemTextFormat: {},
-    itemTextPosition: {},
-    margin: [Number, Object],
+    customizeHint: Function as PropType<((arg: { item: BarGaugeBarInfo, text: string }) => string)>,
+    customizeItems: Function as PropType<((items: Array<BarGaugeLegendItem>) => Array<BarGaugeLegendItem>)>,
+    customizeText: Function as PropType<((arg: { item: BarGaugeBarInfo, text: string }) => string)>,
+    font: Object as PropType<Font | Record<string, any>>,
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
+    itemsAlignment: String as PropType<HorizontalAlignment>,
+    itemTextFormat: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
+    itemTextPosition: String as PropType<Position>,
+    margin: [Number, Object] as PropType<number | Record<string, any>>,
     markerSize: Number,
     markerTemplate: {},
-    orientation: {},
+    orientation: String as PropType<Orientation>,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     rowCount: Number,
     rowItemSpacing: Number,
-    title: [Object, String],
-    verticalAlignment: {},
+    title: [Object, String] as PropType<Record<string, any> | string>,
+    verticalAlignment: String as PropType<VerticalEdge>,
     visible: Boolean
   }
 };
@@ -516,8 +553,8 @@ const DxLegendBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: {},
-    opacity: {},
+    dashStyle: String as PropType<DashStyle>,
+    opacity: Number,
     visible: Boolean,
     width: Number
   }
@@ -542,13 +579,13 @@ const DxLegendTitleConfig = {
     "update:verticalAlignment": null,
   },
   props: {
-    font: Object,
-    horizontalAlignment: {},
-    margin: Object,
-    placeholderSize: {},
-    subtitle: [Object, String],
+    font: Object as PropType<Font | Record<string, any>>,
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
+    margin: Object as PropType<Record<string, any>>,
+    placeholderSize: Number,
+    subtitle: [Object, String] as PropType<Record<string, any> | string>,
     text: String,
-    verticalAlignment: {}
+    verticalAlignment: String as PropType<VerticalEdge>
   }
 };
 
@@ -573,7 +610,7 @@ const DxLegendTitleSubtitleConfig = {
     "update:text": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     offset: Number,
     text: String
   }
@@ -599,7 +636,7 @@ const DxLoadingIndicatorConfig = {
   },
   props: {
     backgroundColor: String,
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     show: Boolean,
     text: String
   }
@@ -670,8 +707,8 @@ const DxSizeConfig = {
     "update:width": null,
   },
   props: {
-    height: {},
-    width: {}
+    height: Number,
+    width: Number
   }
 };
 
@@ -692,11 +729,11 @@ const DxSubtitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     offset: Number,
     text: String,
-    textOverflow: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -724,15 +761,15 @@ const DxTitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
-    horizontalAlignment: {},
-    margin: [Object, Number],
-    placeholderSize: {},
-    subtitle: [Object, String],
+    font: Object as PropType<Font | Record<string, any>>,
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
+    margin: [Object, Number] as PropType<Record<string, any> | number>,
+    placeholderSize: Number,
+    subtitle: [Object, String] as PropType<Record<string, any> | string>,
     text: String,
-    textOverflow: {},
-    verticalAlignment: {},
-    wordWrap: {}
+    textOverflow: String as PropType<TextOverflow>,
+    verticalAlignment: String as PropType<VerticalEdge>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -771,21 +808,21 @@ const DxTooltipConfig = {
   },
   props: {
     arrowLength: Number,
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String,
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: {},
+    customizeTooltip: Function as PropType<((scaleValue: { index: number, value: number, valueText: string }) => Record<string, any>)>,
     enabled: Boolean,
-    font: Object,
-    format: {},
+    font: Object as PropType<Font | Record<string, any>>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     interactive: Boolean,
-    opacity: {},
+    opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
-    shadow: Object,
-    zIndex: {}
+    shadow: Object as PropType<Record<string, any>>,
+    zIndex: Number
   }
 };
 
@@ -814,8 +851,8 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
-    opacity: {},
+    dashStyle: String as PropType<DashStyle>,
+    opacity: Number,
     visible: Boolean,
     width: Number
   }

@@ -1,6 +1,18 @@
-import Draggable, { Properties } from "devextreme/ui/draggable";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import Draggable, { Properties } from "devextreme/ui/draggable";
+import {
+ DragDirection,
+} from "devextreme/common";
+import {
+ DisposingEvent,
+ DragEndEvent,
+ DragMoveEvent,
+ DragStartEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+} from "devextreme/ui/draggable";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -38,24 +50,24 @@ const componentConfig = {
     boundary: {},
     clone: Boolean,
     container: {},
-    cursorOffset: [Object, String],
+    cursorOffset: [Object, String] as PropType<Record<string, any> | string>,
     data: {},
-    dragDirection: {},
+    dragDirection: String as PropType<DragDirection>,
     dragTemplate: {},
-    elementAttr: Object,
-    group: {},
+    elementAttr: Object as PropType<Record<string, any>>,
+    group: String,
     handle: String,
-    height: {},
-    onDisposing: Function,
-    onDragEnd: Function,
-    onDragMove: Function,
-    onDragStart: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onDragEnd: Function as PropType<((e: DragEndEvent) => void)>,
+    onDragMove: Function as PropType<((e: DragMoveEvent) => void)>,
+    onDragStart: Function as PropType<((e: DragStartEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     rtlEnabled: Boolean,
     scrollSensitivity: Number,
     scrollSpeed: Number,
-    width: {}
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

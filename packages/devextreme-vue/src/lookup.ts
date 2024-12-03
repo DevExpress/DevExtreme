@@ -1,6 +1,81 @@
-import Lookup, { Properties } from "devextreme/ui/lookup";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import Lookup, { Properties } from "devextreme/ui/lookup";
+import  DataSource from "devextreme/data/data_source";
+import {
+ ApplyValueMode,
+ LabelMode,
+ PageLoadMode,
+ SimplifiedSearchMode,
+ EditorStyle,
+ ValidationMessageMode,
+ Mode,
+ Position,
+ ValidationStatus,
+ HorizontalAlignment,
+ VerticalAlignment,
+ Direction,
+ PositionAlignment,
+ ToolbarItemLocation,
+ ToolbarItemComponent,
+} from "devextreme/common";
+import {
+ CollectionWidgetItem,
+} from "devextreme/ui/collection/ui.collection_widget.base";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
+import {
+ dxPopoverOptions,
+ ContentReadyEvent as PopoverContentReadyEvent,
+ DisposingEvent as PopoverDisposingEvent,
+ HiddenEvent,
+ HidingEvent,
+ InitializedEvent as PopoverInitializedEvent,
+ OptionChangedEvent as PopoverOptionChangedEvent,
+ ShowingEvent,
+ ShownEvent,
+ TitleRenderedEvent,
+} from "devextreme/ui/popover";
+import {
+ ClosedEvent,
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ ItemClickEvent,
+ OpenedEvent,
+ OptionChangedEvent,
+ PageLoadingEvent,
+ PullRefreshEvent,
+ ScrollEvent,
+ SelectionChangedEvent,
+ ValueChangedEvent,
+} from "devextreme/ui/lookup";
+import {
+ AnimationConfig,
+ AnimationState,
+ AnimationType,
+} from "devextreme/animation/fx";
+import {
+ CollisionResolution,
+ PositionConfig,
+ CollisionResolutionCombination,
+} from "devextreme/animation/position";
+import {
+ event,
+} from "devextreme/events/index";
+import {
+ dxPopupToolbarItem,
+ ToolbarLocation,
+} from "devextreme/ui/popup";
+import {
+ LocateInMenuMode,
+ ShowTextMode,
+} from "devextreme/ui/toolbar";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -94,55 +169,55 @@ interface DxLookup extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: {},
+    accessKey: String,
     activeStateEnabled: Boolean,
     applyButtonText: String,
-    applyValueMode: {},
+    applyValueMode: String as PropType<ApplyValueMode>,
     cancelButtonText: String,
     cleanSearchOnOpening: Boolean,
     clearButtonText: String,
-    dataSource: {},
+    dataSource: [Array, Object, String] as PropType<(Array<any | CollectionWidgetItem>) | DataSource | DataSourceOptions | null | Store | string>,
     deferRendering: Boolean,
     disabled: Boolean,
-    displayExpr: {},
-    displayValue: {},
+    displayExpr: [Function, String] as PropType<(((item: any) => string)) | string>,
+    displayValue: String,
     dropDownCentered: Boolean,
-    dropDownOptions: Object,
-    elementAttr: Object,
+    dropDownOptions: Object as PropType<dxPopoverOptions<any> | Record<string, any>>,
+    elementAttr: Object as PropType<Record<string, any>>,
     fieldTemplate: {},
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
     grouped: Boolean,
     groupTemplate: {},
-    height: {},
-    hint: {},
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
     isDirty: Boolean,
     isValid: Boolean,
-    items: Array,
+    items: Array as PropType<Array<any | CollectionWidgetItem>>,
     itemTemplate: {},
     label: String,
-    labelMode: {},
+    labelMode: String as PropType<LabelMode>,
     minSearchLength: Number,
     name: String,
     nextButtonText: String,
     noDataText: String,
-    onClosed: Function,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onOpened: Function,
-    onOptionChanged: Function,
-    onPageLoading: Function,
-    onPullRefresh: Function,
-    onScroll: Function,
-    onSelectionChanged: Function,
-    onValueChanged: Function,
+    onClosed: Function as PropType<((e: ClosedEvent) => void)>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
+    onOpened: Function as PropType<((e: OpenedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onPageLoading: Function as PropType<((e: PageLoadingEvent) => void)>,
+    onPullRefresh: Function as PropType<((e: PullRefreshEvent) => void)>,
+    onScroll: Function as PropType<((e: ScrollEvent) => void)>,
+    onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
+    onValueChanged: Function as PropType<((e: ValueChangedEvent) => void)>,
     opened: Boolean,
     pageLoadingText: String,
-    pageLoadMode: {},
+    pageLoadMode: String as PropType<PageLoadMode>,
     placeholder: String,
     pulledDownText: String,
     pullingDownText: String,
@@ -150,8 +225,8 @@ const componentConfig = {
     refreshingText: String,
     rtlEnabled: Boolean,
     searchEnabled: Boolean,
-    searchExpr: [Array, Function, String],
-    searchMode: {},
+    searchExpr: [Array, Function, String] as PropType<(Array<(() => any) | string>) | ((() => any)) | string>,
+    searchMode: String as PropType<SimplifiedSearchMode>,
     searchPlaceholder: String,
     searchStartEvent: String,
     searchTimeout: Number,
@@ -159,22 +234,22 @@ const componentConfig = {
     showCancelButton: Boolean,
     showClearButton: Boolean,
     showDataBeforeSearch: Boolean,
-    stylingMode: {},
+    stylingMode: String as PropType<EditorStyle>,
     tabIndex: Number,
     text: String,
     useItemTextAsTitle: Boolean,
     useNativeScrolling: Boolean,
     usePopover: Boolean,
     validationError: {},
-    validationErrors: Array,
-    validationMessageMode: {},
-    validationMessagePosition: {},
-    validationStatus: {},
+    validationErrors: Array as PropType<Array<any>>,
+    validationMessageMode: String as PropType<ValidationMessageMode>,
+    validationMessagePosition: String as PropType<Mode | Position>,
+    validationStatus: String as PropType<ValidationStatus>,
     value: {},
     valueChangeEvent: String,
-    valueExpr: [Function, String],
+    valueExpr: [Function, String] as PropType<(((item: any) => string | number | boolean)) | string>,
     visible: Boolean,
-    width: {},
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     wrapItemText: Boolean
   },
   emits: {
@@ -292,8 +367,8 @@ const DxAnimationConfig = {
     "update:show": null,
   },
   props: {
-    hide: [Object, Number, String],
-    show: [Object, Number, String]
+    hide: [Object, Number, String] as PropType<AnimationConfig | number | Record<string, any> | string>,
+    show: [Object, Number, String] as PropType<AnimationConfig | number | Record<string, any> | string>
   }
 };
 
@@ -315,8 +390,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<HorizontalAlignment>,
+    y: String as PropType<VerticalAlignment>
   }
 };
 
@@ -353,8 +428,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<CollisionResolution>,
+    y: String as PropType<CollisionResolution>
   }
 };
 
@@ -411,46 +486,46 @@ const DxDropDownOptionsConfig = {
     "update:wrapperAttr": null,
   },
   props: {
-    animation: Object,
-    bindingOptions: Object,
-    closeOnOutsideClick: [Boolean, Function],
+    animation: Object as PropType<Record<string, any>>,
+    bindingOptions: Object as PropType<Record<string, any>>,
+    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
     disabled: Boolean,
     enableBodyScroll: Boolean,
-    height: [Function, Number, String],
-    hideEvent: {},
-    hideOnOutsideClick: [Boolean, Function],
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    hideEvent: [Object, String] as PropType<Record<string, any> | string>,
+    hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     hideOnParentScroll: Boolean,
-    hint: {},
+    hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String],
-    maxWidth: [Function, Number, String],
-    minHeight: [Function, Number, String],
-    minWidth: [Function, Number, String],
-    onContentReady: Function,
-    onDisposing: Function,
-    onHidden: Function,
-    onHiding: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onShowing: Function,
-    onShown: Function,
-    onTitleRendered: Function,
-    position: {},
+    maxHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    maxWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    minHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    minWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    onContentReady: Function as PropType<((e: PopoverContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: PopoverDisposingEvent) => void)>,
+    onHidden: Function as PropType<((e: HiddenEvent) => void)>,
+    onHiding: Function as PropType<((e: HidingEvent) => void)>,
+    onInitialized: Function as PropType<((e: PopoverInitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: PopoverOptionChangedEvent) => void)>,
+    onShowing: Function as PropType<((e: ShowingEvent) => void)>,
+    onShown: Function as PropType<((e: ShownEvent) => void)>,
+    onTitleRendered: Function as PropType<((e: TitleRenderedEvent) => void)>,
+    position: [String, Object] as PropType<Position | PositionConfig | Record<string, any>>,
     rtlEnabled: Boolean,
     shading: Boolean,
     shadingColor: String,
     showCloseButton: Boolean,
-    showEvent: {},
+    showEvent: [Object, String] as PropType<Record<string, any> | string>,
     showTitle: Boolean,
     target: {},
     title: String,
     titleTemplate: {},
-    toolbarItems: Array,
+    toolbarItems: Array as PropType<Array<dxPopupToolbarItem>>,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     wrapperAttr: {}
   }
 };
@@ -481,7 +556,7 @@ const DxFromConfig = {
   props: {
     left: Number,
     opacity: Number,
-    position: Object,
+    position: Object as PropType<PositionConfig | Record<string, any>>,
     scale: Number,
     top: Number
   }
@@ -512,16 +587,16 @@ const DxHideConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
     delay: Number,
-    direction: {},
+    direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
-    from: Object,
-    staggerDelay: {},
-    start: Function,
-    to: Object,
-    type: {}
+    from: Object as PropType<AnimationState | Record<string, any>>,
+    staggerDelay: Number,
+    start: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
+    to: Object as PropType<AnimationState | Record<string, any>>,
+    type: String as PropType<AnimationType>
   }
 };
 
@@ -543,8 +618,8 @@ const DxHideEventConfig = {
     "update:name": null,
   },
   props: {
-    delay: {},
-    name: {}
+    delay: Number,
+    name: String
   }
 };
 
@@ -588,8 +663,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<HorizontalAlignment>,
+    y: String as PropType<VerticalAlignment>
   }
 };
 
@@ -631,13 +706,13 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: {},
+    at: [Object, String] as PropType<Record<string, any> | PositionAlignment>,
     boundary: {},
-    boundaryOffset: [Object, String],
-    collision: {},
-    my: {},
+    boundaryOffset: [Object, String] as PropType<Record<string, any> | string>,
+    collision: [String, Object] as PropType<CollisionResolutionCombination | Record<string, any>>,
+    my: [Object, String] as PropType<Record<string, any> | PositionAlignment>,
     of: {},
-    offset: [Object, String]
+    offset: [Object, String] as PropType<Record<string, any> | string>
   }
 };
 
@@ -663,16 +738,16 @@ const DxShowConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
     delay: Number,
-    direction: {},
+    direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
-    from: Object,
-    staggerDelay: {},
-    start: Function,
-    to: Object,
-    type: {}
+    from: Object as PropType<AnimationState | Record<string, any>>,
+    staggerDelay: Number,
+    start: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
+    to: Object as PropType<AnimationState | Record<string, any>>,
+    type: String as PropType<AnimationType>
   }
 };
 
@@ -690,8 +765,8 @@ const DxShowEventConfig = {
     "update:name": null,
   },
   props: {
-    delay: {},
-    name: {}
+    delay: Number,
+    name: String
   }
 };
 
@@ -714,7 +789,7 @@ const DxToConfig = {
   props: {
     left: Number,
     opacity: Number,
-    position: Object,
+    position: Object as PropType<PositionConfig | Record<string, any>>,
     scale: Number,
     top: Number
   }
@@ -745,19 +820,19 @@ const DxToolbarItemConfig = {
     "update:widget": null,
   },
   props: {
-    cssClass: {},
+    cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: {},
-    location: {},
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
     options: {},
-    showText: {},
+    showText: String as PropType<ShowTextMode>,
     template: {},
     text: String,
-    toolbar: {},
+    toolbar: String as PropType<ToolbarLocation>,
     visible: Boolean,
-    widget: {}
+    widget: String as PropType<ToolbarItemComponent>
   }
 };
 

@@ -1,6 +1,30 @@
-import RadioGroup, { Properties } from "devextreme/ui/radio_group";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import RadioGroup, { Properties } from "devextreme/ui/radio_group";
+import  DataSource from "devextreme/data/data_source";
+import {
+ CollectionWidgetItem,
+} from "devextreme/ui/collection/ui.collection_widget.base";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
+import {
+ Orientation,
+ ValidationMessageMode,
+ Position,
+ ValidationStatus,
+} from "devextreme/common";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ ValueChangedEvent,
+} from "devextreme/ui/radio_group";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -45,39 +69,39 @@ interface DxRadioGroup extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: {},
+    accessKey: String,
     activeStateEnabled: Boolean,
-    dataSource: {},
+    dataSource: [Array, Object, String] as PropType<(Array<any | CollectionWidgetItem>) | DataSource | DataSourceOptions | null | Store | string>,
     disabled: Boolean,
-    displayExpr: {},
-    elementAttr: Object,
+    displayExpr: [Function, String] as PropType<(((item: any) => string)) | string>,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: {},
-    hint: {},
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     isValid: Boolean,
-    items: Array,
+    items: Array as PropType<Array<any | CollectionWidgetItem>>,
     itemTemplate: {},
-    layout: {},
+    layout: String as PropType<Orientation>,
     name: String,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onValueChanged: Function,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onValueChanged: Function as PropType<((e: ValueChangedEvent) => void)>,
     readOnly: Boolean,
     rtlEnabled: Boolean,
     tabIndex: Number,
     validationError: {},
-    validationErrors: Array,
-    validationMessageMode: {},
-    validationMessagePosition: {},
-    validationStatus: {},
+    validationErrors: Array as PropType<Array<any>>,
+    validationMessageMode: String as PropType<ValidationMessageMode>,
+    validationMessagePosition: String as PropType<Position>,
+    validationStatus: String as PropType<ValidationStatus>,
     value: {},
-    valueExpr: [Function, String],
+    valueExpr: [Function, String] as PropType<(((item: any) => string | number | boolean)) | string>,
     visible: Boolean,
-    width: {}
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

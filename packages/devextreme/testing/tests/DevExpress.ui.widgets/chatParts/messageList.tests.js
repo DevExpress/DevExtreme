@@ -1155,6 +1155,7 @@ QUnit.module('MessageList', () => {
         });
 
         QUnit.test('should be scrolled down if typingUsers changed at runtime if scroll position at the bottom', function(assert) {
+            const done = assert.async();
             this.reinit({
                 width: 300,
                 height: 500,
@@ -1165,12 +1166,16 @@ QUnit.module('MessageList', () => {
 
             assert.roughEqual(scrollTopBefore, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom before updating typingUsers');
 
-            this.instance.option({ typingUsers: [{ name: 'User' }] });
+            setTimeout(() => {
+                this.instance.option({ typingUsers: [{ name: 'User' }] });
 
-            const scrollTop = this.getScrollView().scrollTop();
+                const scrollTop = this.getScrollView().scrollTop();
 
-            assert.notEqual(scrollTop, 0, 'scroll position should not be 0 after items are updated at runtime');
-            assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after typingUsers are updated at runtime');
+                assert.notEqual(scrollTop, 0, 'scroll position should not be 0 after items are updated at runtime');
+                assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after typingUsers are updated at runtime');
+
+                done();
+            });
         });
 
         QUnit.test('should not be scroll down if typingUsers changed at runtime if scroll position not at the bottom', function(assert) {
@@ -1204,6 +1209,30 @@ QUnit.module('MessageList', () => {
             });
         });
 
+        QUnit.test('should be scroll down if typingUsers changed at runtime, provided the content does not overflow before the typing indicator is displayed', function(assert) {
+            const done = assert.async();
+            this.reinit({
+                width: 300,
+                height: 500,
+                items: generateMessages(7),
+            });
+
+            const scrollTopBefore = this.getScrollView().scrollTop();
+
+            assert.strictEqual(scrollTopBefore, 0, 'content is not overflowing');
+
+            setTimeout(() => {
+                this.instance.option({ typingUsers: [{ name: 'User' }] });
+
+                const scrollTop = this.getScrollView().scrollTop();
+
+                assert.notEqual(scrollTop, 0, 'scroll position should not be 0 after items are updated at runtime');
+                assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after typingUsers are updated at runtime');
+
+                done();
+            });
+        });
+
         QUnit.test('should be scrolled down if items changed at runtime with an invalidate call', function(assert) {
             const done = assert.async();
             this.reinit({
@@ -1227,10 +1256,9 @@ QUnit.module('MessageList', () => {
         [MOCK_CURRENT_USER_ID, MOCK_COMPANION_USER_ID].forEach(id => {
             const isCurrentUser = id === MOCK_CURRENT_USER_ID;
 
-            QUnit.test(`ScrollView should be scrolled down after render ${isCurrentUser ? 'current user' : 'companion'} message`, function(assert) {
+            QUnit.test(`should be scrolled down after render ${isCurrentUser ? 'current user' : 'companion'} message`, function(assert) {
                 const done = assert.async();
-                assert.expect(2);
-                const items = generateMessages(31);
+                const items = generateMessages(52);
 
                 this.reinit({
                     width: 300,
@@ -1245,14 +1273,131 @@ QUnit.module('MessageList', () => {
                     text: 'NEW MESSAGE',
                 };
 
-                this.instance.option('items', [...items, newMessage]);
+                const scrollTopBefore = this.getScrollView().scrollTop();
+                assert.roughEqual(scrollTopBefore, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom before render new message');
 
                 setTimeout(() => {
+                    this.instance.option('items', [...items, newMessage]);
+
+                    setTimeout(() => {
+                        const scrollTop = this.getScrollView().scrollTop();
+
+                        assert.notEqual(scrollTop, 0, 'scroll position should not be 0 after a new message is rendered');
+                        assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after rendering the new message');
+                        done();
+                    });
+                });
+            });
+
+            QUnit.test(`should be scrolled down after render ${isCurrentUser ? 'current user' : 'companion'} message, provided the content does not overflow before the message is rendered`, function(assert) {
+                const done = assert.async();
+                const items = generateMessages(7);
+
+                this.reinit({
+                    width: 300,
+                    height: 500,
+                    items: generateMessages(7),
+                });
+
+                const author = { id };
+                const newMessage = {
+                    author,
+                    timestamp: NOW,
+                    text: 'NEW MESSAGE',
+                };
+
+                const scrollTopBefore = this.getScrollView().scrollTop();
+
+                assert.strictEqual(scrollTopBefore, 0, 'content is not overflowing');
+
+                setTimeout(() => {
+                    this.instance.option('items', [...items, newMessage]);
+
                     const scrollTop = this.getScrollView().scrollTop();
 
                     assert.notEqual(scrollTop, 0, 'scroll position should not be 0 after a new message is rendered');
                     assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after rendering the new message');
+
                     done();
+                });
+            });
+        });
+
+        QUnit.test('should be scroll down after render current user message if scroll position not at the bottom', function(assert) {
+            const done = assert.async();
+            const items = generateMessages(52);
+
+            this.reinit({
+                width: 300,
+                height: 500,
+                items,
+                currentUserId: MOCK_CURRENT_USER_ID,
+            });
+
+            const author = { id: MOCK_CURRENT_USER_ID };
+            const newMessage = {
+                author,
+                timestamp: NOW,
+                text: 'NEW MESSAGE',
+            };
+
+            setTimeout(() => {
+                const initialScrollTop = this.getScrollOffsetMax() - 100;
+                this.getScrollView().scrollTo({ top: initialScrollTop });
+
+                setTimeout(() => {
+                    const scrollTopBefore = this.getScrollView().scrollTop();
+                    assert.roughEqual(scrollTopBefore, this.getScrollOffsetMax() - 100, 1, 'scroll position should not be at the bottom before rendering the message');
+
+                    setTimeout(() => {
+                        this.instance.option('items', [...items, newMessage]);
+
+                        setTimeout(() => {
+                            const scrollTop = this.getScrollView().scrollTop();
+
+                            assert.notEqual(scrollTop, 0, 'scroll position should not be 0 after a new message is rendered');
+                            assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after rendering the new message');
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+
+        QUnit.test('should not be scroll down after render companion message if scroll position not at the bottom', function(assert) {
+            const done = assert.async();
+            const items = generateMessages(52);
+
+            this.reinit({
+                width: 300,
+                height: 500,
+                items,
+                currentUserId: MOCK_CURRENT_USER_ID
+            });
+
+            const author = { id: MOCK_COMPANION_USER_ID };
+            const newMessage = {
+                author,
+                timestamp: NOW,
+                text: 'NEW MESSAGE',
+            };
+
+            setTimeout(() => {
+                this.getScrollView().scrollBy({ top: -100 });
+                setTimeout(() => {
+
+                    const scrollTopBefore = this.getScrollView().scrollTop();
+                    assert.roughEqual(scrollTopBefore, this.getScrollOffsetMax() - 100, 1, 'scroll position should not be at the bottom before rendering the message');
+
+                    setTimeout(() => {
+                        this.instance.option('items', [...items, newMessage]);
+
+                        const scrollTop = this.getScrollView().scrollTop();
+
+                        assert.notEqual(scrollTop, 0, 'scroll position should not be 0 after a new message is rendered');
+                        assert.roughEqual(scrollTop, scrollTopBefore, 1, 'scroll position should be at the bottom after rendering the new message');
+                        done();
+                    });
                 });
             });
         });

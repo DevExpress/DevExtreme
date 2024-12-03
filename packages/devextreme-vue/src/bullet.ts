@@ -1,6 +1,30 @@
-import Bullet, { Properties } from "devextreme/viz/bullet";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import Bullet, { Properties } from "devextreme/viz/bullet";
+import {
+ DisposingEvent,
+ DrawnEvent,
+ ExportedEvent,
+ ExportingEvent,
+ FileSavingEvent,
+ IncidentOccurredEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ TooltipHiddenEvent,
+ TooltipShownEvent,
+} from "devextreme/viz/bullet";
+import {
+ Theme,
+ DashStyle,
+ Font,
+} from "devextreme/common/charts";
+import {
+ Format,
+} from "devextreme/common";
+import {
+ Format as LocalizationFormat,
+} from "devextreme/localization";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -41,30 +65,30 @@ const componentConfig = {
   props: {
     color: String,
     disabled: Boolean,
-    elementAttr: Object,
-    endScaleValue: {},
-    margin: Object,
-    onDisposing: Function,
-    onDrawn: Function,
-    onExported: Function,
-    onExporting: Function,
-    onFileSaving: Function,
-    onIncidentOccurred: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onTooltipHidden: Function,
-    onTooltipShown: Function,
+    elementAttr: Object as PropType<Record<string, any>>,
+    endScaleValue: Number,
+    margin: Object as PropType<Record<string, any>>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onDrawn: Function as PropType<((e: DrawnEvent) => void)>,
+    onExported: Function as PropType<((e: ExportedEvent) => void)>,
+    onExporting: Function as PropType<((e: ExportingEvent) => void)>,
+    onFileSaving: Function as PropType<((e: FileSavingEvent) => void)>,
+    onIncidentOccurred: Function as PropType<((e: IncidentOccurredEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onTooltipHidden: Function as PropType<((e: TooltipHiddenEvent) => void)>,
+    onTooltipShown: Function as PropType<((e: TooltipShownEvent) => void)>,
     pathModified: Boolean,
     rtlEnabled: Boolean,
     showTarget: Boolean,
     showZeroLevel: Boolean,
-    size: Object,
+    size: Object as PropType<Record<string, any>>,
     startScaleValue: Number,
     target: Number,
     targetColor: String,
     targetWidth: Number,
-    theme: {},
-    tooltip: Object,
+    theme: String as PropType<Theme>,
+    tooltip: Object as PropType<Record<string, any>>,
     value: Number
   },
   emits: {
@@ -131,8 +155,8 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
-    opacity: {},
+    dashStyle: String as PropType<DashStyle>,
+    opacity: Number,
     visible: Boolean,
     width: Number
   }
@@ -182,10 +206,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
-    type: {},
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -252,8 +276,8 @@ const DxSizeConfig = {
     "update:width": null,
   },
   props: {
-    height: {},
-    width: {}
+    height: Number,
+    width: Number
   }
 };
 
@@ -286,21 +310,21 @@ const DxTooltipConfig = {
   },
   props: {
     arrowLength: Number,
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String,
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: {},
+    customizeTooltip: Function as PropType<((pointsInfo: any) => Record<string, any>)>,
     enabled: Boolean,
-    font: Object,
-    format: {},
+    font: Object as PropType<Font | Record<string, any>>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     interactive: Boolean,
-    opacity: {},
+    opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
-    shadow: Object,
-    zIndex: {}
+    shadow: Object as PropType<Record<string, any>>,
+    zIndex: Number
   }
 };
 

@@ -1,6 +1,31 @@
-import DeferRendering, { Properties } from "devextreme/ui/defer_rendering";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import DeferRendering, { Properties } from "devextreme/ui/defer_rendering";
+import {
+ AnimationConfig,
+ AnimationState,
+ AnimationType,
+} from "devextreme/animation/fx";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ RenderedEvent,
+ ShownEvent,
+} from "devextreme/ui/defer_rendering";
+import {
+ Direction,
+ HorizontalAlignment,
+ VerticalAlignment,
+ PositionAlignment,
+} from "devextreme/common";
+import {
+ CollisionResolution,
+ PositionConfig,
+ CollisionResolutionCombination,
+} from "devextreme/animation/position";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -34,28 +59,28 @@ interface DxDeferRendering extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: {},
+    accessKey: String,
     activeStateEnabled: Boolean,
-    animation: {},
+    animation: [Object, Number, String] as PropType<AnimationConfig | number | Record<string, any> | string>,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: {},
-    hint: {},
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onRendered: Function,
-    onShown: Function,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onRendered: Function as PropType<((e: RenderedEvent) => void)>,
+    onShown: Function as PropType<((e: ShownEvent) => void)>,
     renderWhen: {},
     rtlEnabled: Boolean,
     showLoadIndicator: Boolean,
-    staggerItemSelector: {},
+    staggerItemSelector: String,
     tabIndex: Number,
     visible: Boolean,
-    width: {}
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -118,16 +143,16 @@ const DxAnimationConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
     delay: Number,
-    direction: {},
+    direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
-    from: Object,
-    staggerDelay: {},
-    start: Function,
-    to: Object,
-    type: {}
+    from: Object as PropType<AnimationState | Record<string, any>>,
+    staggerDelay: Number,
+    start: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
+    to: Object as PropType<AnimationState | Record<string, any>>,
+    type: String as PropType<AnimationType>
   }
 };
 
@@ -149,8 +174,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<HorizontalAlignment>,
+    y: String as PropType<VerticalAlignment>
   }
 };
 
@@ -187,8 +212,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<CollisionResolution>,
+    y: String as PropType<CollisionResolution>
   }
 };
 
@@ -211,7 +236,7 @@ const DxFromConfig = {
   props: {
     left: Number,
     opacity: Number,
-    position: Object,
+    position: Object as PropType<PositionConfig | Record<string, any>>,
     scale: Number,
     top: Number
   }
@@ -234,8 +259,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<HorizontalAlignment>,
+    y: String as PropType<VerticalAlignment>
   }
 };
 
@@ -277,13 +302,13 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: {},
+    at: [Object, String] as PropType<Record<string, any> | PositionAlignment>,
     boundary: {},
-    boundaryOffset: [Object, String],
-    collision: {},
-    my: {},
+    boundaryOffset: [Object, String] as PropType<Record<string, any> | string>,
+    collision: [String, Object] as PropType<CollisionResolutionCombination | Record<string, any>>,
+    my: [Object, String] as PropType<Record<string, any> | PositionAlignment>,
     of: {},
-    offset: [Object, String]
+    offset: [Object, String] as PropType<Record<string, any> | string>
   }
 };
 
@@ -313,7 +338,7 @@ const DxToConfig = {
   props: {
     left: Number,
     opacity: Number,
-    position: Object,
+    position: Object as PropType<PositionConfig | Record<string, any>>,
     scale: Number,
     top: Number
   }

@@ -1,6 +1,39 @@
-import Sparkline, { Properties } from "devextreme/viz/sparkline";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import Sparkline, { Properties } from "devextreme/viz/sparkline";
+import  DataSource from "devextreme/data/data_source";
+import {
+ DataSourceOptions,
+} from "devextreme/data/data_source";
+import {
+ Store,
+} from "devextreme/data/store";
+import {
+ DisposingEvent,
+ DrawnEvent,
+ ExportedEvent,
+ ExportingEvent,
+ FileSavingEvent,
+ IncidentOccurredEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ TooltipHiddenEvent,
+ TooltipShownEvent,
+ SparklineType,
+} from "devextreme/viz/sparkline";
+import {
+ PointSymbol,
+ Theme,
+ DashStyle,
+ Font,
+} from "devextreme/common/charts";
+import {
+ Format,
+} from "devextreme/common";
+import {
+ Format as LocalizationFormat,
+} from "devextreme/localization";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -55,40 +88,40 @@ const componentConfig = {
     argumentField: String,
     barNegativeColor: String,
     barPositiveColor: String,
-    dataSource: {},
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     firstLastColor: String,
     ignoreEmptyPoints: Boolean,
     lineColor: String,
     lineWidth: Number,
     lossColor: String,
-    margin: Object,
+    margin: Object as PropType<Record<string, any>>,
     maxColor: String,
-    maxValue: {},
+    maxValue: Number,
     minColor: String,
-    minValue: {},
-    onDisposing: Function,
-    onDrawn: Function,
-    onExported: Function,
-    onExporting: Function,
-    onFileSaving: Function,
-    onIncidentOccurred: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onTooltipHidden: Function,
-    onTooltipShown: Function,
+    minValue: Number,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onDrawn: Function as PropType<((e: DrawnEvent) => void)>,
+    onExported: Function as PropType<((e: ExportedEvent) => void)>,
+    onExporting: Function as PropType<((e: ExportingEvent) => void)>,
+    onFileSaving: Function as PropType<((e: FileSavingEvent) => void)>,
+    onIncidentOccurred: Function as PropType<((e: IncidentOccurredEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onTooltipHidden: Function as PropType<((e: TooltipHiddenEvent) => void)>,
+    onTooltipShown: Function as PropType<((e: TooltipShownEvent) => void)>,
     pathModified: Boolean,
     pointColor: String,
     pointSize: Number,
-    pointSymbol: {},
+    pointSymbol: String as PropType<PointSymbol>,
     rtlEnabled: Boolean,
     showFirstLast: Boolean,
     showMinMax: Boolean,
-    size: Object,
-    theme: {},
-    tooltip: Object,
-    type: {},
+    size: Object as PropType<Record<string, any>>,
+    theme: String as PropType<Theme>,
+    tooltip: Object as PropType<Record<string, any>>,
+    type: String as PropType<SparklineType>,
     valueField: String,
     winColor: String,
     winlossThreshold: Number
@@ -170,8 +203,8 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
-    opacity: {},
+    dashStyle: String as PropType<DashStyle>,
+    opacity: Number,
     visible: Boolean,
     width: Number
   }
@@ -221,10 +254,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
-    type: {},
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -291,8 +324,8 @@ const DxSizeConfig = {
     "update:width": null,
   },
   props: {
-    height: {},
-    width: {}
+    height: Number,
+    width: Number
   }
 };
 
@@ -325,21 +358,21 @@ const DxTooltipConfig = {
   },
   props: {
     arrowLength: Number,
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String,
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: {},
+    customizeTooltip: Function as PropType<((pointsInfo: any) => Record<string, any>)>,
     enabled: Boolean,
-    font: Object,
-    format: {},
+    font: Object as PropType<Font | Record<string, any>>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     interactive: Boolean,
-    opacity: {},
+    opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
-    shadow: Object,
-    zIndex: {}
+    shadow: Object as PropType<Record<string, any>>,
+    zIndex: Number
   }
 };
 
