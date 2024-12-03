@@ -500,7 +500,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
         border-bottom: $datagrid-border;
       }
 
-      .dx-row:last-child > td {
+      .dx-row:last-child > td, td[rowspan] {
         border-bottom-width: 0;
       }
     }

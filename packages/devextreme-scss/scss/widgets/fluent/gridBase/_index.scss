@@ -704,7 +704,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         }
       }
 
-      .dx-row:last-child > td {
+      .dx-row:last-child > td, td[rowspan] {
         border-bottom-width: 0;
       }
     }

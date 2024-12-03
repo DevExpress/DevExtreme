@@ -677,7 +677,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
         }
       }
 
-      .dx-row:last-child > td {
+      .dx-row:last-child > td, td[rowspan] {
         border-bottom-width: 0;
       }
     }
