@@ -255,6 +255,9 @@
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
+        "dxScheduler-appointmentListAriaLabel": "Appointment list",
+
+
         "dxScheduler-editorLabelTitle": "Assignatura",
         "dxScheduler-editorLabelStartDate": "Data d'inici",
         "dxScheduler-editorLabelEndDate": "Data de finalització",
