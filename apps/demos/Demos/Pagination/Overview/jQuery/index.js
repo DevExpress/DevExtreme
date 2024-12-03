@@ -10,12 +10,12 @@ $(() => {
       onOptionChanged: (evt) => {
         if (evt.name === 'pageSize') {
           const pageSize = evt.value;
-          const pageIndex = pagination.option('pageIndex');
           pagination.option('pageSize', pageSize);
+          const pageIndex = pagination.option('pageIndex');
 
           renderEmployeeGallery(pageSize, pageIndex);
         }
-
+        
         if (evt.name === 'pageIndex') {
           const pageSize = pagination.option('pageSize');
           const pageIndex = evt.value;
