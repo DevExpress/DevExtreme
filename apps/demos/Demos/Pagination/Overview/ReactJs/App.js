@@ -6,9 +6,8 @@ import { employees } from './data.js';
 const App = () => {
   const [pageSize, setPageSize] = useState(4);
   const [pageIndex, setPageIndex] = useState(1);
-
   return (
-    <>
+    <React.Fragment>
       <EmployeeGallery
         employees={employees}
         pageSize={pageSize}
@@ -25,14 +24,12 @@ const App = () => {
           if (evt.name === 'pageSize') {
             setPageSize(evt.value);
           }
-
           if (evt.name === 'pageIndex') {
             setPageIndex(evt.value);
           }
         }}
       />
-    </>
+    </React.Fragment>
   );
 };
-
 export default App;
