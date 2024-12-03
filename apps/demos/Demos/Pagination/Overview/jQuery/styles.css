@@ -24,7 +24,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-  min-height: 640px;
+  min-height: 644px;
   padding-bottom: 24px;
 }
 
