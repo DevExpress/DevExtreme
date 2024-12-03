@@ -8,9 +8,12 @@ import {
   ArrayStore,
   ODataStore,
   LocalStore,
+} from 'devextreme/common/data';
+
+import {
   DataSourceOptionsStub,
   DataSourceLike,
-} from 'devextreme/common/data';
+} from 'devextreme/data/data_source';
 
 import {
   AnotherType,

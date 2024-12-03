@@ -3,5 +3,8 @@ export {
     one,
     off,
     trigger,
-    triggerHandler,
 } from '../common/core/events';
+
+export {
+    triggerHandler,
+} from './events.types';

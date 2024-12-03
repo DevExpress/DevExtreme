@@ -1,1 +1,1 @@
-export { default } from '../data/abstract_store';
+export { default } from '../common/data/abstract_store';
