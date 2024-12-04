@@ -1,6 +1,16 @@
-import Resizable, { Properties } from "devextreme/ui/resizable";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import Resizable, { Properties } from "devextreme/ui/resizable";
+import {
+ ResizeHandle,
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ ResizeEvent,
+ ResizeEndEvent,
+ ResizeStartEvent,
+} from "devextreme/ui/resizable";
 
 type AccessibleOptions = Pick<Properties,
   "area" |
@@ -29,22 +39,22 @@ interface DxResizable extends AccessibleOptions {
 const componentConfig = {
   props: {
     area: {},
-    elementAttr: Object,
-    handles: {},
-    height: [Function, Number, String],
+    elementAttr: Object as PropType<Record<string, any>>,
+    handles: String as PropType<ResizeHandle | string>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     keepAspectRatio: Boolean,
     maxHeight: Number,
     maxWidth: Number,
     minHeight: Number,
     minWidth: Number,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onResize: Function,
-    onResizeEnd: Function,
-    onResizeStart: Function,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onResize: Function as PropType<((e: ResizeEvent) => void)>,
+    onResizeEnd: Function as PropType<((e: ResizeEndEvent) => void)>,
+    onResizeStart: Function as PropType<((e: ResizeStartEvent) => void)>,
     rtlEnabled: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

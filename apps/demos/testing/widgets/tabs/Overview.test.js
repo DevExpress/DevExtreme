@@ -15,7 +15,7 @@ fixture('Tabs.Overview')
     ctx.initialWindowSize = [900, 1200];
   });
 
-runManualTest('Tabs', 'Overview', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('Tabs', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Overview', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

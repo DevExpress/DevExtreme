@@ -8,7 +8,7 @@ fixture('Scheduler.Resources')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Scheduler', 'Resources', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('Scheduler', 'Resources', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Resource fields shouldn\'t empty', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

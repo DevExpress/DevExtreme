@@ -132,9 +132,12 @@ const SKIPPED_TESTS = {
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
       { demo: 'CustomMapData', themes: [THEME.material] },
     ],
-    Pagination: [{ demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] }],
+    Pagination: ['Overview'],
   },
   React: {
+    Common: [
+      { demo: 'ActionAndListsOverview', themes: [THEME.generic, THEME.material] },
+    ],
     Charts: [
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
@@ -182,6 +185,9 @@ const SKIPPED_TESTS = {
     Pagination: ['Overview'],
   },
   Vue: {
+    Common: [
+      { demo: 'ActionAndListsOverview', themes: [THEME.generic, THEME.material] },
+    ],
     Charts: [
       { demo: 'TilingAlgorithms', themes: [THEME.material] },
       { demo: 'ExportAndPrintingAPI', themes: [THEME.material] },

@@ -9,7 +9,7 @@ $(() => {
     startDayHour: 8,
     endDayHour: 18,
     showAllDayPanel: false,
-    height: 600,
+    height: 710,
     groups: ['employeeID'],
     resources: [
       {

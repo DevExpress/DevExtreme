@@ -9,6 +9,7 @@ import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { isElementInDom } from '@js/core/utils/dom';
+import { getHeight } from '@js/core/utils/size';
 import { isDate, isDefined } from '@js/core/utils/type';
 import type { Format } from '@js/localization';
 import dateLocalization from '@js/localization/date';
@@ -593,7 +594,12 @@ class MessageList extends Widget<Properties> {
 
   _setIsReachedBottom(): void {
     // @ts-expect-error
-    this._isBottomReached = this._scrollView.isBottomReached();
+    this._isBottomReached = !this._isContentOverflowing() || this._scrollView.isBottomReached();
+  }
+
+  _isContentOverflowing(): boolean {
+    // @ts-expect-error
+    return getHeight(this._scrollView.content()) > getHeight(this._scrollView.container());
   }
 
   _processScrollDownContent(shouldForceProcessing = false): void {

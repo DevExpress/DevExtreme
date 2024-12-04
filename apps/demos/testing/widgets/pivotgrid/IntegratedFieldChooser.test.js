@@ -14,7 +14,7 @@ fixture('PivotGrid.IntegratedFieldChooser')
     ctx.initialWindowSize = [900, 800];
   });
 
-runManualTest('PivotGrid', 'IntegratedFieldChooser', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('PivotGrid', 'IntegratedFieldChooser', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('IntegratedFieldChooser', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

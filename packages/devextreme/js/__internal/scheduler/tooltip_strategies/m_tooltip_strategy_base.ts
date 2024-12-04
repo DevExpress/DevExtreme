@@ -1,5 +1,6 @@
 import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
+import { isRenderer } from '@js/core/utils/type';
 import Button from '@js/ui/button';
 import { createPromise } from '@ts/core/utils/promise';
 import List from '@ts/ui/list/m_list.edit';
@@ -40,6 +41,8 @@ export class TooltipStrategyBase {
   }
 
   _showCore(target, dataList) {
+    const describedByValue = isRenderer(target) && target.attr('aria-describedby') as string;
+
     if (!this._tooltip) {
       this._tooltip = this._createTooltip(target, dataList);
     } else {
@@ -49,6 +52,8 @@ export class TooltipStrategyBase {
 
     this._prepareBeforeVisibleChanged(dataList);
     this._tooltip.option('visible', true);
+
+    describedByValue && target.attr('aria-describedby', describedByValue);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -61,6 +66,10 @@ export class TooltipStrategyBase {
       const listElement = $('<div>');
       $(container).append(listElement);
       this._list = this._createList(listElement, dataList);
+      this._list.registerKeyHandler?.('escape', () => {
+        this.hide();
+        this._tooltip.option('target').focus();
+      });
     };
   }
 

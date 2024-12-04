@@ -1,6 +1,8 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { checkOptions } from './axe_options';
 
 fixture.disablePageReloads`a11y - appointment`
   .page(url(__dirname, '../../container.html'));
@@ -14,6 +16,8 @@ fixture.disablePageReloads`a11y - appointment`
         scheduler.getAppointment('App 1').element.attributes['aria-label'],
       )
       .eql(undefined);
+
+    await a11yCheck(t, checkOptions, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
       dataSource: [{
@@ -34,6 +38,8 @@ fixture.disablePageReloads`a11y - appointment`
     await t
       .expect(attrs['aria-roledescription'])
       .eql('February 1, 2021, Group: resource1, ');
+
+    await a11yCheck(t, checkOptions, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
       dataSource: [{
@@ -65,6 +71,8 @@ fixture.disablePageReloads`a11y - appointment`
     await t
       .expect(attrs['aria-roledescription'])
       .eql('February 1, 2021, Group: resource11, resource21, ');
+
+    await a11yCheck(t, checkOptions, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
       dataSource: [{
@@ -103,6 +111,8 @@ fixture.disablePageReloads`a11y - appointment`
     await t
       .expect(recurrenceIcon.getAttribute('aria-label'))
       .eql('Recurring appointment');
+
+    await a11yCheck(t, checkOptions, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
       timeZone: 'America/Los_Angeles',
@@ -123,14 +133,21 @@ fixture.disablePageReloads`a11y - appointment`
   test('appointments should have right role', async (t) => {
     const scheduler = new Scheduler('#container');
     const appt = scheduler.getAppointment('Website Re-Design Plan');
+    const contentId = await appt.element.find('.dx-scheduler-appointment-content').getAttribute('id');
 
     await t
       .expect(appt.element.getAttribute('role'))
       .eql('application');
 
     await t
+      .expect(appt.element.getAttribute('aria-describedby'))
+      .eql(contentId);
+
+    await t
       .expect(appt.element.getAttribute('aria-activedescendant'))
       .eql(null);
+
+    await a11yCheck(t, checkOptions, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
       timeZone: 'America/Los_Angeles',
@@ -186,6 +203,8 @@ fixture.disablePageReloads`a11y - appointment`
     await t.expect(apptLabels[0]).eql(labels[0]);
     await t.expect(apptLabels[1]).eql(labels[1]);
     await t.expect(apptLabels[2]).eql(labels[2]);
+
+    await a11yCheck(t, checkOptions, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
       dataSource: [{
@@ -252,6 +271,8 @@ test('appointments & collector buttons can be navigated', async (t) => {
   await t.expect(
     scheduler.appointmentTooltip.element.count,
   ).eql(1);
+
+  await a11yCheck(t, checkOptions, '#container');
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource: [
@@ -301,6 +322,8 @@ test('Scheduler a11y: Disabled time ranges are not supported', async (t) => {
     .eql(expectedAriaLabels.prev)
     .expect(actualNextAriaLabel)
     .eql(expectedAriaLabels.next);
+
+  await a11yCheck(t, checkOptions, '#container');
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource: [
@@ -322,6 +345,8 @@ test('Scheduler a11y: appointments does not have info about reccurence', async (
   await t
     .expect(recurrenceIcon.getAttribute('aria-label'))
     .eql('Recurring appointment');
+
+  await a11yCheck(t, checkOptions, '#container');
 }).before(async () => {
   await createWidget('dxScheduler', {
     timeZone: 'America/Los_Angeles',
@@ -350,6 +375,8 @@ test('Scheduler a11y: Appointment collector button doesn\'t have info about date
     .ok()
     .expect(schedulerCollector.element().getAttribute('aria-roledescription'))
     .contains(dateText);
+
+  await a11yCheck(t, checkOptions, '#container');
 }).before(async () => {
   await createWidget('dxScheduler', {
     timeZone: 'America/Los_Angeles',
@@ -387,6 +414,8 @@ test('appointment aria label should contain date with right timezone', async (t)
   await t
     .expect(appt.element.getAttribute('aria-roledescription'))
     .eql('March 29, 2021, ');
+
+  await a11yCheck(t, checkOptions, '#container');
 }).before(async () => {
   await createWidget('dxScheduler', {
     timeZone: 'America/Los_Angeles',

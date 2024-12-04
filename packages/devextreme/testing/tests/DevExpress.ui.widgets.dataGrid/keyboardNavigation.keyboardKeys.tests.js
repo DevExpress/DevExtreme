@@ -1523,7 +1523,7 @@ QUnit.module('Keyboard keys', {
             isLeftArrow = true;
         };
 
-        this.keyboardNavigationController._keyDownHandler({
+        this.keyboardNavigationController._rowsViewKeyDownHandler({
             keyName: 'leftArrow',
             originalEvent: {
                 isDefaultPrevented: commonUtils.noop,
@@ -1561,7 +1561,7 @@ QUnit.module('Keyboard keys', {
         this.keyboardNavigationController._leftRightKeysHandler = function() {
             isLeftArrow = true;
         };
-        this.keyboardNavigationController._keyDownHandler({
+        this.keyboardNavigationController._rowsViewKeyDownHandler({
             keyName: 'leftArrow',
             originalEvent: {
                 isDefaultPrevented: commonUtils.noop,

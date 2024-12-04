@@ -86,13 +86,6 @@ const isStickyCellPinned = (
 ): boolean => isStickyCellPinnedToLeft($cell, $container, addWidgetPrefix)
   || isStickyCellPinnedToRight($cell, $container, addWidgetPrefix);
 
-const isFixedCellPinnedToLeft = (
-  $cell: dxElementWrapper,
-  $container: dxElementWrapper,
-  addWidgetPrefix,
-): boolean => $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnLeft))
-  || isStickyCellPinnedToLeft($cell, $container, addWidgetPrefix);
-
 const isFixedCellPinnedToRight = (
   $cell: dxElementWrapper,
   $container: dxElementWrapper,
@@ -131,22 +124,6 @@ const getLeftFixedCells = ($cells: dxElementWrapper, addWidgetPrefix): dxElement
 const getRightFixedCells = ($cells: dxElementWrapper, addWidgetPrefix): dxElementWrapper => $cells
   // @ts-expect-error
   .filter((_, cell: HTMLElement) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumnRight)));
-
-const getFixedCellsPinnedToLeft = (
-  $cells: dxElementWrapper,
-  $container: dxElementWrapper,
-  addWidgetPrefix,
-): dxElementWrapper => $cells
-  // @ts-expect-error
-  .filter((_, cell: HTMLElement) => isFixedCellPinnedToLeft($(cell), $container, addWidgetPrefix));
-
-const getFixedCellsPinnedToRight = (
-  $cells: dxElementWrapper,
-  $container: dxElementWrapper,
-  addWidgetPrefix,
-): dxElementWrapper => $cells
-  // @ts-expect-error
-  .filter((_, cell: HTMLElement) => isFixedCellPinnedToRight($(cell), $container, addWidgetPrefix));
 
 const getNonFixedAndStickyCells = (
   $cells: dxElementWrapper,
@@ -313,29 +290,13 @@ const getScrollPadding = (
   left: number;
   right: number;
 } => {
-  const left = getFixedCellsPinnedToLeft($cells, $container, addWidgetPrefix)
-    .toArray()
-    .reduce((sum, cell) => sum + cell.getBoundingClientRect().width, 0);
-  const right = getFixedCellsPinnedToRight($cells, $container, addWidgetPrefix)
-    .toArray()
-    .reduce((sum, cell) => sum + cell.getBoundingClientRect().width, 0);
+  const containerRect = getBoundingRect($container.get(0));
+  const nonFixedAreaBoundingRect = getNonFixedAreaBoundingRect($cells, $container, addWidgetPrefix);
 
   return {
-    left,
-    right,
+    left: nonFixedAreaBoundingRect.left - containerRect.left,
+    right: containerRect.right - nonFixedAreaBoundingRect.right,
   };
-};
-
-const setScrollPadding = (
-  $cells: dxElementWrapper,
-  $container: dxElementWrapper,
-  addWidgetPrefix,
-): void => {
-  const scrollPadding = getScrollPadding($cells, $container, addWidgetPrefix);
-  $container.css({
-    scrollPaddingLeft: scrollPadding.left,
-    scrollPaddingRight: scrollPadding.right,
-  });
 };
 
 const isOutsideVisibleArea = (
@@ -363,6 +324,30 @@ const isLastCell = ($cell: dxElementWrapper): boolean => {
   return $cell[0] === $lastCell[0];
 };
 
+const needToSkipHeaderCell = ($cell: dxElementWrapper): boolean => !$cell.is('[tabindex]');
+
+const getNextHeaderCell = (
+  $cell: dxElementWrapper,
+  direction = 'next',
+): dxElementWrapper => {
+  let $nextCell = $cell;
+  let $nextRow = $cell.parent();
+
+  do {
+    $nextCell = direction === 'next' ? $nextCell.next() : $nextCell.prev();
+
+    if (!$nextCell.length) {
+      $nextRow = direction === 'next' ? $nextRow.next() : $nextRow.prev();
+
+      if ($nextRow.length) {
+        $nextCell = direction === 'next' ? $nextRow.children().first() : $nextRow.children().last();
+      }
+    }
+  } while ($nextCell.length && needToSkipHeaderCell($nextCell));
+
+  return $nextCell;
+};
+
 export const GridCoreStickyColumnsDom = {
   toggleFirstHeaderClass,
   toggleColumnNoBorderClass,
@@ -375,6 +360,7 @@ export const GridCoreStickyColumnsDom = {
   getRightFixedCells,
   getNonFixedAndStickyCells,
   getScrollPadding,
+  getNextHeaderCell,
   noNeedToCreateResizingPoint,
   isFixedCellPinnedToRight,
   noNeedToCreateReorderingPoint,
@@ -383,5 +369,4 @@ export const GridCoreStickyColumnsDom = {
   isStickyCellPinned,
   isOutsideVisibleArea,
   isLastCell,
-  setScrollPadding,
 };

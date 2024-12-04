@@ -1,3 +1,4 @@
+import messageLocalization from '@js/localization/message';
 import supportUtils from '@ts/core/utils/m_support';
 import Tooltip from '@ts/ui/m_tooltip';
 
@@ -40,16 +41,24 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
   }
 
   _createTooltip(target, dataList) {
-    const tooltip = this._createTooltipElement(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
+    const tooltipElement = this._createTooltipElement(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
 
-    return this._options.createComponent(tooltip, Tooltip, {
+    const tooltip = this._options.createComponent(tooltipElement, Tooltip, {
       target,
       maxHeight: MAX_TOOLTIP_HEIGHT,
       rtlEnabled: this._extraOptions.rtlEnabled,
       onShown: this._onShown.bind(this),
       contentTemplate: this._getContentTemplate(dataList),
       wrapperAttr: { class: APPOINTMENT_TOOLTIP_WRAPPER_CLASS },
+      _loopFocus: this._extraOptions._loopFocus,
     });
+
+    tooltip.setAria({
+      role: 'dialog',
+      label: messageLocalization.format('dxScheduler-appointmentListAriaLabel'),
+    });
+
+    return tooltip;
   }
 
   _onListRender(e) {

@@ -1,6 +1,18 @@
-import Button, { Properties } from "devextreme/ui/button";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import Button, { Properties } from "devextreme/ui/button";
+import {
+ ClickEvent,
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+} from "devextreme/ui/button";
+import {
+ ButtonStyle,
+ ButtonType,
+} from "devextreme/common";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -35,30 +47,30 @@ interface DxButton extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: {},
+    accessKey: String,
     activeStateEnabled: Boolean,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: {},
-    hint: {},
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
-    onClick: Function,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    onClick: Function as PropType<((e: ClickEvent) => void)>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     rtlEnabled: Boolean,
-    stylingMode: {},
+    stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
     template: {},
     text: String,
-    type: {},
+    type: String as PropType<ButtonType | string>,
     useSubmitBehavior: Boolean,
-    validationGroup: {},
+    validationGroup: String,
     visible: Boolean,
-    width: {}
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

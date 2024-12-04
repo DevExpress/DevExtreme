@@ -6,7 +6,7 @@
     >
       <h2>{{ employee.text }}</h2>
     </div>
-    <div class="avatar">
+    <div class="avatar" :title="employee.text">
       <img :src="employee.data.avatar" :alt="`${employee.text} photo`">
     </div>
     <div
@@ -28,11 +28,31 @@ withDefaults(defineProps<{
 </script>
 <style>
 .avatar {
-  width: 155px;
+  width: 124px;
   float: left;
   overflow: hidden;
   position: relative;
-  height: 125px;
+  height: 124px;
+  border: 1px solid rgba(0, 0, 0, 0.24);
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.avatar img {
+  position: relative;
+  width: 126px;
+  height: 130px;
+  object-fit: contain;
+}
+
+.avatar[title="John Heart"] img {
+  top: 5px;
+  left: 3px;
+}
+
+.avatar[title="Greta Sims"] img {
+  top: 5px;
+  left: -7px;
 }
 
 .name {
@@ -43,20 +63,23 @@ withDefaults(defineProps<{
 }
 
 .name h2 {
-  color: #fff;
+  color: var(--text-color-2);
   font-size: 28px;
   text-align: left;
-  padding: 0 0 5px 175px;
+  padding: 0 0 0 170px;
   margin: 0;
+  height: 40px;
+  line-height: 40px;
 }
 
 .info {
   width: auto;
   text-align: left;
   height: 100%;
-  font-size: 11pt;
+  font-size: 14px;
+  line-height: 20px;
   font-weight: normal;
-  padding: 25px 20px;
+  padding: 25px 20px 25px 40px;
   color: #707070;
 }
 
