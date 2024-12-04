@@ -187,9 +187,11 @@ const SKIPPED_TESTS = {
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    Pagination: ['Overview'],
   },
   Angular: {
+    Accordion: [
+      { demo: 'Overview', themes: [THEME.fluent] },
+    ],
     Common: [
       { demo: 'EditorAppearanceVariants', themes: [THEME.generic, THEME.material] },
     ],
@@ -198,24 +200,40 @@ const SKIPPED_TESTS = {
       { demo: 'Crosshair', themes: [THEME.material, THEME.fluent] },
       { demo: 'CustomAnnotations', themes: [THEME.material, THEME.fluent] },
       { demo: 'LoadDataOnDemand', themes: [THEME.fluent] },
+      { demo: 'CustomLegendMarkers', themes: [THEME.fluent] },
+      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
+    DropDownBox: [
+      { demo: 'MultipleSelection', themes: [THEME.generic] },
+    ],
+    List: [
+      { demo: 'ItemDragging', themes: [THEME.generic] },
+    ],
+    Gauges: [
+      { demo: 'VariableNumberOfBars', themes: [THEME.material, THEME.fluent] },
+    ],
     DataGrid: [
+      { demo: 'Appearance', themes: [THEME.generic] },
       { demo: 'BatchEditing', themes: [THEME.fluent] },
-      { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material] },
-      { demo: 'MasterDetailAPI', themes: [THEME.generic, THEME.material] },
+      { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'MasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'SimpleArray', themes: [THEME.generic] },
+      { demo: 'MasterDetailAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'DataValidation', themes: [THEME.material] },
+      { demo: 'MultipleSorting', themes: [THEME.material] },
+      { demo: 'OdataService', themes: [THEME.material] },
       { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
       { demo: 'Filtering', themes: [THEME.material, THEME.fluent] },
-      { demo: 'FilteringAPI', themes: [THEME.generic, THEME.fluent] },
-      { demo: 'GroupSummaries', themes: [THEME.fluent ] },
-      { demo: 'RecordPaging', themes: [THEME.fluent ] },
-      { demo: 'RowSelection', themes: [THEME.fluent ] },
-      { demo: 'MultipleSelection', themes: [THEME.fluent ] },
+      { demo: 'FilteringAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'GroupSummaries', themes: [THEME.material, THEME.fluent ] },
+      { demo: 'RecordPaging', themes: [THEME.fluent] },
+      { demo: 'RowSelection', themes: [THEME.fluent] },
+      { demo: 'MultipleSelection', themes: [THEME.material, THEME.fluent] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'RemoteGrouping', themes: [THEME.generic, THEME.fluent, THEME.material] },
@@ -232,9 +250,8 @@ const SKIPPED_TESTS = {
     Popup: [
       { demo: 'Scrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    Pagination: [{ demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] }],
     Sortable: [
-      { demo: 'Kanban', themes: [THEME.fluent] },
+      { demo: 'Kanban', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     PivotGrid: [
       { demo: 'IntegratedFieldChooser', themes: [THEME.generic] },
@@ -264,7 +281,6 @@ const SKIPPED_TESTS = {
     Drawer: [
       { demo: 'TopOrBottomPosition', themes: [THEME.material] },
     ],
-    Pagination: ['Overview'],
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ]
@@ -289,7 +305,6 @@ const SKIPPED_TESTS = {
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
     ],
-    Pagination: ['Overview'],
   },
 };
 

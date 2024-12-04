@@ -132,7 +132,7 @@ const SKIPPED_TESTS = {
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
       { demo: 'CustomMapData', themes: [THEME.material] },
     ],
-    Pagination: [{ demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] }],
+    Pagination: ['Overview'],
   },
   React: {
     Common: [
