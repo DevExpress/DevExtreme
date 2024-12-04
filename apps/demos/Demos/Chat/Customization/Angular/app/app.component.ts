@@ -26,12 +26,8 @@ export class AppComponent {
   currentUser: User;
   supportAgent: User;
   messages$: Observable<Message[]>;
-  showAvatar=true;
-  showUserName=true;
-  showDayHeaders=true;
-  showMessageTimestamp=true;
-  dayHeaderFormat = this.appService.dayHeaderFormat;
-  messageTimestampFormat = this.appService.messageTimestampFormat;
+  dayHeaderFormats = this.appService.dayHeaderFormats;
+  messageTimestampFormats = this.appService.messageTimestampFormats;
   dayHeaderLabel = this.appService.dayHeaderLabel;
   messageTimestampLabel = this.appService.messageTimestampLabel;
 

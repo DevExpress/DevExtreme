@@ -2,14 +2,15 @@
   <div class="chat-container">
     <dx-chat
       #chat
+      height="710",
       [user]="currentUser"
       [items]="messages$ | async"
-      [showAvatar]="showAvatar"
-      [showUserName]="showUserName"
-      [showDayHeaders]="showDayHeaders"
-      [showMessageTimestamp]="showMessageTimestamp"
-      [dayHeaderFormat]="dayHeaderFormat[0]"
-      [messageTimestampFormat]="messageTimestampFormat[0]"
+      [showAvatar]="true"
+      [showUserName]="true"
+      [showDayHeaders]="true"
+      [showMessageTimestamp]="true"
+      [dayHeaderFormat]="dayHeaderFormats[0]"
+      [messageTimestampFormat]="messageTimestampFormats[0]"
       [disabled]="false"
       (onMessageEntered)="onMessageEntered($event)"
     >
@@ -45,7 +46,7 @@
     <div class="option">
       <span>Day Header Format:</span>
       <dx-select-box
-        [items]="dayHeaderFormat"
+        [items]="dayHeaderFormats"
         [(value)]="chat.dayHeaderFormat"
         [inputAttr]="dayHeaderLabel"
       ></dx-select-box>
@@ -63,7 +64,7 @@
     <div class="option">
       <span>Message Timestamp Format:</span>
       <dx-select-box
-        [items]="messageTimestampFormat"
+        [items]="messageTimestampFormats"
         [(value)]="chat.messageTimestampFormat"
         [inputAttr]="messageTimestampLabel"
       ></dx-select-box>

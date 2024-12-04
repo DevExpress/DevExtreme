@@ -3,8 +3,8 @@ $(() => {
     height: 710,
     items: messages,
     user: currentUser,
-    dayHeaderFormat: dayHeaderFormat[0],
-    messageTimestampFormat: messageTimestampFormat[0],
+    dayHeaderFormat: dayHeaderFormats[0],
+    messageTimestampFormat: messageTimestampFormats[0],
     onMessageEntered({ component, message }) {
       component.renderMessage(message);
     },
@@ -35,8 +35,8 @@ $(() => {
   });
 
   $('#day-header-format').dxSelectBox({
-    items: dayHeaderFormat,
-    value: dayHeaderFormat[0],
+    items: dayHeaderFormats,
+    value: dayHeaderFormats[0],
     inputAttr: { 'aria-label': 'Day Header Format' },
     onValueChanged(data) {
       chat.option('dayHeaderFormat', data.value);
@@ -52,8 +52,8 @@ $(() => {
   });
 
   $('#message-timestamp-format').dxSelectBox({
-    items: messageTimestampFormat,
-    value: messageTimestampFormat[0],
+    items: messageTimestampFormats,
+    value: messageTimestampFormats[0],
     inputAttr: { 'aria-label': 'Message Timestamp Format' },
     onValueChanged(data) {
       chat.option('messageTimestampFormat', data.value);

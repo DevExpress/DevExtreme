@@ -13,7 +13,7 @@ export const currentUser = {
 export const supportAgent = {
     id: "d16d1a4c-5c67-4e20-b7v0e-2991c22747c3",
     name: "Support Agent",
-    avatarUrl: "../../../../images/petersmith.png",
+    avatarUrl: "images/petersmith.png",
 };
 
 export const messages = [
@@ -49,7 +49,7 @@ export const messages = [
     },
 ];
 
-export const dayHeaderFormat = ['dd/MM/yyyy', 'dd.MM.yyyy', 'MMMM dd, yyyy', 'EEEE, MMMM dd'];
-export const messageTimestampFormat = ['hh:mm a', 'hh:mm:ss a', 'HH:mm', 'HH:mm:ss'];
+export const dayHeaderFormats = ['dd/MM/yyyy', 'dd.MM.yyyy', 'MMMM dd, yyyy', 'EEEE, MMMM dd'];
+export const messageTimestampFormats = ['hh:mm a', 'hh:mm:ss a', 'HH:mm', 'HH:mm:ss'];
 export const messageTimestampLabel = { 'aria-label': 'Message Timestamp Format' };
 export const dayHeaderLabel = { 'aria-label': 'Day Header Format' };

@@ -5,8 +5,8 @@ import CheckBox from 'devextreme-react/check-box';
 import {
   currentUser,
   messages as initialMessages,
-  dayHeaderFormat as headerFormat,
-  messageTimestampFormat as messageTimestamp,
+  dayHeaderFormats as headerFormats,
+  messageTimestampFormats as messageTimestamps,
   messageTimestampLabel,
   dayHeaderLabel,
 } from './data.js';
@@ -16,9 +16,9 @@ export default function App() {
   const [showAvatar, setShowAvatar] = useState(true);
   const [showUsername, setShowUsername] = useState(true);
   const [showDayHeaders, setDayHeaders] = useState(true);
-  const [dayHeaderFormat, setDayHeaderFormat] = useState(headerFormat[0]);
+  const [dayHeaderFormat, setDayHeaderFormat] = useState(headerFormats[0]);
   const [showMessageTime, setMessageTime] = useState(true);
-  const [messageTimestampFormat, setMessageTimeFormat] = useState(messageTimestamp[0]);
+  const [messageTimestampFormat, setMessageTimeFormat] = useState(messageTimestamps[0]);
   const [isDisabled, setDisabled] = useState(false);
   function onMessageEntered({ message }) {
     setMessages((prevMessages) => [...prevMessages, message]);
@@ -115,7 +115,7 @@ export default function App() {
         <div className="option">
           <span>Day Header Format:</span>
           <SelectBox
-            items={headerFormat}
+            items={headerFormats}
             value={dayHeaderFormat}
             inputAttr={dayHeaderLabel}
             onValueChanged={dayHeaderFormatChanged}
@@ -135,7 +135,7 @@ export default function App() {
         <div className="option">
           <span>Message Timestamp Format:</span>
           <SelectBox
-            items={messageTimestamp}
+            items={messageTimestamps}
             value={messageTimestampFormat}
             inputAttr={messageTimestampLabel}
             onValueChanged={messageTimestampFormatChanged}

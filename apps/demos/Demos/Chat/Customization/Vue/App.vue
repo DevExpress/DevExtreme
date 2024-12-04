@@ -1,6 +1,7 @@
 <template>
     <div class="chat-container">
         <DxChat
+            :height="710",
             v-model:items="messages"
             v-model:user="currentUser"
             v-model:disabled = "isDisabled"
@@ -44,7 +45,7 @@
         <div class="option">
           <span>Day Header Format:</span>
           <DxSelectBox
-            :items="headerFormat"
+            :items="headerFormats"
             :input-attr="dayHeaderLabel"
             v-model:value="dayHeaderFormat"
           />
@@ -62,7 +63,7 @@
         <div class="option">
           <span>Message Timestamp Format:</span>
           <DxSelectBox
-            :items="messageFormat"
+            :items="messageFormats"
             :input-attr="messageTimestampLabel"
             v-model:value="messageTimestampFormat"
           />
@@ -126,20 +127,21 @@
     import DxCheckBox from 'devextreme-vue/check-box';
     import DxSelectBox from 'devextreme-vue/select-box';
     import { 
-      messages,
+      messages as initialMessages,
       currentUser,
-      dayHeaderFormat as headerFormat,
-      messageTimestampFormat as messageFormat,
+      dayHeaderFormats as headerFormats,
+      messageTimestampFormats as messageFormats,
       messageTimestampLabel,
       dayHeaderLabel
     } from './data.ts';
 
+    const messages = ref(initialMessages);
     const showAvatar = ref(true);
     const showUsername = ref(true);
     const showDayHeaders = ref(true);
     const showMessageTime = ref(true);
-    const dayHeaderFormat = ref(headerFormat[0]);
-    const messageTimestampFormat = ref(messageFormat[0]);
+    const dayHeaderFormat = ref(headerFormats[0]);
+    const messageTimestampFormat = ref(messageFormats[0]);
     const isDisabled = ref(false);
     
     function onMessageEntered(event) {

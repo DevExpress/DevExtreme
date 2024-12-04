@@ -16,11 +16,11 @@ export class AppService {
   supportAgent: User = {
     id: 'd16d1a4c-5c67-4e20-b70e-2991c22747c3',
     name: 'Support Agent',
-    avatarUrl: '../../../../images/petersmith.png',
+    avatarUrl: 'images/petersmith.png',
   };
 
-  dayHeaderFormat = ['dd/MM/yyyy', 'dd.MM.yyyy', 'MMMM dd, yyyy', 'EEEE, MMMM dd'];
-  messageTimestampFormat = ['hh:mm a', 'hh:mm:ss a', 'HH:mm', 'HH:mm:ss'];
+  dayHeaderFormats = ['dd/MM/yyyy', 'dd.MM.yyyy', 'MMMM dd, yyyy', 'EEEE, MMMM dd'];
+  messageTimestampFormats = ['hh:mm a', 'hh:mm:ss a', 'HH:mm', 'HH:mm:ss'];
   messageTimestampLabel = { 'aria-label': 'Message Timestamp Format' };
   dayHeaderLabel = { 'aria-label': 'Day Header Format' };
 
