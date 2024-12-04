@@ -1,8 +1,10 @@
-Pagination is a UI component that allows users browse pages and adjust page size at runtime. This demo displays Pagination for navigating employee cards.
+DevExpress Pagination UI component allows users to navigate between pages and adjust page size at runtime. The Pagination component in this demo allows users to browse employee cards.
 
-To set up Pagination, specify [itemCount](/Documentation/ApiReference/UI_Components/dxPagination/Configuration/#itemCount) to indicate the total item count. This step ensures proper functionality.
-<!--split-->
+To set up a Pagination component, specify the following options: 
 
-Next, define page settings. Use the [pageSize](/Documentation/ApiReference/UI_Components/dxPagination/Configuration/#pageSize) property to specify the number of items per page. Configure available page sizes with the [allowedPageSizes](/Documentation/ApiReference/UI_Components/dxPagination/Configuration/#allowedPageSizes) property. Specify [pageIndex](/Documentation/ApiReference/UI_Components/dxPagination/Configuration/#pageIndex) to define the initial page display.
-
-Pagination includes navigation buttons and a page information. Toggle the button display with [showNavigationButtons](/Documentation/ApiReference/UI_Components/dxPagination/Configuration/#showNavigationButtons) and page information with [showInfo](/Documentation/ApiReference/UI_Components/dxPagination/Configuration/#showInfo). 
+- [itemCount](/Documentation/ApiReference/UI_Components/dxPagination/Configuration/#itemCount): the total number of elements in the target control. 
+- [pageSize](/Documentation/ApiReference/UI_Components/dxPagination/Configuration/#pageSize): the number of items per page. 
+- [allowedPageSizes](/Documentation/ApiReference/UI_Components/dxPagination/Configuration/#allowedPageSizes) : available page size choices.
+- [pageIndex](/Documentation/ApiReference/UI_Components/dxPagination/Configuration/#pageIndex): page displayed first
+- [showNavigationButtons](/Documentation/ApiReference/UI_Components/dxPagination/Configuration/#showNavigationButtons): navigation button visibility
+- [showInfo](/Documentation/ApiReference/UI_Components/dxPagination/Configuration/#showInfo): information pane visibility 
