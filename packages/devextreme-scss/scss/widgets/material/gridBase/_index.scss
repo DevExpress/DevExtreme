@@ -643,7 +643,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
     color: $datagrid-columnchooser-item-color;
     touch-action: pinch-zoom;
 
-    &:after {
+    &::before {
       content: '';
       position: absolute;
       top: 0;
@@ -652,7 +652,6 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       right: 0;
       pointer-events: none;
       border-bottom: $datagrid-border;
-      z-index: -1;
     }
 
     .dx-#{$widget-name}-table {

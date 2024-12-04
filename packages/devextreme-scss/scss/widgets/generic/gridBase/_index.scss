@@ -490,7 +490,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
     font-weight: $datagrid-columnchooser-font-weight;
     touch-action: pinch-zoom;
 
-    &:after {
+    &::before {
       content: '';
       position: absolute;
       top: 0;
@@ -499,7 +499,6 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       right: 0;
       pointer-events: none;
       border-bottom: $datagrid-border;
-      z-index: -1;
     }
 
     .dx-#{$widget-name}-table {
