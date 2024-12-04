@@ -1088,12 +1088,12 @@
         ]
       },
       {
-        "Name": "Sorting",
+        "Name": "Filtering",
         "Equivalents": "",
         "Demos": [
           {
-            "Title": "Multiple Sorting",
-            "Name": "MultipleSorting",
+            "Title": "Search Panel",
+            "Name": "SearchPanel",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/TreeListTasksController.cs",
@@ -1102,16 +1102,54 @@
               "/Models/SampleData/EmployeeTasks.cs"
             ],
             "DemoType": "Web"
+          },
+          {
+            "Title": "Filter Row",
+            "Name": "FilterRow",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Column Header Filter",
+            "Name": "ColumnHeaderFilter",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Filter Panel",
+            "Equivalents": "dxFilterBuilder, FilterBuilder, QueryBuilder, dxFilterPanel, FilterPanel",
+            "Name": "FilterPanel",
+            "Widget": "TreeList",
+            "DemoType": "Web",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/OrdersWithCustomerInfo.cs",
+              "/Models/OrderWithCustomerInfo.cs",
+              "/Models/CustomerInfo.cs"
+            ]
+          },
+          {
+            "Title": "Filter Modes",
+            "Name": "FilterModes",
+            "Widget": "TreeList",
+            "DemoType": "Web"
           }
         ]
       },
       {
-        "Name": "Paging",
+        "Name": "Sorting",
         "Equivalents": "",
         "Demos": [
           {
-            "Title": "Paging",
-            "Name": "Paging",
+            "Title": "Multiple Sorting",
+            "Name": "MultipleSorting",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/TreeListTasksController.cs",
@@ -1190,36 +1228,6 @@
         ]
       },
       {
-        "Name": "Node Drag & Drop",
-        "Equivalents": "",
-        "Demos": [
-          {
-            "Title": "Node Drag & Drop",
-            "Name": "LocalReordering",
-            "Widget": "TreeList",
-            "Equivalents": "Node Drag and Drop",
-            "Modules": "devextreme-aspnet-data-nojquery",
-            "MvcAdditionalFiles": [
-              "/Scripts/data/employees.js"
-            ],
-            "DemoType": "Web"
-          }
-        ]
-      },
-      {
-        "Name": "Focused Row",
-        "Equivalents": "",
-        "Demos": [
-          {
-            "Title": "Focused Row",
-            "Name": "FocusedRow",
-            "Widget": "TreeList",
-            "DemoType": "Web",
-            "Modules": "devextreme-aspnet-data-nojquery"
-          }
-        ]
-      },
-      {
         "Name": "Selection",
         "Equivalents": "",
         "Demos": [
@@ -1247,12 +1255,25 @@
         ]
       },
       {
-        "Name": "Filtering",
+        "Name": "Focused Row",
         "Equivalents": "",
         "Demos": [
           {
-            "Title": "Search Panel",
-            "Name": "SearchPanel",
+            "Title": "Focused Row",
+            "Name": "FocusedRow",
+            "Widget": "TreeList",
+            "DemoType": "Web",
+            "Modules": "devextreme-aspnet-data-nojquery"
+          }
+        ]
+      },
+      {
+        "Name": "Paging",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Paging",
+            "Name": "Paging",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/TreeListTasksController.cs",
@@ -1261,43 +1282,22 @@
               "/Models/SampleData/EmployeeTasks.cs"
             ],
             "DemoType": "Web"
-          },
+          }
+        ]
+      },
+      {
+        "Name": "Drag & Drop",
+        "Equivalents": "",
+        "Demos": [
           {
-            "Title": "Filter Row",
-            "Name": "FilterRow",
+            "Title": "Node Drag & Drop",
+            "Name": "LocalReordering",
             "Widget": "TreeList",
+            "Equivalents": "Node Drag and Drop",
+            "Modules": "devextreme-aspnet-data-nojquery",
             "MvcAdditionalFiles": [
-              "/Models/TreeList/Employee.cs",
-              "/Models/SampleData/TreeListEmployees.cs"
+              "/Scripts/data/employees.js"
             ],
-            "DemoType": "Web"
-          },
-          {
-            "Title": "Column Header Filter",
-            "Name": "ColumnHeaderFilter",
-            "Widget": "TreeList",
-            "MvcAdditionalFiles": [
-              "/Models/TreeList/Employee.cs",
-              "/Models/SampleData/TreeListEmployees.cs"
-            ],
-            "DemoType": "Web"
-          },
-          {
-            "Title": "Filter Panel",
-            "Equivalents": "dxFilterBuilder, FilterBuilder, QueryBuilder, dxFilterPanel, FilterPanel",
-            "Name": "FilterPanel",
-            "Widget": "TreeList",
-            "DemoType": "Web",
-            "MvcAdditionalFiles": [
-              "/Models/SampleData/OrdersWithCustomerInfo.cs",
-              "/Models/OrderWithCustomerInfo.cs",
-              "/Models/CustomerInfo.cs"
-            ]
-          },
-          {
-            "Title": "Filter Modes",
-            "Name": "FilterModes",
-            "Widget": "TreeList",
             "DemoType": "Web"
           }
         ]
@@ -3185,36 +3185,6 @@
         ]
       },
       {
-        "Name": "Virtual Scrolling",
-        "Equivalents": "",
-        "Demos": [
-          {
-            "Title": "Virtual Scrolling",
-            "Name": "VirtualScrolling",
-            "Widget": "Scheduler",
-            "MvcAdditionalFiles": [],
-            "DemoType": "Web"
-          }
-        ]
-      },
-      {
-        "Name": "Appearance",
-        "Equivalents": "",
-        "Demos": [
-          {
-            "Title": "Drag & Drop",
-            "Name": "CustomDragAndDrop",
-            "Widget": "Scheduler",
-            "Equivalents": "Custom Drag and Drop",
-            "MvcAdditionalFiles": [
-              "/Models/Appointment.cs",
-              "/Models/SampleData/Appointments.cs"
-            ],
-            "DemoType": "Web"
-          }
-        ]
-      },
-      {
         "Name": "Grouping",
         "Equivalents": "",
         "Demos": [
@@ -3235,6 +3205,36 @@
             "MvcAdditionalFiles": [
               "/Models/EmployeeTask.cs",
               "/Models/SampleData/GroupByDateTasks.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Virtual Scrolling",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Virtual Scrolling",
+            "Name": "VirtualScrolling",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Drag & Drop",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Drag & Drop",
+            "Name": "DragAndDrop",
+            "Widget": "Scheduler",
+            "Equivalents": "Custom Drag and Drop",
+            "MvcAdditionalFiles": [
+              "/Models/Appointment.cs",
+              "/Models/SampleData/Appointments.cs"
             ],
             "DemoType": "Web"
           }

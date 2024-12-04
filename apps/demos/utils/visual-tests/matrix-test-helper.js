@@ -172,7 +172,7 @@ const SKIPPED_TESTS = {
   jQuery: {
     Charts: [
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+      { demo: 'TooltipCustomization', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'CellEditing', themes: [THEME.material] },
@@ -203,11 +203,11 @@ const SKIPPED_TESTS = {
       { demo: 'Crosshair', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'CustomAnnotations', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'LoadDataOnDemand', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'CustomLegendMarkers', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.generic, THEME.material] },
+      { demo: 'LegendMarkersCustomization', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'PieResolveLabelOverlap', themes: [THEME.generic, THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'ZoomingOnAreaSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+      { demo: 'AreaSelectionZooming', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'TooltipCustomization', themes: [THEME.material] },
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
@@ -273,7 +273,7 @@ const SKIPPED_TESTS = {
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-      { demo: 'ZoomingOnAreaSelection', themes: [THEME.material] },
+      { demo: 'AreaSelectionZooming', themes: [THEME.material] },
       { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
     ],
     VectorMap: [
