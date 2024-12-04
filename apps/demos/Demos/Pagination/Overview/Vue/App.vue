@@ -31,14 +31,16 @@
     :show-info="showInfo"
     :show-navigation-buttons="showPageSizeSelector"
     :allowed-page-sizes="pageSizes"
-    :page-index="pageIndex"
-    :page-size="pageSize"
+    v-model:page-index="pageIndex"
+    v-model:page-size="pageSize"
     :item-count="itemCount"
-    @option-changed="handlePropertyChange"
   />
 </template>
 
-<script>
+
+
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import DxPagination from 'devextreme-vue/pagination';
 import { employees } from './data.ts';
 
@@ -49,40 +51,10 @@ const getPageEmployees = (pageIndex, pageSize) => {
 const pageSizes = [4, 6];
 const showInfo = true;
 const showPageSizeSelector = true;
-const pageIndex = 1;
-const pageSize = 4;
+const pageIndex = ref(1);
+const pageSize = ref(4);
 const itemCount = employees.length;
-const pageEmployees = getPageEmployees(pageIndex, pageSize);
-
-export default {
-  components: {
-    DxPagination,
-  },
-  data() {
-    return {
-      showInfo,
-      showPageSizeSelector,
-      pageSizes,
-      pageIndex,
-      pageSize,
-      itemCount,
-      pageEmployees,
-    };
-  },
-  methods: {
-    handlePropertyChange(evt) {
-      if (evt.name === 'pageIndex') {
-        this.pageIndex = evt.value;
-      }
-
-      if (evt.name === 'pageSize') {
-        this.pageSize = evt.value;
-      }
-
-      this.pageEmployees = getPageEmployees(this.pageIndex, this.pageSize);
-    }
-  }
-};
+const pageEmployees = computed(() => getPageEmployees(pageIndex.value, pageSize.value));
 </script>
 
 <style>
