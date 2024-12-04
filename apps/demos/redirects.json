@@ -95,7 +95,7 @@
     { "Widget": "TreeView", "Name": "DragAndDropPlainDataStructure", "NewWidget": "TreeView", "NewName": "PlainDataStructure" },
     { "Widget": "Scheduler", "Name": "AdaptiveAppointments", "NewWidget": "Scheduler", "NewName": "LimitAppointmentCountPerCell" },
     { "Widget": "Scheduler", "Name": "CustomTemplates", "NewWidget": "Scheduler", "NewName": "Templates" },
-    { "Widget": "Scheduler", "Name": "CustomTemplatesCustomizeIndividualViews", "NewWidget": "Scheduler", "NewName": "IndividualViewsCustomization" },
+    { "Widget": "Scheduler", "Name": "CustomizeIndividualViews", "NewWidget": "Scheduler", "NewName": "IndividualViewsCustomization" },
     { "Widget": "Scheduler", "Name": "IncreaseViewDuration", "NewWidget": "Scheduler", "NewName": "CustomViewDuration" },
     { "Widget": "Scheduler", "Name": "LimitAppointmentCountPerCell", "NewWidget": "Scheduler", "NewName": "AppointmentCountPerCell" },
     { "Widget": "Scheduler", "Name": "ContextMenuIntegration", "NewWidget": "Scheduler", "NewName": "ContextMenu" },
