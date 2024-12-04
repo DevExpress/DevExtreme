@@ -101,7 +101,9 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   private focusedHandlerWithContext!: ($element: dxElementWrapper) => void;
 
-  private renderCompletedWithContext!: (e: any) => void;
+  private rowsViewRenderCompletedWithContext!: (e: any) => void;
+
+  private columnHeadersViewRenderCompletedWithContext!: (e: any) => void;
 
   private rowsViewFocusHandlerContext!: (event: any) => void;
 
@@ -119,7 +121,9 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   private _pointerEventAction: any;
 
-  private _keyDownListener: any;
+  private _rowsViewKeyDownListener: any;
+
+  private _columnHeadersViewKeyDownListener: any;
 
   private focusType: any;
 
@@ -134,6 +138,8 @@ export class KeyboardNavigationController extends modules.ViewController {
   private _headerPanel!: Views['headerPanel'];
 
   protected _rowsView!: Views['rowsView'];
+
+  protected _columnHeadersView!: Views['columnHeadersView'];
 
   protected _columnsController!: Controllers['columns'];
 
@@ -152,6 +158,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._editingController = this.getController('editing');
     this._headerPanel = this.getView('headerPanel');
     this._rowsView = this.getView('rowsView');
+    this._columnHeadersView = this.getView('columnHeadersView');
     this._columnsController = this.getController('columns');
     this._editorFactory = this.getController('editorFactory');
     this._focusController = this.getController('focus');
@@ -162,7 +169,8 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._memoFireFocusedRowChanged = memoize(this._memoFireFocusedRowChanged.bind(this), { compareType: 'value' });
 
     this.focusedHandlerWithContext = this.focusedHandlerWithContext || this.focusedHandler.bind(this);
-    this.renderCompletedWithContext = this.renderCompletedWithContext || this.renderCompleted.bind(this);
+    this.columnHeadersViewRenderCompletedWithContext = this.columnHeadersViewRenderCompletedWithContext || this.columnHeadersViewRenderCompleted.bind(this);
+    this.rowsViewRenderCompletedWithContext = this.rowsViewRenderCompletedWithContext || this.rowsViewRenderCompleted.bind(this);
     this.rowsViewFocusHandlerContext = this.rowsViewFocusHandlerContext || this.rowsViewFocusHandler.bind(this);
     this.rowsViewFocusOutHandlerContext = this.rowsViewFocusOutHandlerContext
       ?? this.rowsViewFocusOutHandler.bind(this);
@@ -181,14 +189,16 @@ export class KeyboardNavigationController extends modules.ViewController {
       this._editorFactory?.focused.remove(this.focusedHandlerWithContext);
     }
 
-    this.initViewHandlers();
+    this.initColumnHeadersViewHandler();
+    this.initRowsViewHandlers();
     this.initDocumentHandlers();
   }
 
   public dispose() {
     super.dispose();
     this._resetFocusedView();
-    keyboard.off(this._keyDownListener);
+    keyboard.off(this._rowsViewKeyDownListener);
+    keyboard.off(this._columnHeadersViewKeyDownListener);
     eventsEngine.off(
       domAdapter.getDocument(),
       addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'),
@@ -264,7 +274,11 @@ export class KeyboardNavigationController extends modules.ViewController {
     eventsEngine.off($rowsView, 'focusout', this.rowsViewFocusOutHandlerContext);
   }
 
-  protected renderCompleted(e: any): void {
+  protected columnHeadersViewRenderCompleted(): void {
+    this.initColumnHeadersViewKeyDownHandler();
+  }
+
+  protected rowsViewRenderCompleted(e: any): void {
     const $rowsView = this._rowsView.element();
     const isFullUpdate = !e || e.changeType === 'refresh';
     const isFocusedViewCorrect = this._focusedView && this._focusedView.name === this._rowsView.name;
@@ -279,7 +293,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     this.subscribeToRowsViewFocusEvent();
 
     this.initPointerEventHandler();
-    this.initKeyDownHandler();
+    this.initRowsViewKeyDownHandler();
     this._setRowsViewAttributes();
 
     if (isFocusedViewCorrect && isFocusedElementCorrect) {
@@ -290,15 +304,25 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
-  private initViewHandlers(): void {
-    this.unsubscribeFromRowsViewFocusEvent();
-    this.unsubscribeFromPointerEvent();
-    this.unsubscribeFromKeyDownEvent();
+  private initColumnHeadersViewHandler(): void {
+    this.unsubscribeFromColumnHeadersViewKeyDownEvent();
 
-    this._rowsView?.renderCompleted?.remove(this.renderCompletedWithContext);
+    this._columnHeadersView?.renderCompleted?.remove(this.columnHeadersViewRenderCompletedWithContext);
 
     if (this.isKeyboardEnabled()) {
-      this._rowsView.renderCompleted.add(this.renderCompletedWithContext);
+      this._columnHeadersView?.renderCompleted?.add(this.columnHeadersViewRenderCompletedWithContext);
+    }
+  }
+
+  private initRowsViewHandlers(): void {
+    this.unsubscribeFromRowsViewFocusEvent();
+    this.unsubscribeFromPointerEvent();
+    this.unsubscribeFromRowsViewKeyDownEvent();
+
+    this._rowsView?.renderCompleted?.remove(this.rowsViewRenderCompletedWithContext);
+
+    if (this.isKeyboardEnabled()) {
+      this._rowsView.renderCompleted.add(this.rowsViewRenderCompletedWithContext);
     }
   }
 
@@ -376,19 +400,36 @@ export class KeyboardNavigationController extends modules.ViewController {
     this.subscribeToPointerEvent();
   }
 
-  private unsubscribeFromKeyDownEvent(): void {
-    keyboard.off(this._keyDownListener);
+  private unsubscribeFromColumnHeadersViewKeyDownEvent(): void {
+    if (this._columnHeadersViewKeyDownListener) {
+      keyboard.off(this._columnHeadersViewKeyDownListener);
+    }
   }
 
-  private subscribeToKeyDownEvent(): void {
+  private subscribeToColumnHeadersViewKeyDownEvent(): void {
+    const $columnHeadersView = this._columnHeadersView.element();
+
+    this._columnHeadersViewKeyDownListener = keyboard.on($columnHeadersView, null, (e) => this._columnHeadersViewKeyDownHandler(e));
+  }
+
+  private initColumnHeadersViewKeyDownHandler(): void {
+    this.unsubscribeFromColumnHeadersViewKeyDownEvent();
+    this.subscribeToColumnHeadersViewKeyDownEvent();
+  }
+
+  private unsubscribeFromRowsViewKeyDownEvent(): void {
+    keyboard.off(this._rowsViewKeyDownListener);
+  }
+
+  private subscribeToRowsViewKeyDownEvent(): void {
     const $rowsView = this._getRowsViewElement();
 
-    this._keyDownListener = keyboard.on($rowsView, null, (e) => this._keyDownHandler(e));
+    this._rowsViewKeyDownListener = keyboard.on($rowsView, null, (e) => this._rowsViewKeyDownHandler(e));
   }
 
-  private initKeyDownHandler(): void {
-    this._keyDownListener && this.unsubscribeFromKeyDownEvent();
-    this.subscribeToKeyDownEvent();
+  private initRowsViewKeyDownHandler(): void {
+    this._rowsViewKeyDownListener && this.unsubscribeFromRowsViewKeyDownEvent();
+    this.subscribeToRowsViewKeyDownEvent();
   }
 
   // #endregion Initialization
@@ -431,7 +472,17 @@ export class KeyboardNavigationController extends modules.ViewController {
   // #endregion Options
 
   // #region Key_Handlers
-  private _keyDownHandler(e) {
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected headerTabKeyHandler(e) {}
+
+  private _columnHeadersViewKeyDownHandler(e) {
+    if (e.keyName === 'tab') {
+      this.headerTabKeyHandler(e);
+    }
+  }
+
+  private _rowsViewKeyDownHandler(e) {
     let needStopPropagation = true;
     this._isNeedFocus = true;
     this._isNeedScroll = true;

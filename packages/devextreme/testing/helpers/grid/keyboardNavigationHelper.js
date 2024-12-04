@@ -129,7 +129,7 @@ export function triggerKeyDown(key, ctrl, shift, target, result) {
         ctrl = ctrl.ctrl;
     }
 
-    const keyboardListenerId = this.keyboardNavigationController._keyDownListener;
+    const keyboardListenerId = this.keyboardNavigationController._rowsViewKeyDownListener;
     keyboard._getProcessor(keyboardListenerId).process({
         key: KEYS[key] || key,
         keyName: key,
