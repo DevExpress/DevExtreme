@@ -362,6 +362,15 @@ export function runManualTest(product, demo, framework, callback) {
     return;
   }
 
+  const redirects = JSON.parse(readFileSync('../../redirects.js', "utf8"));
+
+  const redirect = redirects.find(({Widget, Name}) => product === Widget && Name === demo);
+
+  if (redirect) {
+    product = redirect.NewWidget;
+    demo = redirect.NewName;
+  }
+
   if (Array.isArray(framework)) {
     framework.forEach((i) => {
       runManualTestCore(test, product, demo, i, callback);
