@@ -53,15 +53,15 @@ function supportChatTypingEnd() {
 
 <style scoped>
 #app {
-    display: flex;
-    gap: 20px;
+  display: flex;
+  gap: 20px;
 }
 
 .dx-chat {
-    height: 710px;
+  height: 710px;
 }
 
 .dx-avatar {
-    border: 1px solid var(--dx-color-border);
+  border: 1px solid var(--dx-color-border);
 }
 </style>
