@@ -4,10 +4,10 @@ $(() => {
     items: messages,
     user: currentUser,
     dayHeaderFormat: dayHeaderFormat[0],
+    messageTimestampFormat: messageTimestampFormat[0],
     onMessageEntered({ component, message }) {
       component.renderMessage(message);
     },
-    messageTimestampFormat: messageTimestampFormat[0],
   }).dxChat('instance');
 
   $('#show-avatar').dxCheckBox({

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-
 import { User, Message, MessageEnteredEvent } from 'devextreme/ui/chat';
 
 @Injectable({

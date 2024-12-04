@@ -146,5 +146,4 @@
         messages.value = [...messages.value, event.message];
     }
 
-
 </script>
