@@ -77,20 +77,19 @@
   background-color: rgba(255, 255, 255, 1);
 }
 
-::ng-deep .avatar[title="John Heart"] img {
+::ng-deep .avatar img {
   position: relative;
   width: 126px;
   height: 130px;
   object-fit: contain;
+}
+
+::ng-deep .avatar[title="John Heart"] img {
   top: 5px;
   left: 3px;
 }
 
 ::ng-deep .avatar[title="Greta Sims"] img {
-  position: relative;
-  width: 126px;
-  height: 130px;
-  object-fit: contain;
   top: 5px;
   left: -7px;
 }
@@ -155,13 +154,13 @@
 }
 
 ::ng-deep .training-background-0 {
-  background-image: url("../../../../images/gym/icon-abs.png");
+  background-image: url("../../../../images/Scheduler/Overview/icon-abs.png");
 }
 
 ::ng-deep .training-background-1 {
-  background-image: url("../../../../images/gym/icon-step.png");
+  background-image: url("../../../../images/Scheduler/Overview/icon-step.png");
 }
 
 ::ng-deep .training-background-2 {
-  background-image: url("../../../../images/gym/icon-fitball.png");
+  background-image: url("../../../../images/Scheduler/Overview/icon-fitball.png");
 }

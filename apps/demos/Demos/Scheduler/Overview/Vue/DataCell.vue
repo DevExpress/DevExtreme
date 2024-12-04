@@ -70,14 +70,14 @@ function getCurrentTraining(date, employeeID) {
 }
 
 .training-background-0 {
-  background-image: url("../../../../images/gym/icon-abs.png");
+  background-image: url("../../../../images/Scheduler/Overview/icon-abs.png");
 }
 
 .training-background-1 {
-  background-image: url("../../../../images/gym/icon-step.png");
+  background-image: url("../../../../images/Scheduler/Overview/icon-step.png");
 }
 
 .training-background-2 {
-  background-image: url("../../../../images/gym/icon-fitball.png");
+  background-image: url("../../../../images/Scheduler/Overview/icon-fitball.png");
 }
 </style>

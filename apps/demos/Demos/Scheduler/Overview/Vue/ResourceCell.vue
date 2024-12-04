@@ -38,20 +38,19 @@ withDefaults(defineProps<{
   background-color: rgba(255, 255, 255, 1);
 }
 
-.avatar[title="John Heart"] img {
+.avatar img {
   position: relative;
   width: 126px;
   height: 130px;
   object-fit: contain;
+}
+
+.avatar[title="John Heart"] img {
   top: 5px;
   left: 3px;
 }
 
 .avatar[title="Greta Sims"] img {
-  position: relative;
-  width: 126px;
-  height: 130px;
-  object-fit: contain;
   top: 5px;
   left: -7px;
 }
