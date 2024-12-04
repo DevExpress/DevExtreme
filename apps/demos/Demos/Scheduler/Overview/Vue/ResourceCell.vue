@@ -47,13 +47,13 @@ withDefaults(defineProps<{
   left: 3px;
 }
 
-.avatar[title="Sandra Johnson"] img {
+.avatar[title="Greta Sims"] img {
   position: relative;
   width: 126px;
   height: 130px;
   object-fit: contain;
   top: 5px;
-  left: 3px;
+  left: -7px;
 }
 
 .name {
@@ -64,20 +64,23 @@ withDefaults(defineProps<{
 }
 
 .name h2 {
-  color: #fff;
+  color: var(--text-color-2);
   font-size: 28px;
   text-align: left;
-  padding: 0 0 5px 175px;
+  padding: 0 0 0 170px;
   margin: 0;
+  height: 40px;
+  line-height: 40px;
 }
 
 .info {
   width: auto;
   text-align: left;
   height: 100%;
-  font-size: 11pt;
+  font-size: 14px;
+  line-height: 20px;
   font-weight: normal;
-  padding: 25px 20px;
+  padding: 25px 20px 25px 40px;
   color: #707070;
 }
 

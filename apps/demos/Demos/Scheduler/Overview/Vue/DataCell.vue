@@ -49,6 +49,10 @@ function getCurrentTraining(date, employeeID) {
   background-repeat: no-repeat;
 }
 
+.dx-scheduler-appointment {
+  color: rgba(255, 255, 255, 1);
+}
+
 .employee-1 {
   background-color: rgba(55, 126, 58, 0.08);
 }
