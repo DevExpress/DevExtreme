@@ -181,7 +181,7 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       // Scroll to const value. Not enough for other themes, because the height of elements is different.
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RowEditing', themes: [THEME.fluent, THEME.material] },
     ],
     Gantt: [
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
