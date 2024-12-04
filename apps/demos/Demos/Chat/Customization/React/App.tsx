@@ -7,8 +7,10 @@ import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
 import { 
     currentUser,
     messages as initialMessages,
-    dayHeaderFormat as headerFormats,
-    messageTimestampFormat  as msgTimestamp
+    dayHeaderFormat as headerFormat,
+    messageTimestampFormat as messageTimestamp,
+    messageTimestampLabel,
+    dayHeaderLabel
   } from './data.ts';
 
 export default function App() {
@@ -16,9 +18,9 @@ export default function App() {
   const [showAvatar, setShowAvatar] = useState(true);
   const [showUsername, setShowUsername] = useState(true);
   const [showDayHeaders, setDayHeaders] = useState(true);
-  const [dayHeaderFormat, setDayHeaderFormat] = useState(headerFormats[0]);
-  const [showMsgTime, setMsgTime] = useState(true);
-  const [messageTimestampFormat, setMsgTimeFormat] = useState(msgTimestamp[0]);
+  const [dayHeaderFormat, setDayHeaderFormat] = useState(headerFormat[0]);
+  const [showMessageTime, setMessageTime] = useState(true);
+  const [messageTimestampFormat, setMessageTimeFormat] = useState(messageTimestamp[0]);
   const [isDisabled, setDisabled] = useState(false);
 
   function onMessageEntered({ message }: MessageEnteredEvent) {
@@ -30,8 +32,8 @@ export default function App() {
   }, [setDayHeaderFormat]);
 
   const messageTimestampFormatChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
-    setMsgTimeFormat(e.value);
-  }, [setMsgTimeFormat]);
+    setMessageTimeFormat(e.value);
+  }, [setMessageTimeFormat]);
 
   const showAvatarChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setShowAvatar(e.value);
@@ -45,9 +47,9 @@ export default function App() {
     setDayHeaders(e.value);
   }, [setDayHeaders]);
 
-  const showMsgTimeChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
-    setMsgTime(e.value);
-  }, [setMsgTime]);
+  const showMessageTimeChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+    setMessageTime(e.value);
+  }, [setMessageTime]);
 
   const isDisabledChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setDisabled(e.value);
@@ -64,7 +66,7 @@ export default function App() {
           showAvatar = {showAvatar}
           showUserName = {showUsername}
           showDayHeaders = {showDayHeaders}
-          showMessageTimestamp = {showMsgTime}
+          showMessageTimestamp = {showMessageTime}
           dayHeaderFormat = {dayHeaderFormat}
           messageTimestampFormat = {messageTimestampFormat}
           onMessageEntered = {onMessageEntered}
@@ -76,7 +78,7 @@ export default function App() {
 
         <div className="option">
           <CheckBox
-            text="Show Avatar"
+            text="Avatar"
             value={showAvatar}
             onValueChanged={showAvatarChanged}
           />
@@ -84,7 +86,7 @@ export default function App() {
 
         <div className="option">
           <CheckBox
-            text="Show User Name"
+            text="User Name"
             value={showUsername}
             onValueChanged={showUsernameChanged}
           />
@@ -94,17 +96,18 @@ export default function App() {
 
         <div className="option">
           <CheckBox
-            text="Show Day Headers"
+            text="Day Header"
             value={showDayHeaders}
             onValueChanged={showDayHeaderChanged}
           />
         </div>
 
         <div className="option">
-          <span>Day Headers Format:</span>
+          <span>Day Header Format:</span>
           <SelectBox
-            items={headerFormats}
+            items={headerFormat}
             value={dayHeaderFormat}
+            inputAttr={dayHeaderLabel}
             onValueChanged={dayHeaderFormatChanged}
           />
         </div>
@@ -113,17 +116,18 @@ export default function App() {
 
         <div className="option">
           <CheckBox
-            text="Show Message Timestamp"
-            value={showMsgTime}
-            onValueChanged={showMsgTimeChanged}
+            text="Message Timestamp"
+            value={showMessageTime}
+            onValueChanged={showMessageTimeChanged}
           />
         </div>
 
         <div className="option">
           <span>Message Timestamp Format:</span>
           <SelectBox
-            items={msgTimestamp}
+            items={messageTimestamp}
             value={messageTimestampFormat}
+            inputAttr= {messageTimestampLabel}
             onValueChanged={messageTimestampFormatChanged}
           />
         </div>

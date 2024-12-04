@@ -20,6 +20,11 @@ export class AppService {
     avatarUrl: '../../../../images/petersmith.png',
   };
 
+  dayHeaderFormat = ['dd/MM/yyyy', 'dd.MM.yyyy', 'MMMM dd, yyyy', 'EEEE, MMMM dd'];
+  messageTimestampFormat = ['hh:mm a', 'hh:mm:ss a', 'HH:mm', 'HH:mm:ss'];
+  messageTimestampLabel = { 'aria-label': 'Message Timestamp Format' };
+  dayHeaderLabel = { 'aria-label': 'Day Header Format' };
+
   messages: Message[] = [];
 
   messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject([]);

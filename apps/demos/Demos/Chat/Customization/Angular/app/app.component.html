@@ -4,13 +4,13 @@
       #chat
       [user]="currentUser"
       [items]="messages$ | async"
-      [showAvatar] = "true"
-      [showUserName] = "true"
-      [showDayHeaders] = "true"
-      [showMessageTimestamp] = "true"
-      [dayHeaderFormat] = "dayHeaderFormat[0]"
-      [messageTimestampFormat] = "messageTimestampFormat[0]"
-      [disabled] = "false"
+      [showAvatar]="showAvatar"
+      [showUserName]="showUserName"
+      [showDayHeaders]="showDayHeaders"
+      [showMessageTimestamp]="showMessageTimestamp"
+      [dayHeaderFormat]="dayHeaderFormat[0]"
+      [messageTimestampFormat]="messageTimestampFormat[0]"
+      [disabled]="false"
       (onMessageEntered)="onMessageEntered($event)"
     >
     </dx-chat>
@@ -21,14 +21,14 @@
 
     <div class="option">
       <dx-check-box
-        text="Show Avatar"
+        text="Avatar"
         [(value)]="chat.showAvatar"
       ></dx-check-box>
     </div>
 
     <div class="option">
       <dx-check-box
-        text="Show Username"
+        text="User Name"
         [(value)]="chat.showUserName"
       ></dx-check-box>
     </div>
@@ -37,16 +37,17 @@
 
     <div class="option">
       <dx-check-box
-        text="Show Day Headers"
+        text="Day Header"
         [(value)]="chat.showDayHeaders"
       ></dx-check-box>
     </div>
 
     <div class="option">
-      <span>Day Headers Format:</span>
+      <span>Day Header Format:</span>
       <dx-select-box
-        [items] = "dayHeaderFormat"
-        [(value)] = "chat.dayHeaderFormat"
+        [items]="dayHeaderFormat"
+        [(value)]="chat.dayHeaderFormat"
+        [inputAttr]="dayHeaderLabel"
       ></dx-select-box>
     </div>
 
@@ -54,7 +55,7 @@
 
     <div class="option">
       <dx-check-box
-        text="Show Message Timestamp"
+        text="Message Timestamp"
         [(value)]="chat.showMessageTimestamp"
       ></dx-check-box>
     </div>
@@ -62,8 +63,9 @@
     <div class="option">
       <span>Message Timestamp Format:</span>
       <dx-select-box
-        [items] = "messageTimestampFormat"
-        [(value)] = "chat.messageTimestampFormat"
+        [items]="messageTimestampFormat"
+        [(value)]="chat.messageTimestampFormat"
+        [inputAttr]="messageTimestampLabel"
       ></dx-select-box>
     </div>
 
@@ -71,7 +73,7 @@
 
     <div class="option">
       <dx-check-box
-        text="Chat Disabled"
+        text="Disable Chat"
         [(value)]="chat.disabled"
       ></dx-check-box>
     </div>

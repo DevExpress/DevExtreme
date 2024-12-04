@@ -12,7 +12,7 @@ $(() => {
 
   $('#show-avatar').dxCheckBox({
     value: true,
-    text: 'Show Avatar',
+    text: 'Avatar',
     onValueChanged(data) {
       chat.option('showAvatar', data.value);
     },
@@ -20,7 +20,7 @@ $(() => {
 
   $('#show-user-name').dxCheckBox({
     value: true,
-    text: 'Show User Name',
+    text: 'User Name',
     onValueChanged(data) {
       chat.option('showUserName', data.value);
     },
@@ -28,16 +28,16 @@ $(() => {
 
   $('#show-day-headers').dxCheckBox({
     value: true,
-    text: 'Show Day Headers',
+    text: 'Day Headers',
     onValueChanged(data) {
       chat.option('showDayHeaders', data.value);
     },
   });
 
-  $('#day-headers-format').dxSelectBox({
+  $('#day-header-format').dxSelectBox({
     items: dayHeaderFormat,
     value: dayHeaderFormat[0],
-    inputAttr: { 'aria-label': 'Day Headers Format' },
+    inputAttr: { 'aria-label': 'Day Header Format' },
     onValueChanged(data) {
       chat.option('dayHeaderFormat', data.value);
     },
@@ -45,7 +45,7 @@ $(() => {
 
   $('#show-message-timestamp').dxCheckBox({
     value: true,
-    text: 'Show Message Timestamp',
+    text: 'Message Timestamp',
     onValueChanged(data) {
       chat.option('showMessageTimestamp', data.value);
     },

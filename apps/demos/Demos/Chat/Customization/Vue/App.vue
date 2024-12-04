@@ -7,7 +7,7 @@
             v-model:showAvatar = "showAvatar"
             v-model:showUserName = "showUsername"
             v-model:showDayHeaders = "showDayHeaders"
-            v-model:showMessageTimestamp = "showMsgTime"
+            v-model:showMessageTimestamp = "showMessageTime"
             v-model:dayHeaderFormat = "dayHeaderFormat"
             v-model:messageTimestampFormat = "messageTimestampFormat"
             @message-entered="onMessageEntered($event)"
@@ -20,31 +20,32 @@
         <div class="option">
           <DxCheckBox
           v-model:value="showAvatar"
-          text="Show Avatar"
+          text="Avatar"
           />
         </div>
 
         <div class="option">
           <DxCheckBox
           v-model:value="showUsername"
-          text="Show Username"
+          text="User Name"
           />
         </div>
 
         <div class="option-separator"></div>
 
         <div class="option">
-          <div id="show-day-headers"></div>
           <DxCheckBox
           v-model:value="showDayHeaders"
-          text="Show Day Headers"
+          :input-attr="dayHeaderLabel"
+          text="Day Header"
           />
         </div>
 
         <div class="option">
-          <span>Day Headers Format:</span>
+          <span>Day Header Format:</span>
           <DxSelectBox
-          :items="dhFormat"
+          :items="headerFormat"
+          :input-attr="dayHeaderLabel"
           v-model:value="dayHeaderFormat"
           />
         </div>
@@ -53,15 +54,16 @@
 
         <div class="option">
           <DxCheckBox
-          v-model:value="showMsgTime"
-          text="Show Message Timestamp"
+          v-model:value="showMessageTime"
+          text="Message Timestamp"
           />
         </div>
 
         <div class="option">
           <span>Message Timestamp Format:</span>
           <DxSelectBox
-          :items="msgFormat"
+          :items="messageFormat"
+          :input-attr="messageTimestampLabel"
           v-model:value="messageTimestampFormat"
           />
         </div>
@@ -69,10 +71,9 @@
         <div class="option-separator"></div>
 
         <div class="option">
-          <div id="chat-disabled"></div>
           <DxCheckBox
           v-model:value="isDisabled"
-          text="Chat Disabled"
+          text="Disable Chat"
           />
         </div>
       </div>
@@ -124,14 +125,21 @@
     import DxChat from 'devextreme-vue/chat';
     import DxCheckBox from 'devextreme-vue/check-box';
     import DxSelectBox from 'devextreme-vue/select-box';
-    import { messages, currentUser, dayHeaderFormat as dhFormat, messageTimestampFormat as msgFormat } from './data.ts';
+    import { 
+      messages,
+      currentUser,
+      dayHeaderFormat as headerFormat,
+      messageTimestampFormat as messageFormat,
+      messageTimestampLabel,
+      dayHeaderLabel
+    } from './data.ts';
 
     const showAvatar = ref(true);
     const showUsername = ref(true);
     const showDayHeaders = ref(true);
-    const showMsgTime = ref(true);
-    const dayHeaderFormat = ref(dhFormat[0]);
-    const messageTimestampFormat = ref(msgFormat[0]);
+    const showMessageTime = ref(true);
+    const dayHeaderFormat = ref(headerFormat[0]);
+    const messageTimestampFormat = ref(messageFormat[0]);
     const isDisabled = ref(false);
     
     function onMessageEntered(event) {
