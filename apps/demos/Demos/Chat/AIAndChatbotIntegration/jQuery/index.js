@@ -25,8 +25,8 @@ $(() => {
       temperature: 0.7,
     };
 
-    const responseAzure = await chatService.chat.completions.create(params);
-    const data = { choices: responseAzure.choices };
+    const response = await chatService.chat.completions.create(params);
+    const data = { choices: response.choices };
 
     return data.choices[0].message?.content;
   }
@@ -40,7 +40,7 @@ $(() => {
 
     setTimeout(() => {
       instance.option({ alerts: [] });
-    }, MILLISECONDS_PER_MINUTE);
+    }, ALERT_TIMEOUT);
   }
 
   function toggleDisabledState(disabled, event) {
@@ -56,6 +56,7 @@ $(() => {
   async function processMessageSending(event) {
     toggleDisabledState(true, event);
 
+    messages.push({ role: 'user', content: message.text });
     instance.option({ typingUsers: [assistant] });
 
     try {
@@ -70,6 +71,7 @@ $(() => {
       }, 200);
     } catch {
       instance.option({ typingUsers: [] });
+      messages.pop();
       alertLimitReached();
     } finally {
       toggleDisabledState(false, event);
@@ -104,7 +106,7 @@ $(() => {
   }
 
   function updateLastMessage(text) {
-    const { items } = instance.option();
+    const items = customStore.items();
     const lastMessage = items.at(-1);
     const data = {
       text: text ?? REGENERATION_TEXT,
@@ -126,6 +128,57 @@ $(() => {
       .toString();
 
     return result;
+  }
+
+  function onCopyButtonClick(component, text) {
+    navigator.clipboard?.writeText(text);
+
+    component.option({ icon: 'check' });
+
+    setTimeout(() => {
+      component.option({ icon: 'copy' });
+    }, 2500);
+  }
+
+  function onRegenerateButtonClick() {
+    if (instance.option('alerts').length) {
+      return;
+    }
+
+    updateLastMessage();
+    regenerate();
+  }
+
+  function renderMessageContent(message, element) {
+    $('<div>')
+      .addClass('dx-chat-messagebubble-text')
+      .html(convertToHtml(message.text))
+      .appendTo(element);
+
+    const $buttonContainer = $('<div>')
+      .addClass('dx-bubble-button-container');
+
+    $('<div>')
+      .dxButton({
+        icon: 'copy',
+        stylingMode: 'text',
+        hint: 'Copy',
+        onClick: ({ component }) => {
+          onCopyButtonClick(component, message.text);
+        },
+      })
+      .appendTo($buttonContainer);
+
+    $('<div>')
+      .dxButton({
+        icon: 'refresh',
+        stylingMode: 'text',
+        hint: 'Regenerate',
+        onClick: onRegenerateButtonClick,
+      })
+      .appendTo($buttonContainer);
+
+    $buttonContainer.appendTo(element);
   }
 
   const customStore = new DevExpress.data.CustomStore({
@@ -152,17 +205,19 @@ $(() => {
   });
 
   const instance = $('#dx-ai-chat').dxChat({
+    user,
+    height: 710,
     dataSource: customStore,
     reloadOnChange: false,
     showAvatar: false,
     showDayHeaders: false,
-    user,
-    height: 710,
     onMessageEntered: (e) => {
       const { message, event } = e;
 
-      customStore.push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
-      messages.push({ role: 'user', content: message.text });
+      if (instance.option('alerts').length) {
+        customStore.push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
+        return;
+      }
 
       processMessageSending(event);
     },
@@ -174,42 +229,7 @@ $(() => {
         return;
       }
 
-      const $textElement = $('<div>')
-        .addClass('dx-chat-messagebubble-text')
-        .html(convertToHtml(message.text))
-        .appendTo(element);
-
-      const $buttonContainer = $('<div>')
-        .addClass('dx-bubble-button-container');
-
-      $('<div>')
-        .dxButton({
-          icon: 'copy',
-          stylingMode: 'text',
-          hint: 'Copy',
-          onClick: ({ component }) => {
-            navigator.clipboard?.writeText($textElement.text());
-            component.option({ icon: 'check' });
-            setTimeout(() => {
-              component.option({ icon: 'copy' });
-            }, 5000);
-          },
-        })
-        .appendTo($buttonContainer);
-
-      $('<div>')
-        .dxButton({
-          icon: 'refresh',
-          stylingMode: 'text',
-          hint: 'Regenerate',
-          onClick: () => {
-            updateLastMessage();
-            regenerate();
-          },
-        })
-        .appendTo($buttonContainer);
-
-      $buttonContainer.appendTo(element);
+      renderMessageContent(message, element);
     },
   }).dxChat('instance');
 });

@@ -4,7 +4,7 @@ const endpoint = 'https://public-api.devexpress.com/demo-openai';
 const apiKey = 'DEMO';
 const REGENERATION_TEXT = 'Regeneration...';
 const CHAT_DISABLED_CLASS = 'dx-chat-disabled';
-const MILLISECONDS_PER_MINUTE = 1000 * 60;
+const ALERT_TIMEOUT = 1000 * 60;
 const user = {
   id: 'user',
 };
