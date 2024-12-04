@@ -499,6 +499,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       right: 0;
       pointer-events: none;
       border-bottom: $datagrid-border;
+      z-index: -1;
     }
 
     .dx-#{$widget-name}-table {

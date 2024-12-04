@@ -684,6 +684,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       right: 0;
       pointer-events: none;
       border-bottom: $datagrid-border;
+      z-index: -1;
     }
 
     .dx-#{$widget-name}-table {
