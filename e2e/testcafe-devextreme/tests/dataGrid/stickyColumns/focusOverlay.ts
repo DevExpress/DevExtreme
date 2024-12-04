@@ -17,7 +17,7 @@ test('Focus overlay should be displayed correctly if sticky columns are turned o
   await t.expect(dataGrid.isReady()).ok();
 
   await t
-    .click(dataGrid.getGroupRow(0).element)
+    .click(dataGrid.getGroupRow(0).getCell(1).element)
     .pressKey('tab');
 
   await takeScreenshot('datagrid_group_row_focused.png', dataGrid.element);
@@ -29,7 +29,7 @@ test('Focus overlay should be displayed correctly if sticky columns are turned o
   await takeScreenshot('datagrid_adaptive_item_focused.png', dataGrid.element);
 
   await t
-    .click(dataGrid.getGroupFooterRow().nth(0))
+    .click(dataGrid.getGroupFooterRow().nth(0), { offsetX: 5, offsetY: 5 })
     .pressKey('tab');
 
   await takeScreenshot('datagrid_group_footer_row_focused.png', dataGrid.element);

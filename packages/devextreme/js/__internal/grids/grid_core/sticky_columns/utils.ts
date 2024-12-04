@@ -33,18 +33,6 @@ export const needToDisableStickyColumn = function (
   return that.isVirtualMode() && !!column.fixed && column.fixedPosition === StickyPosition.Sticky;
 };
 
-/* TODO: Need to rename this method to hasStickyColumns
-   after removing old fixed columns implementation */
-export const hasFixedColumnsWithStickyPosition = function (that: ColumnsController): boolean {
-  if (that.isVirtualMode()) {
-    return false;
-  }
-
-  return !!that
-    .getStickyColumns()
-    .filter((column) => column.fixedPosition === StickyPosition.Sticky).length;
-};
-
 export const processFixedColumns = function (
   that: ColumnsController,
   columns: object[],

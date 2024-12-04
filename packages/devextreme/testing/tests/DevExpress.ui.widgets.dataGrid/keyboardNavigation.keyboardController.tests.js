@@ -495,7 +495,7 @@ QUnit.module('Keyboard controller', {
         };
 
         // act
-        navigationController._keyDownHandler({
+        navigationController._rowsViewKeyDownHandler({
             keyName: 'leftArrow',
             originalEvent: {
                 preventDefault: commonUtils.noop,
@@ -526,7 +526,7 @@ QUnit.module('Keyboard controller', {
         };
 
         // act
-        navigationController._keyDownHandler({
+        navigationController._rowsViewKeyDownHandler({
             keyName: 'leftArrow',
             originalEvent: {
                 preventDefault: commonUtils.noop,
@@ -561,7 +561,7 @@ QUnit.module('Keyboard controller', {
         navigationController._isLegacyNavigation = () => true;
 
         // act
-        navigationController._keyDownHandler({
+        navigationController._rowsViewKeyDownHandler({
             keyName: 'downArrow',
             originalEvent: {
                 preventDefault: commonUtils.noop,
@@ -596,7 +596,7 @@ QUnit.module('Keyboard controller', {
         navigationController._isLegacyNavigation = () => true;
 
         // act
-        navigationController._keyDownHandler({
+        navigationController._rowsViewKeyDownHandler({
             keyName: 'upArrow',
             originalEvent: {
                 preventDefault: commonUtils.noop,
@@ -722,7 +722,7 @@ QUnit.module('Keyboard controller', {
     });
 
     // T1178858
-    QUnit.testInActiveWindow('Unsubscribe from events when changing the keyboardNavigation.enabled option to false', function(assert) {
+    QUnit.testInActiveWindow('Rows view: Unsubscribe from events when changing the keyboardNavigation.enabled option to false', function(assert) {
         // arrange
         this.options.keyboardNavigation = {
             enabled: true
@@ -743,12 +743,12 @@ QUnit.module('Keyboard controller', {
         callViewsRenderCompleted(this.component._views);
 
         // assert
-        assert.ok(editorFactory.focused.has(navigationController._focusedHandlerWithContext), 'subscribed to the "editorFactory.focused" callback');
-        assert.ok(rowsView.renderCompleted.has(navigationController._renderCompletedWithContext), 'subscribed to the "rowsView.renderCompleted" callback');
+        assert.ok(editorFactory.focused.has(navigationController.focusedHandlerWithContext), 'subscribed to the "editorFactory.focused" callback');
+        assert.ok(rowsView.renderCompleted.has(navigationController.rowsViewRenderCompletedWithContext), 'subscribed to the "rowsView.renderCompleted" callback');
         assert.ok(onSpy.calledWith(document, 'visibilitychange'), 'subscribed to the "visibilitychange" event');
         assert.ok(onSpy.calledWith(element, 'focusin'), 'subscribed to the "focusin" event');
         assert.ok(onSpy.calledWith(element, CLICK_EVENT), 'subscribed to the "pointerdown" event');
-        assert.ok(keyboard._getProcessor(navigationController._keyDownListener), 'subscribed to the "keydown" event');
+        assert.ok(keyboard._getProcessor(navigationController._rowsViewKeyDownListener), 'subscribed to the "keydown" event');
 
         // arrange
         onSpy.resetHistory();
@@ -759,17 +759,17 @@ QUnit.module('Keyboard controller', {
         callViewsRenderCompleted(this.component._views);
 
         // assert
-        assert.notOk(editorFactory.focused.has(navigationController._focusedHandlerWithContext), 'unsubscribed from the "editorFactory.focused" callback');
-        assert.notOk(rowsView.renderCompleted.has(navigationController._renderCompletedWithContext), 'unsubscribed from the "rowsView.renderCompleted" callback');
+        assert.notOk(editorFactory.focused.has(navigationController.focusedHandlerWithContext), 'unsubscribed from the "editorFactory.focused" callback');
+        assert.notOk(rowsView.renderCompleted.has(navigationController.rowsViewRenderCompletedWithContext), 'unsubscribed from the "rowsView.renderCompleted" callback');
         assert.strictEqual(onSpy.callCount, 0, 'call count of the "eventsEngine.on" method');
         assert.ok(offSpy.calledWith(document, 'visibilitychange'), 'unsubscribed from the "visibilitychange" event');
         assert.ok(offSpy.calledWith(element, 'focusin'), 'unsubscribed from the "focusin" event');
         assert.ok(offSpy.calledWith(element, CLICK_EVENT), 'unsubscribed from the "pointerdown" event');
-        assert.notOk(keyboard._getProcessor(navigationController._keyDownListener), 'unsubscribed from the "keydown" event');
+        assert.notOk(keyboard._getProcessor(navigationController._rowsViewKeyDownListener), 'unsubscribed from the "keydown" event');
     });
 
     // T1178858
-    QUnit.testInActiveWindow('Subscribe to events when changing the keyboardNavigation.enabled option to true', function(assert) {
+    QUnit.testInActiveWindow('Rows view: Subscribe to events when changing the keyboardNavigation.enabled option to true', function(assert) {
         // arrange
         this.options.keyboardNavigation = {
             enabled: false
@@ -790,12 +790,12 @@ QUnit.module('Keyboard controller', {
         callViewsRenderCompleted(this.component._views);
 
         // assert
-        assert.notOk(editorFactory.focused.has(navigationController._focusedHandlerWithContext), 'not subscribed to the "editorFactory.focused" callback');
-        assert.notOk(rowsView.renderCompleted.has(navigationController._renderCompletedWithContext), 'not subscribed to the "rowsView.renderCompleted" callback');
+        assert.notOk(editorFactory.focused.has(navigationController.focusedHandlerWithContext), 'not subscribed to the "editorFactory.focused" callback');
+        assert.notOk(rowsView.renderCompleted.has(navigationController.rowsViewRenderCompletedWithContext), 'not subscribed to the "rowsView.renderCompleted" callback');
         assert.notOk(onSpy.calledWith(document, 'visibilitychange'), 'not subscribed to the "visibilitychange" event');
         assert.notOk(onSpy.calledWith(element, 'focusin'), 'not subscribed to the "focusin" event');
         assert.notOk(onSpy.calledWith(element, CLICK_EVENT), 'not subscribed to the "pointerdown" event');
-        assert.notOk(keyboard._getProcessor(navigationController._keyDownListener), 'not subscribed to the "keydown" event');
+        assert.notOk(keyboard._getProcessor(navigationController._rowsViewKeyDownListener), 'not subscribed to the "keydown" event');
 
         // arrange
         onSpy.resetHistory();
@@ -806,11 +806,80 @@ QUnit.module('Keyboard controller', {
         callViewsRenderCompleted(this.component._views);
 
         // assert
-        assert.ok(editorFactory.focused.has(navigationController._focusedHandlerWithContext), 'subscribed to the "editorFactory.focused" callback');
-        assert.ok(rowsView.renderCompleted.has(navigationController._renderCompletedWithContext), 'subscribed to the "rowsView.renderCompleted" callback');
+        assert.ok(editorFactory.focused.has(navigationController.focusedHandlerWithContext), 'subscribed to the "editorFactory.focused" callback');
+        assert.ok(rowsView.renderCompleted.has(navigationController.rowsViewRenderCompletedWithContext), 'subscribed to the "rowsView.renderCompleted" callback');
         assert.ok(onSpy.calledWith(document, 'visibilitychange'), 'subscribed to the "visibilitychange" event');
         assert.ok(onSpy.calledWith(element, 'focusin'), 'subscribed to the "focusin" event');
         assert.ok(onSpy.calledWith(element, CLICK_EVENT), 'subscribed to the "pointerdown" event');
-        assert.ok(keyboard._getProcessor(navigationController._keyDownListener), 'subscribed to the "keydown" event');
+        assert.ok(keyboard._getProcessor(navigationController._rowsViewKeyDownListener), 'subscribed to the "keydown" event');
+    });
+
+    QUnit.testInActiveWindow('Column headers view: Unsubscribe from events when changing the keyboardNavigation.enabled option to false', function(assert) {
+        // arrange
+        this.options.keyboardNavigation = {
+            enabled: true
+        };
+
+        const onSpy = sinon.spy();
+        const offSpy = sinon.spy();
+        const columnHeadersView = this.getView('columnHeadersView');
+        const navigationController = new KeyboardNavigationController(this.component);
+
+        eventsEngine.on = onSpy;
+        eventsEngine.off = offSpy;
+
+        navigationController.init();
+        callViewsRenderCompleted(this.component._views);
+
+        // assert
+        assert.ok(columnHeadersView.renderCompleted.has(navigationController.columnHeadersViewRenderCompletedWithContext), 'subscribed to the "columnHeadersView.renderCompleted" callback');
+        assert.ok(keyboard._getProcessor(navigationController._columnHeadersViewKeyDownListener), 'subscribed to the "keydown" event');
+
+        // arrange
+        onSpy.resetHistory();
+
+        // act
+        navigationController.option('keyboardNavigation.enabled', false);
+        navigationController.optionChanged({ name: 'keyboardNavigation', fullName: 'keyboardNavigation.enabled' });
+        callViewsRenderCompleted(this.component._views);
+
+        // assert
+        assert.notOk(columnHeadersView.renderCompleted.has(navigationController.columnHeadersViewRenderCompletedWithContext), 'unsubscribed from the "columnHeadersView.renderCompleted" callback');
+        assert.notOk(keyboard._getProcessor(navigationController._columnHeadersViewKeyDownListener), 'unsubscribed from the "keydown" event');
+    });
+
+    // T1178858
+    QUnit.testInActiveWindow('Column headers view: Subscribe to events when changing the keyboardNavigation.enabled option to true', function(assert) {
+        // arrange
+        this.options.keyboardNavigation = {
+            enabled: false
+        };
+
+        const onSpy = sinon.spy();
+        const offSpy = sinon.spy();
+        const columnHeadersView = this.getView('columnHeadersView');
+        const navigationController = new KeyboardNavigationController(this.component);
+
+        eventsEngine.on = onSpy;
+        eventsEngine.off = offSpy;
+
+        navigationController.init();
+        callViewsRenderCompleted(this.component._views);
+
+        // assert
+        assert.notOk(columnHeadersView.renderCompleted.has(navigationController.columnHeadersViewRenderCompletedWithContext), 'not subscribed to the "columnHeadersView.renderCompleted" callback');
+        assert.notOk(keyboard._getProcessor(navigationController._columnHeadersViewKeyDownListener), 'not subscribed to the "keydown" event');
+
+        // arrange
+        onSpy.resetHistory();
+
+        // act
+        navigationController.option('keyboardNavigation.enabled', true);
+        navigationController.optionChanged({ name: 'keyboardNavigation', fullName: 'keyboardNavigation.enabled' });
+        callViewsRenderCompleted(this.component._views);
+
+        // assert
+        assert.ok(columnHeadersView.renderCompleted.has(navigationController.columnHeadersViewRenderCompletedWithContext), 'subscribed to the "columnHeadersView.renderCompleted" callback');
+        assert.ok(keyboard._getProcessor(navigationController._columnHeadersViewKeyDownListener), 'subscribed to the "keydown" event');
     });
 });
