@@ -14,7 +14,7 @@ runManualTest('Chat', 'Customization', ['jQuery', 'React', 'Vue', 'Angular'], (t
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .click('#day-headers-format')
+      .click('#day-header-format')
       .click(Selector('.dx-list-item').nth(2))
       .wait(500);
 
