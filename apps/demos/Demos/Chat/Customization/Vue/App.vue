@@ -19,15 +19,15 @@
 
         <div class="option">
           <DxCheckBox
-          v-model:value="showAvatar"
-          text="Avatar"
+            v-model:value="showAvatar"
+            text="Avatar"
           />
         </div>
 
         <div class="option">
           <DxCheckBox
-          v-model:value="showUsername"
-          text="User Name"
+            v-model:value="showUsername"
+            text="User Name"
           />
         </div>
 
@@ -35,18 +35,18 @@
 
         <div class="option">
           <DxCheckBox
-          v-model:value="showDayHeaders"
-          :input-attr="dayHeaderLabel"
-          text="Day Header"
+            v-model:value="showDayHeaders"
+            :input-attr="dayHeaderLabel"
+            text="Day Header"
           />
         </div>
 
         <div class="option">
           <span>Day Header Format:</span>
           <DxSelectBox
-          :items="headerFormat"
-          :input-attr="dayHeaderLabel"
-          v-model:value="dayHeaderFormat"
+            :items="headerFormat"
+            :input-attr="dayHeaderLabel"
+            v-model:value="dayHeaderFormat"
           />
         </div>
 
@@ -54,17 +54,17 @@
 
         <div class="option">
           <DxCheckBox
-          v-model:value="showMessageTime"
-          text="Message Timestamp"
+            v-model:value="showMessageTime"
+            text="Message Timestamp"
           />
         </div>
 
         <div class="option">
           <span>Message Timestamp Format:</span>
           <DxSelectBox
-          :items="messageFormat"
-          :input-attr="messageTimestampLabel"
-          v-model:value="messageTimestampFormat"
+            :items="messageFormat"
+            :input-attr="messageTimestampLabel"
+            v-model:value="messageTimestampFormat"
           />
         </div>
 
@@ -72,8 +72,8 @@
 
         <div class="option">
           <DxCheckBox
-          v-model:value="isDisabled"
-          text="Disable Chat"
+            v-model:value="isDisabled"
+            text="Disable Chat"
           />
         </div>
       </div>
