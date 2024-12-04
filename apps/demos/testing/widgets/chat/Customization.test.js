@@ -21,25 +21,25 @@ runManualTest('Chat', 'Customization', ['jQuery', 'React', 'Vue', 'Angular'], (t
     await testScreenshot(t, takeScreenshot, 'chat_customization_day_headers_format_is_changed.png');
 
     await t
-      .click('#show-day-headers');
+      .click(Selector('.dx-checkbox').nth(2));
 
     await testScreenshot(t, takeScreenshot, 'chat_customization_day_headers_is_hidden.png');
 
     await t
-      .click('#show-avatar');
+      .click(Selector('.dx-checkbox').nth(0));
 
     await testScreenshot(t, takeScreenshot, 'chat_customization_avatar_is_hidden.png');
 
     await t
-      .click('#show-avatar');
+      .click(Selector('.dx-checkbox').nth(0));
 
     await t
-      .click('#show-user-name');
+      .click(Selector('.dx-checkbox').nth(1));
 
     await testScreenshot(t, takeScreenshot, 'chat_customization_username_is_hidden.png');
 
     await t
-      .click('#show-user-name');
+      .click(Selector('.dx-checkbox').nth(1));
 
     await t
       .click('#message-timestamp-format')
@@ -49,14 +49,14 @@ runManualTest('Chat', 'Customization', ['jQuery', 'React', 'Vue', 'Angular'], (t
     await testScreenshot(t, takeScreenshot, 'chat_customization_message_timestamp_format_is_changed.png');
 
     await t
-      .click('#show-message-timestamp');
+      .click(Selector('.dx-checkbox').nth(3));
 
     await testScreenshot(t, takeScreenshot, 'chat_customization_message_timestamps_is_hidden.png');
 
     await t
       .typeText('.dx-texteditor-input', 'testing')
       .pressKey('enter')
-      .click('#chat-disabled');
+      .click(Selector('.dx-checkbox').nth(4));
 
     await testScreenshot(t, takeScreenshot, 'chat_customization_is_disabled_after_sent.png');
 
