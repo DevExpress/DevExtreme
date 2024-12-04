@@ -1,0 +1,38 @@
+#app {
+  min-width: 720px;
+  display: flex;
+  gap: 20px;
+}
+
+.chat-container {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.options {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-width: 280px;
+  background-color: rgba(191, 191, 191, 0.15);
+  gap: 16px;
+}
+
+.dx-chat {
+  max-width: 480px;
+}
+
+.caption {
+  font-size: var(--dx-font-size-sm);
+  font-weight: 500;
+}
+
+.option-separator {
+  border-bottom: 1px solid var(--dx-color-border);
+}
+
+.dx-avatar {
+  border: 1px solid var(--dx-color-border);
+}
