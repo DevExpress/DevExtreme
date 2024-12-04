@@ -175,7 +175,7 @@ const SKIPPED_TESTS = {
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     DataGrid: [
-      { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
+      { demo: 'CellEditing', themes: [THEME.material] },
       // This test works only in simulated scrolling strategy!
       { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
