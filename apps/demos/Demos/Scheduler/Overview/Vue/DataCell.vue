@@ -43,36 +43,41 @@ function getCurrentTraining(date, employeeID) {
 </script>
 <style>
 .day-cell {
+  width: 100%;
   height: 100%;
   background-position: center center;
   background-repeat: no-repeat;
 }
 
+.dx-scheduler-appointment {
+  color: rgba(255, 255, 255, 1);
+}
+
 .employee-1 {
-  background-color: rgba(86, 202, 133, 0.1);
+  background-color: rgba(55, 126, 58, 0.08);
 }
 
 .employee-2 {
-  background-color: rgba(255, 151, 71, 0.1);
+  background-color: rgba(194, 81, 0, 0.08);
 }
 
 .employee-weekend-1 {
-  background-color: rgba(86, 202, 133, 0.2);
+  background-color: rgba(55, 126, 58, 0.12);
 }
 
 .employee-weekend-2 {
-  background-color: rgba(255, 151, 71, 0.2);
+  background-color: rgba(194, 81, 0, 0.12);
 }
 
 .training-background-0 {
-  background-image: url("../../../../images/gym/icon-abs.png");
+  background-image: url("../../../../images/Scheduler/Overview/icon-abs.png");
 }
 
 .training-background-1 {
-  background-image: url("../../../../images/gym/icon-step.png");
+  background-image: url("../../../../images/Scheduler/Overview/icon-step.png");
 }
 
 .training-background-2 {
-  background-image: url("../../../../images/gym/icon-fitball.png");
+  background-image: url("../../../../images/Scheduler/Overview/icon-fitball.png");
 }
 </style>

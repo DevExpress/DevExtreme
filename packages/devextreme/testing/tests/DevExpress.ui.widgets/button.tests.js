@@ -60,6 +60,17 @@ QUnit.module('Button', function() {
             assert.ok(this.element.hasClass(BUTTON_HAS_TEXT_CLASS, 'button with text has text class'));
         });
 
+        QUnit.test('no error should be raised when hovering if svg icon is used (T1266442)', function(assert) {
+            this.instance.option('icon', '<svg></svg>');
+            try {
+                this.element.trigger('dxhoverstart');
+            } catch(e) {
+                assert.ok(false, `error is handled: ${e}`);
+            }
+
+            assert.ok(this.element.hasClass('dx-state-hover'), 'hovered class is added');
+        });
+
         QUnit.test('onClick', function(assert) {
             const clickHandler = sinon.spy();
 

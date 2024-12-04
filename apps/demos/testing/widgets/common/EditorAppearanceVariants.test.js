@@ -10,7 +10,7 @@ fixture('Common.EditorAppearanceVariants')
     ctx.initialWindowSize = [900, 800];
   });
 
-runManualTest('Common', 'EditorAppearanceVariants', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('Common', 'EditorAppearanceVariants', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('EditorAppearanceVariants', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

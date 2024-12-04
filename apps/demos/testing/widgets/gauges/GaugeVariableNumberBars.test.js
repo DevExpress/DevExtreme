@@ -9,7 +9,7 @@ fixture('Gauges.VariableNumberOfBars')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Gauges', 'VariableNumberOfBars', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('Gauges', 'VariableNumberOfBars', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Bars visibility changing', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

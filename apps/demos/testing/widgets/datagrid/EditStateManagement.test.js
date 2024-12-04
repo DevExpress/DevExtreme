@@ -98,7 +98,7 @@ runManualTest('DataGrid', 'EditStateManagement', ['jQuery', 'React', 'Vue', 'Ang
   });
 });
 
-runManualTest('DataGrid', 'EditStateManagement', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('DataGrid', 'EditStateManagement', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('EditStateManagement - remove row', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
