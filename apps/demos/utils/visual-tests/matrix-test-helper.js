@@ -229,7 +229,7 @@ const SKIPPED_TESTS = {
     DataGrid: [
       { demo: 'BatchEditing', themes: [THEME.fluent] },
       { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
-      { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
+      { demo: 'CellEditing', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
@@ -250,7 +250,7 @@ const SKIPPED_TESTS = {
     DataGrid: [
       { demo: 'BatchEditing', themes: [THEME.fluent] },
       { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
-      { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
+      { demo: 'CellEditing', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
