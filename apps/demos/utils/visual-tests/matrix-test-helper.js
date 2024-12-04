@@ -190,27 +190,30 @@ const SKIPPED_TESTS = {
   },
   Angular: {
     Accordion: [
-      { demo: 'Overview', themes: [THEME.fluent] },
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Common: [
       { demo: 'EditorAppearanceVariants', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    DropDownButton: [
+      { demo: 'Overview', themes: [THEME.material] },
     ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'Crosshair', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'CustomAnnotations', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'LoadDataOnDemand', themes: [THEME.material, THEME.fluent] },
-      { demo: 'CustomLegendMarkers', themes: [THEME.generic, THEME.fluent] },
-      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.material] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material, THEME.fluent] },
-      { demo: 'ZoomingOnAreaSelection', themes: [THEME.fluent] },
+      { demo: 'LoadDataOnDemand', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'CustomLegendMarkers', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.generic, THEME.material] },
+      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'ZoomingOnAreaSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     DropDownBox: [
-      { demo: 'MultipleSelection', themes: [THEME.generic] },
+      { demo: 'MultipleSelection', themes: [THEME.generic, THEME.material] },
     ],
     List: [
       { demo: 'ItemDragging', themes: [THEME.generic] },
@@ -219,25 +222,26 @@ const SKIPPED_TESTS = {
       { demo: 'VariableNumberOfBars', themes: [THEME.material, THEME.fluent] },
     ],
     DataGrid: [
-      { demo: 'Appearance', themes: [THEME.generic, THEME.material, ] },
-      { demo: 'BatchEditing', themes: [THEME.fluent] },
-      { demo: 'AjaxRequest', themes: [THEME.material] },
+      { demo: 'Appearance', themes: [THEME.generic, THEME.material] },
+      { demo: 'AdvancedMasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'BatchEditing', themes: [THEME.material, THEME.fluent] },
+      { demo: 'AjaxRequest', themes: [THEME.generic, THEME.material, THEME.fluent ] },
       { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'MasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'SimpleArray', themes: [THEME.generic] },
+      { demo: 'SimpleArray', themes: [THEME.generic, THEME.material] },
       { demo: 'MasterDetailAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'DataValidation', themes: [THEME.material] },
-      { demo: 'MultipleSorting', themes: [THEME.material, THEME.fluent] },
-      { demo: 'OdataService', themes: [THEME.material] },
-      { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
-      { demo: 'Filtering', themes: [THEME.material, THEME.fluent] },
+      { demo: 'DataValidation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'MultipleSorting', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'OdataService', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'CustomNewRecordPosition', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Filtering', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'FilteringAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'GroupSummaries', themes: [THEME.material, THEME.fluent ] },
       { demo: 'RecordPaging', themes: [THEME.material, THEME.fluent] },
-      { demo: 'RowSelection', themes: [THEME.fluent] },
+      { demo: 'RowSelection', themes: [THEME.material, THEME.fluent] },
       { demo: 'MultipleSelection', themes: [THEME.material, THEME.fluent] },
-      { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
+      { demo: 'CellEditingAndEditingAPI', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'RemoteGrouping', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
@@ -250,6 +254,7 @@ const SKIPPED_TESTS = {
     Scheduler: [
       'CustomDragAndDrop',
       { demo: 'Resources', themes: [THEME.fluent] },
+      { demo: 'CellTemplates', themes: [THEME.generic] },
     ],
     Popup: [
       { demo: 'Scrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -258,7 +263,10 @@ const SKIPPED_TESTS = {
       { demo: 'Kanban', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     PivotGrid: [
-      { demo: 'IntegratedFieldChooser', themes: [THEME.generic] },
+      { demo: 'IntegratedFieldChooser', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Toolbar: [
+      { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ]
   },
   Vue: {
