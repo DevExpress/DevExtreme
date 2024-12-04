@@ -174,7 +174,7 @@ $(() => {
             component.option({ icon: 'check' });
             setTimeout(() => {
               component.option({ icon: 'copy' });
-            }, 5000);
+            }, 2500);
           },
         })
         .appendTo($buttonContainer);
