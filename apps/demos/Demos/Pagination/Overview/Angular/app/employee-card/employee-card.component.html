@@ -1,0 +1,21 @@
+<div class="employees__img-wrapper">
+  <img
+    class="employees__img"
+    [src]="employee.Picture"
+    [alt]="employee.FullName"
+  />
+</div>
+<div class="employees__info">
+  <div class="employees__info-row">
+    <span class="employees__info-label">Full Name:</span>
+    <span class="employees__info-value">{{ employee.FullName }}</span>
+  </div>
+  <div class="employees__info-row">
+    <span class="employees__info-label">Position:</span>
+    <span class="employees__info-value">{{ employee.Title }}</span>
+  </div>
+  <div class="employees__info-row">
+    <span class="employees__info-label">Phone:</span>
+    <span class="employees__info-value">{{ employee.MobilePhone }}</span>
+  </div>
+</div>
