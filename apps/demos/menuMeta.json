@@ -2047,6 +2047,27 @@
         ]
       },
       {
+        "Name": "Funnel and Pyramid Charts",
+        "HasCustomImage": true,
+        "Equivalents": "dxFunnel, dx-funnel",
+        "Demos": [
+          {
+            "Title": "Funnel Chart",
+            "Name": "FunnelChart",
+            "DocUrl": "Guide/UI_Components/Funnel/Overview/",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          },
+          {
+            "Title": "Pyramid Chart",
+            "Name": "PyramidChart",
+            "DocUrl": "Guide/UI_Components/Funnel/Pyramid_Chart/",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          }
+        ]
+      },
+      {
         "Name": "Line Charts",
         "HasCustomImage": true,
         "Equivalents": "",
@@ -2352,6 +2373,19 @@
         ]
       },
       {
+        "Name": "Sankey Chart",
+        "HasCustomImage": true,
+        "Equivalents": "dxSankey, dx-sankey",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "SankeyChart",
+            "Widget": "Charts",
+            "DemoType": "Viz"
+          }
+        ]
+      },
+      {
         "Name": "Sparkline Charts",
         "HasCustomImage": true,
         "Equivalents": "",
@@ -2596,40 +2630,6 @@
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": ""
-          }
-        ]
-      },
-      {
-        "Name": "Funnel and Pyramid Charts",
-        "HasCustomImage": true,
-        "Equivalents": "dxFunnel, dx-funnel",
-        "Demos": [
-          {
-            "Title": "Funnel Chart",
-            "Name": "FunnelChart",
-            "DocUrl": "Guide/UI_Components/Funnel/Overview/",
-            "Widget": "Charts",
-            "DemoType": "Viz"
-          },
-          {
-            "Title": "Pyramid Chart",
-            "Name": "PyramidChart",
-            "DocUrl": "Guide/UI_Components/Funnel/Pyramid_Chart/",
-            "Widget": "Charts",
-            "DemoType": "Viz"
-          }
-        ]
-      },
-      {
-        "Name": "Sankey Chart",
-        "HasCustomImage": true,
-        "Equivalents": "dxSankey, dx-sankey",
-        "Demos": [
-          {
-            "Title": "Overview",
-            "Name": "SankeyChart",
-            "Widget": "Charts",
-            "DemoType": "Viz"
           }
         ]
       },
