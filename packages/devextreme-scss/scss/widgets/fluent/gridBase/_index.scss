@@ -674,10 +674,16 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
   .dx-#{$widget-name}-headers {
     color: $datagrid-columnchooser-item-color;
     touch-action: pinch-zoom;
-    border-bottom: $datagrid-border;
 
-    .dx-#{$widget-name}-content {
-      margin-bottom: -1px;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      pointer-events: none;
+      border-bottom: $datagrid-border;
     }
 
     .dx-#{$widget-name}-table {
