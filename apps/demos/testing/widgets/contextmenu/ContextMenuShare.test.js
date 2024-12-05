@@ -12,7 +12,7 @@ fixture('ContextMenu.Templates')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('ContextMenu', 'Templates', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('ContextMenu', 'Templates', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Custom Template Share Appearance', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

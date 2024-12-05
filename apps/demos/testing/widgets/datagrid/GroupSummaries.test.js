@@ -9,7 +9,7 @@ fixture('DataGrid.GroupSummaries')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('DataGrid', 'GroupSummaries', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('DataGrid', 'GroupSummaries', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('GroupSummaries', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

@@ -9,7 +9,7 @@ fixture('PieWithResolvedLabelOverlapping')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Charts', 'PieWithResolvedLabelOverlapping', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('Charts', 'PieWithResolvedLabelOverlapping', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('PieWithResolvedLabelOverlapping', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const showSelectBoxItems = () => t.click($('.options .dx-dropdowneditor-input-wrapper input.dx-texteditor-input'));

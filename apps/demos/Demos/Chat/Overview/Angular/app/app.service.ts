@@ -23,6 +23,7 @@ export class AppService {
   messages: Message[] = [];
 
   userChatTypingUsersSubject: BehaviorSubject<User[]> = new BehaviorSubject([]);
+
   supportChatTypingUsersSubject: BehaviorSubject<User[]> = new BehaviorSubject([]);
 
   messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject([]);
@@ -35,32 +36,32 @@ export class AppService {
       {
         timestamp: this.getTimestamp(this.date, -9),
         author: this.supportAgent,
-        text: 'Hello, John!\nHow can I assist you today?'
+        text: 'Hello, John!\nHow can I assist you today?',
       },
       {
         timestamp: this.getTimestamp(this.date, -7),
         author: this.currentUser,
-        text: 'Hi, I\'m having trouble accessing my account.'
+        text: 'Hi, I\'m having trouble accessing my account.',
       },
       {
         timestamp: this.getTimestamp(this.date, -7),
         author: this.currentUser,
-        text: 'It says my password is incorrect.'
+        text: 'It says my password is incorrect.',
       },
       {
         timestamp: this.getTimestamp(this.date, -7),
         author: this.supportAgent,
-        text: 'I can help you with that. Can you please confirm your UserID for security purposes?'
+        text: 'I can help you with that. Can you please confirm your UserID for security purposes?',
       },
       {
         timestamp: this.getTimestamp(this.date, 1),
         author: this.currentUser,
-        text: 'john.doe1357'
+        text: 'john.doe1357',
       },
       {
         timestamp: this.getTimestamp(this.date, 1),
         author: this.supportAgent,
-        text: '✅ Instructions to restore access have been sent to the email address associated with your account.'
+        text: '✅ Instructions to restore access have been sent to the email address associated with your account.',
       },
     ];
 
@@ -85,7 +86,7 @@ export class AppService {
     return [this.currentUser, this.supportAgent];
   }
 
-  getTimestamp(date: Date, offsetMinutes: number = 0): number {
+  getTimestamp(date: Date, offsetMinutes = 0): number {
     return date.getTime() + offsetMinutes * 60000;
   }
 

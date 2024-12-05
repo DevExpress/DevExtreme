@@ -1,35 +1,62 @@
-::ng-deep .dx-scheduler-date-table-other-month.dx-scheduler-date-table-cell {
-  opacity: 1;
-  color: rgba(0, 0, 0, 0.3) !important;
-}
-
-::ng-deep .dx-color-scheme-light .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-::ng-deep .dx-color-scheme-carmine .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-::ng-deep .dx-color-scheme-softblue .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-::ng-deep .dx-color-scheme-blue-light .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-::ng-deep .dx-color-scheme-saas-light .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-::ng-deep .dx-color-scheme-lime-light .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-::ng-deep .dx-color-scheme-orange-light .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-::ng-deep .dx-color-scheme-purple-light .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-::ng-deep .dx-color-scheme-teal-light .dx-scheduler-work-space-month .dx-scheduler-date-table-cell {
-  color: rgba(0, 0, 0, .6);
-}
-
-::ng-deep .dx-color-scheme-dark .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-::ng-deep .dx-color-scheme-darkviolet .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-::ng-deep .dx-color-scheme-darkmoon .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-::ng-deep .dx-color-scheme-blue-dark .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-::ng-deep .dx-color-scheme-saas-dark .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-::ng-deep .dx-color-scheme-lime-dark .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-::ng-deep .dx-color-scheme-orange-dark .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-::ng-deep .dx-color-scheme-purple-dark .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-::ng-deep .dx-color-scheme-teal-dark .dx-scheduler-work-space-month .dx-scheduler-date-table-cell {
-  color: rgba(255, 255, 255, 1);
-}
-
-::ng-deep .dx-scheduler-group-header-content,
+::ng-deep .dx-scheduler-group-header,
 ::ng-deep .dx-scheduler-date-table-cell {
   position: relative;
+}
+
+::ng-deep .dx-color-scheme-light,
+::ng-deep .dx-color-scheme-carmine,
+::ng-deep .dx-color-scheme-softblue,
+::ng-deep .dx-color-scheme-blue-light,
+::ng-deep .dx-color-scheme-saas-light,
+::ng-deep .dx-color-scheme-lime-light,
+::ng-deep .dx-color-scheme-orange-light,
+::ng-deep .dx-color-scheme-purple-light,
+::ng-deep .dx-color-scheme-teal-light {
+  --text-color-1: rgba(0, 0, 0, .6);
+  --text-color-2: rgba(255, 255, 255, 1);
+  --disabled-color: rgba(0, 0, 0, 0.38);
+  --background-color-1: rgba(50, 134, 56, 1);
+  --background-color-2: rgba(194, 81, 0, 1);
+}
+
+::ng-deep .dx-color-scheme-dark,
+::ng-deep .dx-color-scheme-darkviolet,
+::ng-deep .dx-color-scheme-darkmoon,
+::ng-deep .dx-color-scheme-blue-dark,
+::ng-deep .dx-color-scheme-saas-dark,
+::ng-deep .dx-color-scheme-lime-dark,
+::ng-deep .dx-color-scheme-orange-dark,
+::ng-deep .dx-color-scheme-purple-dark,
+::ng-deep .dx-color-scheme-teal-dark {
+  --text-color-1: rgba(255, 255, 255, 1);
+  --text-color-2: rgba(54, 54, 64, 1);
+  --disabled-color: rgba(255, 255, 255, 0.38);
+  --background-color-1: rgba(159, 213, 161, 1);
+  --background-color-2: rgba(255, 181, 127, 1);
+
+}
+
+::ng-deep .dx-scheduler-header .dx-toolbar .dx-button,
+::ng-deep .dx-scheduler-header .dx-toolbar .dx-button .dx-icon {
+  color: var(--text-color-1);
+}
+
+::ng-deep .dx-scheduler-date-table-other-month.dx-scheduler-date-table-cell {
+  opacity: 1;
+  color: var(--disabled-color) !important;
+}
+
+::ng-deep .dx-scheduler-work-space-month .dx-scheduler-date-table-cell {
+  color: var(--text-color-1);
+}
+
+::ng-deep .dx-scheduler-work-space-month .dx-scheduler-appointment {
+  color: var(--text-color-2);
+  line-height: 22px;
+}
+
+::ng-deep .dx-scheduler-work-space-month .dx-scheduler-appointment .dx-scheduler-appointment-content {
+  padding-top: 0;
 }
 
 ::ng-deep .dx-scheduler-date-table-cell .dx-template-wrapper {
@@ -39,12 +66,32 @@
   padding-right: 6px;
 }
 
-::ng-deep .avatar {
-  width: 155px;
+::ng-deep  .avatar {
+  width: 124px;
   float: left;
   overflow: hidden;
   position: relative;
-  height: 125px;
+  height: 124px;
+  border: 1px solid rgba(0, 0, 0, 0.24);
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+::ng-deep .avatar img {
+  position: relative;
+  width: 126px;
+  height: 130px;
+  object-fit: contain;
+}
+
+::ng-deep .avatar[title="John Heart"] img {
+  top: 5px;
+  left: 3px;
+}
+
+::ng-deep .avatar[title="Greta Sims"] img {
+  top: 5px;
+  left: -7px;
 }
 
 ::ng-deep .name {
@@ -55,52 +102,65 @@
 }
 
 ::ng-deep .name h2 {
-  color: #fff;
+  color: var(--text-color-2);
   font-size: 28px;
   text-align: left;
-  padding: 0 0 5px 175px;
+  padding: 0 0 0 170px;
   margin: 0;
+  height: 40px;
+  line-height: 40px;
 }
 
 ::ng-deep .info {
   width: auto;
   text-align: left;
   height: 100%;
-  font-size: 11pt;
+  font-size: 14px;
+  line-height: 20px;
   font-weight: normal;
-  padding: 25px 20px;
+  padding: 25px 20px 25px 40px;
+  color: #707070;
+}
+
+::ng-deep .dx-color-scheme-contrast .info {
+  color: #fff;
 }
 
 ::ng-deep .day-cell {
+  width: 100%;
   height: 100%;
   background-position: center center;
   background-repeat: no-repeat;
 }
 
+::ng-deep .dx-scheduler-appointment {
+  color: rgba(255, 255, 255, 1);
+}
+
 ::ng-deep .employee-1 {
-  background-color: rgba(86, 202, 133, 0.1);
+  background-color: rgba(55, 126, 58, 0.08);
 }
 
 ::ng-deep .employee-2 {
-  background-color: rgba(255, 151, 71, 0.1);
+  background-color: rgba(194, 81, 0, 0.08);
 }
 
 ::ng-deep .employee-weekend-1 {
-  background-color: rgba(86, 202, 133, 0.2);
+  background-color: rgba(55, 126, 58, 0.12);
 }
 
 ::ng-deep .employee-weekend-2 {
-  background-color: rgba(255, 151, 71, 0.2);
+  background-color: rgba(194, 81, 0, 0.12);
 }
 
 ::ng-deep .training-background-0 {
-  background-image: url("../../../../images/gym/icon-abs.png");
+  background-image: url("../../../../images/Scheduler/Overview/icon-abs.png");
 }
 
 ::ng-deep .training-background-1 {
-  background-image: url("../../../../images/gym/icon-step.png");
+  background-image: url("../../../../images/Scheduler/Overview/icon-step.png");
 }
 
 ::ng-deep .training-background-2 {
-  background-image: url("../../../../images/gym/icon-fitball.png");
+  background-image: url("../../../../images/Scheduler/Overview/icon-fitball.png");
 }

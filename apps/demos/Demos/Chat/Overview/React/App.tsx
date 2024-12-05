@@ -11,7 +11,7 @@ export default function App() {
   const [messages, setMessages] = useState<ChatTypes.Message[]>(initialMessages);
 
   function onMessageEntered({ message }: MessageEnteredEvent) {
-    setMessages(prevMessages => [...prevMessages, message]);
+    setMessages((prevMessages) => [...prevMessages, message]);
   }
 
   function typingStart({ user }: TypingStartEvent) {

@@ -28,7 +28,7 @@ fixture('Scheduler.CustomDragAndDrop')
   fromName,
   toName,
 ]) => {
-  runManualTest('Scheduler', 'CustomDragAndDrop', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+  runManualTest('Scheduler', 'CustomDragAndDrop', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
     test(`Should drag-and-drop from ${fromName} to ${toName}`, async (t) => {
       const {
         takeScreenshot,

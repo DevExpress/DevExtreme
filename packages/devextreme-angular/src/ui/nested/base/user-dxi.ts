@@ -7,6 +7,7 @@ import {
 
 
 @Component({
+    selector: 'base-dxi-user',
     template: ''
 })
 export abstract class DxiUser extends CollectionNestedOption {

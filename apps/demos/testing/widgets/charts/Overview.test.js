@@ -9,7 +9,7 @@ fixture('Charts.Overview')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Charts', 'Overview', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('Charts', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Tooltip', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

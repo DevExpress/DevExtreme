@@ -20,11 +20,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxChat from 'devextreme-vue/chat';
-import {
-  messages as initialMessages,
-  supportAgent,
-  currentUser,
-} from './data.ts';
+import { messages as initialMessages, supportAgent, currentUser } from './data.ts';
 
 const messages = ref(initialMessages);
 const userChatTypingUsers = ref([]);

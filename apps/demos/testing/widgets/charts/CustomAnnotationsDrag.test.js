@@ -9,7 +9,7 @@ fixture('Charts.CustomAnnotations')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Charts', 'CustomAnnotations', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('Charts', 'CustomAnnotations', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('CustomAnnotations. Drag', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
