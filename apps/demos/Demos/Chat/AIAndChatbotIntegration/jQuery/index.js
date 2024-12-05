@@ -53,7 +53,7 @@ $(() => {
     }
   };
 
-  async function processMessageSending(event) {
+  async function processMessageSending(message, event) {
     toggleDisabledState(true, event);
 
     messages.push({ role: 'user', content: message.text });
@@ -102,17 +102,17 @@ $(() => {
       text,
     };
 
-    customStore.push([{ type: 'insert', data: message }]);
+    dataSource.store().push([{ type: 'insert', data: message }]);
   }
 
   function updateLastMessage(text) {
-    const items = customStore.items();
+    const items = dataSource.items();
     const lastMessage = items.at(-1);
     const data = {
       text: text ?? REGENERATION_TEXT,
     };
 
-    customStore.push([{
+    dataSource.store().push([{
       type: 'update',
       key: lastMessage.id,
       data,
@@ -203,23 +203,27 @@ $(() => {
       return d.promise();
     },
   });
+  
+  const dataSource = new DevExpress.data.DataSource({
+    store: customStore,
+    paginate: false,
+  });
 
   const instance = $('#dx-ai-chat').dxChat({
     user,
     height: 710,
-    dataSource: customStore,
+    dataSource,
     reloadOnChange: false,
     showAvatar: false,
     showDayHeaders: false,
     onMessageEntered: (e) => {
       const { message, event } = e;
 
-      if (instance.option('alerts').length) {
-        customStore.push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
-        return;
+      dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
+      
+      if (!instance.option('alerts').length) {
+        processMessageSending(message, event);
       }
-
-      processMessageSending(event);
     },
     messageTemplate: (data, element) => {
       const { message } = data;
