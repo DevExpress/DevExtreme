@@ -258,7 +258,7 @@ const SKIPPED_TESTS = {
       { demo: 'Validation', themes: [THEME.material] },
     ],
     Scheduler: [
-      'CustomDragAndDrop',
+      'DragAndDrop',
       { demo: 'Resources', themes: [THEME.fluent] },
       { demo: 'CellTemplates', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
