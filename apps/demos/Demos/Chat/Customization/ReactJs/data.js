@@ -1,24 +1,18 @@
-import { ChatTypes } from 'devextreme-react/chat';
-
-const date = new Date();
-date.setHours(0, 0, 0, 0);
-
 function getTimestamp(date, offsetMinutes = 0) {
   return date.getTime() + offsetMinutes * 60000;
 }
-
-export const currentUser: ChatTypes.User = {
+const date = new Date();
+date.setHours(0, 0, 0, 0);
+export const currentUser = {
   id: 'c94c0e76-fb49-4b9b-8f07-9f93ed93b4f3',
   name: 'John Doe',
 };
-
-export const supportAgent: ChatTypes.User = {
-  id: 'd16d1a4c-5c67-4e20-b7v0e-2991c22747c3',
+export const supportAgent = {
+  id: 'd16d1a4c-5c67-4e20-b70e-2991c22747c3',
   name: 'Support Agent',
   avatarUrl: '../../../../images/petersmith.png',
 };
-
-export const initialMessages = [
+export const messages = [
   {
     timestamp: getTimestamp(date, -9),
     author: supportAgent,
@@ -27,7 +21,7 @@ export const initialMessages = [
   {
     timestamp: getTimestamp(date, -7),
     author: currentUser,
-    text: 'Hi, I\'m having trouble accessing my account.',
+    text: "Hi, I'm having trouble accessing my account.",
   },
   {
     timestamp: getTimestamp(date, -7),
@@ -50,3 +44,7 @@ export const initialMessages = [
     text: '✅ Instructions to restore access have been sent to the email address associated with your account.',
   },
 ];
+export const dayHeaderFormats = ['dd/MM/yyyy', 'dd.MM.yyyy', 'MMMM dd, yyyy', 'EEEE, MMMM dd'];
+export const messageTimestampFormats = ['hh:mm a', 'hh:mm:ss a', 'HH:mm', 'HH:mm:ss'];
+export const messageTimestampLabel = { 'aria-label': 'Message Timestamp Format' };
+export const dayHeaderLabel = { 'aria-label': 'Day Header Format' };

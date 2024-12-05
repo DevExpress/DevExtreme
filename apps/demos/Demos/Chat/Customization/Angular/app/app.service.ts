@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-
 import { User, Message, MessageEnteredEvent } from 'devextreme/ui/chat';
 
 @Injectable({
@@ -20,11 +19,15 @@ export class AppService {
     avatarUrl: '../../../../images/petersmith.png',
   };
 
+  dayHeaderFormats = ['dd/MM/yyyy', 'dd.MM.yyyy', 'MMMM dd, yyyy', 'EEEE, MMMM dd'];
+
+  messageTimestampFormats = ['hh:mm a', 'hh:mm:ss a', 'HH:mm', 'HH:mm:ss'];
+
+  messageTimestampLabel = { 'aria-label': 'Message Timestamp Format' };
+
+  dayHeaderLabel = { 'aria-label': 'Day Header Format' };
+
   messages: Message[] = [];
-
-  userChatTypingUsersSubject: BehaviorSubject<User[]> = new BehaviorSubject([]);
-
-  supportChatTypingUsersSubject: BehaviorSubject<User[]> = new BehaviorSubject([]);
 
   messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject([]);
 
@@ -66,16 +69,6 @@ export class AppService {
     ];
 
     this.messagesSubject.next(this.messages);
-    this.userChatTypingUsersSubject.next([]);
-    this.supportChatTypingUsersSubject.next([]);
-  }
-
-  get userChatTypingUsers$(): Observable<User[]> {
-    return this.userChatTypingUsersSubject.asObservable();
-  }
-
-  get supportChatTypingUsers$(): Observable<Message[]> {
-    return this.supportChatTypingUsersSubject.asObservable();
   }
 
   get messages$(): Observable<Message[]> {
@@ -93,21 +86,5 @@ export class AppService {
   onMessageEntered(event: MessageEnteredEvent) {
     this.messages = [...this.messages, event.message];
     this.messagesSubject.next(this.messages);
-  }
-
-  userChatOnTypingStart() {
-    this.supportChatTypingUsersSubject.next([this.supportAgent]);
-  }
-
-  userChatOnTypingEnd() {
-    this.supportChatTypingUsersSubject.next([]);
-  }
-
-  supportChatOnTypingStart() {
-    this.userChatTypingUsersSubject.next([this.currentUser]);
-  }
-
-  supportChatOnTypingEnd() {
-    this.userChatTypingUsersSubject.next([]);
   }
 }

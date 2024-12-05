@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { DxChatModule } from 'devextreme-angular';
+import { DxChatModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 import { User, Message, MessageEnteredEvent } from 'devextreme/ui/chat';
 import { Observable } from 'rxjs';
 import { AppService } from './app.service';
@@ -29,35 +29,21 @@ export class AppComponent {
 
   messages$: Observable<Message[]>;
 
-  userChatTypingUsers$: Observable<User[]>;
+  dayHeaderFormats = this.appService.dayHeaderFormats;
 
-  supportChatTypingUsers$: Observable<User[]>;
+  messageTimestampFormats = this.appService.messageTimestampFormats;
+
+  dayHeaderLabel = this.appService.dayHeaderLabel;
+
+  messageTimestampLabel = this.appService.messageTimestampLabel;
 
   constructor(private readonly appService: AppService) {
     [this.currentUser, this.supportAgent] = this.appService.getUsers();
     this.messages$ = this.appService.messages$;
-    this.userChatTypingUsers$ = this.appService.userChatTypingUsers$;
-    this.supportChatTypingUsers$ = this.appService.supportChatTypingUsers$;
   }
 
   onMessageEntered(event: MessageEnteredEvent) {
     this.appService.onMessageEntered(event);
-  }
-
-  userChatOnTypingStart() {
-    this.appService.userChatOnTypingStart();
-  }
-
-  userChatOnTypingEnd() {
-    this.appService.userChatOnTypingEnd();
-  }
-
-  supportChatOnTypingStart() {
-    this.appService.supportChatOnTypingStart();
-  }
-
-  supportChatOnTypingEnd() {
-    this.appService.supportChatOnTypingEnd();
   }
 }
 
@@ -65,6 +51,8 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxChatModule,
+    DxCheckBoxModule,
+    DxSelectBoxModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

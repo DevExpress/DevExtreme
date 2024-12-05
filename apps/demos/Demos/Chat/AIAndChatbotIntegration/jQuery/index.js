@@ -25,8 +25,8 @@ $(() => {
       temperature: 0.7,
     };
 
-    const responseAzure = await chatService.chat.completions.create(params);
-    const data = { choices: responseAzure.choices };
+    const response = await chatService.chat.completions.create(params);
+    const data = { choices: response.choices };
 
     return data.choices[0].message?.content;
   }
@@ -40,10 +40,23 @@ $(() => {
 
     setTimeout(() => {
       instance.option({ alerts: [] });
-    }, 10000);
+    }, ALERT_TIMEOUT);
   }
 
-  async function processMessageSending() {
+  function toggleDisabledState(disabled, event) {
+    instance.element().toggleClass(CHAT_DISABLED_CLASS, disabled);
+
+    if (disabled) {
+      event?.target.blur();
+    } else {
+      event?.target.focus();
+    }
+  };
+
+  async function processMessageSending(message, event) {
+    toggleDisabledState(true, event);
+
+    messages.push({ role: 'user', content: message.text });
     instance.option({ typingUsers: [assistant] });
 
     try {
@@ -54,15 +67,20 @@ $(() => {
 
         messages.push({ role: 'assistant', content: aiResponse });
 
-        renderMessage(aiResponse);
+        renderAssistantMessage(aiResponse);
       }, 200);
     } catch {
       instance.option({ typingUsers: [] });
+      messages.pop();
       alertLimitReached();
+    } finally {
+      toggleDisabledState(false, event);
     }
   }
 
   async function regenerate() {
+    toggleDisabledState(true);
+
     try {
       const aiResponse = await getAIResponse(messages.slice(0, -1));
 
@@ -71,10 +89,12 @@ $(() => {
     } catch {
       updateLastMessage(messages.at(-1).content);
       alertLimitReached();
+    } finally {
+      toggleDisabledState(false);
     }
   }
 
-  function renderMessage(text) {
+  function renderAssistantMessage(text) {
     const message = {
       id: Date.now(),
       timestamp: new Date(),
@@ -82,17 +102,17 @@ $(() => {
       text,
     };
 
-    customStore.push([{ type: 'insert', data: message }]);
+    dataSource.store().push([{ type: 'insert', data: message }]);
   }
 
   function updateLastMessage(text) {
-    const { items } = instance.option();
+    const items = dataSource.items();
     const lastMessage = items.at(-1);
     const data = {
       text: text ?? REGENERATION_TEXT,
     };
 
-    customStore.push([{
+    dataSource.store().push([{
       type: 'update',
       key: lastMessage.id,
       data,
@@ -108,6 +128,57 @@ $(() => {
       .toString();
 
     return result;
+  }
+
+  function onCopyButtonClick(component, text) {
+    navigator.clipboard?.writeText(text);
+
+    component.option({ icon: 'check' });
+
+    setTimeout(() => {
+      component.option({ icon: 'copy' });
+    }, 2500);
+  }
+
+  function onRegenerateButtonClick() {
+    if (instance.option('alerts').length) {
+      return;
+    }
+
+    updateLastMessage();
+    regenerate();
+  }
+
+  function renderMessageContent(message, element) {
+    $('<div>')
+      .addClass('dx-chat-messagebubble-text')
+      .html(convertToHtml(message.text))
+      .appendTo(element);
+
+    const $buttonContainer = $('<div>')
+      .addClass('dx-bubble-button-container');
+
+    $('<div>')
+      .dxButton({
+        icon: 'copy',
+        stylingMode: 'text',
+        hint: 'Copy',
+        onClick: ({ component }) => {
+          onCopyButtonClick(component, message.text);
+        },
+      })
+      .appendTo($buttonContainer);
+
+    $('<div>')
+      .dxButton({
+        icon: 'refresh',
+        stylingMode: 'text',
+        hint: 'Regenerate',
+        onClick: onRegenerateButtonClick,
+      })
+      .appendTo($buttonContainer);
+
+    $buttonContainer.appendTo(element);
   }
 
   const customStore = new DevExpress.data.CustomStore({
@@ -132,21 +203,27 @@ $(() => {
       return d.promise();
     },
   });
+  
+  const dataSource = new DevExpress.data.DataSource({
+    store: customStore,
+    paginate: false,
+  });
 
   const instance = $('#dx-ai-chat').dxChat({
-    dataSource: customStore,
+    user,
+    height: 710,
+    dataSource,
     reloadOnChange: false,
     showAvatar: false,
     showDayHeaders: false,
-    user,
-    height: 710,
     onMessageEntered: (e) => {
-      const { message } = e;
+      const { message, event } = e;
 
-      customStore.push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
-      messages.push({ role: 'user', content: message.text });
-
-      processMessageSending();
+      dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
+      
+      if (!instance.option('alerts').length) {
+        processMessageSending(message, event);
+      }
     },
     messageTemplate: (data, element) => {
       const { message } = data;
@@ -156,42 +233,7 @@ $(() => {
         return;
       }
 
-      const $textElement = $('<div>')
-        .addClass('dx-chat-messagebubble-text')
-        .html(convertToHtml(message.text))
-        .appendTo(element);
-
-      const $buttonContainer = $('<div>')
-        .addClass('dx-bubble-button-container');
-
-      $('<div>')
-        .dxButton({
-          icon: 'copy',
-          stylingMode: 'text',
-          hint: 'Copy',
-          onClick: ({ component }) => {
-            navigator.clipboard.writeText($textElement.text());
-            component.option({ icon: 'check' });
-            setTimeout(() => {
-              component.option({ icon: 'copy' });
-            }, 5000);
-          },
-        })
-        .appendTo($buttonContainer);
-
-      $('<div>')
-        .dxButton({
-          icon: 'refresh',
-          stylingMode: 'text',
-          hint: 'Regenerate',
-          onClick: () => {
-            updateLastMessage();
-            regenerate();
-          },
-        })
-        .appendTo($buttonContainer);
-
-      $buttonContainer.appendTo(element);
+      renderMessageContent(message, element);
     },
   }).dxChat('instance');
 });
