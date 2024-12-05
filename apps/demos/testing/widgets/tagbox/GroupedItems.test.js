@@ -12,7 +12,7 @@ fixture('TagBox.GroupedItems')
 runManualTest('TagBox', 'GroupedItems', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('GroupedItems', async (t) => {
     const TAG_BOX_CLASS = 'dx-tagbox';
-    const $tagBoxes = $(`.${TAG_BOX_CLASS} input`);
+    const $tagBoxes = $(`.${TAG_BOX_CLASS} .dx-tag-container`);
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
