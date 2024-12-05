@@ -11,7 +11,7 @@ import {
   dayHeaderLabel,
 } from './data.js';
 
-const App = () => {
+export default function App() {
   const [messages, setMessages] = useState(initialMessages);
   const [showAvatar, setShowAvatar] = useState(true);
   const [showUsername, setShowUsername] = useState(true);
@@ -112,5 +112,4 @@ const App = () => {
       </div>
     </React.Fragment>
   );
-};
-export default App;
+}

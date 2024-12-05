@@ -22,11 +22,11 @@ export default function App() {
   const [showMessageTimestamp, setMessageTimestamp] = useState(true);
   const [messageTimestampFormat, setMessageTimestampFormat] = useState(messageTimestamps[0]);
   const [isDisabled, setDisabled] = useState(false);
-  
+
   const onMessageEntered = useCallback(({ message }: MessageEnteredEvent) => {
     setMessages(prevMessages => [...prevMessages, message]);
   }, []);
-  
+
   return (
     <React.Fragment>
       <div className="chat-container">
@@ -44,10 +44,10 @@ export default function App() {
           onMessageEntered = {onMessageEntered}
         />
       </div>
-    
+
       <div className="options">
         <div className="caption">Options</div>
-        
+
         <div className="option">
           <CheckBox
             text="Avatar"
@@ -55,7 +55,7 @@ export default function App() {
             onValueChange={setShowAvatar}
           />
         </div>
-        
+
         <div className="option">
           <CheckBox
             text="User Name"
@@ -63,9 +63,9 @@ export default function App() {
             onValueChange={setShowUsername}
           />
         </div>
-        
+
         <div className="option-separator"></div>
-        
+
         <div className="option">
           <CheckBox
             text="Day Headers"
@@ -73,7 +73,7 @@ export default function App() {
             onValueChange={setDayHeaders}
           />
         </div>
-        
+
         <div className="option">
         <span>Day Header Format:</span>
           <SelectBox
@@ -83,9 +83,9 @@ export default function App() {
             onValueChange={setDayHeaderFormat}
           />
         </div>
-        
+
         <div className="option-separator"></div>
-        
+
         <div className="option">
           <CheckBox
             text="Message Timestamp"
@@ -93,7 +93,7 @@ export default function App() {
             onValueChange={setMessageTimestamp}
           />
         </div>
-        
+
         <div className="option">
         <span>Message Timestamp Format:</span>
           <SelectBox
@@ -103,9 +103,9 @@ export default function App() {
             onValueChange={setMessageTimestampFormat}
           />
         </div>
-        
+
         <div className="option-separator"></div>
-        
+
         <div className="option">
           <CheckBox
             text="Disable Chat"
