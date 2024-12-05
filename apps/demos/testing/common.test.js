@@ -174,7 +174,7 @@ const SKIPPED_TESTS = {
     ],
     PivotGrid: [
       { demo: 'ExcelJSCellCustomization', themes: [THEME.material] },
-      { demo: 'LayoutCustomization', themes: [THEME.material] },
+      { demo: 'Customization', themes: [THEME.material] },
     ],
     Gauges: [
       { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
@@ -244,7 +244,7 @@ const SKIPPED_TESTS = {
     ],
     PivotGrid: [
       { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'LayoutCustomization', themes: [THEME.material] },
+      { demo: 'Customization', themes: [THEME.material] },
     ],
     VectorMap: [
       { demo: 'CustomProjection', themes: [THEME.material] },
