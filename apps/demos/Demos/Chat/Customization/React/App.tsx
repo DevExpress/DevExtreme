@@ -4,13 +4,13 @@ import { MessageEnteredEvent } from 'devextreme/ui/chat';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 
-import { 
+import {
   currentUser,
   messages as initialMessages,
   dayHeaderFormats as headerFormats,
   messageTimestampFormats as messageTimestamps,
   messageTimestampLabel,
-  dayHeaderLabel
+  dayHeaderLabel,
 } from './data.ts';
 
 export default function App() {
@@ -24,7 +24,7 @@ export default function App() {
   const [isDisabled, setDisabled] = useState(false);
 
   const onMessageEntered = useCallback(({ message }: MessageEnteredEvent) => {
-    setMessages(prevMessages => [...prevMessages, message]);
+    setMessages((prevMessages) => [...prevMessages, message]);
   }, []);
 
   return (
@@ -75,7 +75,7 @@ export default function App() {
         </div>
 
         <div className="option">
-        <span>Day Header Format:</span>
+          <span>Day Header Format:</span>
           <SelectBox
             items={headerFormats}
             value={dayHeaderFormat}
@@ -95,7 +95,7 @@ export default function App() {
         </div>
 
         <div className="option">
-        <span>Message Timestamp Format:</span>
+          <span>Message Timestamp Format:</span>
           <SelectBox
             items={messageTimestamps}
             value={messageTimestampFormat}

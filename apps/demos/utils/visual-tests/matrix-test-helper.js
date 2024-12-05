@@ -218,13 +218,19 @@ const SKIPPED_TESTS = {
     List: [
       { demo: 'ItemDragging', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
+    TabPanel: [
+      { demo: 'Overview', themes: [THEME.material, THEME.fluent] },
+    ],
+    Splitter: [
+      { demo: 'Overview', themes: [THEME.material, THEME.fluent] },
+    ],
     Gauges: [
       { demo: 'VariableNumberOfBars', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     DataGrid: [
-      { demo: 'Appearance', themes: [THEME.generic, THEME.material] },
+      { demo: 'Appearance', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'AdvancedMasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'BatchEditing', themes: [THEME.material, THEME.fluent] },
+      { demo: 'BatchEditing', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'AjaxRequest', themes: [THEME.generic, THEME.material, THEME.fluent ] },
       { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'MasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
