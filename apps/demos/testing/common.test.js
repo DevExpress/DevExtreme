@@ -183,7 +183,7 @@ const SKIPPED_TESTS = {
   },
   Vue: {
     Common: [
-      { demo: 'ActionAndListsOverview', themes: [THEME.generic, THEME.material] },
+      { demo: 'ListsOverview', themes: [THEME.generic, THEME.material] },
     ],
     Charts: [
       { demo: 'TilingAlgorithms', themes: [THEME.material] },

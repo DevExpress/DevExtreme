@@ -3695,7 +3695,7 @@
         "Demos": [
           {
             "Title": "Overview",
-            "Name": "FormsAndMultiPurposeOverview",
+            "Name": "FormsOverview",
             "DocUrl": "",
             "Widget": "Common",
             "MvcAdditionalFiles": [
@@ -4458,7 +4458,7 @@
         "Demos": [
           {
             "Title": "Overview",
-            "Name": "ActionAndListsOverview",
+            "Name": "ListsOverview",
             "DocUrl": "",
             "Widget": "Common",
             "MvcAdditionalFiles": [

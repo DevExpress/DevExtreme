@@ -18,6 +18,8 @@
     { "Widget": "Charts", "Name": "PieWithAnnotations", "NewWidget": "Charts", "NewName": "PieAnnotations" },
     { "Widget": "Charts", "Name": "PieWithCustomStyles", "NewWidget": "Charts", "NewName": "CustomFillStyles" },
     { "Widget": "Common", "Name": "DialogsAndNotificationsOverview", "NewWidget": "Common", "NewName": "PopupAndNotificationsOverview" },
+    { "Widget": "Common", "Name": "ActionAndListsOverview", "NewWidget": "Common", "NewName": "ListsOverview" },
+    { "Widget": "Common", "Name": "FormsAndMultiPurposeOverview", "NewWidget": "Common", "NewName": "FormsOverview" },
     { "Widget": "Data_Grid", "NewWidget": "DataGrid" },
     { "Widget": "DataGrid", "Name": "FilterBuilder", "NewWidget": "DataGrid", "NewName": "FilterPanel" },
     { "Widget": "DataGrid", "Name": "CustomizeCommandColumns", "NewWidget": "DataGrid", "NewName": "CommandColumnCustomization" },
