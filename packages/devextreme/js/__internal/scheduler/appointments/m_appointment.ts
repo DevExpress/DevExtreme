@@ -2,6 +2,7 @@
 import { move } from '@js/animation/translator';
 import registerComponent from '@js/core/component_registrator';
 import DOMComponent from '@js/core/dom_component';
+import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
@@ -212,6 +213,11 @@ export class Appointment extends DOMComponent {
       .filter((label) => !!label)
       .join(', ');
     $element.attr('aria-roledescription', `${ariaLabel}, `);
+
+    const id = `dx-${new Guid()}`;
+
+    $element.attr('aria-describedby', id);
+    $element.find('.dx-item-content').attr('id', id);
   }
 
   _renderAppointmentGeometry() {

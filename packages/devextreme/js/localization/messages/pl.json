@@ -255,6 +255,9 @@
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
+        "dxScheduler-appointmentListAriaLabel": "Appointment list",
+
+
         "dxScheduler-editorLabelTitle": "Dotyczy",
         "dxScheduler-editorLabelStartDate": "Czas rozpoczęcia",
         "dxScheduler-editorLabelEndDate": "Czas zakończenia",

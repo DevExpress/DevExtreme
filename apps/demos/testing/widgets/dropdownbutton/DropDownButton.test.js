@@ -12,7 +12,7 @@ fixture('DropDownButton.Overview')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('DropDownButton', 'Overview', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('DropDownButton', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Custom Overview Appearance', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

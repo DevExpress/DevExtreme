@@ -15,7 +15,7 @@ fixture('Toolbar.Adaptability')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Toolbar', 'Adaptability', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('Toolbar', 'Adaptability', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Adaptability', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

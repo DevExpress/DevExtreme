@@ -24,7 +24,10 @@ export const createAppointmentLayout = (formatText, config) => {
   $('<div>').addClass(APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_DATE).text(formatText.formatDate).appendTo($contentDetails);
 
   config.isRecurrence
-        && $('<span>').addClass(`${APPOINTMENT_CONTENT_CLASSES.RECURRING_ICON} dx-icon-repeat`).attr('aria-label', recurringText)
+        && $('<span>')
+          .addClass(`${APPOINTMENT_CONTENT_CLASSES.RECURRING_ICON} dx-icon-repeat`)
+          .attr('aria-label', recurringText)
+          .attr('role', 'img')
           .appendTo(result);
 
   config.isAllDay

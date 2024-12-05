@@ -12,7 +12,7 @@ fixture('ContextMenu.Scrolling')
 const TARGET_AREA = 'target-area';
 const MENU_ITEM_TEXT_CLASS = 'dx-menu-item-text';
 
-runManualTest('ContextMenu', 'Scrolling', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('ContextMenu', 'Scrolling', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Custom Template Appearance', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

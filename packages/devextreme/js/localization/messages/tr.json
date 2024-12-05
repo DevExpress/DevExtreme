@@ -255,6 +255,9 @@
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
+        "dxScheduler-appointmentListAriaLabel": "Appointment list",
+
+
         "dxScheduler-editorLabelTitle": "Konu",
         "dxScheduler-editorLabelStartDate": "Başlangıç Tarihi",
         "dxScheduler-editorLabelEndDate": "Bitiş Tarihi",

@@ -9,7 +9,7 @@ fixture('DataGrid.MasterDetailAPI')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('DataGrid', 'MasterDetailAPI', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('DataGrid', 'MasterDetailAPI', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('MasterDetailAPI', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

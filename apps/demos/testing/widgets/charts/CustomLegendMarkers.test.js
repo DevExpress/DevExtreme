@@ -9,7 +9,7 @@ fixture('Charts.CustomLegendMarkers')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Charts', 'CustomLegendMarkers', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('Charts', 'CustomLegendMarkers', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('CustomLegendMarkers', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

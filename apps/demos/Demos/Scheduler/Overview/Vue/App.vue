@@ -5,7 +5,7 @@
     :current-date="currentDate"
     :views="views"
     :groups="groups"
-    :height="600"
+    :height="710"
     :show-all-day-panel="true"
     :first-day-of-week="1"
     :start-day-hour="8"
@@ -51,40 +51,71 @@ const dataSource = data;
   position: relative;
 }
 
+.dx-color-scheme-light,
+.dx-color-scheme-carmine,
+.dx-color-scheme-softblue,
+.dx-color-scheme-blue-light,
+.dx-color-scheme-saas-light,
+.dx-color-scheme-lime-light,
+.dx-color-scheme-orange-light,
+.dx-color-scheme-purple-light,
+.dx-color-scheme-teal-light {
+  --text-color-1: rgba(0, 0, 0, .6);
+  --text-color-2: rgba(255, 255, 255, 1);
+  --disabled-color: rgba(0, 0, 0, 0.38);
+  --background-color-1: rgba(50, 134, 56, 1);
+  --background-color-2: rgba(194, 81, 0, 1);
+}
+
+.dx-color-scheme-dark,
+.dx-color-scheme-darkviolet,
+.dx-color-scheme-darkmoon,
+.dx-color-scheme-blue-dark,
+.dx-color-scheme-saas-dark,
+.dx-color-scheme-lime-dark,
+.dx-color-scheme-orange-dark,
+.dx-color-scheme-purple-dark,
+.dx-color-scheme-teal-dark {
+  --text-color-1: rgba(255, 255, 255, 1);
+  --text-color-2: rgba(54, 54, 64, 1);
+  --disabled-color: rgba(255, 255, 255, 0.38);
+  --background-color-1: rgba(159, 213, 161, 1);
+  --background-color-2: rgba(255, 181, 127, 1);
+
+}
+
+.dx-scheduler-header .dx-toolbar .dx-button,
+.dx-scheduler-header .dx-toolbar .dx-button .dx-icon {
+  color: var(--text-color-1);
+}
+
 .dx-scheduler-date-table-other-month.dx-scheduler-date-table-cell {
   opacity: 1;
-  color: rgba(0, 0, 0, 0.3) !important;
+  color: var(--disabled-color) !important;
 }
 
-.dx-color-scheme-light .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-.dx-color-scheme-carmine .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-.dx-color-scheme-softblue .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-.dx-color-scheme-blue-light .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-.dx-color-scheme-saas-light .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-.dx-color-scheme-lime-light .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-.dx-color-scheme-orange-light .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-.dx-color-scheme-purple-light .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-.dx-color-scheme-teal-light .dx-scheduler-work-space-month .dx-scheduler-date-table-cell {
-  color: rgba(0, 0, 0, .6);
+.dx-scheduler-work-space-month .dx-scheduler-date-table-cell {
+  color: var(--text-color-1);
 }
 
-.dx-color-scheme-dark .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-.dx-color-scheme-darkviolet .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-.dx-color-scheme-darkmoon .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-.dx-color-scheme-blue-dark .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-.dx-color-scheme-saas-dark .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-.dx-color-scheme-lime-dark .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-.dx-color-scheme-orange-dark .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-.dx-color-scheme-purple-dark .dx-scheduler-work-space-month .dx-scheduler-date-table-cell,
-.dx-color-scheme-teal-dark .dx-scheduler-work-space-month .dx-scheduler-date-table-cell {
-  color: rgba(255, 255, 255, 1);
+.dx-scheduler-work-space-month .dx-scheduler-appointment {
+  color: var(--text-color-2);
+  line-height: 22px;
+}
+
+.dx-scheduler-work-space-month .dx-scheduler-appointment .dx-scheduler-appointment-content {
+  padding-top: 0;
 }
 
 .dx-scheduler-date-table-cell .dx-template-wrapper {
   position: absolute;
-  width: 100%;
   height: 100%;
+  width: 100%;
   padding-right: 6px;
+}
+
+.dx-scheduler-appointment {
+  color: rgba(255, 255, 255, 1);
 }
 
 </style>
