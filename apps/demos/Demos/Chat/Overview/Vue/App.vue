@@ -20,13 +20,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxChat from 'devextreme-vue/chat';
-import {
-  messages as initialMessages,
-  supportAgent,
-  currentUser,
-} from './data.ts';
+import { messages, supportAgent, currentUser } from './data.ts';
 
-const messages = ref(initialMessages);
 const userChatTypingUsers = ref([]);
 const supportChatTypingUsers = ref([]);
 
@@ -35,7 +30,7 @@ function onMessageEntered(event) {
 }
 
 function userChatTypingStart() {
-  supportChatTypingUsers.value = [currentUser];
+  supportChatTypingUsers.value = [currentUser.value];
 }
 
 function userChatTypingEnd() {
@@ -43,7 +38,7 @@ function userChatTypingEnd() {
 }
 
 function supportChatTypingStart() {
-  userChatTypingUsers.value = [supportAgent];
+  userChatTypingUsers.value = [supportAgent.value];
 }
 
 function supportChatTypingEnd() {
@@ -52,16 +47,16 @@ function supportChatTypingEnd() {
 </script>
 
 <style scoped>
-#app {
-  display: flex;
-  gap: 20px;
-}
+    #app {
+        display: flex;
+        gap: 20px;
+    }
 
-.dx-chat {
-  height: 710px;
-}
+    .dx-chat {
+        height: 710px;
+    }
 
-.dx-avatar {
-  border: 1px solid var(--dx-color-border);
-}
+    .dx-avatar {
+        border: 1px solid var(--dx-color-border);
+    }
 </style>

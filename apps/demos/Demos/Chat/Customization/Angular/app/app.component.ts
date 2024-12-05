@@ -4,8 +4,8 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { DxChatModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 import { User, Message, MessageEnteredEvent } from 'devextreme/ui/chat';
-import { AppService } from './app.service';
 import { Observable } from 'rxjs';
+import { AppService } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -24,14 +24,20 @@ if (window && window.config.packageConfigPaths) {
 })
 export class AppComponent {
   currentUser: User;
+
   supportAgent: User;
+
   messages$: Observable<Message[]>;
+
   dayHeaderFormats = this.appService.dayHeaderFormats;
+
   messageTimestampFormats = this.appService.messageTimestampFormats;
+
   dayHeaderLabel = this.appService.dayHeaderLabel;
+
   messageTimestampLabel = this.appService.messageTimestampLabel;
 
-  constructor(private appService: AppService) {
+  constructor(private readonly appService: AppService) {
     [this.currentUser, this.supportAgent] = this.appService.getUsers();
     this.messages$ = this.appService.messages$;
   }
@@ -46,7 +52,7 @@ export class AppComponent {
     BrowserModule,
     DxChatModule,
     DxCheckBoxModule,
-    DxSelectBoxModule
+    DxSelectBoxModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

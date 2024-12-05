@@ -13,7 +13,7 @@ import {
   dayHeaderLabel
 } from './data.ts';
 
-const App = () => {
+export default function App() {
   const [messages, setMessages] = useState<ChatTypes.Message[]>(initialMessages);
   const [showAvatar, setShowAvatar] = useState(true);
   const [showUsername, setShowUsername] = useState(true);
@@ -117,5 +117,3 @@ const App = () => {
     </React.Fragment>
   );
 }
-
-export default App;

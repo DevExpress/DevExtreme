@@ -2,7 +2,7 @@ import { ChatTypes } from 'devextreme-react/chat';
 
 function getTimestamp(date, offsetMinutes = 0) {
   return date.getTime() + offsetMinutes * 60000;
-};
+}
 
 const date = new Date();
 date.setHours(0, 0, 0, 0);
@@ -27,7 +27,7 @@ export const messages = [
   {
     timestamp: getTimestamp(date, -7),
     author: currentUser,
-    text: "Hi, I'm having trouble accessing my account.",
+    text: 'Hi, I\'m having trouble accessing my account.',
   },
   {
     timestamp: getTimestamp(date, -7),
