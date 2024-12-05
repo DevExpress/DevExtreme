@@ -50,7 +50,8 @@
   color: var(--text-color-1);
 }
 
-::ng-deep .dx-scheduler-work-space-month .dx-scheduler-appointment {
+::ng-deep .dx-scheduler-work-space-month .dx-scheduler-appointment,
+::ng-deep .dx-scheduler-work-space-month .dx-scheduler-appointment.dx-state-focused {
   color: var(--text-color-2);
   line-height: 22px;
 }

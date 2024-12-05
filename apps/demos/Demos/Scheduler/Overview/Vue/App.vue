@@ -98,7 +98,8 @@ const dataSource = data;
   color: var(--text-color-1);
 }
 
-.dx-scheduler-work-space-month .dx-scheduler-appointment {
+.dx-scheduler-work-space-month .dx-scheduler-appointment,
+.dx-scheduler-work-space-month .dx-scheduler-appointment.dx-state-focused {
   color: var(--text-color-2);
   line-height: 22px;
 }
