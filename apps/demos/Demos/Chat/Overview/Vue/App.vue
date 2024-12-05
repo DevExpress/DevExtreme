@@ -22,7 +22,7 @@ import { ref } from 'vue';
 import DxChat from 'devextreme-vue/chat';
 import { messages as initialMessages, supportAgent, currentUser } from './data.ts';
 
-const messages = ref(initialMessages)
+const messages = ref(initialMessages);
 const userChatTypingUsers = ref([]);
 const supportChatTypingUsers = ref([]);
 
