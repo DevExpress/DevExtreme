@@ -3,12 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxCheckBoxModule } from 'devextreme-angular';
 
-if (!document.location.host.includes('localhost')) {
+if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
 let modulePrefix = '';
-// @ts-expect-error
+// @ts-ignore
 if (window && window.config.packageConfigPaths) {
   modulePrefix = '/app';
 }
