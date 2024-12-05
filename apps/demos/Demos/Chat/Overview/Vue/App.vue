@@ -48,16 +48,16 @@ function supportChatTypingEnd() {
 </script>
 
 <style scoped>
-    #app {
-        display: flex;
-        gap: 20px;
-    }
+#app {
+  display: flex;
+  gap: 20px;
+}
 
-    .dx-chat {
-        height: 710px;
-    }
+.dx-chat {
+  height: 710px;
+}
 
-    .dx-avatar {
-        border: 1px solid var(--dx-color-border);
-    }
+.dx-avatar {
+  border: 1px solid var(--dx-color-border);
+}
 </style>
