@@ -51,6 +51,10 @@ const dataSource = data;
   position: relative;
 }
 
+.dx-scheduler-group-header-content {
+  padding-left: 8px;
+}
+
 .dx-color-scheme-light,
 .dx-color-scheme-carmine,
 .dx-color-scheme-softblue,

@@ -3,6 +3,10 @@
   position: relative;
 }
 
+::ng-deep .dx-scheduler-group-header-content {
+  padding-left: 8px;
+}
+
 ::ng-deep .dx-color-scheme-light,
 ::ng-deep .dx-color-scheme-carmine,
 ::ng-deep .dx-color-scheme-softblue,
