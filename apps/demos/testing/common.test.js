@@ -192,7 +192,7 @@ const SKIPPED_TESTS = {
       { demo: 'Colorization', themes: [THEME.material] },
       { demo: 'SignalRService', themes: [THEME.material] },
       { demo: 'PointsAggregation', themes: [THEME.material] },
-      { demo: 'AxisLabelsOverlapping', themes: [THEME.material] },
+      { demo: 'ResolveLabelOverlap', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'EqualSizePies', themes: [THEME.material] },
       { demo: 'Palette', themes: [THEME.material] },
