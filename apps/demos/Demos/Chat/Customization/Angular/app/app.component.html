@@ -2,7 +2,7 @@
   <div class="chat-container">
     <dx-chat
       #chat
-      height="710",
+      [height]="710"
       [user]="currentUser"
       [items]="messages$ | async"
       [showAvatar]="true"
