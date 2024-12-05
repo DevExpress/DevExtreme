@@ -20,8 +20,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxChat from 'devextreme-vue/chat';
-import { messages, supportAgent, currentUser } from './data.ts';
+import { messages as initialMessages, supportAgent, currentUser } from './data.ts';
 
+const messages = ref(initialMessages)
 const userChatTypingUsers = ref([]);
 const supportChatTypingUsers = ref([]);
 
@@ -30,7 +31,7 @@ function onMessageEntered(event) {
 }
 
 function userChatTypingStart() {
-  supportChatTypingUsers.value = [currentUser.value];
+  supportChatTypingUsers.value = [currentUser];
 }
 
 function userChatTypingEnd() {
@@ -38,7 +39,7 @@ function userChatTypingEnd() {
 }
 
 function supportChatTypingStart() {
-  userChatTypingUsers.value = [supportAgent.value];
+  userChatTypingUsers.value = [supportAgent];
 }
 
 function supportChatTypingEnd() {
