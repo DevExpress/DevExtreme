@@ -15,6 +15,7 @@ withDefaults(defineProps<{
   .custom-icon .icon {
     color: #f05b41;
   }
+
   .custom-icon {
     display: flex;
     align-items: center;
