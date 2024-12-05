@@ -68,7 +68,7 @@ const App = () => {
         
         <div className="option">
           <CheckBox
-            text="Day Header"
+            text="Day Headers"
             value={showDayHeaders}
             onValueChange={setDayHeaders}
           />

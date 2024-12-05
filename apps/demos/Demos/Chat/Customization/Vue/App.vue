@@ -38,7 +38,7 @@
           <DxCheckBox
             v-model:value="showDayHeaders"
             :input-attr="dayHeaderLabel"
-            text="Day Header"
+            text="Day Headers"
           />
         </div>
 

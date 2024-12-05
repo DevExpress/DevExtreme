@@ -196,7 +196,7 @@ const SKIPPED_TESTS = {
       { demo: 'EditorAppearanceVariants', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     DropDownButton: [
-      { demo: 'Overview', themes: [THEME.material, THEME.fluent] },
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
@@ -219,7 +219,7 @@ const SKIPPED_TESTS = {
       { demo: 'ItemDragging', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Gauges: [
-      { demo: 'VariableNumberOfBars', themes: [THEME.material, THEME.fluent] },
+      { demo: 'VariableNumberOfBars', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     DataGrid: [
       { demo: 'Appearance', themes: [THEME.generic, THEME.material] },

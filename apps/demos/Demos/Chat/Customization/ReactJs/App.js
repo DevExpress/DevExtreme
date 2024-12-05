@@ -11,60 +11,18 @@ import {
   dayHeaderLabel,
 } from './data.js';
 
-export default function App() {
+const App = () => {
   const [messages, setMessages] = useState(initialMessages);
   const [showAvatar, setShowAvatar] = useState(true);
   const [showUsername, setShowUsername] = useState(true);
   const [showDayHeaders, setDayHeaders] = useState(true);
   const [dayHeaderFormat, setDayHeaderFormat] = useState(headerFormats[0]);
-  const [showMessageTime, setMessageTime] = useState(true);
-  const [messageTimestampFormat, setMessageTimeFormat] = useState(messageTimestamps[0]);
+  const [showMessageTimestamp, setMessageTimestamp] = useState(true);
+  const [messageTimestampFormat, setMessageTimestampFormat] = useState(messageTimestamps[0]);
   const [isDisabled, setDisabled] = useState(false);
-  function onMessageEntered({ message }) {
+  const onMessageEntered = useCallback(({ message }) => {
     setMessages((prevMessages) => [...prevMessages, message]);
-  }
-  const dayHeaderFormatChanged = useCallback(
-    (e) => {
-      setDayHeaderFormat(e.value);
-    },
-    [setDayHeaderFormat],
-  );
-  const messageTimestampFormatChanged = useCallback(
-    (e) => {
-      setMessageTimeFormat(e.value);
-    },
-    [setMessageTimeFormat],
-  );
-  const showAvatarChanged = useCallback(
-    (e) => {
-      setShowAvatar(e.value);
-    },
-    [setShowAvatar],
-  );
-  const showUsernameChanged = useCallback(
-    (e) => {
-      setShowUsername(e.value);
-    },
-    [setShowUsername],
-  );
-  const showDayHeaderChanged = useCallback(
-    (e) => {
-      setDayHeaders(e.value);
-    },
-    [setDayHeaders],
-  );
-  const showMessageTimeChanged = useCallback(
-    (e) => {
-      setMessageTime(e.value);
-    },
-    [setMessageTime],
-  );
-  const isDisabledChanged = useCallback(
-    (e) => {
-      setDisabled(e.value);
-    },
-    [setDisabled],
-  );
+  }, []);
   return (
     <React.Fragment>
       <div className="chat-container">
@@ -76,7 +34,7 @@ export default function App() {
           showAvatar={showAvatar}
           showUserName={showUsername}
           showDayHeaders={showDayHeaders}
-          showMessageTimestamp={showMessageTime}
+          showMessageTimestamp={showMessageTimestamp}
           dayHeaderFormat={dayHeaderFormat}
           messageTimestampFormat={messageTimestampFormat}
           onMessageEntered={onMessageEntered}
@@ -90,7 +48,7 @@ export default function App() {
           <CheckBox
             text="Avatar"
             value={showAvatar}
-            onValueChanged={showAvatarChanged}
+            onValueChange={setShowAvatar}
           />
         </div>
 
@@ -98,7 +56,7 @@ export default function App() {
           <CheckBox
             text="User Name"
             value={showUsername}
-            onValueChanged={showUsernameChanged}
+            onValueChange={setShowUsername}
           />
         </div>
 
@@ -106,9 +64,9 @@ export default function App() {
 
         <div className="option">
           <CheckBox
-            text="Day Header"
+            text="Day Headers"
             value={showDayHeaders}
-            onValueChanged={showDayHeaderChanged}
+            onValueChange={setDayHeaders}
           />
         </div>
 
@@ -118,7 +76,7 @@ export default function App() {
             items={headerFormats}
             value={dayHeaderFormat}
             inputAttr={dayHeaderLabel}
-            onValueChanged={dayHeaderFormatChanged}
+            onValueChange={setDayHeaderFormat}
           />
         </div>
 
@@ -127,8 +85,8 @@ export default function App() {
         <div className="option">
           <CheckBox
             text="Message Timestamp"
-            value={showMessageTime}
-            onValueChanged={showMessageTimeChanged}
+            value={showMessageTimestamp}
+            onValueChange={setMessageTimestamp}
           />
         </div>
 
@@ -138,7 +96,7 @@ export default function App() {
             items={messageTimestamps}
             value={messageTimestampFormat}
             inputAttr={messageTimestampLabel}
-            onValueChanged={messageTimestampFormatChanged}
+            onValueChange={setMessageTimestampFormat}
           />
         </div>
 
@@ -148,10 +106,11 @@ export default function App() {
           <CheckBox
             text="Disable Chat"
             value={isDisabled}
-            onValueChanged={isDisabledChanged}
+            onValueChange={setDisabled}
           />
         </div>
       </div>
     </React.Fragment>
   );
-}
+};
+export default App;
