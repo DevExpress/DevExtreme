@@ -166,7 +166,7 @@ const SKIPPED_TESTS = {
       { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
       { demo: 'MultipleLayers', themes: [THEME.material] },
       { demo: 'Palette', themes: [THEME.material] },
-      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+      { demo: 'TooltipsCustomization', themes: [THEME.material] },
     ],
     RangeSelector: [
       { demo: 'DiscreteScale', themes: [THEME.material] },
@@ -250,7 +250,7 @@ const SKIPPED_TESTS = {
       { demo: 'CustomProjection', themes: [THEME.material] },
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'PieMarkers', themes: [THEME.material] },
-      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+      { demo: 'TooltipsCustomization', themes: [THEME.material] },
       { demo: 'MultipleLayers', themes: [THEME.material] },
       { demo: 'CustomMapData', themes: [THEME.material] },
       { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
