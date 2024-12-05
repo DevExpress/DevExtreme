@@ -134,7 +134,7 @@ const SKIPPED_TESTS = {
   },
   React: {
     Common: [
-      { demo: 'ActionAndListsOverview', themes: [THEME.generic, THEME.material] },
+      { demo: 'ListsOverview', themes: [THEME.generic, THEME.material] },
     ],
     Charts: [
       { demo: 'EqualSizePies', themes: [THEME.material] },
