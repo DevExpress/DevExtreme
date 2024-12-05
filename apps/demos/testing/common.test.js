@@ -143,7 +143,7 @@ const SKIPPED_TESTS = {
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.material, THEME.fluent] },
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
-      { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
+      { demo: 'Toolbar', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'CellEditing', themes: [THEME.material] },
     ],
@@ -155,7 +155,7 @@ const SKIPPED_TESTS = {
       { demo: 'GroupByDate', themes: [THEME.fluent, THEME.material] },
     ],
     List: [
-      { demo: 'ListWithSearchBar', themes: [THEME.material] },
+      { demo: 'Search', themes: [THEME.material] },
       { demo: 'ItemDragging', themes: [THEME.fluent, THEME.material] },
     ],
     VectorMap: [
@@ -170,7 +170,7 @@ const SKIPPED_TESTS = {
     ],
     RangeSelector: [
       { demo: 'DiscreteScale', themes: [THEME.material] },
-      { demo: 'UseRangeSelectionForCalculation', themes: [THEME.material] },
+      { demo: 'Calculation', themes: [THEME.material] },
     ],
     PivotGrid: [
       { demo: 'ExcelJSCellCustomization', themes: [THEME.material] },
@@ -194,7 +194,7 @@ const SKIPPED_TESTS = {
       { demo: 'PointsAggregation', themes: [THEME.material] },
       { demo: 'AxisLabelsOverlapping', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
-      { demo: 'PiesWithEqualSize', themes: [THEME.material] },
+      { demo: 'EqualSizePies', themes: [THEME.material] },
       { demo: 'Palette', themes: [THEME.material] },
     ],
     Drawer: [
@@ -202,7 +202,7 @@ const SKIPPED_TESTS = {
     ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.fluent, THEME.material] },
-      { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
+      { demo: 'Toolbar', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
       { demo: 'FilteringAPI', themes: [THEME.material] },
       { demo: 'Filtering', themes: [THEME.fluent] },
@@ -230,7 +230,7 @@ const SKIPPED_TESTS = {
       { demo: 'Overview', themes: [THEME.material] },
     ],
     List: [
-      { demo: 'ListWithSearchBar', themes: [THEME.material] },
+      { demo: 'Search', themes: [THEME.material] },
     ],
     Gauges: [
       { demo: 'Overview', themes: [THEME.material] },
@@ -239,7 +239,7 @@ const SKIPPED_TESTS = {
       { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
     ],
     RangeSelector: [
-      { demo: 'UseRangeSelectionForCalculation', themes: [THEME.material] },
+      { demo: 'Calculation', themes: [THEME.material] },
       { demo: 'DiscreteScale', themes: [THEME.material] },
     ],
     PivotGrid: [
