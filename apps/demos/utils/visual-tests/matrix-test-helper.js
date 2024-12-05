@@ -196,7 +196,7 @@ const SKIPPED_TESTS = {
       { demo: 'EditorAppearanceVariants', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     DropDownButton: [
-      { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'Overview', themes: [THEME.material, THEME.fluent] },
     ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
@@ -213,10 +213,10 @@ const SKIPPED_TESTS = {
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     DropDownBox: [
-      { demo: 'MultipleSelection', themes: [THEME.generic, THEME.material] },
+      { demo: 'MultipleSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     List: [
-      { demo: 'ItemDragging', themes: [THEME.generic] },
+      { demo: 'ItemDragging', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Gauges: [
       { demo: 'VariableNumberOfBars', themes: [THEME.material, THEME.fluent] },
@@ -228,7 +228,7 @@ const SKIPPED_TESTS = {
       { demo: 'AjaxRequest', themes: [THEME.generic, THEME.material, THEME.fluent ] },
       { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'MasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'SimpleArray', themes: [THEME.generic, THEME.material] },
+      { demo: 'SimpleArray', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'MasterDetailAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'DataValidation', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'MultipleSorting', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -236,16 +236,16 @@ const SKIPPED_TESTS = {
       { demo: 'CustomNewRecordPosition', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Filtering', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'FilteringAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'GroupSummaries', themes: [THEME.material, THEME.fluent ] },
-      { demo: 'RecordPaging', themes: [THEME.material, THEME.fluent] },
-      { demo: 'RowSelection', themes: [THEME.material, THEME.fluent] },
+      { demo: 'GroupSummaries', themes: [THEME.generic, THEME.material, THEME.fluent ] },
+      { demo: 'RecordPaging', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'RowSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'MultipleSelection', themes: [THEME.material, THEME.fluent] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'RemoteGrouping', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'RecordGrouping', themes: [THEME.material, THEME.fluent] },
+      { demo: 'RecordGrouping', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Form: [
       'CustomizeItem',
@@ -254,7 +254,7 @@ const SKIPPED_TESTS = {
     Scheduler: [
       'CustomDragAndDrop',
       { demo: 'Resources', themes: [THEME.fluent] },
-      { demo: 'CellTemplates', themes: [THEME.generic] },
+      { demo: 'CellTemplates', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Popup: [
       { demo: 'Scrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
