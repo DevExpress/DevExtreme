@@ -4755,7 +4755,7 @@
         "Demos": [
           {
             "Title": "Overview",
-            "Name": "DialogsAndNotificationsOverview",
+            "Name": "PopupAndNotificationsOverview",
             "DocUrl": "",
             "Widget": "Common",
             "MvcAdditionalFiles": [

@@ -280,7 +280,7 @@ const SKIPPED_TESTS = {
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'AreaSelectionZooming', themes: [THEME.material] },
-      { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
+      { demo: 'PopupAndNotificationsOverview', themes: [THEME.material] },
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },

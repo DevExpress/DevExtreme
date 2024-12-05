@@ -17,6 +17,7 @@
     { "Widget": "Charts", "Name": "PieWithResolvedLabelOverlapping", "NewWidget": "Charts", "NewName": "PieResolveLabelOverlap" },
     { "Widget": "Charts", "Name": "PieWithAnnotations", "NewWidget": "Charts", "NewName": "PieAnnotations" },
     { "Widget": "Charts", "Name": "PieWithCustomStyles", "NewWidget": "Charts", "NewName": "CustomFillStyles" },
+    { "Widget": "Common", "Name": "DialogsAndNotificationsOverview", "NewWidget": "Common", "NewName": "PopupAndNotificationsOverview" },
     { "Widget": "Data_Grid", "NewWidget": "DataGrid" },
     { "Widget": "DataGrid", "Name": "FilterBuilder", "NewWidget": "DataGrid", "NewName": "FilterPanel" },
     { "Widget": "DataGrid", "Name": "CustomizeCommandColumns", "NewWidget": "DataGrid", "NewName": "CommandColumnCustomization" },
