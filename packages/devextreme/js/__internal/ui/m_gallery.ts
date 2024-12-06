@@ -1,5 +1,11 @@
-import fx from '@js/animation/fx';
-import { move } from '@js/animation/translator';
+import { fx } from '@js/common/core/animation';
+import { move } from '@js/common/core/animation/translator';
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import Swipeable from '@js/common/core/events/gesture/swipeable';
+import { addNamespace } from '@js/common/core/events/utils/index';
+import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
@@ -13,12 +19,6 @@ import {
 } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import Swipeable from '@js/events/gesture/swipeable';
-import { addNamespace } from '@js/events/utils/index';
-import { triggerResizeEvent } from '@js/events/visibility_change';
-import messageLocalization from '@js/localization/message';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import Widget from '@js/ui/widget/ui.widget';
 

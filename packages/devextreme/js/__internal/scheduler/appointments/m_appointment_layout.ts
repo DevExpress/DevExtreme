@@ -1,6 +1,6 @@
+import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
-import messageLocalization from '@js/localization/message';
 
 import { APPOINTMENT_CONTENT_CLASSES } from '../m_classes';
 
@@ -24,7 +24,10 @@ export const createAppointmentLayout = (formatText, config) => {
   $('<div>').addClass(APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_DATE).text(formatText.formatDate).appendTo($contentDetails);
 
   config.isRecurrence
-        && $('<span>').addClass(`${APPOINTMENT_CONTENT_CLASSES.RECURRING_ICON} dx-icon-repeat`).attr('aria-label', recurringText)
+        && $('<span>')
+          .addClass(`${APPOINTMENT_CONTENT_CLASSES.RECURRING_ICON} dx-icon-repeat`)
+          .attr('aria-label', recurringText)
+          .attr('role', 'img')
           .appendTo(result);
 
   config.isAllDay

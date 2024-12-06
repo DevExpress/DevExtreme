@@ -1,10 +1,10 @@
 import { getOuterHeight } from 'core/utils/size';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
-import CustomStore from 'data/custom_store';
-import { DataSource } from 'data/data_source/data_source';
+import { CustomStore } from 'common/data/custom_store';
+import { DataSource } from 'common/data/data_source/data_source';
 
-import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
+import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import dxSchedulerWorkSpaceDay from '__internal/scheduler/workspaces/m_work_space_day';
 import errors from 'ui/widget/ui.errors';

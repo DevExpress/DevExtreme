@@ -1,12 +1,12 @@
 import 'generic_light.css!';
 
 import 'ui/data_grid';
-import 'data/odata/store';
+import 'common/data/odata/store';
 
 import $ from 'jquery';
-import ArrayStore from 'data/array_store';
-import pointerEvents from 'events/pointer';
-import clickEvent from 'events/click';
+import ArrayStore from 'common/data/array_store';
+import pointerEvents from 'common/core/events/pointer';
+import clickEvent from 'common/core/events/click';
 import { setupDataGridModules, generateItems } from '../../helpers/dataGridMocks.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { CLICK_EVENT, isMobile, device, fireKeyDown, triggerKeyDown } from '../../helpers/grid/keyboardNavigationHelper.js';

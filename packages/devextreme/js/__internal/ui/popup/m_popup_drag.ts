@@ -1,15 +1,15 @@
-import { locate, move } from '@js/animation/translator';
-import domAdapter from '@js/core/dom_adapter';
-import { fitIntoRange } from '@js/core/utils/math';
-import { getOffset, getOuterHeight, getOuterWidth } from '@js/core/utils/size';
-import { isWindow } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
+import { locate, move } from '@js/common/core/animation/translator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   end as dragEndEvent,
   move as dragMoveEvent,
   start as dragStartEvent,
-} from '@js/events/drag';
-import { addNamespace } from '@js/events/utils/index';
+} from '@js/common/core/events/drag';
+import { addNamespace } from '@js/common/core/events/utils/index';
+import domAdapter from '@js/core/dom_adapter';
+import { fitIntoRange } from '@js/core/utils/math';
+import { getOffset, getOuterHeight, getOuterWidth } from '@js/core/utils/size';
+import { isWindow } from '@js/core/utils/type';
 
 const KEYBOARD_DRAG_STEP = 5;
 

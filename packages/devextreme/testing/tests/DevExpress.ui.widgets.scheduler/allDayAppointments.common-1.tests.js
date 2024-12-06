@@ -1,10 +1,10 @@
 import { getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
-import translator from 'animation/translator';
-import dblclickEvent from 'events/dblclick';
-import fx from 'animation/fx';
-import { DataSource } from 'data/data_source/data_source';
-import CustomStore from 'data/custom_store';
+import translator from 'common/core/animation/translator';
+import dblclickEvent from 'common/core/events/dblclick';
+import fx from 'common/core/animation/fx';
+import { DataSource } from 'common/data/data_source/data_source';
+import { CustomStore } from 'common/data/custom_store';
 import {
     supportedScrollingModes,
     createWrapper,

@@ -1,5 +1,11 @@
 import './converters/m_delta';
 
+// @ts-expect-error
+import { Event as dxEvent } from '@js/common/core/events';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import scrollEvents from '@js/common/core/events/gesture/emitter.gesture.scroll';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import config from '@js/core/config';
 import devices from '@js/core/devices';
@@ -16,12 +22,6 @@ import {
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import scrollEvents from '@js/events/gesture/emitter.gesture.scroll';
-// @ts-expect-error
-import { Event as dxEvent } from '@js/events/index';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace } from '@js/events/utils/index';
 import Editor from '@js/ui/editor/editor';
 import { prepareScrollData } from '@ts/ui/text_box/m_utils.scroll';
 

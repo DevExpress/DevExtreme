@@ -2,8 +2,8 @@ import Popup from '../popup/ui.popup';
 import Form from '../form';
 import '../tag_box';
 import '../radio_group';
-import dateLocalization from '../../localization/date';
-import messageLocalization from '../../localization/message';
+import dateLocalization from '../../common/core/localization/date';
+import messageLocalization from '../../common/core/localization/message';
 import '../list_light';
 import '../../__internal/ui/list/modules/m_deleting';
 

@@ -3,7 +3,7 @@ import domAdapter from '../../../core/dom_adapter';
 import { getWindow } from '../../../core/utils/window';
 import callOnce from '../../../core/utils/call_once';
 
-import eventsEngine from '../../../events/core/events_engine';
+import eventsEngine from '../../../common/core/events/core/events_engine';
 import { getSvgMarkup } from '../../../core/utils/svg';
 import { AnimationController } from './animation';
 import { normalizeBBox, rotateBBox, normalizeEnum, normalizeArcParams, getNextDefsSvgId } from '../utils';

@@ -14,7 +14,7 @@ import {
 
 
 
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 import { VerticalEdge, TooltipShowMode } from 'devextreme/common';
 
 import {

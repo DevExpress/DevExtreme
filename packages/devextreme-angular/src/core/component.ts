@@ -38,6 +38,7 @@ import {
 
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx',
+  licensingDocLink: 'https://go.devexpress.com/Licensing_Documentation_DevExtremeAngular.aspx',
 });
 
 let serverStateKey;

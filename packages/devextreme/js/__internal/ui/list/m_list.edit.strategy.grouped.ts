@@ -1,8 +1,8 @@
+import query from '@js/common/data/query';
+import storeHelper from '@js/common/data/store_helper';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { isNumeric } from '@js/core/utils/type';
-import query from '@js/data/query';
-import storeHelper from '@js/data/store_helper';
 import EditStrategy from '@ts/ui/collection/m_collection_widget.edit.strategy.plain';
 
 const LIST_ITEM_CLASS = 'dx-list-item';

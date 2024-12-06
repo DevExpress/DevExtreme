@@ -1,10 +1,10 @@
-import eventsEngine from '../../events/core/events_engine';
+import eventsEngine from '../../common/core/events/core/events_engine';
 import Class from '../../core/class';
 import domAdapter from '../../core/dom_adapter';
-import { name as wheelEventName } from '../../events/core/wheel';
+import { name as wheelEventName } from '../../common/core/events/core/wheel';
 import ReadyCallbacks from '../../core/utils/ready_callbacks';
-import { addNamespace } from '../../events/utils/index';
-import pointerEvents from '../../events/pointer';
+import { addNamespace } from '../../common/core/events/utils/index';
+import pointerEvents from '../../common/core/events/pointer';
 ///#DEBUG
 import { debug } from '../../core/utils/console';
 ///#ENDDEBUG

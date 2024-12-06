@@ -59,7 +59,7 @@ jobs:
           git config --global user.name "DX Robot"
 
       - name: Bump version
-        run: pnpm run all:update-version -- ${{ inputs.version }}
+        run: pnpm run all:update-version ${{ inputs.version }}
 
       - name: Commit changes and make PR
         env:

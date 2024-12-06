@@ -1,1 +1,3 @@
-export { default } from '../__internal/data/m_custom_store';
+import { CustomStore } from '../common/data/custom_store';
+
+export default CustomStore;

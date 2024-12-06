@@ -9,7 +9,7 @@ fixture('DataGrid.MultipleRecordSelectionAPI')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('DataGrid', 'MultipleRecordSelectionAPI', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('DataGrid', 'MultipleRecordSelectionAPI', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('MultipleRecordSelectionAPI', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

@@ -10,9 +10,8 @@ import NestedOption from "./core/nested-option";
 
 import type { ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, SeriesClickEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod, dxChartAnnotationConfig, AggregatedPointsPosition, ChartLabelDisplayMode, FinancialChartReductionLevel, chartPointObject, ChartTooltipLocation, ChartZoomAndPanMode, EventKeyModifier } from "devextreme/viz/chart";
 import type { AnimationEaseMode, DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, TimeInterval, ChartsDataType, ScaleBreak, ScaleBreakLineStyle, RelativePosition, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, ChartsAxisLabelOverlap, AxisScaleType, VisualRangeUpdateMode, ChartsColor, SeriesHoverMode, HatchDirection, PointInteractionMode, PointSymbol, SeriesSelectionMode, SeriesType, ValueErrorBarDisplayMode, ValueErrorBarType, LegendItem, LegendHoverMode } from "devextreme/common/charts";
-import type { template } from "devextreme/core/templates/template";
-import type { HorizontalAlignment, VerticalAlignment, Format as CommonFormat, Position, VerticalEdge, ExportFormat, Orientation } from "devextreme/common";
-import type { Format as LocalizationFormat } from "devextreme/localization";
+import type { template, HorizontalAlignment, VerticalAlignment, Format as CommonFormat, Position, VerticalEdge, ExportFormat, Orientation } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { ChartSeries } from "devextreme/viz/common";
 
 import type * as CommonChartTypes from "devextreme/common/charts";
@@ -1691,6 +1690,9 @@ const _componentConstantLineStyle = (props: IConstantLineStyleProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "constantLineStyle",
+      ExpectedChildren: {
+        commonAxisSettingsConstantLineStyleLabel: { optionName: "label", isCollectionItem: false }
+      },
     },
   });
 };
@@ -2037,6 +2039,13 @@ const _componentHoverStyle = (props: IHoverStyleProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "hoverStyle",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        color: { optionName: "color", isCollectionItem: false },
+        hatching: { optionName: "hatching", isCollectionItem: false },
+        pointBorder: { optionName: "border", isCollectionItem: false },
+        seriesBorder: { optionName: "border", isCollectionItem: false }
+      },
     },
   });
 };
@@ -2067,6 +2076,11 @@ const _componentImage = (props: IImageProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "image",
+      ExpectedChildren: {
+        height: { optionName: "height", isCollectionItem: false },
+        url: { optionName: "url", isCollectionItem: false },
+        width: { optionName: "width", isCollectionItem: false }
+      },
     },
   });
 };
@@ -2135,6 +2149,14 @@ const _componentLabel = (props: ILabelProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "label",
+      ExpectedChildren: {
+        argumentFormat: { optionName: "argumentFormat", isCollectionItem: false },
+        border: { optionName: "border", isCollectionItem: false },
+        connector: { optionName: "connector", isCollectionItem: false },
+        font: { optionName: "font", isCollectionItem: false },
+        format: { optionName: "format", isCollectionItem: false },
+        seriesBorder: { optionName: "border", isCollectionItem: false }
+      },
       TemplateProps: [{
         tmplOption: "template",
         render: "render",
@@ -2785,6 +2807,13 @@ const _componentSelectionStyle = (props: ISelectionStyleProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "selectionStyle",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        color: { optionName: "color", isCollectionItem: false },
+        hatching: { optionName: "hatching", isCollectionItem: false },
+        pointBorder: { optionName: "border", isCollectionItem: false },
+        seriesBorder: { optionName: "border", isCollectionItem: false }
+      },
     },
   });
 };
@@ -3176,6 +3205,9 @@ const _componentSubtitle = (props: ISubtitleProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "subtitle",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
     },
   });
 };
@@ -3268,6 +3300,12 @@ const _componentTitle = (props: ITitleProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "title",
+      ExpectedChildren: {
+        chartTitleSubtitle: { optionName: "subtitle", isCollectionItem: false },
+        font: { optionName: "font", isCollectionItem: false },
+        legendTitleSubtitle: { optionName: "subtitle", isCollectionItem: false },
+        margin: { optionName: "margin", isCollectionItem: false }
+      },
     },
   });
 };

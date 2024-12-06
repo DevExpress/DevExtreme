@@ -7,7 +7,7 @@ import httpRequest from 'devextreme/core/http_request';
 
 import domAdapter from 'devextreme/core/dom_adapter';
 import readyCallbacks from 'devextreme/core/utils/ready_callbacks';
-import eventsEngine from 'devextreme/events/core/events_engine';
+import eventsEngine from 'devextreme/common/core/events/core/events_engine';
 
 const outsideZoneEvents = ['mousemove', 'mouseover', 'mouseout'];
 const insideZoneEvents = ['mouseup', 'click', 'mousedown', 'transitionend', 'wheel'];

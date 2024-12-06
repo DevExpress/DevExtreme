@@ -5,18 +5,22 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    FirstDayOfWeek,
+    Orientation,
+    ScrollMode,
+} from '../common';
 
 import DataSource, { DataSourceLike } from '../data/data_source';
 
 import {
-    DxEvent,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
     Cancelable,
-} from '../events/index';
+} from '../common/core/events';
+
+import { DxEvent } from '../events';
 
 import {
     CollectionWidgetItem,
@@ -32,12 +36,6 @@ import dxSortable from './sortable';
 import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
-
-import {
-    FirstDayOfWeek,
-    Orientation,
-    ScrollMode,
-} from '../common';
 
 interface AppointmentDraggingEvent {
   readonly component: dxScheduler;

@@ -1,5 +1,8 @@
 /* eslint-disable spellcheck/spell-checker */
-import { locate, move } from '@js/animation/translator';
+import { locate, move } from '@js/common/core/animation/translator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { name as dblclickEvent } from '@js/common/core/events/double_click';
+import { addNamespace, isFakeClickEvent } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
@@ -19,9 +22,6 @@ import { setOuterHeight, setOuterWidth } from '@js/core/utils/size';
 import {
   isDeferred, isDefined, isPlainObject, isString,
 } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import { name as dblclickEvent } from '@js/events/double_click';
-import { addNamespace, isFakeClickEvent } from '@js/events/utils/index';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
@@ -464,6 +464,10 @@ class SchedulerAppointments extends CollectionWidget {
   _processItemClick(e) {
     const $target = $(e.currentTarget);
     const data = (this as any)._getItemData($target);
+
+    if ($target.is('.dx-scheduler-appointment-collector')) {
+      return;
+    }
 
     if (e.type === 'keydown' || isFakeClickEvent(e)) {
       this.notifyObserver('showEditAppointmentPopup', { data, target: $target });

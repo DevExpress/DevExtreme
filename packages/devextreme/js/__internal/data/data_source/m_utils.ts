@@ -1,12 +1,11 @@
+import ArrayStore from '@js/common/data/array_store';
+import { CustomStore } from '@js/common/data/custom_store';
+import { normalizeSortingInfo } from '@js/common/data/utils';
 import ajaxUtils from '@js/core/utils/ajax';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { isPlainObject } from '@js/core/utils/type';
 import Store from '@js/data/abstract_store';
-import ArrayStore from '@js/data/array_store';
-import CustomStore from '@js/data/custom_store';
-// @ts-expect-error
-import { normalizeSortingInfo } from '@js/data/utils';
 
 export const CANCELED_TOKEN = 'canceled';
 
@@ -66,7 +65,6 @@ const createCustomStoreFromLoadFunc = (options) => {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete options[this];
   });
-  // @ts-expect-error
   return new CustomStore(storeConfig);
 };
 
@@ -112,7 +110,6 @@ export const normalizeDataSourceOptions = (options, normalizationOptions) => {
   if ('load' in options) {
     store = createCustomStoreFromLoadFunc(options);
   } else if (Array.isArray(store)) {
-    // @ts-expect-error
     store = new ArrayStore(store);
   } else if (isPlainObject(store)) {
     store = createStoreFromConfig(extend({}, store));

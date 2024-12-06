@@ -1,3 +1,6 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { DataSource } from '@js/common/data/data_source/data_source';
+import { normalizeLoadResult } from '@js/common/data/data_source/utils';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
@@ -10,9 +13,6 @@ import {
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
-import { DataSource } from '@js/data/data_source/data_source';
-import { normalizeLoadResult } from '@js/data/data_source/utils';
-import eventsEngine from '@js/events/core/events_engine';
 import errors from '@js/ui/widget/ui.errors';
 import Selection from '@ts/ui/selection/m_selection';
 

@@ -1,1 +1,3 @@
-export { default } from '../__internal/data/m_query';
+import { query } from '../common/data';
+
+export default query;

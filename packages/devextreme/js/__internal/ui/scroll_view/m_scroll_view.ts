@@ -1,3 +1,4 @@
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
@@ -5,7 +6,6 @@ import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { hasWindow } from '@js/core/utils/window';
-import messageLocalization from '@js/localization/message';
 import LoadIndicator from '@js/ui/load_indicator';
 import LoadPanel from '@js/ui/load_panel';
 import { isMaterialBased } from '@js/ui/themes';
@@ -40,6 +40,7 @@ const scrollViewServerConfig = {
   release: noop,
   refresh: noop,
   scrollOffset: () => ({ top: 0, left: 0 }),
+  isBottomReached: () => false,
   _optionChanged(args) {
     if (args.name !== 'onUpdated') {
       return this.callBase.apply(this, arguments);
@@ -306,6 +307,10 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
   finishLoading() {
     this._loadPanel.hide();
     this._unlock();
+  },
+
+  isBottomReached() {
+    return this._strategy.isBottomReached();
   },
 
   _dispose() {

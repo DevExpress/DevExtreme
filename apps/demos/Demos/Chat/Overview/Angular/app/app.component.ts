@@ -4,8 +4,8 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { DxChatModule } from 'devextreme-angular';
 import { User, Message, MessageEnteredEvent } from 'devextreme/ui/chat';
-import { AppService } from './app.service';
 import { Observable } from 'rxjs';
+import { AppService } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -24,12 +24,16 @@ if (window && window.config.packageConfigPaths) {
 })
 export class AppComponent {
   currentUser: User;
+
   supportAgent: User;
+
   messages$: Observable<Message[]>;
+
   userChatTypingUsers$: Observable<User[]>;
+
   supportChatTypingUsers$: Observable<User[]>;
 
-  constructor(private appService: AppService) {
+  constructor(private readonly appService: AppService) {
     [this.currentUser, this.supportAgent] = this.appService.getUsers();
     this.messages$ = this.appService.messages$;
     this.userChatTypingUsers$ = this.appService.userChatTypingUsers$;

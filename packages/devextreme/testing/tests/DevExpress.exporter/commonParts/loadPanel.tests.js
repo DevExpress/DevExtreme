@@ -1,8 +1,8 @@
 import { setHeight } from 'core/utils/size';
 import $ from 'core/renderer';
 import localization from 'localization';
-import ja from 'localization/messages/ja.json!';
-import messageLocalization from 'localization/message';
+import ja from 'common/core/localization/messages/ja.json!';
+import messageLocalization from 'common/core/localization/message';
 import { getWindow, setWindow } from 'core/utils/window';
 
 const LOAD_PANEL_CLASS = 'dx-loadpanel';

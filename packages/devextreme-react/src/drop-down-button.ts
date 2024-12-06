@@ -9,11 +9,10 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { ButtonClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent } from "devextreme/ui/drop_down_button";
-import type { AnimationConfig, AnimationState, AnimationType } from "devextreme/animation/fx";
-import type { HorizontalAlignment, VerticalAlignment, PositionAlignment, Direction, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
-import type { CollisionResolution, PositionConfig, CollisionResolutionCombination } from "devextreme/animation/position";
-import type { event, EventInfo } from "devextreme/events/index";
-import type { template } from "devextreme/core/templates/template";
+import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
+import type { HorizontalAlignment, VerticalAlignment, template, PositionAlignment, Direction, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
+import type { event } from "devextreme/events/events.types";
+import type { EventInfo } from "devextreme/common/core/events";
 import type { Component } from "devextreme/core/component";
 import type { dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";

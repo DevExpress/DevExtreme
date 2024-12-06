@@ -1,5 +1,7 @@
 import '@ts/ui/list/modules/m_selection';
 
+import { normalizeKeyName } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
@@ -11,8 +13,6 @@ import { Deferred, fromPromise } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isPromise } from '@js/core/utils/type';
-import { normalizeKeyName } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import DropDownList from '@js/ui/drop_down_editor/ui.drop_down_list';
 
 const DISABLED_STATE_SELECTOR = '.dx-state-disabled';

@@ -1,8 +1,8 @@
 import GlobalConfig from 'core/config';
-import { getStrategy } from 'events/pointer';
-import TouchStrategy from 'events/pointer/touch';
-import MouseStrategy from 'events/pointer/mouse';
-import MouseAndTouchStrategy from 'events/pointer/mouse_and_touch';
+import { getStrategy } from 'common/core/events/pointer';
+import TouchStrategy from 'common/core/events/pointer/touch';
+import MouseStrategy from 'common/core/events/pointer/mouse';
+import MouseAndTouchStrategy from 'common/core/events/pointer/mouse_and_touch';
 
 const { test } = QUnit;
 

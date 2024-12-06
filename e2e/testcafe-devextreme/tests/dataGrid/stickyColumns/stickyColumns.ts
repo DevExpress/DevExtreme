@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { Selector } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../helpers/generateDataSourceData';
@@ -1193,7 +1193,12 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
   },
 }));
 
-[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
+[
+  Themes.genericLight,
+  Themes.materialBlue,
+  Themes.fluentBlue,
+  Themes.genericGreenMist,
+].forEach((theme) => {
   safeSizeTest(`Header hover should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -1276,4 +1281,89 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
       await t.hover(Selector('body'));
       await changeTheme(Themes.genericLight);
     });
+
+  safeSizeTest(`Alternating rows should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    await t.expect(dataGrid.isReady()).ok();
+
+    await takeScreenshot(`datagrid_row_alt_with_fixed_columns_(${theme}).png`, dataGrid.element);
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [900, 800])
+    .before(async () => {
+      await changeTheme(theme);
+      await createWidget('dxDataGrid', {
+        dataSource: getData(20, 15),
+        columnWidth: 100,
+        columnAutoWidth: true,
+        rowAlternationEnabled: true,
+        customizeColumns: (columns) => {
+          columns[5].fixed = true;
+          columns[5].fixedPosition = 'left';
+          columns[6].fixed = true;
+          columns[6].fixedPosition = 'left';
+
+          columns[8].fixed = true;
+          columns[8].fixedPosition = 'right';
+          columns[9].fixed = true;
+          columns[9].fixedPosition = 'right';
+        },
+      });
+    })
+    .after(async () => {
+      await changeTheme(Themes.genericLight);
+    });
+});
+
+[
+  Themes.genericLight,
+  Themes.materialBlue,
+  Themes.fluentBlue,
+].forEach((theme) => {
+  [0.9, 1.25, 1.5].forEach((zoom) => {
+    safeSizeTest(`Fixed columns should display correctly at ${zoom * 100}% zoom (${theme} theme)`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+      const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+      await t.expect(dataGrid.isReady()).ok();
+
+      await takeScreenshot(`fixed_columns_with_${zoom * 100}%_zoom_(${theme}).png`, dataGrid.element);
+
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }, [900, 800])
+      .before(async () => {
+        await ClientFunction((zoomValue: number) => {
+          $('body').css('zoom', zoomValue);
+        })(zoom);
+        await changeTheme(theme);
+        await createWidget('dxDataGrid', {
+          dataSource: getData(20, 15),
+          columnWidth: 100,
+          columnAutoWidth: true,
+          customizeColumns: (columns) => {
+            columns[5].fixed = true;
+            columns[5].fixedPosition = 'left';
+            columns[6].fixed = true;
+            columns[6].fixedPosition = 'left';
+
+            columns[8].fixed = true;
+            columns[8].fixedPosition = 'right';
+            columns[9].fixed = true;
+            columns[9].fixedPosition = 'right';
+          },
+        });
+      })
+      .after(async () => {
+        await ClientFunction(() => {
+          $('body').css('zoom', '');
+        })();
+        await changeTheme(Themes.genericLight);
+      });
+  });
 });

@@ -1,12 +1,12 @@
 import { getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
-import dblclickEvent from 'events/dblclick';
+import dblclickEvent from 'common/core/events/dblclick';
 import Color from 'color';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
-import dragEvents from 'events/drag';
-import translator from 'animation/translator';
-import { DataSource } from 'data/data_source/data_source';
+import dragEvents from 'common/core/events/drag';
+import translator from 'common/core/animation/translator';
+import { DataSource } from 'common/data/data_source/data_source';
 import dateSerialization from 'core/utils/date_serialization';
 import {
     createWrapper,

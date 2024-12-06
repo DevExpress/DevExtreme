@@ -1,9 +1,9 @@
-import { move } from '@js/animation/translator';
+import { move } from '@js/common/core/animation/translator';
+import { eventData } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
 import { Deferred } from '@js/core/utils/deferred';
 import { getOuterHeight } from '@js/core/utils/size';
-import { eventData } from '@js/events/utils/index';
 import LoadIndicator from '@js/ui/load_indicator';
 
 import NativeStrategy from './m_scrollable.native';
@@ -181,7 +181,11 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
   },
 
   _isReachBottom() {
-    return this._reachBottomEnabled && Math.round(this._bottomBoundary + Math.floor(this._location)) <= 1;
+    return this._reachBottomEnabled && this.isBottomReached();
+  },
+
+  isBottomReached() {
+    return Math.round(this._bottomBoundary + Math.floor(this._location)) <= 1;
   },
 
   _reachBottom() {

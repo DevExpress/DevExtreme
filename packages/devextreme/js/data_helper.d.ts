@@ -1,14 +1,14 @@
-import DataSource from './data/data_source';
+import { DataSource } from './common/data';
 
 /**
  * @docid
  * @hidden
  */
-export default class DataHelperMixin {
-    /**
-     * @docid
-     * @publicName getDataSource()
-     * @public
-     */
-    getDataSource(): DataSource;
+export class DataHelperMixin {
+  /**
+   * @docid
+   * @publicName getDataSource()
+   * @public
+   */
+  getDataSource(): DataSource;
 }

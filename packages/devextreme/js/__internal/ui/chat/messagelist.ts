@@ -1,4 +1,7 @@
-import Guid from '@js/core/guid';
+import { Guid } from '@js/common';
+import type { Format } from '@js/common/core/localization';
+import dateLocalization from '@js/common/core/localization/date';
+import messageLocalization from '@js/common/core/localization/message';
 import type {
   DeepPartial,
 } from '@js/core/index';
@@ -11,9 +14,6 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import { isElementInDom } from '@js/core/utils/dom';
 import { getHeight } from '@js/core/utils/size';
 import { isDate, isDefined } from '@js/core/utils/type';
-import type { Format } from '@js/localization';
-import dateLocalization from '@js/localization/date';
-import messageLocalization from '@js/localization/message';
 import type { Message, User } from '@js/ui/chat';
 import ScrollView from '@js/ui/scroll_view';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
@@ -393,34 +393,56 @@ class MessageList extends Widget<Properties> {
   }
 
   _renderMessage(message: Message): void {
-    const { author, timestamp } = message;
-
-    const lastMessageGroup = this._getLastMessageGroup();
+    const { timestamp } = message;
     const shouldCreateDayHeader = this._shouldAddDayHeader(timestamp);
-
-    if (lastMessageGroup) {
-      const { items } = lastMessageGroup.option();
-      const lastMessageGroupItem = items[items.length - 1];
-      const lastMessageGroupUserId = lastMessageGroupItem.author?.id;
-      const isTimeoutExceeded = this._isTimeoutExceeded(lastMessageGroupItem, message);
-
-      if (author?.id === lastMessageGroupUserId && !isTimeoutExceeded && !shouldCreateDayHeader) {
-        lastMessageGroup.renderMessage(message);
-
-        this._scrollDownContent();
-
-        return;
-      }
-    }
 
     if (shouldCreateDayHeader) {
       this._createDayHeader(timestamp);
+      this._renderMessageIntoGroup(message);
+      return;
     }
 
-    this._createMessageGroupComponent([message], author?.id);
-    this._setLastMessageGroupClasses();
+    const lastMessageGroup = this._getLastMessageGroup();
 
-    this._scrollDownContent();
+    if (!lastMessageGroup) {
+      this._renderMessageIntoGroup(message);
+      return;
+    }
+
+    const lastMessageGroupMessage = this._getLastMessageGroupItem(lastMessageGroup);
+    const isTimeoutExceeded = this._isTimeoutExceeded(lastMessageGroupMessage, message);
+
+    if (this._isSameAuthor(message, lastMessageGroupMessage) && !isTimeoutExceeded) {
+      this._renderMessageIntoGroup(message, lastMessageGroup);
+      return;
+    }
+
+    this._renderMessageIntoGroup(message);
+  }
+
+  _getLastMessageGroupItem(lastMessageGroup: MessageGroup): Message {
+    const { items } = lastMessageGroup.option();
+
+    return items[items.length - 1];
+  }
+
+  _isSameAuthor(lastMessageGroupMessage: Message, message: Message): boolean {
+    return lastMessageGroupMessage.author?.id === message.author?.id;
+  }
+
+  _renderMessageIntoGroup(message: Message, messageGroup?: MessageGroup): void {
+    const { author } = message;
+
+    this._setIsReachedBottom();
+
+    if (messageGroup) {
+      messageGroup.renderMessage(message);
+    } else {
+      this._createMessageGroupComponent([message], author?.id);
+      this._setLastMessageGroupClasses();
+    }
+
+    this._processScrollDownContent(this._isCurrentUser(author?.id));
   }
 
   _getMessageData(message: Element): Message {
@@ -571,19 +593,17 @@ class MessageList extends Widget<Properties> {
   }
 
   _setIsReachedBottom(): void {
-    const contentHeight = getHeight(this._scrollView.content());
     // @ts-expect-error
-    const containerHeight = getHeight(this._scrollView.container());
-    const heightDifference = Math.floor(contentHeight - containerHeight);
-    const scrollOffsetTop = this._scrollView.scrollOffset()?.top ?? 0;
-
-    const isBottomReached = heightDifference <= scrollOffsetTop;
-
-    this._isBottomReached = isBottomReached;
+    this._isBottomReached = !this._isContentOverflowing() || this._scrollView.isBottomReached();
   }
 
-  _processScrollDownContent(): void {
-    if (this._isBottomReached) {
+  _isContentOverflowing(): boolean {
+    // @ts-expect-error
+    return getHeight(this._scrollView.content()) > getHeight(this._scrollView.container());
+  }
+
+  _processScrollDownContent(shouldForceProcessing = false): void {
+    if (this._isBottomReached || shouldForceProcessing) {
       this._scrollDownContent();
     }
 

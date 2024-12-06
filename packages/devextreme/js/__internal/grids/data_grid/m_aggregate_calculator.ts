@@ -1,9 +1,7 @@
+import { errors } from '@js/common/data/errors';
+import { aggregators } from '@js/common/data/utils';
 import { compileGetter } from '@js/core/utils/data';
 import { isFunction } from '@js/core/utils/type';
-// @ts-expect-error
-import { errors } from '@js/data/errors';
-// @ts-expect-error
-import { aggregators } from '@js/data/utils';
 
 function depthFirstSearch(i, depth, root, callback) {
   let j = 0;

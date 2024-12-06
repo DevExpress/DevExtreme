@@ -1,12 +1,12 @@
 import {
     AnimationConfig,
-} from '../animation/fx';
+} from '../common/core/animation';
 
 import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import Widget, {
     WidgetOptions,

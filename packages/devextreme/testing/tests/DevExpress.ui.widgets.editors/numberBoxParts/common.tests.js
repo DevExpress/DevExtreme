@@ -2,10 +2,10 @@ import $ from 'jquery';
 import SpinButton from '__internal/ui/number_box/m_number_box.spin';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
-import eventsEngine from 'events/core/events_engine';
+import eventsEngine from 'common/core/events/core/events_engine';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
-import { normalizeKeyName } from 'events/utils/index';
+import { normalizeKeyName } from 'common/core/events/utils/index';
 
 import 'ui/number_box';
 import 'ui/validator';

@@ -1,14 +1,14 @@
 /* eslint-disable max-classes-per-file */
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import localizationMessage from '@js/common/core/localization/message';
+import ArrayStore from '@js/common/data/array_store';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
-import ArrayStore from '@js/data/array_store';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import localizationMessage from '@js/localization/message';
 import Widget from '@js/ui/widget/ui.widget';
 import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
 import {

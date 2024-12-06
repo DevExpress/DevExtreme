@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import 'ui/html_editor';
-import { createEvent } from 'events/utils/index';
-import eventsEngine from 'events/core/events_engine';
+import { createEvent } from 'common/core/events/utils/index';
+import eventsEngine from 'common/core/events/core/events_engine';
 
 const tableMarkup = '\
     before table text<br>\

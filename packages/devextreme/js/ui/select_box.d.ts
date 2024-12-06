@@ -5,7 +5,7 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+} from '../common';
 
 import {
     EventInfo,
@@ -13,7 +13,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     DropDownButtonTemplateDataModel,

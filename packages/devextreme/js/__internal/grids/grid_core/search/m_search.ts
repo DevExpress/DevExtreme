@@ -1,10 +1,10 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/method-signature-style */
+import messageLocalization from '@js/common/core/localization/message';
+import dataQuery from '@js/common/data/query';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import { compileGetter, toComparable } from '@js/core/utils/data';
-import dataQuery from '@js/data/query';
-import messageLocalization from '@js/localization/message';
 
 import type { Column } from '../columns_controller/m_columns_controller';
 import type { DataController, Filter } from '../data_controller/m_data_controller';

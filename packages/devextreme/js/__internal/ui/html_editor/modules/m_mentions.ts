@@ -1,9 +1,9 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
 import { compileGetter } from '@js/core/utils/data';
 import { extend } from '@js/core/utils/extend';
 import { isString } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
 import type List from '@js/ui/list';
 import type Popup from '@js/ui/popup';
 import Quill from 'devextreme-quill';

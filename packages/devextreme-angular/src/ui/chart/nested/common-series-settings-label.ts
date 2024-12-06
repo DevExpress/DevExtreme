@@ -15,7 +15,7 @@ import {
 
 
 import { HorizontalAlignment } from 'devextreme/common';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 import { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
 
 import {

@@ -489,10 +489,16 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
     color: $datagrid-columnchooser-item-color;
     font-weight: $datagrid-columnchooser-font-weight;
     touch-action: pinch-zoom;
-    border-bottom: $datagrid-border;
 
-    .dx-#{$widget-name}-content {
-      margin-bottom: -1px;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      pointer-events: none;
+      border-bottom: $datagrid-border;
     }
 
     .dx-#{$widget-name}-table {

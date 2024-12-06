@@ -1,7 +1,11 @@
 /* eslint-disable max-classes-per-file */
-import fx from '@js/animation/fx';
-import type { PositionConfig } from '@js/animation/position';
-import animationPosition from '@js/animation/position';
+import type { PositionConfig } from '@js/common/core/animation';
+import { fx } from '@js/common/core/animation';
+import animationPosition from '@js/common/core/animation/position';
+import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import holdEvent from '@js/common/core/events/hold';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
@@ -19,10 +23,6 @@ import {
   isDefined, isFunction, isObject, isPlainObject, isRenderer, isWindow,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import { name as contextMenuEventName } from '@js/events/contextmenu';
-import eventsEngine from '@js/events/core/events_engine';
-import holdEvent from '@js/events/hold';
-import { addNamespace } from '@js/events/utils/index';
 import type { Item } from '@js/ui/context_menu';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import type dxOverlay from '@js/ui/overlay';
@@ -716,7 +716,6 @@ class ContextMenu extends MenuBase {
       this._scrollToElement($item);
 
       const submenuPosition = this._getSubmenuPosition($item);
-      // @ts-expect-error
       animationPosition.setup($submenu, submenuPosition);
     });
   }
@@ -789,7 +788,6 @@ class ContextMenu extends MenuBase {
         fx.stop($submenu);
       }
 
-      // @ts-expect-error
       animationPosition.setup($submenu, submenuPosition);
 
       if (animation) {

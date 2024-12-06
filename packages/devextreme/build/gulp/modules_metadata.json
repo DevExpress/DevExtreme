@@ -1,27 +1,12 @@
 [
   {
-    "name": "animation/frame",
+    "name": "common/core/animation",
     "exports": {
       "cancelAnimationFrame": { "path": "utils.cancelAnimationFrame" },
-      "requestAnimationFrame": { "path": "utils.requestAnimationFrame" }
-    }
-  },
-  {
-    "name": "animation/fx",
-    "exports": {
-      "default": { "path": "fx" }
-    }
-  },
-  {
-    "name": "animation/presets",
-    "exports": {
-      "default": { "path": "animationPresets" }
-    }
-  },
-  {
-    "name": "animation/transition_executor",
-    "exports": {
-      "default": { "path": "TransitionExecutor" }
+      "requestAnimationFrame": { "path": "utils.requestAnimationFrame" },
+      "fx": { "path": "fx" },
+      "animationPresets": { "path": "animationPresets" },
+      "TransitionExecutor": { "path": "TransitionExecutor" }
     }
   },
   {
@@ -31,9 +16,18 @@
     }
   },
   {
-    "name": "core/config",
+    "name": "common",
     "exports": {
-      "default": { "path": "config" }
+      "config": { "path": "config" },
+      "Guid": { "path": "data.Guid" },
+      "setTemplateEngine": { "path": "setTemplateEngine" }
+    }
+  },
+  {
+    "name": "common/core/environment",
+    "exports": {
+      "hideTopOverlay": { "path": "hideTopOverlay" },
+      "initMobileViewport": { "path": "utils.initMobileViewport" }
     }
   },
   {
@@ -56,130 +50,63 @@
     }
   },
   {
-    "name": "core/guid",
+    "name": "common/data",
     "exports": {
-      "default": { "path": "data.Guid" }
-    }
-  },
-  {
-    "name": "core/set_template_engine",
-    "exports": {
-      "default": { "path": "setTemplateEngine" }
-    }
-  },
-  {
-    "name": "data/apply_changes",
-    "exports": {
-      "default": { "path": "data.applyChanges" }
-    }
-  },
-  {
-    "name": "data/array_store",
-    "exports": {
-      "default": { "path": "data.ArrayStore" }
-    }
-  },
-  {
-    "name": "data/custom_store",
-    "exports": {
-      "default": { "path": "data.CustomStore" }
-    }
-  },
-  {
-    "name": "data/data_source",
-    "exports": {
-      "default": { "path": "data.DataSource" }
-    }
-  },
-  {
-    "name": "data/endpoint_selector",
-    "exports": {
-      "default": { "path": "EndpointSelector" }
-    }
-  },
-  {
-    "name": "data/errors",
-    "exports": {
-      "errorHandler": { "path": "data.errorHandler" }
-    }
-  },
-  {
-    "name": "data/index",
-    "exports": {
-      "LoadOptions": { "path": "data.LoadOptions", "exportAs": "type" }
-    }
-  },
-  {
-    "name": "data/local_store",
-    "exports": {
-      "default": { "path": "data.LocalStore" }
-    }
-  },
-  {
-    "name": "data/odata/context",
-    "exports": {
-      "default": { "path": "data.ODataContext" }
-    }
-  },
-  {
-    "name": "data/odata/store",
-    "exports": {
-      "default": { "path": "data.ODataStore" }
-    }
-  },
-  {
-    "name": "data/odata/utils",
-    "exports": {
+      "LoadOptions": { "path": "data.LoadOptions", "exportAs": "type" },
+      "errorHandler": { "path": "data.errorHandler" },
       "EdmLiteral": { "path": "data.EdmLiteral" },
-      "keyConverters": { "path": "data.utils.odata.keyConverters" }
+      "keyConverters": { "path": "data.utils.odata.keyConverters" },
+      "base64_encode": { "path": "data.base64_encode" },
+      "applyChanges": { "path": "data.applyChanges" },
+      "ArrayStore": { "path": "data.ArrayStore" },
+      "CustomStore": { "path": "data.CustomStore" },
+      "DataSource": { "path": "data.DataSource" },
+      "EndpointSelector": { "path": "EndpointSelector" },
+      "LocalStore": { "path": "data.LocalStore" },
+      "ODataContext": { "path": "data.ODataContext" },
+      "ODataStore": { "path": "data.ODataStore" },
+      "query": { "path": "data.query" }
     }
   },
   {
-    "name": "data/query",
-    "exports": {
-      "default": { "path": "data.query" }
-    }
+    "name": "common/core/events/click"
   },
   {
-    "name": "data/utils",
-    "exports": {
-      "base64_encode": { "path": "data.base64_encode" }
-    }
+    "name": "common/core/events/contextmenu"
   },
   {
-    "name": "events/click"
+    "name": "common/core/events/dblclick"
   },
   {
-    "name": "events/contextmenu"
+    "name": "common/core/events/drag"
   },
   {
-    "name": "events/dblclick"
+    "name": "common/core/events/hold"
   },
   {
-    "name": "events/drag"
+    "name": "common/core/events/hover"
   },
   {
-    "name": "events/hold"
+    "name": "common/core/events/pointer"
   },
   {
-    "name": "events/hover"
+    "name": "common/core/events/swipe"
   },
   {
-    "name": "events/pointer"
+    "name": "common/core/events/transform"
   },
   {
-    "name": "events/swipe"
-  },
-  {
-    "name": "events/transform"
-  },
-  {
-    "name": "events",
+    "name": "common/core/events",
     "exports": {
       "on": { "path": "events.on" },
       "one": { "path": "events.one" },
       "off": { "path": "events.off" },
-      "trigger": { "path": "events.trigger" },
+      "trigger": { "path": "events.trigger" }
+    }
+  },
+  {
+    "name": "events",
+    "exports": {
       "triggerHandler": { "path": "events.triggerHandler" }
     }
   },
@@ -217,7 +144,7 @@
     "name": "integration/jquery"
   },
   {
-    "name": "localization",
+    "name": "common/core/localization",
     "exports": {
       "loadMessages": { "path": "localization.loadMessages" },
       "formatMessage": { "path": "localization.formatMessage" },
@@ -226,18 +153,6 @@
       "formatDate": { "path": "localization.formatDate" },
       "parseDate": { "path": "localization.parseDate" },
       "locale": { "path": "localization.locale" }
-    }
-  },
-  {
-    "name": "mobile/hide_top_overlay",
-    "exports": {
-      "default": { "path": "hideTopOverlay" }
-    }
-  },
-  {
-    "name": "mobile/init_mobile_viewport",
-    "exports": {
-      "default": { "path": "utils.initMobileViewport" }
     }
   },
   {

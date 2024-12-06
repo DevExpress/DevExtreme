@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import SelectBox from 'ui/select_box';
-import { DataSource } from 'data/data_source/data_source';
-import CustomStore from 'data/custom_store';
-import fx from 'animation/fx';
+import { DataSource } from 'common/data/data_source/data_source';
+import { CustomStore } from 'common/data/custom_store';
+import fx from 'common/core/animation/fx';
 import windowUtils from 'core/utils/window';
 
 import 'generic_light.css!';

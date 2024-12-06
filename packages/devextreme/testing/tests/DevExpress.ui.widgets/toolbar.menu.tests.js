@@ -1,7 +1,7 @@
 import { getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
-import ArrayStore from 'data/array_store';
-import fx from 'animation/fx';
+import ArrayStore from 'common/data/array_store';
+import fx from 'common/core/animation/fx';
 import Button from 'ui/button';
 import Popup from 'ui/popup';
 import DropDownMenu from '__internal/ui/toolbar/internal/m_toolbar.menu';
@@ -10,7 +10,7 @@ import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import config from 'core/config';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 import { isRenderer } from 'core/utils/type';
 import themes from 'ui/themes';
 

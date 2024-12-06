@@ -2,7 +2,7 @@ import $ from 'jquery';
 import dataCoreUtils from 'core/utils/data';
 import typeUtils from 'core/utils/type';
 import { Deferred } from 'core/utils/deferred';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 
 import '__internal/scheduler/m_scheduler';
 import { ExpressionUtils } from '__internal/scheduler/m_expression_utils';

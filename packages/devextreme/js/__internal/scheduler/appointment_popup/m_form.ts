@@ -4,13 +4,13 @@ import '@js/ui/tag_box';
 import '@js/ui/switch';
 import '@js/ui/select_box';
 
+import messageLocalization from '@js/common/core/localization/message';
+import DataSource from '@js/common/data/data_source';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { extend } from '@js/core/utils/extend';
-import DataSource from '@js/data/data_source';
-import messageLocalization from '@js/localization/message';
 import Form from '@js/ui/form';
 import { current, isFluent } from '@js/ui/themes';
 import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';

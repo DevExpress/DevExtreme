@@ -160,6 +160,10 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
       return true;
     }
 
+    if (!isDefined(data) || !isDefined(nextData)) {
+      return model !== nextModel;
+    }
+
     return !equalityComparer(data, nextData);
   }
 

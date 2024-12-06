@@ -13,7 +13,7 @@ QUnit.testStart(function() {
 import 'generic_light.css!';
 import '__internal/grids/tree_list/m_widget';
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { noop } from 'core/utils/common';
 import { setupTreeListModules, MockColumnsController, MockDataController } from '../../helpers/treeListMocks.js';
 

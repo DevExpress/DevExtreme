@@ -1,7 +1,7 @@
 const { test } = QUnit;
 
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import FileUploader from 'ui/file_uploader';
 import ObjectFileSystemProvider from 'file_management/object_provider';
 import { createTestFileSystem, createEditingEvents, createUploaderFiles, stubFileReader, FileManagerWrapper, FileManagerProgressPanelWrapper } from '../../../helpers/fileManagerHelpers.js';

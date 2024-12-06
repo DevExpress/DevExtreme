@@ -1,17 +1,18 @@
 /* eslint-disable max-classes-per-file */
-import { move } from '@js/animation/translator';
+import { move } from '@js/common/core/animation/translator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace } from '@js/common/core/events/utils/index';
+import dateLocalization from '@js/common/core/localization/date';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import DOMComponent from '@js/core/dom_component';
+import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace } from '@js/events/utils/index';
-import dateLocalization from '@js/localization/date';
-import messageLocalization from '@js/localization/message';
 import Resizable from '@js/ui/resizable';
 import { hide, show } from '@ts/ui/tooltip/m_tooltip';
 
@@ -212,6 +213,11 @@ export class Appointment extends DOMComponent {
       .filter((label) => !!label)
       .join(', ');
     $element.attr('aria-roledescription', `${ariaLabel}, `);
+
+    const id = `dx-${new Guid()}`;
+
+    $element.attr('aria-describedby', id);
+    $element.find('.dx-item-content').attr('id', id);
   }
 
   _renderAppointmentGeometry() {

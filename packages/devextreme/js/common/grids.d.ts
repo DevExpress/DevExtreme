@@ -13,7 +13,7 @@ import {
   Sortable,
   SortOrder,
   ValidationRule,
-  PagerBase,
+  template,
 } from '../common';
 
 import {
@@ -27,27 +27,25 @@ import {
 } from '../core/element';
 
 import {
-  DxPromise,
-} from '../core/utils/deferred';
+  DataSource,
+  DataSourceOptions,
+} from './data';
 
-import {
-  template,
-} from '../core/templates/template';
-
-import DataSource, {
-  Options as DataSourceOptions,
-  DataSourceLike,
-} from '../data/data_source';
+import { DataSourceLike } from '../data/data_source';
 
 import {
   Cancelable,
   EventInfo,
   NativeEventInfo,
-} from '../events/index';
+} from './core/events';
+
+import {
+  DxPromise,
+} from '../core/utils/deferred';
 
 import {
   Format,
-} from '../localization';
+} from './core/localization';
 
 import {
   FilterLookupDataSource,
@@ -70,7 +68,8 @@ import {
 import {
   WidgetOptions,
 } from '../ui/widget/ui.widget';
-import { PositionConfig } from '../animation/position';
+import { PositionConfig } from './core/animation';
+import { PagerBase } from '../ui/pagination';
 
 /**
  * @docid

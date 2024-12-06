@@ -2,6 +2,9 @@ import './m_form.layout_manager';
 import '@js/ui/validation_summary';
 import '@js/ui/validation_group';
 
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { triggerResizeEvent, triggerShownEvent } from '@js/common/core/events/visibility_change';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import config from '@js/core/config';
 import { getPublicElement } from '@js/core/element';
@@ -17,9 +20,6 @@ import {
 } from '@js/core/utils/type';
 // @ts-expect-error
 import { defaultScreenFactorFunc, getCurrentScreenFactor, hasWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
-import { triggerResizeEvent, triggerShownEvent } from '@js/events/visibility_change';
-import messageLocalization from '@js/localization/message';
 import Editor from '@js/ui/editor/editor';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import TabPanel from '@js/ui/tab_panel';

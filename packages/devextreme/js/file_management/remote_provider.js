@@ -1,11 +1,11 @@
 import $ from '../core/renderer';
 import ajax from '../core/utils/ajax';
 import { ensureDefined, noop } from '../core/utils/common';
-import Guid from '../core/guid';
+import { Guid } from '../common';
 import { getWindow } from '../core/utils/window';
 import { each } from '../core/utils/iterator';
 import { Deferred } from '../core/utils/deferred';
-import eventsEngine from '../events/core/events_engine';
+import eventsEngine from '../common/core/events/core/events_engine';
 
 import FileSystemProviderBase from './provider_base';
 import { compileGetter } from '../core/utils/data';

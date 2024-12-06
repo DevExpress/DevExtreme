@@ -1,3 +1,10 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils/index';
+import dateLocalization from '@js/common/core/localization/date';
+import defaultDateNames from '@js/common/core/localization/default_date_names';
+import { getFormat } from '@js/common/core/localization/ldml/date.format';
+import { getRegExpInfo } from '@js/common/core/localization/ldml/date.parser';
+import numberLocalization from '@js/common/core/localization/number';
 import devices from '@js/core/devices';
 import browser from '@js/core/utils/browser';
 import { clipboardText } from '@js/core/utils/dom';
@@ -6,13 +13,6 @@ import { fitIntoRange, inRange, sign } from '@js/core/utils/math';
 import {
   isDate, isDefined, isFunction, isString,
 } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/events/utils/index';
-import dateLocalization from '@js/localization/date';
-import defaultDateNames from '@js/localization/default_date_names';
-import { getFormat } from '@js/localization/ldml/date.format';
-import { getRegExpInfo } from '@js/localization/ldml/date.parser';
-import numberLocalization from '@js/localization/number';
 
 import DateBoxBase from './m_date_box.base';
 import { getDatePartIndexByPosition, renderDateParts } from './m_date_box.mask.parts';

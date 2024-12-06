@@ -5,14 +5,14 @@ import MessageList from '__internal/ui/chat/messagelist';
 import AlertList from '__internal/ui/chat/alertlist';
 import MessageBox, { TYPING_END_DELAY } from '__internal/ui/chat/messagebox';
 import keyboardMock from '../../../helpers/keyboardMock.js';
-import { DataSource } from 'data/data_source/data_source';
-import CustomStore from 'data/custom_store';
+import { DataSource } from 'common/data/data_source/data_source';
+import { CustomStore } from 'common/data/custom_store';
 import dataUtils from 'core/element_data';
 
 import { isRenderer } from 'core/utils/type';
 
 import config from 'core/config';
-import ArrayStore from 'data/array_store';
+import ArrayStore from 'common/data/array_store';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';

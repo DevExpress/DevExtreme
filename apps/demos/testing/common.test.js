@@ -66,7 +66,6 @@ const SKIPPED_TESTS = {
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    Pagination: ['Overview'],
   },
   Angular: {
     DataGrid: [
@@ -132,9 +131,11 @@ const SKIPPED_TESTS = {
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
       { demo: 'CustomMapData', themes: [THEME.material] },
     ],
-    Pagination: [{ demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] }],
   },
   React: {
+    Common: [
+      { demo: 'ActionAndListsOverview', themes: [THEME.generic, THEME.material] },
+    ],
     Charts: [
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
@@ -179,9 +180,11 @@ const SKIPPED_TESTS = {
       { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
     ],
-    Pagination: ['Overview'],
   },
   Vue: {
+    Common: [
+      { demo: 'ActionAndListsOverview', themes: [THEME.generic, THEME.material] },
+    ],
     Charts: [
       { demo: 'TilingAlgorithms', themes: [THEME.material] },
       { demo: 'ExportAndPrintingAPI', themes: [THEME.material] },

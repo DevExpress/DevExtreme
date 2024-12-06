@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 
+import type { DataSource, DataSourceOptions } from '../../../common/data';
 import type Store from '../../../data/abstract_store';
-import type DataSource from '../../../data/data_source';
-import type { Options as DataSourceOptions } from '../../../data/data_source';
 import LegacySelectBox from '../../../ui/select_box';
 import { DomComponentWrapper } from '../../core/r1/dom_component_wrapper';
 import type { EventCallback } from '../../core/r1/event_callback';

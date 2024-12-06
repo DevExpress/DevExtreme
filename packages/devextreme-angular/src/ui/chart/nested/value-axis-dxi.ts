@@ -21,7 +21,7 @@ import * as CommonChartTypes from 'devextreme/common/charts';
 import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
 import { ScaleBreak, ScaleBreakLineStyle, DashStyle, Font, RelativePosition, DiscreteAxisDivisionMode, ChartsAxisLabelOverlap, TextOverflow, WordWrap, TimeInterval, AxisScaleType, ChartsDataType, VisualRangeUpdateMode } from 'devextreme/common/charts';
 import { HorizontalAlignment, VerticalAlignment, Position } from 'devextreme/common';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 
 import {
     NestedOptionHost,

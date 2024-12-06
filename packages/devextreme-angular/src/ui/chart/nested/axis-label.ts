@@ -21,7 +21,7 @@ import { DOCUMENT } from '@angular/common';
 import { HorizontalAlignment, Position } from 'devextreme/common';
 import { ChartLabelDisplayMode } from 'devextreme/viz/chart';
 import { Font, ChartsAxisLabelOverlap, RelativePosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 
 import {
     NestedOptionHost,

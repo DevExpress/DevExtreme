@@ -3,15 +3,10 @@ import { a11yCheck } from '../../../helpers/accessibility/utils';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { changeTheme } from '../../../helpers/changeTheme';
+import { checkOptions } from './axe_options';
 
 fixture.disablePageReloads`a11y - appointment`
   .page(url(__dirname, '../../container.html'));
-
-const checkOptions = {
-  rules: {
-    'color-contrast': { enabled: false },
-  },
-};
 
 test('Scheduler should have right aria attributes', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -29,6 +24,8 @@ test('Scheduler should have right aria attributes', async (t) => {
   await t.expect(
     scheduler.element.getAttribute('aria-label'),
   ).eql('Scheduler. Week view');
+
+  await a11yCheck(t, checkOptions, '#container');
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource: [],
@@ -47,6 +44,8 @@ test('Scheduler table elements have right aria attributes', async (t) => {
       tables.nth(i).getAttribute('aria-hidden'),
     ).eql('true');
   }
+
+  await a11yCheck(t, checkOptions, '#container');
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource: [],

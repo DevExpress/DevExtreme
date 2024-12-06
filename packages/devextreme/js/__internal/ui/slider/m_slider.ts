@@ -1,3 +1,12 @@
+import { name as clickName } from '@js/common/core/events/click';
+import { lock } from '@js/common/core/events/core/emitter.feedback';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import Swipeable from '@js/common/core/events/gesture/swipeable';
+import pointerEvents from '@js/common/core/events/pointer';
+import {
+  addNamespace, eventData, isMouseEvent, isTouchEvent,
+} from '@js/common/core/events/utils/index';
+import numberLocalization from '@js/common/core/localization/number';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
@@ -7,15 +16,6 @@ import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getExponentLength, getRemainderByDivision, roundFloatPart } from '@js/core/utils/math';
 import { getWidth, setWidth } from '@js/core/utils/size';
-import { name as clickName } from '@js/events/click';
-import { lock } from '@js/events/core/emitter.feedback';
-import eventsEngine from '@js/events/core/events_engine';
-import Swipeable from '@js/events/gesture/swipeable';
-import pointerEvents from '@js/events/pointer';
-import {
-  addNamespace, eventData, isMouseEvent, isTouchEvent,
-} from '@js/events/utils/index';
-import numberLocalization from '@js/localization/number';
 import { current as currentTheme, isMaterial } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 

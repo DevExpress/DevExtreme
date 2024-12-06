@@ -1,10 +1,10 @@
 import $ from 'jquery';
 import devices from '__internal/core/m_devices';
-import fx from 'animation/fx';
-import pointerEvents from 'events/pointer';
+import fx from 'common/core/animation/fx';
+import pointerEvents from 'common/core/events/pointer';
 import themes from 'ui/themes';
 import typeUtils from 'core/utils/type';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 import SelectBox from 'ui/select_box';
 import 'ui/text_area';
 import config from 'core/config';
@@ -18,7 +18,7 @@ import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.j
 import { generateItems } from '../../helpers/dataGridMocks.js';
 import { getOuterHeight } from 'core/utils/size';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
-import messageLocalization from 'localization/message';
+import messageLocalization from 'common/core/localization/message';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -2141,7 +2141,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
             this.clock.tick(10);
 
             const navigationController = dataGrid.getController('keyboardNavigation');
-            navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)) }) });
+            navigationController._rowsViewKeyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)) }) });
             this.clock.tick(10);
 
             // assert
@@ -3960,7 +3960,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             const emulateEnterKeyPress = () => {
                 const event = $.Event('keydown', { target: $('#qunit-fixture').find(':focus').get(0) });
-                navigationController._keyDownHandler({ key: 'Enter', keyName: 'enter', originalEvent: event });
+                navigationController._rowsViewKeyDownHandler({ key: 'Enter', keyName: 'enter', originalEvent: event });
             };
 
             // act
@@ -5288,7 +5288,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // act
         const event = $.Event('keydown', { target: $('#qunit-fixture').find(':focus').get(0) });
-        navigationController._keyDownHandler({ key: 'Enter', keyName: 'enter', originalEvent: event });
+        navigationController._rowsViewKeyDownHandler({ key: 'Enter', keyName: 'enter', originalEvent: event });
         this.clock.tick(10);
 
         // assert
@@ -5617,7 +5617,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             width: 400
         });
         const triggerTabPress = function($target) {
-            dataGrid.getController('keyboardNavigation')._keyDownHandler({
+            dataGrid.getController('keyboardNavigation')._rowsViewKeyDownHandler({
                 key: 'Tab',
                 keyName: 'tab',
                 originalEvent: {

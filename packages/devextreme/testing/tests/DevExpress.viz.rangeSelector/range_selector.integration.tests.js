@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import 'viz/range_selector/range_selector';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 
 QUnit.testStart(function() {
     const markup =

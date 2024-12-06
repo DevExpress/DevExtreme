@@ -1,12 +1,12 @@
-import '@js/data/odata/query_adapter';
+import '@js/common/data/odata/query_adapter';
 
+import RequestDispatcher from '@js/common/data/odata/request_dispatcher';
+import ODataStore from '@js/common/data/odata/store';
 import Class from '@js/core/class';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
-import RequestDispatcher from '@js/data/odata/request_dispatcher';
-import ODataStore from '@js/data/odata/store';
 
 import { errors, handleError } from '../m_errors';
 import { escapeServiceOperationParams, formatFunctionInvocationUrl } from './m_utils';

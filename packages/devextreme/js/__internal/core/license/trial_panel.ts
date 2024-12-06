@@ -7,11 +7,12 @@ import {
 
 export function showTrialPanel(
   buyNowUrl: string,
+  licensingDocUrl: string,
   version: string,
   customStyles?: CustomTrialPanelStyles,
 ): void {
   if (isClient()) {
-    renderTrialPanel(buyNowUrl, version, customStyles);
+    renderTrialPanel(buyNowUrl, licensingDocUrl, version, customStyles);
   }
 }
 

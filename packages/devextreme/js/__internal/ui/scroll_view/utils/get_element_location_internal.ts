@@ -18,6 +18,7 @@ export function getElementLocationInternal(
   containerElement: HTMLDivElement,
   scrollOffset: ScrollOffset,
   offset?: ElementOffset,
+  scrollableContentClass = SCROLLABLE_CONTENT_CLASS,
 ): number {
   const additionalOffset = {
     top: 0,
@@ -47,7 +48,7 @@ export function getElementLocationInternal(
 
   // T162489
   const relativeElementOffset = getRelativeOffset(
-    SCROLLABLE_CONTENT_CLASS,
+    scrollableContentClass,
     targetElement,
   )[prop] / scale;
 

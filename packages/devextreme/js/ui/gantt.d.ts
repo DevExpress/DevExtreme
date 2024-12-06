@@ -5,13 +5,14 @@ import {
 } from '../core/element';
 
 import {
-    DxEvent,
     Cancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
+
+import { DxEvent } from '../events';
 
 import {
     Column as TreeListColumn,
@@ -31,17 +32,14 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
-
-import {
-    DxPromise,
-} from '../core/utils/deferred';
-
-import {
     FirstDayOfWeek,
     SingleMultipleOrNone,
     ToolbarItemLocation,
 } from '../common';
+
+import {
+    DxPromise,
+} from '../core/utils/deferred';
 
 import {
     HeaderFilterSearchConfig,

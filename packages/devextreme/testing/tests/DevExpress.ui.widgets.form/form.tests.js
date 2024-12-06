@@ -5,7 +5,7 @@ import domAdapter from '__internal/core/m_dom_adapter';
 import resizeCallbacks from '__internal/core/utils/m_resize_callbacks';
 import typeUtils from 'core/utils/type';
 import { extend } from 'core/utils/extend';
-import visibilityEventsModule from 'events/visibility_change';
+import visibilityEventsModule from 'common/core/events/visibility_change';
 import { EDITORS_WITHOUT_LABELS } from '__internal/ui/form/m_form.layout_manager.utils';
 import 'generic_light.css!';
 import $ from 'jquery';

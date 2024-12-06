@@ -1,3 +1,3 @@
-import { presets } from './presets/presets';
+import { animationPresets } from '../common/core/animation';
 
-export default presets;
+export default animationPresets;

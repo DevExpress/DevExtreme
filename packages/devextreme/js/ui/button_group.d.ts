@@ -5,7 +5,10 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    ButtonType,
+    ButtonStyle,
+    SingleMultipleOrNone,
+} from '../common';
 
 import {
     EventInfo,
@@ -13,7 +16,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     CollectionWidgetItem,
@@ -23,12 +26,6 @@ import {
 import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
-
-import {
-    ButtonType,
-    ButtonStyle,
-    SingleMultipleOrNone,
-} from '../common';
 
 export {
     ButtonType,

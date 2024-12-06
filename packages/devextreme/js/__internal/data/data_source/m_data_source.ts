@@ -1,3 +1,16 @@
+import { applyBatch } from '@js/common/data/array_utils';
+import { CustomStore } from '@js/common/data/custom_store';
+import OperationManager from '@js/common/data/data_source/operation_manager';
+import {
+  CANCELED_TOKEN,
+  isPending,
+  mapDataRespectingGrouping,
+  normalizeDataSourceOptions,
+  normalizeLoadResult,
+  normalizeStoreLoadOptionAccessorArguments,
+} from '@js/common/data/data_source/utils';
+import { errors } from '@js/common/data/errors';
+import { throttleChanges } from '@js/common/data/utils';
 import Class from '@js/core/class';
 import { EventsStrategy } from '@js/core/events_strategy';
 import { Deferred, when } from '@js/core/utils/deferred';
@@ -7,21 +20,6 @@ import { create } from '@js/core/utils/queue';
 import {
   isBoolean, isDefined, isEmptyObject, isNumeric, isObject, isString,
 } from '@js/core/utils/type';
-import { applyBatch } from '@js/data/array_utils';
-import CustomStore from '@js/data/custom_store';
-import OperationManager from '@js/data/data_source/operation_manager';
-import {
-  CANCELED_TOKEN,
-  isPending,
-  mapDataRespectingGrouping,
-  normalizeDataSourceOptions,
-  normalizeLoadResult,
-  normalizeStoreLoadOptionAccessorArguments,
-} from '@js/data/data_source/utils';
-// @ts-expect-error
-import { errors } from '@js/data/errors';
-// @ts-expect-error
-import { throttleChanges } from '@js/data/utils';
 import commonUtils from '@ts/core/utils/m_common';
 
 export const DataSource = Class.inherit({
@@ -354,7 +352,7 @@ export const DataSource = Class.inherit({
     const handleDone = (data) => {
       const isEmptyArray = Array.isArray(data) && !data.length;
       if (!isDefined(data) || isEmptyArray) {
-        d.reject(new errors.Error('E4009'));
+        d.reject(errors.Error('E4009'));
       } else {
         if (!Array.isArray(data)) {
           data = [data];
@@ -375,7 +373,6 @@ export const DataSource = Class.inherit({
     delete options.refresh;
     delete options.pageIndex;
     delete options.searchString;
-    // @ts-expect-error
     const shouldForceByKey = () => (store instanceof CustomStore) && !store._byKeyViaLoad();
 
     (() => {

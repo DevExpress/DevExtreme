@@ -1,3 +1,5 @@
+import EventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import { data } from '@js/core/element_data';
 import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
@@ -5,8 +7,6 @@ import Callbacks from '@js/core/utils/callbacks';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { hasWindow } from '@js/core/utils/window';
-import EventsEngine from '@js/events/core/events_engine';
-import { addNamespace, normalizeKeyName } from '@js/events/utils/index';
 import ValidationEngine from '@js/ui/validation_engine';
 import ValidationMessage from '@js/ui/validation_message';
 import Widget from '@js/ui/widget/ui.widget';

@@ -1,9 +1,9 @@
 import { SchedulerTestWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import $ from 'jquery';
-import translator from 'animation/translator';
-import { DataSource } from 'data/data_source/data_source';
-import CustomStore from 'data/custom_store';
-import fx from 'animation/fx';
+import translator from 'common/core/animation/translator';
+import { DataSource } from 'common/data/data_source/data_source';
+import { CustomStore } from 'common/data/custom_store';
+import fx from 'common/core/animation/fx';
 
 import '__internal/scheduler/m_scheduler';
 import 'generic_light.css!';

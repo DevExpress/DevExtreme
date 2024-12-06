@@ -6,6 +6,7 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { setWidth } from '@js/core/utils/size';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
+import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
@@ -13,6 +14,7 @@ import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
+import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import {
   isAdaptiveItem,
   isGroupFooterRow,
@@ -29,7 +31,6 @@ import { GridCoreStickyColumnsDom } from './dom';
 import {
   getColumnFixedPosition,
   getStickyOffset,
-  hasFixedColumnsWithStickyPosition,
   isFirstFixedColumn,
   isFixedEdge,
   isLastFixedColumn,
@@ -273,14 +274,6 @@ const columnHeadersView = (
     }
   }
 
-  protected _resizeCore() {
-    super._resizeCore();
-
-    if (this.hasStickyColumns()) {
-      this.updateScrollPadding();
-    }
-  }
-
   public getContextMenuItems(options) {
     const { column } = options;
     const columnsController = this._columnsController;
@@ -362,17 +355,6 @@ const columnHeadersView = (
       }
     }
     return items;
-  }
-
-  public updateScrollPadding(): void {
-    const $scrollContainer = $(this.getContent());
-    const $cells = $(this.getColumnElements());
-
-    GridCoreStickyColumnsDom.setScrollPadding(
-      $cells,
-      $scrollContainer,
-      this.addWidgetPrefix.bind(this),
-    );
   }
 };
 
@@ -498,22 +480,25 @@ const rowsView = (
 
         editorFactoryController.focus($focusedElement);
       }
-
-      if (hasFixedColumnsWithStickyPosition(this._columnsController)) {
-        // @ts-expect-error
-        this._columnHeadersView?.updateScrollPadding();
-      }
     }
   }
 
   public _scrollToElement($element, offset?) {
     let scrollOffset = offset;
     const hasStickyColumns = this.hasStickyColumns();
-    const $row = $element?.closest('tr');
-    const $cells = $row?.children();
-    const $scrollContainer = this.getScrollable()?.container();
 
-    if (hasStickyColumns && $cells.length) {
+    if (hasStickyColumns) {
+      const isFixedCell = GridCoreStickyColumnsDom
+        .isFixedCell($element, this.addWidgetPrefix.bind(this));
+
+      if (!$element.is('td') || isFixedCell) {
+        return;
+      }
+
+      const $row = $element?.closest('tr');
+      const $cells = $row?.children();
+      const $scrollContainer = this.getScrollable()?.container();
+
       scrollOffset = GridCoreStickyColumnsDom
         .getScrollPadding($cells, $scrollContainer, this.addWidgetPrefix.bind(this));
     }
@@ -804,6 +789,56 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingStickyC
   }
 };
 
+const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => class KeyboardNavigationStickyColumnsExtender extends Base {
+  // TODO Salimov: Most likely, we will need to remove the subscription
+  // for headers after we implement sticky headers (pqKdLLL1).
+  // Perhaps the headers will be rendered in the same table with data cells.
+  // And this code will no longer be needed.
+  protected headerTabKeyHandler({ originalEvent, shift }) {
+    // @ts-expect-error columnHeadersView's method
+    const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
+    const scrollable = this._rowsView?.getScrollable();
+
+    if (hasStickyColumns && scrollable) {
+      const $cell = $(originalEvent.target).closest('td');
+      const $nextCell = GridCoreStickyColumnsDom.getNextHeaderCell(
+        $cell,
+        shift ? 'previous' : 'next',
+      );
+      const isFixedCell = GridCoreStickyColumnsDom
+        .isFixedCell($nextCell, this.addWidgetPrefix.bind(this));
+
+      if ($nextCell.length && !isFixedCell) {
+        const $cells = $(this._columnHeadersView.getColumnElements());
+        const cellIsOutsideVisibleArea = GridCoreStickyColumnsDom.isOutsideVisibleArea(
+          $nextCell,
+          $cells,
+          $(this._columnHeadersView.getContent()),
+          this.addWidgetPrefix.bind(this),
+        );
+
+        if (cellIsOutsideVisibleArea) {
+          const scrollPadding = GridCoreStickyColumnsDom.getScrollPadding(
+            $cells,
+            scrollable.container(),
+            this.addWidgetPrefix.bind(this),
+          );
+          const scrollPosition = getElementLocationInternal(
+            $nextCell[0],
+            'horizontal',
+            $(this._columnHeadersView.getContent())[0],
+            scrollable.scrollOffset(),
+            scrollPadding,
+            this.addWidgetPrefix('table'),
+          );
+
+          scrollable.scrollTo({ x: scrollPosition });
+        }
+      }
+    }
+  }
+};
+
 export const stickyColumnsModule = {
   extenders: {
     views: {
@@ -816,6 +851,7 @@ export const stickyColumnsModule = {
       draggingHeader,
       editorFactory,
       resizing,
+      keyboardNavigation,
     },
   },
 };

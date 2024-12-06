@@ -1,6 +1,23 @@
-import PivotGridFieldChooser, { Properties } from "devextreme/ui/pivot_grid_field_chooser";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import PivotGridFieldChooser, { Properties } from "devextreme/ui/pivot_grid_field_chooser";
+import  PivotGridDataSource from "devextreme/ui/pivot_grid/data_source";
+import {
+ ApplyChangesMode,
+ HeaderFilterSearchConfig,
+} from "devextreme/common/grids";
+import {
+ FieldChooserLayout,
+ SearchMode,
+} from "devextreme/common";
+import {
+ ContentReadyEvent,
+ ContextMenuPreparingEvent,
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+} from "devextreme/ui/pivot_grid_field_chooser";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -38,32 +55,32 @@ interface DxPivotGridFieldChooser extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    accessKey: {},
+    accessKey: String,
     activeStateEnabled: Boolean,
     allowSearch: Boolean,
-    applyChangesMode: {},
-    dataSource: {},
+    applyChangesMode: String as PropType<ApplyChangesMode>,
+    dataSource: Object as PropType<null | PivotGridDataSource>,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     encodeHtml: Boolean,
     focusStateEnabled: Boolean,
-    headerFilter: Object,
-    height: [Function, Number, String],
-    hint: {},
+    headerFilter: Object as PropType<Record<string, any>>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    hint: String,
     hoverStateEnabled: Boolean,
-    layout: {},
-    onContentReady: Function,
-    onContextMenuPreparing: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    layout: Number as PropType<FieldChooserLayout>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onContextMenuPreparing: Function as PropType<((e: ContextMenuPreparingEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     rtlEnabled: Boolean,
     searchTimeout: Number,
     state: {},
     tabIndex: Number,
-    texts: Object,
+    texts: Object as PropType<Record<string, any>>,
     visible: Boolean,
-    width: {}
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -133,10 +150,10 @@ const DxHeaderFilterConfig = {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
     height: Number,
-    search: Object,
+    search: Object as PropType<HeaderFilterSearchConfig | Record<string, any>>,
     searchTimeout: Number,
     showRelevantValues: Boolean,
-    texts: Object,
+    texts: Object as PropType<Record<string, any>>,
     width: Number
   }
 };
@@ -210,7 +227,7 @@ const DxSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: {},
+    mode: String as PropType<SearchMode>,
     timeout: Number
   }
 };

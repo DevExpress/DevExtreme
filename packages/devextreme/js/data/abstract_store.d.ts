@@ -2,12 +2,10 @@ import {
   DxExtendedPromise,
 } from '../core/utils/deferred';
 import {
-  Store as BaseStore,
-  Options as BaseStoreOptions,
+  Store as StoreBase,
+  StoreOptions as StoreOptionsBase,
 } from './store';
-import {
-  LoadOptions,
-} from './index';
+import { LoadOptions } from '../common/data';
 
 export type Options<
   TItem = any,
@@ -15,12 +13,12 @@ export type Options<
   > = AbstractStoreOptions<TItem, TKey>;
 
 /**
- * @namespace DevExpress.data
+ * @namespace DevExpress.common.data
  */
-interface AbstractStoreOptions<
+export interface AbstractStoreOptions<
   TItem = any,
   TKey = any,
-  > extends BaseStoreOptions<TItem, TKey> {
+  > extends StoreOptionsBase<TItem, TKey> {
   /**
    * @docid StoreOptions.onLoaded
    * @type_function_param2 loadOptions:LoadOptions
@@ -31,12 +29,12 @@ interface AbstractStoreOptions<
 }
 
 /**
- * @namespace DevExpress.data
+ * @namespace DevExpress.common.data
  */
 export default class AbstractStore<
   TItem = any,
   TKey = any,
-  > extends BaseStore<TItem, TKey> {
+  > extends StoreBase<TItem, TKey> {
   constructor(options?: Options<TItem, TKey>);
   /**
    * @docid Store.load()
@@ -56,13 +54,13 @@ export default class AbstractStore<
 }
 
 /**
- * @namespace DevExpress.data
- * @deprecated Use Options from data/store instead
+ * @namespace DevExpress.common.data
+ * @deprecated Use StoreOptions from common/data instead
  */
-export type StoreOptions<TItem = any, TKey = any> = BaseStoreOptions<TItem, TKey>;
+export type StoreOptions<TItem = any, TKey = any> = StoreOptionsBase<TItem, TKey>;
 
 /**
- * @namespace DevExpress.data
- * @deprecated Use Store from data/store instead
+ * @namespace DevExpress.common.data
+ * @deprecated Use Store from common/data instead
  */
-export type Store<TItem = any, TKey = any> = BaseStore<TItem, TKey>;
+export type Store<TItem = any, TKey = any> = StoreBase<TItem, TKey>;

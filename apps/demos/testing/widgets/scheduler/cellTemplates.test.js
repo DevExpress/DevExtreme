@@ -9,7 +9,7 @@ fixture('Scheduler.CellTemplates')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Scheduler', 'CellTemplates', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('Scheduler', 'CellTemplates', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('CellTemplates', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

@@ -1,9 +1,9 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { getEventTarget } from '@js/common/core/events/utils/event_target';
+import { addNamespace, eventSource, fireEvent } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import domAdapter from '@js/core/dom_adapter';
 import browser from '@js/core/utils/browser';
-import eventsEngine from '@js/events/core/events_engine';
-import { getEventTarget } from '@js/events/utils/event_target';
-import { addNamespace, eventSource, fireEvent } from '@js/events/utils/index';
 
 const POINTER_EVENTS_NAMESPACE = 'dxPointerEvents';
 

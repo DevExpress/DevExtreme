@@ -1,14 +1,14 @@
-import Class from '@js/core/class';
-import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
-import { getWidth } from '@js/core/utils/size';
-import eventsEngine from '@js/events/core/events_engine';
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   end as swipeEventEnd,
   start as swipeEventStart,
   swipe as swipeEventSwipe,
-} from '@js/events/swipe';
-import { addNamespace } from '@js/events/utils/index';
+} from '@js/common/core/events/swipe';
+import { addNamespace } from '@js/common/core/events/utils/index';
+import Class from '@js/core/class';
+import $ from '@js/core/renderer';
+import { noop } from '@js/core/utils/common';
+import { getWidth } from '@js/core/utils/size';
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
 const SWIPE_START_EVENT_NAME = addNamespace(swipeEventStart, LIST_EDIT_DECORATOR);

@@ -13,7 +13,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import FileSystemItem from '../file_management/file_system_item';
 
@@ -31,9 +31,6 @@ import Widget, {
 
 import {
     template,
-} from '../core/templates/template';
-
-import {
     DataType,
     SingleOrMultiple,
     HorizontalAlignment,

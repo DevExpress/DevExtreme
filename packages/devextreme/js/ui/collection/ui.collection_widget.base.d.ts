@@ -5,7 +5,7 @@ import {
 
 import {
     template,
-} from '../../core/templates/template';
+} from '../../common';
 
 import DataSource, { DataSourceLike } from '../../data/data_source';
 
@@ -14,7 +14,7 @@ import {
     NativeEventInfo,
     ItemInfo,
     AsyncCancelable,
-} from '../../events/index';
+} from '../../common/core/events';
 
 import Widget, {
     WidgetOptions,

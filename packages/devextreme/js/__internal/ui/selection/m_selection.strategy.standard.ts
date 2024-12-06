@@ -1,3 +1,4 @@
+import dataQuery from '@js/common/data/query';
 import { getUniqueValues, removeDuplicates } from '@js/core/utils/array';
 import { isKeysEqual } from '@js/core/utils/array_compare';
 import { getKeyHash } from '@js/core/utils/common';
@@ -5,7 +6,6 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { SelectionFilterCreator } from '@js/core/utils/selection_filter';
 import { isDefined, isObject } from '@js/core/utils/type';
-import dataQuery from '@js/data/query';
 import errors from '@js/ui/widget/ui.errors';
 
 import SelectionStrategy from './m_selection.strategy';
@@ -115,6 +115,7 @@ export default class StandardStrategy extends SelectionStrategy {
     if (isDeselect) {
       const { selectedItems } = this.options;
       deselectedItems = combinedFilter && keys.length !== selectedItems.length
+        // @ts-expect-error
         ? dataQuery(selectedItems).filter(combinedFilter).toArray()
         : selectedItems.slice(0);
     }

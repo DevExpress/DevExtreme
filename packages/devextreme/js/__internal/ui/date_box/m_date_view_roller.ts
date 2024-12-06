@@ -1,14 +1,14 @@
-import fx from '@js/animation/fx';
-import { resetPosition } from '@js/animation/translator';
+import { fx } from '@js/common/core/animation';
+import { resetPosition } from '@js/common/core/animation/translator';
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace } from '@js/events/utils/index';
 import { convertToLocation } from '@ts/ui/scroll_view/utils/convert_location';
 
 import Scrollable from '../scroll_view/m_scrollable';

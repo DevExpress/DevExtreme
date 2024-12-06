@@ -3,7 +3,7 @@ import { fileSaver } from '../../exporter/file_saver';
 import { isFunction } from '../../core/utils/type';
 import { getWindow } from '../../core/utils/window';
 import { extend } from '../../core/utils/extend';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 
 const SEPARATOR = 'separator';
 const SEPARATOR_COMMAND = { widget: SEPARATOR };

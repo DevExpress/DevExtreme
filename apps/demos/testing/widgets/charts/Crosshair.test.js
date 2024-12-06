@@ -9,7 +9,7 @@ fixture('Charts.Crosshair')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Charts', 'Crosshair', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('Charts', 'Crosshair', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Chart.Crosshair', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

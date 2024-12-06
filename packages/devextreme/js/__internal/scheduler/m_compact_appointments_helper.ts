@@ -1,8 +1,8 @@
-import { locate, move } from '@js/animation/translator';
+import { locate, move } from '@js/common/core/animation/translator';
+import dateLocalization from '@js/common/core/localization/date';
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
-import dateLocalization from '@js/localization/date';
-import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
 
 import { createAppointmentAdapter } from './m_appointment_adapter';
@@ -76,6 +76,7 @@ export class CompactAppointmentsHelper {
       dragBehavior: options.allowDrag && this._createTooltipDragBehavior($appointmentCollector).bind(this),
       dropDownAppointmentTemplate: this.instance.option().dropDownAppointmentTemplate, // TODO deprecated option
       isButtonClick: true,
+      _loopFocus: true,
     };
   }
 

@@ -26,7 +26,7 @@ import { TreeMapColorizerType, TreeMapLayoutAlgorithm, TreeMapLayoutDirection, C
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { ExportFormat, SingleMultipleOrNone, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 
 import DxTreeMap from 'devextreme/viz/tree_map';
 

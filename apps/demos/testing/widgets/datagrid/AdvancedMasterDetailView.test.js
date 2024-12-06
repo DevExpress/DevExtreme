@@ -9,7 +9,7 @@ fixture('DataGrid.AdvancedMasterDetailView')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('DataGrid', 'AdvancedMasterDetailView', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
+runManualTest('DataGrid', 'AdvancedMasterDetailView', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('AdvancedMasterDetailView', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

@@ -1,7 +1,7 @@
 /* global internals */
 
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 
 QUnit.module('Animation', {

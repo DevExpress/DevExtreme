@@ -1,16 +1,16 @@
 import $ from 'jquery';
-import dateLocalization from 'localization/date';
+import dateLocalization from 'common/core/localization/date';
 import { createWrapper, CLASSES, initTestMarkup, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import localization from 'localization';
-import eventsEngine from 'events/core/events_engine';
-import fx from 'animation/fx';
+import eventsEngine from 'common/core/events/core/events_engine';
+import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
-import dragEvents from 'events/drag';
-import CustomStore from 'data/custom_store';
+import dragEvents from 'common/core/events/drag';
+import { CustomStore } from 'common/data/custom_store';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import translator from 'animation/translator';
+import translator from 'common/core/animation/translator';
 import { getOuterHeight, getInnerHeight, getOuterWidth } from 'core/utils/size';
 
 const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);

@@ -1,4 +1,8 @@
 /* eslint-disable max-classes-per-file */
+import messageLocalization from '@js/common/core/localization/message';
+import dataQuery from '@js/common/data/query';
+import storeHelper from '@js/common/data/store_helper';
+import { normalizeSortingInfo } from '@js/common/data/utils';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
@@ -8,11 +12,6 @@ import {
   isDefined, isEmptyObject, isFunction,
   isPlainObject, isString,
 } from '@js/core/utils/type';
-import dataQuery from '@js/data/query';
-import storeHelper from '@js/data/store_helper';
-// @ts-expect-error
-import { normalizeSortingInfo } from '@js/data/utils';
-import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
@@ -128,6 +127,7 @@ const sortGroupsBySummaryCore = function (items, groups, sortByGroups) {
   let query;
 
   if (group && sorts && sorts.length) {
+    // @ts-expect-error
     query = dataQuery(items);
     each(sorts, function (index) {
       if (index === 0) {
@@ -340,6 +340,7 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
   }
 
   private sortLastLevelGroupItems(items, groups, paths) {
+    // @ts-expect-error
     const groupedItems = storeHelper.multiLevelGroup(dataQuery(items), groups).toArray();
     let result = [];
 

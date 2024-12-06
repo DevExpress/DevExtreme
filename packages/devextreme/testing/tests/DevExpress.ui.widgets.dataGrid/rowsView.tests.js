@@ -17,10 +17,10 @@ import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 import { setupDataGridModules, MockDataController, MockColumnsController, MockSelectionController, getCells, generateItems } from '../../helpers/dataGridMocks.js';
 import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
-import numberLocalization from 'localization/number';
+import numberLocalization from 'common/core/localization/number';
 import virtualScrollingCore from '__internal/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
-import ODataStore from 'data/odata/store';
-import ArrayStore from 'data/array_store';
+import ODataStore from 'common/data/odata/store';
+import ArrayStore from 'common/data/array_store';
 
 const expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
 

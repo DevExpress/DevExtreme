@@ -8,7 +8,7 @@
   [startDayHour]="8"
   [endDayHour]="18"
   [showAllDayPanel]="false"
-  [height]="600"
+  [height]="710"
   [groups]="['employeeID']"
   resourceCellTemplate="resourceCellTemplate"
   dataCellTemplate="dataCellTemplate"
@@ -25,7 +25,7 @@
     <div class="name" [style.background]="employee.color">
       <h2>{{ employee.text }}</h2>
     </div>
-    <div class="avatar">
+    <div class="avatar" title="{{ employee.text }}">
       <img [src]="employee.data.avatar" alt="{{ employee.text }} photo" />
     </div>
     <div class="info" [style.color]="employee.color">

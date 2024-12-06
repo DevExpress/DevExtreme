@@ -3,7 +3,6 @@ module.exports = {
         metadataGenerator: {
             sourceMetadataFilePath: './metadata/NGMetaData.json',
             imdMetadataFilePath: './metadata/integration-data.json',
-            deprecatedMetadataFilePath: './metadata/DeprecatedComponentsMetadata.json',
             outputFolderPath: './metadata/generated',
             nestedPathPart: 'nested',
             basePathPart: 'base',
@@ -56,7 +55,7 @@ module.exports = {
             outputFileName: 'tests/src/server/component-names.ts'
         },
         commonReexportsGenerator: {
-            metadataPath: './metadata/NGMetaData.json',
+            imdMetadataFilePath: './metadata/integration-data.json',
             outputPath: './src/'
         },
     },

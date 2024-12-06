@@ -7,7 +7,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 import localization from 'localization';
-import ja from 'localization/messages/ja.json!';
+import ja from 'common/core/localization/messages/ja.json!';
 import { Deferred } from 'core/utils/deferred';
 import dxButton from 'ui/button';
 import { isRenderer } from 'core/utils/type';
@@ -58,6 +58,17 @@ QUnit.module('Button', function() {
             assert.equal(this.element.text(), 'new text 2');
             assert.ok(!this.element.hasClass(BUTTON_HAS_ICON_CLASS), 'button with text only has not icon class');
             assert.ok(this.element.hasClass(BUTTON_HAS_TEXT_CLASS, 'button with text has text class'));
+        });
+
+        QUnit.test('no error should be raised when hovering if svg icon is used (T1266442)', function(assert) {
+            this.instance.option('icon', '<svg></svg>');
+            try {
+                this.element.trigger('dxhoverstart');
+            } catch(e) {
+                assert.ok(false, `error is handled: ${e}`);
+            }
+
+            assert.ok(this.element.hasClass('dx-state-hover'), 'hovered class is added');
         });
 
         QUnit.test('onClick', function(assert) {

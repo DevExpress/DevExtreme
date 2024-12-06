@@ -1,3 +1,4 @@
+import dateLocalization from '@js/common/core/localization/date';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
@@ -7,7 +8,6 @@ import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { setHeight, setOuterHeight } from '@js/core/utils/size';
-import dateLocalization from '@js/localization/date';
 import { agendaUtils, formatWeekday, getVerticalGroupCountClass } from '@ts/scheduler/r1/utils/index';
 
 import {

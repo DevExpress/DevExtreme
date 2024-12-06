@@ -17,11 +17,10 @@ import {
 } from '@angular/core';
 
 
-import { AnimationConfig } from 'devextreme/animation/fx';
-import { event } from 'devextreme/events/index';
+import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
+import { event } from 'devextreme/events/events.types';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/load_panel';
 import { PositionAlignment } from 'devextreme/common';
-import { PositionConfig } from 'devextreme/animation/position';
 
 import DxLoadPanel from 'devextreme/ui/load_panel';
 
