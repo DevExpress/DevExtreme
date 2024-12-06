@@ -555,7 +555,7 @@
             "DemoType": "Web"
           },
           {
-            "Title": "Sticky Columns",
+            "Title": "Fixed and Sticky Columns",
             "Name": "FixedAndStickyColumns",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
@@ -1286,23 +1286,6 @@
         ]
       },
       {
-        "Name": "Drag & Drop",
-        "Equivalents": "",
-        "Demos": [
-          {
-            "Title": "Node Drag & Drop",
-            "Name": "LocalReordering",
-            "Widget": "TreeList",
-            "Equivalents": "Node Drag and Drop",
-            "Modules": "devextreme-aspnet-data-nojquery",
-            "MvcAdditionalFiles": [
-              "/Scripts/data/employees.js"
-            ],
-            "DemoType": "Web"
-          }
-        ]
-      },
-      {
         "Name": "Columns",
         "Equivalents": "",
         "Demos": [
@@ -1346,6 +1329,23 @@
             "MvcAdditionalFiles": [
               "/Models/TreeList/Employee.cs",
               "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Drag & Drop",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Node Drag & Drop",
+            "Name": "LocalReordering",
+            "Widget": "TreeList",
+            "Equivalents": "Node Drag and Drop",
+            "Modules": "devextreme-aspnet-data-nojquery",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/employees.js"
             ],
             "DemoType": "Web"
           }
@@ -3557,7 +3557,7 @@
     ]
   },
   {
-    "Name": "Html Editor",
+    "Name": "HTML Editor",
     "Equivalents": "dxHtmlEditor, dx-htmleditor",
     "Groups": [
       {
@@ -4188,7 +4188,7 @@
     ]
   },
   {
-    "Name": "DropDowns",
+    "Name": "Drop-Downs",
     "Equivalents": "",
     "Groups": [
       {
@@ -4840,7 +4840,7 @@
     ]
   },
   {
-    "Name": "Progress indicators",
+    "Name": "Progress Indicators",
     "Equivalents": "",
     "Groups": [
       {
@@ -5227,7 +5227,7 @@
             ]
           },
           {
-            "Name": "ContextMenu",
+            "Name": "Context Menu",
             "Demos": [
               {
                 "Title": "ContextMenu Integration",
