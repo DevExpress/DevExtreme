@@ -162,7 +162,7 @@ window.config = {
     'devextreme/events/utils': {
       main: 'index',
     },
-    'devextreme/common/core/localization/messages': {
+    'devextreme/localization/messages': {
       format: 'json',
       defaultExtension: '',
     },

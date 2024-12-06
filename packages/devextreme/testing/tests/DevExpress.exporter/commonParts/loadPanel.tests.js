@@ -1,7 +1,7 @@
 import { setHeight } from 'core/utils/size';
 import $ from 'core/renderer';
 import localization from 'localization';
-import ja from 'common/core/localization/messages/ja.json!';
+import ja from 'localization/messages/ja.json!';
 import messageLocalization from 'common/core/localization/message';
 import { getWindow, setWindow } from 'core/utils/window';
 

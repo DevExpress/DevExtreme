@@ -10,7 +10,7 @@ const cldrData = [
 const ValidationEngine = require('ui/validation_engine');
 const Globalize = require('globalize');
 const localization = require('localization');
-const fr = require('common/core/localization/messages/fr.json!');
+const fr = require('localization/messages/fr.json!');
 
 cldrData.forEach(localeCldrData => {
     Globalize.load(localeCldrData);
