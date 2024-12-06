@@ -7,14 +7,16 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    HorizontalEdge,
+    SingleMultipleOrNone,
+} from '../common';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     Format,
@@ -32,11 +34,6 @@ import BaseWidget, {
     ExportInfo,
     IncidentInfo,
 } from './core/base_widget';
-
-import {
-    HorizontalEdge,
-    SingleMultipleOrNone,
-} from '../common';
 
 import {
     DashStyle,

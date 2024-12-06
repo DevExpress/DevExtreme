@@ -2,7 +2,7 @@ interface Callback<T> {
     // eslint-disable-next-line @typescript-eslint/prefer-function-type
     (value: T, ...args: T[]): void;
 }
-declare class DeferredObj<T> {
+export class DeferredObj<T> {
     constructor();
     state(): 'pending' | 'rejected' | 'resolved';
     always(alwaysCallback?: Callback<T>): DeferredObj<T>;
@@ -24,6 +24,7 @@ export function Deferred<T>(): DeferredObj<T>;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
 export interface PromiseType<T> { }
+
 /**
  * @docid
  * @type Promise<void>

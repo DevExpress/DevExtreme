@@ -17,7 +17,7 @@ import {
 } from "devextreme/ui/tile_view";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -70,7 +70,7 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     baseItemHeight: Number,
     baseItemWidth: Number,
-    dataSource: [Array, Object, String] as PropType<(Array<any | dxTileViewItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxTileViewItem | string>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     direction: String as PropType<Orientation>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,

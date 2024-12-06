@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 import 'ui/html_editor';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 
 import { checkLink, prepareEmbedValue, prepareTableValue } from './utils.js';
 

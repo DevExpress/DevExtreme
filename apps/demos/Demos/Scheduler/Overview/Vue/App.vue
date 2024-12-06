@@ -51,6 +51,10 @@ const dataSource = data;
   position: relative;
 }
 
+.dx-scheduler-group-header-content {
+  padding-left: 8px;
+}
+
 .dx-color-scheme-light,
 .dx-color-scheme-carmine,
 .dx-color-scheme-softblue,
@@ -98,7 +102,8 @@ const dataSource = data;
   color: var(--text-color-1);
 }
 
-.dx-scheduler-work-space-month .dx-scheduler-appointment {
+.dx-scheduler-work-space-month .dx-scheduler-appointment,
+.dx-scheduler-work-space-month .dx-scheduler-appointment.dx-state-focused {
   color: var(--text-color-2);
   line-height: 22px;
 }

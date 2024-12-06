@@ -8,20 +8,17 @@ import {
     EventInfo,
     InitializedEventInfo,
     NativeEventInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     template,
-} from '../core/templates/template';
+    FirstDayOfWeek,
+} from '../common';
 
 import Editor, {
     ValueChangedInfo,
     EditorOptions,
 } from './editor/editor';
-
-import {
-    FirstDayOfWeek,
-} from '../common';
 
 export {
     FirstDayOfWeek,

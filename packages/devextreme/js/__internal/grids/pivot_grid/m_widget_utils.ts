@@ -1,3 +1,6 @@
+import localizationDate from '@js/common/core/localization/date';
+import ArrayStore from '@js/common/data/array_store';
+import { DataSource } from '@js/common/data/data_source/data_source';
 import domAdapter from '@js/core/dom_adapter';
 import coreAjaxUtils from '@js/core/utils/ajax';
 import callOnce from '@js/core/utils/call_once';
@@ -6,10 +9,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { isDefined, isNumeric, type } from '@js/core/utils/type';
-import ArrayStore from '@js/data/array_store';
-import { DataSource } from '@js/data/data_source/data_source';
 import formatHelper from '@js/format_helper';
-import localizationDate from '@js/localization/date';
 
 import { CLASSES } from './const';
 

@@ -4,8 +4,8 @@ import devices from '__internal/core/m_devices';
 import Color from 'color';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import fx from 'animation/fx';
-import { normalizeKeyName } from 'events/utils/index';
+import fx from 'common/core/animation/fx';
+import { normalizeKeyName } from 'common/core/events/utils/index';
 
 import 'generic_light.css!';
 import 'ui/color_box';

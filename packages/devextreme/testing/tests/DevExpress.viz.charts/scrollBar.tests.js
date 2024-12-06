@@ -3,7 +3,7 @@ import vizMocks from '../../helpers/vizMocks.js';
 import { ScrollBar } from 'viz/chart_components/scroll_bar';
 import translator2DModule from 'viz/translators/translator2d';
 import pointerMock from '../../helpers/pointerMock.js';
-import dragEvents from 'events/drag';
+import dragEvents from 'common/core/events/drag';
 
 const Translator = vizMocks.stubClass(translator2DModule.Translator2D);
 

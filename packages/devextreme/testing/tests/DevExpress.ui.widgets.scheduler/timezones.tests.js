@@ -1,6 +1,6 @@
 import { getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import {
     CLASSES,
     createWrapper,
@@ -9,12 +9,12 @@ import {
 } from '../../helpers/scheduler/helpers.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import dateUtils from 'core/utils/date';
-import dateLocalization from 'localization/date';
-import translator from 'animation/translator';
+import dateLocalization from 'common/core/localization/date';
+import translator from 'common/core/animation/translator';
 import { hide } from '__internal/ui/tooltip/m_tooltip';
-import { DataSource } from 'data/data_source/data_source';
-import ArrayStore from 'data/array_store';
-import dragEvents from 'events/drag';
+import { DataSource } from 'common/data/data_source/data_source';
+import ArrayStore from 'common/data/array_store';
+import dragEvents from 'common/core/events/drag';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 
 const { testStart, test, module } = QUnit;

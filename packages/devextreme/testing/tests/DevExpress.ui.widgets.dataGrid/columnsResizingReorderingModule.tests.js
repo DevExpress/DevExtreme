@@ -6,7 +6,7 @@ import 'ui/data_grid';
 
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 
 const MockTablePositionViewController = dataGridMocks.MockTablePositionViewController;
@@ -20,7 +20,7 @@ const MockColumnsController = dataGridMocks.MockColumnsController;
 const MockEditingController = dataGridMocks.MockEditingController;
 
 import gridCore from '__internal/grids/data_grid/m_core';
-import dragEvents from 'events/drag';
+import dragEvents from 'common/core/events/drag';
 import columnsResizingReordering from '__internal/grids/data_grid/module_not_extended/columns_resizing_reordering';
 import { ColumnChooserView } from '__internal/grids/data_grid/module_not_extended/column_chooser';
 import { ColumnHeadersView } from '__internal/grids/data_grid/module_not_extended/column_headers';

@@ -1,10 +1,10 @@
 /* eslint-disable max-classes-per-file */
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';

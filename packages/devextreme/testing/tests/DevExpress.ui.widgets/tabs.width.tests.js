@@ -1,5 +1,5 @@
 import 'generic_light.css!';
-import { triggerResizeEvent, triggerShownEvent } from 'events/visibility_change';
+import { triggerResizeEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import 'ui/tabs';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';

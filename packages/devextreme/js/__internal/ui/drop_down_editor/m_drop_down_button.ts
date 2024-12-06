@@ -1,7 +1,7 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import eventsEngine from '@js/events/core/events_engine';
-import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
 
 import TextEditorButton from '../text_box/texteditor_button_collection/m_button';

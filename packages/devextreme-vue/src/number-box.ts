@@ -35,7 +35,7 @@ import {
 } from "devextreme/common";
 import {
  Format,
-} from "devextreme/localization";
+} from "devextreme/common/core/localization";
 import {
  dxButtonOptions,
  ClickEvent,

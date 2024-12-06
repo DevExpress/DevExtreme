@@ -8,14 +8,15 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+} from '../common';
 
 import {
-    DxEvent,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
+
+import { DxEvent } from '../events';
 
 import Widget, {
     WidgetOptions,

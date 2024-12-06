@@ -1,10 +1,10 @@
+import dateLocalization from '@js/common/core/localization/date';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { extend } from '@js/core/utils/extend';
-import dateLocalization from '@js/localization/date';
 
 import BaseView from './m_calendar.base_view';
 

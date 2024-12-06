@@ -5,15 +5,15 @@ import {
     initTestMarkup,
     isDesktopEnvironment
 } from '../../helpers/scheduler/helpers.js';
-import { DataSource } from 'data/data_source/data_source';
-import ArrayStore from 'data/array_store';
-import fx from 'animation/fx';
-import translator from 'animation/translator';
+import { DataSource } from 'common/data/data_source/data_source';
+import ArrayStore from 'common/data/array_store';
+import fx from 'common/core/animation/fx';
+import translator from 'common/core/animation/translator';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
-import CustomStore from 'data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import { noop } from 'core/utils/common';
 import pointerMock from '../../helpers/pointerMock.js';
-import dragEvents from 'events/drag';
+import dragEvents from 'common/core/events/drag';
 
 const { module, test, testStart } = QUnit;
 

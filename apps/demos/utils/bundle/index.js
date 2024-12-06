@@ -133,6 +133,7 @@ const prepareConfigs = (framework)=> {
       prepareDevextremexAngularFiles();
 
       const bundlesRoot = 'node_modules/devextreme-angular/bundles';
+
       const componentNames = fs.readdirSync(bundlesRoot)
           .filter((fileName) => fileName.indexOf('umd.js') !== -1)
           .filter((fileName) => fileName.indexOf('devextreme-angular-ui') === 0)
@@ -175,7 +176,7 @@ const prepareConfigs = (framework)=> {
     }];
 
     additionPaths = {
-      'devextreme/localization/messages/*': 'node_modules/devextreme/localization/messages/*',
+      'devextreme/common/core/localization/messages/*': 'node_modules/devextreme/common/core/localization/messages/*',
     };
 
     packages = [

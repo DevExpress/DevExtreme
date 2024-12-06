@@ -1,3 +1,5 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import messageLocalization from '@js/common/core/localization/message';
 import Action from '@js/core/action';
 import config from '@js/core/config';
 import devices from '@js/core/devices';
@@ -10,8 +12,6 @@ import { getHeight, getWidth } from '@js/core/utils/size';
 import { isPlainObject } from '@js/core/utils/type';
 import { value as getViewport } from '@js/core/utils/view_port';
 import { getWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
-import messageLocalization from '@js/localization/message';
 import Popup from '@js/ui/popup/ui.popup';
 import { isFluent } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';

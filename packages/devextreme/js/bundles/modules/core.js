@@ -12,8 +12,8 @@ if(DevExpress._DEVEXTREME_BUNDLE_INITIALIZED) {
 DevExpress._DEVEXTREME_BUNDLE_INITIALIZED = true;
 
 DevExpress.clientExporter = require('../../exporter');
-DevExpress.excelExporter = require('../../excel_exporter');
-DevExpress.pdfExporter = require('../../pdf_exporter');
+DevExpress.excelExporter = require('../../common/export/excel');
+DevExpress.pdfExporter = require('../../common/export/pdf');
 
 DevExpress.VERSION = require('../../core/version').version;
 DevExpress.assertDevExtremeVersion = require('../../core/version_check').assertDevExtremeVersion;
@@ -24,12 +24,12 @@ DevExpress.DOMComponent = require('../../core/dom_component');
 DevExpress.Component = require('../../core/component').Component;
 
 DevExpress.registerComponent = require('../../core/component_registrator');
-DevExpress.devices = require('../../core/devices');
+DevExpress.devices = require('../../common/core/environment').devices;
 DevExpress.trial = require('../../core/trial_panel');
 
 DevExpress.Color = require('../../color');
 
-const animationFrame = require('../../animation/frame');
+const animationFrame = require('../../common/core/animation/frame');
 
 /**
  * @name utils
@@ -40,14 +40,14 @@ DevExpress.utils = {};
 DevExpress.utils.requestAnimationFrame = animationFrame.requestAnimationFrame;
 DevExpress.utils.cancelAnimationFrame = animationFrame.cancelAnimationFrame;
 
-DevExpress.utils.initMobileViewport = require('../../mobile/init_mobile_viewport/init_mobile_viewport').initMobileViewport;
+DevExpress.utils.initMobileViewport = require('../../common/core/environment').initMobileViewport;
 
-DevExpress.utils.getTimeZones = require('../../time_zone_utils').getTimeZones;
+DevExpress.utils.getTimeZones = require('../../common/core/environment').getTimeZones;
 
 // TODO: MODULARITY: Remove this
 DevExpress.utils.extendFromObject = require('../../core/utils/extend').extendFromObject;
-DevExpress.utils.triggerShownEvent = require('../../events/visibility_change').triggerShownEvent;
-DevExpress.utils.triggerHidingEvent = require('../../events/visibility_change').triggerHidingEvent;
+DevExpress.utils.triggerShownEvent = require('../../common/core/events/visibility_change').triggerShownEvent;
+DevExpress.utils.triggerHidingEvent = require('../../common/core/events/visibility_change').triggerHidingEvent;
 DevExpress.utils.resetActiveElement = require('../../core/utils/dom').resetActiveElement;
 DevExpress.utils.findBestMatches = require('../../core/utils/common').findBestMatches;
 DevExpress.createQueue = require('../../core/utils/queue').create;
@@ -66,23 +66,23 @@ DevExpress.utils.ajax = require('../../core/utils/ajax');
 
 DevExpress.viewPort = require('../../core/utils/view_port').value;
 
-DevExpress.hideTopOverlay = require('../../mobile/hide_top_overlay');
+DevExpress.hideTopOverlay = require('../../common/core/environment').hideTopOverlay;
 
 DevExpress.formatHelper = require('../../format_helper');
-DevExpress.config = require('../../core/config');
+DevExpress.config = require('../../common').config;
 
-DevExpress.animationPresets = require('../../animation/presets/presets').presets;
-DevExpress.fx = require('../../animation/fx');
-DevExpress.TransitionExecutor = require('../../animation/transition_executor/transition_executor').TransitionExecutor;
-DevExpress.AnimationPresetCollection = require('../../animation/presets/presets').PresetCollection;
+DevExpress.animationPresets = require('../../common/core/animation/presets/presets').presets;
+DevExpress.fx = require('../../common/core/animation').fx;
+DevExpress.TransitionExecutor = require('../../common/core/animation/transition_executor/transition_executor').TransitionExecutor;
+DevExpress.AnimationPresetCollection = require('../../common/core/animation/presets/presets').PresetCollection;
 
-DevExpress.events = require('../../events');
+DevExpress.events = require('../../common/core/events');
 
-DevExpress.events.click = require('../../events/click');
-DevExpress.events.utils = require('../../events/utils');
-DevExpress.events.GestureEmitter = require('../../events/gesture/emitter.gesture');
+DevExpress.events.click = require('../../common/core/events/click');
+DevExpress.events.utils = require('../../common/core/events/utils/index');
+DevExpress.events.GestureEmitter = require('../../common/core/events/gesture/emitter.gesture');
 
-DevExpress.localization = require('../../localization');
+DevExpress.localization = require('../../common/core/localization');
 
 DevExpress.templateRendered = require('../../core/templates/template_base').renderedCallbacks;
 DevExpress.setTemplateEngine = require('../../core/templates/template_engine_registry').setTemplateEngine;

@@ -1,5 +1,5 @@
 import GoogleStaticProvider from '__internal/ui/map/m_provider.google_static';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { each } from 'core/utils/iterator';
 import 'bundles/modules/parts/widgets-web';
 

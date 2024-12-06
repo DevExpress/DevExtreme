@@ -16,7 +16,7 @@ import {
 
 import { DashStyle, Font } from 'devextreme/common/charts';
 import { dxTreeMapNode } from 'devextreme/viz/tree_map';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 
 import {
     NestedOptionHost,

@@ -1,7 +1,7 @@
-import fx from 'animation/fx';
-import { DataSource } from 'data/data_source/data_source';
+import fx from 'common/core/animation/fx';
+import { DataSource } from 'common/data/data_source/data_source';
 
-import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
+import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
 import errors from 'ui/widget/ui.errors';

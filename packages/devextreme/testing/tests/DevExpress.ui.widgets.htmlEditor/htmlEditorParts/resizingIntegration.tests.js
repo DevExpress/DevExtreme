@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 import 'ui/html_editor';
-import { name as clickEvent } from 'events/click';
+import { name as clickEvent } from 'common/core/events/click';
 
 import PointerMock from '../../../helpers/pointerMock.js';
 

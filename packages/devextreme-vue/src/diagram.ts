@@ -33,7 +33,7 @@ import {
 } from "devextreme/common";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -516,7 +516,7 @@ const DxEdgesConfig = {
   },
   props: {
     customDataExpr: [Function, String] as PropType<(((data: any, value: any) => any)) | string>,
-    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     fromExpr: [Function, String] as PropType<(((data: any, value: any) => any)) | string>,
     fromLineEndExpr: [Function, String] as PropType<(((data: any, value: any) => any)) | string>,
     fromPointIndexExpr: [Function, String] as PropType<(((data: any, value: any) => any)) | string>,
@@ -745,7 +745,7 @@ const DxNodesConfig = {
     containerChildrenExpr: [Function, String] as PropType<(((data: any, value: any) => any)) | string>,
     containerKeyExpr: [Function, String] as PropType<(((data: any, value: any) => any)) | string>,
     customDataExpr: [Function, String] as PropType<(((data: any, value: any) => any)) | string>,
-    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     heightExpr: [Function, String] as PropType<(((data: any, value: any) => any)) | string>,
     imageUrlExpr: [Function, String] as PropType<(((data: any, value: any) => any)) | string>,
     itemsExpr: [Function, String] as PropType<(((data: any, value: any) => any)) | string>,

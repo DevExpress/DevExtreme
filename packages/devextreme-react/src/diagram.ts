@@ -9,9 +9,8 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, CustomCommandEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemDblClickEvent, RequestEditOperationEvent, RequestLayoutUpdateEvent, DataLayoutType, Command as DiagramCommand, CustomCommand, ShapeCategory, ToolboxDisplayMode, ShapeType, dxDiagramShape, ConnectorLineEnd, ConnectorLineType, PanelVisibility } from "devextreme/ui/diagram";
-import type { Orientation, ToolbarItemLocation } from "devextreme/common";
+import type { Orientation, ToolbarItemLocation, template } from "devextreme/common";
 import type { dxSVGElement } from "devextreme/core/element";
-import type { template } from "devextreme/core/templates/template";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 

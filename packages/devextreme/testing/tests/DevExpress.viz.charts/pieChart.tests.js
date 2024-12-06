@@ -8,7 +8,7 @@ import { BaseChart } from '__internal/viz/chart_components/m_base_chart';
 import labelModule from 'viz/series/points/label';
 import dataValidatorModule from 'viz/components/data_validator';
 import translator1DModule from 'viz/translators/translator1d';
-import CustomStore from 'data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import chartThemeManagerModule from 'viz/components/chart_theme_manager';
 import layoutManagerModule from 'viz/chart_components/layout_manager';
 import trackerModule from 'viz/chart_components/tracker';
@@ -19,7 +19,7 @@ import {
 } from '../../helpers/chartMocks.js';
 import TemplateManagerModule from '__internal/core/m_template_manager';
 import graphicObjects from '__internal/common/m_charts';
-import eventsEngine from 'events/core/events_engine';
+import eventsEngine from 'common/core/events/core/events_engine';
 import devices from '__internal/core/m_devices';
 
 const LabelCtor = new vizMocks.ObjectPool(labelModule.Label);

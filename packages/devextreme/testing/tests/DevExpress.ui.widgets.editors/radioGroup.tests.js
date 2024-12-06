@@ -2,12 +2,12 @@ import $ from 'jquery';
 import devices from '__internal/core/m_devices';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import CustomStore from 'data/custom_store';
-import { DataSource } from 'data/data_source/data_source';
+import { CustomStore } from 'common/data/custom_store';
+import { DataSource } from 'common/data/data_source/data_source';
 import { deferUpdate } from 'core/utils/common';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import errors from 'ui/widget/ui.errors';
-import { normalizeKeyName } from 'events/utils/index';
+import { normalizeKeyName } from 'common/core/events/utils/index';
 
 import 'ui/radio_group';
 

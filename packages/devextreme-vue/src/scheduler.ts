@@ -34,7 +34,7 @@ import {
 } from "devextreme/ui/scheduler";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -45,7 +45,7 @@ import {
 } from "devextreme/common";
 import {
  event,
-} from "devextreme/events/index";
+} from "devextreme/events/events.types";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -149,7 +149,7 @@ const componentConfig = {
     currentView: String as PropType<string | ViewType>,
     customizeDateNavigatorText: Function as PropType<((info: { endDate: Date, startDate: Date, text: string }) => string)>,
     dataCellTemplate: {},
-    dataSource: [Array, Object, String] as PropType<Array<dxSchedulerAppointment> | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<Array<dxSchedulerAppointment> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     dateCellTemplate: {},
     dateSerializationFormat: String,
     descriptionExpr: String,
@@ -397,7 +397,7 @@ const DxResourceConfig = {
   props: {
     allowMultiple: Boolean,
     colorExpr: String,
-    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     displayExpr: [Function, String] as PropType<(((resource: any) => string)) | string>,
     fieldExpr: String,
     label: String,

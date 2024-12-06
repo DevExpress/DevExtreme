@@ -24,12 +24,11 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/context_menu';
 
 import DataSource from 'devextreme/data/data_source';
-import { AnimationConfig } from 'devextreme/animation/fx';
-import { event } from 'devextreme/events/index';
+import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
+import { event } from 'devextreme/events/events.types';
 import { dxContextMenuItem, ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, PositioningEvent, SelectionChangedEvent, ShowingEvent, ShownEvent, ContextSubmenuDirection } from 'devextreme/ui/context_menu';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { PositionConfig } from 'devextreme/animation/position';
 import { SingleOrNone, SubmenuShowMode } from 'devextreme/common';
 
 import DxContextMenu from 'devextreme/ui/context_menu';

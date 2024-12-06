@@ -3,6 +3,10 @@
   position: relative;
 }
 
+::ng-deep .dx-scheduler-group-header-content {
+  padding-left: 8px;
+}
+
 ::ng-deep .dx-color-scheme-light,
 ::ng-deep .dx-color-scheme-carmine,
 ::ng-deep .dx-color-scheme-softblue,
@@ -50,7 +54,8 @@
   color: var(--text-color-1);
 }
 
-::ng-deep .dx-scheduler-work-space-month .dx-scheduler-appointment {
+::ng-deep .dx-scheduler-work-space-month .dx-scheduler-appointment,
+::ng-deep .dx-scheduler-work-space-month .dx-scheduler-appointment.dx-state-focused {
   color: var(--text-color-2);
   line-height: 22px;
 }

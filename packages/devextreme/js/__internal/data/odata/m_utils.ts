@@ -1,3 +1,5 @@
+import { errors } from '@js/common/data/errors';
+import { errorMessageFromXhr, XHR_ERROR_UNLOAD } from '@js/common/data/utils';
 import Class from '@js/core/class';
 import Guid from '@js/core/guid';
 import ajax from '@js/core/utils/ajax';
@@ -10,10 +12,6 @@ import { format as stringFormat } from '@js/core/utils/string';
 import {
   isDefined, isObject, isPlainObject, type,
 } from '@js/core/utils/type';
-// @ts-expect-error
-import { errors } from '@js/data/errors';
-// @ts-expect-error
-import { errorMessageFromXhr, XHR_ERROR_UNLOAD } from '@js/data/utils';
 
 const GUID_REGEX = /^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/;
 
@@ -237,7 +235,7 @@ export const sendRequest = (protocolVersion, request, options) => {
       if (isFinite(count)) {
         d.resolve(count);
       } else {
-        d.reject(new errors.Error('E4018'));
+        d.reject(errors.Error('E4018'));
       }
     } else if (nextUrl && !isPaged) {
       if (!isAbsoluteUrl(nextUrl)) {

@@ -1,20 +1,13 @@
-import {
-  DxPromise,
-  DxExtendedPromise,
-} from '../core/utils/deferred';
-import { DeepPartial } from '../core/index';
-import {
-  FilterDescriptor,
-  GroupDescriptor,
-  LoadOptions,
-} from './index';
+import { DxPromise, DxExtendedPromise } from '../core/utils/deferred';
+import { DeepPartial } from '../core';
+import { FilterDescriptor, GroupDescriptor, LoadOptions } from '../common/data';
 
 /**
  * @docid StoreOptions
- * @namespace DevExpress.data.Store
+ * @namespace DevExpress.common.data
  * @hidden
  */
-export type Options<
+export type StoreOptions<
     TItem = any,
     TKey = any,
 > = {
@@ -100,19 +93,19 @@ export type Options<
     onUpdating?: ((key: TKey, values: TItem) => void);
 };
 
-type EventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | 'updating' | 'push' | 'removed' | 'removing' | 'modified' | 'modifying';
+type StoreEventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | 'updating' | 'push' | 'removed' | 'removing' | 'modified' | 'modifying';
 
 /**
  * @docid Store
- * @namespace DevExpress.data
+ * @namespace DevExpress.common.data
  * @hidden
- * @options Options
+ * @options StoreOptions
  */
 export class Store<
     TItem = any,
     TKey = any,
 > {
-    constructor(options?: Options<TItem, TKey>);
+    constructor(options?: StoreOptions<TItem, TKey>);
     /**
      * @docid
      * @publicName insert(values)
@@ -142,7 +135,7 @@ export class Store<
      * @return this
      * @public
      */
-    off(eventName: EventName): this;
+    off(eventName: StoreEventName): this;
     /**
      * @docid
      * @publicName off(eventName, eventHandler)
@@ -150,7 +143,7 @@ export class Store<
      * @return this
      * @public
      */
-    off(eventName: EventName, eventHandler: Function): this;
+    off(eventName: StoreEventName, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(eventName, eventHandler)
@@ -158,7 +151,7 @@ export class Store<
      * @return this
      * @public
      */
-    on(eventName: EventName, eventHandler: Function): this;
+    on(eventName: StoreEventName, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(events)
@@ -166,7 +159,7 @@ export class Store<
      * @return this
      * @public
      */
-    on(events: { [key in EventName]?: Function }): this;
+    on(events: { [key in StoreEventName]?: Function }): this;
     /**
      * @docid
      * @publicName push(changes)

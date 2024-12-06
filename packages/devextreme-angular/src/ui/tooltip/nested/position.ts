@@ -15,7 +15,7 @@ import {
 
 
 import { PositionAlignment, HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { CollisionResolutionCombination, CollisionResolution } from 'devextreme/animation/position';
+import { CollisionResolutionCombination, CollisionResolution } from 'devextreme/common/core/animation';
 
 import {
     NestedOptionHost,

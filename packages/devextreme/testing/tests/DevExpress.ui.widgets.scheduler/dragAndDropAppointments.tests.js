@@ -1,11 +1,11 @@
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import browser from 'core/utils/browser';
-import { DataSource } from 'data/data_source/data_source';
-import translator from 'animation/translator';
+import { DataSource } from 'common/data/data_source/data_source';
+import translator from 'common/core/animation/translator';
 import config from 'core/config';
-import dragEvents from 'events/drag';
+import dragEvents from 'common/core/events/drag';
 import dataUtils from 'core/element_data';
 import Color from 'color';
 import {

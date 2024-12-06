@@ -10,9 +10,8 @@ import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LinkClickEvent, NodeClickEvent, dxSankeyNode, SankeyColorMode } from "devextreme/viz/sankey";
 import type { DashStyle, HatchDirection, Font as ChartsFont, TextOverflow, WordWrap } from "devextreme/common/charts";
-import type { ExportFormat, Format as CommonFormat, HorizontalAlignment, VerticalEdge } from "devextreme/common";
-import type { Format as LocalizationFormat } from "devextreme/localization";
-import type { template } from "devextreme/core/templates/template";
+import type { ExportFormat, Format as CommonFormat, HorizontalAlignment, VerticalEdge, template } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];

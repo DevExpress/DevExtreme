@@ -1,3 +1,4 @@
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
@@ -5,7 +6,6 @@ import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { hasWindow } from '@js/core/utils/window';
-import messageLocalization from '@js/localization/message';
 import LoadIndicator from '@js/ui/load_indicator';
 import LoadPanel from '@js/ui/load_panel';
 import { isMaterialBased } from '@js/ui/themes';

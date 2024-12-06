@@ -1,9 +1,9 @@
+import messageLocalization from '@js/common/core/localization/message';
 // @ts-expect-error
 import { splitPair } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { isEmptyObject, isFunction } from '@js/core/utils/type';
-import messageLocalization from '@js/localization/message';
 import Calendar from '@js/ui/calendar';
 import { isMaterial } from '@js/ui/themes';
 

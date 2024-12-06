@@ -6,7 +6,7 @@ import ContextMenu, { Properties } from "devextreme/ui/context_menu";
 import  DataSource from "devextreme/data/data_source";
 import {
  event,
-} from "devextreme/events/index";
+} from "devextreme/events/events.types";
 import {
  dxContextMenuItem,
  ContentReadyEvent,
@@ -26,15 +26,18 @@ import {
 } from "devextreme/ui/context_menu";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
 import {
  PositionConfig,
+ AnimationConfig,
  CollisionResolution,
+ AnimationState,
+ AnimationType,
  CollisionResolutionCombination,
-} from "devextreme/animation/position";
+} from "devextreme/common/core/animation";
 import {
  SingleOrNone,
  SubmenuShowMode,
@@ -43,11 +46,6 @@ import {
  Direction,
  PositionAlignment,
 } from "devextreme/common";
-import {
- AnimationConfig,
- AnimationState,
- AnimationType,
-} from "devextreme/animation/fx";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -108,7 +106,7 @@ const componentConfig = {
     animation: Object as PropType<Record<string, any>>,
     closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     cssClass: String,
-    dataSource: [Array, Object, String] as PropType<Array<dxContextMenuItem> | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<Array<dxContextMenuItem> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
     disabledExpr: [Function, String] as PropType<((() => void)) | string>,
     displayExpr: [Function, String] as PropType<(((item: any) => string)) | string>,

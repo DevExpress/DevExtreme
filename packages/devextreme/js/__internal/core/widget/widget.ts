@@ -1,7 +1,10 @@
-import '@js/events/click';
-import '@js/events/core/emitter.feedback';
-import '@js/events/hover';
+import '@js/common/core/events/click';
+import '@js/common/core/events/core/emitter.feedback';
+import '@js/common/core/events/hover';
 
+import {
+  active, focus, hover, keyboard,
+} from '@js/common/core/events/short';
 import Action from '@js/core/action';
 import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
@@ -13,9 +16,6 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { compare as compareVersions } from '@js/core/utils/version';
-import {
-  active, focus, hover, keyboard,
-} from '@js/events/short';
 import { focusable as focusableSelector } from '@js/ui/widget/selectors';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 

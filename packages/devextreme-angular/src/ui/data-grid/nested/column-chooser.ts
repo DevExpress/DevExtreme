@@ -15,7 +15,7 @@ import {
 
 
 import { ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig } from 'devextreme/common/grids';
-import { PositionConfig } from 'devextreme/animation/position';
+import { PositionConfig } from 'devextreme/common/core/animation';
 import { SortOrder } from 'devextreme/common';
 
 import {

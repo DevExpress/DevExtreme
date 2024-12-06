@@ -1,9 +1,9 @@
 /* eslint-disable max-classes-per-file */
+import query from '@js/common/data/query';
 import { wrapToArray } from '@js/core/utils/array';
 import dateUtils from '@js/core/utils/date';
 import { each, map } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import query from '@js/data/query';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import {
   getAppointmentTakesAllDay, getDatesWithoutTime, hasResourceValue, isDateAndTimeView,
@@ -348,14 +348,18 @@ export class AppointmentFilterBaseStrategy {
   filterPreparedItems(filterOptions, preparedItems) {
     const combinedFilter = this._createAppointmentFilter(filterOptions);
 
+    // @ts-expect-error
     return query(preparedItems)
+      // @ts-expect-error
       .filter(combinedFilter)
       .toArray();
   }
 
   filterAllDayAppointments(preparedItems) {
     const combinedFilter = this._createAllDayAppointmentFilter();
+    // @ts-expect-error
     return query(preparedItems)
+      // @ts-expect-error
       .filter(combinedFilter)
       .toArray()
       .map(({ rawAppointment }) => rawAppointment);
@@ -452,7 +456,9 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
       combinedFilters.push(filter);
     });
 
+    // @ts-expect-error
     return query(itemsToFilter)
+      // @ts-expect-error
       .filter(combinedFilters)
       .toArray();
   }

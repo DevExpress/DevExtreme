@@ -11,5 +11,5 @@ themebuilder-scss/src/data/metadata/*
 js/bundles/dx.custom.js
 testing/jest/utils/transformers/*
 ts/
-js/localization/cldr-data/*
-js/localization/default_messages.js
+js/common/core/localization/cldr-data/*
+js/common/core/localization/default_messages.js

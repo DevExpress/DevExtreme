@@ -10,7 +10,7 @@ import {
 
 import $ from 'jquery';
 import devices from '__internal/core/m_devices';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { value as viewPort } from 'core/utils/view_port';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -23,7 +23,7 @@ import windowUtils from '__internal/core/utils/m_window';
 import uiErrors from 'ui/widget/ui.errors';
 import themes from 'ui/themes';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import visibilityChangeUtils from 'events/visibility_change';
+import visibilityChangeUtils from 'common/core/events/visibility_change';
 import domAdapter from '__internal/core/m_dom_adapter';
 
 import 'generic_light.css!';

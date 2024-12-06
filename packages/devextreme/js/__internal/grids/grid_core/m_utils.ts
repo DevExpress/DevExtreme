@@ -1,5 +1,9 @@
 // @ts-check
 
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import DataSource from '@js/common/data/data_source';
+import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
+import { normalizeSortingInfo as normalizeSortingInfoUtility } from '@js/common/data/utils';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { toComparable } from '@js/core/utils/data';
@@ -12,11 +16,6 @@ import { format } from '@js/core/utils/string';
 import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
 import { getWindow } from '@js/core/utils/window';
-import { DataSource } from '@js/data/data_source/data_source';
-import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
-// @ts-expect-error
-import { normalizeSortingInfo as normalizeSortingInfoUtility } from '@js/data/utils';
-import eventsEngine from '@js/events/core/events_engine';
 import formatHelper from '@js/format_helper';
 import LoadPanel from '@js/ui/load_panel';
 import sharedFiltering from '@js/ui/shared/filtering';

@@ -1,6 +1,6 @@
 const $ = require('jquery');
 const inkRipple = require('ui/widget/utils.ink_ripple');
-const fx = require('animation/fx');
+const fx = require('common/core/animation/fx');
 
 const INKRIPPLE_CLASS = 'dx-inkripple';
 const INKRIPPLE_WAVE_CLASS = 'dx-inkripple-wave';

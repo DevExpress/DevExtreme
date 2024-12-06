@@ -1,1 +1,3 @@
-export { default } from '../../__internal/data/odata/m_store';
+import ODataStore from '../../common/data/odata/store';
+
+export default ODataStore;

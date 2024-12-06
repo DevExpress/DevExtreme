@@ -3,29 +3,30 @@
 /* Core (dx.module-core.js) */
 /* eslint-disable import/no-commonjs */
 const DevExpress = require('../../../bundles/modules/core');
+require('../../../bundles/modules/core.legacy');
 
 /* Integrations (dx.module-core.js) */
 
 require('../../../integration/jquery');
 require('../../../integration/knockout');
 
-require('../../../localization/globalize/core');
-require('../../../localization/globalize/message');
-require('../../../localization/globalize/number');
-require('../../../localization/globalize/date');
-require('../../../localization/globalize/currency');
+require('../../../common/core/localization/globalize/core');
+require('../../../common/core/localization/globalize/message');
+require('../../../common/core/localization/globalize/number');
+require('../../../common/core/localization/globalize/date');
+require('../../../common/core/localization/globalize/currency');
 
 /* Events (dx.module-core.js) */
 
-require('../../../events/click');
-require('../../../events/contextmenu');
-require('../../../events/double_click');
-require('../../../events/drag');
-require('../../../events/hold');
-require('../../../events/hover');
-require('../../../events/pointer');
-require('../../../events/swipe');
-require('../../../events/transform');
+require('../../../common/core/events/click');
+require('../../../common/core/events/contextmenu');
+require('../../../common/core/events/double_click');
+require('../../../common/core/events/drag');
+require('../../../common/core/events/hold');
+require('../../../common/core/events/hover');
+require('../../../common/core/events/pointer');
+require('../../../common/core/events/swipe');
+require('../../../common/core/events/transform');
 /// BUNDLER_PARTS_END
 
 module.exports = DevExpress;

@@ -1,10 +1,10 @@
 import 'ui/data_grid';
 
 import $ from 'jquery';
-import { DataSource } from 'data/data_source/data_source';
-import CustomStore from 'data/custom_store';
+import { DataSource } from 'common/data/data_source/data_source';
+import { CustomStore } from 'common/data/custom_store';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
-import ArrayStore from 'data/array_store';
+import ArrayStore from 'common/data/array_store';
 import errors from 'ui/widget/ui.errors';
 
 const FILTER_PANEL_CLASS = 'dx-datagrid-filter-panel';

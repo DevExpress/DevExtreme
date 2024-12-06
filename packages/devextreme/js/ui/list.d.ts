@@ -6,7 +6,11 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    SelectAllMode,
+    ScrollbarMode,
+    PageLoadMode,
+    SingleMultipleAllOrNone,
+} from '../common';
 
 import {
     DxPromise,
@@ -18,7 +22,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import CollectionWidget, {
     CollectionWidgetItem,
@@ -34,13 +38,6 @@ import {
 import {
     SearchBoxMixinOptions,
 } from './widget/ui.search_box_mixin';
-
-import {
-    SelectAllMode,
-    ScrollbarMode,
-    PageLoadMode,
-    SingleMultipleAllOrNone,
-} from '../common';
 
 export {
     SelectAllMode,

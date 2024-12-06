@@ -1,4 +1,13 @@
-import fx from '@js/animation/fx';
+import { fx } from '@js/common/core/animation';
+import { hideCallback as hideTopOverlayCallback } from '@js/common/core/environment/hide_callback';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import {
+  move as dragEventMove,
+} from '@js/common/core/events/drag';
+import pointerEvents from '@js/common/core/events/pointer';
+import { keyboard } from '@js/common/core/events/short';
+import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils/index';
+import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '@js/common/core/events/visibility_change';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
@@ -17,15 +26,6 @@ import {
   isFunction, isObject, isPromise, isWindow,
 } from '@js/core/utils/type';
 import { changeCallback } from '@js/core/utils/view_port';
-import eventsEngine from '@js/events/core/events_engine';
-import {
-  move as dragEventMove,
-} from '@js/events/drag';
-import pointerEvents from '@js/events/pointer';
-import { keyboard } from '@js/events/short';
-import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/events/utils/index';
-import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '@js/events/visibility_change';
-import { hideCallback as hideTopOverlayCallback } from '@js/mobile/hide_callback';
 import type OverlayInstance from '@js/ui/overlay';
 import { tabbable } from '@js/ui/widget/selectors';
 import uiErrors from '@js/ui/widget/ui.errors';

@@ -44,7 +44,11 @@ gulp.task(GENERATE,
             },
             config.widgetsPackage,
             VUE_VERSION,
-            true
+            true,
+            {
+              quotes: 'double',
+              excplicitIndexInImports: true,
+            }
         );
 
         done();
@@ -117,7 +121,7 @@ gulp.task(NPM_PREPARE_MODULES, (done) => {
     return ['', [moduleFileName], moduleFilePath];
   });
 
-  [...packParamsForFolders, ...packParamsForModules].forEach(
+  [ ...packParamsForModules, ...packParamsForFolders].forEach(
     ([folder, moduleFileNames, moduleFilePath]) =>
       makeModule(folder, moduleFileNames, moduleFilePath)
   );

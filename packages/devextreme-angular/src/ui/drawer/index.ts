@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 
 
-import { event } from 'devextreme/events/index';
+import { event } from 'devextreme/events/events.types';
 import { DisposingEvent, InitializedEvent, OptionChangedEvent, OpenedStateMode, PanelLocation, RevealMode } from 'devextreme/ui/drawer';
 
 import DxDrawer from 'devextreme/ui/drawer';

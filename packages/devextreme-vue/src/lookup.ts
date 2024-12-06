@@ -25,7 +25,7 @@ import {
 } from "devextreme/ui/collection/ui.collection_widget.base";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -57,17 +57,15 @@ import {
 } from "devextreme/ui/lookup";
 import {
  AnimationConfig,
- AnimationState,
- AnimationType,
-} from "devextreme/animation/fx";
-import {
  CollisionResolution,
  PositionConfig,
+ AnimationState,
+ AnimationType,
  CollisionResolutionCombination,
-} from "devextreme/animation/position";
+} from "devextreme/common/core/animation";
 import {
  event,
-} from "devextreme/events/index";
+} from "devextreme/events/events.types";
 import {
  dxPopupToolbarItem,
  ToolbarLocation,
@@ -176,7 +174,7 @@ const componentConfig = {
     cancelButtonText: String,
     cleanSearchOnOpening: Boolean,
     clearButtonText: String,
-    dataSource: [Array, Object, String] as PropType<(Array<any | CollectionWidgetItem>) | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | CollectionWidgetItem>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     deferRendering: Boolean,
     disabled: Boolean,
     displayExpr: [Function, String] as PropType<(((item: any) => string)) | string>,

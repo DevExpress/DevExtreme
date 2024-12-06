@@ -26,7 +26,7 @@ import {
 
 
 import * as CommonTypes from 'devextreme/common';
-import { EventInfo } from 'devextreme/events/index';
+import { EventInfo } from 'devextreme/common/core/events';
 
 import DxValidator from 'devextreme/ui/validator';
 

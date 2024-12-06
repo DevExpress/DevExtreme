@@ -1,3 +1,6 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import config from '@js/core/config';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
@@ -9,9 +12,6 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace, normalizeKeyName } from '@js/events/utils/index';
 import Editor from '@js/ui/editor/editor';
 import LoadIndicator from '@js/ui/load_indicator';
 import { current, isFluent, isMaterial } from '@js/ui/themes';

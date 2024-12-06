@@ -6,9 +6,9 @@ import {
 } from '@angular/core';
 
 import { DataType } from 'devextreme/common';
+import { Format } from 'devextreme/common/core/localization';
 import { Store } from 'devextreme/data';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Format } from 'devextreme/localization';
 import { FilterBuilderOperation } from 'devextreme/ui/filter_builder';
 
 @Component({

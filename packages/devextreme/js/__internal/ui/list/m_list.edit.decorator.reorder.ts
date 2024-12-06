@@ -1,8 +1,8 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { isMouseEvent } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getWidth, setWidth } from '@js/core/utils/size';
-import eventsEngine from '@js/events/core/events_engine';
-import { isMouseEvent } from '@js/events/utils/index';
 import Sortable from '@js/ui/sortable';
 
 import EditDecorator from './m_list.edit.decorator';

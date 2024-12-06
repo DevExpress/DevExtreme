@@ -33,7 +33,7 @@ import {
 } from "devextreme/ui/collection/ui.collection_widget.base";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -66,9 +66,12 @@ import {
 } from "devextreme/ui/select_box";
 import {
  AnimationConfig,
+ CollisionResolution,
+ PositionConfig,
  AnimationState,
  AnimationType,
-} from "devextreme/animation/fx";
+ CollisionResolutionCombination,
+} from "devextreme/common/core/animation";
 import {
  dxButtonOptions,
  ClickEvent,
@@ -78,14 +81,11 @@ import {
  OptionChangedEvent as ButtonOptionChangedEvent,
 } from "devextreme/ui/button";
 import {
- CollisionResolution,
- PositionConfig,
- CollisionResolutionCombination,
-} from "devextreme/animation/position";
-import {
  event,
+} from "devextreme/events/events.types";
+import {
  EventInfo,
-} from "devextreme/events/index";
+} from "devextreme/common/core/events";
 import {
  Component,
 } from "devextreme/core/component";
@@ -190,7 +190,7 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     buttons: Array as PropType<Array<DropDownPredefinedButton | TextEditorButton>>,
     customItemCreateEvent: String,
-    dataSource: [Array, Object, String] as PropType<(Array<any | CollectionWidgetItem>) | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | CollectionWidgetItem>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     deferRendering: Boolean,
     disabled: Boolean,
     displayExpr: [Function, String] as PropType<(((item: any) => string)) | string>,

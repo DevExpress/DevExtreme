@@ -3,7 +3,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { hasWindow } from '../../core/utils/window';
 import { Deferred } from '../../core/utils/deferred';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 import TextBox from '../text_box';
 import Accordion from '../accordion';
 import ScrollView from '../scroll_view';

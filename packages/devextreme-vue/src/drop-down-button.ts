@@ -18,7 +18,7 @@ import {
 } from "devextreme/ui/drop_down_button";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -39,18 +39,18 @@ import {
 } from "devextreme/common";
 import {
  AnimationConfig,
- AnimationState,
- AnimationType,
-} from "devextreme/animation/fx";
-import {
  CollisionResolution,
  PositionConfig,
+ AnimationState,
+ AnimationType,
  CollisionResolutionCombination,
-} from "devextreme/animation/position";
+} from "devextreme/common/core/animation";
 import {
  event,
+} from "devextreme/events/events.types";
+import {
  EventInfo,
-} from "devextreme/events/index";
+} from "devextreme/common/core/events";
 import {
  Component,
 } from "devextreme/core/component";
@@ -112,7 +112,7 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    dataSource: [Array, Object, String] as PropType<(Array<any | dxDropDownButtonItem>) | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxDropDownButtonItem>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     deferRendering: Boolean,
     disabled: Boolean,
     displayExpr: [Function, String] as PropType<(((itemData: any) => string)) | string>,

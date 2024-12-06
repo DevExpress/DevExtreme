@@ -9,7 +9,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     Format,
@@ -34,17 +34,14 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    SingleOrMultiple,
+} from '../common';
 
 import {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
 } from './core/base_widget';
-
-import {
-    SingleOrMultiple,
-} from '../common';
 
 import {
     ArgumentAxisHoverMode,

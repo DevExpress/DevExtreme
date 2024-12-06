@@ -42,7 +42,7 @@ import {
 } from "devextreme/ui/calendar";
 import {
  Format,
-} from "devextreme/localization";
+} from "devextreme/common/core/localization";
 import {
  dxPopupOptions,
  dxPopupToolbarItem,
@@ -69,9 +69,12 @@ import {
 } from "devextreme/ui/date_range_box";
 import {
  AnimationConfig,
+ CollisionResolution,
+ PositionConfig,
  AnimationState,
  AnimationType,
-} from "devextreme/animation/fx";
+ CollisionResolutionCombination,
+} from "devextreme/common/core/animation";
 import {
  dxButtonOptions,
  ClickEvent,
@@ -81,14 +84,11 @@ import {
  OptionChangedEvent as ButtonOptionChangedEvent,
 } from "devextreme/ui/button";
 import {
- CollisionResolution,
- PositionConfig,
- CollisionResolutionCombination,
-} from "devextreme/animation/position";
-import {
  event,
+} from "devextreme/events/events.types";
+import {
  EventInfo,
-} from "devextreme/events/index";
+} from "devextreme/common/core/events";
 import {
  Component,
 } from "devextreme/core/component";

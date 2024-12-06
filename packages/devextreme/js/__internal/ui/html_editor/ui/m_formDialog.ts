@@ -1,3 +1,4 @@
+import localizationMessage from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -8,7 +9,6 @@ import {
   getCurrentScreenFactor,
   hasWindow,
 } from '@js/core/utils/window';
-import localizationMessage from '@js/localization/message';
 import Form from '@js/ui/form';
 import Popup from '@js/ui/popup';
 import { isFluent, isMaterialBased } from '@js/ui/themes';

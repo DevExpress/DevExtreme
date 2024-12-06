@@ -10,7 +10,7 @@ import {
 import {
     Cancelable,
     EventInfo,
-} from '../../events/index';
+} from '../../common/core/events';
 
 import {
   Format,

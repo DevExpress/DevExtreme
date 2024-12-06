@@ -16,7 +16,7 @@ import {
 
 import { DashStyle, Font } from 'devextreme/common/charts';
 import { dxFunnelItem } from 'devextreme/viz/funnel';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 
 import {
     NestedOptionHost,

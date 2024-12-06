@@ -7,8 +7,10 @@ import  DOMComponent from "devextreme/core/dom_component";
 import  dxPopup from "devextreme/ui/popup";
 import {
  event,
+} from "devextreme/events/events.types";
+import {
  EventInfo,
-} from "devextreme/events/index";
+} from "devextreme/common/core/events";
 import {
  Component,
 } from "devextreme/core/component";
@@ -22,18 +24,16 @@ import {
 } from "devextreme/common";
 import {
  PositionConfig,
+ AnimationConfig,
  CollisionResolution,
+ AnimationState,
+ AnimationType,
  CollisionResolutionCombination,
-} from "devextreme/animation/position";
+} from "devextreme/common/core/animation";
 import {
  dxPopupToolbarItem,
  ToolbarLocation,
 } from "devextreme/ui/popup";
-import {
- AnimationConfig,
- AnimationState,
- AnimationType,
-} from "devextreme/animation/fx";
 import {
  LocateInMenuMode,
  ShowTextMode,

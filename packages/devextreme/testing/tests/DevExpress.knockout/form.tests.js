@@ -4,7 +4,7 @@ import { FIELD_ITEM_CONTENT_CLASS } from '__internal/ui/form/constants';
 import { FIELD_ITEM_CONTENT_LOCATION_CLASS } from '__internal/ui/form/components/m_field_item';
 import { FIELD_ITEM_LABEL_LOCATION_CLASS } from '__internal/ui/form/components/m_label';
 
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 
 import 'ui/form';
 import 'ui/text_area';

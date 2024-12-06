@@ -1,4 +1,8 @@
 /* eslint-disable max-classes-per-file */
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace, isTouchEvent } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
@@ -14,10 +18,6 @@ import { each } from '@js/core/utils/iterator';
 import { getOffset, getWidth } from '@js/core/utils/size';
 import { isDefined, isFunction, isNumeric } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace, isTouchEvent } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import type { ButtonStyle, ButtonType } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { Properties as PublicProperties } from '@js/ui/file_uploader';

@@ -1,15 +1,15 @@
 import $ from 'jquery';
 import typeUtils from 'core/utils/type';
 import devices from '__internal/core/m_devices';
-import pointerEvents from 'events/pointer';
-import fx from 'animation/fx';
+import pointerEvents from 'common/core/events/pointer';
+import fx from 'common/core/animation/fx';
 import commonUtils from 'core/utils/common';
-import { keyboard } from 'events/short';
+import { keyboard } from 'common/core/events/short';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
-import ArrayStore from 'data/array_store';
+import ArrayStore from 'common/data/array_store';
 import DataGrid from 'ui/data_grid';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 

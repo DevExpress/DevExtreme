@@ -2,10 +2,10 @@ import $ from 'jquery';
 import renderer from 'core/renderer';
 import { noop } from 'core/utils/common';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
-import animationFrame from 'animation/frame';
+import animationFrame from 'common/core/animation/frame';
 import devices from '__internal/core/m_devices';
-import eventsEngine from 'events/core/events_engine';
-import messageLocalization from 'localization/message';
+import eventsEngine from 'common/core/events/core/events_engine';
+import messageLocalization from 'common/core/localization/message';
 import themes from 'ui/themes';
 import pointerMock from '../../helpers/pointerMock.js';
 

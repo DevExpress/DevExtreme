@@ -21,10 +21,10 @@ import {
 } from "devextreme/common";
 import {
  Format,
-} from "devextreme/localization";
+} from "devextreme/common/core/localization";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -327,7 +327,7 @@ const DxLookupConfig = {
   },
   props: {
     allowClearing: Boolean,
-    dataSource: [Array, Object] as PropType<Array<any> | DataSourceOptions | Store>,
+    dataSource: [Array, Object] as PropType<Array<any> | DataSourceOptions | Store | Record<string, any>>,
     displayExpr: [Function, String] as PropType<(((data: any) => string)) | string>,
     valueExpr: [Function, String] as PropType<(((data: any) => string | number | boolean)) | string>
   }

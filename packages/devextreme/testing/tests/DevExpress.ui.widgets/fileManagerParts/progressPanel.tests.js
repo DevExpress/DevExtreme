@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import FileUploader from 'ui/file_uploader';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { createTestFileSystem, createUploaderFiles, FileManagerProgressPanelWrapper, FileManagerWrapper } from '../../../helpers/fileManagerHelpers.js';

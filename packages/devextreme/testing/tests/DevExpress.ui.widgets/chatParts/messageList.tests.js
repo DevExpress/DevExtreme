@@ -14,7 +14,7 @@ import MessageGroup from '__internal/ui/chat/messagegroup';
 import TypingIndicator from '__internal/ui/chat/typingindicator';
 import devices from '__internal/core/m_devices';
 import localization from 'localization';
-import dateLocalization from 'localization/date';
+import dateLocalization from 'common/core/localization/date';
 
 const CHAT_MESSAGELIST_CONTENT_CLASS = 'dx-chat-messagelist-content';
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';

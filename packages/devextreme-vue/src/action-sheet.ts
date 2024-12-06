@@ -18,13 +18,13 @@ import {
 } from "devextreme/ui/action_sheet";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
 import {
  NativeEventInfo,
-} from "devextreme/events/index";
+} from "devextreme/common/core/events";
 import {
  ButtonStyle,
  ButtonType,
@@ -68,7 +68,7 @@ interface DxActionSheet extends AccessibleOptions {
 const componentConfig = {
   props: {
     cancelText: String,
-    dataSource: [Array, Object, String] as PropType<(Array<any | dxActionSheetItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxActionSheetItem | string>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,

@@ -1,12 +1,12 @@
 import domAdapter from '../../core/dom_adapter';
-import eventsEngine from '../../events/core/events_engine';
-import { name as clickEventName } from '../../events/click';
+import eventsEngine from '../../common/core/events/core/events_engine';
+import { name as clickEventName } from '../../common/core/events/click';
 import { extend } from '../../core/utils/extend';
 import { each as _each } from '../../core/utils/iterator';
 import consts from '../components/consts';
 import { getDistance, pointInCanvas as inCanvas, normalizeEnum as _normalizeEnum } from '../core/utils';
-import pointerEvents from '../../events/pointer';
-import { addNamespace } from '../../events/utils/index';
+import pointerEvents from '../../common/core/events/pointer';
+import { addNamespace } from '../../common/core/events/utils/index';
 import { isDefined } from '../../core/utils/type';
 import { noop as _noop } from '../../core/utils/common';
 import errors from '../../core/errors';

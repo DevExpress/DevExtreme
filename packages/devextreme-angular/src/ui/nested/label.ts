@@ -20,7 +20,7 @@ import { DOCUMENT } from '@angular/common';
 
 import { HorizontalAlignment, HorizontalEdge, Position, VerticalAlignment, VerticalEdge } from 'devextreme/common';
 import { ChartsAxisLabelOverlap, DashStyle, Font, LabelOverlap, LabelPosition, RelativePosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 import { LabelLocation } from 'devextreme/ui/form';
 import { ChartLabelDisplayMode } from 'devextreme/viz/chart';
 import { CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';

@@ -20,7 +20,7 @@ import {
 } from "devextreme/common";
 import {
  Format as LocalizationFormat,
-} from "devextreme/localization";
+} from "devextreme/common/core/localization";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

@@ -3,8 +3,8 @@ import { noop } from 'core/utils/common';
 import Color from 'color';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import fx from 'animation/fx';
-import { normalizeKeyName } from 'events/utils/index';
+import fx from 'common/core/animation/fx';
+import { normalizeKeyName } from 'common/core/events/utils/index';
 
 import 'generic_light.css!';
 import '__internal/ui/color_box/m_color_view';

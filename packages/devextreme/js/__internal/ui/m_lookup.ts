@@ -1,4 +1,6 @@
-import { locate, move, resetPosition } from '@js/animation/translator';
+import { locate, move, resetPosition } from '@js/common/core/animation/translator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
@@ -13,8 +15,6 @@ import {
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
-import messageLocalization from '@js/localization/message';
 import DropDownList from '@js/ui/drop_down_editor/ui.drop_down_list';
 import Popover from '@js/ui/popover/ui.popover';
 import TextBox from '@js/ui/text_box';

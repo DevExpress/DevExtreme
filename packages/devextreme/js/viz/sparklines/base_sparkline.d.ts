@@ -5,11 +5,11 @@ import {
 
 import {
     template,
-} from '../../core/templates/template';
+} from '../../common';
 
 import {
     EventInfo,
-} from '../../events/index';
+} from '../../common/core/events';
 
 import BaseWidget, {
     BaseWidgetExport,

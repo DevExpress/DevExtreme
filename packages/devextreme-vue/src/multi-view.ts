@@ -18,7 +18,7 @@ import {
 } from "devextreme/ui/multi_view";
 import {
  DataSourceOptions,
-} from "devextreme/data/data_source";
+} from "devextreme/common/data";
 import {
  Store,
 } from "devextreme/data/store";
@@ -68,7 +68,7 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     animationEnabled: Boolean,
-    dataSource: [Array, Object, String] as PropType<(Array<any | dxMultiViewItem | string>) | DataSource | DataSourceOptions | null | Store | string>,
+    dataSource: [Array, Object, String] as PropType<(Array<any | dxMultiViewItem | string>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     deferRendering: Boolean,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,

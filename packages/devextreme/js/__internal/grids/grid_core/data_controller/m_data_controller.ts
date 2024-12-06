@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
+import ArrayStore from '@js/common/data/array_store';
+import { CustomStore } from '@js/common/data/custom_store';
 import $ from '@js/core/renderer';
 import { findChanges } from '@js/core/utils/array_compare';
 import { deferRender, equalByValue } from '@js/core/utils/common';
@@ -6,8 +8,6 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isObject } from '@js/core/utils/type';
-import ArrayStore from '@js/data/array_store';
-import CustomStore from '@js/data/custom_store';
 import errors from '@js/ui/widget/ui.errors';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';

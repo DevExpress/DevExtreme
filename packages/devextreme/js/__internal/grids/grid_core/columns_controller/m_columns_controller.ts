@@ -1,4 +1,8 @@
 /* eslint-disable prefer-destructuring */
+import dateLocalization from '@js/common/core/localization/date';
+import messageLocalization from '@js/common/core/localization/message';
+import { DataSource } from '@js/common/data/data_source/data_source';
+import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import type { ColumnBase } from '@js/common/grids';
 import config from '@js/core/config';
 import $ from '@js/core/renderer';
@@ -14,10 +18,6 @@ import {
 } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
 import Store from '@js/data/abstract_store';
-import { DataSource } from '@js/data/data_source/data_source';
-import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
-import dateLocalization from '@js/localization/date';
-import messageLocalization from '@js/localization/message';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import inflector from '@ts/core/utils/m_inflector';

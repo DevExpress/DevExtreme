@@ -1,7 +1,7 @@
 /* eslint-disable object-shorthand */
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import domAdapter from '@js/core/dom_adapter';
 import MemorizedCallbacks from '@js/core/memorized_callbacks';
-import eventsEngine from '@js/events/core/events_engine';
 
 const dataMap = new WeakMap();
 let strategy;

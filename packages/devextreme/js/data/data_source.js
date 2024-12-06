@@ -1,3 +1,3 @@
+import DataSource from '../common/data/data_source';
 
-import { DataSource } from './data_source/data_source';
 export default DataSource;

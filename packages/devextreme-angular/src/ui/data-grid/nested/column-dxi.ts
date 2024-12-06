@@ -21,7 +21,7 @@ import * as CommonTypes from 'devextreme/common';
 import { HorizontalAlignment, DataType, SearchMode, SortOrder } from 'devextreme/common';
 import { DataGridPredefinedColumnButton, dxDataGridColumnButton, dxDataGridColumn, DataGridCommandColumnType } from 'devextreme/ui/data_grid';
 import { FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation } from 'devextreme/common/grids';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 import { dxFormSimpleItem } from 'devextreme/ui/form';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';

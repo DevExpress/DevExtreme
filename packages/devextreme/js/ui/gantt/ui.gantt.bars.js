@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import ToolbarMenu from '../toolbar';
 import ContextMenu from '../context_menu';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 import { extend } from '../../core/utils/extend';
 
 const TOOLBAR_SEPARATOR_CLASS = 'dx-gantt-toolbar-separator';

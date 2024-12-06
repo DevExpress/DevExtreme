@@ -8,7 +8,7 @@ const rendererModule = require('viz/core/renderers/renderer');
 const dataValidatorModule = require('viz/components/data_validator');
 const translator2DModule = require('viz/translators/translator2d');
 const seriesModule = require('viz/series/base_series');
-const DataSource = require('data/data_source/data_source').DataSource;
+const DataSource = require('common/data/data_source/data_source').DataSource;
 
 require('viz/sparkline');
 

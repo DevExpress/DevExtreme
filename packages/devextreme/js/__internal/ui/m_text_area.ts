@@ -1,3 +1,7 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import scrollEvents from '@js/common/core/events/gesture/emitter.gesture.scroll';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace, eventData } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { ensureDefined, noop } from '@js/core/utils/common';
@@ -7,10 +11,6 @@ import {
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
-import scrollEvents from '@js/events/gesture/emitter.gesture.scroll';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace, eventData } from '@js/events/utils/index';
 import TextBox from '@js/ui/text_box';
 import { allowScroll, prepareScrollData } from '@ts/ui/text_box/m_utils.scroll';
 

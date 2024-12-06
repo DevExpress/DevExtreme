@@ -5,7 +5,7 @@ import Validator, { Properties } from "devextreme/ui/validator";
 import  DOMComponent from "devextreme/core/dom_component";
 import {
  EventInfo,
-} from "devextreme/events/index";
+} from "devextreme/common/core/events";
 import {
  Component,
 } from "devextreme/core/component";

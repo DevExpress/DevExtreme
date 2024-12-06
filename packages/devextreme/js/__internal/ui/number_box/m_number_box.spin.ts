@@ -1,12 +1,12 @@
+import { lock } from '@js/common/core/events/core/emitter.feedback';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import holdEvent from '@js/common/core/events/hold';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { lock } from '@js/events/core/emitter.feedback';
-import eventsEngine from '@js/events/core/events_engine';
-import holdEvent from '@js/events/hold';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace } from '@js/events/utils/index';
 import Widget from '@js/ui/widget/ui.widget';
 
 const SPIN_CLASS = 'dx-numberbox-spin';

@@ -1,10 +1,10 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { isPointerEvent, isTouchEvent } from '@js/common/core/events/utils/index';
 // @ts-expect-error
 import { grep, noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { reverseEach as _reverseEach } from '@js/core/utils/iterator';
 import { isDefined as _isDefined, isFunction } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import { isPointerEvent, isTouchEvent } from '@js/events/utils/index';
 import { LayoutManager } from '@js/viz/chart_components/layout_manager';
 import * as trackerModule from '@js/viz/chart_components/tracker';
 import { ThemeManager } from '@js/viz/components/chart_theme_manager';

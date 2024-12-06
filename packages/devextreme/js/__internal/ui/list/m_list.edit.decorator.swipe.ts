@@ -1,5 +1,5 @@
-import fx from '@js/animation/fx';
-import { move } from '@js/animation/translator';
+import { fx } from '@js/common/core/animation';
+import { move } from '@js/common/core/animation/translator';
 import { Deferred } from '@js/core/utils/deferred';
 import { getWidth } from '@js/core/utils/size';
 
