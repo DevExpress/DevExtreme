@@ -47,7 +47,7 @@ const bundleConfig = {
   },
   map: {
     'devextreme.react.systemjs.js': '../../../../bundles/devextreme.react.systemjs.js',
-    'devextreme/common/core/localization/messages': 'npm:devextreme/common/core/localization/messages',
+    'devextreme/localization/messages': 'npm:devextreme/localization/messages',
   },
   packages: {
     'react': {
