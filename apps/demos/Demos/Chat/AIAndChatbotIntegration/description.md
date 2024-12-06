@@ -1,17 +1,17 @@
-This demo shows how to add an AI service to the Chat component to create a chatbot.
+This demo uses an AI service and the DevExtreme Chat component to create a chatbot UI.
 
 ## Handling dataSource (reloadOnChange: false)
 
-In this demo, a [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/) is implemented (with custom load and insert functions). This store serves as a [dataSource](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#dataSource) for the Chat component. [reloadOnChange](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#reloadOnChange) is set to `false`, which affects how messages are processed: updates are pushed directly into the store. See the [onMessageEntered](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#onMessageEntered) event handler and `processMessageSending` function for more details.
+The Chat component's [dataSource](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#dataSource) is a [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/) that implements its own load and insert functions. The Chat deactivates [reloadOnChange](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#reloadOnChange) to push updates directly into the store and update the conversation manually. See the [onMessageEntered](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#onMessageEntered) event handler and the `processMessageSending` function to review the code that manages data transfer between the Chat and its data store.
 
-## Customizing Messages with messageTemplate
+## Custom Message Template
 
-The bot's messages feature "Copy" and "Regenerate" buttons. To add these buttons, implement a [messageTemplate](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#messageTemplate).
+The Chat specifies a [messageTemplate](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#messageTemplate) that displays "Copy" and "Regenerate" buttons in bot messages.
 
-## Converting Markdown Responses to HTML
+## Response Format Conversion: Markdown to HTML
 
-The AI model outputs responses in Markdown. This examples converts them to HTML with the [unified](https://github.com/unifiedjs) plugin library. See `convertToHtml` for more information.
+The AI model outputs responses in Markdown, while the Chat requires HTML output. This examples uses the [unified](https://github.com/unifiedjs) plugin library to convert response content. Review `convertToHtml` function code for implementation details.
 
-## Changing Default Texts with Localization
+## Default Caption Customization
 
 Some UI texts are modified in the empty view with [localization](/Documentation/Guide/Common/Localization/) messages. You can apply a similar method to alter text.
