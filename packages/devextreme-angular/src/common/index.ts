@@ -78,4 +78,4 @@ export * as Charts from './charts';
 export * as Core from './core/index';
 export * as Data from './data';
 export * as Export from './export/index';
-export * as Grids from './grids';
+export type * as Grids from './grids';
