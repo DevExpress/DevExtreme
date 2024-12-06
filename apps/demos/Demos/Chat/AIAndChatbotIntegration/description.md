@@ -3,6 +3,7 @@ This demo uses an AI service and the DevExtreme Chat component to create a chatb
 ## Handling dataSource (reloadOnChange: false)
 
 The Chat component's [dataSource](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#dataSource) is a [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/) that implements its own load and insert functions. The Chat deactivates [reloadOnChange](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#reloadOnChange) to push updates directly into the store and update the conversation manually. See the [onMessageEntered](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#onMessageEntered) event handler and the `processMessageSending` function to review the code that manages data transfer between the Chat and its data store.
+<!--split-->
 
 ## Custom Message Template
 
