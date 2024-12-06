@@ -52,6 +52,11 @@ jobs:
               with:
                 chrome-version: '121.0.6167.160'
 
+            - uses: pnpm/action-setup@v3
+              with:
+                version: 9
+                run_install: false
+
             - name: DevExtreme - Install packages
               working-directory: devextreme
               run: pnpm install --no-audit --no-fund

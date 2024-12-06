@@ -18,6 +18,11 @@ jobs:
         with:
           node-version: '20'
 
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
       - name: Restore pnpm cache
         uses: actions/cache@v4
         with:
