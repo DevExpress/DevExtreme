@@ -1,1 +1,3 @@
-export { default } from '../common/core/localization/message';
+import messageLocalization from '../common/core/localization/message';
+
+export default messageLocalization;

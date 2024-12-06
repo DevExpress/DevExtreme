@@ -1,1 +1,3 @@
-export { default } from '../common/core/events/pointer';
+import pointer from '../common/core/events/pointer';
+
+export default pointer;

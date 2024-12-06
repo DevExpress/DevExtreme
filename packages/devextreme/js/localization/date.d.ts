@@ -1,1 +1,3 @@
-export { default } from '../common/core/localization/date';
+import dateLocalization from '../common/core/localization/date';
+
+export default dateLocalization;
