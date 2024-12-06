@@ -14,4 +14,4 @@ The AI model outputs responses in Markdown, while the Chat requires HTML output.
 
 ## Default Caption Customization
 
-Some UI texts are modified in the empty view with [localization](/Documentation/Guide/Common/Localization/) messages. You can apply a similar method to alter text.
+The Chat component in this demo displays modified captions when the conversation is empty. The demo uses [localization](/Documentation/Guide/Common/Localization/) techniques to alter built-in text.
