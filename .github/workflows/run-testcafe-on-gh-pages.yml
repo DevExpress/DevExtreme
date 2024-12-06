@@ -54,7 +54,7 @@ jobs:
 
             - name: DevExtreme - Install packages
               working-directory: devextreme
-              run: npm install --no-audit --no-fund
+              run: pnpm install --no-audit --no-fund
             
             - name: Run TestCafe tests
               working-directory: devextreme/apps/demos

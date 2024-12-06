@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Restore npm cache
+      - name: Restore pnpm cache
         uses: actions/cache@v4
         with:
           path: '**/node_modules'
@@ -26,20 +26,20 @@ jobs:
           restore-keys: ${{ runner.os }}-node-modules
 
       - name: DevExtreme - Install packages
-        run: npm install --no-audit --no-fund
+        run: pnpm install --no-audit --no-fund
 
       - name: DevExtreme - Build-all
         env:
           BUILD_TEST_INTERNAL_PACKAGE: true
-        run: npm run all:build
+        run: pnpm run all:build
 
       - name: Move packages
         run: |
-          mv ./packages/devextreme/artifacts/npm/devextreme/*.tgz ./devextreme-installer.tgz
-          mv ./packages/devextreme/artifacts/npm/devextreme-dist/*.tgz ./devextreme-dist-installer.tgz
-          mv ./packages/devextreme-angular/npm/dist/*.tgz ./devextreme-angular-installer.tgz
-          mv ./packages/devextreme-react/npm/*.tgz ./devextreme-react-installer.tgz
-          mv ./packages/devextreme-vue/npm/*.tgz ./devextreme-vue-installer.tgz
+          mv ./packages/devextreme/artifacts/pnpm/devextreme/*.tgz ./devextreme-installer.tgz
+          mv ./packages/devextreme/artifacts/pnpm/devextreme-dist/*.tgz ./devextreme-dist-installer.tgz
+          mv ./packages/devextreme-angular/pnpm/dist/*.tgz ./devextreme-angular-installer.tgz
+          mv ./packages/devextreme-react/pnpm/*.tgz ./devextreme-react-installer.tgz
+          mv ./packages/devextreme-vue/pnpm/*.tgz ./devextreme-vue-installer.tgz
 
       - name: Copy build artifacts
         uses: actions/upload-artifact@v4
@@ -66,14 +66,14 @@ jobs:
           node-version: '20'
 
       - name: Install Dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Download devextreme sources
         uses: actions/download-artifact@v4
         with:
           name: devextreme-sources
 
-        # NOTE: workaround due to wrappers are incorrect NPM packages now
+        # NOTE: workaround due to wrappers are incorrect pnpm packages now
       - name: Install wrappers packages
         run: |
           rm -rf node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
@@ -91,19 +91,19 @@ jobs:
 
       - name: Prepare configs
         working-directory: apps/demos
-        run: npm run prepare-js
+        run: pnpm run prepare-js
       
       - name: Copy metadata
         working-directory: apps/demos
-        run: npm run make-demos-bundle -- --copy-metadata
+        run: pnpm run make-demos-bundle -- --copy-metadata
 
       - name: Prepare React demo bundles
         working-directory: apps/demos
-        run: npm run make-demos-bundle -- --framework React
+        run: pnpm run make-demos-bundle -- --framework React
 
       - name: Prepare Vue demo bundles
         working-directory: apps/demos
-        run: npm run make-demos-bundle -- --framework Vue
+        run: pnpm run make-demos-bundle -- --framework Vue
 
       - name: Save publish-demos directory for ES as an artifact
         uses: actions/upload-artifact@v3
@@ -119,25 +119,25 @@ jobs:
       matrix:
         include:
           - name: Check generated demos (1/10)
-            command: CONSTEL=1/10 npm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=1/10 pnpm run make-demos-bundle -- --framework Angular
           - name: Check generated demos (2/10)
-            command: CONSTEL=2/10 npm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=2/10 pnpm run make-demos-bundle -- --framework Angular
           - name: Check generated demos (3/10)
-            command: CONSTEL=3/10 npm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=3/10 pnpm run make-demos-bundle -- --framework Angular
           - name: Check generated demos (4/10)
-            command: CONSTEL=4/10 npm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=4/10 pnpm run make-demos-bundle -- --framework Angular
           - name: Check generated demos (5/10)
-            command: CONSTEL=5/10 npm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=5/10 pnpm run make-demos-bundle -- --framework Angular
           - name: Check generated demos (6/10)
-            command: CONSTEL=6/10 npm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=6/10 pnpm run make-demos-bundle -- --framework Angular
           - name: Check generated demos (7/10)
-            command: CONSTEL=7/10 npm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=7/10 pnpm run make-demos-bundle -- --framework Angular
           - name: Check generated demos (8/10)
-            command: CONSTEL=8/10 npm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=8/10 pnpm run make-demos-bundle -- --framework Angular
           - name: Check generated demos (9/10)
-            command: CONSTEL=9/10 npm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=9/10 pnpm run make-demos-bundle -- --framework Angular
           - name: Check generated demos (10/10)
-            command: CONSTEL=10/10 npm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=10/10 pnpm run make-demos-bundle -- --framework Angular
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -148,14 +148,14 @@ jobs:
           node-version: 18
 
       - name: Install Dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Download devextreme sources
         uses: actions/download-artifact@v4
         with:
           name: devextreme-sources
 
-        # NOTE: workaround due to wrappers are incorrect NPM packages now
+        # NOTE: workaround due to wrappers are incorrect pnpm packages now
       - name: Install wrappers packages
         run: |
           rm -rf node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
@@ -173,19 +173,19 @@ jobs:
 
       - name: Prepare configs
         working-directory: apps/demos
-        run: npm run prepare-js
+        run: pnpm run prepare-js
 
       - name: Copy metadata
         working-directory: apps/demos
-        run: npm run make-demos-bundle -- --copy-metadata
+        run: pnpm run make-demos-bundle -- --copy-metadata
 
       - name: Update angular.json
         working-directory: apps/demos
-        run: npm run update-angular-json
+        run: pnpm run update-angular-json
 
       - name: Create angular entryPoints to compile faster
         working-directory: apps/demos
-        run: npm run launch-ngcc
+        run: pnpm run launch-ngcc
 
       - name: Prepare Angular demo bundles
         working-directory: apps/demos
@@ -194,7 +194,7 @@ jobs:
 
       - name: Angular post process index.html
         working-directory: apps/demos
-        run: npm run post-process-angular
+        run: pnpm run post-process-angular
       
       - name: Save publish-demos directory for Angular as an artifact
         uses: actions/upload-artifact@v3
