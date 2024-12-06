@@ -51,7 +51,8 @@ const getTextEditorConfig = function(options) {
             const needDelayedUpdate = options.parentType === 'filterRow' || options.parentType === 'searchPanel';
             const isInputOrKeyUpEvent = e.event && (e.event.type === 'input' || e.event.type === 'keyup');
             const updateValue = function(e, notFireEvent) {
-                options && options.setValue(e.value, notFireEvent);
+                const value = isInputOrKeyUpEvent && e.value === '' ? null : e.value;
+                options && options.setValue(value, notFireEvent);
             };
 
             clearTimeout(data.valueChangeTimeout);
