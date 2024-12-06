@@ -3,18 +3,20 @@ import Chat, { ChatTypes } from 'devextreme-react/chat';
 import { AzureOpenAI } from 'openai';
 import { MessageEnteredEvent } from 'devextreme/ui/chat';
 import CustomStore from 'devextreme/data/custom_store';
+import DataSource from 'devextreme/data/data_source';
 import { loadMessages } from 'devextreme/localization';
 import { 
   user,
   assistant,
   AzureOpenAIConfig,
-  REGENERATION_TEXT
+  REGENERATION_TEXT,
+  CHAT_DISABLED_CLASS,
+  ALERT_TIMEOUT
 } from './data.ts';
 import Message from './Message.tsx';
 
 const store = [];
 const messages = [];
-let lastMessageId;
 
 loadMessages({
   en: {
@@ -33,21 +35,24 @@ async function getAIResponse(messages) {
     temperature: 0.7,
   };
 
-  const responseAzure = await chatService.chat.completions.create(params);
-  const data = { choices: responseAzure.choices };
+  const response = await chatService.chat.completions.create(params);
+  const data = { choices: response.choices };
 
   return data.choices[0].message?.content;
 }
 
 function updateLastMessage(text = REGENERATION_TEXT) {
-  customStore.push([{
+  const items = dataSource.items();
+  const lastMessage = items.at(-1);
+
+  dataSource.store().push([{
     type: 'update',
-    key: lastMessageId,
+    key: lastMessage.id,
     data: { text },
   }]);
 }
 
-function renderMessage(text) {
+function renderAssistantMessage(text) {
   const message = {
     id: Date.now(),
     timestamp: new Date(),
@@ -55,7 +60,7 @@ function renderMessage(text) {
     text,
   };
 
-  customStore.push([{ type: 'insert', data: message }]);
+  dataSource.store().push([{ type: 'insert', data: message }]);
 }
 
 const customStore = new CustomStore({
@@ -77,9 +82,15 @@ const customStore = new CustomStore({
   },
 });
 
+const dataSource = new DataSource({
+  store: customStore,
+  paginate: false,
+})
+
 export default function App() {
   const [alerts, setAlerts] = useState<ChatTypes.Alert[]>([]);
   const [typingUsers, setTypingUsers] = useState<ChatTypes.User[]>([]);
+  const [classList, setClassList] = useState<string>('');
 
   function alertLimitReached() {
     setAlerts([{
@@ -88,10 +99,23 @@ export default function App() {
   
     setTimeout(() => {
       setAlerts([]);
-    }, 10000);
+    }, ALERT_TIMEOUT);
   }
 
-  async function processMessageSending() {
+  function toggleDisabledState(disabled: boolean, event = undefined) {
+    setClassList(disabled ? CHAT_DISABLED_CLASS : '');
+
+    if (disabled) {
+      event?.target.blur();
+    } else {
+      event?.target.focus();
+    }
+  };
+
+  async function processMessageSending(message, event) {
+    toggleDisabledState(true, event);
+
+    messages.push({ role: 'user', content: message.text });
     setTypingUsers([assistant]);
   
     try {
@@ -100,15 +124,20 @@ export default function App() {
       setTimeout(() => {
         setTypingUsers([]);
         messages.push({ role: 'assistant', content: aiResponse });
-        renderMessage(aiResponse);
+        renderAssistantMessage(aiResponse);
       }, 200);
     } catch {
       setTypingUsers([]);
+      messages.pop();
       alertLimitReached();
+    } finally {
+      toggleDisabledState(false, event);
     }
   }
 
   async function regenerate() {
+    toggleDisabledState(true);
+
     try {
       const aiResponse = await getAIResponse(messages.slice(0, -1));
 
@@ -117,14 +146,17 @@ export default function App() {
     } catch {
       updateLastMessage(messages.at(-1).content);
       alertLimitReached();
+    } finally {
+      toggleDisabledState(false);
     }
   }
 
-  function onMessageEntered({ message }: MessageEnteredEvent) {
-    customStore.push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
-    messages.push({ role: 'user', content: message.text });
-    
-    processMessageSending();
+  function onMessageEntered({ message, event }: MessageEnteredEvent) {
+    dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
+   
+    if (!alerts.length) {
+      processMessageSending(message, event);
+    }
   }
 
   function onRegenerateButtonClick() {
@@ -132,22 +164,16 @@ export default function App() {
     regenerate();
   }
 
-  function onOptionChanged({ name, value = [] }) {
-    if (name === 'items' && value.length) {
-      lastMessageId = value.at(-1)?.id;
-    }
-  }
-
   return (
     <Chat
-      dataSource={customStore}
+      className={classList}
+      dataSource={dataSource}
       reloadOnChange={false}
       showAvatar={false}
       showDayHeaders={false}
       user={user}
       height={710}
       onMessageEntered={onMessageEntered}
-      onOptionChanged={onOptionChanged}
       alerts={alerts}
       typingUsers={typingUsers}
       messageRender={(data) => Message(data, onRegenerateButtonClick)}

@@ -4,6 +4,7 @@ import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
+import HTMLReactParser from 'html-react-parser';
 
 import { REGENERATION_TEXT } from './data.ts';
 
@@ -20,28 +21,27 @@ function convertToHtml(value: string) {
 
 function Message({ message }, onRegenerateButtonClick) {
     const [icon, setIcon] = useState('copy');
-    const textElementRef = useRef(null);
 
     if (message.text === REGENERATION_TEXT) {
         return <span>{REGENERATION_TEXT}</span>;
     }
   
     function onCopyButtonClick() {
-      navigator.clipboard.writeText(textElementRef.current.innerText);
-      setIcon('check');
+        navigator.clipboard?.writeText(message.text);
+        setIcon('check');
   
-      setTimeout(() => {
-        setIcon('copy');
-      }, 2500);
+        setTimeout(() => {
+            setIcon('copy');
+        }, 2500);
     }
-  
+
     return (
       <React.Fragment>
-        <div
-          ref={textElementRef}
+        <div 
           className='dx-chat-messagebubble-text'
-          dangerouslySetInnerHTML={{__html: convertToHtml(message.text)}}
-        ></div>
+        >
+            {HTMLReactParser(convertToHtml(message.text))}
+        </div>
         <div className='dx-bubble-button-container'>
           <Button
             icon={icon}

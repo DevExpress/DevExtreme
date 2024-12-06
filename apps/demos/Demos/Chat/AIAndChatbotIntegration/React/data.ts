@@ -3,10 +3,6 @@ import { ChatTypes } from 'devextreme-react/chat';
 const date = new Date();
 date.setHours(0, 0, 0, 0);
 
-function getTimestamp(date, offsetMinutes = 0) {
-  return date.getTime() + offsetMinutes * 60000;
-}
-
 export const AzureOpenAIConfig = {
   dangerouslyAllowBrowser: true,
   deployment: 'gpt-4o-mini',
@@ -16,6 +12,8 @@ export const AzureOpenAIConfig = {
 }
 
 export const REGENERATION_TEXT = 'Regeneration...';
+export const CHAT_DISABLED_CLASS = 'dx-chat-disabled';
+export const ALERT_TIMEOUT = 1000 * 60;
 
 export const user: ChatTypes.User = {
   id: 'user',
