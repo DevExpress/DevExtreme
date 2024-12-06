@@ -1,7 +1,11 @@
 ::ng-deep .custom-icon .icon {
-  font-size: 17px;
   color: #f05b41;
-  margin-right: 2px;
+}
+
+::ng-deep .custom-icon {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 ::ng-deep .dx-field {
