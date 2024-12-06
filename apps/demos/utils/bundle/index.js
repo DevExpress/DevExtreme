@@ -5,6 +5,7 @@ const Builder = require('systemjs-builder');
 const babel = require('@babel/core');
 const url = require('url');
 
+const GRID_COMMON_STAR_IMPORT = 'exports.Grids = __importStar(require("./grids"));';
 
 // https://stackoverflow.com/questions/42412965/how-to-load-named-exports-with-systemjs/47108328
 const prepareModulesToNamedImport = () => {
@@ -223,6 +224,9 @@ const prepareConfigs = (framework)=> {
                   fetch(load).then(r => resolve(r));
                   console.log('Unexpected transipling error (babel 7): ' + err);
                 } else {
+                  if(result.code.includes(GRID_COMMON_STAR_IMPORT)) {
+                    result.code = result.code.replace(GRID_COMMON_STAR_IMPORT, '');
+                  }
                   resolve(result.code);
                 }
             });
