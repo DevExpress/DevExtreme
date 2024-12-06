@@ -13,7 +13,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import { getActiveElement } from '../../helpers/shadowDom.js';
 import messageLocalization from 'common/core/localization/message';
 import localization from 'localization';
-import ja from 'common/core/localization/messages/ja.json!';
+import ja from 'localization/messages/ja.json!';
 import pointerMock from '../../helpers/pointerMock.js';
 import support from '__internal/core/utils/m_support';
 import typeUtils from 'core/utils/type';

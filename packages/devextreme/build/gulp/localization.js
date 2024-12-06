@@ -84,7 +84,7 @@ const accountingFormats = function() {
 };
 
 const RESULT_PATH = path.join(context.RESULT_JS_PATH, 'localization');
-const DICTIONARY_SOURCE_FOLDER = 'js/common/core/localization/messages';
+const DICTIONARY_SOURCE_FOLDER = 'js/localization/messages';
 
 const getLocales = function(directory) {
     return fs.readdirSync(directory).map(file => {
@@ -119,8 +119,8 @@ gulp.task('generate-community-locales', () => {
 
     return gulp
         .src([
-            'js/common/core/localization/messages/*.json',
-            '!js/common/core/localization/messages/en.json'
+            'js/localization/messages/*.json',
+            '!js/localization/messages/en.json'
         ])
         .pipe(through.obj(function(file, encoding, callback) {
             const parsedFile = JSON.parse(file.contents.toString(encoding));
@@ -169,7 +169,7 @@ gulp.task('localization-messages', gulp.parallel(getLocales(DICTIONARY_SOURCE_FO
 
 gulp.task('localization-generated-sources', gulp.parallel([
     {
-        data: require('../../js/common/core/localization/messages/en.json'),
+        data: require('../../js/localization/messages/en.json'),
         filename: 'default_messages.js',
         exportName: 'defaultMessages',
         destination: 'js/common/core/localization'

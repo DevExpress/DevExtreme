@@ -24,7 +24,7 @@
     "devextreme": "workspace:~"
   },
   "devDependencies": {
-    "@angular-devkit/architect": "0.1703.11",
+    "@angular-devkit/architect": "0.1900.2",
     "@angular-devkit/schematics": "17.3.11",
     "@angular/animations": "17.3.12",
     "@angular/cli": "17.3.11",
@@ -73,7 +73,7 @@
     "devexpress"
   ],
   "dependencies": {
-    "@angular-devkit/schematics": "17.3.8",
+    "@angular-devkit/schematics": "17.3.11",
     "devextreme-schematics": "*",
     "inferno-server": "7.4.11"
   },
