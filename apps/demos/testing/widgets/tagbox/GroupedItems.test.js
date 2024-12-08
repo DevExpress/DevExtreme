@@ -19,7 +19,7 @@ runManualTest('TagBox', 'GroupedItems', ['jQuery', 'React', 'Vue', 'Angular'], (
     await testScreenshot(t, takeScreenshot, 'tagbox_groupeditems_first_opened.png');
 
     await t
-      .pressKey('esc')
+      .pressKey('esc');
 
     await t
       .pressKey('tab')
@@ -28,7 +28,7 @@ runManualTest('TagBox', 'GroupedItems', ['jQuery', 'React', 'Vue', 'Angular'], (
     await testScreenshot(t, takeScreenshot, 'tagbox_groupeditems_second_opened.png');
 
     await t
-      .pressKey('esc')
+      .pressKey('esc');
 
     await t
       .pressKey('tab')
