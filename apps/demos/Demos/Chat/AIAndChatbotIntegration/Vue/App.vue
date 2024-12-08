@@ -197,13 +197,11 @@ function onRegenerateButtonClick() {
 </script>
 
 <style scoped>
-#app {
-  display: flex;
-  justify-content: center;
-}
-
 .chat-container {
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .dx-chat {
