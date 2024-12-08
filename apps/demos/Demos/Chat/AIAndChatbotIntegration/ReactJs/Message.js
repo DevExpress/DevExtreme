@@ -6,9 +6,9 @@ import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
 import HTMLReactParser from 'html-react-parser';
 
-import { REGENERATION_TEXT } from './data.ts';
+import { REGENERATION_TEXT } from './data.js';
 
-function convertToHtml(value: string) {
+function convertToHtml(value) {
     const result = unified()
         .use(remarkParse)
         .use(remarkRehype)

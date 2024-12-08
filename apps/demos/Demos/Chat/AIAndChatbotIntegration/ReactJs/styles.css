@@ -1,0 +1,65 @@
+#app {
+  display: flex;
+  justify-content: center;
+}
+
+.dx-chat {
+  max-width: 900px;
+}
+
+.dx-chat-messagelist-empty-image {
+  display: none;
+}
+
+.dx-chat-messagelist-empty-message {
+  font-size: var(--dx-font-size-heading-5);
+}
+
+.dx-chat-messagebubble-content,
+.dx-chat-messagebubble-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.dx-bubble-button-container {
+  display: none;
+}
+
+.dx-button {
+  display: inline-block;
+  color: var(--dx-color-icon);
+}
+
+.dx-chat-messagegroup-alignment-start:last-child .dx-chat-messagebubble:last-child .dx-bubble-button-container {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.dx-chat-messagebubble-content > div > p:first-child {
+  margin-top: 0;
+}
+
+.dx-chat-messagebubble-content > div > p:last-child {
+  margin-bottom: 0;
+}
+
+.dx-chat-messagebubble-content ol,
+.dx-chat-messagebubble-content ul {
+  white-space: normal;
+}
+
+.dx-chat-messagebubble-content h1,
+.dx-chat-messagebubble-content h2,
+.dx-chat-messagebubble-content h3,
+.dx-chat-messagebubble-content h4,
+.dx-chat-messagebubble-content h5,
+.dx-chat-messagebubble-content h6 {
+  font-size: revert;
+  font-weight: revert;
+}
+
+.dx-chat-disabled .dx-chat-messagebox {
+  opacity: 0.5;
+  pointer-events: none;
+}
