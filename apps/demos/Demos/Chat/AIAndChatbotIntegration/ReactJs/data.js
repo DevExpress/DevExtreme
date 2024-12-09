@@ -1,5 +1,3 @@
-import { ChatTypes } from 'devextreme-react/chat';
-
 export const AzureOpenAIConfig = {
   dangerouslyAllowBrowser: true,
   deployment: 'gpt-4o-mini',
@@ -12,11 +10,11 @@ export const REGENERATION_TEXT = 'Regeneration...';
 export const CHAT_DISABLED_CLASS = 'dx-chat-disabled';
 export const ALERT_TIMEOUT = 1000 * 60;
 
-export const user: ChatTypes.User = {
+export const user = {
   id: 'user',
 };
 
-export const assistant: ChatTypes.User = {
+export const assistant = {
   id: 'assistant',
   name: 'Virtual Assistant',
 };
