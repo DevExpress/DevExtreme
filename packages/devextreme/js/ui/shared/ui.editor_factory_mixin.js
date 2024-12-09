@@ -49,20 +49,20 @@ const getTextEditorConfig = function(options) {
         onValueChanged: function(e) {
 
             const needDelayedUpdate = options.parentType === 'filterRow' || options.parentType === 'searchPanel';
-            const isInputOrKeyUpEvent = e.event && (e.event.type === 'input' || e.event.type === 'keyup');
-            const updateValue = function(e, notFireEvent) {
-                const value = isInputOrKeyUpEvent && e.value === '' ? null : e.value;
-                options && options.setValue(value, notFireEvent);
+            const notChangedProgrammatically = isDefined(e.event);
+            const updateValue = function(newValue, notFireEvent) {
+                options && options.setValue(newValue, notFireEvent);
             };
 
             clearTimeout(data.valueChangeTimeout);
 
-            if(isInputOrKeyUpEvent && needDelayedUpdate) {
+            if(notChangedProgrammatically && needDelayedUpdate) {
                 sharedData.valueChangeTimeout = data.valueChangeTimeout = setTimeout(function() {
-                    updateValue(e, data.valueChangeTimeout !== sharedData.valueChangeTimeout);
+                    const value = e.value === '' ? null : e.value;
+                    updateValue(value, data.valueChangeTimeout !== sharedData.valueChangeTimeout);
                 }, isDefined(options.updateValueTimeout) ? options.updateValueTimeout : 0);
             } else {
-                updateValue(e);
+                updateValue(e.value);
             }
         },
         onKeyDown: function(e) {
