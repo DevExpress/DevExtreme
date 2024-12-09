@@ -49,7 +49,7 @@ test('Filter should reset if the filter row editor text is cleared (T1257261)', 
   }],
   onEditorPreparing(e: any) {
     e.updateValueTimeout = 100;
-  }
+  },
 }));
 
 test('Filter row\'s height should be adjusted by content (T1072609)', async (t) => {
