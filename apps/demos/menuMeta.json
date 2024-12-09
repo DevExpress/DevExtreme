@@ -2605,6 +2605,16 @@
             "DemoType": "Viz"
           },
           {
+            "Title": "Legend Markers Customization",
+            "Name": "LegendMarkersCustomization",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/CustomLegendMarkersSampleData.cs"
+            ],
+            "Widget": "Charts",
+            "DemoType": "Viz",
+            "Equivalents": ""
+          },
+          {
             "Title": "Multiple Panes",
             "Name": "MultiplePanes",
             "DocUrl": "Guide/UI_Components/Chart/Panes/Multi-Pane_Chart/",
@@ -2620,16 +2630,6 @@
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "valueErrorBar"
-          },
-          {
-            "Title": "Legend Markers Customization",
-            "Name": "LegendMarkersCustomization",
-            "MvcAdditionalFiles": [
-              "/Models/SampleData/CustomLegendMarkersSampleData.cs"
-            ],
-            "Widget": "Charts",
-            "DemoType": "Viz",
-            "Equivalents": ""
           }
         ]
       },
@@ -3199,7 +3199,7 @@
             "DemoType": "Web"
           },
           {
-            "Title": "Grouping By Date",
+            "Title": "Grouping by Date",
             "Name": "GroupByDate",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [
