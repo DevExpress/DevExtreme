@@ -2086,7 +2086,13 @@
             "Name": "Customization",
             "DocUrl": "Guide/UI_Components/Chat/Customization/",
             "Widget": "Chat",
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/ChatData.cs",
+              "/Models/Chat/User.cs",
+              "/Models/Chat/Message.cs",
+              "/ViewModels/ChatViewModel.cs"
+            ]
           }
         ]
       },
