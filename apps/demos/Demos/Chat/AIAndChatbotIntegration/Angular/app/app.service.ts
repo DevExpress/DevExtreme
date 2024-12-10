@@ -28,7 +28,6 @@ export class AppService {
   }
   
   REGENERATION_TEXT = 'Regeneration...';
-  CHAT_DISABLED_CLASS = 'dx-chat-disabled';
   ALERT_TIMEOUT = 1000 * 60;
 
   user: User = {
@@ -48,8 +47,6 @@ export class AppService {
 
   dataSource: DataSource;
 
-  isDisabled: boolean;
-
   typingUsersSubject: BehaviorSubject<User[]> = new BehaviorSubject([]);
 
   alertsSubject: BehaviorSubject<Alert[]> = new BehaviorSubject([]);
@@ -57,8 +54,6 @@ export class AppService {
   constructor() {
     this.chatService = new AzureOpenAI(this.AzureOpenAIConfig);
     this.initDataSource()
-
-    this.isDisabled = false;
     this.typingUsersSubject.next([]);
     this.alertsSubject.next([]);
   }
@@ -121,8 +116,6 @@ export class AppService {
   }
 
   async processMessageSending(message, event) {
-    this.toggleDisabledState(true, event);
-
     this.messages.push({ role: 'user', content: message.text });
     this.typingUsersSubject.next([this.assistant]);
   
@@ -138,8 +131,6 @@ export class AppService {
       this.typingUsersSubject.next([]);
       this.messages.pop();
       this.alertLimitReached();
-    } finally {
-      this.toggleDisabledState(false, event);
     }
   }
 
@@ -175,24 +166,12 @@ export class AppService {
     }, this.ALERT_TIMEOUT);
   }
 
-  toggleDisabledState(disabled: boolean, event = undefined) {
-    this.isDisabled = disabled;
-
-    if (disabled) {
-      event?.target.blur();
-    } else {
-      event?.target.focus();
-    }
-  };
-
   setAlerts(alerts: Alert[]) {
     this.alerts = alerts;
     this.alertsSubject.next(alerts);
   }
 
   async regenerate() {
-    this.toggleDisabledState(true);
-
     try {
       const aiResponse = await this.getAIResponse(this.messages.slice(0, -1));
 
@@ -201,8 +180,6 @@ export class AppService {
     } catch {
       this.updateLastMessage(this.messages.at(-1).content);
       this.alertLimitReached();
-    } finally {
-      this.toggleDisabledState(false);
     }
   }
 
@@ -217,11 +194,11 @@ export class AppService {
     return result;
   }
   
-  onMessageEntered({ message, event }: MessageEnteredEvent) {
+  async onMessageEntered({ message, event }: MessageEnteredEvent) {
     this.dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
 
     if (!this.alerts.length) {
-      this.processMessageSending(message, event);
+      await this.processMessageSending(message, event);
     }
   }
 }

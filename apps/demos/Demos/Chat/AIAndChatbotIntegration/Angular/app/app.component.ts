@@ -35,8 +35,6 @@ export class AppComponent {
 
   user: User;
 
-  isDisabled$: Observable<boolean>;
-
   typingUsers$: Observable<User[]>;
 
   alerts$: Observable<Alert[]>;
@@ -45,27 +43,44 @@ export class AppComponent {
 
   copyButtonIcon: string;
 
+  isDisabled: boolean;
+
   constructor(private readonly appService: AppService) {
     loadMessages(this.appService.getDictionary());
 
     this.dataSource = this.appService.dataSource;
     this.user = this.appService.user;
-    this.typingUsers$ = this.appService.typingUsers$;
     this.alerts$ = this.appService.alerts$;
+    this.typingUsers$ = this.appService.typingUsers$;
     this.regenerationText = this.appService.REGENERATION_TEXT;
     this.copyButtonIcon = 'copy';
+    this.isDisabled = false;
   }
 
   convertToHtml(message: Message): string {
     return this.appService.convertToHtml(message.text);
   }
 
-  isDisabled(): boolean {
-    return this.appService.isDisabled;
-  }
+  toggleDisabledState(disabled: boolean, event = undefined) {
+    this.isDisabled = disabled;
 
-  onMessageEntered(event: MessageEnteredEvent) {
-    this.appService.onMessageEntered(event);
+    if (disabled) {
+      event?.target.blur();
+    } else {
+      event?.target.focus();
+    }
+  };
+
+  async onMessageEntered(e: MessageEnteredEvent) {
+    if (!this.appService.alerts.length) {
+      this.toggleDisabledState(true, e.event);
+    }
+
+    try {
+      await this.appService.onMessageEntered(e);
+    } finally {
+      this.toggleDisabledState(false, e.event);
+    }
   }
 
   onCopyButtonClick(message: Message) {
@@ -78,9 +93,15 @@ export class AppComponent {
     }, 2500);
   }
 
-  onRegenerateButtonClick() {
+  async onRegenerateButtonClick() {
     this.appService.updateLastMessage();
-    this.appService.regenerate();
+    this.toggleDisabledState(true);
+
+    try {
+      await this.appService.regenerate();
+    } finally {
+      this.toggleDisabledState(false);
+    }
   }
 }
 
