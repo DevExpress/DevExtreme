@@ -127,7 +127,6 @@ window.config = {
     'rehype-stringify': 'externals:unified/rehype-stringify.bundle.js',
 
     'openai': 'externals:openai.bundle.js',
-    'jszip': 'npm:jszip/dist/jszip.min.js',
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram/dist/dx-diagram.js',
     'devexpress-gantt': 'npm:devexpress-gantt/dist/dx-gantt.js',

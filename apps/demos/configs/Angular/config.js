@@ -193,7 +193,6 @@ window.config = {
     'rehype-stringify': 'externals:unified/rehype-stringify.bundle.js',
 
     'openai': 'externals:openai.bundle.js',
-    'jszip': 'npm:jszip/dist/jszip.min.js',
     'tslib': 'npm:tslib/tslib.js',
     'rxjs': 'npm:rxjs/dist/bundles/rxjs.umd.js',
     'rxjs/operators': 'npm:rxjs/dist/cjs/operators/index.js',
