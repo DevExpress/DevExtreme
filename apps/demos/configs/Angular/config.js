@@ -183,7 +183,7 @@ window.config = {
       return acc;
     }, {}),
 
-    /* Bundles for Unified */
+    /** unified */
     'unified': 'externals:unified/unified.bundle.js',
     'remark-parse': 'externals:unified/remark-parse.bundle.js',
     'remark-rehype': 'externals:unified/remark-rehype.bundle.js',
@@ -191,8 +191,12 @@ window.config = {
     'rehype-parse': 'externals:unified/rehype-parse.bundle.js',
     'rehype-remark': 'externals:unified/rehype-remark.bundle.js',
     'rehype-stringify': 'externals:unified/rehype-stringify.bundle.js',
+    /**/
 
+    /** openai */
     'openai': 'externals:openai.bundle.js',
+    /**/
+
     'tslib': 'npm:tslib/tslib.js',
     'rxjs': 'npm:rxjs/dist/bundles/rxjs.umd.js',
     'rxjs/operators': 'npm:rxjs/dist/cjs/operators/index.js',
