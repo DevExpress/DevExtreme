@@ -19,11 +19,22 @@ fixture.disablePageReloads`ChatMessageGroup`
 
 test('Chat: messagegroup, avatar rendering', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const chat = new Chat('#chat');
 
-  await testScreenshot(t, takeScreenshot, 'Avatar has correct position.png', { element: '#chat' });
+  await testScreenshot(t, takeScreenshot, 'Avatar has correct position.png', {
+    element: '#chat',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await setStyleAttribute(Selector(AVATAR_SELECTOR), 'width: 64px; height: 64px');
-  await testScreenshot(t, takeScreenshot, 'Avatar sizes do not affect indentation between bubbles.png', { element: '#chat' });
+  await testScreenshot(t, takeScreenshot, 'Avatar sizes do not affect indentation between bubbles.png', {
+    element: '#chat',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await t
     .expect(compareResults.isValid())
@@ -43,8 +54,14 @@ test('Chat: messagegroup, avatar rendering', async (t) => {
 
 test('Chat: messagegroup, information', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const chat = new Chat('#chat');
 
-  await testScreenshot(t, takeScreenshot, 'Information row with long user name.png', { element: '#chat' });
+  await testScreenshot(t, takeScreenshot, 'Information row with long user name.png', {
+    element: '#chat',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await t
     .expect(compareResults.isValid())
@@ -76,22 +93,42 @@ test('Chat: messagegroup, bubbles', async (t) => {
   let items = generateMessages(1, userFirst, userSecond, false, false, 4, 2);
 
   await chat.option({ items, user: userSecond });
-  await testScreenshot(t, takeScreenshot, 'Messagegroup with 1 bubble.png', { element: '#chat' });
+  await testScreenshot(t, takeScreenshot, 'Messagegroup with 1 bubble.png', {
+    element: '#chat',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   items = generateMessages(2, userFirst, userSecond, false, false, 4, 2);
 
   await chat.option({ items });
-  await testScreenshot(t, takeScreenshot, 'Messagegroup with 2 bubbles.png', { element: '#chat' });
+  await testScreenshot(t, takeScreenshot, 'Messagegroup with 2 bubbles.png', {
+    element: '#chat',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   items = generateMessages(3, userFirst, userSecond, false, false, 4, 2);
 
   await chat.option({ items });
-  await testScreenshot(t, takeScreenshot, 'Messagegroup with 3 bubbles.png', { element: '#chat' });
+  await testScreenshot(t, takeScreenshot, 'Messagegroup with 3 bubbles.png', {
+    element: '#chat',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   items = generateMessages(4, userFirst, userSecond, false, false, 4, 2);
 
   await chat.option({ items });
-  await testScreenshot(t, takeScreenshot, 'Messagegroup with 4 bubbles.png', { element: '#chat' });
+  await testScreenshot(t, takeScreenshot, 'Messagegroup with 4 bubbles.png', {
+    element: '#chat',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await t
     .expect(compareResults.isValid())
@@ -126,6 +163,9 @@ test('Messagegroup scenarios in disabled state', async (t) => {
       width: 250,
       height: 400,
     }, chatId);
+
+    const chat = new Chat(chatId);
+    await chat.repaint();
   });
 
   await testScreenshot(t, takeScreenshot, 'Messagegroup appearance in disabled state.png', { element: '#container' });

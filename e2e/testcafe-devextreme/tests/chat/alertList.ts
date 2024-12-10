@@ -16,7 +16,12 @@ test.clientScripts([
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const chat = new Chat('#container');
 
-  await testScreenshot(t, takeScreenshot, 'Alertlist with one error.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Alertlist with one error.png', {
+    element: '#container',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await chat.option('alerts', [
     { id: 1, message: 'Error Message 1. Error Description...' },
@@ -28,6 +33,9 @@ test.clientScripts([
     element: '#container',
     shouldTestInCompact: true,
     compactCallBack: async () => {
+      await chat.repaint();
+    },
+    themeChanged: async () => {
       await chat.repaint();
     },
   });
@@ -43,7 +51,12 @@ test.clientScripts([
 
   await chat.option('rtlEnabled', true);
 
-  await testScreenshot(t, takeScreenshot, 'Alertlist appearance in RTL mode.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Alertlist appearance in RTL mode.png', {
+    element: '#container',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await t
     .expect(compareResults.isValid())

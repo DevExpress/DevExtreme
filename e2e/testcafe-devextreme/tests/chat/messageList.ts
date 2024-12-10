@@ -17,18 +17,33 @@ test('Messagelist empty view scenarios', async (t) => {
 
   const chat = new Chat('#container');
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist empty state.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist empty state.png', {
+    element: '#container',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await chat.option('rtlEnabled', true);
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist empty in RTL mode.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist empty in RTL mode.png', {
+    element: '#container',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await chat.option({
     disabled: true,
     rtlEnabled: false,
   });
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist empty in disabled state.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist empty in disabled state.png', {
+    element: '#container',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await chat.option({
     width: 200,
@@ -36,7 +51,12 @@ test('Messagelist empty view scenarios', async (t) => {
     disabled: false,
   });
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist empty with limited dimensions.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist empty with limited dimensions.png', {
+    element: '#container',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await t
     .expect(compareResults.isValid())
@@ -55,7 +75,12 @@ test('Messagelist appearance with scrollbar', async (t) => {
     .hover(chat.messageList)
     .wait(400);
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist with a lot of messages.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist with a lot of messages.png', {
+    element: '#container',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await ClientFunction(
     () => {
@@ -68,18 +93,33 @@ test('Messagelist appearance with scrollbar', async (t) => {
     { dependencies: { chat } },
   )();
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist scrollbar position after call renderMessage().png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist scrollbar position after call renderMessage().png', {
+    element: '#container',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await t
     .typeText(chat.getInput(), getLongText())
     .pressKey('shift+enter');
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist scrollbar position after typing in textarea.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist scrollbar position after typing in textarea.png', {
+    element: '#container',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await t
     .pressKey('enter');
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist scrollbar position after send.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist scrollbar position after send.png', {
+    element: '#container',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   const scrollable = chat.getScrollable();
   const topOffset = (await scrollable.scrollOffset()).top;
@@ -89,7 +129,12 @@ test('Messagelist appearance with scrollbar', async (t) => {
   await t
     .typeText(chat.getInput(), getLongText());
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist scrollbar middle position after typing in textarea.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist scrollbar middle position after typing in textarea.png', {
+    element: '#container',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await t
     .expect(compareResults.isValid())
@@ -118,11 +163,17 @@ test('Messagelist should scrolled to the latest messages after being rendered in
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const tabPanel = new TabPanel('#container');
+  const chat = new Chat('#chat');
 
   await t
     .click(tabPanel.tabs.getItem(1).element);
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist scroll position after rendering in invisible container.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist scroll position after rendering in invisible container.png', {
+    element: '#container',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await t
     .expect(compareResults.isValid())
@@ -145,7 +196,7 @@ test('Messagelist should scrolled to the latest messages after being rendered in
     }, {
       title: 'Tab_2',
       collapsible: true,
-      template: ClientFunction(() => ($('<div>') as any).dxChat({
+      template: ClientFunction(() => ($('<div id="chat">') as any).dxChat({
         items,
         user: userSecond,
       }), { dependencies: { items, userSecond } }),
@@ -158,7 +209,12 @@ test('Messagelist with loadindicator appearance on initial loading', async (t) =
   const chat = new Chat('#container');
 
   await chat.repaint();
-  await testScreenshot(t, takeScreenshot, 'Messagelist loadindicator position on initial loading.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist loadindicator position on initial loading.png', {
+    element: '#container',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await t
     .expect(compareResults.isValid())
@@ -188,13 +244,23 @@ test('Messagelist with messageTemplate', async (t) => {
   const chat = new Chat('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist with message template.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist with message template.png', {
+    element: '#container',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await t
     .typeText(chat.getInput(), 'New last message')
     .pressKey('enter');
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist with message template after new message add.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist with message template after new message add.png', {
+    element: '#container',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await t
     .expect(compareResults.isValid())
@@ -275,8 +341,14 @@ test.clientScripts([
   { content: 'window.MockDate = MockDate;' },
 ])('Messagelist with date headers', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const chat = new Chat('#container');
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist with date headers.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist with date headers.png', {
+    element: '#container',
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await t
     .expect(compareResults.isValid())
