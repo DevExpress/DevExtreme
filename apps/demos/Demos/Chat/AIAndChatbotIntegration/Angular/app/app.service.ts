@@ -5,14 +5,12 @@ import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
-import { 
+import {
   User,
-  Message, 
   Alert,
   MessageEnteredEvent
 } from 'devextreme/ui/chat';
-import DataSource from 'devextreme/data/data_source';
-import CustomStore from 'devextreme/data/custom_store';
+import { DataSource, CustomStore } from 'devextreme/common/data';
 
 @Injectable({
   providedIn: 'root',
@@ -56,8 +54,6 @@ export class AppService {
 
   alertsSubject: BehaviorSubject<Alert[]> = new BehaviorSubject([]);
 
-  copyButtonIcon: string;
-
   constructor() {
     this.chatService = new AzureOpenAI(this.AzureOpenAIConfig);
     this.initDataSource()
@@ -65,7 +61,6 @@ export class AppService {
     this.isDisabled = false;
     this.typingUsersSubject.next([]);
     this.alertsSubject.next([]);
-    this.copyButtonIcon = 'copy';
   }
 
   get typingUsers$(): Observable<User[]> {
@@ -76,7 +71,7 @@ export class AppService {
     return this.alertsSubject.asObservable();
   }
 
-  getDictionary()  {
+  getDictionary() {
     return {
       en: {
         'dxChat-emptyListMessage': 'Chat is Empty',
@@ -213,14 +208,14 @@ export class AppService {
 
   convertToHtml(value: string) {
     const result = unified()
-        .use(remarkParse)
-        .use(remarkRehype)
-        .use(rehypeStringify)
-        .processSync(value)
-        .toString();
+      .use(remarkParse)
+      .use(remarkRehype)
+      .use(rehypeStringify)
+      .processSync(value)
+      .toString();
 
     return result;
-}
+  }
   
   onMessageEntered({ message, event }: MessageEnteredEvent) {
     this.dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
@@ -228,19 +223,5 @@ export class AppService {
     if (!this.alerts.length) {
       this.processMessageSending(message, event);
     }
-  }
-
-  onCopyButtonClick(message: Message) {
-    navigator.clipboard?.writeText(message.text);
-    this.copyButtonIcon = 'check';
-
-    setTimeout(() => {
-        this.copyButtonIcon = 'copy';
-    }, 2500);
-}
-
-  onRegenerateButtonClick() {
-    this.updateLastMessage();
-    this.regenerate();
   }
 }

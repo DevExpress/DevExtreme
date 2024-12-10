@@ -17,22 +17,25 @@
         <span>{{ regenerationText }}</span>
       </ng-container>
       <ng-container *ngIf="data.message.text !== regenerationText">
-        <div 
+        <div
           class="dx-chat-messagebubble-text"
-          [innerHTML]="convertToHtml(data.message)">
+          [innerHTML]="convertToHtml(data.message)"
+        >
         </div>
         <div class="dx-bubble-button-container">
           <dx-button
-            [icon]="getCopyButtonIcon()"
+            [icon]="copyButtonIcon"
             stylingMode="text"
             hint="Copy"
-            (onClick)="onCopyButtonClick(data.message)">
+            (onClick)="onCopyButtonClick(data.message)"
+          >
           </dx-button>
           <dx-button
             icon="refresh"
             stylingMode="text"
             hint="Regenerate"
-            (onClick)="onRegenerateButtonClick()">
+            (onClick)="onRegenerateButtonClick()"
+          >
           </dx-button>
         </div>
       </ng-container>

@@ -43,6 +43,8 @@ export class AppComponent {
 
   regenerationText: string;
 
+  copyButtonIcon: string;
+
   constructor(private readonly appService: AppService) {
     loadMessages(this.appService.getDictionary());
 
@@ -51,6 +53,7 @@ export class AppComponent {
     this.typingUsers$ = this.appService.typingUsers$;
     this.alerts$ = this.appService.alerts$;
     this.regenerationText = this.appService.REGENERATION_TEXT;
+    this.copyButtonIcon = 'copy';
   }
 
   convertToHtml(message: Message): string {
@@ -61,20 +64,23 @@ export class AppComponent {
     return this.appService.isDisabled;
   }
 
-  getCopyButtonIcon(): string {
-    return this.appService.copyButtonIcon;
-  }
-
   onMessageEntered(event: MessageEnteredEvent) {
     this.appService.onMessageEntered(event);
   }
 
   onCopyButtonClick(message: Message) {
-   this.appService.onCopyButtonClick(message);
-}
+    navigator.clipboard?.writeText(message.text);
+
+    this.copyButtonIcon = 'check';
+
+    setTimeout(() => {
+      this.copyButtonIcon = 'copy';
+    }, 2500);
+  }
 
   onRegenerateButtonClick() {
-    this.appService.onRegenerateButtonClick();
+    this.appService.updateLastMessage();
+    this.appService.regenerate();
   }
 }
 

@@ -36,11 +36,11 @@
   margin-top: 8px;
 }
 
-::ng-deep .dx-chat-messagebubble-content > div > p:first-child {
+::ng-deep .dx-template-wrapper > div > p:first-child {
   margin-top: 0;
 }
 
-::ng-deep .dx-chat-messagebubble-content > div > p:last-child {
+::ng-deep .dx-template-wrapper > div > p:last-child {
   margin-bottom: 0;
 }
 
