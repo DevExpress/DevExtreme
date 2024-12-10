@@ -381,3 +381,42 @@ test('DataGrid loses grouping after the expandAll method if a grouped column has
     },
   ],
 }));
+
+test('Grouping and filtering should be applied correctly when they change at runtime (T1237863)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.option({
+    'columns[2].groupIndex': 0,
+    filterValue: ['room', '=', '1'],
+  });
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await takeScreenshot('T1237863_datagrid-grouping_and_filtering.png', dataGrid.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(() => createWidget('dxDataGrid', {
+  dataSource: [
+    {
+      ID: 1,
+      FirstName: 'Bob',
+      room: 1,
+    },
+    {
+      ID: 2,
+      FirstName: 'Alex',
+      room: 2,
+    },
+    {
+      ID: 3,
+      FirstName: 'John',
+      room: 1,
+    },
+  ],
+  keyExpr: 'ID',
+}));
