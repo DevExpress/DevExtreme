@@ -1,4 +1,4 @@
-DevExpress Pagination UI component allows users to navigate between pages and adjust page size at runtime. The Pagination component in this demo allows users to browse employee cards.
+DevExpress Pagination UI component allows users to navigate between pages and adjust page size at runtime. In this demo, users can browse employee cards with the Pagination component.
 
 To set up a Pagination component, specify the following options: 
 
