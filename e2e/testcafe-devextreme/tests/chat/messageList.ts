@@ -41,15 +41,10 @@ test('Messagelist empty view scenarios', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
-  await createWidget('dxChat', {
-    width: 400,
-    height: 600,
-  });
-
-  const chat = new Chat('#container');
-  await chat.repaint();
-});
+}).before(async () => createWidget('dxChat', {
+  width: 400,
+  height: 600,
+}));
 
 test('Messagelist appearance with scrollbar', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -105,7 +100,7 @@ test('Messagelist appearance with scrollbar', async (t) => {
 
   const items = generateMessages(17, userFirst, userSecond, true, false, 2);
 
-  await createWidget('dxChat', {
+  return createWidget('dxChat', {
     items,
     user: userSecond,
     width: 400,
@@ -117,9 +112,6 @@ test('Messagelist appearance with scrollbar', async (t) => {
       component.renderMessage(message);
     },
   });
-
-  const chat = new Chat('#container');
-  await chat.repaint();
 });
 
 test('Messagelist should scrolled to the latest messages after being rendered inside an invisible element', async (t) => {
@@ -141,7 +133,7 @@ test('Messagelist should scrolled to the latest messages after being rendered in
 
   const items = generateMessages(17, userFirst, userSecond, true, false, 2);
 
-  await createWidget('dxTabPanel', {
+  return createWidget('dxTabPanel', {
     width: 400,
     height: 500,
     deferRendering: true,
@@ -153,15 +145,12 @@ test('Messagelist should scrolled to the latest messages after being rendered in
     }, {
       title: 'Tab_2',
       collapsible: true,
-      template: ClientFunction(() => ($('<div id="chat">') as any).dxChat({
+      template: ClientFunction(() => ($('<div>') as any).dxChat({
         items,
         user: userSecond,
       }), { dependencies: { items, userSecond } }),
     }],
   });
-
-  const chat = new Chat('#chat');
-  await chat.repaint();
 });
 
 test('Messagelist with loadindicator appearance on initial loading', async (t) => {
@@ -193,9 +182,6 @@ test('Messagelist with loadindicator appearance on initial loading', async (t) =
       height: 600,
     };
   });
-
-  const chat = new Chat('#container');
-  await chat.repaint();
 });
 
 test('Messagelist with messageTemplate', async (t) => {
@@ -227,7 +213,7 @@ test('Messagelist with messageTemplate', async (t) => {
     text: 'CCC',
   }];
 
-  await createWidget('dxChat', {
+  return createWidget('dxChat', {
     items,
     user: userFirst,
     width: 400,
@@ -241,9 +227,6 @@ test('Messagelist with messageTemplate', async (t) => {
       $('<div>').text(`${message.author.name} says: ${message.text}`).appendTo(container);
     },
   });
-
-  const chat = new Chat('#container');
-  await chat.repaint();
 });
 
 test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp set to false work', async (t) => {
@@ -273,7 +256,7 @@ test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp 
     text: 'CCC',
   }];
 
-  await createWidget('dxChat', {
+  return createWidget('dxChat', {
     items,
     user: userFirst,
     width: 400,
@@ -282,9 +265,6 @@ test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp 
     showUserName: false,
     showMessageTimestamp: false,
   });
-
-  const chat = new Chat('#container');
-  await chat.repaint();
 });
 
 fixture`ChatMessageList: dayHeaders`
@@ -334,15 +314,12 @@ test.clientScripts([
     text: 'EEE',
   }];
 
-  await createWidget('dxChat', {
+  return createWidget('dxChat', {
     items,
     user: userSecond,
     width: 400,
     height: 600,
   });
-
-  const chat = new Chat('#container');
-  await chat.repaint();
 }).after(async () => {
   await ClientFunction(() => {
     (window as any).MockDate.reset();

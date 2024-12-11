@@ -34,14 +34,11 @@ test('Chat: messagegroup, avatar rendering', async (t) => {
   const userFirst = createUser(1, 'First');
   const items = generateMessages(3, userFirst);
 
-  await createWidget('dxChat', {
+  return createWidget('dxChat', {
     width: 400,
     height: 600,
     items,
   }, '#chat');
-
-  const chat = new Chat('#chat');
-  await chat.repaint();
 });
 
 test('Chat: messagegroup, information', async (t) => {
@@ -60,15 +57,12 @@ test('Chat: messagegroup, information', async (t) => {
 
   const items = generateMessages(2, userFirst, userSecond, false, false, 2);
 
-  await createWidget('dxChat', {
+  return createWidget('dxChat', {
     width: 400,
     height: 600,
     user: userSecond,
     items,
   }, '#chat');
-
-  const chat = new Chat('#chat');
-  await chat.repaint();
 });
 
 test('Chat: messagegroup, bubbles', async (t) => {
@@ -105,13 +99,10 @@ test('Chat: messagegroup, bubbles', async (t) => {
 }).before(async () => {
   await appendElementTo('#container', 'div', 'chat');
 
-  await createWidget('dxChat', {
+  return createWidget('dxChat', {
     width: 400,
     height: 600,
   }, '#chat');
-
-  const chat = new Chat('#chat');
-  await chat.repaint();
 });
 
 test('Messagegroup scenarios in disabled state', async (t) => {
@@ -135,9 +126,6 @@ test('Messagegroup scenarios in disabled state', async (t) => {
       width: 250,
       height: 400,
     }, chatId);
-
-    const chat = new Chat(chatId);
-    await chat.repaint();
   });
 
   await testScreenshot(t, takeScreenshot, 'Messagegroup appearance in disabled state.png', { element: '#container' });

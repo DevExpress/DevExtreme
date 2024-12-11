@@ -35,15 +35,12 @@ test('Chat: avatar', async (t) => {
 
   const items = generateMessages(2, userFirst, userSecond, false, false, 2);
 
-  await createWidget('dxChat', {
+  return createWidget('dxChat', {
     width: 400,
     height: 600,
     user: userSecond,
     items,
   }, '#chat');
-
-  const chat = new Chat('#chat');
-  await chat.repaint();
 });
 
 test('Chat: showAvatar set to false', async (t) => {
@@ -61,14 +58,11 @@ test('Chat: showAvatar set to false', async (t) => {
 
   const items = generateMessages(2, userFirst, userSecond, false, false, 2);
 
-  await createWidget('dxChat', {
+  return createWidget('dxChat', {
     width: 400,
     height: 600,
     user: userSecond,
     items,
     showAvatar: false,
   }, '#chat');
-
-  const chat = new Chat('#chat');
-  await chat.repaint();
 });

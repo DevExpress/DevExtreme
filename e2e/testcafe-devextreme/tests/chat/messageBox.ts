@@ -34,11 +34,8 @@ test('Chat: messagebox', async (t) => {
 }).before(async () => {
   await appendElementTo('#container', 'div', 'chat');
 
-  await createWidget('dxChat', {
+  return createWidget('dxChat', {
     width: 400,
     height: 600,
   }, '#chat');
-
-  const chat = new Chat('#chat');
-  await chat.repaint();
 });
