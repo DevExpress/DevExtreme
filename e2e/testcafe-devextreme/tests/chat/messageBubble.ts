@@ -20,22 +20,12 @@ test('Chat: messagebubble', async (t) => {
   let items = generateMessages(2, userFirst, userSecond, true, false, 2);
 
   await chat.option({ items, user: userSecond });
-  await testScreenshot(t, takeScreenshot, 'Bubbles with long text.png', {
-    element: '#chat',
-    themeChanged: async () => {
-      await chat.repaint();
-    },
-  });
+  await testScreenshot(t, takeScreenshot, 'Bubbles with long text.png', { element: '#chat' });
 
   items = generateMessages(2, userFirst, userSecond, true, true, 2);
 
   await chat.option({ items });
-  await testScreenshot(t, takeScreenshot, 'Bubbles with long text with line breaks.png', {
-    element: '#chat',
-    themeChanged: async () => {
-      await chat.repaint();
-    },
-  });
+  await testScreenshot(t, takeScreenshot, 'Bubbles with long text with line breaks.png', { element: '#chat' });
 
   await t
     .expect(compareResults.isValid())

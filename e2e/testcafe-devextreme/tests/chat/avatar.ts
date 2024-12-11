@@ -11,14 +11,9 @@ fixture.disablePageReloads`ChatAvatar`
 
 test('Chat: avatar', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const chat = new Chat('#chat');
+  await testScreenshot(t, takeScreenshot, 'Avatar with two word initials.png', { element: '#chat' });
 
-  await testScreenshot(t, takeScreenshot, 'Avatar with two word initials.png', {
-    element: '#chat',
-    themeChanged: async () => {
-      await chat.repaint();
-    },
-  });
+  const chat = new Chat('#chat');
 
   const userFirst = createUser(1, 'First', avatarUrl);
   const userSecond = createUser(2, 'Second', avatarUrl);
@@ -27,12 +22,7 @@ test('Chat: avatar', async (t) => {
 
   await chat.option('items', items);
 
-  await testScreenshot(t, takeScreenshot, 'Avatar with image.png', {
-    element: '#chat',
-    themeChanged: async () => {
-      await chat.repaint();
-    },
-  });
+  await testScreenshot(t, takeScreenshot, 'Avatar with image.png', { element: '#chat' });
 
   await t
     .expect(compareResults.isValid())
@@ -55,14 +45,7 @@ test('Chat: avatar', async (t) => {
 
 test('Chat: showAvatar set to false', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const chat = new Chat('#chat');
-
-  await testScreenshot(t, takeScreenshot, 'Avatar with showAvatar set to false.png', {
-    element: '#chat',
-    themeChanged: async () => {
-      await chat.repaint();
-    },
-  });
+  await testScreenshot(t, takeScreenshot, 'Avatar with showAvatar set to false.png', { element: '#chat' });
 
   await t
     .expect(compareResults.isValid())

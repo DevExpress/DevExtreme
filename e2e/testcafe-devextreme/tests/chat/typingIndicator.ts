@@ -22,9 +22,6 @@ test('Chat: typing indicator with emptyview', async (t) => {
     compactCallBack: async () => {
       await chat.repaint();
     },
-    themeChanged: async () => {
-      await chat.repaint();
-    },
   });
 
   const darkTheme = getFullThemeName().replace('light', 'dark');
@@ -55,14 +52,8 @@ test('Chat: typing indicator with emptyview', async (t) => {
 
 test('Chat: typing indicator with a lot of items', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const chat = new Chat('#chat');
 
-  await testScreenshot(t, takeScreenshot, 'Typing indicator with a lot of items.png', {
-    element: '#chat',
-    themeChanged: async () => {
-      await chat.repaint();
-    },
-  });
+  await testScreenshot(t, takeScreenshot, 'Typing indicator with a lot of items.png', { element: '#chat' });
 
   await t
     .expect(compareResults.isValid())
@@ -89,14 +80,10 @@ test('Chat: typing indicator with a lot of items', async (t) => {
 
 test('Chat: typing indicator', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const chat = new Chat('#chat');
 
-  await testScreenshot(t, takeScreenshot, 'Typing indicator with 1 user.png', {
-    element: '#chat',
-    themeChanged: async () => {
-      await chat.repaint();
-    },
-  });
+  await testScreenshot(t, takeScreenshot, 'Typing indicator with 1 user.png', { element: '#chat' });
+
+  const chat = new Chat('#chat');
 
   const userFirst = createUser(1, 'Camille');
   const userSecond = createUser(2, 'Sophie');
@@ -104,44 +91,19 @@ test('Chat: typing indicator', async (t) => {
   const userFourth = createUser(4, 'Julien');
 
   await chat.option('typingUsers', [userFirst, userSecond]);
-  await testScreenshot(t, takeScreenshot, 'Typing indicator with 2 users.png', {
-    element: '#chat',
-    themeChanged: async () => {
-      await chat.repaint();
-    },
-  });
+  await testScreenshot(t, takeScreenshot, 'Typing indicator with 2 users.png', { element: '#chat' });
 
   await chat.option('typingUsers', [userFirst, userSecond, userThird]);
-  await testScreenshot(t, takeScreenshot, 'Typing indicator with 3 users.png', {
-    element: '#chat',
-    themeChanged: async () => {
-      await chat.repaint();
-    },
-  });
+  await testScreenshot(t, takeScreenshot, 'Typing indicator with 3 users.png', { element: '#chat' });
 
   await chat.option('typingUsers', [userFirst, userSecond, userThird, userFourth]);
-  await testScreenshot(t, takeScreenshot, 'Typing indicator with 4 users.png', {
-    element: '#chat',
-    themeChanged: async () => {
-      await chat.repaint();
-    },
-  });
+  await testScreenshot(t, takeScreenshot, 'Typing indicator with 4 users.png', { element: '#chat' });
 
   await chat.option('typingUsers', [{ name: 'Marie-Francoise Isabelle Antoinette de La Rochefoucauld' }]);
-  await testScreenshot(t, takeScreenshot, 'Typing indicator with long name.png', {
-    element: '#chat',
-    themeChanged: async () => {
-      await chat.repaint();
-    },
-  });
+  await testScreenshot(t, takeScreenshot, 'Typing indicator with long name.png', { element: '#chat' });
 
   await chat.option('typingUsers', [{}]);
-  await testScreenshot(t, takeScreenshot, 'Typing indicator without name.png', {
-    element: '#chat',
-    themeChanged: async () => {
-      await chat.repaint();
-    },
-  });
+  await testScreenshot(t, takeScreenshot, 'Typing indicator without name.png', { element: '#chat' });
 
   await t
     .expect(compareResults.isValid())
