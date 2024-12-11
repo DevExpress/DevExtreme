@@ -16,7 +16,7 @@ const DEVEXTREME_NPM_DIR = path.join(ROOT_DIR, 'packages/devextreme/artifacts/np
 
 const injectDescriptions = () => {
     sh.pushd(ROOT_DIR);
-    // Inject descriptions
+
     const DOCUMENTATION_TEMP_DIR = path.join(ARTIFACTS_DIR, 'doc_tmp');
     sh.exec(`git clone -b ${MAJOR_VERSION} --depth 1 --config core.longpaths=true https://github.com/DevExpress/devextreme-documentation.git ${DOCUMENTATION_TEMP_DIR}`);
 
@@ -43,12 +43,13 @@ const packAndCopy = (outputDir: string) => {
 const monorepoVersion = sh.exec('pnpm pkg get version', { silent: true }).stdout.replaceAll('"', '');
 const MAJOR_VERSION = monorepoVersion.split('.').slice(0, 2).join('_');
 
-// Prepare metadata
 sh.cd(ROOT_DIR);
-sh.exec('pnpm run tools:discover-declarations');
-sh.exec(`pnpm run tools make-aspnet-metadata --version ${MAJOR_VERSION}`);
 
 if (!devMode) {
+    sh.exec('pnpm run tools:discover-declarations');
+    // aspnet metadata will be used in Build custom-tasks to inject aspnet descriptions
+    sh.exec(`pnpm run tools make-aspnet-metadata --version ${MAJOR_VERSION}`);
+
     injectDescriptions();
 }
 
