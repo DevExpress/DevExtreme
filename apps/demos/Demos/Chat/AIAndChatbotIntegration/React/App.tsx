@@ -31,11 +31,12 @@ const chatService = new AzureOpenAI(AzureOpenAIConfig);
 async function getAIResponse(messages) {
   const params = {
     messages,
+    model: AzureOpenAIConfig.deployment,
     max_tokens: 1000,
     temperature: 0.7,
   };
 
-  const response = await chatService.chat.completions.create(params as any);
+  const response = await chatService.chat.completions.create(params);
   const data = { choices: response.choices };
 
   return data.choices[0].message?.content;
