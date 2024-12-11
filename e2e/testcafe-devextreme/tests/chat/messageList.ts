@@ -118,11 +118,9 @@ test('Messagelist appearance with scrollbar', async (t) => {
 
 test('Messagelist should scrolled to the latest messages after being rendered inside an invisible element', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
   const tabPanel = new TabPanel('#container');
-  const chat = new Chat('#chat');
 
-  await chat.repaint();
+  await tabPanel.repaint();
 
   await t
     .click(tabPanel.tabs.getItem(1).element);
@@ -150,7 +148,7 @@ test('Messagelist should scrolled to the latest messages after being rendered in
     }, {
       title: 'Tab_2',
       collapsible: true,
-      template: ClientFunction(() => ($('<div id="chat">') as any).dxChat({
+      template: ClientFunction(() => ($('<div>') as any).dxChat({
         items,
         user: userSecond,
       }), { dependencies: { items, userSecond } }),
