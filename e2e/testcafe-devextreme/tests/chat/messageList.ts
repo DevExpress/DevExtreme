@@ -120,8 +120,6 @@ test('Messagelist should scrolled to the latest messages after being rendered in
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const tabPanel = new TabPanel('#container');
 
-  await tabPanel.repaint();
-
   await t
     .click(tabPanel.tabs.getItem(1).element);
 
