@@ -297,9 +297,6 @@ const SKIPPED_TESTS = {
     'Scheduler',
     'PivotGrid',
   ];
-  const BROKEN_THIRD_PARTY_SCRIPTS_COMPONENT = [
-    'Map',
-  ];
 
   getDemoPaths(approach).forEach((demoPath, index) => {
     if (!shouldRunTestAtIndex(index + 1) || !existsSync(demoPath)) { return; }
@@ -326,9 +323,6 @@ const SKIPPED_TESTS = {
       }) || {};
 
       if (process.env.STRATEGY === 'accessibility' && ACCESSIBILITY_UNSUPPORTED_COMPONENTS.indexOf(widgetName) > -1) {
-        return;
-      }
-      if (BROKEN_THIRD_PARTY_SCRIPTS_COMPONENT.indexOf(widgetName) > -1) {
         return;
       }
       if (process.env.CI_ENV && process.env.DISABLE_DEMO_TEST_SETTINGS !== 'ignore') {
