@@ -82,4 +82,28 @@ describe('two-way binding', () => {
       expect(component.element.classList.toString()).toBe('custom2 dx-show-invalid-badge dx-textbox dx-texteditor dx-editor-outlined dx-texteditor-empty dx-widget');
     });
   });
+
+  it('dxClass should be set when class attr is undefined', async () => {
+    expect.assertions(1);
+    const vm = defineComponent({
+      template:
+                `<dx-text-box id="component" :class="{custom: customClass}"></dx-text-box>
+                `,
+      components: {
+        DxTextBox,
+      },
+      props: {
+        customClass: {
+          type: String,
+          default: true,
+        },
+      },
+    });
+    const wrapper = mount(vm);
+    const component = wrapper.getComponent('#component');
+    await wrapper.setProps({ customClass: false });
+    await nextTick(() => {
+      expect(component.element.classList.toString()).toBe(' dx-show-invalid-badge dx-textbox dx-texteditor dx-editor-outlined dx-texteditor-empty dx-widget');
+    });
+  });
 });
