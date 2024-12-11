@@ -153,6 +153,7 @@ window.config = {
   map: {
     'ts': 'npm:plugin-typescript/lib/plugin.js',
     'typescript': 'npm:typescript/lib/typescript.js',
+    'jszip': 'npm:jszip/dist/jszip.min.js',
 
     /* @angular */
     '@angular/compiler': 'bundles:@angular/compiler.umd.js',
@@ -182,10 +183,6 @@ window.config = {
       acc[`devextreme-angular/ui/${name}/nested`] = `bundles:devextreme-angular/devextreme-angular-ui-${name}-nested.umd.js`;
       return acc;
     }, {}),
-
-    /** jszip */
-    'jszip': 'npm:jszip/dist/jszip.min.js',
-    /**/
 
     /** unified */
     'unified': 'externals:unified/unified.bundle.js',
