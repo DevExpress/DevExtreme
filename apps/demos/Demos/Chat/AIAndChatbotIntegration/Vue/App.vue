@@ -67,7 +67,7 @@ import {
   ALERT_TIMEOUT,
 } from './data.ts';
 
-const chatService = new AzureOpenAI(AzureOpenAIConfig);
+let chatService;
 
 const typingUsers = ref([]);
 const alerts = ref([]);
@@ -76,6 +76,8 @@ const copyButtonIcon = ref('copy');
 
 onBeforeMount(() => {
   loadMessages(dictionary);
+
+  chatService = new AzureOpenAI(AzureOpenAIConfig);
 });
 
 async function getAIResponse(messages) {
