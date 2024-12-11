@@ -83,10 +83,10 @@ ${this.input}
 ${this.getSetterServiceCode('!default')}
 ${this.getCollectorServiceCode()}`;
 
-    return this.clearFromImports(result);
+    return this.removeImports(result);
   }
 
-  clearFromImports(content: string): string {
+  removeImports(content: string): string {
     return content.replace(/^@import "variables-dark";.*$/gm, '');
   }
 

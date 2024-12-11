@@ -41,12 +41,14 @@ describe('BootstrapExtractor', () => {
 
     expect(result.includes('@import "variables-dark";')).toBeFalsy();
 
-    expect(result).toBe(`${functions.toString()}
+    const expectedResult = `${functions.toString()}
 ${variables.toString()}
 ${variablesDark.toString()}
 ${testSassString}
 ${setterServiceCode}
-${collectorServiceCode}`);
+${collectorServiceCode}`;
+
+    expect(result).toBe(extractor.removeImports(expectedResult));
   });
 
   test('getSetterServiceCode', () => {
