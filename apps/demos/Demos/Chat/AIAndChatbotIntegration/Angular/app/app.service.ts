@@ -105,6 +105,7 @@ export class AppService {
   async getAIResponse(messages) {
     const params = {
       messages,
+      model: this.AzureOpenAIConfig.deployment,
       max_tokens: 1000,
       temperature: 0.7,
     };

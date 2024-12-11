@@ -26,8 +26,7 @@ export const CHAT_DISABLED_CLASS = 'dx-chat-disabled';
 export const ALERT_TIMEOUT = 1000 * 60;
 
 export const user = {
-  id: 'c94c0e76-fb49-4b9b-8f07-9f93ed93b4f3',
-  name: 'John Doe',
+  id: 'user',
 };
 
 export const assistant = {

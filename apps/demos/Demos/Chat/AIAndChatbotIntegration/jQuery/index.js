@@ -21,6 +21,7 @@ $(() => {
   async function getAIResponse(messages) {
     const params = {
       messages,
+      model: deployment,
       max_tokens: 1000,
       temperature: 0.7,
     };
