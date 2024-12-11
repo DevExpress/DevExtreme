@@ -50,6 +50,7 @@ import { TOOLBAR_CLASS } from '__internal/ui/toolbar/m_constants';
 
 import 'ui/html_editor';
 import '../../helpers/ignoreQuillTimers.js';
+import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/lookup';
 import 'ui/radio_group';
 import 'ui/tag_box';
@@ -4538,6 +4539,98 @@ QUnit.test('form should be dirty when some editors are dirty', function(assert) 
     form.updateData('Address', originalAddress);
 
     assert.strictEqual(form.option('isDirty'), false, 'form is not dirty when all editors are back to pristine');
+});
+
+[true, false].forEach((openOnFieldClick) => {
+    [true, false].forEach((hideOnOutsideClickValue) => {
+        QUnit.test(`Opened DropDownList must hide on input label click, openOnFieldClick: ${openOnFieldClick}, hideOnOutsideClick: ${hideOnOutsideClickValue} (T1257945)`, function(assert) {
+            let initialHideOnOutsideClick;
+            const $form = $('#form').dxForm({
+                formData: { CustomerID: 'VINET' },
+                items: [{
+                    itemType: 'group',
+                    colCount: 2,
+                    items: [{
+                        dataField: 'CustomerID',
+                        editorType: 'dxSelectBox',
+                        editorOptions: {
+                            items: ['VINET', 'VALUE', 'VINS'],
+                            value: '',
+                            openOnFieldClick,
+                            dropDownOptions: {
+                                hideOnOutsideClick: () => hideOnOutsideClickValue,
+                                onContentReady: ({ component }) => {
+                                    initialHideOnOutsideClick = component.option('hideOnOutsideClick');
+                                }
+                            }
+                        },
+                    }],
+                }],
+            });
+
+            const $dropDownButton = $form.find('.dx-dropdowneditor-button');
+            $dropDownButton.trigger('click');
+
+            const hideOnOutsideClickSpy = sinon.spy(initialHideOnOutsideClick);
+            const formInstance = $form.dxForm('instance');
+            const editorInstance = formInstance.getEditor('CustomerID');
+
+            formInstance.option('items[0].items[0].editorOptions.dropDownOptions.hideOnOutsideClick', hideOnOutsideClickSpy);
+
+            assert.true(editorInstance.option('opened'), 'drop down list is visible');
+
+            const $label = $form.find('.dx-field-item-label-text');
+            pointerMock($label).click();
+
+            const expected = openOnFieldClick ? false : hideOnOutsideClickValue;
+            assert.ok(hideOnOutsideClickSpy.returned(expected), `hideOnOutsideClick returned ${expected}`);
+
+            sinon.restore();
+        });
+    });
+
+    QUnit.test(`Opened DropDownList must hide on input label click, openOnFieldClick: ${openOnFieldClick}, hideOnOutsideClick not defined (T1257945)`, function(assert) {
+        let initialHideOnOutsideClick;
+        const $form = $('#form').dxForm({
+            formData: { CustomerID: 'VINET' },
+            items: [{
+                itemType: 'group',
+                colCount: 2,
+                items: [{
+                    dataField: 'CustomerID',
+                    editorType: 'dxSelectBox',
+                    editorOptions: {
+                        items: ['VINET', 'VALUE', 'VINS'],
+                        value: '',
+                        openOnFieldClick,
+                        dropDownOptions: {
+                            onContentReady: ({ component }) => {
+                                initialHideOnOutsideClick = component.option('hideOnOutsideClick');
+                            }
+                        }
+                    },
+                }],
+            }],
+        });
+
+        const $dropDownButton = $form.find('.dx-dropdowneditor-button');
+        $dropDownButton.trigger('click');
+
+        const hideOnOutsideClickSpy = sinon.spy(initialHideOnOutsideClick);
+        const formInstance = $form.dxForm('instance');
+        const editorInstance = formInstance.getEditor('CustomerID');
+
+        formInstance.option('items[0].items[0].editorOptions.dropDownOptions.hideOnOutsideClick', hideOnOutsideClickSpy);
+
+        assert.true(editorInstance.option('opened'), 'drop down list is visible');
+
+        const $label = $form.find('.dx-field-item-label-text');
+        pointerMock($label).click();
+
+        assert.ok(hideOnOutsideClickSpy.returned(!openOnFieldClick), `hideOnOutsideClick returned ${!openOnFieldClick}`);
+
+        sinon.restore();
+    });
 });
 
 QUnit.module('reset', () => {

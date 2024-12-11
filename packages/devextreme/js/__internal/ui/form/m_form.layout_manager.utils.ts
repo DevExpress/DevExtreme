@@ -1,14 +1,40 @@
 import Guid from '@js/core/guid';
+import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { captionize } from '@js/core/utils/inflector';
 import { each } from '@js/core/utils/iterator';
-import { isDefined } from '@js/core/utils/type';
+import { isBoolean, isDefined, isFunction } from '@js/core/utils/type';
+import type { dxDropDownEditorOptions } from '@js/ui/drop_down_editor/ui.drop_down_editor';
+import type { FormItemComponent } from '@js/ui/form';
+import type dxTextBox from '@js/ui/text_box';
 
 import { SIMPLE_ITEM_TYPE } from './constants';
 
-const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider', 'dxDateRangeBox'];
+const EDITORS_WITH_ARRAY_VALUE = [
+  'dxTagBox',
+  'dxRangeSlider',
+  'dxDateRangeBox',
+];
 const EDITORS_WITH_SPECIFIC_LABELS = ['dxRangeSlider', 'dxSlider'];
-export const EDITORS_WITHOUT_LABELS = ['dxCalendar', 'dxCheckBox', 'dxHtmlEditor', 'dxRadioGroup', 'dxRangeSlider', 'dxSlider', 'dxSwitch'];
+export const EDITORS_WITHOUT_LABELS = [
+  'dxCalendar',
+  'dxCheckBox',
+  'dxHtmlEditor',
+  'dxRadioGroup',
+  'dxRangeSlider',
+  'dxSlider',
+  'dxSwitch',
+];
+const DROP_DOWN_EDITORS: FormItemComponent[] = [
+  'dxSelectBox',
+  'dxDropDownBox',
+  'dxTagBox',
+  'dxLookup',
+  'dxAutocomplete',
+  'dxColorBox',
+  'dxDateBox',
+  'dxDateRangeBox',
+];
 
 export function convertToRenderFieldItemOptions({
   $parent,
@@ -33,7 +59,9 @@ export function convertToRenderFieldItemOptions({
   labelMode,
   onLabelTemplateRendered,
 }) {
-  const isRequired = isDefined(item.isRequired) ? item.isRequired : !!_hasRequiredRuleInSet(item.validationRules);
+  const isRequired = isDefined(item.isRequired)
+    ? item.isRequired
+    : !!_hasRequiredRuleInSet(item.validationRules);
   const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
   const helpID = item.helpText ? `dx-${new Guid()}` : null;
 
@@ -49,11 +77,16 @@ export function convertToRenderFieldItemOptions({
     onLabelTemplateRendered,
   });
 
-  const needRenderLabel = labelOptions.visible && (labelOptions.text || (labelOptions.labelTemplate && isSimpleItem));
+  const needRenderLabel = labelOptions.visible
+    && (labelOptions.text || (labelOptions.labelTemplate && isSimpleItem));
   const { location: labelLocation, labelID } = labelOptions;
-  const labelNeedBaselineAlign = labelLocation !== 'top' && ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor'].includes(item.editorType);
+  const labelNeedBaselineAlign = labelLocation !== 'top'
+    && ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor'].includes(
+      item.editorType,
+    );
 
   const editorOptions = _convertToEditorOptions({
+    $parent,
     editorType: item.editorType,
     editorValue,
     defaultEditorName: item.dataField,
@@ -70,8 +103,9 @@ export function convertToRenderFieldItemOptions({
   });
 
   const needRenderOptionalMarkAsHelpText = labelOptions.markOptions.showOptionalMark
-        && !labelOptions.visible && editorOptions.labelMode !== 'hidden'
-        && !isDefined(item.helpText);
+    && !labelOptions.visible
+    && editorOptions.labelMode !== 'hidden'
+    && !isDefined(item.helpText);
 
   const helpText = needRenderOptionalMarkAsHelpText
     ? labelOptions.markOptions.optionalMark
@@ -102,18 +136,26 @@ export function convertToRenderFieldItemOptions({
 }
 
 export function getLabelMarkText({
-  showRequiredMark, requiredMark, showOptionalMark, optionalMark,
+  showRequiredMark,
+  requiredMark,
+  showOptionalMark,
+  optionalMark,
 }) {
   if (!showRequiredMark && !showOptionalMark) {
     return '';
   }
 
-  return String.fromCharCode(160) + (showRequiredMark ? requiredMark : optionalMark);
+  return (
+    String.fromCharCode(160) + (showRequiredMark ? requiredMark : optionalMark)
+  );
 }
 
-export function convertToLabelMarkOptions({
-  showRequiredMark, requiredMark, showOptionalMark, optionalMark,
-}, isRequired?: boolean) {
+export function convertToLabelMarkOptions(
+  {
+    showRequiredMark, requiredMark, showOptionalMark, optionalMark,
+  },
+  isRequired?: boolean,
+) {
   return {
     showRequiredMark: showRequiredMark && isRequired,
     requiredMark,
@@ -124,6 +166,7 @@ export function convertToLabelMarkOptions({
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function _convertToEditorOptions({
+  $parent,
   editorType,
   defaultEditorName,
   editorValue,
@@ -153,10 +196,46 @@ function _convertToEditorOptions({
   const stylingMode = externalEditorOptions?.stylingMode || editorStylingMode;
   const useSpecificLabelOptions = EDITORS_WITH_SPECIFIC_LABELS.includes(editorType);
 
+  let editorOptionsWithDropDown: Partial<dxDropDownEditorOptions<dxTextBox>> = {};
+  const useDropDownOptions = DROP_DOWN_EDITORS.includes(editorType);
+
+  if (useDropDownOptions) {
+    editorOptionsWithDropDown = {
+      onContentReady: (e) => {
+        const { component } = e;
+        const openOnFieldClick = component.option('openOnFieldClick');
+        const initialHideOnOutsideClick = component.option('dropDownOptions.hideOnOutsideClick');
+
+        if (openOnFieldClick) {
+          component.option('dropDownOptions', {
+            hideOnOutsideClick: (e) => {
+              if (isBoolean(initialHideOnOutsideClick)) {
+                return initialHideOnOutsideClick;
+              }
+
+              const $target = $(e.target);
+              const $label = $parent.find(`label[for="${editorInputId}"]`);
+
+              const isLabelClicked = !!$target.closest($label).length;
+              const initialResult = isFunction(initialHideOnOutsideClick) ? !!initialHideOnOutsideClick(e) : true;
+
+              return !isLabelClicked && initialResult;
+            },
+          });
+        }
+
+        if (isFunction(externalEditorOptions?.onContentReady)) {
+          externalEditorOptions.onContentReady(e);
+        }
+      },
+    };
+  }
+
   const result = extend(
     true,
     editorOptionsWithValue,
     externalEditorOptions,
+    editorOptionsWithDropDown,
     {
       inputAttr: { id: editorInputId },
       validationBoundary: editorValidationBoundary,
@@ -201,15 +280,27 @@ function _hasRequiredRuleInSet(rules) {
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function _convertToLabelOptions({
-  item, id, isRequired, managerMarkOptions, showColonAfterLabel, labelLocation, labelTemplate, formLabelMode, onLabelTemplateRendered,
+  item,
+  id,
+  isRequired,
+  managerMarkOptions,
+  showColonAfterLabel,
+  labelLocation,
+  labelTemplate,
+  formLabelMode,
+  onLabelTemplateRendered,
 }) {
-  const isEditorWithoutLabels = EDITORS_WITHOUT_LABELS.includes(item.editorType);
+  const isEditorWithoutLabels = EDITORS_WITHOUT_LABELS.includes(
+    item.editorType,
+  );
   const labelOptions = extend(
     {
       showColon: showColonAfterLabel,
       location: labelLocation,
       id,
-      visible: formLabelMode === 'outside' || (isEditorWithoutLabels && formLabelMode !== 'hidden'),
+      visible:
+        formLabelMode === 'outside'
+        || (isEditorWithoutLabels && formLabelMode !== 'hidden'),
       isRequired,
     },
     item ? item.label : {},
@@ -220,7 +311,16 @@ function _convertToLabelOptions({
     },
   );
 
-  const editorsRequiringIdForLabel = ['dxRadioGroup', 'dxCheckBox', 'dxLookup', 'dxSlider', 'dxRangeSlider', 'dxSwitch', 'dxHtmlEditor', 'dxDateRangeBox']; // TODO: support "dxCalendar"
+  const editorsRequiringIdForLabel = [
+    'dxRadioGroup',
+    'dxCheckBox',
+    'dxLookup',
+    'dxSlider',
+    'dxRangeSlider',
+    'dxSwitch',
+    'dxHtmlEditor',
+    'dxDateRangeBox',
+  ]; // TODO: support "dxCalendar"
   if (editorsRequiringIdForLabel.includes(item.editorType)) {
     labelOptions.labelID = `dx-label-${new Guid()}`;
   }
