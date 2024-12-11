@@ -33,8 +33,11 @@ test('Chat: messagebubble', async (t) => {
 }).before(async () => {
   await appendElementTo('#container', 'div', 'chat');
 
-  return createWidget('dxChat', {
+  await createWidget('dxChat', {
     width: 400,
     height: 650,
   }, '#chat');
+
+  const chat = new Chat('#chat');
+  await chat.repaint();
 });

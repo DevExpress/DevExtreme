@@ -81,13 +81,16 @@ test.clientScripts([
     text: 'Message text 5',
   }];
 
-  return createWidget('dxChat', {
+  await createWidget('dxChat', {
     items,
     user: userFirst,
     width: 400,
     height: 600,
     alerts: [{ id: 1, message: 'Error Message 1. Error Description...' }],
   });
+
+  const chat = new Chat('#container');
+  await chat.repaint();
 }).after(async () => {
   await ClientFunction(() => {
     (window as any).MockDate.reset();

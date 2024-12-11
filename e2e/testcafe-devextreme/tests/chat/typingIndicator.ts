@@ -15,7 +15,6 @@ test('Chat: typing indicator with emptyview', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const chat = new Chat('#container');
-  await chat.repaint();
 
   await testScreenshot(t, takeScreenshot, 'Typing indicator with emptyview.png', {
     element: '#container',
@@ -44,11 +43,14 @@ test('Chat: typing indicator with emptyview', async (t) => {
     { name: 'Elodie Montclair' },
   ];
 
-  return createWidget('dxChat', {
+  await createWidget('dxChat', {
     width: 400,
     height: 600,
     typingUsers,
   });
+
+  const chat = new Chat('#container');
+  await chat.repaint();
 });
 
 test('Chat: typing indicator with a lot of items', async (t) => {
@@ -70,13 +72,16 @@ test('Chat: typing indicator with a lot of items', async (t) => {
 
   const typingUsers = [userFirst];
 
-  return createWidget('dxChat', {
+  await createWidget('dxChat', {
     user: userSecond,
     width: 400,
     height: 600,
     items,
     typingUsers,
   }, '#chat');
+
+  const chat = new Chat('#chat');
+  await chat.repaint();
 });
 
 test('Chat: typing indicator', async (t) => {
@@ -120,11 +125,14 @@ test('Chat: typing indicator', async (t) => {
 
   const typingUsers = [userFirst];
 
-  return createWidget('dxChat', {
+  await createWidget('dxChat', {
     user: userSecond,
     width: 400,
     height: 600,
     items,
     typingUsers,
   }, '#chat');
+
+  const chat = new Chat('#chat');
+  await chat.repaint();
 });
