@@ -48,6 +48,9 @@ test('Chat: typing indicator with emptyview', async (t) => {
     height: 600,
     typingUsers,
   });
+}).after(async () => {
+  const chat = new Chat('#container');
+  await chat.repaint();
 });
 
 test('Chat: typing indicator with a lot of items', async (t) => {
