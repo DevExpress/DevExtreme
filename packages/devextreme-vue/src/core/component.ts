@@ -54,7 +54,7 @@ function getAttrs(attrs, dxClasses: string[]) {
   const attributes = {};
   includeAttrs.forEach((attr) => {
     const attrValue = attrs[attr];
-    if (attrValue) {
+    if (attrValue !== undefined && attrValue !== null) {
       attributes[attr] = attr === 'class' && dxClasses.length ? `${attrValue} ${dxClasses.join(' ')}` : attrValue;
     }
   });
