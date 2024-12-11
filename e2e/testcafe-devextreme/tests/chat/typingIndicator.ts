@@ -15,6 +15,7 @@ test('Chat: typing indicator with emptyview', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const chat = new Chat('#container');
+  await chat.repaint();
 
   await testScreenshot(t, takeScreenshot, 'Typing indicator with emptyview.png', {
     element: '#container',
@@ -48,9 +49,6 @@ test('Chat: typing indicator with emptyview', async (t) => {
     height: 600,
     typingUsers,
   });
-}).after(async () => {
-  const chat = new Chat('#container');
-  await chat.repaint();
 });
 
 test('Chat: typing indicator with a lot of items', async (t) => {
