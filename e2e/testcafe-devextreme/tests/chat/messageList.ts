@@ -16,6 +16,7 @@ test('Messagelist empty view scenarios', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const chat = new Chat('#container');
+  await chat.repaint();
 
   await testScreenshot(t, takeScreenshot, 'Messagelist empty state.png', { element: '#container' });
 
@@ -50,6 +51,7 @@ test('Messagelist appearance with scrollbar', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const chat = new Chat('#container');
+  await chat.repaint();
 
   await t
     .hover(chat.messageList)
@@ -118,6 +120,9 @@ test('Messagelist should scrolled to the latest messages after being rendered in
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const tabPanel = new TabPanel('#container');
+  const chat = new Chat('#chat');
+
+  await chat.repaint();
 
   await t
     .click(tabPanel.tabs.getItem(1).element);
@@ -145,7 +150,7 @@ test('Messagelist should scrolled to the latest messages after being rendered in
     }, {
       title: 'Tab_2',
       collapsible: true,
-      template: ClientFunction(() => ($('<div>') as any).dxChat({
+      template: ClientFunction(() => ($('<div id="chat">') as any).dxChat({
         items,
         user: userSecond,
       }), { dependencies: { items, userSecond } }),
@@ -185,8 +190,10 @@ test('Messagelist with loadindicator appearance on initial loading', async (t) =
 });
 
 test('Messagelist with messageTemplate', async (t) => {
-  const chat = new Chat('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const chat = new Chat('#container');
+  await chat.repaint();
 
   await testScreenshot(t, takeScreenshot, 'Messagelist with message template.png', { element: '#container' });
 
@@ -231,6 +238,9 @@ test('Messagelist with messageTemplate', async (t) => {
 
 test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp set to false work', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const chat = new Chat('#container');
+
+  await chat.repaint();
 
   await testScreenshot(
     t,
@@ -275,7 +285,9 @@ test.clientScripts([
   { content: 'window.MockDate = MockDate;' },
 ])('Messagelist with date headers', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const chat = new Chat('#container');
 
+  await chat.repaint();
   await testScreenshot(t, takeScreenshot, 'Messagelist with date headers.png', { element: '#container' });
 
   await t
