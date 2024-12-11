@@ -87,3 +87,46 @@ test('Multiple sorting alphabetical icons should be correct in Fluent Theme (T12
     });
   },
 ).after(async () => { await changeTheme(Themes.genericLight); });
+
+test('Sorting and filtering should be applied correctly when they change at runtime (T1237863)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.option({
+    'columns[1].sortIndex': 0,
+    'columns[1].sortOrder': 'desc',
+    filterValue: ['room', '=', '1'],
+  });
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await takeScreenshot('T1237863_datagrid-sorting_and_filtering.png', dataGrid.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(() => createWidget('dxDataGrid', {
+  dataSource: [
+    {
+      ID: 1,
+      FirstName: 'Bob',
+      room: 1,
+    },
+    {
+      ID: 2,
+      FirstName: 'Alex',
+      room: 2,
+    },
+    {
+      ID: 3,
+      FirstName: 'John',
+      room: 1,
+    },
+  ],
+  keyExpr: 'ID',
+  sorting: {
+    mode: 'multiple',
+  },
+}));
