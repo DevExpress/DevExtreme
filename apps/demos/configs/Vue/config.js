@@ -117,6 +117,10 @@ window.config = {
     'devextreme': 'npm:devextreme/cjs',
     'devextreme-vue': 'npm:devextreme-vue/cjs',
 
+    /** jszip */
+    'jszip': 'npm:jszip/dist/jszip.min.js',
+    /**/
+
     /** unified */
     'unified': 'externals:unified/unified.bundle.js',
     'remark-parse': 'externals:unified/remark-parse.bundle.js',

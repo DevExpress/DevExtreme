@@ -118,6 +118,10 @@ window.config = {
     'devextreme': 'npm:devextreme/cjs',
     'devextreme-react': 'npm:devextreme-react/cjs',
 
+    /** jszip */
+    'jszip': 'npm:jszip/dist/jszip.min.js',
+    /**/
+
     /** unified */
     'unified': 'externals:unified/unified.bundle.js',
     'remark-parse': 'externals:unified/remark-parse.bundle.js',

@@ -5074,6 +5074,7 @@
                 "Name": "BindingToFileSystem",
                 "DocUrl": "ApiReference/UI_Components/dxFileManager/File_System_Providers/Remote/",
                 "Widget": "FileManager",
+                "Modules": "jszip",
                 "DemoType": "Web",
                 "MvcAdditionalFiles": [
                   "/Controllers/ApiControllers/FileManagerScriptsApiController.cs"
@@ -5127,6 +5128,7 @@
               {
                 "Title": "Toolbar and Context Menu",
                 "Name": "UICustomization",
+                "Modules": "jszip",
                 "Widget": "FileManager",
                 "DemoType": "Web",
                 "MvcAdditionalFiles": [
