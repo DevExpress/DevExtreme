@@ -50,24 +50,18 @@ const getTextEditorConfig = function(options) {
 
             const needDelayedUpdate = options.parentType === 'filterRow' || options.parentType === 'searchPanel';
             const isInputOrKeyUpEvent = e.event && (e.event.type === 'input' || e.event.type === 'keyup');
-            const updateValue = function(newValue, notFireEvent) {
-                options && options.setValue(newValue, notFireEvent);
+            const updateValue = function(e, notFireEvent) {
+                options && options.setValue(e.value, notFireEvent);
             };
 
             clearTimeout(data.valueChangeTimeout);
 
-            if(isDefined(e.event)) {
-                const newValue = e.value === '' ? null : e.value;
-
-                if(isInputOrKeyUpEvent && needDelayedUpdate) {
-                    sharedData.valueChangeTimeout = data.valueChangeTimeout = setTimeout(function() {
-                        updateValue(newValue, data.valueChangeTimeout !== sharedData.valueChangeTimeout);
-                    }, isDefined(options.updateValueTimeout) ? options.updateValueTimeout : 0);
-                } else {
-                    updateValue(newValue);
-                }
+            if(isInputOrKeyUpEvent && needDelayedUpdate) {
+                sharedData.valueChangeTimeout = data.valueChangeTimeout = setTimeout(function() {
+                    updateValue(e, data.valueChangeTimeout !== sharedData.valueChangeTimeout);
+                }, isDefined(options.updateValueTimeout) ? options.updateValueTimeout : 0);
             } else {
-                updateValue(e.value);
+                updateValue(e);
             }
         },
         onKeyDown: function(e) {

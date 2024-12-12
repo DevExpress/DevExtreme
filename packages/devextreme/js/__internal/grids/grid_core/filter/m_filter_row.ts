@@ -162,7 +162,7 @@ const normalizeFilterValue = function (that, filterValue, column, $editorContain
 };
 
 const updateFilterValue = function (that, options) {
-  const { value } = options;
+  const value = options.value === '' ? null : options.value;
   const $editorContainer = options.container;
   const column = that._columnsController.columnOption(options.column.index);
   const filterValue = getFilterValue(that, column.index, $editorContainer);
