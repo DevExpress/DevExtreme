@@ -91,7 +91,7 @@ test('Menu selected focused item', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const menu = new Menu();
-  
+
   await t
     .click(menu.getItem(0))
     .pressKey('down');

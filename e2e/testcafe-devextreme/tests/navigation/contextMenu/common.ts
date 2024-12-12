@@ -81,7 +81,7 @@ test('ContextMenu selected focused item', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'contextMenu');
-  await setStyleAttribute(Selector('#container'), 'width: 150; height: 200px;');
+  await setStyleAttribute(Selector('#container'), 'width: 150px; height: 200px;');
 
   await insertStylesheetRulesToPage('.custom-class { border: 2px solid green !important; }');
 
