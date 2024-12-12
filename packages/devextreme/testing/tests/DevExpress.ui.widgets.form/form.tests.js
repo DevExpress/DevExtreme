@@ -4543,8 +4543,9 @@ QUnit.test('form should be dirty when some editors are dirty', function(assert) 
 });
 
 [true, false].forEach((openOnFieldClick) => {
-    [true, false].forEach((hideOnOutsideClick) => {
+    [true, false, undefined].forEach((hideOnOutsideClick) => {
         QUnit.test(`Opened DropDownList must hide on input label click, openOnFieldClick: ${openOnFieldClick}, hideOnOutsideClick: ${hideOnOutsideClick} (T1257945)`, function(assert) {
+            const dropDownOptions = hideOnOutsideClick === undefined ? {} : { hideOnOutsideClick };
             const $form = $('#form').dxForm({
                 formData: { CustomerID: 'VINET' },
                 items: [{
@@ -4557,9 +4558,7 @@ QUnit.test('form should be dirty when some editors are dirty', function(assert) 
                             items: ['VINET', 'VALUE', 'VINS'],
                             value: '',
                             openOnFieldClick,
-                            dropDownOptions: {
-                                hideOnOutsideClick,
-                            }
+                            dropDownOptions,
                         },
                     }],
                 }],
@@ -4577,43 +4576,10 @@ QUnit.test('form should be dirty when some editors are dirty', function(assert) 
 
             pointerMock($label).click();
 
-            const willHideByInput = openOnFieldClick || !hideOnOutsideClick;
+            const willHideByInput = openOnFieldClick || (hideOnOutsideClick === false);
 
             assert.equal(editorInstance.option('opened'), willHideByInput, `drop down list is hidden by ${willHideByInput ? 'triggered input click' : 'label click'}`);
         });
-    });
-
-    QUnit.test(`Opened DropDownList must hide on input label click, openOnFieldClick: ${openOnFieldClick}, hideOnOutsideClick not defined (T1257945)`, function(assert) {
-        const $form = $('#form').dxForm({
-            formData: { CustomerID: 'VINET' },
-            items: [{
-                itemType: 'group',
-                colCount: 2,
-                items: [{
-                    dataField: 'CustomerID',
-                    editorType: 'dxSelectBox',
-                    editorOptions: {
-                        items: ['VINET', 'VALUE', 'VINS'],
-                        value: '',
-                        openOnFieldClick,
-                    },
-                }],
-            }],
-        });
-
-        const $dropDownButton = $form.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
-
-        pointerMock($dropDownButton).click();
-
-        const editorInstance = $form.dxForm('instance').getEditor('CustomerID');
-
-        assert.true(editorInstance.option('opened'), 'drop down list is visible');
-
-        const $label = $form.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
-
-        pointerMock($label).click();
-
-        assert.equal(editorInstance.option('opened'), openOnFieldClick, `drop down list is hidden by ${openOnFieldClick ? 'triggered input click' : 'label click'}`);
     });
 });
 
