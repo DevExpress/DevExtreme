@@ -457,6 +457,66 @@ QUnit.module('focus policy', () => {
         assert.ok($dropDownEditor.hasClass('dx-state-focused'), 'Widget is focused after click on clearButton');
     });
 
+    QUnit.test('editor should fire onFocusIn once, if fieldTemplate is used', function(assert) {
+        const onFocusInHandler = sinon.spy();
+
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            items: [
+                { name: 'one', id: 1 },
+                { name: 'two', id: 2 },
+                { name: 'three', id: 3 },
+            ],
+            displayExpr: 'name',
+            valueExpr: 'id',
+            value: 1,
+            onFocusIn: onFocusInHandler,
+            focusStateEnabled: true,
+            fieldTemplate(value) {
+                const $textBox = $('<div>').dxTextBox({
+                    text: value.name,
+                    focusStateEnabled: true,
+                });
+
+                return $textBox;
+            },
+        });
+
+        $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).focus();
+
+        assert.strictEqual(onFocusInHandler.callCount, 1, 'onFocusIn calls once');
+    });
+
+    QUnit.test('editor should fire onFocusOut once, if fieldTemplate is used', function(assert) {
+        const onFocusOutHandler = sinon.spy();
+
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            items: [
+                { name: 'one', id: 1 },
+                { name: 'two', id: 2 },
+                { name: 'three', id: 3 },
+            ],
+            displayExpr: 'name',
+            valueExpr: 'id',
+            value: 1,
+            onFocusOut: onFocusOutHandler,
+            focusStateEnabled: true,
+            fieldTemplate(value) {
+                const $textBox = $('<div>').dxTextBox({
+                    text: value.name,
+                    focusStateEnabled: true,
+                });
+
+                return $textBox;
+            },
+        });
+
+        const event = $.Event('focusout');
+
+        $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).trigger(event);
+
+        assert.strictEqual(onFocusOutHandler.callCount, 1, 'onFocusOut calls once');
+    });
+
     QUnit.testInActiveWindow('input is focused by click on dropDownButton', function(assert) {
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             focusStateEnabled: true
