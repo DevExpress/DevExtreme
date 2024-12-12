@@ -21,14 +21,15 @@ test('ContextMenu items render', async (t) => {
 
   await t.click(contextMenu.items.nth(0));
 
-  const screenshotName = 'ContextMenu items render.png';
+  const firstScreenshotName = 'ContextMenu items render.png';
+  const secondScreenshotName = 'ContextMenu selected focused item.png';
 
   if (!isMaterialBased()) {
-    await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.dark' });
-    await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.contrast' });
+    await testScreenshot(t, takeScreenshot, firstScreenshotName, { element: '#container', theme: 'generic.dark' });
+    await testScreenshot(t, takeScreenshot, firstScreenshotName, { element: '#container', theme: 'generic.contrast' });
   }
 
-  await testScreenshot(t, takeScreenshot, screenshotName, {
+  await testScreenshot(t, takeScreenshot, firstScreenshotName, {
     element: '#container',
     shouldTestInCompact: true,
     compactCallBack: async () => {
@@ -36,6 +37,18 @@ test('ContextMenu items render', async (t) => {
       await contextMenu.show();
       await t.click(contextMenu.items.nth(0));
     },
+  });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+
+  await t
+    .pressKey('down')
+    .pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, secondScreenshotName, {
+    element: '#container',
   });
 
   await t
@@ -50,7 +63,7 @@ test('ContextMenu items render', async (t) => {
 
   const menuItems = [
     { text: 'remove', icon: 'remove', items: [{ text: 'item_1' }, { text: 'item_2' }] },
-    { text: 'user', icon: 'user' },
+    { text: 'user', icon: 'user', selected: true },
     { text: 'coffee', icon: 'coffee' },
   ] as Item[];
 
