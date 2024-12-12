@@ -21,15 +21,14 @@ test('ContextMenu items render', async (t) => {
 
   await t.click(contextMenu.items.nth(0));
 
-  const firstScreenshotName = 'ContextMenu items render.png';
-  const secondScreenshotName = 'ContextMenu selected focused item.png';
+  const screenshotName = 'ContextMenu items render.png';
 
   if (!isMaterialBased()) {
-    await testScreenshot(t, takeScreenshot, firstScreenshotName, { element: '#container', theme: 'generic.dark' });
-    await testScreenshot(t, takeScreenshot, firstScreenshotName, { element: '#container', theme: 'generic.contrast' });
+    await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.dark' });
+    await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.contrast' });
   }
 
-  await testScreenshot(t, takeScreenshot, firstScreenshotName, {
+  await testScreenshot(t, takeScreenshot, screenshotName, {
     element: '#container',
     shouldTestInCompact: true,
     compactCallBack: async () => {
@@ -37,18 +36,6 @@ test('ContextMenu items render', async (t) => {
       await contextMenu.show();
       await t.click(contextMenu.items.nth(0));
     },
-  });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-
-  await t
-    .pressKey('down')
-    .pressKey('down');
-
-  await testScreenshot(t, takeScreenshot, secondScreenshotName, {
-    element: '#container',
   });
 
   await t
@@ -63,7 +50,44 @@ test('ContextMenu items render', async (t) => {
 
   const menuItems = [
     { text: 'remove', icon: 'remove', items: [{ text: 'item_1' }, { text: 'item_2' }] },
-    { text: 'user', icon: 'user', selected: true },
+    { text: 'user', icon: 'user' },
+    { text: 'coffee', icon: 'coffee' },
+  ] as Item[];
+
+  return createWidget('dxContextMenu', {
+    cssClass: 'custom-class',
+    items: menuItems,
+    target: 'body',
+    position: {
+      offset: '10 10',
+    },
+  }, '#contextMenu');
+});
+
+test('ContextMenu selected focused item', async (t) => {
+  const contextMenu = new ContextMenu('#contextMenu');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await contextMenu.show();
+
+  await t.pressKey('down');
+
+  const screenshotName = 'ContextMenu selected focused item.png';
+
+  await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'contextMenu');
+  await setStyleAttribute(Selector('#container'), 'width: 150; height: 200px;');
+
+  await insertStylesheetRulesToPage('.custom-class { border: 2px solid green !important; }');
+
+  const menuItems = [
+    { text: 'remove', icon: 'remove', selected: true },
+    { text: 'user', icon: 'user' },
     { text: 'coffee', icon: 'coffee' },
   ] as Item[];
 
