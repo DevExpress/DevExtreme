@@ -31,6 +31,7 @@ const chatService = new AzureOpenAI(AzureOpenAIConfig);
 async function getAIResponse(messages) {
   const params = {
     messages,
+    model: AzureOpenAIConfig.deployment,
     max_tokens: 1000,
     temperature: 0.7,
   };

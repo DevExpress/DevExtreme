@@ -4,19 +4,18 @@ import { AzureOpenAI } from 'openai';
 import CustomStore from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
 import { loadMessages } from 'devextreme/localization';
-import { 
+import {
   user,
   assistant,
   AzureOpenAIConfig,
   REGENERATION_TEXT,
   CHAT_DISABLED_CLASS,
-  ALERT_TIMEOUT
+  ALERT_TIMEOUT,
 } from './data.js';
 import Message from './Message.js';
 
 const store = [];
 const messages = [];
-
 loadMessages({
   en: {
     'dxChat-emptyListMessage': 'Chat is Empty',
@@ -24,33 +23,29 @@ loadMessages({
     'dxChat-textareaPlaceholder': 'Ask AI Assistant...',
   },
 });
-
 const chatService = new AzureOpenAI(AzureOpenAIConfig);
-
 async function getAIResponse(messages) {
   const params = {
     messages,
+    model: AzureOpenAIConfig.deployment,
     max_tokens: 1000,
     temperature: 0.7,
   };
-
   const response = await chatService.chat.completions.create(params);
   const data = { choices: response.choices };
-
   return data.choices[0].message?.content;
 }
-
 function updateLastMessage(text = REGENERATION_TEXT) {
   const items = dataSource.items();
   const lastMessage = items.at(-1);
-
-  dataSource.store().push([{
-    type: 'update',
-    key: lastMessage.id,
-    data: { text },
-  }]);
+  dataSource.store().push([
+    {
+      type: 'update',
+      key: lastMessage.id,
+      data: { text },
+    },
+  ]);
 }
-
 function renderAssistantMessage(text) {
   const message = {
     id: Date.now(),
@@ -58,68 +53,54 @@ function renderAssistantMessage(text) {
     author: assistant,
     text,
   };
-
   dataSource.store().push([{ type: 'insert', data: message }]);
 }
-
 const customStore = new CustomStore({
   key: 'id',
-  load: () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([...store]);
-      }, 0);
+  load: () => new Promise((resolve) => {
+    setTimeout(() => {
+      resolve([...store]);
+    }, 0);
+  }),
+  insert: (message) => new Promise((resolve) => {
+    setTimeout(() => {
+      store.push(message);
+      resolve(message);
     });
-  },
-  insert: (message) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        store.push(message);
-        resolve(message);
-      });
-    });
-  },
+  }),
 });
-
 const dataSource = new DataSource({
   store: customStore,
   paginate: false,
-})
-
+});
 export default function App() {
   const [alerts, setAlerts] = useState([]);
   const [typingUsers, setTypingUsers] = useState([]);
   const [classList, setClassList] = useState('');
-
   function alertLimitReached() {
-    setAlerts([{
-      message: 'Request limit reached, try again in a minute.'
-    }]);
-  
+    setAlerts([
+      {
+        message: 'Request limit reached, try again in a minute.',
+      },
+    ]);
     setTimeout(() => {
       setAlerts([]);
     }, ALERT_TIMEOUT);
   }
-
   function toggleDisabledState(disabled, event = undefined) {
     setClassList(disabled ? CHAT_DISABLED_CLASS : '');
-
     if (disabled) {
       event?.target.blur();
     } else {
       event?.target.focus();
     }
-  };
-
+  }
   async function processMessageSending(message, event) {
     toggleDisabledState(true, event);
-
     messages.push({ role: 'user', content: message.text });
     setTypingUsers([assistant]);
-  
     try {
       const aiResponse = await getAIResponse(messages);
-  
       setTimeout(() => {
         setTypingUsers([]);
         messages.push({ role: 'assistant', content: aiResponse });
@@ -133,13 +114,10 @@ export default function App() {
       toggleDisabledState(false, event);
     }
   }
-
   async function regenerate() {
     toggleDisabledState(true);
-
     try {
       const aiResponse = await getAIResponse(messages.slice(0, -1));
-
       updateLastMessage(aiResponse);
       messages.at(-1).content = aiResponse;
     } catch {
@@ -149,20 +127,16 @@ export default function App() {
       toggleDisabledState(false);
     }
   }
-
   function onMessageEntered({ message, event }) {
     dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
-   
     if (!alerts.length) {
       processMessageSending(message, event);
     }
   }
-
   function onRegenerateButtonClick() {
     updateLastMessage();
     regenerate();
   }
-
   return (
     <Chat
       className={classList}

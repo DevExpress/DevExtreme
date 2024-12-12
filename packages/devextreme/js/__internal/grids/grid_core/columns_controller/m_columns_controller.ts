@@ -1267,7 +1267,6 @@ export class ColumnsController extends modules.Controller {
 
   public updateSortingGrouping(dataSource, fromDataSource?) {
     const that = this;
-    let sortParameters;
     let isColumnsChanged;
     const updateSortGroupParameterIndexes = function (columns, sortParameters, indexParameterName) {
       each(columns, (index, column) => {
@@ -1304,10 +1303,14 @@ export class ColumnsController extends modules.Controller {
       });
     };
     if (dataSource) {
-      sortParameters = gridCoreUtils.normalizeSortingInfo(dataSource.sort());
+      const sortParameters = gridCoreUtils.normalizeSortingInfo(dataSource.sort());
       const groupParameters = gridCoreUtils.normalizeSortingInfo(dataSource.group());
       const columnsGroupParameters = that.getGroupDataSourceParameters();
       const columnsSortParameters = that.getSortDataSourceParameters();
+      const changeTypes = this._columnChanges?.changeTypes;
+      const sortingChanged = !gridCoreUtils.equalSortParameters(sortParameters, columnsSortParameters);
+      const needToApplySortingFromDataSource = fromDataSource && !changeTypes?.sorting;
+      const needToApplyGroupingFromDataSource = fromDataSource && !changeTypes?.grouping;
       const groupingChanged = !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters, true);
       const groupExpandingChanged = !groupingChanged && !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters);
 
@@ -1323,7 +1326,7 @@ export class ColumnsController extends modules.Controller {
         assignColumns(that, createColumnsFromOptions(that, that._columns));
       }
 
-      if ((fromDataSource || (!columnsGroupParameters && !that._hasUserState)) && (groupingChanged || groupExpandingChanged)) {
+      if ((needToApplyGroupingFromDataSource || (!columnsGroupParameters && !that._hasUserState)) && (groupingChanged || groupExpandingChanged)) {
         /// #DEBUG
         that.__groupingUpdated = true;
         /// #ENDDEBUG
@@ -1334,7 +1337,8 @@ export class ColumnsController extends modules.Controller {
           isColumnsChanged = true;
         }
       }
-      if ((fromDataSource || (!columnsSortParameters && !that._hasUserState)) && !gridCoreUtils.equalSortParameters(sortParameters, columnsSortParameters)) {
+
+      if ((needToApplySortingFromDataSource || (!columnsSortParameters && !that._hasUserState)) && sortingChanged) {
         /// #DEBUG
         that.__sortingUpdated = true;
         /// #ENDDEBUG

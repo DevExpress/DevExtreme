@@ -1,0 +1,65 @@
+.demo-container {
+  display: flex;
+  justify-content: center;
+}
+
+::ng-deep .dx-chat {
+  max-width: 900px;
+}
+
+::ng-deep .dx-chat-messagelist-empty-image {
+  display: none;
+}
+
+::ng-deep .dx-chat-messagelist-empty-message {
+  font-size: var(--dx-font-size-heading-5);
+}
+
+::ng-deep .dx-chat-messagebubble-content,
+::ng-deep .dx-chat-messagebubble-text {
+  display: flex;
+  flex-direction: column;
+}
+
+::ng-deep .dx-bubble-button-container {
+  display: none;
+}
+
+::ng-deep .dx-button {
+  display: inline-block;
+  color: var(--dx-color-icon);
+}
+
+::ng-deep .dx-chat-messagegroup-alignment-start:last-child .dx-chat-messagebubble:last-child .dx-bubble-button-container {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+::ng-deep .dx-template-wrapper > div > p:first-child {
+  margin-top: 0;
+}
+
+::ng-deep .dx-template-wrapper > div > p:last-child {
+  margin-bottom: 0;
+}
+
+::ng-deep .dx-chat-messagebubble-content ol,
+::ng-deep .dx-chat-messagebubble-content ul {
+  white-space: normal;
+}
+
+::ng-deep .dx-chat-messagebubble-content h1,
+::ng-deep .dx-chat-messagebubble-content h2,
+::ng-deep .dx-chat-messagebubble-content h3,
+::ng-deep .dx-chat-messagebubble-content h4,
+::ng-deep .dx-chat-messagebubble-content h5,
+::ng-deep .dx-chat-messagebubble-content h6 {
+  font-size: revert;
+  font-weight: revert;
+}
+
+::ng-deep .dx-chat-disabled .dx-chat-messagebox {
+  opacity: 0.5;
+  pointer-events: none;
+}

@@ -1,4 +1,4 @@
-This demo uses an AI service and the DevExtreme Chat component to create a chatbot UI.
+This demo uses an [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) service and the DevExtreme Chat component to create a chatbot UI. You can integrate Chat with various AI services, including [OpenAI](https://openai.com/), [Google Dialogflow](https://cloud.google.com/dialogflow/docs), and [Microsoft Bot Framework](https://dev.botframework.com/).
 
 ## Handling dataSource (reloadOnChange: false)
 
@@ -11,7 +11,7 @@ The Chat specifies a [messageTemplate](/Documentation/ApiReference/UI_Components
 
 ## Response Format Conversion: Markdown to HTML
 
-The AI model outputs responses in Markdown, while the Chat requires HTML output. This examples uses the [unified](https://github.com/unifiedjs) plugin library to convert response content. Review `convertToHtml` function code for implementation details.
+The AI model outputs responses in Markdown, while the Chat requires HTML output. This example uses the [unified](https://github.com/unifiedjs) plugin library to convert response content. Review `convertToHtml` function code for implementation details.
 
 ## Default Caption Customization
 
