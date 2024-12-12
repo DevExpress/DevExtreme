@@ -110,6 +110,7 @@ export type ArrayStoreOptions<
 
 /**
  * @docid
+ * @inherits Store
  * @namespace DevExpress.common.data
  * @public
  * @options ArrayStoreOptions
