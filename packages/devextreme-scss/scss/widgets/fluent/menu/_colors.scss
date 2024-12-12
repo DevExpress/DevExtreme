@@ -27,10 +27,10 @@ $menu-item-link-color: $base-link-color !default;
 $menu-item-focused-selected-bg: null !default;
 
 @if $mode == "light" {
-    $menu-item-focused-selected-bg: darken($base-selected-bg, 3.92) !default;
+    $menu-item-focused-selected-bg: darken($base-bg, 9.8) !default;
 }
   
 @if $mode == "dark" {
-    $menu-item-focused-selected-bg: lighten($base-selected-bg, 3.92) !default;
+    $menu-item-focused-selected-bg: lighten($base-bg, 18.04) !default;
 }
 
