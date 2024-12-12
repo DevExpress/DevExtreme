@@ -184,13 +184,11 @@ const TextEditorBase = Editor.inherit({
     this._renderStylingMode();
     this._renderInputType();
     this._renderPlaceholder();
-
     this._renderProps();
 
     this.callBase();
 
     this._renderValue();
-
     this._renderLabel();
   },
 
