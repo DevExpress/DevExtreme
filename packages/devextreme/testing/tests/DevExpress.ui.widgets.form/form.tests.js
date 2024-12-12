@@ -4614,7 +4614,6 @@ QUnit.test('form should be dirty when some editors are dirty', function(assert) 
         pointerMock($label).click();
 
         assert.equal(editorInstance.option('opened'), openOnFieldClick, `drop down list is hidden by ${openOnFieldClick ? 'triggered input click' : 'label click'}`);
-
     });
 });
 

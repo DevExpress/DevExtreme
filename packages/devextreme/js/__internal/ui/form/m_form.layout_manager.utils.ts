@@ -314,7 +314,7 @@ function _convertToLabelOptions({
     },
   );
 
-  const editorsRequiringIdForLabel = [
+  const editorsRequiringIdForLabel: FormItemComponent[] = [
     'dxRadioGroup',
     'dxCheckBox',
     'dxLookup',
