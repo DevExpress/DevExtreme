@@ -6,17 +6,18 @@ import { each } from '@js/core/utils/iterator';
 import { isBoolean, isDefined, isFunction } from '@js/core/utils/type';
 import type { dxDropDownEditorOptions } from '@js/ui/drop_down_editor/ui.drop_down_editor';
 import type { FormItemComponent } from '@js/ui/form';
+import type { dxOverlayOptions } from '@js/ui/overlay';
 import type dxTextBox from '@js/ui/text_box';
 
 import { SIMPLE_ITEM_TYPE } from './constants';
 
-const EDITORS_WITH_ARRAY_VALUE = [
+const EDITORS_WITH_ARRAY_VALUE: FormItemComponent[] = [
   'dxTagBox',
   'dxRangeSlider',
   'dxDateRangeBox',
 ];
-const EDITORS_WITH_SPECIFIC_LABELS = ['dxRangeSlider', 'dxSlider'];
-export const EDITORS_WITHOUT_LABELS = [
+const EDITORS_WITH_SPECIFIC_LABELS: FormItemComponent[] = ['dxRangeSlider', 'dxSlider'];
+export const EDITORS_WITHOUT_LABELS: FormItemComponent[] = [
   'dxCalendar',
   'dxCheckBox',
   'dxHtmlEditor',
@@ -203,8 +204,8 @@ function _convertToEditorOptions({
     editorOptionsWithDropDown = {
       onContentReady: (e) => {
         const { component } = e;
-        const openOnFieldClick = component.option('openOnFieldClick');
-        const initialHideOnOutsideClick = component.option('dropDownOptions.hideOnOutsideClick');
+        const openOnFieldClick = component.option('openOnFieldClick') as dxDropDownEditorOptions<dxTextBox>['openOnFieldClick'];
+        const initialHideOnOutsideClick = component.option('dropDownOptions.hideOnOutsideClick') as dxOverlayOptions<dxTextBox>['hideOnOutsideClick'];
 
         if (openOnFieldClick) {
           component.option('dropDownOptions', {
@@ -215,11 +216,13 @@ function _convertToEditorOptions({
 
               const $target = $(e.target);
               const $label = $parent.find(`label[for="${editorInputId}"]`);
-
               const isLabelClicked = !!$target.closest($label).length;
-              const initialResult = isFunction(initialHideOnOutsideClick) ? !!initialHideOnOutsideClick(e) : true;
 
-              return !isLabelClicked && initialResult;
+              if (!isFunction(initialHideOnOutsideClick)) {
+                return !isLabelClicked;
+              }
+
+              return !isLabelClicked && initialHideOnOutsideClick(e);
             },
           });
         }

@@ -42,10 +42,6 @@ import {
     renderLabel,
 } from '__internal/ui/form/components/m_label';
 
-const EDITOR_LABEL_CLASS = 'dx-texteditor-label';
-const EDITOR_INPUT_CLASS = 'dx-texteditor-input';
-const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
-
 import { TOOLBAR_CLASS } from '__internal/ui/toolbar/m_constants';
 
 import 'ui/html_editor';
@@ -67,6 +63,11 @@ const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
 const LAST_COL_CLASS = 'dx-last-col';
 const SLIDER_LABEL = 'dx-slider-label';
+const EDITOR_LABEL_CLASS = 'dx-texteditor-label';
+const EDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
+const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
+const TEXTBOX_CLASS = 'dx-textbox';
 
 QUnit.testStart(function() {
     const markup =
@@ -645,7 +646,7 @@ QUnit.test('Check aria-labelledby attribute for editors label', function(assert)
 });
 
 QUnit.test('field1.required -> form.validate() -> form.option("onFieldDataChanged", "newHandler") -> check form is not re-rendered (T1014577)', function(assert) {
-    const checkEditorIsInvalid = (form) => form.$element().find('.dx-textbox').hasClass(INVALID_CLASS);
+    const checkEditorIsInvalid = (form) => form.$element().find(`.${TEXTBOX_CLASS}`).hasClass(INVALID_CLASS);
     const form = $('#form').dxForm({
         formData: { field1: '' },
         items: [ {
@@ -1856,8 +1857,8 @@ QUnit.test('Align with "" required mark, T1031458', function(assert) {
         }]
     });
 
-    const $labelText = $testContainer.find('.dx-field-item-label-text');
-    const $textBox = $testContainer.find('.dx-textbox');
+    const $labelText = $testContainer.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $textBox = $testContainer.find(`.${TEXTBOX_CLASS}`);
 
     assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
     assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 3, 'textBox.left');
@@ -1873,8 +1874,8 @@ QUnit.test('Align with " " required mark, T1031458', function(assert) {
         }]
     });
 
-    const $labelText = $testContainer.find('.dx-field-item-label-text');
-    const $textBox = $testContainer.find('.dx-textbox');
+    const $labelText = $testContainer.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $textBox = $testContainer.find(`.${TEXTBOX_CLASS}`);
 
     assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
     assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 3, 'textBox.left');
@@ -1890,8 +1891,8 @@ QUnit.test('Align with "!" required mark, T1031458', function(assert) {
         }]
     });
 
-    const $labelText = $testContainer.find('.dx-field-item-label-text');
-    const $textBox = $testContainer.find('.dx-textbox');
+    const $labelText = $testContainer.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $textBox = $testContainer.find(`.${TEXTBOX_CLASS}`);
 
     assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
     assert.roughEqual($textBox.offset().left, $labelText.offset().left + 29, 3, 'textBox.left');
@@ -1907,8 +1908,8 @@ QUnit.test('Align with "×" required mark, T1031458', function(assert) {
         }]
     });
 
-    const $labelText = $testContainer.find('.dx-field-item-label-text');
-    const $textBox = $testContainer.find('.dx-textbox');
+    const $labelText = $testContainer.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $textBox = $testContainer.find(`.${TEXTBOX_CLASS}`);
 
     assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
     assert.roughEqual($textBox.offset().left, $labelText.offset().left + 35, 3, 'textBox.left');
@@ -4542,9 +4543,8 @@ QUnit.test('form should be dirty when some editors are dirty', function(assert) 
 });
 
 [true, false].forEach((openOnFieldClick) => {
-    [true, false].forEach((hideOnOutsideClickValue) => {
-        QUnit.test(`Opened DropDownList must hide on input label click, openOnFieldClick: ${openOnFieldClick}, hideOnOutsideClick: ${hideOnOutsideClickValue} (T1257945)`, function(assert) {
-            let initialHideOnOutsideClick;
+    [true, false].forEach((hideOnOutsideClick) => {
+        QUnit.test(`Opened DropDownList must hide on input label click, openOnFieldClick: ${openOnFieldClick}, hideOnOutsideClick: ${hideOnOutsideClick} (T1257945)`, function(assert) {
             const $form = $('#form').dxForm({
                 formData: { CustomerID: 'VINET' },
                 items: [{
@@ -4558,39 +4558,32 @@ QUnit.test('form should be dirty when some editors are dirty', function(assert) 
                             value: '',
                             openOnFieldClick,
                             dropDownOptions: {
-                                hideOnOutsideClick: () => hideOnOutsideClickValue,
-                                onContentReady: ({ component }) => {
-                                    initialHideOnOutsideClick = component.option('hideOnOutsideClick');
-                                }
+                                hideOnOutsideClick,
                             }
                         },
                     }],
                 }],
             });
 
-            const $dropDownButton = $form.find('.dx-dropdowneditor-button');
-            $dropDownButton.trigger('click');
+            const $dropDownButton = $form.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
 
-            const hideOnOutsideClickSpy = sinon.spy(initialHideOnOutsideClick);
-            const formInstance = $form.dxForm('instance');
-            const editorInstance = formInstance.getEditor('CustomerID');
+            pointerMock($dropDownButton).click();
 
-            formInstance.option('items[0].items[0].editorOptions.dropDownOptions.hideOnOutsideClick', hideOnOutsideClickSpy);
+            const editorInstance = $form.dxForm('instance').getEditor('CustomerID');
 
             assert.true(editorInstance.option('opened'), 'drop down list is visible');
 
-            const $label = $form.find('.dx-field-item-label-text');
+            const $label = $form.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+
             pointerMock($label).click();
 
-            const expected = openOnFieldClick ? false : hideOnOutsideClickValue;
-            assert.ok(hideOnOutsideClickSpy.returned(expected), `hideOnOutsideClick returned ${expected}`);
+            const willHideByInput = openOnFieldClick || !hideOnOutsideClick;
 
-            sinon.restore();
+            assert.equal(editorInstance.option('opened'), willHideByInput, `drop down list is hidden by ${willHideByInput ? 'triggered input click' : 'label click'}`);
         });
     });
 
     QUnit.test(`Opened DropDownList must hide on input label click, openOnFieldClick: ${openOnFieldClick}, hideOnOutsideClick not defined (T1257945)`, function(assert) {
-        let initialHideOnOutsideClick;
         const $form = $('#form').dxForm({
             formData: { CustomerID: 'VINET' },
             items: [{
@@ -4603,33 +4596,25 @@ QUnit.test('form should be dirty when some editors are dirty', function(assert) 
                         items: ['VINET', 'VALUE', 'VINS'],
                         value: '',
                         openOnFieldClick,
-                        dropDownOptions: {
-                            onContentReady: ({ component }) => {
-                                initialHideOnOutsideClick = component.option('hideOnOutsideClick');
-                            }
-                        }
                     },
                 }],
             }],
         });
 
-        const $dropDownButton = $form.find('.dx-dropdowneditor-button');
-        $dropDownButton.trigger('click');
+        const $dropDownButton = $form.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
 
-        const hideOnOutsideClickSpy = sinon.spy(initialHideOnOutsideClick);
-        const formInstance = $form.dxForm('instance');
-        const editorInstance = formInstance.getEditor('CustomerID');
+        pointerMock($dropDownButton).click();
 
-        formInstance.option('items[0].items[0].editorOptions.dropDownOptions.hideOnOutsideClick', hideOnOutsideClickSpy);
+        const editorInstance = $form.dxForm('instance').getEditor('CustomerID');
 
         assert.true(editorInstance.option('opened'), 'drop down list is visible');
 
-        const $label = $form.find('.dx-field-item-label-text');
+        const $label = $form.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+
         pointerMock($label).click();
 
-        assert.ok(hideOnOutsideClickSpy.returned(!openOnFieldClick), `hideOnOutsideClick returned ${!openOnFieldClick}`);
+        assert.equal(editorInstance.option('opened'), openOnFieldClick, `drop down list is hidden by ${openOnFieldClick ? 'triggered input click' : 'label click'}`);
 
-        sinon.restore();
     });
 });
 
