@@ -144,6 +144,9 @@ window.config = {
     '@angular/forms': {
       'esModule': true,
     },
+    'openai': {
+      'esModule': true,
+    },
   },
   paths: {
     'npm:': '../../../../node_modules/',

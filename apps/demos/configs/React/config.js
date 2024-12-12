@@ -38,6 +38,9 @@ window.config = {
       'esModule': true,
     },
     /**/
+    'openai': {
+      'esModule': true,
+    },
   },
   paths: {
     'npm:': '../../../../node_modules/',

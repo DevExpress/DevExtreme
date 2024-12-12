@@ -35,6 +35,9 @@ window.config = {
       'esModule': true,
     },
     /**/
+    'openai': {
+      'esModule': true,
+    },
   },
   paths: {
     'project:': '../../../../',
