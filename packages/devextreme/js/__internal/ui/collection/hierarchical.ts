@@ -3,7 +3,7 @@ import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import type { HierarchicalCollectionWidgetOptions } from '@js/ui/hierarchical_collection/ui.hierarchical_collection_widget';
 import HierarchicalCollectionWidget from '@js/ui/hierarchical_collection/ui.hierarchical_collection_widget';
 
-import CollectionWidgetEdit from './edit';
+import AsyncCollectionWidget from './async';
 
 export interface TypedCollectionWidgetOptions<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,7 +22,7 @@ declare class Hierarchical<
     TItem extends ItemLike = any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TKey = any,
-> extends CollectionWidgetEdit<TProperties> {
+> extends AsyncCollectionWidget<TProperties> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _dataAdapter?: any;
 

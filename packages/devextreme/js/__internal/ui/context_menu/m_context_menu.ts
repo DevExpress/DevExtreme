@@ -531,6 +531,7 @@ class ContextMenu extends MenuBase {
 
   _renderSubmenuItems(node, $itemFrame: dxElementWrapper): void {
     this._renderItems(this._getChildNodes(node), $itemFrame);
+    this._planPostRenderActions();
 
     const $submenu = $itemFrame.children(`.${DX_SUBMENU_CLASS}`);
 
@@ -704,7 +705,7 @@ class ContextMenu extends MenuBase {
     return availableHeight - SUBMENU_PADDING;
   }
 
-  _dimensionChanged() {
+  _dimensionChanged(showAnimation = true) {
     if (!this._shownSubmenus) {
       return;
     }
@@ -715,8 +716,10 @@ class ContextMenu extends MenuBase {
       this._setSubMenuHeight($submenu, $item, true);
       this._scrollToElement($item);
 
-      const submenuPosition = this._getSubmenuPosition($item);
-      animationPosition.setup($submenu, submenuPosition);
+      if (showAnimation) {
+        const submenuPosition = this._getSubmenuPosition($item);
+        animationPosition.setup($submenu, submenuPosition);
+      }
     });
   }
 
@@ -1129,6 +1132,10 @@ class ContextMenu extends MenuBase {
 
   hide(): Promise<unknown> {
     return this.toggle(false);
+  }
+
+  _postProcessRenderItems() {
+    this._dimensionChanged(false);
   }
 }
 
