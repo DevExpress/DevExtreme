@@ -6,14 +6,13 @@ import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
 import { appendElementTo } from '../../helpers/domUtils';
 
-fixture.disablePageReloads`ChatAvatar`
+fixture`ChatAvatar`
   .page(url(__dirname, '../container.html'));
 
 test('Chat: avatar', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const chat = new Chat('#chat');
-  await chat.repaint();
 
   await testScreenshot(t, takeScreenshot, 'Avatar with two word initials.png', { element: '#chat' });
 
@@ -47,9 +46,6 @@ test('Chat: avatar', async (t) => {
 
 test('Chat: showAvatar set to false', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  const chat = new Chat('#chat');
-  await chat.repaint();
 
   await testScreenshot(t, takeScreenshot, 'Avatar with showAvatar set to false.png', { element: '#chat' });
 

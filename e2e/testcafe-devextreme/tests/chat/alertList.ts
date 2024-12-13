@@ -6,7 +6,7 @@ import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { getFullThemeName, testScreenshot } from '../../helpers/themeUtils';
 
-fixture.disablePageReloads`ChatAlertList`
+fixture`ChatAlertList`
   .page(url(__dirname, '../container.html'));
 
 test.clientScripts([
@@ -16,7 +16,6 @@ test.clientScripts([
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const chat = new Chat('#container');
-  await chat.repaint();
 
   await testScreenshot(t, takeScreenshot, 'Alertlist with one error.png', { element: '#container' });
 

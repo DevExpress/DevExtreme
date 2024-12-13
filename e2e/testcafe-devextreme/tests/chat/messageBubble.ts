@@ -6,14 +6,13 @@ import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
 import { appendElementTo } from '../../helpers/domUtils';
 
-fixture.disablePageReloads`ChatMessageBubble`
+fixture`ChatMessageBubble`
   .page(url(__dirname, '../container.html'));
 
 test('Chat: messagebubble', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const chat = new Chat('#chat');
-  await chat.repaint();
 
   const userFirst = createUser(1, 'First');
   const userSecond = createUser(2, 'Second');
