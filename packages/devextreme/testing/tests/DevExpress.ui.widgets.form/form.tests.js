@@ -4576,9 +4576,14 @@ QUnit.test('form should be dirty when some editors are dirty', function(assert) 
 
             pointerMock($label).click();
 
-            const willHideByInput = openOnFieldClick || (hideOnOutsideClick === false);
-
-            assert.equal(editorInstance.option('opened'), willHideByInput, `drop down list is hidden by ${willHideByInput ? 'triggered input click' : 'label click'}`);
+            // NOTE: In the real environment, clicking the label triggers a click on the editor,
+            // toggling the popup visibility if openOnFieldClick=true.
+            // This assertion only takes hideOnOutsideClick into account
+            if(hideOnOutsideClick === false) {
+                assert.true(editorInstance.option('opened'), `drop down list ${openOnFieldClick ? 'is hidden by triggered input click' : 'is visible'}`);
+            } else {
+                assert.strictEqual(editorInstance.option('opened'), openOnFieldClick, `drop down list is hidden by ${openOnFieldClick ? 'triggered input click' : 'outside click'}`);
+            }
         });
     });
 });

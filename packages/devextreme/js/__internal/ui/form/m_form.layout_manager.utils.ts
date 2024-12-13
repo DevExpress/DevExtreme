@@ -37,6 +37,8 @@ const DROP_DOWN_EDITORS: FormItemComponent[] = [
   'dxDateRangeBox',
 ];
 
+type DropDownOptions = dxDropDownEditorOptions<dxTextBox>;
+
 export function convertToRenderFieldItemOptions({
   $parent,
   rootElementCssClassList,
@@ -166,6 +168,52 @@ export function convertToLabelMarkOptions(
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
+function _getDropDownEditorOptions(
+  $parent,
+  editorType: FormItemComponent,
+  editorInputId: string,
+  onContentReadyExternal?: DropDownOptions['onContentReady'],
+): DropDownOptions {
+  const isDropDownEditor = DROP_DOWN_EDITORS.includes(editorType);
+
+  if (!isDropDownEditor) {
+    return {};
+  }
+
+  return {
+    onContentReady: (e) => {
+      const { component } = e;
+      const openOnFieldClick = component.option('openOnFieldClick') as DropDownOptions['openOnFieldClick'];
+      const initialHideOnOutsideClick = component.option('dropDownOptions.hideOnOutsideClick') as dxOverlayOptions<dxTextBox>['hideOnOutsideClick'];
+
+      if (openOnFieldClick) {
+        component.option('dropDownOptions', {
+          hideOnOutsideClick: (e) => {
+            if (isBoolean(initialHideOnOutsideClick)) {
+              return initialHideOnOutsideClick;
+            }
+
+            const $target = $(e.target);
+            const $label = $parent.find(`label[for="${editorInputId}"]`);
+            const isLabelClicked = !!$target.closest($label).length;
+
+            if (!isFunction(initialHideOnOutsideClick)) {
+              return !isLabelClicked;
+            }
+
+            return !isLabelClicked && initialHideOnOutsideClick(e);
+          },
+        });
+      }
+
+      if (isFunction(onContentReadyExternal)) {
+        onContentReadyExternal(e);
+      }
+    },
+  };
+}
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
 function _convertToEditorOptions({
   $parent,
   editorType,
@@ -197,48 +245,13 @@ function _convertToEditorOptions({
   const stylingMode = externalEditorOptions?.stylingMode || editorStylingMode;
   const useSpecificLabelOptions = EDITORS_WITH_SPECIFIC_LABELS.includes(editorType);
 
-  let editorOptionsWithDropDown: Partial<dxDropDownEditorOptions<dxTextBox>> = {};
-  const useDropDownOptions = DROP_DOWN_EDITORS.includes(editorType);
-
-  if (useDropDownOptions) {
-    editorOptionsWithDropDown = {
-      onContentReady: (e) => {
-        const { component } = e;
-        const openOnFieldClick = component.option('openOnFieldClick') as dxDropDownEditorOptions<dxTextBox>['openOnFieldClick'];
-        const initialHideOnOutsideClick = component.option('dropDownOptions.hideOnOutsideClick') as dxOverlayOptions<dxTextBox>['hideOnOutsideClick'];
-
-        if (openOnFieldClick) {
-          component.option('dropDownOptions', {
-            hideOnOutsideClick: (e) => {
-              if (isBoolean(initialHideOnOutsideClick)) {
-                return initialHideOnOutsideClick;
-              }
-
-              const $target = $(e.target);
-              const $label = $parent.find(`label[for="${editorInputId}"]`);
-              const isLabelClicked = !!$target.closest($label).length;
-
-              if (!isFunction(initialHideOnOutsideClick)) {
-                return !isLabelClicked;
-              }
-
-              return !isLabelClicked && initialHideOnOutsideClick(e);
-            },
-          });
-        }
-
-        if (isFunction(externalEditorOptions?.onContentReady)) {
-          externalEditorOptions.onContentReady(e);
-        }
-      },
-    };
-  }
+  const dropDownEditorOptions = _getDropDownEditorOptions($parent, editorType, editorInputId, externalEditorOptions?.onContentReady);
 
   const result = extend(
     true,
     editorOptionsWithValue,
     externalEditorOptions,
-    editorOptionsWithDropDown,
+    dropDownEditorOptions,
     {
       inputAttr: { id: editorInputId },
       validationBoundary: editorValidationBoundary,
@@ -261,6 +274,7 @@ function _convertToEditorOptions({
   if (defaultEditorName && !result.name) {
     result.name = defaultEditorName;
   }
+
   return result;
 }
 
