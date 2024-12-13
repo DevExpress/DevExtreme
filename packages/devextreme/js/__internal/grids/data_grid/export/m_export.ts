@@ -886,10 +886,6 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ExportHeaderPanelEx
       this.setToolbarItemDisabled('exportButton', disabled);
     });
   }
-
-  public isVisible() {
-    return super.isVisible() || this._isExportButtonVisible();
-  }
 };
 
 dataGridCore.registerModule('export', {

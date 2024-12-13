@@ -2873,13 +2873,6 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelEditingE
 
     return editButtonItems.concat(items);
   }
-
-  public isVisible() {
-    const editingOptions = this._editingController.option('editing');
-
-    // @ts-expect-error
-    return super.isVisible() || editingOptions?.allowAdding;
-  }
 };
 
 export const editingModule = {

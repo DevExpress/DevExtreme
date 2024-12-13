@@ -12,7 +12,6 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isElementInDom } from '@js/core/utils/dom';
 import { isDefined, isString } from '@js/core/utils/type';
-import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ModuleType } from '../m_types';
@@ -721,15 +720,6 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingCellBasedE
   }
 };
 
-const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelEditingCellBasedExtender extends Base {
-  public isVisible() {
-    const editingOptions = this._editingController.option('editing');
-
-    // @ts-expect-error
-    return super.isVisible() || editingOptions && (editingOptions.allowUpdating || editingOptions.allowDeleting) && editingOptions.mode === EDIT_MODE_BATCH;
-  }
-};
-
 export const editingCellBasedModule = {
   extenders: {
     controllers: {
@@ -737,7 +727,6 @@ export const editingCellBasedModule = {
     },
     views: {
       rowsView,
-      headerPanel,
     },
   },
 };
