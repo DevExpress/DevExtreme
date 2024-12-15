@@ -156,25 +156,21 @@ exports[`common initial render should be successfull 1`] = `
     class="dx-cardview-headers"
   >
     <div
-      class="dx-sortable"
+      class="dx-cardview-header-item"
     >
+      A
       <div
-        class="dx-cardview-header-item"
+        aria-label="Close"
+        class="dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-icon dx-cardview-header-item-button"
+        role="button"
+        tabindex="0"
       >
-        A
         <div
-          aria-label="Close"
-          class="dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-icon dx-cardview-header-item-button"
-          role="button"
-          tabindex="0"
+          class="dx-button-content"
         >
-          <div
-            class="dx-button-content"
-          >
-            <i
-              class="dx-icon dx-icon-close"
-            />
-          </div>
+          <i
+            class="dx-icon dx-icon-close"
+          />
         </div>
       </div>
     </div>
@@ -292,50 +288,7 @@ exports[`common initial render should be successfull 1`] = `
     />
   </div>
   
-  <div
-    aria-label="Page navigation"
-    class="dx-widget dx-pagination"
-    role="navigation"
-  >
-    <div
-      class="dx-page-sizes"
-    >
-      <div
-        aria-label="Items per page: 5"
-        class="dx-page-size dx-first-child"
-        role="button"
-        tabindex="0"
-      >
-        5
-      </div>
-      <div
-        aria-label="Items per page: 10"
-        class="dx-page-size"
-        role="button"
-        tabindex="0"
-      >
-        10
-      </div>
-    </div>
-    <div
-      class="dx-pages"
-      style="visibility: hidden;"
-    >
-      <div
-        class="dx-page-indexes"
-      >
-        <div
-          aria-current="page"
-          aria-label="Page 1"
-          class="dx-page dx-selection"
-          role="button"
-          tabindex="0"
-        >
-          1
-        </div>
-      </div>
-    </div>
-  </div>
+  
   
 </div>
 `;

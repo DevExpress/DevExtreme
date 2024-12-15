@@ -18,7 +18,7 @@ import { ErrorController } from './error_controller/error_controller';
 import { FilterPanelView } from './filtering/filter_panel/filter_panel';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
-import { PagerView } from './pager';
+import { PagerView } from './pager/view';
 import { Search } from './search/controller';
 import { ToolbarController } from './toolbar/controller';
 import { ToolbarView } from './toolbar/view';

@@ -4,7 +4,7 @@ import { combined } from '@ts/core/reactive/index';
 import { ColumnsChooserView } from '@ts/grids/new/grid_core/columns_chooser/view';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { FilterPanelView } from '@ts/grids/new/grid_core/filtering/filter_panel/filter_panel';
-import { PagerView } from '@ts/grids/new/grid_core/pager';
+import { PagerView } from '@ts/grids/new/grid_core/pager/view';
 import { ToolbarView } from '@ts/grids/new/grid_core/toolbar/view';
 import type { ComponentType } from 'inferno';
 
