@@ -35,7 +35,7 @@ export class AppComponent {
   showNavigationButtons = true;
 
   pageIndex = 1;
-  
+
   pageSize = 4;
 
   onPageIndexChange(val) {
@@ -50,6 +50,10 @@ export class AppComponent {
 
   setPageEmployees() {
     this.pageEmployees = this.employees.slice((this.pageIndex - 1) * this.pageSize, this.pageIndex * this.pageSize);
+  }
+
+  trackEmployee(index, employee) {
+    return employee.ID;
   }
 
   constructor(service: Service) {

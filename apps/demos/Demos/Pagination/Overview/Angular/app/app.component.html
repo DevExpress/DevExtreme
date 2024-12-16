@@ -3,7 +3,7 @@
     class="employees"
     [ngClass]="pageSize === 4 ? 'employees--forth' : 'employees--six'"
   >
-    <employee-card *ngFor="let employee of pageEmployees" [employee]="employee">
+    <employee-card *ngFor="let employee of pageEmployees; trackBy: trackEmployee" [employee]="employee">
     </employee-card>
   </div>
 
