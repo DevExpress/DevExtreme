@@ -833,17 +833,18 @@ declare namespace DevExpress {
   export type EndpointSelector = DevExpress.common.data.EndpointSelector;
   export const fx: typeof DevExpress.common.core.animation.fx;
   export const hideTopOverlay: typeof DevExpress.common.core.environment.hideTopOverlay;
-  export const localizationformatDate: typeof DevExpress.common.core.localization.formatDate;
-  export const localizationformatMessage: typeof DevExpress.common.core.localization.formatMessage;
-  export const localizationformatNumber: typeof DevExpress.common.core.localization.formatNumber;
-  export const localizationloadMessages: typeof DevExpress.common.core.localization.loadMessages;
-  export const localizationlocale: typeof DevExpress.common.core.localization.locale;
-  export const localizationparseDate: typeof DevExpress.common.core.localization.parseDate;
-  export const localizationparseNumber: typeof DevExpress.common.core.localization.parseNumber;
   export type PositionConfig = DevExpress.common.core.animation.PositionConfig;
   export type TransitionExecutor = DevExpress.common.core.animation.TransitionExecutor;
-  export const utilscancelAnimationFrame: typeof DevExpress.common.core.animation.cancelAnimationFrame;
-  export const utilsrequestAnimationFrame: typeof DevExpress.common.core.animation.requestAnimationFrame;
+}
+
+declare namespace DevExpress.localization {
+  export const formatDate: typeof DevExpress.common.core.localization.formatDate;
+  export const formatMessage: typeof DevExpress.common.core.localization.formatMessage;
+  export const formatNumber: typeof DevExpress.common.core.localization.formatNumber;
+  export const loadMessages: typeof DevExpress.common.core.localization.loadMessages;
+  export const locale: typeof DevExpress.common.core.localization.locale;
+  export const parseDate: typeof DevExpress.common.core.localization.parseDate;
+  export const parseNumber: typeof DevExpress.common.core.localization.parseNumber;
 }
 
 declare namespace DevExpress.common {
@@ -937,4 +938,10 @@ declare namespace DevExpress.pdfExporter {
 declare namespace DevExpress.utils {
   export const getTimeZones: typeof DevExpress.common.core.environment.getTimeZones;
   export const initMobileViewport: typeof DevExpress.common.core.environment.initMobileViewport;
+  export const cancelAnimationFrame: typeof DevExpress.common.core.animation.cancelAnimationFrame;
+  export const requestAnimationFrame: typeof DevExpress.common.core.animation.requestAnimationFrame;
+}
+
+declare namespace DevExpress.ui {
+  export type Format = DevExpress.common.core.localization.Format;
 }
