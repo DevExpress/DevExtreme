@@ -191,7 +191,7 @@ test('Toolbar should not reset its widget values when changing the disabled prop
     const dataGrid = new DataGrid('#container');
 
     await t
-      .expect(await takeScreenshot(`disabled-toolbar-buttons-${theme}.png`, dataGrid.element))
+      .expect(await takeScreenshot(`invisible-toolbar-buttons-${theme}.png`, dataGrid.element))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
