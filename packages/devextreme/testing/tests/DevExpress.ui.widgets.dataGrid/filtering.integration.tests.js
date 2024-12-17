@@ -74,8 +74,9 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.notOk(subMenu._isVisible(), 'submenu is hidden');
     });
 
-    // T860356
-    QUnit.test('Filter row\'s menu icons and text should have different colors', function(assert) {
+    // T860356 - Deprecated change
+    // T1257970 - New change for Contrast Accessibility WCAG Standard
+    QUnit.test('Filter row\'s menu icons and text should have similar colors', function(assert) {
         // arrange
         const filterRowWrapper = dataGridWrapper.filterRow;
 
@@ -104,7 +105,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         for(let i = 0; i < $items.length; i++) {
             $currentItem = $items.eq(i);
 
-            assert.notEqual($currentItem.find('.dx-menu-item-text').css('color'), $currentItem.find('.dx-icon').css('color'), 'colors are different');
+            assert.equal($currentItem.find('.dx-menu-item-text').css('color'), $currentItem.find('.dx-icon').css('color'), 'colors are similar');
         }
     });
 

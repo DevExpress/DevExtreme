@@ -144,6 +144,9 @@ window.config = {
     '@angular/forms': {
       'esModule': true,
     },
+    'openai': {
+      'esModule': true,
+    },
   },
   paths: {
     'npm:': '../../../../node_modules/',
@@ -153,6 +156,7 @@ window.config = {
   map: {
     'ts': 'npm:plugin-typescript/lib/plugin.js',
     'typescript': 'npm:typescript/lib/typescript.js',
+    'jszip': 'npm:jszip/dist/jszip.min.js',
 
     /* @angular */
     '@angular/compiler': 'bundles:@angular/compiler.umd.js',
@@ -183,7 +187,7 @@ window.config = {
       return acc;
     }, {}),
 
-    /* Bundles for Unified */
+    /** unified */
     'unified': 'externals:unified/unified.bundle.js',
     'remark-parse': 'externals:unified/remark-parse.bundle.js',
     'remark-rehype': 'externals:unified/remark-rehype.bundle.js',
@@ -191,9 +195,12 @@ window.config = {
     'rehype-parse': 'externals:unified/rehype-parse.bundle.js',
     'rehype-remark': 'externals:unified/rehype-remark.bundle.js',
     'rehype-stringify': 'externals:unified/rehype-stringify.bundle.js',
+    /**/
 
+    /** openai */
     'openai': 'externals:openai.bundle.js',
-    'jszip': 'npm:jszip/dist/jszip.min.js',
+    /**/
+
     'tslib': 'npm:tslib/tslib.js',
     'rxjs': 'npm:rxjs/dist/bundles/rxjs.umd.js',
     'rxjs/operators': 'npm:rxjs/dist/cjs/operators/index.js',

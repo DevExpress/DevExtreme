@@ -37,13 +37,18 @@ describe('BootstrapExtractor', () => {
     extractor.getSetterServiceCode = (): string => setterServiceCode;
     extractor.getCollectorServiceCode = (): string => collectorServiceCode;
 
-    expect(await extractor.sassProcessor())
-      .toBe(`${functions.toString()}
-${extractor.getVariables(variables.toString())}
+    const result = await extractor.sassProcessor();
+
+    expect(result.includes('@import "variables-dark";')).toBeFalsy();
+
+    const expectedResult = `${functions.toString()}
+${variables.toString()}
 ${variablesDark.toString()}
 ${testSassString}
 ${setterServiceCode}
-${collectorServiceCode}`);
+${collectorServiceCode}`;
+
+    expect(result).toBe(extractor.removeImports(expectedResult));
   });
 
   test('getSetterServiceCode', () => {

@@ -17,7 +17,7 @@
       @message-entered="onMessageEntered($event)"
     >
       <template #message="{ data }">
-        <span 
+        <span
           v-if="data.message.text === REGENERATION_TEXT"
         >
           {{ REGENERATION_TEXT }}
@@ -53,7 +53,7 @@ import { ref, onBeforeMount } from 'vue';
 import DxChat from 'devextreme-vue/chat';
 import DxButton from 'devextreme-vue/button';
 import { loadMessages } from 'devextreme/localization';
-import openai from 'openai';
+import { AzureOpenAI } from 'openai';
 import {
   dictionary,
   messages,
@@ -66,7 +66,7 @@ import {
   ALERT_TIMEOUT,
 } from './data.ts';
 
-const chatService = new openai.AzureOpenAI(AzureOpenAIConfig);
+const chatService = new AzureOpenAI(AzureOpenAIConfig);
 
 const typingUsers = ref([]);
 const alerts = ref([]);
@@ -150,7 +150,7 @@ function alertLimitReached() {
   alerts.value = [{
     message: 'Request limit reached, try again in a minute.'
   }];
-  
+
   setTimeout(() => {
     alerts.value = [];
   }, ALERT_TIMEOUT);

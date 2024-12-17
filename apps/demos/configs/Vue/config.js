@@ -35,6 +35,9 @@ window.config = {
       'esModule': true,
     },
     /**/
+    'openai': {
+      'esModule': true,
+    },
   },
   paths: {
     'project:': '../../../../',
@@ -47,6 +50,7 @@ window.config = {
     '@vue/shared': 'npm:@vue/shared/dist/shared.cjs.prod.js',
     'vue-loader': 'npm:dx-systemjs-vue-browser/index.js',
     'demo-ts-loader': 'project:utils/demo-ts-loader.js',
+    'jszip': 'npm:jszip/dist/jszip.min.js',
     'svg-loader': 'project:utils/svg-loader.js',
 
     /** signalr */
@@ -117,7 +121,7 @@ window.config = {
     'devextreme': 'npm:devextreme/cjs',
     'devextreme-vue': 'npm:devextreme-vue/cjs',
 
-    /* Bundles for Unified */
+    /** unified */
     'unified': 'externals:unified/unified.bundle.js',
     'remark-parse': 'externals:unified/remark-parse.bundle.js',
     'remark-rehype': 'externals:unified/remark-rehype.bundle.js',
@@ -125,9 +129,12 @@ window.config = {
     'rehype-parse': 'externals:unified/rehype-parse.bundle.js',
     'rehype-remark': 'externals:unified/rehype-remark.bundle.js',
     'rehype-stringify': 'externals:unified/rehype-stringify.bundle.js',
+    /**/
 
+    /** openai */
     'openai': 'externals:openai.bundle.js',
-    'jszip': 'npm:jszip/dist/jszip.min.js',
+    /**/
+
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram/dist/dx-diagram.js',
     'devexpress-gantt': 'npm:devexpress-gantt/dist/dx-gantt.js',

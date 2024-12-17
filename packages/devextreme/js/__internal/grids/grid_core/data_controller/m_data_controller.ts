@@ -80,6 +80,7 @@ interface Item {
   values?: unknown[];
   visible?: boolean;
   isExpanded?: boolean;
+  isNewRow?: boolean;
   summaryCells?: unknown[];
   rowIndex?: number;
   cells?: unknown[];
