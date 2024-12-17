@@ -222,7 +222,7 @@ export const Scroller = Class.inherit({
       translateOffset = location;
     }
 
-    if (location < minOffset) {
+    if (location <= minOffset) {
       translateOffset = location - minOffset;
     }
 
