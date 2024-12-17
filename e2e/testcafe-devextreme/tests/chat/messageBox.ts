@@ -6,13 +6,14 @@ import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
 import { appendElementTo } from '../../helpers/domUtils';
 
-fixture`ChatMessageBox`
+fixture.disablePageReloads`ChatMessageBox`
   .page(url(__dirname, '../container.html'));
 
 test('Chat: messagebox', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const chat = new Chat('#chat');
+  await chat.repaint();
 
   const shortText = getShortText();
   const longText = getLongText(false, 5);

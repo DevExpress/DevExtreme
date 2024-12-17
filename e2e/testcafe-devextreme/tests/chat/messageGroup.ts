@@ -14,11 +14,14 @@ import asyncForEach from '../../helpers/asyncForEach';
 
 const AVATAR_SELECTOR = '.dx-avatar';
 
-fixture`ChatMessageGroup`
+fixture.disablePageReloads`ChatMessageGroup`
   .page(url(__dirname, '../container.html'));
 
 test('Chat: messagegroup, avatar rendering', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const chat = new Chat('#chat');
+  await chat.repaint();
 
   await testScreenshot(t, takeScreenshot, 'Avatar has correct position.png', { element: '#chat' });
 
@@ -43,6 +46,9 @@ test('Chat: messagegroup, avatar rendering', async (t) => {
 
 test('Chat: messagegroup, information', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const chat = new Chat('#chat');
+  await chat.repaint();
 
   await testScreenshot(t, takeScreenshot, 'Information row with long user name.png', { element: '#chat' });
 
@@ -69,6 +75,7 @@ test('Chat: messagegroup, bubbles', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const chat = new Chat('#chat');
+  await chat.repaint();
 
   const userFirst = createUser(1, 'First');
   const userSecond = createUser(2, 'Second');
@@ -126,6 +133,9 @@ test('Messagegroup scenarios in disabled state', async (t) => {
       width: 250,
       height: 400,
     }, chatId);
+
+    const chat = new Chat(chatId);
+    await chat.repaint(); // NOTE: WA to make it stable in Material theme.
   });
 
   await testScreenshot(t, takeScreenshot, 'Messagegroup appearance in disabled state.png', { element: '#container' });
@@ -156,6 +166,9 @@ test('Messagegroup scenarios in RTL mode', async (t) => {
       width: 250,
       height: 400,
     }, chatId);
+
+    const chat = new Chat(chatId);
+    await chat.repaint(); // NOTE: WA to make it stable in Material theme.
   });
 
   await testScreenshot(t, takeScreenshot, 'Messagegroup appearance in RTL mode.png', { element: '#container' });
