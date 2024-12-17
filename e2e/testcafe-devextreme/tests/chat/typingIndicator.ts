@@ -15,7 +15,6 @@ test('Chat: typing indicator with emptyview', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const chat = new Chat('#container');
-  await chat.repaint();
 
   await testScreenshot(t, takeScreenshot, 'Typing indicator with emptyview.png', {
     element: '#container',
@@ -54,9 +53,6 @@ test('Chat: typing indicator with emptyview', async (t) => {
 test('Chat: typing indicator with a lot of items', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  const chat = new Chat('#chat');
-  await chat.repaint();
-
   await testScreenshot(t, takeScreenshot, 'Typing indicator with a lot of items.png', { element: '#chat' });
 
   await t
@@ -85,10 +81,9 @@ test('Chat: typing indicator with a lot of items', async (t) => {
 test('Chat: typing indicator', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  const chat = new Chat('#chat');
-  await chat.repaint();
-
   await testScreenshot(t, takeScreenshot, 'Typing indicator with 1 user.png', { element: '#chat' });
+
+  const chat = new Chat('#chat');
 
   const userFirst = createUser(1, 'Camille');
   const userSecond = createUser(2, 'Sophie');

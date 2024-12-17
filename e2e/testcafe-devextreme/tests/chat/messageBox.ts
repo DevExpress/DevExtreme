@@ -13,7 +13,6 @@ test('Chat: messagebox', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const chat = new Chat('#chat');
-  await chat.repaint();
 
   const shortText = getShortText();
   const longText = getLongText(false, 5);

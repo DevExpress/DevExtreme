@@ -14,9 +14,7 @@ test.clientScripts([
   { content: 'window.MockDate = MockDate;' },
 ])('Alertlist appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
   const chat = new Chat('#container');
-  await chat.repaint();
 
   await testScreenshot(t, takeScreenshot, 'Alertlist with one error.png', { element: '#container' });
 

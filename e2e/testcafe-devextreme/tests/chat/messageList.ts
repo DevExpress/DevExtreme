@@ -16,7 +16,6 @@ test('Messagelist empty view scenarios', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const chat = new Chat('#container');
-  await chat.repaint();
 
   await testScreenshot(t, takeScreenshot, 'Messagelist empty state.png', { element: '#container' });
 
@@ -51,7 +50,6 @@ test('Messagelist appearance with scrollbar', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const chat = new Chat('#container');
-  await chat.repaint();
 
   await t
     .hover(chat.messageList)
@@ -187,9 +185,7 @@ test('Messagelist with loadindicator appearance on initial loading', async (t) =
 
 test('Messagelist with messageTemplate', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
   const chat = new Chat('#container');
-  await chat.repaint();
 
   await testScreenshot(t, takeScreenshot, 'Messagelist with message template.png', { element: '#container' });
 
@@ -234,9 +230,6 @@ test('Messagelist with messageTemplate', async (t) => {
 
 test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp set to false work', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const chat = new Chat('#container');
-
-  await chat.repaint();
 
   await testScreenshot(
     t,
@@ -281,9 +274,7 @@ test.clientScripts([
   { content: 'window.MockDate = MockDate;' },
 ])('Messagelist with date headers', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const chat = new Chat('#container');
 
-  await chat.repaint();
   await testScreenshot(t, takeScreenshot, 'Messagelist with date headers.png', { element: '#container' });
 
   await t
