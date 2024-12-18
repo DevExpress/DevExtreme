@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import ContextMenu from 'ui/context_menu';
+import devices from '__internal/core/m_devices';
 
 import 'ui/button';
 import 'generic_light.css!';
@@ -9,7 +10,13 @@ const DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS = 'dx-menu-items-container';
 const DX_SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-container';
 const DX_MENU_ITEM_CLASS = 'dx-menu-item';
 
-const ITEMS_CONTAINER_PADDING = 1;
+const isDeviceDesktop = function(assert) {
+    if(devices.real().deviceType !== 'desktop') {
+        assert.ok(true, 'skip this test on mobile devices');
+        return false;
+    }
+    return true;
+};
 
 QUnit.testStart(() => {
     const markup = '\
@@ -108,7 +115,10 @@ QUnit.module('Context menu', () => {
 
         const $itemsContainer = instance.itemsContainer();
         const $rootItem = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
-        $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
+
+        const eventName = isDeviceDesktop(assert) ? 'dxhoverstart' : 'dxclick';
+
+        $($itemsContainer).trigger($.Event(eventName, { target: $rootItem.get(0) }));
 
         instance.option('onShown', (e) => {
             const $submenus = $(`.${DX_SUBMENU_CLASS}`);
@@ -119,7 +129,6 @@ QUnit.module('Context menu', () => {
             assert.roughEqual($nestedSubmenuItemsContainer.outerHeight(), $scrollableContainer.outerHeight(), .1);
             done();
         });
-
     });
 });
 

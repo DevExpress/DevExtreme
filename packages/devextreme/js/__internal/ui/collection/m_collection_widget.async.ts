@@ -36,10 +36,10 @@ const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
 
   _postProcessRenderItems: noop,
 
-  _planPostRenderActions() {
+  _planPostRenderActions(...args: unknown[]) {
     const d = Deferred();
     when.apply(this, this._asyncTemplateItems).done(() => {
-      this._postProcessRenderItems();
+      this._postProcessRenderItems(...args);
       d.resolve();
     });
     return d.promise();
