@@ -20,17 +20,18 @@ test('Data should be filtered if (Blank) is selected in the header filter (T1257
   const buttons = headerFilter.getButtons();
   const list = headerFilter.getList();
 
-  await t.click(filterIconElement)
-    .click(list.getItem(1).element)
-    .click(buttons.nth(0));
+  await t
+    .click(filterIconElement)
+    .click(list.getItem(1).element) // Select second item with value 'Item 1'
+    .click(buttons.nth(0)); // Click OK
 
   result[0] = await dataCell.element().innerText;
 
-  await t.click(filterIconElement)
+  await t
     .click(filterIconElement)
-    .click(list.getItem(1).element)
-    .click(list.getItem(0).element)
-    .click(buttons.nth(0));
+    .click(list.getItem(1).element) // Deselect second item with value 'Item 1'
+    .click(list.getItem(0).element) // Select second item with value '(Blanks)'
+    .click(buttons.nth(0)); // Click OK
 
   result[1] = await dataCell.element().innerText;
 
