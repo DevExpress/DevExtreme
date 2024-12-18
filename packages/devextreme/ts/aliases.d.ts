@@ -830,11 +830,11 @@ declare namespace DevExpress {
   export type Device = common.core.environment.Device;
   export const devices: typeof common.core.environment.devices;
   export type dxSchedulerTimeZone = common.core.environment.SchedulerTimeZone;
-  export type EndpointSelector = common.data.EndpointSelector;
+  export class EndpointSelector extends common.data.EndpointSelector {}
   export const fx: typeof common.core.animation.fx;
   export const hideTopOverlay: typeof common.core.environment.hideTopOverlay;
   export type PositionConfig = common.core.animation.PositionConfig;
-  export type TransitionExecutor = common.core.animation.TransitionExecutor;
+  export class TransitionExecutor extends common.core.animation.TransitionExecutor {}
 }
 
 declare namespace DevExpress.localization {
@@ -864,20 +864,20 @@ declare namespace DevExpress.animation {
 
 declare namespace DevExpress.data {
   export const applyChanges: typeof common.data.applyChanges;
-  export type ArrayStore<TItem, TKey> = common.data.ArrayStore<TItem, TKey>;
+  export class ArrayStore<TItem, TKey> extends common.data.ArrayStore<TItem, TKey> {}
   export const base64_encode: typeof common.data.base64_encode;
-  export type CustomStore<TItem, TKey> = common.data.CustomStore<TItem, TKey>;
-  export type DataSource<TItem, TKey> = common.data.DataSource<TItem, TKey>;
-  export type EdmLiteral = common.data.EdmLiteral;
+  export class CustomStore<TItem, TKey> extends common.data.CustomStore<TItem, TKey> {}
+  export class DataSource<TItem, TKey> extends common.data.DataSource<TItem, TKey> {}
+  export class EdmLiteral extends common.data.EdmLiteral {}
   export const errorHandler: typeof common.data.errorHandler;
   export type LangParams = common.data.LangParams;
-  export type LocalStore<TItem, TKey> = common.data.LocalStore<TItem, TKey>;
-  export type ODataContext = common.data.ODataContext;
-  export type ODataStore<TItem, TKey> = common.data.ODataStore<TItem, TKey>;
+  export class LocalStore<TItem, TKey> extends common.data.LocalStore<TItem, TKey> {}
+  export class ODataContext extends common.data.ODataContext {}
+  export class ODataStore<TItem, TKey> extends common.data.ODataStore<TItem, TKey> {}
   export const query: typeof common.data.query;
   export type Query = common.data.Query;
   export const setErrorHandler: typeof common.data.setErrorHandler;
-  export type Store<TItem = any, TKey = any> = common.data.Store<TItem, TKey>;
+  export class Store<TItem = any, TKey = any> extends common.data.Store<TItem, TKey>{}
 }
 
 declare namespace DevExpress.data.CustomStore {
