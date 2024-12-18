@@ -49,13 +49,102 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+
+        <div class="dx-viewport demo-container">
+            <div id='editor'></div>
+            <div id='button'></div>
+            <!-- <div id='button2'></div> -->
+        </div>
+
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+            $(() => {
+                // const positions = [
+                //     "HR Manager",
+                //     "IT Manager",
+                //     "CEO",
+                //     "Controller",
+                //     "Sales Manager",
+                //     "Support Manager",
+                //     "Shipping Manager"
+                // ];
+
+                // const positionsDS = new DevExpress.data.DataSource({
+                //     store: new DevExpress.data.CustomStore({
+                //         load: (loadOptions) => {
+                //             return positions;
+                //         },
+                //         byKey: (key) => {
+                //             debugger
+                //             console.log("bykey");
+                //             return key;
+                //         }
+                //     })
+                // });
+
+                // const editor = $('#editor').dxTextBox({
+                //     // value: 'CUSTOM',
+                //     // value: '',
+                //     // value: null,
+                //     // value: undefined,
+                //     // onInput: ({ component }) => {
+                //     //     const { value, text } = component.option();
+                //     //     debugger;
+                //     // },
+                //     // onValueChanged: (e) => {
+                //     //     debugger
+                //     // },
+                // }).dxTextBox('instance');
+
+                const editor = $('#editor').dxDateRangeBox({
+                    value: [null, null],
+                    // onValueChanged: (e) => {
+                    //     debugger
+                    // },
+                }).dxDateRangeBox('instance');
+
+                // const editor = $('#editor').dxSelectBox({
+                //     dataSource: positionsDS,
+                //     value: positions[0],
+                //     // value: null,
+                // }).dxSelectBox('instance');
+
+                const INPUT_CLASS = 'dx-texteditor-input';
+
+                $('#button').dxButton({
+                    text: 'reset',
+                    onClick: async () => {
+                        const $input = $(`.${INPUT_CLASS}`);
+                        const inputValue = $input.eq(0).val();
+
+                        debugger;
+
+                        await editor.reset();
+
+                        const $input2 = $(`.${INPUT_CLASS}`);
+                        const inputValue2 = $input.eq(0).val();
+
+                        debugger
+
+                        // setTimeout(() => {
+                        //     const { text, value } = editor.option();
+
+                        //     debugger;
+                        // }, 0);
+                    }
                 });
+
+                // $('#button2').dxButton({
+                //     text: 'clear',
+                //     onClick: async () => {
+                //         await editor.clear();
+
+                //         // setTimeout(() => {
+                //         //     const { text, value } = editor.option();
+
+                //         //     debugger;
+                //         // }, 0);
+                //     }
+                // });
             });
         </script>
     </div>

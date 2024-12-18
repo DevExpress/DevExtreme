@@ -98,7 +98,7 @@ QUnit.module('common', {}, () => {
         assert.strictEqual(editor.option('isValid'), true, 'editor state is valid after reset');
     });
 
-    QUnit.test('reset should clear input value, value and text options', function(assert) {
+    QUnit.test('reset should clear input value, value and text options, if value was changed', function(assert) {
         assert.expect(9);
 
         const $element = $('#textbox').dxTextBox();
@@ -106,15 +106,15 @@ QUnit.module('common', {}, () => {
         const $input = $element.find(`.${INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
-        const values = [
+        const essences = [
             { name: 'input value', get: () => $input.val() },
             { name: 'value option', get: () => instance.option('value') },
             { name: 'text option', get: () => instance.option('text') },
         ];
 
         const check = (expected, message) => {
-            values.forEach(value => {
-                assert.strictEqual(value.get(), expected, `${value.name} ${message}`);
+            essences.forEach(essence => {
+                assert.strictEqual(essence.get(), expected, `${essence.name} ${message}`);
             });
         };
 
