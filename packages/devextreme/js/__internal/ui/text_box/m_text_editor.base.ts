@@ -357,6 +357,8 @@ const TextEditorBase = Editor.inherit({
     const displayValue = this.option('displayValue');
     const displayValueFormatter = this.option('displayValueFormatter');
 
+    debugger;
+
     if (displayValue !== undefined && value !== null) {
       text = displayValueFormatter(displayValue);
     } else if (!isDefined(text)) {
@@ -915,20 +917,22 @@ const TextEditorBase = Editor.inherit({
     }
   },
 
+  _resetInputText() {
+    this._options.silent('text', this._initialValue);
+    this._renderValue();
+  },
+
+  _processResetIfValueIsNotChanged() {
+    this._resetInputText();
+  },
+
   _resetToInitialValue() {
-    const { value, text } = this.option();
-    const initialValue = this._initialValue;
-
     debugger;
-
     if (this.option('value') === this._initialValue) {
-      this._options.silent('text', this._initialValue);
-      this._renderValue();
+      this._processResetIfValueIsNotChanged();
     } else {
       this.callBase();
     }
-
-    // this.callBase();
 
     this._disposePendingIndicator();
     this._showValidMark = false;

@@ -300,6 +300,14 @@ const DropDownList = DropDownEditor.inherit({
     return selectedItem;
   },
 
+  // _processResetIfValueIsNotChanged() {
+  //   const { text, acceptCustomValue } = this.option();
+
+  //   if (acceptCustomValue && text !== this._initialValue) {
+  //     this._resetInputText();
+  //   }
+  // },
+
   _loadItem(value, cache) {
     const selectedItem = this._getItemFromPlain(value, cache);
 

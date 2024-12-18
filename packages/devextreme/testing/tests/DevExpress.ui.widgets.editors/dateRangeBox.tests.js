@@ -2616,24 +2616,17 @@ QUnit.module('Validation', {
     });
 
     QUnit.test('reset should clear input value if editor\'s value has not been changed', function(assert) {
-        // debugger;
         const initialValue = [null, null];
         this.reinit({ value: initialValue });
 
         const startDateBox = getStartDateBoxInstance(this.instance);
         const $startDateBoxInput = $(startDateBox.field());
 
-        // debugger;
-
         const keyboard = keyboardMock($startDateBoxInput);
-        keyboard.type('12/12/2003').press('enter');
-        // $startDateBoxInput.trigger('change');
-        // debugger;
+        keyboard.type('123').press('enter');
 
-        assert.strictEqual($startDateBoxInput.val(), '12/12/2003', 'input value is correct');
+        assert.strictEqual($startDateBoxInput.val(), '123', 'input value is correct');
         assert.deepEqual(this.instance.option('value'), initialValue, 'value option is correct');
-
-        // debugger;
 
         this.instance.reset();
 

@@ -41,6 +41,23 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+
+    <style>
+        .dx-surface {
+            height: 50vh;
+        }
+
+        .dx-surface > div {
+            height: 100%;
+        }
+
+        .demo-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+    </style>
 </head>
 <body class="dx-surface">
     <div role="main">
@@ -58,49 +75,70 @@
 
         <script>
             $(() => {
-                // const positions = [
-                //     "HR Manager",
-                //     "IT Manager",
-                //     "CEO",
-                //     "Controller",
-                //     "Sales Manager",
-                //     "Support Manager",
-                //     "Shipping Manager"
-                // ];
+                const positions = [
+                    "HR Manager",
+                    "IT Manager",
+                    "CEO",
+                    "Controller",
+                    "Sales Manager",
+                    "Support Manager",
+                    "Shipping Manager"
+                ];
 
-                // const positionsDS = new DevExpress.data.DataSource({
-                //     store: new DevExpress.data.CustomStore({
-                //         load: (loadOptions) => {
-                //             return positions;
-                //         },
-                //         byKey: (key) => {
-                //             debugger
-                //             console.log("bykey");
-                //             return key;
-                //         }
-                //     })
-                // });
+                const positionsDS = new DevExpress.data.DataSource({
+                    store: new DevExpress.data.CustomStore({
+                        load: (loadOptions) => {
+                            return positions;
+                        },
+                        byKey: (key) => {
+                            debugger
+                            console.log("bykey");
+                            return key;
+                        }
+                    })
+                });
 
                 // const editor = $('#editor').dxTextBox({
-                //     // value: 'CUSTOM',
+                //     value: 'CUSTOM',
                 //     // value: '',
                 //     // value: null,
                 //     // value: undefined,
-                //     // onInput: ({ component }) => {
-                //     //     const { value, text } = component.option();
-                //     //     debugger;
-                //     // },
+                //     onInput: (e) => {
+                //         const { value, text } = e.component.option();
+                        
+                //         if (text === '123') {
+                //             e.component.resetOption('text');
+                //         }
+                //     },
                 //     // onValueChanged: (e) => {
                 //     //     debugger
                 //     // },
                 // }).dxTextBox('instance');
 
-                const editor = $('#editor').dxDateRangeBox({
-                    value: [null, null],
-                    // onValueChanged: (e) => {
-                    //     debugger
-                    // },
-                }).dxDateRangeBox('instance');
+                // const editor = $('#editor').dxDateRangeBox({
+                //     value: ['11/11/1111', '11/11/1111'],
+                //     onOptionChanged: (e) => {
+                //         if (e.fullName === 'startDateText' && e.value === '123') {
+                //             e.component.reset();
+                //         }
+                //         // debugger
+                //     },
+                //     // onValueChanged: (e) => {
+                //     //     debugger
+                //     // },
+                // }).dxDateRangeBox('instance');
+
+                const editor = $('#editor').dxSelectBox({
+                    acceptCustomValue: true,
+                    dataSource: positionsDS,
+                    value: positions[0],
+                    // value: null,
+                    onInput: (e) => {
+                        if (e.component.option('text') === 'HR Manage') {
+                            e.component.reset();
+                        }
+                    },
+                }).dxSelectBox('instance');
 
                 // const editor = $('#editor').dxSelectBox({
                 //     dataSource: positionsDS,
@@ -113,17 +151,17 @@
                 $('#button').dxButton({
                     text: 'reset',
                     onClick: async () => {
-                        const $input = $(`.${INPUT_CLASS}`);
-                        const inputValue = $input.eq(0).val();
+                        // const $input = $(`.${INPUT_CLASS}`);
+                        // const inputValue = $input.eq(0).val();
 
-                        debugger;
+                        // debugger;
 
                         await editor.reset();
 
-                        const $input2 = $(`.${INPUT_CLASS}`);
-                        const inputValue2 = $input.eq(0).val();
+                        // const $input2 = $(`.${INPUT_CLASS}`);
+                        // const inputValue2 = $input.eq(0).val();
 
-                        debugger
+                        // debugger
 
                         // setTimeout(() => {
                         //     const { text, value } = editor.option();
