@@ -3,9 +3,8 @@
     class="employees"
     [ngClass]="pageSize === 4 ? 'employees--forth' : 'employees--six'"
   >
-    @for (employee of pageEmployees; track employee.ID) {
-    <employee-card [employee]="employee"></employee-card>
-    }
+    <employee-card *ngFor="let employee of pageEmployees" [employee]="employee">
+    </employee-card>
   </div>
 
   <dx-pagination

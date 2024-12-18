@@ -116,7 +116,6 @@ test('Messagelist appearance with scrollbar', async (t) => {
 
 test('Messagelist should scrolled to the latest messages after being rendered inside an invisible element', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
   const tabPanel = new TabPanel('#container');
 
   await t
@@ -185,8 +184,8 @@ test('Messagelist with loadindicator appearance on initial loading', async (t) =
 });
 
 test('Messagelist with messageTemplate', async (t) => {
-  const chat = new Chat('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const chat = new Chat('#container');
 
   await testScreenshot(t, takeScreenshot, 'Messagelist with message template.png', { element: '#container' });
 

@@ -44,7 +44,7 @@
           </div>
         </template>
       </template>
-    <DxChat/>
+    </DxChat>
   </div>
 </template>
 

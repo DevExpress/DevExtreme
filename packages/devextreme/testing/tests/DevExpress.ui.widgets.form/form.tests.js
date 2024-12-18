@@ -42,14 +42,11 @@ import {
     renderLabel,
 } from '__internal/ui/form/components/m_label';
 
-const EDITOR_LABEL_CLASS = 'dx-texteditor-label';
-const EDITOR_INPUT_CLASS = 'dx-texteditor-input';
-const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
-
 import { TOOLBAR_CLASS } from '__internal/ui/toolbar/m_constants';
 
 import 'ui/html_editor';
 import '../../helpers/ignoreQuillTimers.js';
+import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/lookup';
 import 'ui/radio_group';
 import 'ui/tag_box';
@@ -66,6 +63,11 @@ const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
 const LAST_COL_CLASS = 'dx-last-col';
 const SLIDER_LABEL = 'dx-slider-label';
+const EDITOR_LABEL_CLASS = 'dx-texteditor-label';
+const EDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
+const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
+const TEXTBOX_CLASS = 'dx-textbox';
 
 QUnit.testStart(function() {
     const markup =
@@ -644,7 +646,7 @@ QUnit.test('Check aria-labelledby attribute for editors label', function(assert)
 });
 
 QUnit.test('field1.required -> form.validate() -> form.option("onFieldDataChanged", "newHandler") -> check form is not re-rendered (T1014577)', function(assert) {
-    const checkEditorIsInvalid = (form) => form.$element().find('.dx-textbox').hasClass(INVALID_CLASS);
+    const checkEditorIsInvalid = (form) => form.$element().find(`.${TEXTBOX_CLASS}`).hasClass(INVALID_CLASS);
     const form = $('#form').dxForm({
         formData: { field1: '' },
         items: [ {
@@ -1855,8 +1857,8 @@ QUnit.test('Align with "" required mark, T1031458', function(assert) {
         }]
     });
 
-    const $labelText = $testContainer.find('.dx-field-item-label-text');
-    const $textBox = $testContainer.find('.dx-textbox');
+    const $labelText = $testContainer.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $textBox = $testContainer.find(`.${TEXTBOX_CLASS}`);
 
     assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
     assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 3, 'textBox.left');
@@ -1872,8 +1874,8 @@ QUnit.test('Align with " " required mark, T1031458', function(assert) {
         }]
     });
 
-    const $labelText = $testContainer.find('.dx-field-item-label-text');
-    const $textBox = $testContainer.find('.dx-textbox');
+    const $labelText = $testContainer.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $textBox = $testContainer.find(`.${TEXTBOX_CLASS}`);
 
     assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
     assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 3, 'textBox.left');
@@ -1889,8 +1891,8 @@ QUnit.test('Align with "!" required mark, T1031458', function(assert) {
         }]
     });
 
-    const $labelText = $testContainer.find('.dx-field-item-label-text');
-    const $textBox = $testContainer.find('.dx-textbox');
+    const $labelText = $testContainer.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $textBox = $testContainer.find(`.${TEXTBOX_CLASS}`);
 
     assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
     assert.roughEqual($textBox.offset().left, $labelText.offset().left + 29, 3, 'textBox.left');
@@ -1906,8 +1908,8 @@ QUnit.test('Align with "×" required mark, T1031458', function(assert) {
         }]
     });
 
-    const $labelText = $testContainer.find('.dx-field-item-label-text');
-    const $textBox = $testContainer.find('.dx-textbox');
+    const $labelText = $testContainer.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $textBox = $testContainer.find(`.${TEXTBOX_CLASS}`);
 
     assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
     assert.roughEqual($textBox.offset().left, $labelText.offset().left + 35, 3, 'textBox.left');
@@ -4538,6 +4540,52 @@ QUnit.test('form should be dirty when some editors are dirty', function(assert) 
     form.updateData('Address', originalAddress);
 
     assert.strictEqual(form.option('isDirty'), false, 'form is not dirty when all editors are back to pristine');
+});
+
+[true, false].forEach((openOnFieldClick) => {
+    [true, false, undefined].forEach((hideOnOutsideClick) => {
+        QUnit.test(`Opened DropDownList must hide on input label click, openOnFieldClick: ${openOnFieldClick}, hideOnOutsideClick: ${hideOnOutsideClick} (T1257945)`, function(assert) {
+            const dropDownOptions = hideOnOutsideClick === undefined ? {} : { hideOnOutsideClick };
+            const $form = $('#form').dxForm({
+                formData: { CustomerID: 'VINET' },
+                items: [{
+                    itemType: 'group',
+                    colCount: 2,
+                    items: [{
+                        dataField: 'CustomerID',
+                        editorType: 'dxSelectBox',
+                        editorOptions: {
+                            items: ['VINET', 'VALUE', 'VINS'],
+                            value: '',
+                            openOnFieldClick,
+                            dropDownOptions,
+                        },
+                    }],
+                }],
+            });
+
+            const $dropDownButton = $form.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
+
+            pointerMock($dropDownButton).click();
+
+            const editorInstance = $form.dxForm('instance').getEditor('CustomerID');
+
+            assert.true(editorInstance.option('opened'), 'drop down list is visible');
+
+            const $label = $form.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+
+            pointerMock($label).click();
+
+            // NOTE: In the real environment, clicking the label triggers a click on the editor,
+            // toggling the popup visibility if openOnFieldClick=true.
+            // This assertion only takes hideOnOutsideClick into account
+            if(hideOnOutsideClick === false) {
+                assert.true(editorInstance.option('opened'), `drop down list ${openOnFieldClick ? 'is hidden by triggered input click' : 'is visible'}`);
+            } else {
+                assert.strictEqual(editorInstance.option('opened'), openOnFieldClick, `drop down list is hidden by ${openOnFieldClick ? 'triggered input click' : 'outside click'}`);
+            }
+        });
+    });
 });
 
 QUnit.module('reset', () => {
