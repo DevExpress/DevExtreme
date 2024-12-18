@@ -132,7 +132,7 @@ const toolbarContent = [{
     .option {
       margin-top: 10px;
       display: inline-block;
-      margin-right: 54px;
+      margin-right: 50px;
     }
 
     label {
