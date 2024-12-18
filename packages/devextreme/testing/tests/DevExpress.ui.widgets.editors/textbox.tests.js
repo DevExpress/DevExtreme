@@ -75,7 +75,7 @@ QUnit.module('common', {}, () => {
             const instance = $('#textbox').dxTextBox('instance');
 
             inFocus = element.find('.dx-texteditor-input').is(':focus');
-            assert.ok(!inFocus, 'at start  input has not focused');
+            assert.ok(!inFocus, 'at start input has not focused');
 
             instance.focus();
             assert.ok(inFocus, 'when call \'focus\' method, then focus on input');
@@ -98,18 +98,36 @@ QUnit.module('common', {}, () => {
         assert.strictEqual(editor.option('isValid'), true, 'editor state is valid after reset');
     });
 
-    QUnit.test('reset should clear input value', function(assert) {
-        const instance = $('#textbox').dxTextBox().dxTextBox('instance');
-        const $input = $(`.${INPUT_CLASS}`);
+    QUnit.test('reset should clear input value, value and text options', function(assert) {
+        assert.expect(9);
+
+        const $element = $('#textbox').dxTextBox();
+        const instance = $element.dxTextBox('instance');
+        const $input = $element.find(`.${INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
-        keyboard.type('123').press('enter');
+        const values = [
+            { name: 'input value', get: () => $input.val() },
+            { name: 'value option', get: () => instance.option('value') },
+            { name: 'text option', get: () => instance.option('text') },
+        ];
 
-        assert.strictEqual($input.val(), '123', 'input value is pressent before reset');
+        const check = (expected, message) => {
+            values.forEach(value => {
+                assert.strictEqual(value.get(), expected, `${value.name} ${message}`);
+            });
+        };
+
+        check('', 'is empty before typing');
+
+        keyboard.type('123');
+        $input.trigger('change');
+
+        check('123', 'is pressent before reset');
 
         instance.reset();
 
-        assert.strictEqual($input.val(), '', 'input value is absent after reset');
+        check('', 'is absent after reset');
     });
 
     QUnit.test('T218573 - clearButton should be hidden if mode is \'search\' and the \'showClearButton\' option is false', function(assert) {
