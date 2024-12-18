@@ -357,8 +357,6 @@ const TextEditorBase = Editor.inherit({
     const displayValue = this.option('displayValue');
     const displayValueFormatter = this.option('displayValueFormatter');
 
-    debugger;
-
     if (displayValue !== undefined && value !== null) {
       text = displayValueFormatter(displayValue);
     } else if (!isDefined(text)) {
@@ -927,7 +925,6 @@ const TextEditorBase = Editor.inherit({
   },
 
   _resetToInitialValue() {
-    debugger;
     if (this.option('value') === this._initialValue) {
       this._processResetIfValueIsNotChanged();
     } else {

@@ -300,16 +300,18 @@ const DropDownList = DropDownEditor.inherit({
     return selectedItem;
   },
 
-  // _processResetIfValueIsNotChanged() {
-  //   const { text, acceptCustomValue } = this.option();
+  _processResetIfValueIsNotChanged() {
+    // const { text, acceptCustomValue, selectedItem } = this.option();
 
-  //   if (acceptCustomValue && text !== this._initialValue) {
-  //     this._resetInputText();
-  //   }
-  // },
+    // if (acceptCustomValue && text !== this._initialValue) {
+    this._resetInputText();
+    // }
+  },
 
   _loadItem(value, cache) {
-    const selectedItem = this._getItemFromPlain(value, cache);
+    const { selectedItem: selectedItemFromOptions } = this.option();
+
+    const selectedItem = this._getItemFromPlain(value, cache) || selectedItemFromOptions;
 
     return selectedItem !== undefined
       ? Deferred().resolve(selectedItem).promise()
