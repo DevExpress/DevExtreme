@@ -271,9 +271,6 @@ const SKIPPED_TESTS = {
     PivotGrid: [
       { demo: 'IntegratedFieldChooser', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ]
   },
   Vue: {
     Charts: [
@@ -296,12 +293,6 @@ const SKIPPED_TESTS = {
       { demo: 'FilteringAPI', themes: [THEME.material] },
       'StatePersistence',
     ],
-    Drawer: [
-      { demo: 'TopOrBottomPosition', themes: [THEME.material] },
-    ],
-    Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ]
   },
   React: {
     Charts: [
