@@ -10,14 +10,6 @@ const DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS = 'dx-menu-items-container';
 const DX_SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-container';
 const DX_MENU_ITEM_CLASS = 'dx-menu-item';
 
-const isDeviceDesktop = function(assert) {
-    if(devices.real().deviceType !== 'desktop') {
-        assert.ok(true, 'skip this test on mobile devices');
-        return false;
-    }
-    return true;
-};
-
 QUnit.testStart(() => {
     const markup = '\
         <div id="simpleMenu"></div>\
@@ -116,7 +108,7 @@ QUnit.module('Context menu', () => {
         const $itemsContainer = instance.itemsContainer();
         const $rootItem = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
 
-        const eventName = isDeviceDesktop(assert) ? 'dxhoverstart' : 'dxclick';
+        const eventName = devices.real().deviceType === 'desktop' ? 'dxhoverstart' : 'dxclick';
 
         $($itemsContainer).trigger($.Event(eventName, { target: $rootItem.get(0) }));
 
