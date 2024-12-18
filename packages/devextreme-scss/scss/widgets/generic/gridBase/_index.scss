@@ -201,7 +201,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
           min-width: 20px;
         }
       }
-      
+
       .dx-command-edit-with-icons {
         .dx-link {
           @include dx-icon-sizing($generic-command-edit-icon-size);

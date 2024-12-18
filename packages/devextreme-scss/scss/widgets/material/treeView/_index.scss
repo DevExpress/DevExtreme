@@ -20,7 +20,7 @@
         background-color: color.change($checkbox-border-color, $alpha: 0.1);
         transform: scale(1);
       }
-  
+
       &.dx-checkbox-checked,
       &.dx-checkbox-indeterminate {
         .dx-checkbox-icon::after {
@@ -43,7 +43,7 @@
 );
 @include default-expander-icon(
   'chevrondown',
-  'chevronright', 
+  'chevronright',
   $material-base-icon-size,
   $material-treeview-toggle-item-width,
   $treeview-spin-icon-color,

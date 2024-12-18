@@ -16,7 +16,7 @@
   .dx-tabs-wrapper {
     border-block-start: $generic-tabs-border;
     border-block-end: $generic-tabs-border;
-  
+
     @include dx-tabs-border-mixin(
       none,
       $generic-tabs-border,

@@ -39,15 +39,15 @@
     gap: $gap;
     padding: $padding;
     margin: $margin;
-    
+
     .dx-treeview-item-content {
       .dx-icon {
         @include dx-icon-sizing($icon-size);
-  
+
         vertical-align: bottom;
       }
     }
-  
+
     &.dx-state-hover {
       background-color: $hover-bg;
       border-radius: $border-radius;
@@ -80,20 +80,20 @@
   .dx-treeview-search {
     margin-bottom: $searchbox-margin-bottom;
   }
-  
+
   .dx-treeview-with-search > .dx-scrollable {
     height: calc(100% - #{round($search-editor-height + $searchbox-margin-bottom)});
   }
-  
+
   .dx-treeview-select-all-item {
     border-bottom: 1px solid $border-color;
     padding: $select-all-item-padding;
-  
+
     .dx-checkbox-container {
       display: flex;
       align-items: center;
     }
-  
+
     .dx-checkbox-text {
       padding-inline-start: $item-element-gap;
     }
@@ -106,11 +106,11 @@
 
   .dx-treeview-border-visible {
     border: 1px solid $border-color;
-  
+
     .dx-treeview-select-all-item {
       padding-inline-start: $select-all-item-border-visible-padding;
     }
-  
+
     .dx-scrollable-content {
       > .dx-treeview-node-container {
         padding: $treeview-container-padding;
@@ -120,8 +120,8 @@
 }
 
 @mixin treeview-checkbox(
-  $checkbox-container-size, 
-  $base-text-color, 
+  $checkbox-container-size,
+  $base-text-color,
   $checkbox-border-color-focused,
   $treeview-item-selected-color,
   $treeview-item-selected-bg,

@@ -74,7 +74,7 @@ $generic-treeview-search-editor-height: round($generic-base-line-height * $gener
 :root {
   --dx-component-height: #{$generic-base-inline-widget-height};
   --dx-font-size: #{$generic-base-font-size};
-  --dx-border-width: #{$generic-base-border-width}; 
-  --dx-border-radius: #{$base-border-radius}; 
-  --dx-font-size-icon: #{$generic-base-icon-size}; 
+  --dx-border-width: #{$generic-base-border-width};
+  --dx-border-radius: #{$base-border-radius};
+  --dx-font-size-icon: #{$generic-base-icon-size};
 }

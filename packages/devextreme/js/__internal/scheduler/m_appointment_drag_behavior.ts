@@ -130,7 +130,7 @@ export default class AppointmentDragBehavior {
 
       // NOTE: event.cancel may be promise or different type, so we need strict check here.
       if (e.cancel === true) {
-        this.removeDroppableClasses();
+        options.onDragCancel(e);
       }
 
       if (e.cancel !== true && isSchedulerComponent(e.toComponent)) {

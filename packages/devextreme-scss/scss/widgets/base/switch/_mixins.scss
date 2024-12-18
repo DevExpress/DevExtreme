@@ -15,7 +15,7 @@
   .dx-switch {
     width: $switch-width;
     height: $switch-height;
-  
+
     .dx-switch-wrapper {
       position: relative;
       padding-top:  $switch-padding,;
@@ -35,7 +35,7 @@
     overflow: visible;
     position: relative;
     padding: 0 $switch-container-horizontal-padding;
-  
+
     &::before {
       position: absolute;
       content: '';
@@ -46,12 +46,12 @@
       transition: $switch-transition;
     }
   }
-  
+
   .dx-switch-inner {
     width: 200%;
     height: 100%;
   }
-  
+
   .dx-switch-on,
   .dx-switch-off {
     flex-shrink: 0;
@@ -63,17 +63,17 @@
     text-align: center;
     line-height: 100%;
   }
-  
+
   .dx-switch-on {
     background: transparent;
   }
-  
+
   .dx-switch-off {
     display: none;
     padding-bottom: 10px;
     background-color: transparent;
   }
-  
+
   .dx-switch-handle {
     flex-basis: $switch-handle-height;
     flex-shrink: 0;
@@ -83,7 +83,7 @@
     width: $switch-handle-height;
     height: $switch-handle-height;
     border-radius: $switch-handle-border-radius;
-  
+
     &::before {
       display: block;
       content: ' ';
@@ -112,7 +112,7 @@
       .dx-switch-handle::before {
         background-color: $switch-handle-disabled-bg;
       }
-  
+
       .dx-switch-container::before {
         background-color: $switch-disabled-bg;
       }
@@ -156,11 +156,11 @@
     .dx-switch-container::before {
       background-color: $switch-on-bg;
     }
-  
+
     .dx-switch-handle::before {
       background-color: $switch-handle-on-bg;
     }
-  
+
     &.dx-state-active,
     &.dx-state-focused {
       .dx-switch-handle::before {
@@ -221,7 +221,7 @@
       &.dx-state-readonly {
         .dx-switch-container::before {
           border-color: $switch-off-border-color-hover;
-        } 
+        }
       }
 
       &.dx-invalid {
@@ -373,12 +373,12 @@
         background-color: $switch-invalid-container-bg;
       }
     }
-  
+
     &.dx-switch-on-value:not(.dx-state-readonly):not(.dx-state-disabled) {
       .dx-switch-container .dx-switch-handle::before {
         background-color: $switch-invalid-handle-bg;
       }
-  
+
       &.dx-state-active,
       &.dx-state-focused {
         .dx-switch-container .dx-switch-handle::before {

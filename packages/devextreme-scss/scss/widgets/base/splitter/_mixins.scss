@@ -9,12 +9,12 @@
   .dx-resize-handle {
     color: $color;
     background-color: $background-color;
-    
+
     &.dx-state-hover {
       color: $color-hover;
       background-color: $background-color-hover;
     }
-    
+
     &.dx-state-active,
     &.dx-state-focused {
       color: $color-focused;

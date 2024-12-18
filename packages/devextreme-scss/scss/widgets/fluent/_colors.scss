@@ -188,7 +188,7 @@ $scrollview-pulldown-path: null !default;
   $base-separator-color: $base-border-color !default;
 
   $base-inverted-bg: darken($base-bg, 100%) !default;
-  
+
   $base-inverted-text-color: #fff !default;
 
   $base-danger-hover: darken(desaturate($base-danger, 3.05), 5.10) !default;
@@ -217,14 +217,14 @@ $scrollview-pulldown-path: null !default;
     $base-success: #10B230 !default;
     $base-danger: #F92F2F !default;
     $base-border-color: #414B5F !default;
-  
+
     $base-typography-bg: #141E28 !default;
   }
 
   $base-accent-hover: lighten(desaturate($base-accent, 1.67), 5.29) !default;
   $base-accent-active: darken(desaturate(adjust-hue($base-accent, -1), 16.30), 10.59) !default;
   $base-accent-selected: darken(desaturate(adjust-hue($base-accent, -3), 9.05), 31.57) !default;
-  
+
   $base-text-color: rgba(255, 255, 255, 1) !default;
   $base-label-color: darken($base-text-color, 40.00) !default;
   $base-icon-color: darken($base-text-color, 32.16) !default;

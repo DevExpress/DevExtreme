@@ -22,7 +22,7 @@
 
 .dx-tabpanel-tabs-position-right {
   flex-direction: row-reverse;
-  
+
   &.dx-rtl {
     flex-direction: row;
   }
@@ -34,7 +34,7 @@
 
 .dx-tabpanel-tabs-position-left {
   flex-direction: row;
-  
+
   &.dx-rtl {
     flex-direction: row-reverse;
   }
