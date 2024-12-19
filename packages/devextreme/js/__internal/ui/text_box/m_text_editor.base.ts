@@ -915,18 +915,28 @@ const TextEditorBase = Editor.inherit({
     }
   },
 
-  _resetInputText() {
+  _resetInputText(): void {
     this._options.silent('text', this._initialValue);
     this._renderValue();
   },
 
-  _processResetIfValueIsNotChanged() {
-    this._resetInputText();
+  _isValueEqualToInitial(): boolean {
+    const { value } = this.option();
+
+    return value === this._initialValue;
+  },
+
+  _shouldResetInputText(): boolean {
+    const shouldResetInputText = this._isValueEqualToInitial();
+
+    return shouldResetInputText;
   },
 
   _resetToInitialValue() {
-    if (this.option('value') === this._initialValue) {
-      this._processResetIfValueIsNotChanged();
+    const shouldResetInputText = this._shouldResetInputText();
+
+    if (shouldResetInputText) {
+      this._resetInputText();
     } else {
       this.callBase();
     }

@@ -300,19 +300,23 @@ const DropDownList = DropDownEditor.inherit({
     return selectedItem;
   },
 
-  _processResetIfValueIsNotChanged() {
+  _shouldResetInputText(): boolean {
     const { text, acceptCustomValue } = this.option();
 
-    if (acceptCustomValue && text !== this._initialValue) {
-      this._resetInputText();
+    if (!acceptCustomValue) {
+      return false;
     }
+
+    const isTextEqualToInitialValue = text !== this._initialValue;
+    const isValueEqualToInitial = this._isValueEqualToInitial();
+
+    const shouldResetInputText = isTextEqualToInitialValue && isValueEqualToInitial;
+
+    return shouldResetInputText;
   },
 
   _loadItem(value, cache) {
-    // const { selectedItem: selectedItemFromOptions } = this.option();
-
     const selectedItem = this._getItemFromPlain(value, cache);
-    //  || selectedItemFromOptions;
 
     return selectedItem !== undefined
       ? Deferred().resolve(selectedItem).promise()
