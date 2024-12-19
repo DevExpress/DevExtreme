@@ -922,8 +922,9 @@ const TextEditorBase = Editor.inherit({
 
   _isValueEqualToInitial(): boolean {
     const { value } = this.option();
+    const initialValue = this._initialValue;
 
-    return value === this._initialValue;
+    return value === initialValue;
   },
 
   _shouldResetInputText(): boolean {

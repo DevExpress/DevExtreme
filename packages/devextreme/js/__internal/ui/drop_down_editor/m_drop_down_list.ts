@@ -300,17 +300,37 @@ const DropDownList = DropDownEditor.inherit({
     return selectedItem;
   },
 
+  _getInitialText(): string {
+    const { displayExpr, valueExpr } = this.option();
+    const initialItem = this._getItemFromPlain(this._initialValue);
+
+    if (displayExpr && valueExpr) {
+      const text = initialItem[displayExpr];
+
+      return text;
+    }
+
+    return this._initialValue;
+  },
+
+  _isTextEqualToInitial(): boolean {
+    const { text } = this.option();
+    const initialText = this._getInitialText();
+
+    return text === initialText;
+  },
+
   _shouldResetInputText(): boolean {
-    const { text, acceptCustomValue } = this.option();
+    const { acceptCustomValue } = this.option();
 
     if (!acceptCustomValue) {
       return false;
     }
 
-    const isTextEqualToInitialValue = text === this._initialValue;
+    const isTextEqualToInitialText = this._isTextEqualToInitial();
     const isValueEqualToInitial = this._isValueEqualToInitial();
 
-    const shouldResetInputText = !isTextEqualToInitialValue && isValueEqualToInitial;
+    const shouldResetInputText = !isTextEqualToInitialText && isValueEqualToInitial;
 
     return shouldResetInputText;
   },
