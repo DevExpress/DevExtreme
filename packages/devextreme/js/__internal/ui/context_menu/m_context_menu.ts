@@ -704,7 +704,7 @@ class ContextMenu extends MenuBase {
     return availableHeight - SUBMENU_PADDING;
   }
 
-  _dimensionChanged(showAnimation = true) {
+  _dimensionChanged() {
     if (!this._shownSubmenus) {
       return;
     }
@@ -715,10 +715,8 @@ class ContextMenu extends MenuBase {
       this._setSubMenuHeight($submenu, $item, true);
       this._scrollToElement($item);
 
-      if (showAnimation) {
-        const submenuPosition = this._getSubmenuPosition($item);
-        animationPosition.setup($submenu, submenuPosition);
-      }
+      const submenuPosition = this._getSubmenuPosition($item);
+      animationPosition.setup($submenu, submenuPosition);
     });
   }
 
