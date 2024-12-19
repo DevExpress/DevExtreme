@@ -109,6 +109,38 @@ QUnit.module('general', {}, () => {
         assert.equal($textEditor.find('*').length, $contentElements.length);
     });
 
+    QUnit.test('reset should clear input text, value and text options, if value was changed', function(assert) {
+        assert.expect(9);
+
+        const $element = $('#texteditor').dxTextEditor();
+        const instance = $element.dxTextEditor('instance');
+        const $input = $element.find(`.${INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        const essences = [
+            { name: 'input text', get: () => $input.val() },
+            { name: 'value option', get: () => instance.option('value') },
+            { name: 'text option', get: () => instance.option('text') },
+        ];
+
+        const check = (expected, message) => {
+            essences.forEach(essence => {
+                assert.strictEqual(essence.get(), expected, `${essence.name} ${message}`);
+            });
+        };
+
+        check('', 'is empty before typing');
+
+        keyboard.type('123');
+        $input.trigger('change');
+
+        check('123', 'is pressent before reset');
+
+        instance.reset();
+
+        check('', 'is absent after reset');
+    });
+
     QUnit.test('value === 0 should be rendered on init', function(assert) {
         const $element = $('#texteditor').dxTextEditor({
             value: 0

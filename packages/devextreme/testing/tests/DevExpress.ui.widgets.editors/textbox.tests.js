@@ -112,38 +112,6 @@ QUnit.module('common', {}, () => {
         assert.strictEqual($input.val(), '', 'input value is absent after reset');
     });
 
-    QUnit.test('reset should clear input value, value and text options, if value was changed', function(assert) {
-        assert.expect(9);
-
-        const $element = $('#textbox').dxTextBox();
-        const instance = $element.dxTextBox('instance');
-        const $input = $element.find(`.${INPUT_CLASS}`);
-        const keyboard = keyboardMock($input);
-
-        const essences = [
-            { name: 'input value', get: () => $input.val() },
-            { name: 'value option', get: () => instance.option('value') },
-            { name: 'text option', get: () => instance.option('text') },
-        ];
-
-        const check = (expected, message) => {
-            essences.forEach(essence => {
-                assert.strictEqual(essence.get(), expected, `${essence.name} ${message}`);
-            });
-        };
-
-        check('', 'is empty before typing');
-
-        keyboard.type('123');
-        $input.trigger('change');
-
-        check('123', 'is pressent before reset');
-
-        instance.reset();
-
-        check('', 'is absent after reset');
-    });
-
     QUnit.test('T218573 - clearButton should be hidden if mode is \'search\' and the \'showClearButton\' option is false', function(assert) {
         const $element = $('#textbox').dxTextBox({
             showClearButton: false,
