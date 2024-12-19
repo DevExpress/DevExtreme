@@ -109,7 +109,40 @@ QUnit.module('general', {}, () => {
         assert.equal($textEditor.find('*').length, $contentElements.length);
     });
 
-    QUnit.test('reset should clear input text, value and text options, if value was changed', function(assert) {
+    QUnit.test('reset should clear input value, if value was not changed', function(assert) {
+        assert.expect(9);
+
+        const $element = $('#texteditor').dxTextEditor();
+        const instance = $element.dxTextEditor('instance');
+        const $input = $element.find(`.${INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        const initialState = { input: '', value: '', text: '' };
+        const afterTypingState = { input: 'Whoosh!', value: '', text: 'Whoosh!' };
+
+        const getter = {
+            input: () => $input.val(),
+            value: () => instance.option('value'),
+            text: () => instance.option('text'),
+        };
+
+        const check = (expected, message) => {
+            Object.keys(expected).forEach(prop => {
+                assert.strictEqual(getter[prop](), expected[prop], `${prop} is '${expected[prop]}' ${message}`);
+            });
+        };
+
+        check(initialState, 'before typing');
+
+        keyboard.type('Whoosh!');
+        check(afterTypingState, 'after typing');
+
+        instance.reset();
+        check(initialState, 'after reset');
+    });
+
+
+    QUnit.test('reset should clear input value, value and text options, if value was changed', function(assert) {
         assert.expect(9);
 
         const $element = $('#texteditor').dxTextEditor();
@@ -118,7 +151,7 @@ QUnit.module('general', {}, () => {
         const keyboard = keyboardMock($input);
 
         const essences = [
-            { name: 'input text', get: () => $input.val() },
+            { name: 'input value', get: () => $input.val() },
             { name: 'value option', get: () => instance.option('value') },
             { name: 'text option', get: () => instance.option('text') },
         ];
@@ -131,10 +164,10 @@ QUnit.module('general', {}, () => {
 
         check('', 'is empty before typing');
 
-        keyboard.type('123');
+        keyboard.type('Whoosh!');
         $input.trigger('change');
 
-        check('123', 'is pressent before reset');
+        check('Whoosh!', 'is pressent after typing');
 
         instance.reset();
 
