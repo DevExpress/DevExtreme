@@ -307,10 +307,10 @@ const DropDownList = DropDownEditor.inherit({
       return false;
     }
 
-    const isTextEqualToInitialValue = text !== this._initialValue;
+    const isTextEqualToInitialValue = text === this._initialValue;
     const isValueEqualToInitial = this._isValueEqualToInitial();
 
-    const shouldResetInputText = isTextEqualToInitialValue && isValueEqualToInitial;
+    const shouldResetInputText = !isTextEqualToInitialValue && isValueEqualToInitial;
 
     return shouldResetInputText;
   },
