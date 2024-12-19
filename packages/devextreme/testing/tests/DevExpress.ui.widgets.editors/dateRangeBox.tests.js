@@ -2626,13 +2626,11 @@ QUnit.module('Validation', {
         keyboard.type('123').press('enter');
 
         assert.strictEqual($startDateBoxInput.val(), '123', 'input value is correct');
-        assert.deepEqual(this.instance.option('value'), initialValue, 'value option is correct');
+        assert.deepEqual(this.instance.option('value'), initialValue, 'value option is equal to initial');
 
         this.instance.reset();
 
-        // debugger;
-
-        assert.strictEqual($startDateBoxInput.val(), '', 'input value is correct');
+        assert.strictEqual($startDateBoxInput.val(), '', 'input value is reset');
     });
 
     QUnit.test('dateRangeBox should not be re-validated after readOnly option change', function(assert) {
