@@ -1562,13 +1562,15 @@ QUnit.module('reset', moduleConfig, () => {
     });
 
     QUnit.test('reset should restore the input value to the initial value if the value option is changed', function(assert) {
+        assert.expect(9);
+
         const items = ['Whoosh!'];
         const additionalText = 'I love phonk!';
 
         const $element = $('#dropDownList').dxDropDownList({
             acceptCustomValue: true,
             items,
-            value: items[0]
+            value: items[0],
         });
 
         const instance = $element.dxDropDownList('instance');

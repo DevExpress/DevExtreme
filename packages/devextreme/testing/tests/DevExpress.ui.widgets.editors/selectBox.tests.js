@@ -794,6 +794,49 @@ QUnit.module('functionality', moduleSetup, () => {
         assert.equal(noDataText, customersNoDataText, 'empty message is correct');
     });
 
+    QUnit.test('reset should restore the input value to the initial value if the value option is not changed', function(assert) {
+        assert.expect(9);
+
+        const items = ['Whoosh!'];
+        const additionalText = 'I love phonk!';
+        const newValue = `${additionalText}${items[0]}`;
+
+        const $element = $('#selectBox').dxSelectBox({
+            acceptCustomValue: true,
+            items,
+            value: items[0],
+        });
+
+        const instance = $element.dxSelectBox('instance');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        const getter = {
+            input: () => $input.val(),
+            value: () => instance.option('value'),
+            text: () => instance.option('text'),
+        };
+
+        const check = (expected, message) => {
+            Object.keys(getter).forEach(prop => {
+                assert.strictEqual(getter[prop](), expected[prop], `${prop} ${message}`);
+            });
+        };
+
+        const initialValue = { input: items[0], value: items[0], text: items[0] };
+        const valueAfterTyping = { input: newValue, value: items[0], text: newValue };
+
+        check(initialValue, 'is correct after init');
+
+        keyboard.type(additionalText);
+
+        check(valueAfterTyping, 'is correct after typing');
+
+        instance.reset();
+
+        check(initialValue, 'is correct after typing and equal to initial');
+    });
+
     QUnit.test('No data text message after search, encodeNoDataText: true', function(assert) {
         const simpleProducts = [];
         const customersNoDataText = '<a href="javascript:alert(1)">link</a>';

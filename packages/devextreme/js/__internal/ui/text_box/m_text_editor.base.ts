@@ -935,8 +935,6 @@ const TextEditorBase = Editor.inherit({
   _resetToInitialValue() {
     const shouldResetInputText = this._shouldResetInputText();
 
-    // debugger;
-
     if (shouldResetInputText) {
       this._resetInputText();
     } else {
