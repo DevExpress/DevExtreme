@@ -109,7 +109,7 @@ QUnit.module('general', {}, () => {
         assert.equal($textEditor.find('*').length, $contentElements.length);
     });
 
-    QUnit.test('reset should clear input value, if value was not changed', function(assert) {
+    QUnit.test('reset should clear input value, value and text options, if value was not changed', function(assert) {
         assert.expect(9);
 
         const $element = $('#texteditor').dxTextEditor();

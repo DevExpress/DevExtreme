@@ -1534,6 +1534,72 @@ QUnit.module('dataSource integration', moduleConfig, function() {
     });
 });
 
+QUnit.module('reset', moduleConfig, () => {
+    [true, false].forEach(acceptCustomValue => {
+        QUnit.test(`byKey should not be called, if acceptCustomValue is ${acceptCustomValue} and value is equal to initial (T1247576)`, function(assert) {
+            const byKeyHandler = sinon.spy();
+            const items = ['Whoosh!'];
+
+            const dataSource = new DataSource({
+                store: new CustomStore({
+                    load: () => items,
+                    byKey: byKeyHandler,
+                }),
+            });
+
+            const instance = $('#dropDownList').dxDropDownList({
+                acceptCustomValue,
+                dataSource,
+                value: items[0],
+            }).dxDropDownList('instance');
+
+            assert.strictEqual(byKeyHandler.callCount, 1, 'byKey called once after init');
+
+            instance.reset();
+
+            assert.strictEqual(byKeyHandler.callCount, 1, 'byKey still called once');
+        });
+    });
+
+    QUnit.test('reset should restore the input value to the initial value if the value option is changed', function(assert) {
+        const items = ['Whoosh!'];
+        const additionalText = 'I love phonk!';
+
+        const $element = $('#dropDownList').dxDropDownList({
+            acceptCustomValue: true,
+            items,
+            value: items[0]
+        });
+
+        const instance = $element.dxDropDownList('instance');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        const essences = [
+            { name: 'input value', get: () => $input.val() },
+            { name: 'value option', get: () => instance.option('value') },
+            { name: 'text option', get: () => instance.option('text') }
+        ];
+
+        const check = (expected, message) => {
+            essences.forEach(essence => {
+                assert.strictEqual(essence.get(), expected, `${essence.name} ${message}`);
+            });
+        };
+
+        check(items[0], 'is correct initially');
+
+        keyboard.type(additionalText);
+
+        check(`${additionalText}${items[0]}`, 'is correct after typing');
+
+        instance.reset();
+
+        check(items[0], 'is correct after reset');
+    });
+
+});
+
 QUnit.module('action options', moduleConfig, () => {
     QUnit.test('onItemClick action', function(assert) {
         assert.expect(3);
@@ -1806,8 +1872,7 @@ QUnit.module('dropdownlist with groups', {
     });
 });
 
-QUnit.module(
-    'data source from url',
+QUnit.module('data source from url',
     {
         afterEach: function() {
             ajaxMock.clear();
