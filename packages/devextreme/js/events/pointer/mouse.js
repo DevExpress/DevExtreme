@@ -1,17 +1,24 @@
 import { extend } from '../../core/utils/extend';
 import BaseStrategy from './base';
 import Observer from './observer';
+import browser from '../../core/utils/browser';
 
 const eventMap = {
     'dxpointerdown': 'mousedown',
     'dxpointermove': 'mousemove',
     'dxpointerup': 'mouseup',
-    'dxpointercancel': '',
+    'dxpointercancel': 'pointercancel',
     'dxpointerover': 'mouseover',
     'dxpointerout': 'mouseout',
     'dxpointerenter': 'mouseenter',
     'dxpointerleave': 'mouseleave'
 };
+
+// due to this https://bugs.webkit.org/show_bug.cgi?id=222632 issue
+if(browser.safari) {
+    // eslint-disable-next-line spellcheck/spell-checker
+    eventMap.dxpointercancel += ' ' + 'dragstart';
+}
 
 const normalizeMouseEvent = function(e) {
     e.pointerId = 1;
