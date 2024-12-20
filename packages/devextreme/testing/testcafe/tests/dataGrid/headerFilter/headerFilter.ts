@@ -10,6 +10,47 @@ fixture.disablePageReloads`Header Filter`
 
 const GRID_CONTAINER = '#container';
 
+test('Data should be filtered if (Blank) is selected in the header filter (T1257261)', async (t) => {
+  const result: string[] = [];
+  const dataGrid = new DataGrid(GRID_CONTAINER);
+  const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1);
+  const dataCell = dataGrid.getDataRow(0).getDataCell(0);
+  const filterIconElement = headerCell.getFilterIcon();
+  const headerFilter = new HeaderFilter();
+  const buttons = headerFilter.getButtons();
+  const list = headerFilter.getList();
+
+  await t
+    .click(filterIconElement)
+    .click(list.getItem(1).element) // Select second item with value 'Item 1'
+    .click(buttons.nth(0)); // Click OK
+
+  result[0] = await dataCell.element().innerText;
+
+  await t
+    .click(filterIconElement)
+    .click(list.getItem(1).element) // Deselect second item with value 'Item 1'
+    .click(list.getItem(0).element) // Select second item with value '(Blanks)'
+    .click(buttons.nth(0)); // Click OK
+
+  result[1] = await dataCell.element().innerText;
+
+  await t.expect(result[0]).eql('1')
+    .expect(result[1]).eql('2');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { ID: 1, Text: 'Item 1' },
+    { ID: 2, Text: '' },
+    { ID: 3, Text: 'Item 3' },
+  ],
+  keyExpr: 'ID',
+  showBorders: true,
+  remoteOperations: true,
+  headerFilter: { visible: true },
+  filterRow: { visible: true },
+  filterPanel: { visible: true },
+}));
+
 test('HeaderFilter icon should be grayed out after the clearFilter call (T1193648)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_CONTAINER);

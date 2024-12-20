@@ -9,6 +9,49 @@ import { getNumberData } from '../helpers/generateDataSourceData';
 fixture.disablePageReloads`FilterRow`
   .page(url(__dirname, '../../container.html'));
 
+test('Filter should reset if the filter row editor text is cleared (T1257261)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const filterEditor = dataGrid.getFilterEditor(1, FilterTextBox);
+  const filterPanelText = dataGrid.getFilterPanel().getFilterText();
+
+  await t
+    // assert
+    .expect(filterPanelText.element.textContent)
+    .eql('[Text] Equals \'i\'')
+    // act
+    .click(filterEditor.input)
+    .pressKey('backspace')
+    .wait(100) // updateValueTimeout
+    // assert
+    .expect(filterPanelText.element.textContent)
+    .eql('Create Filter')
+    // act
+    .click(dataGrid.element)
+    // assert
+    .expect(filterPanelText.element.textContent)
+    .eql('Create Filter');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { ID: 1, Text: 'Item 1' },
+    { ID: 2, Text: '' },
+    { ID: 3, Text: 'Item 3' },
+  ],
+  keyExpr: 'ID',
+  showBorders: true,
+  remoteOperations: true,
+  headerFilter: { visible: true },
+  filterRow: { visible: true },
+  filterPanel: { visible: true },
+  filterValue: ['Text', '=', 'i'],
+  columns: ['ID', {
+    dataField: 'Text',
+    selectedFilterOperation: '=',
+  }],
+  onEditorPreparing(e: any) {
+    e.updateValueTimeout = 100;
+  },
+}));
+
 test('Filter row\'s height should be adjusted by content (T1072609)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
