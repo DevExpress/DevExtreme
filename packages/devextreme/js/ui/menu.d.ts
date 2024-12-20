@@ -333,6 +333,8 @@ export interface MenuBasePlainItem extends CollectionWidgetItem {
    * @public
    */
   visible?: boolean;
+
+  [key: string]: any;
 }
 
 /**

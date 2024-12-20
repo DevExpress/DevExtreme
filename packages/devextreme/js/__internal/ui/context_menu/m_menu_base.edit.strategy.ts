@@ -5,7 +5,6 @@ import PlainEditStrategy from '@ts/ui/collection/m_collection_widget.edit.strate
 
 class MenuBaseEditStrategy extends PlainEditStrategy {
   _getPlainItems(): Item {
-    // @ts-expect-error
     return map(this._collectionWidget.option('items'), function getMenuItems(item) {
       return item.items ? [item].concat(map(item.items, getMenuItems)) : item;
     });
