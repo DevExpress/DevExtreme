@@ -95,48 +95,48 @@ jobs:
         corepack enable
         pnpm install
 
-      - name: Download devextreme sources
-        uses: actions/download-artifact@v4
-        with:
-          name: devextreme-sources
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-sources
 
-        # NOTE: workaround due to wrappers are incorrect pnpm packages now
-      - name: Install wrappers packages
-        run: |
-          rm -rf node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-          mkdir node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-          tar -xzf devextreme-installer.tgz -C node_modules/devextreme
-          mv node_modules/devextreme/package/* node_modules/devextreme
-          tar -xzf devextreme-dist-installer.tgz -C node_modules/devextreme-dist
-          mv node_modules/devextreme-dist/package/* node_modules/devextreme-dist
-          tar -xzf devextreme-angular-installer.tgz -C node_modules/devextreme-angular
-          mv node_modules/devextreme-angular/package/* node_modules/devextreme-angular
-          tar -xzf devextreme-react-installer.tgz -C node_modules/devextreme-react
-          mv node_modules/devextreme-react/package/* node_modules/devextreme-react
-          tar -xzf devextreme-vue-installer.tgz -C node_modules/devextreme-vue
-          mv node_modules/devextreme-vue/package/* node_modules/devextreme-vue
+      # NOTE: workaround due to wrappers are incorrect pnpm packages now
+    - name: Install wrappers packages
+      run: |
+        rm -rf node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
+        mkdir node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
+        tar -xzf devextreme-installer.tgz -C node_modules/devextreme
+        mv node_modules/devextreme/package/* node_modules/devextreme
+        tar -xzf devextreme-dist-installer.tgz -C node_modules/devextreme-dist
+        mv node_modules/devextreme-dist/package/* node_modules/devextreme-dist
+        tar -xzf devextreme-angular-installer.tgz -C node_modules/devextreme-angular
+        mv node_modules/devextreme-angular/package/* node_modules/devextreme-angular
+        tar -xzf devextreme-react-installer.tgz -C node_modules/devextreme-react
+        mv node_modules/devextreme-react/package/* node_modules/devextreme-react
+        tar -xzf devextreme-vue-installer.tgz -C node_modules/devextreme-vue
+        mv node_modules/devextreme-vue/package/* node_modules/devextreme-vue
 
-      - name: Prepare configs
-        working-directory: apps/demos
-        run: pnpm run prepare-js
-      
-      - name: Copy metadata
-        working-directory: apps/demos
-        run: pnpm run make-demos-bundle -- --copy-metadata
+    - name: Prepare configs
+      working-directory: apps/demos
+      run: pnpm run prepare-js
+    
+    - name: Copy metadata
+      working-directory: apps/demos
+      run: pnpm run make-demos-bundle -- --copy-metadata
 
-      - name: Prepare React demo bundles
-        working-directory: apps/demos
-        run: pnpm run make-demos-bundle -- --framework React
+    - name: Prepare React demo bundles
+      working-directory: apps/demos
+      run: pnpm run make-demos-bundle -- --framework React
 
-      - name: Prepare Vue demo bundles
-        working-directory: apps/demos
-        run: pnpm run make-demos-bundle -- --framework Vue
+    - name: Prepare Vue demo bundles
+      working-directory: apps/demos
+      run: pnpm run make-demos-bundle -- --framework Vue
 
-      - name: Save publish-demos directory for ES as an artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: publish-demos
-          path: ./apps/demos/publish-demos
+    - name: Save publish-demos directory for ES as an artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: publish-demos
+        path: ./apps/demos/publish-demos
 
   publish-angular:
     runs-on: ubuntu-latest
