@@ -798,7 +798,7 @@ QUnit.module('functionality', moduleSetup, () => {
         assert.expect(9);
 
         const items = ['test'];
-        const additionalText = 'additionaltext';
+        const additionalText = 'I love phonk!';
         const newValue = `${additionalText}${items[0]}`;
 
         const $element = $('#selectBox').dxSelectBox({

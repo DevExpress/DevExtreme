@@ -137,6 +137,17 @@ const DropDownList = DropDownEditor.inherit({
     this._validateSearchMode();
     this._clearSelectedItem();
     this._initItems();
+
+    // const options = this.option();
+    // const { text } = this.option();
+
+    // /**
+    //  * Посмотреть, как выставляется init значение при вызове reset(value) с параметрами
+    //  */
+
+    // this._initialText = text;
+
+    // debugger;
   },
 
   _setListFocusedElementOptionChange() {
@@ -298,20 +309,6 @@ const DropDownList = DropDownEditor.inherit({
     }
 
     return selectedItem;
-  },
-
-  _getInitialText(): string {
-    const initialItem = this._getItemFromPlain(this._initialValue);
-    const initialText = this._displayValue(initialItem);
-
-    return initialText;
-  },
-
-  _isTextEqualToInitial(): boolean {
-    const { text } = this.option();
-    const initialText = this._getInitialText();
-
-    return text === initialText;
   },
 
   _shouldResetInputText(): boolean {
@@ -846,7 +843,9 @@ const DropDownList = DropDownEditor.inherit({
     if (this._list) {
       delete this._list;
     }
+
     delete this._isLastMinSearchLengthExceeded;
+
     this.callBase();
   },
 

@@ -190,6 +190,10 @@ const TextEditorBase = Editor.inherit({
 
     this._renderValue();
     this._renderLabel();
+
+    const { text } = this.option();
+
+    this._initialText = text;
   },
 
   _render() {
@@ -281,6 +285,7 @@ const TextEditorBase = Editor.inherit({
     this._$beforeButtonsContainer = null;
     this._$afterButtonsContainer = null;
     this._$textEditorContainer = null;
+    this._initialText = null;
     this.callBase();
   },
 
@@ -916,8 +921,15 @@ const TextEditorBase = Editor.inherit({
   },
 
   _resetInputText(): void {
-    this._options.silent('text', this._initialValue);
+    this._options.silent('text', this._initialText);
     this._renderValue();
+  },
+
+  _isTextEqualToInitial(): boolean {
+    const { text } = this.option();
+    const initialText = this._initialText;
+
+    return text === initialText;
   },
 
   _isValueEqualToInitial(): boolean {
