@@ -137,17 +137,6 @@ const DropDownList = DropDownEditor.inherit({
     this._validateSearchMode();
     this._clearSelectedItem();
     this._initItems();
-
-    // const options = this.option();
-    // const { text } = this.option();
-
-    // /**
-    //  * Посмотреть, как выставляется init значение при вызове reset(value) с параметрами
-    //  */
-
-    // this._initialText = text;
-
-    // debugger;
   },
 
   _setListFocusedElementOptionChange() {
