@@ -31,7 +31,7 @@ jobs:
           restore-keys: ${{ runner.os }}-node-modules
 
       - name: DevExtreme - Install packages
-        run: pnpm install --no-audit --no-fund
+        run: pnpm install
 
       - name: DevExtreme - Build-all
         env:
@@ -62,16 +62,38 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-devextreme]
     steps:
-      - name: Get sources
-        uses: actions/checkout@v4
+    - name: Get sources
+      uses: actions/checkout@v4
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
 
-      - name: Install Dependencies
-        run: pnpm install
+    - uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
+
+    - name: Install dependencies
+      run: |
+        corepack enable
+        pnpm install
 
       - name: Download devextreme sources
         uses: actions/download-artifact@v4
