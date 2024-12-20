@@ -20,7 +20,6 @@ import {
     SCROLLBAR_VERTICAL_CLASS,
     SCROLLABLE_SCROLLBARS_HIDDEN,
     SCROLLABLE_DISABLED_CLASS,
-    calculateInertiaDistance,
 } from './scrollable.constants.js';
 
 import {
