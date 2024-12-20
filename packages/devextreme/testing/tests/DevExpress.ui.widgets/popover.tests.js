@@ -2307,7 +2307,7 @@ QUnit.module('disabled option', {
         assert.strictEqual(popover.option('visible'), false, 'popover should not be shown after clicking on the target');
     });
 
-    QUnit.test('popover should not be shown after clicking on the target if disable is set to false during initialization', function(assert) {
+    QUnit.test('popover should be shown after clicking on the target if disable is set to false during initialization', function(assert) {
         const $popover = $('#what');
         const $target = $('#where');
 
