@@ -214,8 +214,7 @@ export class HeaderPanel extends ColumnsView {
       } else if (parts[1] === 'items') {
         if (parts.length === 2) {
           // `toolbar.items` case
-          const toolbarOptions = this._getToolbarOptions();
-          this._toolbar?.option('items', toolbarOptions.items);
+          this._invalidate();
         } else if (parts.length === 3) {
           // `toolbar.items[i]` case
           const normalizedItem = this._normalizeToolbarItems(this._getToolbarItems(), args.value);

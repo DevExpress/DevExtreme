@@ -12,7 +12,6 @@ import eventsEngine from '@js/events/core/events_engine';
 import holdEvent from '@js/events/hold';
 import pointerEvents from '@js/events/pointer';
 import { addNamespace } from '@js/events/utils/index';
-import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ModuleType } from '../m_types';
@@ -721,15 +720,6 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingCellBasedE
   }
 };
 
-const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelEditingCellBasedExtender extends Base {
-  public isVisible() {
-    const editingOptions = this._editingController.option('editing');
-
-    // @ts-expect-error
-    return super.isVisible() || editingOptions && (editingOptions.allowUpdating || editingOptions.allowDeleting) && editingOptions.mode === EDIT_MODE_BATCH;
-  }
-};
-
 export const editingCellBasedModule = {
   extenders: {
     controllers: {
@@ -737,7 +727,6 @@ export const editingCellBasedModule = {
     },
     views: {
       rowsView,
-      headerPanel,
     },
   },
 };
