@@ -346,6 +346,7 @@ const TextEditorBase = Editor.inherit({
   },
 
   _renderValue() {
+    // debugger;
     const renderInputPromise = this._renderInputValue();
     return renderInputPromise.promise();
   },
@@ -920,6 +921,9 @@ const TextEditorBase = Editor.inherit({
     this._renderValue();
   },
 
+  /**
+   * How should we compare these values if they are objects?
+   */
   _isValueEqualToInitial(): boolean {
     const { value } = this.option();
     const initialValue = this._initialValue;
