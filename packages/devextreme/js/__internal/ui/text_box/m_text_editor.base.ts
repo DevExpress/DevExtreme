@@ -346,7 +346,6 @@ const TextEditorBase = Editor.inherit({
   },
 
   _renderValue() {
-    // debugger;
     const renderInputPromise = this._renderInputValue();
     return renderInputPromise.promise();
   },

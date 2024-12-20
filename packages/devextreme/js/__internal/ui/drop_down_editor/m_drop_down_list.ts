@@ -860,7 +860,7 @@ const DropDownList = DropDownEditor.inherit({
   },
 
   _setSubmitValue() {
-    const value = this.option('value');
+    const { value } = this.option();
     const submitValue = this._shouldUseDisplayValue(value) ? this._displayGetter(value) : value;
 
     this._getSubmitElement().val(submitValue);
