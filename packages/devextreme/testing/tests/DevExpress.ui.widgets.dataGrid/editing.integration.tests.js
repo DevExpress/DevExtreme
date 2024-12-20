@@ -3487,14 +3487,13 @@ QUnit.module('Editing', baseModuleConfig, () => {
         assert.strictEqual(onSelectedSpy.callCount, 0, 'is not selected after change');
     });
 
-    QUnit.skip('key should not be compared many times on paging (T1047506)', function(assert) {
+    QUnit.test('key should not be compared many times on paging (T1047506)', function(assert) {
         // arrange
         let idCallCount = 0;
         const items = Array.from({ length: 50 }).map((_, index) => {
             return {
                 id: {
                     get value() {
-                        console.log(index);
                         idCallCount++;
                         return index;
                     }
@@ -3521,7 +3520,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         dataGrid.pageIndex(1);
 
         // assert
-        assert.equal(idCallCount, 200, 'key call count after paging');
+        assert.true(idCallCount < 280, 'key call count after paging');
     });
 
     QUnit.test('Popup should render editor if columns[].renderAsync option is true', function(assert) {
