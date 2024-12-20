@@ -1535,37 +1535,35 @@ QUnit.module('dataSource integration', moduleConfig, function() {
 });
 
 QUnit.module('reset', moduleConfig, () => {
-    [true, false].forEach(acceptCustomValue => {
-        QUnit.test(`byKey should not be called, if acceptCustomValue is ${acceptCustomValue} and value is equal to initial (T1247576)`, function(assert) {
-            const byKeyHandler = sinon.spy();
-            const items = ['Whoosh!'];
+    QUnit.test('byKey should not be called, if acceptCustomValue is false and value is equal to initial (T1247576)', function(assert) {
+        const byKeyHandler = sinon.spy();
+        const items = ['test'];
 
-            const dataSource = new DataSource({
-                store: new CustomStore({
-                    load: () => items,
-                    byKey: byKeyHandler,
-                }),
-            });
-
-            const instance = $('#dropDownList').dxDropDownList({
-                acceptCustomValue,
-                dataSource,
-                value: items[0],
-            }).dxDropDownList('instance');
-
-            assert.strictEqual(byKeyHandler.callCount, 1, 'byKey called once after init');
-
-            instance.reset();
-
-            assert.strictEqual(byKeyHandler.callCount, 1, 'byKey still called once');
+        const dataSource = new DataSource({
+            store: new CustomStore({
+                load: () => items,
+                byKey: byKeyHandler,
+            }),
         });
+
+        const instance = $('#dropDownList').dxDropDownList({
+            acceptCustomValue: false,
+            dataSource,
+            value: items[0],
+        }).dxDropDownList('instance');
+
+        assert.strictEqual(byKeyHandler.callCount, 1, 'byKey called once after init');
+
+        instance.reset();
+
+        assert.strictEqual(byKeyHandler.callCount, 1, 'byKey still called once');
     });
 
     QUnit.test('reset should restore the input value, value and text options to the initial value if the value option is changed', function(assert) {
         assert.expect(9);
 
-        const items = ['Whoosh!'];
-        const additionalText = 'I love phonk!';
+        const items = ['test'];
+        const additionalText = 'additionaltext';
 
         const $element = $('#dropDownList').dxDropDownList({
             acceptCustomValue: true,

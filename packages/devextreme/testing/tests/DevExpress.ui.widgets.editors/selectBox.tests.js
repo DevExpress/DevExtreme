@@ -797,8 +797,8 @@ QUnit.module('functionality', moduleSetup, () => {
     QUnit.test('reset should restore the input value, value and text options to the initial value if the value option is not changed', function(assert) {
         assert.expect(9);
 
-        const items = ['Whoosh!'];
-        const additionalText = 'I love phonk!';
+        const items = ['test'];
+        const additionalText = 'additionaltext';
         const newValue = `${additionalText}${items[0]}`;
 
         const $element = $('#selectBox').dxSelectBox({

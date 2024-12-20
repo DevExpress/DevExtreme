@@ -118,7 +118,7 @@ QUnit.module('general', {}, () => {
         const keyboard = keyboardMock($input);
 
         const initialState = { input: '', value: '', text: '' };
-        const afterTypingState = { input: 'Whoosh!', value: '', text: 'Whoosh!' };
+        const afterTypingState = { input: 'test', value: '', text: 'test' };
 
         const getter = {
             input: () => $input.val(),
@@ -134,7 +134,7 @@ QUnit.module('general', {}, () => {
 
         check(initialState, 'before typing');
 
-        keyboard.type('Whoosh!');
+        keyboard.type('test');
         check(afterTypingState, 'after typing');
 
         instance.reset();
@@ -164,10 +164,10 @@ QUnit.module('general', {}, () => {
 
         check('', 'is empty before typing');
 
-        keyboard.type('Whoosh!');
+        keyboard.type('test');
         $input.trigger('change');
 
-        check('Whoosh!', 'is pressent after typing');
+        check('test', 'is pressent after typing');
 
         instance.reset();
 
