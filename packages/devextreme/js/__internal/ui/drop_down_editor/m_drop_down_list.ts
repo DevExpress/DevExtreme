@@ -301,10 +301,10 @@ const DropDownList = DropDownEditor.inherit({
   },
 
   _getInitialText(): string {
-    const { displayExpr, valueExpr } = this.option();
+    const { displayExpr } = this.option();
     const initialItem = this._getItemFromPlain(this._initialValue);
 
-    if (displayExpr && valueExpr) {
+    if (displayExpr) {
       const text = initialItem[displayExpr];
 
       return text;
