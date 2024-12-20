@@ -794,7 +794,7 @@ QUnit.module('functionality', moduleSetup, () => {
         assert.equal(noDataText, customersNoDataText, 'empty message is correct');
     });
 
-    QUnit.test('reset should restore the input value to the initial value if the value option is not changed', function(assert) {
+    QUnit.test('reset should restore the input value, value and text options to the initial value if the value option is not changed', function(assert) {
         assert.expect(9);
 
         const items = ['Whoosh!'];

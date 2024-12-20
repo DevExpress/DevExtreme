@@ -307,10 +307,6 @@ const DropDownList = DropDownEditor.inherit({
     return initialText;
   },
 
-  _resetInputText(): void {
-    this._renderValue();
-  },
-
   _isTextEqualToInitial(): boolean {
     const { text } = this.option();
     const initialText = this._getInitialText();
@@ -331,6 +327,10 @@ const DropDownList = DropDownEditor.inherit({
     const shouldResetInputText = !isTextEqualToInitialText && isValueEqualToInitial;
 
     return shouldResetInputText;
+  },
+
+  _resetInputText(): void {
+    this._renderValue();
   },
 
   _loadItem(value, cache) {
