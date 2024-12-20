@@ -328,7 +328,7 @@ const SKIPPED_TESTS = {
       if (process.env.STRATEGY === 'accessibility' && ACCESSIBILITY_UNSUPPORTED_COMPONENTS.indexOf(widgetName) > -1) {
         return;
       }
-      if (BROKEN_THIRD_PARTY_SCRIPTS_COMPONENT.indexOf(widgetName) > -1) {
+      if (BROKEN_THIRD_PARTY_SCRIPTS_COMPONENT.includes(widgetName)) {
         return;
       }
       if (process.env.CI_ENV && process.env.DISABLE_DEMO_TEST_SETTINGS !== 'ignore') {
