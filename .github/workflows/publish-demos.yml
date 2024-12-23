@@ -139,25 +139,25 @@ jobs:
       matrix:
         include:
           - name: Check generated demos (1/10)
-            command: CONSTEL=1/10 pnpm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=1/10 pnpm run make-demos-bundle --framework="Angular"
           - name: Check generated demos (2/10)
-            command: CONSTEL=2/10 pnpm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=2/10 pnpm run make-demos-bundle --framework="Angular"
           - name: Check generated demos (3/10)
-            command: CONSTEL=3/10 pnpm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=3/10 pnpm run make-demos-bundle --framework="Angular"
           - name: Check generated demos (4/10)
-            command: CONSTEL=4/10 pnpm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=4/10 pnpm run make-demos-bundle --framework="Angular"
           - name: Check generated demos (5/10)
-            command: CONSTEL=5/10 pnpm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=5/10 pnpm run make-demos-bundle --framework="Angular"
           - name: Check generated demos (6/10)
-            command: CONSTEL=6/10 pnpm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=6/10 pnpm run make-demos-bundle --framework="Angular"
           - name: Check generated demos (7/10)
-            command: CONSTEL=7/10 pnpm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=7/10 pnpm run make-demos-bundle --framework="Angular"
           - name: Check generated demos (8/10)
-            command: CONSTEL=8/10 pnpm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=8/10 pnpm run make-demos-bundle --framework="Angular"
           - name: Check generated demos (9/10)
-            command: CONSTEL=9/10 pnpm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=9/10 pnpm run make-demos-bundle --framework="Angular"
           - name: Check generated demos (10/10)
-            command: CONSTEL=10/10 pnpm run make-demos-bundle -- --framework Angular
+            command: CONSTEL=10/10 pnpm run make-demos-bundle --framework="Angular"
     steps:
     - name: Get sources
       uses: actions/checkout@v4
