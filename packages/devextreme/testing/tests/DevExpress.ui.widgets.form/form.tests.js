@@ -4579,13 +4579,98 @@ QUnit.test('form should be dirty when some editors are dirty', function(assert) 
             // NOTE: In the real environment, clicking the label triggers a click on the editor,
             // toggling the popup visibility if openOnFieldClick=true.
             // This assertion only takes hideOnOutsideClick into account
-            if(hideOnOutsideClick === false) {
-                assert.true(editorInstance.option('opened'), `drop down list ${openOnFieldClick ? 'is hidden by triggered input click' : 'is visible'}`);
-            } else {
-                assert.strictEqual(editorInstance.option('opened'), openOnFieldClick, `drop down list is hidden by ${openOnFieldClick ? 'triggered input click' : 'outside click'}`);
+            switch(hideOnOutsideClick) {
+                case true:
+                    assert.false(editorInstance.option('opened'), 'drop down list is hidden by outside click');
+                    break;
+                case false:
+                    assert.true(editorInstance.option('opened'), `drop down list ${openOnFieldClick ? 'is hidden by triggered input click' : 'is visible'}`);
+                    break;
+                default:
+                    assert.strictEqual(editorInstance.option('opened'), openOnFieldClick, `drop down list is hidden by ${openOnFieldClick ? 'triggered input click' : 'outside click'}`);
             }
         });
     });
+});
+
+QUnit.test('DropDownEditor popup must toggle on input or dropDownButton click if openOnFieldClick = true', function(assert) {
+    const $form = $('#form').dxForm({
+        formData: { CustomerID: 'VINET' },
+        items: [{
+            itemType: 'group',
+            colCount: 2,
+            items: [{
+                dataField: 'CustomerID',
+                editorType: 'dxSelectBox',
+                editorOptions: {
+                    items: ['VINET', 'VALUE', 'VINS'],
+                    value: '',
+                    openOnFieldClick: true,
+                },
+            }],
+        }],
+    });
+
+    const $dropDownEditorInput = $form.find(`.${EDITOR_INPUT_CLASS}`);
+    const $dropDownButton = $form.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
+
+    pointerMock($dropDownEditorInput).click();
+
+    const editorInstance = $form.dxForm('instance').getEditor('CustomerID');
+
+    assert.true(editorInstance.option('opened'), 'drop down list is visible');
+
+    pointerMock($dropDownEditorInput).click();
+
+    assert.false(editorInstance.option('opened'), 'drop down list is hidden');
+
+    pointerMock($dropDownButton).click();
+
+    assert.true(editorInstance.option('opened'), 'drop down list is visible');
+
+    pointerMock($dropDownButton).click();
+
+    assert.false(editorInstance.option('opened'), 'drop down list is hidden');
+});
+
+QUnit.test('DropDownEditor popup must toggle on dropDownButton click if openOnFieldClick = false', function(assert) {
+    const $form = $('#form').dxForm({
+        formData: { CustomerID: 'VINET' },
+        items: [{
+            itemType: 'group',
+            colCount: 2,
+            items: [{
+                dataField: 'CustomerID',
+                editorType: 'dxSelectBox',
+                editorOptions: {
+                    items: ['VINET', 'VALUE', 'VINS'],
+                    value: '',
+                    openOnFieldClick: false,
+                },
+            }],
+        }],
+    });
+
+    const $dropDownEditorInput = $form.find(`.${EDITOR_INPUT_CLASS}`);
+    const $dropDownButton = $form.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
+
+    pointerMock($dropDownEditorInput).click();
+
+    const editorInstance = $form.dxForm('instance').getEditor('CustomerID');
+
+    assert.false(editorInstance.option('opened'), 'drop down list is hidden');
+
+    pointerMock($dropDownButton).click();
+
+    assert.true(editorInstance.option('opened'), 'drop down list is visible');
+
+    pointerMock($dropDownEditorInput).click();
+
+    assert.true(editorInstance.option('opened'), 'drop down list is visible');
+
+    pointerMock($dropDownButton).click();
+
+    assert.false(editorInstance.option('opened'), 'drop down list is hidden');
 });
 
 QUnit.module('reset', () => {
