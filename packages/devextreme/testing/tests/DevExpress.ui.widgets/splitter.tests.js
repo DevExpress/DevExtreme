@@ -1240,7 +1240,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         assert.strictEqual($leftPane.css('width'), '0px');
     });
 
-    QUnit.skip('The splitter panes should maintain the correct ratio after being rendered inside an invisible element and display correctly when shown (T1241434)', function(assert) {
+    QUnit.test('The splitter panes should maintain the correct ratio after being rendered inside an invisible element and display correctly when shown (T1241434)', function(assert) {
         const done = assert.async();
         $('#splitterParentContainer').css('display', 'none');
 
@@ -1255,15 +1255,16 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
             $('#splitterParentContainer').css('display', 'block');
 
+            const resizeObserverTimeout = 50;
             setTimeout(() => {
                 this.assertLayout(['30.4054', '69.5946']);
 
                 done();
-            }, 10);
+            }, resizeObserverTimeout);
         });
     });
 
-    QUnit.skip('The splitter panes should maintain the correct ratio after being initialized on a detached element and then attached to the DOM (T1241434)', function(assert) {
+    QUnit.test('The splitter panes should maintain the correct ratio after being initialized on a detached element and then attached to the DOM (T1241434)', function(assert) {
         const done = assert.async();
         const $splitter = $('<div id="splitterDetached">');
 
@@ -1278,11 +1279,12 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
             $splitter.appendTo('#splitterParentContainer');
 
+            const resizeObserverTimeout = 50;
             setTimeout(() => {
                 this.assertLayout(['30.4054', '69.5946']);
 
                 done();
-            }, 10);
+            }, resizeObserverTimeout);
         });
     });
 });

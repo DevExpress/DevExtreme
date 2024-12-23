@@ -457,6 +457,11 @@ const Popover = Popup.inherit({
         this._clearEventTimeout(args.value ? 'show' : 'hide');
         this.callBase(args);
         break;
+      case 'disabled':
+        this._detachEvents(this.option('target'));
+        this._attachEvents();
+        this.callBase(args);
+        break;
       default:
         this.callBase(args);
     }

@@ -3,10 +3,10 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { captionize } from '@js/core/utils/inflector';
 import { each } from '@js/core/utils/iterator';
-import { isBoolean, isDefined, isFunction } from '@js/core/utils/type';
+import { isDefined, isFunction } from '@js/core/utils/type';
 import type { dxDropDownEditorOptions } from '@js/ui/drop_down_editor/ui.drop_down_editor';
 import type { FormItemComponent } from '@js/ui/form';
-import type { dxOverlayOptions } from '@js/ui/overlay';
+import type { Properties as PopupProperties } from '@js/ui/popup';
 import type dxTextBox from '@js/ui/text_box';
 
 import { SIMPLE_ITEM_TYPE } from './constants';
@@ -167,12 +167,10 @@ export function convertToLabelMarkOptions(
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-function _getDropDownEditorOptions(
+function getDropDownEditorOptions(
   $parent,
   editorType: FormItemComponent,
   editorInputId: string,
-  onContentReadyExternal?: DropDownOptions['onContentReady'],
 ): DropDownOptions {
   const isDropDownEditor = DROP_DOWN_EDITORS.includes(editorType);
 
@@ -181,33 +179,28 @@ function _getDropDownEditorOptions(
   }
 
   return {
-    onContentReady: (e) => {
-      const { component } = e;
+    // @ts-expect-error // unpublished option
+    onPopupInitialized: ({ component, popup }): void => {
       const openOnFieldClick = component.option('openOnFieldClick') as DropDownOptions['openOnFieldClick'];
-      const initialHideOnOutsideClick = component.option('dropDownOptions.hideOnOutsideClick') as dxOverlayOptions<dxTextBox>['hideOnOutsideClick'];
+      const initialHideOnOutsideClick = popup.option('hideOnOutsideClick') as PopupProperties['hideOnOutsideClick'];
 
-      if (openOnFieldClick) {
+      // Do not overwrite boolean hideOnOutsideClick
+      if (openOnFieldClick && isFunction(initialHideOnOutsideClick)) {
+        const hideOnOutsideClick: PopupProperties['hideOnOutsideClick'] = (e) => {
+          const $target = $(e.target);
+          const $label = $parent.find(`label[for="${editorInputId}"]`);
+          const isLabelClicked = !!$target.closest($label).length;
+
+          return !isLabelClicked && initialHideOnOutsideClick(e);
+        };
+
         component.option('dropDownOptions', {
-          hideOnOutsideClick: (e) => {
-            if (isBoolean(initialHideOnOutsideClick)) {
-              return initialHideOnOutsideClick;
-            }
-
-            const $target = $(e.target);
-            const $label = $parent.find(`label[for="${editorInputId}"]`);
-            const isLabelClicked = !!$target.closest($label).length;
-
-            if (!isFunction(initialHideOnOutsideClick)) {
-              return !isLabelClicked;
-            }
-
-            return !isLabelClicked && initialHideOnOutsideClick(e);
-          },
+          hideOnOutsideClick,
         });
-      }
 
-      if (isFunction(onContentReadyExternal)) {
-        onContentReadyExternal(e);
+        popup.option({
+          hideOnOutsideClick,
+        });
       }
     },
   };
@@ -245,7 +238,7 @@ function _convertToEditorOptions({
   const stylingMode = externalEditorOptions?.stylingMode || editorStylingMode;
   const useSpecificLabelOptions = EDITORS_WITH_SPECIFIC_LABELS.includes(editorType);
 
-  const dropDownEditorOptions = _getDropDownEditorOptions($parent, editorType, editorInputId, externalEditorOptions?.onContentReady);
+  const dropDownEditorOptions = getDropDownEditorOptions($parent, editorType, editorInputId);
 
   const result = extend(
     true,

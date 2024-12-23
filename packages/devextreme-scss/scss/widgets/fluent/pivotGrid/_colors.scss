@@ -46,11 +46,11 @@ $pivotgrid-chevron-icon-color: $pivotgrid-area-color !default;
     $pivotgrid-grandtotalcolor: $base-hover-bg !default;
     $pivotgrid-field-area-box-background-color: darken($base-bg, 5.88) !default;
   }
-  
+
   @if $color == "saas" {
     $pivotgrid-grandtotalcolor: color.change($base-hover-bg, $alpha: 0.4) !default;
     $pivotgrid-field-area-box-background-color: color.change($base-hover-bg, $alpha: 0.4) !default;
-  } 
+  }
 }
 
 @if $mode == "dark" {

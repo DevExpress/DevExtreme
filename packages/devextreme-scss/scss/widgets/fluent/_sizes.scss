@@ -77,10 +77,10 @@ $base-border-radius: $fluent-base-border-radius !default;
 $fluent-base-standard-texteditor-input-horizontal-padding: 0 !default;
 
 
-:root { 
+:root {
   --dx-component-height: #{$fluent-base-inline-widget-height};
   --dx-font-size: #{$fluent-base-font-size};
-  --dx-border-width: #{$fluent-base-border-width}; 
-  --dx-border-radius: #{$fluent-base-border-radius}; 
-  --dx-font-size-icon: #{$fluent-base-icon-size}; 
-} 
+  --dx-border-width: #{$fluent-base-border-width};
+  --dx-border-radius: #{$fluent-base-border-radius};
+  --dx-font-size-icon: #{$fluent-base-icon-size};
+}

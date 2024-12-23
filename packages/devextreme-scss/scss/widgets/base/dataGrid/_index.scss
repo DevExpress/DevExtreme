@@ -417,10 +417,9 @@ $datagrid-text-stub-background-image-path: null !default;
   tr {
     outline: none;
   }
-  
+
   &:focus-within {
     outline: 2px solid $datagrid-focused-border-color;
     outline-offset: -2px;
   }
 }
-

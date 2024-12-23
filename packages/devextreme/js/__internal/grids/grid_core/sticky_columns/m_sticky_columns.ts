@@ -3,7 +3,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { getBoundingRect } from '@js/core/utils/position';
-import { setWidth } from '@js/core/utils/size';
+import { getWidth, setWidth } from '@js/core/utils/size';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
@@ -362,9 +362,10 @@ const rowsView = (
   Base: ModuleType<RowsView>,
 ) => class RowsViewStickyColumnsExtender extends baseStickyColumns(Base) {
   private _getMasterDetailWidth(): number {
-    // @ts-expect-error
-    const componentWidth = this.component.$element().width?.() ?? 0;
-    return componentWidth - gridCoreUtils.getComponentBorderWidth(this, this._$element) - this.getScrollbarWidth();
+    const componentWidth = getWidth(this.component.$element()) ?? 0;
+    const borderWidth = gridCoreUtils.getComponentBorderWidth(this, this._$element);
+
+    return componentWidth - borderWidth - this.getScrollbarWidth();
   }
 
   protected _renderMasterDetailCell($row, row, options): dxElementWrapper {
@@ -372,10 +373,8 @@ const rowsView = (
     const $detailCell: dxElementWrapper = super._renderMasterDetailCell($row, row, options);
 
     if (this.hasStickyColumns()) {
-      $detailCell
-        .addClass(this.addWidgetPrefix(CLASSES.stickyColumnLeft))
-        // @ts-expect-error
-        .width(this._getMasterDetailWidth());
+      $detailCell.addClass(this.addWidgetPrefix(CLASSES.stickyColumnLeft));
+      setWidth($detailCell, this._getMasterDetailWidth());
     }
 
     return $detailCell;
@@ -485,9 +484,10 @@ const rowsView = (
 
   public _scrollToElement($element, offset?) {
     let scrollOffset = offset;
+    const scrollable = this.getScrollable();
     const hasStickyColumns = this.hasStickyColumns();
 
-    if (hasStickyColumns) {
+    if (hasStickyColumns && scrollable) {
       const isFixedCell = GridCoreStickyColumnsDom
         .isFixedCell($element, this.addWidgetPrefix.bind(this));
 
@@ -497,10 +497,9 @@ const rowsView = (
 
       const $row = $element?.closest('tr');
       const $cells = $row?.children();
-      const $scrollContainer = this.getScrollable()?.container();
 
       scrollOffset = GridCoreStickyColumnsDom
-        .getScrollPadding($cells, $scrollContainer, this.addWidgetPrefix.bind(this));
+        .getScrollPadding($cells, $(scrollable.container()), this.addWidgetPrefix.bind(this));
     }
 
     super._scrollToElement($element, scrollOffset);
@@ -820,7 +819,7 @@ const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => c
         if (cellIsOutsideVisibleArea) {
           const scrollPadding = GridCoreStickyColumnsDom.getScrollPadding(
             $cells,
-            scrollable.container(),
+            $(scrollable.container()),
             this.addWidgetPrefix.bind(this),
           );
           const scrollPosition = getElementLocationInternal(

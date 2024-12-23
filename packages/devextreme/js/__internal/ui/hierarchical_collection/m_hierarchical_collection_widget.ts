@@ -7,7 +7,7 @@ import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
 import { isFunction, isObject } from '@js/core/utils/type';
-import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
+import CollectionWidget from '@js/ui/collection/ui.collection_widget.async';
 
 import HierarchicalDataAdapter from './m_data_adapter';
 

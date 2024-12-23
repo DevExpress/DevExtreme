@@ -579,13 +579,6 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ColumnChooserHeader
         super.optionChanged(args);
     }
   }
-
-  public isVisible() {
-    const that = this;
-    const columnChooserEnabled = that.option('columnChooser.enabled')!;
-
-    return super.isVisible() || columnChooserEnabled;
-  }
 };
 
 const columns = (Base: ModuleType<ColumnsController>) => class ColumnsChooserColumnsControllerExtender extends Base {

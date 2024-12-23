@@ -35,7 +35,7 @@
     .dx-tab.dx-tab-selected .dx-tab-content {
       @include dx-tabs-horizontal-indicator-secondary(top, $tabs-selected-tab-border-color);
     }
-  
+
     .dx-tab-selected.dx-state-disabled .dx-tab-content {
       @include dx-tabs-horizontal-indicator-secondary(top, $tabs-disabled-tab-border-color);
     }
@@ -58,7 +58,7 @@
 
     .dx-tab-selected.dx-state-disabled .dx-tab-content {
       @include dx-tabs-horizontal-indicator-secondary(bottom, $tabs-disabled-tab-border-color);
-    } 
+    }
   }
 
   &.dx-tab-indicator-position-left {

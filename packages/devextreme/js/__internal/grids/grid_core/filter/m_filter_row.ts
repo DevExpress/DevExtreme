@@ -1013,10 +1013,6 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class FilterRowHeaderPane
   private enableApplyButton(value) {
     this.setToolbarItemDisabled('applyFilterButton', !value);
   }
-
-  public isVisible() {
-    return super.isVisible() || this._isShowApplyFilterButton();
-  }
 };
 
 export const filterRowModule = {

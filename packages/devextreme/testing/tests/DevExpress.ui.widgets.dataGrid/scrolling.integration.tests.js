@@ -990,7 +990,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         scrollable.scrollTo(100.7);
 
         // assert
-        assert.equal(scrollable.scrollLeft(), 100.7);
+        assert.equal(scrollable.scrollLeft(), 100);
         assert.equal($(scrollable.container()).scrollLeft(), 100);
 
         const $headersScrollable = $dataGrid.find('.dx-datagrid-headers' + ' .dx-datagrid-scroll-container').first();

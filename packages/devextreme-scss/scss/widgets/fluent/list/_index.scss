@@ -267,7 +267,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
         color: $list-group-color;
       }
     }
-    
+
     &:last-of-type {
       .dx-list-item {
         &:last-of-type {
@@ -300,11 +300,11 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
 
     .dx-list-group-header-indicator {
       color: $list-header-indicator-color;
-     
+
       .dx-list-collapsible-groups & {
         display: flex;
         align-items: center;
-        
+
         @include dx-icon(chevrondown);
         @include dx-icon-sizing($fluent-base-icon-size);
       }
@@ -463,7 +463,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
       @include dx-icon(dragvertical);
 
       color: $list-icon-color;
-      
+
       @include dx-icon-sizing($fluent-base-icon-size);
     }
   }

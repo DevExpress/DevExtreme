@@ -2879,7 +2879,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         dataGrid.option('toolbar.visible', false);
 
         // assert
-        assert.ok($toolbar.hasClass('dx-state-invisible'), 'toolbar is hidden');
+        assert.ok($toolbar.parent().hasClass('dx-hidden'), 'toolbar is hidden');
 
         // act
         dataGrid.option('toolbar.disabled', true);

@@ -741,8 +741,19 @@ class ContextMenu extends MenuBase {
       $submenu = $item.children(`.${DX_SUBMENU_CLASS}`);
     }
 
+    this._planPostRenderActions($submenu);
+  }
+
+  _setSubmenuVisible($submenu?: dxElementWrapper) {
+    if (!$submenu) {
+      return;
+    }
+
+    const $item = $submenu?.closest(`.${DX_MENU_ITEM_CLASS}`);
+
     this._setSubMenuHeight($submenu, $item, true);
-    if (!this._isSubmenuVisible($submenu)) {
+
+    if (!this._isSubmenuVisible($submenu) && $item) {
       this._drawSubmenu($item);
     }
   }
@@ -1129,6 +1140,10 @@ class ContextMenu extends MenuBase {
 
   hide(): Promise<unknown> {
     return this.toggle(false);
+  }
+
+  _postProcessRenderItems($submenu?: dxElementWrapper) {
+    this._setSubmenuVisible($submenu);
   }
 }
 

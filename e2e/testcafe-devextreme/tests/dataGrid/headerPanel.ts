@@ -180,3 +180,33 @@ test('Toolbar should not reset its widget values when changing the disabled prop
     }],
   },
 }));
+
+[
+  Themes.genericLight,
+  Themes.materialBlue,
+  Themes.fluentBlue,
+].forEach((theme) => {
+  test(`Invisible toolbar doesn't have additional paddings (T1261773) in ${theme}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
+
+    await t
+      .expect(await takeScreenshot(`invisible-toolbar-buttons-${theme}.png`, dataGrid.element))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(5, 3),
+      keyExpr: 'field_0',
+      toolbar: {
+        items: ['columnChooserButton'],
+        visible: false,
+      },
+    });
+  }).after(async () => {
+    await changeTheme(Themes.genericLight);
+  });
+});

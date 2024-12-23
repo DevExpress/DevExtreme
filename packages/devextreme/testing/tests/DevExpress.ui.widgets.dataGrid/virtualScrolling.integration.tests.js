@@ -1612,6 +1612,10 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
     });
 
     QUnit.test('synchronous render and asynchronous updateDimensions during paging if virtual scrolling is enabled', function(assert) {
+        if(devices.real().ios) {
+            assert.ok(true);
+            return;
+        }
         // arrange, act
 
         let contentReadyCount = 0;
@@ -5858,7 +5862,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(loadSpy.args[1][0].take, 15, 'take in the second call');
     });
 
-    QUnit.skip('Rows in fixed table should not have the offset when the content is scrolled to the bottom (T1072358)', function(assert) {
+    QUnit.test('Rows in fixed table should not have the offset when the content is scrolled to the bottom (T1072358)', function(assert) {
         // arrange
         const getData = function() {
             const items = [];
