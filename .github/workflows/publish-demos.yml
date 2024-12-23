@@ -23,47 +23,62 @@ jobs:
           version: 9
           run_install: false
 
-      - name: Restore pnpm cache
-        uses: actions/cache@v4
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
-          restore-keys: ${{ runner.os }}-node-modules
+      - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
 
-      - name: DevExtreme - Install packages
-        run: pnpm install
-
-      - name: DevExtreme - Build-all
-        env:
-          BUILD_TEST_INTERNAL_PACKAGE: true
-        run: pnpm run all:build
-
-      - name: Move packages
+      - name: Install dependencies
         run: |
-          mv ./packages/devextreme/artifacts/pnpm/devextreme/*.tgz ./devextreme-installer.tgz
-          mv ./packages/devextreme/artifacts/pnpm/devextreme-dist/*.tgz ./devextreme-dist-installer.tgz
-          mv ./packages/devextreme-angular/pnpm/dist/*.tgz ./devextreme-angular-installer.tgz
-          mv ./packages/devextreme-react/pnpm/*.tgz ./devextreme-react-installer.tgz
-          mv ./packages/devextreme-vue/pnpm/*.tgz ./devextreme-vue-installer.tgz
+          corepack enable
+          pnpm install
 
-      - name: Copy build artifacts
-        uses: actions/upload-artifact@v4
+      - name: Build
+        run: pnpx nx build devextreme
+
+      - name: Zip artifacts
+        working-directory: ./packages/devextreme
+        run: |
+          7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
         with:
-          name: devextreme-sources
-          path: |
-            devextreme-installer.tgz
-            devextreme-dist-installer.tgz
-            devextreme-angular-installer.tgz
-            devextreme-react-installer.tgz
-            devextreme-vue-installer.tgz
+          name: devextreme-artifacts
+          path: ./packages/devextreme/artifacts.zip
           retention-days: 1
   
   publish-ES:
     runs-on: ubuntu-latest
     needs: [build-devextreme]
     steps:
+    - name: Set machine timezone
+      run: |
+        sudo ln -sf "/usr/share/zoneinfo/$([ "${{ matrix.ARGS.timezone }}" != "" ] && echo "${{ matrix.ARGS.timezone }}" || echo "GMT")" /etc/localtime
+        date
+
     - name: Get sources
       uses: actions/checkout@v4
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: devextreme-artifacts
+        path: ./packages/devextreme
+
+    - name: Unpack artifacts
+      working-directory: ./packages/devextreme
+      run: 7z x artifacts.zip -aoa
+
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '121.0.6167.160'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
@@ -94,27 +109,6 @@ jobs:
       run: |
         corepack enable
         pnpm install
-
-    - name: Download devextreme sources
-      uses: actions/download-artifact@v4
-      with:
-        name: devextreme-sources
-
-      # NOTE: workaround due to wrappers are incorrect pnpm packages now
-    - name: Install wrappers packages
-      run: |
-        rm -rf node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-        mkdir node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-        tar -xzf devextreme-installer.tgz -C node_modules/devextreme
-        mv node_modules/devextreme/package/* node_modules/devextreme
-        tar -xzf devextreme-dist-installer.tgz -C node_modules/devextreme-dist
-        mv node_modules/devextreme-dist/package/* node_modules/devextreme-dist
-        tar -xzf devextreme-angular-installer.tgz -C node_modules/devextreme-angular
-        mv node_modules/devextreme-angular/package/* node_modules/devextreme-angular
-        tar -xzf devextreme-react-installer.tgz -C node_modules/devextreme-react
-        mv node_modules/devextreme-react/package/* node_modules/devextreme-react
-        tar -xzf devextreme-vue-installer.tgz -C node_modules/devextreme-vue
-        mv node_modules/devextreme-vue/package/* node_modules/devextreme-vue
 
     - name: Prepare configs
       working-directory: apps/demos
@@ -166,68 +160,89 @@ jobs:
           - name: Check generated demos (10/10)
             command: CONSTEL=10/10 pnpm run make-demos-bundle -- --framework Angular
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Set machine timezone
+      run: |
+        sudo ln -sf "/usr/share/zoneinfo/$([ "${{ matrix.ARGS.timezone }}" != "" ] && echo "${{ matrix.ARGS.timezone }}" || echo "GMT")" /etc/localtime
+        date
 
-      - name: Setup Node.js v18
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+    - name: Get sources
+      uses: actions/checkout@v4
 
-      - name: Install Dependencies
-        run: pnpm install
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: devextreme-artifacts
+        path: ./packages/devextreme
 
-      - name: Download devextreme sources
-        uses: actions/download-artifact@v4
-        with:
-          name: devextreme-sources
+    - name: Unpack artifacts
+      working-directory: ./packages/devextreme
+      run: 7z x artifacts.zip -aoa
 
-        # NOTE: workaround due to wrappers are incorrect pnpm packages now
-      - name: Install wrappers packages
-        run: |
-          rm -rf node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-          mkdir node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-          tar -xzf devextreme-installer.tgz -C node_modules/devextreme
-          mv node_modules/devextreme/package/* node_modules/devextreme
-          tar -xzf devextreme-dist-installer.tgz -C node_modules/devextreme-dist
-          mv node_modules/devextreme-dist/package/* node_modules/devextreme-dist
-          tar -xzf devextreme-angular-installer.tgz -C node_modules/devextreme-angular
-          mv node_modules/devextreme-angular/package/* node_modules/devextreme-angular
-          tar -xzf devextreme-react-installer.tgz -C node_modules/devextreme-react
-          mv node_modules/devextreme-react/package/* node_modules/devextreme-react
-          tar -xzf devextreme-vue-installer.tgz -C node_modules/devextreme-vue
-          mv node_modules/devextreme-vue/package/* node_modules/devextreme-vue
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '121.0.6167.160'
 
-      - name: Prepare configs
-        working-directory: apps/demos
-        run: pnpm run prepare-js
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
 
-      - name: Copy metadata
-        working-directory: apps/demos
-        run: pnpm run make-demos-bundle -- --copy-metadata
+    - uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        run_install: false
 
-      - name: Update angular.json
-        working-directory: apps/demos
-        run: pnpm run update-angular-json
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - name: Create angular entryPoints to compile faster
-        working-directory: apps/demos
-        run: pnpm run launch-ngcc
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
 
-      - name: Prepare Angular demo bundles
-        working-directory: apps/demos
-        run: |
-          ${{ matrix.command }}
+    - name: Install dependencies
+      run: |
+        corepack enable
+        pnpm install
 
-      - name: Angular post process index.html
-        working-directory: apps/demos
-        run: pnpm run post-process-angular
-      
-      - name: Save publish-demos directory for Angular as an artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: publish-demos
-          path: ./apps/demos/publish-demos
+    - name: Prepare configs
+      working-directory: apps/demos
+      run: pnpm run prepare-js
+
+    - name: Copy metadata
+      working-directory: apps/demos
+      run: pnpm run make-demos-bundle -- --copy-metadata
+
+    - name: Update angular.json
+      working-directory: apps/demos
+      run: pnpm run update-angular-json
+
+    - name: Create angular entryPoints to compile faster
+      working-directory: apps/demos
+      run: pnpm run launch-ngcc
+
+    - name: Prepare Angular demo bundles
+      working-directory: apps/demos
+      run: |
+        ${{ matrix.command }}
+
+    - name: Angular post process index.html
+      working-directory: apps/demos
+      run: pnpm run post-process-angular
+    
+    - name: Save publish-demos directory for Angular as an artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: publish-demos
+        path: ./apps/demos/publish-demos
 
   deploy:
     runs-on: ubuntu-latest
