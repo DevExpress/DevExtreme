@@ -178,7 +178,7 @@ export const copyMetadata = () => {
   const destScripts = join(destinationPublishDir, 'scripts');
   copyMetadataDir(sourceScripts, destScripts);
 
-  const nodeModulesPath = join(__dirname, '..', '..', '..', '..', '..', 'node_modules');
+  const nodeModulesPath = join(__dirname, '..', '..', '..', 'node_modules');
 
   const imagesPath = join(__dirname, '..', '..', '..', 'images');
   const imagesDest = join(destinationPublishDir, 'images');
