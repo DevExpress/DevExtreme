@@ -115,15 +115,15 @@ jobs:
     
     - name: Copy metadata
       working-directory: apps/demos
-      run: pnpm run make-demos-bundle -- --copy-metadata
+      run: pnpm run make-demos-bundle --copy-metadata
 
     - name: Prepare React demo bundles
       working-directory: apps/demos
-      run: pnpm run make-demos-bundle -- --framework React
+      run: pnpm run make-demos-bundle --framework="React"
 
     - name: Prepare Vue demo bundles
       working-directory: apps/demos
-      run: pnpm run make-demos-bundle -- --framework Vue
+      run: pnpm run make-demos-bundle --framework="Vue"
 
     - name: Save publish-demos directory for ES as an artifact
       uses: actions/upload-artifact@v3
@@ -207,15 +207,11 @@ jobs:
 
     - name: Copy metadata
       working-directory: apps/demos
-      run: pnpm run make-demos-bundle -- --copy-metadata
+      run: pnpm run make-demos-bundle --copy-metadata
 
     - name: Update angular.json
       working-directory: apps/demos
       run: pnpm run update-angular-json
-
-    - name: Create angular entryPoints to compile faster
-      working-directory: apps/demos
-      run: pnpm run launch-ngcc
 
     - name: Prepare Angular demo bundles
       working-directory: apps/demos
