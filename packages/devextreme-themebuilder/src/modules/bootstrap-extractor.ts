@@ -98,13 +98,17 @@ export default class BootstrapExtractor {
     const variablesDark = this.version === 5 && existsSync(this.getFilePath(variablesDarkFile)) ? await this.readSassFile(variablesDarkFile) : ''; // TODO: can be removed safely in bootstrap@6
 
     const result = `${functions}
-${variables.replace('@import "variables-dark";', '')}
+${variables}
 ${variablesDark}
 ${this.input}
 ${this.getSetterServiceCode('!default')}
 ${this.getCollectorServiceCode()}`;
 
-    return result;
+    return this.removeImports(result);
+  }
+
+  removeImports(content: string): string {
+    return content.replace(/^@import "variables-dark";.*$/gm, '');
   }
 
   async lessProcessor(): Promise<string> {

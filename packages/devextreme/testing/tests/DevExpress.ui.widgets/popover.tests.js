@@ -2284,6 +2284,78 @@ QUnit.module('target option', {
     });
 });
 
+QUnit.module('disabled option', {
+    beforeEach: function() {
+        fixtures.simple.create();
+    },
+    afterEach: function() {
+        fixtures.simple.drop();
+    }
+}, () => {
+    QUnit.test('popover should not be shown after clicking on the target if disable is set to true during initialization', function(assert) {
+        const $popover = $('#what');
+        const $target = $('#where');
+
+        const popover = new Popover($popover, {
+            target: $target,
+            showEvent: 'dxclick',
+            disabled: true,
+        });
+
+        $target.trigger('dxclick');
+
+        assert.strictEqual(popover.option('visible'), false, 'popover should not be shown after clicking on the target');
+    });
+
+    QUnit.test('popover should be shown after clicking on the target if disable is set to false during initialization', function(assert) {
+        const $popover = $('#what');
+        const $target = $('#where');
+
+        const popover = new Popover($popover, {
+            target: $target,
+            showEvent: 'dxclick',
+            disabled: false,
+        });
+
+        $target.trigger('dxclick');
+
+        assert.strictEqual(popover.option('visible'), true, 'popover should be shown after clicking on the target');
+    });
+
+    QUnit.test('popover should not be shown after clicking on the target if disable is set to true at runtime', function(assert) {
+        const $popover = $('#what');
+        const $target = $('#where');
+
+        const popover = new Popover($popover, {
+            target: $target,
+            showEvent: 'dxclick',
+        });
+
+        popover.option('disabled', true);
+
+        $target.trigger('dxclick');
+
+        assert.strictEqual(popover.option('visible'), false, 'popover should not be shown after clicking on the target');
+    });
+
+    QUnit.test('popover should be shown after clicking on the target if disable is set to false at runtime', function(assert) {
+        const $popover = $('#what');
+        const $target = $('#where');
+
+        const popover = new Popover($popover, {
+            target: $target,
+            showEvent: 'dxclick',
+            disabled: true,
+        });
+
+        popover.option('disabled', false);
+
+        $target.trigger('dxclick');
+
+        assert.strictEqual(popover.option('visible'), true, 'popover should be shown after clicking on the target');
+    });
+});
+
 QUnit.module('aria accessibility', {
     beforeEach: function() {
         fixtures.simple.create();
