@@ -287,8 +287,8 @@ const SelectBox = (DropDownList as any).inherit({
     return Deferred().resolve();
   },
 
-  _renderInputValue() {
-    return this.callBase().always(() => {
+  _renderInputValue(...args) {
+    return this.callBase(...args).always(() => {
       this._renderInputValueAsync();
     });
   },

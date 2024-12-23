@@ -600,10 +600,10 @@ const TagBox = (SelectBox as any).inherit({
     this.callBase(e);
   },
 
-  _renderInputValue() {
+  _renderInputValue(...args) {
     this.option('displayValue', this._searchValue());
 
-    return this.callBase();
+    return this.callBase(...args);
   },
 
   _restoreInputText(saveEditingValue) {
