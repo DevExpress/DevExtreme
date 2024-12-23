@@ -2,7 +2,7 @@ import * as React from 'react';
 import { separateProps } from '../widget-config';
 import { IOptionElement } from './react/element';
 import { getAnonymousTemplate } from './react/templates';
-import { TemplateDiscoveryContext } from '../contexts';
+import { TemplateRenderingContext } from '../contexts';
 
 interface IConfigNode {
   parentNode?: IConfigNode | undefined;
@@ -126,10 +126,10 @@ const createConfigBuilder: (
       return template.type === 'children' ? {
         ...template,
         content: React.createElement(
-          TemplateDiscoveryContext.Provider,
+          TemplateRenderingContext.Provider,
           {
             value: {
-              discoveryRendering: true,
+              isTemplateRendering: true,
             },
           },
           template.content,
