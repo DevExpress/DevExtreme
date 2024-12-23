@@ -28,7 +28,7 @@ const createConfigForDemo = (Demo: Demo) => {
 
     architect: {
       build: {
-        builder: '@angular-devkit/build-angular:browser',
+        builder: '@angular-devkit/build-angular:browser-esbuild',
         options: {
           outputPath: demoDestinationPathRelative,
           index: `${indexPath}`,
