@@ -272,11 +272,10 @@ const DropDownList = DropDownEditor.inherit({
       return this.callBase(currentValue);
     }
 
-    const that = this;
     return this
       ._loadInputValue(
         currentValue,
-        (...args) => { that._setSelectedItem(...args); },
+        (...args) => { this._setSelectedItem(...args); },
       )
       .always(this.callBase.bind(this, currentValue));
   },

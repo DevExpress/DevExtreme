@@ -101,12 +101,12 @@ const DropDownBox = (DropDownEditor as any).inherit({
     return sortedValues.map((x) => x.itemDisplayValue);
   },
 
-  _renderInputValue(arg = {}) {
+  _renderInputValue({ renderOnly }: { renderOnly?: boolean } = {}) {
     this._rejectValueLoading();
     const values = [];
 
     if (!this._dataSource) {
-      this.callBase({ ...arg, value: values });
+      this.callBase({ renderOnly, value: values });
 
       return Deferred().resolve();
     }
@@ -139,7 +139,7 @@ const DropDownBox = (DropDownEditor as any).inherit({
         const orderedValues = this._sortValuesByKeysOrder(keys, values);
         this.option('displayValue', orderedValues);
         callBase({
-          ...arg,
+          renderOnly,
           value: values.length && orderedValues,
         });
       });
