@@ -1569,7 +1569,6 @@ QUnit.module('reset method', moduleConfig, () => {
             const byKeyHandler = sinon.spy(key => key);
             const items = ['initial'];
             const additionalText = 'NEW';
-            let expectedByKeyCallCount = 1;
 
             const dataSource = new DataSource({
                 store: new CustomStore({
@@ -1592,11 +1591,10 @@ QUnit.module('reset method', moduleConfig, () => {
             const keyboard = keyboardMock($input);
 
             const assertState = (expectedText, messageComment) => {
-                expectedByKeyCallCount += expectedText !== items[0];
                 assert.strictEqual($input.val(), expectedText, `input text is "${expectedText}" ${messageComment}`);
                 assert.strictEqual(instance.option('text'), expectedText, `text option is "${expectedText}" ${messageComment}`);
                 assert.strictEqual(instance.option('value'), items[0], `value option is "${items[0]}" ${messageComment}`);
-                assert.strictEqual(byKeyHandler.callCount, expectedByKeyCallCount, 'no additional byKey for initial item is presented');
+                assert.strictEqual(byKeyHandler.callCount, 1, 'no additional byKey for initial item is presented');
             };
 
             assertState(items[0], 'initially');

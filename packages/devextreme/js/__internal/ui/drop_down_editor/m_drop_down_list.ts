@@ -309,19 +309,6 @@ const DropDownList = DropDownEditor.inherit({
     return selectedItem;
   },
 
-  _shouldResetInputText(): boolean {
-    if (!this._isEditable()) {
-      return false;
-    }
-
-    const isTextEqualToInitialText = this._isTextEqualToInitial();
-    const isValueEqualToInitial = this._isValueEqualToInitial();
-
-    const shouldResetInputText: boolean = !isTextEqualToInitialText && isValueEqualToInitial;
-
-    return shouldResetInputText;
-  },
-
   _resetInputText(): void {
     this._renderInputValue({ renderOnly: true });
   },
