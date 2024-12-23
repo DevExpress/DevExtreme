@@ -15,7 +15,8 @@ import {
 } from './configuration/react/element';
 
 import { useOptionScanning } from './use-option-scanning';
-import { NestedOptionContext, TemplateDiscoveryContext } from './contexts';
+import { NestedOptionContext, TemplateRenderingContext } from './contexts';
+import { hasExpectedChildren } from './helpers';
 
 interface INestedOptionMeta {
   optionName: string;
@@ -41,38 +42,30 @@ const NestedOption = function NestedOption<P>(
     treeUpdateToken,
   } = useContext(NestedOptionContext);
 
-  const { discoveryRendering } = useContext(TemplateDiscoveryContext);
+  const { isTemplateRendering } = useContext(TemplateRenderingContext);
   const [optionComponentKey] = useState(getOptionComponentKey());
   const optionElement = getOptionInfo(elementDescriptor, restProps, parentExpectedChildren);
-  const templateContainer = useMemo(() => document.createElement('div'), []);
   const mainContainer = useMemo(() => document.createElement('div'), []);
 
   const [
     config,
     context,
-  ] = useOptionScanning(optionElement, children, templateContainer, treeUpdateToken);
+  ] = useOptionScanning(optionElement, children, mainContainer, treeUpdateToken, 'option');
 
   useLayoutEffect(() => {
-    if (!discoveryRendering) {
+    if (!isTemplateRendering) {
       triggerParentOptionsReady(config, optionElement.descriptor, treeUpdateToken, optionComponentKey);
     }
   }, [treeUpdateToken]);
 
-  return discoveryRendering ? null : React.createElement(
+  if (children && !isTemplateRendering && !hasExpectedChildren(elementDescriptor)) {
+    mainContainer.appendChild(document.createElement('div'));
+    return null;
+  }
+
+  return isTemplateRendering ? null : React.createElement(
     React.Fragment,
     {},
-    createPortal(
-      React.createElement(
-        TemplateDiscoveryContext.Provider,
-        {
-          value: {
-            discoveryRendering: true,
-          },
-        },
-        children,
-      ),
-      templateContainer,
-    ),
     createPortal(
       React.createElement(
         NestedOptionContext.Provider,
