@@ -24,14 +24,14 @@ jobs:
         run_install: false
 
     - uses: actions/cache@v4
-    name: Setup pnpm cache
-    with:
-      path: |
-        ${{ env.STORE_PATH }}
-        .nx/cache
-      key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-      restore-keys: |
-        ${{ runner.os }}-pnpm-store
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
       run: |
