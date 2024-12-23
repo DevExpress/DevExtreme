@@ -167,7 +167,7 @@ QUnit.module('general', {}, () => {
         keyboard.type('test');
         $input.trigger('change');
 
-        check('test', 'is pressent after typing');
+        check('test', 'is present after typing');
 
         instance.reset();
 

@@ -98,7 +98,7 @@ QUnit.module('common', {}, () => {
         assert.strictEqual(editor.option('isValid'), true, 'editor state is valid after reset');
     });
 
-    QUnit.test('reset should clear input value, if value was not changed', function(assert) {
+    QUnit.test('reset should clear input value if value was not changed', function(assert) {
         const instance = $('#textbox').dxTextBox().dxTextBox('instance');
         const $input = $(`.${INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
