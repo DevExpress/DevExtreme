@@ -21267,6 +21267,8 @@ declare module DevExpress.ui {
        * [descr:dxMenuBaseItem.visible]
        */
       visible?: boolean;
+
+      [key: string]: any;
     }
     /**
      * [descr:_ui_menu_OptionChangedEvent]

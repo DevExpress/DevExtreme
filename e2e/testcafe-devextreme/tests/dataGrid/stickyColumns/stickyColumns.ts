@@ -7,6 +7,7 @@ import { getData } from '../helpers/generateDataSourceData';
 import url from '../../../helpers/getPageUrl';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { Themes } from '../../../helpers/themes';
+import { defaultConfig } from './data';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -1367,3 +1368,21 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
       });
   });
 });
+
+safeSizeTest('The grid should display correctly when there is no data and there are fixed columns (T1269088)', async (t) => {
+  // arrange, act
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await takeScreenshot('T1269088_grid_with_fixed_columns_and_without_data.png', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [1000, 800]).before(async () => createWidget('dxDataGrid', {
+  ...defaultConfig,
+  dataSource: [],
+}));

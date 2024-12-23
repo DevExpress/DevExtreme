@@ -1019,7 +1019,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
   }
 
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns {
-    .dx-row:not(.dx-row-lines, .dx-group-row, .dx-#{$widget-name}-group-footer, .dx-edit-row, .dx-selection, .dx-row-focused) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+    .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
       padding-top: $generic-grid-base-cell-padding + 1px;
     }
 
