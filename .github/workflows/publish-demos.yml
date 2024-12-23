@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-devextreme:
+  build-devextreme-all:
     runs-on: ubuntu-latest
-    name: Build DevExtreme
+    name: Build DevExtreme + wrappers
     timeout-minutes: 20
 
     steps:
@@ -38,52 +38,47 @@ jobs:
         corepack enable
         pnpm install
 
-    - name: Build
-      run: pnpx nx build devextreme
+    - name: DevExtreme - Build-all
+      env:
+        BUILD_TEST_INTERNAL_PACKAGE: true
+      run: pnpm run all:build-dev
 
-    - name: Zip artifacts
-      working-directory: ./packages/devextreme
+    - name: Move packages
       run: |
-        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
+        mv ./packages/devextreme/artifacts/npm/devextreme/*.tgz ./devextreme-installer.tgz
+        mv ./packages/devextreme/artifacts/npm/devextreme-dist/*.tgz ./devextreme-dist-installer.tgz
+        mv ./packages/devextreme-angular/npm/dist/*.tgz ./devextreme-angular-installer.tgz
+        mv ./packages/devextreme-react/npm/*.tgz ./devextreme-react-installer.tgz
+        mv ./packages/devextreme-vue/npm/*.tgz ./devextreme-vue-installer.tgz
 
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+    - name: Copy build artifacts
+      uses: actions/upload-artifact@v4
       with:
-        name: devextreme-artifacts
-        path: ./packages/devextreme/artifacts.zip
+        name: devextreme-sources
+        path: |
+          devextreme-installer.tgz
+          devextreme-dist-installer.tgz
+          devextreme-angular-installer.tgz
+          devextreme-react-installer.tgz
+          devextreme-vue-installer.tgz
         retention-days: 1
   
   publish-ES:
     runs-on: ubuntu-latest
-    needs: [build-devextreme]
+    needs: [build-devextreme-all]
     steps:
-    - name: Set machine timezone
-      run: |
-        sudo ln -sf "/usr/share/zoneinfo/$([ "${{ matrix.ARGS.timezone }}" != "" ] && echo "${{ matrix.ARGS.timezone }}" || echo "GMT")" /etc/localtime
-        date
-
     - name: Get sources
       uses: actions/checkout@v4
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: devextreme-artifacts
-        path: ./packages/devextreme
-
-    - name: Unpack artifacts
-      working-directory: ./packages/devextreme
-      run: 7z x artifacts.zip -aoa
-
-    - name: Setup Chrome
-      uses: ./.github/actions/setup-chrome
-      with:
-        chrome-version: '121.0.6167.160'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
+
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-sources
 
     - uses: pnpm/action-setup@v3
       with:
@@ -110,6 +105,10 @@ jobs:
         corepack enable
         pnpm install
 
+    - name: Install tgz
+      working-directory: apps/demos
+      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+
     - name: Prepare configs
       working-directory: apps/demos
       run: pnpm run prepare-js
@@ -134,7 +133,7 @@ jobs:
 
   publish-angular:
     runs-on: ubuntu-latest
-    needs: [build-devextreme]
+    needs: [build-devextreme-all]
     strategy:
       fail-fast: false
       matrix:
@@ -160,33 +159,18 @@ jobs:
           - name: Check generated demos (10/10)
             command: CONSTEL=10/10 pnpm run make-demos-bundle -- --framework Angular
     steps:
-    - name: Set machine timezone
-      run: |
-        sudo ln -sf "/usr/share/zoneinfo/$([ "${{ matrix.ARGS.timezone }}" != "" ] && echo "${{ matrix.ARGS.timezone }}" || echo "GMT")" /etc/localtime
-        date
-
     - name: Get sources
       uses: actions/checkout@v4
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: devextreme-artifacts
-        path: ./packages/devextreme
-
-    - name: Unpack artifacts
-      working-directory: ./packages/devextreme
-      run: 7z x artifacts.zip -aoa
-
-    - name: Setup Chrome
-      uses: ./.github/actions/setup-chrome
-      with:
-        chrome-version: '121.0.6167.160'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
+
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-sources
 
     - uses: pnpm/action-setup@v3
       with:
@@ -246,7 +230,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [build-devextreme, publish-ES, publish-angular]
+    needs: [build-devextreme-all, publish-ES, publish-angular]
     steps: 
       - name: Download publish-demos artifact
         uses: actions/download-artifact@v3
