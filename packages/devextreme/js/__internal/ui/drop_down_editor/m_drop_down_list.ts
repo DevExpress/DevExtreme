@@ -301,16 +301,14 @@ const DropDownList = DropDownEditor.inherit({
   },
 
   _shouldResetInputText(): boolean {
-    const { acceptCustomValue } = this.option();
-
-    if (!acceptCustomValue) {
+    if (!this._isEditable()) {
       return false;
     }
 
     const isTextEqualToInitialText = this._isTextEqualToInitial();
     const isValueEqualToInitial = this._isValueEqualToInitial();
 
-    const shouldResetInputText = !isTextEqualToInitialText && isValueEqualToInitial;
+    const shouldResetInputText: boolean = !isTextEqualToInitialText && isValueEqualToInitial;
 
     return shouldResetInputText;
   },
