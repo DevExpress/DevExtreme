@@ -653,6 +653,34 @@ QUnit.test('getBoundRange for objects dataSource with dataSourceField', function
     assert.equal(boundRange.arg.max, 16);
 });
 
+QUnit.test('valueAxis minVisible/maxVisible should be defined when min/max is set to 0', function(assert) {
+    const seriesDataSource = createSeriesDataSource({
+        dataSource: [{ arg: 1, val: 3, arg1: 4, val1: 10 },
+            { arg: 3, val: 6, arg1: 7, val1: 5 },
+            { arg: 5, val: 12, arg1: 9, val1: 2 }],
+        chart: {
+            commonSeriesSettings: {
+                type: 'area'
+            },
+            valueAxis: {
+                min: 0,
+                max: 0,
+            },
+            series: [{}, {
+                valueField: 'val1',
+                argumentField: 'arg1'
+            }]
+        },
+        renderer: new vizMocks.Renderer(),
+        argumentAxis: this.argumentAxis
+    });
+    const boundRange = seriesDataSource.getBoundRange();
+
+    // assert
+    assert.equal(boundRange.val.minVisible, 0);
+    assert.equal(boundRange.val.maxVisible, 0);
+});
+
 QUnit.test('several series getBoundRange with valueAxis min/max', function(assert) {
     // arrange, act
     const seriesDataSource = createSeriesDataSource({
