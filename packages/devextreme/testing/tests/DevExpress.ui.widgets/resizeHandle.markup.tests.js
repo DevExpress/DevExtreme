@@ -377,7 +377,7 @@ QUnit.module('Aria attributes', moduleConfig, () => {
     QUnit.test('aria-roledescription attribute should be set correctly', function(assert) {
         this.reinit({ });
 
-        const localizedRoleDescriptionAttribute = messageLocalization.format('dxSplitter-ariaRoleDescription');
+        const localizedRoleDescriptionAttribute = messageLocalization.format('dxSplitter-separatorAriaRoleDescription');
 
         assert.strictEqual(this.$element.attr('aria-roledescription'), localizedRoleDescriptionAttribute);
     });

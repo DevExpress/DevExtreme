@@ -278,7 +278,7 @@ if(devices.real().deviceType === 'desktop') {
                         items: [{ text: 'Item_1' }, { text: 'Item_2' }, { text: 'Item_3' }],
                     }, options))
             });
-            const localizedRoleDescription = 'list';
+            const localizedRoleDescription = 'My Custom List';
             localization.loadMessages({ 'en': { 'dxList-ariaRoleDescription': localizedRoleDescription } });
 
             this.clock = sinon.useFakeTimers();
