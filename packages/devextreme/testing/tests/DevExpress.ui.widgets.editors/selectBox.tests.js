@@ -13,6 +13,7 @@ import errors from 'core/errors';
 import config from 'core/config';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 import { normalizeKeyName } from 'common/core/events/utils/index';
+import messageLocalization from 'common/core/localization/message';
 
 import 'generic_light.css!';
 import 'ui/validator';
@@ -6207,13 +6208,15 @@ if(devices.real().deviceType === 'desktop') {
                     searchMode: 'contains',
                 });
 
+                const localizedRoleDescription = messageLocalization.format('dxList-ariaRoleDescription');
+
                 const listAttributes = {
                     id: helper.widget._listId,
                     role: 'group',
-                    'aria-roledescription': 'list'
+                    'aria-roledescription': localizedRoleDescription,
                 };
 
-                helper.checkAttributes(helper.widget._list.$element(), listAttributes, 'list');
+                helper.checkAttributes(helper.widget._list.$element(), listAttributes, localizedRoleDescription);
 
                 const $listItemContainer = helper.widget._list.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
                 helper.checkAttributes($listItemContainer, { role: 'application' }, 'scrollview content');
