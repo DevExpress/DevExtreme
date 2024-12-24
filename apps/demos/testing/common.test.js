@@ -52,6 +52,9 @@ const getTestSpecificSkipRules = (testName) => {
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
+    case 'Map-Markers':
+    case 'Map-Routes':
+      return ['aria-hidden-focus', 'image-redundant-alt'];
     default:
       return [];
   }
@@ -294,7 +297,6 @@ const SKIPPED_TESTS = {
     'Diagram',
     'FileManager',
     'Gantt',
-    'Map',
     'Scheduler',
     'PivotGrid',
   ];
