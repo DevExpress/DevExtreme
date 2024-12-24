@@ -343,6 +343,7 @@ class ContextMenu extends MenuBase {
       this._overlay = null;
     }
     this._detachShowContextMenuEvents(this._getTarget());
+    this._shownSubmenus = [];
     super._clean();
   }
 
