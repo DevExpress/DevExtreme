@@ -69,6 +69,7 @@ describe('Builder integration tests', () => {
   }, buildTimeout);
 
   test('Build theme with changed color constants (generic)', async () => {
+    console.log('-----test 1----->');
     const allChangedVariables = metadata.generic.map((item) => ({
       key: item.Key,
       value: item.Type === 'color' ? '#abcdef' : '10px',
@@ -89,6 +90,7 @@ describe('Builder integration tests', () => {
   }, buildTimeout);
 
   test('Build theme with changed color constants (material)', async () => {
+    console.log('-----test 2----->');
     const allChangedVariables = metadata.material.map((item) => ({
       key: item.Key,
       value: item.Type === 'color' ? '#abcdef' : '10px',
