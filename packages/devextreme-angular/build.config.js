@@ -13,6 +13,9 @@ module.exports = {
         componentGenerator: {
             metadataFolderPath: './metadata/generated/',
             outputFolderPath: './src/ui/',
+            componentFileNames: {
+                'popup': 'component.ts'
+            },
             nestedPathPart: 'nested',
             basePathPart: 'base'
         },
@@ -59,16 +62,12 @@ module.exports = {
             outputPath: './src/'
         },
     },
-    afterGenerate: {
-        preserveComponentFiles: ['popup/service', 'popup/index.ts'],
-        renameGeneratedFiles: [{ path: 'popup/index.ts', newName: 'component.ts' }],
-        temporaryFolderForPreserved: './tmp-preserved/'
-    },
     components: {
         srcFilesPattern: '**/*.ts',
         tsTestSrc: ['tests/src/**/*.spec.ts', 'tests/src/**/component-names.ts'],
         testsPath: 'tests/dist',
         sourcesGlobs: ['src/**/*.*', './package.json', './ng-package.json'],
+        skipFromCleaningFiles: ['popup/service/**', 'popup/index.ts'],
         tsSourcesGlob: 'src/**/*.ts',
         outputPath: 'dist'
     },
