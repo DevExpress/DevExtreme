@@ -265,12 +265,20 @@ const DropDownList = DropDownEditor.inherit({
     return DROPDOWNLIST_POPUP_WRAPPER_CLASS;
   },
 
-  _renderInputValue() {
-    const value = this._getCurrentValue();
+  _renderInputValue({ value, renderOnly }: { value?: unknown; renderOnly?: boolean } = {}) {
+    const currentValue = value ?? this._getCurrentValue();
     this._rejectValueLoading();
 
-    return this._loadInputValue(value, this._setSelectedItem.bind(this))
-      .always(this.callBase.bind(this, value));
+    if (renderOnly) {
+      return this.callBase(currentValue);
+    }
+
+    return this
+      ._loadInputValue(
+        currentValue,
+        (...args) => { this._setSelectedItem(...args); },
+      )
+      .always(this.callBase.bind(this, currentValue));
   },
 
   _loadInputValue(value, callback) {
@@ -299,6 +307,10 @@ const DropDownList = DropDownEditor.inherit({
     }
 
     return selectedItem;
+  },
+
+  _resetInputText(): void {
+    this._renderInputValue({ renderOnly: true });
   },
 
   _loadItem(value, cache) {
@@ -812,7 +824,9 @@ const DropDownList = DropDownEditor.inherit({
     if (this._list) {
       delete this._list;
     }
+
     delete this._isLastMinSearchLengthExceeded;
+
     this.callBase();
   },
 

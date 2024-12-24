@@ -457,6 +457,29 @@ QUnit.module('focus policy', () => {
         assert.ok($dropDownEditor.hasClass('dx-state-focused'), 'Widget is focused after click on clearButton');
     });
 
+    [
+        { eventName: 'onFocusIn', scenario: 'focus' },
+        { eventName: 'onFocusOut', scenario: 'blur ' },
+    ].forEach(({ eventName, scenario }) => {
+        QUnit.test(`${eventName} should be called only once on component ${scenario} when fieldTemplate is specified (T1238121)`, function(assert) {
+            const eventStub = sinon.stub();
+
+            const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                [eventName]: eventStub,
+                fieldTemplate(_, container) {
+                    $('<div>').dxTextBox({
+                        readOnly: true,
+                    }).appendTo(container);
+                },
+            }).dxDropDownEditor('instance');
+
+            dropDownEditor.focus();
+            dropDownEditor.blur();
+
+            assert.strictEqual(eventStub.callCount, 1, `${eventName} called once`);
+        });
+    });
+
     QUnit.testInActiveWindow('input is focused by click on dropDownButton', function(assert) {
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             focusStateEnabled: true

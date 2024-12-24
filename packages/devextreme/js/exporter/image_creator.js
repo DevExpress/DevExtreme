@@ -455,7 +455,7 @@ function applyGradient(context, options, { linearGradients, radialGradients }, e
         });
 
         if(type === 'linear') {
-            const angle = gradients[id].transform?.replace(/\D/g, '') * Math.PI / 180 ?? 0;
+            const angle = (gradients[id].transform?.replace(/\D/g, '') || 0) * Math.PI / 180;
             context.translate(horizontalCenter, verticalCenter);
             context.rotate(angle);
             context.translate(-horizontalCenter, -verticalCenter);

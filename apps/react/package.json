@@ -2,15 +2,15 @@
   "author": "Developer Express Inc.",
   "name": "devextreme-react-playground",
   "private": true,
-  "version": "24.1.7",
+  "version": "24.1.8",
   "description": "DevExtreme React UI and Visualization Components Sandbox",
   "repository": {
     "type": "git",
     "url": "https://github.com/DevExpress/devextreme-react.git"
   },
   "dependencies": {
-    "devextreme": "~24.1.7",
-    "devextreme-react": "~24.1.7",
+    "devextreme": "~24.1.8",
+    "devextreme-react": "~24.1.8",
     "react": "~18.0.0",
     "react-dom": "~18.0.0"
   },

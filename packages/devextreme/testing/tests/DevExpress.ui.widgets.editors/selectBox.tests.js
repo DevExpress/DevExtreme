@@ -104,7 +104,6 @@ const moduleSetup = {
 };
 
 QUnit.module('hidden input', moduleSetup, () => {
-
     QUnit.test('the hidden input should get correct value on widget value change', function(assert) {
         const $element = $('#selectBox').dxSelectBox({
             items: [1, 2, 3],
@@ -157,7 +156,6 @@ QUnit.module('hidden input', moduleSetup, () => {
 });
 
 QUnit.module('functionality', moduleSetup, () => {
-
     QUnit.test('value can be set to "null"', function(assert) {
         const $element = $('#selectBox').dxSelectBox({
             items: ['first', 'second', 'third'],
@@ -1579,7 +1577,6 @@ QUnit.module('widget options', moduleSetup, () => {
 });
 
 QUnit.module('clearButton', moduleSetup, () => {
-
     QUnit.test('"clear" button click should not open selectbox', function(assert) {
         const $element = $('#selectBox').dxSelectBox({
             items: [1, 2, 3],
@@ -1757,7 +1754,6 @@ QUnit.module('clearButton', moduleSetup, () => {
 });
 
 QUnit.module('showSelectionControls', moduleSetup, () => {
-
     QUnit.test('showSelectionControls is true', function(assert) {
         $('#selectBox').dxSelectBox({
             items: [1],
@@ -1788,7 +1784,6 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
 });
 
 QUnit.module('editing', moduleSetup, () => {
-
     QUnit.test('readOnly option with searchEnabled', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             items: ['item1', 'item2', 'text3'],
@@ -4195,7 +4190,6 @@ QUnit.module('search substitution', {
     });
 });
 
-
 QUnit.module('Scrolling', {
     beforeEach: function() {
         fx.off = true;
@@ -4393,7 +4387,6 @@ QUnit.module('Async tests', {}, () => {
 });
 
 QUnit.module('regressions', moduleSetup, () => {
-
     QUnit.test('dataSource null reference error', function(assert) {
         assert.expect(0);
 
@@ -4720,7 +4713,6 @@ QUnit.module('regressions', moduleSetup, () => {
 });
 
 QUnit.module('hide on blur', moduleSetup, () => {
-
     QUnit.testInActiveWindow('selectbox does not hide self after input blur', function(assert) {
         const $selectBox = $('#selectBoxWithoutScroll').dxSelectBox({
             dataSource: [100, 200, 300]
@@ -5474,7 +5466,6 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
 });
 
 QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
-
     QUnit.test('T309987 - item should not be changed on the "tab" press', function(assert) {
         const items = ['first', 'second'];
         const value = items[1];
@@ -5953,7 +5944,6 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
         assert.strictEqual(selectBox.option('text'), 'second', 'first init byKey result is ignored');
     });
 });
-
 
 QUnit.module('focus policy', {
     beforeEach: function() {
@@ -6522,7 +6512,6 @@ QUnit.module('displayExpr', moduleSetup, () => {
         });
     });
 });
-
 
 QUnit.module('The "customItemCreateEvent" option warning', {
     beforeEach: function() {

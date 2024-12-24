@@ -77,7 +77,7 @@ $datagrid-row-hovered-color: $base-hover-color !default;
 * $name 30. Context menu icon color
 * $type color
 */
-$datagrid-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
+$datagrid-menu-icon-color: inherit !default;
 
 /**
 * $name 40. Modified data background color
