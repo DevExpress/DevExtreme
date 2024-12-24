@@ -652,7 +652,7 @@ QUnit.test('getBoundRange for objects dataSource with dataSourceField', function
     assert.equal(boundRange.arg.max, 16);
 });
 
-QUnit.test('valueAxis minVisible/maxVisible should be defined when min/max is set to 0', function(assert) {
+QUnit.test('valueAxis minVisible/maxVisible should be defined when min/max is set to 0 (T1269725)', function(assert) {
     const seriesDataSource = createSeriesDataSource({
         dataSource: [
             { arg: 1, val: 3, arg1: 4, val1: 10 },
