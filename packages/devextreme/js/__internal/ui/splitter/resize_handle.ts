@@ -305,7 +305,7 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
     this.setAria({
       role: 'application',
       // eslint-disable-next-line spellcheck/spell-checker
-      roledescription: messageLocalization.format('dxSplitter-separatorAriaRoleDescription'),
+      roledescription: messageLocalization.format('dxSplitter-resizeHandleAriaRoleDescription'),
       label: messageLocalization.format('dxSplitter-resizeHandleAriaLabel'),
     });
   }
