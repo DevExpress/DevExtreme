@@ -453,7 +453,6 @@ QUnit.test('bounce is disabled', function(assert) {
         useNative: false,
         bounceEnabled: false,
         inertiaEnabled: false,
-
         onBounce: function() {
             assert.ok(false, 'bounce action was not fired');
         }
@@ -479,11 +478,9 @@ QUnit.test('inertia stopped on the bound when bounce is disabled', function(asse
     $scrollable.dxScrollable({
         useNative: false,
         bounceEnabled: false,
-
         onBounce: function() {
             assert.ok(false, 'bounce action was not fired');
         },
-
         onEnd: function() {
             const location = getScrollOffset($scrollable);
             assert.equal(location.top, 0, 'content stopped on the bound');
