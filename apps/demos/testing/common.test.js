@@ -383,7 +383,7 @@ const SKIPPED_TESTS = {
           }
 
           if (BROKEN_THIRD_PARTY_SCRIPTS_COMPONENT.includes(widgetName)) {
-            t.skipJsErrors();
+            await t.skipJsErrors();
           }
 
           const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
