@@ -54,6 +54,7 @@
         "dxList-selectAll-indeterminate": "Half-checked",
         "dxList-selectAll-checked": "Checked",
         "dxList-selectAll-notChecked": "Not checked",
+        "dxList-ariaRoleDescription": "List",
 
         "dxScrollView-pullingDownText": "Húzza le a frissítéshez...",
         "dxScrollView-pulledDownText": "Engedje el a frissítéshez...",
@@ -250,7 +251,7 @@
         "dxPivotGrid-filterFieldArea": "Húzza a szűrőmezőket ide",
 
         "dxScheduler-ariaLabel": "Scheduler. {0} view",
-        
+
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
@@ -372,6 +373,7 @@
         "dxTagBox-allSelected": "Összes kiválasztva ({0})",
         "dxTagBox-moreSelected": "{0} több",
         "dxTagBox-tagRoleDescription": "Tag. Press the delete button to remove this tag",
+        "dxTagBox-ariaRoleDescription": "Tag box",
 
         "vizExport-printingButtonText": "Nyomtatás",
         "vizExport-titleMenuText": "Exportálás/Nyomtatás",
@@ -793,6 +795,7 @@
         "dxMultiView-itemAriaRoleDescription": "View",
         "dxMultiView-itemAriaLabel": "{0} of {1}",
 
-        "dxSplitter-resizeHandleAriaLabel": "Split bar"
+        "dxSplitter-resizeHandleAriaLabel": "Split bar",
+        "dxSplitter-resizeHandleAriaRoleDescription": "Separator"
     }
 }

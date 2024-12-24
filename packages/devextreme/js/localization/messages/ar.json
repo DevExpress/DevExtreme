@@ -54,6 +54,7 @@
         "dxList-selectAll-indeterminate": "Half-checked",
         "dxList-selectAll-checked": "Checked",
         "dxList-selectAll-notChecked": "Not checked",
+        "dxList-ariaRoleDescription": "List",
 
         "dxScrollView-pullingDownText": "للتحديث اسحب للأسفل...",
         "dxScrollView-pulledDownText": "حرر للتحديث ...",
@@ -250,7 +251,7 @@
         "dxPivotGrid-filterFieldArea": "إفلات حقول التصفية هنا",
 
         "dxScheduler-ariaLabel": "Scheduler. {0} view",
-        
+
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
@@ -372,6 +373,7 @@
         "dxTagBox-allSelected": "كل العناصر المحددة ({0})",
         "dxTagBox-moreSelected": "{0} المزيد",
         "dxTagBox-tagRoleDescription": "Tag. Press the delete button to remove this tag",
+        "dxTagBox-ariaRoleDescription": "Tag box",
 
         "vizExport-printingButtonText": "Print",
         "vizExport-titleMenuText": "تصدير / طباعة",
@@ -793,6 +795,7 @@
         "dxMultiView-itemAriaRoleDescription": "View",
         "dxMultiView-itemAriaLabel": "{0} of {1}",
 
-        "dxSplitter-resizeHandleAriaLabel": "Split bar"
+        "dxSplitter-resizeHandleAriaLabel": "Split bar",
+        "dxSplitter-resizeHandleAriaRoleDescription": "Separator"
     }
 }

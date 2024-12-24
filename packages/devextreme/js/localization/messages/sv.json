@@ -54,6 +54,7 @@
         "dxList-selectAll-indeterminate": "Half-checked",
         "dxList-selectAll-checked": "Checked",
         "dxList-selectAll-notChecked": "Not checked",
+        "dxList-ariaRoleDescription": "List",
 
         "dxScrollView-pullingDownText": "Dra neråt för att uppdatera...",
         "dxScrollView-pulledDownText": "Släpp för att uppdatera...",
@@ -250,7 +251,7 @@
         "dxPivotGrid-filterFieldArea": "Släpp filterfält här",
 
         "dxScheduler-ariaLabel": "Scheduler. {0} view",
-        
+
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
@@ -372,6 +373,7 @@
         "dxTagBox-allSelected": "Alla valda ({0})",
         "dxTagBox-moreSelected": "{0} mer",
         "dxTagBox-tagRoleDescription": "Tag. Press the delete button to remove this tag",
+        "dxTagBox-ariaRoleDescription": "Tag box",
 
         "vizExport-printingButtonText": "Skriv ut",
         "vizExport-titleMenuText": "Export/Utskrift",
@@ -793,6 +795,7 @@
         "dxMultiView-itemAriaRoleDescription": "View",
         "dxMultiView-itemAriaLabel": "{0} of {1}",
 
-        "dxSplitter-resizeHandleAriaLabel": "Split bar"
+        "dxSplitter-resizeHandleAriaLabel": "Split bar",
+        "dxSplitter-resizeHandleAriaRoleDescription": "Separator"
     }
 }

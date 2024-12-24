@@ -54,6 +54,7 @@
         "dxList-selectAll-indeterminate": "Meio marcado",
         "dxList-selectAll-checked": "Marcado",
         "dxList-selectAll-notChecked": "Não marcado",
+        "dxList-ariaRoleDescription": "List",
 
         "dxScrollView-pullingDownText": "Puxar para baixo para recarregar...",
         "dxScrollView-pulledDownText": "Soltar para recarregar...",
@@ -250,7 +251,7 @@
         "dxPivotGrid-filterFieldArea": "Arraste os campos de filtro até aqui",
 
         "dxScheduler-ariaLabel": "Agendador. Vista {0}",
-        
+
 
         "dxScheduler-appointmentAriaLabel-group": "Grupo: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Compromisso recorrente",
@@ -372,6 +373,7 @@
         "dxTagBox-allSelected": "Todos selecionados ({0})",
         "dxTagBox-moreSelected": "{0} mais",
         "dxTagBox-tagRoleDescription": "Tag. Pressione o botão de deletar para remover esta tag",
+        "dxTagBox-ariaRoleDescription": "Tag box",
 
         "vizExport-printingButtonText": "Imprimir",
         "vizExport-titleMenuText": "Exportar/Imprimir",
@@ -793,6 +795,7 @@
         "dxMultiView-itemAriaRoleDescription": "Visualização",
         "dxMultiView-itemAriaLabel": "{0} de {1}",
 
-        "dxSplitter-resizeHandleAriaLabel": "Barra de divisão"
+        "dxSplitter-resizeHandleAriaLabel": "Barra de divisão",
+        "dxSplitter-resizeHandleAriaRoleDescription": "Separator"
     }
 }

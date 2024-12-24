@@ -54,6 +54,7 @@
         "dxList-selectAll-indeterminate": "Half-checked",
         "dxList-selectAll-checked": "Checked",
         "dxList-selectAll-notChecked": "Not checked",
+        "dxList-ariaRoleDescription": "List",
 
         "dxScrollView-pullingDownText": "引っ張って更新…",
         "dxScrollView-pulledDownText": "指を離して更新…",
@@ -250,7 +251,7 @@
         "dxPivotGrid-filterFieldArea": "フィルター フィールドをこちらへドラッグ＆ドロップ",
 
         "dxScheduler-ariaLabel": "Scheduler. {0} view",
-        
+
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
@@ -372,6 +373,7 @@
         "dxTagBox-allSelected": "すべて選択済み ({0})",
         "dxTagBox-moreSelected": "その他 {0} つ選択",
         "dxTagBox-tagRoleDescription": "Tag. Press the delete button to remove this tag",
+        "dxTagBox-ariaRoleDescription": "Tag box",
 
         "vizExport-printingButtonText": "印刷",
         "vizExport-titleMenuText": "エクスポート / 印刷",
@@ -793,6 +795,7 @@
         "dxMultiView-itemAriaRoleDescription": "View",
         "dxMultiView-itemAriaLabel": "{0} of {1}",
 
-        "dxSplitter-resizeHandleAriaLabel": "Split bar"
+        "dxSplitter-resizeHandleAriaLabel": "Split bar",
+        "dxSplitter-resizeHandleAriaRoleDescription": "Separator"
     }
 }

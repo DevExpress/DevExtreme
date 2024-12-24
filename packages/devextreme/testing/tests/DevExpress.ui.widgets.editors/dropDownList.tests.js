@@ -1534,6 +1534,128 @@ QUnit.module('dataSource integration', moduleConfig, function() {
     });
 });
 
+QUnit.module('reset method', moduleConfig, () => {
+    [true, false].forEach(acceptCustomValue => {
+        QUnit.test(`byKey should not be called if value is equal to initial, acceptCustomValue is ${acceptCustomValue} (T1247576)`, function(assert) {
+            const byKeyHandler = sinon.spy(key => key);
+            const items = ['initial'];
+
+            const dataSource = new DataSource({
+                store: new CustomStore({
+                    load: () => items,
+                    byKey: byKeyHandler,
+                }),
+            });
+
+            const instance = $('#dropDownList').dxDropDownList({
+                acceptCustomValue,
+                searchEnabled: false,
+                dataSource,
+                value: items[0],
+            }).dxDropDownList('instance');
+
+            assert.strictEqual(byKeyHandler.callCount, 1, 'byKey is called once after init');
+
+            instance.reset();
+
+            assert.strictEqual(byKeyHandler.callCount, 1, 'byKey is still called once');
+        });
+    });
+
+    ['acceptCustomValue', 'searchEnabled'].forEach(editingOption => {
+        QUnit.test(`reset should restore the input text and text option to the initial value even if the value is NOT changed, ${editingOption}=true`, function(assert) {
+            assert.expect(12);
+
+            const byKeyHandler = sinon.spy(key => key);
+            const items = ['initial'];
+            const additionalText = 'NEW';
+
+            const dataSource = new DataSource({
+                store: new CustomStore({
+                    load: () => items,
+                    byKey: byKeyHandler,
+                }),
+            });
+
+            const $element = $('#dropDownList').dxDropDownList({
+                acceptCustomValue: false,
+                searchEnabled: false,
+                [editingOption]: true,
+                dataSource,
+                valueChangeEvent: 'change',
+                value: items[0],
+            });
+
+            const instance = $element.dxDropDownList('instance');
+            const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const keyboard = keyboardMock($input);
+
+            const assertState = (expectedText, messageComment) => {
+                assert.strictEqual($input.val(), expectedText, `input text is "${expectedText}" ${messageComment}`);
+                assert.strictEqual(instance.option('text'), expectedText, `text option is "${expectedText}" ${messageComment}`);
+                assert.strictEqual(instance.option('value'), items[0], `value option is "${items[0]}" ${messageComment}`);
+                assert.strictEqual(byKeyHandler.callCount, 1, 'no additional byKey for initial item is presented');
+            };
+
+            assertState(items[0], 'initially');
+
+            keyboard.type(additionalText);
+
+            assertState(`${additionalText}${items[0]}`, 'after typing');
+
+            instance.reset();
+
+            assertState(items[0], 'after reset');
+        });
+    });
+
+    QUnit.test('reset should restore the input value, value and text options to the initial value if the value is changed, acceptCustomValue=true', function(assert) {
+        assert.expect(12);
+
+        const byKeyHandler = sinon.spy(key => key);
+        const items = ['initial'];
+        const additionalText = 'NEW';
+        let expectedByKeyCallCount = 0;
+
+        const dataSource = new DataSource({
+            store: new CustomStore({
+                load: () => items,
+                byKey: byKeyHandler,
+            }),
+        });
+
+        const $element = $('#dropDownList').dxDropDownList({
+            acceptCustomValue: true,
+            valueChangeEvent: 'change',
+            dataSource,
+            value: items[0],
+        });
+
+        const instance = $element.dxDropDownList('instance');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        const assertState = (expectedText, messageComment) => {
+            expectedByKeyCallCount++;
+            assert.strictEqual($input.val(), expectedText, `input text is "${expectedText}" ${messageComment}`);
+            assert.strictEqual(instance.option('text'), expectedText, `text option is "${expectedText}" ${messageComment}`);
+            assert.strictEqual(instance.option('value'), expectedText, `value option is "${expectedText}" ${messageComment}`);
+            assert.strictEqual(byKeyHandler.callCount, expectedByKeyCallCount, 'byKey call is okay if loading value is not the current value');
+        };
+
+        assertState(items[0], 'initially');
+
+        keyboard.type(additionalText);
+        keyboard.change();
+
+        assertState(`${additionalText}${items[0]}`, 'after typing');
+
+        instance.reset();
+
+        assertState(items[0], 'after reset');
+    });
+});
+
 QUnit.module('action options', moduleConfig, () => {
     QUnit.test('onItemClick action', function(assert) {
         assert.expect(3);
@@ -1806,8 +1928,7 @@ QUnit.module('dropdownlist with groups', {
     });
 });
 
-QUnit.module(
-    'data source from url',
+QUnit.module('data source from url',
     {
         afterEach: function() {
             ajaxMock.clear();

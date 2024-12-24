@@ -7,6 +7,7 @@ import browser from 'core/utils/browser';
 import errors from 'core/errors';
 import { isRenderer } from 'core/utils/type';
 import { normalizeKeyName } from 'common/core/events/utils/index';
+import messageLocalization from 'common/core/localization/message';
 
 import ArrayStore from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
@@ -3537,6 +3538,8 @@ if(devices.real().deviceType === 'desktop') {
                     searchEnabled
                 });
 
+                const localizedRoleDescription = messageLocalization.format('dxList-ariaRoleDescription');
+
                 const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);
                 const $list = $(`.${LIST_CLASS}`);
                 const $input = helper.widget._popup.$content().find(`.${TEXTEDITOR_INPUT_CLASS}`);
@@ -3544,7 +3547,7 @@ if(devices.real().deviceType === 'desktop') {
                 const listAttributes = {
                     id: helper.widget._listId,
                     role: 'group',
-                    'aria-roledescription': 'list'
+                    'aria-roledescription': localizedRoleDescription
                 };
 
                 const listItemContainerAttributes = {
@@ -3568,7 +3571,7 @@ if(devices.real().deviceType === 'desktop') {
                     id: helper.widget._popupContentId,
                 };
 
-                helper.checkAttributes($list, listAttributes, 'list');
+                helper.checkAttributes($list, listAttributes, localizedRoleDescription);
                 helper.checkAttributes($list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`), listItemContainerAttributes, 'scrollview content');
                 helper.checkAttributes($field, fieldAttributes, 'field');
                 helper.checkAttributes(helper.$widget, widgetAttributes, 'widget');

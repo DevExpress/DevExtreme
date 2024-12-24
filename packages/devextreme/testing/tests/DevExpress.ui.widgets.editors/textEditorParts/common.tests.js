@@ -109,6 +109,71 @@ QUnit.module('general', {}, () => {
         assert.equal($textEditor.find('*').length, $contentElements.length);
     });
 
+    QUnit.test('reset should clear input value, value and text options, if value was not changed', function(assert) {
+        assert.expect(9);
+
+        const $element = $('#texteditor').dxTextEditor();
+        const instance = $element.dxTextEditor('instance');
+        const $input = $element.find(`.${INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        const initialState = { input: '', value: '', text: '' };
+        const afterTypingState = { input: 'test', value: '', text: 'test' };
+
+        const getter = {
+            input: () => $input.val(),
+            value: () => instance.option('value'),
+            text: () => instance.option('text'),
+        };
+
+        const check = (expected, message) => {
+            Object.keys(expected).forEach(prop => {
+                assert.strictEqual(getter[prop](), expected[prop], `${prop} is '${expected[prop]}' ${message}`);
+            });
+        };
+
+        check(initialState, 'before typing');
+
+        keyboard.type('test');
+        check(afterTypingState, 'after typing');
+
+        instance.reset();
+        check(initialState, 'after reset');
+    });
+
+
+    QUnit.test('reset should clear input value, value and text options, if value was changed', function(assert) {
+        assert.expect(9);
+
+        const $element = $('#texteditor').dxTextEditor();
+        const instance = $element.dxTextEditor('instance');
+        const $input = $element.find(`.${INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        const essences = [
+            { name: 'input value', get: () => $input.val() },
+            { name: 'value option', get: () => instance.option('value') },
+            { name: 'text option', get: () => instance.option('text') },
+        ];
+
+        const check = (expected, message) => {
+            essences.forEach(essence => {
+                assert.strictEqual(essence.get(), expected, `${essence.name} ${message}`);
+            });
+        };
+
+        check('', 'is empty before typing');
+
+        keyboard.type('test');
+        $input.trigger('change');
+
+        check('test', 'is present after typing');
+
+        instance.reset();
+
+        check('', 'is absent after reset');
+    });
+
     QUnit.test('value === 0 should be rendered on init', function(assert) {
         const $element = $('#texteditor').dxTextEditor({
             value: 0

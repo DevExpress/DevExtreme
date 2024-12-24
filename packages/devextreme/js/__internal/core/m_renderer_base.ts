@@ -115,7 +115,10 @@ initRender.prototype.attr = function (attrName, value) {
 };
 
 initRender.prototype.removeAttr = function (attrName) {
-  this[0] && domAdapter.removeAttribute(this[0], attrName);
+  this.each(function (_, element) {
+    domAdapter.removeAttribute(element, attrName);
+  });
+
   return this;
 };
 
