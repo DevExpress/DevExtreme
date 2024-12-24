@@ -297,6 +297,9 @@ const SKIPPED_TESTS = {
     'Scheduler',
     'PivotGrid',
   ];
+  const BROKEN_THIRD_PARTY_SCRIPTS_COMPONENT = [
+    'Map',
+  ];
 
   getDemoPaths(approach).forEach((demoPath, index) => {
     if (!shouldRunTestAtIndex(index + 1) || !existsSync(demoPath)) { return; }
@@ -376,6 +379,10 @@ const SKIPPED_TESTS = {
 
           if (shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)) {
             return;
+          }
+
+          if (this.BROKEN_THIRD_PARTY_SCRIPTS_COMPONENT.includes(widgetName)) {
+            t.skipJsErrors();
           }
 
           const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
