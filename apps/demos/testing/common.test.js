@@ -392,10 +392,10 @@ const SKIPPED_TESTS = {
           const errors = [...consoleMessages.error, ...consoleMessages.warn]
             .filter((e) => {
               const isKnownWarning = knownWarnings.some((kw) => e.startsWith(kw));
-              const expectedConsoleMessage = EXPECTED_CONSOLE_MESSAGES[widgetName]  
+              const isExpectedConsoleMessage = EXPECTED_CONSOLE_MESSAGES[widgetName]  
                 && EXPECTED_CONSOLE_MESSAGES[widgetName].some((cm) => e.startsWith(cm));
               
-              return !isKnownWarning && !expectedConsoleMessage; 
+              return !isKnownWarning && !isExpectedConsoleMessage; 
             });
 
           await t.expect(errors).eql([]);
