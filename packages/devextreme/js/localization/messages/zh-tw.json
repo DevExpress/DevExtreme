@@ -52,6 +52,7 @@
         "dxList-selectAll-indeterminate": "Half-checked",
         "dxList-selectAll-checked": "Checked",
         "dxList-selectAll-notChecked": "Not checked",
+        "dxList-ariaRoleDescription": "List",
 
         "dxScrollView-pullingDownText": "下拉以重新整理...",
         "dxScrollView-pulledDownText": "放開以重新整理...",
@@ -324,6 +325,7 @@
         "dxTagBox-allSelected": "已全選 ({0})",
         "dxTagBox-moreSelected": "{0} 更多",
         "dxTagBox-tagRoleDescription": "Tag. Press the delete button to remove this tag",
+        "dxTagBox-ariaRoleDescription": "Tag box",
 
         "vizExport-printingButtonText": "列印",
         "vizExport-titleMenuText": "匯出中/列印中",
@@ -736,6 +738,7 @@
         "dxMultiView-itemAriaRoleDescription": "View",
         "dxMultiView-itemAriaLabel": "{0} of {1}",
 
-        "dxSplitter-resizeHandleAriaLabel": "Split bar"
+        "dxSplitter-resizeHandleAriaLabel": "Split bar",
+        "dxSplitter-resizeHandleAriaRoleDescription": "Separator"
     }
 }

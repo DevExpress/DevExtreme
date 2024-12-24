@@ -441,7 +441,7 @@ const TagBox = (SelectBox as any).inherit({
     const elementAria = {
       role: 'application',
       // eslint-disable-next-line spellcheck/spell-checker
-      roledescription: 'tagbox',
+      roledescription: messageLocalization.format('dxTagBox-ariaRoleDescription'),
     };
 
     this.setAria(elementAria, this.$element());

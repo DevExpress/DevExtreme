@@ -52,6 +52,7 @@
         "dxList-selectAll-indeterminate": "Half-checked",
         "dxList-selectAll-checked": "Checked",
         "dxList-selectAll-notChecked": "Not checked",
+        "dxList-ariaRoleDescription": "List",
 
         "dxScrollView-pullingDownText": "Kéo xuống để làm tươi...",
         "dxScrollView-pulledDownText": "Nhả ra để làm tươi...",
@@ -324,6 +325,7 @@
         "dxTagBox-allSelected": "Tất cả đã được chọn ({0})",
         "dxTagBox-moreSelected": "{0} thêm",
         "dxTagBox-tagRoleDescription": "Tag. Press the delete button to remove this tag",
+        "dxTagBox-ariaRoleDescription": "Tag box",
 
         "vizExport-printingButtonText": "In",
         "vizExport-titleMenuText": "Xuất ra/In",
@@ -736,6 +738,7 @@
         "dxMultiView-itemAriaRoleDescription": "View",
         "dxMultiView-itemAriaLabel": "{0} of {1}",
 
-        "dxSplitter-resizeHandleAriaLabel": "Split bar"
+        "dxSplitter-resizeHandleAriaLabel": "Split bar",
+        "dxSplitter-resizeHandleAriaRoleDescription": "Separator"
     }
 }

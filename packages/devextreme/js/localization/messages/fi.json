@@ -52,6 +52,7 @@
         "dxList-selectAll-indeterminate": "Half-checked",
         "dxList-selectAll-checked": "Checked",
         "dxList-selectAll-notChecked": "Not checked",
+        "dxList-ariaRoleDescription": "List",
 
         "dxScrollView-pullingDownText": "Päivitä vetämällä alas...",
         "dxScrollView-pulledDownText": "Päivitä vapauttamalla...",
@@ -324,6 +325,7 @@
         "dxTagBox-allSelected": "Kaikki valitut ({0})",
         "dxTagBox-moreSelected": "{0} lisää",
         "dxTagBox-tagRoleDescription": "Tag. Press the delete button to remove this tag",
+        "dxTagBox-ariaRoleDescription": "Tag box",
 
         "vizExport-printingButtonText": "Tulosta",
         "vizExport-titleMenuText": "Vienti/Tulostus",
@@ -736,6 +738,7 @@
         "dxMultiView-itemAriaRoleDescription": "View",
         "dxMultiView-itemAriaLabel": "{0} of {1}",
 
-        "dxSplitter-resizeHandleAriaLabel": "Split bar"
+        "dxSplitter-resizeHandleAriaLabel": "Split bar",
+        "dxSplitter-resizeHandleAriaRoleDescription": "Separator"
     }
 }
