@@ -254,18 +254,6 @@ class GroupStrategyBase {
       result -= (groupIndex + 1) * this._getAllDayHeight(showAllDayPanel);
     }
 
-    if (this.options.isVirtualScrolling) {
-      const {
-        topVirtualRowHeight = 0,
-        bottomVirtualRowHeight = 0,
-      }: {
-        topVirtualRowHeight: number;
-        bottomVirtualRowHeight: number;
-      } = this.viewDataProvider.getViewOptions();
-
-      result += topVirtualRowHeight + bottomVirtualRowHeight;
-    }
-
     return result;
   }
 }
