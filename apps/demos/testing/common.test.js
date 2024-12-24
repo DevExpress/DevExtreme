@@ -298,9 +298,10 @@ const SKIPPED_TESTS = {
     'Scheduler',
     'PivotGrid',
   ];
-  const BROKEN_THIRD_PARTY_SCRIPTS_COMPONENT = [
-    'Map',
-  ];
+
+  const EXPECTED_CONSOLE_MESSAGES = {
+    Map: ['TypeError: Failed to fetch'],
+  };
 
   getDemoPaths(approach).forEach((demoPath, index) => {
     if (!shouldRunTestAtIndex(index + 1) || !existsSync(demoPath)) { return; }
@@ -382,16 +383,18 @@ const SKIPPED_TESTS = {
             return;
           }
 
-          if (BROKEN_THIRD_PARTY_SCRIPTS_COMPONENT.includes(widgetName)) {
-            await t.skipJsErrors();
-          }
-
           const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
 
           const consoleMessages = await t.getBrowserConsoleMessages();
 
           const errors = [...consoleMessages.error, ...consoleMessages.warn]
-            .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
+            .filter((e) => {
+              const isKnownWarning = knownWarnings.some((kw) => e.startsWith(kw));
+              const expectedConsoleMessage = EXPECTED_CONSOLE_MESSAGES[widgetName]  
+                && EXPECTED_CONSOLE_MESSAGES[widgetName].some((cm) => e.startsWith(cm));
+              
+              return !isKnownWarning && !expectedConsoleMessage; 
+            });
 
           await t.expect(errors).eql([]);
 
