@@ -294,6 +294,7 @@ const SKIPPED_TESTS = {
     'Diagram',
     'FileManager',
     'Gantt',
+    'Map',
     'Scheduler',
     'PivotGrid',
   ];
@@ -381,7 +382,7 @@ const SKIPPED_TESTS = {
             return;
           }
 
-          if (this.BROKEN_THIRD_PARTY_SCRIPTS_COMPONENT.includes(widgetName)) {
+          if (BROKEN_THIRD_PARTY_SCRIPTS_COMPONENT.includes(widgetName)) {
             t.skipJsErrors();
           }
 
