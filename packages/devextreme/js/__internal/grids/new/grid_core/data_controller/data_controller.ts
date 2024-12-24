@@ -1,11 +1,12 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import type { Subscribable } from '@ts/core/reactive/index';
+import type { SubsGets } from '@ts/core/reactive/index';
 import {
   computed, effect, state,
 } from '@ts/core/reactive/index';
 
+import gridCoreUtils from '../../../grid_core/m_utils';
 // import { EditingController } from '../editing/controller';
 // import type { Change } from '../editing/types';
 import { OptionsController } from '../options_controller/options_controller';
@@ -22,17 +23,33 @@ export class DataController {
     [this.dataSourceConfiguration, this.keyExpr],
   );
 
+  public readonly cacheEnabled = this.options.oneWay('cacheEnabled');
+
+  public readonly pagingEnabled = this.options.twoWay('paging.enabled');
+
   public readonly pageIndex = this.options.twoWay('paging.pageIndex');
 
   public readonly pageSize = this.options.twoWay('paging.pageSize');
 
+  public readonly remoteFiltering = this.options.oneWay('remoteOperations.filtering');
+
+  public readonly remotePaging = this.options.oneWay('remoteOperations.paging');
+
+  public readonly remoteSorting = this.options.oneWay('remoteOperations.sorting');
+
+  public readonly remoteSummary = this.options.oneWay('remoteOperations.summary');
+
+  public readonly dateSerializationFormat = this.options.oneWay('dateSerializationFormat');
+
+  public readonly onDataErrorOccurred = this.options.oneWay('onDataErrorOccurred');
+
   private readonly _items = state<DataObject[]>([]);
 
-  public readonly items: Subscribable<DataObject[]> = this._items;
+  public readonly items: SubsGets<DataObject[]> = this._items;
 
   private readonly _totalCount = state(0);
 
-  public readonly totalCount: Subscribable<number> = this._totalCount;
+  public readonly totalCount: SubsGets<number> = this._totalCount;
 
   public readonly isLoading = state(false);
 
@@ -123,5 +140,9 @@ export class DataController {
 
   public getDataKey(data: unknown): unknown {
     return this.dataSource.unreactive_get().store().keyOf(data);
+  }
+
+  public getCardIndexByKey(key: object): number {
+    return gridCoreUtils.getIndexByKey(key, this.items);
   }
 }
