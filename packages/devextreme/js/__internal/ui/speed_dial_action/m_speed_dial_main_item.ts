@@ -167,7 +167,6 @@ class SpeedDialMainItem extends SpeedDialItem {
   }
 
   _render() {
-    // @ts-expect-error
     this.$element().addClass(FAB_MAIN_CLASS);
     super._render();
     this._moveToContainer();
@@ -177,13 +176,11 @@ class SpeedDialMainItem extends SpeedDialItem {
 
   _renderLabel() {
     super._renderLabel();
-    // @ts-expect-error
     this.$element().toggleClass(FAB_MAIN_CLASS_WITH_LABEL, !!this._$label);
   }
 
   _renderIcon() {
     super._renderIcon();
-    // @ts-expect-error
     this.$element().toggleClass(FAB_MAIN_CLASS_WITHOUT_ICON, !this.option('icon'));
   }
 

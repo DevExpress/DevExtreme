@@ -43,8 +43,6 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
 
   _editStrategy?: MenuBaseEditStrategy;
 
-  _activeStateUnit?: string;
-
   hasIcons?: boolean;
 
   _inkRipple?: {
@@ -139,11 +137,14 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     });
   }
 
-  _isSelectionEnabled() {
-    return this.option('selectionMode') === SINGLE_SELECTION_MODE;
+  _isSelectionEnabled(): boolean {
+    const { selectionMode } = this.option();
+
+    return selectionMode === SINGLE_SELECTION_MODE;
   }
 
-  _init() {
+  _init(): void {
+    // @ts-expect-error
     this._activeStateUnit = `.${ITEM_CLASS}`;
     super._init();
     this._renderSelectedItem();
@@ -285,7 +286,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
   _getShowSubmenuMode() {
     const defaultValue = 'onClick';
     let optionValue = this.option('showSubmenuMode');
-
+    // @ts-expect-error
     optionValue = isObject(optionValue) ? optionValue.name : optionValue;
 
     return this._isDesktopDevice() ? optionValue : defaultValue;
@@ -318,7 +319,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     if (!$itemElement || this._isItemDisabled($itemElement)) return;
 
     e.stopPropagation();
-
+    // @ts-expect-error
     if (this._getShowSubmenuMode() === 'onHover') {
       clearTimeout(this._showSubmenusTimeout);
       this._showSubmenusTimeout = setTimeout(this._showSubmenu.bind(this, $itemElement), this._getSubmenuDelay('show'));
@@ -557,6 +558,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     const itemClickActionHandler = this._createAction(this._updateSubmenuVisibilityOnClick.bind(this));
     this._itemDXEventHandler(e, 'onItemClick', {}, {
       beforeExecute: this._itemClick,
+      // @ts-expect-error
       afterExecute: itemClickActionHandler.bind(this),
     });
     e._skipHandling = true;

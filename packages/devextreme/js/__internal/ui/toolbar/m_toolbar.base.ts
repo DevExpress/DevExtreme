@@ -62,6 +62,7 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
 
   _waitParentAnimationTimeout?: any;
 
+  // @ts-expect-error
   _getSynchronizableOptionsForCreateComponent(): string[] {
     return super._getSynchronizableOptionsForCreateComponent().filter((item) => item !== 'disabled');
   }
@@ -109,7 +110,6 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
       this._getTemplate('dx-polymorph-widget').render({
         container: $container,
         model: rawModel,
-        // @ts-expect-error
         parent: this,
       });
     }, ['text', 'html', 'widget', 'options'], this.option('integrationOptions.watchMethod'));
@@ -139,6 +139,7 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
           return isMaterialBased();
         },
         options: {
+          // @ts-expect-error
           useFlatButtons: true,
         },
       },
@@ -190,7 +191,6 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
 
   _renderToolbar(): void {
     this.$element()
-      // @ts-expect-error
       .addClass(TOOLBAR_CLASS);
 
     this._$toolbarItemsContainer = $('<div>')
@@ -386,12 +386,13 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
   }
 
   _getToolbarItems(): Item[] {
+    // @ts-expect-error
     return this.option('items') ?? [];
   }
 
   _renderContentImpl(): void {
     const items = this._getToolbarItems();
-    // @ts-expect-error
+
     this.$element().toggleClass(TOOLBAR_MINI_CLASS, items.length === 0);
 
     if (this._renderedItemsCount) {
@@ -407,7 +408,7 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
 
   _clean(): void {
     this._$toolbarItemsContainer.children().empty();
-    // @ts-expect-error
+
     this.$element().empty();
 
     delete this._$beforeSection;
@@ -497,9 +498,9 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
 
       // eslint-disable-next-line @typescript-eslint/naming-convention
       const _checkWebFontForLabelsLoaded = () => {
-        // @ts-expect-error
         const $labels = this.$element().find(`.${TOOLBAR_LABEL_CLASS}`);
         const promises = [];
+        // @ts-expect-error
         $labels.each((_, label) => {
           const text = $(label).text();
           // @ts-expect-error
@@ -517,7 +518,7 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
     }
   }
 }
-// @ts-expect-error
+
 registerComponent('dxToolbarBase', ToolbarBase);
 
 export default ToolbarBase;

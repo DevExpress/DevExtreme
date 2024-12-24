@@ -17,6 +17,7 @@ import {
 import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
 import { DefaultOptionsRule } from './options';
+import { dxElementWrapper } from './renderer';
 
 export type OptionChangedEventInfo<TComponent> = EventInfo<TComponent> & ChangedOptionInfo;
 
@@ -89,7 +90,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
 export default class DOMComponent<TProperties = Properties> extends Component<TProperties> {
     _templateManager: TemplateManager;
 
-    _cancelOptionChange?: string;
+    _cancelOptionChange?: string | boolean;
 
     constructor(element: UserDefinedElement, options?: TProperties);
 
@@ -129,7 +130,7 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
      */
     element(): DxElement;
 
-    $element(): UserDefinedElement;
+    $element(): dxElementWrapper;
     _getTemplate(template: unknown): FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;
