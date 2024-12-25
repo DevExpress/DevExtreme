@@ -5,7 +5,7 @@ on:
     paths-ignore:
       - 'apps/**/*.md'
   push:
-    branches: [24_2]
+    branches: [25_1]
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
