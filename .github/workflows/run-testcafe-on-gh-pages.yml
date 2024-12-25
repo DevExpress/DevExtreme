@@ -1,4 +1,4 @@
-name: Publishing (Demos) to GitHub Pages step 2 (run tests on branch)
+name: Publishing to GitHub Pages step 2 (run tests on branch)
 
 on:
   workflow_dispatch:
