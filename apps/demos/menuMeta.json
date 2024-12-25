@@ -605,8 +605,7 @@
               "/Models/DataGrid/Employee.cs",
               "/Models/SampleData/DataGridEmployees.cs"
             ],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           },
           {
             "Title": "Command Column Customization",
@@ -625,8 +624,7 @@
             "MvcAdditionalFiles": [
               "/Scripts/data/employeeData.js"
             ],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           },
           {
             "Title": "Column Chooser",
@@ -1545,8 +1543,7 @@
               "/Models/TreeList/Employee.cs",
               "/Models/SampleData/TreeListEmployees.cs"
             ],
-            "DemoType": "Web",
-            "Badge": "Updated"
+            "DemoType": "Web"
           },
           {
             "Title": "Column Resizing",
@@ -1567,8 +1564,7 @@
               "/Models/TreeList/Employee.cs",
               "/Models/SampleData/TreeListEmployees.cs"
             ],
-            "DemoType": "Web",
-            "Badge": "Updated"
+            "DemoType": "Web"
           }
         ]
       },
@@ -2032,8 +2028,7 @@
             "Name": "MarkdownSupport",
             "Widget": "HtmlEditor",
             "DemoType": "Web",
-            "Modules": "unified",
-            "Badge": "Updated"
+            "Modules": "unified"
           }
         ]
       },
@@ -2056,7 +2051,6 @@
     "Name": "Chat",
     "Breadcrumb": true,
     "Equivalents": "dxChat, dx-chat, chat",
-    "Badge": "New",
     "Groups": [
       {
         "Name": "Overview",
@@ -4196,8 +4190,7 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           }
         ]
       }
@@ -5478,22 +5471,19 @@
           {
             "Title": "Providers and Types",
             "Name": "ProvidersAndTypes",
-            "Widget": "Map",
-            "Badge": "Updated"
+            "Widget": "Map"
           },
           {
             "Title": "Markers",
             "Name": "Markers",
             "DocUrl": "Guide/UI_Components/Map/Configure_Markers/",
-            "Widget": "Map",
-            "Badge": "Updated"
+            "Widget": "Map"
           },
           {
             "Title": "Routes",
             "Name": "Routes",
             "DocUrl": "Guide/UI_Components/Map/Configure_Routes/",
-            "Widget": "Map",
-            "Badge": "Updated"
+            "Widget": "Map"
           }
         ]
       },
