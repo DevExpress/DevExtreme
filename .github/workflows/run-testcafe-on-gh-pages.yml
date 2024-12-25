@@ -68,6 +68,7 @@ jobs:
                   ${{ runner.os }}-pnpm-store
 
             - name: Install dependencies
+              working-directory: devextreme
               run: |
                 corepack enable
                 pnpm install
