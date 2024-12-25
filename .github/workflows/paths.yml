@@ -9,7 +9,7 @@ on:
     paths-ignore:
       - 'apps/**/*.md'
   push:
-    branches: [24_2]
+    branches: [25_1]
 
 env:
   MAX_LENGTH: 170
