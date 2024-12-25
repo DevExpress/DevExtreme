@@ -273,6 +273,41 @@ QUnit.module('Rendering', moduleConfig, () => {
     });
 });
 
+QUnit.module('Repaint', moduleConfig, () => {
+    QUnit.test('On repaint all submenus should be hidden without console errors (T1257288)', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: 'Item 1', items: [{ text: 'Item 11' }, { text: 'Item 12' }] }],
+            visible: true,
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+            onItemClick: (e) => e.component.repaint(),
+        });
+
+        const $itemsContainer = instance.itemsContainer();
+        const $rootItem = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
+        this.clock.tick(0);
+
+        const $submenus = $(`.${DX_SUBMENU_CLASS}`);
+        const $nestedSubmenu = $submenus.eq(1);
+        const $nestedSubmenuItem = $nestedSubmenu.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        assert.strictEqual($submenus.length, 2, 'Nested submenu is shown');
+
+        try {
+            $($nestedSubmenuItem).trigger('dxclick');
+
+            assert.ok(true, 'No errors were thrown');
+        } catch(e) {
+            assert.ok(false, `Error: ${e.message}`);
+        }
+    });
+});
+
 QUnit.module('Rendering Scrollable', moduleConfig, () => {
     const DX_SCROLLABLE_CLASS = 'dx-scrollable';
     const DX_SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
