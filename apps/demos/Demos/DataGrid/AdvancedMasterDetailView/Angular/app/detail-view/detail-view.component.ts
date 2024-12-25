@@ -6,7 +6,7 @@ import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 
 let modulePrefix = '';
 // @ts-ignore
-if (window && window.config.packageConfigPaths) {
+if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 

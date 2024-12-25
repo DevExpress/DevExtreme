@@ -4,7 +4,7 @@ import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
 let modulePrefix = '';
 // @ts-ignore
-if (window && window.config.packageConfigPaths) {
+if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
