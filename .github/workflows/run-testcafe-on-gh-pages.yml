@@ -1,4 +1,4 @@
-name: Run TestCafe on gh-pages branch
+name: Publishing (Demos) to GitHub Pages step 2 (run tests on branch)
 
 on:
   workflow_dispatch:
@@ -57,9 +57,20 @@ jobs:
                 version: 9
                 run_install: false
 
-            - name: DevExtreme - Install packages
-              working-directory: devextreme
-              run: pnpm install --no-audit --no-fund
+            - uses: actions/cache@v4
+              name: Setup pnpm cache
+              with:
+                path: |
+                  ${{ env.STORE_PATH }}
+                  .nx/cache
+                key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+                restore-keys: |
+                  ${{ runner.os }}-pnpm-store
+
+            - name: Install dependencies
+              run: |
+                corepack enable
+                pnpm install
             
             - name: Run TestCafe tests
               working-directory: devextreme/apps/demos
