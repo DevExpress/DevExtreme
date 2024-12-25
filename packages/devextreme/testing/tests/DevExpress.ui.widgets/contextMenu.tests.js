@@ -298,9 +298,13 @@ QUnit.module('Repaint', moduleConfig, () => {
 
         assert.strictEqual($submenus.length, 2, 'Nested submenu is shown');
 
-        $($nestedSubmenuItem).trigger('click');
+        try {
+            $($nestedSubmenuItem).trigger('dxclick');
 
-        assert.ok(true, 'No errors were thrown');
+            assert.ok(true, 'No errors were thrown');
+        } catch(e) {
+            assert.ok(false, `Error: ${e.message}`);
+        }
     });
 });
 
