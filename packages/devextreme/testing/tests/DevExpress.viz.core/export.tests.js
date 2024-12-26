@@ -737,7 +737,7 @@ QUnit.test('exportFromMarkup. backgroundColor from current theme', function(asse
     }
 });
 
-QUnit.test('exportWidgets method should be able export plain DOM element', function(assert) {
+QUnit.test('exportWidgets method should be able export plain DOM element (T1266360)', function(assert) {
     const optionMock = () => {
         return {
             fileName: 'chart',
