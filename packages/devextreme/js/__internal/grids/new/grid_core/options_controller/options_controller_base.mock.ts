@@ -13,9 +13,10 @@ export class OptionsControllerMock<
   TDefaultProps extends TProps,
 > extends OptionsController<TProps, TDefaultProps> {
   private readonly componentMock: Component<TProps>;
-  constructor(options: TProps) {
+  constructor(options: TProps, defaultOptions: TDefaultProps) {
     const componentMock = new Component(options);
     super(componentMock);
+    this.defaults = defaultOptions;
     this.componentMock = componentMock;
   }
 
