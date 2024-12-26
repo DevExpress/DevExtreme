@@ -207,8 +207,8 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
       vMax,
       vMin,
     } = appointmentSettings;
-
-    const maxHeight = this.isVirtualScrolling ? vMax : vMax - vMin;
+    const { bottomVirtualRowHeight = 0 } = this.viewDataProvider.getViewOptions();
+    const maxHeight = this.isVirtualScrolling ? vMax + bottomVirtualRowHeight : vMax - vMin;
 
     const hasTailPart = this.options.endViewDate > appointmentSettings.info.appointment.endDate;
     let left = Math.round(appointmentSettings.left + offset);
