@@ -2,15 +2,18 @@ import browser from '@js/core/utils/browser';
 import { isMaterialBased } from '@js/ui/themes';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
+import * as columnsController from './columns_controller/index';
 import type { GridCoreNew } from './widget';
 
 /**
  * @interface
  */
 export type Options =
-  & WidgetOptions<GridCoreNew>;
+  & WidgetOptions<GridCoreNew>
+  & columnsController.Options;
 
 export const defaultOptions = {
+  ...columnsController.defaultOptions,
 } satisfies Options;
 
 // TODO: separate by modules

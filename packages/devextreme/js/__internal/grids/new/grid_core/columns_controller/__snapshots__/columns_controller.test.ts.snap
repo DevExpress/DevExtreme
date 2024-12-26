@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ColumnsController columns should contain processed column configs 1`] = `
+[
+  {
+    "alignment": "left",
+    "allowReordering": true,
+    "calculateCellValue": [Function],
+    "calculateDisplayValue": [Function],
+    "caption": "A",
+    "dataField": "a",
+    "dataType": "string",
+    "falseText": "false",
+    "name": "a",
+    "trueText": "true",
+    "visible": true,
+    "visibleIndex": 0,
+  },
+  {
+    "alignment": "left",
+    "allowReordering": true,
+    "calculateCellValue": [Function],
+    "calculateDisplayValue": [Function],
+    "caption": "B",
+    "dataField": "b",
+    "dataType": "string",
+    "falseText": "false",
+    "name": "b",
+    "trueText": "true",
+    "visible": true,
+    "visibleIndex": 1,
+  },
+  {
+    "alignment": "left",
+    "allowReordering": true,
+    "calculateCellValue": [Function],
+    "calculateDisplayValue": [Function],
+    "caption": "C",
+    "dataField": "c",
+    "dataType": "string",
+    "falseText": "false",
+    "name": "c",
+    "trueText": "true",
+    "visible": false,
+    "visibleIndex": 2,
+  },
+]
+`;
+
+exports[`ColumnsController createDataRow should process data object to data row using column configuration 1`] = `
+{
+  "cells": [
+    {
+      "column": {
+        "alignment": "left",
+        "allowReordering": true,
+        "calculateCellValue": [Function],
+        "calculateDisplayValue": [Function],
+        "caption": "A",
+        "dataField": "a",
+        "dataType": "string",
+        "falseText": "false",
+        "name": "a",
+        "trueText": "true",
+        "visible": true,
+        "visibleIndex": 0,
+      },
+      "displayValue": "my a value",
+      "text": "my a value",
+      "value": "my a value",
+    },
+    {
+      "column": {
+        "alignment": "left",
+        "allowReordering": true,
+        "calculateCellValue": [Function],
+        "calculateDisplayValue": [Function],
+        "caption": "B",
+        "dataField": "b",
+        "dataType": "string",
+        "falseText": "false",
+        "name": "b",
+        "trueText": "true",
+        "visible": true,
+        "visibleIndex": 1,
+      },
+      "displayValue": "my b value",
+      "text": "my b value",
+      "value": "my b value",
+    },
+  ],
+  "data": {
+    "a": "my a value",
+    "b": "my b value",
+  },
+  "key": undefined,
+}
+`;
