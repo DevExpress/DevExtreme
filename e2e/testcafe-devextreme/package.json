@@ -7,7 +7,7 @@
     "update-failed-etalons": "node update_failed_etalons.mjs"
   },
   "devDependencies": {
-    "@babel/plugin-transform-runtime": "7.19.6",
+    "@babel/plugin-transform-runtime": "7.25.9",
     "@testcafe-community/axe": "3.5.0",
     "@types/jquery": "3.5.29",
     "axe-core": "4.10.2",

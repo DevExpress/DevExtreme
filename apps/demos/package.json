@@ -87,9 +87,9 @@
     },
     "devDependencies": {
         "@angular/platform-server": "17.3.12",
-        "@babel/core": "7.23.9",
-        "@babel/eslint-parser": "7.23.10",
-        "@babel/preset-env": "7.23.9",
+        "@babel/core": "7.26.0",
+        "@babel/eslint-parser": "7.25.9",
+        "@babel/preset-env": "7.26.0",
         "@rollup/plugin-babel": "6.0.4",
         "@rollup/plugin-node-resolve": "15.2.3",
         "@rollup/plugin-replace": "5.0.5",
