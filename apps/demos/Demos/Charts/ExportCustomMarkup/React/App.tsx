@@ -4,7 +4,7 @@ import {
 } from 'devextreme-react/chart';
 import { Button } from 'devextreme-react/button';
 import { exportFromMarkup } from 'devextreme/viz/export';
-// import toCanvas from 'canvg';
+import { Canvg } from 'canvg';
 import { dataSource } from './data.ts';
 import Form from './Form.tsx';
 
@@ -39,15 +39,14 @@ function App() {
         height: 420,
         margin: 0,
         format: 'png',
-        // eslint-disable-next-line no-unused-vars
         svgToCanvas(svg: Node, canvas) {
-        // eslint-disable-next-line no-unused-vars
           return new Promise((resolve) => {
-            // toCanvas(canvas, new XMLSerializer().serializeToString(svg), {
-            //   ignoreDimensions: true,
-            //   ignoreClear: true,
-            //   renderCallback: resolve,
-            // });
+            const v = Canvg.fromString(
+                canvas.getContext("2d"),
+                new XMLSerializer().serializeToString(svg)
+            );
+
+            resolve(v.render());
           });
         },
       },

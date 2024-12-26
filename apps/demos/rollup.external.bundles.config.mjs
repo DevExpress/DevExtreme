@@ -107,5 +107,16 @@ export default [
     },
     external: [],
     plugins,
+  },
+  {
+    input: NG_BASE_DIR + `canvg/dist/index.js`,
+    output: {
+      file: OUTPUT_DIR + `canvg.bundle.js`,
+      format,
+      name: 'canvg',
+      globals: { },
+    },
+    external: [],
+    plugins,
   }
 ];

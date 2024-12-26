@@ -28,6 +28,7 @@
         "@rollup/plugin-commonjs": "19.0.2",
         "@vue/compiler-sfc": "3.4.27",
         "@vue/shared": "^3.2.47",
+        "canvg": "4.0.2",
         "cldr-core": "40.0.0",
         "cldr-data": "36.0.1",
         "cldr-dates-full": "40.0.0",

@@ -95,9 +95,7 @@ window.config = {
     /**/
 
     /** canvg */
-    'stackblur-canvas': 'npm:stackblur-canvas/dist/stackblur.min.js',
-    'rgbcolor': 'npm:rgbcolor/index.js',
-    'canvg': 'npm:canvg/dist/browser/canvg.min.js',
+    'canvg': 'externals:canvg.bundle.js',
     /**/
 
     /** whatwg-fetch */
