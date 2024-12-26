@@ -46,7 +46,7 @@ const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
     when.apply(this, asyncTemplateItems).done(() => {
       this._postProcessRenderItems(...args);
 
-      d.resolve().then(() => {
+      d.resolve().done(() => {
         this._asyncTemplateItemsMap = {};
       });
     });
