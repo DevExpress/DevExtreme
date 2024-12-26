@@ -1,6 +1,6 @@
 {
   "name": "devextreme-modules-test",
-  "version": "24.2.3",
+  "version": "25.1.0",
   "devDependencies": {
     "@rollup/plugin-alias": "3.1.9",
     "@rollup/plugin-commonjs": "19.0.2",

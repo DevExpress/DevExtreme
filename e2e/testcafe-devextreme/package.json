@@ -1,6 +1,6 @@
 {
   "name": "devextreme-testcafe-tests",
-  "version": "24.2.3",
+  "version": "25.1.0",
   "scripts": {
     "test": "node ./runner.js",
     "lint": "eslint --ext .js,.ts .",
