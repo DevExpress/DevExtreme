@@ -406,11 +406,9 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
     }
     const theme = process.env.THEME.replace('generic.', '');
     testURL = `http://localhost:8080/Demos/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
-    testObject.page(testURL);
   } else {
     changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
     testURL = `http://localhost:8080/apps/demos/Demos/${widget}/${demo}/${framework}/`;
-    testObject.page(testURL);
   } 
   
   const test = testObject
