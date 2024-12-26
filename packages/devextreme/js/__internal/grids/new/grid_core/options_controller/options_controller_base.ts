@@ -74,7 +74,7 @@ export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
 
   private readonly props: SubsGetsUpd<TProps>;
 
-  private readonly defaults: TDefaultProps;
+  protected defaults: TDefaultProps;
 
   public static dependencies = [Component];
 
