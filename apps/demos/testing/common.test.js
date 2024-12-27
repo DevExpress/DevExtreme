@@ -415,7 +415,7 @@ const SKIPPED_TESTS = {
           if (isGitHubDemos) {
             comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, (comparisonOptions && {
               ...comparisonOptions,
-              ...{ looksSameComparisonOptions: { tolerance: 30 } },
+              ...{ looksSameComparisonOptions: { antialiasingTolerance: 10 } },
             }));
           } else {
             comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
