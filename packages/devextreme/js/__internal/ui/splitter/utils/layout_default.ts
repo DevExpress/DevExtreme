@@ -1,7 +1,11 @@
 import { toFixed } from '@js/common/core/localization/utils';
 import { isDefined } from '@js/core/utils/type';
 
-import { findLastIndexOfVisibleItem, normalizePanelSize } from './layout';
+import {
+  findLastIndexOfVisibleItem,
+  findLastVisibleExpandedItemIndex,
+  normalizePanelSize,
+} from './layout';
 import { compareNumbersWithPrecision, PRECISION } from './number_comparison';
 import type { PaneRestrictions } from './types';
 
@@ -135,9 +139,9 @@ export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number
     }
 
     if (remainingSize > 0) {
-      const paneIndex = findLastIndexOfVisibleItem(layoutRestrictions);
+      const paneIndex = findLastVisibleExpandedItemIndex(layoutRestrictions);
 
-      if (layoutRestrictions[paneIndex].collapsed === false) {
+      if (paneIndex !== -1) {
         nextLayout[paneIndex] += remainingSize;
       }
     }
