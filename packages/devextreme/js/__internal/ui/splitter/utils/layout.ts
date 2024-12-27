@@ -40,6 +40,17 @@ export function findLastIndexOfNonCollapsedItem(items: Item[]): number {
   return -1;
 }
 
+export function findLastVisibleExpandedItemIndex(items: Item[]): number {
+  for (let i = items.length - 1; i >= 0; i -= 1) {
+    const { collapsed, visible } = items[i];
+
+    if (collapsed !== true && visible !== false) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 export function findIndexOfNextVisibleItem(items: Item[], index: number): number {
   for (let i = index + 1; i < items.length; i += 1) {
     if (items[i].visible !== false) {
