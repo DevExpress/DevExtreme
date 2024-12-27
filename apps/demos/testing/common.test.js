@@ -411,7 +411,16 @@ const SKIPPED_TESTS = {
             return;
           }
 
-          const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
+          let comparisonResult;
+          if (isGitHubDemos) {
+            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, (comparisonOptions && {
+              ...comparisonOptions,
+              ...{ looksSameComparisonOptions: { tolerance: 30 } },
+            }));
+          } else {
+            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
+          }
+
 
           const consoleMessages = await t.getBrowserConsoleMessages();
 

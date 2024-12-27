@@ -397,7 +397,6 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
   const clientScriptSource = globalReadFrom(__dirname, `../../Demos/${widget}/${demo}/client-script.js`, (x) => [{ content: x }]) || [];
 
   let testURL = '';
-  let test;
 
   if (isGitHubDemos) {
     if (widget !== 'DataGrid' || gitHubIgnored.includes(demo)) {
@@ -406,18 +405,16 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
 
     const theme = process.env.THEME.replace('generic.', '');
     testURL = `http://localhost:8080/Demos/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
-    test = testObject.page(testURL);
   } else {
     
     changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
     testURL = `http://localhost:8080/apps/demos/Demos/${widget}/${demo}/${framework}/`;
-    test = testObject
-      .clientScripts([
-        { module: 'mockdate' },
-        ...clientScriptSource
-      ])
-      .page(testURL);
-  } 
+  }
+  const test = testObject.clientScripts([
+      { module: 'mockdate' },
+      ...clientScriptSource
+    ])
+    .page(testURL);
 
   test.before?.(async (t) => {
     const [width, height] = t.fixtureCtx.initialWindowSize;
