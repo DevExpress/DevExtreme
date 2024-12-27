@@ -737,6 +737,31 @@ QUnit.test('exportFromMarkup. backgroundColor from current theme', function(asse
     }
 });
 
+QUnit.test('exportWidgets method should be able export plain DOM element (T1266360)', function(assert) {
+    const optionMock = () => {
+        return {
+            fileName: 'chart',
+            format: 'PNG',
+        };
+    };
+
+    const widgets = [
+        createMockWidget({ height: 25, width: 10 }, optionMock),
+    ];
+
+    widgets.forEach(widget => {
+        const originalElement = widget.element();
+        widget.element = sinon.stub().returns(originalElement[0]); // Get native DOM
+    });
+
+    try {
+        exportModule.exportWidgets(widgets);
+        assert.strictEqual(clientExporter.export.getCall(0).args[0].nodeName, 'svg', 'combineMarkups should pass to export DOM node');
+    } catch(error) {
+        assert.ok(false, 'exportWidgets doesnt work when plain DOM is passed as argument');
+    }
+});
+
 QUnit.test('exportWidgets method should pass to export markup as DOM node', function(assert) {
     const optionMock = (param) => {
         if(param === 'theme') return 'someTheme.light';
