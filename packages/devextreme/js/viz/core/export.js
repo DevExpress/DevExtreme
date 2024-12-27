@@ -308,7 +308,7 @@ export let combineMarkups = function(widgets, options = { }) {
         const rowInfo = row.reduce((r, item, colIndex) => {
             const size = item.getSize();
             const backgroundColor = item.option('backgroundColor') || getTheme(item.option('theme')).backgroundColor;
-            const node = item.element()
+            const node = $(item.element())
                 .find('svg')
                 .get(0)
                 .cloneNode(true);
