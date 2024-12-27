@@ -1,5 +1,9 @@
 name: Publishing to GitHub Pages step 2 (run tests on branch)
 
+concurrency:
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  cancel-in-progress: true
+
 on:
   workflow_dispatch:
 

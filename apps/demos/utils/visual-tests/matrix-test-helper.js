@@ -394,8 +394,6 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
     return;
   }
 
-  // TODO: check if GH pages testcafe fail
-
   const clientScriptSource = globalReadFrom(__dirname, `../../Demos/${widget}/${demo}/client-script.js`, (x) => [{ content: x }]) || [];
 
   let testURL = '';
