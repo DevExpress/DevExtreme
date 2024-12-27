@@ -209,8 +209,7 @@ export function getNextLayout(
   }
 
   const totalSize = nextLayout.reduce((total, size) => size + total, 0);
-
-  if (!(compareNumbersWithPrecision(totalSize, 100, 3) === 0)) {
+  if (!(compareNumbersWithPrecision(totalSize, 100, 2) === 0)) {
     return currentLayout;
   }
 
