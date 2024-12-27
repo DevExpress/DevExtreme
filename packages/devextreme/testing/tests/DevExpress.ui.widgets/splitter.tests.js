@@ -1287,6 +1287,25 @@ QUnit.module('Pane sizing', moduleConfig, () => {
             }, resizeObserverTimeout);
         });
     });
+
+    QUnit.test('The splitter pane can safely collapse if the total size layout calculation error is less than three decimal places (T1262088)', function(assert) {
+        this.reinit({
+            width: 733.67,
+            height: 200,
+            items: [ { collapsible: true }, { collapsible: true }, { collapsible: true }],
+        });
+
+        this.assertLayout(['33.3333', '33.3333', '33.3333']);
+
+        this.instance._layout = [33.3338502509, 33.3338502509, 33.3338502509];
+
+        const $resizeHandle = this.getResizeHandles().first();
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+
+        $collapsePrevButton.trigger('dxclick');
+
+        this.assertLayout(['0', '66.6677', '33.3339']);
+    });
 });
 
 QUnit.module('Resizing', moduleConfig, () => {
