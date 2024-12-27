@@ -3683,6 +3683,54 @@ QUnit.module('regressions', moduleSetup, () => {
 
         assert.equal(count, 1);
     });
+
+    QUnit.test('Selection: item selected correctly on async render with tree structure (T1269855)', function(assert) {
+        this.clock.restore();
+        const done = assert.async();
+
+        const data = [
+            { id: 1, name: 'Item 1_1', group: 'group_1' },
+            { id: 2, name: 'Item 1_2', group: 'group_1' },
+            { id: 3, name: 'Item 1_3', group: 'group_1' },
+            { id: 4, name: 'Item 2_1', group: 'group_2' },
+        ];
+
+        const dataSource = new DataSource({
+            store: new ArrayStore({ data, key: 'id' }),
+            group: 'group',
+        });
+
+        const instance = new List($('#list'), {
+            dataSource,
+            grouped: true,
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    'item': {
+                        render: function({ model, container, onRendered }) {
+                            setTimeout(function() {
+                                const $item = $(`<div>${model.name}</div>`);
+                                $item.appendTo(container);
+
+                                onRendered();
+                            }, 100);
+                        }
+                    },
+                }
+            },
+            selectionMode: 'single',
+            selectedItemKeys: [data[0].id],
+        });
+
+        instance.option('_onItemsRendered', () => {
+            const listElement = instance.element();
+            const $firstGroup = $(listElement).find(`.${LIST_GROUP_CLASS}`).eq(0);
+            const $firstItemInFirstGroup = $firstGroup.find(`.${LIST_ITEM_CLASS}`).eq(0);
+
+            assert.ok($firstItemInFirstGroup.hasClass(LIST_ITEM_SELECTED_CLASS), 'First item in first group should be selected');
+            done();
+        });
+    });
 });
 
 QUnit.module('widget sizing render', {}, () => {
