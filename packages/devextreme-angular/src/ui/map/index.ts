@@ -618,8 +618,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         return this._getOption('markers');
     }
     set markersChildren(value) {
-        this.setContentChildren('markers', value, 'DxiMapMarkerComponent');
-        this.setChildren('markers', value);
+        if (this.checkContentChildren('markers', value, 'DxiMapMarkerComponent')) {
+            this.setContentChildren('markers', value, 'DxiMapMarkerComponent');
+            this.setChildren('markers', value);
+        }
     }
 
     @ContentChildren(DxiMapRouteComponent)
@@ -627,8 +629,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         return this._getOption('routes');
     }
     set routesChildren(value) {
-        this.setContentChildren('routes', value, 'DxiMapRouteComponent');
-        this.setChildren('routes', value);
+        if (this.checkContentChildren('routes', value, 'DxiMapRouteComponent')) {
+            this.setContentChildren('routes', value, 'DxiMapRouteComponent');
+            this.setChildren('routes', value);
+        }
     }
 
 
@@ -638,7 +642,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     }
     set centerLegacyChildren(value) {
         if (this.checkContentChildren('center', value, 'DxiCenterComponent')) {
-           this.setChildren('center', value);
+            this.setContentChildren('center', value, 'DxiCenterComponent');
+            this.setChildren('center', value);
         }
     }
 
@@ -648,7 +653,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     }
     set markersLegacyChildren(value) {
         if (this.checkContentChildren('markers', value, 'DxiMarkerComponent')) {
-           this.setChildren('markers', value);
+            this.setContentChildren('markers', value, 'DxiMarkerComponent');
+            this.setChildren('markers', value);
         }
     }
 
@@ -658,7 +664,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     }
     set routesLegacyChildren(value) {
         if (this.checkContentChildren('routes', value, 'DxiRouteComponent')) {
-           this.setChildren('routes', value);
+            this.setContentChildren('routes', value, 'DxiRouteComponent');
+            this.setChildren('routes', value);
         }
     }
 

@@ -698,8 +698,10 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiRadioGroupItemComponent');
-        this.setChildren('items', value);
+        if (this.checkContentChildren('items', value, 'DxiRadioGroupItemComponent')) {
+            this.setContentChildren('items', value, 'DxiRadioGroupItemComponent');
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -709,7 +711,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     }
     set itemsLegacyChildren(value) {
         if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
+            this.setContentChildren('items', value, 'DxiItemComponent');
+            this.setChildren('items', value);
         }
     }
 

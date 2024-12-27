@@ -561,8 +561,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         return this._getOption('customOperations');
     }
     set customOperationsChildren(value) {
-        this.setContentChildren('customOperations', value, 'DxiFilterBuilderCustomOperationComponent');
-        this.setChildren('customOperations', value);
+        if (this.checkContentChildren('customOperations', value, 'DxiFilterBuilderCustomOperationComponent')) {
+            this.setContentChildren('customOperations', value, 'DxiFilterBuilderCustomOperationComponent');
+            this.setChildren('customOperations', value);
+        }
     }
 
     @ContentChildren(DxiFilterBuilderFieldComponent)
@@ -570,8 +572,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         return this._getOption('fields');
     }
     set fieldsChildren(value) {
-        this.setContentChildren('fields', value, 'DxiFilterBuilderFieldComponent');
-        this.setChildren('fields', value);
+        if (this.checkContentChildren('fields', value, 'DxiFilterBuilderFieldComponent')) {
+            this.setContentChildren('fields', value, 'DxiFilterBuilderFieldComponent');
+            this.setChildren('fields', value);
+        }
     }
 
 
@@ -581,7 +585,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     }
     set customOperationsLegacyChildren(value) {
         if (this.checkContentChildren('customOperations', value, 'DxiCustomOperationComponent')) {
-           this.setChildren('customOperations', value);
+            this.setContentChildren('customOperations', value, 'DxiCustomOperationComponent');
+            this.setChildren('customOperations', value);
         }
     }
 
@@ -591,7 +596,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     }
     set fieldsLegacyChildren(value) {
         if (this.checkContentChildren('fields', value, 'DxiFieldComponent')) {
-           this.setChildren('fields', value);
+            this.setContentChildren('fields', value, 'DxiFieldComponent');
+            this.setChildren('fields', value);
         }
     }
 

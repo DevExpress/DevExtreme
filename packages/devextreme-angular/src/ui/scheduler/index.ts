@@ -1434,8 +1434,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         return this._getOption('resources');
     }
     set resourcesChildren(value) {
-        this.setContentChildren('resources', value, 'DxiSchedulerResourceComponent');
-        this.setChildren('resources', value);
+        if (this.checkContentChildren('resources', value, 'DxiSchedulerResourceComponent')) {
+            this.setContentChildren('resources', value, 'DxiSchedulerResourceComponent');
+            this.setChildren('resources', value);
+        }
     }
 
     @ContentChildren(DxiSchedulerViewComponent)
@@ -1443,8 +1445,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         return this._getOption('views');
     }
     set viewsChildren(value) {
-        this.setContentChildren('views', value, 'DxiSchedulerViewComponent');
-        this.setChildren('views', value);
+        if (this.checkContentChildren('views', value, 'DxiSchedulerViewComponent')) {
+            this.setContentChildren('views', value, 'DxiSchedulerViewComponent');
+            this.setChildren('views', value);
+        }
     }
 
 
@@ -1454,7 +1458,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     }
     set resourcesLegacyChildren(value) {
         if (this.checkContentChildren('resources', value, 'DxiResourceComponent')) {
-           this.setChildren('resources', value);
+            this.setContentChildren('resources', value, 'DxiResourceComponent');
+            this.setChildren('resources', value);
         }
     }
 
@@ -1464,7 +1469,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     }
     set viewsLegacyChildren(value) {
         if (this.checkContentChildren('views', value, 'DxiViewComponent')) {
-           this.setChildren('views', value);
+            this.setContentChildren('views', value, 'DxiViewComponent');
+            this.setChildren('views', value);
         }
     }
 

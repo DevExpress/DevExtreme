@@ -1628,8 +1628,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiLookupItemComponent');
-        this.setChildren('items', value);
+        if (this.checkContentChildren('items', value, 'DxiLookupItemComponent')) {
+            this.setContentChildren('items', value, 'DxiLookupItemComponent');
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -1639,7 +1641,8 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     }
     set itemsLegacyChildren(value) {
         if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
+            this.setContentChildren('items', value, 'DxiItemComponent');
+            this.setChildren('items', value);
         }
     }
 

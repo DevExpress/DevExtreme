@@ -506,8 +506,10 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiActionSheetItemComponent');
-        this.setChildren('items', value);
+        if (this.checkContentChildren('items', value, 'DxiActionSheetItemComponent')) {
+            this.setContentChildren('items', value, 'DxiActionSheetItemComponent');
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -517,7 +519,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     }
     set itemsLegacyChildren(value) {
         if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
+            this.setContentChildren('items', value, 'DxiItemComponent');
+            this.setChildren('items', value);
         }
     }
 

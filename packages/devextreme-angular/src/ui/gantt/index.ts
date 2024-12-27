@@ -1186,8 +1186,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('columns');
     }
     set columnsChildren(value) {
-        this.setContentChildren('columns', value, 'DxiGanttColumnComponent');
-        this.setChildren('columns', value);
+        if (this.checkContentChildren('columns', value, 'DxiGanttColumnComponent')) {
+            this.setContentChildren('columns', value, 'DxiGanttColumnComponent');
+            this.setChildren('columns', value);
+        }
     }
 
     @ContentChildren(DxiGanttStripLineComponent)
@@ -1195,8 +1197,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('stripLines');
     }
     set stripLinesChildren(value) {
-        this.setContentChildren('stripLines', value, 'DxiGanttStripLineComponent');
-        this.setChildren('stripLines', value);
+        if (this.checkContentChildren('stripLines', value, 'DxiGanttStripLineComponent')) {
+            this.setContentChildren('stripLines', value, 'DxiGanttStripLineComponent');
+            this.setChildren('stripLines', value);
+        }
     }
 
 
@@ -1206,7 +1210,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     }
     set columnsLegacyChildren(value) {
         if (this.checkContentChildren('columns', value, 'DxiColumnComponent')) {
-           this.setChildren('columns', value);
+            this.setContentChildren('columns', value, 'DxiColumnComponent');
+            this.setChildren('columns', value);
         }
     }
 
@@ -1216,7 +1221,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     }
     set stripLinesLegacyChildren(value) {
         if (this.checkContentChildren('stripLines', value, 'DxiStripLineComponent')) {
-           this.setChildren('stripLines', value);
+            this.setContentChildren('stripLines', value, 'DxiStripLineComponent');
+            this.setChildren('stripLines', value);
         }
     }
 

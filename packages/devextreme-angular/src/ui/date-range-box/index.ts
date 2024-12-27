@@ -1505,8 +1505,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
-        this.setContentChildren('buttons', value, 'DxiDateRangeBoxButtonComponent');
-        this.setChildren('buttons', value);
+        if (this.checkContentChildren('buttons', value, 'DxiDateRangeBoxButtonComponent')) {
+            this.setContentChildren('buttons', value, 'DxiDateRangeBoxButtonComponent');
+            this.setChildren('buttons', value);
+        }
     }
 
 
@@ -1516,7 +1518,8 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     }
     set buttonsLegacyChildren(value) {
         if (this.checkContentChildren('buttons', value, 'DxiButtonComponent')) {
-           this.setChildren('buttons', value);
+            this.setContentChildren('buttons', value, 'DxiButtonComponent');
+            this.setChildren('buttons', value);
         }
     }
 

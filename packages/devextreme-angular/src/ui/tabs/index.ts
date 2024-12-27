@@ -735,8 +735,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiTabsItemComponent');
-        this.setChildren('items', value);
+        if (this.checkContentChildren('items', value, 'DxiTabsItemComponent')) {
+            this.setContentChildren('items', value, 'DxiTabsItemComponent');
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -746,7 +748,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     }
     set itemsLegacyChildren(value) {
         if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
+            this.setContentChildren('items', value, 'DxiItemComponent');
+            this.setChildren('items', value);
         }
     }
 

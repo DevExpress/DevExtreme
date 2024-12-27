@@ -1447,8 +1447,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('annotations');
     }
     set annotationsChildren(value) {
-        this.setContentChildren('annotations', value, 'DxiChartAnnotationComponent');
-        this.setChildren('annotations', value);
+        if (this.checkContentChildren('annotations', value, 'DxiChartAnnotationComponent')) {
+            this.setContentChildren('annotations', value, 'DxiChartAnnotationComponent');
+            this.setChildren('annotations', value);
+        }
     }
 
     @ContentChildren(DxiChartPaneComponent)
@@ -1456,8 +1458,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('panes');
     }
     set panesChildren(value) {
-        this.setContentChildren('panes', value, 'DxiChartPaneComponent');
-        this.setChildren('panes', value);
+        if (this.checkContentChildren('panes', value, 'DxiChartPaneComponent')) {
+            this.setContentChildren('panes', value, 'DxiChartPaneComponent');
+            this.setChildren('panes', value);
+        }
     }
 
     @ContentChildren(DxiChartSeriesComponent)
@@ -1465,8 +1469,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('series');
     }
     set seriesChildren(value) {
-        this.setContentChildren('series', value, 'DxiChartSeriesComponent');
-        this.setChildren('series', value);
+        if (this.checkContentChildren('series', value, 'DxiChartSeriesComponent')) {
+            this.setContentChildren('series', value, 'DxiChartSeriesComponent');
+            this.setChildren('series', value);
+        }
     }
 
     @ContentChildren(DxiChartValueAxisComponent)
@@ -1474,8 +1480,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('valueAxis');
     }
     set valueAxesChildren(value) {
-        this.setContentChildren('valueAxis', value, 'DxiChartValueAxisComponent');
-        this.setChildren('valueAxis', value);
+        if (this.checkContentChildren('valueAxis', value, 'DxiChartValueAxisComponent')) {
+            this.setContentChildren('valueAxis', value, 'DxiChartValueAxisComponent');
+            this.setChildren('valueAxis', value);
+        }
     }
 
 
@@ -1485,7 +1493,8 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     }
     set annotationsLegacyChildren(value) {
         if (this.checkContentChildren('annotations', value, 'DxiAnnotationComponent')) {
-           this.setChildren('annotations', value);
+            this.setContentChildren('annotations', value, 'DxiAnnotationComponent');
+            this.setChildren('annotations', value);
         }
     }
 
@@ -1495,7 +1504,8 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     }
     set panesLegacyChildren(value) {
         if (this.checkContentChildren('panes', value, 'DxiPaneComponent')) {
-           this.setChildren('panes', value);
+            this.setContentChildren('panes', value, 'DxiPaneComponent');
+            this.setChildren('panes', value);
         }
     }
 
@@ -1505,7 +1515,8 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     }
     set seriesLegacyChildren(value) {
         if (this.checkContentChildren('series', value, 'DxiSeriesComponent')) {
-           this.setChildren('series', value);
+            this.setContentChildren('series', value, 'DxiSeriesComponent');
+            this.setChildren('series', value);
         }
     }
 
@@ -1515,7 +1526,8 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     }
     set valueAxisLegacyChildren(value) {
         if (this.checkContentChildren('valueAxis', value, 'DxiValueAxisComponent')) {
-           this.setChildren('valueAxis', value);
+            this.setContentChildren('valueAxis', value, 'DxiValueAxisComponent');
+            this.setChildren('valueAxis', value);
         }
     }
 

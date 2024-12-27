@@ -777,8 +777,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         return this._getOption('annotations');
     }
     set annotationsChildren(value) {
-        this.setContentChildren('annotations', value, 'DxiVectorMapAnnotationComponent');
-        this.setChildren('annotations', value);
+        if (this.checkContentChildren('annotations', value, 'DxiVectorMapAnnotationComponent')) {
+            this.setContentChildren('annotations', value, 'DxiVectorMapAnnotationComponent');
+            this.setChildren('annotations', value);
+        }
     }
 
     @ContentChildren(DxiVectorMapLayerComponent)
@@ -786,8 +788,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         return this._getOption('layers');
     }
     set layersChildren(value) {
-        this.setContentChildren('layers', value, 'DxiVectorMapLayerComponent');
-        this.setChildren('layers', value);
+        if (this.checkContentChildren('layers', value, 'DxiVectorMapLayerComponent')) {
+            this.setContentChildren('layers', value, 'DxiVectorMapLayerComponent');
+            this.setChildren('layers', value);
+        }
     }
 
     @ContentChildren(DxiVectorMapLegendComponent)
@@ -795,8 +799,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         return this._getOption('legends');
     }
     set legendsChildren(value) {
-        this.setContentChildren('legends', value, 'DxiVectorMapLegendComponent');
-        this.setChildren('legends', value);
+        if (this.checkContentChildren('legends', value, 'DxiVectorMapLegendComponent')) {
+            this.setContentChildren('legends', value, 'DxiVectorMapLegendComponent');
+            this.setChildren('legends', value);
+        }
     }
 
 
@@ -806,7 +812,8 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     }
     set annotationsLegacyChildren(value) {
         if (this.checkContentChildren('annotations', value, 'DxiAnnotationComponent')) {
-           this.setChildren('annotations', value);
+            this.setContentChildren('annotations', value, 'DxiAnnotationComponent');
+            this.setChildren('annotations', value);
         }
     }
 
@@ -816,7 +823,8 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     }
     set layersLegacyChildren(value) {
         if (this.checkContentChildren('layers', value, 'DxiLayerComponent')) {
-           this.setChildren('layers', value);
+            this.setContentChildren('layers', value, 'DxiLayerComponent');
+            this.setChildren('layers', value);
         }
     }
 
@@ -826,7 +834,8 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     }
     set legendsLegacyChildren(value) {
         if (this.checkContentChildren('legends', value, 'DxiLegendComponent')) {
-           this.setChildren('legends', value);
+            this.setContentChildren('legends', value, 'DxiLegendComponent');
+            this.setChildren('legends', value);
         }
     }
 

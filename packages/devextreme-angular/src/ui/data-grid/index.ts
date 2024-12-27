@@ -2066,8 +2066,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
         return this._getOption('columns');
     }
     set columnsChildren(value) {
-        this.setContentChildren('columns', value, 'DxiDataGridColumnComponent');
-        this.setChildren('columns', value);
+        if (this.checkContentChildren('columns', value, 'DxiDataGridColumnComponent')) {
+            this.setContentChildren('columns', value, 'DxiDataGridColumnComponent');
+            this.setChildren('columns', value);
+        }
     }
 
     @ContentChildren(DxiDataGridSortByGroupSummaryInfoComponent)
@@ -2075,8 +2077,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
         return this._getOption('sortByGroupSummaryInfo');
     }
     set sortByGroupSummaryInfosChildren(value) {
-        this.setContentChildren('sortByGroupSummaryInfo', value, 'DxiDataGridSortByGroupSummaryInfoComponent');
-        this.setChildren('sortByGroupSummaryInfo', value);
+        if (this.checkContentChildren('sortByGroupSummaryInfo', value, 'DxiDataGridSortByGroupSummaryInfoComponent')) {
+            this.setContentChildren('sortByGroupSummaryInfo', value, 'DxiDataGridSortByGroupSummaryInfoComponent');
+            this.setChildren('sortByGroupSummaryInfo', value);
+        }
     }
 
 
@@ -2086,7 +2090,8 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     }
     set columnsLegacyChildren(value) {
         if (this.checkContentChildren('columns', value, 'DxiColumnComponent')) {
-           this.setChildren('columns', value);
+            this.setContentChildren('columns', value, 'DxiColumnComponent');
+            this.setChildren('columns', value);
         }
     }
 
@@ -2096,7 +2101,8 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     }
     set sortByGroupSummaryInfoLegacyChildren(value) {
         if (this.checkContentChildren('sortByGroupSummaryInfo', value, 'DxiSortByGroupSummaryInfoComponent')) {
-           this.setChildren('sortByGroupSummaryInfo', value);
+            this.setContentChildren('sortByGroupSummaryInfo', value, 'DxiSortByGroupSummaryInfoComponent');
+            this.setChildren('sortByGroupSummaryInfo', value);
         }
     }
 

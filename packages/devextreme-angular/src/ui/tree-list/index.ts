@@ -2040,8 +2040,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         return this._getOption('columns');
     }
     set columnsChildren(value) {
-        this.setContentChildren('columns', value, 'DxiTreeListColumnComponent');
-        this.setChildren('columns', value);
+        if (this.checkContentChildren('columns', value, 'DxiTreeListColumnComponent')) {
+            this.setContentChildren('columns', value, 'DxiTreeListColumnComponent');
+            this.setChildren('columns', value);
+        }
     }
 
 
@@ -2051,7 +2053,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     }
     set columnsLegacyChildren(value) {
         if (this.checkContentChildren('columns', value, 'DxiColumnComponent')) {
-           this.setChildren('columns', value);
+            this.setContentChildren('columns', value, 'DxiColumnComponent');
+            this.setChildren('columns', value);
         }
     }
 

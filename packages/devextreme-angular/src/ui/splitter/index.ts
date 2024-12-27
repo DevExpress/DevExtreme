@@ -432,8 +432,10 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiSplitterItemComponent');
-        this.setChildren('items', value);
+        if (this.checkContentChildren('items', value, 'DxiSplitterItemComponent')) {
+            this.setContentChildren('items', value, 'DxiSplitterItemComponent');
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -443,7 +445,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     }
     set itemsLegacyChildren(value) {
         if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
+            this.setContentChildren('items', value, 'DxiItemComponent');
+            this.setChildren('items', value);
         }
     }
 

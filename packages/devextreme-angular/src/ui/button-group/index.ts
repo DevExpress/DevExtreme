@@ -499,8 +499,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiButtonGroupItemComponent');
-        this.setChildren('items', value);
+        if (this.checkContentChildren('items', value, 'DxiButtonGroupItemComponent')) {
+            this.setContentChildren('items', value, 'DxiButtonGroupItemComponent');
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -510,7 +512,8 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     }
     set itemsLegacyChildren(value) {
         if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
+            this.setContentChildren('items', value, 'DxiItemComponent');
+            this.setChildren('items', value);
         }
     }
 

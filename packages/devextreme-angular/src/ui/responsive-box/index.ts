@@ -448,8 +448,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         return this._getOption('cols');
     }
     set colsChildren(value) {
-        this.setContentChildren('cols', value, 'DxiResponsiveBoxColComponent');
-        this.setChildren('cols', value);
+        if (this.checkContentChildren('cols', value, 'DxiResponsiveBoxColComponent')) {
+            this.setContentChildren('cols', value, 'DxiResponsiveBoxColComponent');
+            this.setChildren('cols', value);
+        }
     }
 
     @ContentChildren(DxiResponsiveBoxItemComponent)
@@ -457,8 +459,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiResponsiveBoxItemComponent');
-        this.setChildren('items', value);
+        if (this.checkContentChildren('items', value, 'DxiResponsiveBoxItemComponent')) {
+            this.setContentChildren('items', value, 'DxiResponsiveBoxItemComponent');
+            this.setChildren('items', value);
+        }
     }
 
     @ContentChildren(DxiResponsiveBoxRowComponent)
@@ -466,8 +470,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         return this._getOption('rows');
     }
     set rowsChildren(value) {
-        this.setContentChildren('rows', value, 'DxiResponsiveBoxRowComponent');
-        this.setChildren('rows', value);
+        if (this.checkContentChildren('rows', value, 'DxiResponsiveBoxRowComponent')) {
+            this.setContentChildren('rows', value, 'DxiResponsiveBoxRowComponent');
+            this.setChildren('rows', value);
+        }
     }
 
 
@@ -477,7 +483,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     }
     set colsLegacyChildren(value) {
         if (this.checkContentChildren('cols', value, 'DxiColComponent')) {
-           this.setChildren('cols', value);
+            this.setContentChildren('cols', value, 'DxiColComponent');
+            this.setChildren('cols', value);
         }
     }
 
@@ -487,7 +494,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     }
     set itemsLegacyChildren(value) {
         if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
+            this.setContentChildren('items', value, 'DxiItemComponent');
+            this.setChildren('items', value);
         }
     }
 
@@ -497,7 +505,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     }
     set rowsLegacyChildren(value) {
         if (this.checkContentChildren('rows', value, 'DxiRowComponent')) {
-           this.setChildren('rows', value);
+            this.setContentChildren('rows', value, 'DxiRowComponent');
+            this.setChildren('rows', value);
         }
     }
 

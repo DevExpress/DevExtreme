@@ -714,8 +714,10 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiAccordionItemComponent');
-        this.setChildren('items', value);
+        if (this.checkContentChildren('items', value, 'DxiAccordionItemComponent')) {
+            this.setContentChildren('items', value, 'DxiAccordionItemComponent');
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -725,7 +727,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     }
     set itemsLegacyChildren(value) {
         if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
+            this.setContentChildren('items', value, 'DxiItemComponent');
+            this.setChildren('items', value);
         }
     }
 

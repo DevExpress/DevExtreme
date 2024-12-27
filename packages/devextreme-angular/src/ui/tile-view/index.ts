@@ -579,8 +579,10 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiTileViewItemComponent');
-        this.setChildren('items', value);
+        if (this.checkContentChildren('items', value, 'DxiTileViewItemComponent')) {
+            this.setContentChildren('items', value, 'DxiTileViewItemComponent');
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -590,7 +592,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     }
     set itemsLegacyChildren(value) {
         if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
+            this.setContentChildren('items', value, 'DxiItemComponent');
+            this.setChildren('items', value);
         }
     }
 

@@ -980,8 +980,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         return this._getOption('annotations');
     }
     set annotationsChildren(value) {
-        this.setContentChildren('annotations', value, 'DxiPieChartAnnotationComponent');
-        this.setChildren('annotations', value);
+        if (this.checkContentChildren('annotations', value, 'DxiPieChartAnnotationComponent')) {
+            this.setContentChildren('annotations', value, 'DxiPieChartAnnotationComponent');
+            this.setChildren('annotations', value);
+        }
     }
 
     @ContentChildren(DxiPieChartSeriesComponent)
@@ -989,8 +991,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         return this._getOption('series');
     }
     set seriesChildren(value) {
-        this.setContentChildren('series', value, 'DxiPieChartSeriesComponent');
-        this.setChildren('series', value);
+        if (this.checkContentChildren('series', value, 'DxiPieChartSeriesComponent')) {
+            this.setContentChildren('series', value, 'DxiPieChartSeriesComponent');
+            this.setChildren('series', value);
+        }
     }
 
 
@@ -1000,7 +1004,8 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     }
     set annotationsLegacyChildren(value) {
         if (this.checkContentChildren('annotations', value, 'DxiAnnotationComponent')) {
-           this.setChildren('annotations', value);
+            this.setContentChildren('annotations', value, 'DxiAnnotationComponent');
+            this.setChildren('annotations', value);
         }
     }
 
@@ -1010,7 +1015,8 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     }
     set seriesLegacyChildren(value) {
         if (this.checkContentChildren('series', value, 'DxiSeriesComponent')) {
-           this.setChildren('series', value);
+            this.setContentChildren('series', value, 'DxiSeriesComponent');
+            this.setChildren('series', value);
         }
     }
 

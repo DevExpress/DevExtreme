@@ -920,8 +920,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         return this._getOption('customShapes');
     }
     set customShapesChildren(value) {
-        this.setContentChildren('customShapes', value, 'DxiDiagramCustomShapeComponent');
-        this.setChildren('customShapes', value);
+        if (this.checkContentChildren('customShapes', value, 'DxiDiagramCustomShapeComponent')) {
+            this.setContentChildren('customShapes', value, 'DxiDiagramCustomShapeComponent');
+            this.setChildren('customShapes', value);
+        }
     }
 
 
@@ -931,7 +933,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     }
     set customShapesLegacyChildren(value) {
         if (this.checkContentChildren('customShapes', value, 'DxiCustomShapeComponent')) {
-           this.setChildren('customShapes', value);
+            this.setContentChildren('customShapes', value, 'DxiCustomShapeComponent');
+            this.setChildren('customShapes', value);
         }
     }
 
