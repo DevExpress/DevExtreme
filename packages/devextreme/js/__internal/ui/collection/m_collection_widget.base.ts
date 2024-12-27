@@ -876,7 +876,7 @@ const CollectionWidget = Widget.inherit({
     $element.attr(attributes);
   },
 
-  _renderItem(index, itemData, $container, $itemToReplace, uniqueKey) {
+  _renderItem(index, itemData, $container, $itemToReplace) {
     const itemIndex = index?.item ?? index;
     $container = $container || this._getItemsContainer();
     const $itemFrame = this._renderItemFrame(itemIndex, itemData, $container, $itemToReplace);
@@ -891,7 +891,6 @@ const CollectionWidget = Widget.inherit({
       container: getPublicElement($itemContent),
       contentClass: this._itemContentClass(),
       defaultTemplateName: this.option('itemTemplate'),
-      uniqueKey,
     });
 
     const that = this;

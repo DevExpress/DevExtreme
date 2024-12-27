@@ -34,7 +34,6 @@ declare class Base<
     itemData: TItem,
     $container: dxElementWrapper,
     $itemToReplace?: dxElementWrapper,
-    uniqueKey?: string,
   ): dxElementWrapper;
   _renderItemFrame(
     index: number,
