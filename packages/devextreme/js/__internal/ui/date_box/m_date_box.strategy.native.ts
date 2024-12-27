@@ -67,9 +67,12 @@ const NativeStrategy = DateBoxStrategy.inherit({
   },
 
   renderInputMinMax($input) {
+    const type = this.dateBox.option('type');
+    const format = type === 'datetime' ? 'yyyy-MM-ddTHH:mm' : 'yyyy-MM-dd';
+
     $input.attr({
-      min: dateSerialization.serializeDate(this.dateBox.dateOption('min'), 'yyyy-MM-dd'),
-      max: dateSerialization.serializeDate(this.dateBox.dateOption('max'), 'yyyy-MM-dd'),
+      min: dateSerialization.serializeDate(this.dateBox.dateOption('min'), format),
+      max: dateSerialization.serializeDate(this.dateBox.dateOption('max'), format),
     });
   },
 });

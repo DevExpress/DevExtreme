@@ -248,6 +248,21 @@ QUnit.module('datebox tests', moduleConfig, () => {
         assert.equal($dropDownButton.length, expectedButtonsNumber, 'correct readOnly value');
     });
 
+    QUnit.test('Datebox should set min/max attributes to datetime input in localized datetime format (T1252602)', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'datetime',
+            pickerType: 'native',
+            value: new Date(),
+            inputAttr: { 'aria-label': 'Date Time' },
+            min: new Date(2024, 8, 10, 16, 54, 10),
+            max: new Date(2024, 8, 27, 16, 54, 10)
+        });
+
+        const $input = $dateBox.find('.' + TEXTEDITOR_INPUT_CLASS);
+        assert.equal($input.attr('min'), '2024-09-10T16:54', 'minimum date changed correctly');
+        assert.equal($input.attr('max'), '2024-09-27T16:54', 'maximum date changed correctly');
+    });
+
     QUnit.test('Datebox should set min and max attributes to the native input (T258860) after option changed', function(assert) {
         const $dateBox = $('#dateBox').dxDateBox({
             type: 'date',
