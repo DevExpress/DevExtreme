@@ -5,6 +5,7 @@ import {
   useContext,
   useRef,
   useLayoutEffect,
+  useMemo,
 } from 'react';
 
 import { ElementType, getElementType, IOptionElement } from './configuration/react/element';
@@ -31,7 +32,13 @@ export function useOptionScanning(
 
   const updateToken = Symbol('update token');
 
-  const configBuilder = createConfigBuilder(optionElement, parentFullName);
+  const configBuilder = useMemo(
+    () => createConfigBuilder(optionElement, parentFullName),
+    [
+      optionElement,
+      parentFullName,
+    ],
+  );
 
   Children.forEach(
     children,
