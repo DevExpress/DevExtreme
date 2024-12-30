@@ -212,8 +212,8 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
   protected _setChildren(propertyName, value, className) {
     if (this.checkContentChildren(propertyName, value, className)) {
-        this.setContentChildren(propertyName, value, className);
-        this.setChildren(propertyName, value);
+      this.setContentChildren(propertyName, value, className);
+      this.setChildren(propertyName, value);
     }
   }
 
