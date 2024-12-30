@@ -1,4 +1,4 @@
-This demo leverages the [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) service alongside the DevExtreme JavaScript Chat component. You can integrate JavaScript Chat with multiple AI services, including [OpenAI](https://openai.com/), [Google Dialogflow](https://cloud.google.com/dialogflow/docs), and [Microsoft Bot Framework](https://dev.botframework.com/).
+This demo leverages the [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) service alongside the DevExtreme Chat component. You can integrate Chat with multiple AI services, including [OpenAI](https://openai.com/), [Google Dialogflow](https://cloud.google.com/dialogflow/docs), and [Microsoft Bot Framework](https://dev.botframework.com/).
 
 ## Handling dataSource (reloadOnChange: false)
 
