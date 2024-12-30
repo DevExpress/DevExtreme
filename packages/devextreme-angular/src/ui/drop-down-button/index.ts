@@ -836,8 +836,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiDropDownButtonItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiDropDownButtonItemComponent');
     }
 
 
@@ -846,9 +845,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
-        }
+        this._setChildren('items', value, 'DxiItemComponent');
     }
 
 
