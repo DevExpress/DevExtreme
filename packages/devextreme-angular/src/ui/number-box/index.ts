@@ -999,8 +999,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
-        this.setContentChildren('buttons', value, 'DxiNumberBoxButtonComponent');
-        this.setChildren('buttons', value);
+        this._setChildren('buttons', value, 'DxiNumberBoxButtonComponent');
     }
 
 
@@ -1009,9 +1008,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         return this._getOption('buttons');
     }
     set buttonsLegacyChildren(value) {
-        if (this.checkContentChildren('buttons', value, 'DxiButtonComponent')) {
-           this.setChildren('buttons', value);
-        }
+        this._setChildren('buttons', value, 'DxiButtonComponent');
     }
 
 

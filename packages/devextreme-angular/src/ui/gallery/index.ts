@@ -726,8 +726,7 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiGalleryItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiGalleryItemComponent');
     }
 
 
@@ -736,9 +735,7 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
-        }
+        this._setChildren('items', value, 'DxiItemComponent');
     }
 
 

@@ -419,8 +419,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiBoxItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiBoxItemComponent');
     }
 
 
@@ -429,9 +428,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
-        }
+        this._setChildren('items', value, 'DxiItemComponent');
     }
 
 

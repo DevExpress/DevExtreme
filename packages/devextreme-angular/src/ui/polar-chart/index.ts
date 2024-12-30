@@ -1125,8 +1125,7 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         return this._getOption('annotations');
     }
     set annotationsChildren(value) {
-        this.setContentChildren('annotations', value, 'DxiPolarChartAnnotationComponent');
-        this.setChildren('annotations', value);
+        this._setChildren('annotations', value, 'DxiPolarChartAnnotationComponent');
     }
 
     @ContentChildren(DxiPolarChartSeriesComponent)
@@ -1134,8 +1133,7 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         return this._getOption('series');
     }
     set seriesChildren(value) {
-        this.setContentChildren('series', value, 'DxiPolarChartSeriesComponent');
-        this.setChildren('series', value);
+        this._setChildren('series', value, 'DxiPolarChartSeriesComponent');
     }
 
 
@@ -1144,9 +1142,7 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         return this._getOption('annotations');
     }
     set annotationsLegacyChildren(value) {
-        if (this.checkContentChildren('annotations', value, 'DxiAnnotationComponent')) {
-           this.setChildren('annotations', value);
-        }
+        this._setChildren('annotations', value, 'DxiAnnotationComponent');
     }
 
     @ContentChildren(DxiSeriesComponent)
@@ -1154,9 +1150,7 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         return this._getOption('series');
     }
     set seriesLegacyChildren(value) {
-        if (this.checkContentChildren('series', value, 'DxiSeriesComponent')) {
-           this.setChildren('series', value);
-        }
+        this._setChildren('series', value, 'DxiSeriesComponent');
     }
 
 
