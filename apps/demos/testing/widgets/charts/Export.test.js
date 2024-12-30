@@ -1,25 +1,36 @@
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector as $ } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
-import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture('Charts.Export')
-  .page('http://localhost:8080/')
-  .before(async (ctx) => {
-    ctx.initialWindowSize = [900, 600];
-  });
+    .page('http://localhost:8080/')
+    .before(async (ctx) => {
+      ctx.initialWindowSize = [900, 600];
+    });
 
 runManualTest('Charts', 'ExportCustomMarkup', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Export', async (t) => {
-    let dialogAppeared = false;
+    let isFileCreateForDownload = false;
 
-    await t.setNativeDialogHandler(() => {
-      dialogAppeared = true;
-      return false;
+    const checkFn = ClientFunction((checkData) => {
+      window.originalCreateObjectURL = URL.createObjectURL;
+      window._testedValue = '';
+
+      URL.createObjectURL = (blob) => {
+        window._testedValue = blob.type;
+
+        return Promise.reject();
+      };
     });
 
-    await t.click('dx-button[icon=export]');
+    await checkFn();
 
-    await t.expect(dialogAppeared).ok('Save dialog should appear');
+    await t.click('#export,.dx-button[icon=export]');
+
+    isFileCreateForDownload = await ClientFunction(() => {
+      URL.createObjectURL =  window.originalCreateObjectURL;
+      return window._testedValue ===  'image/png';
+    })();
+
+    await t.expect(isFileCreateForDownload).ok('File was created for download');
   });
 });

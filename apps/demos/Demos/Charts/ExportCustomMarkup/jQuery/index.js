@@ -54,7 +54,7 @@ $(() => {
         format: 'png',
         svgToCanvas(svg, canvas) {
           const deferred = $.Deferred();
-          console.log('---------->', canvas.getContext('2d'));
+
           canvas.getContext('2d')
             .drawSvg(new XMLSerializer().serializeToString(svg), 0, 0, null, null, {
               renderCallback: deferred.resolve,
