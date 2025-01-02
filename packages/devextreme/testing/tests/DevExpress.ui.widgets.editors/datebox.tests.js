@@ -258,9 +258,9 @@ QUnit.module('datebox tests', moduleConfig, () => {
             max: new Date(2024, 8, 27, 16, 54, 10)
         });
 
-        const $input = $dateBox.find('.' + TEXTEDITOR_INPUT_CLASS);
-        assert.equal($input.attr('min'), '2024-09-10T16:54', 'minimum date changed correctly');
-        assert.equal($input.attr('max'), '2024-09-27T16:54', 'maximum date changed correctly');
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        assert.equal($input.attr('min'), '2024-09-10T16:54', 'minimum date set correctly');
+        assert.equal($input.attr('max'), '2024-09-27T16:54', 'maximum date set correctly');
     });
 
     QUnit.test('Datebox should set min and max attributes to the native input (T258860) after option changed', function(assert) {
