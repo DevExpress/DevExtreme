@@ -3,10 +3,24 @@ import {Chat, ChatTypes} from 'devextreme-react/chat'
 import type {Meta, StoryObj} from '@storybook/react';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
-import { firstAuthor, secondAuthor, thirdAuthor, fourthAuthor, initialMessages, longError } from './data';
+import {
+    firstAuthor,
+    secondAuthor,
+    thirdAuthor,
+    fourthAuthor,
+    initialMessages,
+    longError,
+    CHAT_DISABLED_CLASS,
+    REGENERATION_TEXT,
+    assistantReplies,
+    userRequest,
+    regenerationMessage, assistant,
+} from './data';
 import { Popup } from 'devextreme-react/popup';
+import HTMLReactParser from 'html-react-parser';
 
 import './styles.css';
+import {Button} from "devextreme-react";
 
 const meta: Meta<typeof Chat> = {
     title: 'Components/Chat',
@@ -473,6 +487,122 @@ export const TypingUsers: Story = {
                     typingUsers={typingUsers}
                 >
                 </Chat>
+            </div>
+        );
+    }
+}
+
+export const MessageCustomization: Story = {
+    args: {
+        width: 500,
+        height: 900,
+        alerts: 'No alerts',
+        showDayHeaders: true,
+        showAvatar: true,
+        showUserName: true,
+        showMessageTimestamp: true,
+    },
+    argTypes: {
+        alerts: {
+            control: 'select',
+            defaultValue: 'No alerts',
+            options: [
+                'No alerts',
+                'Limit reached',
+            ],
+            mapping: {
+                ['No alerts']: [],
+                ['Limit reached']: [{ message: 'Request limit reached, try again in a minute.' }],
+            },
+        },
+    },
+    render: ({
+                 width,
+                 height,
+                 alerts,
+                 showDayHeaders,
+                 showAvatar,
+                 showUserName,
+                 showMessageTimestamp,
+             }) => {
+        const [isProcessing, setIsProcessing] = useState(false);
+        const [assistantReplyIndex, setAssistantReplyIndex] = useState<number>(0);
+
+        const items = useMemo(() => {
+            const repliesCount = assistantReplies.length;
+            const assistantReply = isProcessing ? regenerationMessage : assistantReplies[assistantReplyIndex % repliesCount];
+
+            return [ userRequest, assistantReply ];
+        }, [assistantReplyIndex, isProcessing]);
+
+
+        const messageRender = useCallback(({ message }: { message: ChatTypes.Message }) => {
+            const { text = '', author } = message;
+            const [icon, setIcon] = useState('copy');
+
+            const onCopyButtonClick = useCallback(() => {
+                navigator.clipboard?.writeText(text);
+                setIcon('check');
+
+                setTimeout(() => {
+                    setIcon('copy');
+                }, 2500);
+            }, [text]);
+
+            const onRegenerateButtonClick = useCallback(async (): Promise<void> => {
+                setIsProcessing(true);
+
+                await new Promise((resolve) => {
+                    setTimeout(resolve, 300);
+                });
+                setAssistantReplyIndex((prev: number) => prev + 1);
+
+                setIsProcessing(false);
+            }, []);
+
+            if (text === REGENERATION_TEXT || author !== assistant) {
+                return <span>{text}</span>;
+            }
+
+            return (
+                <>
+                    <div className='dx-chat-messagebubble-text'>
+                        {HTMLReactParser(text)}
+                    </div>
+                    <div className='dx-bubble-button-container'>
+                        <Button
+                            icon={icon}
+                            stylingMode='text'
+                            hint='Copy'
+                            onClick={onCopyButtonClick}
+                        />
+                        <Button
+                            icon='refresh'
+                            stylingMode='text'
+                            hint='Regenerate'
+                            onClick={onRegenerateButtonClick}
+                        />
+                    </div>
+                </>
+            );
+        }, []);
+
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Chat
+                    className={isProcessing ? CHAT_DISABLED_CLASS : ''}
+                    height={height}
+                    width={width}
+                    items={items}
+                    reloadOnChange={false}
+                    showAvatar={showAvatar}
+                    showDayHeaders={showDayHeaders}
+                    showMessageTimestamp={showMessageTimestamp}
+                    showUserName={showUserName}
+                    user={secondAuthor}
+                    alerts={alerts}
+                    messageRender={messageRender}
+                />
             </div>
         );
     }
