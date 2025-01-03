@@ -355,6 +355,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     }), [
       templateProps,
       defaults,
+      props,
     ]);
 
     const options = useOptionScanning(
