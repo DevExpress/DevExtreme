@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import {Chat, ChatTypes} from 'devextreme-react/chat'
-import type {Meta, StoryObj} from '@storybook/react';
+import { Chat, ChatTypes } from 'devextreme-react/chat'
+import { Button } from "devextreme-react";
+import type { Meta, StoryObj } from '@storybook/react';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
 import {
@@ -10,17 +11,16 @@ import {
     fourthAuthor,
     initialMessages,
     longError,
-    CHAT_DISABLED_CLASS,
     REGENERATION_TEXT,
     assistantReplies,
     userRequest,
-    regenerationMessage, assistant,
+    regenerationMessage, 
+    assistant,
 } from './data';
 import { Popup } from 'devextreme-react/popup';
 import HTMLReactParser from 'html-react-parser';
 
 import './styles.css';
-import {Button} from "devextreme-react";
 
 const meta: Meta<typeof Chat> = {
     title: 'Components/Chat',
@@ -492,15 +492,11 @@ export const TypingUsers: Story = {
     }
 }
 
-export const MessageCustomization: Story = {
+export const AIBotIntegration: Story = {
     args: {
         width: 500,
         height: 900,
         alerts: 'No alerts',
-        showDayHeaders: true,
-        showAvatar: true,
-        showUserName: true,
-        showMessageTimestamp: true,
     },
     argTypes: {
         alerts: {
@@ -520,13 +516,10 @@ export const MessageCustomization: Story = {
                  width,
                  height,
                  alerts,
-                 showDayHeaders,
-                 showAvatar,
-                 showUserName,
-                 showMessageTimestamp,
              }) => {
         const [isProcessing, setIsProcessing] = useState(false);
         const [assistantReplyIndex, setAssistantReplyIndex] = useState<number>(0);
+        const [copyBtnIcon, setCopyBtnIcon] = useState('copy');
 
         const items = useMemo(() => {
             const repliesCount = assistantReplies.length;
@@ -535,30 +528,28 @@ export const MessageCustomization: Story = {
             return [ userRequest, assistantReply ];
         }, [assistantReplyIndex, isProcessing]);
 
+        const onRegenerateButtonClick = useCallback(async (): Promise<void> => {
+            setIsProcessing(true);
+
+            await new Promise((resolve) => {
+                setTimeout(resolve, 300);
+            });
+            setAssistantReplyIndex((prev: number) => prev + 1);
+
+            setIsProcessing(false);
+        }, []);
 
         const messageRender = useCallback(({ message }: { message: ChatTypes.Message }) => {
             const { text = '', author } = message;
-            const [icon, setIcon] = useState('copy');
 
-            const onCopyButtonClick = useCallback(() => {
+            const onCopyButtonClick = () => {
                 navigator.clipboard?.writeText(text);
-                setIcon('check');
+                setCopyBtnIcon('check');
 
                 setTimeout(() => {
-                    setIcon('copy');
+                    setCopyBtnIcon('copy');
                 }, 2500);
-            }, [text]);
-
-            const onRegenerateButtonClick = useCallback(async (): Promise<void> => {
-                setIsProcessing(true);
-
-                await new Promise((resolve) => {
-                    setTimeout(resolve, 300);
-                });
-                setAssistantReplyIndex((prev: number) => prev + 1);
-
-                setIsProcessing(false);
-            }, []);
+            };
 
             if (text === REGENERATION_TEXT || author !== assistant) {
                 return <span>{text}</span>;
@@ -566,12 +557,12 @@ export const MessageCustomization: Story = {
 
             return (
                 <>
-                    <div className='dx-chat-messagebubble-text'>
+                    <div>
                         {HTMLReactParser(text)}
                     </div>
-                    <div className='dx-bubble-button-container'>
+                    <div>
                         <Button
-                            icon={icon}
+                            icon={copyBtnIcon}
                             stylingMode='text'
                             hint='Copy'
                             onClick={onCopyButtonClick}
@@ -585,20 +576,19 @@ export const MessageCustomization: Story = {
                     </div>
                 </>
             );
-        }, []);
+        }, [copyBtnIcon, onRegenerateButtonClick]);
 
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Chat
-                    className={isProcessing ? CHAT_DISABLED_CLASS : ''}
                     height={height}
                     width={width}
                     items={items}
                     reloadOnChange={false}
-                    showAvatar={showAvatar}
-                    showDayHeaders={showDayHeaders}
-                    showMessageTimestamp={showMessageTimestamp}
-                    showUserName={showUserName}
+                    showAvatar
+                    showDayHeaders={false}
+                    showMessageTimestamp
+                    showUserName
                     user={secondAuthor}
                     alerts={alerts}
                     messageRender={messageRender}

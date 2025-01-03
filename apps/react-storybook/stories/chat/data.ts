@@ -1,6 +1,5 @@
 import { ChatTypes } from 'devextreme-react/chat';
 
-export const CHAT_DISABLED_CLASS = 'dx-chat-disabled';
 export const REGENERATION_TEXT = 'Regeneration...';
 
 export const firstAuthor: ChatTypes.User = {
@@ -113,103 +112,114 @@ export const assistantReplies: ChatTypes.Message[] = [
     {
         timestamp: todayDate,
         author: assistant,
-        text: `<p>Artificial Intelligence (AI) is a
-            branch of computer science that focuses on creating systems capable of performing tasks that typically
-            require human intelligence. These tasks include learning, reasoning, problem-solving, understanding natural
-            language, recognizing patterns, and even making decisions.</p>
+        text: `<p>Artificial Intelligence (AI) is a branch of computer science that focuses on 
+                creating systems capable of performing tasks that typically require human intelligence. 
+                These tasks include learning, reasoning, problem-solving, understanding natural
+                language, recognizing patterns, and even making decisions.</p>
             <p>AI can be divided into several subfields and categories:</p>
             <h3><strong>Types of AI Based on Capability</strong></h3>
             <ul>
-                <li><strong>Narrow AI (Weak AI):</strong> Specialized in performing a single task or a narrow range of
-                    tasks, like language translation, facial recognition, or recommendation systems. Most AI systems
-                    today fall into this category.
+                <li><strong>Narrow AI (Weak AI):</strong> Specialized in performing a single task 
+                    or a narrow range of tasks, like language translation, facial recognition, 
+                    or recommendation systems. Most AI systems today fall into this category.
                 </li>
-                <li><strong>General AI (Strong AI):</strong> A hypothetical form of AI that possesses the ability to
-                    understand, learn, and apply knowledge across a broad range of tasks, much like a human being.
+                <li><strong>General AI (Strong AI):</strong> A hypothetical form of AI that possesses 
+                    the ability to understand, learn, and apply knowledge across a broad range 
+                    of tasks, much like a human being.
                 </li>
-                <li><strong>Superintelligent AI:</strong> A theoretical concept where AI surpasses human intelligence
-                    across all domains, potentially transforming or outstripping human capabilities.
+                <li><strong>Superintelligent AI:</strong> A theoretical concept where AI surpasses 
+                    human intelligence across all domains, potentially transforming or outstripping 
+                    human capabilities.
                 </li>
             </ul>
-            <p>AI continues to evolve, impacting nearly every aspect of modern life while raising ethical, societal, and
-                technological challenges.</p>`.replace(/\s{2,}/gm, ''),
+            <p>AI continues to evolve, impacting nearly every aspect of modern life while raising 
+                ethical, societal, and technological challenges.</p>`.replace(/\s{2,}/gm, ''),
     },
     {
         timestamp: todayDate,
         author: assistant,
-        text: `<p>Artificial Intelligence (AI) is a
-            branch of computer science that focuses on creating systems capable of performing tasks that typically
-            require human intelligence. These tasks include learning, reasoning, problem-solving, understanding natural
-            language, recognizing patterns, and even making decisions.</p>
+        text: `<p>Artificial Intelligence (AI) is a branch of computer science that focuses on 
+                creating systems capable of performing tasks that typically require human intelligence. 
+                These tasks include learning, reasoning, problem-solving, understanding natural
+                language, recognizing patterns, and even making decisions.</p>
             <p>AI can be divided into several subfields and categories:</p>
             <h3><strong>Types of AI Based on Functionality</strong></h3>
             <ol>
-                <li><strong>Reactive Machines:</strong> AI systems that respond to specific inputs with predefined
-                    outputs, without memory or past experiences influencing their decisions (e.g., IBM's Deep Blue
-                    chess-playing computer).
+                <li><strong>Reactive Machines:</strong> AI systems that respond to specific inputs 
+                    with predefined outputs, without memory or past experiences influencing their 
+                    decisions (e.g., IBM's Deep Blue chess-playing computer).
                 </li>
-                <li><strong>Limited Memory:</strong> AI systems that can use past data for a short time to inform
-                    decisions, such as self-driving cars.
+                <li><strong>Limited Memory:</strong> AI systems that can use past data for a short 
+                    time to inform decisions, such as self-driving cars.
                 </li>
-                <li><strong>Theory of Mind:</strong> A more advanced concept where AI would understand emotions,
-                    beliefs, and intentions, allowing it to interact more naturally with humans. This remains largely in
-                    the research phase.
+                <li><strong>Theory of Mind:</strong> A more advanced concept where AI would 
+                    understand  emotions, beliefs, and intentions, allowing it to interact more 
+                    naturally with humans. This remains largely in the research phase.
                 </li>
-                <li><strong>Self-Aware AI:</strong> A theoretical AI that has self-awareness and consciousness.</li>
+                <li><strong>Self-Aware AI:</strong> A theoretical AI that has self-awareness and 
+                consciousness.
+                </li>
             </ol>
-            <p>AI continues to evolve, impacting nearly every aspect of modern life while raising ethical, societal, and
-                technological challenges.</p>`.replace(/\s{2,}/gm, ''),
+            <p>AI continues to evolve, impacting nearly every aspect of modern life while raising 
+                ethical, societal, and technological challenges.</p>`.replace(/\s{2,}/gm, ''),
     },
     {
         timestamp: todayDate,
         author: assistant,
-        text: `<p>Artificial Intelligence (AI) is a
-            branch of computer science that focuses on creating systems capable of performing tasks that typically
-            require human intelligence. These tasks include learning, reasoning, problem-solving, understanding natural
-            language, recognizing patterns, and even making decisions.</p>
+        text: `<p>Artificial Intelligence (AI) is a branch of computer science that focuses on 
+                creating systems capable of performing tasks that typically require human intelligence. 
+                These tasks include learning, reasoning, problem-solving, understanding natural
+                language, recognizing patterns, and even making decisions.</p>
             <p>AI can be divided into several subfields and categories:</p>
             <h3><strong>Key Subfields of AI</strong></h3>
             <ul>
-                <li><strong>Machine Learning (ML):</strong> Enables systems to learn and improve from data without
-                    explicit programming.
+                <li><strong>Machine Learning (ML):</strong> Enables systems to learn and improve 
+                    from data without explicit programming.
                 </li>
-                <li><strong>Deep Learning:</strong> A subset of ML that uses neural networks with many layers to analyze
-                    complex patterns.
+                <li><strong>Deep Learning:</strong> A subset of ML that uses neural networks with 
+                    many layers to analyze complex patterns.
                 </li>
-                <li><strong>Natural Language Processing (NLP):</strong> Allows AI to understand, interpret, and respond
-                    to human language.
+                <li><strong>Natural Language Processing (NLP):</strong> Allows AI to understand, 
+                    interpret, and respond to human language.
                 </li>
-                <li><strong>Computer Vision:</strong> Enables AI to process and analyze visual data from the world.</li>
-                <li><strong>Robotics:</strong> Focuses on creating AI-driven robots to perform tasks in the physical
-                    world.
+                <li><strong>Computer Vision:</strong> Enables AI to process and analyze visual data 
+                    from the world.
                 </li>
-                <li><strong>Expert Systems:</strong> Mimic human decision-making using rule-based systems.</li>
+                <li><strong>Robotics:</strong> Focuses on creating AI-driven robots to perform tasks 
+                    in the physical world.
+                </li>
+                <li><strong>Expert Systems:</strong> Mimic human decision-making using rule-based 
+                    systems.
+                </li>
             </ul>
-            <p>AI continues to evolve, impacting nearly every aspect of modern life while raising ethical, societal, and
-                technological challenges.</p>`.replace(/\s{2,}/gm, ''),
+            <p>AI continues to evolve, impacting nearly every aspect of modern life while raising 
+                ethical, societal, and technological challenges.</p>`.replace(/\s{2,}/gm, ''),
     },
     {
         timestamp: todayDate,
         author: assistant,
-        text: `<p>Artificial Intelligence (AI) is a
-            branch of computer science that focuses on creating systems capable of performing tasks that typically
-            require human intelligence. These tasks include learning, reasoning, problem-solving, understanding natural
-            language, recognizing patterns, and even making decisions.</p>
+        text: `<p>Artificial Intelligence (AI) is a branch of computer science that focuses on 
+                creating systems capable of performing tasks that typically require human intelligence. 
+                These tasks include learning, reasoning, problem-solving, understanding natural
+                language, recognizing patterns, and even making decisions.</p>
             <p>AI can be divided into several subfields and categories:</p>
             <h3><strong>Applications of AI</strong></h3>
             <ol>
-                <li><strong>Healthcare:</strong> Diagnosing diseases, drug discovery, and patient care.</li>
-                <li><strong>Finance:</strong> Fraud detection, stock market analysis, and personalized financial advice.
+                <li><strong>Healthcare:</strong> Diagnosing diseases, drug discovery, and patient 
+                    care.
+                </li>
+                <li><strong>Finance:</strong> Fraud detection, stock market analysis, and personalized 
+                    financial advice.
                 </li>
                 <li><strong>Transportation:</strong> Autonomous vehicles and traffic management.</li>
-                <li><strong>Entertainment:</strong> Personalized content recommendations on platforms like Netflix or
-                    Spotify.
+                <li><strong>Entertainment:</strong> Personalized content recommendations on platforms 
+                    like Netflix or Spotify.
                 </li>
-                <li><strong>Customer Service:</strong> Chatbots and virtual assistants like Siri, Alexa, or Google
-                    Assistant.
+                <li><strong>Customer Service:</strong> Chatbots and virtual assistants like Siri, 
+                    Alexa, or Google Assistant.
                 </li>
             </ol>
-            <p>AI continues to evolve, impacting nearly every aspect of modern life while raising ethical, societal, and
-                technological challenges.</p>`.replace(/\s{2,}/gm, ''),
+            <p>AI continues to evolve, impacting nearly every aspect of modern life while raising 
+                ethical, societal, and technological challenges.</p>`.replace(/\s{2,}/gm, ''),
     }
 ];
