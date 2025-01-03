@@ -18,7 +18,7 @@ import { NestedComponentMeta } from '../types';
 
 jest.useFakeTimers();
 jest.mock('devextreme/core/utils/common', () => ({
-  __esModule: true, //    <----- this __esModule: true is important
+  __esModule: true, //    <---- this __esModule: true is important
   ...jest.requireActual('devextreme/core/utils/common'),
 }));
 
