@@ -9,8 +9,8 @@ import {
   useLayoutEffect,
   useCallback,
   useState,
-  useMemo,
   ReactElement,
+  useMemo,
 } from 'react';
 
 import { requestAnimationFrame } from 'devextreme/animation/frame';
@@ -97,6 +97,31 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     const prevPropsRef = useRef<P & ComponentBaseProps>();
 
     let widgetConfig: IConfigNode;
+
+    const templateContainer = useMemo(() => document.createElement('div'), []);
+
+    const elementDescriptor: IOptionElement = {
+      type: ElementType.Option,
+      descriptor: {
+        name: '',
+        isCollection: false,
+        templates: templateProps,
+        initialValuesProps: defaults,
+        predefinedValuesProps: {},
+        expectedChildren,
+      },
+      props,
+    };
+
+    const options = useOptionScanning(
+      elementDescriptor,
+      props.children,
+      templateContainer,
+      Symbol('initial update token'),
+    );
+
+    [widgetConfig] = options;
+    const [, context] = options;
 
     const restoreTree = useCallback(() => {
       if (childElementsDetached.current && childNodes.current?.length && element.current) {
@@ -249,6 +274,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       instance.current,
       subscribableOptions,
       independentEvents,
+      widgetConfig,
     ]);
 
     const onTemplatesRendered = useCallback(() => {
@@ -279,6 +305,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       scheduleTemplatesUpdate,
       updateCssClasses,
       props,
+      widgetConfig,
     ]);
 
     const onComponentMounted = useCallback(() => {
@@ -338,35 +365,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       childElementsDetached.current,
       shouldRestoreFocus.current,
     ]);
-
-    const templateContainer = useMemo(() => document.createElement('div'), []);
-
-    const elementDescriptor: IOptionElement = useMemo(() => ({
-      type: ElementType.Option,
-      descriptor: {
-        name: '',
-        isCollection: false,
-        templates: templateProps,
-        initialValuesProps: defaults,
-        predefinedValuesProps: {},
-        expectedChildren,
-      },
-      props,
-    }), [
-      templateProps,
-      defaults,
-      props,
-    ]);
-
-    const options = useOptionScanning(
-      elementDescriptor,
-      props.children,
-      templateContainer,
-      Symbol('initial update token'),
-    );
-
-    [widgetConfig] = options;
-    const [, context] = options;
 
     useLayoutEffect(() => {
       onComponentMounted();
