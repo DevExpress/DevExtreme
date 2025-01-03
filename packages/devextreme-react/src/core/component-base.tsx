@@ -26,7 +26,6 @@ import { elementPropNames, getClassName } from './widget-config';
 import { TemplateManager } from './template-manager';
 import { ComponentProps } from './component';
 import { ElementType, IOptionElement } from './configuration/react/element';
-import { IConfigNode } from './configuration/config-node';
 
 import {
   NestedOptionContext,
@@ -96,8 +95,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
     const prevPropsRef = useRef<P & ComponentBaseProps>();
 
-    let widgetConfig: IConfigNode;
-
     const templateContainer = useMemo(() => document.createElement('div'), []);
 
     const elementDescriptor: IOptionElement = {
@@ -113,15 +110,12 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       props,
     };
 
-    const options = useOptionScanning(
+    const [widgetConfig, context] = useOptionScanning(
       elementDescriptor,
       props.children,
       templateContainer,
       Symbol('initial update token'),
     );
-
-    [widgetConfig] = options;
-    const [, context] = options;
 
     const restoreTree = useCallback(() => {
       if (childElementsDetached.current && childNodes.current?.length && element.current) {
