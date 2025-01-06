@@ -6659,6 +6659,68 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         assert.ok(true, 'TagBox rendered');
     });
 
+    QUnit.test('Tagbox should render tag correctly when hideSelectedItems = true and valueExpr is a function (T1234032)', function(assert) {
+        const data = [
+            {
+                id: 1,
+                scheme: 'schema1',
+                name: 'name1',
+            },
+            {
+                id: 2,
+                scheme: 'schema1',
+                name: 'name2',
+            }];
+        const instance = $('#tagBox').dxTagBox({
+            dataSource: data,
+            valueExpr(x) {
+                return x && x.name + ' ' + x.scheme;
+            },
+            displayExpr: 'name',
+            hideSelectedItems: true,
+            opened: true
+        }).dxTagBox('instance');
+
+        const $listItem = $(instance._list.$element().find(`.${LIST_ITEM_CLASS}`).eq(0));
+        $listItem.trigger('dxclick');
+
+        const $tags = instance.$element().find(`.${TAGBOX_TAG_CLASS}`);
+        assert.strictEqual($tags.length, 1, 'One tag is rendered after click');
+        assert.strictEqual($tags.eq(0).text().trim(), 'name1', 'Correct tag text is rendered');
+        assert.strictEqual(instance.option('value')[0], 'name1 schema1', 'Correct value is stored');
+
+        const $secondItem = $(instance._list.$element().find(`.${LIST_ITEM_CLASS}`).eq(0));
+        $secondItem.trigger('dxclick');
+
+        const $updatedTags = instance.$element().find(`.${TAGBOX_TAG_CLASS}`);
+        assert.strictEqual($updatedTags.length, 2, 'Two tags are rendered after selecting the second item');
+        assert.strictEqual($updatedTags.eq(1).text().trim(), 'name2', 'Second tag is rendered correctly');
+        assert.strictEqual(instance.option('value')[1], 'name2 schema1', 'Correct value is stored');
+    });
+
+    QUnit.test('Tagbox should render initial value correctly with function valueExpr (T1234032)', function(assert) {
+        const data = [
+            { id: 1, scheme: 'schema1', name: 'name1' },
+            { id: 2, scheme: 'schema1', name: 'name2' }
+        ];
+
+        const instance = $('#tagBox').dxTagBox({
+            dataSource: data,
+            valueExpr(x) {
+                return x && `${x.name} ${x.scheme}`;
+            },
+            displayExpr: 'name',
+            hideSelectedItems: true,
+            value: ['name1 schema1'],
+            opened: true
+        }).dxTagBox('instance');
+
+        const $tags = instance.$element().find(`.${TAGBOX_TAG_CLASS}`);
+        assert.strictEqual($tags.length, 1, 'One tag is rendered initially');
+        assert.strictEqual($tags.eq(0).text().trim(), 'name1', 'Correct tag text is rendered');
+        assert.strictEqual(instance.option('value')[0], 'name1 schema1', 'Initial value is correct');
+    });
+
     QUnit.test('TagBox should correctly handle disposing on data loading', function(assert) {
         assert.expect(1);
 
