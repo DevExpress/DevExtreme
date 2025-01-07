@@ -70,9 +70,9 @@ const NativeStrategy = DateBoxStrategy.inherit({
     const type = this.dateBox.option('type');
     const defaultFormat = 'yyyy-MM-dd';
     const format = {
-      datetime: 'yyyy-MM-ddTHH:mm',
+      datetime: 'yyyy-MM-ddTHH:mm:ss',
       date: defaultFormat,
-      time: 'HH:mm',
+      time: 'HH:mm:ss',
     }[type] ?? defaultFormat;
 
     $input.attr({
