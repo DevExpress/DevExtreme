@@ -812,8 +812,8 @@ importers:
         specifier: 3.0.13
         version: 3.0.13
       devexpress-diagram:
-        specifier: 2.2.14
-        version: 2.2.14
+        specifier: 2.2.15
+        version: 2.2.15
       devexpress-gantt:
         specifier: 4.1.56
         version: 4.1.56
@@ -8080,8 +8080,8 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
 
-  devexpress-diagram@2.2.14:
-    resolution: {integrity: sha512-qO+iP0KDfUjWPqPh+293RpliWaV98h1gaOrvFLYEAdY/P/JCxVhujIjrDHKBYS+S72fMRKAgFOZyLKJ0GEr+6A==}
+  devexpress-diagram@2.2.15:
+    resolution: {integrity: sha512-Ky/lnC32odQvn9m61USN3lg2GLkJGAeeui5dScdtKXHJXxIm+b8FCflyye+ALyinqgbFug7JCdQdLZm243FHYg==}
 
   devexpress-diagram@2.2.5:
     resolution: {integrity: sha512-gxcBYNChijcfmsOnWOWPmTGxIPn+eGIf3635PUgpTBL/WPpDVZJsXdEV+eXe92OEX0MopcyxiCSJZN5o3zZ4hQ==}
@@ -25328,7 +25328,7 @@ snapshots:
       defined: 1.0.1
       minimist: 1.2.8
 
-  devexpress-diagram@2.2.14:
+  devexpress-diagram@2.2.15:
     dependencies:
       '@devexpress/utils': 1.4.3
       es6-object-assign: 1.1.0
