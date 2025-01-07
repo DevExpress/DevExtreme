@@ -494,8 +494,6 @@ export const TypingUsers: Story = {
 
 export const AIBotIntegration: Story = {
     args: {
-        width: 500,
-        height: 900,
         alerts: 'No alerts',
     },
     argTypes: {
@@ -512,20 +510,16 @@ export const AIBotIntegration: Story = {
             },
         },
     },
-    render: ({
-                 width,
-                 height,
-                 alerts,
-             }) => {
+    render: ({ alerts }) => {
         const [isProcessing, setIsProcessing] = useState(false);
         const [assistantReplyIndex, setAssistantReplyIndex] = useState<number>(0);
-        const [copyBtnIcon, setCopyBtnIcon] = useState('copy');
+        const [copyButtonIcon, setCopyButtonIcon] = useState('copy');
 
         const items = useMemo(() => {
             const repliesCount = assistantReplies.length;
             const assistantReply = isProcessing ? regenerationMessage : assistantReplies[assistantReplyIndex % repliesCount];
 
-            return [ userRequest, assistantReply ];
+            return [userRequest, assistantReply];
         }, [assistantReplyIndex, isProcessing]);
 
         const onRegenerateButtonClick = useCallback(async (): Promise<void> => {
@@ -544,10 +538,10 @@ export const AIBotIntegration: Story = {
 
             const onCopyButtonClick = () => {
                 navigator.clipboard?.writeText(text);
-                setCopyBtnIcon('check');
+                setCopyButtonIcon('check');
 
                 setTimeout(() => {
-                    setCopyBtnIcon('copy');
+                    setCopyButtonIcon('copy');
                 }, 2500);
             };
 
@@ -562,7 +556,7 @@ export const AIBotIntegration: Story = {
                     </div>
                     <div>
                         <Button
-                            icon={copyBtnIcon}
+                            icon={copyButtonIcon}
                             stylingMode='text'
                             hint='Copy'
                             onClick={onCopyButtonClick}
@@ -576,19 +570,15 @@ export const AIBotIntegration: Story = {
                     </div>
                 </>
             );
-        }, [copyBtnIcon, onRegenerateButtonClick]);
+        }, [copyButtonIcon, onRegenerateButtonClick]);
 
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Chat
-                    height={height}
-                    width={width}
+                    height={900}
+                    width={500}
                     items={items}
-                    reloadOnChange={false}
-                    showAvatar
                     showDayHeaders={false}
-                    showMessageTimestamp
-                    showUserName
                     user={secondAuthor}
                     alerts={alerts}
                     messageRender={messageRender}
