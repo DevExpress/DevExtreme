@@ -145,7 +145,16 @@
   }
 }
 
-@mixin dx-button-flat-color-styling($button-color, $button-color-hover, $button-color-active, $hover-bg, $focused-bg, $active-bg, $selected-bg: $active-bg, $selected-color: $button-color) {
+@mixin dx-button-flat-color-styling(
+  $button-color,
+  $button-color-hover,
+  $button-color-active,
+  $hover-bg,
+  $focused-bg,
+  $active-bg,
+  $selected-bg: $active-bg,
+  $selected-color: $button-color
+) {
   @include dx-button-styling-variant(
     transparent,
     $button-color,

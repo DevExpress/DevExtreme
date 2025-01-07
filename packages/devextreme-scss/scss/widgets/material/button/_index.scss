@@ -139,7 +139,7 @@
 
   &.dx-button-default {
     @include dx-button-flat-color-styling(
-      $button-default-bg,
+      $button-default-text-color,
       $button-default-text-hover-bg,
       $button-default-text-focused-bg,
       $button-default-text-active-bg,
@@ -184,8 +184,8 @@
 
   &.dx-button-default {
     @include dx-button-outlined-color-styling(
-      $button-default-bg,
-      $button-default-bg,
+      $button-default-outlined-color,
+      $button-default-outlined-border-color,
       $button-default-outlined-hover-bg,
       $button-default-outlined-focused-bg,
       $button-default-outlined-active-bg,

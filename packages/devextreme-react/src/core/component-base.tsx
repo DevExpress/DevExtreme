@@ -25,7 +25,7 @@ import { DXRemoveCustomArgs, DXTemplateCreator, InitArgument } from './types';
 import { elementPropNames, getClassName } from './widget-config';
 import { TemplateManager } from './template-manager';
 import { ComponentProps } from './component';
-import { ElementType } from './configuration/react/element';
+import { ElementType, IOptionElement } from './configuration/react/element';
 import { IConfigNode } from './configuration/config-node';
 
 import {
@@ -341,19 +341,24 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
     const templateContainer = useMemo(() => document.createElement('div'), []);
 
-    const options = useOptionScanning(
-      {
-        type: ElementType.Option,
-        descriptor: {
-          name: '',
-          isCollection: false,
-          templates: templateProps,
-          initialValuesProps: defaults,
-          predefinedValuesProps: {},
-          expectedChildren,
-        },
-        props,
+    const elementDescriptor: IOptionElement = useMemo(() => ({
+      type: ElementType.Option,
+      descriptor: {
+        name: '',
+        isCollection: false,
+        templates: templateProps,
+        initialValuesProps: defaults,
+        predefinedValuesProps: {},
+        expectedChildren,
       },
+      props,
+    }), [
+      templateProps,
+      defaults,
+    ]);
+
+    const options = useOptionScanning(
+      elementDescriptor,
       props.children,
       templateContainer,
       Symbol('initial update token'),

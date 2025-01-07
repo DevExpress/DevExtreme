@@ -216,7 +216,7 @@ jobs:
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
         all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $INDICES $PLATFORM $THEME"
         echo "$all_args"
-        pnpx nx test $all_args
+        pnpm run test $all_args
 
     - name: Copy compared screenshot artifacts
       if: ${{ failure() }}

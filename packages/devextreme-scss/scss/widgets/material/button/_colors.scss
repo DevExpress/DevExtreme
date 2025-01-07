@@ -60,7 +60,7 @@ $button-normal-bg-inverted: null !default;
 $button-default-color: $base-inverted-text-color !default;
 
 /**
-* $name 20. Selected state text color
+* $name 20. Selected state text color (contained)
 * $type color
 */
 $button-default-selected-color: $base-inverted-text-color !default;
@@ -99,12 +99,35 @@ $button-default-outlined-hover-bg: color.change($button-default-bg, $alpha: 0.08
 $button-default-outlined-focused-bg: color.change($button-default-bg, $alpha: 0.08) !default;
 $button-default-outlined-active-bg: color.change($button-default-bg, $alpha: 0.36) !default;
 $button-default-outlined-selected-bg: color.change($button-default-bg, $alpha: 0.36) !default;
+
+/**
+* $name 11. Text color (outlined)
+* $type color
+*/
+$button-default-outlined-color: $button-default-bg !default;
+$button-default-outlined-border-color: $button-default-bg !default;
+
+/**
+* $name 21. Selected state text color (outlined)
+* $type color
+*/
 $button-default-outlined-selected-color: $button-default-bg !default;
 
 $button-default-text-hover-bg: color.change($button-default-bg, $alpha: 0.08) !default;
 $button-default-text-focused-bg: color.change($button-default-bg, $alpha: 0.08) !default;
 $button-default-text-active-bg: color.change($button-default-bg, $alpha: 0.36) !default;
 $button-default-text-selected-bg: color.change($button-default-bg, $alpha: 0.36) !default;
+
+/**
+* $name 11. Text color (text)
+* $type color
+*/
+$button-default-text-color: $button-default-bg !default;
+
+/**
+* $name 21. Selected state text color (text)
+* $type color
+*/
 $button-default-text-selected-color: $button-default-bg !default;
 
 /**
@@ -271,4 +294,3 @@ $button-normal-text-hover-bg: color.change($button-normal-bg-inverted, $alpha: 0
 $button-normal-text-focused-bg: color.change($button-normal-bg-inverted, $alpha: 0.08) !default;
 $button-normal-text-active-bg: color.change($button-normal-bg-inverted, $alpha: 0.3) !default;
 $button-normal-text-selected-bg: color.change($button-normal-bg-inverted, $alpha: 0.18) !default;
-
