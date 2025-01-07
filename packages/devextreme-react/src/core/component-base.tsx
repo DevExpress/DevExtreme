@@ -9,8 +9,8 @@ import {
   useLayoutEffect,
   useCallback,
   useState,
-  ReactElement,
   useMemo,
+  ReactElement,
 } from 'react';
 
 import { requestAnimationFrame } from 'devextreme/animation/frame';
@@ -25,7 +25,7 @@ import { DXRemoveCustomArgs, DXTemplateCreator, InitArgument } from './types';
 import { elementPropNames, getClassName } from './widget-config';
 import { TemplateManager } from './template-manager';
 import { ComponentProps } from './component';
-import { ElementType, IOptionElement } from './configuration/react/element';
+import { ElementType } from './configuration/react/element';
 
 import {
   NestedOptionContext,
@@ -97,21 +97,19 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
     const templateContainer = useMemo(() => document.createElement('div'), []);
 
-    const elementDescriptor: IOptionElement = {
-      type: ElementType.Option,
-      descriptor: {
-        name: '',
-        isCollection: false,
-        templates: templateProps,
-        initialValuesProps: defaults,
-        predefinedValuesProps: {},
-        expectedChildren,
-      },
-      props,
-    };
-
     const [widgetConfig, context] = useOptionScanning(
-      elementDescriptor,
+      {
+        type: ElementType.Option,
+        descriptor: {
+          name: '',
+          isCollection: false,
+          templates: templateProps,
+          initialValuesProps: defaults,
+          predefinedValuesProps: {},
+          expectedChildren,
+        },
+        props,
+      },
       props.children,
       templateContainer,
       Symbol('initial update token'),
