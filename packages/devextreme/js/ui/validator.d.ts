@@ -198,3 +198,34 @@ export type Properties = dxValidatorOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxValidatorOptions;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onValidated'>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxValidatorOptions.onDisposing
+ * @type_function_param1 e:{ui/validator:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxValidatorOptions.onInitialized
+ * @type_function_param1 e:{ui/validator:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxValidatorOptions.onOptionChanged
+ * @type_function_param1 e:{ui/validator:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};
+///#ENDDEBUG
