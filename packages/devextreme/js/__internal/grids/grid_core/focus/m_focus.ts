@@ -82,16 +82,28 @@ export class FocusController extends core.ViewController {
     if (!this.option('focusedRowEnabled')) {
       return;
     }
+    const isEmptyData = this.getDataController().isEmpty();
+    const currentIndex = this._getCurrentFocusRowIndex(isEmptyData, index);
 
-    index = index !== undefined ? index : this.option('focusedRowIndex');
-
-    if (index < 0) {
-      if (this.isAutoNavigateToFocusedRow()) {
+    if (currentIndex < 0) {
+      if (isEmptyData || this.isAutoNavigateToFocusedRow()) {
         this._resetFocusedRow();
       }
     } else {
-      this._focusRowByIndexCore(index, operationTypes);
+      this._focusRowByIndexCore(currentIndex, operationTypes);
     }
+  }
+
+  private _getCurrentFocusRowIndex(isEmptyData, index?): number {
+    let currentIndex = index;
+    if (currentIndex === undefined) {
+      if (isEmptyData) {
+        currentIndex = -1;
+      } else {
+        currentIndex = this.option('focusedRowIndex');
+      }
+    }
+    return currentIndex;
   }
 
   private _focusRowByIndexCore(index, operationTypes) {
