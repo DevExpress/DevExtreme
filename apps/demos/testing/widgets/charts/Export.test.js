@@ -2,21 +2,21 @@ import { ClientFunction } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 
 fixture('Charts.Export')
-    .page('http://localhost:8080/')
-    .before(async (ctx) => {
-      ctx.initialWindowSize = [900, 600];
-    });
+  .page('http://localhost:8080/')
+  .before(async (ctx) => {
+    ctx.initialWindowSize = [900, 600];
+  });
 
 runManualTest('Charts', 'ExportCustomMarkup', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Export', async (t) => {
     let isFileCreateForDownload = false;
 
-    const checkFn = ClientFunction((checkData) => {
+    const checkFn = ClientFunction(() => {
       window.originalCreateObjectURL = URL.createObjectURL;
-      window._testedValue = '';
+      window.testedValue = '';
 
       URL.createObjectURL = (blob) => {
-        window._testedValue = blob.type;
+        window.testedValue = blob.type;
 
         return Promise.reject();
       };
@@ -27,8 +27,10 @@ runManualTest('Charts', 'ExportCustomMarkup', ['jQuery', 'React', 'Vue', 'Angula
     await t.click('#export,.dx-button[icon=export]');
 
     isFileCreateForDownload = await ClientFunction(() => {
-      URL.createObjectURL =  window.originalCreateObjectURL;
-      return window._testedValue ===  'image/png';
+      URL.createObjectURL = window.originalCreateObjectURL;
+      const result = window.testedValue === 'image/png';
+      delete window.testedValue;
+      return result;
     })();
 
     await t.expect(isFileCreateForDownload).ok('File was created for download');
