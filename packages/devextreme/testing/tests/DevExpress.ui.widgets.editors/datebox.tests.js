@@ -274,6 +274,7 @@ QUnit.module('datebox tests', moduleConfig, () => {
         assert.equal($input.attr('min'), '12:00:14', 'minimum time set correctly');
         assert.equal($input.attr('max'), '18:00:15', 'maximum time set correctly');
     });
+
     QUnit.test('Datebox should set min/max attributes to date input in localized date format (T1252602)', function(assert) {
         const $dateBox = $('#dateBox').dxDateBox({
             type: 'date',
