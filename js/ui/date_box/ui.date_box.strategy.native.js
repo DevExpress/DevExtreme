@@ -65,18 +65,10 @@ const NativeStrategy = DateBoxStrategy.inherit({
         return displayFormat || dateUtils.FORMATS_MAP[type];
     },
 
-    renderInputMinMax($input) {
-        const type = this.dateBox.option('type');
-        const defaultFormat = 'yyyy-MM-dd';
-        const format = {
-            datetime: 'yyyy-MM-ddTHH:mm:ss',
-            date: defaultFormat,
-            time: 'HH:mm:ss',
-        }[type] ?? defaultFormat;
-
+    renderInputMinMax: function($input) {
         $input.attr({
-            min: dateSerialization.serializeDate(this.dateBox.dateOption('min'), format),
-            max: dateSerialization.serializeDate(this.dateBox.dateOption('max'), format),
+            min: dateSerialization.serializeDate(this.dateBox.dateOption('min'), 'yyyy-MM-dd'),
+            max: dateSerialization.serializeDate(this.dateBox.dateOption('max'), 'yyyy-MM-dd')
         });
     }
 });
