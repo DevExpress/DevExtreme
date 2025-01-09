@@ -43,51 +43,51 @@
 
 
 @mixin dx-button-styling-variant(
-  $background-color,
-  $text-color,
-  $hover-background-color,
-  $focused-background-color,
-  $active-background-color,
+  $button-color,
+  $button-bg,
+  $button-hover-bg,
+  $button-focused-bg,
+  $button-active-bg,
   $icon-color,
-  $selected-background-color: $active-background-color,
-  $selected-color: $text-color,
+  $button-selected-bg: $button-active-bg,
+  $button-selected-color: $button-color,
 ) {
-  background-color: $background-color;
-  color: $text-color;
+  background-color: $button-bg;
+  color: $button-color;
 
   .dx-icon {
     color: $icon-color;
   }
 
   &.dx-state-selected {
-    background-color: $selected-background-color;
+    background-color: $button-selected-bg;
 
     &,
     .dx-icon {
-      color: $selected-color;
+      color: $button-selected-color;
     }
   }
 
   &.dx-state-hover {
-    background-color: $hover-background-color;
+    background-color: $button-hover-bg;
   }
 
   &.dx-state-focused {
-    background-color: $focused-background-color;
+    background-color: $button-focused-bg;
   }
 
   &.dx-state-active {
-    background-color: $active-background-color;
+    background-color: $button-active-bg;
   }
 
   .dx-inkripple-wave {
-    background-color: color.change($text-color, $alpha: 0.2);
+    background-color: color.change($button-color, $alpha: 0.2);
   }
 }
 
 @mixin dx-button-styling(
-  $button-bg,
   $button-color,
+  $button-bg,
   $button-hover-bg,
   $button-focused-bg,
   $button-active-bg,
@@ -98,8 +98,8 @@
   border-radius: $button-border-radius;
 
   @include dx-button-styling-variant(
-    $button-bg,
     $button-color,
+    $button-bg,
     $button-hover-bg,
     $button-focused-bg,
     $button-active-bg,
@@ -132,44 +132,47 @@
 
 @mixin dx-button-flat-color-styling(
   $button-color,
-  $hover-bg,
-  $focused-bg,
-  $active-bg,
-  $selected-bg: $active-bg,
-  $selected-color: $button-color
+  $button-bg,
+  $button-hover-bg,
+  $button-focused-bg,
+  $button-active-bg,
+  $button-selected-bg: $button-active-bg,
+  $button-selected-color: $button-color
 ) {
   @include dx-button-styling-variant(
-    transparent,
     $button-color,
-    $hover-bg,
-    $focused-bg,
-    $active-bg,
+    $button-bg,
+    $button-hover-bg,
+    $button-focused-bg,
+    $button-active-bg,
     $button-color,
-    $selected-bg,
-    $selected-color,
+    $button-selected-bg,
+    $button-selected-color,
   );
 }
 
 @mixin dx-button-outlined-color-styling(
   $button-color,
-  $border-color,
-  $hover-bg,
-  $focused-bg,
-  $active-bg,
-  $selected-bg,
-  $selected-color
+  $button-border-color,
+  $button-bg,
+  $button-hover-bg,
+  $button-focused-bg,
+  $button-active-bg,
+  $button-selected-bg,
+  $button-selected-color,
 ) {
   border-width: 1px;
   border-style: solid;
-  border-color: $border-color;
+  border-color: $button-border-color;
 
   @include dx-button-styling-variant(
-    transparent,
     $button-color,
-    $hover-bg,
-    $focused-bg,
-    $active-bg,
+    $button-bg,
+    $button-hover-bg,
+    $button-focused-bg,
+    $button-active-bg,
     $button-color,
-    $selected-bg,
+    $button-selected-bg,
+    $button-selected-color,
   );
 }
