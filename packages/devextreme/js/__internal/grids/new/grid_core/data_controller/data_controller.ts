@@ -51,19 +51,6 @@ export class DataController {
 
   public readonly isLoading = state(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public readonly filter = this.options.twoWay('filterValue');
-
-  // public itemsWithChanges = computed(
-  //   (items, changes: Change[] | undefined) => items.map((item) => (changes ?? []).filter(
-  //     (change) => change.key === this.getDataKey(item),
-  //   ).reduce((p, v) => ({
-  //     // @ts-expect-error
-  //     ...item, ...v.data,
-  //   }), item)),
-  //   [this.items, this.editing.changes],
-  // );
-
   public readonly pageCount = computed(
     (totalCount, pageSize) => Math.ceil(totalCount / pageSize),
     [this.totalCount, this.pageSize],
@@ -105,7 +92,7 @@ export class DataController {
     );
 
     effect(
-      (dataSource, pageIndex, pageSize, filter, pagingEnabled) => {
+      (dataSource, pageIndex, pageSize, pagingEnabled) => {
         let someParamChanged = false;
         if (dataSource.pageIndex() !== pageIndex) {
           dataSource.pageIndex(pageIndex);
@@ -120,10 +107,6 @@ export class DataController {
           dataSource.requireTotalCount(true);
           someParamChanged ||= true;
         }
-        if (dataSource.filter() !== filter) {
-          dataSource.filter(filter);
-          someParamChanged ||= true;
-        }
         if (dataSource.paginate() !== pagingEnabled) {
           dataSource.paginate(pagingEnabled);
           someParamChanged ||= true;
@@ -134,7 +117,7 @@ export class DataController {
           dataSource.load();
         }
       },
-      [this.dataSource, this.pageIndex, this.pageSize, this.filter, this.pagingEnabled],
+      [this.dataSource, this.pageIndex, this.pageSize, this.pagingEnabled],
     );
   }
 
