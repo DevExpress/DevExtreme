@@ -1497,6 +1497,23 @@ const TagBox = (SelectBox as any).inherit({
     delete this._tagTemplate;
   },
 
+  _synchronizeTagsWithData() {
+    const dataSource = this.option('dataSource') || [];
+    const selectedItems = this.option('selectedItems') || [];
+
+    if (!dataSource.length) {
+      this.option('selectedItems', []);
+      this.option('value', []);
+      return;
+    }
+
+    const validSelectedItems = this._filterSelectedItems(dataSource, selectedItems);
+    const validValues = validSelectedItems.map((item) => this._valueGetter(item));
+
+    this.option('selectedItems', validSelectedItems);
+    this.option('value', validValues);
+  },
+
   _getSelectedItemsDifference(newItems, previousItems) {
     if (!newItems.length) {
       return {
@@ -1591,6 +1608,10 @@ const TagBox = (SelectBox as any).inherit({
       case 'multiline':
         this.$element().toggleClass(TAGBOX_SINGLE_LINE_CLASS, !value);
         this._renderSingleLineScroll();
+        break;
+      case 'dataSource':
+        this._synchronizeTagsWithData();
+        this._renderTags();
         break;
       case 'maxFilterQueryLength':
         break;
