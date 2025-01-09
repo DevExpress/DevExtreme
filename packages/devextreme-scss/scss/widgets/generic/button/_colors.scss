@@ -466,7 +466,7 @@ $button-success-text-bg-selected: null !default;
   $button-normal-contained-bg-focused: lighten($button-normal-bg, 8%) !default;
   $button-normal-contained-bg-active: lighten($button-normal-bg, 24%) !default;
   $button-normal-contained-bg-selected: lighten($button-normal-bg, 17%) !default;
-  $button-normal-outlined-bg:color.change($button-normal-bg-inverted, $alpha: 0) !default;
+  $button-normal-outlined-bg: color.change($button-normal-bg-inverted, $alpha: 0) !default;
   $button-normal-outlined-bg-hover: color.change($button-normal-outlined-bg, $alpha: 0.04) !default;
   $button-normal-outlined-bg-focused: color.change($button-normal-outlined-bg, $alpha: 0.08) !default;
   $button-normal-outlined-bg-active: color.change($button-normal-outlined-bg, $alpha: 0.24) !default;
