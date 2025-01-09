@@ -248,6 +248,45 @@ QUnit.module('datebox tests', moduleConfig, () => {
         assert.equal($dropDownButton.length, expectedButtonsNumber, 'correct readOnly value');
     });
 
+    QUnit.test('Datebox should set min/max attributes to datetime input in localized datetime format (T1252602)', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'datetime',
+            pickerType: 'native',
+            value: new Date(2024, 8, 15, 16, 54, 10),
+            min: new Date(2024, 8, 10, 16, 54, 14),
+            max: new Date(2024, 8, 27, 16, 54, 15)
+        });
+
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        assert.equal($input.attr('min'), '2024-09-10T16:54:14', 'minimum date set correctly');
+        assert.equal($input.attr('max'), '2024-09-27T16:54:15', 'maximum date set correctly');
+    });
+
+    QUnit.test('Datebox should set min/max attributes to time input in localized time format (T1252602)', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'time',
+            pickerType: 'native',
+            value: new Date(2024, 8, 10, 16, 30),
+            min: new Date(2024, 8, 10, 12, 0, 14),
+            max: new Date(2024, 8, 10, 18, 0, 15)
+        });
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        assert.equal($input.attr('min'), '12:00:14', 'minimum time set correctly');
+        assert.equal($input.attr('max'), '18:00:15', 'maximum time set correctly');
+    });
+    QUnit.test('Datebox should set min/max attributes to date input in localized date format (T1252602)', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'date',
+            pickerType: 'native',
+            value: new Date(2024, 8, 15),
+            min: new Date(2024, 8, 10),
+            max: new Date(2024, 8, 20)
+        });
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        assert.equal($input.attr('min'), '2024-09-10', 'minimum date set correctly');
+        assert.equal($input.attr('max'), '2024-09-20', 'maximum date set correctly');
+    });
+
     QUnit.test('Datebox should set min and max attributes to the native input (T258860) after option changed', function(assert) {
         const $dateBox = $('#dateBox').dxDateBox({
             type: 'date',

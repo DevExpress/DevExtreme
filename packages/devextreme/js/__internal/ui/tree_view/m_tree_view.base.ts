@@ -1441,7 +1441,7 @@ const TreeViewBase = (HierarchicalCollectionWidget as any).inherit({
 
     if (this._showCheckboxes()) {
       const parentValue = parentNode.internalFields.selected;
-      this._getCheckBoxInstance($parentNode).option('value', parentValue);
+      this._getCheckBoxInstance($parentNode)?.option('value', parentValue);
       this._toggleSelectedClass($parentNode, parentValue);
     }
 

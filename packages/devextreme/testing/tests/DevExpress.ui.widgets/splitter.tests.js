@@ -729,6 +729,24 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         items: [{ }, { collapsed: true }],
         expectedLayout: ['100', '0'],
     }, {
+        items: [{ maxSize: '75%' }, { collapsed: true }],
+        expectedLayout: ['100', '0'],
+    }, {
+        items: [{ collapsed: true }, { visible: false }, { maxSize: '75%' }],
+        expectedLayout: ['0', '0', '100'],
+    }, {
+        items: [{ maxSize: '75%' }, { visible: false }, { collapsed: true }],
+        expectedLayout: ['100', '0', '0'],
+    }, {
+        items: [{ visible: false }, { collapsed: true }, { maxSize: '75%' }, { visible: false }],
+        expectedLayout: ['0', '0', '100', '0'],
+    }, {
+        items: [{ visible: false }, { maxSize: '75%' }, { visible: false }, { collapsed: true }, { visible: false }],
+        expectedLayout: ['0', '100', '0', '0', '0'],
+    }, {
+        items: [{ collapsed: true }, { maxSize: '75%' }],
+        expectedLayout: ['0', '100'],
+    }, {
         items: [{ collapsed: true }, { collapsed: true }, { collapsed: true }],
         expectedLayout: ['0', '0', '0'],
     }, {
@@ -773,6 +791,8 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         { position: 'prev', expectedLayout: ['0', '100'], items: [{ maxSize: '75%', collapsible: true }, { collapsible: true }] },
         { position: 'prev', expectedLayout: ['0', '100'], items: [{ maxSize: '75%', collapsible: true }, { collapsible: true }] },
         { position: 'prev', expectedLayout: ['0', '100'], items: [{ maxSize: '75%', collapsible: true }, { collapsible: true }] },
+        { position: 'prev', expectedLayout: ['50', '50'], items: [{ maxSize: '75%', collapsible: false }, { collapsed: true, collapsible: true }] },
+        { position: 'next', expectedLayout: ['50', '50'], items: [{ collapsed: true, collapsible: true }, { maxSize: '75%', collapsible: false }] },
         { position: 'prev', expectedLayout: ['10.0806', '89.9194'], items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 }] },
         { position: 'next', expectedLayout: ['89.9194', '10.0806'], items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 }] },
         { position: 'next', expectedLayout: ['100', '0'], items: [{ minSize: '15%', collapsible: true }, { collapsible: true }] },
@@ -1286,6 +1306,25 @@ QUnit.module('Pane sizing', moduleConfig, () => {
                 done();
             }, resizeObserverTimeout);
         });
+    });
+
+    QUnit.test('The splitter pane can safely collapse if the total size layout calculation error is less than three decimal places (T1262088)', function(assert) {
+        this.reinit({
+            width: 733.67,
+            height: 200,
+            items: [ { collapsible: true }, { collapsible: true }, { collapsible: true }],
+        });
+
+        this.assertLayout(['33.3333', '33.3333', '33.3333']);
+
+        this.instance._layout = [33.3338502509, 33.3338502509, 33.3338502509];
+
+        const $resizeHandle = this.getResizeHandles().first();
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+
+        $collapsePrevButton.trigger('dxclick');
+
+        this.assertLayout(['0', '66.6677', '33.3339']);
     });
 });
 

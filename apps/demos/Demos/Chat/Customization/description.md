@@ -1,4 +1,4 @@
-Use the following properties to customize the Chat component:
+Use the following properties to customize the DevExtreme Chat component:
 
 - To display/hide Chat UI elements:
     - [showAvatar](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#showAvatar)    
