@@ -269,7 +269,6 @@ test('DataGrid - FocusedRowChanged event isnt raised when the push API is used t
     onFocusedRowChanged: function(e) {
       const key = e.component.option("focusedRowKey");
       const index = e.component.option("focusedRowIndex");
-      debugger;
 
       if(key === null && index === -1) {
         $('#otherContainer').text('Success');
