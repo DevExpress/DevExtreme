@@ -39,14 +39,11 @@ function App() {
       format: 'png',
       svgToCanvas(svg, canvas) {
         return new Promise((resolve) => {
-          return new Promise((resolve) => {
-            const v = Canvg.fromString(
-                canvas.getContext("2d"),
-                new XMLSerializer().serializeToString(svg)
-            );
-
-            resolve(v.render());
-          });
+          const v = Canvg.fromString(
+            canvas.getContext('2d'),
+            new XMLSerializer().serializeToString(svg),
+          );
+          resolve(v.render());
         });
       },
     });

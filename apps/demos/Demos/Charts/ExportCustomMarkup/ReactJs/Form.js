@@ -11,12 +11,13 @@ const Form = React.forwardRef((_, ref) => (
       height="420px"
     >
       <path
-          d="M 0 0 L 820 0 L 820 420 L 0 420 L 0 0"
-          stroke="#999999"
-          strokeWidth="1"
-          strokeLinecap="butt"
-          fill="white"
-          strokeLinejoin="miter"
+        opacity="1"
+        d="M 0 0 L 820 0 L 820 420 L 0 420 L 0 0"
+        stroke="#999999"
+        strokeWidth="1"
+        strokeLinecap="butt"
+        fill="white"
+        strokeLinejoin="miter"
       ></path>
       <path
         d="M 13 407 L 128 407 L 232 39 L 13 39"
