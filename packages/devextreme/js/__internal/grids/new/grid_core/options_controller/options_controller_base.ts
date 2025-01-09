@@ -11,7 +11,7 @@ import { computed, state } from '@ts/core/reactive/index';
 import type { ComponentType } from 'inferno';
 
 import { TemplateWrapper } from '../inferno_wrappers/template_wrapper';
-import type { Template } from '../types';
+import type { Action, Template } from '../types';
 
 type OwnProperty<T, TPropName extends string> =
   TPropName extends keyof Required<T>
@@ -36,6 +36,11 @@ type PropertyWithDefaults<TProps, TDefaults, TProp extends string> =
 type TemplateProperty<TProps, TProp extends string> =
   NonNullable<PropertyType<TProps, TProp>> extends Template<infer TTemplateProps>
     ? ComponentType<TTemplateProps> | undefined
+    : unknown;
+
+type ActionProperty<TProps, TProp extends string> =
+  NonNullable<PropertyType<TProps, TProp>> extends Action<infer TActionArgs>
+    ? (args: TActionArgs) => void
     : unknown;
 
 function cloneObjectValue<T extends Record<string, unknown> | unknown[]>(
@@ -83,7 +88,7 @@ export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
   ) {
     this.props = state(component.option());
     // @ts-expect-error
-    this.defaults = component._getDefaultOptions();
+    this.defaults = component._getDefaultOptions?.() ?? {};
     this.updateIsControlledMode();
 
     component.on('optionChanged', (e: ChangedOptionInfo) => {
@@ -161,7 +166,7 @@ export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
 
   public action<TProp extends string>(
     name: TProp,
-  ): SubsGets<PropertyWithDefaults<TProps, TDefaultProps, TProp>> {
+  ): SubsGets<ActionProperty<TProps, TProp>> {
     return computed(
       // @ts-expect-error
       () => this.component._createActionByOption(name) as any,

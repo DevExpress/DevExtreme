@@ -3,6 +3,7 @@ import { isMaterialBased } from '@js/ui/themes';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
 import * as columnsController from './columns_controller/index';
+import * as dataController from './data_controller/index';
 import type { GridCoreNew } from './widget';
 
 /**
@@ -10,9 +11,11 @@ import type { GridCoreNew } from './widget';
  */
 export type Options =
   & WidgetOptions<GridCoreNew>
+  & dataController.Options
   & columnsController.Options;
 
 export const defaultOptions = {
+  ...dataController.defaultOptions,
   ...columnsController.defaultOptions,
 } satisfies Options;
 
