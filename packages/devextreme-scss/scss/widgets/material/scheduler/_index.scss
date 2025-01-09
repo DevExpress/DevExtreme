@@ -694,7 +694,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     min-width: auto;
     padding: 0;
 
-    @include dx-button-flat-color-styling($button-default-bg, $button-default-text-hover-bg, $button-default-text-focused-bg, $button-default-text-active-bg);
+    @include dx-button-flat-color-styling($button-default-bg, $button-default-text-bg, $button-default-text-hover-bg, $button-default-text-focused-bg, $button-default-text-active-bg);
 
     .dx-icon {
       @include dx-icon-sizing($material-base-icon-size);
