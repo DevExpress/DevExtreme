@@ -62,8 +62,8 @@
   }
 
   @include dx-button-styling(
-    $button-normal-bg,
     $button-normal-color,
+    $button-normal-bg,
     $button-normal-hover-bg,
     $button-normal-focused-bg,
     $button-normal-active-bg,
@@ -74,8 +74,8 @@
 
   &.dx-button-default {
     @include dx-button-styling(
-      $button-default-bg,
       $button-default-color,
+      $button-default-bg,
       $button-default-hover-bg,
       $button-default-focused-bg,
       $button-default-active-bg,
@@ -87,8 +87,8 @@
 
   &.dx-button-danger {
     @include dx-button-styling(
-      $button-danger-bg,
       $button-danger-color,
+      $button-danger-bg,
       $button-danger-hover-bg,
       $button-danger-focused-bg,
       $button-danger-active-bg,
@@ -100,8 +100,8 @@
 
   &.dx-button-success {
     @include dx-button-styling(
-      $button-success-bg,
       $button-success-color,
+      $button-success-bg,
       $button-success-hover-bg,
       $button-success-focused-bg,
       $button-success-active-bg,
@@ -130,6 +130,7 @@
 .dx-button-mode-text {
   @include dx-button-flat-color-styling(
     $button-normal-color,
+    $button-normal-text-bg,
     $button-normal-text-hover-bg,
     $button-normal-text-focused-bg,
     $button-normal-text-active-bg,
@@ -140,6 +141,7 @@
   &.dx-button-default {
     @include dx-button-flat-color-styling(
       $button-default-text-color,
+      $button-default-text-bg,
       $button-default-text-hover-bg,
       $button-default-text-focused-bg,
       $button-default-text-active-bg,
@@ -151,6 +153,7 @@
   &.dx-button-danger {
     @include dx-button-flat-color-styling(
       $button-danger-bg,
+      $button-danger-text-bg,
       $button-danger-text-hover-bg,
       $button-danger-text-focused-bg,
       $button-danger-text-active-bg,
@@ -162,6 +165,7 @@
   &.dx-button-success {
     @include dx-button-flat-color-styling(
       $button-success-bg,
+      $button-success-text-bg,
       $button-success-text-hover-bg,
       $button-success-text-focused-bg,
       $button-success-text-active-bg,
@@ -174,7 +178,8 @@
 .dx-button-mode-outlined {
   @include dx-button-outlined-color-styling(
     $button-normal-color,
-    color.change($button-normal-color, $alpha: 0.24),
+    $button-normal-border-color,
+    $button-normal-outlined-bg,
     $button-normal-outlined-hover-bg,
     $button-normal-outlined-focused-bg,
     $button-normal-outlined-active-bg,
@@ -186,6 +191,7 @@
     @include dx-button-outlined-color-styling(
       $button-default-outlined-color,
       $button-default-outlined-border-color,
+      $button-default-outlined-bg,
       $button-default-outlined-hover-bg,
       $button-default-outlined-focused-bg,
       $button-default-outlined-active-bg,
@@ -198,6 +204,7 @@
     @include dx-button-outlined-color-styling(
       $button-danger-bg,
       $button-danger-bg,
+      $button-danger-outlined-bg,
       $button-danger-outlined-hover-bg,
       $button-danger-outlined-focused-bg,
       $button-danger-outlined-active-bg,
@@ -210,6 +217,7 @@
     @include dx-button-outlined-color-styling(
       $button-success-bg,
       $button-success-bg,
+      $button-success-outlined-bg,
       $button-success-outlined-hover-bg,
       $button-success-outlined-focused-bg,
       $button-success-outlined-active-bg,
