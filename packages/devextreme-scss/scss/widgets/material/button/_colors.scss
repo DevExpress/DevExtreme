@@ -29,18 +29,6 @@ $button-normal-selected-color: $base-text-color !default;
 $button-normal-bg: $base-element-bg !default;
 
 /**
-* $name 16. Background color (outlined)
-* $type color
-*/
-$button-normal-outlined-bg: null !default;
-
-/**
-* $name 17. Background color (text)
-* $type color
-*/
-$button-normal-text-bg: null !default;
-
-/**
 * $name 30. Hover state background color
 * $type color
 */
@@ -304,11 +292,21 @@ $button-disabled-text-color: $button-disabled-background !default;
 $button-hover-shadow-color: $button-shadow-color !default;
 $button-focused-shadow-color: color.adjust($button-shadow-color, $alpha: 0.08) !default;
 $button-active-shadow-color: color.adjust($button-shadow-color, $alpha: 0.08) !default;
+
+/**
+* $name 16. Background color (outlined)
+* $type color
+*/
 $button-normal-outlined-bg: color.change($button-normal-bg-inverted, $alpha: 0) !default;
 $button-normal-outlined-hover-bg: color.change($button-normal-outlined-bg, $alpha: 0.08) !default;
 $button-normal-outlined-focused-bg: color.change($button-normal-outlined-bg, $alpha: 0.08) !default;
 $button-normal-outlined-active-bg: color.change($button-normal-outlined-bg, $alpha: 0.3) !default;
 $button-normal-outlined-selected-bg: color.change($button-normal-outlined-bg, $alpha: 0.18) !default;
+
+/**
+* $name 17. Background color (text)
+* $type color
+*/
 $button-normal-text-bg: color.change($button-normal-bg-inverted, $alpha: 0) !default;
 $button-normal-text-hover-bg: color.change($button-normal-text-bg, $alpha: 0.08) !default;
 $button-normal-text-focused-bg: color.change($button-normal-text-bg, $alpha: 0.08) !default;
