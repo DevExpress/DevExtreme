@@ -6,10 +6,10 @@ interface ToolbarItem extends BaseToolbarItem {
   name?: string;
 }
 
-export function normalizeToolbarItem(
+function normalizeToolbarItem(
   item: ToolbarItem | string,
   defaultButtonsMap: { [key: string]: ToolbarItem },
-  defaultItemNames: string[],
+  defaultItemNames: readonly string[],
 ): ToolbarItem {
   let button = item;
   const defaultProps: ToolbarItem = { location: 'after' };
@@ -30,31 +30,34 @@ export function normalizeToolbarItem(
 }
 
 export function normalizeToolbarItems(
-  items: (ToolbarItem & { name: string })[],
-  userItems: (ToolbarItem | string)[],
-  defaultItemNames: string[],
+  defaultItems: (ToolbarItem & { name: string })[],
+  userItems: (ToolbarItem | string)[] | undefined,
+  defaultItemNames: readonly string[],
 ): ToolbarItem[] {
-  const isArray = Array.isArray(userItems);
-
-  items.forEach((button) => {
+  // TO DO: We need to discuss about this error. It may need to be removed.
+  /*
+  defaultItems.forEach((button) => {
     if (!defaultItemNames.includes(button.name)) {
-      throw new Error(`Default toolbar item '${button.name}' is not added to DEFAULT_TOOLBAR_ITEM_NAMES`);
+      throw new Error(
+        `Default toolbar item '${button.name}' is not added to DEFAULT_TOOLBAR_ITEM_NAMES`
+      );
     }
   });
+  */
 
   if (!isDefined(userItems)) {
-    return items;
+    return defaultItems;
   }
 
   const defaultButtonsMap = {};
-  items.forEach((button) => {
+
+  defaultItems.forEach((button) => {
     defaultButtonsMap[button.name] = button;
   });
 
-  return (isArray ? userItems : [userItems])
-    .map(
-      (
-        item: ToolbarItem | string,
-      ) => normalizeToolbarItem(item, defaultButtonsMap, defaultItemNames),
-    );
+  return userItems.map(
+    (
+      item: ToolbarItem | string,
+    ) => normalizeToolbarItem(item, defaultButtonsMap, defaultItemNames),
+  );
 }
