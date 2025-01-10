@@ -307,6 +307,13 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     this._documentClickHandler = this._documentClickHandler || this.createAction((e) => {
       const $target = $(e.event.target);
+
+      // if target is no more presented in the DOM, then prevent unfocusing the focused view
+      if (!$target.get(0).isConnected) {
+        e.event.preventDefault();
+        return;
+      }
+
       const isCurrentRowsViewClick = this._isEventInCurrentGrid(e.event)
         && $target.closest(`.${this.addWidgetPrefix(ROWS_VIEW_CLASS)}`).length;
       const isEditorOverlay = $target.closest(
