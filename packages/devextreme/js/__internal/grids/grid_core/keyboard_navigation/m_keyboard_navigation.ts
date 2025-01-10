@@ -308,8 +308,9 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._documentClickHandler = this._documentClickHandler || this.createAction((e) => {
       const $target = $(e.event.target);
 
-      // if target is no more presented in the DOM, then prevent unfocusing the focused view
-      if (!$target.get(0).isConnected) {
+      // if click was on the datagrid, but the target is no more presented in the DOM
+      if (!$target.get(0).isConnected && $target.closest('.dx-datagrid-table').length) {
+        // then prevent unfocusing the focused view
         e.event.preventDefault();
         return;
       }
