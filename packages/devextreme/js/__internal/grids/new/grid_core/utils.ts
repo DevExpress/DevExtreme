@@ -34,17 +34,6 @@ export function normalizeToolbarItems(
   userItems: (ToolbarItem | string)[] | undefined,
   defaultItemNames: readonly string[],
 ): ToolbarItem[] {
-  // TO DO: We need to discuss about this error. It may need to be removed.
-  /*
-  defaultItems.forEach((button) => {
-    if (!defaultItemNames.includes(button.name)) {
-      throw new Error(
-        `Default toolbar item '${button.name}' is not added to DEFAULT_TOOLBAR_ITEM_NAMES`
-      );
-    }
-  });
-  */
-
   if (!isDefined(userItems)) {
     return defaultItems;
   }
