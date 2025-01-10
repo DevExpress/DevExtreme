@@ -1363,7 +1363,8 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
-        this._setChildren('buttons', value, 'DxiAutocompleteButtonComponent');
+        this.setContentChildren('buttons', value, 'DxiAutocompleteButtonComponent');
+        this.setChildren('buttons', value);
     }
 
     @ContentChildren(DxiAutocompleteItemComponent)
@@ -1371,7 +1372,8 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiAutocompleteItemComponent');
+        this.setContentChildren('items', value, 'DxiAutocompleteItemComponent');
+        this.setChildren('items', value);
     }
 
 
@@ -1380,7 +1382,9 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
         return this._getOption('buttons');
     }
     set buttonsLegacyChildren(value) {
-        this._setChildren('buttons', value, 'DxiButtonComponent');
+        if (this.checkContentChildren('buttons', value, 'DxiButtonComponent')) {
+           this.setChildren('buttons', value);
+        }
     }
 
     @ContentChildren(DxiItemComponent)
@@ -1388,7 +1392,9 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 

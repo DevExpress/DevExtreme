@@ -1343,7 +1343,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiListItemComponent');
+        this.setContentChildren('items', value, 'DxiListItemComponent');
+        this.setChildren('items', value);
     }
 
     @ContentChildren(DxiListMenuItemComponent)
@@ -1351,7 +1352,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         return this._getOption('menuItems');
     }
     set menuItemsChildren(value) {
-        this._setChildren('menuItems', value, 'DxiListMenuItemComponent');
+        this.setContentChildren('menuItems', value, 'DxiListMenuItemComponent');
+        this.setChildren('menuItems', value);
     }
 
 
@@ -1360,7 +1362,9 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
     @ContentChildren(DxiMenuItemComponent)
@@ -1368,7 +1372,9 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         return this._getOption('menuItems');
     }
     set menuItemsLegacyChildren(value) {
-        this._setChildren('menuItems', value, 'DxiMenuItemComponent');
+        if (this.checkContentChildren('menuItems', value, 'DxiMenuItemComponent')) {
+           this.setChildren('menuItems', value);
+        }
     }
 
 

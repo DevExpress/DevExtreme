@@ -800,7 +800,8 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiMenuItemComponent');
+        this.setContentChildren('items', value, 'DxiMenuItemComponent');
+        this.setChildren('items', value);
     }
 
 
@@ -809,7 +810,9 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 

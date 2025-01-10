@@ -606,7 +606,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiMultiViewItemComponent');
+        this.setContentChildren('items', value, 'DxiMultiViewItemComponent');
+        this.setChildren('items', value);
     }
 
 
@@ -615,7 +616,9 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 

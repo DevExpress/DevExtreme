@@ -1016,7 +1016,8 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
-        this._setChildren('buttons', value, 'DxiTextBoxButtonComponent');
+        this.setContentChildren('buttons', value, 'DxiTextBoxButtonComponent');
+        this.setChildren('buttons', value);
     }
 
 
@@ -1025,7 +1026,9 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         return this._getOption('buttons');
     }
     set buttonsLegacyChildren(value) {
-        this._setChildren('buttons', value, 'DxiButtonComponent');
+        if (this.checkContentChildren('buttons', value, 'DxiButtonComponent')) {
+           this.setChildren('buttons', value);
+        }
     }
 
 

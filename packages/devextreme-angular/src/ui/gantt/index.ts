@@ -1186,7 +1186,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('columns');
     }
     set columnsChildren(value) {
-        this._setChildren('columns', value, 'DxiGanttColumnComponent');
+        this.setContentChildren('columns', value, 'DxiGanttColumnComponent');
+        this.setChildren('columns', value);
     }
 
     @ContentChildren(DxiGanttStripLineComponent)
@@ -1194,7 +1195,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('stripLines');
     }
     set stripLinesChildren(value) {
-        this._setChildren('stripLines', value, 'DxiGanttStripLineComponent');
+        this.setContentChildren('stripLines', value, 'DxiGanttStripLineComponent');
+        this.setChildren('stripLines', value);
     }
 
 
@@ -1203,7 +1205,9 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('columns');
     }
     set columnsLegacyChildren(value) {
-        this._setChildren('columns', value, 'DxiColumnComponent');
+        if (this.checkContentChildren('columns', value, 'DxiColumnComponent')) {
+           this.setChildren('columns', value);
+        }
     }
 
     @ContentChildren(DxiStripLineComponent)
@@ -1211,7 +1215,9 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('stripLines');
     }
     set stripLinesLegacyChildren(value) {
-        this._setChildren('stripLines', value, 'DxiStripLineComponent');
+        if (this.checkContentChildren('stripLines', value, 'DxiStripLineComponent')) {
+           this.setChildren('stripLines', value);
+        }
     }
 
 
