@@ -980,7 +980,8 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         return this._getOption('annotations');
     }
     set annotationsChildren(value) {
-        this._setChildren('annotations', value, 'DxiPieChartAnnotationComponent');
+        this.setContentChildren('annotations', value, 'DxiPieChartAnnotationComponent');
+        this.setChildren('annotations', value);
     }
 
     @ContentChildren(DxiPieChartSeriesComponent)
@@ -988,7 +989,8 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         return this._getOption('series');
     }
     set seriesChildren(value) {
-        this._setChildren('series', value, 'DxiPieChartSeriesComponent');
+        this.setContentChildren('series', value, 'DxiPieChartSeriesComponent');
+        this.setChildren('series', value);
     }
 
 
@@ -997,7 +999,9 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         return this._getOption('annotations');
     }
     set annotationsLegacyChildren(value) {
-        this._setChildren('annotations', value, 'DxiAnnotationComponent');
+        if (this.checkContentChildren('annotations', value, 'DxiAnnotationComponent')) {
+           this.setChildren('annotations', value);
+        }
     }
 
     @ContentChildren(DxiSeriesComponent)
@@ -1005,7 +1009,9 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         return this._getOption('series');
     }
     set seriesLegacyChildren(value) {
-        this._setChildren('series', value, 'DxiSeriesComponent');
+        if (this.checkContentChildren('series', value, 'DxiSeriesComponent')) {
+           this.setChildren('series', value);
+        }
     }
 
 

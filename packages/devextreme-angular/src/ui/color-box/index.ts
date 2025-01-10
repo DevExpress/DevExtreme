@@ -1111,7 +1111,8 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
-        this._setChildren('buttons', value, 'DxiColorBoxButtonComponent');
+        this.setContentChildren('buttons', value, 'DxiColorBoxButtonComponent');
+        this.setChildren('buttons', value);
     }
 
 
@@ -1120,7 +1121,9 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         return this._getOption('buttons');
     }
     set buttonsLegacyChildren(value) {
-        this._setChildren('buttons', value, 'DxiButtonComponent');
+        if (this.checkContentChildren('buttons', value, 'DxiButtonComponent')) {
+           this.setChildren('buttons', value);
+        }
     }
 
 

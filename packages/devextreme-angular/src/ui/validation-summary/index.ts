@@ -212,7 +212,8 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiValidationSummaryItemComponent');
+        this.setContentChildren('items', value, 'DxiValidationSummaryItemComponent');
+        this.setChildren('items', value);
     }
 
 
@@ -221,7 +222,9 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 

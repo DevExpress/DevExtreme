@@ -831,7 +831,8 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiContextMenuItemComponent');
+        this.setContentChildren('items', value, 'DxiContextMenuItemComponent');
+        this.setChildren('items', value);
     }
 
 
@@ -840,7 +841,9 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 

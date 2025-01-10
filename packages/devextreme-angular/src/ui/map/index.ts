@@ -618,7 +618,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         return this._getOption('markers');
     }
     set markersChildren(value) {
-        this._setChildren('markers', value, 'DxiMapMarkerComponent');
+        this.setContentChildren('markers', value, 'DxiMapMarkerComponent');
+        this.setChildren('markers', value);
     }
 
     @ContentChildren(DxiMapRouteComponent)
@@ -626,7 +627,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         return this._getOption('routes');
     }
     set routesChildren(value) {
-        this._setChildren('routes', value, 'DxiMapRouteComponent');
+        this.setContentChildren('routes', value, 'DxiMapRouteComponent');
+        this.setChildren('routes', value);
     }
 
 
@@ -635,7 +637,9 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         return this._getOption('center');
     }
     set centerLegacyChildren(value) {
-        this._setChildren('center', value, 'DxiCenterComponent');
+        if (this.checkContentChildren('center', value, 'DxiCenterComponent')) {
+           this.setChildren('center', value);
+        }
     }
 
     @ContentChildren(DxiMarkerComponent)
@@ -643,7 +647,9 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         return this._getOption('markers');
     }
     set markersLegacyChildren(value) {
-        this._setChildren('markers', value, 'DxiMarkerComponent');
+        if (this.checkContentChildren('markers', value, 'DxiMarkerComponent')) {
+           this.setChildren('markers', value);
+        }
     }
 
     @ContentChildren(DxiRouteComponent)
@@ -651,7 +657,9 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         return this._getOption('routes');
     }
     set routesLegacyChildren(value) {
-        this._setChildren('routes', value, 'DxiRouteComponent');
+        if (this.checkContentChildren('routes', value, 'DxiRouteComponent')) {
+           this.setChildren('routes', value);
+        }
     }
 
 

@@ -561,7 +561,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         return this._getOption('customOperations');
     }
     set customOperationsChildren(value) {
-        this._setChildren('customOperations', value, 'DxiFilterBuilderCustomOperationComponent');
+        this.setContentChildren('customOperations', value, 'DxiFilterBuilderCustomOperationComponent');
+        this.setChildren('customOperations', value);
     }
 
     @ContentChildren(DxiFilterBuilderFieldComponent)
@@ -569,7 +570,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         return this._getOption('fields');
     }
     set fieldsChildren(value) {
-        this._setChildren('fields', value, 'DxiFilterBuilderFieldComponent');
+        this.setContentChildren('fields', value, 'DxiFilterBuilderFieldComponent');
+        this.setChildren('fields', value);
     }
 
 
@@ -578,7 +580,9 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         return this._getOption('customOperations');
     }
     set customOperationsLegacyChildren(value) {
-        this._setChildren('customOperations', value, 'DxiCustomOperationComponent');
+        if (this.checkContentChildren('customOperations', value, 'DxiCustomOperationComponent')) {
+           this.setChildren('customOperations', value);
+        }
     }
 
     @ContentChildren(DxiFieldComponent)
@@ -586,7 +590,9 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         return this._getOption('fields');
     }
     set fieldsLegacyChildren(value) {
-        this._setChildren('fields', value, 'DxiFieldComponent');
+        if (this.checkContentChildren('fields', value, 'DxiFieldComponent')) {
+           this.setChildren('fields', value);
+        }
     }
 
 

@@ -852,7 +852,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         return this._getOption('mentions');
     }
     set mentionsChildren(value) {
-        this._setChildren('mentions', value, 'DxiHtmlEditorMentionComponent');
+        this.setContentChildren('mentions', value, 'DxiHtmlEditorMentionComponent');
+        this.setChildren('mentions', value);
     }
 
 
@@ -861,7 +862,9 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         return this._getOption('mentions');
     }
     set mentionsLegacyChildren(value) {
-        this._setChildren('mentions', value, 'DxiMentionComponent');
+        if (this.checkContentChildren('mentions', value, 'DxiMentionComponent')) {
+           this.setChildren('mentions', value);
+        }
     }
 
 

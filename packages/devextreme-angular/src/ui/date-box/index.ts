@@ -1426,7 +1426,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
-        this._setChildren('buttons', value, 'DxiDateBoxButtonComponent');
+        this.setContentChildren('buttons', value, 'DxiDateBoxButtonComponent');
+        this.setChildren('buttons', value);
     }
 
 
@@ -1435,7 +1436,9 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         return this._getOption('buttons');
     }
     set buttonsLegacyChildren(value) {
-        this._setChildren('buttons', value, 'DxiButtonComponent');
+        if (this.checkContentChildren('buttons', value, 'DxiButtonComponent')) {
+           this.setChildren('buttons', value);
+        }
     }
 
 
