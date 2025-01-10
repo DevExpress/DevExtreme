@@ -831,8 +831,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         return this._getOption('items');
     }
     set buttonItemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiFormButtonItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiFormButtonItemComponent');
     }
 
     @ContentChildren(DxiFormEmptyItemComponent)
@@ -840,8 +839,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         return this._getOption('items');
     }
     set emptyItemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiFormEmptyItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiFormEmptyItemComponent');
     }
 
     @ContentChildren(DxiFormGroupItemComponent)
@@ -849,8 +847,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         return this._getOption('items');
     }
     set groupItemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiFormGroupItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiFormGroupItemComponent');
     }
 
     @ContentChildren(DxiFormItemComponent)
@@ -858,8 +855,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiFormItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiFormItemComponent');
     }
 
     @ContentChildren(DxiFormSimpleItemComponent)
@@ -867,8 +863,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         return this._getOption('items');
     }
     set simpleItemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiFormSimpleItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiFormSimpleItemComponent');
     }
 
     @ContentChildren(DxiFormTabbedItemComponent)
@@ -876,8 +871,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         return this._getOption('items');
     }
     set tabbedItemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiFormTabbedItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiFormTabbedItemComponent');
     }
 
 
@@ -886,9 +880,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
-        }
+        this._setChildren('items', value, 'DxiItemComponent');
     }
 
 

@@ -932,8 +932,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('toolbarItems');
     }
     set toolbarItemsChildren(value) {
-        this.setContentChildren('toolbarItems', value, 'DxiPopupToolbarItemComponent');
-        this.setChildren('toolbarItems', value);
+        this._setChildren('toolbarItems', value, 'DxiPopupToolbarItemComponent');
     }
 
 
