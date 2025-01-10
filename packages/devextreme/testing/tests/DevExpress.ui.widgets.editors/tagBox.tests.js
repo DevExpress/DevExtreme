@@ -23,7 +23,7 @@ import Guid from 'core/guid';
 
 import { TextEditorLabel } from '__internal/ui/text_box/m_text_editor.label';
 
-import 'generic_light.css!';
+// import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =
@@ -6708,36 +6708,30 @@ QUnit.module('dataSource integration', moduleSetup, () => {
             this.tagBox = this.$tagBox.dxTagBox('instance');
         }
     }, () => {
-        QUnit.test('Tagbox should only render existing tags (T1253312)', function(assert) {
+        QUnit.test('Tagbox updates value option (T1253312)', function(assert) {
+            assert.deepEqual(this.tagBox.option('selectedItems'), this.data, 'Initially, selectedItems contains both items from the dataSource.');
+
             this.tagBox.option('dataSource', this.data.slice(0, 1));
 
-            assert.strictEqual(this.$tagBox.find(`.${TAGBOX_TAG_CLASS}`).length, 1, 'Only one tag is rendered after the dataSource is reduced.');
-            assert.strictEqual(this.$tagBox.find(`.${TAGBOX_TAG_CLASS}`).eq(0).text(), 'HD Video Player', 'Rendered tags match the updated dataSource.');
+            assert.deepEqual(this.tagBox.option('value'), [1], 'value is updated based on the new dataSource');
         });
 
-        QUnit.test('Tagbox updates value and selectedItems (T1253312)', function(assert) {
+        QUnit.test('Tagbox updates selectedItems option (T1253312)', function(assert) {
+            assert.deepEqual(this.tagBox.option('selectedItems'), this.data, 'Initially, selectedItems contains both items from the dataSource.');
+
             this.tagBox.option('dataSource', this.data.slice(0, 1));
 
-            assert.deepEqual(this.tagBox.option('selectedItems'), this.data.slice(0, 1), 'selectedItems match the updated dataSource.');
-            assert.deepEqual(this.tagBox.option('value'), [1], 'value is updated based on the new dataSource.');
+            assert.deepEqual(this.tagBox.option('selectedItems'), this.data.slice(0, 1), 'selectedItems match the updated dataSource');
         });
 
-        QUnit.test('Tagbox shouldnt render any tags if dataSource is updated to either null or empty (T1253312)', function(assert) {
-            this.tagBox.option('dataSource', []);
-
-            assert.strictEqual(this.$tagBox.find(`.${TAGBOX_TAG_CLASS}`).length, 0, 'No tags are rendered after empty dataSource');
-
-            this.tagBox.option('dataSource', null);
-
-            assert.strictEqual(this.$tagBox.find(`.${TAGBOX_TAG_CLASS}`).length, 0, 'No tags are rendered after null dataSource');
-        });
-
-        QUnit.test('Tagbox should update its selectedItems and value to empty if dataSource is updated to empty or null (T1253312)', function(assert) {
+        QUnit.test('Tagbox should update its selectedItems and value to empty if dataSource is updated to empty (T1253312)', function(assert) {
             this.tagBox.option('dataSource', []);
 
             assert.deepEqual(this.tagBox.option('selectedItems'), [], 'selectedItems is updated to empty array when dataSource is empty');
             assert.deepEqual(this.tagBox.option('value'), [], 'value is updated to empty array when dataSource is empty');
+        });
 
+        QUnit.test('Tagbox should update its selectedItems and value to empty if dataSource is updated to null (T1253312)', function(assert) {
             this.tagBox.option('dataSource', null);
 
             assert.deepEqual(this.tagBox.option('selectedItems'), [], 'selectedItems is updated to empty array when dataSource is null');

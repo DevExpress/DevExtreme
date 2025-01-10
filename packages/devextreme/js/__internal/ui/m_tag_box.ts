@@ -1611,6 +1611,7 @@ const TagBox = (SelectBox as any).inherit({
         break;
       case 'dataSource':
         this._synchronizeTagsWithData();
+        this.callBase(args);
         this._renderTags();
         break;
       case 'maxFilterQueryLength':
