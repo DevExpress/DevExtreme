@@ -4,6 +4,7 @@ export const ATTRIBUTES = {
 };
 
 export const ROWS_VIEW_CLASS = 'rowsview';
+export const TABLE_CLASS = 'table';
 export const EDIT_FORM_CLASS = 'edit-form';
 export const GROUP_FOOTER_CLASS = 'group-footer';
 export const ROW_CLASS = 'dx-row';

@@ -71,6 +71,7 @@ import {
   REVERT_BUTTON_CLASS,
   ROWS_VIEW,
   ROWS_VIEW_CLASS,
+  TABLE_CLASS,
   WIDGET_CLASS,
 } from './const';
 import { GridCoreKeyboardNavigationDom } from './dom';
@@ -308,25 +309,31 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._documentClickHandler = this._documentClickHandler || this.createAction((e) => {
       const $target = $(e.event.target);
 
-      // if click was on the datagrid, but the target is no more presented in the DOM
-      if (!$target.get(0).isConnected && $target.closest('.dx-datagrid-table').length) {
-        // then prevent unfocusing the focused view
+      const tableSelector = `.${this.addWidgetPrefix(TABLE_CLASS)}`;
+      const rowsViewSelector = `.${this.addWidgetPrefix(ROWS_VIEW_CLASS)}`;
+      const editorOverlaySelector = `.${DROPDOWN_EDITOR_OVERLAY_CLASS}`;
+
+      // if click was on the datagrid table, but the target element is no more presented in the DOM
+      const keepFocus = !!$target.closest(tableSelector).length && !$target.get(0).isConnected;
+
+      if (keepFocus) {
         e.event.preventDefault();
         return;
       }
 
-      const isCurrentRowsViewClick = this._isEventInCurrentGrid(e.event)
-        && $target.closest(`.${this.addWidgetPrefix(ROWS_VIEW_CLASS)}`).length;
-      const isEditorOverlay = $target.closest(
-        `.${DROPDOWN_EDITOR_OVERLAY_CLASS}`,
-      ).length;
-      const isColumnResizing = !!this._columnResizerController && this._columnResizerController.isResizing();
-      if (!isCurrentRowsViewClick && !isEditorOverlay && !isColumnResizing) {
-        const targetInsideFocusedView = this._focusedView
-          ? $target.parents().filter(this._focusedView.element()).length > 0
-          : false;
+      const isRowsViewClick = this._isEventInCurrentGrid(e.event) && !!$target.closest(rowsViewSelector).length;
+      const isEditorOverlayClick = !!$target.closest(editorOverlaySelector).length;
+      const isColumnResizing = !!this._columnResizerController?.isResizing();
 
-        !targetInsideFocusedView && this._resetFocusedCell(true);
+      if (!isRowsViewClick && !isEditorOverlayClick && !isColumnResizing) {
+        const outsideFocusedView = this._focusedView
+          ? $target.closest(this._focusedView.element()).length === 0
+          : true;
+
+        if (outsideFocusedView) {
+          this._resetFocusedCell(true);
+        }
+
         this._resetFocusedView();
       }
     });
