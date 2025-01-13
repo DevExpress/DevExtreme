@@ -295,10 +295,6 @@ const SKIPPED_TESTS = {
     'PivotGrid',
   ];
 
-  const EXPECTED_CONSOLE_MESSAGES = {
-    Map: ['TypeError: Failed to fetch'],
-  };
-
   getDemoPaths(approach).forEach((demoPath, index) => {
     if (!shouldRunTestAtIndex(index + 1) || !existsSync(demoPath)) { return; }
     // eslint-disable-next-line max-len
@@ -385,11 +381,11 @@ const SKIPPED_TESTS = {
 
           const errors = [...consoleMessages.error, ...consoleMessages.warn]
             .filter((e) => {
-              const isKnownWarning = knownWarnings.some((kw) => e.startsWith(kw));
-              const isExpectedConsoleMessage = EXPECTED_CONSOLE_MESSAGES[widgetName]  
-                && EXPECTED_CONSOLE_MESSAGES[widgetName].some((cm) => e.startsWith(cm));
+              const isKnownWarning = knownWarnings.common.some((kw) => e.startsWith(kw));
+              const isComponentSpecificKnownWarning = knownWarnings[widgetName]  
+                && isComponentSpecificKnownWarning[widgetName].some((kw) => e.startsWith(kw));
               
-              return !isKnownWarning && !isExpectedConsoleMessage; 
+              return !isKnownWarning && !isComponentSpecificKnownWarning; 
             });
 
           await t.expect(errors).eql([]);
