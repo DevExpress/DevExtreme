@@ -84,6 +84,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
      */
     name?: string;
     /**
+     * @skip
      * @docid
      * @type_function_param1 validatedInfo:{ui/validator:ValidatedEvent}
      * @action
