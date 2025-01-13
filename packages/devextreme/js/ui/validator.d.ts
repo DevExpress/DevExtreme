@@ -85,12 +85,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
     name?: string;
     /**
      * @docid
-     * @type_function_param1 validatedInfo:Object
-     * @type_function_param1_field value:Object
-     * @type_function_param1_field validationRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-     * @type_function_param1_field brokenRule:RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule
-     * @type_function_param1_field brokenRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-     * @type_function_param1_field status:Enums.ValidationStatus
+     * @type_function_param1 validatedInfo:{ui/validator:ValidatedEvent}
      * @action
      * @public
      */
