@@ -844,7 +844,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _beforeSaveEditData(change, editIndex?) {
     let result: any = super._beforeSaveEditData.apply(this, arguments as any);
-    const validationData = this._validatingController._getValidationData(change?.key);
+    const validationData = this._validatingController._getValidationData(change?.key, true);
 
     if (change) {
       const isValid = change.type === 'remove' || validationData.isValid;
