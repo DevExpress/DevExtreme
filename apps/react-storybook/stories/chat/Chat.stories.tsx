@@ -1,10 +1,24 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import {Chat, ChatTypes} from 'devextreme-react/chat'
-import type {Meta, StoryObj} from '@storybook/react';
+import { Chat, ChatTypes } from 'devextreme-react/chat'
+import { Button } from "devextreme-react";
+import type { Meta, StoryObj } from '@storybook/react';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
-import { firstAuthor, secondAuthor, thirdAuthor, fourthAuthor, initialMessages, longError } from './data';
+import {
+    firstAuthor,
+    secondAuthor,
+    thirdAuthor,
+    fourthAuthor,
+    initialMessages,
+    longError,
+    REGENERATION_TEXT,
+    assistantReplies,
+    userRequest,
+    regenerationMessage, 
+    assistant,
+} from './data';
 import { Popup } from 'devextreme-react/popup';
+import HTMLReactParser from 'html-react-parser';
 
 import './styles.css';
 
@@ -473,6 +487,102 @@ export const TypingUsers: Story = {
                     typingUsers={typingUsers}
                 >
                 </Chat>
+            </div>
+        );
+    }
+}
+
+export const AIBotIntegration: Story = {
+    args: {
+        alerts: 'No alerts',
+    },
+    argTypes: {
+        alerts: {
+            control: 'select',
+            defaultValue: 'No alerts',
+            options: [
+                'No alerts',
+                'Limit reached',
+            ],
+            mapping: {
+                ['No alerts']: [],
+                ['Limit reached']: [{ message: 'Request limit reached, try again in a minute.' }],
+            },
+        },
+    },
+    render: ({ alerts }) => {
+        const [isProcessing, setIsProcessing] = useState(false);
+        const [assistantReplyIndex, setAssistantReplyIndex] = useState<number>(0);
+        const [copyButtonIcon, setCopyButtonIcon] = useState('copy');
+
+        const items = useMemo(() => {
+            const repliesCount = assistantReplies.length;
+            const assistantReply = isProcessing ? regenerationMessage : assistantReplies[assistantReplyIndex % repliesCount];
+
+            return [userRequest, assistantReply];
+        }, [assistantReplyIndex, isProcessing]);
+
+        const onRegenerateButtonClick = useCallback(async (): Promise<void> => {
+            setIsProcessing(true);
+
+            await new Promise((resolve) => {
+                setTimeout(resolve, 300);
+            });
+            setAssistantReplyIndex((prev: number) => prev + 1);
+
+            setIsProcessing(false);
+        }, []);
+
+        const messageRender = useCallback(({ message }: { message: ChatTypes.Message }) => {
+            const { text = '', author } = message;
+
+            const onCopyButtonClick = () => {
+                navigator.clipboard?.writeText(text);
+                setCopyButtonIcon('check');
+
+                setTimeout(() => {
+                    setCopyButtonIcon('copy');
+                }, 2500);
+            };
+
+            if (text === REGENERATION_TEXT || author !== assistant) {
+                return <span>{text}</span>;
+            }
+
+            return (
+                <>
+                    <div>
+                        {HTMLReactParser(text)}
+                    </div>
+                    <div>
+                        <Button
+                            icon={copyButtonIcon}
+                            stylingMode='text'
+                            hint='Copy'
+                            onClick={onCopyButtonClick}
+                        />
+                        <Button
+                            icon='refresh'
+                            stylingMode='text'
+                            hint='Regenerate'
+                            onClick={onRegenerateButtonClick}
+                        />
+                    </div>
+                </>
+            );
+        }, [copyButtonIcon, onRegenerateButtonClick]);
+
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Chat
+                    height={900}
+                    width={500}
+                    items={items}
+                    showDayHeaders={false}
+                    user={secondAuthor}
+                    alerts={alerts}
+                    messageRender={messageRender}
+                />
             </div>
         );
     }
