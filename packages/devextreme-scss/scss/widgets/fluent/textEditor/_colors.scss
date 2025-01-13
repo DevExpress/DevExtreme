@@ -98,7 +98,7 @@ $texteditor-label-transition:
     $texteditor-outlined-bg: $base-element-bg !default;
     $texteditor-filled-bg: darken($base-element-bg, 3.9) !default;
   }
-  
+
   @if $color == "saas" {
     $texteditor-color: rgba(66, 81, 118, 1) !default;
     $texteditor-placeholder-color: rgba(144, 158, 192, 1) !default;
@@ -148,9 +148,6 @@ $texteditor-label-color: $texteditor-placeholder-color;
 $texteditor-label-color-focused: $base-accent;
 
 :root {
-  --dx-texteditor-color-text: #{$texteditor-color}; 
+  --dx-texteditor-color-text: #{$texteditor-color};
   --dx-texteditor-color-label: #{$texteditor-label-color};
 }
-
-
-  

@@ -147,11 +147,11 @@ $chat-typingindicator-circle-bg-color: null !default;
 @if $mode == "dark" {
   $chat-bubble-background-color-secondary: lighten($base-bg, 7.84) !default;
   $chat-bubble-background-color-primary: darken(desaturate(adjust-hue($base-accent, 356.3), 14.7), 49.4) !default;
-  
+
   $chat-information-author-name-color: lighten($base-bg, 43.92) !default;
   $chat-information-timestamp-color: lighten($base-bg, 43.92) !default;
   $chat-typingindicator-color: lighten($base-bg, 43.92) !default;
-  
+
   $chat-messagelist-day-header-color: lighten($base-bg, 43.92) !default;
   $chat-messagelist-empty-icon-color: darken($base-icon-color, 25.88) !default;
   $chat-messagelist-empty-icon-background-color: lighten($base-bg, 7.84) !default;

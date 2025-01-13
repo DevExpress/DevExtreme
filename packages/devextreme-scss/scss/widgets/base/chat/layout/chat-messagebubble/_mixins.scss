@@ -24,13 +24,13 @@
       &:first-child {
         border-start-start-radius: $border-radius;
       }
-  
+
       &:last-child {
         border-end-start-radius: $border-radius;
       }
     }
   }
-  
+
   .dx-chat-messagegroup-alignment-end {
     .dx-chat-messagebubble {
       color: $color-primary;

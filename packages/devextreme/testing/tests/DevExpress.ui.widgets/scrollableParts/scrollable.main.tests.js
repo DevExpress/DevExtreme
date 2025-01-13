@@ -161,6 +161,56 @@ QUnit.test('reset unused position after change direction', function(assert) {
 
 QUnit.module('both directions', moduleConfig);
 
+['horizontal', 'vertical'].forEach((direction) => {
+    QUnit.test(`content should have the translate(0,0) when scrolling within the bounds of the container in ${direction} direction`, function(assert) {
+        const done = assert.async();
+        assert.expect(2);
+
+        const contentWidth = 9000;
+        const contentHeight = 9000;
+        const moveDistance = -10;
+        const moveDuration = 10;
+        const $scrollable = $('#scrollable');
+
+        $scrollable
+            .find('.content1')
+            .width(contentWidth)
+            .height(contentHeight);
+
+        $scrollable.dxScrollable({
+            useNative: false,
+            direction,
+            onEnd: function() {
+                const translate = getTranslateValues($content.get(0));
+
+                assert.equal(translate.left, 0, 'translate left should have zero value');
+                assert.equal(translate.top, 0, 'translate top should have zero value');
+
+                done();
+            }
+        });
+
+        const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
+        const mouse = pointerMock($content).start();
+
+        mouse
+            .down()
+            .wait(moveDuration);
+
+        if(direction === 'horizontal') {
+            mouse
+                .move(moveDistance, 0)
+                .up();
+        } else {
+            mouse
+                .move(0, moveDistance)
+                .up();
+        }
+
+        this.clock.tick(10);
+    });
+});
+
 QUnit.test('bounce problem', function(assert) {
     assert.expect(2);
 

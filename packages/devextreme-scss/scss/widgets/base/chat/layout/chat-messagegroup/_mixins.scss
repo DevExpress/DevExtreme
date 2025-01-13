@@ -20,7 +20,7 @@
   .dx-chat-messagegroup-information {
     column-gap: $information-gap;
   }
-  
+
   .dx-chat-messagegroup-alignment-start {
     grid-template-columns: $messagegroup-start-template;
   }
@@ -28,7 +28,7 @@
   .dx-chat-messagegroup-alignment-start:has(.dx-avatar) {
     column-gap: $messagegroup-start-gap;
   }
-  
+
   .dx-chat-messagegroup-time {
     font-size: $information-font-size;
     color: $information-timestamp-color;

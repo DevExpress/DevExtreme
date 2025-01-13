@@ -777,7 +777,7 @@ export const ListBase = CollectionWidget.inherit({
     const elementAria = {
       role: 'group',
       // eslint-disable-next-line spellcheck/spell-checker
-      roledescription: 'list',
+      roledescription: messageLocalization.format('dxList-ariaRoleDescription'),
     };
 
     this.setAria(elementAria, this.$element());

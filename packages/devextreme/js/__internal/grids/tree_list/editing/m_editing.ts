@@ -39,8 +39,11 @@ class EditingController extends editingModule.controllers.editing {
   }
 
   protected _setInsertAfterOrBeforeKey(change, parentKey) {
-    if (parentKey !== undefined && parentKey !== this.option('rootValue')) {
-      change.insertAfterKey = parentKey;
+    const dataSourceAdapter = this._dataController.dataSource();
+    const key = parentKey || dataSourceAdapter?.parentKeyOf(change.data);
+
+    if (key !== undefined && key !== this.option('rootValue')) {
+      change.insertAfterKey = key;
     } else {
       // @ts-expect-error
       super._setInsertAfterOrBeforeKey.apply(this, arguments);
@@ -55,7 +58,8 @@ class EditingController extends editingModule.controllers.editing {
       const rowIndex = gridCoreUtils.getIndexByKey(parentKey, items);
       // @ts-expect-error
       if (rowIndex >= 0 && this._dataController.isRowExpanded(parentKey)) {
-        return rowIndex + 1;
+        // @ts-expect-error
+        return super._getLoadedRowIndex.apply(this, arguments);
       }
       return -1;
     }

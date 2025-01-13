@@ -7525,7 +7525,6 @@ declare module DevExpress.events {
 declare module DevExpress.excelExporter {
   /**
    * [descr:CellAddress]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface CellAddress {
     /**
@@ -7539,7 +7538,6 @@ declare module DevExpress.excelExporter {
   }
   /**
    * [descr:CellRange]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface CellRange {
     /**
@@ -21267,6 +21265,8 @@ declare module DevExpress.ui {
        * [descr:dxMenuBaseItem.visible]
        */
       visible?: boolean;
+
+      [key: string]: any;
     }
     /**
      * [descr:_ui_menu_OptionChangedEvent]

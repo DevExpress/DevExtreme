@@ -13,7 +13,7 @@ import {
 import { Observable } from 'rxjs';
 import { AppService } from './app.service';
 import { loadMessages } from 'devextreme/localization';
-import { DataSource } from 'devextreme/common/data';
+import DataSource from 'devextreme/data/data_source';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

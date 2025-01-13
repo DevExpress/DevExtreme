@@ -10,7 +10,8 @@ import {
   Alert,
   MessageEnteredEvent
 } from 'devextreme/ui/chat';
-import { DataSource, CustomStore } from 'devextreme/common/data';
+import DataSource from 'devextreme/data/data_source';
+import CustomStore from 'devextreme/data/custom_store';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,7 @@ export class AppService {
     endpoint: 'https://public-api.devexpress.com/demo-openai',
     apiKey: 'DEMO',
   }
-  
+
   REGENERATION_TEXT = 'Regeneration...';
   ALERT_TIMEOUT = 1000 * 60;
 
@@ -95,7 +96,7 @@ export class AppService {
         });
       },
     });
-  
+
     this.dataSource = new DataSource({
       store: this.customStore,
       paginate: false,
@@ -105,20 +106,21 @@ export class AppService {
   async getAIResponse(messages) {
     const params = {
       messages,
+      model: this.AzureOpenAIConfig.deployment,
       max_tokens: 1000,
       temperature: 0.7,
     };
-  
+
     const response = await this.chatService.chat.completions.create(params);
     const data = { choices: response.choices };
-  
+
     return data.choices[0].message?.content;
   }
 
   async processMessageSending(message, event) {
     this.messages.push({ role: 'user', content: message.text });
     this.typingUsersSubject.next([this.assistant]);
-  
+
     try {
       const aiResponse = await this.getAIResponse(this.messages);
 
@@ -137,7 +139,7 @@ export class AppService {
   updateLastMessage(text = this.REGENERATION_TEXT) {
     const items = this.dataSource.items();
     const lastMessage = items.at(-1);
-  
+
     this.dataSource.store().push([{
       type: 'update',
       key: lastMessage.id,
@@ -160,7 +162,7 @@ export class AppService {
     this.setAlerts([{
       message: 'Request limit reached, try again in a minute.'
     }]);
-  
+
     setTimeout(() => {
       this.setAlerts([]);
     }, this.ALERT_TIMEOUT);
@@ -193,7 +195,7 @@ export class AppService {
 
     return result;
   }
-  
+
   async onMessageEntered({ message, event }: MessageEnteredEvent) {
     this.dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
 

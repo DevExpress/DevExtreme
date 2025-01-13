@@ -973,8 +973,8 @@ const Lookup = DropDownList.inherit({
     return this.option('searchEnabled') && this._searchBox ? this._searchBox.option('value') : '';
   },
 
-  _renderInputValue() {
-    return this.callBase().always(() => {
+  _renderInputValue(...args) {
+    return this.callBase(...args).always(() => {
       this._refreshSelected();
     });
   },

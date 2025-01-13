@@ -440,7 +440,7 @@ const TagBox = (SelectBox as any).inherit({
     const elementAria = {
       role: 'application',
       // eslint-disable-next-line spellcheck/spell-checker
-      roledescription: 'tagbox',
+      roledescription: messageLocalization.format('dxTagBox-ariaRoleDescription'),
     };
 
     this.setAria(elementAria, this.$element());
@@ -600,10 +600,10 @@ const TagBox = (SelectBox as any).inherit({
     this.callBase(e);
   },
 
-  _renderInputValue() {
+  _renderInputValue(...args) {
     this.option('displayValue', this._searchValue());
 
-    return this.callBase();
+    return this.callBase(...args);
   },
 
   _restoreInputText(saveEditingValue) {

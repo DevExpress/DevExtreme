@@ -77,17 +77,17 @@ export default class BootstrapExtractor {
     }
 
     const result = `${functions}
-${this.getVariables(variables)}
+${variables}
 ${variablesDark}
 ${this.input}
 ${this.getSetterServiceCode('!default')}
 ${this.getCollectorServiceCode()}`;
 
-    return result;
+    return this.removeImports(result);
   }
 
-  getVariables(variables: string): string {
-    return variables.replace(/^@import "variables-dark";.*$/gm, '');
+  removeImports(content: string): string {
+    return content.replace(/^@import "variables-dark";.*$/gm, '');
   }
 
   getFilePath(fileName: string): string {

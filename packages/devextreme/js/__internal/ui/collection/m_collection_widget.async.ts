@@ -1,11 +1,13 @@
+import Guid from '@js/core/guid';
 import { noop } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 
 import CollectionWidgetEdit from './m_collection_widget.edit';
 
 const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
   _initMarkup() {
-    this._asyncTemplateItems = [];
+    this._asyncTemplateItemsMap = {};
     this.callBase();
   },
 
@@ -17,9 +19,10 @@ const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
   _renderItemContent(args) {
     const renderContentDeferred = Deferred();
     const itemDeferred = Deferred();
+    const uniqueKey = `dx${new Guid()}`;
 
-    this._asyncTemplateItems[args.index] = itemDeferred;
-    const $itemContent = this.callBase(args);
+    this._asyncTemplateItemsMap[uniqueKey] = itemDeferred;
+    const $itemContent = this.callBase({ ...args, uniqueKey });
 
     itemDeferred.done(() => {
       renderContentDeferred.resolve($itemContent);
@@ -30,27 +33,37 @@ const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
 
   _onItemTemplateRendered(itemTemplate, renderArgs) {
     return () => {
-      this._asyncTemplateItems[renderArgs.index]?.resolve();
+      this._asyncTemplateItemsMap[renderArgs.uniqueKey]?.resolve();
     };
   },
 
   _postProcessRenderItems: noop,
 
-  _planPostRenderActions() {
+  _planPostRenderActions(...args: unknown[]) {
     const d = Deferred();
-    when.apply(this, this._asyncTemplateItems).done(() => {
-      this._postProcessRenderItems();
-      d.resolve();
+    const asyncTemplateItems = Object.values<DeferredObj<unknown>>(this._asyncTemplateItemsMap);
+
+    when.apply(this, asyncTemplateItems).done(() => {
+      this._postProcessRenderItems(...args);
+
+      d.resolve().done(() => {
+        this._asyncTemplateItemsMap = {};
+      });
     });
+
     return d.promise();
   },
 
   _clean() {
     this.callBase();
-    this._asyncTemplateItems.forEach((item) => {
+
+    const asyncTemplateItems = Object.values<DeferredObj<unknown>>(this._asyncTemplateItemsMap);
+
+    asyncTemplateItems.forEach((item) => {
       item.reject();
     });
-    this._asyncTemplateItems = [];
+
+    this._asyncTemplateItemsMap = {};
   },
 });
 

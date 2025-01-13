@@ -2615,7 +2615,7 @@ QUnit.module('Validation', {
         assert.strictEqual(this.instance.option('isValid'), true);
     });
 
-    QUnit.test('reset should clear input value when editor`s value hasn`t been changed', function(assert) {
+    QUnit.test('reset should clear input value if editor\'s value has not been changed', function(assert) {
         const initialValue = [null, null];
         this.reinit({ value: initialValue });
 
@@ -2625,12 +2625,12 @@ QUnit.module('Validation', {
         const keyboard = keyboardMock($startDateBoxInput);
         keyboard.type('123').press('enter');
 
-        assert.strictEqual($startDateBoxInput.val(), '123');
-        assert.deepEqual(this.instance.option('value'), initialValue);
+        assert.strictEqual($startDateBoxInput.val(), '123', 'input value is correct');
+        assert.deepEqual(this.instance.option('value'), initialValue, 'value option is equal to initial');
 
         this.instance.reset();
 
-        assert.strictEqual($startDateBoxInput.val(), '');
+        assert.strictEqual($startDateBoxInput.val(), '', 'input value is reset');
     });
 
     QUnit.test('dateRangeBox should not be re-validated after readOnly option change', function(assert) {

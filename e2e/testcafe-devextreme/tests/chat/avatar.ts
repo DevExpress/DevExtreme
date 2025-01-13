@@ -45,6 +45,7 @@ test('Chat: avatar', async (t) => {
 
 test('Chat: showAvatar set to false', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
   await testScreenshot(t, takeScreenshot, 'Avatar with showAvatar set to false.png', { element: '#chat' });
 
   await t

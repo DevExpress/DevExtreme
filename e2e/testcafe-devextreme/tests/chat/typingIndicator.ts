@@ -13,8 +13,9 @@ fixture.disablePageReloads`ChatTypingIndicator`
 
 test('Chat: typing indicator with emptyview', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
   const chat = new Chat('#container');
+
+  await chat.repaint();
 
   await testScreenshot(t, takeScreenshot, 'Typing indicator with emptyview.png', {
     element: '#container',

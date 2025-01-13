@@ -53,7 +53,7 @@ $button-normal-selected-bg: $base-selected-bg !default;
 $button-normal-bg-inverted: null !default;
 
 /**
-* $name 10. Text color
+* $name 10. Text color (contained)
 * $type color
 */
 $button-default-color: null !default;
@@ -94,6 +94,10 @@ $button-default-active-bg: null !default;
 */
 $button-default-selected-bg: null !default;
 
+/**
+* $name 11. Text color (outlined)
+* $type color
+*/
 $button-default-outlined-color: $base-accent !default;
 $button-default-outlined-border-color: $base-accent !default;
 $button-default-outlined-hover-bg: null !default;
@@ -101,6 +105,10 @@ $button-default-outlined-focused-bg: null !default;
 $button-default-outlined-active-bg: null !default;
 $button-default-outlined-selected-bg: null !default;
 
+/**
+* $name 11. Text color (text)
+* $type color
+*/
 $button-default-text-color: $base-accent !default;
 
 /**
@@ -337,13 +345,41 @@ $button-normal-text-focused-bg: $button-normal-hover-bg !default;
 $button-normal-text-active-bg: $button-normal-active-bg !default;
 $button-normal-text-selected-bg: $button-normal-selected-bg !default;
 
+/**
+* $name 12. Hover state text color (outlined)
+* $type color
+*/
 $button-default-outlined-color-hover: $button-accent-foreground-color !default;
+
+/**
+* $name 13. Active state text color (outlined)
+* $type color
+*/
 $button-default-outlined-color-active: $button-accent-foreground-color !default;
+
+/**
+* $name 21. Selected state text color (outlined)
+* $type color
+*/
 $button-default-outlined-selected-color: $button-accent-foreground-color !default;
 
-$button-default-text-color-hover: $button-default-outlined-color-hover !default;
+/**
+* $name 12. Hover state text color (text)
+* $type color
+*/
+$button-default-text-color-hover: $button-accent-foreground-color !default;
+
+/**
+* $name 13. Active state text color (text)
+* $type color
+*/
 $button-default-text-color-active: $button-default-outlined-color-active !default;
-$button-default-text-selected-color: $button-default-outlined-selected-color !default;
+
+/**
+* $name 21. Selected state text color (text)
+* $type color
+*/
+$button-default-text-selected-color: $button-accent-foreground-color !default;
 
 $button-default-text-hover-bg: $button-default-outlined-hover-bg !default;
 $button-default-text-focused-bg: $button-default-outlined-focused-bg !default;

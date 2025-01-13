@@ -8096,9 +8096,10 @@ QUnit.module('accessibility', () => {
 
     QUnit.test('TagBox element should have correct aria attributes', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox();
+        const localizedRoleDescription = messageLocalization.format('dxTagBox-ariaRoleDescription');
 
         assert.strictEqual($tagBox.attr('role'), 'application', 'role is set correctly');
-        assert.strictEqual($tagBox.attr('aria-roledescription'), 'tagbox', 'aria-roledescription is set correctly');
+        assert.strictEqual($tagBox.attr('aria-roledescription'), localizedRoleDescription, 'aria-roledescription is set correctly');
     });
 
     QUnit.test('TagBox element should have an aria-labelledby attribute with correct ids', function(assert) {

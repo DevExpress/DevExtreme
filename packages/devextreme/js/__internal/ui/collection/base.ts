@@ -47,6 +47,7 @@ declare class Base<
     container: dxElementWrapper;
     contentClass: string;
     defaultTemplateName: string;
+    uniqueKey?: string;
   }): dxElementWrapper;
   _renderContent(): void;
   _postprocessRenderItem(args: unknown): void;

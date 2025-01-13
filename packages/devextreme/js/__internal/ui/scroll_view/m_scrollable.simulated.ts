@@ -220,10 +220,10 @@ export const Scroller = Class.inherit({
 
     if (location > 0) {
       translateOffset = location;
-    } else if (location <= minOffset) {
+    }
+
+    if (location <= minOffset) {
       translateOffset = location - minOffset;
-    } else {
-      translateOffset = location % 1;
     }
 
     if (this._translateOffset === translateOffset) {
@@ -234,7 +234,7 @@ export const Scroller = Class.inherit({
     targetLocation[this._prop] = translateOffset;
     this._translateOffset = translateOffset;
 
-    if (translateOffset === 0) {
+    if (!translateOffset) {
       resetPosition(this._$content);
       return;
     }

@@ -278,6 +278,9 @@ if(devices.real().deviceType === 'desktop') {
                         items: [{ text: 'Item_1' }, { text: 'Item_2' }, { text: 'Item_3' }],
                     }, options))
             });
+            const localizedRoleDescription = 'My Custom List';
+            localization.loadMessages({ 'en': { 'dxList-ariaRoleDescription': localizedRoleDescription } });
+
             this.clock = sinon.useFakeTimers();
             this.expectedContainerAttrs = {
                 tabindex: '0',
@@ -289,7 +292,7 @@ if(devices.real().deviceType === 'desktop') {
             };
             this.expectedListAttrs = {
                 role: 'group',
-                'aria-roledescription': 'list',
+                'aria-roledescription': localizedRoleDescription,
             };
         },
         afterEach: function() {

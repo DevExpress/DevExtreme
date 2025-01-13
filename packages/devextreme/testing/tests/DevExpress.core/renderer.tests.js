@@ -372,6 +372,21 @@ QUnit.test('Add/remove atribute', function(assert) {
     assert.equal(!!$element.get(0).getAttribute('readonly'), true, 'element readOnly attribute');
     $element.attr('readonly', false);
     assert.equal($element.get(0).getAttribute('readonly'), undefined, 'element readOnly attribute');
+});
 
+QUnit.test('Remove an attribute from the whole set of elements (T1261932)', function(assert) {
+    const fixture = document.getElementById('qunit-fixture');
+
+    const $wrapper = renderer('<div>').html('<div readonly="true">1</div><div readonly="true">2</div>');
+
+    const $allInnerElements = $wrapper.find('div');
+
+    fixture.appendChild($allInnerElements.get(0));
+
+    $allInnerElements.removeAttr('readonly');
+
+    $allInnerElements.each(function(_, element) {
+        assert.equal(element.getAttribute('readonly'), undefined, 'element readOnly attribute');
+    });
 });
 

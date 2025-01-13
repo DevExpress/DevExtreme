@@ -171,7 +171,7 @@
     @include dx-button-styling-variant(
       transparent,
       $button-default-border-color,
-      $button-default-border-color,
+      $button-default-outlined-color,
       $button-default-outlined-bg-hover,
       $button-default-outlined-bg-focused,
       $button-default-outlined-bg-active,
@@ -227,7 +227,7 @@
     @include dx-button-styling-variant(
       transparent,
       transparent,
-      $button-default-border-color,
+      $button-default-text-color,
       $button-default-text-bg-hover,
       $button-default-text-bg-focused,
       $button-default-text-bg-active,

@@ -584,10 +584,6 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     return items;
   }
 
-  public isVisible() {
-    return super.isVisible() || this._isGroupPanelVisible();
-  }
-
   public hasGroupedColumns(): boolean {
     return this._isGroupPanelVisible() && !!this.getColumns().length;
   }

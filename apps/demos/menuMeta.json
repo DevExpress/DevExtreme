@@ -2104,7 +2104,7 @@
             "Title": "AI and Chatbot Integration",
             "Name": "AIAndChatbotIntegration",
             "Widget": "Chat",
-            "Modules": "html-react-parser",
+            "Modules": "html-react-parser,openai,unified",
             "DemoType": "Web"
           }
         ]

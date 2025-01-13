@@ -78,7 +78,7 @@ QUnit.test('one series', function(assert) {
         argumentAxis: this.argumentAxis
     });
     const series = seriesDataSource.getSeries();
-    // assert
+
     assert.equal(series.length, 1);
     assert.equal(series[0].type, 'area');
     const points = series[0].getPoints();
@@ -156,7 +156,7 @@ QUnit.test('datetime in chart valueAxis', function(assert) {
 
     // act
     const range = seriesDataSource.getBoundRange();
-    // assert
+
     assert.strictEqual(range.val.min.toUTCString(), (new Date(1980, 5, 11)).toUTCString());
     assert.strictEqual(range.val.max.toUTCString(), (new Date(1980, 6, 20)).toUTCString());
 });
@@ -188,7 +188,6 @@ QUnit.test('seriesDateSource with categories', function(assert) {
         categories: ['a1', 'a2', 'a3']
     });
 
-    // assert
     assert.deepEqual(seriesDataSource._series[0].argumentAxisType, 'discrete');
     assert.deepEqual(seriesDataSource._series[1].argumentAxisType, 'discrete');
 });
@@ -234,7 +233,7 @@ QUnit.test('several series', function(assert) {
         argumentAxis: this.argumentAxis
     });
     const series = seriesDataSource.getSeries();
-    // assert
+
     assert.equal(series.length, 2);
     let points = series[0].getPoints();
     assert.equal(series[0].type, 'area');
@@ -268,7 +267,7 @@ QUnit.test('several series. Set valueType', function(assert) {
         argumentAxis: this.argumentAxis
     });
     const series = seriesDataSource.getSeries();
-    // assert
+
     assert.equal(series.length, 2);
     assert.equal(series[0].valueType, 'numeric');
     assert.equal(series[1].valueType, 'numeric');
@@ -303,7 +302,7 @@ QUnit.test('series theme', function(assert) {
     });
 
     const series = seriesDataSource.getSeries();
-    // assert
+
     assert.equal(series.length, 2);
     assert.equal(series[0].type, 'area');
     assert.equal(series[1].type, 'line');
@@ -342,7 +341,7 @@ QUnit.test('Pass series count to themeManager', function(assert) {
     });
 
     const series = seriesDataSource.getSeries();
-    // assert
+
     assert.equal(series.length, 3);
     assert.equal(series[0].getColor(), 'green');
     assert.equal(series[1].getColor(), 'red');
@@ -370,7 +369,7 @@ QUnit.test('getBoundRange with topIndent, bottomIndent', function(assert) {
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
-    // assert
+
     assert.equal(boundRange.val.min, -20);
     assert.equal(boundRange.val.max, 240);
     assert.equal(boundRange.val.minVisible, undefined);
@@ -397,7 +396,7 @@ QUnit.test('getBoundRange with topIndent>1, bottomIndent<0', function(assert) {
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
-    // assert
+
     assert.equal(boundRange.val.min, 0);
     assert.equal(boundRange.val.max, 200);
     assert.equal(boundRange.val.minVisible, undefined);
@@ -418,7 +417,7 @@ QUnit.test('getBoundRange if no series', function(assert) {
         incidentOccurred: noop
     });
     const boundRange = seriesDataSource.getBoundRange();
-    // assert
+
     assert.strictEqual(boundRange.val.min, undefined);
     assert.strictEqual(boundRange.val.max, undefined);
 });
@@ -446,7 +445,7 @@ QUnit.test('getBoundRange with topIndent, bottomIndent, valueAxis min', function
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
-    // assert
+
     assert.strictEqual(boundRange.val.min, -20);
     assert.strictEqual(boundRange.val.max, 240);
     assert.strictEqual(boundRange.val.minVisible, 90);
@@ -474,7 +473,7 @@ QUnit.test('getBoundRange with topIndent, bottomIndent, valueAxis max', function
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
-    // assert
+
     assert.strictEqual(boundRange.val.min, -20);
     assert.strictEqual(boundRange.val.max, 240);
     assert.strictEqual(boundRange.val.minVisible, undefined);
@@ -504,7 +503,7 @@ QUnit.test('getBoundRange with valueAxis min/max', function(assert) {
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
-    // assert
+
     assert.strictEqual(boundRange.val.min, -20);
     assert.strictEqual(boundRange.val.max, 240);
     assert.strictEqual(boundRange.val.minVisible, 12);
@@ -530,7 +529,7 @@ QUnit.test('getBoundRange valueAxis inverted', function(assert) {
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
-    // assert
+
     assert.ok(boundRange.val.invert);
     assert.equal(boundRange.val.min, -20);
     assert.equal(boundRange.val.max, 200);
@@ -559,7 +558,7 @@ QUnit.test('getBoundRange with topIndent, bottomIndent, valueAxis inverted', fun
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
-    // assert
+
     assert.ok(boundRange.val.invert);
     assert.equal(boundRange.val.min, -40);
     assert.equal(boundRange.val.max, 220);
@@ -585,7 +584,7 @@ QUnit.test('several series getBoundRange', function(assert) {
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
-    // assert
+
     assert.equal(boundRange.arg.min, 1);
     assert.equal(boundRange.arg.max, 9);
     assert.equal(boundRange.val.min, 2);
@@ -605,7 +604,7 @@ QUnit.test('getBoundRange for simple dataSource', function(assert) {
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
-    // assert
+
     assert.equal(boundRange.arg.min, 5);
     assert.equal(boundRange.arg.max, 100);
 });
@@ -626,7 +625,7 @@ QUnit.test('getBoundRange for objects dataSource default dataSourceField', funct
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
-    // assert
+
     assert.equal(boundRange.arg.min, 10);
     assert.equal(boundRange.arg.max, 50);
 });
@@ -648,17 +647,48 @@ QUnit.test('getBoundRange for objects dataSource with dataSourceField', function
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
-    // assert
+
     assert.equal(boundRange.arg.min, 3);
     assert.equal(boundRange.arg.max, 16);
+});
+
+QUnit.test('valueAxis minVisible/maxVisible should be defined when min/max is set to 0 (T1269725)', function(assert) {
+    const seriesDataSource = createSeriesDataSource({
+        dataSource: [
+            { arg: 1, val: 3, arg1: 4, val1: 10 },
+            { arg: 3, val: 6, arg1: 7, val1: 5 },
+            { arg: 5, val: 12, arg1: 9, val1: 2 }
+        ],
+        chart: {
+            commonSeriesSettings: {
+                type: 'area'
+            },
+            valueAxis: {
+                min: 0,
+                max: 0,
+            },
+            series: [{}, {
+                valueField: 'val1',
+                argumentField: 'arg1'
+            }]
+        },
+        renderer: new vizMocks.Renderer(),
+        argumentAxis: this.argumentAxis
+    });
+    const boundRange = seriesDataSource.getBoundRange();
+
+    assert.strictEqual(boundRange.val.minVisible, 0);
+    assert.strictEqual(boundRange.val.maxVisible, 0);
 });
 
 QUnit.test('several series getBoundRange with valueAxis min/max', function(assert) {
     // arrange, act
     const seriesDataSource = createSeriesDataSource({
-        dataSource: [{ arg: 1, val: 3, arg1: 4, val1: 10 },
+        dataSource: [
+            { arg: 1, val: 3, arg1: 4, val1: 10 },
             { arg: 3, val: 6, arg1: 7, val1: 5 },
-            { arg: 5, val: 12, arg1: 9, val1: 2 }],
+            { arg: 5, val: 12, arg1: 9, val1: 2 }
+        ],
         chart: {
             commonSeriesSettings: {
                 type: 'area'
@@ -676,7 +706,7 @@ QUnit.test('several series getBoundRange with valueAxis min/max', function(asser
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
-    // assert
+
     assert.equal(boundRange.arg.min, 1);
     assert.equal(boundRange.arg.max, 9);
     assert.equal(boundRange.val.min, 0);
@@ -687,9 +717,11 @@ QUnit.test('several series getBoundRange with valueAxis min/max', function(asser
 QUnit.test('getBoundRange of Line series with equal values', function(assert) {
     // arrange, act
     const seriesDataSource = createSeriesDataSource({
-        dataSource: [{ arg: 1, val: 10 },
+        dataSource: [
+            { arg: 1, val: 10 },
             { arg: 3, val: 10 },
-            { arg: 5, val: 10 }],
+            { arg: 5, val: 10 }
+        ],
         chart: {
             commonSeriesSettings: {
                 type: 'line'
@@ -702,7 +734,7 @@ QUnit.test('getBoundRange of Line series with equal values', function(assert) {
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
-    // assert
+
     assert.equal(boundRange.arg.min, 1);
     assert.equal(boundRange.arg.max, 5);
     assert.equal(boundRange.val.min, 10);
@@ -712,9 +744,11 @@ QUnit.test('getBoundRange of Line series with equal values', function(assert) {
 QUnit.test('getBoundRange valueAxis has logarithmic type', function(assert) {
     // arrange, act
     const seriesDataSource = createSeriesDataSource({
-        dataSource: [{ arg: 1, val: 4 },
+        dataSource: [
+            { arg: 1, val: 4 },
             { arg: 3, val: 200 },
-            { arg: 5, val: 12 }],
+            { arg: 5, val: 12 }
+        ],
         chart: {
             commonSeriesSettings: {
                 type: 'area'
@@ -730,7 +764,7 @@ QUnit.test('getBoundRange valueAxis has logarithmic type', function(assert) {
         valueAxis: this.valueAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
-    // assert
+
     assert.equal(boundRange.val.axisType, 'logarithmic');
     assert.equal(boundRange.val.base, 2);
 });
@@ -738,9 +772,11 @@ QUnit.test('getBoundRange valueAxis has logarithmic type', function(assert) {
 // T602076
 QUnit.test('Logarithmic value axis. \'Type\' option should be passed to the series', function(assert) {
     const seriesDataSource = createSeriesDataSource({
-        dataSource: [{ arg: 1, val: 4 },
+        dataSource: [
+            { arg: 1, val: 4 },
             { arg: 3, val: 200 },
-            { arg: 5, val: 12 }],
+            { arg: 5, val: 12 }
+        ],
         chart: {
             commonSeriesSettings: {
                 type: 'area'
@@ -820,7 +856,7 @@ QUnit.test('dataSource is null or is empty', function(assert) {
         renderer: new vizMocks.Renderer(),
         argumentAxis: this.argumentAxis
     });
-    // assert
+
     assert.ok(seriesDataSource.isEmpty());
 
     // arrange, act
@@ -837,7 +873,7 @@ QUnit.test('dataSource is null or is empty', function(assert) {
         },
         incidentOccurred: noop
     });
-    // assert
+
     assert.ok(seriesDataSource.isEmpty());
 });
 
@@ -862,7 +898,7 @@ QUnit.test('with dataSourceField', function(assert) {
         renderer: new vizMocks.Renderer(),
         argumentAxis: this.argumentAxis
     });
-    // assert
+
     assert.equal(seriesDataSource._series[0].getOptions().argumentField, 'X1');
     assert.equal(seriesDataSource._series[1].getOptions().argumentField, 'x');
 });
@@ -879,7 +915,7 @@ QUnit.test('No chart, dataSourceField, arguments as string, valueType = datetime
         renderer: new vizMocks.Renderer(),
         argumentAxis: this.argumentAxis
     });
-    // assert
+
     assert.equal(seriesDataSource._series[0].valueType, 'datetime');
     assert.equal(seriesDataSource._series[0].argumentType, 'datetime');
 });
@@ -908,7 +944,6 @@ QUnit.test('argumentField in commonSeriesSettings', function(assert) {
         argumentAxis: this.argumentAxis
     });
 
-    // assert
     assert.equal(seriesDataSource._series[0].getOptions().argumentField, 'X1');
     assert.equal(seriesDataSource._series[1].getOptions().argumentField, 'x');
 });
@@ -933,7 +968,7 @@ QUnit.test('without dataSourceField, (valueField from commonSeriesSettings)', fu
         renderer: new vizMocks.Renderer(),
         argumentAxis: this.argumentAxis
     });
-    // assert
+
     assert.equal(seriesDataSource._series[0].getOptions().argumentField, 'X1');
     assert.equal(seriesDataSource._series[1].getOptions().argumentField, 'x');
 });
@@ -968,7 +1003,7 @@ QUnit.test('seriesTemplate', function(assert) {
         renderer: new vizMocks.Renderer(),
         argumentAxis: this.argumentAxis
     });
-    // assert
+
     const series = seriesDataSource.getSeries();
 
     assert.equal(series.length, 2, 'series length should be correct');
@@ -998,7 +1033,7 @@ QUnit.test('seriesTemplate, incorrect nameField', function(assert) {
         renderer: new vizMocks.Renderer(),
         argumentAxis: this.argumentAxis
     });
-    // assert
+
     const series = seriesDataSource.getSeries();
 
     assert.ok(!series.length);
@@ -1427,7 +1462,7 @@ QUnit.test('Return max size', function(assert) {
     });
     // act
     const marginOptions = seriesDataSource.getMarginOptions({ width: 100, height: 100 });
-    // assert
+
     assert.deepEqual(marginOptions, {
         size: 38,
         checkInterval: undefined,
@@ -1457,7 +1492,7 @@ QUnit.test('If there is bar series return checkInterval option', function(assert
     });
     // act
     const marginOptions = seriesDataSource.getMarginOptions({ width: 100, height: 100 });
-    // assert
+
     assert.deepEqual(marginOptions, {
         size: 20,
         checkInterval: true,
@@ -1487,7 +1522,7 @@ QUnit.test('Calculate size for bubble - height < width', function(assert) {
     });
     // act
     const marginOptions = seriesDataSource.getMarginOptions({ width: 100, height: 50 });
-    // assert
+
     assert.deepEqual(marginOptions, {
         size: 10,
         checkInterval: undefined,
@@ -1517,7 +1552,7 @@ QUnit.test('Calculate size for bubble - height > width', function(assert) {
     });
     // act
     const marginOptions = seriesDataSource.getMarginOptions({ width: 100, height: 150 });
-    // assert
+
     assert.deepEqual(marginOptions, {
         size: 20,
         checkInterval: undefined,

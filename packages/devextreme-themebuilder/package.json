@@ -39,7 +39,7 @@
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-airbnb-typescript": "17.1.0",
     "eslint-config-devextreme": "1.1.5",
-    "express": "4.20.0",
+    "express": "4.21.1",
     "filing-cabinet": "4.1.6",
     "fs-extra": "11.2.0",
     "immutable": "4.3.5",

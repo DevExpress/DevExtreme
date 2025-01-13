@@ -16,7 +16,7 @@ declare class Async<
     args: { itemData: unknown }
   ): () => void;
 
-  _planPostRenderActions(): void;
+  _planPostRenderActions(...args: unknown[]): void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

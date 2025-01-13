@@ -216,6 +216,8 @@ const DropDownEditor = TextBox.inherit({
   },
 
   _render() {
+    this._detachFocusEvents();
+
     this.callBase();
 
     this._renderOpenHandler();
@@ -291,7 +293,9 @@ const DropDownEditor = TextBox.inherit({
   _renderField() {
     const fieldTemplate = this._getFieldTemplate();
 
-    fieldTemplate && this._renderTemplatedField(fieldTemplate, this._fieldRenderData());
+    if (fieldTemplate) {
+      this._renderTemplatedField(fieldTemplate, this._fieldRenderData());
+    }
   },
 
   _renderPlaceholder() {
