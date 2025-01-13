@@ -9,7 +9,7 @@ import { ExtensionComponent as BaseComponent } from "./core/extension-component"
 import { IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { DisposingEvent, InitializedEvent } from "devextreme/ui/validator";
+import type { DisposingEvent, InitializedEvent, ValidatedEvent } from "devextreme/ui/validator";
 import type { ValidationRuleType, ComparisonOperator } from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -19,6 +19,7 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type IValidatorOptionsNarrowedEvents = {
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
+  onValidated?: ((validatedInfo: ValidatedEvent) => void);
 }
 
 type IValidatorOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IValidatorOptionsNarrowedEvents> & IHtmlOptions>

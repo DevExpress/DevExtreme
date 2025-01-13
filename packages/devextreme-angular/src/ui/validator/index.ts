@@ -26,7 +26,7 @@ import {
 
 
 import * as CommonTypes from 'devextreme/common';
-import { DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/validator';
+import { DisposingEvent, InitializedEvent, OptionChangedEvent, ValidatedEvent } from 'devextreme/ui/validator';
 
 import DxValidator from 'devextreme/ui/validator';
 
@@ -207,7 +207,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     
     
      */
-    @Output() onValidated: EventEmitter<Object>;
+    @Output() onValidated: EventEmitter<ValidatedEvent>;
 
     /**
     

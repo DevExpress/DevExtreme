@@ -6,9 +6,9 @@ import {
  DisposingEvent,
  InitializedEvent,
  OptionChangedEvent,
+ ValidatedEvent,
 } from "devextreme/ui/validator";
 import {
- ValidationStatus,
  ValidationRuleType,
  ComparisonOperator,
 } from "devextreme/common";
@@ -42,7 +42,7 @@ const componentConfig = {
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
     onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
-    onValidated: Function as PropType<((validatedInfo: { brokenRule: CommonTypes.ValidationRule | CommonTypes.ValidationRule | CommonTypes.ValidationRule | CommonTypes.ValidationRule | CommonTypes.ValidationRule | CommonTypes.ValidationRule | CommonTypes.ValidationRule | CommonTypes.ValidationRule | CommonTypes.ValidationRule, brokenRules: Array<CommonTypes.ValidationRule>, isValid: boolean, name: string, status: ValidationStatus, validationRules: Array<CommonTypes.ValidationRule>, value: Record<string, any> }) => void)>,
+    onValidated: Function as PropType<((validatedInfo: ValidatedEvent) => void)>,
     validationGroup: String,
     validationRules: Array as PropType<Array<CommonTypes.ValidationRule>>,
     width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
