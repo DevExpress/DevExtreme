@@ -22,23 +22,49 @@ export {
     ValidationStatus,
 };
 
-/** @public */
+/**
+ * @docid _ui_validator_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxValidator>;
 
-/** @public */
+/**
+ * @docid _ui_validator_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxValidator>;
 
-/** @public */
+/**
+ * @docid _ui_validator_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxValidator> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_validator_ValidatedEvent
+ * @public
+ * @type object
+ */
 export type ValidatedEvent = {
+    /** @docid _ui_validator_ValidatedEvent.name */
     name?: string;
+    /** @docid _ui_validator_ValidatedEvent.isValid */
     isValid?: boolean;
+    /** @docid _ui_validator_ValidatedEvent.value */
     value?: any;
+    /** @docid _ui_validator_ValidatedEvent.validationRules */
     validationRules?: Array<ValidationRule>;
+    /** @docid _ui_validator_ValidatedEvent.brokenRule */
     brokenRule?: ValidationRule;
+    /** @docid _ui_validator_ValidatedEvent.brokenRules */
     brokenRules?: ValidationRule;
+    /** @docid _ui_validator_ValidatedEvent.status */
     status?: ValidationStatus;
 };
 
@@ -84,7 +110,6 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
      */
     name?: string;
     /**
-     * @skip
      * @docid
      * @type_function_param1 validatedInfo:{ui/validator:ValidatedEvent}
      * @action
@@ -206,19 +231,16 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>,
 */
 type Events = {
 /**
- * @skip
  * @docid dxValidatorOptions.onDisposing
  * @type_function_param1 e:{ui/validator:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxValidatorOptions.onInitialized
  * @type_function_param1 e:{ui/validator:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxValidatorOptions.onOptionChanged
  * @type_function_param1 e:{ui/validator:OptionChangedEvent}
  */
