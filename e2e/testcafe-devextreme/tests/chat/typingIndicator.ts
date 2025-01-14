@@ -88,6 +88,7 @@ test('Chat: typing indicator', async (t) => {
   await testScreenshot(t, takeScreenshot, 'Typing indicator with 1 user.png', { element: '#chat' });
 
   const chat = new Chat('#chat');
+  await chat.repaint();
 
   const userFirst = createUser(1, 'Camille');
   const userSecond = createUser(2, 'Sophie');

@@ -22,13 +22,17 @@ fixture.disablePageReloads`Form`
           await t
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
-        }).before(async () => createWidget('dxForm', {
-          width: 500,
-          colCount,
-          rtlEnabled,
-          labelLocation,
-          items: Array(itemsCount).fill(null).map((_, i) => ({ dataField: `item_${i + 1}` })),
-        }));
+        }).before(async () => {
+          await waitFont();
+
+          return createWidget('dxForm', {
+            width: 500,
+            colCount,
+            rtlEnabled,
+            labelLocation,
+            items: Array(itemsCount).fill(null).map((_, i) => ({ dataField: `item_${i + 1}` })),
+          });
+        });
       });
     });
   });
