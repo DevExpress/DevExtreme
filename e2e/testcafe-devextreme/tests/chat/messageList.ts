@@ -9,6 +9,8 @@ import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
 import { insertStylesheetRulesToPage } from '../../helpers/domUtils';
 
+const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
+
 fixture.disablePageReloads`ChatMessageList`
   .page(url(__dirname, '../container.html'));
 
@@ -162,6 +164,8 @@ test('Messagelist with loadindicator appearance on initial loading', async (t) =
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await insertStylesheetRulesToPage('.dx-loadindicator-content, .dx-loadindicator-icon, .dx-loadindicator-segment, .dx-loadindicator-segment-inner { animation-play-state: paused !important; }');
+
+  await waitFont();
 
   await createWidget('dxChat', () => {
     const data: Message[] = [];

@@ -139,6 +139,8 @@ const SKIPPED_TESTS = {
     Charts: [
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
+      { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
+      { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.material, THEME.fluent] },
@@ -188,6 +190,8 @@ const SKIPPED_TESTS = {
       { demo: 'TilingAlgorithms', themes: [THEME.material] },
       { demo: 'ExportAndPrintingAPI', themes: [THEME.material] },
       { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
+      { demo: 'Line', themes: [THEME.material] },
+      { demo: 'Spline', themes: [THEME.material] },
       { demo: 'Colorization', themes: [THEME.material] },
       { demo: 'SignalRService', themes: [THEME.material] },
       { demo: 'PointsAggregation', themes: [THEME.material] },
@@ -235,6 +239,7 @@ const SKIPPED_TESTS = {
     ],
     Gauges: [
       { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'VariableNumberOfSubvalueIndicators', themes: [THEME.material] },
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
       { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
       { demo: 'DifferentValueIndicatorTypes', themes: [THEME.material] },
