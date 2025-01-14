@@ -26,7 +26,6 @@ import { elementPropNames, getClassName } from './widget-config';
 import { TemplateManager } from './template-manager';
 import { ComponentProps } from './component';
 import { ElementType } from './configuration/react/element';
-import { IConfigNode } from './configuration/config-node';
 
 import {
   NestedOptionContext,
@@ -96,7 +95,25 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
     const prevPropsRef = useRef<P & ComponentBaseProps>();
 
-    let widgetConfig: IConfigNode;
+    const templateContainer = useMemo(() => document.createElement('div'), []);
+
+    const [widgetConfig, context] = useOptionScanning(
+      {
+        type: ElementType.Option,
+        descriptor: {
+          name: '',
+          isCollection: false,
+          templates: templateProps,
+          initialValuesProps: defaults,
+          predefinedValuesProps: {},
+          expectedChildren,
+        },
+        props,
+      },
+      props.children,
+      templateContainer,
+      Symbol('initial update token'),
+    );
 
     const restoreTree = useCallback(() => {
       if (childElementsDetached.current && childNodes.current?.length && element.current) {
@@ -249,6 +266,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       instance.current,
       subscribableOptions,
       independentEvents,
+      widgetConfig,
     ]);
 
     const onTemplatesRendered = useCallback(() => {
@@ -279,6 +297,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       scheduleTemplatesUpdate,
       updateCssClasses,
       props,
+      widgetConfig,
     ]);
 
     const onComponentMounted = useCallback(() => {
@@ -338,29 +357,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       childElementsDetached.current,
       shouldRestoreFocus.current,
     ]);
-
-    const templateContainer = useMemo(() => document.createElement('div'), []);
-
-    const options = useOptionScanning(
-      {
-        type: ElementType.Option,
-        descriptor: {
-          name: '',
-          isCollection: false,
-          templates: templateProps,
-          initialValuesProps: defaults,
-          predefinedValuesProps: {},
-          expectedChildren,
-        },
-        props,
-      },
-      props.children,
-      templateContainer,
-      Symbol('initial update token'),
-    );
-
-    [widgetConfig] = options;
-    const [, context] = options;
 
     useLayoutEffect(() => {
       onComponentMounted();
