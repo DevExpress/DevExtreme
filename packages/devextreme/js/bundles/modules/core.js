@@ -79,7 +79,7 @@ DevExpress.AnimationPresetCollection = require('../../common/core/animation/pres
 DevExpress.events = require('../../common/core/events');
 
 DevExpress.events.click = require('../../common/core/events/click');
-DevExpress.events.utils = require('../../common/core/events/utils/index');
+DevExpress.events.utils = require('../../common/core/events/utils');
 DevExpress.events.GestureEmitter = require('../../common/core/events/gesture/emitter.gesture');
 
 DevExpress.localization = require('../../common/core/localization');
