@@ -147,7 +147,7 @@ jobs:
           { componentFolder: "filterBuilder", name: "filterBuilder - material", theme: 'material.blue.light' },
           { componentFolder: "filterBuilder", name: "filterBuilder - fluent", theme: 'fluent.blue.light' },
           { componentFolder: "pagination", name: "pagination" },
-          { componentFolder: "pagination", name: "pagination - material", theme: 'material.blue.light', concurrency: 5 },
+          { componentFolder: "pagination", name: "pagination - material", theme: 'material.blue.light', concurrency: 7 },
           { componentFolder: "pagination", name: "pagination - fluent", theme: 'fluent.blue.light' },
         ]
     runs-on: devextreme-shr2

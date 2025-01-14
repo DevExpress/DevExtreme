@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
-import { isMaterialBased, testScreenshot } from '../../helpers/themeUtils';
+import { isMaterial, isMaterialBased, testScreenshot } from '../../helpers/themeUtils';
 
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 
@@ -26,11 +26,15 @@ fixture.disablePageReloads`Form`
               return;
             }
 
+            if (labelVisible && isMaterial()) {
+              // There is no specificity for the Material theme
+              return;
+            }
+
             const testName = `Form,lMode=${formLabelMode},lLoc=${formLabelLocation},lVis=${labelVisible},lAl=${labelAlignment},e.lMode=${editorLabelMode ?? 'undef'},e.sMode=${editorStylingMode}`;
 
             test(testName, async (t) => {
               const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-              await t.wait(500);
 
               await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container' });
 
