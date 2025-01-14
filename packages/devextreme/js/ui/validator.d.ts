@@ -56,7 +56,10 @@ export type ValidatedEvent = {
     name?: string;
     /** @docid _ui_validator_ValidatedEvent.isValid */
     isValid?: boolean;
-    /** @docid _ui_validator_ValidatedEvent.value */
+    /**
+     * @docid _ui_validator_ValidatedEvent.value
+     * @type object
+     */
     value?: any;
     /** @docid _ui_validator_ValidatedEvent.validationRules */
     validationRules?: Array<ValidationRule>;
