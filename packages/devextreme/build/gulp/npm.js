@@ -123,8 +123,14 @@ const sources = (src, dist, distGlob) => (() => merge(
 
                 pkg.name = 'devextreme';
                 pkg.version = ctx.version;
+                pkg.bin = {
+                    'devextreme-bundler-init': 'bin/bundler-init.js',
+                    'devextreme-bundler': 'bin/bundler.js'
+                };
+
                 delete pkg.devDependencies;
                 delete pkg.publishConfig;
+                delete pkg.scripts;
 
                 file.contents = Buffer.from(JSON.stringify(pkg, null, 2));
                 callback(null, file);
