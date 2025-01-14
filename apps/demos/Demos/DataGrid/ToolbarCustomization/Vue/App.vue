@@ -36,14 +36,18 @@
       />
       <DxItem
         location="before"
+        locateInMenu="auto"
         template="groupingTemplate"
       />
       <DxItem
         location="before"
+        locateInMenu="auto"
         template="collapseTemplate"
       />
       <DxItem
         location="after"
+        locateInMenu="auto"
+        showText="inMenu"
         template="refreshTemplate"
       />
       <DxItem
@@ -77,6 +81,7 @@
     <template #refreshTemplate>
       <DxButton
         icon="refresh"
+        text="Refresh"
         @click="refreshDataGrid"
       />
     </template>

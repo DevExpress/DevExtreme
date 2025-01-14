@@ -66,7 +66,7 @@ const App = () => {
             <span>Total Count</span>
           </div>
         </Item>
-        <Item location="before">
+        <Item location="before" locateInMenu="auto">
           <SelectBox
             width="225"
             items={groupingValues}
@@ -76,15 +76,16 @@ const App = () => {
             value={groupColumn}
             onValueChanged={toggleGroupColumn} />
         </Item>
-        <Item location="before">
+        <Item location="before" locateInMenu="auto">
           <Button
             text={expandAll ? 'Collapse All' : 'Expand All'}
-            width='136'
+            width="136"
             onClick={toggleExpandAll} />
         </Item>
-        <Item location="after">
+        <Item location="after" locateInMenu="auto" showText="inMenu">
           <Button
-            icon='refresh'
+            icon="refresh"
+            text="Refresh"
             onClick={refreshDataGrid} />
         </Item>
         <Item name="columnChooserButton" />
