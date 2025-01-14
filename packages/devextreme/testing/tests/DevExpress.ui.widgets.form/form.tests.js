@@ -6,7 +6,9 @@ import resizeCallbacks from '__internal/core/utils/m_resize_callbacks';
 import typeUtils from 'core/utils/type';
 import { extend } from 'core/utils/extend';
 import visibilityEventsModule from 'common/core/events/visibility_change';
-import { EDITORS_WITHOUT_LABELS } from '__internal/ui/form/m_form.layout_manager.utils';
+import {
+    EDITORS_WITHOUT_LABELS,
+} from '__internal/ui/form/m_form.layout_manager.utils';
 import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
@@ -20,6 +22,10 @@ import 'ui/range_slider';
 import windowModule from '__internal/core/utils/m_window';
 import Form from 'ui/form';
 import TextEditorBase from 'ui/text_box/ui.text_editor.base.js';
+import {
+    TEXTEDITOR_INPUT_CLASS
+} from '__internal/ui/text_box/m_text_editor.base';
+
 
 import {
     FIELD_ITEM_CLASS,
@@ -57,6 +63,7 @@ import themes from 'ui/themes';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import { isDefined } from 'core/utils/type.js';
+import { TABPANEL_CLASS } from '__internal/ui/tab_panel/m_tab_panel';
 
 const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
@@ -95,9 +102,9 @@ if(device.current().deviceType === 'desktop') {
     });
 }
 
-QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(assert) {
+QUnit.testInActiveWindow('Form\'s textbox input saves value on refresh (T404958)', function(assert) {
     let screen = 'md';
-    const $formContainer = $('#form').dxForm({
+    const $form = $('#form').dxForm({
         screenByWidth: function() {
             return screen;
         },
@@ -113,7 +120,7 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
         ]
     });
 
-    $('#form input')
+    $form.find(`.${TEXTEDITOR_INPUT_CLASS}`)
         .first()
         .focus()
         .val('test');
@@ -121,9 +128,40 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
     screen = 'sm';
     resizeCallbacks.fire();
 
-    const formData = $formContainer.dxForm('instance').option('formData');
+    const formData = $form.dxForm('instance').option('formData');
 
-    assert.deepEqual(formData, { name: 'test' }, 'value updates');
+    assert.deepEqual(formData, { name: 'test' }, 'textbox value updates');
+});
+
+QUnit.testInActiveWindow('Form\'s textarea input saves value on refresh (T404958)', function(assert) {
+    let screen = 'md';
+    const $form = $('#form').dxForm({
+        screenByWidth: function() {
+            return screen;
+        },
+        colCountByScreen: {
+            sm: 1,
+            md: 2
+        },
+        items: [
+            {
+                dataField: 'name',
+                editorType: 'dxTextArea'
+            }
+        ]
+    });
+
+    $form.find(`.${TEXTEDITOR_INPUT_CLASS}`)
+        .first()
+        .focus()
+        .val('test');
+
+    screen = 'sm';
+    resizeCallbacks.fire();
+
+    const formData = $form.dxForm('instance').option('formData');
+
+    assert.deepEqual(formData, { name: 'test' }, 'textarea value updates');
 });
 
 QUnit.test('Check field width on render form with colspan', function(assert) {
@@ -4916,39 +4954,124 @@ QUnit.module('reset', () => {
         assert.strictEqual(summaryItemsAfterValidate.length, 2, 'form has validation summary after validation');
     });
 
-    QUnit.test('DropDownBox should not lose its value if form resized (T1196835)', function(assert) {
-        let screen = 'lg';
+    [
+        'dxSelectBox',
+        'dxDropDownBox'
+    ].forEach((editorType) => {
+        QUnit.test(`Focused ${editorType} should not lose its value when the form is resized (T1196835)`, function(assert) {
+            let screen = 'lg';
 
-        const value = 'VINET';
-        const text = 'Vins et alcools Chevalier (France)';
-        const $form = $('#form').dxForm({
-            formData: { CustomerID: value },
-            screenByWidth: function() { return screen; },
-            colCountByScreen: {
-                sm: 1,
-                lg: 2
-            },
-            items: [
-                {
-                    itemType: 'simple',
-                    cssClass: 'test-ddbox',
-                    dataField: 'CustomerID',
-                    editorOptions: {
-                        displayExpr: 'Text',
-                        valueExpr: 'Value',
-                        showClearButton: true,
-                        dataSource: [{ Value: value, Text: text }],
-                    },
-                    editorType: 'dxDropDownBox',
+            const name = 'VINET';
+            const value = 'Vins et alcools Chevalier (France)';
+            const form = $('#form').dxForm({
+                formData: { name: name },
+                screenByWidth: function() { return screen; },
+                colCountByScreen: {
+                    sm: 1,
+                    lg: 2
                 },
-            ]
+                items: [
+                    {
+                        itemType: 'simple',
+                        dataField: 'name',
+                        editorOptions: {
+                            displayExpr: 'Text',
+                            valueExpr: 'Value',
+                            showClearButton: true,
+                            dataSource: [{ Value: name, Text: value }],
+                        },
+                        editorType,
+                    },
+                ]
+            }).dxForm('instance');
+
+            const dropDownEditor = form.getEditor('name');
+
+            screen = 'sm';
+            dropDownEditor.focus();
+            resizeCallbacks.fire();
+
+            assert.strictEqual($(form.getEditor('name').field()).val(), value, `${editorType} contains expected value`);
         });
-        const $input = $form.find(`.test-ddbox .${EDITOR_INPUT_CLASS}`);
 
-        screen = 'sm';
-        $input.focus();
-        resizeCallbacks.fire();
+        QUnit.test(`Focused ${editorType} inside a tabbed item should not lose its value when the form is resized (T1196835)`, function(assert) {
+            let screen = 'lg';
 
-        assert.strictEqual($input.val(), text, 'ddBox contain correct value');
+            const name = 'VINET';
+            const value = 'Vins et alcools Chevalier (France)';
+            const form = $('#form').dxForm({
+                formData: { name: name },
+                screenByWidth: function() { return screen; },
+                colCountByScreen: {
+                    sm: 1,
+                    lg: 2
+                },
+                items: [{
+                    itemType: 'tabbed',
+                    tabs: [{
+                        title: 'Phone',
+                        colCount: 1,
+                        items: [{
+                            itemType: 'simple',
+                            dataField: 'name',
+                            editorOptions: {
+                                displayExpr: 'Text',
+                                valueExpr: 'Value',
+                                showClearButton: true,
+                                dataSource: [{ Value: name, Text: value }],
+                            },
+                            editorType,
+                        }],
+                    }],
+                }],
+            }).dxForm('instance');
+
+            const dropDownEditor = form.getEditor('name');
+
+            screen = 'sm';
+            dropDownEditor.focus();
+            resizeCallbacks.fire();
+
+            assert.strictEqual($(form.getEditor('name').field()).val(), value, `${editorType} contains expected value`);
+        });
+
+        QUnit.test(`${editorType} inside a tabbed item and focused tab should not lose its value when the form is resized (T1196835)`, function(assert) {
+            let screen = 'lg';
+
+            const name = 'VINET';
+            const value = 'Vins et alcools Chevalier (France)';
+            const form = $('#form').dxForm({
+                formData: { name: name },
+                screenByWidth: function() { return screen; },
+                colCountByScreen: {
+                    sm: 1,
+                    lg: 2
+                },
+                items: [{
+                    itemType: 'tabbed',
+                    tabs: [{
+                        title: 'Phone',
+                        colCount: 1,
+                        items: [{
+                            itemType: 'simple',
+                            dataField: 'name',
+                            editorOptions: {
+                                displayExpr: 'Text',
+                                valueExpr: 'Value',
+                                showClearButton: true,
+                                dataSource: [{ Value: name, Text: value }],
+                            },
+                            editorType,
+                        }],
+                    }],
+                }],
+            }).dxForm('instance');
+
+            screen = 'sm';
+            $(form.element()).find(`.${TABPANEL_CLASS}`).focus();
+            resizeCallbacks.fire();
+
+            assert.strictEqual($(form.getEditor('name').field()).val(), value, `${editorType} contains expected value`);
+        });
     });
 });
