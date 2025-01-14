@@ -24,6 +24,7 @@ import {
 import { isDeferred, isDefined, isEmptyObject } from '@js/core/utils/type';
 import * as accessibility from '@js/ui/shared/accessibility';
 import { focused } from '@js/ui/widget/selectors';
+import { isElementInDom } from '@ts/core/utils/m_dom';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
@@ -338,9 +339,9 @@ export class KeyboardNavigationController extends modules.ViewController {
       const editorOverlaySelector = `.${DROPDOWN_EDITOR_OVERLAY_CLASS}`;
 
       // if click was on the datagrid table, but the target element is no more presented in the DOM
-      const keepFocus = !!$target.closest(tableSelector).length && !$target.get(0).isConnected;
+      const needKeepFocus = !!$target.closest(tableSelector).length && !isElementInDom($target);
 
-      if (keepFocus) {
+      if (needKeepFocus) {
         e.event.preventDefault();
         return;
       }
@@ -350,11 +351,11 @@ export class KeyboardNavigationController extends modules.ViewController {
       const isColumnResizing = !!this._columnResizerController?.isResizing();
 
       if (!isRowsViewClick && !isEditorOverlayClick && !isColumnResizing) {
-        const outsideFocusedView = this._focusedView
+        const isClickOutsideFocusedView = this._focusedView
           ? $target.closest(this._focusedView.element()).length === 0
           : true;
 
-        if (outsideFocusedView) {
+        if (isClickOutsideFocusedView) {
           this._resetFocusedCell(true);
         }
 
