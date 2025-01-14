@@ -43,7 +43,8 @@ webpack([
 
     const jsonStats = stats.toJson();
     if(jsonStats.errors.length) {
-        console.log('\'' + bundle + '\' bundles creation failed!\n\n' + jsonStats.errors.join('\n\n'));
+        const errorMessages = jsonStats.errors.map(({ message }) => message);
+        console.log('\'' + bundle + '\' bundles creation failed!\n\n' + errorMessages.join('\n\n'));
     } else {
         console.log('\'' + bundle + '\' bundles created!');
     }
