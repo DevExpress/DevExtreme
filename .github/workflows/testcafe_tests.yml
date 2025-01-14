@@ -124,8 +124,8 @@ jobs:
           { componentFolder: "scheduler/timezones", name: "scheduler (America/Los_Angeles)", timezone: "America/Los_Angeles" },
           { componentFolder: "form", name: "form (1/2)", indices: "1/2" },
           { componentFolder: "form", name: "form (2/2)", indices: "2/2" },
-          { componentFolder: "form", name: "form - material (1/2)", theme: 'material.blue.light', indices: "1/2" },
-          { componentFolder: "form", name: "form - material (2/2)", theme: 'material.blue.light', indices: "2/2" },
+          { componentFolder: "form", name: "form - material (1/2)", theme: 'material.blue.light', indices: "1/2", concurrency: 5 },
+          { componentFolder: "form", name: "form - material (2/2)", theme: 'material.blue.light', indices: "2/2", concurrency: 5 },
           { componentFolder: "form", name: "form - fluent (1/2)", theme: 'fluent.blue.light', indices: "1/2" },
           { componentFolder: "form", name: "form - fluent (2/2)", theme: 'fluent.blue.light', indices: "2/2" },
           { componentFolder: "editors", name: "editors (1/2)", indices: "1/2" },
@@ -147,7 +147,7 @@ jobs:
           { componentFolder: "filterBuilder", name: "filterBuilder - material", theme: 'material.blue.light' },
           { componentFolder: "filterBuilder", name: "filterBuilder - fluent", theme: 'fluent.blue.light' },
           { componentFolder: "pagination", name: "pagination" },
-          { componentFolder: "pagination", name: "pagination - material", theme: 'material.blue.light' },
+          { componentFolder: "pagination", name: "pagination - material", theme: 'material.blue.light', concurrency: 5 },
           { componentFolder: "pagination", name: "pagination - fluent", theme: 'fluent.blue.light' },
         ]
     runs-on: devextreme-shr2
