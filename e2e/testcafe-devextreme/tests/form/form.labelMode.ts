@@ -30,6 +30,7 @@ fixture.disablePageReloads`Form`
 
             test(testName, async (t) => {
               const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+              await t.wait(500);
 
               await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container' });
 
