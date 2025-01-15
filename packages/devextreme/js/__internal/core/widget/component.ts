@@ -1,6 +1,7 @@
 import Action from '@js/core/action';
 import Class from '@js/core/class';
 import type {
+  Component as PublicComponent,
   ComponentOptions,
 } from '@js/core/component';
 import Config from '@js/core/config';
@@ -45,7 +46,7 @@ export class Component<
   TProperties extends Properties<TComponent>,
   // @ts-expect-error dxClass inheritance issue
   // eslint-disable-next-line @typescript-eslint/ban-types
-> extends (Class.inherit({}) as new() => {}) {
+> extends (Class.inherit({}) as new() => {}) implements PublicComponent<TProperties> {
   _deprecatedOptions!: Partial<TProperties>;
 
   _options!: Options;
@@ -285,8 +286,8 @@ export class Component<
     }
   }
 
-  instance(): TComponent {
-    return this as unknown as TComponent;
+  instance(): this {
+    return this;
   }
 
   beginUpdate(): void {
@@ -372,7 +373,7 @@ export class Component<
 
   _createActionByOption(
     optionName: string,
-    config: Record<string, unknown>,
+    config?: Record<string, unknown>,
   ): (event?: Record<string, unknown>) => void {
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let action;
@@ -406,15 +407,16 @@ export class Component<
         actionFunc = this.option(optionName);
       }
 
-      if (!action && !actionFunc && !config.beforeExecute
-        && !config.afterExecute && !this._eventsStrategy.hasEvent(eventName)) {
+      if (!action && !actionFunc && !config?.beforeExecute
+        && !config?.afterExecute && !this._eventsStrategy.hasEvent(eventName)) {
         return;
       }
 
       if (!action) {
+        // @ts-expect-error
         const { beforeExecute } = config;
+        // @ts-expect-error
         config.beforeExecute = (...props): void => {
-          // @ts-expect-error
           // eslint-disable-next-line max-len
           // eslint-disable-next-line @typescript-eslint/prefer-optional-chain, @typescript-eslint/no-unused-expressions
           beforeExecute && beforeExecute.apply(this, props);
@@ -447,16 +449,17 @@ export class Component<
     return onActionCreated(this, result, config) || result;
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  on(eventName: string, eventHandler): TComponent {
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/ban-types
+  on(eventName: string | { [key: string]: Function }, eventHandler?): this {
     this._eventsStrategy.on(eventName, eventHandler);
-    return this as unknown as TComponent;
+    return this;
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  off(eventName: string, eventHandler): TComponent {
+  off(eventName: string, eventHandler?): this {
     this._eventsStrategy.off(eventName, eventHandler);
-    return this as unknown as TComponent;
+    return this;
   }
 
   hasActionSubscription(actionName: string): boolean {
@@ -490,6 +493,7 @@ export class Component<
     return value;
   }
 
+  // @ts-expect-error
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   option(...args): TProperties {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return

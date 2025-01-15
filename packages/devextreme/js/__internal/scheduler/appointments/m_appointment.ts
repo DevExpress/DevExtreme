@@ -188,7 +188,7 @@ export class Appointment extends DOMComponent {
     return messageLocalization.format('dxScheduler-appointmentAriaLabel-group', groupText);
   }
 
-  _getDateText() {
+  _getDateText(): string {
     const startDateText = this._localizeDate(this._getStartDate());
     const endDateText = this._localizeDate(this._getEndDate());
 
@@ -203,8 +203,7 @@ export class Appointment extends DOMComponent {
     return `${dateText}${partText}`;
   }
 
-  _renderAriaLabel() {
-    // @ts-expect-error
+  _renderAriaLabel(): void {
     const $element: dxElementWrapper = this.$element();
     const ariaLabel = [
       this._getDateText(),
@@ -220,7 +219,7 @@ export class Appointment extends DOMComponent {
     $element.find('.dx-item-content').attr('id', id);
   }
 
-  _renderAppointmentGeometry() {
+  _renderAppointmentGeometry(): void {
     const geometry: any = this.option('geometry');
     const $element: any = this.$element();
     move($element, {

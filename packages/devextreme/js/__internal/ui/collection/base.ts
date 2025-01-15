@@ -2,8 +2,7 @@ import type { DataSource } from '@js/common/data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { CollectionWidgetOptions, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.base';
-
-import Widget from '../widget';
+import Widget from '@ts/core/widget/widget';
 
 export interface TypedCollectionWidgetOptions<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

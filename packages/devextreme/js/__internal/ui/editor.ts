@@ -1,16 +1,9 @@
 import Editor from '@js/ui/editor/editor';
 import type ValidationMessage from '@js/ui/validation_message';
+import type { Properties } from '@ts/core/widget/widget';
+import Widget from '@ts/core/widget/widget';
 
-import Widget from './widget';
-
-// interface AriaOptions {
-//   role: string;
-//   // eslint-disable-next-line spellcheck/spell-checker
-//   roledescription: string;
-//   label: string;
-// }
-
-declare class ExtendedEditor<TProperties> extends Widget<TProperties> {
+declare class ExtendedEditor<TProperties extends Properties> extends Widget<TProperties> {
   public _validationMessage?: ValidationMessage;
 
   _saveValueChangeEvent(e: unknown): void;

@@ -6,6 +6,7 @@ import {
 import {
     UserDefinedElement,
     DxElement,
+    InternalElement,
 } from './element';
 
 import {
@@ -89,7 +90,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
 export default class DOMComponent<TProperties = Properties> extends Component<TProperties> {
     _templateManager: TemplateManager;
 
-    _cancelOptionChange?: string;
+    _cancelOptionChange?: string | boolean;
 
     constructor(element: UserDefinedElement, options?: TProperties);
 
@@ -129,7 +130,7 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
      */
     element(): DxElement;
 
-    $element(): UserDefinedElement;
+    $element(): InternalElement<Element>;
     _getTemplate(template: unknown): FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;
