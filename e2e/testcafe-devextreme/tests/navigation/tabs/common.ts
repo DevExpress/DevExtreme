@@ -165,7 +165,7 @@ test('Tabs with width: auto in flex container', async (t) => {
 
       await t.dispatchEvent(firstItem, 'mousedown');
       if (!isMaterial()) {
-        await testScreenshot(t, takeScreenshot, `Tabs 1 selected,active stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, {element: '#tabs'});
+        await testScreenshot(t, takeScreenshot, `Tabs 1 selected,active stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
       }
       const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
 
