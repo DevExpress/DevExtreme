@@ -128,8 +128,6 @@ jobs:
           { componentFolder: "form", name: "form - material (2/6)", theme: 'material.blue.light', indices: "2/6" },
           { componentFolder: "form", name: "form - material (3/6)", theme: 'material.blue.light', indices: "3/6" },
           { componentFolder: "form", name: "form - material (4/6)", theme: 'material.blue.light', indices: "4/6" },
-          { componentFolder: "form", name: "form - material (5/6)", theme: 'material.blue.light', indices: "5/6" },
-          { componentFolder: "form", name: "form - material (6/6)", theme: 'material.blue.light', indices: "6/6" },
           { componentFolder: "form", name: "form - fluent (1/2)", theme: 'fluent.blue.light', indices: "1/2" },
           { componentFolder: "form", name: "form - fluent (2/2)", theme: 'fluent.blue.light', indices: "2/2" },
           { componentFolder: "editors", name: "editors (1/2)", indices: "1/2" },

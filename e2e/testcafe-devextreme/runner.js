@@ -159,7 +159,7 @@ function expandBrowserAlias(browser, componentFolder) {
     switch(browser) {
         case 'chrome:devextreme-shr2':
             if(process.env.theme === 'material.blue.light'
-                && (componentFolder === 'pagination' || componentFolder === 'form')
+                && (componentFolder === 'pagination')
             ) {
                 return 'chrome:headless --disable-gpu --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning';
             }
