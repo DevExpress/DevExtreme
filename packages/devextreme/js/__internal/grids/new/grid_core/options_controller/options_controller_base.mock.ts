@@ -20,6 +20,7 @@ export class OptionsControllerMock<
     this.componentMock = componentMock;
   }
 
+  // TODO: add typing
   public option(key?: string, value?: unknown): unknown {
     // @ts-expect-error
     return this.componentMock.option(key, value);
