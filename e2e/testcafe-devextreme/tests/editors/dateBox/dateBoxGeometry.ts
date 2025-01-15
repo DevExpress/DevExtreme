@@ -19,7 +19,9 @@ safeSizeTest('Geometry is good', async (t) => {
 
   await testScreenshot(t, takeScreenshot, 'Datebox with calendar.png');
 
+  await dateBox.option('opened', false);
   await dateBox.option('type', 'datetime');
+  await dateBox.option('opened', true);
 
   await testScreenshot(t, takeScreenshot, 'Datebox with datetime.png');
 
