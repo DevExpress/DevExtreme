@@ -22,9 +22,9 @@ import ClearButton from './m_text_editor.clear';
 import { TextEditorLabel } from './m_text_editor.label';
 import TextEditorButtonCollection from './texteditor_button_collection/m_index';
 
-const TEXTEDITOR_CLASS = 'dx-texteditor';
+export const TEXTEDITOR_CLASS = 'dx-texteditor';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
-const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+export const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TEXTEDITOR_INPUT_SELECTOR = `.${TEXTEDITOR_INPUT_CLASS}`;
 const TEXTEDITOR_CONTAINER_CLASS = 'dx-texteditor-container';
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
