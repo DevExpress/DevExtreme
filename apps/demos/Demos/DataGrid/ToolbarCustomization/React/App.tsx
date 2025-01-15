@@ -86,11 +86,12 @@ const App = () => {
             width="136"
             onClick={toggleExpandAll} />
         </Item>
-        <Item location="after"
-              locateInMenu="auto"
-              showText="inMenu"
-              widget="dxButton"
-              options={refreshButtonOptions} />
+        <Item
+          location="after"
+          locateInMenu="auto"
+          showText="inMenu"
+          widget="dxButton"
+          options={refreshButtonOptions} />
         <Item name="columnChooserButton" />
       </Toolbar>
     </DataGrid>

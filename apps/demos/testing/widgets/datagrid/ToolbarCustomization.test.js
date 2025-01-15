@@ -12,11 +12,11 @@ fixture('DataGrid.ToolbarCustomization')
 runManualTest('DataGrid', 'ToolbarCustomization', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('ToolbarCustomization', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const menuButtonSelector = $('.dx-toolbar').find('.dx-toolbar-menu-container').find('.dx-button')
-    const menuItemsSelector = $('.dx-overlay-wrapper').find('.dx-list-item')
+    const menuButtonSelector = $('.dx-toolbar').find('.dx-toolbar-menu-container').find('.dx-button');
+    const menuItemsSelector = $('.dx-overlay-wrapper').find('.dx-list-item');
 
     await testScreenshot(t, takeScreenshot, 'toolbar_customization_wide.png');
-    
+
     await t
       .resizeWindow(480, 600)
       .click(menuButtonSelector)
@@ -28,7 +28,8 @@ runManualTest('DataGrid', 'ToolbarCustomization', ['jQuery', 'React', 'Vue', 'An
       .click($('body'), { offsetX: 0, offsetY: 0 })
       .resizeWindow(320, 600)
       .click(menuButtonSelector)
-      .expect(menuItemsSelector.count).eql(4);
+      .expect(menuItemsSelector.count)
+      .eql(4);
 
     await testScreenshot(t, takeScreenshot, 'toolbar_customization_thin.png');
 
