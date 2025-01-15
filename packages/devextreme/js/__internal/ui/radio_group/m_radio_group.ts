@@ -9,8 +9,9 @@ import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import type { Properties } from '@js/ui/radio_group';
+import type { EditorProperties, UnresolvedEvents } from '@ts/ui/editor/m_editor';
+import Editor from '@ts/ui/editor/m_editor';
 
-import Editor from '../editor';
 import RadioCollection from './m_radio_collection';
 
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
@@ -20,7 +21,10 @@ const RADIO_GROUP_CLASS = 'dx-radiogroup';
 
 const RADIO_FEEDBACK_HIDE_TIMEOUT = 100;
 
-class RadioGroup extends Editor<Properties> {
+interface RadioGroupProperties extends Properties,
+  Omit<EditorProperties<RadioGroup>, UnresolvedEvents> {}
+
+class RadioGroup extends Editor<RadioGroupProperties> {
   private _radios?: RadioCollection;
 
   private _areRadiosCreated!: DeferredObj<unknown>;
@@ -31,7 +35,7 @@ class RadioGroup extends Editor<Properties> {
     return { paginate: false };
   }
 
-  _defaultOptionsRules(): DefaultOptionsRule<Properties>[] {
+  _defaultOptionsRules(): DefaultOptionsRule<RadioGroupProperties>[] {
     const defaultOptionsRules = super._defaultOptionsRules();
 
     return defaultOptionsRules.concat([{

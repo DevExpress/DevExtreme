@@ -23,7 +23,8 @@ import Button from '@js/ui/button';
 import type { Properties as PublicProperties } from '@js/ui/file_uploader';
 import ProgressBar from '@js/ui/progress_bar';
 import { isFluent, isMaterial } from '@js/ui/themes';
-import Editor from '@ts/ui/editor';
+import type { EditorProperties, UnresolvedEvents } from '@ts/ui/editor/m_editor';
+import Editor from '@ts/ui/editor/m_editor';
 
 const window = getWindow();
 
@@ -69,7 +70,10 @@ export interface Properties extends PublicProperties {
   _uploadButtonType?: ButtonType;
 }
 
-class FileUploader extends Editor<Properties> {
+interface FileUploaderProperties extends Properties,
+  Omit<EditorProperties<FileUploader>, UnresolvedEvents | 'value'> {}
+
+class FileUploader extends Editor<FileUploaderProperties> {
   // Temporary solution. Move to component level
   public NAME!: string;
 
@@ -150,7 +154,7 @@ class FileUploader extends Editor<Properties> {
     });
   }
 
-  _getDefaultOptions(): Properties {
+  _getDefaultOptions(): FileUploaderProperties {
     return extend(super._getDefaultOptions(), {
       chunkSize: 0,
       value: [],
@@ -287,6 +291,7 @@ class FileUploader extends Editor<Properties> {
   }
 
   _setUploadStrategy() {
+    // @ts-expect-error
     if (this.option('chunkSize') > 0) {
       const uploadChunk = this.option('uploadChunk');
       this._uploadStrategy = uploadChunk && isFunction(uploadChunk)
@@ -502,14 +507,14 @@ class FileUploader extends Editor<Properties> {
   _validateMaxFileSize(file): boolean {
     const fileSize = file.value.size;
     const maxFileSize = this.option('maxFileSize');
-
+    // @ts-expect-error
     return maxFileSize > 0 ? fileSize <= maxFileSize : true;
   }
 
   _validateMinFileSize(file): boolean {
     const fileSize = file.value.size;
     const minFileSize = this.option('minFileSize');
-
+    // @ts-expect-error
     return minFileSize > 0 ? fileSize >= minFileSize : true;
   }
 
