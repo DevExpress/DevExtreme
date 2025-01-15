@@ -15,7 +15,7 @@ import { current as currentTheme, isFluent, isMaterialBased } from '@js/ui/theme
 // eslint-disable-next-line import/no-named-default
 import { default as TabPanelItem } from './m_item';
 
-const TABPANEL_CLASS = 'dx-tabpanel';
+export const TABPANEL_CLASS = 'dx-tabpanel';
 const TABPANEL_TABS_CLASS = 'dx-tabpanel-tabs';
 const TABPANEL_TABS_ITEM_CLASS = 'dx-tabpanel-tab';
 const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
