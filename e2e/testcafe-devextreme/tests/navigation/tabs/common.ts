@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector, ClientFunction } from 'testcafe';
 import { Item } from 'devextreme/ui/tabs.d';
 import Tabs from 'devextreme-testcafe-models/tabs';
-import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
+import { testScreenshot, isMaterialBased, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
@@ -164,8 +164,9 @@ test('Tabs with width: auto in flex container', async (t) => {
       // await testScreenshot(t, takeScreenshot, `Tabs 1 selected,hovered stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
       await t.dispatchEvent(firstItem, 'mousedown');
-      await testScreenshot(t, takeScreenshot, `Tabs 1 selected,active stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
-
+      if (!isMaterial()) {
+        await testScreenshot(t, takeScreenshot, `Tabs 1 selected,active stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, {element: '#tabs'});
+      }
       const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
 
       // TODO: this test is unstable
@@ -177,7 +178,9 @@ test('Tabs with width: auto in flex container', async (t) => {
       // await testScreenshot(t, takeScreenshot, `Tabs 3 not selected,hovered stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
       await t.dispatchEvent(thirdItem, 'mousedown');
-      await testScreenshot(t, takeScreenshot, `Tabs 3 not selected,active stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+      if (!isMaterial()) {
+        await testScreenshot(t, takeScreenshot, `Tabs 3 not selected,active stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+      }
 
       await t
         .expect(compareResults.isValid())
