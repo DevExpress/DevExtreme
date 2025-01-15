@@ -668,7 +668,7 @@ declare module DevExpress {
      */
     element(): DevExpress.core.DxElement;
 
-    $element(): DevExpress.core.dxElementWrapper;
+    $element(): DevExpress.core.InternalElement<Element>;
     _getTemplate(template: unknown): DevExpress.core.FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;
@@ -6756,6 +6756,20 @@ declare module DevExpress.core {
       transclude?: boolean;
     }): DxElement;
   }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type InternalElement<T extends Element> = {} extends Condition
+    ? dxElementWrapper
+    : InternalElementWrapper<T>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface InternalElementWrapper<T extends Element> {}
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface InternalElementWrapper<T extends Element> extends JQuery<T> {}
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */

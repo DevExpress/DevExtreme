@@ -6,6 +6,7 @@ import {
 import {
     UserDefinedElement,
     DxElement,
+    InternalElement,
 } from './element';
 
 import {
@@ -130,7 +131,7 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
      */
     element(): DxElement;
 
-    $element(): dxElementWrapper;
+    $element(): InternalElement<Element>;
     _getTemplate(template: unknown): FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;
