@@ -1073,6 +1073,26 @@ QUnit.module('options changed callbacks', {
         assert.ok($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), 'has POPUP_CONTENT_INHERIT_HEIGHT_CLASS with auto width');
     });
 
+    QUnit.test('template wrapper element inherits maxHeight and minHeight styles from parent when popup dimensions are auto (T1259619)', function(assert) {
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            height: 'auto',
+            width: 'auto',
+            showTitle: false,
+            contentTemplate() {
+                return $('<div>')
+                    .addClass('templateWrapper')
+                    .text('testContent');
+            }
+        }).dxPopup('instance');
+
+        const $templateWrapper = popup.$content().find('.templateWrapper');
+        const maxHeight = $templateWrapper.css('maxHeight');
+        const minHeight = $templateWrapper.css('minHeight');
+
+        assert.strictEqual(maxHeight, 'none', 'maxHeight is inherited correctly');
+        assert.strictEqual(minHeight, '0px', 'minHeight is inherited correctly');
+    });
 
     QUnit.test('popup height should support TreeView with Search if height = auto (T724029)', function(assert) {
         if(IS_OLD_SAFARI) {
