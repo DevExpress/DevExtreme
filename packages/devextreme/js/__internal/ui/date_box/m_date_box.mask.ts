@@ -624,6 +624,7 @@ const DateBoxMask = DateBoxBase.inherit({
     const shouldFireChangeEvent = this._useMaskBehavior() && !e.isDefaultPrevented();
 
     if (shouldFireChangeEvent) {
+      this._renderDateParts();
       this._fireChangeEvent();
       this.callBase(e);
       this._selectFirstPart(e);
