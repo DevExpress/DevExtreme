@@ -23,7 +23,7 @@ import DOMComponent from './dom_component';
 import type { OptionChanged } from './types';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
-const FOCUSED_STATE_CLASS = 'dx-state-focused';
+export const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 function setAttribute(name, value, target): void {
