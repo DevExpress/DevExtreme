@@ -280,6 +280,7 @@ const SKIPPED_TESTS = {
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'ZoomingOnAreaSelection', themes: [THEME.material] },
+      { demo: 'CustomLegendMarkers', themes: [THEME.material] },
       { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
     ],
     VectorMap: [
@@ -307,6 +308,9 @@ const SKIPPED_TESTS = {
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+      { demo: 'Crosshair', themes: [THEME.material] },
+      { demo: 'CustomAnnotations', themes: [THEME.material] },
+      { demo: 'CustomLegendMarkers', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'BatchEditing', themes: [THEME.fluent] },
