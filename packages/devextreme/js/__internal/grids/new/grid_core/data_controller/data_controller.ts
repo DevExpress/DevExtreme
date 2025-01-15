@@ -9,8 +9,6 @@ import {
 } from '@ts/core/reactive/index';
 import { createPromise } from '@ts/core/utils/promise';
 
-// import { EditingController } from '../editing/controller';
-// import type { Change } from '../editing/types';
 import { OptionsController } from '../options_controller/options_controller';
 import type { DataObject, Key } from './types';
 import { normalizeDataSource, updateItemsImmutable } from './utils';
