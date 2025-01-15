@@ -30793,7 +30793,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_validator_ValidatedEvent.brokenRules]
        */
-      brokenRules?: DevExpress.common.ValidationRule;
+      brokenRules?: Array<DevExpress.common.ValidationRule>;
       /**
        * [descr:_ui_validator_ValidatedEvent.status]
        */

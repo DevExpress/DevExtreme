@@ -66,7 +66,7 @@ export type ValidatedEvent = {
     /** @docid _ui_validator_ValidatedEvent.brokenRule */
     brokenRule?: ValidationRule;
     /** @docid _ui_validator_ValidatedEvent.brokenRules */
-    brokenRules?: ValidationRule;
+    brokenRules?: Array<ValidationRule>;
     /** @docid _ui_validator_ValidatedEvent.status */
     status?: ValidationStatus;
 };
