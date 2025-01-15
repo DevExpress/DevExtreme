@@ -82,7 +82,7 @@
   .dx-popup-inherit-height & {
     @include dx-popup-content-auto-resizing();
 
-    > .dx-template-wrapper {
+    > div {
       max-height: inherit;
       min-height: inherit;
 
