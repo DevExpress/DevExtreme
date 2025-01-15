@@ -59,7 +59,9 @@ createTestCafe({
             fs.rmSync('./screenshots', { recursive: true });
         }
 
-        const browsers = args.browsers.split(' ').map(expandBrowserAlias);
+        const browsers = args.browsers
+            .split(' ')
+            .map((browser) => expandBrowserAlias(browser, componentFolder));
         // eslint-disable-next-line no-console
         console.log('Browsers:', browsers);
 
@@ -155,7 +157,7 @@ function setShadowDom(args) {
     process.env.shadowDom = args.shadowDom;
 }
 
-function expandBrowserAlias(browser) {
+function expandBrowserAlias(browser, componentFolder) {
     switch(browser) {
         case 'chrome:devextreme-shr2':
             if(process.env.theme === 'material.blue.light'
