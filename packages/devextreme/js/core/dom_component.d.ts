@@ -18,7 +18,6 @@ import {
 import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
 import { DefaultOptionsRule } from './options';
-import { dxElementWrapper } from './renderer';
 
 export type OptionChangedEventInfo<TComponent> = EventInfo<TComponent> & ChangedOptionInfo;
 
