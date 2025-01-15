@@ -61,7 +61,7 @@ createTestCafe({
 
         const browsers = args.browsers
             .split(' ')
-            .map((browser) => expandBrowserAlias(browser, componentFolder));
+            .map((browser) => expandBrowserAlias(browser, args.componentFolder.trim()));
         // eslint-disable-next-line no-console
         console.log('Browsers:', browsers);
 
@@ -115,24 +115,22 @@ createTestCafe({
             quarantineMode: { successThreshold: 1, attemptLimit: 5 },
         };
 
-        if(args.componentFolder.trim() !== 'renovation') {
-            runOptions.hooks = {
-                test: {
-                    before: async() => {
-                        if(args.shadowDom) {
-                            await addShadowRootTree();
-                        }
+        runOptions.hooks = {
+            test: {
+                before: async() => {
+                    if(args.shadowDom) {
+                        await addShadowRootTree();
+                    }
 
-                        if(args.theme) {
-                            await changeTheme(args.theme);
-                        }
-                    },
-                    after: async() => {
-                        await testPageUtils.clearTestPage();
+                    if(args.theme) {
+                        await changeTheme(args.theme);
                     }
                 },
-            };
-        }
+                after: async() => {
+                    await testPageUtils.clearTestPage();
+                }
+            },
+        };
 
         if(args.browsers === 'chrome:docker') {
             runOptions.disableScreenshots = true;
