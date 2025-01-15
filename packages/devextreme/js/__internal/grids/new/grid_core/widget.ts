@@ -10,6 +10,7 @@ import type { Subscription } from '@ts/core/reactive/index';
 import { render } from 'inferno';
 
 import * as ColumnsControllerModule from './columns_controller/index';
+import * as DataControllerModule from './data_controller/index';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 
@@ -20,14 +21,18 @@ export class GridCoreNewBase<
 
   protected diContext!: DIContext;
 
+  protected dataController!: DataControllerModule.DataController;
+
   protected columnsController!: ColumnsControllerModule.ColumnsController;
 
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
+    this.diContext.register(DataControllerModule.DataController);
     this.diContext.register(ColumnsControllerModule.ColumnsController);
   }
 
   protected _initDIContext(): void {
+    this.dataController = this.diContext.get(DataControllerModule.DataController);
     this.columnsController = this.diContext.get(ColumnsControllerModule.ColumnsController);
   }
 
@@ -71,5 +76,7 @@ export class GridCoreNewBase<
 }
 
 export class GridCoreNew extends ColumnsControllerModule.PublicMethods(
-  GridCoreNewBase,
+  DataControllerModule.PublicMethods(
+    GridCoreNewBase,
+  ),
 ) {}
