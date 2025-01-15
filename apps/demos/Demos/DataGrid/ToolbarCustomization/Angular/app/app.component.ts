@@ -9,6 +9,7 @@ import {
   DxTemplateModule,
   DxButtonModule,
 } from 'devextreme-angular';
+import { DxButtonTypes } from 'devextreme-angular/ui/button';
 import query from 'devextreme/data/query';
 import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Service, Order } from './app.service';
@@ -46,6 +47,14 @@ export class AppComponent {
     text: 'Grouping by Employee',
   }];
 
+  refreshButtonOptions: DxButtonTypes.Properties = {
+    icon: 'refresh',
+    text: 'Refresh',
+    onClick: () => {
+      this.dataGrid.instance.refresh();
+    },
+  };
+
   constructor(service: Service) {
     this.orders = service.getOrders();
     this.totalCount = this.getGroupCount('CustomerStoreState');
@@ -65,10 +74,6 @@ export class AppComponent {
 
   toggleExpandAll() {
     this.expandAll = !this.expandAll;
-  }
-
-  refreshDataGrid() {
-    this.dataGrid.instance.refresh();
   }
 }
 

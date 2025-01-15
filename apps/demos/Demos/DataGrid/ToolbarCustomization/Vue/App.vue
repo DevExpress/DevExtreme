@@ -48,7 +48,8 @@
         location="after"
         locateInMenu="auto"
         showText="inMenu"
-        template="refreshTemplate"
+        widget="dxButton"
+        :options="refreshButtonOptions"
       />
       <DxItem
         name="columnChooserButton"
@@ -76,13 +77,6 @@
         :text="expandAll ? 'Collapse All' : 'Expand All'"
         width="136"
         @click="toggleExpandAll"
-      />
-    </template>
-    <template #refreshTemplate>
-      <DxButton
-        icon="refresh"
-        text="Refresh"
-        @click="refreshDataGrid"
       />
     </template>
   </DxDataGrid>
@@ -130,8 +124,12 @@ const toggleExpandAll = () => {
   expandAll.value = !expandAll.value;
 };
 
-const refreshDataGrid = () => {
-  dataGridRef.value!.instance!.refresh();
+const refreshButtonOptions = {
+  icon: 'refresh',
+  text: 'Refresh',
+  onClick: () => {
+    dataGridRef.value!.instance!.refresh();
+  },
 };
 </script>
 <style scoped>

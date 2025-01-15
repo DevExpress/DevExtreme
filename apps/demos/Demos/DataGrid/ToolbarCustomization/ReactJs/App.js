@@ -1,4 +1,6 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, {
+  useCallback, useMemo, useRef, useState,
+} from 'react';
 import Button from 'devextreme-react/button';
 import SelectBox from 'devextreme-react/select-box';
 import DataGrid, {
@@ -39,9 +41,16 @@ const App = () => {
   const toggleExpandAll = useCallback(() => {
     setExpandAll(!expandAll);
   }, [expandAll]);
-  const refreshDataGrid = useCallback(() => {
-    dataGridRef.current.instance().refresh();
-  }, []);
+  const refreshButtonOptions = useMemo(
+    () => ({
+      icon: 'refresh',
+      text: 'Refresh',
+      onClick: () => {
+        dataGridRef.current.instance().refresh();
+      },
+    }),
+    [],
+  );
   return (
     <DataGrid
       id="gridContainer"
@@ -80,7 +89,10 @@ const App = () => {
             <span>Total Count</span>
           </div>
         </Item>
-        <Item location="before" locateInMenu="auto">
+        <Item
+          location="before"
+          locateInMenu="auto"
+        >
           <SelectBox
             width="225"
             items={groupingValues}
@@ -91,20 +103,23 @@ const App = () => {
             onValueChanged={toggleGroupColumn}
           />
         </Item>
-        <Item location="before" locateInMenu="auto">
+        <Item
+          location="before"
+          locateInMenu="auto"
+        >
           <Button
             text={expandAll ? 'Collapse All' : 'Expand All'}
             width="136"
             onClick={toggleExpandAll}
           />
         </Item>
-        <Item location="after" locateInMenu="auto" showText="inMenu">
-          <Button
-            icon="refresh"
-            text="Refresh"
-            onClick={refreshDataGrid}
-          />
-        </Item>
+        <Item
+          location="after"
+          locateInMenu="auto"
+          showText="inMenu"
+          widget="dxButton"
+          options={refreshButtonOptions}
+        />
         <Item name="columnChooserButton" />
       </Toolbar>
     </DataGrid>

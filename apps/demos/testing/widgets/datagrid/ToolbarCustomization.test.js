@@ -10,7 +10,7 @@ fixture('DataGrid.ToolbarCustomization')
   });
 
 runManualTest('DataGrid', 'ToolbarCustomization', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
-  test.only('ToolbarCustomization', async (t) => {
+  test('ToolbarCustomization', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const menuButtonSelector = $('.dx-toolbar').find('.dx-toolbar-menu-container').find('.dx-button')
     const menuItemsSelector = $('.dx-overlay-wrapper').find('.dx-list-item')

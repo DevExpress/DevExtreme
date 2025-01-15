@@ -54,10 +54,12 @@
         </dx-button>
       </div>
     </dxi-item>
-    <dxi-item location="after" locateInMenu="auto" showText="inMenu">
-      <div *dxTemplate>
-        <dx-button icon="refresh" text="Refresh" (onClick)="refreshDataGrid()"> </dx-button>
-      </div>
+    <dxi-item
+        location="after"
+        locateInMenu="auto"
+        showText="inMenu"
+        widget="dxButton"
+        [options]="refreshButtonOptions">
     </dxi-item>
     <dxi-item name="columnChooserButton"></dxi-item>
   </dxo-toolbar>

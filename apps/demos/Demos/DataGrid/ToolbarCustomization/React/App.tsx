@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import Button from 'devextreme-react/button';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 import DataGrid, {
@@ -39,9 +39,13 @@ const App = () => {
     setExpandAll(!expandAll);
   }, [expandAll]);
 
-  const refreshDataGrid = useCallback(() => {
-    dataGridRef.current.instance().refresh();
-  }, []);
+  const refreshButtonOptions = useMemo(() => ({
+    icon: 'refresh',
+    text: 'Refresh',
+    onClick: () => {
+      dataGridRef.current.instance().refresh();
+    },
+  }), []);
 
   return (
     <DataGrid
@@ -82,12 +86,11 @@ const App = () => {
             width="136"
             onClick={toggleExpandAll} />
         </Item>
-        <Item location="after" locateInMenu="auto" showText="inMenu">
-          <Button
-            icon="refresh"
-            text="Refresh"
-            onClick={refreshDataGrid} />
-        </Item>
+        <Item location="after"
+              locateInMenu="auto"
+              showText="inMenu"
+              widget="dxButton"
+              options={refreshButtonOptions} />
         <Item name="columnChooserButton" />
       </Toolbar>
     </DataGrid>
