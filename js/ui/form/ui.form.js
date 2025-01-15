@@ -66,6 +66,9 @@ import {
 import { TOOLBAR_CLASS } from '../toolbar/constants';
 
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
+const TEXTEDITOR_CLASS = 'dx-texteditor';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor';
 
 const ITEM_OPTIONS_FOR_VALIDATION_UPDATING = ['items', 'isRequired', 'validationRules', 'visible'];
 
@@ -1127,8 +1130,7 @@ const Form = Widget.inherit({
     },
 
     _refresh: function() {
-        const editorSelector = `.${FOCUSED_STATE_CLASS} > :not(.dx-dropdowneditor-input-wrapper) input,`
-            + ` .${FOCUSED_STATE_CLASS} textarea`;
+        const editorSelector = `.${TEXTEDITOR_CLASS}.${FOCUSED_STATE_CLASS}:not(.${DROP_DOWN_EDITOR_CLASS}) .${TEXTEDITOR_INPUT_CLASS}`;
 
         eventsEngine.trigger(this.$element().find(editorSelector), 'change');
 
