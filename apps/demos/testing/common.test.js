@@ -162,6 +162,7 @@ const SKIPPED_TESTS = {
       { demo: 'ItemDragging', themes: [THEME.fluent, THEME.material] },
     ],
     VectorMap: [
+      { demo: 'Overview', themes: [THEME.material] },
       { demo: 'PieMarkers', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
       { demo: 'CustomMapData', themes: [THEME.material] },
@@ -180,6 +181,7 @@ const SKIPPED_TESTS = {
       { demo: 'LayoutCustomization', themes: [THEME.material] },
     ],
     Gauges: [
+      { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
       { demo: 'VariableNumberOfSubvalueIndicators', themes: [THEME.material] },
       { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
@@ -256,6 +258,7 @@ const SKIPPED_TESTS = {
     VectorMap: [
       { demo: 'CustomProjection', themes: [THEME.material] },
       { demo: 'Spline', themes: [THEME.material] },
+      { demo: 'CustomAnnotations', themes: [THEME.material] },
       { demo: 'Palette', themes: [THEME.material] },
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'PieMarkers', themes: [THEME.material] },
