@@ -41,6 +41,7 @@ export class PagerView extends View<PagerProps> {
 
   protected override getProps(): SubsGets<PagerProps> {
     return combined({
+      itemCount: this.dataController.totalCount,
       allowedPageSizes: this.allowedPageSizes,
       visible: this.visible,
       pageIndex: computed(
@@ -50,11 +51,13 @@ export class PagerView extends View<PagerProps> {
       pageIndexChanged: (value): void => this.dataController.pageIndex.update(value - 1),
       pageSize: this.dataController.pageSize,
       pageSizeChanged: (value): void => this.dataController.pageSize.update(value),
-      gridCompatibility: false,
+      isGridCompatibility: false,
       pageCount: this.dataController.pageCount,
       showPageSizeSelector: this.options.oneWay('pager.showPageSizeSelector'),
       _skipValidation: true,
       tabIndex: 0,
+      showInfo: this.options.oneWay('pager.showInfo'),
+      showNavigationButtons: this.options.oneWay('pager.showNavigationButtons'),
     });
   }
 }

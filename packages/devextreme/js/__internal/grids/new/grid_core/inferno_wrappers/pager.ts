@@ -10,7 +10,7 @@ export interface PagerProps {
   pageIndexChanged?: (value: number) => void;
   pageSizeChanged?: (value: number) => void;
 
-  gridCompatibility?: boolean;
+  isGridCompatibility?: boolean;
 
   pageSizes?: number[];
 
