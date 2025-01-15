@@ -26,10 +26,10 @@ fixture.disablePageReloads`Form`
               return;
             }
 
-            // if (labelVisible && isMaterial()) {
-            //   // There is no specificity for the Material theme
-            //   return;
-            // }
+            if (labelVisible && isMaterial()) {
+              // There is no specificity for the Material theme
+              return;
+            }
 
             const testName = `Form,lMode=${formLabelMode},lLoc=${formLabelLocation},lVis=${labelVisible},lAl=${labelAlignment},e.lMode=${editorLabelMode ?? 'undef'},e.sMode=${editorStylingMode}`;
 
