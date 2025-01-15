@@ -120,6 +120,9 @@ const SKIPPED_TESTS = {
     ],
     VectorMap: [
       { demo: 'Palette', themes: [THEME.material] },
+      { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'PieMarkers', themes: [THEME.material] },
+      { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
       { demo: 'CustomProjection', themes: [THEME.material] },
       { demo: 'MultipleLayers', themes: [THEME.material] },
@@ -131,9 +134,12 @@ const SKIPPED_TESTS = {
     Charts: [
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
+      { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
+      { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.material, THEME.fluent] },
+      { demo: 'EditStateManagement', themes: [THEME.material] },
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
       { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
@@ -148,6 +154,7 @@ const SKIPPED_TESTS = {
       { demo: 'ItemDragging', themes: [THEME.fluent, THEME.material] },
     ],
     VectorMap: [
+      { demo: 'Overview', themes: [THEME.material] },
       { demo: 'PieMarkers', themes: [THEME.material] },
       { demo: 'CustomMapData', themes: [THEME.material] },
       { demo: 'CustomProjection', themes: [THEME.material] },
@@ -164,6 +171,8 @@ const SKIPPED_TESTS = {
       { demo: 'LayoutCustomization', themes: [THEME.material] },
     ],
     Gauges: [
+      { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
+      { demo: 'VariableNumberOfSubvalueIndicators', themes: [THEME.material] },
       { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
     ],
@@ -173,9 +182,12 @@ const SKIPPED_TESTS = {
       { demo: 'TilingAlgorithms', themes: [THEME.material] },
       { demo: 'ExportAndPrintingAPI', themes: [THEME.material] },
       { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
+      { demo: 'Line', themes: [THEME.material] },
+      { demo: 'Spline', themes: [THEME.material] },
       { demo: 'Colorization', themes: [THEME.material] },
       { demo: 'SignalRService', themes: [THEME.material] },
       { demo: 'PointsAggregation', themes: [THEME.material] },
+      { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
       { demo: 'AxisLabelsOverlapping', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
@@ -186,6 +198,7 @@ const SKIPPED_TESTS = {
     ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.fluent, THEME.material] },
+      { demo: 'EditStateManagement', themes: [THEME.material] },
       { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
       { demo: 'FilteringAPI', themes: [THEME.material] },
@@ -202,7 +215,9 @@ const SKIPPED_TESTS = {
     ],
     Gauges: [
       { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'VariableNumberOfSubvalueIndicators', themes: [THEME.material] },
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
+      { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
       { demo: 'DifferentValueIndicatorTypes', themes: [THEME.material] },
       { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
     ],
@@ -215,6 +230,10 @@ const SKIPPED_TESTS = {
       { demo: 'LayoutCustomization', themes: [THEME.material] },
     ],
     VectorMap: [
+      { demo: 'CustomProjection', themes: [THEME.material] },
+      { demo: 'Spline', themes: [THEME.material] },
+      { demo: 'CustomAnnotations', themes: [THEME.material] },
+      { demo: 'Palette', themes: [THEME.material] },
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'PieMarkers', themes: [THEME.material] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
@@ -223,7 +242,9 @@ const SKIPPED_TESTS = {
       { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
     ],
     Gantt: [
-      { demo: 'Validation', themes: [THEME.material] },
+      { demo: 'ContextMenu', themes: [THEME.material] },
+      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
   },
 };

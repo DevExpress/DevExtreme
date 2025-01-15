@@ -58,5 +58,7 @@ export async function testScreenshot(
       .ok();
   }
 
-  await changeTheme(process.env.theme ?? defaultThemeName);
+  if (isString(theme) || shouldTestInCompact) {
+    await changeTheme(process.env.theme ?? defaultThemeName);
+  }
 }
