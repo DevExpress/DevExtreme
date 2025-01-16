@@ -420,7 +420,7 @@ const DateBoxMask = DateBoxBase.inherit({
   },
 
   _selectFirstPart() {
-    if (this.option('text')) {
+    if (this.option('text') && this._dateParts) {
       this._activePartIndex = -1;
       this._selectNextPart(FORWARD);
     }
@@ -624,7 +624,6 @@ const DateBoxMask = DateBoxBase.inherit({
     const shouldFireChangeEvent = this._useMaskBehavior() && !e.isDefaultPrevented();
 
     if (shouldFireChangeEvent) {
-      this._renderDateParts();
       this._fireChangeEvent();
       this.callBase(e);
       this._selectFirstPart(e);
