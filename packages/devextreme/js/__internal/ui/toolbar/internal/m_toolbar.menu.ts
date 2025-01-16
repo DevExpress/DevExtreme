@@ -1,6 +1,7 @@
 import '@js/ui/popup/ui.popup';
 
 import devices from '@js/core/devices';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { ChildDefaultTemplate } from '@js/core/templates/child_default_template';
@@ -14,7 +15,7 @@ import type Popup from '@js/ui/popup';
 import { isFluent, isMaterialBased } from '@js/ui/themes';
 import type { Item } from '@js/ui/toolbar';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
-import Widget from '@ts/ui/widget';
+import Widget from '@ts/core/widget/widget';
 
 import { toggleItemFocusableElementTabIndex } from '../m_toolbar.utils';
 import ToolbarMenuList from './m_toolbar.menu.list';
@@ -30,7 +31,7 @@ const POPUP_VERTICAL_OFFSET = 3;
 export interface Properties extends WidgetOptions<DropDownMenu> {
   opened?: boolean;
 
-  container?: string | Element | undefined;
+  container: string | Element | undefined;
 
   animation?: dxPopupAnimation;
 
@@ -90,7 +91,7 @@ export default class DropDownMenu extends Widget<Properties> {
     };
   }
 
-  _defaultOptionsRules() {
+  _defaultOptionsRules(): DefaultOptionsRule<Properties>[] {
     return super._defaultOptionsRules().concat([
       {
         device() {
@@ -106,6 +107,7 @@ export default class DropDownMenu extends Widget<Properties> {
           return isMaterialBased();
         },
         options: {
+          // @ts-expect-error
           useInkRipple: true,
           animation: {
             show: {
@@ -129,22 +131,21 @@ export default class DropDownMenu extends Widget<Properties> {
   _init(): void {
     super._init();
 
-    // @ts-expect-error
     this.$element().addClass(DROP_DOWN_MENU_CLASS);
 
     this._initItemClickAction();
     this._initButtonClickAction();
   }
 
-  _initItemClickAction() {
-    this._itemClickAction = this._createActionByOption('onItemClick');
+  _initItemClickAction(): void {
+    this._itemClickAction = this._createActionByOption('onItemClick', {});
   }
 
-  _initButtonClickAction() {
-    this._buttonClickAction = this._createActionByOption('onButtonClick');
+  _initButtonClickAction(): void {
+    this._buttonClickAction = this._createActionByOption('onButtonClick', {});
   }
 
-  _initTemplates() {
+  _initTemplates(): void {
     this._templateManager.addDefaultTemplates({
       content: new ChildDefaultTemplate('content'),
     });
@@ -181,7 +182,6 @@ export default class DropDownMenu extends Widget<Properties> {
   }
 
   _renderButton(): void {
-    // @ts-expect-error
     const $button = this.$element().addClass(DROP_DOWN_MENU_BUTTON_CLASS);
 
     this._button = this._createComponent($button, Button, {
@@ -189,7 +189,6 @@ export default class DropDownMenu extends Widget<Properties> {
       template: 'content',
       // @ts-expect-error
       stylingMode: isFluent() ? 'text' : 'contained',
-      // @ts-expect-error
       useInkRipple: this.option('useInkRipple'),
       hoverStateEnabled: false,
       focusStateEnabled: false,
@@ -226,7 +225,6 @@ export default class DropDownMenu extends Widget<Properties> {
 
     this._popup = this._createComponent(this._$popup, 'dxPopup', {
       onInitialized({ component }) {
-        // @ts-expect-error
         component.$wrapper()
           .addClass(DROP_DOWN_MENU_POPUP_WRAPPER_CLASS)
           .addClass(DROP_DOWN_MENU_POPUP_CLASS);
@@ -237,12 +235,9 @@ export default class DropDownMenu extends Widget<Properties> {
       _ignoreFunctionValueDeprecation: true,
       maxHeight: () => this._getMaxHeight(),
       position: {
-        // @ts-expect-error
         my: `top ${rtlEnabled ? 'left' : 'right'}`,
-        // @ts-expect-error
         at: `bottom ${rtlEnabled ? 'left' : 'right'}`,
         collision: 'fit flip',
-        // @ts-expect-error
         offset: { v: POPUP_VERTICAL_OFFSET },
         of: this.$element(),
       },

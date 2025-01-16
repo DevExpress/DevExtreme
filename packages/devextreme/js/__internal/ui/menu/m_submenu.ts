@@ -32,14 +32,14 @@ class Submenu extends ContextMenu {
     });
   }
 
-  _initDataAdapter() {
+  _initDataAdapter(): void {
     this._dataAdapter = this.option('_dataAdapter');
     if (!this._dataAdapter) {
       super._initDataAdapter();
     }
   }
 
-  _renderContentImpl() {
+  _renderContentImpl(): void {
     this._renderContextMenuOverlay();
     super._renderContentImpl();
 
@@ -48,7 +48,7 @@ class Submenu extends ContextMenu {
     this._renderDelimiter();
   }
 
-  _renderDelimiter() {
+  _renderDelimiter(): void {
     this.$contentDelimiter = $('<div>')
       .appendTo(this._itemContainer())
       .addClass(DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS);
@@ -73,6 +73,7 @@ class Submenu extends ContextMenu {
   }
 
   _isMenuHorizontal(): boolean {
+    // @ts-expect-error
     return this.option('orientation') === 'horizontal';
   }
 

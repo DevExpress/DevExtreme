@@ -149,23 +149,24 @@
   $button-color,
   $button-color-hover,
   $button-color-active,
-  $hover-bg,
-  $focused-bg,
-  $active-bg,
-  $selected-bg: $active-bg,
-  $selected-color: $button-color
+  $button-bg,
+  $button-hover-bg,
+  $button-focused-bg,
+  $button-active-bg,
+  $button-selected-bg: $button-active-bg,
+  $button-selected-color: $button-color
 ) {
   @include dx-button-styling-variant(
-    transparent,
+    $button-bg,
     $button-color,
     $button-color-hover,
     $button-color-active,
-    $hover-bg,
-    $focused-bg,
-    $active-bg,
+    $button-hover-bg,
+    $button-focused-bg,
+    $button-active-bg,
     $button-color,
-    $selected-bg,
-    $selected-color,
+    $button-selected-bg,
+    $button-selected-color,
   );
 }
 
@@ -174,26 +175,27 @@
   $button-color-hover,
   $button-color-active,
   $border-color,
-  $hover-bg,
-  $focused-bg,
-  $active-bg,
-  $selected-bg,
-  $selected-color: $button-color-active,
+  $button-bg,
+  $button-hover-bg,
+  $button-focused-bg,
+  $button-active-bg,
+  $button-selected-bg,
+  $button-selected-color: $button-color-active,
 ) {
   border-width: 1px;
   border-style: solid;
   border-color: $border-color;
 
   @include dx-button-styling-variant(
-    transparent,
+    $button-bg,
     $button-color,
     $button-color-hover,
     $button-color-active,
-    $hover-bg,
-    $focused-bg,
-    $active-bg,
+    $button-hover-bg,
+    $button-focused-bg,
+    $button-active-bg,
     $button-color,
-    $selected-bg,
-    $selected-color,
+    $button-selected-bg,
+    $button-selected-color,
   );
 }

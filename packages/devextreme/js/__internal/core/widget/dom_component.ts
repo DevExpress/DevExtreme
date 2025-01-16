@@ -52,7 +52,7 @@ class DOMComponent<
   private _requireRefresh?: boolean;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _templateManager?: any;
+  _templateManager!: any;
 
   // eslint-disable-next-line max-len
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
@@ -493,7 +493,7 @@ class DOMComponent<
     return this._$element;
   }
 
-  element(): Element {
+  element(): HTMLElement {
     const $element = this.$element();
 
     return getPublicElement($element);

@@ -20,7 +20,7 @@ env:
 
 jobs:
   build-devextreme:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: Build DevExtreme
     timeout-minutes: 40
 
@@ -84,7 +84,7 @@ jobs:
           retention-days: 1
 
   build-demos:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: Build Demos
     timeout-minutes: 20
     needs: build-devextreme
@@ -156,7 +156,7 @@ jobs:
         retention-days: 1
 
   get-changes:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: Get changed demos
     timeout-minutes: 5
 
@@ -185,7 +185,7 @@ jobs:
       - build-devextreme
       - get-changes
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 60
 
     strategy:
@@ -271,7 +271,7 @@ jobs:
 
   check_generated_demos:
     name: ${{ matrix.name }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 10
     needs: build-demos
 
@@ -361,7 +361,7 @@ jobs:
         CONSTEL: [react(1/4), react(2/4), react(3/4), react(4/4), vue(1/4), vue(2/4), vue(3/4), vue(4/4), angular(1/4), angular(2/4), angular(3/4), angular(4/4)]
         THEME: ['generic.light', 'material.blue.light', 'fluent.blue.light']
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: testcafe-${{ matrix.CONSTEL }}-${{ matrix.THEME }}
     timeout-minutes: 60
 

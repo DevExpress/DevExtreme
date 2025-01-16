@@ -169,6 +169,7 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _initializeRenderQueue(): void {
+    // @ts-expect-error
     this._renderQueue = this.option('_renderQueue') ?? [];
   }
 
@@ -503,12 +504,14 @@ class Splitter extends CollectionWidget<Properties> {
           return;
         }
 
+        const { orientation: currentOrientation } = this.option();
+
         const newLayout = getNextLayout(
           this._currentLayout ?? [],
           calculateDelta(
             // @ts-expect-error ts-error
             event.offset,
-            this.option('orientation'),
+            currentOrientation,
             rtlEnabled,
             this._currentOnePxRatio,
           ),
@@ -626,7 +629,9 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _isHorizontalOrientation(): boolean {
-    return this.option('orientation') === ORIENTATION.horizontal;
+    const { orientation } = this.option();
+
+    return orientation === ORIENTATION.horizontal;
   }
 
   _toggleOrientationClass(): void {
@@ -900,7 +905,6 @@ class Splitter extends CollectionWidget<Properties> {
 
   _updateItemOption(path: string, value: unknown, silent = false): void {
     if (silent) {
-      // @ts-expect-error badly typed base class
       this._options.silent(path, value);
     } else {
       this.option(path, value);
@@ -1001,7 +1005,6 @@ class Splitter extends CollectionWidget<Properties> {
   }
 }
 
-// @ts-expect-error ts-error
 registerComponent('dxSplitter', Splitter);
 
 export default Splitter;
