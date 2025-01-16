@@ -124,7 +124,7 @@ jobs:
 
     - name: Copy screenshots artifacts
       if: failure() && matrix.STRATEGY == 'screenshots'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: screenshots
         path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
@@ -132,7 +132,7 @@ jobs:
 
     - name: Copy accessibility report
       if: matrix.STRATEGY == 'accessibility'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: accessibility-reports
         path: apps/demos/testing/artifacts/axe-reports/*

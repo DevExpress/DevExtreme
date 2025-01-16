@@ -43,7 +43,7 @@ jobs:
           alert_type: Dependabot
           alerts_cache_file: dependabot_alerts.json
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: dependabot_alerts.json
           path: dependabot_alerts.json

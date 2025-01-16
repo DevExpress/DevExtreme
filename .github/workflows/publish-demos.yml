@@ -52,7 +52,7 @@ jobs:
             devextreme-react-installer.tgz
             devextreme-vue-installer.tgz
           retention-days: 1
-  
+
   publish-ES:
     runs-on: ubuntu-latest
     needs: [build-devextreme]
@@ -92,7 +92,7 @@ jobs:
       - name: Prepare configs
         working-directory: apps/demos
         run: npm run prepare-js
-      
+
       - name: Copy metadata
         working-directory: apps/demos
         run: npm run make-demos-bundle -- --copy-metadata
@@ -106,7 +106,7 @@ jobs:
         run: npm run make-demos-bundle -- --framework Vue
 
       - name: Save publish-demos directory for ES as an artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: publish-demos
           path: ./apps/demos/publish-demos
@@ -140,10 +140,10 @@ jobs:
             command: CONSTEL=10/10 npm run make-demos-bundle -- --framework Angular
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js v18
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 
@@ -195,9 +195,9 @@ jobs:
       - name: Angular post process index.html
         working-directory: apps/demos
         run: npm run post-process-angular
-      
+
       - name: Save publish-demos directory for Angular as an artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: publish-demos
           path: ./apps/demos/publish-demos
@@ -205,9 +205,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: [build-devextreme, publish-ES, publish-angular]
-    steps: 
+    steps:
       - name: Download publish-demos artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: publish-demos
           path: ./apps/demos/publish-demos
