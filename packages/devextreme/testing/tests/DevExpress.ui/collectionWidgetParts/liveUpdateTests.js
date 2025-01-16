@@ -183,4 +183,58 @@ module('live update', {
         assert.strictEqual($items.first().text(), 'text 0 mark', 'the first item correctly updated');
         assert.strictEqual($items.last().text(), 'text 24 mark', 'the last item correctly updated');
     });
+
+    test('next page items should not be excessive skipped after dataSource runtime change and push remove (T1250900)', function(assert) {
+        const newDataSource = new DataSource({
+            load: () => helper.data.sort((a, b) => a.index - b.index),
+            loadMode: 'raw',
+            pageSize: 2,
+            pushAggregationTimeout: 0,
+            key: 'id'
+        });
+        helper.instance.option('dataSource', newDataSource);
+
+        let items = helper.getItems();
+        assert.strictEqual(items.length, 2, '2 items on the first page');
+        assert.strictEqual(items[0].id, 0, '0 item');
+        assert.strictEqual(items[1].id, 1, '1st item');
+
+        newDataSource.store().push([{ type: 'remove', key: 0 }]);
+
+        items = helper.getItems();
+        assert.strictEqual(items.length, 1, '1 item on the first page after remove');
+        assert.strictEqual(items[0].id, 1, '1 item');
+
+        helper.instance.loadNextPage();
+
+        items = helper.getItems();
+        assert.strictEqual(items.length, 3, '2 pages are loaded');
+        assert.strictEqual(items[0].id, 1, '1 item');
+        assert.strictEqual(items[1].id, 2, '2 item');
+        assert.strictEqual(items[2].id, 3, '3 item');
+    });
+
+    test('dataSource runtime change should be correct even if remove was pushed to the previous dataSource', function(assert) {
+        const data = [...helper.data];
+        helper.store.push([{ type: 'remove', key: 0 }]);
+
+        const newDataSource = new DataSource({
+            load: (e) => data.sort((a, b) => a.index - b.index),
+            loadMode: 'raw',
+            pageSize: 2,
+            pushAggregationTimeout: 0,
+            key: 'id'
+        });
+        helper.instance.option('dataSource', newDataSource);
+
+        let items = helper.getItems();
+        assert.strictEqual(items[0].id, 0, '0 item');
+        assert.strictEqual(items[1].id, 1, '1 item');
+
+        helper.instance.loadNextPage();
+
+        items = helper.getItems();
+        assert.strictEqual(items[2].id, 2, '2 item');
+        assert.strictEqual(items[3].id, 3, '3 item');
+    });
 });
