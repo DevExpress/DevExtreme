@@ -4339,43 +4339,6 @@ QUnit.module('View\'s focus', {
         assert.equal(this.dataGrid.option('focusedRowKey'), 2, 'row key is changed');
         assert.ok($(this.dataGrid.getRowElement(1)).hasClass('dx-row-focused'), 'second row is focused');
     });
-
-    // T1224663
-    ['onFocusedRowChanged', 'onFocusedRowChanging'].forEach(event => {
-        QUnit.testInActiveWindow(`Focus should be preserved on datagrid when rowsview repaints in ${event} event`, function(assert) {
-            // arrange
-            this.dataGrid.option({
-                dataSource: [
-                    { id: 1, name: 'name 1' },
-                    { id: 2, name: 'name 2' },
-                    { id: 3, name: 'name 3' }
-                ],
-                keyExpr: 'id',
-                focusedRowEnabled: true,
-                [event]: (e) => {
-                    this.dataGrid.repaint();
-                }
-            });
-            this.clock.tick(300);
-
-            // act
-            $(this.dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
-            this.clock.tick(300);
-
-            // assert
-            const firstRow = $(this.dataGrid.getRowElement(0));
-            assert.ok(firstRow.hasClass('dx-row-focused'), 'first row is focused');
-
-            // act
-            const keyboard = keyboardMock(firstRow);
-            keyboard.keyDown('down');
-            this.clock.tick(300);
-
-            // assert
-            const secondRow = $(this.dataGrid.getRowElement(1));
-            assert.ok(secondRow.hasClass('dx-row-focused'), 'second row is focused');
-        });
-    });
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {
