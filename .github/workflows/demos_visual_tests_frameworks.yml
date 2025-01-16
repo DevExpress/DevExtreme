@@ -467,6 +467,17 @@ jobs:
       if: ${{ failure() }}
       uses: actions/upload-artifact@v4
       with:
-        name: screenshots
+        name: screenshots-${{ matrix.CONSTEL }}-${{ matrix.THEME }}
         path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
+
+  merge:
+    runs-on: devextreme-shr2
+    needs: testcafe
+    steps:
+      - name: Merge screenshot artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: screenshots
+          pattern: screenshots-*
+          delete-merged: true

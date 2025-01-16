@@ -245,12 +245,14 @@ jobs:
       with:
         name: compared-screenshots
         pattern: compared-screenshots-*
+        delete-merged: true
 
     - name: Merge failed test artifacts
       uses: actions/upload-artifact/merge@v4
       with:
         name: failed-tests
         pattern: failed-tests-*
+        delete-merged: true
 
   notify:
     runs-on: devextreme-shr2
