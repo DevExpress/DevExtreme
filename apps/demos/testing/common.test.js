@@ -410,7 +410,7 @@ const SKIPPED_TESTS = {
             .filter((e) => {
               const isKnownWarning = knownWarnings.common.some((kw) => e.startsWith(kw));
               const isComponentSpecificKnownWarning = knownWarnings[widgetName]  
-                && isComponentSpecificKnownWarning[widgetName].some((kw) => e.startsWith(kw));
+                && knownWarnings[widgetName].some((kw) => e.startsWith(kw));
               
               return !isKnownWarning && !isComponentSpecificKnownWarning; 
             });
