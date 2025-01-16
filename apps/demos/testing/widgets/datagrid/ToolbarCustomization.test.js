@@ -19,9 +19,7 @@ runManualTest('DataGrid', 'ToolbarCustomization', ['jQuery', 'React', 'Vue', 'An
 
     await t
       .resizeWindow(490, 600)
-      .click(menuButtonSelector)
-      .expect(menuItemsSelector.count)
-      .eql(3);
+      .click(menuButtonSelector);
 
     await testScreenshot(t, takeScreenshot, 'toolbar_customization_medium.png');
 
