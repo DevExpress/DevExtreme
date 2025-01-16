@@ -242,38 +242,38 @@ test('DataGrid - FilterRow cell loses focus when focusedRowEnabled is true and e
 });
 
 test('DataGrid - FocusedRowChanged event isnt raised when the push API is used to remove the last row (T1261532)', async (t) => {
-    await t
-      .expect(Selector('#otherContainer').innerText)
-      .eql('Success');
+  await t
+    .expect(Selector('#otherContainer').innerText)
+    .eql('Success');
 }).before(async () => createWidget('dxDataGrid', {
-    dataSource: {
-      store: {
-        data: [
-          {
-            id: 1,
-            name: "Item 1 "
-          },
-        ],
-        type: 'array',
-        key: "id",
-      },
-      reshapeOnPush: true,
+  dataSource: {
+    store: {
+      data: [
+        {
+          id: 1,
+          name: 'Item 1 ',
+        },
+      ],
+      type: 'array',
+      key: 'id',
     },
-    keyExpr: 'id',
-    showBorders: true,
-    focusedRowEnabled: true,
-    focusedRowKey: 1,
-    onInitialized: function(e) {
-      e.component?.getDataSource().store().push([{ type: "remove", key: 1 }]);
-    },
-    onFocusedRowChanged: function(e) {
-      const key = e.component.option("focusedRowKey");
-      const index = e.component.option("focusedRowIndex");
+    reshapeOnPush: true,
+  },
+  keyExpr: 'id',
+  showBorders: true,
+  focusedRowEnabled: true,
+  focusedRowKey: 1,
+  onInitialized(e) {
+    e.component?.getDataSource().store().push([{ type: 'remove', key: 1 }]);
+  },
+  onFocusedRowChanged(e) {
+    const key = e.component.option('focusedRowKey');
+    const index = e.component.option('focusedRowIndex');
 
-      if(key === null && index === -1) {
-        $('#otherContainer').text('Success');
-      }
+    if (key === null && index === -1) {
+      $('#otherContainer').text('Success');
     }
+  },
 }));
 
 ['onFocusedRowChanged', 'onFocusedRowChanging'].forEach((event) => {
@@ -302,4 +302,3 @@ test('DataGrid - FocusedRowChanged event isnt raised when the push API is used t
     },
   }));
 });
-
