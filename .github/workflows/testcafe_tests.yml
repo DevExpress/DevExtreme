@@ -181,7 +181,7 @@ jobs:
       if: ${{ failure() }}
       uses: actions/upload-artifact@v3
       with:
-        name: compared-screenshots
+        name: compared-screenshots-${{ matrix.ARGS.name }}
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
 
@@ -189,9 +189,25 @@ jobs:
       if: ${{ failure() }}
       uses: actions/upload-artifact@v3
       with:
-        name: failed-tests
+        name: failed-tests-${{ matrix.ARGS.name }}
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/failedtests/**/*
         if-no-files-found: ignore
+
+  merge:
+    runs-on: devextreme-shr2
+    needs: testcafe
+    steps:
+    - name: Merge screenshot artifacts
+      uses: actions/upload-artifact/merge@v4
+      with:
+        name: compared-screenshots
+        pattern: compared-screenshots-*
+
+    - name: Merge failed test artifacts
+      uses: actions/upload-artifact/merge@v4
+      with:
+        name: failed-tests
+        pattern: failed-tests-*
 
   notify:
     runs-on: devextreme-shr2
