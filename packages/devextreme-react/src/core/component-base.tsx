@@ -95,11 +95,12 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
     const prevPropsRef = useRef<P & ComponentBaseProps>();
 
-    const templateContainer = useMemo(() => 
-      typeof document !== 'undefined'
+    const templateContainer = useMemo(
+      () => (typeof document !== 'undefined'
         ? document.createElement('div')
-        : undefined,
-    []);
+        : undefined),
+      [],
+    );
 
     const [widgetConfig, context] = useOptionScanning(
       {
@@ -426,8 +427,8 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     return (
       <RestoreTreeContext.Provider value={restoreTree}>
         <TemplateDiscoveryContext.Provider value={{ discoveryRendering: false }}>
-          { templateContainer &&
-            createPortal(
+          { templateContainer
+            && createPortal(
               <TemplateDiscoveryContext.Provider value={{ discoveryRendering: true }}>
                 {_renderChildren()}
               </TemplateDiscoveryContext.Provider>,

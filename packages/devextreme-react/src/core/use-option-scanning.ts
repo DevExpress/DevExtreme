@@ -75,8 +75,9 @@ export function useOptionScanning(
   };
 
   useLayoutEffect(() => {
-    if (!templateContainer)
+    if (!templateContainer) {
       return;
+    }
 
     const hasTemplateRendered = templateContainer.childNodes.length > 0;
 
