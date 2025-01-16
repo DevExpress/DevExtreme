@@ -250,8 +250,7 @@ class FilterBuilder extends Widget<any> {
     return action && action(options);
   }
 
-  _initMarkup() {
-    // @ts-expect-error
+  _initMarkup(): void {
     this.$element().addClass(FILTER_BUILDER_CLASS);
     // @ts-expect-error
     super._initMarkup();
@@ -391,11 +390,8 @@ class FilterBuilder extends Widget<any> {
   _createButtonWithMenu(options) {
     const that = this;
     const removeMenu = function () {
-      // @ts-expect-error
       that.$element().find(`.${ACTIVE_CLASS}`).removeClass(ACTIVE_CLASS).attr('aria-expanded', 'false');
-      // @ts-expect-error
       that.$element().find('.dx-overlay .dx-treeview').remove();
-      // @ts-expect-error
       that.$element().find('.dx-overlay').remove();
     };
     const rtlEnabled = this.option('rtlEnabled');

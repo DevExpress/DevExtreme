@@ -1,5 +1,6 @@
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -30,7 +31,7 @@ class RadioGroup extends Editor<Properties> {
     return { paginate: false };
   }
 
-  _defaultOptionsRules() {
+  _defaultOptionsRules(): DefaultOptionsRule<Properties>[] {
     const defaultOptionsRules = super._defaultOptionsRules();
 
     return defaultOptionsRules.concat([{
@@ -46,6 +47,7 @@ class RadioGroup extends Editor<Properties> {
     }]);
   }
 
+  // @ts-expect-error
   _fireContentReadyAction(force: boolean): void {
     force && super._fireContentReadyAction();
   }
@@ -111,6 +113,7 @@ class RadioGroup extends Editor<Properties> {
   }
 
   _getSelectedItemKeys(value = this.option('value')) {
+    // @ts-expect-error
     const isNullSelectable = this.option('valueExpr') !== 'this';
     const shouldSelectValue = isNullSelectable && value === null || isDefined(value);
 
@@ -178,7 +181,7 @@ class RadioGroup extends Editor<Properties> {
   }
 
   _renderLayout(): void {
-    const layout = this.option('layout');
+    const { layout } = this.option();
     const $element = $(this.element());
 
     $element.toggleClass(RADIO_GROUP_VERTICAL_CLASS, layout === 'vertical');
@@ -195,7 +198,6 @@ class RadioGroup extends Editor<Properties> {
       itemTemplate,
       tabIndex,
     } = this.option();
-
     this._createComponent($radios, RadioCollection, {
       onInitialized: ({ component }) => {
         this._radios = component;
@@ -239,7 +241,7 @@ class RadioGroup extends Editor<Properties> {
 
   _setSubmitValue(value?: unknown): void {
     value = value ?? this.option('value');
-
+    // @ts-expect-error
     const submitValue = this.option('valueExpr') === 'this'
       // @ts-expect-error
       ? this._displayGetter(value)
@@ -250,12 +252,15 @@ class RadioGroup extends Editor<Properties> {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _setCollectionWidgetOption(name: string, value: unknown): void {
+    // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._areRadiosCreated.done(this._setWidgetOption.bind(this, '_radios', arguments));
   }
 
   _updateItemsSize(): void {
-    if (this.option('layout') === 'horizontal') {
+    const { layout } = this.option();
+
+    if (layout === 'horizontal') {
       this.itemElements()?.css('height', 'auto');
     } else {
       // @ts-expect-error
@@ -276,7 +281,6 @@ class RadioGroup extends Editor<Properties> {
 // @ts-expect-error
 RadioGroup.include(DataExpressionMixin);
 
-// @ts-expect-error
 registerComponent('dxRadioGroup', RadioGroup);
 
 export default RadioGroup;

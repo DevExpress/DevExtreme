@@ -27,24 +27,23 @@ export default class SchedulerCalendar extends Widget<dxSchedulerOptions> {
     this._overlay.hide();
   }
 
-  _keyboardHandler(opts) {
+  _keyboardHandler(opts): void {
     this._calendar?._keyboardHandler(opts);
   }
 
-  _init() {
+  _init(): void {
     // @ts-expect-error
     super._init();
     this.$element();
   }
 
-  _render() {
+  _render(): void {
     // @ts-expect-error
     super._render();
     this._renderOverlay();
   }
 
-  _renderOverlay() {
-    // @ts-expect-error
+  _renderOverlay(): void {
     this.$element().addClass(CALENDAR_POPOVER_CLASS);
 
     const isMobileLayout = this._isMobileLayout();

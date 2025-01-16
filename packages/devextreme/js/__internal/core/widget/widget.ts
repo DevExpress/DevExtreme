@@ -23,7 +23,7 @@ import DOMComponent from './dom_component';
 import type { OptionChanged } from './types';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
-const FOCUSED_STATE_CLASS = 'dx-state-focused';
+export const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 function setAttribute(name, value, target): void {
@@ -548,7 +548,7 @@ class Widget<
     this.$element().toggleClass('dx-state-independent', ignoreParentReadOnly);
   }
 
-  _setWidgetOption(widgetName: 'string', args: Record<string, unknown>): void {
+  _setWidgetOption(widgetName: string, args: Record<string, unknown>): void {
     if (!this[widgetName]) {
       return;
     }

@@ -734,11 +734,11 @@ class DateRangeBox extends Editor<Properties> {
     return this.element();
   }
 
-  _focusClassTarget(): Element {
+  _focusClassTarget(): dxElementWrapper {
     return this.$element();
   }
 
-  _toggleFocusClass(isFocused, $element): void {
+  _toggleFocusClass(isFocused, $element: dxElementWrapper): void {
     // @ts-expect-error
     super._toggleFocusClass(isFocused, this._focusClassTarget($element));
   }

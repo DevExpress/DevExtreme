@@ -75,10 +75,6 @@ test.clientScripts([
     timestamp: today,
     author: userFirst,
     text: 'Message text 4',
-  }, {
-    timestamp: today,
-    author: userFirst,
-    text: 'Message text 5',
   }];
 
   return createWidget('dxChat', {

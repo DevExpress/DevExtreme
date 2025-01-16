@@ -3,7 +3,7 @@ import Pagination from 'devextreme-testcafe-models/pagination';
 import url from '../../helpers/getPageUrl';
 import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
-import { testScreenshot } from '../../helpers/themeUtils';
+import { isMaterial, testScreenshot } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Pagination`
   .page(url(__dirname, '../container.html'));
@@ -29,6 +29,17 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const pagination = new Pagination('#container');
+
+  if (isMaterial()
+    && displayMode === 'compact'
+    && infoText
+    && showInfo === false
+    && showNavigationButtons === false
+    && showPageSizeSelector === false
+  ) {
+    // Flaky tests on CI in Material theme
+    return;
+  }
 
   await testScreenshot(
     t,

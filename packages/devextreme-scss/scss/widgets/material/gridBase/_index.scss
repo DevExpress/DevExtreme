@@ -1181,8 +1181,8 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       border-radius: $button-border-radius;
 
       @include dx-button-styling-variant(
-        $button-danger-bg,
         $button-danger-color,
+        $button-danger-bg,
         $button-danger-bg,
         $button-danger-bg,
         $button-danger-bg,
@@ -1261,7 +1261,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
 
   .dx-#{$widget-name}-form-buttons-container {
     .dx-button {
-      @include dx-button-flat-color-styling($button-default-bg, $button-default-text-hover-bg, $button-default-text-focused-bg, $button-default-text-active-bg);
+      @include dx-button-flat-color-styling($button-default-bg, $button-default-text-bg, $button-default-text-hover-bg, $button-default-text-focused-bg, $button-default-text-active-bg);
     }
   }
 
