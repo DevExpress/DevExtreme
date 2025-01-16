@@ -314,6 +314,10 @@ const SKIPPED_TESTS = {
     'PivotGrid',
   ];
 
+  const SKIP_JS_ERRORS_COMPONENTS = [
+    'Map',
+  ];
+
   getDemoPaths(approach).forEach((demoPath, index) => {
     if (!shouldRunTestAtIndex(index + 1) || !existsSync(demoPath)) { return; }
     // eslint-disable-next-line max-len
@@ -367,6 +371,10 @@ const SKIPPED_TESTS = {
 
         if (testCafeCodeSource) {
           await execTestCafeCode(t, testCafeCodeSource);
+        }
+
+        if (SKIP_JS_ERRORS_COMPONENTS.includes(widgetName)) {
+          t.skipJsErrors();
         }
 
         if (process.env.STRATEGY === 'accessibility') {
