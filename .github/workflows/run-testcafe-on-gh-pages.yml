@@ -16,7 +16,7 @@ jobs:
               THEME: ['generic.light', 'material.blue.light', 'fluent.blue.light']
 
 
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04
         name: testcafe-${{ matrix.CONSTEL }}-${{ matrix.THEME }}
         timeout-minutes: 60
         env:
