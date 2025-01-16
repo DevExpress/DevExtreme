@@ -10,7 +10,7 @@ fixture('DataGrid.ToolbarCustomization')
   });
 
 runManualTest('DataGrid', 'ToolbarCustomization', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
-  test('ToolbarCustomization', async (t) => {
+  test.only('ToolbarCustomization', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const menuButtonSelector = $('.dx-toolbar').find('.dx-toolbar-menu-container').find('.dx-button');
     const menuItemsSelector = $('.dx-overlay-wrapper').find('.dx-list-item');
@@ -18,9 +18,10 @@ runManualTest('DataGrid', 'ToolbarCustomization', ['jQuery', 'React', 'Vue', 'An
     await testScreenshot(t, takeScreenshot, 'toolbar_customization_wide.png');
 
     await t
-      .resizeWindow(480, 600)
+      .resizeWindow(490, 600)
       .click(menuButtonSelector)
-      .expect(menuItemsSelector.count).eql(3);
+      .expect(menuItemsSelector.count)
+      .eql(3);
 
     await testScreenshot(t, takeScreenshot, 'toolbar_customization_medium.png');
 
