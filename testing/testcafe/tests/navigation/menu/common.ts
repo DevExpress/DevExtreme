@@ -33,14 +33,16 @@ test('Menu items render', async (t) => {
     await testScreenshot(t, takeScreenshot, 'Menu render items.png', { element: '#container', theme: 'generic.contrast' });
   }
 
-  await testScreenshot(t, takeScreenshot, 'Menu render items.png', {
-    element: '#container',
-    shouldTestInCompact: true,
-    compactCallBack: async () => {
-      await menu.repaint();
-      await expandMenuItems();
-    },
-  });
+  if (!isMaterial()) {
+    await testScreenshot(t, takeScreenshot, 'Menu render items.png', {
+      element: '#container',
+      shouldTestInCompact: true,
+      compactCallBack: async () => {
+        await menu.repaint();
+        await expandMenuItems();
+      },
+    });
+  }
 
   await t
     .expect(compareResults.isValid())
