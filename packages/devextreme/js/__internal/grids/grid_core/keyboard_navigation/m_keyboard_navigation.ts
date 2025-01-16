@@ -6,6 +6,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { Deferred, when } from '@js/core/utils/deferred';
+import { isElementInDom } from '@js/core/utils/dom';
 import {
   getHeight,
   getOuterHeight,
@@ -24,7 +25,6 @@ import {
 } from '@js/events/utils/index';
 import * as accessibility from '@js/ui/shared/accessibility';
 import { focused } from '@js/ui/widget/selectors';
-import { isElementInDom } from '@ts/core/utils/m_dom';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
