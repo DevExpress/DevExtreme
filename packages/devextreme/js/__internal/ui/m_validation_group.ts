@@ -24,7 +24,7 @@ class ValidationGroup extends DOMComponent {
 
   _initMarkup() {
     const $element = this.$element();
-    // @ts-expect-error
+
     $element.addClass(VALIDATION_ENGINE_CLASS);
     // @ts-expect-error
     $element.find(`.${VALIDATOR_CLASS}`).each((_, validatorContainer) => {
@@ -48,7 +48,6 @@ class ValidationGroup extends DOMComponent {
 
   _dispose() {
     ValidationEngine.removeGroup(this);
-    // @ts-expect-error
     this.$element().removeClass(VALIDATION_ENGINE_CLASS);
     // @ts-expect-error
     super._dispose();

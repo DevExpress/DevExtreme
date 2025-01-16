@@ -26,8 +26,11 @@ import TabPanel from '@js/ui/tab_panel';
 import { isMaterial, isMaterialBased } from '@js/ui/themes';
 import ValidationEngine from '@js/ui/validation_engine';
 import Widget from '@js/ui/widget/ui.widget';
+import { FOCUSED_STATE_CLASS } from '@ts/core/widget/widget';
+import { DROP_DOWN_EDITOR_CLASS } from '@ts/ui/drop_down_editor/m_drop_down_editor';
 import { TOOLBAR_CLASS } from '@ts/ui/toolbar/m_constants';
 
+import { TEXTEDITOR_CLASS, TEXTEDITOR_INPUT_CLASS } from '../text_box/m_text_editor.base';
 import {
   setLabelWidthByMaxLabelWidth,
 } from './components/m_label';
@@ -65,8 +68,6 @@ import {
   isFullPathContainsTabs,
   tryGetTabPath,
 } from './m_form.utils';
-
-const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const ITEM_OPTIONS_FOR_VALIDATION_UPDATING = ['items', 'isRequired', 'validationRules', 'visible'];
 
@@ -1201,9 +1202,7 @@ const Form = Widget.inherit({
   },
 
   _refresh() {
-    const editorSelector = `.${FOCUSED_STATE_CLASS} > :not(.dx-dropdowneditor-input-wrapper) input,`
-            + ` .${FOCUSED_STATE_CLASS} textarea`;
-
+    const editorSelector = `.${TEXTEDITOR_CLASS}.${FOCUSED_STATE_CLASS}:not(.${DROP_DOWN_EDITOR_CLASS}) .${TEXTEDITOR_INPUT_CLASS}`;
     // @ts-expect-error
     eventsEngine.trigger(this.$element().find(editorSelector), 'change');
 
