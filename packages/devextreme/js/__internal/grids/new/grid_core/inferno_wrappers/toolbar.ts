@@ -29,8 +29,9 @@ export class Toolbar extends InfernoWrapper<ToolbarProps, dxToolbar> {
           });
         }
       });
-      const propsToUpdate = { ...props };
-      delete propsToUpdate.items;
+
+      const { items, ...propsToUpdate } = props;
+
       super.updateComponentOptions(prevProps, propsToUpdate);
     } else {
       super.updateComponentOptions(prevProps, props);

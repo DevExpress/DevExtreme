@@ -1,15 +1,19 @@
 /* eslint-disable @typescript-eslint/no-dynamic-delete */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable spellcheck/spell-checker */
-import type { MaybeSubscribable, Subscribable, SubsGets } from '@ts/core/reactive/index';
+import type {
+  MaybeSubscribable, Subscribable, Subscription, SubsGets,
+} from '@ts/core/reactive/index';
 import { computed, state, toSubscribable } from '@ts/core/reactive/index';
 
 import { OptionsController } from '../options_controller/options_controller';
-import { normalizeToolbarItems } from '../utils';
 import { DEFAULT_TOOLBAR_ITEMS } from './defaults';
 import type { PredefinedToolbarItem, ToolbarItem, ToolbarItems } from './types';
+import { normalizeToolbarItems } from './utils';
 
 export class ToolbarController {
+  private readonly itemSubscriptions: Record<string, Subscription> = {};
+
   private readonly defaultItems = state<Record<string, PredefinedToolbarItem>>({});
 
   private readonly userItems: Subscribable<ToolbarItems | undefined>;
@@ -35,7 +39,11 @@ export class ToolbarController {
   public addDefaultItem(
     item: MaybeSubscribable<PredefinedToolbarItem>,
   ): void {
-    toSubscribable(item).subscribe((item) => {
+    const itemObs = toSubscribable(item);
+    // @ts-expect-error
+    const { name } = itemObs.unreactive_get();
+
+    this.itemSubscriptions[name] = itemObs.subscribe((item) => {
       this.defaultItems.updateFunc((oldDefaultItems) => ({
         ...oldDefaultItems,
         [item.name]: item,
@@ -49,5 +57,6 @@ export class ToolbarController {
       delete defaultItems[name];
       return defaultItems;
     });
+    this.itemSubscriptions[name].unsubscribe();
   }
 }

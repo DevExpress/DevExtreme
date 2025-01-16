@@ -7,7 +7,7 @@ import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
-import { normalizeToolbarItems } from '@ts/grids/new/grid_core/utils';
+import { normalizeToolbarItems } from '@ts/grids/new/grid_core/toolbar/utils';
 
 import type { ModuleType } from '../m_types';
 import { ColumnsView } from '../views/m_columns_view';

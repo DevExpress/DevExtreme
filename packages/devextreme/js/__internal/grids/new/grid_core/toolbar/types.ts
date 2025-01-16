@@ -10,10 +10,9 @@ export interface ToolbarItem extends BaseToolbarItem {
 
 export type PredefinedToolbarItem = ToolbarItem & { name: DefaultToolbarItem };
 export type ToolbarItems = (ToolbarItem | DefaultToolbarItem)[];
-export type ToolbarVisible = boolean | undefined;
 
 export interface ToolbarProps {
   items?: ToolbarItems;
-  visible?: ToolbarVisible;
+  visible?: boolean | undefined;
   disabled?: boolean;
 }
