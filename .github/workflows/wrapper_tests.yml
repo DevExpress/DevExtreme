@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
@@ -29,7 +29,7 @@ jobs:
         run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
 
       - name: Restore npm cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.npm-cache-dir.outputs.dir }}
           key: ${{ runner.os }}-node-${{ github.workflow }}-${{ hashFiles('**/package-lock.json') }}
@@ -82,7 +82,7 @@ jobs:
         run: npx nx run-many -t pack -p devextreme-vue
 
       - name: Archive internal-tools artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: internal-tools-artifacts
           path: artifacts/internal-tools/

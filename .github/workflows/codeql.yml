@@ -71,7 +71,7 @@ jobs:
         shell: bash
         run: echo "date=$(/bin/date -u "+%s")" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         id: notify-cache
         with:
           path: notify.json
