@@ -71,7 +71,7 @@ jobs:
           7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles testing/tests/Renovation/widgets.json
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: devextreme-artifacts
           path: packages/devextreme/artifacts.zip
