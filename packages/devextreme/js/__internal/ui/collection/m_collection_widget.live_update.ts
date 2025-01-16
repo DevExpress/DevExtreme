@@ -19,12 +19,6 @@ export default CollectionWidget.inherit({
     });
   },
 
-  ctor() {
-    this.callBase.apply(this, arguments);
-
-    this._subscribeLoadOptionsCustomization(true);
-  },
-
   _customizeStoreLoadOptions(e) {
     const dataController = this._dataController;
 
@@ -44,6 +38,7 @@ export default CollectionWidget.inherit({
     this.callBase();
     this._refreshItemsCache();
     this._correctionIndex = 0;
+    this._subscribeLoadOptionsCustomization(true);
   },
 
   _findItemElementByKey(key) {
