@@ -49,7 +49,7 @@ jobs:
         run: pnpm run all:build
 
       - name: Copy build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: devextreme-npm-packages
           path: |

@@ -290,7 +290,7 @@ jobs:
         pnpm install
 
     - name: Upload lock-file
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: package-lock.json
         path: ./package-lock.json
