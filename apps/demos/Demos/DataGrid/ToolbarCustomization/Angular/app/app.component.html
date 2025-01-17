@@ -44,15 +44,12 @@
         </dx-select-box>
       </div>
     </dxi-item>
-    <dxi-item location="before" locateInMenu="auto">
-      <div *dxTemplate>
-        <dx-button
-          [text]="this.expandAll ? 'Collapse All' : 'Expand All'"
-          width="136"
-          (onClick)="toggleExpandAll()"
-        >
-        </dx-button>
-      </div>
+    <dxi-item
+      location="before"
+      locateInMenu="auto"
+      widget="dxButton"
+      [options]="toggleButtonOptions"
+    >
     </dxi-item>
     <dxi-item
       location="after"

@@ -55,6 +55,18 @@ export class AppComponent {
     },
   };
 
+  toggleButtonOptions: DxButtonTypes.Properties = {
+    text: this.expandAll ? 'Collapse All' : 'Expand All',
+    width: 136,
+    onClick: () => {
+      this.toggleExpandAll();
+      this.toggleButtonOptions = {
+        ...this.toggleButtonOptions,
+        text: this.expandAll ? 'Collapse All' : 'Expand All',
+      };
+    },
+  };
+
   constructor(service: Service) {
     this.orders = service.getOrders();
     this.totalCount = this.getGroupCount('CustomerStoreState');

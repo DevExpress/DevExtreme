@@ -1,7 +1,6 @@
 import React, {
   useCallback, useMemo, useRef, useState,
 } from 'react';
-import Button from 'devextreme-react/button';
 import SelectBox from 'devextreme-react/select-box';
 import DataGrid, {
   Grouping,
@@ -41,6 +40,14 @@ const App = () => {
   const toggleExpandAll = useCallback(() => {
     setExpandAll(!expandAll);
   }, [expandAll]);
+  const toggleButtonOptions = useMemo(
+    () => ({
+      text: expandAll ? 'Collapse All' : 'Expand All',
+      width: 136,
+      onClick: () => toggleExpandAll(),
+    }),
+    [expandAll, toggleExpandAll],
+  );
   const refreshButtonOptions = useMemo(
     () => ({
       icon: 'refresh',
@@ -106,13 +113,9 @@ const App = () => {
         <Item
           location="before"
           locateInMenu="auto"
-        >
-          <Button
-            text={expandAll ? 'Collapse All' : 'Expand All'}
-            width="136"
-            onClick={toggleExpandAll}
-          />
-        </Item>
+          widget="dxButton"
+          options={toggleButtonOptions}
+        />
         <Item
           location="after"
           locateInMenu="auto"

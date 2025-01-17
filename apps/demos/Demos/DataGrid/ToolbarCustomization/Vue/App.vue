@@ -42,7 +42,8 @@
       <DxItem
         location="before"
         locateInMenu="auto"
-        template="collapseTemplate"
+        widget="dxButton"
+        :options="toggleButtonOptions"
       />
       <DxItem
         location="after"
@@ -72,17 +73,10 @@
         @value-changed="toggleGroupColumn"
       />
     </template>
-    <template #collapseTemplate>
-      <DxButton
-        :text="expandAll ? 'Collapse All' : 'Expand All'"
-        width="136"
-        @click="toggleExpandAll"
-      />
-    </template>
   </DxDataGrid>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import {
   DxDataGrid,
   DxColumn,
@@ -93,7 +87,6 @@ import {
   DxItem,
 } from 'devextreme-vue/data-grid';
 import { DxSelectBox, DxSelectBoxTypes } from 'devextreme-vue/select-box';
-import { DxButton } from 'devextreme-vue/button';
 import query from 'devextreme/data/query';
 import { orders } from './data.ts';
 
@@ -123,6 +116,12 @@ const toggleGroupColumn = (e: DxSelectBoxTypes.ValueChangedEvent) => {
 const toggleExpandAll = () => {
   expandAll.value = !expandAll.value;
 };
+
+const toggleButtonOptions = computed(() => ({
+  text: expandAll.value ? 'Collapse All' : 'Expand All',
+  width: 136,
+  onClick: toggleExpandAll,
+}));
 
 const refreshButtonOptions = {
   icon: 'refresh',
