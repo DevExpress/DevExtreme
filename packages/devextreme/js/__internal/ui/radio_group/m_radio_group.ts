@@ -9,8 +9,8 @@ import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import type { Properties } from '@js/ui/radio_group';
-import type { EditorProperties, UnresolvedEvents } from '@ts/ui/editor/m_editor';
-import Editor from '@ts/ui/editor/m_editor';
+import type { EditorProperties, UnresolvedEvents } from '@ts/ui/editor/editor';
+import Editor from '@ts/ui/editor/editor';
 
 import RadioCollection from './m_radio_collection';
 

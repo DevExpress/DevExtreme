@@ -23,8 +23,8 @@ import Button from '@js/ui/button';
 import type { Properties as PublicProperties } from '@js/ui/file_uploader';
 import ProgressBar from '@js/ui/progress_bar';
 import { isFluent, isMaterial } from '@js/ui/themes';
-import type { EditorProperties, UnresolvedEvents } from '@ts/ui/editor/m_editor';
-import Editor from '@ts/ui/editor/m_editor';
+import type { EditorProperties, UnresolvedEvents } from '@ts/ui/editor/editor';
+import Editor from '@ts/ui/editor/editor';
 
 const window = getWindow();
 
