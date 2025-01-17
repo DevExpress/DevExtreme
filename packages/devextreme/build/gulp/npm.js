@@ -123,10 +123,6 @@ const sources = (src, dist, distGlob) => (() => merge(
 
                 pkg.name = 'devextreme';
                 pkg.version = ctx.version;
-                pkg.bin = {
-                    'devextreme-bundler-init': 'bin/bundler-init.js',
-                    'devextreme-bundler': 'bin/bundler.js'
-                };
 
                 delete pkg.devDependencies;
                 delete pkg.publishConfig;
