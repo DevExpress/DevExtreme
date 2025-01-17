@@ -63,8 +63,8 @@ safeSizeTest('Base sensitivity search should accept rows with accent letters in 
   await t.expect(dataGrid.dataRows.count).eql(2);
   await t.expect(dataGrid.dataRows.withText('another').exists).ok();
   await t.expect(dataGrid.dataRows.withText('ánother').exists).ok();
-}, [800, 800]).before(async () => {
-  return createWidget('dxDataGrid', {
+}, [800, 800]).before(async () =>
+  createWidget('dxDataGrid', {
     dataSource: {
       store: [
         { id: 1, text: 'tešt', lookup: 1 },
@@ -86,11 +86,10 @@ safeSizeTest('Base sensitivity search should accept rows with accent letters in 
         dataSource: [
           { id: 1, text: 'another' },
           { id: 2, text: 'ánother' },
-          { id: 3, text: 'other' }
+          { id: 3, text: 'other' },
         ],
         valueExpr: 'id',
         displayExpr: 'text',
-      }
+      },
     }],
-  });
-});
+  }));
