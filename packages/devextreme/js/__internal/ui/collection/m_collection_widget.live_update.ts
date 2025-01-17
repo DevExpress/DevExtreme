@@ -19,21 +19,15 @@ export default CollectionWidget.inherit({
     });
   },
 
-  ctor() {
-    this.callBase.apply(this, arguments);
+  _customizeStoreLoadOptions(e) {
+    const dataController = this._dataController;
 
-    this._customizeStoreLoadOptions = (e) => {
-      const dataController = this._dataController;
-
-      if (dataController.getDataSource() && !this._dataController.isLoaded()) {
-        this._correctionIndex = 0;
-      }
-      if (this._correctionIndex && e.storeLoadOptions) {
-        e.storeLoadOptions.skip += this._correctionIndex;
-      }
-    };
-
-    this._dataController?.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
+    if (dataController.getDataSource() && !this._dataController.isLoaded()) {
+      this._correctionIndex = 0;
+    }
+    if (this._correctionIndex && e.storeLoadOptions) {
+      e.storeLoadOptions.skip += this._correctionIndex;
+    }
   },
 
   reload() {
@@ -44,6 +38,7 @@ export default CollectionWidget.inherit({
     this.callBase();
     this._refreshItemsCache();
     this._correctionIndex = 0;
+    this._subscribeLoadOptionsCustomization(true);
   },
 
   _findItemElementByKey(key) {
@@ -146,7 +141,7 @@ export default CollectionWidget.inherit({
   },
 
   _dispose() {
-    this._dataController.off('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
+    this._subscribeLoadOptionsCustomization(false);
     this.callBase();
   },
 
@@ -242,6 +237,19 @@ export default CollectionWidget.inherit({
     domAdapter.insertElement($container.get(0), $itemFrame.get(0), nextSiblingElement);
   },
 
+  _subscribeLoadOptionsCustomization(enable: boolean): void {
+    if (!this._dataController) {
+      return;
+    }
+
+    if (enable) {
+      this._correctionIndex = 0;
+      this._dataController.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions.bind(this));
+    } else {
+      this._dataController.off('customizeStoreLoadOptions', this._customizeStoreLoadOptions.bind(this));
+    }
+  },
+
   _optionChanged(args) {
     switch (args.name) {
       case 'items': {
@@ -256,7 +264,9 @@ export default CollectionWidget.inherit({
           this.option('items', []);
         }
 
+        this._subscribeLoadOptionsCustomization(false);
         this.callBase(args);
+        this._subscribeLoadOptionsCustomization(true);
         break;
       case 'repaintChangesOnly':
         break;
