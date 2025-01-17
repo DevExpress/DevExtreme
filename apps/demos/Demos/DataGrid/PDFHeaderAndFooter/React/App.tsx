@@ -51,12 +51,16 @@ const onExporting = (e: DataGridTypes.ExportingEvent) => {
 };
 
 const App = () => (
+<>
+  <div id="long-title">
+      <h3>Country Area, Population, and GDP Structure</h3>
+  </div>
   <DataGrid
     dataSource={countries}
     keyExpr="ID"
     showBorders={true}
     onExporting={onExporting}
-  >
+    >
     <Export enabled={true} formats={exportFormats} />
     <Column dataField="Country" />
     <Column dataField="Area" />
@@ -65,12 +69,12 @@ const App = () => (
         dataField="Population_Total"
         caption="Total"
         format="fixedPoint"
-      />
+        />
       <Column
         dataField="Population_Urban"
         caption="Urban"
         format="percent"
-      />
+        />
     </Column>
     <Column caption="Nominal GDP">
       <Column
@@ -78,29 +82,30 @@ const App = () => (
         caption="Total, mln $"
         format="fixedPoint"
         sortOrder="desc"
-      />
+        />
       <Column caption="By Sector">
         <Column
           dataField="GDP_Agriculture"
           caption="Agriculture"
           format={gdpFormat}
           width={95}
-        />
+          />
         <Column
           dataField="GDP_Industry"
           caption="Industry"
           format={gdpFormat}
           width={80}
-        />
+          />
         <Column
           dataField="GDP_Services"
           caption="Services"
           format={gdpFormat}
           width={85}
-        />
+          />
       </Column>
     </Column>
   </DataGrid>
+</>
 );
 
 export default App;

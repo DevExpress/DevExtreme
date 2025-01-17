@@ -129,7 +129,7 @@ const refreshDataGrid = () => {
   dataGridRef.value!.instance!.refresh();
 };
 </script>
-<style scoped>
+<style>
 
 #gridContainer .informer {
   display: grid;

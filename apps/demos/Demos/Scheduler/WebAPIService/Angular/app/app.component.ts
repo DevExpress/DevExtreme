@@ -12,7 +12,7 @@ const url = 'https://js.devexpress.com/Demos/Mvc/api/SchedulerData';
 
 let modulePrefix = '';
 // @ts-ignore
-if (window && window.config.packageConfigPaths) {
+if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
