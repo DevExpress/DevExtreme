@@ -58,6 +58,7 @@ import { DxiTileViewItemComponent } from 'devextreme-angular/ui/tile-view/nested
 @Component({
     selector: 'dx-tile-view',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

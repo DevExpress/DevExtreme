@@ -44,6 +44,7 @@ import {
 @Component({
     selector: 'dx-button',
     template: '<ng-content></ng-content>',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

@@ -57,6 +57,7 @@ import { DxiToolbarItemComponent } from 'devextreme-angular/ui/toolbar/nested';
 @Component({
     selector: 'dx-toolbar',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

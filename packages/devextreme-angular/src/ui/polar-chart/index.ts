@@ -180,6 +180,7 @@ import { DxiPolarChartSeriesComponent } from 'devextreme-angular/ui/polar-chart/
     selector: 'dx-polar-chart',
     template: '',
     styles: [ ' :host {  display: block; }'],
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

@@ -81,6 +81,7 @@ import { DxiPopoverToolbarItemComponent } from 'devextreme-angular/ui/popover/ne
 @Component({
     selector: 'dx-popover',
     template: '<ng-content></ng-content>',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

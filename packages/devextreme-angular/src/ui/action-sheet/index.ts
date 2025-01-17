@@ -57,6 +57,7 @@ import { DxiActionSheetItemComponent } from 'devextreme-angular/ui/action-sheet/
 @Component({
     selector: 'dx-action-sheet',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

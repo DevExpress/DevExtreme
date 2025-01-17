@@ -73,6 +73,7 @@ import { DxiChatTypingUserComponent } from 'devextreme-angular/ui/chat/nested';
 @Component({
     selector: 'dx-chat',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
