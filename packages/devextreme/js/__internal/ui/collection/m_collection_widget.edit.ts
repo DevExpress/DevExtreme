@@ -14,9 +14,9 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
+import BaseCollectionWidget from '@ts/ui/collection/m_collection_widget.base';
 import Selection from '@ts/ui/selection/m_selection';
 
-import BaseCollectionWidget from './m_collection_widget.base';
 import PlainEditStrategy from './m_collection_widget.edit.strategy.plain';
 
 const ITEM_DELETING_DATA_KEY = 'dxItemDeleting';
@@ -25,7 +25,7 @@ const NOT_EXISTING_INDEX = -1;
 const indexExists = function (index) {
   return index !== NOT_EXISTING_INDEX;
 };
-
+// @ts-expect-error
 const CollectionWidget = BaseCollectionWidget.inherit({
 
   _setOptionsByReference() {

@@ -156,8 +156,6 @@ const TreeViewBase = (HierarchicalCollectionWidget as any).inherit({
     return $(element);
   },
 
-  _activeStateUnit: `.${ITEM_CLASS}`,
-
   _widgetClass() {
     return WIDGET_CLASS;
   },
@@ -403,6 +401,8 @@ const TreeViewBase = (HierarchicalCollectionWidget as any).inherit({
   _init() {
     this._filter = {};
     this.callBase();
+
+    this._activeStateUnit = `.${ITEM_CLASS}`;
 
     this._initStoreChangeHandlers();
   },

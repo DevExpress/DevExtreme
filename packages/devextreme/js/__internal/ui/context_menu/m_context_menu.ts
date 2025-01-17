@@ -1007,7 +1007,6 @@ class ContextMenu extends MenuBase {
         this._overlay.$content().addClass(this._widgetClass());
         this._renderFocusState();
         this._attachHoverEvents();
-        // @ts-expect-error
         this._attachClickEvent();
         this._renderItems(this._dataAdapter.getRootNodes());
       }
