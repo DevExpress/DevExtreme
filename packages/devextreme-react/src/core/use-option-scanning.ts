@@ -17,7 +17,7 @@ import { NestedOptionContext, NestedOptionContextContent } from './contexts';
 export function useOptionScanning(
   optionElement: IOptionElement,
   children: ReactNode,
-  templateContainer: HTMLDivElement,
+  templateContainer: HTMLDivElement | undefined,
   parentUpdateToken: symbol,
 ): [
     IConfigNode,
@@ -75,7 +75,12 @@ export function useOptionScanning(
   };
 
   useLayoutEffect(() => {
+    if (!templateContainer) {
+      return;
+    }
+
     const hasTemplateRendered = templateContainer.childNodes.length > 0;
+
     configBuilder.updateAnonymousTemplates(hasTemplateRendered);
   }, [parentUpdateToken]);
 
