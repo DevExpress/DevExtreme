@@ -374,7 +374,7 @@ const SKIPPED_TESTS = {
         }
 
         if (SKIP_JS_ERRORS_COMPONENTS.includes(widgetName)) {
-          t.skipJsErrors();
+          await t.skipJsErrors();
         }
 
         if (process.env.STRATEGY === 'accessibility') {
