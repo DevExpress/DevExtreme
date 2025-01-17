@@ -43,6 +43,7 @@ import {
 @Component({
     selector: 'dx-speed-dial-action',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
