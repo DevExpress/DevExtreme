@@ -24,7 +24,9 @@ const createConfig = function(outputFile, mode) {
 
     config.resolve = {
         alias: {
-            'devextreme': sourcesDir
+            'devextreme': sourcesDir,
+            '../../events/index': path.resolve(sourcesDir, 'cjs/events/index.js'),
+            '../../common/core/events/utils/index': path.resolve(sourcesDir, 'cjs/common/core/events.js')
         },
         mainFields: ['main']
     };
@@ -43,7 +45,8 @@ webpack([
 
     const jsonStats = stats.toJson();
     if(jsonStats.errors.length) {
-        console.log('\'' + bundle + '\' bundles creation failed!\n\n' + jsonStats.errors.join('\n\n'));
+        const errorMessages = jsonStats.errors.map(({ message }) => message);
+        console.log('\'' + bundle + '\' bundles creation failed!\n\n' + errorMessages.join('\n\n'));
     } else {
         console.log('\'' + bundle + '\' bundles created!');
     }

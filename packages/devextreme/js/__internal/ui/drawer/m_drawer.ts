@@ -11,12 +11,12 @@ import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { PanelLocation } from '@js/ui/drawer';
 import Widget from '@js/ui/widget/ui.widget';
-
-import { animation } from './m_drawer.animation';
-import OverlapStrategy from './m_drawer.rendering.strategy.overlap';
-import PushStrategy from './m_drawer.rendering.strategy.push';
-import ShrinkStrategy from './m_drawer.rendering.strategy.shrink';
+import { animation } from '@ts/ui/drawer/m_drawer.animation';
+import OverlapStrategy from '@ts/ui/drawer/m_drawer.rendering.strategy.overlap';
+import PushStrategy from '@ts/ui/drawer/m_drawer.rendering.strategy.push';
+import ShrinkStrategy from '@ts/ui/drawer/m_drawer.rendering.strategy.shrink';
 
 const DRAWER_CLASS = 'dx-drawer';
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
@@ -216,12 +216,13 @@ const Drawer = (Widget as any).inherit({
     this.$element().addClass(`${DRAWER_CLASS}-${this.option('openedStateMode')}`);
   },
 
-  _refreshPositionClass(prevPosition) {
-    if (prevPosition) {
-      this.$element().removeClass(`${DRAWER_CLASS}-${prevPosition}`);
-    }
+  _refreshPositionClass(): void {
+    const positions = ['left', 'right', 'top', 'bottom'];
+    const classPrefix = `${DRAWER_CLASS}-`;
 
-    this.$element().addClass(`${DRAWER_CLASS}-${this.calcTargetPosition()}`);
+    this.$element()
+      .removeClass(positions.map((position) => `${classPrefix}${position}`).join(' '))
+      .addClass(`${classPrefix}${this.calcTargetPosition()}`);
   },
 
   _refreshWrapperChildrenOrder() {
@@ -279,17 +280,18 @@ const Drawer = (Widget as any).inherit({
     this._minSize = this.option('minSize') || 0;
   },
 
-  calcTargetPosition() {
-    const position = this.option('position');
-    const rtl = this.option('rtlEnabled');
-    let result = position;
+  calcTargetPosition(): PanelLocation {
+    const { position, rtlEnabled } = this.option();
 
     if (position === 'before') {
-      result = rtl ? 'right' : 'left';
-    } else if (position === 'after') {
-      result = rtl ? 'left' : 'right';
+      return rtlEnabled ? 'right' : 'left';
     }
-    return result;
+
+    if (position === 'after') {
+      return rtlEnabled ? 'left' : 'right';
+    }
+
+    return position;
   },
 
   getOverlayTarget() {
@@ -511,7 +513,7 @@ const Drawer = (Widget as any).inherit({
         this._togglePanelContentHiddenClass();
         break;
       case 'position':
-        this._refreshPositionClass(args.previousValue);
+        this._refreshPositionClass();
         this._refreshWrapperChildrenOrder();
         this._invalidate();
         break;
