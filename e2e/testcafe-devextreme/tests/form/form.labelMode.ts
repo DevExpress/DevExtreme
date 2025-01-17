@@ -1,7 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
-import { isMaterialBased, testScreenshot } from '../../helpers/themeUtils';
+import { isMaterial, isMaterialBased, testScreenshot } from '../../helpers/themeUtils';
+
+const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 
 fixture.disablePageReloads`Form`
   .page(url(__dirname, '../container.html'));
@@ -23,6 +26,11 @@ fixture.disablePageReloads`Form`
               return;
             }
 
+            if (labelVisible && isMaterial()) {
+              // There is no specificity for the Material theme
+              return;
+            }
+
             const testName = `Form,lMode=${formLabelMode},lLoc=${formLabelLocation},lVis=${labelVisible},lAl=${labelAlignment},e.lMode=${editorLabelMode ?? 'undef'},e.sMode=${editorStylingMode}`;
 
             test(testName, async (t) => {
@@ -33,229 +41,233 @@ fixture.disablePageReloads`Form`
               await t
                 .expect(compareResults.isValid())
                 .ok(compareResults.errorMessages());
-            }).before(async () => createWidget('dxForm', {
-              width: 1100,
-              height: 800,
-              labelMode: formLabelMode,
-              labelLocation: formLabelLocation,
-              colCount: 3,
-              items: [
-                {
-                  dataField: 'field1',
-                  label: {
-                    visible: labelVisible,
-                    alignment: labelAlignment,
+            }).before(async () => {
+              await waitFont();
+
+              return createWidget('dxForm', {
+                width: 1100,
+                height: 800,
+                labelMode: formLabelMode,
+                labelLocation: formLabelLocation,
+                colCount: 3,
+                items: [
+                  {
+                    dataField: 'field1',
+                    label: {
+                      visible: labelVisible,
+                      alignment: labelAlignment,
+                    },
+                    editorType: 'dxAutocomplete',
+                    editorOptions: {
+                      items: ['1', '2'],
+                      labelMode: editorLabelMode,
+                      stylingMode: editorStylingMode,
+                    },
                   },
-                  editorType: 'dxAutocomplete',
-                  editorOptions: {
-                    items: ['1', '2'],
-                    labelMode: editorLabelMode,
-                    stylingMode: editorStylingMode,
+                  {
+                    dataField: 'field2',
+                    label: {
+                      visible: labelVisible,
+                      alignment: labelAlignment,
+                    },
+                    editorType: 'dxTextBox',
+                    editorOptions: {
+                      value: 'dxTextBox',
+                      labelMode: editorLabelMode,
+                      stylingMode: editorStylingMode,
+                    },
                   },
-                },
-                {
-                  dataField: 'field2',
-                  label: {
-                    visible: labelVisible,
-                    alignment: labelAlignment,
+                  {
+                    dataField: 'field3',
+                    label: {
+                      visible: labelVisible,
+                      alignment: labelAlignment,
+                    },
+                    editorType: 'dxCheckBox',
+                    editorOptions: {
+                      value: true,
+                      text: 'dxCheckBox',
+                      labelMode: editorLabelMode,
+                      stylingMode: editorStylingMode,
+                    },
                   },
-                  editorType: 'dxTextBox',
-                  editorOptions: {
-                    value: 'dxTextBox',
-                    labelMode: editorLabelMode,
-                    stylingMode: editorStylingMode,
+                  {
+                    dataField: 'field4',
+                    label: {
+                      visible: labelVisible,
+                      alignment: labelAlignment,
+                    },
+                    editorType: 'dxColorBox',
+                    editorOptions: {
+                      labelMode: editorLabelMode,
+                      stylingMode: editorStylingMode,
+                    },
                   },
-                },
-                {
-                  dataField: 'field3',
-                  label: {
-                    visible: labelVisible,
-                    alignment: labelAlignment,
+                  {
+                    dataField: 'field5',
+                    label: {
+                      visible: labelVisible,
+                      alignment: labelAlignment,
+                    },
+                    editorType: 'dxDateBox',
+                    editorOptions: {
+                      labelMode: editorLabelMode,
+                      stylingMode: editorStylingMode,
+                    },
                   },
-                  editorType: 'dxCheckBox',
-                  editorOptions: {
-                    value: true,
-                    text: 'dxCheckBox',
-                    labelMode: editorLabelMode,
-                    stylingMode: editorStylingMode,
+                  {
+                    dataField: 'field6',
+                    label: {
+                      visible: labelVisible,
+                      alignment: labelAlignment,
+                    },
+                    editorType: 'dxDropDownBox',
+                    editorOptions: {
+                      labelMode: editorLabelMode,
+                      stylingMode: editorStylingMode,
+                    },
                   },
-                },
-                {
-                  dataField: 'field4',
-                  label: {
-                    visible: labelVisible,
-                    alignment: labelAlignment,
+                  {
+                    dataField: 'field7',
+                    label: {
+                      visible: labelVisible,
+                      alignment: labelAlignment,
+                    },
+                    editorType: 'dxTextArea',
+                    editorOptions: {
+                      labelMode: editorLabelMode,
+                      stylingMode: editorStylingMode,
+                    },
                   },
-                  editorType: 'dxColorBox',
-                  editorOptions: {
-                    labelMode: editorLabelMode,
-                    stylingMode: editorStylingMode,
+                  {
+                    dataField: 'field8',
+                    label: {
+                      visible: labelVisible,
+                      alignment: labelAlignment,
+                    },
+                    editorType: 'dxLookup',
+                    editorOptions: {
+                      labelMode: editorLabelMode,
+                      stylingMode: editorStylingMode,
+                    },
                   },
-                },
-                {
-                  dataField: 'field5',
-                  label: {
-                    visible: labelVisible,
-                    alignment: labelAlignment,
+                  {
+                    dataField: 'field9',
+                    label: {
+                      visible: labelVisible,
+                      alignment: labelAlignment,
+                    },
+                    editorType: 'dxNumberBox',
+                    editorOptions: {
+                      labelMode: editorLabelMode,
+                      stylingMode: editorStylingMode,
+                    },
                   },
-                  editorType: 'dxDateBox',
-                  editorOptions: {
-                    labelMode: editorLabelMode,
-                    stylingMode: editorStylingMode,
+                  {
+                    dataField: 'field10',
+                    label: {
+                      visible: labelVisible,
+                      alignment: labelAlignment,
+                    },
+                    editorType: 'dxRadioGroup',
+                    editorOptions: {
+                      items: ['1', '2'],
+                      labelMode: editorLabelMode,
+                      stylingMode: editorStylingMode,
+                    },
                   },
-                },
-                {
-                  dataField: 'field6',
-                  label: {
-                    visible: labelVisible,
-                    alignment: labelAlignment,
+                  {
+                    dataField: 'field11',
+                    label: {
+                      visible: labelVisible,
+                      alignment: labelAlignment,
+                    },
+                    editorType: 'dxRangeSlider',
+                    editorOptions: {
+                      labelMode: editorLabelMode,
+                      stylingMode: editorStylingMode,
+                    },
                   },
-                  editorType: 'dxDropDownBox',
-                  editorOptions: {
-                    labelMode: editorLabelMode,
-                    stylingMode: editorStylingMode,
+                  {
+                    dataField: 'field12',
+                    label: {
+                      visible: labelVisible,
+                      alignment: labelAlignment,
+                    },
+                    editorType: 'dxSelectBox',
+                    editorOptions: {
+                      items: ['1', '2'],
+                      labelMode: editorLabelMode,
+                      stylingMode: editorStylingMode,
+                    },
                   },
-                },
-                {
-                  dataField: 'field7',
-                  label: {
-                    visible: labelVisible,
-                    alignment: labelAlignment,
+                  {
+                    dataField: 'field13',
+                    label: {
+                      visible: labelVisible,
+                      alignment: labelAlignment,
+                    },
+                    editorType: 'dxSlider',
+                    editorOptions: {
+                      labelMode: editorLabelMode,
+                      stylingMode: editorStylingMode,
+                    },
                   },
-                  editorType: 'dxTextArea',
-                  editorOptions: {
-                    labelMode: editorLabelMode,
-                    stylingMode: editorStylingMode,
+                  {
+                    dataField: 'field14',
+                    label: {
+                      visible: labelVisible,
+                      alignment: labelAlignment,
+                    },
+                    editorType: 'dxSwitch',
+                    editorOptions: {
+                      value: true,
+                      labelMode: editorLabelMode,
+                      stylingMode: editorStylingMode,
+                    },
                   },
-                },
-                {
-                  dataField: 'field8',
-                  label: {
-                    visible: labelVisible,
-                    alignment: labelAlignment,
+                  {
+                    dataField: 'field15',
+                    label: {
+                      visible: labelVisible,
+                      alignment: labelAlignment,
+                    },
+                    editorType: 'dxTagBox',
+                    editorOptions: {
+                      labelMode: editorLabelMode,
+                      stylingMode: editorStylingMode,
+                    },
                   },
-                  editorType: 'dxLookup',
-                  editorOptions: {
-                    labelMode: editorLabelMode,
-                    stylingMode: editorStylingMode,
+                  {
+                    dataField: 'field16',
+                    label: {
+                      visible: labelVisible,
+                      alignment: labelAlignment,
+                    },
+                    editorType: 'dxHtmlEditor',
+                    editorOptions: {
+                      labelMode: editorLabelMode,
+                      height: 100,
+                      stylingMode: editorStylingMode,
+                      toolbar: { items: ['undo', 'redo', 'separator', 'insertTable', 'deleteTable', 'insertRowAbove', 'insertRowBelow', 'deleteRow'] },
+                    },
                   },
-                },
-                {
-                  dataField: 'field9',
-                  label: {
-                    visible: labelVisible,
-                    alignment: labelAlignment,
+                  {
+                    dataField: 'field17',
+                    label: {
+                      visible: labelVisible,
+                      alignment: labelAlignment,
+                    },
+                    editorType: 'dxCalendar',
+                    editorOptions: {
+                      value: new Date(2021, 9, 17),
+                      labelMode: editorLabelMode,
+                      stylingMode: editorStylingMode,
+                    },
                   },
-                  editorType: 'dxNumberBox',
-                  editorOptions: {
-                    labelMode: editorLabelMode,
-                    stylingMode: editorStylingMode,
-                  },
-                },
-                {
-                  dataField: 'field10',
-                  label: {
-                    visible: labelVisible,
-                    alignment: labelAlignment,
-                  },
-                  editorType: 'dxRadioGroup',
-                  editorOptions: {
-                    items: ['1', '2'],
-                    labelMode: editorLabelMode,
-                    stylingMode: editorStylingMode,
-                  },
-                },
-                {
-                  dataField: 'field11',
-                  label: {
-                    visible: labelVisible,
-                    alignment: labelAlignment,
-                  },
-                  editorType: 'dxRangeSlider',
-                  editorOptions: {
-                    labelMode: editorLabelMode,
-                    stylingMode: editorStylingMode,
-                  },
-                },
-                {
-                  dataField: 'field12',
-                  label: {
-                    visible: labelVisible,
-                    alignment: labelAlignment,
-                  },
-                  editorType: 'dxSelectBox',
-                  editorOptions: {
-                    items: ['1', '2'],
-                    labelMode: editorLabelMode,
-                    stylingMode: editorStylingMode,
-                  },
-                },
-                {
-                  dataField: 'field13',
-                  label: {
-                    visible: labelVisible,
-                    alignment: labelAlignment,
-                  },
-                  editorType: 'dxSlider',
-                  editorOptions: {
-                    labelMode: editorLabelMode,
-                    stylingMode: editorStylingMode,
-                  },
-                },
-                {
-                  dataField: 'field14',
-                  label: {
-                    visible: labelVisible,
-                    alignment: labelAlignment,
-                  },
-                  editorType: 'dxSwitch',
-                  editorOptions: {
-                    value: true,
-                    labelMode: editorLabelMode,
-                    stylingMode: editorStylingMode,
-                  },
-                },
-                {
-                  dataField: 'field15',
-                  label: {
-                    visible: labelVisible,
-                    alignment: labelAlignment,
-                  },
-                  editorType: 'dxTagBox',
-                  editorOptions: {
-                    labelMode: editorLabelMode,
-                    stylingMode: editorStylingMode,
-                  },
-                },
-                {
-                  dataField: 'field16',
-                  label: {
-                    visible: labelVisible,
-                    alignment: labelAlignment,
-                  },
-                  editorType: 'dxHtmlEditor',
-                  editorOptions: {
-                    labelMode: editorLabelMode,
-                    height: 100,
-                    stylingMode: editorStylingMode,
-                    toolbar: { items: ['undo', 'redo', 'separator', 'insertTable', 'deleteTable', 'insertRowAbove', 'insertRowBelow', 'deleteRow'] },
-                  },
-                },
-                {
-                  dataField: 'field17',
-                  label: {
-                    visible: labelVisible,
-                    alignment: labelAlignment,
-                  },
-                  editorType: 'dxCalendar',
-                  editorOptions: {
-                    value: new Date(2021, 9, 17),
-                    labelMode: editorLabelMode,
-                    stylingMode: editorStylingMode,
-                  },
-                },
-              ],
-            }));
+                ],
+              });
+            });
           });
         });
       });

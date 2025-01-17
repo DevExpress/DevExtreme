@@ -218,7 +218,6 @@ const DeferRendering = Widget.inherit({
     // @ts-expect-error
     this._$loadIndicator = new LoadIndicator($('<div>'), { visible: true })
       .$element()
-      // @ts-expect-error
       .addClass(DEFER_DEFER_RENDERING_LOAD_INDICATOR);
 
     $('<div>')

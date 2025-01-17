@@ -180,7 +180,6 @@ class FormDialog {
     const label = text ?? this.popupOption('title');
     this._form
       ?.$element()
-      // @ts-expect-error
       .attr('aria-label', label);
   }
 

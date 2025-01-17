@@ -24,6 +24,7 @@
   &.dx-button.dx-tabs-nav-button.dx-button-has-icon:not(.dx-button-has-text) {
     @include dx-button-flat-color-styling(
       $base-icon-color,
+      transparent,
       $material-tabs-nav-button-background,
       $material-tabs-nav-button-background,
       $material-tabs-nav-button-background,

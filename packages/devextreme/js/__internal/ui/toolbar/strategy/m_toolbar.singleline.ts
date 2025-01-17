@@ -10,9 +10,8 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getWidth } from '@js/core/utils/size';
 import type { Item } from '@js/ui/toolbar';
-
-import DropDownMenu from '../internal/m_toolbar.menu';
-import type Toolbar from '../m_toolbar';
+import DropDownMenu from '@ts/ui/toolbar/internal/m_toolbar.menu';
+import type Toolbar from '@ts/ui/toolbar/m_toolbar';
 
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const TOOLBAR_DROP_DOWN_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';
@@ -38,14 +37,14 @@ export class SingleLineStrategy {
     this._toolbar = toolbar;
   }
 
-  _initMarkup() {
+  _initMarkup(): void {
     deferRender(() => {
       this._renderOverflowMenu();
       this._renderMenuItems();
     });
   }
 
-  _renderOverflowMenu() {
+  _renderOverflowMenu(): void {
     if (!this._hasVisibleMenuItems()) {
       return;
     }
@@ -58,6 +57,7 @@ export class SingleLineStrategy {
     const menuItemTemplate = this._toolbar._getTemplateByOption('menuItemTemplate');
 
     this._menu = this._toolbar._createComponent($menu, DropDownMenu, {
+      // @ts-expect-error
       disabled: this._toolbar.option('disabled'),
       itemTemplate: () => menuItemTemplate,
       onItemClick: (e) => { itemClickAction(e); },
@@ -199,8 +199,7 @@ export class SingleLineStrategy {
     return elementWidth;
   }
 
-  _hideOverflowItems(width?: number) {
-    // @ts-expect-error
+  _hideOverflowItems(width?: number): void {
     const overflowItems = this._toolbar.$element().find(`.${TOOLBAR_AUTO_HIDE_ITEM_CLASS}`);
 
     if (!overflowItems.length) {
