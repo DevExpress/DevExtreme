@@ -6698,6 +6698,46 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         assert.strictEqual(instance.option('value')[1], 'name2 schema1', 'Correct value is stored');
     });
 
+    QUnit.test('TagBox should update tags when custom dataSource is used (T1234032)', function(assert) {
+        const data = [
+            { name: 'name1', scheme: 'schema1', value: 1 },
+            { name: 'name2', scheme: 'schema2', value: 2 },
+        ];
+
+        const dataSource = new DataSource({
+            store: new ArrayStore(data),
+            paginate: true,
+            pageSize: 1,
+        });
+
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource,
+            displayExpr: 'name',
+            hideSelectedItems: true,
+            valueExpr(x) {
+                return x && `${x.name} ${x.scheme}`;
+            },
+            value: ['name1 schema1'],
+            opened: true
+        });
+
+        const instance = $tagBox.dxTagBox('instance');
+        instance._list.reload();
+        const $tags = instance.$element().find(`.${TAGBOX_TAG_CLASS}`);
+
+        assert.strictEqual($tags.length, 1, 'One tag is rendered after click');
+        assert.strictEqual($tags.eq(0).text().trim(), 'name1', 'Correct tag text is rendered');
+        assert.strictEqual(instance.option('value')[0], 'name1 schema1', 'Correct value is stored');
+
+        const $secondItem = $(instance._list.$element().find(`.${LIST_ITEM_CLASS}`).eq(0));
+        $secondItem.trigger('dxclick');
+        const $updatedTags = instance.$element().find(`.${TAGBOX_TAG_CLASS}`);
+
+        assert.strictEqual($updatedTags.length, 2, 'Two tags are rendered after selecting the second item');
+        assert.strictEqual($updatedTags.eq(1).text().trim(), 'name2', 'Second tag is rendered correctly');
+        assert.strictEqual(instance.option('value')[1], 'name2 schema2', 'Correct value is stored');
+    });
+
     QUnit.test('Tagbox should render initial value correctly with function valueExpr (T1234032)', function(assert) {
         const data = [
             { id: 1, scheme: 'schema1', name: 'name1' },
@@ -6879,9 +6919,8 @@ QUnit.module('performance', () => {
         const $item = $(getList(tagBox).find('.dx-list-item').eq(0));
 
         $item.trigger('dxclick');
-
         const filter = load.lastCall.args[0].filter;
-        assert.ok($.isFunction(filter), 'filter is function');
+        assert.ok($.isFunction(filter[0]), 'filter is function');
     });
 
     QUnit.test('loadOptions.filter should be correct when user filter is also used', function(assert) {

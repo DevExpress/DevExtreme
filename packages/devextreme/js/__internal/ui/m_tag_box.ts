@@ -960,9 +960,6 @@ const TagBox = (SelectBox as any).inherit({
   },
 
   _shouldGetItemsFromPlain(values) {
-    if (this.option('hideSelectedItems')) {
-      return values && this._dataController.isLoaded();
-    }
     return values && this._dataController.isLoaded() && values.length <= this._getPlainItems().length;
   },
 
@@ -980,12 +977,10 @@ const TagBox = (SelectBox as any).inherit({
 
   _getSelectedItemsFromList(values) {
     const listSelectedItems = this._list?.option('selectedItems');
+
     let selectedItems = [];
     if (values.length === listSelectedItems?.length) {
       selectedItems = this._filterSelectedItems(listSelectedItems, values);
-    } else {
-      const items = this.option('dataSource') ?? this._dataController.items();
-      selectedItems = this._filterSelectedItems(items, values);
     }
 
     return selectedItems;
