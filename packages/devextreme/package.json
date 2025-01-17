@@ -220,6 +220,10 @@
     "qunit-in-docker": "gulp qunit-in-docker --constel",
     "tcd-update": "tcd-update"
   },
+  "bin": {
+    "devextreme-bundler-init": "bin/bundler-init.js",
+    "devextreme-bundler": "bin/bundler.js"
+  },
   "browserslist": [
     "last 2 versions",
     "ios > 9",
