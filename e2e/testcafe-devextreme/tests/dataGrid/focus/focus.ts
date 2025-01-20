@@ -242,9 +242,13 @@ test('DataGrid - FilterRow cell loses focus when focusedRowEnabled is true and e
 });
 
 test('DataGrid - FocusedRowChanged event isnt raised when the push API is used to remove the last row (T1261532)', async (t) => {
+  const grid = new DataGrid(GRID_SELECTOR);
+
   await t
-    .expect(Selector('#otherContainer').innerText)
-    .eql('Success');
+    .expect(await grid.option('focusedRowKey'))
+    .eql(null)
+    .expect(await grid.option('focusedRowIndex'))
+    .eql(-1);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: {
     store: {
@@ -265,14 +269,6 @@ test('DataGrid - FocusedRowChanged event isnt raised when the push API is used t
   focusedRowKey: 1,
   onInitialized(e) {
     e.component?.getDataSource().store().push([{ type: 'remove', key: 1 }]);
-  },
-  onFocusedRowChanged(e) {
-    const key = e.component.option('focusedRowKey');
-    const index = e.component.option('focusedRowIndex');
-
-    if (key === null && index === -1) {
-      $('#otherContainer').text('Success');
-    }
   },
 }));
 
