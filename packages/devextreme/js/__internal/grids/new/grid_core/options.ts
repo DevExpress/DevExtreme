@@ -4,8 +4,8 @@ import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
 import * as columnsController from './columns_controller/index';
 import * as dataController from './data_controller/index';
-import * as pager from './pager';
-import type * as toolbar from './toolbar';
+import * as pager from './pager/index';
+import type * as toolbar from './toolbar/index';
 import type { GridCoreNew } from './widget';
 
 /**
