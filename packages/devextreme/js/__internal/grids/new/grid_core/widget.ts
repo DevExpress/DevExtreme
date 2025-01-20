@@ -13,6 +13,8 @@ import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
+import { ToolbarController } from './toolbar/controller';
+import { ToolbarView } from './toolbar/view';
 
 export class GridCoreNewBase<
   TProperties extends Options = Options,
@@ -25,15 +27,23 @@ export class GridCoreNewBase<
 
   protected columnsController!: ColumnsControllerModule.ColumnsController;
 
+  private toolbarController!: ToolbarController;
+
+  private toolbarView!: ToolbarView;
+
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
     this.diContext.register(DataControllerModule.DataController);
     this.diContext.register(ColumnsControllerModule.ColumnsController);
+    this.diContext.register(ToolbarController);
+    this.diContext.register(ToolbarView);
   }
 
   protected _initDIContext(): void {
     this.dataController = this.diContext.get(DataControllerModule.DataController);
     this.columnsController = this.diContext.get(ColumnsControllerModule.ColumnsController);
+    this.toolbarController = this.diContext.get(ToolbarController);
+    this.toolbarView = this.diContext.get(ToolbarView);
   }
 
   protected _init(): void {

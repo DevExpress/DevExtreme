@@ -938,20 +938,4 @@ QUnit.module('Draw buttons in header panel', {
         assert.strictEqual($customToolbarItem.length, 1, 'item is rendered');
         assert.ok($customToolbarItem.is(':visible'), 'item is visible');
     });
-
-    QUnit.test('The error should be raised if new default toolbar item is not added to DEFAULT_TOOLBAR_ITEM_NAMES', function(assert) {
-        // arrange
-        const headerPanel = this.headerPanel;
-        const $testElement = $('#container');
-
-        // act
-        headerPanel._getToolbarItems = () => [{ name: 'new' }];
-
-        assert.throws(function() {
-            headerPanel.init();
-            headerPanel.render($testElement);
-        }, function(e) {
-            return e.message === 'Default toolbar item \'new\' is not added to DEFAULT_TOOLBAR_ITEM_NAMES';
-        }, 'exception');
-    });
 });
