@@ -4,6 +4,7 @@ exports[`common initial render should be successfull 1`] = `
 <div
   class="dx-widget dx-cardview"
 >
+  
   This is cardView
 </div>
 `;
