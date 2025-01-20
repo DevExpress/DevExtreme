@@ -38,6 +38,13 @@ export default {
 
     zoom: function(translate, scale) {
         const that = this;
+        const minValidScaleOffset = 0.05;
+        const scaleOffset = Math.abs(Math.abs(scale) - 1);
+
+        if(scale !== 1 && scaleOffset < minValidScaleOffset) {
+            scale = this.getMinScale(scale > 1);
+        }
+
         const categories = that._categories;
         const canvasOptions = that._canvasOptions;
         const stick = that._options.stick;
