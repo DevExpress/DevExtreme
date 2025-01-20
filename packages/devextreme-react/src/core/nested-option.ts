@@ -30,7 +30,7 @@ const NestedOption = function NestedOption<P>(
   const { children } = props;
   const { elementDescriptor, ...restProps } = props;
 
-  if (!elementDescriptor) {
+  if (!elementDescriptor || typeof document === 'undefined') {
     return null;
   }
 
