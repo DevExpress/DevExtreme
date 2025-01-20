@@ -6882,6 +6882,7 @@ declare module DevExpress.data {
     group?:
       | DevExpress.common.data.GroupDescriptor<TItem>
       | Array<DevExpress.common.data.GroupDescriptor<TItem>>;
+    langParams?: DevExpress.common.data.LangParams;
     map?: (dataItem: TStoreItem) => TMappedItem;
     onChanged?: (e: { readonly changes?: Array<TMappedItem> }) => void;
     onLoadError?: (error: { readonly message?: string }) => void;
