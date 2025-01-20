@@ -46,7 +46,7 @@ const POPUP_FULL_SCREEN_CLASS = 'dx-popup-fullscreen';
 const POPUP_FULL_SCREEN_WIDTH_CLASS = 'dx-popup-fullscreen-width';
 const POPUP_NORMAL_CLASS = 'dx-popup-normal';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
-const POPUP_CONTENT_SCROLLABLE_CLASS = 'dx-popup-content-scrollable';
+export const POPUP_CONTENT_SCROLLABLE_CLASS = 'dx-popup-content-scrollable';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
@@ -58,7 +58,7 @@ const POPUP_BOTTOM_CLASS = 'dx-popup-bottom';
 
 const POPUP_HAS_CLOSE_BUTTON_CLASS = 'dx-has-close-button';
 
-const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
+export const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
 const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
