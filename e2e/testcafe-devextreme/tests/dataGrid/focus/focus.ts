@@ -245,9 +245,9 @@ test('DataGrid - FocusedRowChanged event isnt raised when the push API is used t
   const grid = new DataGrid(GRID_SELECTOR);
 
   await t
-    .expect(await grid.option('focusedRowKey'))
+    .expect(grid.option('focusedRowKey'))
     .eql(null)
-    .expect(await grid.option('focusedRowIndex'))
+    .expect(grid.option('focusedRowIndex'))
     .eql(-1);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: {
