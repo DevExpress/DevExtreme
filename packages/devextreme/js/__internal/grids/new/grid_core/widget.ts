@@ -72,13 +72,11 @@ export class GridCoreNewBase<
   protected _initMarkup(): void {
     // @ts-expect-error
     super._initMarkup();
-    // @ts-expect-error
     this.renderSubscription = this.diContext.get(MainView).render(this.$element().get(0));
   }
 
   protected _clean(): void {
     this.renderSubscription?.unsubscribe();
-    // @ts-expect-error
     render(null, this.$element().get(0));
     // @ts-expect-error
     super._clean();
