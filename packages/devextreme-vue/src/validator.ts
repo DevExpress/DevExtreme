@@ -2,15 +2,13 @@ import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareExtensionComponentConfig } from "./core/index";
 import Validator, { Properties } from "devextreme/ui/validator";
-import  DOMComponent from "devextreme/core/dom_component";
 import {
- EventInfo,
-} from "devextreme/common/core/events";
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ ValidatedEvent,
+} from "devextreme/ui/validator";
 import {
- Component,
-} from "devextreme/core/component";
-import {
- ValidationStatus,
  ValidationRuleType,
  ComparisonOperator,
 } from "devextreme/common";
@@ -41,10 +39,10 @@ const componentConfig = {
     elementAttr: Object as PropType<Record<string, any>>,
     height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     name: String,
-    onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
-    onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
-    onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
-    onValidated: Function as PropType<((validatedInfo: { brokenRule: CommonTypes.ValidationRule | CommonTypes.ValidationRule | CommonTypes.ValidationRule | CommonTypes.ValidationRule | CommonTypes.ValidationRule | CommonTypes.ValidationRule | CommonTypes.ValidationRule | CommonTypes.ValidationRule | CommonTypes.ValidationRule, brokenRules: Array<CommonTypes.ValidationRule>, isValid: boolean, name: string, status: ValidationStatus, validationRules: Array<CommonTypes.ValidationRule>, value: Record<string, any> }) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onValidated: Function as PropType<((validatedInfo: ValidatedEvent) => void)>,
     validationGroup: String,
     validationRules: Array as PropType<Array<CommonTypes.ValidationRule>>,
     width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
