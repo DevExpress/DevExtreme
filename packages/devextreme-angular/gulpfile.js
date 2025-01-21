@@ -45,24 +45,23 @@ gulp.task('clean.generatedComponents', (done) => {
 
   del.sync([
     `${outputFolderPath}/*/**`,
-    ...skipFromCleaningFiles.flatMap(keepPattern => {
-      const pathParts = keepPattern.match(/[\*\/]$/) ? keepPattern.split('/') : [keepPattern];
+    ...skipFromCleaningFiles.flatMap((keepPattern) => {
+      const pathParts = /[\*\/]$/.exec(keepPattern) ? keepPattern.split('/') : [keepPattern];
 
       const patternsToKeep = pathParts.reduce((acc, pathPart) => {
-
-        if(pathPart) {
-          acc.path += '/' + pathPart;
+        if (pathPart) {
+          acc.path += `/${pathPart}`;
           acc.patterns.push(`!${acc.path}`);
         }
 
         return acc;
       }, {
         patterns: [],
-        path: outputFolderPath.replace(/\/$/,'')
+        path: outputFolderPath.replace(/\/$/, ''),
       }).patterns;
 
       return patternsToKeep;
-    })
+    }),
   ]);
 
   done();
@@ -101,7 +100,7 @@ gulp.task('before-generate.preserve-component-files', (done) => {
     return () => gulp.src(src).pipe(gulp.dest(dest));
   });
 
-  gulp.parallel(...tasks)(done)
+  gulp.parallel(...tasks)(done);
 });
 
 gulp.task('generate.facades', gulp.series('generate.moduleFacades', (done) => {
@@ -213,16 +212,16 @@ gulp.task('npm.content', gulp.series(
 
     return gulp.src([`${cmpConfig.outputPath}/**/collection.json`, ...npmConfig.content])
       .pipe(gulp.dest(npmConfig.distPath));
-  }
+  },
 ));
 
 gulp.task('npm.package-json', (cb) => {
   const pkgPath = path.join('.', buildConfig.npm.distPath, 'package.json');
   const pkg = require(`./${pkgPath}`);
   delete pkg.publishConfig;
-  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2))
+  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
   cb();
-})
+});
 
 gulp.task('npm.pack', gulp.series(
   'npm.content',
@@ -262,11 +261,9 @@ gulp.task('generate-component-names', (done) => {
   done();
 });
 
-gulp.task('copy.dist.dx-angular', () => {
-  return gulp
-    .src(`${buildConfig.npm.distPath}/**/*`)
-    .pipe(gulp.dest(path.join(buildConfig.components.testsPath, 'node_modules/devextreme-angular')));
-});
+gulp.task('copy.dist.dx-angular', () => gulp
+  .src(`${buildConfig.npm.distPath}/**/*`)
+  .pipe(gulp.dest(path.join(buildConfig.components.testsPath, 'node_modules/devextreme-angular'))));
 
 gulp.task('build.tests', gulp.series('clean.tests', 'generate-component-names', 'copy.dist.dx-angular', () => {
   const config = buildConfig.components;
@@ -289,7 +286,7 @@ const getKarmaConfig = function (testsPath) {
   return karmaConfig.parseConfig(path.resolve('./karma.conf.js'), {
     files: [{ pattern: testsPath, watched: false }],
     preprocessors,
-  }, {throwErrors: true});
+  }, { throwErrors: true });
 };
 
 gulp.task('test.components.client', gulp.series('build.tests', (done) => {
@@ -298,6 +295,8 @@ gulp.task('test.components.client', gulp.series('build.tests', (done) => {
 
 gulp.task('test.components.server', gulp.series('build.tests', (done) => {
   new karmaServer(getKarmaConfig('./karma.server.test.shim.js'), done).start();
+}, (done) => {
+  new karmaServer(getKarmaConfig('./karma.hydration.test.shim.js'), done).start();
 }));
 
 gulp.task('test.components.client.debug', (done) => {
