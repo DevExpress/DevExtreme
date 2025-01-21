@@ -1,6 +1,6 @@
 import { extend } from '../../core/utils/extend';
 import { Component } from '../../core/component';
-import DataHelperMixin from '../../common/data/data_helper';
+import { DataHelperMixin } from '../../common/data';
 
 const ItemsOptionBase = Component.inherit({}).include(DataHelperMixin);
 

@@ -1,5 +1,5 @@
 import ArrayStore from '@js/common/data/array_store';
-import DataHelperMixin from '@js/common/data/data_helper';
+import DataHelperMixin from '@ts/data/m_data_helper';
 import DataSource from '@js/common/data/data_source';
 import { ensureDefined, noop } from '@js/core/utils/common';
 import {

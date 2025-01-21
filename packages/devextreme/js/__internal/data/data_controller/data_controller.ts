@@ -1,10 +1,10 @@
 import { Deferred } from '@js/core/utils/deferred';
 
-import ArrayStore from '../common/data/array_store';
-import { DataSource } from '../common/data/data_source/data_source';
-import { normalizeDataSourceOptions } from '../common/data/data_source/utils';
-import { extend } from '../core/utils/extend';
-import { isDefined } from '../core/utils/type';
+import ArrayStore from '../../../common/data/array_store';
+import { DataSource } from '../../../common/data/data_source/data_source';
+import { normalizeDataSourceOptions } from '../../../common/data/data_source/utils';
+import { extend } from '../../../core/utils/extend';
+import { isDefined } from '../../../core/utils/type';
 
 interface DataSourceType {
   _userData: unknown;

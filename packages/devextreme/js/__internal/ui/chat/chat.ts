@@ -1,7 +1,7 @@
 import { Guid } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import type { DataSourceOptions } from '@js/common/data';
-import DataHelperMixin from '@js/common/data/data_helper';
+import DataHelperMixin from '@ts/data/m_data_helper';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
