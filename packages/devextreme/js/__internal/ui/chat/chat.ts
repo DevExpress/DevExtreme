@@ -1,11 +1,11 @@
 import { Guid } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import type { DataSourceOptions } from '@js/common/data';
-import DataHelperMixin from '@ts/data/m_data_helper';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
+import DataHelperMixin from '@js/data_helper';
 import type {
   Message,
   MessageEnteredEvent,
