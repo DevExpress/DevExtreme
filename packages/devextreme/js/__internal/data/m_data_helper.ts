@@ -1,6 +1,8 @@
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import { extend } from '@js/core/utils/extend';
+import type { Controller } from '@ts/grids/grid_core/m_modules';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import DataController from '@ts/ui/collection/m_data_controller';
 
 const DATA_SOURCE_OPTIONS_METHOD = '_dataSourceOptions';
@@ -11,21 +13,37 @@ const DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD = '_dataSourceFromUrlLoadMode';
 const SPECIFIC_DATA_SOURCE_OPTION = '_getSpecificDataSourceOption';
 const NORMALIZE_DATA_SOURCE = '_normalizeDataSource';
 
-export const DataHelperMixin = {
-  postCtor(): void {
+export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => class DataHelperMixin extends Base {
+  public _dataSource: any;
+
+  protected _dataController: any;
+
+  protected readyWatcher: any;
+
+  private _proxiedDataSourceChangedHandler: any;
+
+  private _proxiedDataSourceLoadErrorHandler: any;
+
+  private _proxiedDataSourceLoadingChangedHandler: any;
+
+  protected _isSharedDataSource: any;
+
+  private readonly _dataSourceType: any;
+
+  public postCtor() {
     this.on('disposing', () => {
       this._disposeDataSource();
     });
-  },
+  }
 
-  _refreshDataSource(): void {
+  protected _refreshDataSource() {
     this._initDataSource();
     this._loadDataSource();
-  },
+  }
 
-  _initDataSource(): void {
+  protected _initDataSource() {
     let dataSourceOptions = SPECIFIC_DATA_SOURCE_OPTION in this
-      ? this[SPECIFIC_DATA_SOURCE_OPTION]()
+      ? (this[SPECIFIC_DATA_SOURCE_OPTION] as any)()
       : this.option('dataSource');
 
     let widgetDataSourceOptions;
@@ -39,13 +57,13 @@ export const DataHelperMixin = {
         this._dataSource = dataSourceOptions;
       } else {
         widgetDataSourceOptions = DATA_SOURCE_OPTIONS_METHOD in this
-          ? this[DATA_SOURCE_OPTIONS_METHOD]()
+          ? (this[DATA_SOURCE_OPTIONS_METHOD] as any)()
           : {};
 
         dataSourceType = this._dataSourceType ? this._dataSourceType() : DataSource;
 
         dataSourceOptions = normalizeDataSourceOptions(dataSourceOptions, {
-          fromUrlLoadMode: (DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD in this) && this[DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD](),
+          fromUrlLoadMode: (DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD in this) && (this[DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD] as any)(),
         });
 
         // eslint-disable-next-line new-cap
@@ -53,15 +71,15 @@ export const DataHelperMixin = {
       }
 
       if (NORMALIZE_DATA_SOURCE in this) {
-        this._dataSource = this[NORMALIZE_DATA_SOURCE](this._dataSource);
+        this._dataSource = (this[NORMALIZE_DATA_SOURCE] as any)(this._dataSource);
       }
 
       this._addDataSourceHandlers();
       this._initDataController();
     }
-  },
+  }
 
-  _initDataController(): void {
+  private _initDataController() {
     const dataController = this.option?.('_dataController');
     const dataSource = this._dataSource;
 
@@ -70,9 +88,9 @@ export const DataHelperMixin = {
     } else {
       this._dataController = new DataController(dataSource);
     }
-  },
+  }
 
-  _addDataSourceHandlers(): void {
+  private _addDataSourceHandlers() {
     if (DATA_SOURCE_CHANGED_METHOD in this) {
       this._addDataSourceChangeHandler();
     }
@@ -86,34 +104,34 @@ export const DataHelperMixin = {
     }
 
     this._addReadyWatcher();
-  },
+  }
 
-  _addReadyWatcher(): void {
+  private _addReadyWatcher() {
     this.readyWatcher = function (isLoading) {
       this._ready && this._ready(!isLoading);
     }.bind(this);
     this._dataSource.on('loadingChanged', this.readyWatcher);
-  },
+  }
 
-  _addDataSourceChangeHandler(): void {
+  private _addDataSourceChangeHandler() {
     const dataSource = this._dataSource;
     this._proxiedDataSourceChangedHandler = function (e) {
       this[DATA_SOURCE_CHANGED_METHOD](dataSource.items(), e);
     }.bind(this);
     dataSource.on('changed', this._proxiedDataSourceChangedHandler);
-  },
+  }
 
-  _addDataSourceLoadErrorHandler(): void {
+  private _addDataSourceLoadErrorHandler() {
     this._proxiedDataSourceLoadErrorHandler = this[DATA_SOURCE_LOAD_ERROR_METHOD].bind(this);
     this._dataSource.on('loadError', this._proxiedDataSourceLoadErrorHandler);
-  },
+  }
 
-  _addDataSourceLoadingChangedHandler(): void {
+  private _addDataSourceLoadingChangedHandler() {
     this._proxiedDataSourceLoadingChangedHandler = this[DATA_SOURCE_LOADING_CHANGED_METHOD].bind(this);
     this._dataSource.on('loadingChanged', this._proxiedDataSourceLoadingChangedHandler);
-  },
+  }
 
-  _loadDataSource(): void {
+  protected _loadDataSource() {
     const dataSource = this._dataSource;
     if (dataSource) {
       if (dataSource.isLoaded()) {
@@ -122,22 +140,22 @@ export const DataHelperMixin = {
         dataSource.load();
       }
     }
-  },
+  }
 
-  _loadSingle(key, value) {
+  private _loadSingle(key, value) {
     key = key === 'this' ? this._dataSource.key() || 'this' : key;
     return this._dataSource.loadSingle(key, value);
-  },
+  }
 
-  _isLastPage(): boolean {
+  private _isLastPage() {
     return !this._dataSource || this._dataSource.isLastPage() || !this._dataSource._pageSize;
-  },
+  }
 
-  _isDataSourceLoading() {
+  private _isDataSourceLoading() {
     return this._dataSource && this._dataSource.isLoading();
-  },
+  }
 
-  _disposeDataSource(): void {
+  protected _disposeDataSource() {
     if (this._dataSource) {
       if (this._isSharedDataSource) {
         delete this._isSharedDataSource;
@@ -159,11 +177,11 @@ export const DataHelperMixin = {
       delete this._proxiedDataSourceLoadErrorHandler;
       delete this._proxiedDataSourceLoadingChangedHandler;
     }
-  },
+  }
 
-  getDataSource() {
+  protected getDataSource() {
     return this._dataSource || null;
-  },
+  }
 };
 
 export default DataHelperMixin;
