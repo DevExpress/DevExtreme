@@ -603,19 +603,6 @@ const DropDownList = DropDownEditor.inherit({
     return this._searchValue().toString().length >= this.option('minSearchLength');
   },
 
-  _needClearFilter() {
-    return this._canKeepDataSource() ? false : this._needPassDataSourceToList();
-  },
-
-  _canKeepDataSource() {
-    const isMinSearchLengthExceeded = this._isMinSearchLengthExceeded();
-    return this._dataController.isLoaded()
-            && this.option('showDataBeforeSearch')
-            && this.option('minSearchLength')
-            && !isMinSearchLengthExceeded
-            && !this._isLastMinSearchLengthExceeded;
-  },
-
   _searchValue() {
     return this._input().val() || '';
   },
@@ -675,10 +662,20 @@ const DropDownList = DropDownEditor.inherit({
     }
   },
 
+  _presetListDataSource() {
+    if (this._list && this._shouldRefreshDataSource()) {
+      // this._dataSource.beginLoading();
+      this._setListDataSource();
+      // this._dataSource.endLoading();
+    }
+  },
+
   _searchHandler(e, searchValue) {
     if (this._isTextCompositionInProgress()) {
       return;
     }
+
+    this._presetListDataSource();
 
     if (!this._isMinSearchLengthExceeded()) {
       this._searchCanceled();
@@ -703,7 +700,16 @@ const DropDownList = DropDownEditor.inherit({
     if (this._needClearFilter()) {
       this._filterDataSource(null);
     }
-    this._refreshList();
+  },
+
+  _needClearFilter(): boolean {
+    const isMinSearchLengthExceeded = this._isMinSearchLengthExceeded();
+
+    return this._dataController.isLoaded()
+      && !this.option('showDataBeforeSearch')
+      && !!this.option('minSearchLength')
+      && !isMinSearchLengthExceeded
+      && this._isLastMinSearchLengthExceeded;
   },
 
   _searchDataSource(searchValue = this._searchValue()) {
