@@ -130,7 +130,7 @@ safeSizeTest('TagBox with selection controls', async (t) => {
 
   await t.click(tagBox.element);
 
-  await testScreenshot(t, takeScreenshot, 'TagBox with selection controls');
+  await testScreenshot(t, takeScreenshot, 'TagBox with selection controls.png');
 
   await t
     .expect(compareResults.isValid())
