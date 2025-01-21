@@ -1968,5 +1968,17 @@ onSelectionChanged?: ((e: SelectionChangedEvent) => void);
  * @type_function_param1 e:{ui/tree_list:ToolbarPreparingEvent}
  */
 onToolbarPreparing?: ((e: ToolbarPreparingEvent) => void);
+
+/* Nested Components */
+
+/* RowDragging */
+/**
+ * @docid dxTreeListOptions.rowDragging.onReorder
+ * @type_function_param1 e:{ui/tree_list:RowDraggingReorderEvent}
+ * @skip
+ */
+onReorder?: ((e: RowDraggingReorderEvent) => void);
+/* RowDragging */
+
 };
 ///#ENDDEBUG

@@ -17,6 +17,7 @@ import {
 import { DragDirection, DragHighlight } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { RowDraggingReorderEvent } from 'devextreme/ui/data_grid';
+import { RowDraggingReorderEvent } from 'devextreme/ui/tree_list';
 
 import {
     NestedOptionHost,
