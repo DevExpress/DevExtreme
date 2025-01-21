@@ -427,7 +427,6 @@ class Menu extends MenuBase {
     });
 
     return extend(menuOptions, {
-      // @ts-expect-error
       dataSource: this.getDataSource(),
       animationEnabled: !!this.option('animation'),
       onItemClick: this._treeviewItemClickHandler.bind(this),

@@ -26,7 +26,6 @@ import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { findTemplates } from '@js/core/utils/template_manager';
 import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
 import type { DataSourceOptions } from '@js/data/data_source';
-import DataHelperMixin from '@js/data_helper';
 import type {
   Cancelable, DxEvent, EventInfo, ItemInfo,
 } from '@js/events';
@@ -35,6 +34,7 @@ import { focusable } from '@js/ui/widget/selectors';
 import { getPublicElement } from '@ts/core/m_element';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import { DataHelperMixin } from '@ts/data/m_data_helper';
 import CollectionWidgetItem from '@ts/ui/collection/m_item';
 
 const COLLECTION_CLASS = 'dx-collection';
@@ -91,7 +91,11 @@ export interface CollectionWidgetBaseProperties<
 
   focusOnSelectedItem?: boolean;
 
+  encodeNoDataText?: boolean;
+
   _itemAttributes?: Record<string, string>;
+
+  selectOnFocus?: boolean;
 }
 
 class CollectionWidget<
@@ -101,7 +105,7 @@ class CollectionWidget<
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey = any,
-> extends Widget<TProperties> {
+> extends DataHelperMixin(Widget)<TProperties> {
   private _focusedItemId?: string;
 
   // eslint-disable-next-line no-restricted-globals
@@ -120,6 +124,8 @@ class CollectionWidget<
   _$noData?: dxElementWrapper;
 
   _itemFocusHandler?: () => void;
+
+  onFocusedItemChanged?: (event?: Partial<EventInfo<unknown> & ItemInfo<TItem>>) => void;
 
   _inkRipple?: {
     showWave: (config: {
@@ -234,14 +240,12 @@ class CollectionWidget<
 
   _init(): void {
     this._compileDisplayGetter();
-    // @ts-expect-error ts-error
     this._initDataController();
     super._init();
 
     this._activeStateUnit = `.${ITEM_CLASS}`;
 
     this._cleanRenderedItems();
-    // @ts-expect-error ts-error
     this._refreshDataSource();
   }
 
@@ -575,7 +579,7 @@ class CollectionWidget<
     this._updateFocusedItemState($target, true);
     // @ts-expect-error ts-error
     this.onFocusedItemChanged(this.getFocusedItemId());
-    // @ts-expect-error ts-error
+
     const { selectOnFocus } = this.option();
     const isTargetDisabled = this._isDisabled($target);
 
@@ -683,7 +687,6 @@ class CollectionWidget<
         this._invalidate();
         break;
       case 'dataSource':
-        // @ts-expect-error ts-error
         this._refreshDataSource();
         // @ts-expect-error ts-error
         this._renderEmptyMessage();
@@ -709,7 +712,6 @@ class CollectionWidget<
         this._attachContextMenuEvent();
         break;
       case 'onFocusedItemChanged':
-        // @ts-expect-error ts-error
         this.onFocusedItemChanged = this._createActionByOption('onFocusedItemChanged');
         break;
       case 'selectOnFocus':
@@ -742,7 +744,6 @@ class CollectionWidget<
 
   _loadNextPage(): Promise<unknown> {
     this._expectNextPageLoading();
-    // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._dataController.loadNextPage();
   }
@@ -866,7 +867,6 @@ class CollectionWidget<
 
   _initMarkup(): void {
     super._initMarkup();
-    // @ts-expect-error ts-error
     this.onFocusedItemChanged = this._createActionByOption('onFocusedItemChanged');
 
     this.$element().addClass(COLLECTION_CLASS);
@@ -1355,8 +1355,8 @@ class CollectionWidget<
   _renderEmptyMessage(items: TItem[]): void {
     // eslint-disable-next-line no-param-reassign
     items = items || this.option('items');
-    const noDataText = this.option('noDataText');
-    // @ts-expect-error ts-error
+    const { noDataText } = this.option();
+
     // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     const hideNoData = !noDataText || (items && items.length) || this._dataController.isLoading();
 
@@ -1371,11 +1371,11 @@ class CollectionWidget<
       this._$noData = this._$noData ?? $('<div>').addClass('dx-empty-message');
       this._$noData.appendTo(this._emptyMessageContainer());
 
-      if (this.option('encodeNoDataText')) {
-        // @ts-expect-error ts-error
+      const { encodeNoDataText } = this.option();
+
+      if (encodeNoDataText) {
         this._$noData.text(noDataText);
       } else {
-        // @ts-expect-error ts-error
         this._$noData.html(noDataText);
       }
     }
@@ -1484,7 +1484,7 @@ class CollectionWidget<
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-(CollectionWidget as any).include(DataHelperMixin);
+// (CollectionWidget as any).include(DataHelperMixin);
 
 // @ts-expect-error ts-error
 CollectionWidget.ItemClass = CollectionWidgetItem;

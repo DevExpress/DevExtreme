@@ -1,8 +1,6 @@
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import { extend } from '@js/core/utils/extend';
-import type { Controller } from '@ts/grids/grid_core/m_modules';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import DataController from '@ts/ui/collection/m_data_controller';
 
 const DATA_SOURCE_OPTIONS_METHOD = '_dataSourceOptions';
@@ -13,7 +11,8 @@ const DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD = '_dataSourceFromUrlLoadMode';
 const SPECIFIC_DATA_SOURCE_OPTION = '_getSpecificDataSourceOption';
 const NORMALIZE_DATA_SOURCE = '_normalizeDataSource';
 
-export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => class DataHelperMixin extends Base {
+export type Constructor<T> = (new (...args: any[]) => T);
+export const DataHelperMixin = <T extends Constructor<object>>(Base: T) => class DataHelperMixin extends Base {
   public _dataSource: any;
 
   protected _dataController: any;
@@ -31,6 +30,7 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
   private readonly _dataSourceType: any;
 
   public postCtor() {
+    // @ts-expect-error ts-error
     this.on('disposing', () => {
       this._disposeDataSource();
     });
@@ -41,9 +41,11 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     this._loadDataSource();
   }
 
-  protected _initDataSource() {
+  protected _initDataSource(): void {
     let dataSourceOptions = SPECIFIC_DATA_SOURCE_OPTION in this
-      ? (this[SPECIFIC_DATA_SOURCE_OPTION] as any)()
+      // @ts-expect-error ts-error
+      ? this[SPECIFIC_DATA_SOURCE_OPTION]()
+      // @ts-expect-error ts-error
       : this.option('dataSource');
 
     let widgetDataSourceOptions;
@@ -57,13 +59,15 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
         this._dataSource = dataSourceOptions;
       } else {
         widgetDataSourceOptions = DATA_SOURCE_OPTIONS_METHOD in this
-          ? (this[DATA_SOURCE_OPTIONS_METHOD] as any)()
+          // @ts-expect-error ts-error
+          ? this[DATA_SOURCE_OPTIONS_METHOD]()
           : {};
 
         dataSourceType = this._dataSourceType ? this._dataSourceType() : DataSource;
 
         dataSourceOptions = normalizeDataSourceOptions(dataSourceOptions, {
-          fromUrlLoadMode: (DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD in this) && (this[DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD] as any)(),
+          // @ts-expect-error ts-error
+          fromUrlLoadMode: (DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD in this) && this[DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD](),
         });
 
         // eslint-disable-next-line new-cap
@@ -71,7 +75,8 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
       }
 
       if (NORMALIZE_DATA_SOURCE in this) {
-        this._dataSource = (this[NORMALIZE_DATA_SOURCE] as any)(this._dataSource);
+        // @ts-expect-error ts-error
+        this._dataSource = this[NORMALIZE_DATA_SOURCE](this._dataSource);
       }
 
       this._addDataSourceHandlers();
@@ -79,7 +84,8 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     }
   }
 
-  private _initDataController() {
+  protected _initDataController() {
+    // @ts-expect-error
     const dataController = this.option?.('_dataController');
     const dataSource = this._dataSource;
 
@@ -183,5 +189,3 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     return this._dataSource || null;
   }
 };
-
-export default DataHelperMixin;
