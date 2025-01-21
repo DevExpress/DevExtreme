@@ -16,6 +16,7 @@ import {
 
 import { DragDirection, DragHighlight } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
+import { RowDraggingReorderEvent } from 'devextreme/ui/data_grid';
 
 import {
     NestedOptionHost,
@@ -183,10 +184,10 @@ export class DxoRowDraggingComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get onReorder(): Function {
+    get onReorder(): ((e: RowDraggingReorderEvent) => void) {
         return this._getOption('onReorder');
     }
-    set onReorder(value: Function) {
+    set onReorder(value: ((e: RowDraggingReorderEvent) => void)) {
         this._setOption('onReorder', value);
     }
 

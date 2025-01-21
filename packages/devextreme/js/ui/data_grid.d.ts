@@ -2650,5 +2650,16 @@ onSelectionChanged?: ((e: SelectionChangedEvent) => void);
  * @type_function_param1 e:{ui/data_grid:ToolbarPreparingEvent}
  */
 onToolbarPreparing?: ((e: ToolbarPreparingEvent) => void);
+
+/* Nested Components */
+
+/* RowDragging */
+/**
+ * @docid dxDataGridOptions.rowDragging.onReorder
+ * @type_function_param1 e:{ui/data_grid:RowDraggingReorderEvent}
+ */
+onReorder?: ((e: RowDraggingReorderEvent) => void);
+/* RowDragging */
+
 };
 ///#ENDDEBUG
