@@ -16,7 +16,7 @@ import {
 import type { Item, Properties } from '@js/ui/toolbar';
 import type { OptionChanged } from '@ts/core/widget/types';
 import AsyncCollectionWidget from '@ts/ui/collection/async';
-import type { CollectionWidgetBaseProperties } from '@ts/ui/collection/m_collection_widget.base';
+import type { CollectionWidgetBaseProperties } from '@ts/ui/collection/collection_widget.base';
 
 import { TOOLBAR_CLASS } from './m_constants';
 

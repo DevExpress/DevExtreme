@@ -14,7 +14,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
-import BaseCollectionWidget from '@ts/ui/collection/m_collection_widget.base';
+import BaseCollectionWidget from '@ts/ui/collection/collection_widget.base';
 import Selection from '@ts/ui/selection/m_selection';
 
 import PlainEditStrategy from './m_collection_widget.edit.strategy.plain';

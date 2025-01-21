@@ -26,8 +26,8 @@ import type {
   ResizeStartEvent,
 } from '@js/ui/splitter';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { CollectionWidgetBaseProperties, ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
 import CollectionWidget from '@ts/ui/collection/live_update';
-import type { CollectionWidgetBaseProperties, ItemRenderInfo } from '@ts/ui/collection/m_collection_widget.base';
 
 import type ResizeHandle from './resize_handle';
 import type { ResizeHandleOptions } from './resize_handle';

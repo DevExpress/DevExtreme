@@ -1,6 +1,6 @@
 import CollectionWidgetAsync from '@js/ui/collection/ui.collection_widget.async';
 import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
-import type { CollectionWidgetBaseProperties } from '@ts/ui/collection/m_collection_widget.base';
+import type { CollectionWidgetBaseProperties } from '@ts/ui/collection/collection_widget.base';
 
 import CollectionWidgetEdit from './edit';
 

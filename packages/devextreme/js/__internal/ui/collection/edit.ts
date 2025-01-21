@@ -1,8 +1,8 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import CollectionWidgetEdit from '@js/ui/collection/ui.collection_widget.edit';
-import type { CollectionWidgetBaseProperties } from '@ts/ui/collection/m_collection_widget.base';
-import CollectionWidgetBase from '@ts/ui/collection/m_collection_widget.base';
+import type { CollectionWidgetBaseProperties } from '@ts/ui/collection/collection_widget.base';
+import CollectionWidgetBase from '@ts/ui/collection/collection_widget.base';
 
 declare class Edit<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
