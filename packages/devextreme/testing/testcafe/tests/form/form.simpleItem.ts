@@ -22,13 +22,17 @@ fixture.disablePageReloads`Form`
           await t
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
-        }).before(async () => createWidget('dxForm', {
-          width: 500,
-          colCount,
-          rtlEnabled,
-          labelLocation,
-          items: Array(itemsCount).fill(null).map((_, i) => ({ dataField: `item_${i + 1}` })),
-        }));
+        }).before(async () => {
+          await waitFont();
+
+          return createWidget('dxForm', {
+            width: 500,
+            colCount,
+            rtlEnabled,
+            labelLocation,
+            items: Array(itemsCount).fill(null).map((_, i) => ({ dataField: `item_${i + 1}` })),
+          });
+        });
       });
     });
   });
@@ -38,32 +42,34 @@ fixture.disablePageReloads`Form`
   test('widget alignment (T1086611)', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await waitFont();
-
     await testScreenshot(t, takeScreenshot, `Form with labelLocation=${labelLocation}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => createWidget('dxForm', {
-    labelLocation,
-    colCount: 2,
-    width: 1000,
-    formData: {},
-    items: [{
-      dataField: 'FirstName',
-      editorType: 'dxTextBox',
-    }, {
-      dataField: 'Position',
-      editorType: 'dxSelectBox',
-    }, {
-      dataField: 'BirthDate',
-      editorType: 'dxDateBox',
-    }, {
-      dataField: 'Notes',
-      editorType: 'dxTextArea',
-    }],
-  }));
+  }).before(async () => {
+    await waitFont();
+
+    return createWidget('dxForm', {
+      labelLocation,
+      colCount: 2,
+      width: 1000,
+      formData: {},
+      items: [{
+        dataField: 'FirstName',
+        editorType: 'dxTextBox',
+      }, {
+        dataField: 'Position',
+        editorType: 'dxSelectBox',
+      }, {
+        dataField: 'BirthDate',
+        editorType: 'dxDateBox',
+      }, {
+        dataField: 'Notes',
+        editorType: 'dxTextArea',
+      }],
+    });
+  });
 });
 
 [() => 'xs', () => 'md', () => 'lg'].forEach((screenByWidth) => {
