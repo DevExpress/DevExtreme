@@ -1,8 +1,8 @@
 
-import { DataSource } from './data_source/data_source';
+import { DataSource } from '../../common/data/data_source/data_source';
 import { extend } from '../../core/utils/extend';
-import { normalizeDataSourceOptions } from './data_source/utils';
-import DataController from '../../__internal/ui/collection/m_data_controller';
+import { normalizeDataSourceOptions } from '../../common/data/data_source/utils';
+import DataController from '../ui/collection/m_data_controller';
 
 const DATA_SOURCE_OPTIONS_METHOD = '_dataSourceOptions';
 const DATA_SOURCE_CHANGED_METHOD = '_dataSourceChangedHandler';
