@@ -79,6 +79,7 @@
           [focusedRowEnabled]="true"
           [focusedRowKey]="cellInfo.value"
           [hoverStateEnabled]="true"
+          (onContextMenuPreparing)="$event.items = []"
           (onSelectionChanged)="
             onSelectionChanged($event.selectedRowKeys, cellInfo, e.component)
           "
