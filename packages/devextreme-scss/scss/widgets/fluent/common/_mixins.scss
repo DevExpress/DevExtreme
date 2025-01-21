@@ -92,7 +92,8 @@ $badge-invalid-bg: $base-invalid-color;
     padding: $fluent-list-item-vertical-padding + 2px 0 $fluent-list-item-vertical-padding - 2px;
   }
 
-  .dx-list-items {
+  .dx-list-items,
+  .dx-list-select-all {
     margin-left: $fluent-list-vertical-padding;
     margin-right: $fluent-list-vertical-padding;
   }
