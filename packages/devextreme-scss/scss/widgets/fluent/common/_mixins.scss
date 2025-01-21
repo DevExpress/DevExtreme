@@ -6,7 +6,7 @@
 @use "../../base/mixins" as *;
 @use "../../base/validation" as *;
 @use "../list/sizes" as *;
-@use "../dropdownlist/sizes" as *;
+@use "../dropDownList/sizes" as *;
 
 $badge-invalid-bg: $base-invalid-color;
 
@@ -95,8 +95,7 @@ $badge-invalid-bg: $base-invalid-color;
   }
 
   .dx-list-items {
-    margin-left: $fluent-list-horizontal-padding;
-    margin-right: $fluent-list-horizontal-padding;
+    margin-inline: $fluent-list-horizontal-padding;
 
     .dx-list-select-checkbox {
       margin-inline: $fluent-dropdownlist-checkbox-margin;
