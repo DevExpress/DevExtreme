@@ -59,6 +59,7 @@ import { DxoShadowModule } from 'devextreme-angular/ui/nested';
     selector: 'dx-sparkline',
     template: '',
     styles: [ ' :host {  display: block; }'],
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

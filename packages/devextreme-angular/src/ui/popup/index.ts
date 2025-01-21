@@ -66,6 +66,7 @@ import { DxiToolbarItemComponent } from 'devextreme-angular/ui/nested';
 @Component({
     selector: 'dx-popup',
     template: '<ng-content></ng-content>',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

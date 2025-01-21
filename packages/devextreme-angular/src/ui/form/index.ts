@@ -57,6 +57,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 @Component({
     selector: 'dx-form',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

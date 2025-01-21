@@ -70,6 +70,7 @@ import { DxoFormatModule } from 'devextreme-angular/ui/nested';
     selector: 'dx-sankey',
     template: '',
     styles: [ ' :host {  display: block; }'],
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

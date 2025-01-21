@@ -53,6 +53,7 @@ import { DxoShadowModule } from 'devextreme-angular/ui/nested';
     selector: 'dx-bullet',
     template: '',
     styles: [ ' :host {  display: block; }'],
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

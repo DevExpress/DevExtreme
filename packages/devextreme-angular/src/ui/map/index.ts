@@ -57,6 +57,7 @@ import { DxiRouteComponent } from 'devextreme-angular/ui/nested';
 @Component({
     selector: 'dx-map',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

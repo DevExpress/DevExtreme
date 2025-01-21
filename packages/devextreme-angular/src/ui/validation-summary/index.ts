@@ -51,6 +51,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 @Component({
     selector: 'dx-validation-summary',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

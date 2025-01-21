@@ -125,6 +125,7 @@ import { DxiSortByGroupSummaryInfoComponent } from 'devextreme-angular/ui/nested
 @Component({
     selector: 'dx-data-grid',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

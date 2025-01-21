@@ -58,6 +58,7 @@ import { DxiViewComponent } from 'devextreme-angular/ui/nested';
 @Component({
     selector: 'dx-scheduler',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

@@ -54,6 +54,7 @@ import { DxiValidationRuleComponent } from 'devextreme-angular/ui/nested';
 @Component({
     selector: 'dx-validator',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

@@ -62,6 +62,7 @@ import { DxoStateStoringModule } from 'devextreme-angular/ui/nested';
 @Component({
     selector: 'dx-pivot-grid',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

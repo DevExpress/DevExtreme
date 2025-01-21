@@ -77,6 +77,7 @@ import { DxoValueIndicatorModule } from 'devextreme-angular/ui/nested';
     selector: 'dx-linear-gauge',
     template: '',
     styles: [ ' :host {  display: block; }'],
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

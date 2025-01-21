@@ -68,6 +68,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 @Component({
     selector: 'dx-filter-builder',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

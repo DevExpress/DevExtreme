@@ -57,6 +57,7 @@ import { DxoUploadModule } from 'devextreme-angular/ui/nested';
 @Component({
     selector: 'dx-file-manager',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

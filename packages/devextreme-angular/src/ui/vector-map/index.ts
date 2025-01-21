@@ -78,6 +78,7 @@ import { DxiLegendComponent } from 'devextreme-angular/ui/nested';
     selector: 'dx-vector-map',
     template: '',
     styles: [ ' :host {  display: block; }'],
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

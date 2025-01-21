@@ -106,6 +106,7 @@ import { DxiSeriesComponent } from 'devextreme-angular/ui/nested';
     selector: 'dx-polar-chart',
     template: '',
     styles: [ ' :host {  display: block; }'],
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

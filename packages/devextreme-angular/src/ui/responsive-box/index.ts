@@ -58,6 +58,7 @@ import { DxiRowComponent } from 'devextreme-angular/ui/nested';
 @Component({
     selector: 'dx-responsive-box',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

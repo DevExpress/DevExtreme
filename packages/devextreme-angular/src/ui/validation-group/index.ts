@@ -42,6 +42,7 @@ import {
 @Component({
     selector: 'dx-validation-group',
     template: '<ng-content></ng-content>',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

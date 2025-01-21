@@ -45,6 +45,7 @@ import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
 @Component({
     selector: 'dx-sortable',
     template: '<ng-content></ng-content>',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

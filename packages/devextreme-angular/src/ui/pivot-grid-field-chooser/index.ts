@@ -52,6 +52,7 @@ import { DxoTextsModule } from 'devextreme-angular/ui/nested';
 @Component({
     selector: 'dx-pivot-grid-field-chooser',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

@@ -114,6 +114,7 @@ import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
 @Component({
     selector: 'dx-tree-list',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

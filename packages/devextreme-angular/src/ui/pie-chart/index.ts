@@ -85,6 +85,7 @@ import { DxiSeriesComponent } from 'devextreme-angular/ui/nested';
     selector: 'dx-pie-chart',
     template: '',
     styles: [ ' :host {  display: block; }'],
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

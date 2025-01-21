@@ -67,6 +67,7 @@ import { DxoShadowModule } from 'devextreme-angular/ui/nested';
     selector: 'dx-bar-gauge',
     template: '',
     styles: [ ' :host {  display: block; }'],
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

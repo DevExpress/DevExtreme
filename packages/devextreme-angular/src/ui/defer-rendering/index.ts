@@ -53,6 +53,7 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 @Component({
     selector: 'dx-defer-rendering',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

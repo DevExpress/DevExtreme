@@ -42,6 +42,7 @@ import {
 @Component({
     selector: 'dx-load-indicator',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
