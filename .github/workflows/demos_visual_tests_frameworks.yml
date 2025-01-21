@@ -463,17 +463,23 @@ jobs:
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
       run: pnpx nx test-testcafe
 
+    - name: Sanitize job name
+      if: ${{ failure() }}
+      run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
+
     - name: Copy screenshots artifacts
       if: ${{ failure() }}
       uses: actions/upload-artifact@v4
       with:
-        name: screenshots-${{ matrix.CONSTEL }}-${{ matrix.THEME }}
+        name: screenshots-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
 
   merge:
     runs-on: devextreme-shr2
     needs: testcafe
+    if: contains(needs.*.result, 'failure')
+
     steps:
       - name: Merge screenshot artifacts
         uses: actions/upload-artifact/merge@v4
