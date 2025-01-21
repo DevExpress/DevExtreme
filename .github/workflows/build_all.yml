@@ -49,9 +49,34 @@ jobs:
         run: pnpm run all:build
 
       - name: Copy build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: devextreme-npm-packages
           path: |
             artifacts/npm/*.tgz
           retention-days: 1
+
+  custom_bundles:
+    runs-on: devextreme-shr2
+    needs: build
+
+    steps:
+      - name: Download npm packages
+        uses: actions/download-artifact@v4
+        with:
+          name: devextreme-npm-packages
+          path: npm
+
+      - name: Move devextreme package
+        run: mv ./npm/devextreme-2*.tgz ./devextreme.tgz
+
+      - name: Setup deps
+        run: |
+          npm init -y
+          npm i webpack terser-webpack-plugin
+          npm i ./devextreme.tgz
+
+      - name: Build bundle
+        run: |
+          npx devextreme-bundler-init custom-bundle
+          npx devextreme-bundler custom-bundle

@@ -1582,6 +1582,32 @@ module('Regression', () => {
 
         assert.strictEqual($dateBox.dxDateBox('option', 'value').getFullYear(), new Date(null).getFullYear(), 'year is correct');
     });
+
+    QUnit.test('There should be no error here after the component loses focus on Option Changed (T1264236)', function(assert) {
+        assert.expect(1);
+
+        const instance = $('#dateBox').dxDateBox({
+            displayFormat: 'MM/dd/yyyy',
+            useMaskBehavior: true,
+            openOnFieldClick: true,
+            onFocusIn: (e) => {
+                e.component.option({ value: new Date('01/13/2025') });
+            },
+            onOptionChanged: (e) => {
+                if(e.name === 'text' && e.value) {
+                    try {
+                        e.component.blur();
+                    } catch(e) {
+                        assert.ok(false, `error: ${e.message}`);
+                    } finally {
+                        assert.ok(true, 'there is no error');
+                    }
+                }
+            },
+        }).dxDateBox('instance');
+
+        instance.focus();
+    });
 });
 
 module('Caret moving', setupModule, () => {

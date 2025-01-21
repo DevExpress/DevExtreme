@@ -512,4 +512,41 @@ describe('Nested DxDataGrid', () => {
             done();
         }, 1000);
     });
+
+    it('should render a template with dynamic content once (T1269950)', (done) => {
+        TestBed.overrideComponent(TestContainerComponent, {
+            set: {
+                template: `
+                    <dx-data-grid
+                        [dataSource]="dataSource"
+                        (onOptionChanged)="onOptionChanged($event)"
+                        keyExpr="id">
+                        <dxi-column dataField="string" cellTemplate="cellTemplate"></dxi-column>
+
+                        <ng-container *dxTemplate="let data of 'cellTemplate'">
+                            <ng-container *ngIf="true"><div class="my-template">test value</div></ng-container>
+                        </ng-container>
+                    </dx-data-grid>
+                `
+            }
+        });
+
+        let fixture = TestBed.createComponent(TestContainerComponent);
+        fixture.detectChanges();
+
+        setTimeout(() => {
+            fixture.detectChanges();
+            let instance = fixture.componentInstance.innerWidgets.first.instance;
+            let element = instance.element().querySelector('.my-template');
+            expect(fixture.componentInstance.columsChanged).toBe(0);
+            instance.focus(element);
+
+            setTimeout(() => {
+                expect(fixture.componentInstance.columsChanged).toBe(0);
+                fixture.componentInstance.columsChanged = 0;
+
+                done();
+            }, 1000);
+        }, 1000);
+    });
 });

@@ -22,23 +22,52 @@ export {
     ValidationStatus,
 };
 
-/** @public */
+/**
+ * @docid _ui_validator_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxValidator>;
 
-/** @public */
+/**
+ * @docid _ui_validator_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxValidator>;
 
-/** @public */
+/**
+ * @docid _ui_validator_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxValidator> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_validator_ValidatedEvent
+ * @public
+ * @type object
+ */
 export type ValidatedEvent = {
+    /** @docid _ui_validator_ValidatedEvent.name */
     name?: string;
+    /** @docid _ui_validator_ValidatedEvent.isValid */
     isValid?: boolean;
+    /**
+     * @docid _ui_validator_ValidatedEvent.value
+     * @type object
+     */
     value?: any;
+    /** @docid _ui_validator_ValidatedEvent.validationRules */
     validationRules?: Array<ValidationRule>;
+    /** @docid _ui_validator_ValidatedEvent.brokenRule */
     brokenRule?: ValidationRule;
-    brokenRules?: ValidationRule;
+    /** @docid _ui_validator_ValidatedEvent.brokenRules */
+    brokenRules?: Array<ValidationRule>;
+    /** @docid _ui_validator_ValidatedEvent.status */
     status?: ValidationStatus;
 };
 
@@ -85,12 +114,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
     name?: string;
     /**
      * @docid
-     * @type_function_param1 validatedInfo:Object
-     * @type_function_param1_field value:Object
-     * @type_function_param1_field validationRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-     * @type_function_param1_field brokenRule:RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule
-     * @type_function_param1_field brokenRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-     * @type_function_param1_field status:Enums.ValidationStatus
+     * @type_function_param1 validatedInfo:{ui/validator:ValidatedEvent}
      * @action
      * @public
      */
@@ -198,3 +222,31 @@ export type Properties = dxValidatorOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxValidatorOptions;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onValidated'>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @docid dxValidatorOptions.onDisposing
+ * @type_function_param1 e:{ui/validator:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @docid dxValidatorOptions.onInitialized
+ * @type_function_param1 e:{ui/validator:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @docid dxValidatorOptions.onOptionChanged
+ * @type_function_param1 e:{ui/validator:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};
+///#ENDDEBUG

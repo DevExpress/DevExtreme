@@ -1613,6 +1613,11 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       .viewportItemSize(rowHeight);
 
     if (isVirtualMode(this) || gridCoreUtils.isVirtualRowRendering(this)) {
+      const isEmptyRows = this._dataController.isEmpty();
+      if (isEmptyRows) {
+        return;
+      }
+
       if (!isRender) {
         this._updateContentItemSizes();
       }
