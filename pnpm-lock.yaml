@@ -818,8 +818,8 @@ importers:
         specifier: 2.2.15
         version: 2.2.15
       devexpress-gantt:
-        specifier: 4.1.56
-        version: 4.1.56
+        specifier: 4.1.57
+        version: 4.1.57
       devextreme-quill:
         specifier: 1.7.1
         version: 1.7.1
@@ -8092,8 +8092,8 @@ packages:
   devexpress-gantt@4.1.54:
     resolution: {integrity: sha512-5o5Y/v+mc/ukYGwmRy9UJ2SegKB/XXsa981BsXXT437QGHcwLzT47+NBRhsmQ8yIkp7NvCzKz8nEsF4tYORGFg==}
 
-  devexpress-gantt@4.1.56:
-    resolution: {integrity: sha512-jnnvDYDDzjqr8pnWYsAM96mug6yXEQ1H26QLLBRbwLC72ckb1yv0Rk6DUae9ZwewIFNzIKHt1klQMF/KD9Mb8A==}
+  devexpress-gantt@4.1.57:
+    resolution: {integrity: sha512-UMtPo9O7B+PZfyHTR5L/dVaQkcjUhjCKfhi6NrfnvjXW7+sjisvm5LhKd+AIXhjv9IlMbfGyutfUcH5VF1wxyQ==}
 
   devextreme-aspnet-data-nojquery@3.0.0:
     resolution: {integrity: sha512-2wkePdGr4+nnSUZ8PUFR9biFhvMD2gztz/Yim7Iu/szAQJcgitfgOa12xqIQn4B5xpOm3+kupjccpBsED9nDMA==}
@@ -25375,7 +25375,7 @@ snapshots:
       '@devexpress/utils': 1.4.3
       tslib: 2.3.1
 
-  devexpress-gantt@4.1.56:
+  devexpress-gantt@4.1.57:
     dependencies:
       '@devexpress/utils': 1.4.3
       tslib: 2.3.1
