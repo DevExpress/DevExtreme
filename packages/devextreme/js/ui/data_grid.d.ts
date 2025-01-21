@@ -2657,6 +2657,7 @@ onToolbarPreparing?: ((e: ToolbarPreparingEvent) => void);
 /**
  * @docid dxDataGridOptions.rowDragging.onReorder
  * @type_function_param1 e:{ui/data_grid:RowDraggingReorderEvent}
+ * @skip
  */
 onReorder?: ((e: RowDraggingReorderEvent) => void);
 /* RowDragging */
