@@ -6,6 +6,7 @@
 @use "../../base/mixins" as *;
 @use "../../base/validation" as *;
 @use "../list/sizes" as *;
+@use "../dropdownlist/sizes" as *;
 
 $badge-invalid-bg: $base-invalid-color;
 
@@ -89,13 +90,17 @@ $badge-invalid-bg: $base-invalid-color;
   }
 
   .dx-list-select-all {
+    margin-inline: $fluent-list-horizontal-padding;
     padding: $fluent-list-item-vertical-padding + 2px 0 $fluent-list-item-vertical-padding - 2px;
   }
 
-  .dx-list-items,
-  .dx-list-select-all {
-    margin-left: $fluent-list-vertical-padding;
-    margin-right: $fluent-list-vertical-padding;
+  .dx-list-items {
+    margin-left: $fluent-list-horizontal-padding;
+    margin-right: $fluent-list-horizontal-padding;
+
+    .dx-list-select-checkbox {
+      margin-inline: $fluent-dropdownlist-checkbox-margin;
+    }
   }
 
   .dx-list-item,

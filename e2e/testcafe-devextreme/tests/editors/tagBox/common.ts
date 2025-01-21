@@ -135,7 +135,7 @@ safeSizeTest('TagBox with selection controls', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [300, 400]).before(async () => createWidget('dxTagBox', {
+}, [300, 300]).before(async () => createWidget('dxTagBox', {
   items: [1, 2, 3, 4, 5, 6, 7],
   showSelectionControls: true,
   width: 300,
