@@ -250,7 +250,8 @@ gulp.task('npm.pack', gulp.series(
   'npm.content',
   'npm.package-json',
   (cb) => {
-    argv.withDescriptions ? exec('pnpm run angular:inject-descriptions', { cwd: '../..' }, (err) => cb(err)) : cb();
+    // argv.withDescriptions ? exec('pnpm run angular:inject-descriptions', { cwd: '../..' }, (err) => cb(err)) : cb();
+    cb();
   },
   (cb) => { exec('pnpm pack', { }, (err) => cb(err)); },
   () => gulp.src(buildConfig.npm.distPath)
