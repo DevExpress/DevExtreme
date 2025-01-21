@@ -13,6 +13,7 @@ import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
+import { PagerView } from './pager/view';
 import { ToolbarController } from './toolbar/controller';
 import { ToolbarView } from './toolbar/view';
 
@@ -27,6 +28,8 @@ export class GridCoreNewBase<
 
   protected columnsController!: ColumnsControllerModule.ColumnsController;
 
+  private pagerView!: PagerView;
+
   private toolbarController!: ToolbarController;
 
   private toolbarView!: ToolbarView;
@@ -37,6 +40,7 @@ export class GridCoreNewBase<
     this.diContext.register(ColumnsControllerModule.ColumnsController);
     this.diContext.register(ToolbarController);
     this.diContext.register(ToolbarView);
+    this.diContext.register(PagerView);
   }
 
   protected _initDIContext(): void {
@@ -44,6 +48,7 @@ export class GridCoreNewBase<
     this.columnsController = this.diContext.get(ColumnsControllerModule.ColumnsController);
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
+    this.pagerView = this.diContext.get(PagerView);
   }
 
   protected _init(): void {
