@@ -124,6 +124,7 @@ $(() => {
     const result = unified()
       .use(remarkParse)
       .use(remarkRehype)
+      .use(rehypeMinifyWhitespace)
       .use(rehypeStringify)
       .processSync(value)
       .toString();

@@ -1,5 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
-import Button from 'devextreme-react/button';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 import DataGrid, {
   Grouping, Column, ColumnChooser, LoadPanel, Toolbar, Item, DataGridRef,
@@ -39,9 +38,19 @@ const App = () => {
     setExpandAll(!expandAll);
   }, [expandAll]);
 
-  const refreshDataGrid = useCallback(() => {
-    dataGridRef.current.instance().refresh();
-  }, []);
+  const toggleButtonOptions = useMemo(() => ({
+    text: expandAll ? 'Collapse All' : 'Expand All',
+    width: 136,
+    onClick: () => toggleExpandAll(),
+  }), [expandAll, toggleExpandAll]);
+
+  const refreshButtonOptions = useMemo(() => ({
+    icon: 'refresh',
+    text: 'Refresh',
+    onClick: () => {
+      dataGridRef.current.instance().refresh();
+    },
+  }), []);
 
   return (
     <DataGrid
@@ -66,7 +75,7 @@ const App = () => {
             <span>Total Count</span>
           </div>
         </Item>
-        <Item location="before">
+        <Item location="before" locateInMenu="auto">
           <SelectBox
             width="225"
             items={groupingValues}
@@ -76,17 +85,17 @@ const App = () => {
             value={groupColumn}
             onValueChanged={toggleGroupColumn} />
         </Item>
-        <Item location="before">
-          <Button
-            text={expandAll ? 'Collapse All' : 'Expand All'}
-            width='136'
-            onClick={toggleExpandAll} />
-        </Item>
-        <Item location="after">
-          <Button
-            icon='refresh'
-            onClick={refreshDataGrid} />
-        </Item>
+        <Item
+          location="before"
+          locateInMenu="auto"
+          widget="dxButton"
+          options={toggleButtonOptions} />
+        <Item
+          location="after"
+          locateInMenu="auto"
+          showText="inMenu"
+          widget="dxButton"
+          options={refreshButtonOptions} />
         <Item name="columnChooserButton" />
       </Toolbar>
     </DataGrid>

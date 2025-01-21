@@ -179,6 +179,61 @@ QUnit.module('rendering', () => {
         assert.ok($element.hasClass(DRAWER_CLASS + '-top'), 'top panel position class added');
     });
 
+    [true, false].forEach((rtlEnabled) => {
+        const panelPositions = ['top', 'bottom', 'left', 'right', 'before', 'after'];
+
+        const configs = [
+            { panelPosition: 'top', expectedClass: `${DRAWER_CLASS}-top` },
+            { panelPosition: 'bottom', expectedClass: `${DRAWER_CLASS}-bottom` },
+            { panelPosition: 'left', expectedClass: `${DRAWER_CLASS}-left` },
+            { panelPosition: 'right', expectedClass: `${DRAWER_CLASS}-right` },
+            { panelPosition: 'before', expectedClass: rtlEnabled ? `${DRAWER_CLASS}-right` : `${DRAWER_CLASS}-left` },
+            { panelPosition: 'after', expectedClass: rtlEnabled ? `${DRAWER_CLASS}-left` : `${DRAWER_CLASS}-right` },
+        ];
+
+        configs.forEach(({ panelPosition, expectedClass }) => {
+            QUnit.test(`drawer should have ${expectedClass} class on initialization if panel position is set to ${panelPosition}, rtlEnabled=${rtlEnabled}`, function(assert) {
+                assert.expect(6);
+
+                const $element = $('#contentTemplate').dxDrawer({
+                    position: panelPosition,
+                    opened: true,
+                    rtlEnabled,
+                });
+
+                assert.strictEqual($element.hasClass(expectedClass), true, `class ${expectedClass} is added correctly`);
+
+                panelPositions
+                    .filter((position) => `${DRAWER_CLASS}-${position}` !== expectedClass)
+                    .map((position) => {
+                        assert.strictEqual($element.hasClass(`${DRAWER_CLASS}-${position}`), false, `class ${DRAWER_CLASS}-${position} is not set`);
+                    });
+            });
+
+            configs.forEach(({ panelPosition: newPanelPosition, expectedClass: expectedClassAfterChange }) => {
+                QUnit.test(`ddrawer should have ${expectedClassAfterChange} class after changing position from ${panelPosition} to ${newPanelPosition}, rtlEnabled=${rtlEnabled}`, function(assert) {
+                    const drawer = $('#contentTemplate').dxDrawer({
+                        position: panelPosition,
+                        opened: true,
+                        rtlEnabled,
+                    }).dxDrawer('instance');
+
+                    const $element = drawer.$element();
+
+                    drawer.option('position', newPanelPosition);
+
+                    assert.strictEqual($element.hasClass(expectedClassAfterChange), true, `class ${expectedClassAfterChange} is added correctly`);
+
+                    panelPositions
+                        .filter((position) => `${DRAWER_CLASS}-${position}` !== expectedClassAfterChange)
+                        .map((position) => {
+                            assert.strictEqual($element.hasClass(`${DRAWER_CLASS}-${position}`), false, `class ${DRAWER_CLASS}-${position} is not set`);
+                        });
+                });
+            });
+        });
+    });
+
     QUnit.test('shader should be rendered by default if panel is visible', function(assert) {
         const $element = $('#drawer').dxDrawer({
             opened: true

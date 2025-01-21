@@ -7,7 +7,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
 import type { dxMenuBaseOptions } from '@js/ui/context_menu/ui.menu_base';
-import type { Item } from '@js/ui/menu';
+import type { Item, SubmenuShowMode } from '@js/ui/menu';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import HierarchicalCollectionWidget from '@ts/ui/collection/hierarchical';
 import MenuItem from '@ts/ui/collection/m_item';
@@ -36,6 +36,7 @@ const DX_MENU_ITEM_CAPTION_URL_CLASS = `${DX_MENU_ITEM_CAPTION_CLASS}-with-url`;
 const DX_ICON_WITH_URL_CLASS = 'dx-icon-with-url';
 const ITEM_URL_CLASS = 'dx-item-url';
 
+// @ts-expect-error ts-error
 export type Properties = dxMenuBaseOptions<MenuBase, Item>;
 
 class MenuBase extends HierarchicalCollectionWidget<Properties> {
@@ -45,12 +46,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
 
   hasIcons?: boolean;
 
-  _inkRipple?: {
-    showWave: (args: any) => void;
-    hideWave: (args: any) => void;
-  };
-
-  _showSubmenusTimeout?: any;
+  _showSubmenusTimeout?: ReturnType<typeof setTimeout>;
 
   _getDefaultOptions() {
     return extend(super._getDefaultOptions(), {
@@ -144,9 +140,9 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
   }
 
   _init(): void {
-    // @ts-expect-error
-    this._activeStateUnit = `.${ITEM_CLASS}`;
     super._init();
+    this._activeStateUnit = `.${ITEM_CLASS}`;
+
     this._renderSelectedItem();
     this._initActions();
   }
@@ -283,13 +279,13 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     }
   }
 
-  _getShowSubmenuMode() {
+  _getShowSubmenuMode(): SubmenuShowMode | undefined {
     const defaultValue = 'onClick';
-    let optionValue = this.option('showSubmenuMode');
-    // @ts-expect-error
-    optionValue = isObject(optionValue) ? optionValue.name : optionValue;
+    const { showSubmenuMode } = this.option();
 
-    return this._isDesktopDevice() ? optionValue : defaultValue;
+    const showMode = isObject(showSubmenuMode) ? showSubmenuMode.name : showSubmenuMode;
+
+    return this._isDesktopDevice() ? showMode : defaultValue;
   }
 
   _initSelectedItems() {}
@@ -319,7 +315,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     if (!$itemElement || this._isItemDisabled($itemElement)) return;
 
     e.stopPropagation();
-    // @ts-expect-error
+
     if (this._getShowSubmenuMode() === 'onHover') {
       clearTimeout(this._showSubmenusTimeout);
       this._showSubmenusTimeout = setTimeout(this._showSubmenu.bind(this, $itemElement), this._getSubmenuDelay('show'));
@@ -488,12 +484,12 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
 
   _refreshItem($item: dxElementWrapper, item: Item): void {
     const node = this._dataAdapter.getNodeByItem(item);
+
     // @ts-expect-error
-    const index = $item.data(this._itemIndexKey());
+    const index: number = $item.data(this._itemIndexKey());
     const $nodeContainer = $item.closest('ul');
     const $nodeElement = $item.closest('li');
 
-    // @ts-expect-error
     this._renderItem(index, node, $nodeContainer, $nodeElement);
   }
 
@@ -558,7 +554,6 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     const itemClickActionHandler = this._createAction(this._updateSubmenuVisibilityOnClick.bind(this));
     this._itemDXEventHandler(e, 'onItemClick', {}, {
       beforeExecute: this._itemClick,
-      // @ts-expect-error
       afterExecute: itemClickActionHandler.bind(this),
     });
     e._skipHandling = true;
@@ -692,7 +687,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     });
   }
 
-  selectItem(itemElement): void {
+  selectItem(itemElement: Element): void {
     const itemData = itemElement.nodeType ? this._getItemData(itemElement) : itemElement;
     const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
     const selectedItem = this.option('selectedItem');
@@ -708,7 +703,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     }
   }
 
-  unselectItem(itemElement): void {
+  unselectItem(itemElement: Element): void {
     const itemData = itemElement.nodeType ? this._getItemData(itemElement) : itemElement;
     const node = this._dataAdapter.getNodeByItem(itemData);
     const selectedItem = this.option('selectedItem');

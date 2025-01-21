@@ -40,7 +40,7 @@ QUnit.module('Context Menu', moduleConfig, () => {
         assert.equal(getContextMenuElement().length, 0, 'menu is hidden on create');
         const $cellElement = $(this.instance._treeList.getCellElement(0, 0));
         $cellElement.trigger('contextmenu');
-        assert.equal(getContextMenuElement().length, 2, 'menu is visible after right click in tree list');
+        assert.equal(getContextMenuElement().length, 1, 'menu is visible after right click in tree list');
     });
     test('shown at correct position', function(assert) {
         this.createInstance(options.allSourcesOptions);

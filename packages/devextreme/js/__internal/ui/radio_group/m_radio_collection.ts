@@ -3,9 +3,8 @@ import $ from '@js/core/renderer';
 import { deferRender } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
+import type { CollectionWidgetBaseProperties } from '@ts/ui/collection/collection_widget.base';
 import CollectionWidget from '@ts/ui/collection/edit';
-
-import type { TypedCollectionWidgetOptions } from '../collection/base';
 
 const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
 const RADIO_BUTTON_ICON_CHECKED_CLASS = 'dx-radiobutton-icon-checked';
@@ -14,7 +13,7 @@ const RADIO_BUTTON_ICON_DOT_CLASS = 'dx-radiobutton-icon-dot';
 const RADIO_VALUE_CONTAINER_CLASS = 'dx-radio-value-container';
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
 
-export type Properties = TypedCollectionWidgetOptions<RadioCollection>;
+export type Properties = CollectionWidgetBaseProperties<RadioCollection>;
 
 class RadioCollection extends CollectionWidget<Properties> {
   _focusTarget(): dxElementWrapper {
@@ -44,7 +43,7 @@ class RadioCollection extends CollectionWidget<Properties> {
     });
   }
 
-  _keyboardEventBindingTarget() {
+  _keyboardEventBindingTarget(): dxElementWrapper {
     return this._focusTarget();
   }
 
@@ -106,6 +105,7 @@ class RadioCollection extends CollectionWidget<Properties> {
     return this._itemContainer().children(this._itemSelector());
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _setAriaSelectionAttribute(): void {}
 }
 

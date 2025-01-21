@@ -74,8 +74,6 @@ const SELECTION_STRATEGIES = {
 
 // @ts-expect-error
 const Calendar = Editor.inherit({
-  _activeStateUnit: `.${CALENDAR_CELL_CLASS}`,
-
   _getDefaultOptions() {
     return extend(this.callBase(), {
 
@@ -442,6 +440,8 @@ const Calendar = Editor.inherit({
 
   _init() {
     this.callBase();
+
+    this._activeStateUnit = `.${CALENDAR_CELL_CLASS}`;
     this._initSelectionStrategy();
     this._correctZoomLevel();
     this._initCurrentDate();

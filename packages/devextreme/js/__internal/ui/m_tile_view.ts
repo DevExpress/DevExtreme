@@ -51,9 +51,6 @@ const CONFIGS = {
 };
 
 const TileView = CollectionWidget.inherit({
-
-  _activeStateUnit: TILEVIEW_ITEM_SELECTOR,
-
   _getDefaultOptions() {
     return extend(this.callBase(), {
       items: null,
@@ -104,6 +101,8 @@ const TileView = CollectionWidget.inherit({
 
   _init() {
     this.callBase();
+
+    this._activeStateUnit = TILEVIEW_ITEM_SELECTOR;
 
     this.$element().addClass(TILEVIEW_CLASS);
     this._initScrollView();

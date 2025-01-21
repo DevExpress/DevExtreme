@@ -3,6 +3,7 @@ import Button from 'devextreme-react/button';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
+import rehypeMinifyWhitespace from 'rehype-minify-whitespace';
 import rehypeStringify from 'rehype-stringify';
 import HTMLReactParser from 'html-react-parser';
 import { REGENERATION_TEXT } from './data.js';
@@ -11,6 +12,7 @@ function convertToHtml(value) {
   const result = unified()
     .use(remarkParse)
     .use(remarkRehype)
+    .use(rehypeMinifyWhitespace)
     .use(rehypeStringify)
     .processSync(value)
     .toString();
