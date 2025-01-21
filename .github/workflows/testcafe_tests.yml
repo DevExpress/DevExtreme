@@ -240,10 +240,10 @@ jobs:
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/failedtests/**/*
         if-no-files-found: ignore
 
-  merge:
+  merge-artifacts:
     runs-on: devextreme-shr2
     needs: testcafe
-    if: contains(needs.*.result, 'failure')
+    if: ${{ failure() }}
 
     steps:
     - name: Merge screenshot artifacts
