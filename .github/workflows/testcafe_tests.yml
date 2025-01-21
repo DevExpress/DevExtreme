@@ -220,11 +220,15 @@ jobs:
         echo "$all_args"
         pnpm run test $all_args
 
+    - name: Sanitize job name
+      if: ${{ failure() }}
+      run: echo "JOB_NAME=$(echo "${{ matrix.ARGS.name }}" | tr '/' '-')" >> $GITHUB_ENV
+
     - name: Copy compared screenshot artifacts
       if: ${{ failure() }}
       uses: actions/upload-artifact@v4
       with:
-        name: compared-screenshots-${{ matrix.ARGS.name }}
+        name: compared-screenshots-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
 
@@ -232,13 +236,15 @@ jobs:
       if: ${{ failure() }}
       uses: actions/upload-artifact@v4
       with:
-        name: failed-tests-${{ matrix.ARGS.name }}
+        name: failed-tests-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/failedtests/**/*
         if-no-files-found: ignore
 
   merge:
     runs-on: devextreme-shr2
     needs: testcafe
+    if: contains(needs.*.result, 'failure')
+
     steps:
     - name: Merge screenshot artifacts
       uses: actions/upload-artifact/merge@v4
