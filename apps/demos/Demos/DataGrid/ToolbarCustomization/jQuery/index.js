@@ -41,6 +41,7 @@ $(() => {
           },
         }, {
           location: 'before',
+          locateInMenu: 'auto',
           widget: 'dxSelectBox',
           options: {
             width: 225,
@@ -62,6 +63,7 @@ $(() => {
           },
         }, {
           location: 'before',
+          locateInMenu: 'auto',
           widget: 'dxButton',
           options: {
             text: 'Collapse All',
@@ -74,9 +76,12 @@ $(() => {
           },
         }, {
           location: 'after',
+          locateInMenu: 'auto',
+          showText: 'inMenu',
           widget: 'dxButton',
           options: {
             icon: 'refresh',
+            text: 'Refresh',
             onClick() {
               dataGrid.refresh();
             },
