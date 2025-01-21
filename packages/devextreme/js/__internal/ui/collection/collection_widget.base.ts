@@ -26,6 +26,7 @@ import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { findTemplates } from '@js/core/utils/template_manager';
 import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
 import type { DataSourceOptions } from '@js/data/data_source';
+import DataHelperMixin from '@js/data_helper';
 import type {
   Cancelable, DxEvent, EventInfo, ItemInfo,
 } from '@js/events';
@@ -34,7 +35,6 @@ import { focusable } from '@js/ui/widget/selectors';
 import { getPublicElement } from '@ts/core/m_element';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-import DataHelperMixin from '@ts/data/m_data_helper';
 import CollectionWidgetItem from '@ts/ui/collection/m_item';
 
 const COLLECTION_CLASS = 'dx-collection';
