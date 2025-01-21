@@ -564,12 +564,6 @@ export const ListBase = CollectionWidget.inherit({
   },
 
   _dataSourceChangedHandler() {
-    const isSearchCompleted = !this._dataSource?.isLoading();
-
-    if (!isSearchCompleted) {
-      return;
-    }
-
     if (!this._shouldAppendItems() && hasWindow()) {
       this._scrollView && this._scrollView.scrollTo(0);
     }

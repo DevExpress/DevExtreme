@@ -811,6 +811,39 @@ const Lookup = DropDownList.inherit({
     }
   },
 
+  _presetListDataSource() {
+    if (this._list && this._shouldRefreshDataSource()) {
+      const forceLoading = !this.option('showDataBeforeSearch') && !this._isLastMinSearchLengthExceeded;
+
+      if (forceLoading) {
+        this._dataSource.beginLoading();
+      }
+
+      this._setListDataSource();
+
+      if (forceLoading) {
+        this._dataSource.endLoading();
+      }
+    }
+  },
+
+  _searchHandler() {
+    this._presetListDataSource();
+    this.callBase();
+  },
+
+  _needClearFilter(): boolean {
+    if (this.callBase()) {
+      return true;
+    }
+
+    return this._dataController.isLoaded()
+      && !this.option('showDataBeforeSearch')
+      && !!this.option('minSearchLength')
+      && !this._isMinSearchLengthExceeded()
+      && this._isLastMinSearchLengthExceeded;
+  },
+
   _updateActiveDescendant() {
     this.callBase();
 
@@ -985,6 +1018,31 @@ const Lookup = DropDownList.inherit({
     }
 
     this.callBase();
+  },
+
+  _renderList() {
+    this.callBase();
+    this._setListDataSourceChangedHandler();
+  },
+
+  _setListDataSourceChangedHandler() {
+    if (!this.option('showDataBeforeSearch') && !!this.option('minSearchLength')) {
+      const defaultHandler = this._list._dataSourceChangedHandler.bind(this._list);
+
+      this._list._dataSourceChangedHandler = this._enrichListDataSourceChangeHandler(defaultHandler);
+    }
+  },
+
+  _enrichListDataSourceChangeHandler(defaultHandler) {
+    return (...args) => {
+      const isSearchCompleted = !this._getDataSource()?.isLoading();
+
+      if (!isSearchCompleted) {
+        return;
+      }
+
+      defaultHandler(...args);
+    };
   },
 
   _clean() {
