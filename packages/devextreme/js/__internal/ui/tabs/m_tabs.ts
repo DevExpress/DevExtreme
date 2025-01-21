@@ -114,9 +114,6 @@ const STYLING_MODE = {
 };
 
 const Tabs = CollectionWidget.inherit({
-
-  _activeStateUnit: `.${TABS_ITEM_CLASS}`,
-
   _getDefaultOptions() {
     return extend(this.callBase(), {
       hoverStateEnabled: true,
@@ -191,6 +188,8 @@ const Tabs = CollectionWidget.inherit({
     const indicatorPosition = this._getIndicatorPosition();
 
     this.callBase();
+
+    this._activeStateUnit = `.${TABS_ITEM_CLASS}`;
     this.setAria('role', 'tablist');
     this.$element().addClass(TABS_CLASS);
     this._toggleScrollingEnabledClass(scrollingEnabled);

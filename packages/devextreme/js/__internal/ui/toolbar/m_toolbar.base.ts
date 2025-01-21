@@ -13,10 +13,11 @@ import {
   // @ts-expect-error
   waitWebFont,
 } from '@js/ui/themes';
-import type { Item, Properties as PublicProperties } from '@js/ui/toolbar';
+import type { Item, Properties } from '@js/ui/toolbar';
+import type { OptionChanged } from '@ts/core/widget/types';
 import AsyncCollectionWidget from '@ts/ui/collection/async';
+import type { CollectionWidgetBaseProperties } from '@ts/ui/collection/m_collection_widget.base';
 
-import type { TypedCollectionWidgetOptions } from '../collection/base';
 import { TOOLBAR_CLASS } from './m_constants';
 
 const TOOLBAR_BEFORE_CLASS = 'dx-toolbar-before';
@@ -39,19 +40,24 @@ const ANIMATION_TIMEOUT = 15;
 
 type ItemLike = string | Item | any;
 
-export interface Properties<
+export interface ToolbarBaseProperties<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey = any,
-> extends PublicProperties<TItem, TKey>,
+> extends Properties<TItem, TKey>,
   Omit<
-  TypedCollectionWidgetOptions<ToolbarBase, TItem, TKey>,
-  keyof PublicProperties<TItem, TKey> & keyof TypedCollectionWidgetOptions<ToolbarBase, TItem, TKey>
+  CollectionWidgetBaseProperties<ToolbarBase, TItem, TKey>,
+  keyof Properties<TItem, TKey> & keyof CollectionWidgetBaseProperties<ToolbarBase, TItem, TKey>
   > {
+  grouped: boolean;
+  renderAs: 'topToolbar';
+  useFlatButtons: boolean;
+  useDefaultButtons: boolean;
+  compactMode: boolean;
 }
 
-class ToolbarBase extends AsyncCollectionWidget<Properties> {
+class ToolbarBase extends AsyncCollectionWidget<ToolbarBaseProperties> {
   _$toolbarItemsContainer?: any;
 
   _$beforeSection?: dxElementWrapper;
@@ -120,10 +126,9 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
     });
   }
 
-  _getDefaultOptions(): Properties {
+  _getDefaultOptions(): ToolbarBaseProperties {
     return {
       ...super._getDefaultOptions(),
-      // @ts-expect-error
       renderAs: 'topToolbar',
       grouped: false,
       useFlatButtons: false,
@@ -139,7 +144,6 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
           return isMaterialBased();
         },
         options: {
-          // @ts-expect-error
           useFlatButtons: true,
         },
       },
@@ -440,7 +444,7 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
     this._arrangeItems();
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<ToolbarBaseProperties>): void {
     const { name } = args;
 
     switch (name) {
