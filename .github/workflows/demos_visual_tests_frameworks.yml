@@ -477,6 +477,7 @@ jobs:
     steps:
       - name: Merge screenshot artifacts
         uses: actions/upload-artifact/merge@v4
+        continue-on-error: true
         with:
           name: screenshots
           pattern: screenshots-*

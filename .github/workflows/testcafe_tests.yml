@@ -242,6 +242,7 @@ jobs:
     steps:
     - name: Merge screenshot artifacts
       uses: actions/upload-artifact/merge@v4
+      continue-on-error: true
       with:
         name: compared-screenshots
         pattern: compared-screenshots-*
@@ -249,6 +250,7 @@ jobs:
 
     - name: Merge failed test artifacts
       uses: actions/upload-artifact/merge@v4
+      continue-on-error: true
       with:
         name: failed-tests
         pattern: failed-tests-*
