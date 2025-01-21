@@ -9,9 +9,20 @@ import { ExtensionComponent as BaseComponent } from "./core/extension-component"
 import { IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
+import type { DisposingEvent, InitializedEvent, ValidatedEvent } from "devextreme/ui/validator";
 import type { ValidationRuleType, ComparisonOperator } from "devextreme/common";
 
-type IValidatorOptions = React.PropsWithChildren<Properties & IHtmlOptions>
+type ReplaceFieldTypes<TSource, TReplacement> = {
+  [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
+}
+
+type IValidatorOptionsNarrowedEvents = {
+  onDisposing?: ((e: DisposingEvent) => void);
+  onInitialized?: ((e: InitializedEvent) => void);
+  onValidated?: ((validatedInfo: ValidatedEvent) => void);
+}
+
+type IValidatorOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IValidatorOptionsNarrowedEvents> & IHtmlOptions>
 
 interface ValidatorRef {
   instance: () => dxValidator;
