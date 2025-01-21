@@ -475,10 +475,10 @@ jobs:
         path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
 
-  merge:
+  merge-artifacts:
     runs-on: devextreme-shr2
     needs: testcafe
-    if: contains(needs.*.result, 'failure')
+    if: ${{ failure() }}
 
     steps:
       - name: Merge screenshot artifacts
