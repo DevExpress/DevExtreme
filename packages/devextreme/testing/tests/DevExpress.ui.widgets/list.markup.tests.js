@@ -491,6 +491,23 @@ QUnit.module('decorators markup', {}, () => {
         assert.notStrictEqual(window.getComputedStyle($deleteToggleIcon).backgroundImage, 'none', 'background image is defined');
     });
 
+    QUnit.test('list item aria-label should be equal to item text, if showSelectionControls is true and selectionMode is multiple (T1248422)', function(assert) {
+        const $list = $('#list').dxList({
+            items: ['item 1'],
+            showSelectionControls: true,
+            selectionMode: 'multiple',
+        });
+
+        const instance = $list.dxList('instance');
+        const getItem = () => $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
+
+        assert.strictEqual(getItem().attr('aria-label'), 'item 1', 'aria-label is correct on init');
+
+        instance.option({ items: ['item 2'] });
+
+        assert.strictEqual(getItem().attr('aria-label'), 'item 2', 'aria-label is correct if items were changed in runtime');
+    });
+
     QUnit.test('list item markup, item select decorator', function(assert) {
         const $list = $($('#templated-list').dxList({
             items: ['0'],
