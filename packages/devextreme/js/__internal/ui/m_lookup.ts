@@ -812,36 +812,18 @@ const Lookup = DropDownList.inherit({
   },
 
   _presetListDataSource() {
-    if (this._list && this._shouldRefreshDataSource()) {
-      const forceLoading = !this.option('showDataBeforeSearch') && !this._isLastMinSearchLengthExceeded;
+    if (this._list && this._list?.option('dataSource') && !this._needPassDataSourceToList()) {
+      this._setListOption('dataSource', null);
+    }
 
-      if (forceLoading) {
-        this._dataSource.beginLoading();
-      }
-
-      this._setListDataSource();
-
-      if (forceLoading) {
-        this._dataSource.endLoading();
-      }
+    if (this._list && !this._list.option('dataSource') && this._needPassDataSourceToList()) {
+      this._list._initDataSource();
     }
   },
 
   _searchHandler() {
     this._presetListDataSource();
     this.callBase();
-  },
-
-  _needClearFilter(): boolean {
-    if (this.callBase()) {
-      return true;
-    }
-
-    return this._dataController.isLoaded()
-      && !this.option('showDataBeforeSearch')
-      && !!this.option('minSearchLength')
-      && !this._isMinSearchLengthExceeded()
-      && this._isLastMinSearchLengthExceeded;
   },
 
   _updateActiveDescendant() {
@@ -1022,26 +1004,28 @@ const Lookup = DropDownList.inherit({
 
   _renderList() {
     this.callBase();
-    this._setListDataSourceChangedHandler();
-  },
 
-  _setListDataSourceChangedHandler() {
     if (!this.option('showDataBeforeSearch') && !!this.option('minSearchLength')) {
-      const defaultHandler = this._list._dataSourceChangedHandler.bind(this._list);
-
-      this._list._dataSourceChangedHandler = this._enrichListDataSourceChangeHandler(defaultHandler);
+      this._list._getSpecificDataSourceOption = this._getDataSource.bind(this);
+      this._setListDataSourceFirstLoadCompleted();
     }
   },
 
-  _enrichListDataSourceChangeHandler(defaultHandler) {
-    return (...args) => {
-      const isSearchCompleted = !this._getDataSource()?.isLoading();
+  _setListDataSourceFirstLoadCompleted() {
+    const defaultLoadCompleted = this._list._isDataSourceFirstLoadCompleted.bind(this._list);
 
-      if (!isSearchCompleted) {
-        return;
+    this._list._isDataSourceFirstLoadCompleted = this._isListDataSourceFirstLoadCompleted(defaultLoadCompleted);
+  },
+
+  _isListDataSourceFirstLoadCompleted(defaultLoadCompleted) {
+    return (newValue): boolean => {
+      if (isDefined(newValue) || this.option('showDataBeforeSearch')) {
+        return defaultLoadCompleted(newValue);
       }
 
-      defaultHandler(...args);
+      this._list._isFirstLoadCompleted = undefined;
+
+      return !this.option('showDataBeforeSearch');
     };
   },
 
