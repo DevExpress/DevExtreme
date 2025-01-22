@@ -44,11 +44,6 @@
   margin-bottom: 0;
 }
 
-.dx-chat-messagebubble-content ol,
-.dx-chat-messagebubble-content ul {
-  white-space: normal;
-}
-
 .dx-chat-messagebubble-content h1,
 .dx-chat-messagebubble-content h2,
 .dx-chat-messagebubble-content h3,

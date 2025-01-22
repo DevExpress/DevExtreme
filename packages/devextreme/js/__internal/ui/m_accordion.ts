@@ -30,9 +30,6 @@ const ACCORDION_ITEM_TITLE_CAPTION_CLASS = 'dx-accordion-item-title-caption';
 const ACCORDION_ITEM_DATA_KEY = 'dxAccordionItemData';
 
 const Accordion = CollectionWidget.inherit({
-
-  _activeStateUnit: `.${ACCORDION_ITEM_CLASS}`,
-
   _getDefaultOptions() {
     return extend(this.callBase(), {
 
@@ -90,6 +87,8 @@ const Accordion = CollectionWidget.inherit({
 
   _init() {
     this.callBase();
+
+    this._activeStateUnit = `.${ACCORDION_ITEM_CLASS}`;
 
     this.option('selectionRequired', !this.option('collapsible'));
     this.option('selectionMode', this.option('multiple') ? 'multiple' : 'single');

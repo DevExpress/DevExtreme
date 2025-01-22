@@ -134,6 +134,7 @@ window.config = {
     'rehype-parse': 'externals:unified/rehype-parse.bundle.js',
     'rehype-remark': 'externals:unified/rehype-remark.bundle.js',
     'rehype-stringify': 'externals:unified/rehype-stringify.bundle.js',
+    'rehype-minify-whitespace': 'externals:unified/rehype-minify-whitespace.bundle.js',
     /**/
 
     /** openai */

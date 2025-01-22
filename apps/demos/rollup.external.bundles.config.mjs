@@ -107,5 +107,16 @@ export default [
     },
     external: [],
     plugins,
+  },
+  {
+    input: NG_BASE_DIR + `rehype-minify-whitespace/index.js`,
+    output: {
+      file: OUTPUT_DIR + `unified/rehype-minify-whitespace.bundle.js`,
+      format,
+      name: 'rehypeRemark',
+      globals: { },
+    },
+    external: [],
+    plugins,
   }
 ];

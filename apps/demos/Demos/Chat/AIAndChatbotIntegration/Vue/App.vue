@@ -26,8 +26,7 @@
           <div
             v-html="convertToHtml(data.message.text)"
             class="dx-chat-messagebubble-text"
-          >
-          </div>
+          />
           <div class="dx-bubble-button-container">
             <DxButton
               :icon="copyButtonIcon"
@@ -99,7 +98,7 @@ function toggleDisabledState(disabled, event = undefined) {
   } else {
     event?.target.focus();
   }
-};
+}
 
 function updateLastMessage(text = REGENERATION_TEXT) {
   const items = dataSource.items();
@@ -148,7 +147,7 @@ async function processMessageSending(message, event) {
 
 function alertLimitReached() {
   alerts.value = [{
-    message: 'Request limit reached, try again in a minute.'
+    message: 'Request limit reached, try again in a minute.',
   }];
 
   setTimeout(() => {
@@ -185,7 +184,7 @@ function onCopyButtonClick(message) {
   copyButtonIcon.value = 'check';
 
   setTimeout(() => {
-      copyButtonIcon.value = 'copy';
+    copyButtonIcon.value = 'copy';
   }, 2500);
 }
 
@@ -243,11 +242,6 @@ function onRegenerateButtonClick() {
 
 .dx-chat-messagebubble-content > div > p:last-child {
   margin-bottom: 0;
-}
-
-.dx-chat-messagebubble-content ol,
-.dx-chat-messagebubble-content ul {
-  white-space: normal;
 }
 
 .dx-chat-messagebubble-content h1,
