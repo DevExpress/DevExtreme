@@ -122,6 +122,7 @@ export class DataController {
             // @ts-expect-error
             e.data = new Deferred().reject(error);
           });
+          this.pendingLocalOperations[e.operationId] = undefined;
         };
 
         if (dataSource.isLoaded()) {
