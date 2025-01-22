@@ -355,70 +355,69 @@ const SKIPPED_TESTS = {
 
     changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
 
-    runTestAtPage(test, `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`)
-      .clientScripts(clientScriptSource)(testName, async (t) => {
-        if (visualTestStyles) {
-          await execCode(visualTestStyles);
+    runTestAtPage(
+      test,
+      `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`,
+      SKIP_JS_ERRORS_COMPONENTS.includes(widgetName),
+    ).clientScripts(clientScriptSource)(testName, async (t) => {
+      if (visualTestStyles) {
+        await execCode(visualTestStyles);
+      }
+
+      if (approach === 'Angular') {
+        await waitForAngularLoading();
+      }
+
+      if (testCodeSource) {
+        await execCode(testCodeSource);
+      }
+
+      if (testCafeCodeSource) {
+        await execTestCafeCode(t, testCafeCodeSource);
+      }
+
+      if (process.env.STRATEGY === 'accessibility') {
+        const specificSkipRules = getTestSpecificSkipRules(testName);
+        const options = { rules: { } };
+
+        [...COMMON_SKIP_RULES, ...specificSkipRules].forEach((ruleName) => {
+          options.rules[ruleName] = { enabled: false };
+        });
+
+        const axeResult = await axeCheck(t, '.demo-container', options);
+        const { error, results } = axeResult;
+
+        if (results.violations.length > 0) {
+          createMdReport({ testName, results });
+          await t.report(createTestCafeReport(results.violations));
         }
 
-        if (approach === 'Angular') {
-          await waitForAngularLoading();
+        await t.expect(error).notOk();
+        await t.expect(results.violations.length === 0).ok(createReport(results.violations));
+      } else {
+        const testTheme = process.env.THEME;
+
+        if (shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)) {
+          return;
         }
 
-        if (testCodeSource) {
-          await execCode(testCodeSource);
-        }
+        const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
 
-        if (testCafeCodeSource) {
-          await execTestCafeCode(t, testCafeCodeSource);
-        }
+        const consoleMessages = await t.getBrowserConsoleMessages();
 
-        if (SKIP_JS_ERRORS_COMPONENTS.includes(widgetName)) {
-          await t.skipJsErrors();
-        }
+        const errors = [...consoleMessages.error, ...consoleMessages.warn]
+          .filter((e) => {
+            const isKnownWarning = knownWarnings.common.some((kw) => e.startsWith(kw));
+            const isComponentSpecificKnownWarning = knownWarnings[widgetName]
+                && knownWarnings[widgetName].some((kw) => e.startsWith(kw));
 
-        if (process.env.STRATEGY === 'accessibility') {
-          const specificSkipRules = getTestSpecificSkipRules(testName);
-          const options = { rules: { } };
-
-          [...COMMON_SKIP_RULES, ...specificSkipRules].forEach((ruleName) => {
-            options.rules[ruleName] = { enabled: false };
+            return !isKnownWarning && !isComponentSpecificKnownWarning;
           });
 
-          const axeResult = await axeCheck(t, '.demo-container', options);
-          const { error, results } = axeResult;
+        await t.expect(errors).eql([]);
 
-          if (results.violations.length > 0) {
-            createMdReport({ testName, results });
-            await t.report(createTestCafeReport(results.violations));
-          }
-
-          await t.expect(error).notOk();
-          await t.expect(results.violations.length === 0).ok(createReport(results.violations));
-        } else {
-          const testTheme = process.env.THEME;
-
-          if (shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)) {
-            return;
-          }
-
-          const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
-
-          const consoleMessages = await t.getBrowserConsoleMessages();
-
-          const errors = [...consoleMessages.error, ...consoleMessages.warn]
-            .filter((e) => {
-              const isKnownWarning = knownWarnings.common.some((kw) => e.startsWith(kw));
-              const isComponentSpecificKnownWarning = knownWarnings[widgetName]  
-                && knownWarnings[widgetName].some((kw) => e.startsWith(kw));
-              
-              return !isKnownWarning && !isComponentSpecificKnownWarning; 
-            });
-
-          await t.expect(errors).eql([]);
-
-          await t.expect(comparisonResult).ok('INVALID_SCREENSHOT');
-        }
-      });
+        await t.expect(comparisonResult).ok('INVALID_SCREENSHOT');
+      }
+    });
   });
 });
