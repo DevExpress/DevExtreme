@@ -117,7 +117,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
     // @ts-expect-error
     super._init();
     this._createEventMap();
-    // @ts-expect-error
+
     this.$element().addClass(COMPONENT_CLASS);
 
     this.currentView = viewsUtils.getCurrentView(

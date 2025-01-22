@@ -118,7 +118,6 @@ class Toolbar extends ToolbarBase {
   }
 
   _arrangeItems(): void {
-    // @ts-expect-error
     if (this.$element().is(':hidden')) {
       return;
     }
@@ -186,7 +185,7 @@ class Toolbar extends ToolbarBase {
     this._dimensionChanged();
   }
 }
-// @ts-expect-error
+
 registerComponent('dxToolbar', Toolbar);
 
 export default Toolbar;

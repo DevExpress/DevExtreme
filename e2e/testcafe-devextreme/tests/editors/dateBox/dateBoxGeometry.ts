@@ -15,9 +15,13 @@ safeSizeTest('Geometry is good', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dateBox = new DateBox('#container');
 
+  await dateBox.option('opened', true);
+
   await testScreenshot(t, takeScreenshot, 'Datebox with calendar.png');
 
+  await dateBox.option('opened', false);
   await dateBox.option('type', 'datetime');
+  await dateBox.option('opened', true);
 
   await testScreenshot(t, takeScreenshot, 'Datebox with datetime.png');
 
@@ -40,7 +44,6 @@ safeSizeTest('Geometry is good', async (t) => {
   await waitFont();
 
   return createWidget('dxDateBox', {
-    opened: true,
     pickerType: 'calendar',
     width: 200,
     value: new Date(1.5e12),

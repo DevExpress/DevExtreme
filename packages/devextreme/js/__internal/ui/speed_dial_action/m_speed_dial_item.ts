@@ -79,7 +79,6 @@ class SpeedDialItem extends Overlay<Properties> {
   }
 
   _render(): void {
-    // @ts-expect-error
     this.$element().addClass(FAB_CLASS);
     this._renderIcon();
     this._renderLabel();
@@ -193,7 +192,6 @@ class SpeedDialItem extends Overlay<Properties> {
 
   _setClickAction(): void {
     const eventName = addNamespace(clickEventName, this.NAME);
-    // @ts-expect-error
     const overlayContent = this.$element().find(OVERLAY_CONTENT_SELECTOR);
 
     eventsEngine.off(overlayContent, eventName);

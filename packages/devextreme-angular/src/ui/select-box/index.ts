@@ -1513,8 +1513,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
-        this.setContentChildren('buttons', value, 'DxiSelectBoxButtonComponent');
-        this.setChildren('buttons', value);
+        this._setChildren('buttons', value, 'DxiSelectBoxButtonComponent');
     }
 
     @ContentChildren(DxiSelectBoxItemComponent)
@@ -1522,8 +1521,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiSelectBoxItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiSelectBoxItemComponent');
     }
 
 
@@ -1532,9 +1530,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         return this._getOption('buttons');
     }
     set buttonsLegacyChildren(value) {
-        if (this.checkContentChildren('buttons', value, 'DxiButtonComponent')) {
-           this.setChildren('buttons', value);
-        }
+        this._setChildren('buttons', value, 'DxiButtonComponent');
     }
 
     @ContentChildren(DxiItemComponent)
@@ -1542,9 +1538,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
-        }
+        this._setChildren('items', value, 'DxiItemComponent');
     }
 
 

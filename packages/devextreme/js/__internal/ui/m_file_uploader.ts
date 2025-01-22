@@ -23,7 +23,8 @@ import Button from '@js/ui/button';
 import type { Properties as PublicProperties } from '@js/ui/file_uploader';
 import ProgressBar from '@js/ui/progress_bar';
 import { isFluent, isMaterial } from '@js/ui/themes';
-import Editor from '@ts/ui/editor';
+import type { EditorProperties, UnresolvedEvents } from '@ts/ui/editor/editor';
+import Editor from '@ts/ui/editor/editor';
 
 const window = getWindow();
 
@@ -69,7 +70,10 @@ export interface Properties extends PublicProperties {
   _uploadButtonType?: ButtonType;
 }
 
-class FileUploader extends Editor<Properties> {
+interface FileUploaderProperties extends Properties,
+  Omit<EditorProperties<FileUploader>, UnresolvedEvents | 'value'> {}
+
+class FileUploader extends Editor<FileUploaderProperties> {
   // Temporary solution. Move to component level
   public NAME!: string;
 
@@ -150,7 +154,7 @@ class FileUploader extends Editor<Properties> {
     });
   }
 
-  _getDefaultOptions(): Properties {
+  _getDefaultOptions(): FileUploaderProperties {
     return extend(super._getDefaultOptions(), {
       chunkSize: 0,
       value: [],
@@ -206,6 +210,7 @@ class FileUploader extends Editor<Properties> {
   }
 
   _defaultOptionsRules() {
+    // @ts-expect-error
     return super._defaultOptionsRules().concat([
       {
         device: () => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
@@ -340,20 +345,21 @@ class FileUploader extends Editor<Properties> {
 
     const fileName = this._$fileInput.val().replace(/^.*\\/, '');
     const files = this._$fileInput.prop('files');
-
+    // @ts-expect-error
     if (files && !files.length && this.option('uploadMode') !== 'useForm') {
       return;
     }
 
     const value = files ? this._getFiles(files) : [{ name: fileName }];
     this._changeValue(value);
-
+    // @ts-expect-error
     if (this.option('uploadMode') === 'instantly') {
       this._uploadFiles();
     }
   }
 
   _shouldFileListBeExtended() {
+    // @ts-expect-error
     return this.option('uploadMode') !== 'useForm' && this.option('extendSelection') && this.option('multiple');
   }
 
@@ -371,7 +377,6 @@ class FileUploader extends Editor<Properties> {
   }
 
   _getFile(fileData) {
-    // @ts-expect-error
     const targetFileValue = isNumeric(fileData) ? this.option('value')[fileData] : fileData;
     return this._files.filter((file) => file.value === targetFileValue)[0];
   }
@@ -391,7 +396,6 @@ class FileUploader extends Editor<Properties> {
   }
 
   _focusTarget() {
-    // @ts-expect-error
     return this.$element().find(`.${FILEUPLOADER_BUTTON_CLASS}`);
   }
 
@@ -401,7 +405,6 @@ class FileUploader extends Editor<Properties> {
 
   _initMarkup(): void {
     super._initMarkup();
-    // @ts-expect-error
     this.$element().addClass(FILEUPLOADER_CLASS);
 
     this._renderWrapper();
@@ -444,6 +447,7 @@ class FileUploader extends Editor<Properties> {
   }
 
   _getUploadAbortedStatusMessage() {
+    // @ts-expect-error
     return this.option('uploadMode') === 'instantly'
       ? this.option('uploadAbortedMessage')
       : this.option('readyToUploadMessage');
@@ -451,7 +455,7 @@ class FileUploader extends Editor<Properties> {
 
   _createFiles(): void {
     const value = this.option('value');
-
+    // @ts-expect-error
     if (this._files && (value?.length === 0 || !this._shouldFileListBeExtended())) {
       this._preventFilesUploading(this._files);
       this._files = null;
@@ -460,7 +464,7 @@ class FileUploader extends Editor<Properties> {
     if (!this._files) {
       this._files = [];
     }
-
+    // @ts-expect-error
     each(value?.slice(this._files.length), (_, value) => {
       const file = this._createFile(value);
       this._validateFile(file);
@@ -483,15 +487,16 @@ class FileUploader extends Editor<Properties> {
     const accept = this.option('accept');
     const allowedTypes = this._getAllowedFileTypes(accept);
     const fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.')).toLowerCase();
+    // @ts-expect-error
     if (accept?.length !== 0 && !this._isFileTypeAllowed(file.value, allowedTypes)) {
       return false;
     }
+    // @ts-expect-error
     if (allowedExtensions?.length === 0) {
       return true;
     }
     // @ts-expect-error
     for (let i = 0; i < allowedExtensions.length; i++) {
-      // @ts-expect-error
       if (fileExtension === allowedExtensions[i].toLowerCase()) {
         return true;
       }
@@ -585,6 +590,7 @@ class FileUploader extends Editor<Properties> {
         .addClass(FILEUPLOADER_FILES_CONTAINER_CLASS)
         // @ts-expect-error
         .appendTo(this._$content);
+      // @ts-expect-error
     } else if (!this._shouldFileListBeExtended() || value?.length === 0) {
       this._$filesContainer.empty();
     }
@@ -655,11 +661,14 @@ class FileUploader extends Editor<Properties> {
   }
 
   _createValidationElement(key) {
+    // @ts-expect-error
     return $('<span>').text(this.option(key));
   }
 
   _updateFileNameMaxWidth() {
+    // @ts-expect-error
     const cancelButtonsCount = this.option('allowCanceling') && this.option('uploadMode') !== 'useForm' ? 1 : 0;
+    // @ts-expect-error
     const uploadButtonsCount = this.option('uploadMode') === 'useButtons' ? 1 : 0;
     const filesContainerWidth = getWidth(
       this._$filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).first(),
@@ -685,6 +694,7 @@ class FileUploader extends Editor<Properties> {
   }
 
   _getCancelButton(file) {
+    // @ts-expect-error
     if (this.option('uploadMode') === 'useForm') {
       return null;
     }
@@ -705,7 +715,6 @@ class FileUploader extends Editor<Properties> {
         icon: 'close',
         visible: allowCanceling,
         disabled: readOnly,
-        // @ts-expect-error
         integrationOptions: {},
         hoverStateEnabled,
         stylingMode: _buttonStylingMode,
@@ -718,6 +727,7 @@ class FileUploader extends Editor<Properties> {
   }
 
   _getUploadButton(file) {
+    // @ts-expect-error
     if (!file.isValid() || this.option('uploadMode') !== 'useButtons') {
       return null;
     }
@@ -768,6 +778,7 @@ class FileUploader extends Editor<Properties> {
   }
 
   removeFile(fileData) {
+    // @ts-expect-error
     if (this.option('uploadMode') === 'useForm' || !isDefined(fileData)) {
       return;
     }
@@ -781,7 +792,6 @@ class FileUploader extends Editor<Properties> {
   }
 
   _toggleFileUploaderEmptyClassName(): void {
-    // @ts-expect-error
     this.$element().toggleClass(FILEUPLOADER_EMPTY_CLASS, !this._files.length || this._hasInvalidFile(this._files));
   }
 
@@ -820,7 +830,6 @@ class FileUploader extends Editor<Properties> {
     this._selectButton = this._createComponent($button, Button, {
       text: this.option('selectButtonText'),
       focusStateEnabled: false,
-      // @ts-expect-error
       integrationOptions: {},
       disabled: this.option('readOnly'),
       hoverStateEnabled: this.option('hoverStateEnabled'),
@@ -868,6 +877,7 @@ class FileUploader extends Editor<Properties> {
   }
 
   _renderUploadButton() {
+    // @ts-expect-error
     if (this.option('uploadMode') !== 'useButtons') {
       return;
     }
@@ -882,7 +892,6 @@ class FileUploader extends Editor<Properties> {
       text: this.option('uploadButtonText'),
       onClick: this._uploadButtonClickHandler.bind(this),
       type: this.option('_uploadButtonType'),
-      // @ts-expect-error
       integrationOptions: {},
       hoverStateEnabled: this.option('hoverStateEnabled'),
     });
@@ -893,6 +902,7 @@ class FileUploader extends Editor<Properties> {
   }
 
   _shouldDragOverBeRendered() {
+    // @ts-expect-error
     return !this.option('readOnly') && (this.option('uploadMode') !== 'useForm' || this.option('nativeDropSupported'));
   }
 
@@ -977,6 +987,7 @@ class FileUploader extends Editor<Properties> {
   }
 
   _useInputForDrop() {
+    // @ts-expect-error
     return this.option('nativeDropSupported') && this.option('uploadMode') === 'useForm';
   }
 
@@ -1060,7 +1071,6 @@ class FileUploader extends Editor<Properties> {
     this._activeDropZone = null;
 
     if (!isCustomTarget) {
-      // @ts-expect-error
       this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
     }
 
@@ -1078,7 +1088,7 @@ class FileUploader extends Editor<Properties> {
     }
 
     this._changeValue(files);
-
+    // @ts-expect-error
     if (this.option('uploadMode') === 'instantly') {
       this._uploadFiles();
     }
@@ -1156,6 +1166,7 @@ class FileUploader extends Editor<Properties> {
   }
 
   abortUpload(fileData) {
+    // @ts-expect-error
     if (this.option('uploadMode') === 'useForm') {
       return;
     }
@@ -1170,6 +1181,7 @@ class FileUploader extends Editor<Properties> {
   }
 
   upload(fileData) {
+    // @ts-expect-error
     if (this.option('uploadMode') === 'useForm') {
       return;
     }
@@ -1259,7 +1271,6 @@ class FileUploader extends Editor<Properties> {
       max: fileSize,
       statusFormat: (ratio) => `${this._getProgressValue(ratio)}%`,
       showStatus: false,
-      // @ts-expect-error
       statusPosition: 'right',
     });
   }
@@ -1351,6 +1362,7 @@ class FileUploader extends Editor<Properties> {
 
   _updateReadOnlyState() {
     const readOnly = this.option('readOnly');
+    // @ts-expect-error
     this._selectButton.option('disabled', readOnly);
     this._files.forEach((file) => file.cancelButton?.option('disabled', readOnly));
     this._updateInputLabelText();
@@ -1359,7 +1371,9 @@ class FileUploader extends Editor<Properties> {
 
   _updateHoverState() {
     const value = this.option('hoverStateEnabled');
+    // @ts-expect-error
     this._selectButton?.option('hoverStateEnabled', value);
+    // @ts-expect-error
     this._uploadButton?.option('hoverStateEnabled', value);
     this._files.forEach((file) => {
       file.uploadButton?.option('hoverStateEnabled', value);
@@ -1523,6 +1537,7 @@ class FileUploader extends Editor<Properties> {
   }
 
   _resetInputValue(force?: boolean) {
+    // @ts-expect-error
     if (this.option('uploadMode') === 'useForm' && !force) {
       return;
     }
@@ -2024,7 +2039,7 @@ class CustomWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
     return true;
   }
 }
-// @ts-expect-error
+
 registerComponent('dxFileUploader', FileUploader);
 
 export default FileUploader;

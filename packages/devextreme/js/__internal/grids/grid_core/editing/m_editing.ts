@@ -2154,7 +2154,6 @@ class EditingControllerImpl extends modules.ViewController {
     setTimeout(() => {
       // NOTE: if the editForm is enabled then we need to search for focused element in the document root
       // otherwise we need to search for element in the shadow dom
-      // @ts-expect-error
       const elementContainer = this._editForm?.element() || this.component.$element().get(0);
       const $focusedElement = $(domAdapter.getActiveElement(elementContainer));
       const columnIndex = this._rowsView.getCellIndex($focusedElement, row.rowIndex);

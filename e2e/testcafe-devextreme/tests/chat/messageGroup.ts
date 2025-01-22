@@ -126,6 +126,9 @@ test('Messagegroup scenarios in disabled state', async (t) => {
       width: 250,
       height: 400,
     }, chatId);
+
+    const chat = new Chat(chatId);
+    await chat.repaint();
   });
 
   await testScreenshot(t, takeScreenshot, 'Messagegroup appearance in disabled state.png', { element: '#container' });
