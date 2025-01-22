@@ -122,6 +122,17 @@ export function effect<T1, T2, T3, T4, T5>(
   callback: (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => ((() => void) | void),
   deps: [Subscribable<T1>, Subscribable<T2>, Subscribable<T3>, Subscribable<T4>, Subscribable<T5>]
 ): Subscription;
+export function effect<T1, T2, T3, T4, T5, T6>(
+  callback: (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => ((() => void) | void),
+  deps: [
+    Subscribable<T1>,
+    Subscribable<T2>,
+    Subscribable<T3>,
+    Subscribable<T4>,
+    Subscribable<T5>,
+    Subscribable<T6>,
+  ]
+): Subscription;
 export function effect<TArgs extends readonly any[]>(
   callback: (...args: TArgs) => ((() => void) | void),
   deps: { [I in keyof TArgs]: Subscribable<TArgs[I]> },
