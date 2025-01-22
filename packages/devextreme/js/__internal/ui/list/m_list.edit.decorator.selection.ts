@@ -74,11 +74,24 @@ registerDecorator(
       this.callBase.apply(this, arguments);
 
       const { $itemElement } = config;
+
+      this._updateItemAria($itemElement);
+
       const control = this._controlWidget.getInstance($itemElement.find(`.${this._controlClass}`));
 
       eventsEngine.on($itemElement, 'stateChanged', (e, state) => {
         control.option('value', state);
       });
+    },
+
+    _updateItemAria($itemElement) {
+      const text = $itemElement.text();
+
+      const attributes = {
+        'aria-label': text,
+      };
+
+      $itemElement.attr(attributes);
     },
 
     _updateSelectAllState() {
