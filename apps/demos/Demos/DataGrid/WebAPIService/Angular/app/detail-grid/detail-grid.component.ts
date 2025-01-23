@@ -4,14 +4,14 @@ import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
 let modulePrefix = '';
 // @ts-ignore
-if (window && window.config.packageConfigPaths) {
+if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
 @Component({
   selector: 'detail-grid',
-  templateUrl: `.${modulePrefix}/detail-grid/detail-grid.component.html`,
-  styleUrls: [`.${modulePrefix}/detail-grid/detail-grid.component.css`],
+  templateUrl: `.${modulePrefix && (modulePrefix + '/detail-grid')}/detail-grid.component.html`,
+  styleUrls: [`.${modulePrefix && (modulePrefix + '/detail-grid')}/detail-grid.component.css`],
   providers: [],
 })
 export class DetailGridComponent implements AfterViewInit {
