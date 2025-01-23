@@ -66,6 +66,11 @@ const SKIPPED_TESTS = {
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
+    Map: [
+      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
   },
   Angular: {
     DataGrid: [
@@ -92,6 +97,11 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleSeriesSelection', themes: [THEME.material] },
       { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
       { demo: 'APISelectAPoint', themes: [THEME.material] },
+    ],
+    Map: [
+      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
@@ -160,6 +170,11 @@ const SKIPPED_TESTS = {
     List: [
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
       { demo: 'ItemDragging', themes: [THEME.fluent, THEME.material] },
+    ],
+    Map: [
+      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     VectorMap: [
       { demo: 'Overview', themes: [THEME.material] },
@@ -238,6 +253,11 @@ const SKIPPED_TESTS = {
     ],
     List: [
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
+    ],
+    Map: [
+      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Gauges: [
       { demo: 'Overview', themes: [THEME.material] },
