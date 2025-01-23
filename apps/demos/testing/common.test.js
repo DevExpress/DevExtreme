@@ -21,7 +21,7 @@ import {
 
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
 import knownWarnings from './known-warnings.json';
-import skipJsErrorsComponents from './skip-js-errors-components.json'
+import skipJsErrorsComponents from './skip-js-errors-components.json';
 
 const execCode = ClientFunction((code) => {
   // eslint-disable-next-line no-eval
