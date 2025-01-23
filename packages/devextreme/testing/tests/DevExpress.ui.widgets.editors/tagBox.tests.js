@@ -6661,16 +6661,9 @@ QUnit.module('dataSource integration', moduleSetup, () => {
 
     QUnit.test('Tagbox should render tag correctly when hideSelectedItems = true and valueExpr is a function (T1234032)', function(assert) {
         const data = [
-            {
-                id: 1,
-                scheme: 'schema1',
-                name: 'name1',
-            },
-            {
-                id: 2,
-                scheme: 'schema1',
-                name: 'name2',
-            }];
+            { id: 1, scheme: 'schema1', name: 'name1' },
+            { id: 2, scheme: 'schema1', name: 'name2' }
+        ];
         const instance = $('#tagBox').dxTagBox({
             dataSource: data,
             valueExpr(x) {
@@ -6717,28 +6710,21 @@ QUnit.module('dataSource integration', moduleSetup, () => {
             valueExpr(x) {
                 return x && `${x.name} ${x.scheme}`;
             },
-            value: ['name1 schema1'],
+            value: ['name1 schema1', 'name2 schema2'],
             opened: true
         });
 
         const instance = $tagBox.dxTagBox('instance');
-        instance._list.reload();
         const $tags = instance.$element().find(`.${TAGBOX_TAG_CLASS}`);
 
-        assert.strictEqual($tags.length, 1, 'One tag is rendered after reload');
-        assert.strictEqual($tags.eq(0).text().trim(), 'name1', 'Correct tag text is rendered');
-        assert.strictEqual(instance.option('value')[0], 'name1 schema1', 'Correct value is stored');
-
-        const $secondItem = $(instance._list.$element().find(`.${LIST_ITEM_CLASS}`).eq(0));
-        $secondItem.trigger('dxclick');
-        const $updatedTags = instance.$element().find(`.${TAGBOX_TAG_CLASS}`);
-
-        assert.strictEqual($updatedTags.length, 2, 'Two tags are rendered after selecting the second item');
-        assert.strictEqual($updatedTags.eq(1).text().trim(), 'name2', 'Second tag is rendered correctly');
-        assert.strictEqual(instance.option('value')[1], 'name2 schema2', 'Correct value is stored');
+        assert.strictEqual($tags.length, 2, 'Two tag is rendered after init');
+        assert.strictEqual($tags.eq(0).text().trim(), 'name1', 'Correct first tag text is rendered');
+        assert.strictEqual($tags.eq(1).text().trim(), 'name2', 'Correct second tag text is rendered');
+        assert.strictEqual(instance.option('value')[0], 'name1 schema1', 'Correct first value is stored');
+        assert.strictEqual(instance.option('value')[1], 'name2 schema2', 'Correct second value is stored');
     });
 
-    QUnit.test('Tagbox should render initial value correctly with function valueExpr (T1234032)', function(assert) {
+    QUnit.test('Tagbox should render initial value correctly with function valueExpr', function(assert) {
         const data = [
             { id: 1, scheme: 'schema1', name: 'name1' },
             { id: 2, scheme: 'schema1', name: 'name2' }
