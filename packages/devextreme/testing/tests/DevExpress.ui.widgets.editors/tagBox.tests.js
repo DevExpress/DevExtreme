@@ -6725,7 +6725,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         instance._list.reload();
         const $tags = instance.$element().find(`.${TAGBOX_TAG_CLASS}`);
 
-        assert.strictEqual($tags.length, 1, 'One tag is rendered after click');
+        assert.strictEqual($tags.length, 1, 'One tag is rendered after reload');
         assert.strictEqual($tags.eq(0).text().trim(), 'name1', 'Correct tag text is rendered');
         assert.strictEqual(instance.option('value')[0], 'name1 schema1', 'Correct value is stored');
 
