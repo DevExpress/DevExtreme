@@ -65,6 +65,7 @@ import { DxiTreeViewItemComponent } from 'devextreme-angular/ui/tree-view/nested
 @Component({
     selector: 'dx-tree-view',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

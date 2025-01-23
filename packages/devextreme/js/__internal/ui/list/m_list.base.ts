@@ -58,9 +58,6 @@ const groupItemsGetter = compileGetter('items');
 let _scrollView;
 
 export const ListBase = CollectionWidget.inherit({
-
-  _activeStateUnit: [LIST_ITEM_SELECTOR, SELECT_ALL_ITEM_SELECTOR].join(','),
-
   _supportedKeys() {
     const that = this;
 
@@ -395,8 +392,10 @@ export const ListBase = CollectionWidget.inherit({
   },
 
   _init() {
-    this._updateActiveStateUnit();
     this.callBase();
+
+    this._updateActiveStateUnit();
+
     this._dataController.resetDataSourcePageIndex();
     this._$container = this.$element();
 

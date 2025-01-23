@@ -30,9 +30,6 @@ const toNumber = (value) => +value;
 const position = ($element) => locate($element).left;
 
 const MultiView = CollectionWidget.inherit({
-
-  _activeStateUnit: `.${MULTIVIEW_ITEM_CLASS}`,
-
   _supportedKeys() {
     return extend(this.callBase(), {
       pageUp: noop,
@@ -136,6 +133,8 @@ const MultiView = CollectionWidget.inherit({
 
   _init() {
     this.callBase.apply(this, arguments);
+
+    this._activeStateUnit = `.${MULTIVIEW_ITEM_CLASS}`;
 
     const $element = this.$element();
 

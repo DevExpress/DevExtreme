@@ -44,6 +44,7 @@ import {
 @Component({
     selector: 'dx-scroll-view',
     template: '<ng-content></ng-content>',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

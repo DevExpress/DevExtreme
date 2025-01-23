@@ -57,6 +57,7 @@ import { DxiGalleryItemComponent } from 'devextreme-angular/ui/gallery/nested';
 @Component({
     selector: 'dx-gallery',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

@@ -1,3 +1,4 @@
+import type { template } from '@js/common';
 import { name as clickEventName } from '@js/common/core/events/click';
 import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
 import eventsEngine from '@js/common/core/events/core/events_engine';
@@ -8,27 +9,33 @@ import messageLocalization from '@js/common/core/localization/message';
 import DataHelperMixin from '@js/common/data/data_helper';
 import Action from '@js/core/action';
 import domAdapter from '@js/core/dom_adapter';
-import { getPublicElement } from '@js/core/element';
 import Guid from '@js/core/guid';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import {
-  // @ts-expect-error
+  // @ts-expect-error ts-error
   deferRenderer,
   ensureDefined,
-  noop,
 } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { findTemplates } from '@js/core/utils/template_manager';
 import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
+import type { DataSourceOptions } from '@js/data/data_source';
+import type {
+  Cancelable, DxEvent, EventInfo, ItemInfo,
+} from '@js/events';
+import type { CollectionWidgetItem as CollectionWidgetItemProperties, CollectionWidgetOptions, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import { focusable } from '@js/ui/widget/selectors';
-import Widget from '@js/ui/widget/ui.widget';
-
-import CollectionWidgetItem from './m_item';
+import { getPublicElement } from '@ts/core/m_element';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
+import CollectionWidgetItem from '@ts/ui/collection/m_item';
 
 const COLLECTION_CLASS = 'dx-collection';
 const ITEM_CLASS = 'dx-item';
@@ -54,24 +61,92 @@ const FOCUS_PAGE_UP = 'pageup';
 const FOCUS_PAGE_DOWN = 'pagedown';
 const FOCUS_LAST = 'last';
 const FOCUS_FIRST = 'first';
-// @ts-expect-error
-const CollectionWidget = Widget.inherit({
 
-  _activeStateUnit: `.${ITEM_CLASS}`,
+interface ActionConfig {
+  beforeExecute?: (e: DxEvent) => void;
+  afterExecute?: (e: DxEvent) => void;
+  excludeValidators?: ('disabled' | 'readOnly')[];
+}
 
-  _supportedKeys() {
-    const space = function (e) {
+type ItemTemplate<TItem> = template | (
+  (itemData: TItem, itemIndex: number, itemElement: Element) => string | dxElementWrapper
+);
+export interface ItemRenderInfo<TItem> {
+  index: number;
+  itemData: TItem;
+  container: dxElementWrapper;
+  contentClass: string;
+  defaultTemplateName: ItemTemplate<TItem> | undefined;
+  templateProperty?: string;
+}
+export interface CollectionWidgetBaseProperties<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    TComponent extends CollectionWidget<any, TItem, TKey> | any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    TItem extends ItemLike = any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    TKey = any,
+> extends CollectionWidgetOptions<TComponent, TItem, TKey> {
+  focusedElement?: dxElementWrapper;
+
+  focusOnSelectedItem?: boolean;
+
+  _itemAttributes?: Record<string, string>;
+}
+
+class CollectionWidget<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TProperties extends CollectionWidgetBaseProperties<any, TItem, TKey>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TItem extends ItemLike = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey = any,
+> extends Widget<TProperties> {
+  private _focusedItemId?: string;
+
+  // eslint-disable-next-line no-restricted-globals
+  private _itemFocusTimeout?: ReturnType<typeof setTimeout>;
+
+  private _itemRenderAction?: (event?: Partial<EventInfo<unknown> & ItemInfo<TItem>>) => void;
+
+  _displayGetter?: unknown;
+
+  _shouldSkipSelectOnFocus?: boolean;
+
+  _renderedItemsCount?: number;
+
+  _startIndexForAppendedItems?: number | null;
+
+  _$noData?: dxElementWrapper;
+
+  _itemFocusHandler?: () => void;
+
+  _inkRipple?: {
+    showWave: (config: {
+      element: dxElementWrapper;
+      event: unknown;
+    }) => void;
+    hideWave: (config: {
+      element: dxElementWrapper;
+      event: unknown;
+    }) => void;
+  };
+
+  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+    const space = (e): void => {
       e.preventDefault();
       this._enterKeyHandler(e);
     };
-    const move = function (location, e) {
+    const move = (location, e): void => {
       if (!isCommandKeyPressed(e)) {
         e.preventDefault();
         e.stopPropagation();
         this._moveFocus(location, e);
       }
     };
-    return extend(this.callBase(), {
+
+    return {
+      ...super._supportedKeys(),
       space,
       enter: this._enterKeyHandler,
       leftArrow: move.bind(this, FOCUS_LEFT),
@@ -82,37 +157,47 @@ const CollectionWidget = Widget.inherit({
       pageDown: move.bind(this, FOCUS_DOWN),
       home: move.bind(this, FOCUS_FIRST),
       end: move.bind(this, FOCUS_LAST),
-    });
-  },
+    };
+  }
 
-  _getHandlerExtendedParams(e, target) {
+  // eslint-disable-next-line class-methods-use-this
+  _getHandlerExtendedParams(
+    e: Record<string, unknown>,
+    $target: dxElementWrapper,
+  ): Record<string, unknown> {
     const params = extend({}, e, {
-      target: target.get(0),
-      currentTarget: target.get(0),
+      target: $target.get(0),
+      currentTarget: $target.get(0),
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return params;
-  },
+  }
 
-  _enterKeyHandler(e) {
-    const $itemElement = $(this.option('focusedElement'));
+  _enterKeyHandler(e: KeyboardEvent): void {
+    const { focusedElement } = this.option();
+
+    const $itemElement = $(focusedElement);
 
     if (!$itemElement.length) {
       return;
     }
 
     const itemData = this._getItemData($itemElement);
+    // @ts-expect-error ts-error
     if (itemData?.onClick) {
+      // @ts-expect-error ts-error
       this._itemEventHandlerByHandler($itemElement, itemData.onClick, {
         event: e,
       });
     }
-
+    // @ts-expect-error ts-error
     this._itemClickHandler(this._getHandlerExtendedParams(e, $itemElement));
-  },
+  }
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+  _getDefaultOptions(): TProperties {
+    return {
+      ...super._getDefaultOptions(),
       selectOnFocus: false,
       loopItemFocus: true,
       items: [],
@@ -134,82 +219,106 @@ const CollectionWidget = Widget.inherit({
       focusedElement: null,
 
       displayExpr: undefined,
-      disabledExpr(data) { return data ? data.disabled : undefined; },
-      visibleExpr(data) { return data ? data.visible : undefined; },
+      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+      disabledExpr(data) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return data ? data.disabled : undefined;
+      },
+      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+      visibleExpr(data) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return data ? data.visible : undefined;
+      },
+    };
+  }
 
-    });
-  },
-
-  _init() {
+  _init(): void {
     this._compileDisplayGetter();
+    // @ts-expect-error ts-error
     this._initDataController();
-    this.callBase();
+    super._init();
+
+    this._activeStateUnit = `.${ITEM_CLASS}`;
 
     this._cleanRenderedItems();
+    // @ts-expect-error ts-error
     this._refreshDataSource();
-  },
+  }
 
-  _compileDisplayGetter() {
-    const displayExpr = this.option('displayExpr');
-    this._displayGetter = displayExpr ? compileGetter(this.option('displayExpr')) : undefined;
-  },
+  _compileDisplayGetter(): void {
+    // @ts-expect-error ts-error
+    const { displayExpr } = this.option();
 
-  _initTemplates() {
+    this._displayGetter = displayExpr ? compileGetter(displayExpr) : undefined;
+  }
+
+  _initTemplates(): void {
     this._initItemsFromMarkup();
 
     this._initDefaultItemTemplate();
-    this.callBase();
-  },
+    super._initTemplates();
+  }
 
-  _getAnonymousTemplateName() {
+  // eslint-disable-next-line class-methods-use-this
+  _getAnonymousTemplateName(): string {
     return ANONYMOUS_TEMPLATE_NAME;
-  },
+  }
 
-  _initDefaultItemTemplate() {
+  _initDefaultItemTemplate(): void {
     const fieldsMap = this._getFieldsMap();
     this._templateManager.addDefaultTemplates({
-      item: new BindableTemplate(($container, data) => {
+      item: new BindableTemplate(($container: dxElementWrapper, data) => {
         if (isPlainObject(data)) {
           this._prepareDefaultItemTemplate(data, $container);
         } else {
           if (fieldsMap && isFunction(fieldsMap.text)) {
+            // eslint-disable-next-line no-param-reassign
             data = fieldsMap.text(data);
           }
           $container.text(String(ensureDefined(data, '')));
         }
       }, this._getBindableFields(), this.option('integrationOptions.watchMethod'), fieldsMap),
     });
-  },
+  }
 
-  _getBindableFields() {
+  // eslint-disable-next-line class-methods-use-this
+  _getBindableFields(): string[] {
     return ['text', 'html'];
-  },
-  // @ts-expect-error
-  _getFieldsMap() {
+  }
+
+  _getFieldsMap(): { text: unknown } | undefined {
     if (this._displayGetter) {
       return { text: this._displayGetter };
     }
-  },
 
-  _prepareDefaultItemTemplate(data, $container) {
-    if (isDefined(data.text)) {
-      $container.text(data.text);
+    return undefined;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _prepareDefaultItemTemplate(
+    data: CollectionWidgetItemProperties,
+    $container: dxElementWrapper,
+  ): void {
+    const { text, html } = data;
+
+    if (isDefined(text)) {
+      $container.text(text);
     }
 
-    if (isDefined(data.html)) {
-      $container.html(data.html);
+    if (isDefined(html)) {
+      $container.html(html);
     }
-  },
+  }
 
-  _initItemsFromMarkup() {
+  _initItemsFromMarkup(): void {
     const rawItems = findTemplates(this.$element(), ITEMS_OPTIONS_NAME);
-
+    // @ts-expect-error ts-error
     if (!rawItems.length || this.option('items').length) {
       return;
     }
 
     const items = rawItems.map(({ element, options }) => {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       const isTemplateRequired = /\S/.test(element.innerHTML) && !options.template;
 
       if (isTemplateRequired) {
@@ -218,14 +327,15 @@ const CollectionWidget = Widget.inherit({
         $(element).remove();
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return options;
     });
 
     this.option('items', items);
-  },
+  }
 
-  _prepareItemTemplate(item) {
-    const templateId = ITEM_TEMPLATE_ID_PREFIX + new Guid();
+  _prepareItemTemplate(item: Element): string {
+    const templateId = `${ITEM_TEMPLATE_ID_PREFIX}${new Guid()}`;
     const $template = $(item)
       .detach()
       .clone()
@@ -235,27 +345,28 @@ const CollectionWidget = Widget.inherit({
     this._saveTemplate(templateId, $template);
 
     return templateId;
-  },
+  }
 
-  _dataSourceOptions() {
+  // eslint-disable-next-line class-methods-use-this
+  _dataSourceOptions(): DataSourceOptions {
     return { paginate: false };
-  },
+  }
 
-  _cleanRenderedItems() {
+  _cleanRenderedItems(): void {
     this._renderedItemsCount = 0;
-  },
+  }
 
-  _focusTarget() {
+  _focusTarget(): dxElementWrapper {
     return this.$element();
-  },
+  }
 
-  _focusInHandler(e) {
-    this.callBase.apply(this, arguments);
+  _focusInHandler(e: DxEvent): void {
+    super._focusInHandler(e);
 
     if (!this._isFocusTarget(e.target)) {
       return;
     }
-
+    // @ts-expect-error ts-error
     const $focusedElement = $(this.option('focusedElement'));
     if ($focusedElement.length) {
       // NOTE: If focusedElement is set, selection was already processed on its focusing.
@@ -268,42 +379,54 @@ const CollectionWidget = Widget.inherit({
         this.option('focusedElement', getPublicElement($activeItem));
       }
     }
-  },
+  }
 
-  _focusOutHandler() {
-    this.callBase.apply(this, arguments);
+  _focusOutHandler(e: DxEvent): void {
+    super._focusOutHandler(e);
 
-    const $target = $(this.option('focusedElement'));
+    const { focusedElement } = this.option();
+    const $target = $(focusedElement);
 
     this._updateFocusedItemState($target, false);
-  },
+  }
 
-  _findActiveTarget($element) {
+  _findActiveTarget($element: dxElementWrapper): dxElementWrapper {
     return $element.find(this._activeStateUnit);
-  },
+  }
 
-  _getActiveItem(last) {
-    const $focusedElement = $(this.option('focusedElement'));
+  _getActiveItem(last?: boolean): dxElementWrapper {
+    const { focusedElement } = this.option();
+
+    const $focusedElement = $(focusedElement);
 
     if ($focusedElement.length) {
       return $focusedElement;
     }
 
-    let index = this.option('focusOnSelectedItem') ? this.option('selectedIndex') : 0;
+    const { focusOnSelectedItem, selectedIndex } = this.option();
+
+    let index = focusOnSelectedItem ? selectedIndex : 0;
 
     const activeElements = this._getActiveElement();
     const lastIndex = activeElements.length - 1;
 
+    // @ts-expect-error ts-error
     if (index < 0) {
       index = last ? lastIndex : 0;
     }
-
+    // @ts-expect-error ts-error
     return activeElements.eq(index);
-  },
-  // @ts-expect-error
-  _moveFocus(location) {
+  }
+
+  // eslint-disable-next-line consistent-return
+  _moveFocus(
+    location: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    e?: unknown,
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  ): boolean | undefined | void {
     const $items = this._getAvailableItems();
-    let $newTarget;
+    let $newTarget: dxElementWrapper = $();
 
     switch (location) {
       case FOCUS_PAGE_UP:
@@ -333,18 +456,18 @@ const CollectionWidget = Widget.inherit({
     if ($newTarget.length !== 0) {
       this.option('focusedElement', getPublicElement($newTarget));
     }
-  },
+  }
 
-  _getVisibleItems($itemElements) {
-    $itemElements = $itemElements || this._itemElements();
-    return $itemElements.filter(':visible');
-  },
+  _getVisibleItems($itemElements?: dxElementWrapper): dxElementWrapper {
+    const $items = $itemElements ?? this._itemElements();
+    return $items.filter(':visible');
+  }
 
-  _getAvailableItems($itemElements) {
+  _getAvailableItems($itemElements?: dxElementWrapper): dxElementWrapper {
     return this._getVisibleItems($itemElements);
-  },
+  }
 
-  _prevItem($items) {
+  _prevItem($items: dxElementWrapper): dxElementWrapper {
     const $target = this._getActiveItem();
     const targetIndex = $items.index($target);
     const $last = $items.last();
@@ -356,9 +479,9 @@ const CollectionWidget = Widget.inherit({
     }
 
     return $item;
-  },
+  }
 
-  _nextItem($items) {
+  _nextItem($items: dxElementWrapper): dxElementWrapper {
     const $target = this._getActiveItem(true);
     const targetIndex = $items.index($target);
     const $first = $items.first();
@@ -370,13 +493,18 @@ const CollectionWidget = Widget.inherit({
     }
 
     return $item;
-  },
+  }
 
-  _selectFocusedItem($target) {
+  _selectFocusedItem($target: dxElementWrapper): void {
+    // @ts-expect-error ts-error
     this.selectItem($target);
-  },
+  }
 
-  _updateFocusedItemState(target, isFocused, needCleanItemId) {
+  _updateFocusedItemState(
+    target: dxElementWrapper | Element | undefined,
+    isFocused: boolean,
+    needCleanItemId?: boolean | undefined,
+  ): void {
     const $target = $(target);
 
     if ($target.length) {
@@ -386,18 +514,21 @@ const CollectionWidget = Widget.inherit({
     }
 
     this._updateParentActiveDescendant();
-  },
+  }
 
-  _getElementClassToSkipRefreshId: noop,
+  // eslint-disable-next-line class-methods-use-this
+  _getElementClassToSkipRefreshId(): string {
+    return '';
+  }
 
-  _shouldSkipRefreshId(target) {
-    const elementClass = this._getElementClassToSkipRefreshId() ?? '';
+  _shouldSkipRefreshId(target: Element | dxElementWrapper): boolean {
+    const elementClass = this._getElementClassToSkipRefreshId();
     const shouldSkipRefreshId = $(target).hasClass(elementClass);
 
     return shouldSkipRefreshId;
-  },
+  }
 
-  _refreshActiveDescendant($target) {
+  _refreshActiveDescendant($target?: dxElementWrapper): void {
     const { focusedElement } = this.option();
 
     if (isDefined(focusedElement)) {
@@ -410,9 +541,12 @@ const CollectionWidget = Widget.inherit({
     }
 
     this.setAria('activedescendant', null, $target);
-  },
+  }
 
-  _refreshItemId($target, needCleanItemId) {
+  _refreshItemId(
+    $target: dxElementWrapper,
+    needCleanItemId: boolean | undefined,
+  ): void {
     const { focusedElement } = this.option();
     const shouldSkipRefreshId = this._shouldSkipRefreshId($target);
 
@@ -425,53 +559,67 @@ const CollectionWidget = Widget.inherit({
     } else {
       this.setAria('id', null, $target);
     }
-  },
+  }
 
-  _isDisabled($element) {
+  // eslint-disable-next-line class-methods-use-this
+  _isDisabled($element: dxElementWrapper): boolean {
     return $element && $($element).attr('aria-disabled') === 'true';
-  },
+  }
 
-  _setFocusedItem($target) {
+  _setFocusedItem($target: dxElementWrapper): void {
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (!$target || !$target.length) {
       return;
     }
 
     this._updateFocusedItemState($target, true);
+    // @ts-expect-error ts-error
     this.onFocusedItemChanged(this.getFocusedItemId());
-
+    // @ts-expect-error ts-error
     const { selectOnFocus } = this.option();
     const isTargetDisabled = this._isDisabled($target);
 
     if (selectOnFocus && !isTargetDisabled && !this._shouldSkipSelectOnFocus) {
       this._selectFocusedItem($target);
     }
-  },
+  }
 
-  _findItemElementByItem(item) {
+  _findItemElementByItem(item: TItem): dxElementWrapper {
     let result = $();
-    const that = this;
-    // @ts-expect-error
-    this.itemElements().each(function () {
-      const $item = $(this);
-      if ($item.data(that._itemDataKey()) === item) {
+    const itemDataKey = this._itemDataKey();
+
+    this.itemElements().each((index, itemElement): boolean => {
+      const $item = $(itemElement);
+      if ($item.data(itemDataKey) === item) {
         result = $item;
         return false;
       }
+
+      return true;
     });
 
     return result;
-  },
+  }
 
-  _getIndexByItem(item) {
-    return this.option('items').indexOf(item);
-  },
+  _getIndexByItem(item: TItem): number {
+    const { items } = this.option();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _itemOptionChanged(item, property, value, oldValue) {
+    // @ts-expect-error ts-error
+    return items.indexOf(item);
+  }
+
+  _itemOptionChanged(
+    item: TItem,
+    property: string,
+    value: unknown,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    prevValue: unknown,
+  ): void {
     const $item = this._findItemElementByItem(item);
     if (!$item.length) {
       return;
     }
+    // @ts-expect-error ts-error
     if (!this.constructor.ItemClass.getInstance($item).setDataField(property, value)) {
       this._refreshItem($item, item);
     }
@@ -481,37 +629,52 @@ const CollectionWidget = Widget.inherit({
     if (isDisabling) {
       this._resetItemFocus($item);
     }
-  },
+  }
 
-  _resetItemFocus($item) {
+  _resetItemFocus($item: dxElementWrapper): void {
+    // @ts-expect-error ts-error
     if ($item.is(this.option('focusedElement'))) {
       this.option('focusedElement', null);
     }
-  },
+  }
 
-  _refreshItem($item) {
+  _refreshItem(
+    $item: dxElementWrapper,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    item: TItem,
+  ): void {
     const itemData = this._getItemData($item);
     const index = $item.data(this._itemIndexKey());
+    // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     this._renderItem(this._renderedItemsCount + index, itemData, null, $item);
-  },
+  }
 
-  _updateParentActiveDescendant: noop,
+  // eslint-disable-next-line class-methods-use-this
+  _updateParentActiveDescendant(): void {}
 
-  _optionChanged(args) {
-    if (args.name === 'items') {
-      const matches = args.fullName.match(ITEM_PATH_REGEX);
+  _optionChanged(args: OptionChanged<TProperties>): void {
+    const {
+      name, value, previousValue, fullName,
+    } = args;
 
-      if (matches && matches.length) {
+    if (name === 'items') {
+      // @ts-expect-error ts-error
+      const matches = fullName.match(ITEM_PATH_REGEX);
+
+      if (matches?.length) {
         const property = matches[matches.length - 1];
-        const itemPath = args.fullName.replace(`.${property}`, '');
+        // @ts-expect-error ts-error
+        const itemPath = fullName.replace(`.${property}`, '');
         const item = this.option(itemPath);
 
-        this._itemOptionChanged(item, property, args.value, args.previousValue);
+        // @ts-expect-error ts-error
+        this._itemOptionChanged(item, property, value, previousValue);
         return;
       }
     }
 
-    switch (args.name) {
+    switch (name) {
       case 'items':
       case '_itemAttributes':
       case 'itemTemplateProperty':
@@ -520,11 +683,14 @@ const CollectionWidget = Widget.inherit({
         this._invalidate();
         break;
       case 'dataSource':
+        // @ts-expect-error ts-error
         this._refreshDataSource();
+        // @ts-expect-error ts-error
         this._renderEmptyMessage();
         break;
       case 'noDataText':
       case 'encodeNoDataText':
+        // @ts-expect-error ts-error
         this._renderEmptyMessage();
         break;
       case 'itemTemplate':
@@ -543,6 +709,7 @@ const CollectionWidget = Widget.inherit({
         this._attachContextMenuEvent();
         break;
       case 'onFocusedItemChanged':
+        // @ts-expect-error ts-error
         this.onFocusedItemChanged = this._createActionByOption('onFocusedItemChanged');
         break;
       case 'selectOnFocus':
@@ -550,8 +717,8 @@ const CollectionWidget = Widget.inherit({
       case 'focusOnSelectedItem':
         break;
       case 'focusedElement':
-        this._updateFocusedItemState(args.previousValue, false, true);
-        this._setFocusedItem($(args.value));
+        this._updateFocusedItemState(previousValue as Element | undefined, false, true);
+        this._setFocusedItem($(value as Element | undefined));
         break;
       case 'displayExpr':
         this._compileDisplayGetter();
@@ -563,39 +730,43 @@ const CollectionWidget = Widget.inherit({
         this._invalidate();
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
-  _invalidate() {
+  _invalidate(): void {
     this.option('focusedElement', null);
 
-    return this.callBase.apply(this, arguments);
-  },
+    super._invalidate();
+  }
 
-  _loadNextPage() {
+  _loadNextPage(): Promise<unknown> {
     this._expectNextPageLoading();
-
+    // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._dataController.loadNextPage();
-  },
+  }
 
-  _expectNextPageLoading() {
+  _expectNextPageLoading(): void {
     this._startIndexForAppendedItems = 0;
-  },
+  }
 
-  _expectLastItemLoading() {
+  _expectLastItemLoading(): void {
     this._startIndexForAppendedItems = -1;
-  },
+  }
 
-  _forgetNextPageLoading() {
+  _forgetNextPageLoading(): void {
     this._startIndexForAppendedItems = null;
-  },
+  }
 
-  _dataSourceChangedHandler(newItems) {
+  _dataSourceChangedHandler(newItems: TItem[]): void {
     const items = this.option('items');
     if (this._initialized && items && this._shouldAppendItems()) {
+      // @ts-expect-error ts-error
       this._renderedItemsCount = items.length;
+      // @ts-expect-error ts-error
       if (!this._isLastPage() || this._startIndexForAppendedItems !== -1) {
+        // @ts-expect-error ts-error
         this.option().items = items.concat(newItems.slice(this._startIndexForAppendedItems));
       }
 
@@ -604,118 +775,134 @@ const CollectionWidget = Widget.inherit({
     } else {
       this.option('items', newItems.slice());
     }
-  },
+  }
 
-  _refreshContent() {
+  _refreshContent(): void {
     this._prepareContent();
     this._renderContent();
-  },
+  }
 
-  _dataSourceLoadErrorHandler() {
+  _dataSourceLoadErrorHandler(): void {
     this._forgetNextPageLoading();
     this.option('items', this.option('items'));
-  },
+  }
 
-  _shouldAppendItems() {
+  _shouldAppendItems(): boolean {
     return this._startIndexForAppendedItems != null && this._allowDynamicItemsAppend();
-  },
+  }
 
-  _allowDynamicItemsAppend() {
+  // eslint-disable-next-line class-methods-use-this
+  _allowDynamicItemsAppend(): boolean {
     return false;
-  },
+  }
 
-  _clean() {
+  _clean(): void {
     this._cleanFocusState();
     this._cleanItemContainer();
-    this._inkRipple && delete this._inkRipple;
+
+    if (this._inkRipple) {
+      delete this._inkRipple;
+    }
+
     this._resetActiveState();
-  },
+  }
 
-  _cleanItemContainer() {
+  _cleanItemContainer(): void {
     $(this._itemContainer()).empty();
-  },
+  }
 
-  _dispose() {
-    this.callBase();
+  _dispose(): void {
+    super._dispose();
 
     clearTimeout(this._itemFocusTimeout);
-  },
+  }
 
-  _refresh() {
+  _refresh(): void {
     this._cleanRenderedItems();
 
-    this.callBase.apply(this, arguments);
-  },
+    super._refresh();
+  }
 
-  _itemContainer() {
+  _itemContainer(): dxElementWrapper {
     return this.$element();
-  },
+  }
 
-  _itemClass() {
+  // eslint-disable-next-line class-methods-use-this
+  _itemClass(): string {
     return ITEM_CLASS;
-  },
+  }
 
-  _itemContentClass() {
-    return this._itemClass() + CONTENT_CLASS_POSTFIX;
-  },
+  _itemContentClass(): string {
+    return `${this._itemClass()}${CONTENT_CLASS_POSTFIX}`;
+  }
 
-  _selectedItemClass() {
+  // eslint-disable-next-line class-methods-use-this
+  _selectedItemClass(): string {
     return SELECTED_ITEM_CLASS;
-  },
+  }
 
-  _itemResponseWaitClass() {
+  // eslint-disable-next-line class-methods-use-this
+  _itemResponseWaitClass(): string {
     return ITEM_RESPONSE_WAIT_CLASS;
-  },
+  }
 
-  _itemSelector() {
+  _itemSelector(): string {
     return `.${this._itemClass()}`;
-  },
+  }
 
-  _itemDataKey() {
+  // eslint-disable-next-line class-methods-use-this
+  _itemDataKey(): string {
     return ITEM_DATA_KEY;
-  },
+  }
 
-  _itemIndexKey() {
+  // eslint-disable-next-line class-methods-use-this
+  _itemIndexKey(): string {
     return ITEM_INDEX_KEY;
-  },
+  }
 
-  _itemElements() {
+  _itemElements(): dxElementWrapper {
     return this._itemContainer().find(this._itemSelector());
-  },
+  }
 
-  _initMarkup() {
-    this.callBase();
+  _initMarkup(): void {
+    super._initMarkup();
+    // @ts-expect-error ts-error
     this.onFocusedItemChanged = this._createActionByOption('onFocusedItemChanged');
 
     this.$element().addClass(COLLECTION_CLASS);
     this._prepareContent();
-  },
+  }
 
-  _prepareContent: deferRenderer(function () {
-    this._renderContentImpl();
-  }),
+  _prepareContent(): void {
+    deferRenderer(() => {
+      this._renderContentImpl();
+    })();
+  }
 
-  _renderContent() {
+  _renderContent(): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._fireContentReadyAction();
-  },
+  }
 
-  _render() {
-    this.callBase();
+  _render(): void {
+    super._render();
 
     this._attachClickEvent();
     this._attachHoldEvent();
     this._attachContextMenuEvent();
-  },
+  }
 
-  _getPointerEvent() {
+  // eslint-disable-next-line class-methods-use-this
+  _getPointerEvent(): string {
     return pointerEvents.down;
-  },
+  }
 
-  _attachClickEvent() {
+  _attachClickEvent(): void {
     const itemSelector = this._itemSelector();
     const pointerEvent = this._getPointerEvent();
-
+    // @ts-expect-error ts-error
     const clickEventNamespace = addNamespace(clickEventName, this.NAME);
+    // @ts-expect-error ts-error
     const pointerEventNamespace = addNamespace(pointerEvent, this.NAME);
 
     const pointerAction = new Action((args) => {
@@ -724,8 +911,8 @@ const CollectionWidget = Widget.inherit({
       this._itemPointerDownHandler(event);
     });
 
-    const clickEventCallback = (e) => this._itemClickHandler(e);
-    const pointerEventCallback = (e) => {
+    const clickEventCallback = (e): void => this._itemClickHandler(e);
+    const pointerEventCallback = (e): void => {
       pointerAction.execute({
         element: $(e.target),
         event: e,
@@ -735,21 +922,29 @@ const CollectionWidget = Widget.inherit({
     eventsEngine.off(this._itemContainer(), clickEventNamespace, itemSelector);
     eventsEngine.off(this._itemContainer(), pointerEventNamespace, itemSelector);
     eventsEngine.on(this._itemContainer(), clickEventNamespace, itemSelector, clickEventCallback);
-    eventsEngine.on(this._itemContainer(), pointerEventNamespace, itemSelector, pointerEventCallback);
-  },
+    eventsEngine.on(
+      this._itemContainer(),
+      pointerEventNamespace,
+      itemSelector,
+      pointerEventCallback,
+    );
+  }
 
-  _itemClickHandler(e, args, config) {
+  _itemClickHandler(
+    e: DxEvent,
+    args?: Record<string, unknown>,
+    config?: ActionConfig,
+  ): void {
     this._itemDXEventHandler(e, 'onItemClick', args, config);
-  },
+  }
 
-  _itemPointerDownHandler(e) {
+  _itemPointerDownHandler(e: DxEvent): void {
     if (!this.option('focusStateEnabled')) {
       return;
     }
-
-    this._itemFocusHandler = function () {
+    this._itemFocusHandler = (): void => {
       clearTimeout(this._itemFocusTimeout);
-      this._itemFocusHandler = null;
+      this._itemFocusHandler = undefined;
 
       if (e.isDefaultPrevented()) {
         return;
@@ -765,168 +960,223 @@ const CollectionWidget = Widget.inherit({
         this.option('focusedElement', getPublicElement($closestItem));
         this._shouldSkipSelectOnFocus = false;
       }
-    }.bind(this);
+    };
 
-    this._itemFocusTimeout = setTimeout(this._forcePointerDownFocus.bind(this));
-  },
+    // eslint-disable-next-line no-restricted-globals
+    this._itemFocusTimeout = setTimeout(
+      this._forcePointerDownFocus.bind(this),
+    );
+  }
 
-  _closestFocusable($target) {
+  // eslint-disable-next-line class-methods-use-this
+  _closestFocusable(
+    $target: dxElementWrapper,
+  ): dxElementWrapper | undefined {
+    // @ts-expect-error ts-error
     if ($target.is(focusable)) {
       return $target;
     }
-    $target = $target.parent();
-    while ($target.length && !domAdapter.isDocument($target.get(0)) && !domAdapter.isDocumentFragment($target.get(0))) {
-      if ($target.is(focusable)) {
-        return $target;
+    let $nextTarget = $target.parent();
+    while ($nextTarget.length
+        && !domAdapter.isDocument($nextTarget.get(0))
+        && !domAdapter.isDocumentFragment($nextTarget.get(0))
+    ) {
+      // @ts-expect-error ts-error
+      if ($nextTarget.is(focusable)) {
+        return $nextTarget;
       }
-      $target = $target.parent();
+      $nextTarget = $nextTarget.parent();
     }
-  },
 
-  _forcePointerDownFocus() {
-    this._itemFocusHandler && this._itemFocusHandler();
-  },
+    return undefined;
+  }
 
-  _updateFocusState() {
-    this.callBase.apply(this, arguments);
+  _forcePointerDownFocus(): void {
+    if (this._itemFocusHandler) {
+      this._itemFocusHandler();
+    }
+  }
+
+  _updateFocusState(e: DxEvent, isFocused: boolean): void {
+    super._updateFocusState(e, isFocused);
 
     this._forcePointerDownFocus();
-  },
+  }
 
-  _attachHoldEvent() {
+  _attachHoldEvent(): void {
     const $itemContainer = this._itemContainer();
     const itemSelector = this._itemSelector();
+    // @ts-expect-error ts-error
     const eventName = addNamespace(holdEvent.name, this.NAME);
 
     eventsEngine.off($itemContainer, eventName, itemSelector);
-    // @ts-expect-error
-    eventsEngine.on($itemContainer, eventName, itemSelector, { timeout: this._getHoldTimeout() }, this._itemHoldHandler.bind(this));
-  },
+    eventsEngine.on(
+      $itemContainer,
+      eventName,
+      itemSelector,
+      { timeout: this._getHoldTimeout() },
+      // @ts-expect-error ts-error
+      this._itemHoldHandler.bind(this),
+    );
+  }
 
-  _getHoldTimeout() {
-    return this.option('itemHoldTimeout');
-  },
+  _getHoldTimeout(): number | undefined {
+    const { itemHoldTimeout } = this.option();
 
-  _shouldFireHoldEvent() {
+    return itemHoldTimeout;
+  }
+
+  _shouldFireHoldEvent(): boolean {
     return this.hasActionSubscription('onItemHold');
-  },
+  }
 
-  _itemHoldHandler(e) {
+  _itemHoldHandler(e: DxEvent & Cancelable): void {
     if (this._shouldFireHoldEvent()) {
       this._itemDXEventHandler(e, 'onItemHold');
     } else {
       e.cancel = true;
     }
-  },
+  }
 
-  _attachContextMenuEvent() {
+  _attachContextMenuEvent(): void {
     const $itemContainer = this._itemContainer();
     const itemSelector = this._itemSelector();
+    // @ts-expect-error ts-error
     const eventName = addNamespace(contextMenuEventName, this.NAME);
 
     eventsEngine.off($itemContainer, eventName, itemSelector);
-    eventsEngine.on($itemContainer, eventName, itemSelector, this._itemContextMenuHandler.bind(this));
-  },
+    eventsEngine.on(
+      $itemContainer,
+      eventName,
+      itemSelector,
+      this._itemContextMenuHandler.bind(this),
+    );
+  }
 
-  _shouldFireContextMenuEvent() {
+  _shouldFireContextMenuEvent(): boolean {
     return this.hasActionSubscription('onItemContextMenu');
-  },
+  }
 
-  _itemContextMenuHandler(e) {
+  _itemContextMenuHandler(e: DxEvent & Cancelable): void {
     if (this._shouldFireContextMenuEvent()) {
       this._itemDXEventHandler(e, 'onItemContextMenu');
     } else {
       e.cancel = true;
     }
-  },
+  }
 
-  _renderContentImpl() {
-    const items = this.option('items') || [];
+  _renderContentImpl(): void {
+    const { items } = this.option();
+    const itemsToRender = items ?? [];
+
     if (this._renderedItemsCount) {
-      this._renderItems(items.slice(this._renderedItemsCount));
+      this._renderItems(itemsToRender.slice(this._renderedItemsCount));
     } else {
-      this._renderItems(items);
+      this._renderItems(itemsToRender);
     }
-  },
+  }
 
-  _renderItems(items) {
+  _renderItems(items: TItem[]): void {
     if (items.length) {
       each(items, (index, itemData) => {
+        // @ts-expect-error ts-error
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
         this._renderItem(this._renderedItemsCount + index, itemData);
       });
     }
-
+    // @ts-expect-error ts-error
     this._renderEmptyMessage();
-  },
+  }
 
-  _getItemsContainer() {
+  _getItemsContainer(): dxElementWrapper {
     return this._itemContainer();
-  },
+  }
 
-  _setAttributes($element) {
+  _setAttributes($element: dxElementWrapper): void {
     const attributes = { ...this.option('_itemAttributes') };
+    // @ts-expect-error ts-error
     const { class: customClassValue } = attributes;
 
     if (customClassValue) {
       const currentClassValue = $element.get(0).className;
-
+      // @ts-expect-error ts-error
       attributes.class = [currentClassValue, customClassValue].join(' ');
     }
-
+    // @ts-expect-error ts-error
     $element.attr(attributes);
-  },
+  }
 
-  _renderItem(index, itemData, $container, $itemToReplace) {
+  _renderItem(
+    index: { group: number; item: number } | number,
+    itemData: TItem,
+    $container: dxElementWrapper | null,
+    $itemToReplace?: dxElementWrapper,
+  ): dxElementWrapper {
+    // @ts-expect-error ts-error
     const itemIndex = index?.item ?? index;
-    $container = $container || this._getItemsContainer();
-    const $itemFrame = this._renderItemFrame(itemIndex, itemData, $container, $itemToReplace);
+    const $containerToRender = $container ?? this._getItemsContainer();
+    const $itemFrame = this._renderItemFrame(
+      itemIndex,
+      itemData,
+      $containerToRender,
+      $itemToReplace,
+    );
     this._setElementData($itemFrame, itemData, itemIndex);
     this._setAttributes($itemFrame);
     this._attachItemClickEvent(itemData, $itemFrame);
     const $itemContent = this._getItemContent($itemFrame);
+
+    const { itemTemplate } = this.option();
 
     const renderContentPromise = this._renderItemContent({
       index: itemIndex,
       itemData,
       container: getPublicElement($itemContent),
       contentClass: this._itemContentClass(),
-      defaultTemplateName: this.option('itemTemplate'),
+      defaultTemplateName: itemTemplate,
     });
 
-    const that = this;
-    when(renderContentPromise).done(($itemContent) => {
-      that._postprocessRenderItem({
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    when(renderContentPromise).done(($content) => {
+      this._postprocessRenderItem({
         itemElement: $itemFrame,
-        itemContent: $itemContent,
+        itemContent: $content,
         itemData,
         itemIndex,
       });
 
-      that._executeItemRenderAction(index, itemData, getPublicElement($itemFrame));
+      // @ts-expect-error ts-error
+      this._executeItemRenderAction(index, itemData, getPublicElement($itemFrame));
     });
 
     return $itemFrame;
-  },
+  }
 
-  _getItemContent($itemFrame) {
+  // eslint-disable-next-line class-methods-use-this
+  _getItemContent($itemFrame: dxElementWrapper): dxElementWrapper {
     const $itemContent = $itemFrame.find(`.${ITEM_CONTENT_PLACEHOLDER_CLASS}`);
     $itemContent.removeClass(ITEM_CONTENT_PLACEHOLDER_CLASS);
     return $itemContent;
-  },
+  }
 
-  _attachItemClickEvent(itemData, $itemElement) {
+  _attachItemClickEvent(itemData: TItem, $itemElement: dxElementWrapper): void {
+    // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (!itemData || !itemData.onClick) {
       return;
     }
 
     eventsEngine.on($itemElement, clickEventName, (e) => {
+      // @ts-expect-error ts-error
       this._itemEventHandlerByHandler($itemElement, itemData.onClick, {
         event: e,
       });
     });
-  },
+  }
 
-  _renderItemContent(args) {
+  _renderItemContent(
+    args: ItemRenderInfo<TItem>,
+  ): dxElementWrapper | DeferredObj<dxElementWrapper> {
     const itemTemplateName = this._getItemTemplateName(args);
     const itemTemplate = this._getTemplate(itemTemplateName);
 
@@ -937,221 +1187,306 @@ const CollectionWidget = Widget.inherit({
     }
 
     return this._renderItemContentByNode(args, $templateResult);
-  },
+  }
 
-  _renderItemContentByNode(args, $node) {
+  _renderItemContentByNode(
+    args: ItemRenderInfo<TItem>,
+    $node: dxElementWrapper,
+  ): dxElementWrapper {
     $(args.container).replaceWith($node);
     args.container = getPublicElement($node);
     this._addItemContentClasses(args);
 
     return $node;
-  },
+  }
 
-  _addItemContentClasses(args) {
+  // eslint-disable-next-line class-methods-use-this
+  _addItemContentClasses(args: ItemRenderInfo<TItem>): void {
     const classes = [
       ITEM_CLASS + CONTENT_CLASS_POSTFIX,
       args.contentClass,
     ];
 
     $(args.container).addClass(classes.join(' '));
-  },
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _appendItemToContainer($container, $itemFrame, index) {
+  // eslint-disable-next-line class-methods-use-this
+  _appendItemToContainer(
+    $container: dxElementWrapper,
+    $itemFrame: dxElementWrapper,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    index: number,
+  ): void {
     $itemFrame.appendTo($container);
-  },
+  }
 
-  _renderItemFrame(index, itemData, $container, $itemToReplace) {
+  _renderItemFrame(
+    index: number,
+    itemData: TItem,
+    $container: dxElementWrapper,
+    $itemToReplace?: dxElementWrapper,
+  ): dxElementWrapper {
     const $itemFrame = $('<div>');
+    // @ts-expect-error ts-error
     // eslint-disable-next-line no-new
     new this.constructor.ItemClass($itemFrame, this._itemOptions(), itemData || {});
 
-    if ($itemToReplace && $itemToReplace.length) {
+    if ($itemToReplace?.length) {
       $itemToReplace.replaceWith($itemFrame);
     } else {
       this._appendItemToContainer.call(this, $container, $itemFrame, index);
     }
 
     if (this.option('useItemTextAsTitle')) {
+      // @ts-expect-error ts-error
       const displayValue = this._displayGetter ? this._displayGetter(itemData) : itemData;
       $itemFrame.attr('title', displayValue);
     }
 
     return $itemFrame;
-  },
+  }
 
-  _itemOptions() {
-    const that = this;
+  _itemOptions(): Record<string, unknown> {
     return {
-      watchMethod() {
-        return that.option('integrationOptions.watchMethod');
-      },
-      owner: that,
-      fieldGetter(field) {
-        const expr = that.option(`${field}Expr`);
+      watchMethod: () => this.option('integrationOptions.watchMethod'),
+      owner: this,
+      fieldGetter: (field): unknown => {
+        const expr = this.option(`${field}Expr`);
+        // @ts-expect-error ts-error
         const getter = compileGetter(expr);
 
         return getter;
       },
     };
-  },
+  }
 
-  _postprocessRenderItem: noop,
+  // eslint-disable-next-line class-methods-use-this
+  _postprocessRenderItem(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    args: {
+      itemElement: dxElementWrapper;
+      itemContent: dxElementWrapper;
+      itemData: TItem;
+      itemIndex: number;
+    },
+  ): void {}
 
-  _executeItemRenderAction(index, itemData, itemElement) {
+  _executeItemRenderAction(
+    index: number,
+    itemData: TItem,
+    itemElement: HTMLElement,
+  ): void {
     this._getItemRenderAction()({
       itemElement,
       itemIndex: index,
       itemData,
     });
-  },
+  }
 
-  _setElementData(element, data, index) {
+  _setElementData(
+    element: dxElementWrapper,
+    data: TItem,
+    index: number,
+  ): void {
     element
       .addClass([ITEM_CLASS, this._itemClass()].join(' '))
       .data(this._itemDataKey(), data)
       .data(this._itemIndexKey(), index);
-  },
+  }
 
-  _createItemRenderAction() {
-    // eslint-disable-next-line no-return-assign
-    return (this._itemRenderAction = this._createActionByOption('onItemRendered', {
+  _createItemRenderAction(): (event?: Partial<EventInfo<unknown> & ItemInfo<TItem>>) => void {
+    this._itemRenderAction = this._createActionByOption('onItemRendered', {
       element: this.element(),
       excludeValidators: ['disabled', 'readOnly'],
       category: 'rendering',
-    }));
-  },
+    });
 
-  _getItemRenderAction() {
-    return this._itemRenderAction || this._createItemRenderAction();
-  },
+    return this._itemRenderAction;
+  }
 
-  _getItemTemplateName(args) {
+  _getItemRenderAction(): (event?: Partial<EventInfo<unknown> & ItemInfo<TItem>>) => void {
+    return this._itemRenderAction ?? this._createItemRenderAction();
+  }
+
+  _getItemTemplateName(
+    args: ItemRenderInfo<TItem>,
+  ): ItemTemplate<TItem> {
     const data = args.itemData;
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const templateProperty = args.templateProperty || this.option('itemTemplateProperty');
+    // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     const template = data && data[templateProperty];
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return template || args.defaultTemplateName;
-  },
+  }
 
-  _createItemByTemplate(itemTemplate, renderArgs) {
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
+  _createItemByTemplate(
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    itemTemplate,
+    renderArgs: ItemRenderInfo<TItem>,
+  ) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return itemTemplate.render({
       model: renderArgs.itemData,
       container: renderArgs.container,
       index: renderArgs.index,
       onRendered: this._onItemTemplateRendered(itemTemplate, renderArgs),
     });
-  },
+  }
 
-  _onItemTemplateRendered() {
-    return noop;
-  },
+  // eslint-disable-next-line class-methods-use-this
+  _onItemTemplateRendered(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    itemTemplate: { source: () => unknown },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    renderArgs: { itemData: unknown },
+  ): () => void {
+    return (): void => {};
+  }
 
-  _emptyMessageContainer() {
+  _emptyMessageContainer(): dxElementWrapper {
     return this._itemContainer();
-  },
+  }
 
-  _renderEmptyMessage(items) {
+  _renderEmptyMessage(items: TItem[]): void {
+    // eslint-disable-next-line no-param-reassign
     items = items || this.option('items');
     const noDataText = this.option('noDataText');
+    // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     const hideNoData = !noDataText || (items && items.length) || this._dataController.isLoading();
 
     if (hideNoData && this._$noData) {
       this._$noData.remove();
+      // @ts-expect-error ts-error
       this._$noData = null;
       this.setAria('label', undefined);
     }
 
     if (!hideNoData) {
-      this._$noData = this._$noData || $('<div>').addClass('dx-empty-message');
+      this._$noData = this._$noData ?? $('<div>').addClass('dx-empty-message');
       this._$noData.appendTo(this._emptyMessageContainer());
 
       if (this.option('encodeNoDataText')) {
+        // @ts-expect-error ts-error
         this._$noData.text(noDataText);
       } else {
+        // @ts-expect-error ts-error
         this._$noData.html(noDataText);
       }
     }
     this.$element().toggleClass(EMPTY_COLLECTION, !hideNoData);
-  },
+  }
 
-  _itemDXEventHandler(dxEvent, handlerOptionName, actionArgs, actionConfig) {
+  _itemDXEventHandler(
+    dxEvent: DxEvent,
+    handlerOptionName: string,
+    actionArgs?: Record<string, unknown>,
+    actionConfig?: ActionConfig,
+  ): void {
     this._itemEventHandler(dxEvent.target, handlerOptionName, extend(actionArgs, {
       event: dxEvent,
     }), actionConfig);
-  },
+  }
 
-  _itemEventHandler(initiator, handlerOptionName, actionArgs, actionConfig) {
+  _itemEventHandler(
+    initiator: dxElementWrapper | Element,
+    handlerOptionName: string,
+    actionArgs: Record<string, unknown>,
+    actionConfig?: ActionConfig,
+  ): void {
     const action = this._createActionByOption(handlerOptionName, extend({
       validatingTargetName: 'itemElement',
     }, actionConfig));
     return this._itemEventHandlerImpl(initiator, action, actionArgs);
-  },
+  }
 
-  _itemEventHandlerByHandler(initiator, handler, actionArgs, actionConfig) {
+  _itemEventHandlerByHandler(
+    initiator: dxElementWrapper | Element,
+    handler: () => void,
+    actionArgs: Record<string, unknown>,
+    actionConfig: ActionConfig,
+  ): void {
     const action = this._createAction(handler, extend({
       validatingTargetName: 'itemElement',
     }, actionConfig));
     return this._itemEventHandlerImpl(initiator, action, actionArgs);
-  },
+  }
 
-  _itemEventHandlerImpl(initiator, action, actionArgs) {
+  _itemEventHandlerImpl(
+    initiator: dxElementWrapper | Element,
+    action: (event?: Record<string, unknown>) => void,
+    actionArgs: ActionConfig,
+  ): void {
     const $itemElement = this._closestItemElement($(initiator));
     const args = extend({}, actionArgs);
 
     return action(extend(actionArgs, this._extendActionArgs($itemElement), args));
-  },
+  }
 
-  _extendActionArgs($itemElement) {
+  _extendActionArgs($itemElement: dxElementWrapper): ItemInfo<TItem> {
     return {
       itemElement: getPublicElement($itemElement),
       itemIndex: this._itemElements().index($itemElement),
       itemData: this._getItemData($itemElement),
     };
-  },
+  }
 
-  _closestItemElement($element) {
+  _closestItemElement($element: dxElementWrapper): dxElementWrapper {
     return $($element).closest(this._itemSelector());
-  },
+  }
 
-  _getItemData(itemElement) {
+  _getItemData(itemElement: Element | dxElementWrapper): TItem {
+    // @ts-expect-error ts-error
     return $(itemElement).data(this._itemDataKey());
-  },
+  }
 
-  _getSummaryItemsSize(dimension, items, includeMargin) {
+  // eslint-disable-next-line class-methods-use-this
+  _getSummaryItemsSize(
+    dimension: string,
+    items: dxElementWrapper,
+    includeMargin?: boolean,
+  ): number {
     let result = 0;
 
     if (items) {
       each(items, (_, item) => {
         if (dimension === 'width') {
-          result += getOuterWidth(item, includeMargin || false);
+          result += getOuterWidth(item, includeMargin ?? false);
         } else if (dimension === 'height') {
-          result += getOuterHeight(item, includeMargin || false);
+          result += getOuterHeight(item, includeMargin ?? false);
         }
       });
     }
 
     return result;
-  },
+  }
 
-  getFocusedItemId() {
+  getFocusedItemId(): string {
     if (!this._focusedItemId) {
       this._focusedItemId = `dx-${new Guid()}`;
     }
 
     return this._focusedItemId;
-  },
+  }
 
-  itemElements() {
+  itemElements(): dxElementWrapper {
     return this._itemElements();
-  },
+  }
 
-  itemsContainer() {
+  itemsContainer(): dxElementWrapper {
     return this._itemContainer();
-  },
+  }
+}
 
-}).include(DataHelperMixin);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(CollectionWidget as any).include(DataHelperMixin);
 
+// @ts-expect-error ts-error
 CollectionWidget.ItemClass = CollectionWidgetItem;
 
 export default CollectionWidget;

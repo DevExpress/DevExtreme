@@ -21,15 +21,21 @@ export class DxServerModule {
           const el = infernoRenderer.createElement(component, props);
           const document = container.ownerDocument;
           const temp = document.createElement(container.tagName);
+
           temp.innerHTML = renderToString(el);
+
           const mainElement = temp.childNodes[0];
           const childString = mainElement.innerHTML;
 
           for (let i = 0; i < mainElement.attributes.length; i++) {
-            temp.setAttribute(mainElement.attributes[i].name, mainElement.attributes[i].value);
+            const attr = mainElement.attributes[i];
+
+            if (!container.hasAttribute(attr.name)) {
+              container.setAttribute(attr.name, attr.value);
+            }
           }
-          temp.innerHTML = childString;
-          container.outerHTML = temp.outerHTML;
+
+          container.innerHTML = childString;
         },
       });
     }

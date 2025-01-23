@@ -87,9 +87,7 @@ class RadioGroup extends Editor<RadioGroupProperties> {
   _init(): void {
     super._init();
 
-    // @ts-expect-error
     this._activeStateUnit = `.${RADIO_BUTTON_CLASS}`;
-    // @ts-expect-error
     this._feedbackHideTimeout = RADIO_FEEDBACK_HIDE_TIMEOUT;
     // @ts-expect-error
     this._initDataExpressions();

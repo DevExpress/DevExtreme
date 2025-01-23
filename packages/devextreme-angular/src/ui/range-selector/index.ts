@@ -199,6 +199,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-range-selector',
     template: '',
     styles: [ ' :host {  display: block; }'],
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
