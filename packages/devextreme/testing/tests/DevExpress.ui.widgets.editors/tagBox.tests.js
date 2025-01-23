@@ -6664,7 +6664,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
             { id: 1, scheme: 'schema1', name: 'name1' },
             { id: 2, scheme: 'schema1', name: 'name2' }
         ];
-        const instance = $('#tagBox').dxTagBox({
+        const $tagBox = $('#tagBox').dxTagBox({
             dataSource: data,
             valueExpr(x) {
                 return x && x.name + ' ' + x.scheme;
@@ -6672,9 +6672,9 @@ QUnit.module('dataSource integration', moduleSetup, () => {
             displayExpr: 'name',
             hideSelectedItems: true,
             opened: true
-        }).dxTagBox('instance');
-
-        const $listItem = $(instance._list.$element().find(`.${LIST_ITEM_CLASS}`).eq(0));
+        });
+        const instance = $tagBox.dxTagBox('instance');
+        const $listItem = getListItems($tagBox);
         $listItem.trigger('dxclick');
 
         const $tags = instance.$element().find(`.${TAGBOX_TAG_CLASS}`);
@@ -6682,7 +6682,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         assert.strictEqual($tags.eq(0).text().trim(), 'name1', 'Correct tag text is rendered');
         assert.strictEqual(instance.option('value')[0], 'name1 schema1', 'Correct value is stored');
 
-        const $secondItem = $(instance._list.$element().find(`.${LIST_ITEM_CLASS}`).eq(0));
+        const $secondItem = getListItems($tagBox);
         $secondItem.trigger('dxclick');
 
         const $updatedTags = instance.$element().find(`.${TAGBOX_TAG_CLASS}`);
