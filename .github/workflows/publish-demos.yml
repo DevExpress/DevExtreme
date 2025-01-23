@@ -126,7 +126,7 @@ jobs:
       run: pnpm run make-demos-bundle --framework="Vue"
 
     - name: Save publish-demos directory for ES as an artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: publish-demos
         path: ./apps/demos/publish-demos
@@ -233,7 +233,7 @@ jobs:
     needs: [build-devextreme-all, publish-ES, publish-angular]
     steps: 
       - name: Download publish-demos artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: publish-demos
           path: ./apps/demos/publish-demos

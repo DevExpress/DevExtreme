@@ -7,8 +7,8 @@ concurrency:
 on:
   workflow_dispatch:
 
-jobs: 
-    testcafe: 
+jobs:
+    testcafe:
         strategy:
             fail-fast: false
             matrix:
@@ -27,7 +27,7 @@ jobs:
               uses: actions/setup-node@v4
               with:
                 node-version: '20'
-            
+
             - name: Checkout gh-pages branch
               uses: actions/checkout@v4
               with:
@@ -47,7 +47,7 @@ jobs:
               with:
                 ref: ${{ env.TARGET_BRANCH }}
                 path: devextreme
-            
+
             - name: Console.log ls
               run: ls -al & cd gh-pages & ls -al
 
@@ -96,7 +96,7 @@ jobs:
 
             - name: Copy screenshots artifacts
               if: ${{ failure() }}
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                 name: screenshots
                 path: ${{ github.workspace }}/devextreme/apps/demos/testing/artifacts/compared-screenshots/**/*
