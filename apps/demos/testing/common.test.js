@@ -21,6 +21,7 @@ import {
 
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
 import knownWarnings from './known-warnings.json';
+import skipJsErrorsComponents from './skip-js-errors-components.json'
 
 const execCode = ClientFunction((code) => {
   // eslint-disable-next-line no-eval
@@ -334,10 +335,6 @@ const SKIPPED_TESTS = {
     'PivotGrid',
   ];
 
-  const SKIP_JS_ERRORS_COMPONENTS = [
-    'Map',
-  ];
-
   getDemoPaths(approach).forEach((demoPath, index) => {
     if (!shouldRunTestAtIndex(index + 1) || !existsSync(demoPath)) { return; }
     // eslint-disable-next-line max-len
@@ -378,7 +375,7 @@ const SKIPPED_TESTS = {
     runTestAtPage(
       test,
       `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`,
-      SKIP_JS_ERRORS_COMPONENTS.includes(widgetName),
+      skipJsErrorsComponents.includes(widgetName),
     ).clientScripts(clientScriptSource)(testName, async (t) => {
       if (visualTestStyles) {
         await execCode(visualTestStyles);
@@ -426,13 +423,7 @@ const SKIPPED_TESTS = {
         const consoleMessages = await t.getBrowserConsoleMessages();
 
         const errors = [...consoleMessages.error, ...consoleMessages.warn]
-          .filter((e) => {
-            const isKnownWarning = knownWarnings.common.some((kw) => e.startsWith(kw));
-            const isComponentSpecificKnownWarning = knownWarnings[widgetName]
-                && knownWarnings[widgetName].some((kw) => e.startsWith(kw));
-
-            return !isKnownWarning && !isComponentSpecificKnownWarning;
-          });
+          .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
 
         await t.expect(errors).eql([]);
 
