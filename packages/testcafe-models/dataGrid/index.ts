@@ -666,6 +666,20 @@ export default class DataGrid extends Widget {
       },
     )();
   }
+
+  apiSearchByText(text: string): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).searchByText(text),
+      {
+        dependencies: {
+          getInstance, text
+        },
+      },
+    )();
+  }
+
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 
