@@ -59,7 +59,9 @@ createTestCafe({
             fs.rmSync('./screenshots', { recursive: true });
         }
 
-        const browsers = args.browsers.split(' ').map(expandBrowserAlias);
+        const browsers = args.browsers
+            .split(' ')
+            .map((browser) => expandBrowserAlias(browser, args.componentFolder.trim()));
         // eslint-disable-next-line no-console
         console.log('Browsers:', browsers);
 
@@ -113,24 +115,22 @@ createTestCafe({
             quarantineMode: { successThreshold: 1, attemptLimit: 5 },
         };
 
-        if(args.componentFolder.trim() !== 'renovation') {
-            runOptions.hooks = {
-                test: {
-                    before: async() => {
-                        if(args.shadowDom) {
-                            await addShadowRootTree();
-                        }
+        runOptions.hooks = {
+            test: {
+                before: async() => {
+                    if(args.shadowDom) {
+                        await addShadowRootTree();
+                    }
 
-                        if(args.theme) {
-                            await changeTheme(args.theme);
-                        }
-                    },
-                    after: async() => {
-                        await testPageUtils.clearTestPage();
+                    if(args.theme) {
+                        await changeTheme(args.theme);
                     }
                 },
-            };
-        }
+                after: async() => {
+                    await testPageUtils.clearTestPage();
+                }
+            },
+        };
 
         if(args.browsers === 'chrome:docker') {
             runOptions.disableScreenshots = true;
@@ -155,7 +155,7 @@ function setShadowDom(args) {
     process.env.shadowDom = args.shadowDom;
 }
 
-function expandBrowserAlias(browser) {
+function expandBrowserAlias(browser, componentFolder) {
     switch(browser) {
         case 'chrome:devextreme-shr2':
             return 'chrome:headless --disable-gpu --window-size=1200,800';

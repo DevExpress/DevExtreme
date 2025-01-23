@@ -1,5 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Chat from 'devextreme-testcafe-models/chat';
+import { ClientFunction } from 'testcafe';
 import { createUser, generateMessages } from './data';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
@@ -7,6 +8,7 @@ import { getFullThemeName, testScreenshot } from '../../helpers/themeUtils';
 import { appendElementTo, insertStylesheetRulesToPage } from '../../helpers/domUtils';
 
 const CHAT_TYPINGINDICATOR_CIRCLE_CLASS = 'dx-chat-typingindicator-circle';
+const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 
 fixture.disablePageReloads`ChatTypingIndicator`
   .page(url(__dirname, '../container.html'));
@@ -14,8 +16,6 @@ fixture.disablePageReloads`ChatTypingIndicator`
 test('Chat: typing indicator with emptyview', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const chat = new Chat('#container');
-
-  await chat.repaint();
 
   await testScreenshot(t, takeScreenshot, 'Typing indicator with emptyview.png', {
     element: '#container',
@@ -44,6 +44,8 @@ test('Chat: typing indicator with emptyview', async (t) => {
     { name: 'Elodie Montclair' },
   ];
 
+  await waitFont();
+
   return createWidget('dxChat', {
     width: 400,
     height: 600,
@@ -53,6 +55,9 @@ test('Chat: typing indicator with emptyview', async (t) => {
 
 test('Chat: typing indicator with a lot of items', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const chat = new Chat('#chat');
+
+  await chat.repaint();
 
   await testScreenshot(t, takeScreenshot, 'Typing indicator with a lot of items.png', { element: '#chat' });
 
@@ -119,6 +124,8 @@ test('Chat: typing indicator', async (t) => {
   const items = generateMessages(5, userFirst, userSecond);
 
   const typingUsers = [userFirst];
+
+  await waitFont();
 
   return createWidget('dxChat', {
     user: userSecond,

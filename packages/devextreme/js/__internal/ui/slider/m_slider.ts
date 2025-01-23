@@ -35,9 +35,6 @@ const INVALID_MESSAGE_VISIBLE_CLASS = 'dx-invalid-message-visible';
 const SLIDER_VALIDATION_NAMESPACE = 'Validation';
 
 const Slider = TrackBar.inherit({
-
-  _activeStateUnit: SLIDER_HANDLE_SELECTOR,
-
   _supportedKeys() {
     const isRTL = this.option('rtlEnabled');
 
@@ -153,6 +150,12 @@ const Slider = TrackBar.inherit({
 
       valueChangeMode: 'onHandleMove',
     });
+  },
+
+  _init() {
+    this.callBase();
+
+    this._activeStateUnit = SLIDER_HANDLE_SELECTOR;
   },
 
   _toggleValidationMessage(visible) {

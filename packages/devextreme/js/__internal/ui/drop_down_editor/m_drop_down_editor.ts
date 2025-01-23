@@ -29,7 +29,7 @@ import Widget from '@js/ui/widget/ui.widget';
 import DropDownButton from './m_drop_down_button';
 import { getElementWidth, getSizeValue } from './m_utils';
 
-const DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor';
+export const DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor';
 const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
 const DROP_DOWN_EDITOR_BUTTON_ICON = 'dx-dropdowneditor-icon';
 const DROP_DOWN_EDITOR_OVERLAY = 'dx-dropdowneditor-overlay';

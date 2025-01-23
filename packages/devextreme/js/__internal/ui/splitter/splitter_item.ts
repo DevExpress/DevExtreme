@@ -36,7 +36,7 @@ class SplitterItem extends CollectionWidgetItem {
       this._setIdAttr(id);
 
       const config = this._owner._getResizeHandleConfig(id);
-      // @ts-expect-error
+
       this._resizeHandle = this._owner._createComponent($('<div>'), ResizeHandle, config);
 
       if (this._resizeHandle && this._$element) {
@@ -50,6 +50,8 @@ class SplitterItem extends CollectionWidgetItem {
   }
 
   getIndex(): number {
+    // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._owner._getIndexByItemData(this._rawData);
   }
 

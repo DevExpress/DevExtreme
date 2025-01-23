@@ -42,6 +42,7 @@
   }
 
   & .dx-popup-content > .dx-template-wrapper {
+    display: flow-root;
     height: 100%;
     width: 100%;
   }
@@ -82,7 +83,7 @@
   .dx-popup-inherit-height & {
     @include dx-popup-content-auto-resizing();
 
-    > .dx-template-wrapper {
+    > div {
       max-height: inherit;
       min-height: inherit;
 

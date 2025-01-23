@@ -25,9 +25,10 @@ import type {
   ResizeEvent,
   ResizeStartEvent,
 } from '@js/ui/splitter';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { CollectionWidgetBaseProperties, ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
 import CollectionWidget from '@ts/ui/collection/live_update';
 
-import type { TypedCollectionWidgetOptions } from '../collection/base';
 import type ResizeHandle from './resize_handle';
 import type { ResizeHandleOptions } from './resize_handle';
 import { RESIZE_HANDLE_CLASS } from './resize_handle';
@@ -96,8 +97,8 @@ export interface Properties<
   TKey = any,
 > extends PublicProperties<TItem, TKey>,
   Omit<
-  TypedCollectionWidgetOptions<Splitter, TItem, TKey>,
-  keyof PublicProperties<TItem, TKey> & keyof TypedCollectionWidgetOptions<Splitter, TItem, TKey>
+  CollectionWidgetBaseProperties<Splitter, TItem, TKey>,
+  keyof PublicProperties<TItem, TKey> & keyof CollectionWidgetBaseProperties<Splitter, TItem, TKey>
   > {
   _renderQueue?: RenderQueueItem[];
 }
@@ -169,6 +170,7 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _initializeRenderQueue(): void {
+    // @ts-expect-error
     this._renderQueue = this.option('_renderQueue') ?? [];
   }
 
@@ -177,7 +179,7 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _pushItemToRenderQueue(
-    itemContent: Element,
+    itemContent: dxElementWrapper,
     splitterConfig: Properties,
   ): void {
     this._renderQueue.push({ itemContent, splitterConfig });
@@ -503,12 +505,14 @@ class Splitter extends CollectionWidget<Properties> {
           return;
         }
 
+        const { orientation: currentOrientation } = this.option();
+
         const newLayout = getNextLayout(
           this._currentLayout ?? [],
           calculateDelta(
             // @ts-expect-error ts-error
             event.offset,
-            this.option('orientation'),
+            currentOrientation,
             rtlEnabled,
             this._currentOnePxRatio,
           ),
@@ -601,7 +605,7 @@ class Splitter extends CollectionWidget<Properties> {
 
   _createItemByTemplate(
     itemTemplate: { source: () => unknown },
-    args: { itemData: Item },
+    args: ItemRenderInfo<Item>,
   ): unknown {
     const { itemData } = args;
 
@@ -616,7 +620,12 @@ class Splitter extends CollectionWidget<Properties> {
     return super._createItemByTemplate(itemTemplate, args);
   }
 
-  _postprocessRenderItem(args: { itemData: Item; itemContent: Element }): void {
+  _postprocessRenderItem(args: {
+    itemElement: dxElementWrapper;
+    itemContent: dxElementWrapper;
+    itemData: Item;
+    itemIndex: number;
+  }): void {
     const splitterConfig = args.itemData.splitter;
     if (!splitterConfig) {
       return;
@@ -626,7 +635,9 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _isHorizontalOrientation(): boolean {
-    return this.option('orientation') === ORIENTATION.horizontal;
+    const { orientation } = this.option();
+
+    return orientation === ORIENTATION.horizontal;
   }
 
   _toggleOrientationClass(): void {
@@ -900,7 +911,6 @@ class Splitter extends CollectionWidget<Properties> {
 
   _updateItemOption(path: string, value: unknown, silent = false): void {
     if (silent) {
-      // @ts-expect-error badly typed base class
       this._options.silent(path, value);
     } else {
       this.option(path, value);
@@ -948,7 +958,7 @@ class Splitter extends CollectionWidget<Properties> {
     this._layout = this._getDefaultLayoutBasedOnSize();
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<Properties>): void {
     const { name, value } = args;
 
     switch (name) {
@@ -1001,7 +1011,6 @@ class Splitter extends CollectionWidget<Properties> {
   }
 }
 
-// @ts-expect-error ts-error
 registerComponent('dxSplitter', Splitter);
 
 export default Splitter;

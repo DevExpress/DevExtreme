@@ -58,7 +58,7 @@ export class AppComponent {
       },
     });
   }
-  
+
   getSelectedRowKeys<T>(value: T): T[] {
     return value !== null && value !== undefined ? [value] : [];
   }

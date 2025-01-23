@@ -1,10 +1,10 @@
+import type { DefaultOptionsRule } from '@js/core/options/utils';
 import $ from '@js/core/renderer';
 import type { ButtonStyle, ButtonType, ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import { isFluent, isMaterial } from '@js/ui/themes';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
-
-import Widget from '../widget';
+import Widget from '@ts/core/widget/widget';
 
 const CALENDAR_NAVIGATOR_CLASS = 'dx-calendar-navigator';
 const CALENDAR_NAVIGATOR_PREVIOUS_MONTH_CLASS = 'dx-calendar-navigator-previous-month';
@@ -24,9 +24,9 @@ export interface NavigatorOptions extends WidgetOptions<Navigator> {
 }
 
 class Navigator extends Widget<NavigatorOptions> {
-  _clickAction?: any;
+  _clickAction?: ((event: { direction: number; event: ClickEvent }) => void) | null;
 
-  _captionClickAction?: any;
+  _captionClickAction?: ((event: { event: ClickEvent }) => void) | null;
 
   _prevButton!: Button;
 
@@ -45,7 +45,7 @@ class Navigator extends Widget<NavigatorOptions> {
     };
   }
 
-  _defaultOptionsRules(): Record<string, unknown>[] {
+  _defaultOptionsRules(): DefaultOptionsRule<NavigatorOptions>[] {
     return super._defaultOptionsRules().concat([
       {
         device() {
@@ -103,10 +103,9 @@ class Navigator extends Widget<NavigatorOptions> {
       {
         focusStateEnabled,
         icon: rtlEnabled ? 'chevronright' : 'chevronleft',
-        onClick: (e) => { this._clickAction({ direction: -direction, event: e }); },
+        onClick: (e) => { this._clickAction?.({ direction: -direction, event: e }); },
         type,
         stylingMode,
-        // @ts-expect-error
         integrationOptions: {},
       },
     );
@@ -121,10 +120,9 @@ class Navigator extends Widget<NavigatorOptions> {
       {
         focusStateEnabled,
         icon: rtlEnabled ? 'chevronleft' : 'chevronright',
-        onClick: (e) => { this._clickAction({ direction, event: e }); },
+        onClick: (e) => { this._clickAction?.({ direction, event: e }); },
         type,
         stylingMode,
-        // @ts-expect-error
         integrationOptions: {},
       },
     );
@@ -138,7 +136,7 @@ class Navigator extends Widget<NavigatorOptions> {
       Button,
       {
         focusStateEnabled,
-        onClick: (e) => { this._captionClickAction({ event: e }); },
+        onClick: (e) => { this._captionClickAction?.({ event: e }); },
         type,
         stylingMode,
         template: (_, content) => {
@@ -152,19 +150,22 @@ class Navigator extends Widget<NavigatorOptions> {
               .append($('<span>').addClass(BUTTON_TEXT_CLASS).text(captionText));
           });
         },
-        // @ts-expect-error
         integrationOptions: {},
       },
     );
 
     const $caption = this._caption.$element();
 
-    // @ts-expect-error
-    this.$element().append($prevButton, $caption, $nextButton);
+    this.$element()
+      .append($prevButton)
+      .append($caption)
+      .append($nextButton);
   }
 
   _renderCaption(): void {
-    this._caption?.option('text', this.option('text'));
+    const { text } = this.option();
+
+    this._caption?.option('text', text);
   }
 
   toggleButton(

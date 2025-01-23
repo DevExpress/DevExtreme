@@ -4,6 +4,8 @@ const round = Math.round;
 
 function getValue(value) { return value; }
 
+const MIN_VALID_SCALE_OFFSET = 0.05;
+
 export default {
     translate: function(category, directionOffset) {
         const that = this;
@@ -38,6 +40,13 @@ export default {
 
     zoom: function(translate, scale) {
         const that = this;
+        const scaleOffset = Math.abs(Math.abs(scale) - 1);
+        const isZoomIn = scale > 1;
+
+        if(scale !== 1 && scaleOffset < MIN_VALID_SCALE_OFFSET) {
+            scale = this.getMinScale(isZoomIn);
+        }
+
         const categories = that._categories;
         const canvasOptions = that._canvasOptions;
         const stick = that._options.stick;

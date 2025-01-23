@@ -2612,11 +2612,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     this._appendHeaderPanelEmptyCellIfNecessary();
     this._$headerPanelContainer.append(this._$headerTablesContainer);
 
-    this.$element().append(
-      this._$fixedContainer,
-      this._$headerPanelContainer,
-      this._dateTableScrollable.$element(),
-    );
+    this.$element()
+      .append(this._$fixedContainer)
+      .append(this._$headerPanelContainer)
+      .append(this._dateTableScrollable.$element());
   }
 
   _createWorkSpaceScrollableElements() {

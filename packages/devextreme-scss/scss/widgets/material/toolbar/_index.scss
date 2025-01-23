@@ -96,19 +96,43 @@
 
   .dx-toolbar-hidden-button {
     .dx-button-normal {
-      @include dx-button-flat-color-styling($button-normal-color, $button-normal-text-hover-bg, $button-normal-text-focused-bg, $button-normal-text-active-bg);
+      @include dx-button-flat-color-styling(
+        $button-normal-color,
+        $button-normal-text-bg,
+        $button-normal-text-hover-bg,
+        $button-normal-text-focused-bg,
+        $button-normal-text-active-bg
+      );
     }
 
     .dx-button-default {
-      @include dx-button-flat-color-styling($button-default-bg, $button-default-text-hover-bg, $button-default-text-focused-bg, $button-default-text-active-bg);
+      @include dx-button-flat-color-styling(
+        $button-default-bg,
+        $button-default-text-bg,
+        $button-default-text-hover-bg,
+        $button-default-text-focused-bg,
+        $button-default-text-active-bg
+      );
     }
 
     .dx-button-danger {
-      @include dx-button-flat-color-styling($button-danger-bg, $button-danger-text-hover-bg, $button-danger-text-focused-bg, $button-danger-text-active-bg);
+      @include dx-button-flat-color-styling(
+        $button-danger-bg,
+        $button-danger-text-bg,
+        $button-danger-text-hover-bg,
+        $button-danger-text-focused-bg,
+        $button-danger-text-active-bg
+      );
     }
 
     .dx-button-success {
-      @include dx-button-flat-color-styling($button-success-bg, $button-success-text-hover-bg, $button-success-text-focused-bg, $button-success-text-active-bg);
+      @include dx-button-flat-color-styling(
+        $button-success-bg,
+        $button-success-text-bg,
+        $button-success-text-hover-bg,
+        $button-success-text-focused-bg,
+        $button-success-text-active-bg
+      );
     }
 
     .dx-button {
