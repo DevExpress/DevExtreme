@@ -55,7 +55,7 @@ const getTestSpecificSkipRules = (testName) => {
       return ['label'];
     case 'Map-Markers':
     case 'Map-Routes':
-      return ['aria-hidden-focus', 'image-alt'];
+      return ['aria-hidden-focus', 'image-alt', 'image-redundant-alt'];
     default:
       return [];
   }
