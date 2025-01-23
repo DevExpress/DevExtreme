@@ -421,7 +421,6 @@ const SKIPPED_TESTS = {
             comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
           }
 
-
           const consoleMessages = await t.getBrowserConsoleMessages();
 
           const errors = [...consoleMessages.error, ...consoleMessages.warn]
