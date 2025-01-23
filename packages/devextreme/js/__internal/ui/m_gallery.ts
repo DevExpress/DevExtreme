@@ -92,7 +92,6 @@ const GalleryNavButton = Widget.inherit({
 
 const Gallery = CollectionWidget.inherit({
 
-  _activeStateUnit: GALLERY_ITEM_SELECTOR,
   _wasAnyItemTemplateRendered: false,
 
   _getDefaultOptions() {
@@ -138,6 +137,7 @@ const Gallery = CollectionWidget.inherit({
   _init() {
     this.callBase();
 
+    this._activeStateUnit = GALLERY_ITEM_SELECTOR;
     this.option('loopItemFocus', this.option('loop'));
   },
 

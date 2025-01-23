@@ -2597,6 +2597,69 @@ QUnit.test('Pinch zoom. Big chart rendering time on start and small time in the 
     assert.deepEqual(valueAxis2.visualRange(), { startValue: 11.5, endValue: 14.5 }, 'Val2 axis visualRange after pinchEnd');
 });
 
+[
+    {
+        axis: 'argument',
+        zoomAndPan: {
+            argumentAxis: 'both',
+            valueAxis: 'none',
+            allowTouchGestures: true,
+        },
+    },
+    {
+        axis: 'value',
+        zoomAndPan: {
+            argumentAxis: 'none',
+            valueAxis: 'both',
+            allowTouchGestures: true,
+        },
+    },
+].forEach(({ axis, zoomAndPan }) => {
+    QUnit.test(`${axis} axis pinch with tiny offset should still zoom on one step (T1236028)`, function(assert) {
+        const onZoomStart = sinon.spy();
+        const onZoomEnd = sinon.spy();
+        const dataSource = [
+            { arg: '1', val: '1' },
+            { arg: '2', val: '2' },
+            { arg: '3', val: '3' },
+            { arg: '4', val: '4' },
+            { arg: '5', val: '5' },
+        ];
+
+        const chart = this.createChart({
+            argumentAxis: {
+                argumentType: 'string',
+                visualRange: {
+                    startValue: '1',
+                    endValue: '1',
+                }
+            },
+            valueAxis: {
+                valueType: 'string',
+                visualRange: {
+                    startValue: '1',
+                    endValue: '1',
+                }
+            },
+            dataSource,
+            zoomAndPan,
+            onZoomStart: onZoomStart,
+            onZoomEnd: onZoomEnd
+        });
+
+        const targetAxis = axis === 'argument' ? chart.getArgumentAxis() : chart.getValueAxis();
+
+        const $root = $(chart._renderer.root.element);
+        $root.trigger($.Event('dxpointerdown', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 10, pageY: 10 }, { pointerId: 2, pageX: 100, pageY: 100 }] }));
+        $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 11, pageY: 11 }, { pointerId: 2, pageX: 99, pageY: 99 }] }));
+        $root.trigger($.Event('dxpointerup', { pointerType: 'touch', pointers: [] }));
+
+        assert.equal(onZoomEnd.getCall(0).args[0].axis, targetAxis, `${axis} axis is zoomed`);
+        assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: '1', endValue: '1', categories: ['1'] }, 'previous range is correct');
+        assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: '1', endValue: '3', categories: ['1', '2', '3'] }, 'new range is correct');
+    });
+});
+
 QUnit.module('Misc', environment);
 
 QUnit.test('argument axis should not restore visual range on dataSource update (T1049139)', function(assert) {

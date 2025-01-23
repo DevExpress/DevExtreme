@@ -16,6 +16,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { compare as compareVersions } from '@js/core/utils/version';
+import type { DxEvent } from '@js/events';
 import { focusable as focusableSelector } from '@js/ui/widget/selectors';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
@@ -47,13 +48,13 @@ export interface Properties<TComponent = any> extends WidgetOptions<TComponent> 
 class Widget<
   TProperties extends Properties = Properties,
 > extends DOMComponent<Widget<TProperties>, TProperties> {
-  private readonly _feedbackHideTimeout = 400;
+  public _activeStateUnit!: string;
+
+  public _feedbackHideTimeout = 400;
 
   private readonly _feedbackShowTimeout = 30;
 
   private _contentReadyAction?: ((event?: Record<string, unknown>) => void) | null;
-
-  private readonly _activeStateUnit!: string;
 
   private _keyboardListenerId?: string | null;
 
@@ -265,8 +266,9 @@ class Widget<
     return this._getActiveElement();
   }
 
-  _isFocusTarget(element: Element): boolean {
+  _isFocusTarget(element: Element | undefined): boolean {
     const focusTargets = $(this._focusTarget()).toArray();
+    // @ts-expect-error ts-error
     return focusTargets.includes(element);
   }
 
@@ -306,7 +308,7 @@ class Widget<
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  _focusInHandler(event): void {
+  _focusInHandler(event: DxEvent): void {
     if (!event.isDefaultPrevented()) {
       this._createActionByOption('onFocusIn', {
         beforeExecute: () => this._updateFocusState(event, true),
@@ -316,7 +318,7 @@ class Widget<
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  _focusOutHandler(event): void {
+  _focusOutHandler(event: DxEvent): void {
     if (!event.isDefaultPrevented()) {
       this._createActionByOption('onFocusOut', {
         beforeExecute: () => this._updateFocusState(event, false),

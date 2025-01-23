@@ -30749,21 +30749,54 @@ declare module DevExpress.ui {
     validate(): DevExpress.ui.dxValidator.ValidationResult;
   }
   module dxValidator {
+    /**
+     * [descr:_ui_validator_DisposingEvent]
+     */
     export type DisposingEvent =
       DevExpress.common.core.events.EventInfo<dxValidator>;
+    /**
+     * [descr:_ui_validator_InitializedEvent]
+     */
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxValidator>;
+    /**
+     * [descr:_ui_validator_OptionChangedEvent]
+     */
     export type OptionChangedEvent =
       DevExpress.common.core.events.EventInfo<dxValidator> &
         DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties = dxValidatorOptions;
+    /**
+     * [descr:_ui_validator_ValidatedEvent]
+     */
     export type ValidatedEvent = {
+      /**
+       * [descr:_ui_validator_ValidatedEvent.name]
+       */
       name?: string;
+      /**
+       * [descr:_ui_validator_ValidatedEvent.isValid]
+       */
       isValid?: boolean;
+      /**
+       * [descr:_ui_validator_ValidatedEvent.value]
+       */
       value?: any;
+      /**
+       * [descr:_ui_validator_ValidatedEvent.validationRules]
+       */
       validationRules?: Array<DevExpress.common.ValidationRule>;
+      /**
+       * [descr:_ui_validator_ValidatedEvent.brokenRule]
+       */
       brokenRule?: DevExpress.common.ValidationRule;
-      brokenRules?: DevExpress.common.ValidationRule;
+      /**
+       * [descr:_ui_validator_ValidatedEvent.brokenRules]
+       */
+      brokenRules?: Array<DevExpress.common.ValidationRule>;
+      /**
+       * [descr:_ui_validator_ValidatedEvent.status]
+       */
       status?: DevExpress.common.ValidationStatus;
     };
     export type ValidationResult = dxValidatorResult;

@@ -9,6 +9,7 @@ import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
 import { extend } from '@js/core/utils/extend';
 import { hasWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
 import type PublicEditor from '@js/ui/editor/editor';
 import type {
   EditorOptions,
@@ -192,7 +193,7 @@ class Editor<
     this._valueChangeEventInstance = e;
   }
 
-  _focusInHandler(e: NativeEventInfo<Editor, FocusEvent>): void {
+  _focusInHandler(e: DxEvent): void {
     const { validationMessageMode } = this.option();
     const isValidationMessageShownOnFocus = validationMessageMode === 'auto';
 

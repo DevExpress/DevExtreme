@@ -120,6 +120,9 @@ $(() => {
           selectedRowKeys: selectedRowKeys,
           focusedRowEnabled: true,
           focusedRowKey: cellInfo.value,
+          onContextMenuPreparing: (e) => {
+            e.items = [];
+          },
           onSelectionChanged(selectionChangedArgs) {
             e.component.option('value', selectionChangedArgs.selectedRowKeys[0]);
             cellInfo.setValue(selectionChangedArgs.selectedRowKeys[0]);

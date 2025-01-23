@@ -1,4 +1,4 @@
-import Editor from '../../__internal/ui/editor/m_editor';
+import Editor from '../../__internal/ui/editor/editor';
 
 export default Editor;
 

@@ -89,12 +89,16 @@ $badge-invalid-bg: $base-invalid-color;
   }
 
   .dx-list-select-all {
+    margin-inline: $fluent-list-item-margin-inline;
     padding: $fluent-list-item-vertical-padding + 2px 0 $fluent-list-item-vertical-padding - 2px;
   }
 
   .dx-list-items {
-    margin-left: $fluent-list-vertical-padding;
-    margin-right: $fluent-list-vertical-padding;
+    margin-inline: $fluent-list-item-margin-inline;
+
+    .dx-list-select-checkbox {
+      margin-inline: $fluent-list-item-checkbox-margin-inline;
+    }
   }
 
   .dx-list-item,

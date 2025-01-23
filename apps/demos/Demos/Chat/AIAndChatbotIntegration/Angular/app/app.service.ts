@@ -5,10 +5,11 @@ import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
+import rehypeMinifyWhitespace from 'rehype-minify-whitespace';
 import {
   User,
   Alert,
-  MessageEnteredEvent
+  MessageEnteredEvent,
 } from 'devextreme/ui/chat';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
@@ -26,9 +27,10 @@ export class AppService {
     apiVersion: '2024-02-01',
     endpoint: 'https://public-api.devexpress.com/demo-openai',
     apiKey: 'DEMO',
-  }
+  };
 
   REGENERATION_TEXT = 'Regeneration...';
+
   ALERT_TIMEOUT = 1000 * 60;
 
   user: User = {
@@ -41,7 +43,9 @@ export class AppService {
   };
 
   store: any[] = [];
+
   messages: any[] = [];
+
   alerts: Alert[] = [];
 
   customStore: CustomStore;
@@ -54,7 +58,7 @@ export class AppService {
 
   constructor() {
     this.chatService = new AzureOpenAI(this.AzureOpenAIConfig);
-    this.initDataSource()
+    this.initDataSource();
     this.typingUsersSubject.next([]);
     this.alertsSubject.next([]);
   }
@@ -73,28 +77,24 @@ export class AppService {
         'dxChat-emptyListMessage': 'Chat is Empty',
         'dxChat-emptyListPrompt': 'AI Assistant is ready to answer your questions.',
         'dxChat-textareaPlaceholder': 'Ask AI Assistant...',
-      }
-    }
+      },
+    };
   }
 
   initDataSource() {
     this.customStore = new CustomStore({
       key: 'id',
-      load: () => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve([...this.store]);
-          }, 0);
+      load: () => new Promise((resolve) => {
+        setTimeout(() => {
+          resolve([...this.store]);
+        }, 0);
+      }),
+      insert: (message) => new Promise((resolve) => {
+        setTimeout(() => {
+          this.store.push(message);
+          resolve(message);
         });
-      },
-      insert: (message) => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            this.store.push(message);
-            resolve(message);
-          });
-        });
-      },
+      }),
     });
 
     this.dataSource = new DataSource({
@@ -160,7 +160,7 @@ export class AppService {
 
   alertLimitReached() {
     this.setAlerts([{
-      message: 'Request limit reached, try again in a minute.'
+      message: 'Request limit reached, try again in a minute.',
     }]);
 
     setTimeout(() => {
@@ -189,6 +189,7 @@ export class AppService {
     const result = unified()
       .use(remarkParse)
       .use(remarkRehype)
+      .use(rehypeMinifyWhitespace)
       .use(rehypeStringify)
       .processSync(value)
       .toString();
