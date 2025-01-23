@@ -6691,7 +6691,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         assert.strictEqual(instance.option('value')[1], 'name2 schema1', 'Correct value is stored');
     });
 
-    QUnit.test('TagBox should update tags when custom dataSource is used (T1234032)', function(assert) {
+    QUnit.test('TagBox should render initial tags correctly even if items are not loaded yet and valueExpr is a function', function(assert) {
         const data = [
             { name: 'name1', scheme: 'schema1', value: 1 },
             { name: 'name2', scheme: 'schema2', value: 2 },
