@@ -11,6 +11,7 @@ import { render } from 'inferno';
 
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
+import { ErrorController } from './error_controller/error_controller';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
@@ -34,6 +35,8 @@ export class GridCoreNewBase<
 
   private toolbarView!: ToolbarView;
 
+  private errorController!: ErrorController;
+
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
     this.diContext.register(DataControllerModule.DataController);
@@ -41,6 +44,7 @@ export class GridCoreNewBase<
     this.diContext.register(ToolbarController);
     this.diContext.register(ToolbarView);
     this.diContext.register(PagerView);
+    this.diContext.register(ErrorController);
   }
 
   protected _initDIContext(): void {
@@ -49,6 +53,7 @@ export class GridCoreNewBase<
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
     this.pagerView = this.diContext.get(PagerView);
+    this.errorController = this.diContext.get(ErrorController);
   }
 
   protected _init(): void {
