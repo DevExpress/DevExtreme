@@ -210,6 +210,9 @@ importers:
       '@vue/shared':
         specifier: ^3.2.47
         version: 3.4.27
+      canvg:
+        specifier: 4.0.2
+        version: 4.0.2
       cldr-core:
         specifier: 40.0.0
         version: 40.0.0
@@ -7091,6 +7094,10 @@ packages:
   canvg@3.0.10:
     resolution: {integrity: sha512-qwR2FRNO9NlzTeKIPIKpnTY6fqwuYSequ8Ru8c0YkYU7U0oW+hLUvWadLvAu1Rl72OMNiFhoLu4f8eUjQ7l/+Q==}
     engines: {node: '>=10.0.0'}
+
+  canvg@4.0.2:
+    resolution: {integrity: sha512-/7kIZger/mdFci4KXdtMr+NQB4GU1InkJ4RwSyDBRcvy4BUlg1hD+ZUWo550sWPyWaKZ8purqby6kjf09qVriw==}
+    engines: {node: '>=12.0.0'}
 
   case-sensitive-paths-webpack-plugin@2.4.0:
     resolution: {integrity: sha512-roIFONhcxog0JSSWbvVAh3OocukmSgpqOH6YpMkCvav/ySIV3JKg4Dc8vYtQjYi/UxpNE36r/9v+VqTQqgkYmw==}
@@ -22070,8 +22077,7 @@ snapshots:
 
   '@types/qs@6.9.17': {}
 
-  '@types/raf@3.4.3':
-    optional: true
+  '@types/raf@3.4.3': {}
 
   '@types/range-parser@1.2.7': {}
 
@@ -24253,6 +24259,14 @@ snapshots:
       stackblur-canvas: 2.7.0
       svg-pathdata: 6.0.3
     optional: true
+
+  canvg@4.0.2:
+    dependencies:
+      '@types/raf': 3.4.3
+      raf: 3.4.1
+      rgbcolor: 1.0.1
+      stackblur-canvas: 2.7.0
+      svg-pathdata: 6.0.3
 
   case-sensitive-paths-webpack-plugin@2.4.0: {}
 
@@ -33007,8 +33021,7 @@ snapshots:
 
   rfdc@1.4.1: {}
 
-  rgbcolor@1.0.1:
-    optional: true
+  rgbcolor@1.0.1: {}
 
   rimraf@2.6.3:
     dependencies:
@@ -33696,8 +33709,7 @@ snapshots:
     dependencies:
       escape-string-regexp: 2.0.0
 
-  stackblur-canvas@2.7.0:
-    optional: true
+  stackblur-canvas@2.7.0: {}
 
   stackframe@0.3.1: {}
 
@@ -34262,8 +34274,7 @@ snapshots:
       es6-iterator: 2.0.3
       es6-symbol: 3.1.4
 
-  svg-pathdata@6.0.3:
-    optional: true
+  svg-pathdata@6.0.3: {}
 
   svg-tags@1.0.0: {}
 
