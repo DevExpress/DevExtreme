@@ -43,7 +43,7 @@ jobs:
                 python -m http.server 8083 &
 
             - name: Checkout main branch
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
               with:
                 ref: ${{ env.TARGET_BRANCH }}
                 path: devextreme
