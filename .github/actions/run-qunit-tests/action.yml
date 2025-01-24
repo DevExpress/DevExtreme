@@ -76,12 +76,12 @@ runs:
         firefox-version: '120.0.1'
 
     - name: Use Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '20'
 
     - name: Restore npm cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -92,7 +92,7 @@ runs:
       run: npm install --no-audit --no-fund
 
     - name: Download artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: devextreme-artifacts
         path: packages/devextreme
@@ -132,7 +132,7 @@ runs:
 
     - name: Copy RawLog.txt
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: RawLog-${{ env.MATRIX_ENVS_NAME_SAFE }}
         path: ${{ github.workspace }}/packages/devextreme/testing/RawLog.txt
