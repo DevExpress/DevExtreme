@@ -977,6 +977,7 @@ const TagBox = (SelectBox as any).inherit({
 
   _getSelectedItemsFromList(values) {
     const listSelectedItems = this._list?.option('selectedItems');
+
     let selectedItems = [];
     if (values.length === listSelectedItems?.length) {
       selectedItems = this._filterSelectedItems(listSelectedItems, values);
