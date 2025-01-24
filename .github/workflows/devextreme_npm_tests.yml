@@ -339,13 +339,31 @@ jobs:
         CI_ENV: true
       run: npm run test-testcafe
 
+    - name: Sanitize job name
+      if: ${{ failure() }}
+      run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}" | tr '/' '-')" >> $GITHUB_ENV
+
     - name: Copy screenshots artifacts
       if: ${{ failure() }}
       uses: actions/upload-artifact@v4
       with:
-        name: screenshots
+        name: screenshots-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/devextreme-demos/testing/artifacts/*
         if-no-files-found: ignore
+
+  merge-artifacts:
+    runs-on: devextreme-shr2
+    needs: test_demos
+    if: ${{ failure() }}
+
+    steps:
+      - name: Merge screenshot artifacts
+        uses: actions/upload-artifact/merge@v4
+        continue-on-error: true
+        with:
+          name: screenshots
+          pattern: screenshots-*
+          delete-merged: true
 
   notify:
     runs-on: devextreme-shr2
