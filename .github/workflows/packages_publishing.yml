@@ -92,7 +92,7 @@ jobs:
       - name: Build artifacts package
         run: npx ts-node tools/scripts/make-artifacts-package
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: packages
           path: artifacts/npm/*.tgz
@@ -123,7 +123,7 @@ jobs:
           sparse-checkout-cone-mode: false
 
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: packages
 
