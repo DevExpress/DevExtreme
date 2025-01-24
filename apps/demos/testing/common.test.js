@@ -22,6 +22,7 @@ import {
 
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
 import knownWarnings from './known-warnings.json';
+import skipJsErrorsComponents from './skip-js-errors-components.json';
 
 import { gitHubIgnored } from '../utils/visual-tests/github-ignored-list';
 
@@ -55,6 +56,9 @@ const getTestSpecificSkipRules = (testName) => {
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
+    case 'Map-Markers':
+    case 'Map-Routes':
+      return ['aria-hidden-focus', 'image-alt', 'image-redundant-alt'];
     default:
       return [];
   }
@@ -68,6 +72,11 @@ const SKIPPED_TESTS = {
     Gantt: [
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Map: [
+      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
   },
   Angular: {
@@ -95,6 +104,11 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleSeriesSelection', themes: [THEME.material] },
       { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
       { demo: 'APISelectAPoint', themes: [THEME.material] },
+    ],
+    Map: [
+      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
@@ -163,6 +177,11 @@ const SKIPPED_TESTS = {
     List: [
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
       { demo: 'ItemDragging', themes: [THEME.fluent, THEME.material] },
+    ],
+    Map: [
+      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     VectorMap: [
       { demo: 'Overview', themes: [THEME.material] },
@@ -242,6 +261,11 @@ const SKIPPED_TESTS = {
     List: [
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
     ],
+    Map: [
+      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Gauges: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'VariableNumberOfSubvalueIndicators', themes: [THEME.material] },
@@ -313,9 +337,6 @@ const SKIPPED_TESTS = {
     'Scheduler',
     'PivotGrid',
   ];
-  const BROKEN_THIRD_PARTY_SCRIPTS_COMPONENT = [
-    'Map',
-  ];
 
   getDemoPaths(approach).forEach((demoPath, index) => {
     if (!shouldRunTestAtIndex(index + 1) || !existsSync(demoPath)) { return; }
@@ -344,9 +365,6 @@ const SKIPPED_TESTS = {
       if (process.env.STRATEGY === 'accessibility' && ACCESSIBILITY_UNSUPPORTED_COMPONENTS.indexOf(widgetName) > -1) {
         return;
       }
-      if (BROKEN_THIRD_PARTY_SCRIPTS_COMPONENT.indexOf(widgetName) > -1) {
-        return;
-      }
       if (process.env.CI_ENV && process.env.DISABLE_DEMO_TEST_SETTINGS !== 'ignore') {
         if (mergedTestSettings.ignore) { return; }
       }
@@ -368,68 +386,70 @@ const SKIPPED_TESTS = {
     if (isGitHubDemos && (widgetName !== 'DataGrid' || gitHubIgnored.includes(demoName))) {
       return;
     }
-    runTestAtPage(test, pageURL)
+    runTestAtPage(
+      test, 
+      pageURL,
+      skipJsErrorsComponents.includes(widgetName),
+    )
       .clientScripts(clientScriptSource)(testName, async (t) => {
         if (visualTestStyles) {
           await execCode(visualTestStyles);
         }
-
         if (approach === 'Angular') {
           await waitForAngularLoading();
         }
-
+  
         if (testCodeSource) {
           await execCode(testCodeSource);
         }
-
+  
         if (testCafeCodeSource) {
           await execTestCafeCode(t, testCafeCodeSource);
         }
-
+  
         if (process.env.STRATEGY === 'accessibility') {
           const specificSkipRules = getTestSpecificSkipRules(testName);
           const options = { rules: { } };
-
+  
           [...COMMON_SKIP_RULES, ...specificSkipRules].forEach((ruleName) => {
             options.rules[ruleName] = { enabled: false };
           });
-
+  
           const axeResult = await axeCheck(t, '.demo-container', options);
           const { error, results } = axeResult;
-
+  
           if (results.violations.length > 0) {
             createMdReport({ testName, results });
             await t.report(createTestCafeReport(results.violations));
-          }
-
-          await t.expect(error).notOk();
-          await t.expect(results.violations.length === 0).ok(createReport(results.violations));
-        } else {
-          const testTheme = process.env.THEME;
-
-          if (shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)) {
-            return;
-          }
-
-          let comparisonResult;
-          if (isGitHubDemos) {
-            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, (comparisonOptions && {
-              ...comparisonOptions,
-              ...{ looksSameComparisonOptions: { antialiasingTolerance: 10 } },
-            }));
-          } else {
-            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
-          }
-
-          const consoleMessages = await t.getBrowserConsoleMessages();
-
-          const errors = [...consoleMessages.error, ...consoleMessages.warn]
-            .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
-
-          await t.expect(errors).eql([]);
-
-          await t.expect(comparisonResult).ok('INVALID_SCREENSHOT');
         }
-      });
+
+        await t.expect(error).notOk();
+        await t.expect(results.violations.length === 0).ok(createReport(results.violations));
+      } else {
+        const testTheme = process.env.THEME;
+
+        if (shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)) {
+          return;
+        }
+
+        let comparisonResult;
+        if (isGitHubDemos) {
+          comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, (comparisonOptions && {
+            ...comparisonOptions,
+            ...{ looksSameComparisonOptions: { antialiasingTolerance: 10 } },
+          }));
+        } else {
+          comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
+        }
+
+        const consoleMessages = await t.getBrowserConsoleMessages();
+
+        const errors = [...consoleMessages.error, ...consoleMessages.warn]
+          .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
+
+        await t.expect(errors).eql([]);
+        await t.expect(comparisonResult).ok('INVALID_SCREENSHOT');
+      }
+    });
   });
 });

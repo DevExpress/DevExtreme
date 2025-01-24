@@ -375,8 +375,13 @@ export function shouldRunTestExplicitly(demoUrl) {
   );
 }
 
-export function runTestAtPage(test, demoUrl) {
+export function runTestAtPage(test, demoUrl, shouldSkipJsError) {
   let executor = test;
+
+  if (shouldSkipJsError) {
+    test.skipJsErrors();
+  }
+  
   if (settings.explicitTests) {
     executor = shouldRunTestExplicitly(demoUrl) ? test.only : executor = test.skip;
   }

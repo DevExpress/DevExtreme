@@ -6,7 +6,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxChartModule, DxChartComponent, DxButtonModule } from 'devextreme-angular';
 
 import { exportFromMarkup } from 'devextreme/viz/export';
-// import canvg from 'canvg';
+import { Canvg } from 'canvg';
 import { Service, OilProductionDataItem } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -42,11 +42,12 @@ export class AppComponent {
       format: 'png',
       svgToCanvas(svg, canvas) {
         return new Promise((resolve) => {
-          // canvg(canvas, new XMLSerializer().serializeToString(svg), {
-          //   ignoreDimensions: true,
-          //   ignoreClear: true,
-          //   renderCallback: resolve,
-          // });
+          const v = Canvg.fromString(
+              canvas.getContext("2d"),
+              new XMLSerializer().serializeToString(svg)
+          );
+
+          resolve(v.render());
         });
       },
     });

@@ -1,6 +1,14 @@
 <div class="chart_environment">
   <div id="custom_markup_container">
     <svg version="1.1" width="820px" height="420px">
+      <path
+        d="M 0 0 L 820 0 L 820 420 L 0 420 L 0 0"
+        stroke="#999999"
+        stroke-width="1"
+        stroke-linecap="butt"
+        fill="white"
+        stroke-linejoin="miter"
+      ></path>
       <path d="M 13 407 L 128 407 L 232 39 L 13 39" fill="#6D39C3"></path>
       <path
         d="M 46 381 L 161 381 L 265 13 L 46 13"
@@ -34,15 +42,6 @@
         <tspan x="0" y="0">Export a chart with</tspan>
         <tspan x="0" y="19.2">custom elements</tspan>
       </text>
-      <path
-        opacity="0.8"
-        d="M 0 0 L 820 0 L 820 420 L 0 420 L 0 0"
-        stroke="#999999"
-        stroke-width="1"
-        stroke-linecap="butt"
-        fill="none"
-        stroke-linejoin="miter"
-      ></path>
     </svg>
   </div>
   <dx-chart id="chart" [dataSource]="oilProductionData" palette="Violet">
