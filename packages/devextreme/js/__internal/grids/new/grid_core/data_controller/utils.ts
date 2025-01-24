@@ -33,17 +33,18 @@ export function normalizeDataSource(
   return new DataSource(normalizeDataSourceOptions(dataSourceLike, undefined));
 }
 
-function isLocalStore(store: Store): boolean {
+export function isLocalStore(store: Store): boolean {
   return store instanceof ArrayStore;
 }
 
-function isCustomStore(store): boolean {
+export function isCustomStore(store: Store): boolean {
   return store instanceof CustomStore;
 }
 
 export function normalizeRemoteOptions(
   remoteOperations: boolean | object | string,
-  dataSource: DataSource,
+  localStore: boolean,
+  customStore: boolean,
 ): OperationOptions {
   if (remoteOperations instanceof String && remoteOperations !== 'auto') {
     throw new Error('Remote operations do not support any string values except \'auto\'');
@@ -60,8 +61,7 @@ export function normalizeRemoteOptions(
   }
 
   if (remoteOperations === 'auto') {
-    const store = dataSource.store();
-    if (isLocalStore(store) || isCustomStore(store)) {
+    if (localStore || customStore) {
       return disabledAllRemoteOperations;
     }
     return {
@@ -83,6 +83,17 @@ export function normalizeRemoteOptions(
   }
 
   return remoteOperations as object;
+}
+
+export function normalizeLocalOptions(
+  normalizedRemoteOperations: OperationOptions,
+): OperationOptions {
+  return {
+    filtering: !normalizedRemoteOperations.filtering,
+    sorting: !normalizedRemoteOperations.sorting,
+    paging: !normalizedRemoteOperations.paging,
+    summary: !normalizedRemoteOperations.summary,
+  };
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -124,17 +135,6 @@ export function getStoreLoadOptions(originOptions, localOperations) {
   }
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return storeLoadOptions;
-}
-
-export function normalizeLocalOptions(
-  normalizedRemoteOperations: OperationOptions,
-): OperationOptions {
-  return {
-    filtering: !normalizedRemoteOperations.filtering,
-    sorting: !normalizedRemoteOperations.sorting,
-    paging: !normalizedRemoteOperations.paging,
-    summary: !normalizedRemoteOperations.summary,
-  };
 }
 
 export function updateItemsImmutable(

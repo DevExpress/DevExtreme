@@ -17,7 +17,12 @@ import type { DataObject, Key } from './types';
 import {
   getLocalLoadOptions,
   getStoreLoadOptions,
-  normalizeDataSource, normalizeLocalOptions, normalizeRemoteOptions, updateItemsImmutable,
+  isCustomStore,
+  isLocalStore,
+  normalizeDataSource,
+  normalizeLocalOptions,
+  normalizeRemoteOptions,
+  updateItemsImmutable,
 } from './utils';
 
 export class DataController {
@@ -76,7 +81,10 @@ export class DataController {
   );
 
   private readonly normalizedRemoteOptions = computed(
-    (remoteOperations, dataSource) => normalizeRemoteOptions(remoteOperations, dataSource),
+    (remoteOperations, dataSource) => {
+      const store = dataSource.store();
+      return normalizeRemoteOptions(remoteOperations, isLocalStore(store), isCustomStore(store));
+    },
     [this.remoteOperations, this.dataSource],
   );
 
@@ -116,6 +124,10 @@ export class DataController {
         };
 
         const dataLoadedCallback = (e): void => {
+          /*
+            We use Deffered here because the code below is synchronous.
+            customizeLoadResult callback does not support async code.
+          */
           new ArrayStore(e.data).load(this.pendingLocalOperations[e.operationId]).done((data) => {
             e.data = data;
           }).fail((error) => {
@@ -145,7 +157,7 @@ export class DataController {
           // @ts-expect-error
           dataSource.off('customizeStoreLoadOptions', customizeStoreLoadOptionsCallback);
           // @ts-expect-error
-          dataSource.on('customizeLoadResult', dataLoadedCallback);
+          dataSource.off('customizeLoadResult', dataLoadedCallback);
         };
       },
       [this.dataSource],
@@ -153,7 +165,10 @@ export class DataController {
 
     effect(
       () => {
-        this.onChanged(this.dataSource.unreactive_get(), null);
+        if (this.dataSource.unreactive_get().isLoaded()) {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          this.dataSource.unreactive_get().load();
+        }
       },
       [this.normalizedRemoteOptions],
     );
