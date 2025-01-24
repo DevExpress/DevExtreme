@@ -811,19 +811,18 @@ const Lookup = DropDownList.inherit({
     }
   },
 
-  _presetListDataSource() {
-    if (this._list && this._list?.option('dataSource') && !this._needPassDataSourceToList()) {
-      this._setListOption('dataSource', null);
+  _filterDataSource(...args) {
+    if (this._list && !this._list._dataSource && this._isMinSearchLengthExceeded()) {
+      this._list?._scrollView.startLoading();
     }
 
-    if (this._list && !this._list.option('dataSource') && this._needPassDataSourceToList()) {
-      this._list._initDataSource();
-    }
+    this.callBase(...args);
   },
 
-  _searchHandler() {
-    this._presetListDataSource();
-    this.callBase();
+  _dataSourceFiltered(...args) {
+    this.callBase(...args);
+
+    this._list?._scrollView.finishLoading();
   },
 
   _updateActiveDescendant() {
@@ -1000,33 +999,6 @@ const Lookup = DropDownList.inherit({
     }
 
     this.callBase();
-  },
-
-  _renderList() {
-    this.callBase();
-
-    if (!this.option('showDataBeforeSearch') && !!this.option('minSearchLength')) {
-      this._list._getSpecificDataSourceOption = this._getDataSource.bind(this);
-      this._setListDataSourceFirstLoadCompleted();
-    }
-  },
-
-  _setListDataSourceFirstLoadCompleted() {
-    const defaultLoadCompleted = this._list._isDataSourceFirstLoadCompleted.bind(this._list);
-
-    this._list._isDataSourceFirstLoadCompleted = this._isListDataSourceFirstLoadCompleted(defaultLoadCompleted);
-  },
-
-  _isListDataSourceFirstLoadCompleted(defaultLoadCompleted) {
-    return (newValue): boolean => {
-      if (isDefined(newValue) || this.option('showDataBeforeSearch')) {
-        return defaultLoadCompleted(newValue);
-      }
-
-      this._list._isFirstLoadCompleted = undefined;
-
-      return !this.option('showDataBeforeSearch');
-    };
   },
 
   _clean() {
