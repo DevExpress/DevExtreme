@@ -23,12 +23,12 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Use Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '20'
 
     - name: Restore npm cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -45,7 +45,7 @@ jobs:
         7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: devextreme-artifacts
         path: artifacts.zip
@@ -94,12 +94,12 @@ jobs:
         chrome-version: '121.0.6167.160'
 
     - name: Use Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '20'
 
     - name: Restore npm cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -109,7 +109,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Download artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: devextreme-artifacts
 
@@ -139,20 +139,46 @@ jobs:
         echo "$all_args"
         npm run test-testcafe -- $all_args
 
+    - name: Sanitize job name
+      if: ${{ failure() }}
+      run: echo "JOB_NAME=$(echo "${{ matrix.ARGS.name }}" | tr '/' '-')" >> $GITHUB_ENV
+
     - name: Copy compared screenshot artifacts
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: compared-screenshots
+        name: compared-screenshots-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/testing/testcafe/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
     - name: Copy failed test artifacts
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: failed-tests
+        name: failed-tests-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/testing/testcafe/artifacts/failedtests/**/*
         if-no-files-found: ignore
+
+  merge-artifacts:
+    runs-on: devextreme-shr2
+    needs: testcafe
+    if: ${{ failure() }}
+
+    steps:
+    - name: Merge screenshot artifacts
+      uses: actions/upload-artifact/merge@v4
+      continue-on-error: true
+      with:
+        name: compared-screenshots
+        pattern: compared-screenshots-*
+        delete-merged: true
+
+    - name: Merge failed test artifacts
+      uses: actions/upload-artifact/merge@v4
+      continue-on-error: true
+      with:
+        name: failed-tests
+        pattern: failed-tests-*
+        delete-merged: true
 
   notify:
     runs-on: devextreme-shr2
