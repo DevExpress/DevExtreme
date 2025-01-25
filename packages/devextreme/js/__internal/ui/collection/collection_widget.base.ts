@@ -91,7 +91,11 @@ export interface CollectionWidgetBaseProperties<
 
   focusOnSelectedItem?: boolean;
 
+  encodeNoDataText?: boolean;
+
   _itemAttributes?: Record<string, string>;
+
+  selectOnFocus?: boolean;
 }
 
 class CollectionWidget<
@@ -575,7 +579,7 @@ class CollectionWidget<
     this._updateFocusedItemState($target, true);
     // @ts-expect-error ts-error
     this.onFocusedItemChanged(this.getFocusedItemId());
-    // @ts-expect-error ts-error
+
     const { selectOnFocus } = this.option();
     const isTargetDisabled = this._isDisabled($target);
 
@@ -685,12 +689,10 @@ class CollectionWidget<
       case 'dataSource':
         // @ts-expect-error ts-error
         this._refreshDataSource();
-        // @ts-expect-error ts-error
         this._renderEmptyMessage();
         break;
       case 'noDataText':
       case 'encodeNoDataText':
-        // @ts-expect-error ts-error
         this._renderEmptyMessage();
         break;
       case 'itemTemplate':
@@ -1084,7 +1086,6 @@ class CollectionWidget<
         this._renderItem(this._renderedItemsCount + index, itemData);
       });
     }
-    // @ts-expect-error ts-error
     this._renderEmptyMessage();
   }
 
@@ -1352,9 +1353,9 @@ class CollectionWidget<
     return this._itemContainer();
   }
 
-  _renderEmptyMessage(items: TItem[]): void {
+  _renderEmptyMessage(rootNodes?: TItem[]): void {
     // eslint-disable-next-line no-param-reassign
-    items = items || this.option('items');
+    const items = rootNodes ?? this.option('items');
     const noDataText = this.option('noDataText');
     // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/prefer-optional-chain

@@ -314,9 +314,7 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _getItemInstance($item: dxElementWrapper): SplitterItem {
-    // @ts-expect-error badly typed base class
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return Splitter.ItemClass.getInstance($item);
+    return SplitterItem.getInstance<SplitterItem>($item);
   }
 
   _updateResizeHandlesResizableState(): void {
