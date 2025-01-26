@@ -112,7 +112,7 @@ const STYLING_MODE = {
   primary: 'primary',
   secondary: 'secondary',
 };
-
+// @ts-expect-error
 const Tabs = CollectionWidget.inherit({
   _getDefaultOptions() {
     return extend(this.callBase(), {

@@ -56,7 +56,7 @@ const groupItemsGetter = compileGetter('items');
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 let _scrollView;
-
+// @ts-expect-error
 export const ListBase = CollectionWidget.inherit({
   _supportedKeys() {
     const that = this;
