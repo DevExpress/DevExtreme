@@ -191,6 +191,23 @@ const ListEdit = ListBase.inherit({
     this._editProvider.afterItemsRendered();
   },
 
+  _renderItem(index, itemData, $container, $itemToReplace) {
+    const { showSelectionControls, selectionMode } = this.option();
+    const $itemFrame = this.callBase(index, itemData, $container, $itemToReplace);
+
+    if (showSelectionControls && selectionMode !== 'none') {
+      this._updateItemAriaLabel($itemFrame, itemData);
+    }
+
+    return $itemFrame;
+  },
+
+  _updateItemAriaLabel($itemFrame, itemData) {
+    const label = this._displayGetter?.(itemData) ?? itemData?.text ?? itemData;
+
+    this.setAria('label', label, $itemFrame);
+  },
+
   _selectedItemClass() {
     return LIST_ITEM_SELECTED_CLASS;
   },
