@@ -124,7 +124,7 @@ jobs:
 
     - name: Sanitize job name
       if: ${{ failure() }}
-      run: echo "JOB_NAME=$(echo "${{ matrix.ARGS.name }}" | tr '/' '-')" >> $GITHUB_ENV
+      run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
 
     - name: Copy screenshots artifacts
       if: failure() && matrix.STRATEGY == 'screenshots'
