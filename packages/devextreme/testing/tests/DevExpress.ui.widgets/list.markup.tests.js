@@ -491,6 +491,73 @@ QUnit.module('decorators markup', {}, () => {
         assert.notStrictEqual(window.getComputedStyle($deleteToggleIcon).backgroundImage, 'none', 'background image is defined');
     });
 
+    QUnit.module('list item aria-label should be equal to item text (T1248422)', {
+        beforeEach: function() {
+            const init = (options = {}) => {
+                this.$element = $('#list').dxList(options);
+                this.instance = this.$element.dxList('instance');
+            };
+
+            init();
+
+            this.reinit = (options) => {
+                this.instance.dispose();
+
+                init(options);
+            };
+
+            this.getItem = () => this.$element.find(`.${LIST_ITEM_CLASS}`).eq(0);
+
+            this.checkAriaLabel = (assert, updatedItems) => {
+                const { selectionMode, showSelectionControls } = this.instance.option();
+                const isSelectionActive = selectionMode !== 'none' && showSelectionControls;
+
+                assert.strictEqual(this.getItem().attr('aria-label'), isSelectionActive ? 'item 1' : undefined, 'aria-label is correct on init');
+
+                this.instance.option({ items: updatedItems });
+
+                assert.strictEqual(this.getItem().attr('aria-label'), isSelectionActive ? 'item 2' : undefined, 'aria-label is correct if items were changed in runtime');
+            };
+        },
+    }, () => {
+        [true, false].forEach(showSelectionControls => {
+            [ 'multiple', 'single', 'all', 'none' ].forEach(selectionMode => {
+                QUnit.test(`showSelectionControls is ${showSelectionControls}, selectionMode is ${selectionMode}, items is string, displayExpr is not specified`, function(assert) {
+                    this.reinit({
+                        showSelectionControls,
+                        selectionMode,
+                        items: ['item 1'],
+                        displayExpr: null,
+                    });
+
+                    this.checkAriaLabel(assert, ['item 2']);
+                });
+
+                QUnit.test(`showSelectionControls is ${showSelectionControls}, selectionMode is ${selectionMode}, items is object, displayExpr is not specified`, function(assert) {
+                    this.reinit({
+                        showSelectionControls,
+                        selectionMode,
+                        items: [{ text: 'item 1' }],
+                        displayExpr: null,
+                    });
+
+                    this.checkAriaLabel(assert, [{ text: 'item 2' }]);
+                });
+
+                QUnit.test(`showSelectionControls is ${showSelectionControls}, selectionMode is ${selectionMode}, items is object, displayExpr is specified`, function(assert) {
+                    this.reinit({
+                        showSelectionControls,
+                        selectionMode,
+                        items: [{ custom: 'item 1' }],
+                        displayExpr: 'custom',
+                    });
+
+                    this.checkAriaLabel(assert, [{ custom: 'item 2' }]);
+                });
+            });
+        });
+    });
+
     QUnit.test('list item markup, item select decorator', function(assert) {
         const $list = $($('#templated-list').dxList({
             items: ['0'],
