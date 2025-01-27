@@ -1,5 +1,5 @@
 import { noop } from '../../core/utils/common';
-import DataHelperMixin from '../../common/data/data_helper';
+import DataHelperMixin from '../../data_helper';
 const postCtor = DataHelperMixin.postCtor;
 let name;
 const members = {

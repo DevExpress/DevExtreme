@@ -3399,6 +3399,45 @@ QUnit.module('dataSource integration', {
 
         assert.ok($loadPanel.is(':visible'), 'load panel is visible');
     });
+
+    QUnit.test('load panel should be displayed if search value length exceed minSearchLength and showDataBeforeSearch=false, (T1215813)', function(assert) {
+        const loadDelay = 1000;
+        const timeoutDelay = 100;
+        const instance = this.$element.dxLookup({
+            dataSource: {
+                load: () => {
+                    const d = new $.Deferred();
+
+                    setTimeout(() => {
+                        d.resolve([]);
+                    }, loadDelay);
+
+                    return d;
+                }
+            },
+            searchEnabled: true,
+            showDataBeforeSearch: false,
+            minSearchLength: 3,
+            searchTimeout: timeoutDelay,
+            useNativeScrolling: false,
+            opened: true
+        }).dxLookup('instance');
+
+        const $content = $(instance.content());
+        const $input = $content.find(`.${LOOKUP_SEARCH_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
+        const $loadPanel = $content.find(`.${SCROLL_VIEW_LOAD_PANEL_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('abc');
+        this.clock.tick(timeoutDelay + loadDelay / 2);
+        assert.ok($loadPanel.is(':visible'), 'load panel is visible');
+        this.clock.tick(loadDelay / 2);
+        assert.ok($loadPanel.is(':hidden'), 'load panel is not visible when loading has been finished');
+
+        keyboard.press('backspace');
+        this.clock.tick(loadDelay / 2);
+        assert.ok($loadPanel.is(':hidden'), 'load panel is not visible if value length less than minSearchLength)');
+    });
 });
 
 

@@ -10,6 +10,8 @@ import {
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import CollectionWidget from '@js/ui//collection/ui.collection_widget.edit';
+import type { Item } from '@js/ui/box';
+import type { ItemExtraOption } from '@ts/ui/collection/m_item';
 import CollectionWidgetItem from '@ts/ui/collection/m_item';
 
 const BOX_CLASS = 'dx-box';
@@ -62,12 +64,21 @@ const setFlexProp = (element, prop, value) => {
   }
 };
 
-// @ts-expect-error dxClass inheritance issue
-class BoxItem extends CollectionWidgetItem {
-  _renderVisible(value, oldValue) {
+class BoxItem extends CollectionWidgetItem<Item> {
+  _options!: ItemExtraOption<Item> & {
+    fireItemStateChangedAction: ((args: {
+      name: string;
+      state: unknown;
+      oldState: unknown;
+    }) => void);
+  };
+
+  _renderVisible(
+    value: boolean | undefined,
+    oldValue: boolean | undefined,
+  ): void {
     super._renderVisible(value);
     if (isDefined(oldValue)) {
-      // @ts-expect-error
       this._options.fireItemStateChangedAction({
         name: 'visible',
         state: value,

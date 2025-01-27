@@ -3,7 +3,7 @@ import CollectionWidgetItem from '@ts/ui/collection/m_item';
 
 const TABS_ITEM_BADGE_CLASS = 'dx-tabs-item-badge';
 const BADGE_CLASS = 'dx-badge';
-
+// @ts-expect-error
 const TabsItem = CollectionWidgetItem.inherit({
 
   _renderWatchers() {
