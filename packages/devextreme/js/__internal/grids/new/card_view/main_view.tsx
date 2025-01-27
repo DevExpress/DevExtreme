@@ -6,21 +6,24 @@ import { PagerView } from '@ts/grids/new/grid_core/pager/view';
 import { ToolbarView } from '@ts/grids/new/grid_core/toolbar/view';
 import type { ComponentType } from 'inferno';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+import { HeaderPanelView } from './header_panel/view';
+
 interface MainViewProps {
   Toolbar: ComponentType;
   Pager: ComponentType;
+  HeaderPanel: ComponentType;
 }
 
 function MainViewComponent({
-  Toolbar, Pager,
+  Toolbar, Pager, HeaderPanel,
 }: MainViewProps): JSX.Element {
   return (<>
     {/* @ts-expect-error */}
     <Toolbar/>
+    {/* @ts-expect-error */}
+    <HeaderPanel/>
     <div>
       {/*
-        TODO:
         Pager, as renovated component, has strange disposing.
         See `inferno_renderer.remove` method.
         It somehow mutates $V prop of parent element.
@@ -37,12 +40,13 @@ export class MainView extends View<MainViewProps> {
   protected override component = MainViewComponent;
 
   public static dependencies = [
-    PagerView, ToolbarView,
+    PagerView, ToolbarView, HeaderPanelView,
   ] as const;
 
   constructor(
     private readonly pager: PagerView,
     private readonly toolbar: ToolbarView,
+    private readonly headerPanel: HeaderPanelView,
   ) {
     super();
   }
@@ -53,6 +57,7 @@ export class MainView extends View<MainViewProps> {
     return combined({
       Toolbar: this.toolbar.asInferno(),
       Pager: this.pager.asInferno(),
+      HeaderPanel: this.headerPanel.asInferno(),
     });
   }
 }

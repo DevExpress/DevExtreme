@@ -7,13 +7,17 @@ import { MainView as MainViewBase } from '@ts/grids/new/grid_core/main_view';
 import { OptionsController as OptionsControllerBase } from '@ts/grids/new/grid_core/options_controller/options_controller';
 import { GridCoreNew } from '@ts/grids/new/grid_core/widget';
 
+import { HeaderPanelView } from './header_panel/view';
 import { MainView } from './main_view';
 import { defaultOptions } from './options';
 import { OptionsController } from './options_controller';
 
 export class CardViewBase extends GridCoreNew {
+  headerPanel!: HeaderPanelView;
+
   protected _registerDIContext(): void {
     super._registerDIContext();
+    this.diContext.register(HeaderPanelView);
     this.diContext.register(MainViewBase, MainView);
 
     const optionsController = new OptionsController(this);
@@ -28,6 +32,7 @@ export class CardViewBase extends GridCoreNew {
 
   protected _initDIContext(): void {
     super._initDIContext();
+    this.headerPanel = this.diContext.get(HeaderPanelView);
   }
 
   // eslint-disable-next-line max-len
