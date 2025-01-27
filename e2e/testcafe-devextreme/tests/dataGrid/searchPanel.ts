@@ -51,3 +51,44 @@ safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
     },
   });
 }).after(async () => { await changeTheme(Themes.genericLight); });
+
+// T1272535
+safeSizeTest('Base sensitivity search should accept rows with accent letters in lookup columns', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .click(dataGrid.getSearchBox().input)
+    .pressKey('a');
+
+  await t.expect(dataGrid.dataRows.count).eql(2);
+  await t.expect(dataGrid.dataRows.withText('another').exists).ok();
+  await t.expect(dataGrid.dataRows.withText('ánother').exists).ok();
+}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+  dataSource: {
+    store: [
+      { id: 1, text: 'tešt', lookup: 1 },
+      { id: 2, text: 'test', lookup: 2 },
+      { id: 3, text: 'chest', lookup: 3 },
+    ],
+    langParams: {
+      locale: 'en-US',
+      collatorOptions: {
+        sensitivity: 'base',
+      },
+    },
+  },
+  keyExpr: 'id',
+  searchPanel: { visible: true },
+  columns: ['id', 'text', {
+    dataField: 'lookup',
+    lookup: {
+      dataSource: [
+        { id: 1, text: 'another' },
+        { id: 2, text: 'ánother' },
+        { id: 3, text: 'other' },
+      ],
+      valueExpr: 'id',
+      displayExpr: 'text',
+    },
+  }],
+}));
