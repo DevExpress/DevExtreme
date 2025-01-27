@@ -387,7 +387,7 @@ const SKIPPED_TESTS = {
       return;
     }
     runTestAtPage(
-      test, 
+      test,
       pageURL,
       skipJsErrorsComponents.includes(widgetName),
     )
@@ -398,58 +398,56 @@ const SKIPPED_TESTS = {
         if (approach === 'Angular') {
           await waitForAngularLoading();
         }
-  
         if (testCodeSource) {
           await execCode(testCodeSource);
         }
-  
         if (testCafeCodeSource) {
           await execTestCafeCode(t, testCafeCodeSource);
         }
-  
+
         if (process.env.STRATEGY === 'accessibility') {
           const specificSkipRules = getTestSpecificSkipRules(testName);
-          const options = { rules: { } };
-  
+          const options = { rules: {} };
+
           [...COMMON_SKIP_RULES, ...specificSkipRules].forEach((ruleName) => {
             options.rules[ruleName] = { enabled: false };
           });
-  
+
           const axeResult = await axeCheck(t, '.demo-container', options);
           const { error, results } = axeResult;
-  
+
           if (results.violations.length > 0) {
             createMdReport({ testName, results });
             await t.report(createTestCafeReport(results.violations));
-        }
+          }
 
-        await t.expect(error).notOk();
-        await t.expect(results.violations.length === 0).ok(createReport(results.violations));
-      } else {
-        const testTheme = process.env.THEME;
-
-        if (shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)) {
-          return;
-        }
-
-        let comparisonResult;
-        if (isGitHubDemos) {
-          comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, (comparisonOptions && {
-            ...comparisonOptions,
-            ...{ looksSameComparisonOptions: { antialiasingTolerance: 10 } },
-          }));
+          await t.expect(error).notOk();
+          await t.expect(results.violations.length === 0).ok(createReport(results.violations));
         } else {
-          comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
+          const testTheme = process.env.THEME;
+
+          if (shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)) {
+            return;
+          }
+
+          let comparisonResult;
+          if (isGitHubDemos) {
+            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, (comparisonOptions && {
+              ...comparisonOptions,
+              ...{ looksSameComparisonOptions: { antialiasingTolerance: 10 } },
+            }));
+          } else {
+            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
+          }
+
+          const consoleMessages = await t.getBrowserConsoleMessages();
+
+          const errors = [...consoleMessages.error, ...consoleMessages.warn]
+            .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
+
+          await t.expect(errors).eql([]);
+          await t.expect(comparisonResult).ok('INVALID_SCREENSHOT');
         }
-
-        const consoleMessages = await t.getBrowserConsoleMessages();
-
-        const errors = [...consoleMessages.error, ...consoleMessages.warn]
-          .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
-
-        await t.expect(errors).eql([]);
-        await t.expect(comparisonResult).ok('INVALID_SCREENSHOT');
-      }
-    });
+      });
   });
 });
