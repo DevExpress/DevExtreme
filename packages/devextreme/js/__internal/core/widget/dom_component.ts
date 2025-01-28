@@ -23,7 +23,7 @@ import { Component } from './component';
 import type { OptionChanged } from './types';
 
 // @ts-expect-error
-export const waitForFirstWidget = new Deferred();
+export const waitForWidgetCreating = new Deferred();
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface Properties<TComponent = any> extends DOMComponentOptions<TComponent> {
@@ -90,14 +90,14 @@ class DOMComponent<
   }
 
   ctor(element: Element, options: TProperties): void {
+    waitForWidgetCreating.resolve();
+
     this._customClass = null;
 
     this._createElement(element);
     attachInstanceToElement(this._$element, this, this._dispose);
 
     super.ctor(options);
-
-    waitForFirstWidget.resolve();
 
     const validationAlreadyPerformed = peekValidationPerformed();
     // @ts-expect-error
