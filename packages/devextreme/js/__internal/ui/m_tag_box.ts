@@ -786,7 +786,15 @@ const TagBox = (SelectBox as any).inherit({
     const d = Deferred();
     const dataController = this._dataController;
 
-    if ((!this._isDataSourceChanged || isListItemsLoaded) && selectedItemsAlreadyLoaded) {
+    if (!this._dataSource) {
+      return d.resolve([]).promise();
+    }
+
+    if (
+      (!this._isDataSourceChanged || isListItemsLoaded)
+      && selectedItemsAlreadyLoaded
+      && !this._newDataSource
+    ) {
       return d.resolve(filteredItems).promise();
     }
     const { customQueryParams, expand, select } = dataController.loadOptions();
@@ -798,6 +806,7 @@ const TagBox = (SelectBox as any).inherit({
       })
       .done((data, extra) => {
         this._isDataSourceChanged = false;
+        this._newDataSource = false;
         if (this._disposed) {
           d.reject();
           return;
@@ -817,6 +826,7 @@ const TagBox = (SelectBox as any).inherit({
     const items = [];
     const cache = {};
     const isValueExprSpecified = this._valueGetterExpr() === 'this';
+    const { acceptCustomValue } = this.option();
     const filteredValues = {};
 
     filteredItems.forEach((filteredItem) => {
@@ -831,10 +841,23 @@ const TagBox = (SelectBox as any).inherit({
       const currentItem = filteredValues[isValueExprSpecified ? JSON.stringify(value) : value];
 
       if (isValueExprSpecified && !isDefined(currentItem)) {
-        loadItemPromises.push(this._loadItem(value, cache).always((item) => {
-          const newItem = this._createTagData(item, value);
-          items.splice(index, 0, newItem as never);
-        }) as never);
+        if (!this._dataSource) {
+          return;
+        }
+
+        loadItemPromises.push(
+          this._loadItem(value, cache)
+            .done((item) => {
+              const newItem = this._createTagData(item, value);
+              items.splice(index, 0, newItem as never);
+            })
+            .fail(() => {
+              if (acceptCustomValue) {
+                const newItem = this._createTagData(undefined, value);
+                items.splice(index, 0, newItem as never);
+              }
+            }) as never,
+        );
       } else {
         const newItem = this._createTagData(currentItem, value);
         items.splice(index, 0, newItem as never);
@@ -1005,6 +1028,12 @@ const TagBox = (SelectBox as any).inherit({
     return selectedItems;
   },
 
+  _processDataSourceChanging() {
+    this._newDataSource = true;
+
+    this.callBase();
+  },
+
   _integrateInput() {
     this._isInputReady.resolve();
     this.callBase();
@@ -1058,13 +1087,15 @@ const TagBox = (SelectBox as any).inherit({
       this._tagElements().remove();
     } else {
       const $tags = this._tagElements();
-      const values = this._getValue();
+
+      const selectedItems = this._selectedItems ?? [];
+      const values = selectedItems.map((item) => this._valueGetter(item));
 
       each($tags, (_, tag) => {
         const $tag = $(tag);
         const tagData = $tag.data(TAGBOX_TAG_DATA_KEY);
 
-        if (!values?.includes(tagData)) {
+        if (!values.includes(tagData)) {
           $tag.remove();
         }
       });
