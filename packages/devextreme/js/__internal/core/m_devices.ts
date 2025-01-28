@@ -4,6 +4,7 @@ import { EventsStrategy } from '@js/core/events_strategy';
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
+import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
 import resizeCallbacks from '@js/core/utils/resize_callbacks';
@@ -12,6 +13,7 @@ import { sessionStorage as SessionStorage } from '@js/core/utils/storage';
 import { isPlainObject } from '@js/core/utils/type';
 import { changeCallback, value as viewPort } from '@js/core/utils/view_port';
 import { getNavigator, getWindow, hasWindow } from '@js/core/utils/window';
+import { waitForFirstWidget } from '@ts/core/widget/dom_component';
 
 export interface Device {
   android?: boolean;
@@ -387,14 +389,16 @@ class Devices {
 
 const devices = new Devices();
 
-const viewPortElement = viewPort();
-if (viewPortElement) {
-  devices.attachCssClasses(viewPortElement);
-}
+when(waitForFirstWidget).done(() => {
+  const viewPortElement = viewPort();
+  if (viewPortElement) {
+    devices.attachCssClasses(viewPortElement);
+  }
 
-changeCallback.add((viewPort, prevViewport) => {
-  devices.detachCssClasses(prevViewport);
-  devices.attachCssClasses(viewPort);
+  changeCallback.add((viewPort, prevViewport) => {
+    devices.detachCssClasses(prevViewport);
+    devices.attachCssClasses(viewPort);
+  });
 });
 
 /// #DEBUG

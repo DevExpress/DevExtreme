@@ -17,9 +17,13 @@ import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import license, { peekValidationPerformed } from '@ts/core/license/license_validation';
 import TemplateManagerModule from '@ts/core/m_template_manager';
+import { Deferred } from '@ts/core/utils/m_deferred';
 
 import { Component } from './component';
 import type { OptionChanged } from './types';
+
+// @ts-expect-error
+export const waitForFirstWidget = new Deferred();
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface Properties<TComponent = any> extends DOMComponentOptions<TComponent> {
@@ -92,6 +96,9 @@ class DOMComponent<
     attachInstanceToElement(this._$element, this, this._dispose);
 
     super.ctor(options);
+
+    waitForFirstWidget.resolve();
+
     const validationAlreadyPerformed = peekValidationPerformed();
     // @ts-expect-error
     license.validateLicense(config().licenseKey);
