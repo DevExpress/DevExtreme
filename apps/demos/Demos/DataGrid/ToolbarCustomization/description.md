@@ -1,4 +1,6 @@
 The DataGrid includes an integrated toolbar that displays predefined and custom controls. To add or remove toolbar items, declare the [toolbar](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/toolbar/).[items[]](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/toolbar/items/) array.
+
+[note] If **toolbar.items[]** is specified, DataGrid does not display controls missing from the array. Ensure this array includes controls for all enabled features.
 <!--split-->
 
 This demo illustrates how to add the following items to the toolbar:
