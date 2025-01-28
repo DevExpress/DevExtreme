@@ -1,11 +1,14 @@
 import $ from 'jquery';
 import 'ui/html_editor';
+import localization from 'localization';
 
 import { getFormatHandlers } from '__internal/ui/html_editor/utils/m_toolbar_helper';
 
 const FORM_CLASS = 'dx-formdialog-form';
 const FIELD_ITEM_CLASS = 'dx-field-item';
 const COLOR_BOX_CLASS = 'dx-colorbox';
+const SELECT_BOX_CONTAINER_CLASS = 'dx-selectbox-container';
+const LIST_ITEM_CLASS = 'dx-list-item';
 
 const showCellPropertiesForm = (instance, $cellElement) => {
     showForm(instance, $cellElement, 'cellProperties');
@@ -1134,4 +1137,39 @@ module('Table properties forms', {
         });
     });
 
+    module('Localization', {
+        beforeEach: function() {
+            this.messages = {
+                'de': {
+                    'dxHtmlEditor-borderStyleNone': 'Test',
+                }
+            };
+        }
+    }, () => {
+        test('SelectBox should show correct localization (T1234032)', function(assert) {
+            try {
+                localization.loadMessages(this.messages);
+                localization.locale('de');
+
+                this.createWidget({ width: 432 });
+
+                const $tableElement = this.$element.find('table').eq(0);
+
+                this.quillInstance.setSelection(50, 1);
+
+                showCellPropertiesForm(this.instance, $tableElement);
+                this.clock.tick(10);
+
+                const $borderStyleSelectBox = $(`.${SELECT_BOX_CONTAINER_CLASS} > input`);
+
+                $borderStyleSelectBox.trigger('dxclick');
+
+                const $firstListItem = $(`.${LIST_ITEM_CLASS}`).eq(0);
+
+                assert.strictEqual($firstListItem.text(), 'Test', 'borderStyleEditor is correctly localized');
+            } finally {
+                localization.locale();
+            }
+        });
+    });
 });
