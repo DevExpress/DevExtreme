@@ -16,6 +16,7 @@
         :height="250"
         :selected-row-keys="getSelectedRowKeys(currentValue)"
         :hover-state-enabled="true"
+        :on-context-menu-preparing="onContextMenuPreparing"
         :on-selection-changed="onSelectionChanged"
         :focused-row-enabled="true"
         :focused-row-key="currentValue"
@@ -61,6 +62,9 @@ function getSelectedRowKeys<T>(value: T | null): T[] {
   return value !== null && value !== undefined ? [value] : [];
 }
 
+const onContextMenuPreparing = (e: DxDataGridTypes.ContextMenuPreparing) => {
+  e.items = [];
+};
 const onSelectionChanged = (e: DxDataGridTypes.SelectionChangedEvent) => {
   currentValue.value = e.selectedRowKeys[0];
 

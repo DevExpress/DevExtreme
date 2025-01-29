@@ -811,6 +811,20 @@ const Lookup = DropDownList.inherit({
     }
   },
 
+  _filterDataSource(...args) {
+    if (this._list && !this._list._dataSource && this._isMinSearchLengthExceeded()) {
+      this._list?._scrollView.startLoading();
+    }
+
+    this.callBase(...args);
+  },
+
+  _dataSourceFiltered(...args) {
+    this.callBase(...args);
+
+    this._list?._scrollView.finishLoading();
+  },
+
   _updateActiveDescendant() {
     this.callBase();
 

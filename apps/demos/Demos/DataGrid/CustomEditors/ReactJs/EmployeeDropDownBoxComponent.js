@@ -19,6 +19,9 @@ const EmployeeDropDownBoxComponent = (props) => {
     }
   }, []);
   const contentRender = useCallback(() => {
+    const onContextMenuPreparing = (event) => {
+      event.items = [];
+    };
     const onSelectionChanged = (args) => {
       setSelectedRowKeys(args.selectedRowKeys);
       setDropDownOpened(false);
@@ -31,6 +34,7 @@ const EmployeeDropDownBoxComponent = (props) => {
         height={250}
         selectedRowKeys={selectedRowKeys}
         hoverStateEnabled={true}
+        onContextMenuPreparing={onContextMenuPreparing}
         onSelectionChanged={onSelectionChanged}
         focusedRowEnabled={true}
         defaultFocusedRowKey={selectedRowKeys[0]}

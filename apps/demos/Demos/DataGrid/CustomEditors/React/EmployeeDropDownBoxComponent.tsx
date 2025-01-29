@@ -12,7 +12,7 @@ const dropDownOptions = { width: 500 };
 const ownerLabel = { 'aria-label': 'Owner' };
 
 const EmployeeDropDownBoxComponent = (props) => {
-  const {data: { value: dataValue }} = props;
+  const { data: { value: dataValue } } = props;
   const initialSelectedRowKeys = dataValue !== null && dataValue !== undefined ? [dataValue] : [];
   const [selectedRowKeys, setSelectedRowKeys] = useState(initialSelectedRowKeys);
   const [isDropDownOpened, setDropDownOpened] = useState(false);
@@ -24,6 +24,9 @@ const EmployeeDropDownBoxComponent = (props) => {
   }, []);
 
   const contentRender = useCallback(() => {
+    const onContextMenuPreparing = (event: DataGridTypes.ContextMenuPreparingEvent) => {
+      event.items = [];
+    };
     const onSelectionChanged = (args: DataGridTypes.SelectionChangedEvent) => {
       setSelectedRowKeys(args.selectedRowKeys);
       setDropDownOpened(false);
@@ -38,6 +41,7 @@ const EmployeeDropDownBoxComponent = (props) => {
         height={250}
         selectedRowKeys={selectedRowKeys}
         hoverStateEnabled={true}
+        onContextMenuPreparing={onContextMenuPreparing}
         onSelectionChanged={onSelectionChanged}
         focusedRowEnabled={true}
         defaultFocusedRowKey={selectedRowKeys[0]}
