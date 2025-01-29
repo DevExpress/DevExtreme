@@ -827,8 +827,8 @@ importers:
         specifier: 4.1.57
         version: 4.1.57
       devextreme-quill:
-        specifier: 1.7.1
-        version: 1.7.1
+        specifier: 1.7.2
+        version: 1.7.2
       inferno:
         specifier: ^7.4.9
         version: 7.4.11
@@ -8128,6 +8128,9 @@ packages:
 
   devextreme-quill@1.7.1:
     resolution: {integrity: sha512-0smNE/Br+m9gQDxSPaJxwmrX5ZFubnBHWdbBtY8p6L3ATrF00mFqNQIflVi1tUAr8ndYeHY6Oih46Z1EWDGSQA==}
+
+  devextreme-quill@1.7.2:
+    resolution: {integrity: sha512-Ng+3ULPwGhLnCqstLRqnDF8Jj2P40sgjTjWzwgCYzH9G9E1n5IvzRl6weFzDWeytRM1WfsxX8Xdr2Oumf/2CDA==}
 
   devextreme-schematics@1.7.1:
     resolution: {integrity: sha512-K+FNrji2/G7QPkfWYhWiNNaXcmxdlXDTOVpIiISoMr6fumRhz5PindoIYlOx0HXtnpvcBWzb2Fqadujr8qop2g==}
@@ -25439,6 +25442,16 @@ snapshots:
       yargs: 17.7.2
 
   devextreme-quill@1.7.1:
+    dependencies:
+      core-js: 3.39.0
+      eventemitter3: 4.0.7
+      lodash.clonedeep: 4.5.0
+      lodash.isequal: 4.5.0
+      lodash.merge: 4.6.2
+      parchment: 2.0.1
+      quill-delta: 5.1.0
+
+  devextreme-quill@1.7.2:
     dependencies:
       core-js: 3.39.0
       eventemitter3: 4.0.7
