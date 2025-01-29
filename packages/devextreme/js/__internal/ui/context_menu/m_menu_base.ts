@@ -9,9 +9,9 @@ import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
 import type { dxMenuBaseOptions } from '@js/ui/context_menu/ui.menu_base';
 import type { Item, SubmenuShowMode } from '@js/ui/menu';
 import { render } from '@js/ui/widget/utils.ink_ripple';
-import HierarchicalCollectionWidget from '@ts/ui/collection/hierarchical';
 import MenuItem from '@ts/ui/collection/m_item';
 import MenuBaseEditStrategy from '@ts/ui/context_menu/m_menu_base.edit.strategy';
+import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/m_hierarchical_collection_widget';
 
 const DX_MENU_CLASS = 'dx-menu';
 const DX_MENU_NO_ICONS_CLASS = `${DX_MENU_CLASS}-no-icons`;
@@ -41,8 +41,6 @@ export type Properties = dxMenuBaseOptions<MenuBase, Item>;
 
 class MenuBase extends HierarchicalCollectionWidget<Properties> {
   static ItemClass = MenuItem;
-
-  _editStrategy?: MenuBaseEditStrategy;
 
   hasIcons?: boolean;
 
@@ -166,6 +164,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     if (url) {
       $container.html(html);
       const link = this._getLinkContainer(
+        // @ts-expect-error
         this._getIconContainer(itemData),
         this._getTextContainer(itemData),
         itemData,
@@ -296,7 +295,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
 
   _initEditStrategy() {
     const Strategy = MenuBaseEditStrategy;
-    // @ts-expect-error dxClass inheritance issue
+
     this._editStrategy = new Strategy(this);
   }
 
@@ -445,13 +444,12 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
       .addClass(DX_MENU_ITEM_WRAPPER_CLASS);
   }
 
-  // @ts-expect-error
   _renderItem(
     index: number,
-    node: any,
+    node: Item,
     $nodeContainer: dxElementWrapper,
     $nodeElement?: dxElementWrapper,
-  ): void {
+  ): dxElementWrapper {
     const { items = [] } = this.option();
 
     const $node = $nodeElement ?? this._createDOMElement($nodeContainer);
@@ -469,6 +467,8 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     $itemFrame.attr('tabIndex', -1);
 
     if (this._hasSubmenu(node)) this.setAria('haspopup', 'true', $itemFrame);
+
+    return $itemFrame;
   }
 
   _renderItemFrame(
@@ -550,7 +550,6 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
   _itemClickHandler(e) {
     if (e._skipHandling) return;
 
-    // @ts-expect-error
     const itemClickActionHandler = this._createAction(this._updateSubmenuVisibilityOnClick.bind(this));
     this._itemDXEventHandler(e, 'onItemClick', {}, {
       beforeExecute: this._itemClick,

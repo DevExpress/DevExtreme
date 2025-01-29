@@ -26,9 +26,10 @@ import type {
   ResizeStartEvent,
 } from '@js/ui/splitter';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { CollectionWidgetBaseProperties, ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
-import CollectionWidget from '@ts/ui/collection/live_update';
+import type { ItemRenderInfo, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
+import CollectionWidgetLiveUpdate from '@ts/ui/collection/m_collection_widget.live_update';
 
+import type { CollectionWidgetEditProperties } from '../collection/m_collection_widget.edit';
 import type ResizeHandle from './resize_handle';
 import type { ResizeHandleOptions } from './resize_handle';
 import { RESIZE_HANDLE_CLASS } from './resize_handle';
@@ -97,8 +98,8 @@ export interface Properties<
   TKey = any,
 > extends PublicProperties<TItem, TKey>,
   Omit<
-  CollectionWidgetBaseProperties<Splitter, TItem, TKey>,
-  keyof PublicProperties<TItem, TKey> & keyof CollectionWidgetBaseProperties<Splitter, TItem, TKey>
+  CollectionWidgetEditProperties<Splitter, TItem, TKey>,
+  keyof PublicProperties<TItem, TKey> & keyof CollectionWidgetEditProperties<Splitter, TItem, TKey>
   > {
   _renderQueue?: RenderQueueItem[];
 }
@@ -108,7 +109,7 @@ interface PaneCache {
   direction: CollapseExpandDirection;
 }
 
-class Splitter extends CollectionWidget<Properties> {
+class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   static ItemClass = SplitterItem;
 
   private _renderQueue: RenderQueueItem[] = [];
@@ -386,7 +387,6 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _getItemDataByIndex(index: number): Item {
-    // @ts-expect-error badly typed base class
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._editStrategy.getItemDataByIndex(index);
   }
@@ -618,12 +618,7 @@ class Splitter extends CollectionWidget<Properties> {
     return super._createItemByTemplate(itemTemplate, args);
   }
 
-  _postprocessRenderItem(args: {
-    itemElement: dxElementWrapper;
-    itemContent: dxElementWrapper;
-    itemData: Item;
-    itemIndex: number;
-  }): void {
+  _postprocessRenderItem(args: PostprocessRenderItemInfo<Item>): void {
     const splitterConfig = args.itemData.splitter;
     if (!splitterConfig) {
       return;
