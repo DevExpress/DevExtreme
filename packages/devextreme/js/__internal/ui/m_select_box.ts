@@ -49,13 +49,17 @@ const SelectBox = (DropDownList as any).inherit({
 
     return extend({}, parent, {
       tab() {
-        if (this.option('opened') && !this._popup.getFocusableElements().length) {
+        const { opened } = this.option();
+        const popupHasFocusableElements = opened && !!this._popup.getFocusableElements().length;
+        if (!popupHasFocusableElements) {
           this._resetCaretPosition(true);
         }
 
         parent.tab && parent.tab.apply(this, arguments);
 
-        this._cancelSearchIfNeed();
+        if (!popupHasFocusableElements) {
+          this._cancelSearchIfNeed();
+        }
       },
       upArrow(e) {
         if (parent.upArrow.apply(this, arguments)) {
