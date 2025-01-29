@@ -466,7 +466,6 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     const { removedItemKeys } = args;
 
     if (that._rendered && (addedItemKeys.length || removedItemKeys.length)) {
-      const selectionChangePromise = that._selectionChangePromise;
       if (!that._rendering) {
         const addedSelection = [];
         let normalizedIndex;
@@ -493,11 +492,9 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         that._updateSelection(addedSelection, removedSelection);
       }
 
-      when(selectionChangePromise).done(() => {
-        this._actions.onSelectionChanged({
-          addedItems: args.addedItems,
-          removedItems: args.removedItems,
-        });
+      this._actions.onSelectionChanged({
+        addedItems: args.addedItems,
+        removedItems: args.removedItems,
       });
     }
   },
