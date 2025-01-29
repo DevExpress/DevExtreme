@@ -9,6 +9,9 @@ import messageLocalization from '@js/common/core/localization/message';
 import Action from '@js/core/action';
 import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
+import type {
+  DeepPartial,
+} from '@js/core/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
@@ -33,8 +36,10 @@ import type {
 import type { CollectionWidgetItem as CollectionWidgetItemProperties, CollectionWidgetOptions, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import { focusable } from '@js/ui/widget/selectors';
 import { getPublicElement } from '@ts/core/m_element';
+import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import type CollectionItem from '@ts/ui/collection/m_item';
 import CollectionWidgetItem from '@ts/ui/collection/m_item';
 
 const COLLECTION_CLASS = 'dx-collection';
@@ -62,10 +67,12 @@ const FOCUS_PAGE_DOWN = 'pagedown';
 const FOCUS_LAST = 'last';
 const FOCUS_FIRST = 'first';
 
-interface ActionConfig {
-  beforeExecute?: (e: DxEvent) => void;
-  afterExecute?: (e: DxEvent) => void;
-  excludeValidators?: ('disabled' | 'readOnly')[];
+export type DataChangeType = 'insert' | 'update' | 'remove';
+
+export interface DataChange<TItem = CollectionItem, TKey = number | string> {
+  key: TKey;
+  type: DataChangeType;
+  data: DeepPartial<TItem>;
 }
 
 type ItemTemplate<TItem> = template | (
@@ -77,8 +84,17 @@ export interface ItemRenderInfo<TItem> {
   container: dxElementWrapper;
   contentClass: string;
   defaultTemplateName: ItemTemplate<TItem> | undefined;
+  uniqueKey?: string;
   templateProperty?: string;
 }
+
+export interface PostprocessRenderItemInfo<TItem> {
+  itemElement: dxElementWrapper;
+  itemContent: dxElementWrapper;
+  itemData: TItem;
+  itemIndex: number;
+}
+
 export interface CollectionWidgetBaseProperties<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TComponent extends CollectionWidget<any, TItem, TKey> | any,
@@ -617,7 +633,7 @@ class CollectionWidget<
     property: string,
     value: unknown,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    prevValue: unknown,
+    prevValue?: unknown,
   ): void {
     const $item = this._findItemElementByItem(item);
     if (!$item.length) {
@@ -761,7 +777,11 @@ class CollectionWidget<
     this._startIndexForAppendedItems = null;
   }
 
-  _dataSourceChangedHandler(newItems: TItem[]): void {
+  _dataSourceChangedHandler(
+    newItems: TItem[],
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    e?: { changes?: DataChange<TItem>[] },
+  ): void {
     const items = this.option('items');
     if (this._initialized && items && this._shouldAppendItems()) {
       // @ts-expect-error ts-error
@@ -1081,7 +1101,6 @@ class CollectionWidget<
   _renderItems(items: TItem[]): void {
     if (items.length) {
       each(items, (index, itemData) => {
-        // @ts-expect-error ts-error
         // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
         this._renderItem(this._renderedItemsCount + index, itemData);
       });
@@ -1110,7 +1129,7 @@ class CollectionWidget<
   _renderItem(
     index: { group: number; item: number } | number,
     itemData: TItem,
-    $container: dxElementWrapper | null,
+    $container?: dxElementWrapper | null,
     $itemToReplace?: dxElementWrapper,
   ): dxElementWrapper {
     // @ts-expect-error ts-error
@@ -1264,12 +1283,7 @@ class CollectionWidget<
   // eslint-disable-next-line class-methods-use-this
   _postprocessRenderItem(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    args: {
-      itemElement: dxElementWrapper;
-      itemContent: dxElementWrapper;
-      itemData: TItem;
-      itemIndex: number;
-    },
+    args: PostprocessRenderItemInfo<TItem>,
   ): void {}
 
   _executeItemRenderAction(

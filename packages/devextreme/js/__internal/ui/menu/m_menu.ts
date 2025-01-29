@@ -78,8 +78,6 @@ class Menu extends MenuBase {
 
   _hoveredRootItem?: dxElementWrapper;
 
-  _actions?: any;
-
   _showSubmenuTimer?: any;
 
   _hideSubmenuTimer?: any;
@@ -948,6 +946,7 @@ class Menu extends MenuBase {
       return submenu;
     }
     itemData = itemData ?? this._getItemData($itemElement);
+
     const node = this._dataAdapter.getNodeByItem(itemData);
     // @ts-expect-error
     return this._hasChildren(node) && this._renderSubmenuItems(node, $itemElement);

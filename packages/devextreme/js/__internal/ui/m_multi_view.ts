@@ -28,7 +28,7 @@ const MULTIVIEW_ANIMATION_DURATION = 200;
 const toNumber = (value) => +value;
 
 const position = ($element) => locate($element).left;
-
+// @ts-expect-error
 const MultiView = CollectionWidget.inherit({
   _supportedKeys() {
     return extend(this.callBase(), {
