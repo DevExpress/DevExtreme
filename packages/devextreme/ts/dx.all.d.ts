@@ -5417,6 +5417,7 @@ declare module DevExpress.data {
       expand?: Array<string> | string;
       filter?: FilterDescriptor | Array<FilterDescriptor>;
       group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
+      langParams?: LangParams;
       map?: (dataItem: TStoreItem) => TMappedItem;
       onChanged?: (e: { readonly changes?: Array<TMappedItem> }) => void;
       onLoadError?: (error: { readonly message?: string }) => void;
