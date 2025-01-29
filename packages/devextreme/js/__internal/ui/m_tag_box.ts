@@ -793,7 +793,7 @@ const TagBox = (SelectBox as any).inherit({
     if (
       (!this._isDataSourceChanged || isListItemsLoaded)
       && selectedItemsAlreadyLoaded
-      && !this._newDataSource
+      && !this._isDataSourceOptionChanged
     ) {
       return d.resolve(filteredItems).promise();
     }
@@ -806,7 +806,7 @@ const TagBox = (SelectBox as any).inherit({
       })
       .done((data, extra) => {
         this._isDataSourceChanged = false;
-        this._newDataSource = false;
+        this._isDataSourceOptionChanged = false;
         if (this._disposed) {
           d.reject();
           return;
@@ -846,21 +846,25 @@ const TagBox = (SelectBox as any).inherit({
         }
 
         loadItemPromises.push(
+          // @ts-expect-error
           this._loadItem(value, cache)
             .done((item) => {
               const newItem = this._createTagData(item, value);
-              items.splice(index, 0, newItem as never);
+              // @ts-expect-error// @ts-expect-error
+              items.splice(index, 0, newItem);
             })
             .fail(() => {
               if (acceptCustomValue) {
                 const newItem = this._createTagData(undefined, value);
-                items.splice(index, 0, newItem as never);
+                // @ts-expect-error
+                items.splice(index, 0, newItem);
               }
-            }) as never,
+            }),
         );
       } else {
         const newItem = this._createTagData(currentItem, value);
-        items.splice(index, 0, newItem as never);
+        // @ts-expect-error
+        items.splice(index, 0, newItem);
       }
     });
 
@@ -892,7 +896,8 @@ const TagBox = (SelectBox as any).inherit({
     values.forEach((value) => {
       const item = this._getItemFromPlain(value);
       if (isDefined(item)) {
-        resultItems.push(item as never);
+        // @ts-expect-error
+        resultItems.push(item);
       }
     });
     return resultItems;
@@ -1029,7 +1034,7 @@ const TagBox = (SelectBox as any).inherit({
   },
 
   _processDataSourceChanging() {
-    this._newDataSource = true;
+    this._isDataSourceOptionChanged = true;
 
     this.callBase();
   },
@@ -1088,7 +1093,7 @@ const TagBox = (SelectBox as any).inherit({
     } else {
       const $tags = this._tagElements();
 
-      const selectedItems = this._selectedItems ?? [];
+      const selectedItems = this.option('selectedItems') ?? [];
       const values = selectedItems.map((item) => this._valueGetter(item));
 
       each($tags, (_, tag) => {
@@ -1441,8 +1446,8 @@ const TagBox = (SelectBox as any).inherit({
 
   _dataSourceFilterExpr() {
     const filter = [];
-
-    this._getValue().forEach((value) => filter.push(['!', [this._valueGetterExpr(), value]] as never));
+    // @ts-expect-error
+    this._getValue().forEach((value) => filter.push(['!', [this._valueGetterExpr(), value]]));
 
     return filter;
   },
