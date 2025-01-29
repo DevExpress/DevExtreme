@@ -17,13 +17,10 @@ import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import license, { peekValidationPerformed } from '@ts/core/license/license_validation';
 import TemplateManagerModule from '@ts/core/m_template_manager';
-import { Deferred } from '@ts/core/utils/m_deferred';
+import { waitUntilFirstWidgetCreating } from '@ts/core/utils/m_common';
 
 import { Component } from './component';
 import type { OptionChanged } from './types';
-
-// @ts-expect-error
-export const waitForWidgetCreating = new Deferred();
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface Properties<TComponent = any> extends DOMComponentOptions<TComponent> {
@@ -90,7 +87,7 @@ class DOMComponent<
   }
 
   ctor(element: Element, options: TProperties): void {
-    waitForWidgetCreating.resolve();
+    waitUntilFirstWidgetCreating.resolve();
 
     this._customClass = null;
 

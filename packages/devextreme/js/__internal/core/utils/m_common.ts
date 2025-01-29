@@ -7,6 +7,9 @@ import {
   isDefined, isFunction, isObject, isString, type,
 } from '@js/core/utils/type';
 
+// @ts-expect-error new deferred
+export const waitUntilFirstWidgetCreating = new Deferred();
+
 export const ensureDefined = function (value, defaultValue) {
   return isDefined(value) ? value : defaultValue;
 };
