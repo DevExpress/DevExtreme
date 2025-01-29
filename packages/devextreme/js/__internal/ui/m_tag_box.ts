@@ -850,7 +850,7 @@ const TagBox = (SelectBox as any).inherit({
           this._loadItem(value, cache)
             .done((item) => {
               const newItem = this._createTagData(item, value);
-              // @ts-expect-error// @ts-expect-error
+              // @ts-expect-error
               items.splice(index, 0, newItem);
             })
             .fail(() => {
