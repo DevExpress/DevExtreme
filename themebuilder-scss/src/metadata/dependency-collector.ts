@@ -82,6 +82,7 @@ export default class DependencyCollector {
 
       const result = precinct.paperwork(filePath, {
         es6: { mixedImports: true },
+        ts: { skipTypeImports: true },
       });
 
       const deps = result.map((relativeDependency: string): string => cabinet({
