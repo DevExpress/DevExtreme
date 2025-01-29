@@ -104,8 +104,8 @@ test('TreeList restore selection after the search panel has cleared', async (t) 
       key: 'Task_ID',
       loadUrl: 'https://api/data',
     }),
-    selection: {mode: 'multiple', recursive: true, allowSelectAll: false},
-    remoteOperations: {filtering: true, sorting: true, grouping: true},
+    selection: { mode: 'multiple', recursive: true, allowSelectAll: false },
+    remoteOperations: { filtering: true, sorting: true, grouping: true },
     parentIdExpr: 'Task_Parent_ID',
     hasItemsExpr: 'Has_Items',
     searchPanel: {
