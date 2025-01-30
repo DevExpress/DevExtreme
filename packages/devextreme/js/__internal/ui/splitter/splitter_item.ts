@@ -27,8 +27,15 @@ class SplitterItem extends CollectionWidgetItem<Item> {
     this._owner = options.owner;
   }
 
+  _renderVisible(
+    value: boolean | undefined,
+    oldValue?: boolean | undefined,
+  ): void {
+    super._renderVisible(value, oldValue);
+  }
+
   _renderResizeHandle(): void {
-    if (this._rawData?.visible !== false && !this.isLast()) {
+    if (this._shouldHaveResizeHandle()) {
       const id = `dx_${new Guid()}`;
 
       this._setIdAttr(id);
@@ -43,8 +50,26 @@ class SplitterItem extends CollectionWidgetItem<Item> {
     }
   }
 
+  _shouldHaveResizeHandle(): boolean {
+    return this._rawData?.visible !== false && !this.isLast();
+  }
+
+  updateResizeHandle(): void {
+    if (this._shouldHaveResizeHandle()) {
+      if (this.getResizeHandle()) return;
+      this._renderResizeHandle();
+    } else {
+      this._removeIdAttr();
+      this._removeResizeHandle();
+    }
+  }
+
   _setIdAttr(id: string): void {
     this._$element.attr('id', id);
+  }
+
+  _removeIdAttr(): void {
+    this._$element.attr('id', null);
   }
 
   getIndex(): number {
@@ -54,6 +79,11 @@ class SplitterItem extends CollectionWidgetItem<Item> {
 
   getResizeHandle(): ResizeHandle | undefined {
     return this._resizeHandle;
+  }
+
+  _removeResizeHandle(): void {
+    this.getResizeHandle()?.$element().remove();
+    delete this._resizeHandle;
   }
 
   isLast(): boolean {
