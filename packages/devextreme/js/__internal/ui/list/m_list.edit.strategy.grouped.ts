@@ -1,5 +1,6 @@
 import query from '@js/common/data/query';
 import storeHelper from '@js/common/data/store_helper';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { isNumeric } from '@js/core/utils/type';
@@ -11,26 +12,23 @@ const LIST_GROUP_CLASS = 'dx-list-group';
 const SELECTION_SHIFT = 20;
 const SELECTION_MASK = (1 << SELECTION_SHIFT) - 1;
 
-const combineIndex = function (indices) {
-  return (indices.group << SELECTION_SHIFT) + indices.item;
-};
+const combineIndex = (
+  indices: { group: number; item: number },
+): number => (indices.group << SELECTION_SHIFT) + indices.item;
 
-const splitIndex = function (combinedIndex) {
-  return {
-    group: combinedIndex >> SELECTION_SHIFT,
-    item: combinedIndex & SELECTION_MASK,
-  };
-};
-
-const GroupedEditStrategy = EditStrategy.inherit({
-
+const splitIndex = (combinedIndex: number): { group: number; item: number } => ({
+  group: combinedIndex >> SELECTION_SHIFT,
+  item: combinedIndex & SELECTION_MASK,
+});
+class GroupedEditStrategy extends EditStrategy {
   _groupElements() {
     return this._collectionWidget._itemContainer().find(`.${LIST_GROUP_CLASS}`);
-  },
+  }
 
-  _groupItemElements($group) {
+  // eslint-disable-next-line class-methods-use-this
+  _groupItemElements($group: dxElementWrapper): dxElementWrapper {
     return $group.find(`.${LIST_ITEM_CLASS}`);
-  },
+  }
 
   getIndexByItemData(itemData) {
     const groups = this._collectionWidget.option('items');
@@ -65,7 +63,7 @@ const GroupedEditStrategy = EditStrategy.inherit({
     });
 
     return index;
-  },
+  }
 
   getItemDataByIndex(index) {
     const items = this._collectionWidget.option('items');
@@ -73,13 +71,12 @@ const GroupedEditStrategy = EditStrategy.inherit({
     if (isNumeric(index)) {
       return this.itemsGetter()[index];
     }
-
     return (index && items[index.group] && items[index.group].items[index.item]) || null;
-  },
+  }
 
   itemsGetter() {
     let resultItems = [];
-    const items = this._collectionWidget.option('items');
+    const { items } = this._collectionWidget.option();
 
     for (let i = 0; i < items.length; i++) {
       if (items[i] && items[i].items) {
@@ -90,14 +87,14 @@ const GroupedEditStrategy = EditStrategy.inherit({
       }
     }
     return resultItems;
-  },
+  }
 
-  deleteItemAtIndex(index) {
+  deleteItemAtIndex(index: number): void {
     const indices = splitIndex(index);
     const itemGroup = this._collectionWidget.option('items')[indices.group].items;
 
     itemGroup.splice(indices.item, 1);
-  },
+  }
 
   getKeysByItems(items) {
     let plainItems = [];
@@ -119,8 +116,9 @@ const GroupedEditStrategy = EditStrategy.inherit({
     }
 
     return result;
-  },
+  }
 
+  // @ts-expect-error
   getIndexByKey(key, items) {
     const groups = items || this._collectionWidget.option('items');
     let index = -1;
@@ -147,9 +145,10 @@ const GroupedEditStrategy = EditStrategy.inherit({
     });
 
     return index;
-  },
+  }
 
   _getGroups(items) {
+    // @ts-expect-error
     const dataController = this._collectionWidget._dataController;
     const group = dataController.group();
 
@@ -159,7 +158,7 @@ const GroupedEditStrategy = EditStrategy.inherit({
     }
 
     return this._collectionWidget.option('items');
-  },
+  }
 
   getItemsByKeys(keys, items) {
     const result = [];
@@ -168,12 +167,14 @@ const GroupedEditStrategy = EditStrategy.inherit({
 
     const getItemMeta = (key) => {
       const index = this.getIndexByKey(key, groups);
+      // @ts-expect-error
       const group = index && groups[index.group];
 
       if (!group) return;
 
       return {
         groupKey: group.key,
+        // @ts-expect-error
         item: group.items[index.item],
       };
     };
@@ -198,14 +199,13 @@ const GroupedEditStrategy = EditStrategy.inherit({
     });
 
     return result;
-  },
+  }
 
   moveItemAtIndexToIndex(movingIndex, destinationIndex) {
     const items = this._collectionWidget.option('items');
 
     const movingIndices = splitIndex(movingIndex);
     const destinationIndices = splitIndex(destinationIndex);
-
     const movingItemGroup = items[movingIndices.group].items;
     const destinationItemGroup = items[destinationIndices.group].items;
 
@@ -213,13 +213,16 @@ const GroupedEditStrategy = EditStrategy.inherit({
 
     movingItemGroup.splice(movingIndices.item, 1);
     destinationItemGroup.splice(destinationIndices.item, 0, movedItemData);
-  },
+  }
 
-  _isItemIndex(index) {
+  // @ts-expect-error
+  // eslint-disable-next-line class-methods-use-this
+  _isItemIndex(index: { group: number; item: number }): boolean {
     return index && isNumeric(index.group) && isNumeric(index.item);
-  },
+  }
 
-  _getNormalizedItemIndex(itemElement) {
+  // @ts-expect-error
+  _getNormalizedItemIndex(itemElement: Element): number | { group: number; index: number } {
     const $item = $(itemElement);
     const $group = $item.closest(`.${LIST_GROUP_CLASS}`);
 
@@ -231,27 +234,28 @@ const GroupedEditStrategy = EditStrategy.inherit({
       group: this._groupElements().index($group),
       item: this._groupItemElements($group).index($item),
     });
-  },
+  }
 
-  _normalizeItemIndex(index) {
+  // eslint-disable-next-line class-methods-use-this
+  _normalizeItemIndex(index: { group: number; item: number }): number {
     return combineIndex(index);
-  },
+  }
 
-  _denormalizeItemIndex(index) {
+  // eslint-disable-next-line class-methods-use-this
+  _denormalizeItemIndex(index: number): { group: number; item: number } {
     return splitIndex(index);
-  },
+  }
 
-  _getItemByNormalizedIndex(index) {
+  _getItemByNormalizedIndex(index: number): dxElementWrapper {
     const indices = splitIndex(index);
     const $group = this._groupElements().eq(indices.group);
 
     return this._groupItemElements($group).eq(indices.item);
-  },
+  }
 
-  _itemsFromSameParent(firstIndex, secondIndex) {
+  _itemsFromSameParent(firstIndex, secondIndex): boolean {
     return splitIndex(firstIndex).group === splitIndex(secondIndex).group;
-  },
-
-});
+  }
+}
 
 export default GroupedEditStrategy;

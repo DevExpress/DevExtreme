@@ -714,8 +714,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiAccordionItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiAccordionItemComponent');
     }
 
 
@@ -724,9 +723,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
-        }
+        this._setChildren('items', value, 'DxiItemComponent');
     }
 
 

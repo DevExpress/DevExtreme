@@ -738,6 +738,146 @@ QUnit.module('tags', moduleSetup, () => {
             done();
         }, TIME_TO_WAIT);
     });
+
+    ['items', 'dataSource'].forEach((optionName) => {
+        QUnit.test('TagBox should not have unexpected selected tags when value includes item that doesn\'t exist in items', function(assert) {
+            const options = { value: [1, 11] };
+            options[optionName] = [1, 2, 3];
+            const $tagBox = $('#tagBox').dxTagBox(options);
+            const tagBox = $tagBox.dxTagBox('instance');
+
+            const { selectedItems } = tagBox.option();
+            const $tags = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+
+            assert.deepEqual(selectedItems, [1], 'selectedItems have no unexpected items');
+            assert.strictEqual($tags.length, 1, 'there is no unexpected tags');
+        });
+    });
+
+    [false, true].forEach((deferRendering) => {
+        [
+            {
+                initialOptions: {
+                    deferRendering,
+                    items: [1, 2, 3],
+                    value: [1, 3],
+                },
+                optionsToUpdate: {
+                    items: [1, 2],
+                },
+                expectedSelectedItems: [1],
+                optionName: 'items',
+            },
+            {
+                initialOptions: {
+                    deferRendering,
+                    dataSource: [1, 2, 3],
+                    value: [1, 3],
+                },
+                optionsToUpdate: {
+                    dataSource: [1, 2],
+                },
+                expectedSelectedItems: [1],
+                optionName: 'dataSource',
+            },
+            {
+                initialOptions: {
+                    deferRendering,
+                    items: [1],
+                    value: [1],
+                },
+                optionsToUpdate: {
+                    items: null,
+                },
+                expectedSelectedItems: [],
+                optionName: 'items',
+            },
+            {
+                initialOptions: {
+                    deferRendering,
+                    dataSource: [1],
+                    value: [1],
+                },
+                optionsToUpdate: {
+                    dataSource: null,
+                },
+                expectedSelectedItems: [],
+                optionName: 'dataSource',
+            },
+            {
+                initialOptions: {
+                    deferRendering,
+                    dataSource: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }, { id: 3, text: 'three' }],
+                    value: [1, 3],
+                    valueExpr: 'id',
+                },
+                optionsToUpdate: {
+                    dataSource: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }],
+                },
+                expectedSelectedItems: [{ id: 1, text: 'one' }],
+                optionName: 'dataSource',
+            },
+            {
+                initialOptions: {
+                    deferRendering,
+                    dataSource: new DataSource({ store: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }, { id: 3, text: 'three' }] }),
+                    value: [1, 3],
+                    valueExpr: 'id',
+                },
+                optionsToUpdate: {
+                    dataSource: new DataSource({ store: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }] }),
+                },
+                expectedSelectedItems: [{ id: 1, text: 'one' }],
+                optionName: 'dataSource',
+            },
+            {
+                initialOptions: {
+                    deferRendering,
+                    items: null,
+                    value: [1],
+                },
+                optionsToUpdate: {
+                    items: [1, 2],
+                },
+                expectedSelectedItems: [1],
+                optionName: 'items',
+            },
+            {
+                initialOptions: {
+                    deferRendering,
+                    dataSource: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }],
+                    value: [1, 3],
+                    valueExpr: 'id',
+                },
+                optionsToUpdate: {
+                    dataSource: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }, { id: 3, text: 'three' }],
+                },
+                expectedSelectedItems: [{ id: 1, text: 'one' }, { id: 3, text: 'three' }],
+                optionName: 'dataSource',
+            },
+        ].forEach(({ initialOptions, optionsToUpdate, expectedSelectedItems, optionName }) => {
+            const source = initialOptions.dataSource instanceof DataSource ? 'DataSource' : JSON.stringify(initialOptions[optionName]);
+
+            QUnit.test(`SelectedItems should be updated correctly on runtime ${optionName} change (deferRendering=${deferRendering}, source=${source}) (T1253312)`, function(assert) {
+                const tagBox = $('#tagBox').dxTagBox(initialOptions).dxTagBox('instance');
+
+                tagBox.option(optionsToUpdate);
+
+                assert.deepEqual(tagBox.option('selectedItems'), expectedSelectedItems, 'selectedItems are updated');
+            });
+
+            QUnit.test(`Tags should be updated correctly on runtime ${optionName} change (deferRendering=${deferRendering}, source=${source}) (T1253312)`, function(assert) {
+                const $tagBox = $('#tagBox').dxTagBox(initialOptions);
+                const tagBox = $tagBox.dxTagBox('instance');
+
+                tagBox.option(optionsToUpdate);
+
+                const $tags = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+
+                assert.strictEqual($tags.length, expectedSelectedItems.length, 'tags are updated');
+            });
+        });
+    });
 });
 
 QUnit.module('multi tag support', {
@@ -2725,6 +2865,28 @@ QUnit.module('keyboard navigation', {
 
         assert.ok(keyDownStub.calledOnce, 'keydown handled');
         assert.ok(keyUpStub.calledOnce, 'keyup handled');
+    });
+
+    QUnit.testInActiveWindow('Popup should not close on tab press after search when applyValueMode is "useButtons" (T1230517)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'desktop specific test');
+            return;
+        }
+
+        this.reinit({
+            focusStateEnabled: true,
+            items: ['first', 'second', 'third'],
+            opened: true,
+            searchEnabled: true,
+            applyValueMode: 'useButtons',
+        });
+
+        this.keyboard
+            .focus()
+            .type('s')
+            .press('tab');
+
+        assert.deepEqual(this.instance.option('opened'), true, 'popup is not closed');
     });
 });
 
@@ -7016,7 +7178,7 @@ QUnit.module('performance', () => {
             this.resetGetterCallCount();
             $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
-            assert.strictEqual(this.getValueGetterCallCount(), 6154, 'key getter call count');
+            assert.strictEqual(this.getValueGetterCallCount(), 6254, 'key getter call count');
             assert.strictEqual(isValueEqualsSpy.callCount, 5050, '_isValueEquals call count');
         });
 
@@ -7027,7 +7189,7 @@ QUnit.module('performance', () => {
             const checkboxes = $(`.${LIST_CHECKBOX_CLASS}`);
             checkboxes.eq(checkboxes.length - 1).trigger('dxclick');
 
-            assert.strictEqual(this.getValueGetterCallCount(), 6054, 'key getter call count');
+            assert.strictEqual(this.getValueGetterCallCount(), 6153, 'key getter call count');
         });
     });
 
