@@ -91,6 +91,7 @@ function getFormatHandlers(module) {
     },
     superscript: prepareShortcutHandler(module, 'script', 'super'),
     subscript: prepareShortcutHandler(module, 'script', 'sub'),
+    aIShortenText: prepareAIShortenTextHandler(module),
     insertTable: prepareInsertTableHandler(module),
     insertHeaderRow: getTableOperationHandler(module.quill, 'insertHeaderRow'),
     insertRowAbove: getTableOperationHandler(module.quill, 'insertRowAbove'),
@@ -102,6 +103,51 @@ function getFormatHandlers(module) {
     deleteTable: getTableOperationHandler(module.quill, 'deleteTable'),
     cellProperties: prepareShowFormProperties(module, 'cell'),
     tableProperties: prepareShowFormProperties(module, 'table'),
+  };
+}
+
+function prepareAIShortenTextHandler(module) {
+  return () => {
+    const selection = module.quill.getSelection();
+    const value = selection?.length ? module.quill.getText(selection) : module.quill.getText();
+
+    const formData = { selectedText: value, modelResponse: '' };
+
+    module.editorInstance.formDialogOption({
+      title: 'AI SERVICE CUSTOM TITLE',
+    });
+
+    const { aIIntegration } = module.editorInstance.option();
+    const form = module.editorInstance._formDialog._form;
+
+    const promise = module.editorInstance.showFormDialog({
+      formData,
+      items: aIShortenTextItems(aIIntegration, form),
+    });
+
+    promise
+      .done((formData, event) => {
+        module.quill.focus();
+
+        if (selection?.length) {
+          module.quill.deleteText(selection.index, selection.length, SILENT_ACTION);
+        } else {
+          module.quill.deleteText(0, value.length);
+        }
+
+        module.quill.insertText(selection?.index ?? 0, formData.modelResponse, '', formData.modelResponse, USER_ACTION);
+
+        if (selection?.length) {
+          module.quill.setSelection(selection.index - 1, selection.index - 1 + formData.modelResponse.length, USER_ACTION);
+        } else {
+          module.quill.setSelection(0, formData.modelResponse.length, USER_ACTION);
+        }
+
+        module.saveValueChangeEvent(event);
+      })
+      .always(() => {
+        module.quill.focus();
+      });
   };
 }
 
@@ -350,6 +396,49 @@ function getDefaultClickHandler(module, name) {
 
     getToolbarModule(module)?._updateFormatWidget(name, newValue, formats);
   };
+}
+
+function aIShortenTextItems(aIIntegration, form) {
+  return [
+    {
+      dataField: 'selectedText',
+      editorType: 'dxTextArea',
+      editorOptions: {
+        height: 200,
+        width: 400,
+      },
+    },
+    {
+      dataField: 'modelResponse',
+      editorType: 'dxTextArea',
+      editorOptions: {
+        height: 200,
+        width: 400,
+      },
+    },
+    {
+      itemType: 'button',
+      buttonOptions: {
+        text: 'Shorten text',
+        onClick: () => {
+          const text = form.option('formData').selectedText;
+          const system = 'Shorten the text by half';
+
+          const prompt = {
+            system,
+            user: `${system}: ${text}`,
+          };
+
+          const promise = aIIntegration.getModelResponse(prompt, 'shortentext');
+
+          promise
+            .then((value) => {
+              form.option('formData.modelResponse', value);
+            });
+        },
+      },
+    },
+  ];
 }
 
 function insertTableFormItems() {
