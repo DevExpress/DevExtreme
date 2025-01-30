@@ -71,6 +71,15 @@ if (Quill) {
       eventsEngine.off(this.editorInstance._getContent(), CONTEXT_MENU_EVENT);
     }
 
+    _escKeyHandler() {
+      this._contextMenu.hide();
+      this.editorInstance.focus();
+    }
+
+    _addEscapeHandler(e) {
+      e.component.registerKeyHandler('escape', this._escKeyHandler.bind(this));
+    }
+
     _createContextMenu(items) {
       const $container = $('<div>').appendTo(this.editorInstance.$element());
       const menuConfig = this._getMenuConfig(items);
@@ -160,6 +169,7 @@ if (Quill) {
         target: this._quillContainer,
         showEvent: null,
         hideOnParentScroll: false,
+        onInitialized: this._addEscapeHandler.bind(this),
         items: customItems,
       };
     }
