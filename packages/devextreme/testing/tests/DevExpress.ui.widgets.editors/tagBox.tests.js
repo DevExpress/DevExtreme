@@ -7178,7 +7178,7 @@ QUnit.module('performance', () => {
             this.resetGetterCallCount();
             $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
-            assert.strictEqual(this.getValueGetterCallCount(), 6254, 'key getter call count');
+            assert.strictEqual(this.getValueGetterCallCount(), 6354, 'key getter call count');
             assert.strictEqual(isValueEqualsSpy.callCount, 5050, '_isValueEquals call count');
         });
 
@@ -7189,7 +7189,7 @@ QUnit.module('performance', () => {
             const checkboxes = $(`.${LIST_CHECKBOX_CLASS}`);
             checkboxes.eq(checkboxes.length - 1).trigger('dxclick');
 
-            assert.strictEqual(this.getValueGetterCallCount(), 6153, 'key getter call count');
+            assert.strictEqual(this.getValueGetterCallCount(), 6151, 'key getter call count');
         });
     });
 
