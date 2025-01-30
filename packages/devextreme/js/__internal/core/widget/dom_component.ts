@@ -95,7 +95,6 @@ class DOMComponent<
     attachInstanceToElement(this._$element, this, this._dispose);
 
     super.ctor(options);
-
     const validationAlreadyPerformed = peekValidationPerformed();
     // @ts-expect-error
     license.validateLicense(config().licenseKey);
