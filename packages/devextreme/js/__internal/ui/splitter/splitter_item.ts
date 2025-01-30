@@ -48,7 +48,6 @@ class SplitterItem extends CollectionWidgetItem<Item> {
   }
 
   getIndex(): number {
-    // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._owner._getIndexByItemData(this._rawData);
   }

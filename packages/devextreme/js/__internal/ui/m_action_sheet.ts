@@ -22,7 +22,7 @@ const ACTION_SHEET_ITEM_CLASS = 'dx-actionsheet-item';
 const ACTION_SHEET_ITEM_DATA_KEY = 'dxActionSheetItemData';
 const ACTION_SHEET_WITHOUT_TITLE_CLASS = 'dx-actionsheet-without-title';
 const ACTION_SHEET_BUTTON_DEFAULT_STYLING_MODE = 'outlined';
-
+// @ts-expect-error
 const ActionSheet = CollectionWidget.inherit({
 
   _getDefaultOptions() {

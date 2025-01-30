@@ -2726,6 +2726,28 @@ QUnit.module('keyboard navigation', {
         assert.ok(keyDownStub.calledOnce, 'keydown handled');
         assert.ok(keyUpStub.calledOnce, 'keyup handled');
     });
+
+    QUnit.testInActiveWindow('Popup should not close on tab press after search when applyValueMode is "useButtons" (T1230517)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'desktop specific test');
+            return;
+        }
+
+        this.reinit({
+            focusStateEnabled: true,
+            items: ['first', 'second', 'third'],
+            opened: true,
+            searchEnabled: true,
+            applyValueMode: 'useButtons',
+        });
+
+        this.keyboard
+            .focus()
+            .type('s')
+            .press('tab');
+
+        assert.deepEqual(this.instance.option('opened'), true, 'popup is not closed');
+    });
 });
 
 QUnit.module('keyboard navigation through tags', {
