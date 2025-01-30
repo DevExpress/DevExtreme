@@ -10,44 +10,21 @@ fixture`Column resizing`
 test('column separator should starts from the parent', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
-  const dataGridOffset = {
-    offsetX: await dataGrid.element.offsetLeft ?? 0,
-    offsetY: await dataGrid.element.offsetTop ?? 0,
-  };
-  let screenshotIndex = 0;
-  async function makeColumnSeparatorScreenshot(offsetX: number, offsetY: number) {
-    const correctedOffsetX = offsetX + 1; // 1px for grid left border
-    await t.hover(dataGrid.element, { offsetX: correctedOffsetX, offsetY });
-    await t.dispatchEvent(
-      dataGrid.getColumnsSeparator().element,
-      'mousedown',
-      {
-        offsetX: correctedOffsetX + dataGridOffset.offsetX,
-        offsetY: offsetY + dataGridOffset.offsetY,
-      },
-    );
-    await t.expect(await takeScreenshot(`column-separator-${screenshotIndex}.png`)).ok();
-    await t.dispatchEvent(dataGrid.getColumnsSeparator().element, 'mouseup');
-    screenshotIndex += 1;
+  async function makeColumnSeparatorScreenshot(index: number) {
+    await dataGrid.resizeHeader(index, 0, false);
+    await t.expect(await takeScreenshot(`column-separator-${index}.png`)).ok();
+    await t.dispatchEvent(dataGrid.element, 'mouseup');
   }
 
-  // first row
-  await makeColumnSeparatorScreenshot(0, 15);
-  await makeColumnSeparatorScreenshot(100, 15);
-  await makeColumnSeparatorScreenshot(6 * 100, 15);
-  await makeColumnSeparatorScreenshot(8 * 100, 15);
-  await makeColumnSeparatorScreenshot(9 * 100, 15);
-  await makeColumnSeparatorScreenshot(10 * 100, 15);
-  // second row
-  await makeColumnSeparatorScreenshot(2 * 100, 45);
-  await makeColumnSeparatorScreenshot(6 * 100, 45);
-  await makeColumnSeparatorScreenshot(7 * 100, 45);
-  await makeColumnSeparatorScreenshot(8 * 100, 45);
-  // third row
-  await makeColumnSeparatorScreenshot(3 * 100, 75);
-  await makeColumnSeparatorScreenshot(4 * 100, 75);
-  await makeColumnSeparatorScreenshot(5 * 100, 75);
-  await makeColumnSeparatorScreenshot(6 * 100, 75);
+  await makeColumnSeparatorScreenshot(1);
+  await makeColumnSeparatorScreenshot(2);
+  await makeColumnSeparatorScreenshot(3);
+  await makeColumnSeparatorScreenshot(4);
+  await makeColumnSeparatorScreenshot(5);
+  await makeColumnSeparatorScreenshot(6);
+  await makeColumnSeparatorScreenshot(7);
+  await makeColumnSeparatorScreenshot(8);
+  await makeColumnSeparatorScreenshot(9);
 
   await t
     .expect(compareResults.isValid())

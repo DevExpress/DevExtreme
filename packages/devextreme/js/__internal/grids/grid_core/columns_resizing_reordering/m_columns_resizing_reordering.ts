@@ -928,7 +928,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
       return true;
     };
 
-    for (let rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+    for (let rowIndex = 0; rowIndex < rowCount - 1; rowIndex++) {
       const cells = that._columnHeadersView.getColumnElements(rowIndex);
 
       if (cells && cells.length > 0) {
