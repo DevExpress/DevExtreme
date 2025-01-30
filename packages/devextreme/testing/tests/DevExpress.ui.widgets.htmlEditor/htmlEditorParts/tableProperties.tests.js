@@ -1144,32 +1144,31 @@ module('Table properties forms', {
                     'dxHtmlEditor-borderStyleNone': 'Test',
                 }
             };
+            localization.loadMessages(this.messages);
+            localization.locale('de');
+        },
+        afterEach: function() {
+            localization.locale('en');
         }
     }, () => {
-        test('SelectBox should show correct localization (T1234032)', function(assert) {
-            try {
-                localization.loadMessages(this.messages);
-                localization.locale('de');
+        test('borderStyle selectbox items are localized even if messages are loaded at runtime (T1234032)', function(assert) {
+            this.createWidget({ width: 432 });
 
-                this.createWidget({ width: 432 });
+            const $tableElement = this.$element.find('table').eq(0);
 
-                const $tableElement = this.$element.find('table').eq(0);
+            this.quillInstance.setSelection(50, 1);
 
-                this.quillInstance.setSelection(50, 1);
+            showCellPropertiesForm(this.instance, $tableElement);
 
-                showCellPropertiesForm(this.instance, $tableElement);
-                this.clock.tick(10);
+            this.clock.tick(10);
 
-                const $borderStyleSelectBox = $(`.${SELECT_BOX_CONTAINER_CLASS} > input`);
+            const $borderStyleSelectBox = $(this.getFormInstance().getEditor('borderStyle')._input());
 
-                $borderStyleSelectBox.trigger('dxclick');
+            $borderStyleSelectBox.trigger('dxclick');
 
-                const $firstListItem = $(`.${LIST_ITEM_CLASS}`).eq(0);
+            const $firstListItem = $(`.${LIST_ITEM_CLASS}`).eq(0);
 
-                assert.strictEqual($firstListItem.text(), 'Test', 'borderStyleEditor is correctly localized');
-            } finally {
-                localization.locale();
-            }
+            assert.strictEqual($firstListItem.text(), 'Test', 'borderStyleEditor is correctly localized');
         });
     });
 });
