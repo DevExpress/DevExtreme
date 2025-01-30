@@ -50,6 +50,7 @@ const HtmlEditor = Editor.inherit({
       focusStateEnabled: true,
       placeholder: '',
       toolbar: null,
+      aIIntegration: null,
       variables: null,
       mediaResizing: null,
       tableResizing: null,
@@ -602,6 +603,8 @@ const HtmlEditor = Editor.inherit({
         break;
       case 'imageUpload':
         this._moduleOptionChanged('imageUpload', args);
+        break;
+      case 'aIIntegration':
         break;
       default:
         this.callBase(args);

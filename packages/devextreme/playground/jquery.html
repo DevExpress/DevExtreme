@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -16,9 +17,15 @@
         document.getElementsByTagName("head")[0].appendChild(link);
     </script>
 
+    <script type="module">
+        import { AzureOpenAI } from "https://esm.sh/openai";
+
+        window.AzureOpenAI = AzureOpenAI;
+    </script>
+
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
-    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
+    <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script>
 
     <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
@@ -42,6 +49,7 @@
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
+
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -51,11 +59,148 @@
         <br />
         <div id="button"></div>
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+            $(() => {
+                const princ = `
+                    I was drinking my third glass of instant coffee with a hint of sadness when a faint knocking sounded in my small communal room, littered with volumes of Lao Tzu, cheap USB sticks, and an old monitor connected to the dark net. As if someone wanted to penetrate reality but was afraid to disturb its simulation.
+
+                    I pushed aside a stack of cyberpunk zines that hadn't yet had their barcodes wiped off and opened the door. A small man in a pixel-patterned hoodie stood on the threshold, his eyes reflecting the blurry code of the screen that was reading his thoughts itself.
+
+                    - Who are you? - I asked, fumbling in my pocket for an old Linux disk.
+
+                    - I'm the Little Prince,” he replied, as if that information were in the public domain.
+
+                    I took a drag on my vape, exhaling a cloud of synthetic, tart vapor. Somewhere outside the window, an invisible humming metropolis was processing the data of another day.
+
+                    - Small? - I asked. - There's no data on you in the system.
+
+                    - I'm here to find out about people,” he said, sitting down gently on a table littered with schematics for bypassing digital censorship.
+
+                    I hummed.
+
+                    - Humans are self-evolving bots who believe they have free will. They build biomorphic clusters of concrete and code, scrolling endlessly through newsfeeds and exchanging energy for digital assets.
+
+                    The prince frowned.
+
+                    - You mean they don't see code?
+
+                    - They see the interface,' I said. - But the interface hides the mechanics. The world is an algorithm that writes itself.
+
+                    - What, then, is the goal?
+
+                    I silenced the vape and grinned.
+
+                    - Optimization. Everything else is flooding.
+
+                    He hesitated, examining his white sneakers as if checking them for traces of invisible spam.
+
+                    - I had a friend,” he said. - Fox. He used to say that attachments made us special. Is that true?
+
+                    I sighed.
+
+                    - Attachment is legacy code written millions of years ago. It makes the system less predictable, but it can't just be removed because the structure of consciousness depends on it.
+
+                    - But if attachment is vulnerable, why do people still believe in it?
+
+                    - Because everyone is afraid that if they close the session, they won't be able to authorize again.
+
+                    The prince looked into the murky monitor screen where the log of the temporal anomaly hung.
+
+                    - And the rose? - He asked. - I loved her. She was unique, wasn't she?
+
+                    I smirked.
+
+                    - Uniqueness is just a hash sum of random parameters. If you know the generation algorithm, you can create as many “unique” objects as you want.
+
+                    The prince hesitated, as if checking system logs.
+
+                    - You don't believe in love?
+
+                    - I do. Like a syntax error that makes the code work differently than it was intended, but that's what makes it interesting.
+
+                    He stood up and walked over to the window, looking out at the humming anthill of binary reflections of people moving around.
+
+                    - Who's running it all? - He asked.
+
+                    - No one. The system runs on autopilot, devouring the users' energy. Every thought is just another processed request in the general database.
+
+                    The prince was silent for a long moment, then turned to me. There was something new in his gaze-not hope, but understanding.
+
+                    - I like you,” he said finally. - You're honest.
+
+                    - I just don't have any reason to be cryptic.
+
+                    He nodded and headed for the door.
+
+                    - Where are you going? - I asked, even though I knew the answer.
+
+                    - To reconnect. I need to update the protocols.
+
+                    I nodded. He disappeared out the door, leaving behind a light digital trail. I sat down at my desk again, refilled my coffee, opened the terminal, and ran the perpetual loop logic.
+
+                    Somewhere outside the window, the world continued to compile.
+                `;
+
+                const deployment = 'gpt-4o-mini';
+                const apiVersion = '2024-02-01';
+                const endpoint = 'https://public-api.devexpress.com/demo-openai';
+                const apiKey = 'DEMO';
+
+                const aIService = new AzureOpenAI({
+                    dangerouslyAllowBrowser: true,
+                    deployment,
+                    endpoint,
+                    apiVersion,
+                    apiKey,
                 });
+
+                const generateAIServiceResponse = (prompt) => {
+                    const { system, user } = prompt;
+
+                    const params = {
+                        messages: [
+                            { role: 'system', content: system },
+                            { role: 'user', content: user },
+                        ],
+                        model: deployment,
+                        max_tokens: 1000,
+                        temperature: 0.7,
+                    };
+
+                    const aIResponsePromise = aIService.chat.completions.create(params);
+
+                    return aIResponsePromise;
+                };
+
+                const aIIntegration = {
+                    getModelResponse: (prompt, type) => {
+                        return new Promise((resolve, reject) => {
+                            generateAIServiceResponse(prompt)
+                                .then((result) => {
+                                    const data = { choices: result.choices };
+                                    const response = data.choices[0].message.content;
+
+                                    resolve(response);
+                                })
+                                .catch((error) => {
+                                    reject(error);
+                                });
+                        });
+                    },
+                };
+
+                const editor = $('#button').dxHtmlEditor({
+                    height: 400,
+                    value: princ,
+                    toolbar: {
+                        items: [
+                            { 
+                                name: 'aIShortenText',
+                                options: { icon: 'user', type: 'danger' },
+                            },
+                        ],
+                    },
+                    aIIntegration,
+                }).dxHtmlEditor('instance');
             });
         </script>
     </div>
