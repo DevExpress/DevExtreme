@@ -323,7 +323,8 @@ export class DateGeneratorBaseStrategy {
 
       const duration = source.endDate.getTime() - source.startDate.getTime();
       const startDate = this.timeZoneCalculator.createDate(source.startDate, { path: 'toGrid' });
-      const endDate = dateUtilsTs.addOffsets(startDate, [duration]);
+      const endDate = this.timeZoneCalculator.createDate(source.endDate, { path: 'toGrid' });
+      // const endDate = dateUtilsTs.addOffsets(startDate, [duration]);
 
       return {
         startDate,

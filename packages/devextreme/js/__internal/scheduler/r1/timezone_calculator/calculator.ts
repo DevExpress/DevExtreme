@@ -2,6 +2,7 @@ import dateUtils from '@js/core/utils/date';
 import { isDefined } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
+import timeZoneUtils from '../../m_utils_time_zone';
 import { PathTimeZoneConversion } from './const';
 import type { DateType, TimeZoneCalculatorOptions, TimeZoneOffsetsType } from './types';
 
@@ -63,12 +64,21 @@ export class TimeZoneCalculator {
     const direction = isBack
       ? -1
       : 1;
-
     const resultDate = new Date(date);
-    return dateUtilsTs.addOffsets(resultDate, [
+    let convertedDateByOffsets = dateUtilsTs.addOffsets(resultDate, [
       direction * (toMs('hour') * targetOffset),
       -direction * (toMs('hour') * clientOffset),
     ]);
+
+    if (isBack) {
+      const DSTOffset = timeZoneUtils.getDaylightOffsetInMs(resultDate, convertedDateByOffsets);
+
+      if (DSTOffset !== 0) {
+        convertedDateByOffsets = dateUtilsTs.addOffsets(convertedDateByOffsets, [DSTOffset]);
+      }
+    }
+
+    return convertedDateByOffsets;
 
     // V1
     // NOTE: Previous date calculation engine.
