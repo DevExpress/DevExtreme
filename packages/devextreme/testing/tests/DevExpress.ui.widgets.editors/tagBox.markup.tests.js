@@ -67,7 +67,8 @@ QUnit.module('base markup', moduleSetup, () => {
     QUnit.test('tagbox should render custom values in tags', function(assert) {
         const $element = $('#tagBox')
             .dxTagBox({
-                value: [1, 2]
+                value: [1, 2],
+                acceptCustomValue: true,
             });
 
         const tags = $element.find('.' + TAGBOX_TAG_CONTENT_CLASS);
@@ -77,6 +78,7 @@ QUnit.module('base markup', moduleSetup, () => {
     QUnit.test('tagElement arguments of tagTemplate for custom tags is correct', function(assert) {
         $('#tagBox').dxTagBox({
             value: [1, 2],
+            acceptCustomValue: true,
             tagTemplate: function(tagData, tagElement) {
                 assert.equal(isRenderer(tagElement), !!config().useJQuery, 'tagElement is correct');
             }
