@@ -27,13 +27,6 @@ class SplitterItem extends CollectionWidgetItem<Item> {
     this._owner = options.owner;
   }
 
-  _renderVisible(
-    value: boolean | undefined,
-    oldValue?: boolean | undefined,
-  ): void {
-    super._renderVisible(value, oldValue);
-  }
-
   _renderResizeHandle(): void {
     if (this._shouldHaveResizeHandle()) {
       const id = `dx_${new Guid()}`;

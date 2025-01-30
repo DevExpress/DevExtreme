@@ -659,9 +659,12 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
         this._applyStylesFromLayout(this.getLayout());
         this._updateItemSizes();
         break;
-      case 'collapsed':
-        this._itemCollapsedOptionChanged(item, value as boolean, prevValue as boolean);
+      case 'collapsed': {
+        type PropertyType = Item[typeof property];
+
+        this._itemCollapsedOptionChanged(item, value as PropertyType, prevValue as PropertyType);
         break;
+      }
       case 'resizable':
         this._updateResizeHandlesResizableState();
         break;
@@ -669,9 +672,11 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
         this._updateResizeHandlesCollapsibleState();
         break;
       case 'visible': {
+        type PropertyType = Item[typeof property];
+
         super._itemOptionChanged(item, property, value, prevValue);
 
-        this._itemVisibleOptionChanged(item, value as boolean, prevValue as boolean);
+        this._itemVisibleOptionChanged(item, value as PropertyType, prevValue as PropertyType);
         break;
       }
       default:
@@ -679,8 +684,8 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     }
   }
 
-  _itemVisibleOptionChanged(item: Item, value: boolean, prevValue: boolean): void {
-    if (Boolean(prevValue ?? true) === Boolean(value ?? true)) {
+  _itemVisibleOptionChanged(item: Item, value = true, prevValue = true): void {
+    if (Boolean(prevValue) === Boolean(value)) {
       return;
     }
 
@@ -699,11 +704,9 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
       direction,
     );
 
-    this._itemRestrictions.map((pane) => {
+    this._itemRestrictions.forEach((pane) => {
       pane.maxSize = undefined;
       pane.resizable = undefined;
-
-      return item;
     });
 
     this._layout = getNextLayout(
@@ -725,32 +728,17 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     const $item = $(this._itemElements()[itemIndex]);
     const { items = [] } = this.option();
 
-    const isLastVisibleItem = itemIndex >= findLastIndexOfVisibleItem(items);
-    const isLastVisible = this._isLastVisibleItem(itemIndex) || isLastVisibleItem;
+    const isLastVisible = itemIndex >= findLastIndexOfVisibleItem(items);
 
-    if (value === false) {
-      if (isLastVisible) {
-        return {
-          direction: CollapseExpandDirection.Next,
-          paneIndex: this._getPaneIndexByElement(this._getResizeHandleLeftItem($item)),
-        };
-      }
+    const direction = isLastVisible === (value === false)
+      ? CollapseExpandDirection.Next
+      : CollapseExpandDirection.Previous;
 
-      return {
-        direction: CollapseExpandDirection.Previous,
-        paneIndex: this._getPaneIndexByElement($item),
-      };
-    } if (isLastVisible) {
-      return {
-        direction: CollapseExpandDirection.Previous,
-        paneIndex: this._getPaneIndexByElement(this._getResizeHandleLeftItem($item)),
-      };
-    }
+    const paneIndex = this._getPaneIndexByElement(
+      isLastVisible ? this._getResizeHandleLeftItem($item) : $item,
+    );
 
-    return {
-      direction: CollapseExpandDirection.Next,
-      paneIndex: this._getPaneIndexByElement($item),
-    };
+    return { direction, paneIndex };
   }
 
   _updateResizeHandles(): void {
@@ -769,7 +757,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     return this._getIndexByItem(itemData);
   }
 
-  _itemCollapsedOptionChanged(item: Item, value: boolean, prevValue: boolean): void {
+  _itemCollapsedOptionChanged(item: Item, value?: boolean, prevValue?: boolean): void {
     if (Boolean(value) === Boolean(prevValue)) {
       return;
     }
@@ -830,11 +818,9 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
       this._collapseDirection,
     );
 
-    this._itemRestrictions.map((pane) => {
+    this._itemRestrictions.forEach((pane) => {
       pane.maxSize = undefined;
       pane.resizable = undefined;
-
-      return item;
     });
 
     this._layout = getNextLayout(
@@ -886,7 +872,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
   _getCollapseDelta(
     item: Item,
-    newCollapsedState: boolean,
+    newCollapsedState: boolean | undefined,
     panesCacheSize: (PaneCache | undefined)[],
     direction?: CollapseExpandDirection,
   ): number {

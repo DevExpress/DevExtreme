@@ -1598,11 +1598,11 @@ QUnit.module('Pane visibility', moduleConfig, () => {
                 dataSource: [{}, {}, {}]
             });
 
-            const $pane = this.getPanes().eq(0).attr('id');
+            const initialPaneId = this.getPanes().eq(0).attr('id');
 
             this.instance.option('items[2].visible', false);
 
-            assert.strictEqual($pane, this.getPanes().eq(0).attr('id'), 'neighbour pane was not rerendered');
+            assert.strictEqual(initialPaneId, this.getPanes().eq(0).attr('id'), 'neighbour pane was not rerendered');
         });
     });
 });
