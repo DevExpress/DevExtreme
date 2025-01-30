@@ -49,6 +49,10 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 this.labelCoords = axis._getTranslatedValue(value);
             },
             saveCoords() {
+                if(this._templateDef?.state() === 'pending') {
+                    return;
+                }
+
                 this._lastStoredCoordinates = {
                     coords: this._storedCoords,
                     labelCoords: this._storedLabelsCoords
@@ -236,6 +240,10 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
             },
 
             updateLabelPosition: function(animate) {
+                if(this._templateDef?.state() === 'pending') {
+                    return;
+                }
+
                 const templateContainer = this.templateContainer;
                 if(!this.getContentContainer()) {
                     return;
