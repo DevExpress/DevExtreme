@@ -630,7 +630,7 @@ class CollectionWidget<
 
   _itemOptionChanged(
     item: TItem,
-    property: string,
+    property: keyof TItem,
     value: unknown,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     prevValue?: unknown,
