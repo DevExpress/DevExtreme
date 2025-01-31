@@ -288,6 +288,8 @@ QUnit.module('Aria attributes', moduleConfig, () => {
             }]
         });
 
+        assert.strictEqual(this.getItems().eq(1).attr('id'), undefined, 'id attribute is not set for invisible item');
+
         this.instance.option('items[1].visible', true);
 
         assert.strictEqual(this.getItems().eq(1).attr('id'), this.getResizeHandles().eq(1).attr('aria-controls'), 'aria-controls of the resize handle are linked with id attribute of the pane');

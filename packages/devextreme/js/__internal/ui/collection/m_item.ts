@@ -90,7 +90,11 @@ const CollectionItem = Class.inherit({
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _renderVisible(value, oldValue) {
+  _renderVisible(
+    value: boolean | undefined,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    oldValue?: boolean,
+  ): void {
     this._$element.toggleClass(INVISIBLE_STATE_CLASS, value !== undefined && !value);
   },
 

@@ -29,7 +29,7 @@ class SplitterItem extends CollectionWidgetItem {
   }
 
   _renderResizeHandle(): void {
-    if (this._rawData?.visible !== false && !this.isLast()) {
+    if (this._shouldHaveResizeHandle()) {
       const id = `dx_${new Guid()}`;
 
       this._setIdAttr(id);
@@ -44,8 +44,26 @@ class SplitterItem extends CollectionWidgetItem {
     }
   }
 
+  _shouldHaveResizeHandle(): boolean {
+    return this._rawData?.visible !== false && !this.isLast();
+  }
+
+  updateResizeHandle(): void {
+    if (this._shouldHaveResizeHandle()) {
+      if (this.getResizeHandle()) return;
+      this._renderResizeHandle();
+    } else {
+      this._removeIdAttr();
+      this._removeResizeHandle();
+    }
+  }
+
   _setIdAttr(id: string): void {
     this._$element?.attr('id', id);
+  }
+
+  _removeIdAttr(): void {
+    this._$element?.attr('id', null);
   }
 
   getIndex(): number {
@@ -54,6 +72,11 @@ class SplitterItem extends CollectionWidgetItem {
 
   getResizeHandle(): ResizeHandle | undefined {
     return this._resizeHandle;
+  }
+
+  _removeResizeHandle(): void {
+    this.getResizeHandle()?.$element().remove();
+    delete this._resizeHandle;
   }
 
   isLast(): boolean {
