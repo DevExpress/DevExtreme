@@ -324,44 +324,53 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
   _updateResizeHandlesResizableState(): void {
     this._getResizeHandles().forEach((resizeHandle) => {
-      const $resizeHandle = (resizeHandle.$element() as unknown) as dxElementWrapper;
+      this._updateResizeHandleResizableState(resizeHandle);
+    });
+  }
 
-      const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
-      const $rightItem = this._getResizeHandleRightItem($resizeHandle);
-      const leftItemData = this._getItemData($leftItem);
-      const rightItemData = this._getItemData($rightItem);
-      const resizable = leftItemData.resizable !== false
+  _updateResizeHandleResizableState(resizeHandle: ResizeHandle): void {
+    const $resizeHandle = resizeHandle.$element();
+
+    const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
+    const $rightItem = this._getResizeHandleRightItem($resizeHandle);
+    const leftItemData = this._getItemData($leftItem);
+    const rightItemData = this._getItemData($rightItem);
+
+    const resizable = leftItemData.resizable !== false
         && rightItemData.resizable !== false
         && leftItemData.collapsed !== true
         && rightItemData.collapsed !== true;
 
-      resizeHandle.option('resizable', resizable);
+    resizeHandle.option('resizable', resizable);
 
-      resizeHandle.option('disabled', resizeHandle.isInactive());
-    });
+    resizeHandle.option('disabled', resizeHandle.isInactive());
   }
 
   _updateResizeHandlesCollapsibleState(): void {
     this._getResizeHandles().forEach((resizeHandle) => {
-      const $resizeHandle = $(resizeHandle.element());
-
-      const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
-      const $rightItem = this._getResizeHandleRightItem($resizeHandle);
-      const leftItemData = this._getItemData($leftItem);
-      const rightItemData = this._getItemData($rightItem);
-
-      const showCollapsePrev = rightItemData.collapsed === true
-        ? rightItemData.collapsible === true && leftItemData.collapsed !== true
-        : leftItemData.collapsible === true && leftItemData.collapsed !== true;
-
-      const showCollapseNext = leftItemData.collapsed === true
-        ? leftItemData.collapsible === true
-        : rightItemData.collapsible === true && rightItemData.collapsed !== true;
-
-      resizeHandle.option({ showCollapsePrev, showCollapseNext });
-
-      resizeHandle.option('disabled', resizeHandle.isInactive());
+      this._updateResizeHandleCollapsibleState(resizeHandle);
     });
+  }
+
+  _updateResizeHandleCollapsibleState(resizeHandle: ResizeHandle): void {
+    const $resizeHandle = $(resizeHandle.element());
+
+    const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
+    const $rightItem = this._getResizeHandleRightItem($resizeHandle);
+    const leftItemData = this._getItemData($leftItem);
+    const rightItemData = this._getItemData($rightItem);
+
+    const showCollapsePrev = rightItemData.collapsed === true
+      ? rightItemData.collapsible === true && leftItemData.collapsed !== true
+      : leftItemData.collapsible === true && leftItemData.collapsed !== true;
+
+    const showCollapseNext = leftItemData.collapsed === true
+      ? leftItemData.collapsible === true
+      : rightItemData.collapsible === true && rightItemData.collapsed !== true;
+
+    resizeHandle.option({ showCollapsePrev, showCollapseNext });
+
+    resizeHandle.option('disabled', resizeHandle.isInactive());
   }
 
   _updateNestedSplitterOption(optionName: string, optionValue: unknown): void {
@@ -743,9 +752,15 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
   _updateResizeHandles(): void {
     this._iterateItems((_, itemElement) => {
-      const instance = this._getItemInstance($(itemElement));
+      const item = this._getItemInstance($(itemElement));
 
-      instance.updateResizeHandle();
+      item.updateResizeHandle();
+
+      const resizeHandle = item.getResizeHandle();
+      if (resizeHandle) {
+        this._updateResizeHandleResizableState(resizeHandle);
+        this._updateResizeHandleCollapsibleState(resizeHandle);
+      }
     });
   }
 

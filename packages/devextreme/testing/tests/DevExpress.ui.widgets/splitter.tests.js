@@ -1558,7 +1558,7 @@ QUnit.module('Pane visibility', moduleConfig, () => {
                 visible: false,
                 expected: {
                     layout: ['10.1215', '0', '69.6356', '20.2429'],
-                    itemSizes: [100.203, 0, 689.391, 200.406],
+                    itemSizes: [100.812, 0, 693.57, 201.617],
                     handlesCount: 2
                 }
             }]
@@ -1569,7 +1569,7 @@ QUnit.module('Pane visibility', moduleConfig, () => {
                 visible: false,
                 expected: {
                     layout: ['10.2459', '0', '69.2623', '20.4918'],
-                    itemSizes: [100.82, 0, 681.539, 201.641],
+                    itemSizes: [100.812, 0, 681.539, 201.617],
                     handlesCount: 2
                 }
             }]
@@ -2894,6 +2894,41 @@ QUnit.module('Visibility of control elements', {
             $collapseButton.trigger('dxclick');
 
             assert.ok($resizeHandleIcon.hasClass(STATE_INVISIBLE_CLASS), 'resize handle icon is invisible');
+        });
+    });
+
+    [{
+        dataSource: [{ visible: false, collapsible: false, }, { collapsible: true }],
+        scenarios: [{
+            paneIndex: 0,
+            visible: true,
+            expectedVisibleIcons: [{ prev: false, resize: true, next: true }]
+        }, ]
+    }, {
+        dataSource: [{ visible: false, resizable: false, collapsible: false }, { collapsible: false }],
+        scenarios: [{
+            paneIndex: 0,
+            visible: true,
+            expectedVisibleIcons: [{ prev: false, resize: false, next: false }]
+        }, ]
+    }, {
+        dataSource: [{ visible: false }, { }, { }],
+        scenarios: [{
+            paneIndex: 0,
+            visible: true,
+            expectedVisibleIcons: [{ prev: false, resize: true, next: false }, { prev: false, resize: true, next: false }]
+        }]
+    }].forEach(({ dataSource, scenarios }) => {
+        QUnit.test(`Control elements visibility distribution after changing pane.visibility at runtime, dataSource: ${JSON.stringify(dataSource)}`, function(assert) {
+            this.reinit({
+                dataSource: dataSource
+            });
+
+            scenarios.forEach(({ paneIndex, visible, expectedVisibleIcons }) => {
+                this.instance.option(`items[${paneIndex}].visible`, visible);
+
+                this.checkIconsVisibility(expectedVisibleIcons);
+            });
         });
     });
 });
