@@ -7,8 +7,6 @@ import { getFormatHandlers } from '__internal/ui/html_editor/utils/m_toolbar_hel
 const FORM_CLASS = 'dx-formdialog-form';
 const FIELD_ITEM_CLASS = 'dx-field-item';
 const COLOR_BOX_CLASS = 'dx-colorbox';
-const SELECT_BOX_CONTAINER_CLASS = 'dx-selectbox-container';
-const LIST_ITEM_CLASS = 'dx-list-item';
 
 const showCellPropertiesForm = (instance, $cellElement) => {
     showForm(instance, $cellElement, 'cellProperties');
