@@ -1162,13 +1162,11 @@ module('Table properties forms', {
 
             this.clock.tick(10);
 
-            const $borderStyleSelectBox = $(this.getFormInstance().getEditor('borderStyle')._input());
+            const formBorderItem = this.getFormInstance().option('items')[0];
+            const borderStyleEditor = formBorderItem.items[0];
+            const firstListItem = borderStyleEditor.editorOptions.items[0];
 
-            $borderStyleSelectBox.trigger('dxclick');
-
-            const $firstListItem = $(`.${LIST_ITEM_CLASS}`).eq(0);
-
-            assert.strictEqual($firstListItem.text(), 'Test', 'borderStyleEditor is correctly localized');
+            assert.strictEqual(firstListItem.value, 'Test', 'borderStyleEditor is correctly localized');
         });
     });
 });
