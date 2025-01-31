@@ -5,5 +5,5 @@ export interface OperationOptions {
   filtering?: boolean;
   sorting?: boolean;
   paging?: boolean;
-  summary?: boolean;
 }
+export type RemoteOperations = boolean | OperationOptions | 'auto';
