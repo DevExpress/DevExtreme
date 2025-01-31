@@ -1,13 +1,14 @@
 import {
-    DataSource,
-    DataSourceOptions,
-    FilterDescriptor,
-    GroupDescriptor,
-    SearchOperation,
-    SelectDescriptor,
-    SortDescriptor,
-    Store,
-    StoreOptions,
+  DataSource,
+  DataSourceOptions,
+  FilterDescriptor,
+  GroupDescriptor,
+  LangParams,
+  SearchOperation,
+  SelectDescriptor,
+  SortDescriptor,
+  Store,
+  StoreOptions,
 } from '../common/data';
 
 export {
@@ -40,6 +41,7 @@ export interface DataSourceOptionsStub<
     expand?: Array<string> | string;
     filter?: FilterDescriptor | Array<FilterDescriptor>;
     group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
+    langParams?: LangParams;
     map?: ((dataItem: TStoreItem) => TMappedItem);
     onChanged?: ((e: { readonly changes?: Array<TMappedItem> }) => void);
     onLoadError?: ((error: { readonly message?: string }) => void);

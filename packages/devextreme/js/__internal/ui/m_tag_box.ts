@@ -786,7 +786,15 @@ const TagBox = (SelectBox as any).inherit({
     const d = Deferred();
     const dataController = this._dataController;
 
-    if ((!this._isDataSourceChanged || isListItemsLoaded) && selectedItemsAlreadyLoaded) {
+    if (!this._dataSource) {
+      return d.resolve([]).promise();
+    }
+
+    if (
+      (!this._isDataSourceChanged || isListItemsLoaded)
+      && selectedItemsAlreadyLoaded
+      && !this._isDataSourceOptionChanged
+    ) {
       return d.resolve(filteredItems).promise();
     }
     const { customQueryParams, expand, select } = dataController.loadOptions();
@@ -798,6 +806,7 @@ const TagBox = (SelectBox as any).inherit({
       })
       .done((data, extra) => {
         this._isDataSourceChanged = false;
+        this._isDataSourceOptionChanged = false;
         if (this._disposed) {
           d.reject();
           return;
@@ -817,6 +826,7 @@ const TagBox = (SelectBox as any).inherit({
     const items = [];
     const cache = {};
     const isValueExprSpecified = this._valueGetterExpr() === 'this';
+    const { acceptCustomValue } = this.option();
     const filteredValues = {};
 
     filteredItems.forEach((filteredItem) => {
@@ -831,13 +841,30 @@ const TagBox = (SelectBox as any).inherit({
       const currentItem = filteredValues[isValueExprSpecified ? JSON.stringify(value) : value];
 
       if (isValueExprSpecified && !isDefined(currentItem)) {
-        loadItemPromises.push(this._loadItem(value, cache).always((item) => {
-          const newItem = this._createTagData(item, value);
-          items.splice(index, 0, newItem as never);
-        }) as never);
+        if (!this._dataSource) {
+          return;
+        }
+
+        loadItemPromises.push(
+          // @ts-expect-error
+          this._loadItem(value, cache)
+            .done((item) => {
+              const newItem = this._createTagData(item, value);
+              // @ts-expect-error
+              items.splice(index, 0, newItem);
+            })
+            .fail(() => {
+              if (acceptCustomValue) {
+                const newItem = this._createTagData(undefined, value);
+                // @ts-expect-error
+                items.splice(index, 0, newItem);
+              }
+            }),
+        );
       } else {
         const newItem = this._createTagData(currentItem, value);
-        items.splice(index, 0, newItem as never);
+        // @ts-expect-error
+        items.splice(index, 0, newItem);
       }
     });
 
@@ -869,7 +896,8 @@ const TagBox = (SelectBox as any).inherit({
     values.forEach((value) => {
       const item = this._getItemFromPlain(value);
       if (isDefined(item)) {
-        resultItems.push(item as never);
+        // @ts-expect-error
+        resultItems.push(item);
       }
     });
     return resultItems;
@@ -977,6 +1005,7 @@ const TagBox = (SelectBox as any).inherit({
 
   _getSelectedItemsFromList(values) {
     const listSelectedItems = this._list?.option('selectedItems');
+
     let selectedItems = [];
     if (values.length === listSelectedItems?.length) {
       selectedItems = this._filterSelectedItems(listSelectedItems, values);
@@ -1003,6 +1032,12 @@ const TagBox = (SelectBox as any).inherit({
     }, this);
 
     return selectedItems;
+  },
+
+  _processDataSourceChanging() {
+    this._isDataSourceOptionChanged = true;
+
+    this.callBase();
   },
 
   _integrateInput() {
@@ -1058,13 +1093,15 @@ const TagBox = (SelectBox as any).inherit({
       this._tagElements().remove();
     } else {
       const $tags = this._tagElements();
-      const values = this._getValue();
+
+      const selectedItems = this.option('selectedItems') ?? [];
+      const values = selectedItems.map((item) => this._valueGetter(item));
 
       each($tags, (_, tag) => {
         const $tag = $(tag);
         const tagData = $tag.data(TAGBOX_TAG_DATA_KEY);
 
-        if (!values?.includes(tagData)) {
+        if (!values.includes(tagData)) {
           $tag.remove();
         }
       });
@@ -1410,8 +1447,8 @@ const TagBox = (SelectBox as any).inherit({
 
   _dataSourceFilterExpr() {
     const filter = [];
-
-    this._getValue().forEach((value) => filter.push(['!', [this._valueGetterExpr(), value]] as never));
+    // @ts-expect-error
+    this._getValue().forEach((value) => filter.push(['!', [this._valueGetterExpr(), value]]));
 
     return filter;
   },

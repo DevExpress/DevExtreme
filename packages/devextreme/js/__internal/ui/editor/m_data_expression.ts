@@ -1,5 +1,4 @@
 import ArrayStore from '@js/common/data/array_store';
-import DataHelperMixin from '@js/common/data/data_helper';
 import DataSource from '@js/common/data/data_source';
 import { ensureDefined, noop } from '@js/core/utils/common';
 import {
@@ -12,6 +11,7 @@ import {
   isDefined, isFunction, isObject as isObjectType, isString,
 } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
+import DataHelperMixin from '@js/data_helper';
 
 const DataExpressionMixin = extend({}, DataHelperMixin, {
 

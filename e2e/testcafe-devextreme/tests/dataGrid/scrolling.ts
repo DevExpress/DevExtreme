@@ -1764,3 +1764,33 @@ test('DataGrid - Gray boxes appear when the push method is used to remove rows i
     };
   });
 });
+
+// T1262288
+test('DataGrid - Focused cell moves to the end of the table after horizontal scrolling', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .pressKey('left');
+
+  await t.expect(dataGrid.getDataCell(0, 0).isFocused).ok();
+
+  await dataGrid.scrollBy({ x: 1000 });
+  await dataGrid.scrollBy({ x: -1000 });
+
+  await t.expect(dataGrid.getDataCell(0, 0).isFocused).ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(1, 20).map((item, index) => ({ ...item, id: index })),
+  keyExpr: 'id',
+  columnWidth: 100,
+  showBorders: true,
+  focusedRowEnabled: true,
+  scrolling: {
+    columnRenderingMode: 'virtual',
+    mode: 'virtual',
+    showScrollbar: 'always',
+  },
+  paging: {
+    enabled: false,
+  },
+}));

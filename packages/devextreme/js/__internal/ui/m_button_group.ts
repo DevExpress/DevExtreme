@@ -20,7 +20,7 @@ const BUTTON_GROUP_STYLING_MODE_CLASS = {
   outlined: 'dx-buttongroup-mode-outlined',
   text: 'dx-buttongroup-mode-text',
 };
-
+// @ts-expect-error
 const ButtonCollection = CollectionWidget.inherit({
   _initTemplates() {
     this.callBase();

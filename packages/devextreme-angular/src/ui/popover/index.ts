@@ -793,8 +793,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         return this._getOption('toolbarItems');
     }
     set toolbarItemsChildren(value) {
-        this.setContentChildren('toolbarItems', value, 'DxiPopoverToolbarItemComponent');
-        this.setChildren('toolbarItems', value);
+        this._setChildren('toolbarItems', value, 'DxiPopoverToolbarItemComponent');
     }
 
 

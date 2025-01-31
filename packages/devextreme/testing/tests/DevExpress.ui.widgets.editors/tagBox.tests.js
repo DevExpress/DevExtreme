@@ -738,6 +738,146 @@ QUnit.module('tags', moduleSetup, () => {
             done();
         }, TIME_TO_WAIT);
     });
+
+    ['items', 'dataSource'].forEach((optionName) => {
+        QUnit.test('TagBox should not have unexpected selected tags when value includes item that doesn\'t exist in items', function(assert) {
+            const options = { value: [1, 11] };
+            options[optionName] = [1, 2, 3];
+            const $tagBox = $('#tagBox').dxTagBox(options);
+            const tagBox = $tagBox.dxTagBox('instance');
+
+            const { selectedItems } = tagBox.option();
+            const $tags = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+
+            assert.deepEqual(selectedItems, [1], 'selectedItems have no unexpected items');
+            assert.strictEqual($tags.length, 1, 'there is no unexpected tags');
+        });
+    });
+
+    [false, true].forEach((deferRendering) => {
+        [
+            {
+                initialOptions: {
+                    deferRendering,
+                    items: [1, 2, 3],
+                    value: [1, 3],
+                },
+                optionsToUpdate: {
+                    items: [1, 2],
+                },
+                expectedSelectedItems: [1],
+                optionName: 'items',
+            },
+            {
+                initialOptions: {
+                    deferRendering,
+                    dataSource: [1, 2, 3],
+                    value: [1, 3],
+                },
+                optionsToUpdate: {
+                    dataSource: [1, 2],
+                },
+                expectedSelectedItems: [1],
+                optionName: 'dataSource',
+            },
+            {
+                initialOptions: {
+                    deferRendering,
+                    items: [1],
+                    value: [1],
+                },
+                optionsToUpdate: {
+                    items: null,
+                },
+                expectedSelectedItems: [],
+                optionName: 'items',
+            },
+            {
+                initialOptions: {
+                    deferRendering,
+                    dataSource: [1],
+                    value: [1],
+                },
+                optionsToUpdate: {
+                    dataSource: null,
+                },
+                expectedSelectedItems: [],
+                optionName: 'dataSource',
+            },
+            {
+                initialOptions: {
+                    deferRendering,
+                    dataSource: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }, { id: 3, text: 'three' }],
+                    value: [1, 3],
+                    valueExpr: 'id',
+                },
+                optionsToUpdate: {
+                    dataSource: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }],
+                },
+                expectedSelectedItems: [{ id: 1, text: 'one' }],
+                optionName: 'dataSource',
+            },
+            {
+                initialOptions: {
+                    deferRendering,
+                    dataSource: new DataSource({ store: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }, { id: 3, text: 'three' }] }),
+                    value: [1, 3],
+                    valueExpr: 'id',
+                },
+                optionsToUpdate: {
+                    dataSource: new DataSource({ store: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }] }),
+                },
+                expectedSelectedItems: [{ id: 1, text: 'one' }],
+                optionName: 'dataSource',
+            },
+            {
+                initialOptions: {
+                    deferRendering,
+                    items: null,
+                    value: [1],
+                },
+                optionsToUpdate: {
+                    items: [1, 2],
+                },
+                expectedSelectedItems: [1],
+                optionName: 'items',
+            },
+            {
+                initialOptions: {
+                    deferRendering,
+                    dataSource: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }],
+                    value: [1, 3],
+                    valueExpr: 'id',
+                },
+                optionsToUpdate: {
+                    dataSource: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }, { id: 3, text: 'three' }],
+                },
+                expectedSelectedItems: [{ id: 1, text: 'one' }, { id: 3, text: 'three' }],
+                optionName: 'dataSource',
+            },
+        ].forEach(({ initialOptions, optionsToUpdate, expectedSelectedItems, optionName }) => {
+            const source = initialOptions.dataSource instanceof DataSource ? 'DataSource' : JSON.stringify(initialOptions[optionName]);
+
+            QUnit.test(`SelectedItems should be updated correctly on runtime ${optionName} change (deferRendering=${deferRendering}, source=${source}) (T1253312)`, function(assert) {
+                const tagBox = $('#tagBox').dxTagBox(initialOptions).dxTagBox('instance');
+
+                tagBox.option(optionsToUpdate);
+
+                assert.deepEqual(tagBox.option('selectedItems'), expectedSelectedItems, 'selectedItems are updated');
+            });
+
+            QUnit.test(`Tags should be updated correctly on runtime ${optionName} change (deferRendering=${deferRendering}, source=${source}) (T1253312)`, function(assert) {
+                const $tagBox = $('#tagBox').dxTagBox(initialOptions);
+                const tagBox = $tagBox.dxTagBox('instance');
+
+                tagBox.option(optionsToUpdate);
+
+                const $tags = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+
+                assert.strictEqual($tags.length, expectedSelectedItems.length, 'tags are updated');
+            });
+        });
+    });
 });
 
 QUnit.module('multi tag support', {
@@ -2725,6 +2865,28 @@ QUnit.module('keyboard navigation', {
 
         assert.ok(keyDownStub.calledOnce, 'keydown handled');
         assert.ok(keyUpStub.calledOnce, 'keyup handled');
+    });
+
+    QUnit.testInActiveWindow('Popup should not close on tab press after search when applyValueMode is "useButtons" (T1230517)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'desktop specific test');
+            return;
+        }
+
+        this.reinit({
+            focusStateEnabled: true,
+            items: ['first', 'second', 'third'],
+            opened: true,
+            searchEnabled: true,
+            applyValueMode: 'useButtons',
+        });
+
+        this.keyboard
+            .focus()
+            .type('s')
+            .press('tab');
+
+        assert.deepEqual(this.instance.option('opened'), true, 'popup is not closed');
     });
 });
 
@@ -6659,6 +6821,94 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         assert.ok(true, 'TagBox rendered');
     });
 
+    QUnit.test('Tagbox should render tag correctly when hideSelectedItems = true and valueExpr is a function (T1234032)', function(assert) {
+        const data = [
+            { id: 1, scheme: 'schema1', name: 'name1' },
+            { id: 2, scheme: 'schema1', name: 'name2' }
+        ];
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: data,
+            valueExpr(x) {
+                return x && x.name + ' ' + x.scheme;
+            },
+            displayExpr: 'name',
+            hideSelectedItems: true,
+            opened: true
+        });
+        const instance = $tagBox.dxTagBox('instance');
+        const $listItem = getListItems($tagBox);
+        $listItem.trigger('dxclick');
+
+        const $tags = instance.$element().find(`.${TAGBOX_TAG_CLASS}`);
+        assert.strictEqual($tags.length, 1, 'One tag is rendered after click');
+        assert.strictEqual($tags.eq(0).text().trim(), 'name1', 'Correct tag text is rendered');
+        assert.strictEqual(instance.option('value')[0], 'name1 schema1', 'Correct value is stored');
+
+        const $secondItem = getListItems($tagBox);
+        $secondItem.trigger('dxclick');
+
+        const $updatedTags = instance.$element().find(`.${TAGBOX_TAG_CLASS}`);
+        assert.strictEqual($updatedTags.length, 2, 'Two tags are rendered after selecting the second item');
+        assert.strictEqual($updatedTags.eq(1).text().trim(), 'name2', 'Second tag is rendered correctly');
+        assert.strictEqual(instance.option('value')[1], 'name2 schema1', 'Correct value is stored');
+    });
+
+    QUnit.test('TagBox should render initial tags correctly even if items are not loaded yet and valueExpr is a function', function(assert) {
+        const data = [
+            { name: 'name1', scheme: 'schema1', value: 1 },
+            { name: 'name2', scheme: 'schema2', value: 2 },
+        ];
+
+        const dataSource = new DataSource({
+            store: new ArrayStore(data),
+            paginate: true,
+            pageSize: 1,
+        });
+
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource,
+            displayExpr: 'name',
+            hideSelectedItems: true,
+            valueExpr(x) {
+                return x && `${x.name} ${x.scheme}`;
+            },
+            value: ['name1 schema1', 'name2 schema2'],
+            opened: true
+        });
+
+        const instance = $tagBox.dxTagBox('instance');
+        const $tags = instance.$element().find(`.${TAGBOX_TAG_CLASS}`);
+
+        assert.strictEqual($tags.length, 2, 'Two tag is rendered after init');
+        assert.strictEqual($tags.eq(0).text().trim(), 'name1', 'Correct first tag text is rendered');
+        assert.strictEqual($tags.eq(1).text().trim(), 'name2', 'Correct second tag text is rendered');
+        assert.strictEqual(instance.option('value')[0], 'name1 schema1', 'Correct first value is stored');
+        assert.strictEqual(instance.option('value')[1], 'name2 schema2', 'Correct second value is stored');
+    });
+
+    QUnit.test('Tagbox should render initial value correctly with function valueExpr', function(assert) {
+        const data = [
+            { id: 1, scheme: 'schema1', name: 'name1' },
+            { id: 2, scheme: 'schema1', name: 'name2' }
+        ];
+
+        const instance = $('#tagBox').dxTagBox({
+            dataSource: data,
+            valueExpr(x) {
+                return x && `${x.name} ${x.scheme}`;
+            },
+            displayExpr: 'name',
+            hideSelectedItems: true,
+            value: ['name1 schema1'],
+            opened: true
+        }).dxTagBox('instance');
+
+        const $tags = instance.$element().find(`.${TAGBOX_TAG_CLASS}`);
+        assert.strictEqual($tags.length, 1, 'One tag is rendered initially');
+        assert.strictEqual($tags.eq(0).text().trim(), 'name1', 'Correct tag text is rendered');
+        assert.strictEqual(instance.option('value')[0], 'name1 schema1', 'Initial value is correct');
+    });
+
     QUnit.test('TagBox should correctly handle disposing on data loading', function(assert) {
         assert.expect(1);
 
@@ -6817,9 +7067,8 @@ QUnit.module('performance', () => {
         const $item = $(getList(tagBox).find('.dx-list-item').eq(0));
 
         $item.trigger('dxclick');
-
         const filter = load.lastCall.args[0].filter;
-        assert.ok($.isFunction(filter), 'filter is function');
+        assert.ok($.isFunction(filter[0]), 'filter is function');
     });
 
     QUnit.test('loadOptions.filter should be correct when user filter is also used', function(assert) {
@@ -6929,7 +7178,7 @@ QUnit.module('performance', () => {
             this.resetGetterCallCount();
             $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
-            assert.strictEqual(this.getValueGetterCallCount(), 6154, 'key getter call count');
+            assert.strictEqual(this.getValueGetterCallCount(), 6254, 'key getter call count');
             assert.strictEqual(isValueEqualsSpy.callCount, 5050, '_isValueEquals call count');
         });
 
@@ -6940,7 +7189,7 @@ QUnit.module('performance', () => {
             const checkboxes = $(`.${LIST_CHECKBOX_CLASS}`);
             checkboxes.eq(checkboxes.length - 1).trigger('dxclick');
 
-            assert.strictEqual(this.getValueGetterCallCount(), 6054, 'key getter call count');
+            assert.strictEqual(this.getValueGetterCallCount(), 6153, 'key getter call count');
         });
     });
 

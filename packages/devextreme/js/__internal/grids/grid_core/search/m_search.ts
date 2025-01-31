@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/method-signature-style */
 import messageLocalization from '@js/common/core/localization/message';
+import type { LangParams } from '@js/common/data';
 import dataQuery from '@js/common/data/query';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
@@ -56,8 +57,11 @@ const dataController = (
   }
 
   protected _calculateAdditionalFilter(): Filter {
+    const dataSource = this._dataController?.getDataSource?.();
+    const langParams = dataSource?.loadOptions?.()?.langParams;
+
     const filter = super._calculateAdditionalFilter();
-    const searchFilter = this.calculateSearchFilter(this.option('searchPanel.text'));
+    const searchFilter = this.calculateSearchFilter(this.option('searchPanel.text'), langParams);
 
     return gridCoreUtils.combineFilters([filter, searchFilter]);
   }
@@ -66,8 +70,7 @@ const dataController = (
     this.option('searchPanel.text', text);
   }
 
-  private calculateSearchFilter(text: string | undefined): Filter {
-    let i;
+  private calculateSearchFilter(text: string | undefined, langParams?: LangParams): Filter {
     let column;
     const columns = this._columnsController.getColumns();
     const searchVisibleColumnsOnly = this.option('searchPanel.searchVisibleColumnsOnly');
@@ -87,7 +90,7 @@ const dataController = (
       }
     }
 
-    for (i = 0; i < columns.length; i++) {
+    for (let i = 0; i < columns.length; i++) {
       column = columns[i];
 
       if (searchVisibleColumnsOnly && !column.visible) continue;
@@ -95,9 +98,25 @@ const dataController = (
       if (allowSearch(column) && column.calculateFilterExpression) {
         lookup = column.lookup;
         const filterValue = parseValue(column, text);
-        if (lookup && lookup.items) {
+
+        if (lookup?.items) {
           // @ts-expect-error
-          dataQuery(lookup.items).filter(column.createFilterExpression.call({ dataField: lookup.displayExpr, dataType: lookup.dataType, calculateFilterExpression: column.calculateFilterExpression }, filterValue, null, 'search')).enumerate().done(onQueryDone);
+          dataQuery(lookup.items, { langParams })
+            // @ts-expect-error
+            .filter(
+              column.createFilterExpression.call(
+                {
+                  dataField: lookup.displayExpr,
+                  dataType: lookup.dataType,
+                  calculateFilterExpression: column.calculateFilterExpression,
+                },
+                filterValue,
+                null,
+                'search',
+              ),
+            )
+            .enumerate()
+            .done(onQueryDone);
         } else if (filterValue !== undefined) {
           filters.push(column.createFilterExpression(filterValue, null, 'search'));
         }

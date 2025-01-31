@@ -69,7 +69,7 @@ import {
 } from 'devextreme-vue/chart';
 import { exportFromMarkup } from 'devextreme/viz/export';
 import DxButton from 'devextreme-vue/button';
-// import toCanvas from 'canvg';
+import { Canvg } from 'canvg';
 import { dataSource } from './data.ts';
 import Form from './Form.vue';
 
@@ -102,15 +102,14 @@ function onClick() {
     height: 420,
     margin: 0,
     format: 'png',
-    // eslint-disable-next-line no-unused-vars
     svgToCanvas(svg, canvas) {
-      // eslint-disable-next-line no-unused-vars
       return new Promise((resolve) => {
-        // toCanvas(canvas, new XMLSerializer().serializeToString(svg), {
-        //   ignoreDimensions: true,
-        //   ignoreClear: true,
-        //   renderCallback: resolve,
-        // });
+        const v = Canvg.fromString(
+            canvas.getContext("2d"),
+            new XMLSerializer().serializeToString(svg)
+        );
+
+        resolve(v.render());
       });
     },
   });

@@ -2067,8 +2067,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
         return this._getOption('columns');
     }
     set columnsChildren(value) {
-        this.setContentChildren('columns', value, 'DxiDataGridColumnComponent');
-        this.setChildren('columns', value);
+        this._setChildren('columns', value, 'DxiDataGridColumnComponent');
     }
 
     @ContentChildren(DxiDataGridSortByGroupSummaryInfoComponent)
@@ -2076,8 +2075,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
         return this._getOption('sortByGroupSummaryInfo');
     }
     set sortByGroupSummaryInfosChildren(value) {
-        this.setContentChildren('sortByGroupSummaryInfo', value, 'DxiDataGridSortByGroupSummaryInfoComponent');
-        this.setChildren('sortByGroupSummaryInfo', value);
+        this._setChildren('sortByGroupSummaryInfo', value, 'DxiDataGridSortByGroupSummaryInfoComponent');
     }
 
 
@@ -2086,9 +2084,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
         return this._getOption('columns');
     }
     set columnsLegacyChildren(value) {
-        if (this.checkContentChildren('columns', value, 'DxiColumnComponent')) {
-           this.setChildren('columns', value);
-        }
+        this._setChildren('columns', value, 'DxiColumnComponent');
     }
 
     @ContentChildren(DxiSortByGroupSummaryInfoComponent)
@@ -2096,9 +2092,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
         return this._getOption('sortByGroupSummaryInfo');
     }
     set sortByGroupSummaryInfoLegacyChildren(value) {
-        if (this.checkContentChildren('sortByGroupSummaryInfo', value, 'DxiSortByGroupSummaryInfoComponent')) {
-           this.setChildren('sortByGroupSummaryInfo', value);
-        }
+        this._setChildren('sortByGroupSummaryInfo', value, 'DxiSortByGroupSummaryInfoComponent');
     }
 
 

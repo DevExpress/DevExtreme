@@ -419,8 +419,7 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiToolbarItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiToolbarItemComponent');
     }
 
 
@@ -429,9 +428,7 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
-        }
+        this._setChildren('items', value, 'DxiItemComponent');
     }
 
 

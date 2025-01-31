@@ -1147,8 +1147,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiTreeViewItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiTreeViewItemComponent');
     }
 
 
@@ -1157,9 +1156,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
-        }
+        this._setChildren('items', value, 'DxiItemComponent');
     }
 
 

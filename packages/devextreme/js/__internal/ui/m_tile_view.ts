@@ -49,7 +49,7 @@ const CONFIGS = {
     crossPosition: 'left',
   },
 };
-
+// @ts-expect-error
 const TileView = CollectionWidget.inherit({
   _getDefaultOptions() {
     return extend(this.callBase(), {

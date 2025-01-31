@@ -89,7 +89,7 @@ const GalleryNavButton = Widget.inherit({
     }
   },
 });
-
+// @ts-expect-error
 const Gallery = CollectionWidget.inherit({
 
   _wasAnyItemTemplateRendered: false,

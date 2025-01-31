@@ -619,8 +619,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         return this._getOption('alerts');
     }
     set alertsChildren(value) {
-        this.setContentChildren('alerts', value, 'DxiChatAlertComponent');
-        this.setChildren('alerts', value);
+        this._setChildren('alerts', value, 'DxiChatAlertComponent');
     }
 
     @ContentChildren(DxiChatItemComponent)
@@ -628,8 +627,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiChatItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiChatItemComponent');
     }
 
     @ContentChildren(DxiChatTypingUserComponent)
@@ -637,8 +635,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         return this._getOption('typingUsers');
     }
     set typingUsersChildren(value) {
-        this.setContentChildren('typingUsers', value, 'DxiChatTypingUserComponent');
-        this.setChildren('typingUsers', value);
+        this._setChildren('typingUsers', value, 'DxiChatTypingUserComponent');
     }
 
 
@@ -647,9 +644,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         return this._getOption('alerts');
     }
     set alertsLegacyChildren(value) {
-        if (this.checkContentChildren('alerts', value, 'DxiAlertComponent')) {
-           this.setChildren('alerts', value);
-        }
+        this._setChildren('alerts', value, 'DxiAlertComponent');
     }
 
     @ContentChildren(DxiItemComponent)
@@ -657,9 +652,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
-        }
+        this._setChildren('items', value, 'DxiItemComponent');
     }
 
     @ContentChildren(DxiTypingUserComponent)
@@ -667,9 +660,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         return this._getOption('typingUsers');
     }
     set typingUsersLegacyChildren(value) {
-        if (this.checkContentChildren('typingUsers', value, 'DxiTypingUserComponent')) {
-           this.setChildren('typingUsers', value);
-        }
+        this._setChildren('typingUsers', value, 'DxiTypingUserComponent');
     }
 
 

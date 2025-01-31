@@ -29,6 +29,15 @@ const getEventName = (actionName): string => actionName.charAt(2).toLowerCase() 
 
 const isInnerOption = (optionName): boolean => optionName.indexOf('_', 0) === 0;
 
+export interface ActionConfig {
+  beforeExecute?: (e: Record<string, unknown>) => void;
+  afterExecute?: (e: Record<string, unknown>) => void;
+  excludeValidators?: ('disabled' | 'readOnly')[];
+  element?: Element;
+  validatingTargetName?: string;
+  category?: 'rendering';
+}
+
 export interface Properties<TComponent> extends ComponentOptions<
 EventInfo<TComponent>,
 InitializedEventInfo<TComponent>,
@@ -350,7 +359,7 @@ export class Component<
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  _createAction(actionSource, config): (e) => void {
+  _createAction(actionSource, config?: ActionConfig): (e) => void {
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let action;
 
@@ -373,7 +382,7 @@ export class Component<
 
   _createActionByOption(
     optionName: string,
-    config?: Record<string, unknown>,
+    config?: ActionConfig,
   ): (event?: Record<string, unknown>) => void {
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let action;

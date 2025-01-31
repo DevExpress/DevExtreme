@@ -26,7 +26,7 @@ import {
 
 
 import * as CommonTypes from 'devextreme/common';
-import { EventInfo } from 'devextreme/common/core/events';
+import { DisposingEvent, InitializedEvent, OptionChangedEvent, ValidatedEvent } from 'devextreme/ui/validator';
 
 import DxValidator from 'devextreme/ui/validator';
 
@@ -180,27 +180,27 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
     
-     * [descr:DOMComponentOptions.onDisposing]
+     * [descr:dxValidatorOptions.onDisposing]
     
     
      */
-    @Output() onDisposing: EventEmitter<EventInfo<any>>;
+    @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
     
-     * [descr:ComponentOptions.onInitialized]
+     * [descr:dxValidatorOptions.onInitialized]
     
     
      */
-    @Output() onInitialized: EventEmitter<Object>;
+    @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
     
-     * [descr:DOMComponentOptions.onOptionChanged]
+     * [descr:dxValidatorOptions.onOptionChanged]
     
     
      */
-    @Output() onOptionChanged: EventEmitter<Object>;
+    @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
     
@@ -208,7 +208,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     
     
      */
-    @Output() onValidated: EventEmitter<Object>;
+    @Output() onValidated: EventEmitter<ValidatedEvent>;
 
     /**
     
@@ -267,8 +267,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         return this._getOption('validationRules');
     }
     set asyncRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorAsyncRuleComponent');
-        this.setChildren('validationRules', value);
+        this._setChildren('validationRules', value, 'DxiValidatorAsyncRuleComponent');
     }
 
     @ContentChildren(DxiValidatorCompareRuleComponent)
@@ -276,8 +275,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         return this._getOption('validationRules');
     }
     set compareRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorCompareRuleComponent');
-        this.setChildren('validationRules', value);
+        this._setChildren('validationRules', value, 'DxiValidatorCompareRuleComponent');
     }
 
     @ContentChildren(DxiValidatorCustomRuleComponent)
@@ -285,8 +283,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         return this._getOption('validationRules');
     }
     set customRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorCustomRuleComponent');
-        this.setChildren('validationRules', value);
+        this._setChildren('validationRules', value, 'DxiValidatorCustomRuleComponent');
     }
 
     @ContentChildren(DxiValidatorEmailRuleComponent)
@@ -294,8 +291,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         return this._getOption('validationRules');
     }
     set emailRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorEmailRuleComponent');
-        this.setChildren('validationRules', value);
+        this._setChildren('validationRules', value, 'DxiValidatorEmailRuleComponent');
     }
 
     @ContentChildren(DxiValidatorNumericRuleComponent)
@@ -303,8 +299,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         return this._getOption('validationRules');
     }
     set numericRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorNumericRuleComponent');
-        this.setChildren('validationRules', value);
+        this._setChildren('validationRules', value, 'DxiValidatorNumericRuleComponent');
     }
 
     @ContentChildren(DxiValidatorPatternRuleComponent)
@@ -312,8 +307,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         return this._getOption('validationRules');
     }
     set patternRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorPatternRuleComponent');
-        this.setChildren('validationRules', value);
+        this._setChildren('validationRules', value, 'DxiValidatorPatternRuleComponent');
     }
 
     @ContentChildren(DxiValidatorRangeRuleComponent)
@@ -321,8 +315,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         return this._getOption('validationRules');
     }
     set rangeRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorRangeRuleComponent');
-        this.setChildren('validationRules', value);
+        this._setChildren('validationRules', value, 'DxiValidatorRangeRuleComponent');
     }
 
     @ContentChildren(DxiValidatorRequiredRuleComponent)
@@ -330,8 +323,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         return this._getOption('validationRules');
     }
     set requiredRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorRequiredRuleComponent');
-        this.setChildren('validationRules', value);
+        this._setChildren('validationRules', value, 'DxiValidatorRequiredRuleComponent');
     }
 
     @ContentChildren(DxiValidatorStringLengthRuleComponent)
@@ -339,8 +331,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         return this._getOption('validationRules');
     }
     set stringLengthRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorStringLengthRuleComponent');
-        this.setChildren('validationRules', value);
+        this._setChildren('validationRules', value, 'DxiValidatorStringLengthRuleComponent');
     }
 
     @ContentChildren(DxiValidatorValidationRuleComponent)
@@ -348,8 +339,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         return this._getOption('validationRules');
     }
     set validationRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorValidationRuleComponent');
-        this.setChildren('validationRules', value);
+        this._setChildren('validationRules', value, 'DxiValidatorValidationRuleComponent');
     }
 
 
@@ -358,9 +348,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         return this._getOption('validationRules');
     }
     set validationRulesLegacyChildren(value) {
-        if (this.checkContentChildren('validationRules', value, 'DxiValidationRuleComponent')) {
-           this.setChildren('validationRules', value);
-        }
+        this._setChildren('validationRules', value, 'DxiValidationRuleComponent');
     }
 
 

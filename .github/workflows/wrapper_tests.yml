@@ -77,12 +77,14 @@ jobs:
             exit 1
           fi
 
+      - name: Angular - Download Browser
+        run: pnpx puppeteer browsers install chrome@130.0.6723.69
+
       - name: Angular - Build
         run: pnpx nx build devextreme-angular
 
-# NOTE: temporary skipped during migrating to the PNPM
-#      - name: Angular - Run tests
-#        run: pnpx nx test:dev devextreme-angular
+      - name: Angular - Run tests
+        run: pnpx nx test:dev devextreme-angular
 
       - name: Angular - Check packing
         run: pnpx nx pack devextreme-angular
@@ -100,7 +102,7 @@ jobs:
         run: pnpx nx pack devextreme-vue
 
       - name: Archive internal-tools artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: internal-tools-artifacts
           path: artifacts/internal-tools/
