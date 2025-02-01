@@ -38,7 +38,6 @@ export class HeaderPanelTimeline extends InfernoWrapperComponent<HeaderPanelProp
         groups={groups}
         groupOrientation={groupOrientation}
         isRenderDateHeader={isRenderDateHeader}
-        // @ts-expect-error JSXTemplate types issue
         dateHeaderTemplate={TimelineDateHeaderLayout}
         resourceCellTemplate={ResourceCellTemplateComponent}
         dateCellTemplate={DateCellTemplateComponent}

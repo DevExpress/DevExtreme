@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
-import type { RefObject } from '@devextreme-generator/declarations';
+import type { RefObject } from '@ts/core/r1/types';
 import { createRef as infernoCreateRef } from 'inferno';
 
 import { PAGINATION_PAGE_SIZES_CLASS } from '../common/consts';
@@ -36,7 +36,7 @@ export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType
 
   public rootElementRef = infernoCreateRef() as RefObject<HTMLDivElement>;
 
-  public htmlRef = infernoCreateRef() as RefObject<HTMLElement>;
+  public htmlRef = infernoCreateRef() as RefObject<HTMLDivElement>;
 
   public __getterCache: any = {
     normalizedPageSizes: undefined,
