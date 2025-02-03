@@ -60,7 +60,7 @@ function isLiteralChar(char) {
 function isSpaceChar(char) {
   return char === ' ';
 }
-
+// @ts-expect-error
 const TextEditorMask = TextEditorBase.inherit({
 
   _getDefaultOptions() {
