@@ -393,7 +393,7 @@ module('Table context menu integration', {
             contextMenu.trigger($.Event('keydown', { key: 'Escape', keyCode: 27, which: 27 }));
             this.clock.tick(10);
 
-            const shadowRoot = editor.get(0).shadowRoot;
+            const shadowRoot = document.activeElement.shadowRoot;
             const activeElement = shadowRoot ? shadowRoot.activeElement : document.activeElement;
 
             assert.strictEqual(activeElement, editor[0], 'Editor should regain focus after Escape');
