@@ -244,11 +244,11 @@ importers:
         specifier: workspace:~
         version: link:../../packages/devextreme-angular/npm/dist
       devextreme-aspnet-data:
-        specifier: 3.0.0
-        version: 3.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
+        specifier: 5.0.0
+        version: 5.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
       devextreme-aspnet-data-nojquery:
-        specifier: 3.0.0
-        version: 3.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
+        specifier: 5.0.0
+        version: 5.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
       devextreme-cldr-data:
         specifier: 1.0.3
         version: 1.0.3
@@ -8105,13 +8105,13 @@ packages:
   devexpress-gantt@4.1.57:
     resolution: {integrity: sha512-UMtPo9O7B+PZfyHTR5L/dVaQkcjUhjCKfhi6NrfnvjXW7+sjisvm5LhKd+AIXhjv9IlMbfGyutfUcH5VF1wxyQ==}
 
-  devextreme-aspnet-data-nojquery@3.0.0:
-    resolution: {integrity: sha512-2wkePdGr4+nnSUZ8PUFR9biFhvMD2gztz/Yim7Iu/szAQJcgitfgOa12xqIQn4B5xpOm3+kupjccpBsED9nDMA==}
+  devextreme-aspnet-data-nojquery@5.0.0:
+    resolution: {integrity: sha512-WC1JBUocjD7lxy2bMFlUTF0Z3GCUNYveucgarERJ85SO+h7czqAyYwnYCJT845Vyabfw5Ta9mOJ0y0fB/wWzwA==}
     peerDependencies:
       devextreme: '>=18.1.0'
 
-  devextreme-aspnet-data@3.0.0:
-    resolution: {integrity: sha512-q4oFNNFM6KUvMGd3yoglXMjunxRbnwmVj9vmYiJi+rLd+LPagjv+olyszG/gio+pzmV047gyMztc+dhZWHxVQQ==}
+  devextreme-aspnet-data@5.0.0:
+    resolution: {integrity: sha512-JtI8qOPGcKWIa06rMS335lpE+HhttygJzMG1Y1x0PoQ6RIxJ5NfD/R7cFiE2hsRXqJYIV6MLV1/qkMs169oR1A==}
     peerDependencies:
       devextreme: '>=18.1.0'
 
@@ -25418,11 +25418,11 @@ snapshots:
       '@devexpress/utils': 1.4.3
       tslib: 2.3.1
 
-  devextreme-aspnet-data-nojquery@3.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme):
+  devextreme-aspnet-data-nojquery@5.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme):
     dependencies:
       devextreme: link:packages/devextreme/artifacts/npm/devextreme
 
-  devextreme-aspnet-data@3.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme):
+  devextreme-aspnet-data@5.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme):
     dependencies:
       devextreme: link:packages/devextreme/artifacts/npm/devextreme
 
