@@ -71,13 +71,8 @@ if (Quill) {
       eventsEngine.off(this.editorInstance._getContent(), CONTEXT_MENU_EVENT);
     }
 
-    _escKeyHandler() {
-      this._contextMenu.hide();
-      this.editorInstance.focus();
-    }
-
-    _addEscapeHandler(e) {
-      e.component.registerKeyHandler('escape', this._escKeyHandler.bind(this));
+    _onContextMenuInitialized(e) {
+      e.component.registerKeyHandler('escape', () => this.editorInstance.focus());
     }
 
     _createContextMenu(items) {
@@ -169,7 +164,7 @@ if (Quill) {
         target: this._quillContainer,
         showEvent: null,
         hideOnParentScroll: false,
-        onInitialized: this._addEscapeHandler.bind(this),
+        onInitialized: this._onContextMenuInitialized.bind(this),
         items: customItems,
       };
     }

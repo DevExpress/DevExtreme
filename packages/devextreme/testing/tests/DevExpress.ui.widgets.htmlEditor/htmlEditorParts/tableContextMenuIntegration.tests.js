@@ -387,12 +387,14 @@ module('Table context menu integration', {
         test('Pressing escape button should close context menu and return focus to html editor', function(assert) {
             this.createWidget();
 
-            const $tableElement = this.$element.find('td').eq(0);
-            $tableElement.trigger('dxcontextmenu');
+            const contextMenu = this.getContextMenu();
+            const editor = this.instance._getContent();
+
+            contextMenu.trigger($.Event('keydown', { key: 'Escape', keyCode: 27, which: 27 }));
             this.clock.tick(10);
-            const container = this.quillInstance.container;
-            $(container).trigger($.Event('keydown', { key: 'Escape', keyCode: 27, which: 27 }));
-            this.clock.tick(10);
+
+            assert.strictEqual(document.activeElement, editor[0], 'Editor should regain focus after Escape');
+
             const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
 
             assert.ok($contextMenu.length);
