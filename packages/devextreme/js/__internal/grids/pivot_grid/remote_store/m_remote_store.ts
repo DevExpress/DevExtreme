@@ -155,19 +155,18 @@ function createFilterExpressions(fields) {
   return filterExpressions;
 }
 
-function mergeFilters(filter1, filter2) {
-  let mergedFilter;
-  const notEmpty = function (filter) {
-    return filter && filter.length;
-  };
+function mergeFilters(filters, op = 'and') {
+  const empty = (filter): boolean => !filter || filter.length === 0;
 
-  if (notEmpty(filter1) && notEmpty(filter2)) {
-    mergedFilter = [filter1, 'and', filter2];
-  } else {
-    mergedFilter = notEmpty(filter1) ? filter1 : filter2;
-  }
+  const result: any = [];
 
-  return mergedFilter;
+  each(filters, (_, filter) => {
+    if (!empty(filter)) result.push(filter, op);
+  });
+
+  if (result.length) result.pop();
+
+  return result;
 }
 
 function createLoadOptions(options, externalFilterExpr, hasRows) {
@@ -191,8 +190,10 @@ function createLoadOptions(options, externalFilterExpr, hasRows) {
     loadOptions.requireGroupCount = true;
   }
 
+  filterExpressions = mergeFilters([filterExpressions, options.filterExpression]);
+
   if (externalFilterExpr) {
-    filterExpressions = mergeFilters(filterExpressions, externalFilterExpr);
+    filterExpressions = mergeFilters([filterExpressions, externalFilterExpr]);
   }
 
   if (filterExpressions.length) {
@@ -352,33 +353,39 @@ function getFiltersForExpandedDimension(options) {
   );
 }
 
-function getExpandedPathSliceFilter(options, dimensionName, level, firstCollapsedFieldIndex) {
+function getExpandedPathsFilterExpression(options, dimensionName, level, firstCollapsedFieldIndex) {
+  if (options.headerName === dimensionName) {
+    return [];
+  }
+
   const result: any = [];
   const startSliceIndex = level > firstCollapsedFieldIndex ? 0 : firstCollapsedFieldIndex;
-  const fields = options.headerName !== dimensionName
-    ? options[dimensionName].slice(startSliceIndex, level)
-    : [];
-  const paths = dimensionName === 'rows' ? options.rowExpandedPaths : options.columnExpandedPaths;
+  let fields = options[dimensionName];
+  let paths = dimensionName === 'rows' ? options.rowExpandedPaths : options.columnExpandedPaths;
 
-  each(fields, (index: number, field) => {
-    const filterValues: any = [];
-    each(paths, (_, path) => {
-      path = path.slice(startSliceIndex, level);
-      if (index < path.length) {
-        const filterValue = path[index];
-        if (!filterValues.includes(filterValue)) {
-          filterValues.push(filterValue);
-        }
-      }
-    });
+  fields = fields.slice(startSliceIndex);
+  paths = paths
+    .map((path) => path.slice(startSliceIndex))
+    .filter((path) => path.length === level); // TODO: is order correct?
 
-    if (filterValues.length) {
-      result.push(extend({}, field, {
-        filterType: 'include',
-        filterValues,
-      }));
+  // eslint-disable-next-line
+  for (const path of paths) {
+    const filters: any = [];
+
+    for (let i = 0; i < path.length; i++) {
+      const field = fields[i];
+      field.filterType = 'include'; // TODO: refactor this
+      const fieldFilterExpression = getFilterExpressionForFilterValue(field, path[i]);
+
+      filters.push(fieldFilterExpression);
     }
-  });
+
+    const pathFilterExpression = mergeFilters(filters);
+
+    result.push(pathFilterExpression, 'or');
+  }
+
+  result.pop();
 
   return result;
 }
@@ -400,15 +407,13 @@ function getGrandTotalRequest(
   if (expandedPaths.length) {
     for (let i = expandedIndex; i < expandedLevel + 1; i += 1) {
       newOptions = {
-        filters: commonFilters
-          .concat(
-            getExpandedPathSliceFilter(
-              options,
-              dimensionName,
-              i,
-              firstCollapsedFieldIndex,
-            ),
-          ),
+        filters: commonFilters,
+        filterExpression: getExpandedPathsFilterExpression(
+          options,
+          dimensionName,
+          i,
+          firstCollapsedFieldIndex,
+        ),
       };
       newOptions[dimensionName] = fields.slice(expandedIndex, i + 1);
       newOptions[oppositeDimensionName] = [];
@@ -444,46 +449,56 @@ function getFirstCollapsedIndex(fields) {
   return firstCollapsedIndex;
 }
 
-function getRequestsData(options) {
+function createRequestsOptions(options) {
   const rowExpandedLevel = getExpandedLevel(options, 'rows');
-  const columnExpandedLevel = getExpandedLevel(options, 'columns');
-  let filters = options.filters || [];
-  const columnExpandedIndex = getExpandedIndex(options, 'columns');
-  const firstCollapsedColumnIndex = getFirstCollapsedIndex(options.columns);
-  const firstCollapsedRowIndex = getFirstCollapsedIndex(options.rows);
   const rowExpandedIndex = getExpandedIndex(options, 'rows');
-  let data: any = [];
+  const columnExpandedLevel = getExpandedLevel(options, 'columns');
+  const columnExpandedIndex = getExpandedIndex(options, 'columns');
+  const firstCollapsedColumnFieldIndex = getFirstCollapsedIndex(options.columns);
+  const firstCollapsedRowFieldIndex = getFirstCollapsedIndex(options.rows);
+  const requestsOptions: any = [];
 
-  filters = filters.concat(getFiltersForDimension(options.rows))
-    .concat(getFiltersForDimension(options.columns))
-    .concat(getFiltersForExpandedDimension(options));
+  const commonFilters = (options.filters || []).concat(
+    getFiltersForDimension(options.rows),
+    getFiltersForDimension(options.columns),
+    getFiltersForExpandedDimension(options),
+  );
 
-  const columnTotalsOptions = getGrandTotalRequest(options, 'columns', columnExpandedIndex, columnExpandedLevel, filters, firstCollapsedColumnIndex);
+  const columnTotalsOptions = getGrandTotalRequest(options, 'columns', columnExpandedIndex, columnExpandedLevel, commonFilters, firstCollapsedColumnFieldIndex);
+  const rowTotalsOptions = getGrandTotalRequest(options, 'rows', rowExpandedIndex, rowExpandedLevel, commonFilters, firstCollapsedRowFieldIndex);
 
   if (options.rows.length && options.columns.length) {
     if (options.headerName !== 'rows') {
-      data = data.concat(columnTotalsOptions);
+      requestsOptions.push(...columnTotalsOptions);
     }
 
     for (let i = rowExpandedIndex; i < rowExpandedLevel + 1; i += 1) {
       const rows = options.rows.slice(rowExpandedIndex, i + 1);
-      const rowFilterByExpandedPaths = getExpandedPathSliceFilter(options, 'rows', i, firstCollapsedRowIndex);
+      const rowFilters = getExpandedPathsFilterExpression(options, 'rows', i, firstCollapsedRowFieldIndex);
 
       for (let j = columnExpandedIndex; j < columnExpandedLevel + 1; j += 1) {
-        const preparedOptions = extend({}, options, {
-          columns: options.columns.slice(columnExpandedIndex, j + 1),
+        const columns = options.columns.slice(columnExpandedIndex, j + 1);
+        const columnFilters = getExpandedPathsFilterExpression(options, 'columns', j, firstCollapsedColumnFieldIndex);
+
+        const filterExpression = mergeFilters([rowFilters, columnFilters]);
+
+        const requestOptions = extend({}, options, {
+          columns,
           rows,
-          filters: filters.concat(getExpandedPathSliceFilter(options, 'columns', j, firstCollapsedColumnIndex)).concat(rowFilterByExpandedPaths),
+          filters: commonFilters,
+          filterExpression,
         });
 
-        data.push(preparedOptions);
+        requestsOptions.push(requestOptions);
       }
     }
   } else {
-    data = options.columns.length ? columnTotalsOptions : getGrandTotalRequest(options, 'rows', rowExpandedIndex, rowExpandedLevel, filters, firstCollapsedRowIndex);
+    const totalOptions = options.columns.length ? columnTotalsOptions : rowTotalsOptions;
+
+    requestsOptions.push(...totalOptions);
   }
 
-  return data;
+  return requestsOptions;
 }
 
 function prepareFields(fields) {
@@ -540,22 +555,18 @@ const RemoteStore = Class.inherit((function () {
         rowIndex: 1,
         columnIndex: 1,
       };
-      const requestsData = getRequestsData(options);
+      const requestsOptions = createRequestsOptions(options);
       const deferreds: any = [];
 
       prepareFields(options.rows);
       prepareFields(options.columns);
       prepareFields(options.filters);
 
-      each(requestsData, (_, dataItem) => {
-        deferreds.push(that._store
-          .load(
-            createLoadOptions(
-              dataItem,
-              that.filter(),
-              options.rows.length,
-            ),
-          ));
+      each(requestsOptions, (_, requestOptions) => {
+        const loadOptions = createLoadOptions(requestOptions, that.filter(), options.rows.length);
+        const loadDeferred = that._store.load(loadOptions);
+
+        deferreds.push(loadDeferred);
       });
 
       when.apply(null, deferreds).done(function () {
@@ -566,7 +577,7 @@ const RemoteStore = Class.inherit((function () {
           parseResult(
             normalizedArguments.data,
             normalizedArguments.extra,
-            requestsData[index],
+            requestsOptions[index],
             result,
           );
         });
@@ -607,7 +618,7 @@ const RemoteStore = Class.inherit((function () {
       return new DataSource({
         load(loadOptions) {
           return store.load(extend({}, loadOptions, {
-            filter: mergeFilters(filterExp, loadOptions.filter),
+            filter: mergeFilters([filterExp, loadOptions.filter]),
             select: params.customColumns,
           }));
         },
