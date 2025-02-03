@@ -271,7 +271,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
 
     let syncRendering = true;
     when.apply(this, items).done(() => {
-      const isGroupInDom = groups[0]?.element.closest('svg');
+      const isGroupInDom = !groups[0]?.element || groups[0].element.closest('svg');
       if (!isGroupInDom) {
         return;
       }
