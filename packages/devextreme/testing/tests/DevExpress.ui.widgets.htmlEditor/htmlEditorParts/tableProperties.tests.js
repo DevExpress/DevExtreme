@@ -1150,11 +1150,9 @@ module('Table properties forms', {
         }
     }, () => {
         test('borderStyle selectbox items are localized even if messages are loaded at runtime (T1234032)', function(assert) {
-            this.createWidget({ width: 432 });
+            this.createWidget();
 
             const $tableElement = this.$element.find('table').eq(0);
-
-            this.quillInstance.setSelection(50, 1);
 
             showCellPropertiesForm(this.instance, $tableElement);
 
