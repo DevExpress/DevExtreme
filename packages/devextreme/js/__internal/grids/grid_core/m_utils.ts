@@ -21,6 +21,7 @@ import eventsEngine from '@js/events/core/events_engine';
 import formatHelper from '@js/format_helper';
 import LoadPanel from '@js/ui/load_panel';
 import sharedFiltering from '@js/ui/shared/filtering';
+import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
 
 const DATAGRID_SELECTION_DISABLED_CLASS = 'dx-selection-disabled';
 const DATAGRID_GROUP_OPENED_CLASS = 'dx-datagrid-group-opened';
@@ -154,6 +155,27 @@ const equalFilterParameters = function (filter1, filter2) {
             && toComparable(filter1.selectedFilterOperation) === toComparable(filter2.selectedFilterOperation);
   }
   return toComparable(filter1) == toComparable(filter2); // eslint-disable-line eqeqeq
+};
+
+const createPoint = <T extends ColumnPoint>(options: T): ColumnPoint => ({
+  index: options.index,
+  columnIndex: options.columnIndex,
+  x: options.x,
+  y: options.y,
+});
+
+const addPointIfNeed = <T extends ColumnPoint> (points: ColumnPoint[], pointProps: T, pointCreated: (point: T) => boolean): void => {
+  let notCreatePoint = false;
+
+  if (pointCreated) {
+    notCreatePoint = pointCreated(pointProps);
+  }
+
+  if (!notCreatePoint) {
+    const point = createPoint(pointProps);
+
+    points.push(point);
+  }
 };
 
 function normalizeGroupingLoadOptions(group) {
@@ -414,45 +436,65 @@ export default {
     return (!sortParameters1 || !sortParameters1.length) === (!sortParameters2 || !sortParameters2.length);
   },
 
-  getPointsByColumns(items, pointCreated, isVertical?, startColumnIndex?) {
-    const cellsLength = items.length;
-    let notCreatePoint = false;
-    let item;
-    let offset;
-    let columnIndex = startColumnIndex || 0;
-    const result: any[] = [];
+  getPointsByColumns<T extends ColumnPoint>(items, pointCreated: (point: T) => boolean, isVertical = false, startColumnIndex = 0, needToCheckPrevPoint = false): ColumnPoint[] {
+    const result: ColumnPoint[] = [];
+    const cellsLength: number = items.length;
+    let $item;
+    let offset: { left: number; top: number } = { left: 0, top: 0 };
+    let itemRect: { width: number; height: number } = { width: 0, height: 0 };
+    let columnIndex = startColumnIndex;
     let rtlEnabled;
 
     for (let i = 0; i <= cellsLength; i++) {
       if (i < cellsLength) {
-        item = items.eq(i);
-        offset = item.offset();
-        rtlEnabled = item.css('direction') === 'rtl';
+        $item = items.eq(i);
+        offset = $item.offset();
+        itemRect = getBoundingRect($item.get(0));
+        rtlEnabled = $item.css('direction') === 'rtl';
       }
 
-      const point = {
+      const offsetRight = offset.left + itemRect.width;
+      const offsetBottom = offset.top + itemRect.height;
+
+      const pointProps: any = {
         index: columnIndex,
-        // @ts-expect-error
-        x: offset ? offset.left + (!isVertical && (rtlEnabled ^ (i === cellsLength)) ? getBoundingRect(item[0]).width : 0) : 0,
-        y: offset ? offset.top + (isVertical && i === cellsLength ? getBoundingRect(item[0]).height : 0) : 0,
         columnIndex,
+        item: $item?.get(0),
+        x: !isVertical && rtlEnabled !== (i === cellsLength) ? offsetRight : offset.left,
+        y: isVertical && i === cellsLength ? offsetBottom : offset.top,
       };
 
       if (!isVertical && i > 0) {
-        const prevItemOffset = items.eq(i - 1).offset();
+        const prevItemOffset: { left: number; top: number } = items.eq(i - 1).offset();
+        const { width: prevItemWidth }: { width: number } = getBoundingRect(items[i - 1]);
+        const prevItemOffsetX = rtlEnabled
+          ? prevItemOffset.left
+          : prevItemOffset.left + prevItemWidth;
 
-        if (prevItemOffset.top < point.y) {
-          point.y = prevItemOffset.top;
+        if (prevItemOffset.top < pointProps.y) {
+          pointProps.y = prevItemOffset.top;
+        }
+
+        if (needToCheckPrevPoint && Math.round(prevItemOffsetX) !== Math.round(pointProps.x)) {
+          const prevPointProps: any = {
+            ...pointProps,
+            item: items[i - 1],
+            x: prevItemOffsetX,
+          };
+
+          if (rtlEnabled) {
+            pointProps.isRightBoundary = true;
+            prevPointProps.isLeftBoundary = true;
+          } else {
+            pointProps.isLeftBoundary = true;
+            prevPointProps.isRightBoundary = true;
+          }
+
+          addPointIfNeed(result, prevPointProps, pointCreated);
         }
       }
 
-      if (pointCreated) {
-        notCreatePoint = pointCreated(point);
-      }
-
-      if (!notCreatePoint) {
-        result.push(point);
-      }
+      addPointIfNeed(result, pointProps, pointCreated);
       columnIndex++;
     }
     return result;

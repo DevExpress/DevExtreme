@@ -67,6 +67,7 @@ export const CLASS = {
   commandDrag: 'dx-command-drag',
   dialogWrapper: 'dx-dialog-wrapper',
   summaryTotal: 'dx-datagrid-summary-item',
+  columnsSeparator: 'dx-datagrid-columns-separator',
 };
 
 const E2E_ATTRIBUTES = {
@@ -204,6 +205,10 @@ export default class DataGrid extends Widget {
 
   getSearchBox(): TextBox {
     return new TextBox(this.element.find(`.${CLASS.searchBox}`));
+  }
+
+  getColumnsSeparator(): TextBox {
+    return new TextBox(this.element.find(`.${CLASS.columnsSeparator}`));
   }
 
   getOverlay(): Overlay {
