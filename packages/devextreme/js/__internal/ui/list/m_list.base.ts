@@ -938,6 +938,7 @@ export const ListBase = CollectionWidget.inherit({
       case 'dataSource':
         this.callBase(args);
         this._initScrollView();
+        this._updateLoadingState(true);
         this._isDataSourceFirstLoadCompleted(false);
         break;
       case 'items':
