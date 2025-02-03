@@ -25,10 +25,6 @@ import {
 
 const MIN_HEIGHT = 400;
 const BORDER_STYLES = ['none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset'];
-const BORDER_STYLES_TRANSLATED = BORDER_STYLES.map((style) => ({
-  id: style,
-  value: localizationMessage.format(`dxHtmlEditor-borderStyle${camelize(style, true)}`),
-}));
 
 const USER_ACTION = 'user';
 const SILENT_ACTION = 'silent';
@@ -50,6 +46,13 @@ const ICON_MAP = {
   insertHeaderRow: 'header',
   clear: 'clearformat',
 };
+
+function getBorderStylesTranslated() {
+  return BORDER_STYLES.map((style) => ({
+    id: style,
+    value: localizationMessage.format(`dxHtmlEditor-borderStyle${camelize(style, true)}`),
+  }));
+}
 
 function getFormatHandlers(module) {
   return {
@@ -446,7 +449,7 @@ function getTablePropertiesFormConfig(module, { $element, formats, tableBlot }) 
           label: { text: localizationMessage.format('dxHtmlEditor-style') },
           editorType: 'dxSelectBox',
           editorOptions: {
-            items: BORDER_STYLES_TRANSLATED,
+            items: getBorderStylesTranslated(),
             valueExpr: 'id',
             displayExpr: 'value',
             placeholder: 'Select style',
@@ -616,7 +619,7 @@ function getCellPropertiesFormConfig(module, {
           label: { text: localizationMessage.format('dxHtmlEditor-style') },
           editorType: 'dxSelectBox',
           editorOptions: {
-            items: BORDER_STYLES_TRANSLATED,
+            items: getBorderStylesTranslated(),
             valueExpr: 'id',
             displayExpr: 'value',
           },
