@@ -49,9 +49,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: |
-        corepack enable
-        pnpm install
+      run: pnpm install
 
     - name: Compile renovation
       working-directory: ./packages/devextreme
@@ -96,9 +94,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: |
-        corepack enable
-        pnpm install
+      run: pnpm install
 
     - name: Build
       working-directory: ./packages/devextreme
@@ -155,9 +151,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: |
-        corepack enable
-        pnpm install
+      run: pnpm install
 
     - name: Build
       working-directory: ./packages/devextreme
@@ -202,9 +196,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: |
-        corepack enable
-        pnpm install
+      run: pnpm install
 
     - name: Check texts
       working-directory: ./packages/devextreme
@@ -243,9 +235,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: |
-        corepack enable
-        pnpm install
+      run: pnpm install
 
     - name: Lint CSS
       working-directory: ./packages/devextreme-scss
@@ -332,9 +322,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: |
-        corepack enable
-        pnpm install
+      run: pnpm install
 
     - name: Check generated component reexports
       working-directory: ./packages/devextreme
@@ -384,9 +372,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: |
-        corepack enable
-        pnpm install
+      run: pnpm install
 
     - name: Lint wrappers
       run: pnpx nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
