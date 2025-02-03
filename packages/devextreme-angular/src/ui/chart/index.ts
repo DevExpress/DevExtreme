@@ -242,6 +242,7 @@ import { DxiChartValueAxisComponent } from 'devextreme-angular/ui/chart/nested';
     selector: 'dx-chart',
     template: '',
     styles: [ ' :host {  display: block; }'],
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1447,8 +1448,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('annotations');
     }
     set annotationsChildren(value) {
-        this.setContentChildren('annotations', value, 'DxiChartAnnotationComponent');
-        this.setChildren('annotations', value);
+        this._setChildren('annotations', value, 'DxiChartAnnotationComponent');
     }
 
     @ContentChildren(DxiChartPaneComponent)
@@ -1456,8 +1456,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('panes');
     }
     set panesChildren(value) {
-        this.setContentChildren('panes', value, 'DxiChartPaneComponent');
-        this.setChildren('panes', value);
+        this._setChildren('panes', value, 'DxiChartPaneComponent');
     }
 
     @ContentChildren(DxiChartSeriesComponent)
@@ -1465,8 +1464,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('series');
     }
     set seriesChildren(value) {
-        this.setContentChildren('series', value, 'DxiChartSeriesComponent');
-        this.setChildren('series', value);
+        this._setChildren('series', value, 'DxiChartSeriesComponent');
     }
 
     @ContentChildren(DxiChartValueAxisComponent)
@@ -1474,8 +1472,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('valueAxis');
     }
     set valueAxesChildren(value) {
-        this.setContentChildren('valueAxis', value, 'DxiChartValueAxisComponent');
-        this.setChildren('valueAxis', value);
+        this._setChildren('valueAxis', value, 'DxiChartValueAxisComponent');
     }
 
 
@@ -1484,9 +1481,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('annotations');
     }
     set annotationsLegacyChildren(value) {
-        if (this.checkContentChildren('annotations', value, 'DxiAnnotationComponent')) {
-           this.setChildren('annotations', value);
-        }
+        this._setChildren('annotations', value, 'DxiAnnotationComponent');
     }
 
     @ContentChildren(DxiPaneComponent)
@@ -1494,9 +1489,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('panes');
     }
     set panesLegacyChildren(value) {
-        if (this.checkContentChildren('panes', value, 'DxiPaneComponent')) {
-           this.setChildren('panes', value);
-        }
+        this._setChildren('panes', value, 'DxiPaneComponent');
     }
 
     @ContentChildren(DxiSeriesComponent)
@@ -1504,9 +1497,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('series');
     }
     set seriesLegacyChildren(value) {
-        if (this.checkContentChildren('series', value, 'DxiSeriesComponent')) {
-           this.setChildren('series', value);
-        }
+        this._setChildren('series', value, 'DxiSeriesComponent');
     }
 
     @ContentChildren(DxiValueAxisComponent)
@@ -1514,9 +1505,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('valueAxis');
     }
     set valueAxisLegacyChildren(value) {
-        if (this.checkContentChildren('valueAxis', value, 'DxiValueAxisComponent')) {
-           this.setChildren('valueAxis', value);
-        }
+        this._setChildren('valueAxis', value, 'DxiValueAxisComponent');
     }
 
 

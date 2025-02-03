@@ -63,6 +63,7 @@ import { DxoDeferRenderingToModule } from 'devextreme-angular/ui/defer-rendering
 @Component({
     selector: 'dx-defer-rendering',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

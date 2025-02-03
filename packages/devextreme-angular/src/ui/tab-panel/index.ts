@@ -58,6 +58,7 @@ import { DxiTabPanelItemComponent } from 'devextreme-angular/ui/tab-panel/nested
 @Component({
     selector: 'dx-tab-panel',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -799,8 +800,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiTabPanelItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiTabPanelItemComponent');
     }
 
 
@@ -809,9 +809,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
-        }
+        this._setChildren('items', value, 'DxiItemComponent');
     }
 
 

@@ -72,6 +72,7 @@ import { DxoTooltipToModule } from 'devextreme-angular/ui/tooltip/nested';
 @Component({
     selector: 'dx-tooltip',
     template: '<ng-content></ng-content>',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

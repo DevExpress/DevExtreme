@@ -74,6 +74,7 @@ import { DxiListMenuItemComponent } from 'devextreme-angular/ui/list/nested';
 @Component({
     selector: 'dx-list',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1343,8 +1344,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiListItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiListItemComponent');
     }
 
     @ContentChildren(DxiListMenuItemComponent)
@@ -1352,8 +1352,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         return this._getOption('menuItems');
     }
     set menuItemsChildren(value) {
-        this.setContentChildren('menuItems', value, 'DxiListMenuItemComponent');
-        this.setChildren('menuItems', value);
+        this._setChildren('menuItems', value, 'DxiListMenuItemComponent');
     }
 
 
@@ -1362,9 +1361,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
-        }
+        this._setChildren('items', value, 'DxiItemComponent');
     }
 
     @ContentChildren(DxiMenuItemComponent)
@@ -1372,9 +1369,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         return this._getOption('menuItems');
     }
     set menuItemsLegacyChildren(value) {
-        if (this.checkContentChildren('menuItems', value, 'DxiMenuItemComponent')) {
-           this.setChildren('menuItems', value);
-        }
+        this._setChildren('menuItems', value, 'DxiMenuItemComponent');
     }
 
 

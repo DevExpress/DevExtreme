@@ -123,6 +123,7 @@ import { DxiPieChartSeriesComponent } from 'devextreme-angular/ui/pie-chart/nest
     selector: 'dx-pie-chart',
     template: '',
     styles: [ ' :host {  display: block; }'],
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -980,8 +981,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         return this._getOption('annotations');
     }
     set annotationsChildren(value) {
-        this.setContentChildren('annotations', value, 'DxiPieChartAnnotationComponent');
-        this.setChildren('annotations', value);
+        this._setChildren('annotations', value, 'DxiPieChartAnnotationComponent');
     }
 
     @ContentChildren(DxiPieChartSeriesComponent)
@@ -989,8 +989,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         return this._getOption('series');
     }
     set seriesChildren(value) {
-        this.setContentChildren('series', value, 'DxiPieChartSeriesComponent');
-        this.setChildren('series', value);
+        this._setChildren('series', value, 'DxiPieChartSeriesComponent');
     }
 
 
@@ -999,9 +998,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         return this._getOption('annotations');
     }
     set annotationsLegacyChildren(value) {
-        if (this.checkContentChildren('annotations', value, 'DxiAnnotationComponent')) {
-           this.setChildren('annotations', value);
-        }
+        this._setChildren('annotations', value, 'DxiAnnotationComponent');
     }
 
     @ContentChildren(DxiSeriesComponent)
@@ -1009,9 +1006,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         return this._getOption('series');
     }
     set seriesLegacyChildren(value) {
-        if (this.checkContentChildren('series', value, 'DxiSeriesComponent')) {
-           this.setChildren('series', value);
-        }
+        this._setChildren('series', value, 'DxiSeriesComponent');
     }
 
 

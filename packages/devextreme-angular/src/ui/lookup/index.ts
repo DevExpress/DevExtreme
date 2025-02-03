@@ -100,6 +100,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 @Component({
     selector: 'dx-lookup',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1628,8 +1629,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiLookupItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiLookupItemComponent');
     }
 
 
@@ -1638,9 +1638,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
-        }
+        this._setChildren('items', value, 'DxiItemComponent');
     }
 
 

@@ -88,6 +88,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 @Component({
     selector: 'dx-html-editor',
     template: '<ng-content></ng-content>',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -852,8 +853,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         return this._getOption('mentions');
     }
     set mentionsChildren(value) {
-        this.setContentChildren('mentions', value, 'DxiHtmlEditorMentionComponent');
-        this.setChildren('mentions', value);
+        this._setChildren('mentions', value, 'DxiHtmlEditorMentionComponent');
     }
 
 
@@ -862,9 +862,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         return this._getOption('mentions');
     }
     set mentionsLegacyChildren(value) {
-        if (this.checkContentChildren('mentions', value, 'DxiMentionComponent')) {
-           this.setChildren('mentions', value);
-        }
+        this._setChildren('mentions', value, 'DxiMentionComponent');
     }
 
 
