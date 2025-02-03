@@ -925,7 +925,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
    * @extended: column_fixing
    * @protected
    */
-  protected _generatePointsByColumns() {
+  protected _generatePointsByColumns(needToCheckPrevPoint = false) {
     const that = this;
     const topYMap = that._generateColumnsTopYIndex(needToCheckPrevPoint);
     const columns = that._columnsController ? that._columnsController.getVisibleColumns() : [];

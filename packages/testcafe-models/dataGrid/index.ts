@@ -75,6 +75,33 @@ const E2E_ATTRIBUTES = {
   summaryCellStatusContainer: 'e2e-a11y-summary-cell-status-container',
 };
 
+const triggerPointerDown = ($element: JQuery<any>, x: number, y: number) => {
+  $element
+    .trigger($.Event('dxpointerdown', {
+      pageX: x,
+      pageY: y,
+      pointers: [{ pointerId: 1 }],
+    }));
+}
+
+const triggerPointerMove = ($element: JQuery<any>, x: number, y: number) => {
+  $element
+    .trigger($.Event('dxpointermove', {
+      pageX: x,
+      pageY: y,
+      pointers: [{ pointerId: 1 }],
+    }));
+}
+
+const triggerPointerUp = ($element: JQuery<any>, x: number, y: number) => {
+  $element
+    .trigger($.Event('dxpointerup', {
+      pageX: x,
+      pageY: y,
+      pointers: [{ pointerId: 1 }],
+    }));
+}
+
 const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): void => {
   if ($element?.length) {
     const offset = $element.offset();
@@ -649,6 +676,40 @@ export default class DataGrid extends Widget {
       {
         dependencies: {
           getInstance, rowIndex, x, y, isStart, moveElement,
+        },
+      },
+    )();
+  }
+
+  resizeHeader(columnIndex: number, offset: number, needToTriggerPointerUp = true): Promise<void>  {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        const gridInstance = getInstance() as any;
+        const $gridElement = $(gridInstance.element());
+        const columnHeadersView = gridInstance.getView('columnHeadersView');
+        const $header = $(columnHeadersView.getHeaderElement(columnIndex));
+        const headerOffset = $header.offset();
+        const offsetX = headerOffset.left;
+
+        triggerPointerMove($(document), offsetX, headerOffset.top + 1);
+        triggerPointerDown($gridElement, offsetX, headerOffset.top + 1);
+        triggerPointerMove($(document), offsetX + offset, headerOffset.top + 1);
+
+        if (needToTriggerPointerUp) {
+          triggerPointerUp($(document), offsetX + offset, headerOffset.top + 1);
+        }
+      },
+      {
+        dependencies: {
+          getInstance,
+          triggerPointerDown,
+          triggerPointerMove,
+          triggerPointerUp,
+          columnIndex,
+          offset,
+          needToTriggerPointerUp,
         },
       },
     )();
