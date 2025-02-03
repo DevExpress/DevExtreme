@@ -75,6 +75,7 @@
       },
       "inputs": [
         "default",
+        "test",
         "!{projectRoot}/Demos/**/*",
         "{projectRoot}/.eslint*"
       ],
