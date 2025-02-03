@@ -74,6 +74,7 @@ import { DxiListMenuItemComponent } from 'devextreme-angular/ui/list/nested';
 @Component({
     selector: 'dx-list',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

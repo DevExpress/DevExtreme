@@ -92,6 +92,7 @@ import { DxoTreeMapTreeMapborderModule } from 'devextreme-angular/ui/tree-map/ne
     selector: 'dx-tree-map',
     template: '',
     styles: [ ' :host {  display: block; }'],
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

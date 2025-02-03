@@ -8,6 +8,6 @@ testing.TestBed.initTestEnvironment(
   browser.platformBrowserDynamicTesting(),
 );
 
-const context = require.context('./tests/dist', true, /^.\/(?!.*\/ssr-components\.spec.js$).*\.spec\.js$/);
+const context = require.context('./tests/dist', true, /^.\/(?!.*\/(ssr-components|hydration)\.spec\.js$).*\.spec\.js$/);
 context.keys().map(context);
 __karma__.start();
