@@ -54,9 +54,7 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: |
-          corepack enable
-          pnpm install
+        run: pnpm install
 
       - name: DevExtreme - Build-all
         env:
@@ -125,9 +123,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: |
-        corepack enable
-        pnpm install
+      run: pnpm install
 
     - name: Install tgz
       working-directory: apps/demos
@@ -246,9 +242,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: |
-        corepack enable
-        pnpm install
+      run: pnpm install
 
     - name: Install tgz
       run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
@@ -326,9 +320,7 @@ jobs:
         name: devextreme-sources
 
     - name: Install dependencies
-      run: |
-        corepack enable
-        pnpm install --frozen-lockfile
+      run: pnpm install --frozen-lockfile
 
     - name: Install tgz
       working-directory: apps/demos
@@ -412,9 +404,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: |
-        corepack enable
-        pnpm install
+      run: pnpm install
 
     - name: Install tgz
       working-directory: apps/demos
