@@ -145,7 +145,24 @@ const ScrollViewMock = DOMComponent.inherit({
 
     _useTemplates() {
         return false;
-    }
+    },
+
+    _createActions() {
+        this._tryRefreshPocketState();
+    },
+
+    _tryRefreshPocketState() {
+        this._pageLoading = !!this.option('onReachBottom');
+    },
+
+    _optionChanged(args) {
+        switch(args.name) {
+            case 'onPullDown':
+            case 'onReachBottom':
+                this._createActions();
+                break;
+        }
+    },
 });
 
 const showListSlideMenu = ($list) => {
@@ -1175,6 +1192,21 @@ QUnit.module('options changed', moduleSetup, () => {
         assert.ok(scrollView._pageLoading, 'scrollBottom div is visible');
         assert.equal($list.find('.dx-empty-message').length, 0, 'empty message was not rendered');
     });
+
+    QUnit.test('LoadIndicator should not be shown on dataSource runtime change with repaintChangesOnly=true (T1249958)', function(assert) {
+        const $list = $('#list').dxList({
+            dataSource: ['one', 'two', 'tree'],
+            repaintChangesOnly: true,
+            useNativeScrolling: true,
+        });
+        const instance = $list.dxList('instance');
+        const scrollView = $list.dxScrollView('instance');
+
+        instance.option('dataSource', ['four', 'five', 'six']);
+
+        assert.strictEqual(scrollView._pageLoading, false, 'scrollBottom div is hidden');
+    });
+
 
     QUnit.test('list should be able to change grouped option to false after dataSource option', function(assert) {
         const $element = $('#list').dxList({
