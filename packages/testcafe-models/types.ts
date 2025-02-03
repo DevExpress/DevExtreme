@@ -66,7 +66,8 @@ export type WidgetName =
   | 'dxTreeList'
   | 'dxTreeView'
   | 'dxValidationSummary'
-  | 'dxValidator';
+  | 'dxValidator'
+  | 'dxGantt';
 
 export interface WidgetOptions {
   dxDataGrid: DataGridProperties;
