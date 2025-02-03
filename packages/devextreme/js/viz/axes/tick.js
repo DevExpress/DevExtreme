@@ -240,10 +240,6 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
             },
 
             updateLabelPosition: function(animate) {
-                if(this._templateDef?.state() === 'pending') {
-                    return;
-                }
-
                 const templateContainer = this.templateContainer;
                 if(!this.getContentContainer()) {
                     return;
