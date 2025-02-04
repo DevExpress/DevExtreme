@@ -59,6 +59,7 @@ export class ColumnSortable extends Component<Props, State> {
       Math.abs(dragCoords.y - containerCoords.y + containerCoords.height),
     );
 
+    // TODO: move to scss variable
     if (yDistance <= 64) {
       this.status = 'moving';
     } else {
