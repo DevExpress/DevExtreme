@@ -52,9 +52,7 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: |
-          corepack enable
-          pnpm install
+        run: pnpm install
 
       - name: Build devextreme package
         env:
