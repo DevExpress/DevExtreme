@@ -21,7 +21,7 @@ export interface Options {
   keyExpr?: string | string[];
   onDataErrorOccurred?: Action<{ error: string }>;
   paging?: PagingOptions;
-  remoteOperations?: RemoteOperationsOptions | boolean;
+  remoteOperations?: RemoteOperationsOptions | boolean | 'auto';
 }
 
 export const defaultOptions = {
@@ -30,11 +30,6 @@ export const defaultOptions = {
     pageSize: 6,
     pageIndex: 0,
   },
-  remoteOperations: {
-    filtering: false,
-    paging: false,
-    sorting: false,
-    summary: false,
-  },
+  remoteOperations: 'auto',
   cacheEnabled: true,
 } satisfies Options;
