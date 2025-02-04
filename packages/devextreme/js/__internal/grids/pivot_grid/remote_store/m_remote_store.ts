@@ -15,15 +15,15 @@ import pivotGridUtils, {
 } from '../m_widget_utils';
 import { forEachGroup } from './m_remote_store_utils';
 
-function createGroupingOptions(dimensionOptions, useSortOrder) {
+function createGroupingOptions(fields, useSortOrder) {
   const groupingOptions: any = [];
 
-  each(dimensionOptions, (index: number, dimensionOption) => {
+  each(fields, (index: number, field) => {
     groupingOptions.push({
-      selector: dimensionOption.dataField,
-      groupInterval: dimensionOption.groupInterval,
-      desc: useSortOrder && dimensionOption.sortOrder === 'desc',
-      isExpanded: index < dimensionOptions.length - 1,
+      selector: field.dataField,
+      groupInterval: field.groupInterval,
+      desc: useSortOrder && field.sortOrder === 'desc',
+      isExpanded: index < fields.length - 1,
     });
   });
 
@@ -155,30 +155,40 @@ function createFilterExpressions(fields) {
   return filterExpressions;
 }
 
-function mergeFilters(filters, op = 'and') {
-  const empty = (filter): boolean => !filter || filter.length === 0;
+function mergeFilters(filters, op = 'and'): any {
+  const notEmpty = (filter): boolean => !!filter?.length;
 
   const result: any = [];
 
   each(filters, (_, filter) => {
-    if (!empty(filter)) result.push(filter, op);
+    if (notEmpty(filter)) result.push(filter, op);
   });
 
-  if (result.length) result.pop();
+  result.pop();
+
+  // remove redundant nesting
+  if (result.length === 1) return result[0];
 
   return result;
 }
 
 function createLoadOptions(options, externalFilterExpr, hasRows) {
-  let filterExpressions = createFilterExpressions(options.filters);
-  const groupingOptions = createGroupingOptions(options.rows, options.rowTake)
-    .concat(createGroupingOptions(options.columns, options.columnTake));
   const loadOptions: any = {
     groupSummary: [],
     totalSummary: [],
-    group: groupingOptions.length ? groupingOptions : undefined,
-    take: groupingOptions.length ? undefined : 1,
   };
+
+  const rowGroupingOptions = createGroupingOptions(options.rows, options.rowTake);
+  const columnGroupingOptions = createGroupingOptions(options.columns, options.columnTake);
+  const groupingOptions = [...rowGroupingOptions, ...columnGroupingOptions];
+
+  if (groupingOptions.length) {
+    loadOptions.group = groupingOptions;
+    loadOptions.take = undefined;
+  } else {
+    loadOptions.group = undefined;
+    loadOptions.take = 1;
+  }
 
   if (options.rows.length && options.rowTake) {
     loadOptions.skip = options.rowSkip;
@@ -190,11 +200,11 @@ function createLoadOptions(options, externalFilterExpr, hasRows) {
     loadOptions.requireGroupCount = true;
   }
 
-  filterExpressions = mergeFilters([filterExpressions, options.filterExpression]);
+  let filterExpressions = createFilterExpressions(options.filters);
 
-  if (externalFilterExpr) {
-    filterExpressions = mergeFilters([filterExpressions, externalFilterExpr]);
-  }
+  filterExpressions = externalFilterExpr
+    ? mergeFilters([filterExpressions, options.filterExpression, externalFilterExpr])
+    : mergeFilters([filterExpressions, options.filterExpression]);
 
   if (filterExpressions.length) {
     loadOptions.filter = filterExpressions;
@@ -336,6 +346,11 @@ function getFiltersForDimension(fields) {
   return (fields || []).filter((f) => f.filterValues && f.filterValues.length || f.searchValue);
 }
 
+/**
+ * If some field in the 'axis' area was expanded, then returns field's level index.
+ *
+ * Otherwise, returns 0
+ */
 function getExpandedIndex(options, axis) {
   if (options.headerName) {
     if (axis === options.headerName) {
@@ -353,27 +368,60 @@ function getFiltersForExpandedDimension(options) {
   );
 }
 
-function getExpandedPathsFilterExpression(options, dimensionName, level, firstCollapsedFieldIndex) {
-  if (options.headerName === dimensionName) {
+/**
+ * @returns index of the first field with field.expanded != true
+ */
+function getFirstCollapsedIndex(fields): number {
+  for (let index = 0; index < fields.length; index += 1) {
+    if (!fields[index].expanded) return index;
+  }
+
+  return 0;
+}
+
+function getExpandedPathsFilterExprByLevel(options, axis, level) {
+  if (options.headerName === axis) {
     return [];
   }
 
-  const result: any = [];
-  const startSliceIndex = level > firstCollapsedFieldIndex ? 0 : firstCollapsedFieldIndex;
-  let fields = options[dimensionName];
-  let paths = dimensionName === 'rows' ? options.rowExpandedPaths : options.columnExpandedPaths;
+  const isPathInLevel = (fields, path: any[]): boolean => {
+    if (path.length > level) return false;
 
-  fields = fields.slice(startSliceIndex);
-  paths = paths
-    .map((path) => path.slice(startSliceIndex))
-    .filter((path) => path.length === level); // TODO: is order correct?
+    let expandedLevel = path.length;
 
-  // eslint-disable-next-line
-  for (const path of paths) {
+    while (fields[expandedLevel]?.expanded) {
+      expandedLevel += 1;
+    }
+
+    return expandedLevel >= level;
+  };
+
+  const firstCollapsedFieldIndex = axis === 'rows'
+    ? getFirstCollapsedIndex(options.rows)
+    : getFirstCollapsedIndex(options.columns);
+
+  // Note: we don't need to create filters for fields with field.expanded=true,
+  // if level <= number of the expanded fields that are at the beginning
+  const startFieldIndex = level <= firstCollapsedFieldIndex ? firstCollapsedFieldIndex : 0;
+
+  const fields = options[axis].slice(startFieldIndex, level);
+  const paths = (axis === 'rows' ? options.rowExpandedPaths : options.columnExpandedPaths) || [];
+
+  let result: any = [];
+
+  each(paths, (_, path) => {
+    path = path.slice(startFieldIndex);
+
+    // only prepare filters for paths that are in the specified level
+    if (!isPathInLevel(fields, path)) return;
+
     const filters: any = [];
 
-    for (let i = 0; i < path.length; i++) {
+    for (let i = 0; i < path.length; i += 1) {
       const field = fields[i];
+
+      if (!isDefined(field)) break;
+
       field.filterType = 'include'; // TODO: refactor this
       const fieldFilterExpression = getFilterExpressionForFilterValue(field, path[i]);
 
@@ -382,52 +430,45 @@ function getExpandedPathsFilterExpression(options, dimensionName, level, firstCo
 
     const pathFilterExpression = mergeFilters(filters);
 
-    result.push(pathFilterExpression, 'or');
-  }
+    result.push(pathFilterExpression);
+  });
 
-  result.pop();
+  result = mergeFilters(result, 'or');
 
   return result;
 }
 
-function getGrandTotalRequest(
-  options,
-  dimensionName,
-  expandedIndex,
-  expandedLevel,
-  commonFilters,
-  firstCollapsedFieldIndex,
-) {
+function getGrandTotalRequest(options, dimensionName, commonFilters) {
+  const expandedIndex = getExpandedIndex(options, dimensionName);
+  const expandedLevel = getExpandedLevel(options, dimensionName);
   const expandedPaths = (dimensionName === 'columns' ? options.columnExpandedPaths : options.rowExpandedPaths) || [];
   const oppositeDimensionName = dimensionName === 'columns' ? 'rows' : 'columns';
   const fields = options[dimensionName];
   const result: any = [];
-  let newOptions;
 
   if (expandedPaths.length) {
-    for (let i = expandedIndex; i < expandedLevel + 1; i += 1) {
-      newOptions = {
-        filters: commonFilters,
-        filterExpression: getExpandedPathsFilterExpression(
-          options,
-          dimensionName,
-          i,
-          firstCollapsedFieldIndex,
-        ),
-      };
-      newOptions[dimensionName] = fields.slice(expandedIndex, i + 1);
-      newOptions[oppositeDimensionName] = [];
+    for (let i = expandedIndex; i <= expandedLevel; i += 1) {
+      const slicedFields = fields.slice(expandedIndex, i + 1);
+      const filterExpr = getExpandedPathsFilterExprByLevel(options, dimensionName, i);
 
-      result.push(extend({}, options, newOptions));
+      const grandTotalOptions = {
+        filters: commonFilters,
+        filterExpression: filterExpr,
+        [dimensionName]: slicedFields,
+        [oppositeDimensionName]: [],
+      };
+
+      result.push(extend({}, options, grandTotalOptions));
     }
   } else {
-    newOptions = {
+    const slicedFields = fields.slice(expandedIndex, expandedLevel + 1);
+    const grandTotalOptions = {
       filters: commonFilters,
+      [dimensionName]: slicedFields,
+      [oppositeDimensionName]: [],
     };
 
-    newOptions[dimensionName] = fields.slice(expandedIndex, expandedLevel + 1);
-    newOptions[oppositeDimensionName] = [];
-    result.push(extend({}, options, newOptions));
+    result.push(extend({}, options, grandTotalOptions));
   }
 
   result[0].includeTotalSummary = true;
@@ -435,27 +476,12 @@ function getGrandTotalRequest(
   return result;
 }
 
-function getFirstCollapsedIndex(fields) {
-  let firstCollapsedIndex = 0;
-  each(fields, (index: number, field) => {
-    if (!field.expanded) {
-      firstCollapsedIndex = index;
-      return false;
-    }
-
-    return undefined;
-  });
-
-  return firstCollapsedIndex;
-}
-
 function createRequestsOptions(options) {
-  const rowExpandedLevel = getExpandedLevel(options, 'rows');
   const rowExpandedIndex = getExpandedIndex(options, 'rows');
-  const columnExpandedLevel = getExpandedLevel(options, 'columns');
+  const rowExpandedLevel = getExpandedLevel(options, 'rows');
   const columnExpandedIndex = getExpandedIndex(options, 'columns');
-  const firstCollapsedColumnFieldIndex = getFirstCollapsedIndex(options.columns);
-  const firstCollapsedRowFieldIndex = getFirstCollapsedIndex(options.rows);
+  const columnExpandedLevel = getExpandedLevel(options, 'columns');
+
   const requestsOptions: any = [];
 
   const commonFilters = (options.filters || []).concat(
@@ -464,23 +490,23 @@ function createRequestsOptions(options) {
     getFiltersForExpandedDimension(options),
   );
 
-  const columnTotalsOptions = getGrandTotalRequest(options, 'columns', columnExpandedIndex, columnExpandedLevel, commonFilters, firstCollapsedColumnFieldIndex);
-  const rowTotalsOptions = getGrandTotalRequest(options, 'rows', rowExpandedIndex, rowExpandedLevel, commonFilters, firstCollapsedRowFieldIndex);
+  const columnTotalsOptions = getGrandTotalRequest(options, 'columns', commonFilters);
+  const rowTotalsOptions = getGrandTotalRequest(options, 'rows', commonFilters);
 
   if (options.rows.length && options.columns.length) {
     if (options.headerName !== 'rows') {
       requestsOptions.push(...columnTotalsOptions);
     }
 
-    for (let i = rowExpandedIndex; i < rowExpandedLevel + 1; i += 1) {
+    for (let i = rowExpandedIndex; i <= rowExpandedLevel; i += 1) {
       const rows = options.rows.slice(rowExpandedIndex, i + 1);
-      const rowFilters = getExpandedPathsFilterExpression(options, 'rows', i, firstCollapsedRowFieldIndex);
+      const rowsFilterExpr = getExpandedPathsFilterExprByLevel(options, 'rows', i);
 
-      for (let j = columnExpandedIndex; j < columnExpandedLevel + 1; j += 1) {
+      for (let j = columnExpandedIndex; j <= columnExpandedLevel; j += 1) {
         const columns = options.columns.slice(columnExpandedIndex, j + 1);
-        const columnFilters = getExpandedPathsFilterExpression(options, 'columns', j, firstCollapsedColumnFieldIndex);
+        const columnsFilterExpr = getExpandedPathsFilterExprByLevel(options, 'columns', j);
 
-        const filterExpression = mergeFilters([rowFilters, columnFilters]);
+        const filterExpression = mergeFilters([rowsFilterExpr, columnsFilterExpr]);
 
         const requestOptions = extend({}, options, {
           columns,
@@ -602,7 +628,7 @@ const RemoteStore = Class.inherit((function () {
       return false;
     },
 
-    createDrillDownDataSource(loadOptions, params) {
+    createDrillDownDataSource(loadOptions, params): any {
       loadOptions = loadOptions || {};
       params = params || {};
 
@@ -617,10 +643,14 @@ const RemoteStore = Class.inherit((function () {
 
       return new DataSource({
         load(loadOptions) {
-          return store.load(extend({}, loadOptions, {
-            filter: mergeFilters([filterExp, loadOptions.filter]),
+          const filter = mergeFilters([filterExp, loadOptions.filter]);
+
+          const extendedLoadOptions = extend({}, loadOptions, {
+            filter: filter.length === 0 ? undefined : filter,
             select: params.customColumns,
-          }));
+          });
+
+          return store.load(extendedLoadOptions);
         },
       });
     },
