@@ -33,6 +33,7 @@ const CONTEXT_MENU_OVERLAY_SELECTOR = '.dx-context-menu.dx-overlay-content';
 const ITEM_HAS_SUBMENU_CLASS = 'dx-menu-item-has-submenu';
 const ITEM_HAS_TEXT_CLASS = 'dx-menu-item-has-text';
 const SUBMENU_CLASS = 'dx-submenu';
+const HTML_EDITOR_CLASS = 'dx-htmleditor-content';
 const SUBMENU_ITEMS_SELECTOR = `.${SUBMENU_CLASS} .${SUBMENU_CLASS} .${ITEM_HAS_TEXT_CLASS}`;
 
 module('Table context menu integration', {
@@ -388,7 +389,7 @@ module('Table context menu integration', {
             this.createWidget();
 
             const contextMenu = this.getContextMenu();
-            const editor = this.instance._getContent();
+            const $editorContent = $(`.${HTML_EDITOR_CLASS}`);
 
             contextMenu.trigger($.Event('keydown', { key: 'Escape', keyCode: 27, which: 27 }));
             this.clock.tick(10);
@@ -396,7 +397,7 @@ module('Table context menu integration', {
             const shadowRoot = document.activeElement.shadowRoot;
             const activeElement = shadowRoot ? shadowRoot.activeElement : document.activeElement;
 
-            assert.strictEqual(activeElement, editor[0], 'Editor should regain focus after Escape');
+            assert.strictEqual(activeElement, $editorContent.get(0), 'Editor should regain focus after Escape');
 
             const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
 

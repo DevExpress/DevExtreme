@@ -72,7 +72,9 @@ if (Quill) {
     }
 
     _onContextMenuInitialized(e) {
-      e.component.registerKeyHandler('escape', () => this.editorInstance.focus());
+      e.component.registerKeyHandler('escape', () => {
+        this.editorInstance.focus();
+      });
     }
 
     _createContextMenu(items) {
@@ -164,7 +166,9 @@ if (Quill) {
         target: this._quillContainer,
         showEvent: null,
         hideOnParentScroll: false,
-        onInitialized: this._onContextMenuInitialized.bind(this),
+        onInitialized: (e) => {
+          this._onContextMenuInitialized(e);
+        },
         items: customItems,
       };
     }
