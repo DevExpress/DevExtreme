@@ -173,24 +173,10 @@ exports[`common initial render should be successfull 1`] = `
               class="dx-cardview-headers-content"
             >
               <div
-                class="dx-cardview-header-item"
+                class="dx-cardview-header-item undefined undefined"
                 tabindex="0"
               >
                 A
-                <div
-                  aria-label="eyeopen"
-                  class="dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-icon dx-cardview-header-item-button"
-                  role="button"
-                  tabindex="-1"
-                >
-                  <div
-                    class="dx-button-content"
-                  >
-                    <i
-                      class="dx-icon dx-icon-eyeopen"
-                    />
-                  </div>
-                </div>
               </div>
             </div>
           </div>
