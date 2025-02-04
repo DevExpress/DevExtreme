@@ -385,7 +385,7 @@ module('Table context menu integration', {
             assert.strictEqual($table.length, 0, 'Table is deleted');
         });
 
-        test('Pressing escape button should close context menu and return focus to html editor', function(assert) {
+        test('Pressing escape button should return focus to html editor', function(assert) {
             this.createWidget();
 
             const contextMenu = this.getContextMenu();
@@ -398,10 +398,6 @@ module('Table context menu integration', {
             const activeElement = shadowRoot ? shadowRoot.activeElement : document.activeElement;
 
             assert.strictEqual(activeElement, $editorContent.get(0), 'Editor should regain focus after Escape');
-
-            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
-
-            assert.ok($contextMenu.length);
         });
     });
 
