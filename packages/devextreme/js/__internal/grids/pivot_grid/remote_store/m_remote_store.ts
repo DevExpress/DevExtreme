@@ -56,9 +56,9 @@ function getIntervalFilterExpression(
   return [startFilterValue, isExcludedFilterType ? 'or' : 'and', endFilterValue];
 }
 
-function getFilterExpressionForFilterValue(field, filterValue) {
+function getFilterExpressionForFilterValue(field, filterValue, filterType?) {
   const selector = getFieldFilterSelector(field);
-  const isExcludedFilterType = field.filterType === 'exclude';
+  const isExcludedFilterType = (filterType || field.filterType) === 'exclude';
   let expression = [selector, isExcludedFilterType ? '<>' : '=', filterValue];
 
   if (isDefined(field.groupInterval)) {
@@ -343,7 +343,7 @@ function parseResult(data, total, descriptions, result) {
 }
 
 function getFiltersForDimension(fields) {
-  return (fields || []).filter((f) => f.filterValues && f.filterValues.length || f.searchValue);
+  return fields?.filter((f) => f.filterValues?.length || f.searchValue) || [];
 }
 
 /**
@@ -363,9 +363,15 @@ function getExpandedIndex(options, axis) {
 }
 
 function getFiltersForExpandedDimension(options) {
-  return getFiltersByPath(options[options.headerName], options.path).concat(
-    getFiltersByPath(options[options.headerName === 'rows' ? 'columns' : 'rows'], options.oppositePath || []),
-  );
+  const oppositeAxis = options.headerName === 'rows' ? 'columns' : 'rows';
+
+  const fields = options[options.headerName];
+  const oppositeFields = options[oppositeAxis];
+
+  const filters = getFiltersByPath(fields, options.path);
+  const oppositeFieldsFilters = getFiltersByPath(oppositeFields, options.oppositePath || []);
+
+  return filters.concat(oppositeFieldsFilters);
 }
 
 /**
@@ -422,8 +428,7 @@ function getExpandedPathsFilterExprByLevel(options, axis, level) {
 
       if (!isDefined(field)) break;
 
-      field.filterType = 'include'; // TODO: refactor this
-      const fieldFilterExpression = getFilterExpressionForFilterValue(field, path[i]);
+      const fieldFilterExpression = getFilterExpressionForFilterValue(field, path[i], 'include');
 
       filters.push(fieldFilterExpression);
     }
