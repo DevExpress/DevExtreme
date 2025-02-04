@@ -4,6 +4,7 @@ exports[`ColumnsController columns should contain processed column configs 1`] =
 [
   {
     "alignment": "left",
+    "allowHiding": true,
     "allowReordering": true,
     "calculateCellValue": [Function],
     "calculateDisplayValue": [Function],
@@ -11,6 +12,7 @@ exports[`ColumnsController columns should contain processed column configs 1`] =
     "dataField": "a",
     "dataType": "string",
     "falseText": "false",
+    "headerItemTemplate": undefined,
     "name": "a",
     "trueText": "true",
     "visible": true,
@@ -18,6 +20,7 @@ exports[`ColumnsController columns should contain processed column configs 1`] =
   },
   {
     "alignment": "left",
+    "allowHiding": true,
     "allowReordering": true,
     "calculateCellValue": [Function],
     "calculateDisplayValue": [Function],
@@ -25,6 +28,7 @@ exports[`ColumnsController columns should contain processed column configs 1`] =
     "dataField": "b",
     "dataType": "string",
     "falseText": "false",
+    "headerItemTemplate": undefined,
     "name": "b",
     "trueText": "true",
     "visible": true,
@@ -32,6 +36,7 @@ exports[`ColumnsController columns should contain processed column configs 1`] =
   },
   {
     "alignment": "left",
+    "allowHiding": true,
     "allowReordering": true,
     "calculateCellValue": [Function],
     "calculateDisplayValue": [Function],
@@ -39,6 +44,7 @@ exports[`ColumnsController columns should contain processed column configs 1`] =
     "dataField": "c",
     "dataType": "string",
     "falseText": "false",
+    "headerItemTemplate": undefined,
     "name": "c",
     "trueText": "true",
     "visible": false,
@@ -53,6 +59,7 @@ exports[`ColumnsController createDataRow should process data object to data row 
     {
       "column": {
         "alignment": "left",
+        "allowHiding": true,
         "allowReordering": true,
         "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
@@ -60,6 +67,7 @@ exports[`ColumnsController createDataRow should process data object to data row 
         "dataField": "a",
         "dataType": "string",
         "falseText": "false",
+        "headerItemTemplate": undefined,
         "name": "a",
         "trueText": "true",
         "visible": true,
@@ -72,6 +80,7 @@ exports[`ColumnsController createDataRow should process data object to data row 
     {
       "column": {
         "alignment": "left",
+        "allowHiding": true,
         "allowReordering": true,
         "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
@@ -79,6 +88,7 @@ exports[`ColumnsController createDataRow should process data object to data row 
         "dataField": "b",
         "dataType": "string",
         "falseText": "false",
+        "headerItemTemplate": undefined,
         "name": "b",
         "trueText": "true",
         "visible": true,

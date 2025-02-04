@@ -1,7 +1,7 @@
-import type { Format } from '@js/common';
+import type { Format, SortOrder } from '@js/common';
 import type { ColumnBase } from '@js/common/grids';
+import type { ComponentType } from 'inferno';
 
-import type * as HeaderPanel from '../../card_view/header_panel/index';
 import type { DataObject, Key } from '../data_controller/types';
 
 type InheritedColumnProps =
@@ -17,6 +17,9 @@ type InheritedColumnProps =
 
 export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   dataField?: string;
+
+  sortOrder?: SortOrder; // todo: move to sorting module
+  sortIndex?: number; // todo: move to sorting module
 
   name: string;
 
@@ -34,7 +37,12 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   editorTemplate?: unknown;
 
   fieldTemplate?: unknown;
-} & HeaderPanel.ColumnOptions;
+
+  // TODO: move to cardview/headerpanel
+  headerItemTemplate?: ComponentType<{ column: Column }>;
+
+  headerItemCssClass?: string;
+};
 
 export type VisibleColumn = Column & { visible: true };
 

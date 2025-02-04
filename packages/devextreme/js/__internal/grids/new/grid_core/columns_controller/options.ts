@@ -3,12 +3,18 @@ import type { DataType } from '@js/common';
 import messageLocalization from '@js/localization/message';
 
 import type { DataObject } from '../data_controller/types';
-import type { WithRequired } from '../types';
+import type { Template, WithRequired } from '../types';
 import type { Column } from './types';
 
-export type ColumnSettings = Partial<Omit<Column, 'calculateDisplayValue'> & {
+interface NonNormalizedColumnOptions {
   calculateDisplayValue: string | ((this: Column, data: DataObject) => unknown);
-}>;
+  headerItemTemplate?: Template<{ column: Column }>;
+}
+
+export type ColumnSettings = Partial<
+Omit<Column, keyof NonNormalizedColumnOptions>
+& NonNormalizedColumnOptions
+>;
 
 export type PreNormalizedColumn = WithRequired<ColumnSettings, 'name' | 'visibleIndex'>;
 

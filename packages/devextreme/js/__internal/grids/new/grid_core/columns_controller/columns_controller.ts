@@ -61,7 +61,10 @@ export class ColumnsController {
     );
 
     this.columns = computed(
-      (columnsSettings) => normalizeColumns(columnsSettings ?? []),
+      (columnsSettings) => normalizeColumns(
+        columnsSettings ?? [],
+        this.options.normalizeTemplate.bind(this.options),
+      ),
       [
         this.columnsSettings,
       ],

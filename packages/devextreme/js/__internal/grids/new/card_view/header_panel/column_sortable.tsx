@@ -106,6 +106,7 @@ export class ColumnSortable extends Component<Props, State> {
       source,
       visibleColumns,
       dragTemplate,
+      dropFeedbackMode,
       ...restProps
     } = this.props;
 
@@ -121,7 +122,7 @@ export class ColumnSortable extends Component<Props, State> {
     return (
       <Sortable
         {...restProps}
-        dropFeedbackMode='indicate'
+        dropFeedbackMode={dropFeedbackMode ?? 'indicate'}
         onDragStart={this.onDragStart}
         group='dx-cardview-columns'
         onAdd={this.onMove}

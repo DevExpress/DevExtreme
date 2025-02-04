@@ -1,13 +1,20 @@
 import { compileGetter } from '@js/core/utils/data';
 import { captionize } from '@js/core/utils/inflector';
 import { isDefined, isString } from '@js/core/utils/type';
+import type { ComponentType } from 'inferno';
 
 import type { DataObject } from '../data_controller/types';
+import type { Template } from '../types';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import { defaultColumnProperties, defaultColumnPropertiesByDataType } from './options';
 import type { Column } from './types';
 
-function normalizeColumn(column: PreNormalizedColumn): Column {
+type TemplateNormalizationFunc = <T>(template: Template<T>) => ComponentType<T>;
+
+function normalizeColumn(
+  column: PreNormalizedColumn,
+  templateNormalizationFunc: TemplateNormalizationFunc,
+): Column {
   const dataTypeDefault = defaultColumnPropertiesByDataType[
     column.dataType ?? defaultColumnProperties.dataType
   ];
@@ -26,6 +33,9 @@ function normalizeColumn(column: PreNormalizedColumn): Column {
     calculateDisplayValue: isString(colWithDefaults.calculateDisplayValue)
       ? compileGetter(colWithDefaults.calculateDisplayValue) as (data: DataObject) => string
       : colWithDefaults.calculateDisplayValue,
+    headerItemTemplate: colWithDefaults.headerItemTemplate
+      ? templateNormalizationFunc(colWithDefaults.headerItemTemplate)
+      : undefined,
   };
 }
 
@@ -85,8 +95,11 @@ export function normalizeVisibleIndexes(
   return returnIndexes;
 }
 
-export function normalizeColumns(columns: PreNormalizedColumn[]): Column[] {
-  const normalizedColumns = columns.map((c) => normalizeColumn(c));
+export function normalizeColumns(
+  columns: PreNormalizedColumn[],
+  templateNormalizationFunc: TemplateNormalizationFunc,
+): Column[] {
+  const normalizedColumns = columns.map((c) => normalizeColumn(c, templateNormalizationFunc));
   return normalizedColumns;
 }
 
