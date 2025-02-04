@@ -15,7 +15,7 @@ const TEXTBOX_CLASS = 'dx-textbox';
 const SEARCHBOX_CLASS = 'dx-searchbox';
 const ICON_CLASS = 'dx-icon';
 const SEARCH_ICON_CLASS = 'dx-icon-search';
-
+// @ts-expect-error
 const TextBox = TextEditor.inherit({
 
   ctor(element, options) {

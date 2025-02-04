@@ -368,9 +368,10 @@ class TextEditorBase extends Editor<TextEditorBaseProperties> {
     return $input;
   }
 
-  _setSubmitElementName(name: string): void {
+  _setSubmitElementName(name?: string): void {
     const { inputAttr } = this.option();
 
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     super._setSubmitElementName(name || inputAttr?.name || '');
   }
 
