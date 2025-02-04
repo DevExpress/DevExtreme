@@ -244,11 +244,11 @@ importers:
         specifier: workspace:~
         version: link:../../packages/devextreme-angular/npm/dist
       devextreme-aspnet-data:
-        specifier: 3.0.0
-        version: 3.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
+        specifier: 5.0.0
+        version: 5.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
       devextreme-aspnet-data-nojquery:
-        specifier: 3.0.0
-        version: 3.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
+        specifier: 5.0.0
+        version: 5.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
       devextreme-cldr-data:
         specifier: 1.0.3
         version: 1.0.3
@@ -8111,13 +8111,8 @@ packages:
   devexpress-gantt@4.1.57:
     resolution: {integrity: sha512-UMtPo9O7B+PZfyHTR5L/dVaQkcjUhjCKfhi6NrfnvjXW7+sjisvm5LhKd+AIXhjv9IlMbfGyutfUcH5VF1wxyQ==}
 
-  devextreme-aspnet-data-nojquery@3.0.0:
-    resolution: {integrity: sha512-2wkePdGr4+nnSUZ8PUFR9biFhvMD2gztz/Yim7Iu/szAQJcgitfgOa12xqIQn4B5xpOm3+kupjccpBsED9nDMA==}
-    peerDependencies:
-      devextreme: '>=18.1.0'
-
-  devextreme-aspnet-data@3.0.0:
-    resolution: {integrity: sha512-q4oFNNFM6KUvMGd3yoglXMjunxRbnwmVj9vmYiJi+rLd+LPagjv+olyszG/gio+pzmV047gyMztc+dhZWHxVQQ==}
+  devextreme-aspnet-data-nojquery@5.0.0:
+    resolution: {integrity: sha512-WC1JBUocjD7lxy2bMFlUTF0Z3GCUNYveucgarERJ85SO+h7czqAyYwnYCJT845Vyabfw5Ta9mOJ0y0fB/wWzwA==}
     peerDependencies:
       devextreme: '>=18.1.0'
 
@@ -19784,13 +19779,15 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))':
+  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
       '@parcel/core': 2.12.0(@swc/helpers@0.5.15)
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/logger': 2.12.0
       '@parcel/utils': 2.12.0
       lmdb: 2.8.5
+    transitivePeerDependencies:
+      - '@swc/helpers'
 
   '@parcel/codeframe@2.12.0':
     dependencies:
@@ -19850,7 +19847,7 @@ snapshots:
   '@parcel/core@2.12.0(@swc/helpers@0.5.15)':
     dependencies:
       '@mischnic/json-sourcemap': 0.1.1
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/diagnostic': 2.12.0
       '@parcel/events': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -20265,7 +20262,7 @@ snapshots:
 
   '@parcel/types@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/diagnostic': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -25426,11 +25423,7 @@ snapshots:
       '@devexpress/utils': 1.4.3
       tslib: 2.3.1
 
-  devextreme-aspnet-data-nojquery@3.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme):
-    dependencies:
-      devextreme: link:packages/devextreme/artifacts/npm/devextreme
-
-  devextreme-aspnet-data@3.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme):
+  devextreme-aspnet-data-nojquery@5.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme):
     dependencies:
       devextreme: link:packages/devextreme/artifacts/npm/devextreme
 
