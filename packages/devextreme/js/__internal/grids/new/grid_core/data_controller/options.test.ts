@@ -229,7 +229,92 @@ describe('Options', () => {
     });
   });
 
-  describe.skip('remoteOperations', () => {
+  describe('remoteOperations', () => {
+    const setupForRemoteOperations = ({ remoteOperations }) => {
+      const store = new CustomStore({
+        key: 'id',
+        load(loadOptions) {
+          const data = [
+            { id: 1, value: 'value 1' },
+            { id: 2, value: 'value 2' },
+            { id: 3, value: 'value 3' },
+          ];
 
+          const remotePaging = loadOptions.skip === 0 && !!loadOptions.take;
+          if (remotePaging) {
+            return Promise.resolve({
+              data: [data[0]],
+              totalCount: 1,
+            });
+          }
+
+          return Promise.resolve({
+            data,
+            totalCount: data.length,
+          });
+        },
+      });
+
+      jest.spyOn(store, 'load');
+
+      const { dataController } = setup({
+        remoteOperations,
+        dataSource: store,
+        paging: {
+          pageSize: 1,
+          pageIndex: 0,
+        },
+      });
+
+      return { store, dataController };
+    };
+
+    it('should exclude skip and take in the store load request by default for CustomStore', async () => {
+      const { store, dataController } = setupForRemoteOperations({
+        remoteOperations: 'auto',
+      });
+
+      await dataController.waitLoaded();
+
+      const items = dataController.items.unreactive_get();
+      expect(items).toHaveLength(1);
+
+      // @ts-expect-error
+      expect(store.load.mock.calls[0][0].skip).toBe(undefined);
+      // @ts-expect-error
+      expect(store.load.mock.calls[0][0].take).toBe(undefined);
+    });
+
+    it('should exclude skip and take in the store load request if remotePaging disabled', async () => {
+      const { store, dataController } = setupForRemoteOperations({
+        remoteOperations: { paging: false },
+      });
+
+      await dataController.waitLoaded();
+
+      const items = dataController.items.unreactive_get();
+      expect(items).toHaveLength(1);
+
+      // @ts-expect-error
+      expect(store.load.mock.calls[0][0].skip).toBe(undefined);
+      // @ts-expect-error
+      expect(store.load.mock.calls[0][0].take).toBe(undefined);
+    });
+
+    it('should include skip and take in the store load request if remotePaging enabled', async () => {
+      const { store, dataController } = setupForRemoteOperations({
+        remoteOperations: { paging: true },
+      });
+
+      await dataController.waitLoaded();
+
+      const items = dataController.items.unreactive_get();
+      expect(items).toHaveLength(1);
+
+      // @ts-expect-error
+      expect(store.load.mock.calls[0][0].skip).toBe(0);
+      // @ts-expect-error
+      expect(store.load.mock.calls[0][0].take).toBe(1);
+    });
   });
 });
