@@ -1565,7 +1565,7 @@ QUnit.module('Expanding items', moduleConfig, () => {
             };
             loadOptions[expandedPathOptionName] = [[2010], [2010, 1]];
             store.load(loadOptions).done(function() {
-                assert.deepEqual(actualFilter, [['date', '=', 2010]], 'rows count');
+                assert.deepEqual(actualFilter, ['date', '=', 2010], 'rows count');
             });
         });
 
@@ -1594,7 +1594,7 @@ QUnit.module('Expanding items', moduleConfig, () => {
             };
             loadOptions[expandedPathOptionName] = [[2010], [2010, 2010, 1]];
             store.load(loadOptions).done(function() {
-                assert.deepEqual(actualFilter, [[['date1', '=', 2010]], 'and', [['date2', '=', 2010]]], 'rows count');
+                assert.deepEqual(actualFilter, [['date1', '=', 2010], 'and', ['date2', '=', 2010]], 'rows count');
             });
         });
     });
@@ -1740,7 +1740,7 @@ QUnit.module('Expanding items', moduleConfig, () => {
                 { dataField: 'ShipRegion' },
                 { dataField: 'ShipCity' }
             ],
-            rowExpandedPaths: [['USA', 'AK']],
+            rowExpandedPaths: [['USA'], ['USA', 'AK']],
             columns: [],
             values: [{ summaryType: 'count' }]
         }).done(function(data) {
