@@ -1,5 +1,6 @@
 import type { Properties as DataGridProperties } from 'devextreme/ui/data_grid';
 import type { Properties as FilterBuilderProperties } from 'devextreme/ui/filter_builder';
+import type { Properties as GanttProperties } from 'devextreme/ui/gantt';
 
 export type WidgetName =
   'dxAccordion'
@@ -72,5 +73,6 @@ export type WidgetName =
 export interface WidgetOptions {
   dxDataGrid: DataGridProperties;
   dxFilterBuilder: FilterBuilderProperties;
+  dxGantt: GanttProperties;
   // TODO: write other widgets
 }
