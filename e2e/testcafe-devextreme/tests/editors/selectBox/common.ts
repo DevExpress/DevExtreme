@@ -39,13 +39,13 @@ test('Pages should be loaded consistently after closing the dropdown popup and f
   const items = list.getItems();
 
   await t.expect(items.count)
-    .eql(20)
+    .eql(12)
     .expect(items.nth(0).textContent)
     .eql('item 1')
-    .expect(items.nth(19).textContent)
-    .eql('item 20');
+    .expect(items.nth(11).textContent)
+    .eql('item 12');
 
-  const scrollingDistance = 100;
+  const scrollingDistance = 50;
   await list.scrollTo(scrollingDistance);
   await t.wait(500);
 
@@ -68,11 +68,11 @@ test('Pages should be loaded consistently after closing the dropdown popup and f
   await t.wait(500);
 
   await t.expect(items.count)
-    .eql(20)
+    .eql(12)
     .expect(items.nth(0).textContent)
     .eql('item 2')
-    .expect(items.nth(19).textContent)
-    .eql('item 40');
+    .expect(items.nth(11).textContent)
+    .eql('item 24');
 }).before(async () => {
   await changeTheme(`${process.env.theme}.compact`);
   await appendElementTo('#container', 'div', 'selectBox');
@@ -113,7 +113,7 @@ test('Pages should be loaded consistently after closing the dropdown popup and f
       dataSource: {
         store,
         paginate: true,
-        pageSize: 10,
+        pageSize: 6,
       },
       valueExpr: 'id',
       displayExpr: 'text',
