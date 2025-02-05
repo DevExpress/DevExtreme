@@ -1902,7 +1902,61 @@ QUnit.module('Expanding items', moduleConfig, () => {
         });
     });
 
+    ['rows', 'columns'].forEach(axis => {
+        QUnit.test(`${axis} area: generate filters by levels (T1246608)`, function(assert) {
+            const filters = [];
+            const store = new RemoteStore({
+                load: function(loadOptions) {
+                    filters.push(loadOptions.filter);
 
+                    return $.Deferred();
+                }
+            });
+            const fields = [
+                { dataField: 'OrderDate', groupInterval: 'year', dataType: 'date' },
+                { dataField: 'OrderDate', groupInterval: 'month', dataType: 'date' }
+            ];
+
+            const oppositeAxis = axis === 'rows' ? 'columns' : 'rows';
+            const expandedPaths = axis === 'rows' ? 'rowExpandedPaths' : 'columnExpandedPaths';
+
+            // act
+            store.load({
+                [axis]: fields,
+                [oppositeAxis]: [],
+                [expandedPaths]: [[1996], [1996, 1], [1997], [1997, 2]],
+                values: [{ summaryType: 'count' }],
+            });
+
+            assert.equal(filters.length, 3, '3 load request created');
+
+            assert.deepEqual(filters[0], undefined, 'filter for total count is empty');
+            assert.deepEqual(filters[1],
+                [
+                    ['OrderDate.Year', '=', 1996],
+                    'or',
+                    ['OrderDate.Year', '=', 1997]
+                ],
+                'filter for count by year is correct'
+            );
+            assert.deepEqual(filters[2],
+                [
+                    [
+                        ['OrderDate.Year', '=', 1996],
+                        'and',
+                        ['OrderDate.Month', '=', 1]
+                    ],
+                    'or',
+                    [
+                        ['OrderDate.Year', '=', 1997],
+                        'and',
+                        ['OrderDate.Month', '=', 2]
+                    ]
+                ],
+                'request for count by month is correct'
+            );
+        });
+    });
 });
 
 QUnit.module('DrillDown', {
