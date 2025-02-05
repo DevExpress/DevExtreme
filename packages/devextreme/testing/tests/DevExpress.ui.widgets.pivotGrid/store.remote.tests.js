@@ -1903,8 +1903,8 @@ QUnit.module('Expanding items', moduleConfig, () => {
     });
 
     ['rows', 'columns'].forEach(axis => {
-        QUnit.test(`${axis} area: generate filters by levels (T1246608)`, function(assert) {
-            const filters = [];
+        QUnit.test(`${axis} area: generate filters by levels (T1246608) - 1`, function(assert) {
+            // arrange
             const store = new RemoteStore({
                 load: function(loadOptions) {
                     filters.push(loadOptions.filter);
@@ -1912,13 +1912,16 @@ QUnit.module('Expanding items', moduleConfig, () => {
                     return $.Deferred();
                 }
             });
+
+            const oppositeAxis = axis === 'rows' ? 'columns' : 'rows';
+            const expandedPaths = axis === 'rows' ? 'rowExpandedPaths' : 'columnExpandedPaths';
+
             const fields = [
                 { dataField: 'OrderDate', groupInterval: 'year', dataType: 'date' },
                 { dataField: 'OrderDate', groupInterval: 'month', dataType: 'date' }
             ];
 
-            const oppositeAxis = axis === 'rows' ? 'columns' : 'rows';
-            const expandedPaths = axis === 'rows' ? 'rowExpandedPaths' : 'columnExpandedPaths';
+            let filters = [];
 
             // act
             store.load({
@@ -1928,7 +1931,8 @@ QUnit.module('Expanding items', moduleConfig, () => {
                 values: [{ summaryType: 'count' }],
             });
 
-            assert.equal(filters.length, 3, '3 load request created');
+            // assert
+            assert.equal(filters.length, 3, '3 load request were created');
 
             assert.deepEqual(filters[0], undefined, 'filter for total count is empty');
             assert.deepEqual(filters[1],
@@ -1949,6 +1953,69 @@ QUnit.module('Expanding items', moduleConfig, () => {
                     'or',
                     [
                         ['OrderDate.Year', '=', 1997],
+                        'and',
+                        ['OrderDate.Month', '=', 2]
+                    ]
+                ],
+                'request for count by month is correct'
+            );
+
+            // act
+            filters = [];
+
+            store.load({
+                [axis]: fields,
+                [oppositeAxis]: [],
+                [expandedPaths]: [[1996], [1996, 1], [1997]],
+                values: [{ summaryType: 'count' }],
+            });
+
+            // assert
+            assert.equal(filters.length, 3, '3 load request were created');
+
+            assert.deepEqual(filters[0], undefined, 'filter for total count is empty');
+            assert.deepEqual(filters[1],
+                [
+                    ['OrderDate.Year', '=', 1996],
+                    'or',
+                    ['OrderDate.Year', '=', 1997]
+                ],
+                'filter for count by year is correct'
+            );
+            assert.deepEqual(filters[2],
+                [
+                    ['OrderDate.Year', '=', 1996],
+                    'and',
+                    ['OrderDate.Month', '=', 1]
+                ],
+                'request for count by month is correct'
+            );
+
+            // act
+            filters = [];
+
+            store.load({
+                [axis]: fields,
+                [oppositeAxis]: [],
+                [expandedPaths]: [[1996], [1996, 1], [1996, 2]],
+                values: [{ summaryType: 'count' }],
+            });
+
+            // assert
+            assert.equal(filters.length, 3, '3 load request were created');
+
+            assert.deepEqual(filters[0], undefined, 'filter for total count is empty');
+            assert.deepEqual(filters[1], ['OrderDate.Year', '=', 1996], 'filter for count by year is correct');
+            assert.deepEqual(filters[2],
+                [
+                    [
+                        ['OrderDate.Year', '=', 1996],
+                        'and',
+                        ['OrderDate.Month', '=', 1]
+                    ],
+                    'or',
+                    [
+                        ['OrderDate.Year', '=', 1996],
                         'and',
                         ['OrderDate.Month', '=', 2]
                     ]
