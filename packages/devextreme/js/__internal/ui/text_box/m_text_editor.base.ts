@@ -90,7 +90,9 @@ export interface TextEditorBaseProperties extends dxTextEditorOptions<TextEditor
   displayValue?: string;
 }
 
-class TextEditorBase extends Editor<TextEditorBaseProperties> {
+class TextEditorBase<
+  TProperties extends TextEditorBaseProperties = TextEditorBaseProperties,
+> extends Editor<TProperties> {
   _showValidMark?: boolean;
 
   _$textEditorContainer!: dxElementWrapper;
@@ -113,11 +115,11 @@ class TextEditorBase extends Editor<TextEditorBaseProperties> {
 
   _enterKeyAction?: ((event?: Record<string, unknown>) => void);
 
-  ctor(element: Element, options: TextEditorBaseProperties): void {
+  ctor(element: Element, options: TProperties): void {
     if (options) {
       checkButtonsOptionType(options.buttons);
     }
-
+    // @ts-expect-error
     this._buttonCollection = new TextEditorButtonCollection(this, this._getDefaultButtons());
 
     this._$beforeButtonsContainer = null;
@@ -127,7 +129,7 @@ class TextEditorBase extends Editor<TextEditorBaseProperties> {
     super.ctor(element, options);
   }
 
-  _getDefaultOptions(): TextEditorBaseProperties {
+  _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
       // eslint-disable-next-line no-void
@@ -138,25 +140,15 @@ class TextEditorBase extends Editor<TextEditorBaseProperties> {
       valueChangeEvent: 'change',
       placeholder: '',
       inputAttr: {},
-      // @ts-expect-error ts-error
       onFocusIn: null,
-      // @ts-expect-error ts-error
       onFocusOut: null,
-      // @ts-expect-error ts-error
       onKeyDown: null,
-      // @ts-expect-error ts-error
       onKeyUp: null,
-      // @ts-expect-error ts-error
       onChange: null,
-      // @ts-expect-error ts-error
       onInput: null,
-      // @ts-expect-error ts-error
       onCut: null,
-      // @ts-expect-error ts-error
       onCopy: null,
-      // @ts-expect-error ts-error
       onPaste: null,
-      // @ts-expect-error ts-error
       onEnterKey: null,
       mode: 'text',
       hoverStateEnabled: true,
@@ -175,7 +167,8 @@ class TextEditorBase extends Editor<TextEditorBaseProperties> {
     };
   }
 
-  _defaultOptionsRules(): DefaultOptionsRule<TextEditorBaseProperties>[] {
+  _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
+    // @ts-expect-error
     return super._defaultOptionsRules().concat([
       {
         device(): boolean {
@@ -888,7 +881,7 @@ class TextEditorBase extends Editor<TextEditorBaseProperties> {
     return this._input().is(domAdapter.getActiveElement(this._input()[0]));
   }
 
-  _optionChanged(args: OptionChanged<TextEditorBaseProperties>): void {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     const { name, fullName, value } = args;
 
     const eventName = name.replace('on', '');

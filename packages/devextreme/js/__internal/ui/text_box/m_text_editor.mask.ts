@@ -67,7 +67,9 @@ function isSpaceChar(char): boolean {
   return char === ' ';
 }
 
-class TextEditorMask extends TextEditorBase {
+class TextEditorMask<
+  TProperties extends TextEditorBaseProperties= TextEditorBaseProperties,
+> extends TextEditorBase<TProperties> {
   _changedValue?: any;
 
   _maskStrategy!: MaskStrategy;
@@ -84,7 +86,7 @@ class TextEditorMask extends TextEditorBase {
 
   _value?: any;
 
-  _getDefaultOptions(): TextEditorBaseProperties {
+  _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
       mask: '',
@@ -101,7 +103,7 @@ class TextEditorMask extends TextEditorBase {
     };
   }
 
-  _supportedKeys() {
+  _supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
     const that = this;
 
     const keyHandlerMap = {
@@ -600,7 +602,7 @@ class TextEditorMask extends TextEditorBase {
     this._renderValue();
   }
 
-  _optionChanged(args: OptionChanged<TextEditorBaseProperties>): void {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     switch (args.name) {
       case 'mask':
         this._updateMaskOption();

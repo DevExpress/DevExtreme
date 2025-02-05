@@ -48,7 +48,6 @@ export default class TextEditorButton {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
   _attachEvents(instance: unknown, $element: dxElementWrapper): void {
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw 'Not implemented';
   }
 
@@ -73,7 +72,6 @@ export default class TextEditorButton {
 
   // eslint-disable-next-line class-methods-use-this
   _isDisabled(): boolean | undefined {
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw 'Not implemented';
   }
 
