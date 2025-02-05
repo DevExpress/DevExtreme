@@ -50,7 +50,7 @@ jobs:
             - name: Setup Chrome
               uses: ./devextreme/.github/actions/setup-chrome
               with:
-                chrome-version: '121.0.6167.160'
+                chrome-version: '121.0.6167.184'
 
             - name: DevExtreme - Install packages
               working-directory: devextreme
