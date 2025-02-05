@@ -65,6 +65,8 @@ const KEY_CODES = {
   TAB: 'tab',
 };
 
+interface ScrollByDelta { x: number; y: number }
+
 const InertiaAnimator = Animator.inherit({
   ctor(scroller) {
     this.callBase();
@@ -352,7 +354,10 @@ export const Scroller = Class.inherit({
     this._scrollStep(delta);
   },
 
-  _scrollByHandler(delta) {
+  _scrollByHandler(delta: ScrollByDelta): void {
+    if (!delta.x && !delta.y) {
+      return;
+    }
     this._scrollBy(delta);
     this._scrollComplete();
   },
