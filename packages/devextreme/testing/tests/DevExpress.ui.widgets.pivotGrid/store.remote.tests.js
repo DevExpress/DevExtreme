@@ -1903,6 +1903,14 @@ QUnit.module('Expanding items', moduleConfig, () => {
     });
 
     ['rows', 'columns'].forEach(axis => {
+        const oppositeAxis = axis === 'rows' ? 'columns' : 'rows';
+        const expandedPaths = axis === 'rows' ? 'rowExpandedPaths' : 'columnExpandedPaths';
+
+        const fields = [
+            { dataField: 'OrderDate', groupInterval: 'year', dataType: 'date' },
+            { dataField: 'OrderDate', groupInterval: 'month', dataType: 'date' }
+        ];
+
         QUnit.test(`${axis} area: generate filters by levels (T1246608) - 1`, function(assert) {
             // arrange
             const store = new RemoteStore({
@@ -1913,15 +1921,7 @@ QUnit.module('Expanding items', moduleConfig, () => {
                 }
             });
 
-            const oppositeAxis = axis === 'rows' ? 'columns' : 'rows';
-            const expandedPaths = axis === 'rows' ? 'rowExpandedPaths' : 'columnExpandedPaths';
-
-            const fields = [
-                { dataField: 'OrderDate', groupInterval: 'year', dataType: 'date' },
-                { dataField: 'OrderDate', groupInterval: 'month', dataType: 'date' }
-            ];
-
-            let filters = [];
+            const filters = [];
 
             // act
             store.load({
@@ -1959,10 +1959,21 @@ QUnit.module('Expanding items', moduleConfig, () => {
                 ],
                 'request for count by month is correct'
             );
+        });
+
+        QUnit.test(`${axis} area: generate filters by levels (T1246608) - 2`, function(assert) {
+            // arrange
+            const store = new RemoteStore({
+                load: function(loadOptions) {
+                    filters.push(loadOptions.filter);
+
+                    return $.Deferred();
+                }
+            });
+
+            const filters = [];
 
             // act
-            filters = [];
-
             store.load({
                 [axis]: fields,
                 [oppositeAxis]: [],
@@ -1990,9 +2001,19 @@ QUnit.module('Expanding items', moduleConfig, () => {
                 ],
                 'request for count by month is correct'
             );
+        });
 
-            // act
-            filters = [];
+        QUnit.test(`${axis} area: generate filters by levels (T1246608) - 3`, function(assert) {
+            // arrange
+            const store = new RemoteStore({
+                load: function(loadOptions) {
+                    filters.push(loadOptions.filter);
+
+                    return $.Deferred();
+                }
+            });
+
+            const filters = [];
 
             store.load({
                 [axis]: fields,
