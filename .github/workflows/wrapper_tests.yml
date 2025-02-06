@@ -60,8 +60,8 @@ jobs:
         working-directory: ./packages/devextreme
         run: pnpx nx build
 
-      - name: Generate wrappers
-        run: pnpm run regenerate-all
+      # - name: Generate wrappers
+      #   run: pnpm run regenerate-all
 
       - name: Check generated code
         shell: bash
