@@ -4963,18 +4963,4 @@ QUnit.module('React async templates rendering', {
 
         assert.strictEqual(axis._majorTicks[0].templateContainer.attr('visibility'), 'visible', 'label is visible');
     });
-
-    /*
-            const stub = sinon.stub(axis, 'getTemplatesGroups').onCall(0).returns([{ element: $(document.createElementNS('http://www.w3.org/2000/svg', 'g')), attr: () => {} }]);
-
-
-        chart.render({ force: true });
-        stub.callThrough();
-        chart._applyingChanges = true;
-        this.clock.tick(this.templateTimeout / 2);
-        chart._applyingChanges = false;
-        chart.render({ force: true });
-
-        this.clock.tick(this.templateTimeout);
-    */
 });
