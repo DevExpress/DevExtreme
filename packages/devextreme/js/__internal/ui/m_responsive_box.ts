@@ -18,7 +18,7 @@ const BOX_ITEM_CLASS = 'dx-box-item';
 const BOX_ITEM_DATA_KEY = 'dxBoxItemData';
 
 const HD_SCREEN_WIDTH = 1920;
-
+// @ts-expect-error
 const ResponsiveBox = CollectionWidget.inherit({
   _getDefaultOptions() {
     return extend(this.callBase(), {

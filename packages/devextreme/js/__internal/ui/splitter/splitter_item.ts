@@ -7,10 +7,7 @@ import CollectionWidgetItem from '@ts/ui/collection/m_item';
 import ResizeHandle from './resize_handle';
 import type Splitter from './splitter';
 
-// @ts-expect-error dxClass inheritance issue
-class SplitterItem extends CollectionWidgetItem {
-  private readonly _$element?: dxElementWrapper;
-
+class SplitterItem extends CollectionWidgetItem<Item> {
   _owner: Splitter;
 
   _rawData?: Item;
@@ -24,13 +21,14 @@ class SplitterItem extends CollectionWidgetItem {
     },
     rawData: Item,
   ) {
+    // @ts-expect-error
     super($element, options, rawData);
 
     this._owner = options.owner;
   }
 
   _renderResizeHandle(): void {
-    if (this._rawData?.visible !== false && !this.isLast()) {
+    if (this._shouldHaveResizeHandle()) {
       const id = `dx_${new Guid()}`;
 
       this._setIdAttr(id);
@@ -45,18 +43,40 @@ class SplitterItem extends CollectionWidgetItem {
     }
   }
 
+  _shouldHaveResizeHandle(): boolean {
+    return this._rawData?.visible !== false && !this.isLast();
+  }
+
+  updateResizeHandle(): void {
+    if (this._shouldHaveResizeHandle()) {
+      if (this.getResizeHandle()) return;
+      this._renderResizeHandle();
+    } else {
+      this._removeIdAttr();
+      this._removeResizeHandle();
+    }
+  }
+
   _setIdAttr(id: string): void {
-    this._$element?.attr('id', id);
+    this._$element.attr('id', id);
+  }
+
+  _removeIdAttr(): void {
+    this._$element.attr('id', null);
   }
 
   getIndex(): number {
-    // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._owner._getIndexByItemData(this._rawData);
   }
 
   getResizeHandle(): ResizeHandle | undefined {
     return this._resizeHandle;
+  }
+
+  _removeResizeHandle(): void {
+    this.getResizeHandle()?.$element().remove();
+    delete this._resizeHandle;
   }
 
   isLast(): boolean {

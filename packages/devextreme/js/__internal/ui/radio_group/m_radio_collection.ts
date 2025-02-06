@@ -3,8 +3,8 @@ import $ from '@js/core/renderer';
 import { deferRender } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
-import CollectionWidget from '@ts/ui/collection/edit';
-import type { CollectionWidgetBaseProperties } from '@ts/ui/collection/m_collection_widget.base';
+import type { CollectionWidgetBaseProperties } from '@ts/ui/collection/collection_widget.base';
+import CollectionWidget from '@ts/ui/collection/m_collection_widget.edit';
 
 const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
 const RADIO_BUTTON_ICON_CHECKED_CLASS = 'dx-radiobutton-icon-checked';

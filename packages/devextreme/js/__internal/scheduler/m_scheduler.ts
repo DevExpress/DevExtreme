@@ -1,7 +1,6 @@
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
-import DataHelperMixin from '@js/common/data/data_helper';
 import registerComponent from '@js/core/component_registrator';
 import config from '@js/core/config';
 import devices from '@js/core/devices';
@@ -30,6 +29,7 @@ import {
   isString,
 } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import DataHelperMixin from '@js/data_helper';
 import { custom as customDialog } from '@js/ui/dialog';
 import type { AppointmentTooltipShowingEvent, ViewType } from '@js/ui/scheduler';
 import { isMaterial, isMaterialBased } from '@js/ui/themes';

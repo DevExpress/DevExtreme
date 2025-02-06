@@ -3,6 +3,8 @@
 // adduse
 
 $fluent-list-vertical-padding: 4px !default;
+$fluent-list-item-margin-inline: 4px !default;
+$fluent-list-item-checkbox-margin-inline: null !default;
 $fluent-list-bottom-padding: 4px !default;
 $fluent-list-searchbox-margin-bottom: 4px !default;
 $fluent-list-item-height: null !default;
@@ -13,6 +15,7 @@ $fluent-list-group-header-vertical-padding: null !default;
 $fluent-list-next-button-horizontal-padding: null !default;
 
 @if $size == "default" {
+  $fluent-list-item-checkbox-margin-inline: 8px !default;
   $fluent-list-item-height: 32px !default;
   $fluent-list-item-vertical-padding: 6px !default;
   $fluent-list-item-horizontal-padding: 12px !default;
@@ -21,6 +24,7 @@ $fluent-list-next-button-horizontal-padding: null !default;
 }
 
 @else if $size == "compact" {
+  $fluent-list-item-checkbox-margin-inline: 4px !default;
   $fluent-list-item-height: 24px !default;
   $fluent-list-item-vertical-padding: 4px !default;
   $fluent-list-item-horizontal-padding: 8px !default;

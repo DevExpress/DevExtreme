@@ -77,6 +77,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 @Component({
     selector: 'dx-filter-builder',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -561,8 +562,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         return this._getOption('customOperations');
     }
     set customOperationsChildren(value) {
-        this.setContentChildren('customOperations', value, 'DxiFilterBuilderCustomOperationComponent');
-        this.setChildren('customOperations', value);
+        this._setChildren('customOperations', value, 'DxiFilterBuilderCustomOperationComponent');
     }
 
     @ContentChildren(DxiFilterBuilderFieldComponent)
@@ -570,8 +570,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         return this._getOption('fields');
     }
     set fieldsChildren(value) {
-        this.setContentChildren('fields', value, 'DxiFilterBuilderFieldComponent');
-        this.setChildren('fields', value);
+        this._setChildren('fields', value, 'DxiFilterBuilderFieldComponent');
     }
 
 
@@ -580,9 +579,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         return this._getOption('customOperations');
     }
     set customOperationsLegacyChildren(value) {
-        if (this.checkContentChildren('customOperations', value, 'DxiCustomOperationComponent')) {
-           this.setChildren('customOperations', value);
-        }
+        this._setChildren('customOperations', value, 'DxiCustomOperationComponent');
     }
 
     @ContentChildren(DxiFieldComponent)
@@ -590,9 +587,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         return this._getOption('fields');
     }
     set fieldsLegacyChildren(value) {
-        if (this.checkContentChildren('fields', value, 'DxiFieldComponent')) {
-           this.setChildren('fields', value);
-        }
+        this._setChildren('fields', value, 'DxiFieldComponent');
     }
 
 

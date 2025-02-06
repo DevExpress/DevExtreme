@@ -54,6 +54,7 @@ import { DxiButtonGroupItemComponent } from 'devextreme-angular/ui/button-group/
 @Component({
     selector: 'dx-button-group',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -499,8 +500,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiButtonGroupItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiButtonGroupItemComponent');
     }
 
 
@@ -509,9 +509,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
-        }
+        this._setChildren('items', value, 'DxiItemComponent');
     }
 
 

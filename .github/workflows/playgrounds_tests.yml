@@ -54,9 +54,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: |
-        corepack enable
-        pnpm install
+      run: pnpm install
 
     - name: Build
       working-directory: ./packages/devextreme
@@ -68,7 +66,7 @@ jobs:
         7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: devextreme-artifacts
         path: ./packages/devextreme/artifacts.zip
@@ -94,15 +92,15 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '121.0.6167.160'
+        chrome-version: '121.0.6167.184'
 
     - name: Use Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '20'
 
     - name: Download artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: devextreme-artifacts
         path: ./packages/devextreme
@@ -132,9 +130,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: |
-        corepack enable
-        pnpm install
+      run: pnpm install
 
     - name: Build
       working-directory: ./packages/devextreme-${{ matrix.ARGS.platform }}

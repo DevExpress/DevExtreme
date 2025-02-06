@@ -6,10 +6,12 @@ import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
-import DataHelperMixin from '@js/common/data/data_helper';
 import Action from '@js/core/action';
 import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
+import type {
+  DeepPartial,
+} from '@js/core/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
@@ -27,14 +29,17 @@ import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { findTemplates } from '@js/core/utils/template_manager';
 import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
 import type { DataSourceOptions } from '@js/data/data_source';
+import DataHelperMixin from '@js/data_helper';
 import type {
   Cancelable, DxEvent, EventInfo, ItemInfo,
 } from '@js/events';
 import type { CollectionWidgetItem as CollectionWidgetItemProperties, CollectionWidgetOptions, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import { focusable } from '@js/ui/widget/selectors';
 import { getPublicElement } from '@ts/core/m_element';
+import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import type CollectionItem from '@ts/ui/collection/m_item';
 import CollectionWidgetItem from '@ts/ui/collection/m_item';
 
 const COLLECTION_CLASS = 'dx-collection';
@@ -62,10 +67,12 @@ const FOCUS_PAGE_DOWN = 'pagedown';
 const FOCUS_LAST = 'last';
 const FOCUS_FIRST = 'first';
 
-interface ActionConfig {
-  beforeExecute?: (e: DxEvent) => void;
-  afterExecute?: (e: DxEvent) => void;
-  excludeValidators?: ('disabled' | 'readOnly')[];
+export type DataChangeType = 'insert' | 'update' | 'remove';
+
+export interface DataChange<TItem = CollectionItem, TKey = number | string> {
+  key: TKey;
+  type: DataChangeType;
+  data: DeepPartial<TItem>;
 }
 
 type ItemTemplate<TItem> = template | (
@@ -77,8 +84,17 @@ export interface ItemRenderInfo<TItem> {
   container: dxElementWrapper;
   contentClass: string;
   defaultTemplateName: ItemTemplate<TItem> | undefined;
+  uniqueKey?: string;
   templateProperty?: string;
 }
+
+export interface PostprocessRenderItemInfo<TItem> {
+  itemElement: dxElementWrapper;
+  itemContent: dxElementWrapper;
+  itemData: TItem;
+  itemIndex: number;
+}
+
 export interface CollectionWidgetBaseProperties<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TComponent extends CollectionWidget<any, TItem, TKey> | any,
@@ -91,7 +107,11 @@ export interface CollectionWidgetBaseProperties<
 
   focusOnSelectedItem?: boolean;
 
+  encodeNoDataText?: boolean;
+
   _itemAttributes?: Record<string, string>;
+
+  selectOnFocus?: boolean;
 }
 
 class CollectionWidget<
@@ -575,7 +595,7 @@ class CollectionWidget<
     this._updateFocusedItemState($target, true);
     // @ts-expect-error ts-error
     this.onFocusedItemChanged(this.getFocusedItemId());
-    // @ts-expect-error ts-error
+
     const { selectOnFocus } = this.option();
     const isTargetDisabled = this._isDisabled($target);
 
@@ -610,10 +630,10 @@ class CollectionWidget<
 
   _itemOptionChanged(
     item: TItem,
-    property: string,
+    property: keyof TItem,
     value: unknown,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    prevValue: unknown,
+    prevValue?: unknown,
   ): void {
     const $item = this._findItemElementByItem(item);
     if (!$item.length) {
@@ -685,12 +705,10 @@ class CollectionWidget<
       case 'dataSource':
         // @ts-expect-error ts-error
         this._refreshDataSource();
-        // @ts-expect-error ts-error
         this._renderEmptyMessage();
         break;
       case 'noDataText':
       case 'encodeNoDataText':
-        // @ts-expect-error ts-error
         this._renderEmptyMessage();
         break;
       case 'itemTemplate':
@@ -759,7 +777,11 @@ class CollectionWidget<
     this._startIndexForAppendedItems = null;
   }
 
-  _dataSourceChangedHandler(newItems: TItem[]): void {
+  _dataSourceChangedHandler(
+    newItems: TItem[],
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    e?: { changes?: DataChange<TItem>[] },
+  ): void {
     const items = this.option('items');
     if (this._initialized && items && this._shouldAppendItems()) {
       // @ts-expect-error ts-error
@@ -1079,12 +1101,10 @@ class CollectionWidget<
   _renderItems(items: TItem[]): void {
     if (items.length) {
       each(items, (index, itemData) => {
-        // @ts-expect-error ts-error
         // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
         this._renderItem(this._renderedItemsCount + index, itemData);
       });
     }
-    // @ts-expect-error ts-error
     this._renderEmptyMessage();
   }
 
@@ -1109,7 +1129,7 @@ class CollectionWidget<
   _renderItem(
     index: { group: number; item: number } | number,
     itemData: TItem,
-    $container: dxElementWrapper | null,
+    $container?: dxElementWrapper | null,
     $itemToReplace?: dxElementWrapper,
   ): dxElementWrapper {
     // @ts-expect-error ts-error
@@ -1263,12 +1283,7 @@ class CollectionWidget<
   // eslint-disable-next-line class-methods-use-this
   _postprocessRenderItem(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    args: {
-      itemElement: dxElementWrapper;
-      itemContent: dxElementWrapper;
-      itemData: TItem;
-      itemIndex: number;
-    },
+    args: PostprocessRenderItemInfo<TItem>,
   ): void {}
 
   _executeItemRenderAction(
@@ -1352,9 +1367,9 @@ class CollectionWidget<
     return this._itemContainer();
   }
 
-  _renderEmptyMessage(items: TItem[]): void {
+  _renderEmptyMessage(rootNodes?: TItem[]): void {
     // eslint-disable-next-line no-param-reassign
-    items = items || this.option('items');
+    const items = rootNodes ?? this.option('items');
     const noDataText = this.option('noDataText');
     // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/prefer-optional-chain

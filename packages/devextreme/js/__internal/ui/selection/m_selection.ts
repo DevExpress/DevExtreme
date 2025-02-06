@@ -79,7 +79,7 @@ export default class Selection {
     filterIsChanged && this.onSelectionChanged();
   }
 
-  setSelection(keys, updatedKeys) {
+  setSelection(keys, updatedKeys?) {
     return this.selectedItemKeys(keys, false, false, false, updatedKeys);
   }
 
@@ -221,7 +221,7 @@ export default class Selection {
     return this._selectionStrategy.isItemDataSelected(data, { checkPending: true });
   }
 
-  isItemSelected(arg, options?: any) {
+  isItemSelected(arg, options?: any): boolean {
     return this._selectionStrategy.isItemKeySelected(arg, options);
   }
 

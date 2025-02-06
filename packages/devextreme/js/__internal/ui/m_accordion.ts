@@ -28,7 +28,7 @@ const ACCORDION_ITEM_BODY_CLASS = 'dx-accordion-item-body';
 const ACCORDION_ITEM_TITLE_CAPTION_CLASS = 'dx-accordion-item-title-caption';
 
 const ACCORDION_ITEM_DATA_KEY = 'dxAccordionItemData';
-
+// @ts-expect-error
 const Accordion = CollectionWidget.inherit({
   _getDefaultOptions() {
     return extend(this.callBase(), {

@@ -58,6 +58,7 @@ import { DxiTileViewItemComponent } from 'devextreme-angular/ui/tile-view/nested
 @Component({
     selector: 'dx-tile-view',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -579,8 +580,7 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiTileViewItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiTileViewItemComponent');
     }
 
 
@@ -589,9 +589,7 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
-        }
+        this._setChildren('items', value, 'DxiItemComponent');
     }
 
 

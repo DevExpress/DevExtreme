@@ -43,6 +43,7 @@ import {
 @Component({
     selector: 'dx-resizable',
     template: '<ng-content></ng-content>',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

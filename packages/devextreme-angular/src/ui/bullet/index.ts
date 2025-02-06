@@ -60,6 +60,7 @@ import { DxoBulletTooltipModule } from 'devextreme-angular/ui/bullet/nested';
     selector: 'dx-bullet',
     template: '',
     styles: [ ' :host {  display: block; }'],
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

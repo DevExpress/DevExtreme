@@ -2,9 +2,6 @@ import { Guid } from '@js/common';
 import type { Format } from '@js/common/core/localization';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
-import type {
-  DeepPartial,
-} from '@js/core/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
@@ -21,6 +18,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import { getScrollTopMax } from '@ts/ui/scroll_view/utils/get_scroll_top_max';
 
+import type { DataChange } from '../collection/collection_widget.base';
 import { isElementVisible } from '../splitter/utils/layout';
 import MessageBubble, { CHAT_MESSAGEBUBBLE_CLASS } from './messagebubble';
 import type { MessageGroupAlignment } from './messagegroup';
@@ -50,13 +48,6 @@ const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
 export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
 
 export type MessageTemplate = ((data: Message, messageBubbleContainer: Element) => void) | null;
-
-export interface Change {
-  type: 'insert' | 'update' | 'remove';
-  data?: DeepPartial<Message>;
-  key?: string | number;
-  index?: number;
-}
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
@@ -624,7 +615,7 @@ class MessageList extends Widget<Properties> {
     super._clean();
   }
 
-  _modifyByChanges(changes: Change[]): void {
+  _modifyByChanges(changes: DataChange<Message>[]): void {
     changes.forEach((change) => {
       switch (change.type) {
         case 'update':
