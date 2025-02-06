@@ -63,7 +63,7 @@ export interface ItemProps {
 
 export function Item(props: ItemProps): JSX.Element {
   const Template = props.column.headerItemTemplate ?? props.template;
-  const cssClass = `${CLASSES.item} ${props.column.headerItemCssClass} ${props.cssClass}`;
+  const cssClass = `${CLASSES.item} ${props.column.headerItemCssClass ?? ''} ${props.cssClass ?? ''}`;
 
   return (
     <div className={cssClass} tabIndex={0} onClick={props.onSortClick}>
