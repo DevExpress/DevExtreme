@@ -795,6 +795,9 @@ prepareConfigurationComponentConfig(DxAxisConstantLineStyleConfig);
 const DxAxisConstantLineStyle = defineComponent(DxAxisConstantLineStyleConfig);
 
 (DxAxisConstantLineStyle as any).$_optionName = "constantLineStyle";
+(DxAxisConstantLineStyle as any).$_expectedChildren = {
+  label: { isCollectionItem: false, optionName: "label" }
+};
 
 const DxAxisConstantLineStyleLabelConfig = {
   emits: {
@@ -820,6 +823,9 @@ prepareConfigurationComponentConfig(DxAxisConstantLineStyleLabelConfig);
 const DxAxisConstantLineStyleLabel = defineComponent(DxAxisConstantLineStyleLabelConfig);
 
 (DxAxisConstantLineStyleLabel as any).$_optionName = "label";
+(DxAxisConstantLineStyleLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxAxisLabelConfig = {
   emits: {
@@ -865,6 +871,10 @@ prepareConfigurationComponentConfig(DxAxisLabelConfig);
 const DxAxisLabel = defineComponent(DxAxisLabelConfig);
 
 (DxAxisLabel as any).$_optionName = "label";
+(DxAxisLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" },
+  format: { isCollectionItem: false, optionName: "format" }
+};
 
 const DxAxisTitleConfig = {
   emits: {
@@ -892,6 +902,9 @@ prepareConfigurationComponentConfig(DxAxisTitleConfig);
 const DxAxisTitle = defineComponent(DxAxisTitleConfig);
 
 (DxAxisTitle as any).$_optionName = "title";
+(DxAxisTitle as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxBackgroundColorConfig = {
   emits: {
@@ -1683,6 +1696,9 @@ const DxConstantLine = defineComponent(DxConstantLineConfig);
 
 (DxConstantLine as any).$_optionName = "constantLines";
 (DxConstantLine as any).$_isCollectionItem = true;
+(DxConstantLine as any).$_expectedChildren = {
+  label: { isCollectionItem: false, optionName: "label" }
+};
 
 const DxConstantLineLabelConfig = {
   emits: {
@@ -1738,7 +1754,8 @@ const DxConstantLineStyle = defineComponent(DxConstantLineStyleConfig);
 
 (DxConstantLineStyle as any).$_optionName = "constantLineStyle";
 (DxConstantLineStyle as any).$_expectedChildren = {
-  commonAxisSettingsConstantLineStyleLabel: { isCollectionItem: false, optionName: "label" }
+  commonAxisSettingsConstantLineStyleLabel: { isCollectionItem: false, optionName: "label" },
+  label: { isCollectionItem: false, optionName: "label" }
 };
 
 const DxCrosshairConfig = {
@@ -2019,6 +2036,10 @@ prepareConfigurationComponentConfig(DxHorizontalLineLabelConfig);
 const DxHorizontalLineLabel = defineComponent(DxHorizontalLineLabelConfig);
 
 (DxHorizontalLineLabel as any).$_optionName = "label";
+(DxHorizontalLineLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" },
+  format: { isCollectionItem: false, optionName: "format" }
+};
 
 const DxHoverStyleConfig = {
   emits: {
@@ -2980,6 +3001,9 @@ const DxStrip = defineComponent(DxStripConfig);
 
 (DxStrip as any).$_optionName = "strips";
 (DxStrip as any).$_isCollectionItem = true;
+(DxStrip as any).$_expectedChildren = {
+  label: { isCollectionItem: false, optionName: "label" }
+};
 
 const DxStripLabelConfig = {
   emits: {
@@ -3003,6 +3027,9 @@ prepareConfigurationComponentConfig(DxStripLabelConfig);
 const DxStripLabel = defineComponent(DxStripLabelConfig);
 
 (DxStripLabel as any).$_optionName = "label";
+(DxStripLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxStripStyleConfig = {
   emits: {
@@ -3496,6 +3523,9 @@ prepareConfigurationComponentConfig(DxVisualRangeConfig);
 const DxVisualRange = defineComponent(DxVisualRangeConfig);
 
 (DxVisualRange as any).$_optionName = "visualRange";
+(DxVisualRange as any).$_expectedChildren = {
+  length: { isCollectionItem: false, optionName: "length" }
+};
 
 const DxWholeRangeConfig = {
   emits: {

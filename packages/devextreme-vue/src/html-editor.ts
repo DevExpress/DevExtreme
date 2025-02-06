@@ -483,6 +483,9 @@ const DxItem = defineComponent(DxItemConfig);
 
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
+(DxItem as any).$_expectedChildren = {
+  item: { isCollectionItem: true, optionName: "items" }
+};
 
 const DxMediaResizingConfig = {
   emits: {
@@ -615,6 +618,9 @@ const DxTableContextMenuItem = defineComponent(DxTableContextMenuItemConfig);
 
 (DxTableContextMenuItem as any).$_optionName = "items";
 (DxTableContextMenuItem as any).$_isCollectionItem = true;
+(DxTableContextMenuItem as any).$_expectedChildren = {
+  item: { isCollectionItem: true, optionName: "items" }
+};
 
 const DxTableResizingConfig = {
   emits: {

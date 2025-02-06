@@ -672,6 +672,10 @@ prepareConfigurationComponentConfig(DxAxisLabelConfig);
 const DxAxisLabel = defineComponent(DxAxisLabelConfig);
 
 (DxAxisLabel as any).$_optionName = "label";
+(DxAxisLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" },
+  format: { isCollectionItem: false, optionName: "format" }
+};
 
 const DxBorderConfig = {
   emits: {
@@ -1175,6 +1179,9 @@ const DxConstantLine = defineComponent(DxConstantLineConfig);
 
 (DxConstantLine as any).$_optionName = "constantLines";
 (DxConstantLine as any).$_isCollectionItem = true;
+(DxConstantLine as any).$_expectedChildren = {
+  label: { isCollectionItem: false, optionName: "label" }
+};
 
 const DxConstantLineLabelConfig = {
   emits: {
@@ -1196,6 +1203,9 @@ prepareConfigurationComponentConfig(DxConstantLineLabelConfig);
 const DxConstantLineLabel = defineComponent(DxConstantLineLabelConfig);
 
 (DxConstantLineLabel as any).$_optionName = "label";
+(DxConstantLineLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxConstantLineStyleConfig = {
   emits: {
@@ -2231,6 +2241,9 @@ const DxStrip = defineComponent(DxStripConfig);
 
 (DxStrip as any).$_optionName = "strips";
 (DxStrip as any).$_isCollectionItem = true;
+(DxStrip as any).$_expectedChildren = {
+  label: { isCollectionItem: false, optionName: "label" }
+};
 
 const DxStripLabelConfig = {
   emits: {
@@ -2250,6 +2263,9 @@ prepareConfigurationComponentConfig(DxStripLabelConfig);
 const DxStripLabel = defineComponent(DxStripLabelConfig);
 
 (DxStripLabel as any).$_optionName = "label";
+(DxStripLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxStripStyleConfig = {
   emits: {

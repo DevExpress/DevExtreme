@@ -372,6 +372,11 @@ prepareConfigurationComponentConfig(DxHoverStyleConfig);
 const DxHoverStyle = defineComponent(DxHoverStyleConfig);
 
 (DxHoverStyle as any).$_optionName = "hoverStyle";
+(DxHoverStyle as any).$_expectedChildren = {
+  border: { isCollectionItem: false, optionName: "border" },
+  hatching: { isCollectionItem: false, optionName: "hatching" },
+  sankeyborder: { isCollectionItem: false, optionName: "border" }
+};
 
 const DxLabelConfig = {
   emits: {

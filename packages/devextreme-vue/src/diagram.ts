@@ -269,6 +269,9 @@ const DxCommand = defineComponent(DxCommandConfig);
 
 (DxCommand as any).$_optionName = "commands";
 (DxCommand as any).$_isCollectionItem = true;
+(DxCommand as any).$_expectedChildren = {
+  commandItem: { isCollectionItem: true, optionName: "items" }
+};
 
 const DxCommandItemConfig = {
   emits: {
