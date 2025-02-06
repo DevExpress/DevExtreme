@@ -4921,4 +4921,60 @@ QUnit.module('React async templates rendering', {
 
         assert.strictEqual(animationSpy.callCount, 0, 'slide animation is not run because no label coordinates were saved before template is rendered');
     });
+
+    QUnit.test('label templates should be visible after rendering even if additional render interrupted first render, async templates in React 17 (T1232664)', function(assert) {
+        const chart = $('#chartContainer').dxChart({
+            dataSource: [{ arg: 1, val: 10 }],
+            templatesRenderAsynchronously: true,
+            animation: { enabled: true },
+            commonSeriesSettings: {
+                type: 'bar',
+                argumentField: 'arg',
+            },
+            series: [{
+                valueField: 'val',
+            }],
+            integrationOptions: this.integrationOptions,
+            argumentAxis: {
+                label: {
+                    template: 'labelTemplate',
+                },
+            },
+        }).dxChart('instance');
+
+        this.clock.tick(this.templateTimeout);
+
+        const axis = chart.getArgumentAxis();
+        const stub = sinon
+            .stub(axis, 'getTemplatesGroups')
+            .onCall(0)
+            .returns([{ element: $(document.createElementNS('http://www.w3.org/2000/svg', 'g')), attr: () => {} }]);
+
+        chart.render({ force: true });
+        stub.callThrough();
+
+
+        chart._applyingChanges = true;
+        this.clock.tick(this.templateTimeout);
+        chart._applyingChanges = false;
+
+        chart.render({ force: true });
+        this.clock.tick(this.templateTimeout);
+
+        assert.strictEqual(axis._majorTicks[0].templateContainer.attr('visibility'), 'visible', 'label is visible');
+    });
+
+    /*
+            const stub = sinon.stub(axis, 'getTemplatesGroups').onCall(0).returns([{ element: $(document.createElementNS('http://www.w3.org/2000/svg', 'g')), attr: () => {} }]);
+
+
+        chart.render({ force: true });
+        stub.callThrough();
+        chart._applyingChanges = true;
+        this.clock.tick(this.templateTimeout / 2);
+        chart._applyingChanges = false;
+        chart.render({ force: true });
+
+        this.clock.tick(this.templateTimeout);
+    */
 });
