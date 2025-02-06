@@ -1,4 +1,3 @@
-import type { DefaultOptionsRule } from '@js/common';
 import type { PositionConfig } from '@js/common/core/animation';
 import animationPosition from '@js/common/core/animation/position';
 import { locate, move } from '@js/common/core/animation/translator';
@@ -10,6 +9,7 @@ import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
 import Guid from '@js/core/guid';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
@@ -78,7 +78,7 @@ class DropDownEditor<
 
   _closeAction!: (event?: Record<string, unknown>) => void;
 
-  _openOnFieldClickAction?: (event) => void;
+  _openOnFieldClickAction?: (event?: Record<string, unknown>) => void;
 
   _activeRenderContext?: symbol;
 
@@ -90,11 +90,11 @@ class DropDownEditor<
   _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | void> {
     return {
       ...super._supportedKeys(),
-      tab(e): void {
+      tab: (e): void => {
         if (!this.option('opened')) {
           return;
         }
-
+        // @ts-expect-error ts-error
         if (!this._popup.getFocusableElements().length) {
           this.close();
           return;
@@ -107,11 +107,12 @@ class DropDownEditor<
         if ($focusableElement) {
           // @ts-expect-error ts-error
           eventsEngine.trigger($focusableElement, 'focus');
+          // @ts-expect-error ts-error
           $focusableElement.select();
         }
         e.preventDefault();
       },
-      escape(e): boolean {
+      escape: (e): boolean => {
         if (this.option('opened')) {
           e.preventDefault();
         }
@@ -120,7 +121,7 @@ class DropDownEditor<
 
         return true;
       },
-      upArrow(e): boolean {
+      upArrow: (e): boolean => {
         if (!isCommandKeyPressed(e)) {
           e.preventDefault();
           e.stopPropagation();
@@ -131,7 +132,7 @@ class DropDownEditor<
         }
         return true;
       },
-      downArrow(e): boolean {
+      downArrow: (e): boolean => {
         if (!isCommandKeyPressed(e)) {
           e.preventDefault();
           e.stopPropagation();
