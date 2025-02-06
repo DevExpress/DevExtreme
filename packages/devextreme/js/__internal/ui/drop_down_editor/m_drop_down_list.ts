@@ -37,7 +37,7 @@ const SEARCH_EVENT = 'input';
 const SEARCH_MODES = ['startswith', 'contains', 'endwith', 'notcontains'];
 
 const useCompositionEvents = devices.real().platform !== 'android';
-
+// @ts-expect-error
 const DropDownList = DropDownEditor.inherit({
 
   _supportedKeys() {
