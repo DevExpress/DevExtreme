@@ -496,6 +496,10 @@ const _componentAxisLabel = (props: IAxisLabelProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "label",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false },
+        format: { optionName: "format", isCollectionItem: false }
+      },
     },
   });
 };
@@ -1116,6 +1120,9 @@ const _componentConstantLine = (props: IConstantLineProps) => {
     elementDescriptor: {
       OptionName: "constantLines",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        label: { optionName: "label", isCollectionItem: false }
+      },
     },
   });
 };
@@ -1137,6 +1144,9 @@ const _componentConstantLineLabel = (props: IConstantLineLabelProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "label",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
     },
   });
 };
@@ -2289,6 +2299,9 @@ const _componentStrip = (props: IStripProps) => {
     elementDescriptor: {
       OptionName: "strips",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        label: { optionName: "label", isCollectionItem: false }
+      },
     },
   });
 };
@@ -2309,6 +2322,9 @@ const _componentStripLabel = (props: IStripLabelProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "label",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
     },
   });
 };

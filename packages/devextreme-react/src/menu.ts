@@ -256,6 +256,7 @@ const Hide = Object.assign<typeof _componentHide, NestedComponentMeta>(_componen
 
 // owners:
 // Menu
+// Item
 type IItemProps = React.PropsWithChildren<{
   beginGroup?: boolean;
   closeMenuOnClick?: boolean;
@@ -278,6 +279,9 @@ const _componentItem = (props: IItemProps) => {
     elementDescriptor: {
       OptionName: "items",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        item: { optionName: "items", isCollectionItem: true }
+      },
       TemplateProps: [{
         tmplOption: "template",
         render: "render",

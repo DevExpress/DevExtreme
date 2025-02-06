@@ -302,6 +302,10 @@ const _componentHoverStyle = (props: IHoverStyleProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "hoverStyle",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        treeMapborder: { optionName: "border", isCollectionItem: false }
+      },
     },
   });
 };
@@ -401,6 +405,10 @@ const _componentSelectionStyle = (props: ISelectionStyleProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "selectionStyle",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        treeMapborder: { optionName: "border", isCollectionItem: false }
+      },
     },
   });
 };

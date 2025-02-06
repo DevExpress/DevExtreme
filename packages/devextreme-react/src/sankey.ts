@@ -252,6 +252,11 @@ const _componentHoverStyle = (props: IHoverStyleProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "hoverStyle",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        hatching: { optionName: "hatching", isCollectionItem: false },
+        sankeyborder: { optionName: "border", isCollectionItem: false }
+      },
     },
   });
 };

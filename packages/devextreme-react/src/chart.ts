@@ -625,6 +625,9 @@ const _componentAxisConstantLineStyle = (props: IAxisConstantLineStyleProps) => 
     ...props,
     elementDescriptor: {
       OptionName: "constantLineStyle",
+      ExpectedChildren: {
+        label: { optionName: "label", isCollectionItem: false }
+      },
     },
   });
 };
@@ -648,6 +651,9 @@ const _componentAxisConstantLineStyleLabel = (props: IAxisConstantLineStyleLabel
     ...props,
     elementDescriptor: {
       OptionName: "label",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
     },
   });
 };
@@ -683,6 +689,10 @@ const _componentAxisLabel = (props: IAxisLabelProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "label",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false },
+        format: { optionName: "format", isCollectionItem: false }
+      },
       TemplateProps: [{
         tmplOption: "template",
         render: "render",
@@ -712,6 +722,9 @@ const _componentAxisTitle = (props: IAxisTitleProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "title",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
     },
   });
 };
@@ -1635,6 +1648,9 @@ const _componentConstantLine = (props: IConstantLineProps) => {
     elementDescriptor: {
       OptionName: "constantLines",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        label: { optionName: "label", isCollectionItem: false }
+      },
     },
   });
 };
@@ -1691,7 +1707,8 @@ const _componentConstantLineStyle = (props: IConstantLineStyleProps) => {
     elementDescriptor: {
       OptionName: "constantLineStyle",
       ExpectedChildren: {
-        commonAxisSettingsConstantLineStyleLabel: { optionName: "label", isCollectionItem: false }
+        commonAxisSettingsConstantLineStyleLabel: { optionName: "label", isCollectionItem: false },
+        label: { optionName: "label", isCollectionItem: false }
       },
     },
   });
@@ -2004,6 +2021,10 @@ const _componentHorizontalLineLabel = (props: IHorizontalLineLabelProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "label",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false },
+        format: { optionName: "format", isCollectionItem: false }
+      },
     },
   });
 };
@@ -3112,6 +3133,9 @@ const _componentStrip = (props: IStripProps) => {
     elementDescriptor: {
       OptionName: "strips",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        label: { optionName: "label", isCollectionItem: false }
+      },
     },
   });
 };
@@ -3134,6 +3158,9 @@ const _componentStripLabel = (props: IStripLabelProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "label",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
     },
   });
 };
@@ -3731,6 +3758,9 @@ const _componentVisualRange = (props: IVisualRangeProps) => {
       DefaultsProps: {
         defaultEndValue: "endValue",
         defaultStartValue: "startValue"
+      },
+      ExpectedChildren: {
+        length: { optionName: "length", isCollectionItem: false }
       },
     },
   });
