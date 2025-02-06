@@ -19,6 +19,7 @@ import { getWindow } from '@js/core/utils/window';
 import formatHelper from '@js/format_helper';
 import LoadPanel from '@js/ui/load_panel';
 import sharedFiltering from '@js/ui/shared/filtering';
+import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
 
 const DATAGRID_SELECTION_DISABLED_CLASS = 'dx-selection-disabled';
 const DATAGRID_GROUP_OPENED_CLASS = 'dx-datagrid-group-opened';
@@ -154,16 +155,14 @@ const equalFilterParameters = function (filter1, filter2) {
   return toComparable(filter1) == toComparable(filter2); // eslint-disable-line eqeqeq
 };
 
-const createPoint = function (options): Record<string, any> {
-  return {
-    index: options.index,
-    columnIndex: options.columnIndex,
-    x: options.x,
-    y: options.y,
-  };
-};
+const createPoint = <T extends ColumnPoint>(options: T): ColumnPoint => ({
+  index: options.index,
+  columnIndex: options.columnIndex,
+  x: options.x,
+  y: options.y,
+});
 
-const addPointIfNeed = function (points, pointProps, pointCreated): void {
+const addPointIfNeed = <T extends ColumnPoint> (points: ColumnPoint[], pointProps: T, pointCreated: (point: T) => boolean): void => {
   let notCreatePoint = false;
 
   if (pointCreated) {
@@ -439,8 +438,8 @@ export default {
     return (!sortParameters1 || !sortParameters1.length) === (!sortParameters2 || !sortParameters2.length);
   },
 
-  getPointsByColumns(items, pointCreated, isVertical?, startColumnIndex = 0, needToCheckPrevPoint = false) {
-    const result: any[] = [];
+  getPointsByColumns<T extends ColumnPoint>(items, pointCreated: (point: T) => boolean, isVertical = false, startColumnIndex = 0, needToCheckPrevPoint = false): ColumnPoint[] {
+    const result: ColumnPoint[] = [];
     const cellsLength: number = items.length;
     let $item;
     let offset: { left: number; top: number } = { left: 0, top: 0 };

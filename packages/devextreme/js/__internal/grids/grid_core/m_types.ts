@@ -16,6 +16,13 @@ export type GridPropertyType<T, TProp extends string> = PropertyType<T, TProp> e
 // Data types
 export type RowKey = unknown;
 
+export interface ColumnPoint {
+  index: number;
+  columnIndex: number;
+  x: number;
+  y: number;
+}
+
 // todo: move to upper .d.ts
 type OptionsMethod<TOptions> =
   (() => TOptions) &
