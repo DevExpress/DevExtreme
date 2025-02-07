@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -14,6 +15,12 @@
         link.rel = "stylesheet";
 
         document.getElementsByTagName("head")[0].appendChild(link);
+    </script>
+
+    <script type="module">
+        import { AzureOpenAI } from "https://esm.sh/openai";
+
+        window.AzureOpenAI = AzureOpenAI;
     </script>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
@@ -42,6 +49,7 @@
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
+
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -49,15 +57,151 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
-        <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+        <div id="form"></div>
+        <hr>
+        <h5>Click on list item to copy to clipboard</h3>
+            <div id="list"></div>
+            <script>
+                const promptCreator = (searchValue) => {
+                    return `Filter the following list of items (${listItems}) based on the search query (${searchValue}), using smart search. The search should include items with synonyms or related terms (e.g., searching 'food' matches 'apple', 'sandwich', or 'groceries'). Response should only include list of items or an empty string`
+                }
+
+                const deployment = 'gpt-4o-mini';
+                const apiVersion = '2024-02-01';
+                const endpoint = 'https://public-api.devexpress.com/demo-openai';
+                const apiKey = 'DEMO';
+
+                $(function () {
+                    const aIService = new AzureOpenAI({
+                        dangerouslyAllowBrowser: true,
+                        deployment,
+                        endpoint,
+                        apiVersion,
+                        apiKey,
+                    });
+
+                    const generateAIServiceResponse = (prompt) => {
+                        debugger
+                        const { system, user } = prompt;
+
+                        const params = {
+                            messages: [
+                                { role: 'system', content: system },
+                                { role: 'user', content: user },
+                            ],
+                            model: deployment,
+                        };
+
+                        const aIResponsePromise = aIService.chat.completions.create(params);
+
+                        return aIResponsePromise;
+                    };
+
+                    const aIIntegration = {
+                        getModelResponse: (prompt, type) => {
+                            debugger
+                            return new Promise((resolve, reject) => {
+                                generateAIServiceResponse(prompt)
+                                    .then((result) => {
+                                        debugger
+                                        const data = { choices: result.choices };
+                                        const response = data.choices[0].message.content;
+
+                                        resolve(response);
+                                    })
+                                    .catch((error) => {
+                                        reject(error);
+                                    });
+                            });
+                        },
+                    };
+
+                    formWidget = $("#form").dxForm({
+                        aIIntegration,
+                        items: [{
+                            itemType: 'group',
+                            caption: 'Bug details',
+                            colCount: 2,
+                            items: [{
+                                dataField: 'Reporter Name',
+                            }, {
+                                dataField: 'Account type',
+                                descriptionForAI: `It should be one of the folowing: ${accountType.join(',')} or an empty string`,
+                                editorType: 'dxSelectBox',
+                                editorOptions: {
+                                    items: accountType,
+                                },
+                            }, {
+                                dataField: 'When issue was find',
+                                descriptionForAI: 'A date when bug was found in format yyyy/MM/dd if there is an info',
+                                editorType: 'dxDateBox',
+                                editorOptions: {
+                                    width: '100%',
+                                },
+                            }, {
+                                dataField: 'Bug report name',
+                                descriptionForAI: 'Give a name for a described bug',
+                            }, {
+                                dataField: 'Steps to reproduce',
+                                descriptionForAI: 'How a bug can be reproduced, what are expected and actual results',
+                                editorType: 'dxTextArea',
+                                editorOptions: {
+                                    height: 90,
+                                    maxLength: 200,
+                                },
+                            }, {
+                                dataField: 'Build version',
+                                descriptionForAI: 'Sepcify a version of a build to reproduce a bug. If there is no info use 24.2',
+                                editorType: 'dxNumberBox',
+                                editorOptions: {
+                                    value: null,
+                                },
+                            }, {
+                                itemType: 'button',
+                                name: 'Clear',
+                                buttonOptions: {
+                                    onClick: () => {
+                                        formWidget.clear();
+                                    },
+                                    icon: 'clear',
+                                    text: 'Clear',
+                                    width: '160px',
+                                },
+                            }, {
+                                itemType: 'button',
+                                name: 'Smart paste',
+                                buttonOptions: {
+                                    onClick: () => {
+                                        navigator.clipboard
+                                            .readText()
+                                            .then((text) => {
+                                                formWidget.smartPaste(text ?? listItems[0])
+                                            })
+                                        ;
+                                    },
+                                    icon: 'paste',
+                                    text: 'SmartPaste',
+                                    width: '160px',
+                                },
+                            }],
+                        },],
+                    }).dxForm('instance');
+
+                    $("#list").dxList({
+                        items: listItems,
+                        onItemClick: ({ itemData }) => {
+                            navigator.clipboard.writeText(itemData);
+                        },
+                    })
                 });
-            });
-        </script>
+                const accountType = ['User', 'Support', 'Developer'];
+                const listItems = [
+                    'hi devextreme team my name is Bob and yesterday (05.01.2025) we were trying to set up dateRangeBox to disable dates that are not in range but when we set desablyaOutOfRange nothing happen please help us we are using devextreme 19.2',
+                    'hi devs, we have an issue in 23.2 from a user: dateRangeBox have a misaligned placeholder on IOS (u can use this demo <DEMO_LINK>). Is that a bug or it is intended? Should we create a bug report? 02.02.2025 devexpress support team',
+                    'during working on another bug fix found a new one: tagBox render tags for items that are not in dataSource. steps to reproduce: set up items: [1,2] and value: [1, 11] on init. Expected behavior: only one tag is rendered. Actual behavior: excess tag is rendered for item "11"',
+                ];
+            </script>
     </div>
 </body>
+
 </html>

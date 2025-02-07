@@ -113,7 +113,55 @@ const Form = Widget.inherit({
       stylingMode: config().editorStylingMode,
       labelMode: 'outside',
       isDirty: false,
+      aIIntegration: null,
     });
+  },
+
+  _getUserPrompt(items, text) {
+    const fieldsInfo = items.map((item) => {
+      let itemDescription = `field name: ${item.dataField}`;
+      if (item.descriptionForAI) {
+        itemDescription += `, additional info: ${item.descriptionForAI}`;
+      }
+
+      return itemDescription;
+    }).join(':::');
+
+    const promptText = `Text: ${text}. Fields to fill: ${fieldsInfo}`;
+
+    return promptText;
+  },
+
+  _getSystemPrompt() {
+    return 'You will get some text that is supposingly describe a bug. Also you will get a list of field that should be filled using info from the text. It can include the name of field, optionally some additional info about what should it include. You need to return data for all the fields in the following format: {fieldName}:::{fieldValue};;;{fieldName}:::{fieldValue} and so on, where {fieldName} - is a variable for a field name and {fieldValue} - is a variable for a string to fill.If there is no info to fill, field value should be empty (like Name:::;;;)';
+  },
+
+  smartPaste(text) {
+    const items = Object.values(this._itemsRunTimeInfo._map)
+      .map((itemRunTimeInfo: any) => itemRunTimeInfo.item);
+
+    const itemsWithDataField = items.filter((item) => isDefined(item.dataField));
+    const { aIIntegration } = this.option();
+
+    const prompt = {
+      system: this._getSystemPrompt(),
+      user: this._getUserPrompt(itemsWithDataField, text),
+    };
+
+    const promise = aIIntegration.getModelResponse(prompt, 'shortentext');
+
+    promise
+      .then((response) => {
+        const fieldsData = response.split(';;;');
+
+        fieldsData.forEach((data) => {
+          const [dataField, value] = data.split(':::');
+
+          if (value) {
+            this._updateFieldValue(dataField, value);
+          }
+        });
+      });
   },
 
   _defaultOptionsRules() {
@@ -819,6 +867,8 @@ const Form = Widget.inherit({
         // @ts-expect-error
         ValidationEngine.removeGroup(args.previousValue || this);
         this._invalidate();
+        break;
+      case 'aIIntegration':
         break;
       default:
         this.callBase(args);
