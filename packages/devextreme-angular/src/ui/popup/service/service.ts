@@ -5,6 +5,7 @@ import {
   Injector,
   EmbeddedViewRef,
   ComponentRef, Type,
+  RendererFactory2,
 } from '@angular/core';
 import { DxPopupComponent, DxPopupTypes } from '../component';
 import { PopupServiceComponent } from './service.component';
@@ -19,6 +20,7 @@ export class DxPopupService {
     private readonly injector: Injector,
     private readonly applicationRef: ApplicationRef,
     private readonly componentFactoryResolver: ComponentFactoryResolver,
+    private rendererFactory: RendererFactory2,
   ) {}
 
   open<T>(contentComponent: Type<T>, popupOptions?: DxPopupTypes.Properties): DxPopupServiceComponent<T> {
@@ -39,15 +41,15 @@ export class DxPopupService {
       componentRef.destroy();
     });
 
+    componentRef.changeDetectorRef.detectChanges();
     this.applicationRef.attachView(componentRef.hostView);
 
     const domElem = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
+    const renderer = this.rendererFactory.createRenderer(null, null);
 
-    document.body.appendChild(domElem);
+    renderer.appendChild(document.body, domElem);
 
     cmpInstance.visible = true;
-
-    this.applicationRef.tick();
 
     return componentRef.instance;
   }
