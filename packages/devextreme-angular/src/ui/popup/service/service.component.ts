@@ -1,6 +1,5 @@
 import {
   OnInit,
-  ChangeDetectorRef,
   Component,
   ComponentRef,
   ElementRef,
@@ -46,7 +45,6 @@ export class PopupServiceComponent<T> extends DxPopupComponent implements OnInit
       optionHost: NestedOptionHost,
       transferState: TransferState,
       @Inject(PLATFORM_ID) platformId: any,
-      protected changeDetectorRef: ChangeDetectorRef
   ) {
     super(elementRef, ngZone, templateHost, _watcherHelper, _idh, optionHost, transferState, platformId);
   }
