@@ -23,6 +23,8 @@ import DropDownList from '@ts/ui/drop_down_editor/m_drop_down_list';
 
 import type { ValueChangedEvent } from './editor/editor';
 
+// STYLE selectBox
+
 const DISABLED_STATE_SELECTOR = '.dx-state-disabled';
 const SELECTBOX_CLASS = 'dx-selectbox';
 const SELECTBOX_POPUP_CLASS = 'dx-selectbox-popup';
