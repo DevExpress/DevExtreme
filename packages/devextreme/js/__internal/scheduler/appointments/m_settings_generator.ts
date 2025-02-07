@@ -321,9 +321,8 @@ export class DateGeneratorBaseStrategy {
         source.exceptionDate = new Date(source.startDate);
       }
 
-      const duration = source.endDate.getTime() - source.startDate.getTime();
       const startDate = this.timeZoneCalculator.createDate(source.startDate, { path: 'toGrid' });
-      const endDate = dateUtilsTs.addOffsets(startDate, [duration]);
+      const endDate = this.timeZoneCalculator.createDate(source.endDate, { path: 'toGrid' });
 
       return {
         startDate,

@@ -2,12 +2,62 @@ import {
   beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import dateUtils from '@js/core/utils/date';
+import timeZoneUtils from '@ts/scheduler/m_utils_time_zone';
+import { createTimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator';
 
 import { TimeZoneCalculator } from '../calculator';
 import type { PathTimeZoneConversion } from '../const';
 import type { TimeZoneCalculatorOptions } from '../types';
 
 describe('TimeZoneCalculator', () => {
+  describe('T1255474 - handle DST', () => {
+    // DST CET: 01:00 UTC 27 March 2021, 01:00 UTC 30 October 2021
+    // DST USA: 01:00 UTC 09 March 2025, 01:00 UTC 03 November 2024
+    ([
+      [new Date(Date.UTC(2021, 2, 27, 0)), 'CET winter'],
+      [new Date(Date.UTC(2021, 2, 27, 15)), 'CET winter to summer'],
+      [new Date(Date.UTC(2021, 2, 27, 22)), 'CET winter to summer'],
+      [new Date(Date.UTC(2021, 2, 28, 0)), 'CET summer'],
+      [new Date(Date.UTC(2021, 9, 29, 21)), 'CET summer'],
+      [new Date(Date.UTC(2021, 9, 30, 15)), 'CET summer to winter'],
+      [new Date(Date.UTC(2021, 9, 30, 21)), 'CET summer to winter'],
+      [new Date(Date.UTC(2021, 9, 30, 23)), 'CET winter'],
+      [new Date(Date.UTC(2025, 2, 9, 0)), 'USA winter'],
+      [new Date(Date.UTC(2025, 2, 9, 2)), 'USA winter to summer'],
+      [new Date(Date.UTC(2025, 2, 10, 0)), 'USA summer'],
+      [new Date(Date.UTC(2024, 11, 3, 21)), 'USA summer'],
+      [new Date(Date.UTC(2024, 11, 4, 15)), 'USA summer to winter'],
+      [new Date(Date.UTC(2024, 11, 4, 23)), 'USA winter'],
+    ] as const).forEach(([date, description]) => {
+      [
+        'Europe/Belgrade', // +1/+2 GMT
+        'Asia/Beirut', // +2/+3 GMT
+        'America/Los_Angeles', // -7/-8 GMT
+        'Etc/GMT+12',
+        'Etc/GMT+11',
+        'Etc/GMT+10',
+        'Etc/GMT+9',
+        'Etc/GMT+8',
+        'Etc/GMT+7',
+        'Etc/GMT+6',
+      ].forEach((clientTimeZOne) => {
+        it(`Should correctly convert ${date.toISOString()} (${description}) to Grid and back in ${clientTimeZOne} timezone`, () => {
+          const calculator = createTimeZoneCalculator('America/Los_Angeles');
+
+          jest.spyOn(calculator as any, 'getClientOffset').mockImplementation((dateArg) => (timeZoneUtils
+            .calculateTimezoneByValue(clientTimeZOne, dateArg as Date) ?? 0) * dateUtils.dateToMilliseconds('hour'));
+
+          const sourceDate = calculator.createDate(date, { path: 'toGrid' as PathTimeZoneConversion }) as Date;
+          const gridDate = calculator.createDate(sourceDate, { path: 'fromGrid' as PathTimeZoneConversion }) as Date;
+          const sourceDate2 = calculator.createDate(gridDate, { path: 'toGrid' as PathTimeZoneConversion }) as Date;
+
+          expect(date.toISOString()).toBe(gridDate.toISOString());
+          expect(sourceDate.toISOString()).toBe(sourceDate2.toISOString());
+        });
+      });
+    });
+  });
+
   describe('General tests', () => {
     const localOffset = new Date().getTimezoneOffset() * 60000;
     const commonOffset = 15;
@@ -46,94 +96,48 @@ describe('TimeZoneCalculator', () => {
     });
 
     [
-      'America/Los_Angeles',
-      undefined,
-    ].forEach((appointmentTimezone) => {
-      ['toGrid', 'fromGrid'].forEach((path) => {
-        it(`should use common time zone [path: ${path}
-        if converting to common timezone, appointmentTimezone: ${appointmentTimezone}]`, () => {
-          const calculator = new TimeZoneCalculator(mock);
+      { path: 'toGrid' as PathTimeZoneConversion, appointmentTimezone: 'America/Los_Angeles', timezone: 'common' },
+      { path: 'toGrid' as PathTimeZoneConversion, appointmentTimezone: undefined, timezone: 'common' },
+      { path: 'fromGrid' as PathTimeZoneConversion, appointmentTimezone: 'America/Los_Angeles', timezone: 'common' },
+      { path: 'fromGrid' as PathTimeZoneConversion, appointmentTimezone: undefined, timezone: 'common' },
+      { path: 'toAppointment' as PathTimeZoneConversion, appointmentTimezone: 'America/Los_Angeles', timezone: 'appointment' },
+      { path: 'toAppointment' as PathTimeZoneConversion, appointmentTimezone: undefined, timezone: 'common' },
+      { path: 'fromAppointment' as PathTimeZoneConversion, appointmentTimezone: 'America/Los_Angeles', timezone: 'appointment' },
+      { path: 'fromAppointment' as PathTimeZoneConversion, appointmentTimezone: undefined, timezone: 'common' },
+    ].forEach(({ path, appointmentTimezone, timezone }) => {
+      it(`should use ${timezone} timezone [path: ${path}, appointmentTimezone: ${appointmentTimezone}]`, () => {
+        const calculator = createTimeZoneCalculator('America/Los_Angeles');
+        const clientMock = jest.fn().mockReturnValue(0);
+        const commonMock = jest.fn().mockReturnValue(0);
+        const appointmentMock = jest.fn().mockReturnValue(0);
 
-          const spy = jest.spyOn(calculator, 'getConvertedDateByOffsets');
+        jest.spyOn(calculator, 'getOffsets').mockImplementation(() => ({
+          get client(): number { return clientMock() as number; },
+          get common(): number { return commonMock() as number; },
+          get appointment(): number { return appointmentMock() as number; },
+        }));
 
-          calculator.createDate(
-            sourceDate,
-            {
-              path: path as PathTimeZoneConversion,
-              appointmentTimeZone: appointmentTimezone,
-            },
-          );
+        calculator.createDate(sourceDate, { path, appointmentTimeZone: appointmentTimezone });
 
-          expect(spy)
-            .toBeCalledTimes(1);
-
-          const isBackDirection = path === 'fromGrid';
-
-          expect(spy)
-            .toBeCalledWith(
-              sourceDate,
-              -localOffset / dateUtils.dateToMilliseconds('hour'),
-              commonOffset,
-              isBackDirection,
-            );
-        });
+        expect(clientMock).toHaveBeenCalledTimes(3);
+        expect(commonMock).toHaveBeenCalledTimes(timezone === 'common' ? 3 : 0);
+        expect(appointmentMock).toHaveBeenCalledTimes(timezone === 'appointment' ? 3 : 0);
       });
     });
 
-    [
-      'America/Los_Angeles',
-      undefined,
-    ].forEach((appointmentTimezone) => {
-      [
-        'toAppointment',
-        'fromAppointment',
-      ].forEach((path) => {
-        it(`if converting to appointment timezone, should use appointment time zone
-              [path: ${path}, appointmentTimezone: ${appointmentTimezone}]`, () => {
-          const calculator = new TimeZoneCalculator(mock);
+    it('createDate should throw error if wrong path', () => {
+      const calculator = new TimeZoneCalculator(mock);
 
-          const spy = jest.spyOn(calculator, 'getConvertedDateByOffsets');
-
-          calculator.createDate(
-            sourceDate,
-            {
-              path: path as PathTimeZoneConversion,
-              appointmentTimeZone: appointmentTimezone,
-            },
-          );
-
-          expect(spy)
-            .toBeCalledTimes(1);
-
-          const isBackDirectionArg = path === 'fromAppointment';
-          const commonOffsetArg = appointmentTimezone === undefined
-            ? commonOffset
-            : appointmentOffset;
-
-          expect(spy)
-            .toBeCalledWith(
-              sourceDate,
-              -localOffset / dateUtils.dateToMilliseconds('hour'),
-              commonOffsetArg,
-              isBackDirectionArg,
-            );
-        });
-      });
-
-      it('createDate should throw error if wrong path', () => {
-        const calculator = new TimeZoneCalculator(mock);
-
-        expect(() => {
-          calculator.createDate(
-            sourceDate,
-            {
-              path: 'WrongPath' as PathTimeZoneConversion,
-              appointmentTimeZone: appointmentTimezone,
-            },
-          );
-        })
-          .toThrow('not specified pathTimeZoneConversion');
-      });
+      expect(() => {
+        calculator.createDate(
+          sourceDate,
+          {
+            path: 'WrongPath' as PathTimeZoneConversion,
+            appointmentTimeZone: 'America/Los_Angeles',
+          },
+        );
+      })
+        .toThrow('not specified pathTimeZoneConversion');
     });
   });
 
