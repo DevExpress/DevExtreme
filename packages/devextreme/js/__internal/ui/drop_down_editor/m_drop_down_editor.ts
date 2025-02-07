@@ -66,7 +66,7 @@ class DropDownEditor<
 > extends TextBox<TProperties> {
   _$container!: dxElementWrapper;
 
-  private _$submitElement?: dxElementWrapper;
+  _$submitElement?: dxElementWrapper;
 
   _$popup?: dxElementWrapper;
 
@@ -918,7 +918,8 @@ class DropDownEditor<
     return resultConfig;
   }
 
-  _applyButtonHandler(): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _applyButtonHandler(args?): void {
     this.close();
 
     if (this.option('focusStateEnabled')) {

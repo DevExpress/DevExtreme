@@ -341,7 +341,7 @@ class DropDownList<
     return this._loadItem(value).always(callback);
   }
 
-  _getItemFromPlain(value, cache) {
+  _getItemFromPlain(value, cache?) {
     let plainItems;
     let selectedItem;
 
@@ -570,7 +570,7 @@ class DropDownList<
   _shouldRefreshDataSource(): boolean {
     // @ts-expect-error ts-error
     const dataSourceProvided = !!this._list.option('dataSource');
-    // @ts-expect-error ts-error
+
     return dataSourceProvided !== this._needPassDataSourceToList();
   }
 
@@ -679,21 +679,24 @@ class DropDownList<
     }
   }
 
-  _needPassDataSourceToList() {
-    return this.option('showDataBeforeSearch') || this._isMinSearchLengthExceeded();
+  _needPassDataSourceToList(): boolean {
+    const { showDataBeforeSearch } = this.option();
+
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return showDataBeforeSearch || this._isMinSearchLengthExceeded();
   }
 
-  _isMinSearchLengthExceeded() {
+  _isMinSearchLengthExceeded(): boolean {
     // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/no-base-to-string
     return this._searchValue().toString().length >= this.option('minSearchLength');
   }
 
-  _needClearFilter() {
+  _needClearFilter(): boolean {
     return this._canKeepDataSource() ? false : this._needPassDataSourceToList();
   }
 
-  _canKeepDataSource() {
+  _canKeepDataSource(): boolean {
     const isMinSearchLengthExceeded = this._isMinSearchLengthExceeded();
     return this._dataController.isLoaded()
             && this.option('showDataBeforeSearch')
@@ -815,13 +818,14 @@ class DropDownList<
     dataController.searchValue() && dataController.searchValue(null);
   }
 
-  _dataSourceFiltered(): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _dataSourceFiltered(searchValue?): void {
     this._isLastMinSearchLengthExceeded = this._isMinSearchLengthExceeded();
     this._refreshList();
     this._refreshPopupVisibility();
   }
 
-  _shouldOpenPopup() {
+  _shouldOpenPopup(): boolean {
     return this._hasItemsToShow();
   }
 
