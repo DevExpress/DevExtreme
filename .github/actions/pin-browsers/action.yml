@@ -4,7 +4,7 @@ description: "Install and setup Chrome and Firefox"
 inputs:
   chrome-version:
     description: "Chrome version to install"
-    default: "112.0.5615.165-1"
+    default: "121.0.6167.184-1"
   firefox-version:
     description: "Firefox version to install"
     default: "latest"
@@ -18,6 +18,8 @@ runs:
         CHROME_VERSION: ${{ inputs.chrome-version }}
       run: |
         if [ -n "$CHROME_VERSION" ]; then
+          sudo apt-get update
+          sudo apt-get -y install libu2f-udev
           curl -L "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb" > /tmp/chrome.deb
           sudo dpkg -i /tmp/chrome.deb
           unlink /tmp/chrome.deb

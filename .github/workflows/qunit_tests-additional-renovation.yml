@@ -17,15 +17,15 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
       - name: Restore npm cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ./node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -46,7 +46,7 @@ jobs:
           7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: devextreme-artifacts
           path: artifacts.zip
@@ -70,11 +70,11 @@ jobs:
           'ui.scheduler(2/3)',
           'ui.scheduler(3/3)'
         ]
-        timezone: [ 'PST8PDT', 'Japan', 'Australia/ACT', 'Europe/London' ]
+        timezone: [ 'Japan', 'Australia/ACT', 'Europe/London' ]
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
@@ -94,7 +94,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Get sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
@@ -144,7 +144,7 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
@@ -182,7 +182,7 @@ jobs:
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
@@ -206,7 +206,7 @@ jobs:
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/send-teams-notification
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}
