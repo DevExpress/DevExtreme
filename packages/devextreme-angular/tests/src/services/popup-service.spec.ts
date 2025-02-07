@@ -1,7 +1,8 @@
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { DxPopupService } from 'devextreme-angular/ui/popup';
-import { DxButtonModule } from 'devextreme-angular';
 import { Component, Input } from '@angular/core';
+import { DxPopupService } from 'devextreme-angular/ui/popup';
+import { DxButtonModule } from 'devextreme-angular/ui/button';
+
 import 'devextreme/dist/css/dx.light.css';
 
 @Component({
@@ -23,9 +24,11 @@ describe('Using DxPopupService', () => {
     popupService = TestBed.inject(DxPopupService);
   });
 
-  it('DxPopupService opens DxPopup with component passed as argument', fakeAsync((/* done */) => {
-    // TestBed.createComponent(StubComponent);
+  it('DxPopupService opens DxPopup with component passed as argument', fakeAsync(() => {
+    const TITLE_MIN_WIDTH = 150;
+    const POPUP_CONTENT_MAX_HEIGHT = 240;
     let isPopupHidden = true;
+
     const popupRef = popupService.open(
       PopupContentComponent,
       {
@@ -63,19 +66,19 @@ describe('Using DxPopupService', () => {
     const popupTitleBarEl: HTMLElement = popupEl.querySelector('.dx-toolbar .dx-toolbar-before .dx-toolbar-label');
     const popupContentEl: HTMLElement = popupEl.querySelector('.dx-popup-content');
 
-    tick(1000);
+    tick(500);
 
     expect(isPopupHidden).toBeFalsy();
     expect(popupEl).toBeTruthy();
     expect(popupCloseEl).toBeTruthy();
-    expect(Number.parseInt(popupTitleBarEl.style.maxWidth, 10)).toBeGreaterThan(150);
-    expect(Number.parseInt(popupContentEl.style.height, 10)).toBeLessThan(240);
+    expect(Number.parseInt(popupTitleBarEl.style.maxWidth, 10)).toBeGreaterThan(TITLE_MIN_WIDTH);
+    expect(Number.parseInt(popupContentEl.style.height, 10)).toBeLessThan(POPUP_CONTENT_MAX_HEIGHT);
     expect(popupRef.contentRef.instance).toBeTruthy();
     expect(popupContentComponentEl.textContent).toEqual('Test Button');
 
     popupContentComponentEl.click();
 
-    tick(1000);
+    tick(500);
 
     expect(isPopupHidden).toBeTruthy();
     expect(popupRef.contentRef.hostView.destroyed).toBeTruthy();
