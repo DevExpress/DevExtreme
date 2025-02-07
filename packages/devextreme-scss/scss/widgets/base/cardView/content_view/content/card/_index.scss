@@ -1,4 +1,5 @@
 @use './header';
+@use './content';
 @use './variables' as *;
 
 .dx-cardview-card {
@@ -6,40 +7,5 @@
   border: $cardview-card-border-size solid $cardview-card-border-color;
   border-radius: $cardview-card-border-radius;
   width: 100%;
-}
-
-.dx-cardview-card-header {
-  .dx-toolbar {
-    border-radius: $cardview-card-border-radius;
-  }
-}
-
-.dx-cardview-card-content {
-  padding: ($cardview-card-content-padding-vertical - $cardview-card-content-field-gap) $cardview-card-content-padding-horizontal;
-  display: table;
-  border-spacing: $cardview-card-content-field-gap;
-  table-layout: fixed;
-  width: 100%;
-}
-
-.dx-card-cover {
-  border-top: $cardview-card-border-size solid $cardview-card-border-color;
-  border-bottom: $cardview-card-border-size solid $cardview-card-border-color;
-}
-
-.dx-cardview-field {
-  display: table-row
-}
-
-.dx-cardview-field-name,
-.dx-cardview-field-value {
-  display: table-cell;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: $cardview-card-content-cell-padding-vertical $cardview-card-content-cell-padding-horizontal;
-}
-
-.dx-cardview-field-name {
-  font-weight: bold;
+  background-color: $cardview-card-background-color;
 }
