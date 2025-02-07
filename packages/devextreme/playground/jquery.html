@@ -49,12 +49,45 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+
+        <div id="btn1"></div>
+        <div id="btn2"></div>
+
+        <div id="uploader1"></div>
+        <div id="uploader2"></div>
+
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+            $(() => {
+                $("#btn1").dxDropDownButton({
+                    text: "DropDownButton",
+                    splitButton: true,
+                    onButtonClick(e) {
+                        console.log("DropDownButton click");
+                    },
+                });
+
+                $("#btn2").dxButtonGroup({
+                    items: [
+                        {
+                            text: "test1",
+                        },
+                        {
+                            text: "test2",
+                        },
+                    ],
+                    onItemClick(e) {
+                        console.log("dxButtonGroup click");
+                    },
+                });
+
+                $("#uploader1").dxFileUploader({
+                    visible: false,
+                    dialogTrigger: "#btn1"
+                });
+
+                $("#uploader2").dxFileUploader({
+                    visible: false,
+                    dialogTrigger: "#btn2"
                 });
             });
         </script>

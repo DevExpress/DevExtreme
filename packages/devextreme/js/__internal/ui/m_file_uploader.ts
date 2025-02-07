@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import { addNamespace, isTouchEvent } from '@js/common/core/events/utils/index';
+import { addNamespace, isTouchEvent, normalizeKeyName } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
@@ -59,6 +59,8 @@ const FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid';
 const FILEUPLOADER_AFTER_LOAD_DELAY = 400;
 const FILEUPLOADER_CHUNK_META_DATA_NAME = 'chunkMetadata';
 const DRAG_EVENT_DELTA = 1;
+
+const ENTER_KEY = 'enter';
 
 let renderFileUploaderInput = () => $('<input>').attr('type', 'file');
 // @ts-expect-error
@@ -861,12 +863,19 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._isCustomClickEvent = false;
   }
 
+  _selectFileDialogKeyPressHandler(e): void {
+    if (normalizeKeyName(e) === ENTER_KEY) {
+      this._selectFileDialogHandler();
+    }
+  }
+
   _attachSelectFileDialogHandler(target) {
     if (!isDefined(target)) {
       return;
     }
     this._detachSelectFileDialogHandler(target);
     eventsEngine.on($(target), 'click', this._selectFileDialogHandler);
+    eventsEngine.on($(target), 'keyup', this._selectFileDialogKeyPressHandler.bind(this));
   }
 
   _detachSelectFileDialogHandler(target) {
@@ -874,6 +883,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
       return;
     }
     eventsEngine.off($(target), 'click', this._selectFileDialogHandler);
+    eventsEngine.off($(target), 'keyup', this._selectFileDialogKeyPressHandler.bind(this));
   }
 
   _renderUploadButton() {
