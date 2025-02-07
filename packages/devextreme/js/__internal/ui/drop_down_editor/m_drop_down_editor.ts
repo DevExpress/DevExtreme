@@ -191,6 +191,7 @@ class DropDownEditor<
     return true;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _getDefaultPopupPosition(isRtlEnabled?: boolean): PositionConfig {
     const position = getDefaultAlignment(isRtlEnabled);
 
