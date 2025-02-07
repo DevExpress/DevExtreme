@@ -67,8 +67,9 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
   }
 
   updateWidth(): void {
+    const minWidth = getElementMinWidth(this.props.parentRef?.current);
     this.setState((state) => ({
-      minWidth: getElementMinWidth(this.props.parentRef?.current) || state.minWidth,
+      minWidth: minWidth > 0 ? minWidth : state.minWidth,
     }));
   }
 

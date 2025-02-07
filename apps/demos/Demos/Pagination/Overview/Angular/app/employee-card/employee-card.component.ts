@@ -3,7 +3,7 @@ import { Employee } from '../app.service';
 
 let modulePrefix = '';
 // @ts-ignore
-if (window && window.config.packageConfigPaths) {
+if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 

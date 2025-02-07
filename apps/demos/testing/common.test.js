@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import { glob } from 'glob';
 import { ClientFunction } from 'testcafe';
 import { join } from 'path';
@@ -22,6 +23,8 @@ import {
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
 import knownWarnings from './known-warnings.json';
 import skipJsErrorsComponents from './skip-js-errors-components.json';
+
+import { gitHubIgnored } from '../utils/visual-tests/github-ignored-list';
 
 const execCode = ClientFunction((code) => {
   // eslint-disable-next-line no-eval
@@ -370,65 +373,81 @@ const SKIPPED_TESTS = {
       }
     }
 
-    changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
-
+    const isGitHubDemos = process.env.ISGITHUBDEMOS;
+    let pageURL = '';
+    const theme = process.env.THEME.replace('generic.', '');
+    if (isGitHubDemos) {
+      pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
+    } else {
+      changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
+      pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
+    }
+    // remove when tests enabled not only for datagrid
+    if (isGitHubDemos && (widgetName !== 'DataGrid' || gitHubIgnored.includes(demoName))) {
+      return;
+    }
     runTestAtPage(
       test,
-      `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`,
+      pageURL,
       skipJsErrorsComponents.includes(widgetName),
-    ).clientScripts(clientScriptSource)(testName, async (t) => {
-      if (visualTestStyles) {
-        await execCode(visualTestStyles);
-      }
-
-      if (approach === 'Angular') {
-        await waitForAngularLoading();
-      }
-
-      if (testCodeSource) {
-        await execCode(testCodeSource);
-      }
-
-      if (testCafeCodeSource) {
-        await execTestCafeCode(t, testCafeCodeSource);
-      }
-
-      if (process.env.STRATEGY === 'accessibility') {
-        const specificSkipRules = getTestSpecificSkipRules(testName);
-        const options = { rules: { } };
-
-        [...COMMON_SKIP_RULES, ...specificSkipRules].forEach((ruleName) => {
-          options.rules[ruleName] = { enabled: false };
-        });
-
-        const axeResult = await axeCheck(t, '.demo-container', options);
-        const { error, results } = axeResult;
-
-        if (results.violations.length > 0) {
-          createMdReport({ testName, results });
-          await t.report(createTestCafeReport(results.violations));
+    )
+      .clientScripts(clientScriptSource)(testName, async (t) => {
+        if (visualTestStyles) {
+          await execCode(visualTestStyles);
+        }
+        if (approach === 'Angular') {
+          await waitForAngularLoading();
+        }
+        if (testCodeSource) {
+          await execCode(testCodeSource);
+        }
+        if (testCafeCodeSource) {
+          await execTestCafeCode(t, testCafeCodeSource);
         }
 
-        await t.expect(error).notOk();
-        await t.expect(results.violations.length === 0).ok(createReport(results.violations));
-      } else {
-        const testTheme = process.env.THEME;
+        if (process.env.STRATEGY === 'accessibility') {
+          const specificSkipRules = getTestSpecificSkipRules(testName);
+          const options = { rules: {} };
 
-        if (shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)) {
-          return;
+          [...COMMON_SKIP_RULES, ...specificSkipRules].forEach((ruleName) => {
+            options.rules[ruleName] = { enabled: false };
+          });
+
+          const axeResult = await axeCheck(t, '.demo-container', options);
+          const { error, results } = axeResult;
+
+          if (results.violations.length > 0) {
+            createMdReport({ testName, results });
+            await t.report(createTestCafeReport(results.violations));
+          }
+
+          await t.expect(error).notOk();
+          await t.expect(results.violations.length === 0).ok(createReport(results.violations));
+        } else {
+          const testTheme = process.env.THEME;
+
+          if (shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)) {
+            return;
+          }
+
+          let comparisonResult;
+          if (isGitHubDemos) {
+            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, (comparisonOptions && {
+              ...comparisonOptions,
+              ...{ looksSameComparisonOptions: { antialiasingTolerance: 10 } },
+            }));
+          } else {
+            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
+          }
+
+          const consoleMessages = await t.getBrowserConsoleMessages();
+
+          const errors = [...consoleMessages.error, ...consoleMessages.warn]
+            .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
+
+          await t.expect(errors).eql([]);
+          await t.expect(comparisonResult).ok('INVALID_SCREENSHOT');
         }
-
-        const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
-
-        const consoleMessages = await t.getBrowserConsoleMessages();
-
-        const errors = [...consoleMessages.error, ...consoleMessages.warn]
-          .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
-
-        await t.expect(errors).eql([]);
-
-        await t.expect(comparisonResult).ok('INVALID_SCREENSHOT');
-      }
-    });
+      });
   });
 });

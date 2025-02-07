@@ -1,4 +1,8 @@
-name: Run TestCafe on gh-pages branch
+name: Publishing to GitHub Pages step 2 (run tests on branch)
+
+concurrency:
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  cancel-in-progress: true
 
 on:
   workflow_dispatch:
@@ -12,7 +16,7 @@ jobs:
               THEME: ['generic.light', 'material.blue.light', 'fluent.blue.light']
 
 
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04
         name: testcafe-${{ matrix.CONSTEL }}-${{ matrix.THEME }}
         timeout-minutes: 60
         env:
@@ -39,7 +43,7 @@ jobs:
                 python -m http.server 8083 &
 
             - name: Checkout main branch
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
               with:
                 ref: ${{ env.TARGET_BRANCH }}
                 path: devextreme
@@ -52,15 +56,32 @@ jobs:
               with:
                 chrome-version: '121.0.6167.184'
 
-            - name: DevExtreme - Install packages
-              working-directory: devextreme
-              run: npm install --no-audit --no-fund
+            - uses: pnpm/action-setup@v3
+              with:
+                version: 9
+                run_install: false
 
+            - uses: actions/cache@v4
+              name: Setup pnpm cache
+              with:
+                path: |
+                  ${{ env.STORE_PATH }}
+                  .nx/cache
+                key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+                restore-keys: |
+                  ${{ runner.os }}-pnpm-store
+
+            - name: Install dependencies
+              working-directory: devextreme
+              run: |
+                corepack enable
+                pnpm install
+            
             - name: Run TestCafe tests
               working-directory: devextreme/apps/demos
               env:
                 CHANGEDFILEINFOSPATH: changed-files.json
-                BROWSERS: chrome:headless --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+                BROWSERS: chrome:headless --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
                 #DEBUG: hammerhead:*,testcafe:*
                 CONCURRENCY: 4
                 TCQUARANTINE: true
@@ -71,7 +92,7 @@ jobs:
                 # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
                 # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
                 CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-              run: npx nx test-testcafe
+              run: pnpx nx test-testcafe
 
             - name: Copy screenshots artifacts
               if: ${{ failure() }}

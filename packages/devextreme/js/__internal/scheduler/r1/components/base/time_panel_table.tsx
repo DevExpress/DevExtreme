@@ -1,6 +1,6 @@
 import type { InfernoEffect } from '@devextreme/runtime/inferno';
 import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
-import type { JSXTemplate, RefObject } from '@devextreme-generator/declarations';
+import type { JSXTemplate, RefObject } from '@ts/core/r1/types';
 import { getTemplate } from '@ts/core/r1/utils/index';
 import { Fragment } from 'inferno';
 
