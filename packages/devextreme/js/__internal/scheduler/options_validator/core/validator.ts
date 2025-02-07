@@ -12,14 +12,14 @@ export class Validator<TWidgetOptions, TOption> {
 
     const errors = this.rules
       .reduce<Record<string, string>>((result, rule) => {
-      const validationResult = rule(value);
+        const validationResult = rule(value);
 
-      if (validationResult !== true) {
-        result[rule.name] = validationResult;
-      }
+        if (validationResult !== true) {
+          result[rule.name] = validationResult;
+        }
 
-      return result;
-    }, {});
+        return result;
+      }, {});
 
     return Object.keys(errors).length
       ? errors

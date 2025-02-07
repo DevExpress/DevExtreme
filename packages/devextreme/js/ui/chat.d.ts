@@ -316,7 +316,7 @@ export type ExplicitTypes = {
 /** @public */
 export type Properties = dxChatOptions;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -344,4 +344,4 @@ onInitialized?: ((e: InitializedEvent) => void);
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

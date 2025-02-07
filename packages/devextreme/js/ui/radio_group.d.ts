@@ -125,7 +125,7 @@ export type Properties = dxRadioGroupOptions;
 /** @deprecated use Properties instead */
 export type Options = dxRadioGroupOptions;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -163,4 +163,4 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

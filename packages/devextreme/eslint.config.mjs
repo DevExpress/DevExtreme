@@ -20,20 +20,21 @@ const compat = new FlatCompat({
     allConfig: js.configs.all
 });
 
+const REMOVED_TYPESCRIPT_RULES = ['@typescript-eslint/no-throw-literal', '@typescript-eslint/ban-types'];
+
 // TODO Salimov: We need to remove this function after updating eslint-config-devextreme
 const processDevExtremeRules = devExtremeRules => (
     {
         ...Object.fromEntries(Object
             .entries(devExtremeRules)
+            .filter(([key]) => !REMOVED_TYPESCRIPT_RULES.includes(key))
             .map(([key, value]) => {
                 const rule = stylisticRules.find((r) => key.includes(r.name));
                 const newKey = rule ? `@stylistic/${rule.name}` : key;
 
                 return [newKey, value];
             })
-        ),
-        '@typescript-eslint/no-throw-literal': 'off',
-        '@typescript-eslint/ban-types': 'off',
+        )
     }
 );
 
@@ -67,7 +68,7 @@ export default [
         settings: {
             'import/resolver': {
                 node: {
-                    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+                    extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
                 },
             },
         },
@@ -156,7 +157,7 @@ export default [
             'space-before-blocks': 'error',
             'space-before-function-paren': ['error', 'never'],
             'space-in-parens': 'error',
-            'space-infix-ops': 'error',
+            '@stylistic/space-infix-ops': 'error',
             'space-unary-ops': 'error',
             'spaced-comment': ['error', 'always', {
                 exceptions: ['#DEBUG', '#ENDDEBUG'],
@@ -168,7 +169,7 @@ export default [
             'curly': ['error', 'multi-line', 'consistent'],
             'unicode-bom': ['error', 'never'],
             'eol-last': ['error', 'always'],
-            'indent': ['error', 4, {
+            '@stylistic/indent': ['error', 4, {
                 SwitchCase: 1,
                 MemberExpression: 1,
 
@@ -210,7 +211,7 @@ export default [
             ecmaVersion: 6,
             sourceType: 'module',
             parserOptions: {
-                projectService: true,
+                project: './tsconfig.json',
                 tsconfigRootDir: __dirname,
             },
         },
@@ -227,6 +228,9 @@ export default [
             '@typescript-eslint/ban-types': 'off',
             '@typescript-eslint/no-empty-object-type': 'off',
             '@typescript-eslint/no-throw-literal': 'off',
+            '@typescript-eslint/switch-exhaustiveness-check': ['error', {
+                considerDefaultExhaustiveForUnions: true,
+            }],
         },
     },
     ...compat.extends('devextreme/typescript').map(config => {
@@ -251,7 +255,7 @@ export default [
             ecmaVersion: 6,
             sourceType: 'module',
             parserOptions: {
-                projectService: true,
+                project: './tsconfig.json',
                 tsconfigRootDir: __dirname,
                 ecmaFeatures: {
                     globalReturn: true,
@@ -260,11 +264,15 @@ export default [
             },
         },
         rules: {
+            '@typescript-eslint/no-unsafe-function-type': 'off',
+            '@typescript-eslint/no-wrapper-object-types': 'off',
+            '@typescript-eslint/no-empty-object-type': 'off',
             'i18n/no-russian-character': ['error', {
                 includeIdentifier: true,
             }],
         }
     },
+    //  Rules for QUnit tests
     ...compat.extends('devextreme/qunit').map(config => ({
         ...config,
         files: ['testing/tests/**/*.js', 'testing/helpers/**/*.js'],
@@ -293,8 +301,9 @@ export default [
             'i18n/no-russian-character': 'warn'
         }
     },
+    // Rules for js folder
     {
-        files: ['js/**/*.js', 'js/**/*.d.ts'],
+        files: ['js/**/*'],
         languageOptions: {
             globals: {
                 ...globals.node,
@@ -303,7 +312,7 @@ export default [
         settings: {
             'import/resolver': {
                 node: {
-                    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+                    extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
                 },
             },
         },
@@ -342,7 +351,7 @@ export default [
             '@typescript-eslint/strict-boolean-expressions': 'warn',
             '@typescript-eslint/unbound-method': 'warn',
             '@typescript-eslint/no-unsafe-member-access': 'warn',
-            '@typescript-eslint/indent': 'off',
+            '@stylistic/indent': 'off',
             'spaced-comment': 'off',
             '@stylistic/max-len': 'off',
             '@typescript-eslint/method-signature-style': 'off',
@@ -372,6 +381,7 @@ export default [
             '@typescript-eslint/no-empty-interface': 'off',
         },
     },
+    // Rules for build folder
     ...compat.extends('plugin:node/recommended').map(config => ({
         ...config,
         files: ['build/**/*'],
@@ -393,6 +403,7 @@ export default [
             'spellcheck/spell-checker': 'off',
         },
     },
+    // Rules for js/__internal folder
     {
         files: ['js/__internal/**/*'],
         plugins: {
@@ -406,7 +417,7 @@ export default [
         settings: {
             'import/resolver': {
                 node: {
-                    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+                    extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
                 },
             },
         },
@@ -418,8 +429,8 @@ export default [
             ecmaVersion: 5,
             sourceType: 'script',
             parserOptions: {
-                projectService: true,
-                tsconfigRootDir: __dirname,
+                project: './tsconfig.json',
+                tsconfigRootDir: `${__dirname}/js/__internal`,
             },
         },
         rules: {
@@ -462,6 +473,7 @@ export default [
             '@typescript-eslint/prefer-ts-expect-error': 'off',
         },
     },
+    // Rules for a new TS files
     {
         files: ['js/__internal/**/*.ts?(x)'],
         ignores: ['js/__internal/**/m_*.ts'],
@@ -470,8 +482,8 @@ export default [
             ecmaVersion: 5,
             sourceType: 'script',
             parserOptions: {
-                projectService: true,
-                tsconfigRootDir: __dirname,
+                project: './tsconfig.json',
+                tsconfigRootDir: `${__dirname}/js/__internal`,
             },
         },
         rules: {
@@ -479,6 +491,7 @@ export default [
             'no-inner-declarations': ['error', 'both'],
         },
     },
+    // Rules for migrated from JS files
     {
         files: ['js/__internal/**/m_*.ts', 'js/__internal/**/module*/**.ts'],
         languageOptions: {
@@ -486,8 +499,8 @@ export default [
             ecmaVersion: 5,
             sourceType: 'script',
             parserOptions: {
-                projectService: true,
-                tsconfigRootDir: __dirname,
+                project: './tsconfig.json',
+                tsconfigRootDir: `${__dirname}/js/__internal`,
             },
         },
         rules: {
@@ -524,6 +537,7 @@ export default [
             '@typescript-eslint/prefer-for-of': 'warn',
         },
     },
+    // Rules for grid controls
     {
         files: [
             'js/__internal/**/grid_core/**/**.ts?(x)',
@@ -535,8 +549,8 @@ export default [
             ecmaVersion: 5,
             sourceType: 'script',
             parserOptions: {
-                projectService: true,
-                tsconfigRootDir: __dirname,
+                project: './tsconfig.json',
+                tsconfigRootDir: `${__dirname}/js/__internal`,
             },
         },
         rules: {
@@ -555,6 +569,7 @@ export default [
             '@typescript-eslint/lines-between-class-members': 'off',
         },
     },
+    // Rules for Jest tests
     {
         files: ['js/__internal/**/*test.ts?(x)'],
         languageOptions: {
@@ -562,8 +577,8 @@ export default [
             ecmaVersion: 5,
             sourceType: 'script',
             parserOptions: {
-                projectService: true,
-                tsconfigRootDir: __dirname,
+                project: './tsconfig.json',
+                tsconfigRootDir: `${__dirname}/js/__internal`,
             },
         },
         rules: {
@@ -573,6 +588,7 @@ export default [
             'import/no-extraneous-dependencies': 'off',
         },
     },
+    // Rules for migrated core files
     {
         files: ['js/__internal/**/core/**/m_*.ts'],
         languageOptions: {
@@ -580,15 +596,15 @@ export default [
             ecmaVersion: 5,
             sourceType: 'script',
             parserOptions: {
-                projectService: true,
-                tsconfigRootDir: __dirname,
+                project: './tsconfig.json',
+                tsconfigRootDir: `${__dirname}/js/__internal`,
             },
         },
         rules: {
             'guard-for-in': 'off',
             'no-restricted-syntax': 'off',
             'func-style': 'off',
-            'wrap-iife': 'off',
+            '@stylistic/wrap-iife': 'off',
             'prefer-arrow-callback': 'off',
             '@typescript-eslint/prefer-optional-chain': 'off',
             'radix': 'off',

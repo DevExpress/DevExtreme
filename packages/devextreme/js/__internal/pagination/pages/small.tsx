@@ -17,7 +17,6 @@ const PAGER_PAGE_INDEX_CLASS = 'dx-page-index';
 const LIGHT_PAGES_CLASS = 'dx-light-pages';
 const PAGER_PAGES_COUNT_CLASS = 'dx-pages-count';
 
-// eslint-disable-next-line @typescript-eslint/no-type-alias
 type PaginationSmallPropsType = Pick<PaginationProps, 'pageCount' | 'pageIndex' | 'pageIndexChangedInternal' | 'pagesCountText'>;
 
 export const PaginationSmallDefaultProps: PaginationSmallPropsType = {

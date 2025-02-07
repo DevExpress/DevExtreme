@@ -55,7 +55,6 @@ export interface ItemExtraOption<TProperties, T = boolean> {
 class CollectionItem<
   TProperties extends CollectionWidgetItem = CollectionWidgetItem,
   // @ts-expect-error dxClass inheritance issue
-  // eslint-disable-next-line @typescript-eslint/ban-types
 > extends (Class.inherit({}) as new() => {}) {
   _dirty?: boolean;
 
@@ -146,7 +145,6 @@ class CollectionItem<
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _renderVisible(
     value: boolean | undefined,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

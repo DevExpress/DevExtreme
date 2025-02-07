@@ -19,7 +19,6 @@ export interface PageSizeSelectorProps {
   rootElementRef?: RefObject<HTMLDivElement>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-type-alias
 type PageSizeSelectorPropsType = Pick<PaginationProps, 'pageSize' | 'pageSizeChangedInternal' | 'allowedPageSizes' > & PageSizeSelectorProps;
 
 const PageSizeSelectorDefaultProps: PageSizeSelectorPropsType = {
@@ -75,7 +74,7 @@ export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType
       text: String(p),
       value: p,
     });
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     const result: FullPageSize[] | undefined = this.props.allowedPageSizes.map<FullPageSize>(mapFunction);
     this.__getterCache.normalizedPageSizes = result;
     return result;

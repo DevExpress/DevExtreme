@@ -1,4 +1,3 @@
-/* globals Intl */
 import errors from '@js/core/errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
