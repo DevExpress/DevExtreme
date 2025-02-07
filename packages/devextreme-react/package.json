@@ -1,7 +1,7 @@
 {
   "author": "Developer Express Inc.",
   "name": "devextreme-react",
-  "version": "24.1.9",
+  "version": "24.1.10",
   "description": "DevExtreme React UI and Visualization Components",
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "devextreme": "~24.1.9",
+    "devextreme": "~24.1.10",
     "react": "^16.2.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
     "react-dom": "^16.2.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
   },

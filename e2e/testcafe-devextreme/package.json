@@ -1,13 +1,13 @@
 {
   "name": "devextreme-testcafe-tests",
-  "version": "24.1.9",
+  "version": "24.1.10",
   "scripts": {
     "test": "node ./runner.js",
     "lint": "eslint --ext .js,.ts .",
     "update-failed-etalons": "node update_failed_etalons.mjs"
   },
   "devDependencies": {
-    "devextreme": "~24.1.9",
+    "devextreme": "~24.1.10",
     "testcafe": "2.5.0"
   }
 }
