@@ -15,22 +15,22 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Use Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '18'
 
     - name: Restore npm cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Restore artifacts cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ./artifacts
         key: build-npm-devextreme-artifacts-${{ github.sha }}
@@ -46,7 +46,7 @@ jobs:
       run: npm pack
 
     - name: Copy build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: devextreme-npm
         path: ./artifacts/npm/devextreme/devextreme-*.tgz
@@ -60,12 +60,12 @@ jobs:
 
     steps:
     - name: Use Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '14'
 
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - uses: ./.github/actions/pin-browsers
 
@@ -73,7 +73,7 @@ jobs:
       run: cd ../ && ln -s DevExtreme devextreme
 
     - name: Restore npm cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -101,7 +101,7 @@ jobs:
         test -d ../devextreme-angular-repo || git clone -b 22.2 https://github.com/devexpress/devextreme-angular ../devextreme-angular-repo
 
     - name: Download artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: devextreme-npm
         path: ../devextreme-angular-repo/devextreme-setup
@@ -141,15 +141,15 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Use Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '18'
 
     - name: Download artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: devextreme-npm
         path: ./testing/bundlers
@@ -203,12 +203,12 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - uses: ./.github/actions/pin-browsers
 
     - name: Use Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '18'
 
@@ -229,7 +229,7 @@ jobs:
         test -d ./devextreme-demos || git clone -b $BASE_BRANCH --depth 1 https://github.com/devexpress/devextreme-demos ./devextreme-demos
 
     - name: Download artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: devextreme-npm
         path: ./devextreme-demos
@@ -268,13 +268,31 @@ jobs:
         CI_ENV: true
       run: npm run test-testcafe
 
+    - name: Sanitize job name
+      if: ${{ failure() }}
+      run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}" | tr '/' '-')" >> $GITHUB_ENV
+
     - name: Copy screenshots artifacts
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: screenshots
+        name: screenshots-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/devextreme-demos/testing/artifacts/*
         if-no-files-found: ignore
+
+  merge-artifacts:
+    runs-on: devextreme-shr2
+    needs: test_demos
+    if: ${{ failure() }}
+
+    steps:
+      - name: Merge screenshot artifacts
+        uses: actions/upload-artifact/merge@v4
+        continue-on-error: true
+        with:
+          name: screenshots
+          pattern: screenshots-*
+          delete-merged: true
 
   notify:
     runs-on: devextreme-shr2
@@ -283,7 +301,7 @@ jobs:
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: DevExpress/github-actions/send-teams-notification@main
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}
