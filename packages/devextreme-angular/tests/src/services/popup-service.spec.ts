@@ -61,7 +61,7 @@ describe('Using DxPopupService', () => {
 
     const popupEl: HTMLElement = document.querySelector('.dx-overlay-wrapper.dx-popup-wrapper .dx-overlay-content.dx-popup-normal');
     const popupCloseEl = popupEl.querySelector('.dx-toolbar .dx-button .dx-icon-close');
-    const popupContentComponentEl: HTMLButtonElement = popupEl.querySelector('.popup-content .dx-button');
+    const popupContentButtonEl: HTMLButtonElement = popupEl.querySelector('.popup-content .dx-button');
 
     const popupTitleBarEl: HTMLElement = popupEl.querySelector('.dx-toolbar .dx-toolbar-before .dx-toolbar-label');
     const popupContentEl: HTMLElement = popupEl.querySelector('.dx-popup-content');
@@ -74,9 +74,9 @@ describe('Using DxPopupService', () => {
     expect(Number.parseInt(popupTitleBarEl.style.maxWidth, 10)).toBeGreaterThan(TITLE_MIN_WIDTH);
     expect(Number.parseInt(popupContentEl.style.height, 10)).toBeLessThan(POPUP_CONTENT_MAX_HEIGHT);
     expect(popupRef.contentRef.instance).toBeTruthy();
-    expect(popupContentComponentEl.textContent).toEqual('Test Button');
+    expect(popupContentButtonEl.textContent).toEqual('Test Button');
 
-    popupContentComponentEl.click();
+    popupContentButtonEl.click();
 
     tick(500);
 
