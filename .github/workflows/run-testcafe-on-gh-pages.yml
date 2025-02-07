@@ -56,7 +56,7 @@ jobs:
               with:
                 chrome-version: '121.0.6167.184'
 
-            - uses: pnpm/action-setup@v3
+            - uses: pnpm/action-setup@v4
               with:
                 version: 9
                 run_install: false
