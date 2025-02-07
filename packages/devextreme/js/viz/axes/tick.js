@@ -1,6 +1,6 @@
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { Deferred } from '../../core/utils/deferred';
+import { Deferred, when } from '../../core/utils/deferred';
 
 function getPathStyle(options) {
     return { stroke: options.color, 'stroke-width': options.width, 'stroke-opacity': options.opacity, opacity: 1 };
@@ -49,12 +49,14 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 this.labelCoords = axis._getTranslatedValue(value);
             },
             saveCoords() {
-                this._lastStoredCoordinates = {
-                    coords: this._storedCoords,
-                    labelCoords: this._storedLabelsCoords
-                };
-                this._storedCoords = this.coords;
-                this._storedLabelsCoords = this.templateContainer ? this._getTemplateCoords() : this.labelCoords;
+                when(this._templateDef).done(() => {
+                    this._lastStoredCoordinates = {
+                        coords: this._storedCoords,
+                        labelCoords: this._storedLabelsCoords
+                    };
+                    this._storedCoords = this.coords;
+                    this._storedLabelsCoords = this.templateContainer ? this._getTemplateCoords() : this.labelCoords;
+                });
             },
             resetCoordinates() {
                 if(this._lastStoredCoordinates) {
