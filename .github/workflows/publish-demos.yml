@@ -18,9 +18,9 @@ jobs:
       with:
         node-version: '20'
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
-        version: 9
+        version: 9.15.4
         run_install: false
 
     - uses: actions/cache@v4
@@ -80,9 +80,9 @@ jobs:
       with:
         name: devextreme-sources
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
-        version: 9
+        version: 9.15.4
         run_install: false
 
     - name: Get pnpm store directory
@@ -172,9 +172,9 @@ jobs:
       with:
         name: devextreme-sources
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
-        version: 9
+        version: 9.15.4
         run_install: false
 
     - name: Get pnpm store directory
