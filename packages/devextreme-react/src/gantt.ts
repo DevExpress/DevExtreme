@@ -341,10 +341,6 @@ const _componentContextMenuItem = (props: IContextMenuItemProps) => {
     elementDescriptor: {
       OptionName: "items",
       IsCollectionItem: true,
-      ExpectedChildren: {
-        contextMenuItemItem: { optionName: "items", isCollectionItem: true },
-        item: { optionName: "items", isCollectionItem: true }
-      },
       TemplateProps: [{
         tmplOption: "template",
         render: "render",
@@ -355,41 +351,6 @@ const _componentContextMenuItem = (props: IContextMenuItemProps) => {
 };
 
 const ContextMenuItem = Object.assign<typeof _componentContextMenuItem, NestedComponentMeta>(_componentContextMenuItem, {
-  componentType: "option",
-});
-
-// owners:
-// ContextMenuItem
-type IContextMenuItemItemProps = React.PropsWithChildren<{
-  beginGroup?: boolean;
-  closeMenuOnClick?: boolean;
-  disabled?: boolean;
-  icon?: string;
-  items?: Array<dxContextMenuItem>;
-  selectable?: boolean;
-  selected?: boolean;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
-  text?: string;
-  visible?: boolean;
-  render?: (...params: any) => React.ReactNode;
-  component?: React.ComponentType<any>;
-}>
-const _componentContextMenuItemItem = (props: IContextMenuItemItemProps) => {
-  return React.createElement(NestedOption<IContextMenuItemItemProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "items",
-      IsCollectionItem: true,
-      TemplateProps: [{
-        tmplOption: "template",
-        render: "render",
-        component: "component"
-      }],
-    },
-  });
-};
-
-const ContextMenuItemItem = Object.assign<typeof _componentContextMenuItemItem, NestedComponentMeta>(_componentContextMenuItemItem, {
   componentType: "option",
 });
 
@@ -579,7 +540,6 @@ const HeaderFilter = Object.assign<typeof _componentHeaderFilter, NestedComponen
 
 // owners:
 // ContextMenu
-// ContextMenuItem
 // Toolbar
 type IItemProps = React.PropsWithChildren<{
   beginGroup?: boolean;
@@ -612,10 +572,6 @@ const _componentItem = (props: IItemProps) => {
     elementDescriptor: {
       OptionName: "items",
       IsCollectionItem: true,
-      ExpectedChildren: {
-        contextMenuItemItem: { optionName: "items", isCollectionItem: true },
-        item: { optionName: "items", isCollectionItem: true }
-      },
       TemplateProps: [{
         tmplOption: "template",
         render: "render",
@@ -935,8 +891,6 @@ export {
   IContextMenuProps,
   ContextMenuItem,
   IContextMenuItemProps,
-  ContextMenuItemItem,
-  IContextMenuItemItemProps,
   Dependencies,
   IDependenciesProps,
   Editing,
