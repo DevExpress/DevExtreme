@@ -1096,7 +1096,7 @@ const DataController = Class.inherit((function () {
         texts: options.texts || {},
         hiddenTotals,
         hiddenValues,
-        hiddenGrandTotals: [],
+        hiddenGrandTotals,
         showTotals: options.showRowTotals,
         showGrandTotals: options.showRowGrandTotals !== false
           && grandTotalsAreHiddenForNotAllDataFields,
