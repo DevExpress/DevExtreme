@@ -5,6 +5,39 @@ exports[`common initial render should be successfull 1`] = `
   class="dx-widget dx-cardview"
 >
   
+  <div
+    class="dx-cardview-headers"
+  >
+    <div
+      class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
+    >
+      <div
+        class="dx-scrollable-wrapper"
+      >
+        <div
+          class="dx-scrollable-container"
+          tabindex="0"
+        >
+          <div
+            class="dx-scrollable-content"
+            style="left: 0px; top: 0px; transform: none;"
+          />
+          <div
+            class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
+            style="display: none;"
+          >
+            <div
+              class="dx-scrollable-scroll dx-state-invisible"
+            >
+              <div
+                class="dx-scrollable-scroll-content"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div>
     
   </div>
