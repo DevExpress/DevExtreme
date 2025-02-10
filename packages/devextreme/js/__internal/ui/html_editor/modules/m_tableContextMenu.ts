@@ -71,6 +71,12 @@ if (Quill) {
       eventsEngine.off(this.editorInstance._getContent(), CONTEXT_MENU_EVENT);
     }
 
+    _onContextMenuInitialized(e) {
+      e.component.registerKeyHandler('escape', () => {
+        this.editorInstance.focus();
+      });
+    }
+
     _createContextMenu(items) {
       const $container = $('<div>').appendTo(this.editorInstance.$element());
       const menuConfig = this._getMenuConfig(items);
@@ -160,6 +166,9 @@ if (Quill) {
         target: this._quillContainer,
         showEvent: null,
         hideOnParentScroll: false,
+        onInitialized: (e) => {
+          this._onContextMenuInitialized(e);
+        },
         items: customItems,
       };
     }
