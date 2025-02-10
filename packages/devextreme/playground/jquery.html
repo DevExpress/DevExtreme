@@ -58,27 +58,9 @@
 
         <script>
             $(() => {
-                $("#btn1").dxDropDownButton({
-                    text: "DropDownButton",
-                    splitButton: true,
-                    onButtonClick(e) {
-                        console.log("DropDownButton click");
-                    },
-                });
+                $("#btn1").dxDropDownButton({ text: 'dd' });
 
-                $("#btn2").dxButtonGroup({
-                    items: [
-                        {
-                            text: "test1",
-                        },
-                        {
-                            text: "test2",
-                        },
-                    ],
-                    onItemClick(e) {
-                        console.log("dxButtonGroup click");
-                    },
-                });
+                $("#btn2").dxButtonGroup({ items: [ { text: 'bg' } ] });
 
                 $("#uploader1").dxFileUploader({
                     visible: false,

@@ -1,5 +1,7 @@
 import $ from 'jquery';
 import FileUploader from 'ui/file_uploader';
+import 'ui/drop_down_button';
+import 'ui/button_group';
 import devices from '__internal/core/m_devices';
 import { Deferred } from 'core/utils/deferred';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -20,6 +22,7 @@ QUnit.testStart(function() {
 const internals = FileUploader.__internals;
 
 const FILEUPLOADER_EMPTY_CLASS = 'dx-fileuploader-empty';
+const FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid';
 
 const FILEUPLOADER_CONTENT_CLASS = 'dx-fileuploader-content';
 const FILEUPLOADER_INPUT_WRAPPER_CLASS = 'dx-fileuploader-input-wrapper';
@@ -38,7 +41,7 @@ const FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button';
 const FILEUPLOADER_UPLOAD_BUTTON_CLASS = 'dx-fileuploader-upload-button';
 const FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS = 'dx-fileuploader-file-status-message';
 
-const FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid';
+const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 
 const FILEUPLOADER_AFTER_LOAD_DELAY = 500;
 
@@ -4355,38 +4358,31 @@ QUnit.module('readOnly option', moduleConfig, () => {
         $fileUploader.find('.dx-fileuploader-input-wrapper').trigger('dragenter');
         assert.notOk($fileUploader.hasClass('dx-fileuploader-dragover'), 'drag event was not handled for input wrapper element');
     });
-
 });
 
-QUnit.module('dxButton integration', moduleConfig, () => {
-    QUnit.test('dialog should be shown after press enter key on dxButton (T1178836)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'keyboard is not supported for not generic devices');
-            return;
-        }
+QUnit.module('integration of dx button components via dialogTrigger', moduleConfig, () => {
+    ['dxButton', 'dxButtonGroup', 'dxDropDownButton'].forEach(component => {
+        QUnit.test(`dialog should be shown after press enter key on ${component} (T1178836, T1256752)`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'keyboard is not supported for not generic devices');
+                return;
+            }
 
-        const $customDialogTrigger = $('<div>').appendTo('#qunit-fixture');
+            const $dialogTrigger = $('<div>')[component]().appendTo('#qunit-fixture');
 
-        $customDialogTrigger.dxButton({
-            text: 'button'
+            $('#fileuploader').dxFileUploader({ dialogTrigger: $dialogTrigger });
+
+            const $fileUploaderInput = $(`.${FILEUPLOADER_INPUT_CLASS}`);
+            const $focusTarget = component === 'dxButton' ? $dialogTrigger : $(`.${BUTTON_GROUP_CLASS}`);
+
+            const fileUploaderInputClickSpy = sinon.spy();
+            const keyboard = keyboardMock($focusTarget);
+
+            $fileUploaderInput.on('click', fileUploaderInputClickSpy);
+
+            keyboard.keyUp('enter');
+
+            assert.strictEqual(fileUploaderInputClickSpy.callOnce, true, 'click on input fired once');
         });
-
-        const instance = $('#fileuploader').dxFileUploader({
-            dialogTrigger: $customDialogTrigger,
-            visible: false
-        }).dxFileUploader('instance');
-        const spy = sinon.spy();
-
-        $(`.${FILEUPLOADER_INPUT_CLASS}`).on('click', spy);
-
-        instance.option({
-            uploadMode: 'useButtons',
-        });
-        assert.strictEqual(spy.callCount, 0, 'click on input not fired');
-
-        const keyboard = keyboardMock($customDialogTrigger);
-        keyboard.keyDown('enter');
-
-        assert.strictEqual(spy.callCount, 1, 'click on input fired');
     });
 });
