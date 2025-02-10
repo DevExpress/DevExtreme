@@ -11,6 +11,7 @@ import contextMenuEvent from 'common/core/events/contextmenu';
 import holdEvent from 'common/core/events/hold';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
+import themes from 'ui/themes';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
@@ -322,6 +323,19 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
 
         assert.strictEqual($submenu.length, 1, 'only 1 submenu exists');
         assert.ok($submenu.hasClass(DX_SCROLLABLE_CLASS), 'Scrollable initialized');
+    });
+
+    QUnit.test('Scrollable container should include added border space in generic theme (T1258002)', function(assert) {
+        new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
+        const isGeneric = themes.isGeneric();
+        const containerCalculatedHeight = $(`.${DX_SCROLLABLE_CONTAINER_CLASS}`).outerHeight();
+        const contentCalculatedHeight = $(` .${DX_SCROLLABLE_CONTENT_CLASS}`).outerHeight();
+
+        if(!isGeneric) {
+            assert.strictEqual(containerCalculatedHeight, contentCalculatedHeight, 'scrollable container has no additional border padding');
+            return;
+        }
+        assert.roughEqual(containerCalculatedHeight, contentCalculatedHeight, 1, 'scrollable container has additional border padding for generic theme');
     });
 
     QUnit.test('Scrollable should be initialized on a 2nd level submenu', function(assert) {
