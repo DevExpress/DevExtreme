@@ -86,18 +86,20 @@ export class ColumnSortable extends Component<Props, State> {
 
   // TODO: move all none-native approaches to sortable wrapper
   private readonly renderDragTemplate = (): void => {
-    if (this.dragItemProps) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const DragTemplate = this.props.dragTemplate!;
-      render(
+    if (!this.dragItemProps) {
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const DragTemplate = this.props.dragTemplate!;
+    render(
         // @ts-expect-error
         <DragTemplate
           column={this.dragItemProps.props.itemData.column}
           status={this.status}
         />,
         this.dragItemProps.container,
-      );
-    }
+    );
   };
 
   render(): InfernoNode {
