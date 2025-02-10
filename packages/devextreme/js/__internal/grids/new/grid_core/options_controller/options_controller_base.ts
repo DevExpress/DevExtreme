@@ -154,12 +154,17 @@ export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
     };
   }
 
+  public normalizeTemplate<T>(template: Template<T>): ComponentType<T> {
+    // @ts-expect-error
+    return TemplateWrapper(this.component._getTemplate(template)) as any;
+  }
+
   public template<TProp extends string>(
     name: TProp,
   ): SubsGets<TemplateProperty<TProps, TProp>> {
     return computed(
       // @ts-expect-error
-      (template) => template && TemplateWrapper(this.component._getTemplate(template)) as any,
+      (template) => template && this.normalizeTemplate(template) as any,
       [this.oneWay(name)],
     );
   }

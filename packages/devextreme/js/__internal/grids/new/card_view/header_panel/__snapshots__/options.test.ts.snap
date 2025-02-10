@@ -1,0 +1,156 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ColumnProperties headerItemCssClass should override content of headerPanel item 1`] = `
+<div
+  class="test-container"
+>
+  <div
+    class="dx-cardview-headers"
+  >
+    <div
+      class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
+    >
+      <div
+        class="dx-scrollable-wrapper"
+      >
+        <div
+          class="dx-scrollable-container"
+          tabindex="0"
+        >
+          <div
+            class="dx-scrollable-content"
+            style="left: 0px; top: 0px; transform: none;"
+          >
+            <div
+              class="dx-cardview-headers-content"
+            >
+              <div
+                class="dx-cardview-header-item my-css-class "
+                tabindex="0"
+              >
+                Column 1
+              </div>
+            </div>
+          </div>
+          <div
+            class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
+            style="display: none;"
+          >
+            <div
+              class="dx-scrollable-scroll dx-state-invisible"
+            >
+              <div
+                class="dx-scrollable-scroll-content"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+`;
+
+exports[`Options headerPanel itemCssClass should add css class to headerPanel item 1`] = `
+<div
+  class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
+>
+  <div
+    class="dx-scrollable-wrapper"
+  >
+    <div
+      class="dx-scrollable-container"
+      tabindex="0"
+    >
+      <div
+        class="dx-scrollable-content"
+        style="left: 0px; top: 0px; transform: none;"
+      >
+        <div
+          class="dx-cardview-headers-content"
+        >
+          <div
+            class="dx-cardview-header-item  my-class"
+            tabindex="0"
+          >
+            Column 1
+          </div>
+        </div>
+      </div>
+      <div
+        class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
+        style="display: none;"
+      >
+        <div
+          class="dx-scrollable-scroll dx-state-invisible"
+        >
+          <div
+            class="dx-scrollable-scroll-content"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Options headerPanel visible when it is false should hide headerPanel 1`] = `
+<div
+  class="test-container"
+>
+  
+</div>
+`;
+
+exports[`Options headerPanel visible when it is true should show headerPanel 1`] = `
+<div
+  class="test-container"
+>
+  <div
+    class="dx-cardview-headers"
+  >
+    <div
+      class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
+    >
+      <div
+        class="dx-scrollable-wrapper"
+      >
+        <div
+          class="dx-scrollable-container"
+          tabindex="0"
+        >
+          <div
+            class="dx-scrollable-content"
+            style="left: 0px; top: 0px; transform: none;"
+          >
+            <div
+              class="dx-cardview-headers-content"
+            >
+              <div
+                class="dx-cardview-header-item  "
+                tabindex="0"
+              >
+                Column 1
+              </div>
+            </div>
+          </div>
+          <div
+            class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
+            style="display: none;"
+          >
+            <div
+              class="dx-scrollable-scroll dx-state-invisible"
+            >
+              <div
+                class="dx-scrollable-scroll-content"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+`;
