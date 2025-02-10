@@ -7,6 +7,7 @@ import { changeTheme } from '../../../../../helpers/changeTheme';
 fixture.disablePageReloads`Scheduler: Material theme without all-day panel`
   .page(url(__dirname, '../../../../container.html'));
 
+// TODO(Scheduler_tests): Check this test
 test('Week view without all-day panel should be rendered correctly', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
