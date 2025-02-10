@@ -104,21 +104,9 @@ export class TimeZoneCalculator {
     const targetOffsetName = appointmentTimezone ? 'appointment' : 'common';
     const direction = isBack ? -1 : 1;
 
-    let nextDate = dateUtilsTs.addOffsets(newDate, [
-      direction * (toMs('hour') * offsets[targetOffsetName]),
-      -direction * (toMs('hour') * offsets.client),
+    return dateUtilsTs.addOffsets(newDate, [
+      direction * toMs('hour') * offsets[targetOffsetName],
+      -direction * toMs('hour') * offsets.client,
     ]);
-
-    // NOTE: if `addOffsets` crosses DST, then offsets in `date` and `nextDate` are different
-    // Add correction according offset changes.
-    const nextOffsets = this.getOffsets(nextDate, appointmentTimezone);
-    const deltaHours = offsets.client - nextOffsets.client
-      + nextOffsets[targetOffsetName] - offsets[targetOffsetName];
-
-    if (!isBack && deltaHours) {
-      nextDate = dateUtilsTs.addOffsets(nextDate, [direction * toMs('hour') * deltaHours]);
-    }
-
-    return nextDate;
   }
 }

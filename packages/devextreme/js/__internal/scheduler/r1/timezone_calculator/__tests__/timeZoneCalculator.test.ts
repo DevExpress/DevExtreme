@@ -1,8 +1,6 @@
 import {
   beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
-import dateUtils from '@js/core/utils/date';
-import timeZoneUtils from '@ts/scheduler/m_utils_time_zone';
 import { createTimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator';
 
 import { TimeZoneCalculator } from '../calculator';
@@ -10,54 +8,6 @@ import type { PathTimeZoneConversion } from '../const';
 import type { TimeZoneCalculatorOptions } from '../types';
 
 describe('TimeZoneCalculator', () => {
-  describe('T1255474 - handle DST', () => {
-    // DST CET: 01:00 UTC 27 March 2021, 01:00 UTC 30 October 2021
-    // DST USA: 01:00 UTC 09 March 2025, 01:00 UTC 03 November 2024
-    ([
-      [new Date(Date.UTC(2021, 2, 27, 0)), 'CET winter'],
-      [new Date(Date.UTC(2021, 2, 27, 15)), 'CET winter to summer'],
-      [new Date(Date.UTC(2021, 2, 27, 22)), 'CET winter to summer'],
-      [new Date(Date.UTC(2021, 2, 28, 0)), 'CET summer'],
-      [new Date(Date.UTC(2021, 9, 29, 21)), 'CET summer'],
-      [new Date(Date.UTC(2021, 9, 30, 15)), 'CET summer to winter'],
-      [new Date(Date.UTC(2021, 9, 30, 21)), 'CET summer to winter'],
-      [new Date(Date.UTC(2021, 9, 30, 23)), 'CET winter'],
-      [new Date(Date.UTC(2025, 2, 9, 0)), 'USA winter'],
-      [new Date(Date.UTC(2025, 2, 9, 2)), 'USA winter to summer'],
-      [new Date(Date.UTC(2025, 2, 10, 0)), 'USA summer'],
-      [new Date(Date.UTC(2024, 11, 3, 21)), 'USA summer'],
-      [new Date(Date.UTC(2024, 11, 4, 15)), 'USA summer to winter'],
-      [new Date(Date.UTC(2024, 11, 4, 23)), 'USA winter'],
-    ] as const).forEach(([date, description]) => {
-      [
-        'Europe/Belgrade', // +1/+2 GMT
-        'Asia/Beirut', // +2/+3 GMT
-        'America/Los_Angeles', // -7/-8 GMT
-        'Etc/GMT+12',
-        'Etc/GMT+11',
-        'Etc/GMT+10',
-        'Etc/GMT+9',
-        'Etc/GMT+8',
-        'Etc/GMT+7',
-        'Etc/GMT+6',
-      ].forEach((clientTimeZOne) => {
-        it(`Should correctly convert ${date.toISOString()} (${description}) to Grid and back in ${clientTimeZOne} timezone`, () => {
-          const calculator = createTimeZoneCalculator('America/Los_Angeles');
-
-          jest.spyOn(calculator as any, 'getClientOffset').mockImplementation((dateArg) => (timeZoneUtils
-            .calculateTimezoneByValue(clientTimeZOne, dateArg as Date) ?? 0) * dateUtils.dateToMilliseconds('hour'));
-
-          const sourceDate = calculator.createDate(date, { path: 'toGrid' as PathTimeZoneConversion }) as Date;
-          const gridDate = calculator.createDate(sourceDate, { path: 'fromGrid' as PathTimeZoneConversion }) as Date;
-          const sourceDate2 = calculator.createDate(gridDate, { path: 'toGrid' as PathTimeZoneConversion }) as Date;
-
-          expect(date.toISOString()).toBe(gridDate.toISOString());
-          expect(sourceDate.toISOString()).toBe(sourceDate2.toISOString());
-        });
-      });
-    });
-  });
-
   describe('General tests', () => {
     const localOffset = new Date().getTimezoneOffset() * 60000;
     const commonOffset = 15;
@@ -119,9 +69,9 @@ describe('TimeZoneCalculator', () => {
 
         calculator.createDate(sourceDate, { path, appointmentTimeZone: appointmentTimezone });
 
-        expect(clientMock).toHaveBeenCalledTimes(3);
-        expect(commonMock).toHaveBeenCalledTimes(timezone === 'common' ? 3 : 0);
-        expect(appointmentMock).toHaveBeenCalledTimes(timezone === 'appointment' ? 3 : 0);
+        expect(clientMock).toHaveBeenCalledTimes(1);
+        expect(commonMock).toHaveBeenCalledTimes(timezone === 'common' ? 1 : 0);
+        expect(appointmentMock).toHaveBeenCalledTimes(timezone === 'appointment' ? 1 : 0);
       });
     });
 

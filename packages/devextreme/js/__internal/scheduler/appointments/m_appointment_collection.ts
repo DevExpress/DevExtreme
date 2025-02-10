@@ -751,21 +751,37 @@ class SchedulerAppointments extends CollectionWidget {
     });
   }
 
-  updateResizedAppointment($element, dateRange, dataAccessors, timeZoneCalculator) {
+  updateResizedAppointment($element, dateRange: { startDate: Date; endDate: Date }, dataAccessors, timeZoneCalculator) {
     const sourceAppointment = (this as any)._getItemData($element);
 
-    const modifiedAppointmentAdapter = createAppointmentAdapter(
+    const gridAdapter = createAppointmentAdapter(
       sourceAppointment,
       dataAccessors,
       timeZoneCalculator,
-    ).clone();
+    );
 
-    modifiedAppointmentAdapter.startDate = new Date(dateRange.startDate);
-    modifiedAppointmentAdapter.endDate = new Date(dateRange.endDate);
+    gridAdapter.startDate = new Date(dateRange.startDate);
+    gridAdapter.endDate = new Date(dateRange.endDate);
+
+    /*
+     * T1255474. `dateRange` has dates with 00:00 local time.
+     * If we transform dates fromGrid and back through DST then we'll lose one hour.
+     * TODO(1): refactor computation around DST globally
+     */
+    const convertedBackAdapter = gridAdapter.clone();
+    convertedBackAdapter
+      .calculateDates('fromGrid')
+      .calculateDates('toGrid');
+
+    const startDateDelta = gridAdapter.startDate.getTime() - convertedBackAdapter.startDate.getTime();
+    const endDateDelta = gridAdapter.endDate.getTime() - convertedBackAdapter.endDate.getTime();
+
+    gridAdapter.startDate = dateUtilsTs.addOffsets(gridAdapter.startDate, [startDateDelta]);
+    gridAdapter.endDate = dateUtilsTs.addOffsets(gridAdapter.endDate, [endDateDelta]);
 
     this.notifyObserver('updateAppointmentAfterResize', {
       target: sourceAppointment,
-      data: modifiedAppointmentAdapter.clone({ pathTimeZone: 'fromGrid' } as any).source(),
+      data: gridAdapter.calculateDates('fromGrid').source(),
       $appointment: $element,
     });
   }
