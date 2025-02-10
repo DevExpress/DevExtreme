@@ -236,7 +236,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: publish-demos-angular-${{ matrix.index }}
-        path: ./apps/demos/publish-demos/Angular-${{ matrix.index }}
+        path: ./apps/demos/publish-demos/
 
   deploy:
     runs-on: ubuntu-latest
@@ -253,7 +253,7 @@ jobs:
         with:
           pattern: publish-demos-angular-*
           merge-multiple: true
-          path: ./apps/demos/publish-demos/Angular
+          path: ./apps/demos/publish-demos/
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
