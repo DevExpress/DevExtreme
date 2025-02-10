@@ -694,23 +694,13 @@ QUnit.module('dxPivotGrid DataController', moduleConfig, () => {
                 {
                     text: 'Grand Total',
                     type: 'GT',
-                    rowspan: 2
                 },
-                {
-                    dataIndex: 0,
-                    isLast: true,
-                    text: 'Sum',
-                    type: 'GT'
-                },
-            ],
-            [
                 {
                     dataIndex: 1,
                     isLast: true,
                     text: 'Avg',
                     type: 'GT'
                 }
-
             ]
         ], 'Rows Info');
 
