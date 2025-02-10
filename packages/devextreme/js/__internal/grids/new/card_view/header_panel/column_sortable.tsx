@@ -63,11 +63,9 @@ export class ColumnSortable extends Component<Props, State> {
     );
 
     // TODO: move to scss variable
-    if (yDistance <= 64) {
-      this.status = 'moving';
-    } else {
-      this.status = 'forbid';
-    }
+    this.status = yDistance <= 64
+      ? 'moving'
+      : 'forbid';
 
     this.renderDragTemplate();
   };
