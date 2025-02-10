@@ -140,24 +140,34 @@ jobs:
         include:
           - name: Check generated demos (1/10)
             command: CONSTEL=1/10 pnpm run make-demos-bundle --framework="Angular"
+            index: 1
           - name: Check generated demos (2/10)
             command: CONSTEL=2/10 pnpm run make-demos-bundle --framework="Angular"
+            index: 2
           - name: Check generated demos (3/10)
             command: CONSTEL=3/10 pnpm run make-demos-bundle --framework="Angular"
+            index: 3
           - name: Check generated demos (4/10)
             command: CONSTEL=4/10 pnpm run make-demos-bundle --framework="Angular"
+            index: 4
           - name: Check generated demos (5/10)
             command: CONSTEL=5/10 pnpm run make-demos-bundle --framework="Angular"
+            index: 5
           - name: Check generated demos (6/10)
             command: CONSTEL=6/10 pnpm run make-demos-bundle --framework="Angular"
+            index: 6
           - name: Check generated demos (7/10)
             command: CONSTEL=7/10 pnpm run make-demos-bundle --framework="Angular"
+            index: 7
           - name: Check generated demos (8/10)
             command: CONSTEL=8/10 pnpm run make-demos-bundle --framework="Angular"
+            index: 8
           - name: Check generated demos (9/10)
             command: CONSTEL=9/10 pnpm run make-demos-bundle --framework="Angular"
+            index: 9
           - name: Check generated demos (10/10)
             command: CONSTEL=10/10 pnpm run make-demos-bundle --framework="Angular"
+            index: 10
     steps:
     - name: Get sources
       uses: actions/checkout@v4
@@ -223,10 +233,10 @@ jobs:
       run: pnpm run post-process-angular
     
     - name: Save publish-demos directory for Angular as an artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: publish-demos
-        path: ./apps/demos/publish-demos
+        name: publish-demos-angular-${{ matrix.index }}
+        path: ./apps/demos/publish-demos/
 
   deploy:
     runs-on: ubuntu-latest
@@ -237,8 +247,16 @@ jobs:
         with:
           name: publish-demos
           path: ./apps/demos/publish-demos
+
+      - name: Download publish-demos artifact
+        uses: actions/download-artifact@v4
+        with:
+          pattern: publish-demos-angular-*
+          merge-multiple: true
+          path: ./apps/demos/publish-demos/
+
       - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./apps/demos/publish-demos
