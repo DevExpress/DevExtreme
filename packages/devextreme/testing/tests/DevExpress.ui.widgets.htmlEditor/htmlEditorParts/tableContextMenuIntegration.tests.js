@@ -33,6 +33,7 @@ const CONTEXT_MENU_OVERLAY_SELECTOR = '.dx-context-menu.dx-overlay-content';
 const ITEM_HAS_SUBMENU_CLASS = 'dx-menu-item-has-submenu';
 const ITEM_HAS_TEXT_CLASS = 'dx-menu-item-has-text';
 const SUBMENU_CLASS = 'dx-submenu';
+const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 const SUBMENU_ITEMS_SELECTOR = `.${SUBMENU_CLASS} .${SUBMENU_CLASS} .${ITEM_HAS_TEXT_CLASS}`;
 
 module('Table context menu integration', {
@@ -382,6 +383,21 @@ module('Table context menu integration', {
             const $table = this.$element.find('table');
 
             assert.strictEqual($table.length, 0, 'Table is deleted');
+        });
+
+        test('Pressing escape button should return focus to html editor', function(assert) {
+            this.createWidget();
+
+            const contextMenu = this.getContextMenu();
+            const $editorContent = $(`.${HTML_EDITOR_CONTENT_CLASS}`);
+
+            contextMenu.trigger($.Event('keydown', { key: 'Escape', keyCode: 27, which: 27 }));
+            this.clock.tick(10);
+
+            const shadowRoot = document.activeElement.shadowRoot;
+            const activeElement = shadowRoot ? shadowRoot.activeElement : document.activeElement;
+
+            assert.strictEqual(activeElement, $editorContent.get(0), 'Editor should regain focus after Escape');
         });
     });
 
