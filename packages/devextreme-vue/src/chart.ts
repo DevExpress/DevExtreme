@@ -1163,6 +1163,14 @@ prepareConfigurationComponentConfig(DxCommonAnnotationSettingsConfig);
 const DxCommonAnnotationSettings = defineComponent(DxCommonAnnotationSettingsConfig);
 
 (DxCommonAnnotationSettings as any).$_optionName = "commonAnnotationSettings";
+(DxCommonAnnotationSettings as any).$_expectedChildren = {
+  annotationBorder: { isCollectionItem: false, optionName: "border" },
+  annotationImage: { isCollectionItem: false, optionName: "image" },
+  border: { isCollectionItem: false, optionName: "border" },
+  font: { isCollectionItem: false, optionName: "font" },
+  image: { isCollectionItem: false, optionName: "image" },
+  shadow: { isCollectionItem: false, optionName: "shadow" }
+};
 
 const DxCommonAxisSettingsConfig = {
   emits: {
@@ -1223,11 +1231,17 @@ const DxCommonAxisSettings = defineComponent(DxCommonAxisSettingsConfig);
 
 (DxCommonAxisSettings as any).$_optionName = "commonAxisSettings";
 (DxCommonAxisSettings as any).$_expectedChildren = {
+  breakStyle: { isCollectionItem: false, optionName: "breakStyle" },
   commonAxisSettingsConstantLineStyle: { isCollectionItem: false, optionName: "constantLineStyle" },
   commonAxisSettingsLabel: { isCollectionItem: false, optionName: "label" },
   commonAxisSettingsTitle: { isCollectionItem: false, optionName: "title" },
   constantLineStyle: { isCollectionItem: false, optionName: "constantLineStyle" },
+  grid: { isCollectionItem: false, optionName: "grid" },
   label: { isCollectionItem: false, optionName: "label" },
+  minorGrid: { isCollectionItem: false, optionName: "minorGrid" },
+  minorTick: { isCollectionItem: false, optionName: "minorTick" },
+  stripStyle: { isCollectionItem: false, optionName: "stripStyle" },
+  tick: { isCollectionItem: false, optionName: "tick" },
   title: { isCollectionItem: false, optionName: "title" }
 };
 
@@ -1282,6 +1296,9 @@ prepareConfigurationComponentConfig(DxCommonAxisSettingsConstantLineStyleLabelCo
 const DxCommonAxisSettingsConstantLineStyleLabel = defineComponent(DxCommonAxisSettingsConstantLineStyleLabelConfig);
 
 (DxCommonAxisSettingsConstantLineStyleLabel as any).$_optionName = "label";
+(DxCommonAxisSettingsConstantLineStyleLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxCommonAxisSettingsLabelConfig = {
   emits: {
@@ -1321,6 +1338,9 @@ prepareConfigurationComponentConfig(DxCommonAxisSettingsLabelConfig);
 const DxCommonAxisSettingsLabel = defineComponent(DxCommonAxisSettingsLabelConfig);
 
 (DxCommonAxisSettingsLabel as any).$_optionName = "label";
+(DxCommonAxisSettingsLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxCommonAxisSettingsTitleConfig = {
   emits: {
@@ -1346,6 +1366,9 @@ prepareConfigurationComponentConfig(DxCommonAxisSettingsTitleConfig);
 const DxCommonAxisSettingsTitle = defineComponent(DxCommonAxisSettingsTitleConfig);
 
 (DxCommonAxisSettingsTitle as any).$_optionName = "title";
+(DxCommonAxisSettingsTitle as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxCommonPaneSettingsConfig = {
   emits: {
@@ -1726,6 +1749,9 @@ prepareConfigurationComponentConfig(DxConstantLineLabelConfig);
 const DxConstantLineLabel = defineComponent(DxConstantLineLabelConfig);
 
 (DxConstantLineLabel as any).$_optionName = "label";
+(DxConstantLineLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxConstantLineStyleConfig = {
   emits: {
@@ -2531,6 +2557,11 @@ const DxPane = defineComponent(DxPaneConfig);
 
 (DxPane as any).$_optionName = "panes";
 (DxPane as any).$_isCollectionItem = true;
+(DxPane as any).$_expectedChildren = {
+  backgroundColor: { isCollectionItem: false, optionName: "backgroundColor" },
+  border: { isCollectionItem: false, optionName: "border" },
+  paneBorder: { isCollectionItem: false, optionName: "border" }
+};
 
 const DxPaneBorderConfig = {
   emits: {
@@ -2600,14 +2631,10 @@ const DxPoint = defineComponent(DxPointConfig);
 
 (DxPoint as any).$_optionName = "point";
 (DxPoint as any).$_expectedChildren = {
-  border: { isCollectionItem: false, optionName: "border" },
   color: { isCollectionItem: false, optionName: "color" },
   hoverStyle: { isCollectionItem: false, optionName: "hoverStyle" },
   image: { isCollectionItem: false, optionName: "image" },
   pointBorder: { isCollectionItem: false, optionName: "border" },
-  pointHoverStyle: { isCollectionItem: false, optionName: "hoverStyle" },
-  pointImage: { isCollectionItem: false, optionName: "image" },
-  pointSelectionStyle: { isCollectionItem: false, optionName: "selectionStyle" },
   selectionStyle: { isCollectionItem: false, optionName: "selectionStyle" }
 };
 
@@ -2887,6 +2914,21 @@ const DxSeries = defineComponent(DxSeriesConfig);
 
 (DxSeries as any).$_optionName = "series";
 (DxSeries as any).$_isCollectionItem = true;
+(DxSeries as any).$_expectedChildren = {
+  aggregation: { isCollectionItem: false, optionName: "aggregation" },
+  border: { isCollectionItem: false, optionName: "border" },
+  color: { isCollectionItem: false, optionName: "color" },
+  commonSeriesSettingsHoverStyle: { isCollectionItem: false, optionName: "hoverStyle" },
+  commonSeriesSettingsLabel: { isCollectionItem: false, optionName: "label" },
+  commonSeriesSettingsSelectionStyle: { isCollectionItem: false, optionName: "selectionStyle" },
+  hoverStyle: { isCollectionItem: false, optionName: "hoverStyle" },
+  label: { isCollectionItem: false, optionName: "label" },
+  point: { isCollectionItem: false, optionName: "point" },
+  reduction: { isCollectionItem: false, optionName: "reduction" },
+  selectionStyle: { isCollectionItem: false, optionName: "selectionStyle" },
+  seriesBorder: { isCollectionItem: false, optionName: "border" },
+  valueErrorBar: { isCollectionItem: false, optionName: "valueErrorBar" }
+};
 
 const DxSeriesBorderConfig = {
   emits: {
@@ -3052,8 +3094,7 @@ const DxStripStyle = defineComponent(DxStripStyleConfig);
 
 (DxStripStyle as any).$_optionName = "stripStyle";
 (DxStripStyle as any).$_expectedChildren = {
-  label: { isCollectionItem: false, optionName: "label" },
-  stripStyleLabel: { isCollectionItem: false, optionName: "label" }
+  label: { isCollectionItem: false, optionName: "label" }
 };
 
 const DxStripStyleLabelConfig = {
@@ -3076,6 +3117,9 @@ prepareConfigurationComponentConfig(DxStripStyleLabelConfig);
 const DxStripStyleLabel = defineComponent(DxStripStyleLabelConfig);
 
 (DxStripStyleLabel as any).$_optionName = "label";
+(DxStripStyleLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxSubtitleConfig = {
   emits: {
@@ -3427,12 +3471,18 @@ const DxValueAxis = defineComponent(DxValueAxisConfig);
   axisLabel: { isCollectionItem: false, optionName: "label" },
   axisTitle: { isCollectionItem: false, optionName: "title" },
   break: { isCollectionItem: true, optionName: "breaks" },
+  breakStyle: { isCollectionItem: false, optionName: "breakStyle" },
   constantLine: { isCollectionItem: true, optionName: "constantLines" },
   constantLineStyle: { isCollectionItem: false, optionName: "constantLineStyle" },
+  grid: { isCollectionItem: false, optionName: "grid" },
   label: { isCollectionItem: false, optionName: "label" },
+  minorGrid: { isCollectionItem: false, optionName: "minorGrid" },
+  minorTick: { isCollectionItem: false, optionName: "minorTick" },
   minorTickInterval: { isCollectionItem: false, optionName: "minorTickInterval" },
   minVisualRangeLength: { isCollectionItem: false, optionName: "minVisualRangeLength" },
   strip: { isCollectionItem: true, optionName: "strips" },
+  stripStyle: { isCollectionItem: false, optionName: "stripStyle" },
+  tick: { isCollectionItem: false, optionName: "tick" },
   tickInterval: { isCollectionItem: false, optionName: "tickInterval" },
   title: { isCollectionItem: false, optionName: "title" },
   visualRange: { isCollectionItem: false, optionName: "visualRange" },
@@ -3547,6 +3597,9 @@ prepareConfigurationComponentConfig(DxWholeRangeConfig);
 const DxWholeRange = defineComponent(DxWholeRangeConfig);
 
 (DxWholeRange as any).$_optionName = "wholeRange";
+(DxWholeRange as any).$_expectedChildren = {
+  length: { isCollectionItem: false, optionName: "length" }
+};
 
 const DxWidthConfig = {
   emits: {

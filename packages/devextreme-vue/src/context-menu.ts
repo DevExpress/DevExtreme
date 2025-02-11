@@ -530,6 +530,10 @@ prepareConfigurationComponentConfig(DxShowConfig);
 const DxShow = defineComponent(DxShowConfig);
 
 (DxShow as any).$_optionName = "show";
+(DxShow as any).$_expectedChildren = {
+  from: { isCollectionItem: false, optionName: "from" },
+  to: { isCollectionItem: false, optionName: "to" }
+};
 
 const DxShowEventConfig = {
   emits: {
@@ -596,6 +600,9 @@ prepareConfigurationComponentConfig(DxToConfig);
 const DxTo = defineComponent(DxToConfig);
 
 (DxTo as any).$_optionName = "to";
+(DxTo as any).$_expectedChildren = {
+  position: { isCollectionItem: false, optionName: "position" }
+};
 
 export default DxContextMenu;
 export {
