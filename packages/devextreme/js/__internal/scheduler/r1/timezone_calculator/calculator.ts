@@ -52,32 +52,6 @@ export class TimeZoneCalculator {
     };
   }
 
-  // QUnit tests are checked call of this method
-
-  getConvertedDateByOffsets(
-    date: Date,
-    clientOffset: number,
-    targetOffset: number,
-    isBack: boolean,
-  ): Date {
-    const direction = isBack
-      ? -1
-      : 1;
-
-    const resultDate = new Date(date);
-    return dateUtilsTs.addOffsets(resultDate, [
-      direction * (toMs('hour') * targetOffset),
-      -direction * (toMs('hour') * clientOffset),
-    ]);
-
-    // V1
-    // NOTE: Previous date calculation engine.
-    // Engine was changed after fix T1078292.
-    // eslint-disable-next-line @stylistic/max-len
-    // const utcDate = date.getTime() - direction * clientOffset * dateUtils.dateToMilliseconds('hour');
-    // return new Date(utcDate + direction * targetOffset * dateUtils.dateToMilliseconds('hour'));
-  }
-
   getOriginStartDateOffsetInMs(
     date: Date,
     timezone: string | undefined,
