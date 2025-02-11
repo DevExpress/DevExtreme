@@ -43,6 +43,7 @@ const DX_MENU_ITEM_POPOUT_CLASS = 'dx-menu-item-popout';
 const DX_SUBMENU_CLASS = 'dx-submenu';
 const DX_HAS_SUBMENU_CLASS = 'dx-menu-item-has-submenu';
 const DX_OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
+const DX_OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 
 const isDeviceDesktop = function(assert) {
     if(devices.real().deviceType !== 'desktop') {
@@ -325,29 +326,27 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         assert.ok($submenu.hasClass(DX_SCROLLABLE_CLASS), 'Scrollable initialized');
     });
 
-    QUnit.test('contextMenu maxHeight should include border width in generic theme only (T1258002)', function(assert) {
-        new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
+    QUnit.test('contextMenu maxHeight should not include border width if no theme is specified (T1258002)', function(assert) {
+        const stub = sinon.stub(themes, 'current').returns('none');
 
-        const containerCalculatedHeight = $(`.${DX_SCROLLABLE_CONTAINER_CLASS}`).height();
-        const contentCalculatedHeight = $(` .${DX_SCROLLABLE_CONTENT_CLASS}`).height() + BORDER_WIDTH * 2;
-
-        const heightDifference = Math.floor(contentCalculatedHeight) - Math.floor(containerCalculatedHeight);
-        assert.strictEqual(heightDifference, 2, 'scrollable container has additional border paddi;ng for generic theme');
-    });
-
-    QUnit.test('contextMenu maxHeight should not include border width in other theme (T1258002)', function(assert) {
-        const originalTheme = themes.current();
-        themes.current('material.blue.light');
         try {
-            new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
+            new ContextMenu(this.$element, {
+                items: [{ text: 'Test Item' }],
+                visible: true
+            });
 
-            const containerCalculatedHeight = $(`.${DX_SCROLLABLE_CONTAINER_CLASS}`).height();
-            const contentCalculatedHeight = $(` .${DX_SCROLLABLE_CONTENT_CLASS}`).height() + BORDER_WIDTH * 2;
-            const heightDifference = Math.floor(contentCalculatedHeight) - Math.floor(containerCalculatedHeight);
+            this.clock.tick(10);
 
-            assert.strictEqual(heightDifference, 0, 'scrollable container has additional border padding for generic theme');
+            const overlayMaxHeight = $(`.${DX_OVERLAY_CONTENT_CLASS}`).css('maxHeight');
+            const containerCalculatedHeight = $(`.${DX_SCROLLABLE_CONTAINER_CLASS}`).outerHeight();
+
+            assert.strictEqual(
+                overlayMaxHeight,
+                `${containerCalculatedHeight}px`,
+                'Overlay maxHeight should be equal to items container outerHeight without extra border width'
+            );
         } finally {
-            themes.current(originalTheme);
+            stub.restore();
         }
     });
 
