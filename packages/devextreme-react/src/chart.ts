@@ -140,6 +140,7 @@ const AdaptiveLayout = Object.assign<typeof _componentAdaptiveLayout, NestedComp
 
 // owners:
 // CommonSeriesSettings
+// Series
 type IAggregationProps = React.PropsWithChildren<{
   calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>) | undefined;
   enabled?: boolean;
@@ -295,6 +296,7 @@ const Annotation = Object.assign<typeof _componentAnnotation, NestedComponentMet
 
 // owners:
 // Annotation
+// CommonAnnotationSettings
 // Legend
 type IAnnotationBorderProps = React.PropsWithChildren<{
   color?: string;
@@ -319,6 +321,7 @@ const AnnotationBorder = Object.assign<typeof _componentAnnotationBorder, Nested
 
 // owners:
 // Annotation
+// CommonAnnotationSettings
 type IAnnotationImageProps = React.PropsWithChildren<{
   height?: number;
   url?: string | undefined;
@@ -580,7 +583,7 @@ const ArgumentAxis = Object.assign<typeof _componentArgumentAxis, NestedComponen
 });
 
 // owners:
-// CommonSeriesSettingsLabel
+// Label
 // Tooltip
 type IArgumentFormatProps = React.PropsWithChildren<{
   currency?: string;
@@ -735,6 +738,7 @@ const AxisTitle = Object.assign<typeof _componentAxisTitle, NestedComponentMeta>
 
 // owners:
 // CommonPaneSettings
+// Pane
 type IBackgroundColorProps = React.PropsWithChildren<{
   base?: string | undefined;
   fillId?: string | undefined;
@@ -754,15 +758,16 @@ const BackgroundColor = Object.assign<typeof _componentBackgroundColor, NestedCo
 
 // owners:
 // Annotation
+// CommonAnnotationSettings
 // Legend
 // CommonPaneSettings
+// Pane
 // CommonSeriesSettings
-// CommonSeriesSettingsHoverStyle
-// CommonSeriesSettingsLabel
-// CommonSeriesSettingsSelectionStyle
+// HoverStyle
+// Label
+// SelectionStyle
+// Series
 // Point
-// PointHoverStyle
-// PointSelectionStyle
 // Tooltip
 type IBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
@@ -812,6 +817,8 @@ const Break = Object.assign<typeof _componentBreak, NestedComponentMeta>(_compon
 
 // owners:
 // ArgumentAxis
+// CommonAxisSettings
+// ValueAxis
 type IBreakStyleProps = React.PropsWithChildren<{
   color?: string;
   line?: ScaleBreakLineStyle;
@@ -900,11 +907,10 @@ const ChartTitleSubtitle = Object.assign<typeof _componentChartTitleSubtitle, Ne
 
 // owners:
 // CommonSeriesSettings
-// CommonSeriesSettingsHoverStyle
+// HoverStyle
 // Point
-// PointHoverStyle
-// PointSelectionStyle
-// CommonSeriesSettingsSelectionStyle
+// SelectionStyle
+// Series
 type IColorProps = React.PropsWithChildren<{
   base?: string | undefined;
   fillId?: string | undefined;
@@ -983,6 +989,14 @@ const _componentCommonAnnotationSettings = (props: ICommonAnnotationSettingsProp
     ...props,
     elementDescriptor: {
       OptionName: "commonAnnotationSettings",
+      ExpectedChildren: {
+        annotationBorder: { optionName: "border", isCollectionItem: false },
+        annotationImage: { optionName: "image", isCollectionItem: false },
+        border: { optionName: "border", isCollectionItem: false },
+        font: { optionName: "font", isCollectionItem: false },
+        image: { optionName: "image", isCollectionItem: false },
+        shadow: { optionName: "shadow", isCollectionItem: false }
+      },
       TemplateProps: [{
         tmplOption: "template",
         render: "render",
@@ -992,13 +1006,6 @@ const _componentCommonAnnotationSettings = (props: ICommonAnnotationSettingsProp
         render: "tooltipRender",
         component: "tooltipComponent"
       }],
-      ExpectedChildren: {
-        annotationBorder: { optionName: "border", isCollectionItem: false },
-        border: { optionName: "border", isCollectionItem: false },
-        font: { optionName: "font", isCollectionItem: false },
-        image: { optionName: "image", isCollectionItem: false },
-        shadow: { optionName: "shadow", isCollectionItem: false }
-      },
     },
   });
 };
@@ -1105,11 +1112,17 @@ const _componentCommonAxisSettings = (props: ICommonAxisSettingsProps) => {
     elementDescriptor: {
       OptionName: "commonAxisSettings",
       ExpectedChildren: {
+        breakStyle: { optionName: "breakStyle", isCollectionItem: false },
         commonAxisSettingsConstantLineStyle: { optionName: "constantLineStyle", isCollectionItem: false },
         commonAxisSettingsLabel: { optionName: "label", isCollectionItem: false },
         commonAxisSettingsTitle: { optionName: "title", isCollectionItem: false },
         constantLineStyle: { optionName: "constantLineStyle", isCollectionItem: false },
+        grid: { optionName: "grid", isCollectionItem: false },
         label: { optionName: "label", isCollectionItem: false },
+        minorGrid: { optionName: "minorGrid", isCollectionItem: false },
+        minorTick: { optionName: "minorTick", isCollectionItem: false },
+        stripStyle: { optionName: "stripStyle", isCollectionItem: false },
+        tick: { optionName: "tick", isCollectionItem: false },
         title: { optionName: "title", isCollectionItem: false }
       },
     },
@@ -1163,6 +1176,9 @@ const _componentCommonAxisSettingsConstantLineStyleLabel = (props: ICommonAxisSe
     ...props,
     elementDescriptor: {
       OptionName: "label",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
     },
   });
 };
@@ -1194,6 +1210,9 @@ const _componentCommonAxisSettingsLabel = (props: ICommonAxisSettingsLabelProps)
     ...props,
     elementDescriptor: {
       OptionName: "label",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
       TemplateProps: [{
         tmplOption: "template",
         render: "render",
@@ -1221,6 +1240,9 @@ const _componentCommonAxisSettingsTitle = (props: ICommonAxisSettingsTitleProps)
     ...props,
     elementDescriptor: {
       OptionName: "title",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
     },
   });
 };
@@ -1483,6 +1505,7 @@ const CommonSeriesSettings = Object.assign<typeof _componentCommonSeriesSettings
 
 // owners:
 // CommonSeriesSettings
+// Series
 type ICommonSeriesSettingsHoverStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string | undefined;
@@ -1522,6 +1545,7 @@ const CommonSeriesSettingsHoverStyle = Object.assign<typeof _componentCommonSeri
 
 // owners:
 // CommonSeriesSettings
+// Series
 type ICommonSeriesSettingsLabelProps = React.PropsWithChildren<{
   alignment?: HorizontalAlignment;
   argumentFormat?: LocalizationFormat | undefined;
@@ -1571,6 +1595,7 @@ const CommonSeriesSettingsLabel = Object.assign<typeof _componentCommonSeriesSet
 
 // owners:
 // CommonSeriesSettings
+// Series
 type ICommonSeriesSettingsSelectionStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string | undefined;
@@ -1609,7 +1634,7 @@ const CommonSeriesSettingsSelectionStyle = Object.assign<typeof _componentCommon
 });
 
 // owners:
-// CommonSeriesSettingsLabel
+// Label
 type IConnectorProps = React.PropsWithChildren<{
   color?: string | undefined;
   visible?: boolean;
@@ -1668,7 +1693,6 @@ const ConstantLine = Object.assign<typeof _componentConstantLine, NestedComponen
 
 // owners:
 // ConstantLine
-// ConstantLine
 type IConstantLineLabelProps = React.PropsWithChildren<{
   font?: ChartsFont;
   horizontalAlignment?: HorizontalAlignment;
@@ -1682,6 +1706,9 @@ const _componentConstantLineLabel = (props: IConstantLineLabelProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "label",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
     },
   });
 };
@@ -1855,16 +1882,16 @@ const Export = Object.assign<typeof _componentExport, NestedComponentMeta>(_comp
 // Annotation
 // Label
 // AxisLabel
-// Label
 // AxisTitle
-// CommonSeriesSettingsLabel
-// Label
-// Label
-// Label
+// CommonAnnotationSettings
+// CommonAxisSettingsConstantLineStyleLabel
+// CommonAxisSettingsLabel
+// CommonAxisSettingsTitle
 // Legend
 // LegendTitle
 // LegendTitleSubtitle
 // Tooltip
+// Title
 // LoadingIndicator
 // ChartTitle
 // ChartTitleSubtitle
@@ -1890,12 +1917,8 @@ const Font = Object.assign<typeof _componentFont, NestedComponentMeta>(_componen
 
 // owners:
 // AxisLabel
-// CommonSeriesSettingsLabel
-// Label
-// Label
 // Label
 // Tooltip
-// Label
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | Date) => string);
@@ -1919,6 +1942,8 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 
 // owners:
 // ArgumentAxis
+// CommonAxisSettings
+// ValueAxis
 type IGridProps = React.PropsWithChildren<{
   color?: string;
   opacity?: number | undefined;
@@ -1939,8 +1964,8 @@ const Grid = Object.assign<typeof _componentGrid, NestedComponentMeta>(_componen
 });
 
 // owners:
-// CommonSeriesSettingsHoverStyle
-// CommonSeriesSettingsSelectionStyle
+// HoverStyle
+// SelectionStyle
 type IHatchingProps = React.PropsWithChildren<{
   direction?: HatchDirection;
   opacity?: number;
@@ -1961,7 +1986,7 @@ const Hatching = Object.assign<typeof _componentHatching, NestedComponentMeta>(_
 });
 
 // owners:
-// PointImage
+// Image
 type IHeightProps = React.PropsWithChildren<{
   rangeMaxPoint?: number | undefined;
   rangeMinPoint?: number | undefined;
@@ -2042,6 +2067,7 @@ const HorizontalLineLabel = Object.assign<typeof _componentHorizontalLineLabel, 
 
 // owners:
 // CommonSeriesSettings
+// Series
 // Point
 type IHoverStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
@@ -2084,6 +2110,7 @@ const HoverStyle = Object.assign<typeof _componentHoverStyle, NestedComponentMet
 
 // owners:
 // Annotation
+// CommonAnnotationSettings
 // Point
 type IImageProps = React.PropsWithChildren<{
   height?: number | Record<string, any> | {
@@ -2121,15 +2148,14 @@ const Image = Object.assign<typeof _componentImage, NestedComponentMeta>(_compon
 // AxisConstantLineStyle
 // ConstantLineStyle
 // ConstantLine
-// ConstantLine
 // ArgumentAxis
 // ValueAxis
-// Strip
 // Strip
 // StripStyle
 // CommonAxisSettingsConstantLineStyle
 // CommonAxisSettings
 // CommonSeriesSettings
+// Series
 // HorizontalLine
 // Crosshair
 // VerticalLine
@@ -2347,6 +2373,7 @@ const LegendTitleSubtitle = Object.assign<typeof _componentLegendTitleSubtitle, 
 
 // owners:
 // VisualRange
+// WholeRange
 type ILengthProps = React.PropsWithChildren<{
   days?: number;
   hours?: number;
@@ -2427,6 +2454,8 @@ const Margin = Object.assign<typeof _componentMargin, NestedComponentMeta>(_comp
 
 // owners:
 // ArgumentAxis
+// CommonAxisSettings
+// ValueAxis
 type IMinorGridProps = React.PropsWithChildren<{
   color?: string;
   opacity?: number | undefined;
@@ -2448,6 +2477,8 @@ const MinorGrid = Object.assign<typeof _componentMinorGrid, NestedComponentMeta>
 
 // owners:
 // ArgumentAxis
+// CommonAxisSettings
+// ValueAxis
 type IMinorTickProps = React.PropsWithChildren<{
   color?: string;
   length?: number;
@@ -2547,6 +2578,11 @@ const _componentPane = (props: IPaneProps) => {
     elementDescriptor: {
       OptionName: "panes",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        backgroundColor: { optionName: "backgroundColor", isCollectionItem: false },
+        border: { optionName: "border", isCollectionItem: false },
+        paneBorder: { optionName: "border", isCollectionItem: false }
+      },
     },
   });
 };
@@ -2557,6 +2593,7 @@ const Pane = Object.assign<typeof _componentPane, NestedComponentMeta>(_componen
 
 // owners:
 // CommonPaneSettings
+// Pane
 type IPaneBorderProps = React.PropsWithChildren<{
   bottom?: boolean;
   color?: string;
@@ -2583,6 +2620,7 @@ const PaneBorder = Object.assign<typeof _componentPaneBorder, NestedComponentMet
 
 // owners:
 // CommonSeriesSettings
+// Series
 type IPointProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string | undefined;
@@ -2634,14 +2672,10 @@ const _componentPoint = (props: IPointProps) => {
     elementDescriptor: {
       OptionName: "point",
       ExpectedChildren: {
-        border: { optionName: "border", isCollectionItem: false },
         color: { optionName: "color", isCollectionItem: false },
         hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
         image: { optionName: "image", isCollectionItem: false },
         pointBorder: { optionName: "border", isCollectionItem: false },
-        pointHoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
-        pointImage: { optionName: "image", isCollectionItem: false },
-        pointSelectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
         selectionStyle: { optionName: "selectionStyle", isCollectionItem: false }
       },
     },
@@ -2654,8 +2688,8 @@ const Point = Object.assign<typeof _componentPoint, NestedComponentMeta>(_compon
 
 // owners:
 // Point
-// PointHoverStyle
-// PointSelectionStyle
+// HoverStyle
+// SelectionStyle
 type IPointBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
   visible?: boolean;
@@ -2768,6 +2802,7 @@ const PointSelectionStyle = Object.assign<typeof _componentPointSelectionStyle, 
 
 // owners:
 // CommonSeriesSettings
+// Series
 type IReductionProps = React.PropsWithChildren<{
   color?: string;
   level?: FinancialChartReductionLevel;
@@ -2811,6 +2846,7 @@ const ScrollBar = Object.assign<typeof _componentScrollBar, NestedComponentMeta>
 // owners:
 // Point
 // CommonSeriesSettings
+// Series
 type ISelectionStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string | undefined;
@@ -3025,6 +3061,21 @@ const _componentSeries = (props: ISeriesProps) => {
     elementDescriptor: {
       OptionName: "series",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        aggregation: { optionName: "aggregation", isCollectionItem: false },
+        border: { optionName: "border", isCollectionItem: false },
+        color: { optionName: "color", isCollectionItem: false },
+        commonSeriesSettingsHoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
+        commonSeriesSettingsLabel: { optionName: "label", isCollectionItem: false },
+        commonSeriesSettingsSelectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
+        hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
+        label: { optionName: "label", isCollectionItem: false },
+        point: { optionName: "point", isCollectionItem: false },
+        reduction: { optionName: "reduction", isCollectionItem: false },
+        selectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
+        seriesBorder: { optionName: "border", isCollectionItem: false },
+        valueErrorBar: { optionName: "valueErrorBar", isCollectionItem: false }
+      },
     },
   });
 };
@@ -3035,9 +3086,10 @@ const Series = Object.assign<typeof _componentSeries, NestedComponentMeta>(_comp
 
 // owners:
 // CommonSeriesSettings
-// CommonSeriesSettingsHoverStyle
-// CommonSeriesSettingsLabel
-// CommonSeriesSettingsSelectionStyle
+// HoverStyle
+// Label
+// SelectionStyle
+// Series
 type ISeriesBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
   dashStyle?: DashStyle | undefined;
@@ -3078,6 +3130,7 @@ const SeriesTemplate = Object.assign<typeof _componentSeriesTemplate, NestedComp
 
 // owners:
 // Annotation
+// CommonAnnotationSettings
 // Tooltip
 type IShadowProps = React.PropsWithChildren<{
   blur?: number;
@@ -3153,7 +3206,6 @@ const Strip = Object.assign<typeof _componentStrip, NestedComponentMeta>(_compon
 
 // owners:
 // Strip
-// Strip
 type IStripLabelProps = React.PropsWithChildren<{
   font?: ChartsFont;
   horizontalAlignment?: HorizontalAlignment;
@@ -3178,6 +3230,8 @@ const StripLabel = Object.assign<typeof _componentStripLabel, NestedComponentMet
 
 // owners:
 // ArgumentAxis
+// CommonAxisSettings
+// ValueAxis
 type IStripStyleProps = React.PropsWithChildren<{
   label?: Record<string, any> | {
     font?: ChartsFont;
@@ -3193,8 +3247,7 @@ const _componentStripStyle = (props: IStripStyleProps) => {
     elementDescriptor: {
       OptionName: "stripStyle",
       ExpectedChildren: {
-        label: { optionName: "label", isCollectionItem: false },
-        stripStyleLabel: { optionName: "label", isCollectionItem: false }
+        label: { optionName: "label", isCollectionItem: false }
       },
     },
   });
@@ -3216,6 +3269,9 @@ const _componentStripStyleLabel = (props: IStripStyleLabelProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "label",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
     },
   });
 };
@@ -3252,6 +3308,8 @@ const Subtitle = Object.assign<typeof _componentSubtitle, NestedComponentMeta>(_
 
 // owners:
 // ArgumentAxis
+// CommonAxisSettings
+// ValueAxis
 type ITickProps = React.PropsWithChildren<{
   color?: string;
   length?: number;
@@ -3434,7 +3492,7 @@ const TooltipBorder = Object.assign<typeof _componentTooltipBorder, NestedCompon
 });
 
 // owners:
-// PointImage
+// Image
 type IUrlProps = React.PropsWithChildren<{
   rangeMaxPoint?: string | undefined;
   rangeMinPoint?: string | undefined;
@@ -3657,12 +3715,18 @@ const _componentValueAxis = (props: IValueAxisProps) => {
         axisLabel: { optionName: "label", isCollectionItem: false },
         axisTitle: { optionName: "title", isCollectionItem: false },
         break: { optionName: "breaks", isCollectionItem: true },
+        breakStyle: { optionName: "breakStyle", isCollectionItem: false },
         constantLine: { optionName: "constantLines", isCollectionItem: true },
         constantLineStyle: { optionName: "constantLineStyle", isCollectionItem: false },
+        grid: { optionName: "grid", isCollectionItem: false },
         label: { optionName: "label", isCollectionItem: false },
+        minorGrid: { optionName: "minorGrid", isCollectionItem: false },
+        minorTick: { optionName: "minorTick", isCollectionItem: false },
         minorTickInterval: { optionName: "minorTickInterval", isCollectionItem: false },
         minVisualRangeLength: { optionName: "minVisualRangeLength", isCollectionItem: false },
         strip: { optionName: "strips", isCollectionItem: true },
+        stripStyle: { optionName: "stripStyle", isCollectionItem: false },
+        tick: { optionName: "tick", isCollectionItem: false },
         tickInterval: { optionName: "tickInterval", isCollectionItem: false },
         title: { optionName: "title", isCollectionItem: false },
         visualRange: { optionName: "visualRange", isCollectionItem: false },
@@ -3678,6 +3742,7 @@ const ValueAxis = Object.assign<typeof _componentValueAxis, NestedComponentMeta>
 
 // owners:
 // CommonSeriesSettings
+// Series
 type IValueErrorBarProps = React.PropsWithChildren<{
   color?: string;
   displayMode?: ValueErrorBarDisplayMode;
@@ -3808,6 +3873,9 @@ const _componentWholeRange = (props: IWholeRangeProps) => {
         defaultEndValue: "endValue",
         defaultStartValue: "startValue"
       },
+      ExpectedChildren: {
+        length: { optionName: "length", isCollectionItem: false }
+      },
     },
   });
 };
@@ -3817,7 +3885,7 @@ const WholeRange = Object.assign<typeof _componentWholeRange, NestedComponentMet
 });
 
 // owners:
-// PointImage
+// Image
 type IWidthProps = React.PropsWithChildren<{
   rangeMaxPoint?: number | undefined;
   rangeMinPoint?: number | undefined;

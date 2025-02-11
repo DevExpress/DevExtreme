@@ -92,8 +92,6 @@ const TreeMap = memo(
 // HoverStyle
 // SelectionStyle
 // Tile
-// HoverStyle
-// SelectionStyle
 // Tooltip
 type IBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
@@ -684,8 +682,6 @@ const TooltipBorder = Object.assign<typeof _componentTooltipBorder, NestedCompon
 // HoverStyle
 // SelectionStyle
 // Tile
-// HoverStyle
-// SelectionStyle
 type ITreeMapborderProps = React.PropsWithChildren<{
   color?: string | undefined;
   width?: number | undefined;

@@ -159,6 +159,7 @@ const Border = Object.assign<typeof _componentBorder, NestedComponentMeta>(_comp
 // owners:
 // Range
 // SubvalueIndicator
+// ValueIndicator
 type IColorProps = React.PropsWithChildren<{
   base?: string | undefined;
   fillId?: string | undefined;
@@ -600,6 +601,7 @@ const SubvalueIndicator = Object.assign<typeof _componentSubvalueIndicator, Nest
 
 // owners:
 // SubvalueIndicator
+// ValueIndicator
 type ITextProps = React.PropsWithChildren<{
   customizeText?: ((indicatedValue: { value: number, valueText: string }) => string) | undefined;
   font?: ChartsFont;
@@ -778,6 +780,10 @@ const _componentValueIndicator = (props: IValueIndicatorProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "valueIndicator",
+      ExpectedChildren: {
+        color: { optionName: "color", isCollectionItem: false },
+        text: { optionName: "text", isCollectionItem: false }
+      },
     },
   });
 };

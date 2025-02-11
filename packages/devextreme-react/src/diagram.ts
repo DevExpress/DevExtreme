@@ -159,7 +159,7 @@ const _componentCommand = (props: ICommandProps) => {
       OptionName: "commands",
       IsCollectionItem: true,
       ExpectedChildren: {
-        commandItem: { optionName: "items", isCollectionItem: true }
+        item: { optionName: "items", isCollectionItem: true }
       },
     },
   });

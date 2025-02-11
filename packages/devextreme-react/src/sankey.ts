@@ -112,7 +112,6 @@ const AdaptiveLayout = Object.assign<typeof _componentAdaptiveLayout, NestedComp
 // Link
 // HoverStyle
 // Node
-// HoverStyle
 // Tooltip
 type IBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
@@ -208,7 +207,6 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 });
 
 // owners:
-// HoverStyle
 // HoverStyle
 type IHatchingProps = React.PropsWithChildren<{
   direction?: HatchDirection;
@@ -455,7 +453,6 @@ const Node = Object.assign<typeof _componentNode, NestedComponentMeta>(_componen
 // Link
 // HoverStyle
 // Node
-// HoverStyle
 type ISankeyborderProps = React.PropsWithChildren<{
   color?: string | undefined;
   visible?: boolean | undefined;
