@@ -35,15 +35,15 @@ const getDateRangeHorizontal = (options) => {
   const appointmentCellsAmount = Math.round(relativeAppointmentRect.width / cellWidth);
   const appointmentLastCellIndex = appointmentFirstCell.index + (appointmentCellsAmount - 1);
 
-  const { appointment } = appointmentSettings.info;
+  const { sourceAppointment } = appointmentSettings.info;
   const { allDay } = appointmentSettings.info.appointment;
 
   if (handles.left) {
     return {
       startDate: appointmentFirstCell.startDate,
-      endDate: appointmentFirstCell.startDate > appointment.endDate
+      endDate: appointmentFirstCell.startDate > sourceAppointment.endDate
         ? appointmentFirstCell.startDate
-        : appointment.endDate,
+        : sourceAppointment.endDate,
     };
   }
 
@@ -60,9 +60,9 @@ const getDateRangeHorizontal = (options) => {
     : appointmentLastCell.startDate;
 
   return {
-    startDate: endDate < appointment.startDate
+    startDate: endDate < sourceAppointment.startDate
       ? endDate
-      : appointment.startDate,
+      : sourceAppointment.startDate,
     endDate,
   };
 };
