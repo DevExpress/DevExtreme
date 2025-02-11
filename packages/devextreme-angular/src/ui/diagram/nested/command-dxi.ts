@@ -22,7 +22,7 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiDiagramCommandItemComponent } from './command-item-dxi';
+import { DxiDiagramItemComponent } from './item-dxi';
 
 
 @Component({
@@ -78,11 +78,11 @@ export class DxiDiagramCommandComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiDiagramCommandItemComponent))
-    get commandItemsChildren(): QueryList<DxiDiagramCommandItemComponent> {
+    @ContentChildren(forwardRef(() => DxiDiagramItemComponent))
+    get itemsChildren(): QueryList<DxiDiagramItemComponent> {
         return this._getOption('items');
     }
-    set commandItemsChildren(value) {
+    set itemsChildren(value) {
         this.setChildren('items', value);
     }
 
