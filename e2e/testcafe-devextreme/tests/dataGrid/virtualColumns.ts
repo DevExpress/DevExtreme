@@ -364,11 +364,15 @@ test('Header, fixed columns and virtual scroll bar should have stable position d
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await ClientFunction(() => {
+    (window as any).deferred.resolve();
+    (window as any).deferred = $.Deferred();
+  })();
   await t.expect(dataGrid.isReady()).ok();
-  await ClientFunction(() => { (window as any).timeout = 10000; })();
   await dataGrid.scrollTo(t, { x: 2000 });
   await takeScreenshot('T1260472-async-render-during-horizontal-scrolling.png', dataGrid.element);
-  await ClientFunction(() => { (window as any).timeout = 0; })();
+  await ClientFunction(() => { (window as any).deferred.resolve(); })();
+  await takeScreenshot('T1260472-async-render-after-horizontal-scrolling.png', dataGrid.element);
 
   await t
     .expect(compareResults.isValid())
@@ -379,6 +383,7 @@ test('Header, fixed columns and virtual scroll bar should have stable position d
     cellTemplate: 'cellTemplate',
   };
 
+  await ClientFunction(() => { (window as any).deferred = $.Deferred(); })();
   return createWidget('dxDataGrid', {
     dataSource: generateData(3, 50),
     keyExpr: 'field1',
@@ -406,26 +411,22 @@ test('Header, fixed columns and virtual scroll bar should have stable position d
       templates: {
         headerCellTemplate: {
           render({ model, container, onRendered }) {
-            setTimeout(() => {
-              const title = model.column.caption == null ? null : model.column.caption;
-              const content = $(`<span title='${title}'>
+            const title = model.column.caption == null ? null : model.column.caption;
+            const content = $(`<span title='${title}'>
           ${title}
         </span>`);
-              container.append(content);
-              onRendered();
-            }, (window as any).timeout ?? 0);
+            container.append(content);
+            (window as any).deferred.done(onRendered);
           },
         },
         cellTemplate: {
           render({ model, container, onRendered }) {
-            setTimeout(() => {
-              const title = model.value == null ? null : model.value;
-              const content = $(`<span title='${title}'>
+            const title = model.value == null ? null : model.value;
+            const content = $(`<span title='${title}'>
           ${title}
         </span>`);
-              container.append(content);
-              onRendered();
-            }, (window as any).timeout ?? 0);
+            container.append(content);
+            (window as any).deferred.done(onRendered);
           },
         },
       },
