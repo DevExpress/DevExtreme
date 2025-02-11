@@ -8,6 +8,7 @@ const BADGE_CLASS = 'dx-badge';
 const LIST_ITEM_CHEVRON_CONTAINER_CLASS = 'dx-list-item-chevron-container';
 const LIST_ITEM_CHEVRON_CLASS = 'dx-list-item-chevron';
 
+// @ts-expect-error
 const ListItem = CollectionWidgetItem.inherit({
 
   _renderWatchers() {

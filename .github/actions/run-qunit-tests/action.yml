@@ -54,7 +54,7 @@ runs:
       if: ${{ inputs.browser == 'chrome' }}
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '121.0.6167.160'
+        chrome-version: '121.0.6167.184'
 
     - name: Setup Firefox profile
       if: ${{ inputs.browser == 'firefox' }}
@@ -81,7 +81,7 @@ runs:
         node-version: '20'
 
     - name: Download artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: devextreme-artifacts
         path: packages/devextreme
@@ -145,7 +145,7 @@ runs:
 
     - name: Copy RawLog.txt
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: RawLog-${{ env.MATRIX_ENVS_NAME_SAFE }}
         path: ${{ github.workspace }}/packages/devextreme/testing/RawLog.txt

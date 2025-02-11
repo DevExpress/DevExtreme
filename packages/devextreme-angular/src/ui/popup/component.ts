@@ -77,6 +77,7 @@ import { DxiPopupToolbarItemComponent } from 'devextreme-angular/ui/popup/nested
 @Component({
     selector: 'dx-popup',
     template: '<ng-content></ng-content>',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -932,8 +933,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('toolbarItems');
     }
     set toolbarItemsChildren(value) {
-        this.setContentChildren('toolbarItems', value, 'DxiPopupToolbarItemComponent');
-        this.setChildren('toolbarItems', value);
+        this._setChildren('toolbarItems', value, 'DxiPopupToolbarItemComponent');
     }
 
 

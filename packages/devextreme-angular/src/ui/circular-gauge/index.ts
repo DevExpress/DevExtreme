@@ -100,6 +100,7 @@ import { DxoCircularGaugeValueIndicatorModule } from 'devextreme-angular/ui/circ
     selector: 'dx-circular-gauge',
     template: '',
     styles: [ ' :host {  display: block; }'],
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

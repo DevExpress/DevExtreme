@@ -41,7 +41,30 @@ gulp.task('generate.metadata', gulp.series('clean.metadata', (done) => {
 
 gulp.task('clean.generatedComponents', (done) => {
   const { outputFolderPath } = buildConfig.tools.componentGenerator;
-  del.sync([`${outputFolderPath}/**`]);
+  const { skipFromCleaningFiles } = buildConfig.components;
+
+  del.sync([
+    `${outputFolderPath}/*/**`,
+    ...skipFromCleaningFiles.flatMap(keepPattern => {
+      const pathParts = keepPattern.match(/[\*\/]$/) ? keepPattern.split('/') : [keepPattern];
+
+      const patternsToKeep = pathParts.reduce((acc, pathPart) => {
+
+        if(pathPart) {
+          acc.path += '/' + pathPart;
+          acc.patterns.push(`!${acc.path}`);
+        }
+
+        return acc;
+      }, {
+        patterns: [],
+        path: outputFolderPath.replace(/\/$/,'')
+      }).patterns;
+
+      return patternsToKeep;
+    })
+  ]);
+
   done();
 });
 
@@ -78,7 +101,7 @@ gulp.task('before-generate.preserve-component-files', (done) => {
     return () => gulp.src(src).pipe(gulp.dest(dest));
   });
 
-  gulp.parallel(...tasks)(done)
+  gulp.parallel(...tasks)(done);
 });
 
 gulp.task('generate.facades', gulp.series('generate.moduleFacades', (done) => {
@@ -108,51 +131,6 @@ gulp.task('generate.common-reexports', (done) => {
   });
   done();
 });
-
-gulp.task('after-generate.rename-files', (done) => {
-  const { outputFolderPath } = buildConfig.tools.componentGenerator;
-  const { renameGeneratedFiles } = buildConfig.afterGenerate;
-  const rename = require('gulp-rename');
-
-  const actions = (renameGeneratedFiles || []).map(({ path, newName }) =>
-      () =>  gulp
-          .src(outputFolderPath + path)
-          .pipe(rename(newName))
-          .pipe(gulp.dest((file) => file.base))
-  );
-
-  gulp.parallel(...actions)(done);
-});
-
-gulp.task('after-generate.restore-preserved', (done) => {
-  const { outputFolderPath } = buildConfig.tools.componentGenerator;
-  const { preserveComponentFiles, temporaryFolderForPreserved } = buildConfig.afterGenerate;
-
-  const actions = preserveComponentFiles.map((folderOrFile) => {
-    let src = temporaryFolderForPreserved + folderOrFile;
-    let dest = outputFolderPath + folderOrFile;
-    const isFile = fs.statSync(src).isFile();
-
-    if (isFile) {
-      dest = path.dirname(dest);
-    } else {
-      src += `/**/*`;
-    }
-
-    return () => gulp.src(src).pipe(gulp.dest(dest));
-  });
-
-  gulp.parallel(...actions)(() => fs.rm(
-      temporaryFolderForPreserved,
-      { recursive: true, force: true },
-      (err) => done(err)
-  ));
-});
-
-gulp.task('after-generate', gulp.series(
-    'after-generate.rename-files',
-    'after-generate.restore-preserved',
-));
 
 gulp.task('build.license-headers', () => {
   const config = buildConfig.components;
@@ -235,16 +213,16 @@ gulp.task('npm.content', gulp.series(
 
     return gulp.src([`${cmpConfig.outputPath}/**/collection.json`, ...npmConfig.content])
       .pipe(gulp.dest(npmConfig.distPath));
-  }
+  },
 ));
 
 gulp.task('npm.package-json', (cb) => {
   const pkgPath = path.join('.', buildConfig.npm.distPath, 'package.json');
   const pkg = require(`./${pkgPath}`);
   delete pkg.publishConfig;
-  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2))
+  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
   cb();
-})
+});
 
 gulp.task('npm.pack', gulp.series(
   'npm.content',
@@ -264,10 +242,8 @@ const buildTask = gulp.series('build.components');
 gulp.task('build', buildTask);
 gulp.task('default', buildTask);
 gulp.task('generate', gulp.series(
-  'before-generate.preserve-component-files',
   'generate.facades',
   'generate.common-reexports',
-  'after-generate',
 ));
 
 // ------------Testing------------
@@ -322,6 +298,8 @@ gulp.task('test.components.client', gulp.series('build.tests', (done) => {
 
 gulp.task('test.components.server', gulp.series('build.tests', (done) => {
   new karmaServer(getKarmaConfig('./karma.server.test.shim.js'), done).start();
+}, (done) => {
+  new karmaServer(getKarmaConfig('./karma.hydration.test.shim.js'), done).start();
 }));
 
 gulp.task('test.components.client.debug', (done) => {

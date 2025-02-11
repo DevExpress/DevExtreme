@@ -1,5 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
 import registerComponent from '@js/core/component_registrator';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { dasherize } from '@js/core/utils/inflector';
@@ -10,6 +11,8 @@ import {
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import CollectionWidget from '@js/ui//collection/ui.collection_widget.edit';
+import type { Item, Properties } from '@js/ui/box';
+import type { ItemExtraOption } from '@ts/ui/collection/m_item';
 import CollectionWidgetItem from '@ts/ui/collection/m_item';
 
 const BOX_CLASS = 'dx-box';
@@ -62,12 +65,21 @@ const setFlexProp = (element, prop, value) => {
   }
 };
 
-// @ts-expect-error dxClass inheritance issue
-class BoxItem extends CollectionWidgetItem {
-  _renderVisible(value, oldValue) {
+class BoxItem extends CollectionWidgetItem<Item> {
+  _options!: ItemExtraOption<Item> & {
+    fireItemStateChangedAction: ((args: {
+      name: string;
+      state: unknown;
+      oldState: unknown;
+    }) => void);
+  };
+
+  _renderVisible(
+    value: boolean | undefined,
+    oldValue: boolean | undefined,
+  ): void {
     super._renderVisible(value);
     if (isDefined(oldValue)) {
-      // @ts-expect-error
       this._options.fireItemStateChangedAction({
         name: 'visible',
         state: value,
@@ -148,7 +160,7 @@ class LayoutStrategy {
   }
 }
 
-class Box extends CollectionWidget {
+class Box extends CollectionWidget<Properties> {
   private _layout: any;
 
   private _queue: any;
@@ -180,31 +192,27 @@ class Box extends CollectionWidget {
     return BOX_ITEM_DATA_KEY;
   }
 
-  _itemElements() {
-    // @ts-expect-error
+  _itemElements(): dxElementWrapper {
     return this._itemContainer().children(this._itemSelector());
   }
 
-  _init() {
+  _init(): void {
     super._init();
-    // @ts-expect-error
+
     this.$element().addClass(BOX_FLEX_CLASS);
     this._initLayout();
     this._initBoxQueue();
   }
 
-  _initLayout() {
-    // @ts-expect-error
+  _initLayout(): void {
     this._layout = new LayoutStrategy(this.$element(), this.option.bind(this));
   }
 
-  _initBoxQueue() {
-    // @ts-expect-error
+  _initBoxQueue(): void {
     this._queue = this.option('_queue') || [];
   }
 
-  _queueIsNotEmpty() {
-    // @ts-expect-error
+  _queueIsNotEmpty(): boolean {
     return this.option('_queue') ? false : !!this._queue.length;
   }
 
@@ -216,8 +224,7 @@ class Box extends CollectionWidget {
     return this._queue.shift();
   }
 
-  _initMarkup() {
-    // @ts-expect-error
+  _initMarkup(): void {
     this.$element().addClass(BOX_CLASS);
     this._layout.renderBox();
     super._initMarkup();
@@ -240,20 +247,13 @@ class Box extends CollectionWidget {
 
     while (this._queueIsNotEmpty()) {
       const item = this._shiftItemFromQueue();
-      // @ts-expect-error
 
       this._createComponent(item.$item, Box, extend({
-        // @ts-expect-error
         itemTemplate: this.option('itemTemplate'),
-        // @ts-expect-error
         itemHoldTimeout: this.option('itemHoldTimeout'),
-        // @ts-expect-error
         onItemHold: this.option('onItemHold'),
-        // @ts-expect-error
         onItemClick: this.option('onItemClick'),
-        // @ts-expect-error
         onItemContextMenu: this.option('onItemContextMenu'),
-        // @ts-expect-error
         onItemRendered: this.option('onItemRendered'),
         _queue: this._queue,
       }, item.config));
@@ -265,7 +265,6 @@ class Box extends CollectionWidget {
   _renderItemContent(args) {
     const $itemNode = args.itemData && args.itemData.node;
     if ($itemNode) {
-      // @ts-expect-error
       return this._renderItemContentByNode(args, $itemNode);
     }
 
@@ -288,13 +287,18 @@ class Box extends CollectionWidget {
     return super._createItemByTemplate(itemTemplate, args);
   }
 
-  _itemOptionChanged(item, property, value, oldValue) {
+  _itemOptionChanged(
+    item: Item,
+    property: string,
+    value: unknown,
+    prevValue,
+  ): void {
     if (property === 'visible') {
       // @ts-expect-error
       this._onItemStateChanged({
         name: property,
         state: value,
-        oldState: oldValue !== false,
+        oldState: prevValue !== false,
       });
     }
     super._itemOptionChanged(item, property, value);
@@ -304,7 +308,6 @@ class Box extends CollectionWidget {
     switch (args.name) {
       case '_queue':
       case 'direction':
-        // @ts-expect-error
         this._invalidate();
         break;
       case 'align':
@@ -333,7 +336,6 @@ class Box extends CollectionWidget {
 // @ts-expect-error
 Box.ItemClass = BoxItem;
 
-// @ts-expect-error
 registerComponent('dxBox', Box);
 
 export default Box;

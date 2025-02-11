@@ -67,6 +67,7 @@ import { DxoSparklineTooltipModule } from 'devextreme-angular/ui/sparkline/neste
     selector: 'dx-sparkline',
     template: '',
     styles: [ ' :host {  display: block; }'],
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

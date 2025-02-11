@@ -103,6 +103,7 @@ import { DxiDiagramCustomShapeComponent } from 'devextreme-angular/ui/diagram/ne
 @Component({
     selector: 'dx-diagram',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -920,8 +921,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         return this._getOption('customShapes');
     }
     set customShapesChildren(value) {
-        this.setContentChildren('customShapes', value, 'DxiDiagramCustomShapeComponent');
-        this.setChildren('customShapes', value);
+        this._setChildren('customShapes', value, 'DxiDiagramCustomShapeComponent');
     }
 
 
@@ -930,9 +930,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         return this._getOption('customShapes');
     }
     set customShapesLegacyChildren(value) {
-        if (this.checkContentChildren('customShapes', value, 'DxiCustomShapeComponent')) {
-           this.setChildren('customShapes', value);
-        }
+        this._setChildren('customShapes', value, 'DxiCustomShapeComponent');
     }
 
 

@@ -1,11 +1,11 @@
 import { Guid } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import type { DataSourceOptions } from '@js/common/data';
-import DataHelperMixin from '@js/common/data/data_helper';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
+import DataHelperMixin from '@js/data_helper';
 import type {
   Message,
   MessageEnteredEvent,
@@ -15,16 +15,16 @@ import type {
 } from '@js/ui/chat';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-
-import AlertList from './alertlist';
+import AlertList from '@ts/ui/chat/alertlist';
 import type {
   MessageEnteredEvent as MessageBoxMessageEnteredEvent,
   Properties as MessageBoxProperties,
   TypingStartEvent as MessageBoxTypingStartEvent,
-} from './messagebox';
-import MessageBox from './messagebox';
-import type { Change, MessageTemplate, Properties as MessageListProperties } from './messagelist';
-import MessageList from './messagelist';
+} from '@ts/ui/chat/messagebox';
+import MessageBox from '@ts/ui/chat/messagebox';
+import type { MessageTemplate, Properties as MessageListProperties } from '@ts/ui/chat/messagelist';
+import MessageList from '@ts/ui/chat/messagelist';
+import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
@@ -84,7 +84,10 @@ class Chat extends Widget<Properties> {
     this.option('items', []);
   }
 
-  _dataSourceChangedHandler(newItems: Message[], e?: { changes?: Change[] }): void {
+  _dataSourceChangedHandler(
+    newItems: Message[],
+    e?: { changes?: DataChange<Message>[] },
+  ): void {
     if (e?.changes) {
       this._messageList._modifyByChanges(e.changes);
 

@@ -71,6 +71,7 @@ import { DxoFileManagerUploadModule } from 'devextreme-angular/ui/file-manager/n
 @Component({
     selector: 'dx-file-manager',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

@@ -214,12 +214,9 @@ const TreeViewBase = (HierarchicalCollectionWidget as any).inherit({
   _syncSelectionOptions: asyncNoop,
 
   _fireSelectionChanged() {
-    const selectionChangePromise = this._selectionChangePromise;
-    when(selectionChangePromise).done(() => {
-      this._createActionByOption('onSelectionChanged', {
-        excludeValidators: ['disabled', 'readOnly'],
-      })();
-    });
+    this._createActionByOption('onSelectionChanged', {
+      excludeValidators: ['disabled', 'readOnly'],
+    })();
   },
 
   _createSelectAllValueChangedAction() {

@@ -14,6 +14,6 @@ testing.TestBed.initTestEnvironment(
   server.platformServerTesting(),
 );
 
-const context = require.context('./tests/dist/server', true, /\.spec\.js$/);
+const context = require.context('./tests/dist/server', true, /^.\/(?!(hydration)\.spec\.js$).*\.spec\.js$/);
 context.keys().map(context);
 __karma__.start();

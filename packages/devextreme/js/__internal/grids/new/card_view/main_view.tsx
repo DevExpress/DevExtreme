@@ -7,19 +7,23 @@ import { ToolbarView } from '@ts/grids/new/grid_core/toolbar/view';
 import type { ComponentType } from 'inferno';
 
 import { ContentView } from './content_view/view';
+import { HeaderPanelView } from './header_panel/view';
 
 interface MainViewProps {
   Toolbar: ComponentType;
   Content: ComponentType;
   Pager: ComponentType;
+  HeaderPanel: ComponentType;
 }
 
 function MainViewComponent({
-  Toolbar, Content, Pager,
+  Toolbar, Content, Pager, HeaderPanel,
 }: MainViewProps): JSX.Element {
   return (<>
     {/* @ts-expect-error */}
     <Toolbar/>
+    {/* @ts-expect-error */}
+    <HeaderPanel/>
     {/* @ts-expect-error */}
     <Content/>
     <div>
@@ -40,13 +44,14 @@ export class MainView extends View<MainViewProps> {
   protected override component = MainViewComponent;
 
   public static dependencies = [
-    ContentView, PagerView, ToolbarView,
+    ContentView, PagerView, ToolbarView, HeaderPanelView,
   ] as const;
 
   constructor(
     private readonly content: ContentView,
     private readonly pager: PagerView,
     private readonly toolbar: ToolbarView,
+    private readonly headerPanel: HeaderPanelView,
   ) {
     super();
   }
@@ -58,6 +63,7 @@ export class MainView extends View<MainViewProps> {
       Toolbar: this.toolbar.asInferno(),
       Content: this.content.asInferno(),
       Pager: this.pager.asInferno(),
+      HeaderPanel: this.headerPanel.asInferno(),
     });
   }
 }

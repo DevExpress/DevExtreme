@@ -1,43 +1,81 @@
+import type { SingleMultipleOrNone } from '@js/common';
+import type { ItemInfo } from '@js/common/core/events';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeLoadResult } from '@js/common/data/data_source/utils';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import {
   Deferred,
-  // @ts-expect-error
+  // @ts-expect-error ts-error
   fromPromise,
   when,
 } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events/events.types';
+import type { ItemLike, SelectionChangeInfo } from '@js/ui/collection/ui.collection_widget.base';
 import errors from '@js/ui/widget/ui.errors';
-import BaseCollectionWidget from '@ts/ui/collection/m_collection_widget.base';
+import type { ActionConfig } from '@ts/core/widget/component';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { CollectionWidgetBaseProperties, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
+import BaseCollectionWidget from '@ts/ui/collection/collection_widget.base';
+import PlainEditStrategy from '@ts/ui/collection/m_collection_widget.edit.strategy.plain';
 import Selection from '@ts/ui/selection/m_selection';
 
-import PlainEditStrategy from './m_collection_widget.edit.strategy.plain';
+import type MenuBaseEditStrategy from '../context_menu/m_menu_base.edit.strategy';
 
 const ITEM_DELETING_DATA_KEY = 'dxItemDeleting';
 const NOT_EXISTING_INDEX = -1;
 
-const indexExists = function (index) {
-  return index !== NOT_EXISTING_INDEX;
-};
-// @ts-expect-error
-const CollectionWidget = BaseCollectionWidget.inherit({
+const indexExists = (index): boolean => index !== NOT_EXISTING_INDEX;
 
-  _setOptionsByReference() {
-    this.callBase();
+export interface CollectionWidgetEditProperties<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TComponent extends CollectionWidget<any, TItem, TKey> | any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TItem extends ItemLike = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey = any,
+> extends CollectionWidgetBaseProperties<TComponent, TItem, TKey> {
+  selectionMode?: SingleMultipleOrNone;
+}
+
+class CollectionWidget<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TProperties extends CollectionWidgetEditProperties<any, TItem, TKey>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TItem extends ItemLike = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey = any,
+> extends BaseCollectionWidget<TProperties> {
+  _userOptions?: TProperties;
+
+  _selection!: Selection;
+
+  _editStrategy!: PlainEditStrategy<this> | MenuBaseEditStrategy;
+
+  _actions!: Record<string, (args: Record<string, unknown>) => void>;
+
+  _rendered?: boolean;
+
+  _rendering?: boolean;
+
+  _setOptionsByReference(): void {
+    super._setOptionsByReference();
 
     extend(this._optionsByReference, {
       selectedItem: true,
     });
-  },
+  }
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+  _getDefaultOptions(): TProperties {
+    return {
+      ...super._getDefaultOptions(),
       selectionMode: 'none',
       selectionRequired: false,
       selectByClick: true,
@@ -52,36 +90,38 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       onItemReordered: null,
       onItemDeleting: null,
       onItemDeleted: null,
-    });
-  },
+    };
+  }
 
-  ctor(element, options) {
+  ctor(element: Element, options: TProperties): void {
     this._userOptions = options || {};
 
-    this.callBase(element, options);
-  },
+    super.ctor(element, options);
+  }
 
-  _init() {
+  _init(): void {
     this._initEditStrategy();
 
-    this.callBase();
+    super._init();
 
     this._initKeyGetter();
 
     this._initActions();
 
     this._initSelectionModule();
-  },
+  }
 
-  _initKeyGetter() {
+  _initKeyGetter(): void {
+    // @ts-expect-error ts-error
     this._keyGetter = compileGetter(this.option('keyExpr'));
-  },
+  }
 
-  _getActionsList() {
+  // eslint-disable-next-line class-methods-use-this
+  _getActionsList(): ('onSelectionChanging' | 'onSelectionChanged')[] {
     return ['onSelectionChanging', 'onSelectionChanged'];
-  },
+  }
 
-  _initActions() {
+  _initActions(): void {
     this._actions = {};
     const actions = this._getActionsList();
 
@@ -90,60 +130,69 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         excludeValidators: ['disabled', 'readOnly'],
       }) ?? noop;
     });
-  },
+  }
 
   _getKeysByItems(selectedItems) {
     return this._editStrategy.getKeysByItems(selectedItems);
-  },
+  }
 
   _getItemsByKeys(selectedItemKeys, selectedItems) {
     return this._editStrategy.getItemsByKeys(selectedItemKeys, selectedItems);
-  },
+  }
 
-  _getKeyByIndex(index) {
+  _getKeyByIndex(index: number): unknown {
     return this._editStrategy.getKeyByIndex(index);
-  },
+  }
 
-  _getIndexByKey(key) {
+  _getIndexByKey(key: unknown): number {
     return this._editStrategy.getIndexByKey(key);
-  },
+  }
 
   _getIndexByItemData(itemData) {
     return this._editStrategy.getIndexByItemData(itemData);
-  },
+  }
 
   _isKeySpecified() {
+    // @ts-expect-error ts-error
     return !!this._dataController.key();
-  },
+  }
 
   _getCombinedFilter() {
+    // @ts-expect-error ts-error
     return this._dataController.filter();
-  },
+  }
 
   key() {
-    if (this.option('keyExpr')) return this.option('keyExpr');
+    const { keyExpr } = this.option();
+    if (keyExpr) return keyExpr;
+    // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._dataController.key();
-  },
+  }
 
   keyOf(item) {
     let key = item;
 
     if (this.option('keyExpr')) {
+      // @ts-expect-error ts-error
       key = this._keyGetter(item);
+      // @ts-expect-error ts-error
     } else if (this._dataController.store()) {
+      // @ts-expect-error ts-error
       key = this._dataController.keyOf(item);
     }
 
     return key;
-  },
+  }
 
-  _nullValueSelectionSupported() {
+  // eslint-disable-next-line class-methods-use-this
+  _nullValueSelectionSupported(): boolean {
     return false;
-  },
+  }
 
-  _initSelectionModule() {
+  _initSelectionModule(): void {
     const that = this;
-    const { itemsGetter } = that._editStrategy;
+    const { itemsGetter } = this._editStrategy;
 
     this._selection = new Selection({
       allowNullValue: this._nullValueSelectionSupported(),
@@ -170,17 +219,20 @@ const CollectionWidget = BaseCollectionWidget.inherit({
           this._updateSelectedItems(args);
         }
       },
-      filter: that._getCombinedFilter.bind(that),
-      totalCount() {
-        const items = that.option('items');
-        const totalCount = that._dataController.totalCount();
+      filter: this._getCombinedFilter.bind(this),
+      totalCount: (): number => {
+        const { items } = this.option();
+        // @ts-expect-error ts-error
+        const totalCount: number = this._dataController.totalCount();
         return totalCount >= 0
           ? totalCount
-          : that._getItemsCount(items);
+          // @ts-expect-error ts-error
+          : this._getItemsCount(items);
       },
-      key: that.key.bind(that),
-      keyOf: that.keyOf.bind(that),
-      load(options) {
+      key: this.key.bind(this),
+      keyOf: this.keyOf.bind(this),
+      load(options): DeferredObj<unknown> {
+        // @ts-expect-error ts-error
         const dataController = that._dataController;
         options.customQueryParams = dataController.loadOptions()?.customQueryParams;
         options.userData = dataController.userData();
@@ -198,70 +250,71 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         }
         return Deferred().resolve(this.plainItems());
       },
-      dataFields() {
-        return that._dataController.select();
-      },
-      plainItems: itemsGetter.bind(that._editStrategy),
+      // @ts-expect-error ts-error
+      dataFields: () => this._dataController.select(),
+      plainItems: itemsGetter.bind(this._editStrategy),
     });
-  },
+  }
 
-  _getItemsCount(items) {
+  _getItemsCount(items: TItem[]): number {
+    // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return, no-return-assign
     return items.reduce((itemsCount, item) => itemsCount += item.items
+      // @ts-expect-error ts-error
       ? this._getItemsCount(item.items)
       : 1, 0);
-  },
+  }
 
-  _initEditStrategy() {
-    const Strategy = PlainEditStrategy;
-    this._editStrategy = new Strategy(this);
-  },
+  _initEditStrategy(): void {
+    this._editStrategy = new PlainEditStrategy(this);
+  }
 
-  _getSelectedItemIndices(keys) {
-    const that = this;
-    const indices = [];
+  _getSelectedItemIndices(keys): number[] {
+    const indices: number[] = [];
 
     keys = keys || this._selection.getSelectedItemKeys();
 
-    that._editStrategy.beginCache();
+    this._editStrategy.beginCache();
 
     each(keys, (_, key) => {
-      const selectedIndex = that._getIndexByKey(key);
+      const selectedIndex = this._getIndexByKey(key);
 
       if (indexExists(selectedIndex)) {
-        // @ts-expect-error
         indices.push(selectedIndex);
       }
     });
 
-    that._editStrategy.endCache();
+    this._editStrategy.endCache();
 
     return indices;
-  },
+  }
 
-  _initMarkup() {
+  _initMarkup(): void {
     this._rendering = true;
-
+    // @ts-expect-error ts-error
     if (!this._dataController.isLoading()) {
       this._syncSelectionOptions().done(() => this._normalizeSelectedItems());
     }
 
-    this.callBase();
-  },
-  _render() {
-    this.callBase();
+    super._initMarkup();
+  }
+
+  _render(): void {
+    super._render();
 
     this._rendering = false;
-  },
+  }
 
-  _fireContentReadyAction() {
+  _fireContentReadyAction(): void {
     this._rendering = false;
     this._rendered = true;
-    this.callBase.apply(this, arguments);
-  },
 
-  _syncSelectionOptions(byOption) {
-    byOption = byOption || this._chooseSelectOption();
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    super._fireContentReadyAction();
+  }
+
+  _syncSelectionOptions(byOption?: string) {
+    byOption = byOption ?? this._chooseSelectOption();
 
     let selectedItem;
     let selectedIndex;
@@ -331,16 +384,21 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     }
 
     return Deferred().resolve().promise();
-  },
+  }
 
-  _chooseSelectOption() {
+  _chooseSelectOption(): string {
     let optionName = 'selectedIndex';
 
-    const isOptionDefined = function (optionName) {
-      const optionValue = this.option(optionName);
+    const isOptionDefined = (
+      name: 'selectedItems' | 'selectedItem' | 'selectedItemKeys',
+    ): boolean => {
+      const optionValue = this.option(name);
+      // @ts-expect-error ts-error
       const length = isDefined(optionValue) && optionValue.length;
-      return length || optionName in this._userOptions;
-    }.bind(this);
+      // @ts-expect-error ts-error
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return length || name in this._userOptions;
+    };
 
     if (isOptionDefined('selectedItems')) {
       optionName = 'selectedItems';
@@ -351,9 +409,9 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     }
 
     return optionName;
-  },
+  }
 
-  _compareKeys(oldKeys, newKeys) {
+  _compareKeys(oldKeys, newKeys): boolean {
     if (oldKeys.length !== newKeys.length) {
       return false;
     }
@@ -365,18 +423,23 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     }
 
     return true;
-  },
+  }
 
-  _normalizeSelectedItems() {
-    if (this.option('selectionMode') === 'none') {
+  _normalizeSelectedItems(): Promise<unknown> {
+    const { selectionMode, selectedItems, items } = this.option();
+
+    if (selectionMode === 'none') {
       this._setOptionWithoutOptionChange('selectedItems', []);
       this._syncSelectionOptions('selectedItems');
-    } else if (this.option('selectionMode') === 'single') {
-      const newSelection = this.option('selectedItems');
+    } else if (selectionMode === 'single') {
+      const newSelection = selectedItems ?? [];
 
-      if (newSelection.length > 1 || !newSelection.length && this.option('selectionRequired') && this.option('items') && this.option('items').length) {
+      // eslint-disable-next-line no-mixed-operators
+      if (newSelection.length > 1 || !newSelection.length && this.option('selectionRequired') && items && items.length) {
         const currentSelection = this._selection.getSelectedItems();
-        let normalizedSelection = newSelection[0] === undefined ? currentSelection[0] : newSelection[0];
+        let normalizedSelection = newSelection[0] === undefined
+          ? currentSelection[0]
+          : newSelection[0];
 
         if (normalizedSelection === undefined) {
           // eslint-disable-next-line prefer-destructuring
@@ -403,11 +466,14 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     }
 
     return Deferred().resolve().promise();
-  },
+  }
 
-  _itemClickHandler(e) {
+  _itemClickHandler(
+    e: DxEvent,
+    args?: Record<string, unknown>,
+    config?: ActionConfig,
+  ): void {
     let itemSelectPromise = Deferred().resolve();
-    const { callBase } = this;
 
     this._createAction((e) => {
       itemSelectPromise = this._itemSelectHandler(e.event) ?? itemSelectPromise;
@@ -417,133 +483,150 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       itemElement: $(e.currentTarget),
       event: e,
     });
-
+    // const parentItemClickHandler = super._itemClickHandler.bind(this);
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     itemSelectPromise.always(() => {
-      callBase.apply(this, arguments);
+      super._itemClickHandler(e, args, config);
     });
-  },
+  }
 
-  _itemSelectHandler(e, shouldIgnoreSelectByClick) {
-    let itemSelectPromise;
-
+  _itemSelectHandler(
+    e: DxEvent,
+    shouldIgnoreSelectByClick?: boolean,
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  ): DeferredObj<unknown> | void {
     if (!shouldIgnoreSelectByClick && !this.option('selectByClick')) {
       return;
     }
 
     const $itemElement = e.currentTarget;
 
+    // @ts-expect-error ts-error
     if (this.isItemSelected($itemElement)) {
       this.unselectItem(e.currentTarget);
     } else {
-      itemSelectPromise = this.selectItem(e.currentTarget);
+      const itemSelectPromise = this.selectItem(e.currentTarget);
+
+      // @ts-expect-error ts-error
+      // eslint-disable-next-line consistent-return
+      return itemSelectPromise?.promise();
     }
+  }
 
-    return itemSelectPromise?.promise();
-  },
-
-  _selectedItemElement(index) {
+  _selectedItemElement(index: number): dxElementWrapper {
     return this._itemElements().eq(index);
-  },
+  }
 
-  _postprocessRenderItem(args) {
-    if (this.option('selectionMode') !== 'none') {
+  _postprocessRenderItem(args: PostprocessRenderItemInfo<TItem>): void {
+    const { selectionMode } = this.option();
+
+    if (selectionMode !== 'none') {
       const $itemElement = $(args.itemElement);
+      // @ts-expect-error ts-error
       const normalizedItemIndex = this._editStrategy.getNormalizedIndex($itemElement);
       const isItemSelected = this._isItemSelected(normalizedItemIndex);
 
       this._processSelectableItem($itemElement, isItemSelected);
     }
-  },
+  }
 
-  _processSelectableItem($itemElement, isSelected) {
+  _processSelectableItem(
+    $itemElement: dxElementWrapper,
+    isSelected: boolean,
+  ): void {
     $itemElement.toggleClass(this._selectedItemClass(), isSelected);
     this._setAriaSelectionAttribute($itemElement, String(isSelected));
-  },
+  }
 
-  _updateSelectedItems(args) {
-    const that = this;
-    const { addedItemKeys } = args;
-    const { removedItemKeys } = args;
+  _updateSelectedItems(args: SelectionChangeInfo<TItem> & {
+    addedItemKeys: unknown[];
+    removedItemKeys: unknown[];
+  }): void {
+    const { addedItemKeys, removedItemKeys } = args;
 
-    if (that._rendered && (addedItemKeys.length || removedItemKeys.length)) {
-      const selectionChangePromise = that._selectionChangePromise;
-      if (!that._rendering) {
+    if (this._rendered && (addedItemKeys.length || removedItemKeys.length)) {
+      if (!this._rendering) {
         const addedSelection = [];
-        let normalizedIndex;
         const removedSelection = [];
 
-        that._editStrategy.beginCache();
+        this._editStrategy.beginCache();
 
-        for (let i = 0; i < addedItemKeys.length; i++) {
-          normalizedIndex = that._getIndexByKey(addedItemKeys[i]);
-          // @ts-expect-error
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
+        for (let i = 0; i < addedItemKeys.length; i += 1) {
+          const normalizedIndex = this._getIndexByKey(addedItemKeys[i]);
+          // @ts-expect-error ts-error
           addedSelection.push(normalizedIndex);
-          that._addSelection(normalizedIndex);
+          this._addSelection(normalizedIndex);
         }
 
-        for (let i = 0; i < removedItemKeys.length; i++) {
-          normalizedIndex = that._getIndexByKey(removedItemKeys[i]);
-          // @ts-expect-error
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
+        for (let i = 0; i < removedItemKeys.length; i += 1) {
+          const normalizedIndex = this._getIndexByKey(removedItemKeys[i]);
+          // @ts-expect-error ts-error
           removedSelection.push(normalizedIndex);
-          that._removeSelection(normalizedIndex);
+          this._removeSelection(normalizedIndex);
         }
 
-        that._editStrategy.endCache();
+        this._editStrategy.endCache();
 
-        that._updateSelection(addedSelection, removedSelection);
+        this._updateSelection(addedSelection, removedSelection);
       }
 
-      when(selectionChangePromise).done(() => {
-        this._actions.onSelectionChanged({
-          addedItems: args.addedItems,
-          removedItems: args.removedItems,
-        });
+      this._actions.onSelectionChanged({
+        addedItems: args.addedItems,
+        removedItems: args.removedItems,
       });
     }
-  },
+  }
 
-  _updateSelection: noop,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  _updateSelection(addedSelection: unknown[], removedSelection: unknown[]): void {}
 
-  _setAriaSelectionAttribute($target, value) {
+  _setAriaSelectionAttribute(
+    $target: dxElementWrapper,
+    value: string,
+  ): void {
     this.setAria('selected', value, $target);
-  },
+  }
 
-  _removeSelection(normalizedIndex) {
+  _removeSelection(normalizedIndex: number): void {
     const $itemElement = this._editStrategy.getItemElement(normalizedIndex);
 
     if (indexExists(normalizedIndex)) {
       this._processSelectableItem($itemElement, false);
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       eventsEngine.triggerHandler($itemElement, 'stateChanged', false);
     }
-  },
+  }
 
-  _addSelection(normalizedIndex) {
+  _addSelection(normalizedIndex: number): void {
     const $itemElement = this._editStrategy.getItemElement(normalizedIndex);
 
     if (indexExists(normalizedIndex)) {
       this._processSelectableItem($itemElement, true);
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       eventsEngine.triggerHandler($itemElement, 'stateChanged', true);
     }
-  },
+  }
 
-  _isItemSelected(index) {
+  _isItemSelected(index: number): boolean {
     const key = this._getKeyByIndex(index);
-    return this._selection.isItemSelected(key, { checkPending: true });
-  },
 
-  _optionChanged(args) {
+    return this._selection.isItemSelected(key, { checkPending: true });
+  }
+
+  _optionChanged(args: OptionChanged<TProperties>): void {
     switch (args.name) {
       case 'selectionMode':
         this._invalidate();
         break;
       case 'dataSource':
+        // eslint-disable-next-line no-mixed-operators
         if (!args.value || Array.isArray(args.value) && !args.value.length) {
           this.option('selectedItemKeys', []);
         }
 
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       case 'selectedIndex':
       case 'selectedItem':
@@ -555,6 +638,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         this._initKeyGetter();
         break;
       case 'selectionRequired':
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._normalizeSelectedItems();
         break;
       case 'onSelectionChanging':
@@ -568,16 +652,16 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       case 'maxFilterLengthInRequest':
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
-  _clearSelectedItems() {
+  _clearSelectedItems(): void {
     this._setOptionWithoutOptionChange('selectedItems', []);
     this._syncSelectionOptions('selectedItems');
-  },
+  }
 
-  _waitDeletingPrepare($itemElement) {
+  _waitDeletingPrepare($itemElement: dxElementWrapper): Promise<unknown> {
     if ($itemElement.data(ITEM_DELETING_DATA_KEY)) {
       return Deferred().resolve().promise();
     }
@@ -588,28 +672,44 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     const deletingActionArgs = { cancel: false };
     const deletePromise = this._itemEventHandler($itemElement, 'onItemDeleting', deletingActionArgs, { excludeValidators: ['disabled', 'readOnly'] });
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises, func-names
     when(deletePromise).always(function (value) {
+      // @ts-expect-error ts-error
       const deletePromiseExists = !deletePromise;
+      // @ts-expect-error ts-error
       const deletePromiseResolved = !deletePromiseExists && deletePromise.state() === 'resolved';
       const argumentsSpecified = !!arguments.length;
 
-      const shouldDelete = deletePromiseExists || deletePromiseResolved && !argumentsSpecified || deletePromiseResolved && value;
+      // eslint-disable-next-line no-mixed-operators
+      const shouldDelete = deletePromiseExists || deletePromiseResolved
+        // eslint-disable-next-line no-mixed-operators
+        && !argumentsSpecified || deletePromiseResolved
+        // eslint-disable-next-line no-mixed-operators
+        && value;
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       when(fromPromise(deletingActionArgs.cancel))
         .always(() => {
           $itemElement.data(ITEM_DELETING_DATA_KEY, false);
         })
         .done((cancel) => {
-          shouldDelete && !cancel ? deferred.resolve() : deferred.reject();
+          if (shouldDelete && !cancel) {
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            deferred.resolve();
+          } else {
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            deferred.reject();
+          }
         })
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         .fail(deferred.reject);
     });
 
     return deferred.promise();
-  },
+  }
 
-  _deleteItemFromDS($item) {
+  _deleteItemFromDS($item: dxElementWrapper): Promise<unknown> | DeferredObj<unknown> {
+    // @ts-expect-error ts-error
     const dataController = this._dataController;
     const deferred = Deferred();
     const disabledState = this.option('disabled');
@@ -628,69 +728,83 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     dataStore.remove(dataController.keyOf(this._getItemData($item)))
       .done((key) => {
         if (key !== undefined) {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           deferred.resolve();
         } else {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           deferred.reject();
         }
       })
       .fail(() => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         deferred.reject();
       });
 
-    deferred.always(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    deferred.always((): void => {
       this.option('disabled', disabledState);
     });
 
     return deferred;
-  },
+  }
 
-  _tryRefreshLastPage() {
+  _tryRefreshLastPage(): Promise<unknown> {
     const deferred = Deferred();
-
+    // @ts-expect-error ts-error
     if (this._isLastPage() || this.option('grouped')) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       deferred.resolve();
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._refreshLastPage().done(() => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         deferred.resolve();
       });
     }
 
     return deferred.promise();
-  },
+  }
 
-  _refreshLastPage() {
+  _refreshLastPage(): DeferredObj<unknown> {
     this._expectLastItemLoading();
+    // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._dataController.load();
-  },
+  }
 
-  _updateSelectionAfterDelete(index) {
+  _updateSelectionAfterDelete(index: number): void {
     const key = this._getKeyByIndex(index);
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._selection.deselect([key]);
-  },
+  }
 
-  _updateIndicesAfterIndex(index) {
+  _updateIndicesAfterIndex(index: number): void {
     const itemElements = this._itemElements();
-    for (let i = index + 1; i < itemElements.length; i++) {
+    for (let i = index + 1; i < itemElements.length; i += 1) {
       $(itemElements[i]).data(this._itemIndexKey(), i - 1);
     }
-  },
+  }
 
-  _simulateOptionChange(optionName) {
+  _simulateOptionChange(optionName: keyof TProperties): void {
     const optionValue = this.option(optionName);
 
     if (optionValue instanceof DataSource) {
       return;
     }
 
-    this._optionChangedAction({ name: optionName, fullName: optionName, value: optionValue });
-  },
+    this._optionChangedAction?.({ name: optionName, fullName: optionName, value: optionValue });
+  }
 
-  isItemSelected(itemElement) {
+  isItemSelected(itemElement: dxElementWrapper | number): boolean {
+    // @ts-expect-error ts-error
     return this._isItemSelected(this._editStrategy.getNormalizedIndex(itemElement));
-  },
+  }
 
-  selectItem(itemElement) {
-    if (this.option('selectionMode') === 'none') return Deferred().resolve();
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  selectItem(itemElement: Element): DeferredObj<unknown> | void {
+    const { selectionMode } = this.option();
+
+    if (selectionMode === 'none') return Deferred().resolve();
 
     const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
     if (!indexExists(itemIndex)) {
@@ -703,15 +817,16 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       return Deferred().resolve();
     }
 
-    if (this.option('selectionMode') === 'single') {
+    if (selectionMode === 'single') {
       return this._selection.setSelection([key]);
     }
 
-    const selectedItemKeys = this.option('selectedItemKeys') || [];
-    return this._selection.setSelection([...selectedItemKeys, key], [key]);
-  },
+    const { selectedItemKeys } = this.option();
 
-  unselectItem(itemElement) {
+    return this._selection.setSelection([...selectedItemKeys ?? [], key], [key]);
+  }
+
+  unselectItem(itemElement: Element): void {
     const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
     if (!indexExists(itemIndex)) {
       return;
@@ -729,16 +844,21 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._selection.deselect([key]);
-  },
+  }
 
-  _deleteItemElementByIndex(index) {
+  _deleteItemElementByIndex(index: number): void {
     this._updateSelectionAfterDelete(index);
     this._updateIndicesAfterIndex(index);
     this._editStrategy.deleteItemAtIndex(index);
-  },
+  }
 
-  _afterItemElementDeleted($item, deletedActionArgs) {
+  _afterItemElementDeleted(
+    $item: dxElementWrapper,
+    deletedActionArgs: ItemInfo<TItem>,
+  ): void {
+    // @ts-expect-error ts-error
     const changingOption = this._dataController.getDataSource()
       ? 'dataSource'
       : 'items';
@@ -750,80 +870,94 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       excludeValidators: ['disabled', 'readOnly'],
     });
     this._renderEmptyMessage();
-  },
+  }
 
-  deleteItem(itemElement) {
-    const that = this;
-
+  deleteItem(itemElement: Element): Promise<unknown> {
     const deferred = Deferred();
     const $item = this._editStrategy.getItemElement(itemElement);
     const index = this._editStrategy.getNormalizedIndex(itemElement);
     const itemResponseWaitClass = this._itemResponseWaitClass();
 
     if (indexExists(index)) {
+      // @ts-expect-error ts-error
       this._waitDeletingPrepare($item).done(() => {
         $item.addClass(itemResponseWaitClass);
-        const deletedActionArgs = that._extendActionArgs($item);
-        that._deleteItemFromDS($item).done(() => {
-          that._deleteItemElementByIndex(index);
-          that._afterItemElementDeleted($item, deletedActionArgs);
-          that._tryRefreshLastPage().done(() => {
-            deferred.resolveWith(that);
+        const deletedActionArgs = this._extendActionArgs($item);
+        // @ts-expect-error ts-error
+        this._deleteItemFromDS($item).done(() => {
+          this._deleteItemElementByIndex(index);
+          this._afterItemElementDeleted($item, deletedActionArgs);
+          // @ts-expect-error ts-error
+          this._tryRefreshLastPage().done(() => {
+            // @ts-expect-error ts-error
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            deferred.resolveWith(this);
           });
         }).fail(() => {
           $item.removeClass(itemResponseWaitClass);
-          deferred.rejectWith(that);
+          // @ts-expect-error ts-error
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          deferred.rejectWith(this);
         });
       }).fail(() => {
-        deferred.rejectWith(that);
+        // @ts-expect-error ts-error
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        deferred.rejectWith(this);
       });
     } else {
-      deferred.rejectWith(that);
+      // @ts-expect-error ts-error
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      deferred.rejectWith(this);
     }
 
     return deferred.promise();
-  },
+  }
 
-  reorderItem(itemElement, toItemElement) {
+  reorderItem(itemElement: Element, toItemElement: Element): DeferredObj<unknown> {
     const deferred = Deferred();
-
-    const that = this;
     const strategy = this._editStrategy;
 
     const $movingItem = strategy.getItemElement(itemElement);
     const $destinationItem = strategy.getItemElement(toItemElement);
     const movingIndex = strategy.getNormalizedIndex(itemElement);
     const destinationIndex = strategy.getNormalizedIndex(toItemElement);
-
+    // @ts-expect-error ts-error
     const changingOption = this._dataController.getDataSource()
       ? 'dataSource'
       : 'items';
 
-    const canMoveItems = indexExists(movingIndex) && indexExists(destinationIndex) && movingIndex !== destinationIndex;
+    const canMoveItems = indexExists(movingIndex)
+      && indexExists(destinationIndex)
+      && movingIndex !== destinationIndex;
     if (canMoveItems) {
+      // @ts-expect-error ts-error
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       deferred.resolveWith(this);
     } else {
+      // @ts-expect-error ts-error
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       deferred.rejectWith(this);
     }
-    // @ts-expect-error
-    return deferred.promise().done(function () {
+    // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return deferred.promise().done(() => {
       $destinationItem[strategy.itemPlacementFunc(movingIndex, destinationIndex)]($movingItem);
 
       strategy.moveItemAtIndexToIndex(movingIndex, destinationIndex);
       this._updateIndicesAfterIndex(movingIndex);
-      that.option('selectedItems', that._getItemsByKeys(that._selection.getSelectedItemKeys(), that._selection.getSelectedItems()));
+      this.option('selectedItems', this._getItemsByKeys(this._selection.getSelectedItemKeys(), this._selection.getSelectedItems()));
 
       if (changingOption === 'items') {
-        that._simulateOptionChange(changingOption);
+        this._simulateOptionChange(changingOption);
       }
-      that._itemEventHandler($movingItem, 'onItemReordered', {
+      this._itemEventHandler($movingItem, 'onItemReordered', {
         fromIndex: strategy.getIndex(movingIndex),
         toIndex: strategy.getIndex(destinationIndex),
       }, {
         excludeValidators: ['disabled', 'readOnly'],
       });
     });
-  },
-});
+  }
+}
 
 export default CollectionWidget;

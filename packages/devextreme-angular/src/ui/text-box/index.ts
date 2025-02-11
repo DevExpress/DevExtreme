@@ -68,6 +68,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 @Component({
     selector: 'dx-text-box',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1016,8 +1017,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
-        this.setContentChildren('buttons', value, 'DxiTextBoxButtonComponent');
-        this.setChildren('buttons', value);
+        this._setChildren('buttons', value, 'DxiTextBoxButtonComponent');
     }
 
 
@@ -1026,9 +1026,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         return this._getOption('buttons');
     }
     set buttonsLegacyChildren(value) {
-        if (this.checkContentChildren('buttons', value, 'DxiButtonComponent')) {
-           this.setChildren('buttons', value);
-        }
+        this._setChildren('buttons', value, 'DxiButtonComponent');
     }
 
 

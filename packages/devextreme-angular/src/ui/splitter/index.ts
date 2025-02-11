@@ -59,6 +59,7 @@ import { DxiSplitterItemComponent } from 'devextreme-angular/ui/splitter/nested'
 @Component({
     selector: 'dx-splitter',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -432,8 +433,7 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiSplitterItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiSplitterItemComponent');
     }
 
 
@@ -442,9 +442,7 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
-        }
+        this._setChildren('items', value, 'DxiItemComponent');
     }
 
 
