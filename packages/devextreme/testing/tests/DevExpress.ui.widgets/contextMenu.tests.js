@@ -325,17 +325,30 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         assert.ok($submenu.hasClass(DX_SCROLLABLE_CLASS), 'Scrollable initialized');
     });
 
-    QUnit.test('Scrollable container should include added border space in generic theme (T1258002)', function(assert) {
+    QUnit.test('contextMenu maxHeight should include border width in generic theme only (T1258002)', function(assert) {
         new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
-        const isGeneric = themes.isGeneric();
-        const containerCalculatedHeight = $(`.${DX_SCROLLABLE_CONTAINER_CLASS}`).outerHeight();
-        const contentCalculatedHeight = $(` .${DX_SCROLLABLE_CONTENT_CLASS}`).outerHeight();
 
-        if(!isGeneric) {
-            assert.strictEqual(containerCalculatedHeight, contentCalculatedHeight, 'scrollable container has no additional border padding');
-            return;
+        const containerCalculatedHeight = $(`.${DX_SCROLLABLE_CONTAINER_CLASS}`).height();
+        const contentCalculatedHeight = $(` .${DX_SCROLLABLE_CONTENT_CLASS}`).height() + BORDER_WIDTH * 2;
+
+        const heightDifference = Math.floor(contentCalculatedHeight) - Math.floor(containerCalculatedHeight);
+        assert.strictEqual(heightDifference, 2, 'scrollable container has additional border paddi;ng for generic theme');
+    });
+
+    QUnit.test('contextMenu maxHeight should not include border width in other theme (T1258002)', function(assert) {
+        const originalTheme = themes.current();
+        themes.current('material.blue.light');
+        try {
+            new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
+
+            const containerCalculatedHeight = $(`.${DX_SCROLLABLE_CONTAINER_CLASS}`).height();
+            const contentCalculatedHeight = $(` .${DX_SCROLLABLE_CONTENT_CLASS}`).height() + BORDER_WIDTH * 2;
+            const heightDifference = Math.floor(contentCalculatedHeight) - Math.floor(containerCalculatedHeight);
+
+            assert.strictEqual(heightDifference, 0, 'scrollable container has additional border padding for generic theme');
+        } finally {
+            themes.current(originalTheme);
         }
-        assert.roughEqual(containerCalculatedHeight, contentCalculatedHeight, 1, 'scrollable container has additional border padding for generic theme');
     });
 
     QUnit.test('Scrollable should be initialized on a 2nd level submenu', function(assert) {
