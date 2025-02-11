@@ -6,6 +6,7 @@ import PieChart, {
   Label,
   Font,
   Connector,
+  CommonSeriesSettings,
 } from 'devextreme-react/pie-chart';
 import { dataSource } from './data.ts';
 
@@ -27,7 +28,7 @@ function App() {
         verticalAlignment="bottom"
         columnCount={4} />
       <Export enabled={true} />
-      <Series argumentField="country" valueField="medals">
+      <CommonSeriesSettings>
         <Label
           visible={true}
           position="columns"
@@ -35,7 +36,8 @@ function App() {
           <Font size={16} />
           <Connector visible={true} width={0.5} />
         </Label>
-      </Series>
+      </CommonSeriesSettings>
+      <Series argumentField="country" valueField="medals" />
     </PieChart>
   );
 }

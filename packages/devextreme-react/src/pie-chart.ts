@@ -1139,15 +1139,6 @@ const _componentSeries = (props: ISeriesProps) => {
     elementDescriptor: {
       OptionName: "series",
       IsCollectionItem: true,
-      ExpectedChildren: {
-        border: { optionName: "border", isCollectionItem: false },
-        color: { optionName: "color", isCollectionItem: false },
-        hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
-        label: { optionName: "label", isCollectionItem: false },
-        selectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
-        seriesBorder: { optionName: "border", isCollectionItem: false },
-        smallValuesGrouping: { optionName: "smallValuesGrouping", isCollectionItem: false }
-      },
     },
   });
 };
