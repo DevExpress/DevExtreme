@@ -35,7 +35,7 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxDataGridModule,
-    DxTextAreaModule
+    DxTextAreaModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
