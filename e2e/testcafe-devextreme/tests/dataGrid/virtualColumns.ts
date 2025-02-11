@@ -368,7 +368,7 @@ test('Header, fixed columns and virtual scroll bar should have stable position d
     (window as any).deferred.resolve();
     (window as any).deferred = $.Deferred();
   })();
-  await t.expect(dataGrid.isReady()).ok();
+  await t.expect(dataGrid.getDataRow(0).element.exists).ok();
   await dataGrid.scrollTo(t, { x: 2000 });
   await takeScreenshot('T1260472-async-render-during-horizontal-scrolling.png', dataGrid.element);
   await ClientFunction(() => { (window as any).deferred.resolve(); })();
