@@ -364,11 +364,8 @@ test('Header, fixed columns and virtual scroll bar should have stable position d
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await ClientFunction(() => {
-    (window as any).deferred.resolve();
-    (window as any).deferred = $.Deferred();
-  })();
-  await t.expect(dataGrid.getDataRow(0).element.exists).ok();
+  await t.expect(dataGrid.getDataRow(0).element.exists).ok(); // wait for initial render
+  await ClientFunction(() => { (window as any).deferred = $.Deferred(); })();
   await dataGrid.scrollTo(t, { x: 2000 });
   await takeScreenshot('T1260472-async-render-during-horizontal-scrolling.png', dataGrid.element);
   await ClientFunction(() => { (window as any).deferred.resolve(); })();
@@ -383,7 +380,6 @@ test('Header, fixed columns and virtual scroll bar should have stable position d
     cellTemplate: 'cellTemplate',
   };
 
-  await ClientFunction(() => { (window as any).deferred = $.Deferred(); })();
   return createWidget('dxDataGrid', {
     dataSource: generateData(3, 50),
     keyExpr: 'field1',
@@ -416,7 +412,11 @@ test('Header, fixed columns and virtual scroll bar should have stable position d
           ${title}
         </span>`);
             container.append(content);
-            (window as any).deferred.done(onRendered);
+            if ((window as any).deferred) {
+              (window as any).deferred.done(onRendered);
+            } else {
+              onRendered();
+            }
           },
         },
         cellTemplate: {
@@ -426,7 +426,11 @@ test('Header, fixed columns and virtual scroll bar should have stable position d
           ${title}
         </span>`);
             container.append(content);
-            (window as any).deferred.done(onRendered);
+            if ((window as any).deferred) {
+              (window as any).deferred.done(onRendered);
+            } else {
+              onRendered();
+            }
           },
         },
       },
