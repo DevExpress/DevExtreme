@@ -59,15 +59,11 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
       const $contentElement = this._findContentElement();
       const fixedColumns = this._columnsController?.getFixedColumns();
       const useNativeScrolling = this._scrollable?.option('useNative');
-      const legacyMode = this.option('columnFixing.legacyMode');
 
       if (fixedColumns?.length) {
-        // TODO: remove the condition when legacyMode is removed
-        if (legacyMode && !useNativeScrolling) {
-          $contentElement.css({ minHeight: gridCoreUtils.getContentHeightLimit(browser) });
-        } else {
-          $contentElement.css({ minHeight: getHeight($contentElement) });
-        }
+        $contentElement.css({
+          minHeight: useNativeScrolling ? getHeight($contentElement) : gridCoreUtils.getContentHeightLimit(browser),
+        });
 
         const resizeCompletedHandler = () => {
           this.resizeCompleted.remove(resizeCompletedHandler);
