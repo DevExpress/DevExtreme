@@ -74,7 +74,7 @@ const BERLIN_WINTER_CASE: TestCase = {
   timezone: MACHINE_TIMEZONES.EuropeBerlin,
   season: 'winter',
   currentDate: '2024-10-27',
-  startDate: new Date('2024-10-26T22:00:00Z'),
+  startDate: new Date('2024-10-25T23:00:00Z'),
   cellIdxArray: Array.from({ length: 8 }, (_, idx) => [idx, 3]),
   expectedTopPosition: [0, 25, 50, 75, 100, 125, 150, 175],
 };
@@ -96,7 +96,7 @@ const LOS_ANGELES_SUMMER_CASE_OFFSET: TestCase = {
   timezone: MACHINE_TIMEZONES.AmericaLosAngeles,
   season: 'summer',
   currentDate: '2024-03-10',
-  startDate: new Date('2024-03-10T08:00:00Z'),
+  startDate: new Date('2024-03-09T08:00:00Z'),
   cellIdxArray: Array.from({ length: 8 }, (_, idx) => [idx, 3]),
   expectedTopPosition: [0, 25, 50, 75, 100, 125, 150, 175],
 };
@@ -145,6 +145,7 @@ const OFFSET_TEST_CASES = generateOptionMatrix({
   },
 }) => {
   getTimezoneTest([timezone])(`Should drag-n-drop appointment correctly during around DST (${timezone}, ${season}, ${offset})`, async (t) => {
+    // await t.debug();
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
     const appointment = scheduler.getAppointment(APPOINTMENT_TEXT);
     const initialHeight = await appointment.size.height;
