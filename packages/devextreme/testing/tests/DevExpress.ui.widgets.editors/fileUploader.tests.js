@@ -4382,7 +4382,7 @@ QUnit.module('integration of dx button components via dialogTrigger', moduleConf
 
             keyboard.keyUp('enter');
 
-            assert.strictEqual(fileUploaderInputClickSpy.callOnce, true, 'click on input fired once');
+            assert.strictEqual(fileUploaderInputClickSpy.calledOnce, true, 'click on input fired once');
         });
     });
 });
