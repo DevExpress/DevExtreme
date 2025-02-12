@@ -299,8 +299,7 @@ export class ColumnHeadersView extends ColumnsView {
 
     $container
       .addClass(that.addWidgetPrefix(HEADERS_CLASS))
-      .toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option('wordWrapEnabled'))
-      .empty();
+      .toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option('wordWrapEnabled'));
 
     that.setAria('role', 'presentation', $container);
 
