@@ -452,7 +452,19 @@ const NumberBoxMask = NumberBoxBase.inherit({
     const value = parsedValue === null ? this._parsedValue : parsedValue;
     parsedValue = maxPrecision ? this._truncateToPrecision(value, maxPrecision) : parsedValue;
 
-    return !format.parser && this._isPercentFormat() ? adjustPercentValue(parsedValue, maxPrecision) : parsedValue;
+    if (!format.parser && this._isPercentFormat()) {
+      const interval = this._getIntervalFromPrecision(maxPrecision);
+
+      return adjustPercentValue(parsedValue, interval);
+    }
+
+    return parsedValue;
+  },
+
+  _getIntervalFromPrecision(precision = 1) {
+    const result = `0.${'0'.repeat(precision)}1`;
+
+    return parseFloat(result);
   },
 
   _getParsedValue(text, format) {

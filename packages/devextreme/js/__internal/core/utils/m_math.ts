@@ -53,7 +53,7 @@ function isEdgeBug() {
 }
 
 function adjust(value, interval) {
-  let precision = getPrecision(value || 0) + 2;
+  let precision = getPrecision(interval || 0) + 2;
   const separatedValue = value.toString().split('.');
   const sourceValue = value;
   const absValue = Math.abs(value);

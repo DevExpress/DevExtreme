@@ -1383,6 +1383,14 @@ QUnit.module('format: percent format', moduleConfig, () => {
         });
     });
 
+    QUnit.test('It should be possible to use percent format with more than 7 fractional digits (T1277123)', function(assert) {
+        this.instance.option('format', '#0.###########%');
+        this.keyboard.type('0.123456789').change();
+
+        assert.strictEqual(this.input.val(), '0.123456789%', 'text is correct');
+        assert.strictEqual(this.instance.option('value'), 0.00123456789, 'value is correct');
+    });
+
     [
         { text: '0.04', value: 0.00035, format: '#0.00%' },
         { text: '0.0350', value: 0.00035, format: '#0.0000%' },
