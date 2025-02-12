@@ -92,8 +92,6 @@ const TreeMap = memo(
 // HoverStyle
 // SelectionStyle
 // Tile
-// HoverStyle
-// SelectionStyle
 // Tooltip
 type IBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
@@ -302,6 +300,10 @@ const _componentHoverStyle = (props: IHoverStyleProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "hoverStyle",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        treeMapborder: { optionName: "border", isCollectionItem: false }
+      },
     },
   });
 };
@@ -401,6 +403,10 @@ const _componentSelectionStyle = (props: ISelectionStyleProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "selectionStyle",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        treeMapborder: { optionName: "border", isCollectionItem: false }
+      },
     },
   });
 };
@@ -676,8 +682,6 @@ const TooltipBorder = Object.assign<typeof _componentTooltipBorder, NestedCompon
 // HoverStyle
 // SelectionStyle
 // Tile
-// HoverStyle
-// SelectionStyle
 type ITreeMapborderProps = React.PropsWithChildren<{
   color?: string | undefined;
   width?: number | undefined;
