@@ -43,7 +43,6 @@ const DX_MENU_ITEM_POPOUT_CLASS = 'dx-menu-item-popout';
 const DX_SUBMENU_CLASS = 'dx-submenu';
 const DX_HAS_SUBMENU_CLASS = 'dx-menu-item-has-submenu';
 const DX_OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
-const DX_OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 
 const isDeviceDesktop = function(assert) {
     if(devices.real().deviceType !== 'desktop') {
@@ -273,6 +272,24 @@ QUnit.module('Rendering', moduleConfig, () => {
 
         assert.strictEqual($icon.attr('alt'), 'dxContextMenu item icon');
     });
+
+    QUnit.test('contextMenu maxHeight should not include border width if no theme is specified (T1258002)', function(assert) {
+        const stub = sinon.stub(themes, 'current').returns('none');
+
+        try {
+            const contextMenu = new ContextMenu(this.$element, {
+                items: [{ text: 'Test Item' }],
+                visible: true
+            });
+
+            const overlayMaxHeight = contextMenu.itemsContainer().css('maxHeight');
+            const contentHeight = $(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`).outerHeight();
+
+            assert.strictEqual(overlayMaxHeight, `${contentHeight}px`, 'overlay maxHeight does not include border width');
+        } finally {
+            stub.restore();
+        }
+    });
 });
 
 QUnit.module('Repaint', moduleConfig, () => {
@@ -324,24 +341,6 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
 
         assert.strictEqual($submenu.length, 1, 'only 1 submenu exists');
         assert.ok($submenu.hasClass(DX_SCROLLABLE_CLASS), 'Scrollable initialized');
-    });
-
-    QUnit.test('contextMenu maxHeight should not include border width if no theme is specified (T1258002)', function(assert) {
-        const stub = sinon.stub(themes, 'current').returns('none');
-
-        try {
-            new ContextMenu(this.$element, {
-                items: [{ text: 'Test Item' }],
-                visible: true
-            });
-
-            const overlayMaxHeight = $(`.${DX_OVERLAY_CONTENT_CLASS}`).css('maxHeight');
-            const contentHeight = $(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`).outerHeight();
-
-            assert.strictEqual(overlayMaxHeight, `${contentHeight}px`, 'overlay maxHeight does not include border width');
-        } finally {
-            stub.restore();
-        }
     });
 
     QUnit.test('Scrollable should be initialized on a 2nd level submenu', function(assert) {
