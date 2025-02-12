@@ -123,6 +123,7 @@ test('Gantt - show resources button should not have focus state (T1264485)', asy
   await t
     .click(Selector(TOOLBAR_ITEM_BUTTON));
   await testScreenshot(t, takeScreenshot, 'Gantt show resourced.png', { element: '#container' });
+  //changes
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

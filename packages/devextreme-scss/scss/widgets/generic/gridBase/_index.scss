@@ -1023,7 +1023,6 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       padding-top: $generic-grid-base-cell-padding + 1px;
     }
 
-    // changes
     .dx-selection.dx-row:not(.dx-edit-row) > td:not(.dx-editor-cell, .dx-master-detail-cell),
     .dx-row-focused.dx-row:not(.dx-edit-row) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
       padding-bottom: $generic-grid-base-cell-padding - 1px;
