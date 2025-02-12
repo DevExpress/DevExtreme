@@ -327,24 +327,20 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('contextMenu maxHeight should not include border width if no theme is specified (T1258002)', function(assert) {
-        try {
-            this.stub = sinon.stub(themes, 'current').returns('none');
+        const stub = sinon.stub(themes, 'current').returns('none');
 
+        try {
             new ContextMenu(this.$element, {
                 items: [{ text: 'Test Item' }],
                 visible: true
             });
 
             const overlayMaxHeight = $(`.${DX_OVERLAY_CONTENT_CLASS}`).css('maxHeight');
-            const containerCalculatedHeight = $(`.${DX_SCROLLABLE_CONTENT_CLASS}`).outerHeight();
+            const contentHeight = $(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`).outerHeight();
 
-            assert.strictEqual(
-                overlayMaxHeight,
-                `${containerCalculatedHeight}px`,
-                'Overlay maxHeight should be equal to items container outerHeight without extra border width'
-            );
+            assert.strictEqual(overlayMaxHeight, `${contentHeight}px`, 'overlay maxHeight does not include border width');
         } finally {
-            this.stub.restore();
+            stub.restore();
         }
     });
 
