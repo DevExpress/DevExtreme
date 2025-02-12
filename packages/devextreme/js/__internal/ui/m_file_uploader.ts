@@ -112,7 +112,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
   _totalFilesSize?: any;
 
-  _selectFileDialogHandler?: any;
+  _selectFileDialogClickHandler?: any;
 
   _isCustomClickEvent?: any;
 
@@ -836,15 +836,16 @@ class FileUploader extends Editor<FileUploaderProperties> {
       disabled: this.option('readOnly'),
       hoverStateEnabled: this.option('hoverStateEnabled'),
     });
-    this._selectFileDialogHandler = this._selectButtonClickHandler.bind(this);
+
+    this._selectFileDialogClickHandler = this._selectButtonClickHandler.bind(this);
 
     // NOTE: click triggering on input 'file' works correctly only in native click handler when device is used
     if (devices.real().deviceType === 'desktop') {
-      this._selectButton.option('onClick', this._selectFileDialogHandler);
+      this._selectButton.option('onClick', this._selectFileDialogClickHandler);
     } else {
-      this._attachSelectFileDialogHandler(this._selectButton.$element());
+      this._attachSelectFileDialogHandlers(this._selectButton.$element());
     }
-    this._attachSelectFileDialogHandler(this.option('dialogTrigger'));
+    this._attachSelectFileDialogHandlers(this.option('dialogTrigger'));
   }
 
   // @ts-expect-error
@@ -863,27 +864,30 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._isCustomClickEvent = false;
   }
 
-  _selectFileDialogKeyPressHandler(e): void {
+  _selectFileDialogKeyUpHandler(e): void {
     if (normalizeKeyName(e) === ENTER_KEY) {
-      this._selectFileDialogHandler();
+      this._selectFileDialogClickHandler();
     }
   }
 
-  _attachSelectFileDialogHandler(target) {
+  _attachSelectFileDialogHandlers(target) {
     if (!isDefined(target)) {
       return;
     }
-    this._detachSelectFileDialogHandler(target);
-    eventsEngine.on($(target), 'click', this._selectFileDialogHandler);
-    eventsEngine.on($(target), 'keyup', this._selectFileDialogKeyPressHandler.bind(this));
+
+    this._detachSelectFileDialogHandlers(target);
+
+    eventsEngine.on($(target), 'click', this._selectFileDialogClickHandler);
+    eventsEngine.on($(target), 'keyup', this._selectFileDialogKeyUpHandler.bind(this));
   }
 
-  _detachSelectFileDialogHandler(target) {
+  _detachSelectFileDialogHandlers(target) {
     if (!isDefined(target)) {
       return;
     }
-    eventsEngine.off($(target), 'click', this._selectFileDialogHandler);
-    eventsEngine.off($(target), 'keyup', this._selectFileDialogKeyPressHandler.bind(this));
+
+    eventsEngine.off($(target), 'click', this._selectFileDialogClickHandler);
+    eventsEngine.off($(target), 'keyup', this._selectFileDialogKeyUpHandler.bind(this));
   }
 
   _renderUploadButton() {
@@ -1162,7 +1166,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._$fileInput.detach();
     // @ts-expect-error
     delete this._$filesContainer;
-    this._detachSelectFileDialogHandler(this.option('dialogTrigger'));
+    this._detachSelectFileDialogHandlers(this.option('dialogTrigger'));
     this._detachDragEventHandlers(this.option('dropZone'));
 
     if (this._files) {
@@ -1449,8 +1453,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
         });
         break;
       case 'dialogTrigger':
-        this._detachSelectFileDialogHandler(previousValue);
-        this._attachSelectFileDialogHandler(value);
+        this._detachSelectFileDialogHandlers(previousValue);
+        this._attachSelectFileDialogHandlers(value);
         break;
       case 'dropZone':
         this._detachDragEventHandlers(previousValue);

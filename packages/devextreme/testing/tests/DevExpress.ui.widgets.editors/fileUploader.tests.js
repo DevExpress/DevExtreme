@@ -839,16 +839,16 @@ QUnit.module('custom uploading', moduleConfig, () => {
 
     QUnit.test('set custom dialog trigger attaches click event handler on targets', function(assert) {
         const instance = $('#fileuploader').dxFileUploader().dxFileUploader('instance');
-        sinon.stub(instance, '_attachSelectFileDialogHandler');
+        sinon.stub(instance, '_attachSelectFileDialogHandlers');
 
         instance.option('dialogTrigger', '.pic');
 
-        assert.strictEqual(instance._attachSelectFileDialogHandler.callCount, 1, 'attachHandlers method called');
-        const items = instance._attachSelectFileDialogHandler.args[0];
+        assert.strictEqual(instance._attachSelectFileDialogHandlers.callCount, 1, 'attachHandlers method called');
+        const items = instance._attachSelectFileDialogHandlers.args[0];
         assert.strictEqual(items.length, 1, 'attachHandlers args is valid');
         assert.strictEqual(items[0], '.pic', 'attachHandlers args is valid');
 
-        instance._attachSelectFileDialogHandler.restore();
+        instance._attachSelectFileDialogHandlers.restore();
     });
 
     QUnit.test('it is possible to drop files using custom dropzone', function(assert) {
@@ -2042,8 +2042,8 @@ QUnit.module('option change', moduleConfig, () => {
         const customDropZone = $('<div>').addClass('dropZone').appendTo('#qunit-fixture');
         const customDialogTrigger = $('<div>').addClass('trigger').appendTo('#qunit-fixture');
         const instance = $('#fileuploader').dxFileUploader().dxFileUploader('instance');
-        sinon.stub(instance, '_attachSelectFileDialogHandler');
-        sinon.stub(instance, '_detachSelectFileDialogHandler');
+        sinon.stub(instance, '_attachSelectFileDialogHandlers');
+        sinon.stub(instance, '_detachSelectFileDialogHandlers');
         sinon.stub(instance, '_attachDragEventHandlers');
         sinon.stub(instance, '_detachDragEventHandlers');
 
@@ -2053,13 +2053,13 @@ QUnit.module('option change', moduleConfig, () => {
             dropZone: '.dropZone'
         });
         this.clock.tick(100);
-        instance._detachSelectFileDialogHandler.reset();
+        instance._detachSelectFileDialogHandlers.reset();
         instance._detachDragEventHandlers.reset();
 
-        assert.ok(instance._attachSelectFileDialogHandler.callCount >= 1, '_attachSelectFileDialogHandler method called');
-        let items = instance._attachSelectFileDialogHandler.args[0];
-        assert.strictEqual(items.length, 1, '_attachSelectFileDialogHandler args is valid');
-        assert.strictEqual(items[0], '.trigger', '_attachSelectFileDialogHandler args is valid');
+        assert.ok(instance._attachSelectFileDialogHandlers.callCount >= 1, '_attachSelectFileDialogHandlers method called');
+        let items = instance._attachSelectFileDialogHandlers.args[0];
+        assert.strictEqual(items.length, 1, '_attachSelectFileDialogHandlers args is valid');
+        assert.strictEqual(items[0], '.trigger', '_attachSelectFileDialogHandlers args is valid');
 
         assert.ok(instance._attachDragEventHandlers.callCount >= 1, '_attachDragEventHandlers method called');
         items = instance._attachDragEventHandlers.args[0];
@@ -2068,18 +2068,18 @@ QUnit.module('option change', moduleConfig, () => {
 
         instance.dispose();
 
-        assert.strictEqual(instance._detachSelectFileDialogHandler.callCount, 1, '_detachSelectFileDialogHandler method called');
-        items = instance._detachSelectFileDialogHandler.args[0] || [];
-        assert.strictEqual(items.length, 1, '_detachSelectFileDialogHandler args is valid');
-        assert.strictEqual(items[0], '.trigger', '_detachSelectFileDialogHandler args is valid');
+        assert.strictEqual(instance._detachSelectFileDialogHandlers.callCount, 1, '_detachSelectFileDialogHandlers method called');
+        items = instance._detachSelectFileDialogHandlers.args[0] || [];
+        assert.strictEqual(items.length, 1, '_detachSelectFileDialogHandlers args is valid');
+        assert.strictEqual(items[0], '.trigger', '_detachSelectFileDialogHandlers args is valid');
 
         assert.strictEqual(instance._detachDragEventHandlers.callCount, 1, '_detachDragEventHandlers method called');
         items = instance._detachDragEventHandlers.args[0] || [];
         assert.strictEqual(items.length, 1, '_detachDragEventHandlers args is valid');
         assert.strictEqual(items[0], '.dropZone', '_detachDragEventHandlers args is valid');
 
-        instance._attachSelectFileDialogHandler.restore();
-        instance._detachSelectFileDialogHandler.restore();
+        instance._attachSelectFileDialogHandlers.restore();
+        instance._detachSelectFileDialogHandlers.restore();
         instance._attachDragEventHandlers.restore();
         instance._detachDragEventHandlers.restore();
         customDropZone.remove();
@@ -4208,7 +4208,7 @@ QUnit.module('readOnly option', moduleConfig, () => {
             readOnly: true,
             uploadMode: 'useButtons'
         }).dxFileUploader('instance');
-        sinon.stub(instance, '_selectButtonClickHandler').callsFake(() => instance._selectFileDialogHandler());
+        sinon.stub(instance, '_selectButtonClickHandler').callsFake(() => instance._selectFileDialogClickHandler());
 
         instance._selectButtonClickHandler();
         assert.strictEqual(instance._selectButtonClickHandler.returnValues[0], false, 'selectFile method not called');
