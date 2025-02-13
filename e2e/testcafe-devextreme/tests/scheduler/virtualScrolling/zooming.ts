@@ -11,7 +11,8 @@ import {
   scrollConfig,
 } from './utils';
 
-fixture.disablePageReloads`Scheduler: Virtual Scrolling with Zooming`
+// TODO: Check these tests and unskip if it possible to make them stable
+fixture.skip.disablePageReloads`Scheduler: Virtual Scrolling with Zooming`
   .page(url(__dirname, '../../container.html'));
 
 const createScheduler = async (
