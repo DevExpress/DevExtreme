@@ -461,10 +461,12 @@ const NumberBoxMask = NumberBoxBase.inherit({
     return parsedValue;
   },
 
-  _getIntervalFromPrecision(precision = 1) {
-    const result = `0.${'0'.repeat(precision)}1`;
+  _getIntervalFromPrecision(precision: number) {
+    if (precision < 1) {
+      return 1;
+    }
 
-    return parseFloat(result);
+    return 10 ** -precision;
   },
 
   _getParsedValue(text, format) {
