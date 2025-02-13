@@ -31,10 +31,17 @@ runs:
         if [ -n "$CHROME_VERSION" ]; then
           sudo apt-get update
           sudo apt-get -y install libu2f-udev
-          curl -L "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}-1_amd64.deb" > /tmp/chrome.deb
-          sudo dpkg -i /tmp/chrome.deb
-          unlink /tmp/chrome.deb
+        
+          mkdir google-chrome-setup 
+          pushd google-chrome-setup
+          npm init -y
+          npm set //npm.pkg.github.com/:_authToken="${{ github.token }}"  
+          npm i @devexpress/devextreme-google-chrome-image@1.0.0 --registry=https://npm.pkg.github.com
+          sudo dpkg -i node_modules/@devexpress/devextreme-google-chrome-image/google-chrome-stable_121.0.6167.184-1_amd64.deb
           google-chrome-stable --version
+          popd
+        
+          rm -rf google-chrome-setup  
         else
           echo "Skip Chrome upgrade"
         fi
