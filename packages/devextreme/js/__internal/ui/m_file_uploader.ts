@@ -60,7 +60,10 @@ const FILEUPLOADER_AFTER_LOAD_DELAY = 400;
 const FILEUPLOADER_CHUNK_META_DATA_NAME = 'chunkMetadata';
 const DRAG_EVENT_DELTA = 1;
 
+const keyUpEventName = 'keyup';
+
 const ENTER_KEY = 'enter';
+const SPACE_KEY = 'space';
 
 let renderFileUploaderInput = () => $('<input>').attr('type', 'file');
 // @ts-expect-error
@@ -112,7 +115,9 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
   _totalFilesSize?: any;
 
-  _selectFileDialogClickHandler?: any;
+  _selectFileDialogClickHandler!: () => void;
+
+  _selectFileDialogKeyUpHandler!: (e: any) => void;
 
   _isCustomClickEvent?: any;
 
@@ -133,6 +138,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
   _uploadedAction?: any;
 
   _beforeSendAction?: any;
+
+  _clickEventName!: string;
+
+  _keyUpEventName!: string;
 
   _supportedKeys() {
     const click = (e) => {
@@ -274,6 +283,9 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _init(): void {
+    this._clickEventName = addNamespace(clickEventName, this.NAME);
+    this._keyUpEventName = addNamespace(keyUpEventName, this.NAME);
+
     super._init();
 
     this._initFileInput();
@@ -838,6 +850,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     });
 
     this._selectFileDialogClickHandler = this._selectButtonClickHandler.bind(this);
+    this._selectFileDialogKeyUpHandler = this._selectButtonKeyUpHandler.bind(this);
 
     // NOTE: click triggering on input 'file' works correctly only in native click handler when device is used
     if (devices.real().deviceType === 'desktop') {
@@ -864,30 +877,36 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._isCustomClickEvent = false;
   }
 
-  _selectFileDialogKeyUpHandler(e): void {
-    if (normalizeKeyName(e) === ENTER_KEY) {
+  _selectButtonKeyUpHandler(e: any): void {
+    const normalizedKeyName = normalizeKeyName(e);
+
+    if (normalizedKeyName === ENTER_KEY || normalizedKeyName === SPACE_KEY) {
       this._selectFileDialogClickHandler();
     }
   }
 
-  _attachSelectFileDialogHandlers(target) {
+  _attachSelectFileDialogHandlers(target: any): void {
     if (!isDefined(target)) {
       return;
     }
 
     this._detachSelectFileDialogHandlers(target);
 
-    eventsEngine.on($(target), 'click', this._selectFileDialogClickHandler);
-    eventsEngine.on($(target), 'keyup', this._selectFileDialogKeyUpHandler.bind(this));
+    const $target = $(target);
+
+    eventsEngine.on($target, this._clickEventName, this._selectFileDialogClickHandler);
+    eventsEngine.on($target, this._keyUpEventName, this._selectFileDialogKeyUpHandler);
   }
 
-  _detachSelectFileDialogHandlers(target) {
+  _detachSelectFileDialogHandlers(target: any): void {
     if (!isDefined(target)) {
       return;
     }
 
-    eventsEngine.off($(target), 'click', this._selectFileDialogClickHandler);
-    eventsEngine.off($(target), 'keyup', this._selectFileDialogKeyUpHandler.bind(this));
+    const $target = $(target);
+
+    eventsEngine.off($target, this._clickEventName, this._selectFileDialogClickHandler);
+    eventsEngine.off($target, this._keyUpEventName, this._selectFileDialogKeyUpHandler);
   }
 
   _renderUploadButton() {
