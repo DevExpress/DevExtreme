@@ -28,7 +28,6 @@ import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import type dxOverlay from '@js/ui/overlay';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
-// @ts-expect-error
 import { current as currentTheme, isGeneric } from '@js/ui/themes';
 import MenuBase from '@ts/ui/context_menu/m_menu_base';
 

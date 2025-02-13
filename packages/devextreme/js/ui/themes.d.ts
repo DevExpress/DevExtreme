@@ -39,4 +39,5 @@ export function current(): string;
 export function isMaterialBased(theme: string): boolean;
 export function isFluent(theme: string): boolean;
 export function isMaterial(theme: string): boolean;
+export function isGeneric(theme: string): boolean;
 export function isCompact(theme: string): boolean;
