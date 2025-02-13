@@ -78,6 +78,8 @@ export interface Properties extends PublicProperties {
 interface FileUploaderProperties extends Properties,
   Omit<EditorProperties<FileUploader>, UnresolvedEvents | 'value'> {}
 
+type FileDialogEventTarget = dxElementWrapper | FileUploaderProperties['dialogTrigger'];
+
 class FileUploader extends Editor<FileUploaderProperties> {
   // Temporary solution. Move to component level
   public NAME!: string;
@@ -117,7 +119,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
   _selectFileDialogClickHandler!: () => void;
 
-  _selectFileDialogKeyUpHandler!: (e: any) => void;
+  _selectFileDialogKeyUpHandler!: (e: KeyboardEvent) => void;
 
   _isCustomClickEvent?: any;
 
@@ -858,7 +860,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
     } else {
       this._attachSelectFileDialogHandlers(this._selectButton.$element());
     }
-    this._attachSelectFileDialogHandlers(this.option('dialogTrigger'));
+
+    const { dialogTrigger } = this.option();
+
+    this._attachSelectFileDialogHandlers(dialogTrigger);
   }
 
   // @ts-expect-error
@@ -877,7 +882,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._isCustomClickEvent = false;
   }
 
-  _selectButtonKeyUpHandler(e: any): void {
+  _selectButtonKeyUpHandler(e: KeyboardEvent): void {
     const normalizedKeyName = normalizeKeyName(e);
 
     if (normalizedKeyName === ENTER_KEY || normalizedKeyName === SPACE_KEY) {
@@ -885,7 +890,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     }
   }
 
-  _attachSelectFileDialogHandlers(target: any): void {
+  _attachSelectFileDialogHandlers(target: FileDialogEventTarget): void {
     if (!isDefined(target)) {
       return;
     }
@@ -898,7 +903,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     eventsEngine.on($target, this._keyUpEventName, this._selectFileDialogKeyUpHandler);
   }
 
-  _detachSelectFileDialogHandlers(target: any): void {
+  _detachSelectFileDialogHandlers(target: FileDialogEventTarget): void {
     if (!isDefined(target)) {
       return;
     }
@@ -1185,7 +1190,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._$fileInput.detach();
     // @ts-expect-error
     delete this._$filesContainer;
-    this._detachSelectFileDialogHandlers(this.option('dialogTrigger'));
+
+    const { dialogTrigger } = this.option();
+
+    this._detachSelectFileDialogHandlers(dialogTrigger);
     this._detachDragEventHandlers(this.option('dropZone'));
 
     if (this._files) {
