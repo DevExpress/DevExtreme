@@ -221,6 +221,7 @@
         jQueryInit = jQuery.fn.init;
 
         jQuery.fn.init = function(selector, context, root) {
+            const shadowRoot = getRoot().host;
             const result = new jQueryInit(selector, context, root);
             const resultElement = result.get(0);
 
@@ -228,8 +229,8 @@
                 return new jQueryInit(get(selector), context, root);
             }
 
-            if(resultElement === getRoot().host) {
-                return new jQueryInit(get(':scope div')[0], context, root);
+            if(resultElement === shadowRoot) {
+                return new jQueryInit(get('.shadow-container')[0], context, root);
             }
 
             return result;
