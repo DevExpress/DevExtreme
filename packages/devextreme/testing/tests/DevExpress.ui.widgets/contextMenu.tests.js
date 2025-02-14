@@ -11,6 +11,7 @@ import contextMenuEvent from 'events/contextmenu';
 import holdEvent from 'events/hold';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
+import themes from 'ui/themes';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
@@ -270,6 +271,24 @@ QUnit.module('Rendering', moduleConfig, () => {
         const $icon = instance.itemsContainer().find(`.${DX_MENU_ITEM_CLASS} .${DX_ICON_CLASS}`);
 
         assert.strictEqual($icon.attr('alt'), 'dxContextMenu item icon');
+    });
+
+    QUnit.test('contextMenu maxHeight should not include border width if no theme is specified (T1258002)', function(assert) {
+        const stub = sinon.stub(themes, 'current').returns('none');
+
+        try {
+            const contextMenu = new ContextMenu(this.$element, {
+                items: [{ text: 'Test Item' }],
+                visible: true
+            });
+
+            const overlayMaxHeight = contextMenu.itemsContainer().css('maxHeight');
+            const contentHeight = $(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`).outerHeight();
+
+            assert.strictEqual(overlayMaxHeight, `${contentHeight}px`, 'overlay maxHeight does not include border width');
+        } finally {
+            stub.restore();
+        }
     });
 });
 

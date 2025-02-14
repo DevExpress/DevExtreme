@@ -101,7 +101,7 @@ const subscribes = {
     }
 
     if ((newCellIndex !== oldCellIndex) || isDragAndDropBetweenComponents || movedBetweenAllDayAndSimple) {
-      this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.exceptionDate, () => {
+      this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.startDate, () => {
         this._updateAppointment(rawAppointment, targetedRawAppointment, function () {
           this._appointments.moveAppointmentBack(event);
         }, event);

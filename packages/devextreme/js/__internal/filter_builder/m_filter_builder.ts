@@ -827,6 +827,7 @@ class FilterBuilder extends Widget<any> {
       height: 'auto',
       showTitle: false,
       _wrapperClassExternal: options.menu.cssClass,
+      _ignorePreventScrollEventsDeprecation: true,
     });
   }
 
