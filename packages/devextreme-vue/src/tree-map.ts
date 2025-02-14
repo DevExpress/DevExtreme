@@ -427,6 +427,10 @@ prepareConfigurationComponentConfig(DxHoverStyleConfig);
 const DxHoverStyle = defineComponent(DxHoverStyleConfig);
 
 (DxHoverStyle as any).$_optionName = "hoverStyle";
+(DxHoverStyle as any).$_expectedChildren = {
+  border: { isCollectionItem: false, optionName: "border" },
+  treeMapborder: { isCollectionItem: false, optionName: "border" }
+};
 
 const DxLabelConfig = {
   emits: {
@@ -523,6 +527,10 @@ prepareConfigurationComponentConfig(DxSelectionStyleConfig);
 const DxSelectionStyle = defineComponent(DxSelectionStyleConfig);
 
 (DxSelectionStyle as any).$_optionName = "selectionStyle";
+(DxSelectionStyle as any).$_expectedChildren = {
+  border: { isCollectionItem: false, optionName: "border" },
+  treeMapborder: { isCollectionItem: false, optionName: "border" }
+};
 
 const DxShadowConfig = {
   emits: {

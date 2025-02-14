@@ -576,6 +576,9 @@ describe('component/render in nested options', () => {
             render: 'itemRender',
             component: 'itemComponent',
           }],
+          ExpectedChildren: {
+            test: { optionName: "test", isCollectionItem: false },
+          },
         }}
         {...props}
       />
@@ -599,6 +602,9 @@ describe('component/render in nested options', () => {
             render: 'render',
             component: 'component',
           }],
+          ExpectedChildren: {
+            test: { optionName: "test", isCollectionItem: false },
+          },
         }}
         {...props}
       />

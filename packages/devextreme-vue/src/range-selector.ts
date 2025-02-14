@@ -1378,14 +1378,10 @@ const DxPoint = defineComponent(DxPointConfig);
 
 (DxPoint as any).$_optionName = "point";
 (DxPoint as any).$_expectedChildren = {
-  border: { isCollectionItem: false, optionName: "border" },
   color: { isCollectionItem: false, optionName: "color" },
   hoverStyle: { isCollectionItem: false, optionName: "hoverStyle" },
   image: { isCollectionItem: false, optionName: "image" },
   pointBorder: { isCollectionItem: false, optionName: "border" },
-  pointHoverStyle: { isCollectionItem: false, optionName: "hoverStyle" },
-  pointImage: { isCollectionItem: false, optionName: "image" },
-  pointSelectionStyle: { isCollectionItem: false, optionName: "selectionStyle" },
   selectionStyle: { isCollectionItem: false, optionName: "selectionStyle" }
 };
 
@@ -1758,6 +1754,21 @@ const DxSeries = defineComponent(DxSeriesConfig);
 
 (DxSeries as any).$_optionName = "series";
 (DxSeries as any).$_isCollectionItem = true;
+(DxSeries as any).$_expectedChildren = {
+  aggregation: { isCollectionItem: false, optionName: "aggregation" },
+  border: { isCollectionItem: false, optionName: "border" },
+  color: { isCollectionItem: false, optionName: "color" },
+  commonSeriesSettingsHoverStyle: { isCollectionItem: false, optionName: "hoverStyle" },
+  commonSeriesSettingsLabel: { isCollectionItem: false, optionName: "label" },
+  commonSeriesSettingsSelectionStyle: { isCollectionItem: false, optionName: "selectionStyle" },
+  hoverStyle: { isCollectionItem: false, optionName: "hoverStyle" },
+  label: { isCollectionItem: false, optionName: "label" },
+  point: { isCollectionItem: false, optionName: "point" },
+  reduction: { isCollectionItem: false, optionName: "reduction" },
+  selectionStyle: { isCollectionItem: false, optionName: "selectionStyle" },
+  seriesBorder: { isCollectionItem: false, optionName: "border" },
+  valueErrorBar: { isCollectionItem: false, optionName: "valueErrorBar" }
+};
 
 const DxSeriesBorderConfig = {
   emits: {
