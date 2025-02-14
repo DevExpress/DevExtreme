@@ -5,7 +5,6 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { getNavigator } from '@js/core/utils/window';
-// @ts-expect-error
 import { current, isGeneric, isMaterialBased } from '@js/ui/themes';
 import Widget from '@js/ui/widget/ui.widget';
 
