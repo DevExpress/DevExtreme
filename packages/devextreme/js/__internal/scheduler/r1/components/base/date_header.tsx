@@ -1,5 +1,5 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
-import type { JSXTemplate } from '@devextreme-generator/declarations';
+import type { JSXTemplate } from '@ts/core/r1/types';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
 import type { DateHeaderData, Group, GroupOrientation } from '../../types';

@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "@angular/cli": "17.3.11",
+        "@angular-devkit/build-angular": "17.3.11",
         "@angular/common": "17.3.12",
         "@angular/compiler": "17.3.12",
         "@angular/compiler-cli": "17.3.12",
@@ -42,7 +43,7 @@
         "devextreme-cldr-data": "1.0.3",
         "devextreme-quill": "1.7.1",
         "dx-systemjs-vue-browser": "1.1.1",
-        "esbuild": "0.19.3",
+        "esbuild": "0.25.0",
         "esbuild-plugin-vue3": "0.3.2",
         "eslint-plugin-react-hooks": "4.6.0",
         "exceljs": "4.4.0",
@@ -164,7 +165,11 @@
         "prepare-bundles": "pnpm run generate-devextreme-angular-umd && gulp bundles && gulp update-config",
         "convert-to-js": "ts-node ./utils/ts-to-js-converter/cli.ts",
         "create-typestat-cfg": "cd ./utils/internal && node ./create-typestat-cfg.js",
-        "make-demos-bundle": "ts-node ./utils/create-bundles"
+        "make-demos-bundle": "ts-node ./utils/create-bundles",
+        "update-angular-json": "ts-node ./utils/create-bundles/Angular/update-angular-json.ts",
+        "build-angular": "ng build",
+        "post-process-angular": "ts-node ./utils/create-bundles/Angular/post-process-index.ts",
+        "webserver-gh": "cd ./publish-demos && http-server --port 5645"
     },
     "license": "SEE LICENSE IN README.md",
     "keywords": [

@@ -4866,3 +4866,101 @@ QUnit.test('Set bar width (via interval) for each pane (T1000672)', function(ass
     assert.ok(chart.series[0].getPoints()[0].width > 30);
     assert.ok(chart.series[2].getPoints()[0].width < 10);
 });
+
+QUnit.module('React async templates rendering', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        this.templateTimeout = 1000;
+        this.integrationOptions = {
+            templates: {
+                labelTemplate: {
+                    render: ({ model, container, onRendered }) => {
+                        const deferred = $.Deferred();
+                        setTimeout(() => {
+                            const content = $(`<svg overflow="visible"><text fill="#767676" x="30" y="59" text-anchor="middle">${model.valueText}</text></svg>`);
+                            container.append(content);
+                            onRendered();
+                            deferred.resolve();
+                        }, this.templateTimeout);
+                        return deferred.promise();
+                    }
+                },
+            }
+        };
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('no visual slide animation should be shown when label templates are rendered asynchroniously (T1232664)', function(assert) {
+        const chart = $('#chartContainer').dxChart({
+            dataSource: [{ arg: 1, val: 10 }],
+            templatesRenderAsynchronously: true,
+            animation: { enabled: true },
+            commonSeriesSettings: {
+                type: 'bar',
+                argumentField: 'arg',
+            },
+            series: [{
+                valueField: 'val',
+            }],
+            integrationOptions: this.integrationOptions,
+            argumentAxis: {
+                label: {
+                    template: 'labelTemplate',
+                },
+            },
+        }).dxChart('instance');
+
+        const axis = chart.getArgumentAxis();
+        const animationSpy = sinon.spy(axis._majorTicks[0].templateContainer, 'animate');
+
+        chart.render({ animate: true });
+
+        this.clock.tick(this.templateTimeout);
+
+        assert.strictEqual(animationSpy.callCount, 0, 'slide animation is not run because no label coordinates were saved before template is rendered');
+    });
+
+    QUnit.test('label templates should be visible after rendering even if additional render interrupted first render, async templates in React 17 (T1232664)', function(assert) {
+        const chart = $('#chartContainer').dxChart({
+            dataSource: [{ arg: 1, val: 10 }],
+            templatesRenderAsynchronously: true,
+            animation: { enabled: true },
+            commonSeriesSettings: {
+                type: 'bar',
+                argumentField: 'arg',
+            },
+            series: [{
+                valueField: 'val',
+            }],
+            integrationOptions: this.integrationOptions,
+            argumentAxis: {
+                label: {
+                    template: 'labelTemplate',
+                },
+            },
+        }).dxChart('instance');
+
+        this.clock.tick(this.templateTimeout);
+
+        const axis = chart.getArgumentAxis();
+        const stub = sinon
+            .stub(axis, 'getTemplatesGroups')
+            .onCall(0)
+            .returns([{ element: $(document.createElementNS('http://www.w3.org/2000/svg', 'g')), attr: () => {} }]);
+
+        chart.render({ force: true });
+        stub.callThrough();
+
+
+        chart._applyingChanges = true;
+        this.clock.tick(this.templateTimeout);
+        chart._applyingChanges = false;
+
+        chart.render({ force: true });
+        this.clock.tick(this.templateTimeout);
+
+        assert.strictEqual(axis._majorTicks[0].templateContainer.attr('visibility'), 'visible', 'label is visible');
+    });
+});
