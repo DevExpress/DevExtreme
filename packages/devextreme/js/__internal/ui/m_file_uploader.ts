@@ -60,7 +60,12 @@ const FILEUPLOADER_AFTER_LOAD_DELAY = 400;
 const FILEUPLOADER_CHUNK_META_DATA_NAME = 'chunkMetadata';
 const DRAG_EVENT_DELTA = 1;
 
+const DIALOG_TRIGGER_EVENT_NAMESPACE = 'dxFileUploaderDialogTrigger';
+
 const keyUpEventName = 'keyup';
+
+const dialogTriggerClickEventName = addNamespace(clickEventName, DIALOG_TRIGGER_EVENT_NAMESPACE);
+const dialogTriggerKeyUpEventName = addNamespace(keyUpEventName, DIALOG_TRIGGER_EVENT_NAMESPACE);
 
 const ENTER_KEY = 'enter';
 const SPACE_KEY = 'space';
@@ -136,10 +141,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
   _uploadedAction?: any;
 
   _beforeSendAction?: any;
-
-  _clickEventName!: string;
-
-  _keyUpEventName!: string;
 
   _supportedKeys() {
     const click = (e) => {
@@ -281,9 +282,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _init(): void {
-    this._clickEventName = addNamespace(clickEventName, this.NAME);
-    this._keyUpEventName = addNamespace(keyUpEventName, this.NAME);
-
     super._init();
 
     this._initFileInput();
@@ -884,8 +882,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
     const $target = $(target);
 
-    eventsEngine.on($target, this._clickEventName, () => this._selectFileDialogClickHandler());
-    eventsEngine.on($target, this._keyUpEventName, (e: KeyboardEvent) => {
+    eventsEngine.on($target, dialogTriggerClickEventName, () => {
+      this._selectFileDialogClickHandler();
+    });
+    eventsEngine.on($target, dialogTriggerKeyUpEventName, (e: KeyboardEvent) => {
       const normalizedKeyName = normalizeKeyName(e);
 
       if (normalizedKeyName === ENTER_KEY || normalizedKeyName === SPACE_KEY) {
@@ -901,8 +901,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
     const $target = $(target);
 
-    eventsEngine.off($target, this._clickEventName);
-    eventsEngine.off($target, this._keyUpEventName);
+    eventsEngine.off($target, `.${DIALOG_TRIGGER_EVENT_NAMESPACE}`);
   }
 
   _renderUploadButton() {
