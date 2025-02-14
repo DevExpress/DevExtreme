@@ -30,8 +30,9 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
       cellTemplate,
       dataCellTemplate,
     } = this.props;
-    const rowClasses = combineClasses({
-      [DATE_TABLE_ROW_CLASS]: true,
+    const rowClasses = combineClasses([
+      DATE_TABLE_ROW_CLASS,
+    ], {
       'dx-scheduler-cell-sizes-vertical': addVerticalSizesClassToRows,
     });
     const CellTemplateComponent = getTemplate(cellTemplate);

@@ -53,11 +53,12 @@ export class DateTableMonthCell extends BaseInfernoComponent<DateTableCellBasePr
       otherMonth,
       today,
     } = this.props;
-    const classes = combineClasses({
+    const classes = combineClasses([
+      className,
+    ], {
       'dx-scheduler-date-table-other-month': !!otherMonth,
       'dx-scheduler-date-table-current-date': !!today,
       'dx-scheduler-date-table-first-of-month': !!firstDayOfMonth,
-      [className ?? '']: !!className,
     });
     const contentTemplateProps = this.getContentTemplateProps();
     const DataCellTemplateComponent = getTemplate(dataCellTemplate);

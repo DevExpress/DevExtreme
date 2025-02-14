@@ -583,10 +583,10 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
     const isFocusable = !!focusStateEnabled && !disabled;
     const isHoverable = !!hoverStateEnabled && !disabled;
     const canBeActive = !!activeStateEnabled && !disabled;
-    const classesMap = {
+    return combineClasses([
+      classes, className,
+    ], {
       'dx-widget': !!addWidgetClass,
-      [String(classes)]: !!classes,
-      [String(className)]: !!className,
       'dx-state-disabled': !!disabled,
       'dx-state-invisible': !visible,
       'dx-state-focused': !!this.state.focused && isFocusable,
@@ -594,9 +594,7 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
       'dx-state-hover': !!this.state.hovered && isHoverable && !this.state.active,
       'dx-rtl': !!this.props.rtlEnabled,
       'dx-visibility-change-handler': !!onVisibilityChange,
-    };
-
-    return combineClasses(classesMap);
+    });
   }
 
   getTabIndex(): undefined | number {

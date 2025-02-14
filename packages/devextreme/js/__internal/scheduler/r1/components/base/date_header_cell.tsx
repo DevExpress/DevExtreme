@@ -51,12 +51,13 @@ export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
     } = this.props;
     const cellSizeHorizontalClass = renderUtils
       .getCellSizeHorizontalClass(viewType, crossScrollingEnabled);
-    const cellClasses = combineClasses({
-      'dx-scheduler-header-panel-cell': true,
-      [cellSizeHorizontalClass]: true,
+    const cellClasses = combineClasses([
+      'dx-scheduler-header-panel-cell',
+      cellSizeHorizontalClass,
+      className,
+    ], {
       'dx-scheduler-header-panel-current-time-cell': today,
       'dx-scheduler-header-panel-week-cell': isWeekDayCell,
-      [className ?? '']: !!className,
     });
     const classes = renderUtils
       .getGroupCellClasses(isFirstGroupCell, isLastGroupCell, cellClasses);

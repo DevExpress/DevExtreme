@@ -94,13 +94,14 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
     const cellSizeVerticalClass = renderUtils
       .getCellSizeVerticalClass(!!allDay);
 
-    const classes = combineClasses({
-      [cellSizeHorizontalClass]: true,
-      [cellSizeVerticalClass]: true,
+    const classes = combineClasses([
+      cellSizeHorizontalClass,
+      cellSizeVerticalClass,
+      className,
+    ], {
       [DATE_TABLE_CELL_CLASS]: !allDay,
       'dx-state-focused': isSelected,
       'dx-scheduler-focused-cell': isFocused,
-      [className ?? '']: true,
     });
     const ariaLabel = isSelected ? ADD_APPOINTMENT_LABEL : undefined;
     const dataCellTemplateProps = this.getDataCellTemplateProps();

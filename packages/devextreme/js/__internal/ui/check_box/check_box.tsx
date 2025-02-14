@@ -19,13 +19,13 @@ const getCssClasses = (model: CheckBoxProps): string => {
   } = model;
   const checked = value;
   const indeterminate = checked === null;
-  const classesMap = {
-    'dx-checkbox': true,
+  return combineClasses([
+    'dx-checkbox',
+  ], {
     'dx-checkbox-checked': checked === true,
     'dx-checkbox-has-text': !!text,
     'dx-checkbox-indeterminate': indeterminate,
-  };
-  return combineClasses(classesMap);
+  });
 };
 
 export interface CheckBoxProps extends EditorProps {

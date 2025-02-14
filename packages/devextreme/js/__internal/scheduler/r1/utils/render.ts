@@ -42,10 +42,11 @@ export const getGroupCellClasses = (
   isFirstGroupCell: boolean | undefined = false,
   isLastGroupCell: boolean | undefined = false,
   className = '',
-): string => combineClasses({
+): string => combineClasses([
+  className,
+], {
   'dx-scheduler-first-group-cell': isFirstGroupCell,
   'dx-scheduler-last-group-cell': isLastGroupCell,
-  [className]: true,
 });
 
 export const getCellSizeHorizontalClass = (

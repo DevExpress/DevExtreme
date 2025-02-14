@@ -157,13 +157,13 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
   }
 
   getClasses(): string {
-    const classesMap = {
-      [`${this.props.className}`]: !!this.props.className,
+    return combineClasses([
+      this.props.className,
+    ], {
       [PAGER_CLASS]: !!this.props.isGridCompatibilityMode,
       [PAGINATION_CLASS]: !this.props.isGridCompatibilityMode,
       [LIGHT_MODE_CLASS]: !this.getIsLargeDisplayMode(),
-    };
-    return combineClasses(classesMap);
+    });
   }
 
   getAria(): Record<string, string> {

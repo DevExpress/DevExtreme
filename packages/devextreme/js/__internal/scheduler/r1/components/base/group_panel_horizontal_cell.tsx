@@ -32,11 +32,12 @@ export class GroupPanelHorizontalCell extends BaseInfernoComponent<GroupPanelHor
       isFirstGroupCell,
       isLastGroupCell,
     } = this.props;
-    const classes = combineClasses({
-      'dx-scheduler-group-header': true,
+    const classes = combineClasses([
+      'dx-scheduler-group-header',
+      className,
+    ], {
       'dx-scheduler-first-group-cell': isFirstGroupCell,
       'dx-scheduler-last-group-cell': isLastGroupCell,
-      [className ?? '']: !!className,
     });
     const CellTemplateComponent = getTemplate(cellTemplate);
 

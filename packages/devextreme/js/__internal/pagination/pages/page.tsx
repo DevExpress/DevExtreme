@@ -37,8 +37,9 @@ export class Page extends BaseInfernoComponent<PagePropsInterface> {
   }
 
   getClassName(): string {
-    return combineClasses({
-      [`${this.props.className}`]: !!this.props.className,
+    return combineClasses([
+      this.props.className,
+    ], {
       [PAGINATION_SELECTION_CLASS]: !!this.props.selected,
     });
   }

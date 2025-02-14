@@ -42,9 +42,10 @@ export class Pagination extends InfernoWrapperComponent<PaginationProps> {
   }
 
   getClassName(): string | undefined {
-    return combineClasses({
+    return combineClasses([
+      this.props.className,
+    ], {
       'dx-datagrid-pager': isGridCompatibilityMode(this.context),
-      [`${this.props.className}`]: !!this.props.className,
     });
   }
 

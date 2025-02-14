@@ -18,12 +18,12 @@ const getCssClasses = (model: EditorProps): string => {
     isValid,
     readOnly,
   } = model;
-  const classesMap = {
+  return combineClasses([
+    classes,
+  ], {
     'dx-state-readonly': !!readOnly,
     'dx-invalid': !isValid,
-    [String(classes)]: !!classes,
-  };
-  return combineClasses(classesMap);
+  });
 };
 
 export interface EditorProps extends WidgetProps {

@@ -34,15 +34,15 @@ const getCssClasses = (model): string => {
     type,
   } = model;
   const isValidStylingMode = stylingMode && stylingModes.includes(stylingMode);
-  const classesMap = {
-    'dx-button': true,
-    [`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`]: true,
-    [`dx-button-${type ?? 'normal'}`]: true,
+  return combineClasses([
+    'dx-button',
+    `dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`,
+    `dx-button-${type ?? 'normal'}`,
+  ], {
     'dx-button-has-text': !!text,
     'dx-button-has-icon': !!icon,
     'dx-button-icon-right': iconPosition !== 'left',
-  };
-  return combineClasses(classesMap);
+  });
 };
 
 export const defaultOptionRules = createDefaultOptionRules([{

@@ -42,10 +42,10 @@ export class AllDayPanelTableBody extends BaseInfernoComponent<AllDayPanelTableB
       isVerticalGroupOrientation,
       dataCellTemplate,
     } = this.props;
-    const classes = combineClasses({
-      'dx-scheduler-all-day-table-row': true,
-      [className ?? '']: !!className,
-    });
+    const classes = combineClasses([
+      'dx-scheduler-all-day-table-row',
+      className,
+    ]);
     const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (

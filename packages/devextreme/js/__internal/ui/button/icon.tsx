@@ -31,23 +31,23 @@ export class Icon extends BaseInfernoComponent<IconProps> {
   }
 
   get iconClassName(): string {
-    const generalClasses = {
-      'dx-icon': true,
-      [this.cssClass]: !!this.cssClass,
-    };
+    const generalClasses = [
+      'dx-icon',
+      this.cssClass,
+    ];
     const { source } = this.props;
 
     if (this.sourceType === 'dxIcon') {
-      return combineClasses({ ...generalClasses, [`dx-icon-${source}`]: true });
+      return combineClasses([...generalClasses, `dx-icon-${source}`]);
     }
     if (this.sourceType === 'fontIcon') {
-      return combineClasses({ ...generalClasses, [String(source)]: !!source });
+      return combineClasses([...generalClasses, source]);
     }
     if (this.sourceType === 'image') {
       return combineClasses(generalClasses);
     }
     if (this.sourceType === 'svg') {
-      return combineClasses({ ...generalClasses, 'dx-svg-icon': true });
+      return combineClasses([...generalClasses, 'dx-svg-icon']);
     }
     return '';
   }
