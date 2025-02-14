@@ -510,6 +510,7 @@ const Drawer = (Widget as any).inherit({
       case 'opened':
         this._renderPosition(this.option('opened'));
         this._toggleOpenedStateClass(args.value);
+        this._whenAnimationCompleted = Deferred();
         this._togglePanelContentHiddenClass();
         break;
       case 'position':
@@ -572,7 +573,6 @@ const Drawer = (Widget as any).inherit({
   toggle(opened) {
     const targetOpened = opened === undefined ? !this.option('opened') : opened;
 
-    this._whenAnimationCompleted = Deferred();
     this.option('opened', targetOpened);
 
     return this._whenAnimationCompleted.promise();
