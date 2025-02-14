@@ -11,6 +11,7 @@
         "enabled": true,
         "automerge": true
     },
+    "rebaseWhen": "conflicted",
     "packageRules": [
         {
             "matchPackagePrefixes": [ "cldr-" ],
