@@ -117,10 +117,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
   _totalFilesSize?: any;
 
-  _selectFileDialogClickHandler!: () => void;
-
-  _selectFileDialogKeyUpHandler!: (e: KeyboardEvent) => void;
-
   _isCustomClickEvent?: any;
 
   _progressAction?: any;
@@ -851,9 +847,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
       hoverStateEnabled: this.option('hoverStateEnabled'),
     });
 
-    this._selectFileDialogClickHandler = this._selectButtonClickHandler.bind(this);
-    this._selectFileDialogKeyUpHandler = this._selectButtonKeyUpHandler.bind(this);
-
     // NOTE: click triggering on input 'file' works correctly only in native click handler when device is used
     if (devices.real().deviceType === 'desktop') {
       this._selectButton.option('onClick', this._selectFileDialogClickHandler);
@@ -867,7 +860,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   // @ts-expect-error
-  _selectButtonClickHandler() {
+  _selectFileDialogClickHandler() {
     if (this.option('useNativeInputClick')) {
       return;
     }
@@ -882,14 +875,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._isCustomClickEvent = false;
   }
 
-  _selectButtonKeyUpHandler(e: KeyboardEvent): void {
-    const normalizedKeyName = normalizeKeyName(e);
-
-    if (normalizedKeyName === ENTER_KEY || normalizedKeyName === SPACE_KEY) {
-      this._selectFileDialogClickHandler();
-    }
-  }
-
   _attachSelectFileDialogHandlers(target: FileDialogEventTarget): void {
     if (!isDefined(target)) {
       return;
@@ -899,8 +884,14 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
     const $target = $(target);
 
-    eventsEngine.on($target, this._clickEventName, this._selectFileDialogClickHandler);
-    eventsEngine.on($target, this._keyUpEventName, this._selectFileDialogKeyUpHandler);
+    eventsEngine.on($target, this._clickEventName, () => this._selectFileDialogClickHandler());
+    eventsEngine.on($target, this._keyUpEventName, (e: KeyboardEvent) => {
+      const normalizedKeyName = normalizeKeyName(e);
+
+      if (normalizedKeyName === ENTER_KEY || normalizedKeyName === SPACE_KEY) {
+        this._selectFileDialogClickHandler();
+      }
+    });
   }
 
   _detachSelectFileDialogHandlers(target: FileDialogEventTarget): void {
@@ -910,8 +901,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
     const $target = $(target);
 
-    eventsEngine.off($target, this._clickEventName, this._selectFileDialogClickHandler);
-    eventsEngine.off($target, this._keyUpEventName, this._selectFileDialogKeyUpHandler);
+    eventsEngine.off($target, this._clickEventName);
+    eventsEngine.off($target, this._keyUpEventName);
   }
 
   _renderUploadButton() {
