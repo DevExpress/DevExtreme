@@ -64,9 +64,6 @@ const DIALOG_TRIGGER_EVENT_NAMESPACE = 'dxFileUploaderDialogTrigger';
 
 const keyUpEventName = 'keyup';
 
-const dialogTriggerClickEventName = addNamespace(clickEventName, DIALOG_TRIGGER_EVENT_NAMESPACE);
-const dialogTriggerKeyUpEventName = addNamespace(keyUpEventName, DIALOG_TRIGGER_EVENT_NAMESPACE);
-
 const ENTER_KEY = 'enter';
 const SPACE_KEY = 'space';
 
@@ -847,7 +844,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
     // NOTE: click triggering on input 'file' works correctly only in native click handler when device is used
     if (devices.real().deviceType === 'desktop') {
-      this._selectButton.option('onClick', this._selectFileDialogClickHandler);
+      this._selectButton.option('onClick', () => this._selectFileDialogClickHandler());
     } else {
       this._attachSelectFileDialogHandlers(this._selectButton.$element());
     }
@@ -882,10 +879,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
     const $target = $(target);
 
-    eventsEngine.on($target, dialogTriggerClickEventName, () => {
+    eventsEngine.on($target, addNamespace(clickEventName, DIALOG_TRIGGER_EVENT_NAMESPACE), () => {
       this._selectFileDialogClickHandler();
     });
-    eventsEngine.on($target, dialogTriggerKeyUpEventName, (e: KeyboardEvent) => {
+    eventsEngine.on($target, addNamespace(keyUpEventName, DIALOG_TRIGGER_EVENT_NAMESPACE), (e: KeyboardEvent) => {
       const normalizedKeyName = normalizeKeyName(e);
 
       if (normalizedKeyName === ENTER_KEY || normalizedKeyName === SPACE_KEY) {
