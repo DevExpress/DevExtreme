@@ -181,6 +181,7 @@ const TreeList = memo(
 
 // owners:
 // Popup
+// FilterBuilderPopup
 type IAnimationProps = React.PropsWithChildren<{
   hide?: AnimationConfig;
   show?: AnimationConfig;
@@ -1170,6 +1171,11 @@ const _componentFilterBuilderPopup = (props: IFilterBuilderPopupProps) => {
         defaultVisible: "visible",
         defaultWidth: "width"
       },
+      ExpectedChildren: {
+        animation: { optionName: "animation", isCollectionItem: false },
+        position: { optionName: "position", isCollectionItem: false },
+        toolbarItem: { optionName: "toolbarItems", isCollectionItem: true }
+      },
       TemplateProps: [{
         tmplOption: "contentTemplate",
         render: "contentRender",
@@ -1467,6 +1473,7 @@ const FormItem = Object.assign<typeof _componentFormItem, NestedComponentMeta>(_
 
 // owners:
 // Hide
+// Show
 type IFromProps = React.PropsWithChildren<{
   left?: number;
   opacity?: number;
@@ -2020,8 +2027,10 @@ const Popup = Object.assign<typeof _componentPopup, NestedComponentMeta>(_compon
 
 // owners:
 // From
+// To
 // Popup
 // ColumnChooser
+// FilterBuilderPopup
 type IPositionProps = React.PropsWithChildren<{
   at?: Record<string, any> | PositionAlignment | {
     x?: HorizontalAlignment;
@@ -2051,6 +2060,13 @@ const _componentPosition = (props: IPositionProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "position",
+      ExpectedChildren: {
+        at: { optionName: "at", isCollectionItem: false },
+        boundaryOffset: { optionName: "boundaryOffset", isCollectionItem: false },
+        collision: { optionName: "collision", isCollectionItem: false },
+        my: { optionName: "my", isCollectionItem: false },
+        offset: { optionName: "offset", isCollectionItem: false }
+      },
     },
   });
 };
@@ -2305,6 +2321,10 @@ const _componentShow = (props: IShowProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "show",
+      ExpectedChildren: {
+        from: { optionName: "from", isCollectionItem: false },
+        to: { optionName: "to", isCollectionItem: false }
+      },
     },
   });
 };
@@ -2431,6 +2451,7 @@ const Texts = Object.assign<typeof _componentTexts, NestedComponentMeta>(_compon
 
 // owners:
 // Hide
+// Show
 type IToProps = React.PropsWithChildren<{
   left?: number;
   opacity?: number;
@@ -2443,6 +2464,9 @@ const _componentTo = (props: IToProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "to",
+      ExpectedChildren: {
+        position: { optionName: "position", isCollectionItem: false }
+      },
     },
   });
 };
@@ -2476,6 +2500,7 @@ const Toolbar = Object.assign<typeof _componentToolbar, NestedComponentMeta>(_co
 
 // owners:
 // Popup
+// FilterBuilderPopup
 type IToolbarItemProps = React.PropsWithChildren<{
   cssClass?: string | undefined;
   disabled?: boolean;

@@ -19,6 +19,7 @@ export const RestoreTreeContext: Context<(() => void) | undefined> = createConte
 export interface NestedOptionContextContent {
   parentExpectedChildren: Record<string, IExpectedChild> | undefined;
   parentFullName: string;
+  parentType: 'component' | 'option';
   onChildOptionsReady: (
     configNode: IConfigNode,
     optionDescriptor: IOptionDescriptor,
@@ -35,12 +36,13 @@ export const NestedOptionContext = createContext<NestedOptionContextContent>({
   onChildOptionsReady: () => undefined,
   getOptionComponentKey: () => 0,
   treeUpdateToken: Symbol('initial tree update token'),
+  parentType: 'component',
 });
 
-export interface TemplateDiscoveryContextContent {
-  discoveryRendering: boolean;
+export interface TemplateRenderContextContent {
+  isTemplateRendering?: boolean;
 }
 
-export const TemplateDiscoveryContext = createContext<TemplateDiscoveryContextContent>({
-  discoveryRendering: false,
+export const TemplateRenderingContext = createContext<TemplateRenderContextContent>({
+  isTemplateRendering: false,
 });
