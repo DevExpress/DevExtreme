@@ -1,8 +1,8 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@ts/core/r1/types';
 import { getTemplate } from '@ts/core/r1/utils/index';
+import { combineClasses } from '@ts/core/utils/combine_classes';
 
-import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import { renderUtils } from '../../utils/index';
 import type { DateTimeCellTemplateProps, DefaultProps } from '../types';
 import type { CellBaseProps } from './cell';

@@ -1,6 +1,6 @@
+import { combineClasses } from '@ts/core/utils/combine_classes';
 import type { Properties } from 'csstype';
 
-import { combineClasses } from '../../../core/r1/utils/render_utils';
 import type { ViewType } from '../types';
 
 type CSSAttributes = Properties<string | number>;

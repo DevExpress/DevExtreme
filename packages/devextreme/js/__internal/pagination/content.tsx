@@ -4,12 +4,12 @@ import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 import type { DisplayMode } from '@js/common';
 import type { RefObject } from '@ts/core/r1/types';
 import { Widget } from '@ts/core/r1/widget';
+import { combineClasses } from '@ts/core/utils/combine_classes';
 import { createRef as infernoCreateRef } from 'inferno';
 
 import { registerKeyboardAction } from '../../ui/shared/accessibility';
 import type { EventCallback } from '../core/r1/event_callback';
 import type { DisposeEffectReturn } from '../core/r1/utils/effect_return';
-import { combineClasses } from '../core/r1/utils/render_utils';
 import {
   LIGHT_MODE_CLASS,
   PAGER_CLASS,

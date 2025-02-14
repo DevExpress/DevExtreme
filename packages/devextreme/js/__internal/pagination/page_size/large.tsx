@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
+import { combineClasses } from '@ts/core/utils/combine_classes';
 import { Fragment } from 'inferno';
 
 import { format } from '../../../core/utils/string';
-import { combineClasses } from '../../core/r1/utils/render_utils';
 import { FIRST_CHILD_CLASS, PAGINATION_PAGE_SIZE_CLASS, PAGINATION_SELECTED_PAGE_SIZE_CLASS } from '../common/consts';
 import { LightButton } from '../common/light_button';
 import { PaginationDefaultProps, type PaginationProps } from '../common/pagination_props';

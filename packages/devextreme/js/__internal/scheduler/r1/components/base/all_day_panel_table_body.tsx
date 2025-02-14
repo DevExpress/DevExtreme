@@ -2,8 +2,8 @@ import type { PropsWithClassName } from '__internal/core/r1';
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@ts/core/r1/types';
 import { getTemplate } from '@ts/core/r1/utils/index';
+import { combineClasses } from '@ts/core/utils/combine_classes';
 
-import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import type { ViewCellData } from '../../types';
 import type { DataCellTemplateProps, DefaultProps, PropsWithViewContext } from '../types';
 import { AllDayPanelCell } from './all_day_panel_cell';

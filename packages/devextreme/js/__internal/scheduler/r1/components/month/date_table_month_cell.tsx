@@ -1,7 +1,7 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import { getTemplate } from '@ts/core/r1/utils/index';
+import { combineClasses } from '@ts/core/utils/combine_classes';
 
-import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import type { DateTableCellBaseProps } from '../base/date_table_cell_base';
 import { DateTableCallBaseDefaultProps, DateTableCellBase } from '../base/date_table_cell_base';
 import type { ContentTemplateProps } from '../types';

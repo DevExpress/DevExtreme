@@ -22,8 +22,8 @@ import { ConfigContext } from '@ts/core/r1/config_context';
 import { ConfigProvider } from '@ts/core/r1/config_provider';
 import type { RefObject } from '@ts/core/r1/types';
 import type { EffectReturn } from '@ts/core/r1/utils/effect_return';
-import { combineClasses } from '@ts/core/r1/utils/render_utils';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '@ts/core/r1/utils/resolve_rtl';
+import { combineClasses } from '@ts/core/utils/combine_classes';
 import { createRef as infernoCreateRef } from 'inferno';
 
 import type { BaseWidgetProps } from './base_props';

@@ -1,9 +1,9 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@ts/core/r1/types';
 import { getTemplate } from '@ts/core/r1/utils/index';
+import { combineClasses } from '@ts/core/utils/combine_classes';
 import { Fragment } from 'inferno';
 
-import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import { DATE_TABLE_ROW_CLASS } from '../const';
 import type { CellTemplateProps, DefaultProps } from '../types';
 import { AllDayPanelTableBody, AllDayPanelTableBodyDefaultProps } from './all_day_panel_table_body';

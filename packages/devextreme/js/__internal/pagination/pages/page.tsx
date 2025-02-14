@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
+import { combineClasses } from '@ts/core/utils/combine_classes';
 
 import { format } from '../../../core/utils/string';
 import type { EventCallback } from '../../core/r1/event_callback';
-import { combineClasses } from '../../core/r1/utils/render_utils';
 import { PAGINATION_PAGE_CLASS, PAGINATION_SELECTION_CLASS } from '../common/consts';
 import { LightButton } from '../common/light_button';
 import { getLocalizationMessage } from '../utils/compatibility_utils';
