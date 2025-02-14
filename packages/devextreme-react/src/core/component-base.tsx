@@ -3,6 +3,7 @@ import * as events from 'devextreme/events';
 
 import {
   useContext,
+  useMemo,
   useImperativeHandle,
   forwardRef,
   useRef,
@@ -428,11 +429,13 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       _renderChildren,
     ]);
 
+    const renderContextValue = useMemo(() => ({
+      isTemplateRendering: false,
+    }), []);
+
     return (
       <RestoreTreeContext.Provider value={restoreTree}>
-        <TemplateRenderingContext.Provider value={{
-          isTemplateRendering: false,
-        }}>
+        <TemplateRenderingContext.Provider value={renderContextValue}>
           <div ref={childrenContainer} {...getElementProps()}>
             <NestedOptionContext.Provider value={context}>
               {renderContent()}
