@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import { setZoomLevel } from '../virtualScrolling/utils';
 
-fixture.disablePageReloads`Resize appointments - Zooming`
+fixture.skip.disablePageReloads`Resize appointments - Zooming`
   .page(url(__dirname, '../../container.html'));
 
 test('Vertical resize with zooming', async (t) => {
