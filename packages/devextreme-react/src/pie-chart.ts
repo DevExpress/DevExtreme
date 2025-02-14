@@ -235,6 +235,7 @@ const Annotation = Object.assign<typeof _componentAnnotation, NestedComponentMet
 
 // owners:
 // Annotation
+// CommonAnnotationSettings
 // Legend
 type IAnnotationBorderProps = React.PropsWithChildren<{
   color?: string;
@@ -283,11 +284,13 @@ const ArgumentFormat = Object.assign<typeof _componentArgumentFormat, NestedComp
 
 // owners:
 // Annotation
+// CommonAnnotationSettings
 // Legend
 // CommonSeriesSettings
 // HoverStyle
 // Label
 // SelectionStyle
+// Series
 // Tooltip
 type IBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
@@ -314,6 +317,7 @@ const Border = Object.assign<typeof _componentBorder, NestedComponentMeta>(_comp
 // CommonSeriesSettings
 // HoverStyle
 // SelectionStyle
+// Series
 type IColorProps = React.PropsWithChildren<{
   base?: string | undefined;
   fillId?: string | undefined;
@@ -391,6 +395,13 @@ const _componentCommonAnnotationSettings = (props: ICommonAnnotationSettingsProp
     ...props,
     elementDescriptor: {
       OptionName: "commonAnnotationSettings",
+      ExpectedChildren: {
+        annotationBorder: { optionName: "border", isCollectionItem: false },
+        border: { optionName: "border", isCollectionItem: false },
+        font: { optionName: "font", isCollectionItem: false },
+        image: { optionName: "image", isCollectionItem: false },
+        shadow: { optionName: "shadow", isCollectionItem: false }
+      },
       TemplateProps: [{
         tmplOption: "template",
         render: "render",
@@ -558,6 +569,7 @@ const Export = Object.assign<typeof _componentExport, NestedComponentMeta>(_comp
 
 // owners:
 // Annotation
+// CommonAnnotationSettings
 // Label
 // Legend
 // LegendTitle
@@ -634,6 +646,7 @@ const Hatching = Object.assign<typeof _componentHatching, NestedComponentMeta>(_
 
 // owners:
 // CommonSeriesSettings
+// Series
 type IHoverStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string | undefined;
@@ -671,6 +684,7 @@ const HoverStyle = Object.assign<typeof _componentHoverStyle, NestedComponentMet
 
 // owners:
 // Annotation
+// CommonAnnotationSettings
 type IImageProps = React.PropsWithChildren<{
   height?: number;
   url?: string | undefined;
@@ -691,6 +705,7 @@ const Image = Object.assign<typeof _componentImage, NestedComponentMeta>(_compon
 
 // owners:
 // CommonSeriesSettings
+// Series
 type ILabelProps = React.PropsWithChildren<{
   argumentFormat?: LocalizationFormat | undefined;
   backgroundColor?: string | undefined;
@@ -1007,6 +1022,7 @@ const PieChartTitleSubtitle = Object.assign<typeof _componentPieChartTitleSubtit
 
 // owners:
 // CommonSeriesSettings
+// Series
 type ISelectionStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string | undefined;
@@ -1132,6 +1148,15 @@ const _componentSeries = (props: ISeriesProps) => {
     elementDescriptor: {
       OptionName: "series",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        color: { optionName: "color", isCollectionItem: false },
+        hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
+        label: { optionName: "label", isCollectionItem: false },
+        selectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
+        seriesBorder: { optionName: "border", isCollectionItem: false },
+        smallValuesGrouping: { optionName: "smallValuesGrouping", isCollectionItem: false }
+      },
     },
   });
 };
@@ -1145,6 +1170,7 @@ const Series = Object.assign<typeof _componentSeries, NestedComponentMeta>(_comp
 // HoverStyle
 // Label
 // SelectionStyle
+// Series
 type ISeriesBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
   dashStyle?: DashStyle | undefined;
@@ -1185,6 +1211,7 @@ const SeriesTemplate = Object.assign<typeof _componentSeriesTemplate, NestedComp
 
 // owners:
 // Annotation
+// CommonAnnotationSettings
 // Tooltip
 type IShadowProps = React.PropsWithChildren<{
   blur?: number;
@@ -1227,6 +1254,7 @@ const Size = Object.assign<typeof _componentSize, NestedComponentMeta>(_componen
 
 // owners:
 // CommonSeriesSettings
+// Series
 type ISmallValuesGroupingProps = React.PropsWithChildren<{
   groupName?: string;
   mode?: SmallValuesGroupingMode;
