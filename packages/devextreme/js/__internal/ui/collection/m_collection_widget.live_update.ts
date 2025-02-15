@@ -249,6 +249,7 @@ class CollectionWidgetLiveUpdate<
     changes.forEach((change) => this[`_${change.type}ByChange`](keyInfo, items, change, isPartialRefresh));
     this._renderedItemsCount = items.length;
     this._refreshItemsCache();
+    this._renderEmptyMessage();
     this._fireContentReadyAction();
   }
 
