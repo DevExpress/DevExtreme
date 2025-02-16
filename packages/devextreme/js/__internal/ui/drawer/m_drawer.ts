@@ -410,7 +410,7 @@ const Drawer = (Widget as any).inherit({
     if (isDrawerOpened) {
       this._toggleShaderVisibility(isDrawerOpened);
     }
-
+    this._whenAnimationCompleted = Deferred();
     this._strategy.renderPosition(animationEnabled, this.option('animationDuration'));
   },
 
@@ -508,9 +508,6 @@ const Drawer = (Widget as any).inherit({
         this._dimensionChanged();
         break;
       case 'opened':
-        if (!this._whenAnimationCompleted) {
-          this._whenAnimationCompleted = Deferred();
-        }
         this._renderPosition(this.option('opened'));
         this._toggleOpenedStateClass(args.value);
         this._togglePanelContentHiddenClass();
@@ -575,7 +572,6 @@ const Drawer = (Widget as any).inherit({
   toggle(opened) {
     const targetOpened = opened === undefined ? !this.option('opened') : opened;
 
-    this._whenAnimationCompleted = Deferred();
     this.option('opened', targetOpened);
 
     return this._whenAnimationCompleted.promise();
