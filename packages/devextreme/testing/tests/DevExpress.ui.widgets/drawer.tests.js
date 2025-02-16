@@ -143,22 +143,28 @@ QUnit.module('Drawer behavior', () => {
         assert.equal($element.attr('tabIndex'), undefined, 'tabIndex was removed');
     });
 
-    QUnit.test('subscribe on toggle function should fired at the end of animation', function(assert) {
-        const $element = $('#drawer').dxDrawer({
-            opened: false
+    [true, false].forEach((animationEnabled) => {
+        QUnit.test(`Toggle promise should be resolved after toggle finished (animationEnabled=${animationEnabled})`, function(assert) {
+            assert.expect(1);
+
+            const instance = $('#drawer').dxDrawer({
+                animationEnabled,
+                animationDuration: 0,
+            }).dxDrawer('instance');
+
+            const done = assert.async();
+
+            const timeout = setTimeout(() => {
+                assert.ok(false, 'toggle promise was not resolved');
+                done();
+            }, 10);
+
+            instance.toggle().then(() => {
+                clearTimeout(timeout);
+                assert.ok(true, 'toggle promise was resolved');
+                done();
+            });
         });
-
-        const instance = $element.dxDrawer('instance');
-        let count = 0;
-        const done = assert.async();
-
-        instance.toggle().then(() => {
-            count++;
-            assert.equal(count, 1, 'callback not fired at animation start');
-            done();
-        });
-
-        assert.equal(count, 0, 'callback not fired at animation start');
     });
 
     QUnit.test('Drawer panel should add a hidden class after hide animation is completed, toggle method is used (T1239845)', function(assert) {
