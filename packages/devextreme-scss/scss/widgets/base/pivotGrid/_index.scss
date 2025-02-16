@@ -127,10 +127,6 @@ $pivotgrid-expand-icon-text-offset: 0;
 .dx-pivotgrid {
   .dx-column-header,
   .dx-filter-header {
-    .dx-pivotgrid-fields-area {
-      overflow: hidden;
-    }
-
     .dx-pivotgrid-toolbar {
       margin-right: 10px;
       float: right;
@@ -143,6 +139,22 @@ $pivotgrid-expand-icon-text-offset: 0;
       .dx-pivotgrid-field-chooser-button {
         margin-right: 4px;
       }
+    }
+  }
+
+  .dx-column-header {
+    .dx-pivotgrid-fields-area {
+      .dx-area-field-container {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+      }
+    }
+  }
+
+  .dx-filter-header {
+    .dx-pivotgrid-fields-area {
+      overflow: hidden;
     }
   }
 
