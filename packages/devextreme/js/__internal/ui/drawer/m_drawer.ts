@@ -393,6 +393,16 @@ const Drawer = (Widget as any).inherit({
     this.stopAnimations(jumpToEnd);
     this._whenAnimationCompleted = Deferred();
 
+    let { animationEnabled } = this.option();
+
+    if (disableAnimation === true) {
+      animationEnabled = false;
+    }
+
+    if (!animationEnabled) {
+      this._whenAnimationCompleted.resolve();
+    }
+
     if (!hasWindow()) {
       return;
     }
@@ -403,17 +413,8 @@ const Drawer = (Widget as any).inherit({
     $(this.viewContent()).css('paddingTop', 0);
     $(this.viewContent()).css('paddingBottom', 0);
 
-    let animationEnabled = this.option('animationEnabled');
-    if (disableAnimation === true) {
-      animationEnabled = false;
-    }
-
     if (isDrawerOpened) {
       this._toggleShaderVisibility(isDrawerOpened);
-    }
-
-    if (!animationEnabled) {
-      this._whenAnimationCompleted.resolve();
     }
 
     this._strategy.renderPosition(animationEnabled, this.option('animationDuration'));
