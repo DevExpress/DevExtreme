@@ -391,6 +391,7 @@ const Drawer = (Widget as any).inherit({
 
   _renderPosition(isDrawerOpened, disableAnimation, jumpToEnd) {
     this.stopAnimations(jumpToEnd);
+    this._whenAnimationCompleted = Deferred();
 
     if (!hasWindow()) {
       return;
@@ -410,16 +411,18 @@ const Drawer = (Widget as any).inherit({
     if (isDrawerOpened) {
       this._toggleShaderVisibility(isDrawerOpened);
     }
-    this._whenAnimationCompleted = Deferred();
+
+    if (!animationEnabled) {
+      this._whenAnimationCompleted.resolve();
+    }
+
     this._strategy.renderPosition(animationEnabled, this.option('animationDuration'));
   },
 
   _animationCompleteHandler() {
     this.resizeViewContent();
 
-    if (this._whenAnimationCompleted) {
-      this._whenAnimationCompleted.resolve();
-    }
+    this._whenAnimationCompleted.resolve();
   },
 
   _getPositionCorrection() {
