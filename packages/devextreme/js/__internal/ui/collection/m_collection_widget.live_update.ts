@@ -210,7 +210,9 @@ class CollectionWidgetLiveUpdate<
     }
   }
 
-  _afterItemElementInserted(): void {}
+  _afterItemElementInserted(): void {
+    this._renderEmptyMessage();
+  }
 
   _removeByChange(keyInfo, items, change, isPartialRefresh): void {
     const index = isPartialRefresh ? change.index : indexByKey(keyInfo, items, change.key);
@@ -249,7 +251,6 @@ class CollectionWidgetLiveUpdate<
     changes.forEach((change) => this[`_${change.type}ByChange`](keyInfo, items, change, isPartialRefresh));
     this._renderedItemsCount = items.length;
     this._refreshItemsCache();
-    this._renderEmptyMessage();
     this._fireContentReadyAction();
   }
 
