@@ -200,13 +200,12 @@ const NumberBoxBase = TextEditor.inherit({
   },
 
   _renderProps() {
+    this.callBase();
     this._input().prop({
       min: this.option('min'),
       max: this.option('max'),
       step: this.option('step'),
     });
-
-    this._toggleTabIndex();
 
     this.setAria({
       // eslint-disable-next-line spellcheck/spell-checker
