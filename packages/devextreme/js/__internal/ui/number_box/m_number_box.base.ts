@@ -201,6 +201,10 @@ const NumberBoxBase = TextEditor.inherit({
 
   _renderProps() {
     this.callBase();
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    this._isFocusable() && this._renderFocusTarget();
+
     this._input().prop({
       min: this.option('min'),
       max: this.option('max'),
