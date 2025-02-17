@@ -167,6 +167,40 @@ QUnit.module('Drawer behavior', () => {
         });
     });
 
+    [
+        {
+            opened: true,
+            scenario: 'show method call if drawer is already opened',
+        },
+        {
+            opened: false,
+            scenario: 'hide method call if drawer is already closed',
+        },
+    ].forEach(({ opened, scenario }) => {
+        QUnit.test(`Promise should be resolved after ${scenario} (T1263952)`, function(assert) {
+            assert.expect(1);
+
+            const instance = $('#drawer').dxDrawer({
+                opened
+            }).dxDrawer('instance');
+
+            const done = assert.async();
+
+            const timeout = setTimeout(() => {
+                assert.ok(false, 'promise was not resolved');
+                done();
+            }, 10);
+
+            const methodToCall = opened ? 'show' : 'hide';
+
+            instance[methodToCall]().then(() => {
+                clearTimeout(timeout);
+                assert.ok(true, 'promise was resolved');
+                done();
+            });
+        });
+    });
+
     QUnit.test('Drawer panel should add a hidden class after hide animation is completed, toggle method is used (T1239845)', function(assert) {
         const $element = $('#drawer').dxDrawer({ animationDuration: 0, opened: true });
         const instance = $element.dxDrawer('instance');
