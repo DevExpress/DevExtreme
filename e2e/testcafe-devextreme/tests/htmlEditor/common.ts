@@ -3,7 +3,7 @@ import { Selector } from 'testcafe';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import { testScreenshot } from '../../helpers/themeUtils';
-import {appendElementTo, setStyleAttribute} from "../../helpers/domUtils";
+import { appendElementTo, setStyleAttribute } from '../../helpers/domUtils';
 
 fixture.disablePageReloads`HtmlEditor`
   .page(url(__dirname, '../container.html'));
@@ -22,7 +22,6 @@ fixture.disablePageReloads`HtmlEditor`
       .click(Selector(clickTarget));
 
     await testScreenshot(t, takeScreenshot, `${baseScreenName}-focused.png`, { element: selector });
-    // await t.debug();
 
     await t
       .expect(compareResults.isValid())
