@@ -81,7 +81,7 @@ QUnit.module('basics', {}, () => {
                 assert.strictEqual($input.prop('tabindex'), expectedInitialFocusState);
             });
 
-            QUnit.test(`should update from ${expectedInitialFocusState} to ${expectedUpdatedFocusState} when focusStateEnabled changes to ${updatedFocusState}`, function(assert) {
+            QUnit.test(`should be updated from ${expectedInitialFocusState} to ${expectedUpdatedFocusState} when focusStateEnabled changes to ${updatedFocusState}`, function(assert) {
                 const $element = $('#numberbox').dxNumberBox({ focusStateEnabled: initialFocusState });
                 const instance = $element.dxNumberBox('instance');
                 const $input = $element.find(`.${INPUT_CLASS}`);
