@@ -2,7 +2,7 @@ import $ from 'jquery';
 import FileUploader from 'ui/file_uploader';
 import 'ui/drop_down_button';
 import 'ui/button_group';
-import devices from '__internal/core/m_devices';
+import devices from 'core/devices';
 import { Deferred } from 'core/utils/deferred';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { createBlobFile } from '../../helpers/fileHelper.js';
