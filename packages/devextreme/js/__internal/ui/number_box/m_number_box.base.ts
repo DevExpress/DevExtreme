@@ -201,10 +201,6 @@ const NumberBoxBase = TextEditor.inherit({
 
   _renderProps() {
     this.callBase();
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    this._isFocusable() && this._renderFocusTarget();
-
     this._input().prop({
       min: this.option('min'),
       max: this.option('max'),
@@ -457,10 +453,14 @@ const NumberBoxBase = TextEditor.inherit({
         break;
       case 'step':
         this._renderProps();
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        this._isFocusable() && this._renderFocusTarget();
         break;
       case 'min':
       case 'max':
         this._renderProps();
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        this._isFocusable() && this._renderFocusTarget();
         this.option('value', this._parseValue(this.option('value')));
         break;
       case 'showSpinButtons':
