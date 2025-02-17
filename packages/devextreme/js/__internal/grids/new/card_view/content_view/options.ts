@@ -1,5 +1,7 @@
-import * as Base from '../../grid_core/content_view/options';
-import type { DataObject } from '../../grid_core/data_controller/types';
+import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
+import * as Base from '@ts/grids/new/grid_core/content_view/options';
+import type { DataObject } from '@ts/grids/new/grid_core/data_controller/types';
+import type { Template } from '@ts/grids/new/grid_core/types';
 
 export interface Options extends Base.Options {
   cardsPerRow?: number | 'auto';
@@ -9,6 +11,8 @@ export interface Options extends Base.Options {
     imageExpr: string | ((data: DataObject) => string);
     altExpr: string | ((data: DataObject) => string);
   };
+
+  cardTemplate?: Template<DataRow>;
 
   cardHeader?: {
     captionExpr?: string | ((data: DataObject) => string);

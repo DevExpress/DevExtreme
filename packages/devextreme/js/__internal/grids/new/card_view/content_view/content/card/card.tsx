@@ -4,7 +4,7 @@ import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
 import { PureComponent } from '@ts/grids/new/grid_core/core/pure_component';
 import type { DataObject } from '@ts/grids/new/grid_core/data_controller/types';
 import { CollectionController } from '@ts/grids/new/grid_core/keyboard_navigation/collection_controller';
-import type { InfernoNode, RefObject } from 'inferno';
+import type { ComponentType, InfernoNode, RefObject } from 'inferno';
 import { createRef } from 'inferno';
 
 import { Cover } from './cover';
@@ -60,7 +60,7 @@ export interface CardProps {
 
   width?: number;
 
-  template?: (row: DataRow) => JSX.Element;
+  template?: ComponentType<{ row: DataRow }>;
 
   onClick?: (e: CardClickEvent) => void;
 
@@ -93,6 +93,7 @@ export class Card extends PureComponent<CardProps> {
       hoverStateEnabled,
       cover,
       header,
+      template: Template,
     } = this.props;
 
     const style = {
@@ -110,6 +111,30 @@ export class Card extends PureComponent<CardProps> {
     const alt = cover?.altExpr?.(this.props.row.data);
     const headerCaption = header?.captionExpr?.(this.props.row.data);
 
+    const content = Template ? <Template row={this.props.row}/> : <>
+      <CardHeader
+        items={this.props.toolbar || []}
+        caption={headerCaption}
+      />
+      {imageSrc && (
+        <Cover
+          imageSrc={imageSrc}
+          alt={alt}
+        />
+      )}
+      <div className={CLASSES.content}>
+        {this.props.row.cells.map((cell, index) => (
+          <FieldTemplate
+            elementRef={this.fieldRefs[index]}
+            // eslint-disable-next-line max-len, @typescript-eslint/explicit-function-return-type
+            alignment={cell.column.alignment}
+            title={cell.column.caption || cell.column.name}
+            value={cell.text}
+          />
+        ))}
+      </div>
+    </>;
+
     return (
       <div
         className={className}
@@ -123,27 +148,7 @@ export class Card extends PureComponent<CardProps> {
         // TODO: move to scss
         style={style}
       >
-        <CardHeader
-          items={this.props.toolbar || []}
-          caption={headerCaption}
-        />
-        {imageSrc && (
-          <Cover
-            imageSrc={imageSrc}
-            alt={alt}
-          />
-        )}
-        <div className={CLASSES.content}>
-          {this.props.row.cells.map((cell, index) => (
-            <FieldTemplate
-              elementRef={this.fieldRefs[index]}
-              // eslint-disable-next-line max-len, @typescript-eslint/explicit-function-return-type
-              alignment={cell.column.alignment}
-              title={cell.column.caption || cell.column.name}
-              value={cell.text}
-            />
-          ))}
-        </div>
+        {content}
       </div>
     );
   }

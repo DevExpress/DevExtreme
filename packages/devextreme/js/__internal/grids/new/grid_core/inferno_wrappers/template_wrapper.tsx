@@ -1,11 +1,14 @@
+/* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/ban-types */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Component, createRef } from 'inferno';
 
+import { templateContext } from '../core/template_context';
+
 interface TemplateType<T> {
-  render: (args: { model: T; container: dxElementWrapper }) => void;
+  render: (args: { model: T; container: dxElementWrapper; onRendered: () => void }) => void;
 }
 
 // eslint-disable-next-line max-len
@@ -15,10 +18,21 @@ export function TemplateWrapper<TProps = {}>(template: TemplateType<TProps>) {
     private readonly ref = createRef<HTMLDivElement>();
 
     private renderTemplate(): void {
-      $(this.ref.current!).empty();
+      const templateStore = templateContext.get(this.context);
+
+      const $deattachedContainer = $('<div>');
+      const $container = $(this.ref.current!);
+
+      const $prevAttachedContainer = templateStore.nodes.shift();
+      $prevAttachedContainer?.children().appendTo($container);
+
       template.render({
-        container: $(this.ref.current!),
+        container: $deattachedContainer,
         model: this.props,
+        onRendered: (): void => {
+          $container.empty();
+          $deattachedContainer.children().appendTo($container);
+        },
       });
     }
 
@@ -32,6 +46,15 @@ export function TemplateWrapper<TProps = {}>(template: TemplateType<TProps>) {
 
     public componentDidMount(): void {
       this.renderTemplate();
+    }
+
+    public componentWillUnmount(): void {
+      const $deattachedContainer = $('<div>');
+      const $container = $(this.ref.current!);
+      $container.children().appendTo($deattachedContainer);
+
+      const templateStore = templateContext.get(this.context);
+      templateStore.nodes.push($deattachedContainer);
     }
   };
 }
