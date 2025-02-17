@@ -567,6 +567,24 @@ QUnit.module('Markers', moduleConfig, () => {
         });
     });
 
+    QUnit.test('It should be possible to pass a markup to marker tooltip.text option', function(assert) {
+        const done = assert.async();
+        const marker = { location: [10, 20], tooltip: { text: '<b>Austin</b>, Texas' } };
+        $('#map').dxMap({
+            provider: 'azure',
+            markers: [marker],
+            onReady: () => {
+                const $popupContent = $(atlas.popupOptions.content);
+                const $b = $popupContent.find('b');
+
+                assert.strictEqual($b.length, 1, '<b> element is passed to Popup');
+                assert.strictEqual($b.text(), 'Austin', 'text is correct');
+
+                done();
+            }
+        });
+    });
+
     [false, true].forEach((isShown) => {
         QUnit.test(`Click on marker should ${isShown ? 'hide' : 'show'} Popup if tooltip.isShown=${isShown}`, function(assert) {
             const done = assert.async();
