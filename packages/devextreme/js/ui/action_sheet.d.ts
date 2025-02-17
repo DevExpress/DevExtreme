@@ -34,226 +34,145 @@ export {
 };
 
 /**
- * @docid _ui_action_sheet_CancelClickEvent
- * @public
- * @type object
- * @inherits Cancelable,EventInfo
+ * The type of the cancelClick event handler&apos;s argument.
  */
 export type CancelClickEvent<TItem extends ItemLike<TKey> = any, TKey = any> = Cancelable & EventInfo<dxActionSheet<TItem, TKey>>;
 
 /**
- * @docid _ui_action_sheet_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>>;
 
 /**
- * @docid _ui_action_sheet_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>>;
 
 /**
- * @docid _ui_action_sheet_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = InitializedEventInfo<dxActionSheet<TItem, TKey>>;
 
 /**
- * @docid _ui_action_sheet_ItemClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ItemInfo
+ * The type of the itemClick event handler&apos;s argument.
  */
 export type ItemClickEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_action_sheet_ItemContextMenuEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ItemInfo
+ * The type of the itemContextMenu event handler&apos;s argument.
  */
 export type ItemContextMenuEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_action_sheet_ItemHoldEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ItemInfo
+ * The type of the itemHold event handler&apos;s argument.
  */
 export type ItemHoldEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_action_sheet_ItemRenderedEvent
- * @public
- * @type object
- * @inherits EventInfo,ItemInfo
+ * The type of the itemRendered event handler&apos;s argument.
  */
 export type ItemRenderedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_action_sheet_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>> & ChangedOptionInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @public
- * @docid
+ * 
+ * @deprecated 
  */
 export interface dxActionSheetOptions<
     TItem extends ItemLike<TKey> = any,
     TKey = any,
 > extends CollectionWidgetOptions<dxActionSheet<TItem, TKey>, TItem, TKey> {
     /**
-     * @docid
-     * @default "Cancel"
-     * @public
+     * The text displayed in the button that closes the action sheet.
      */
     cancelText?: string;
     /**
-     * @docid
-     * @type string | Array<string | dxActionSheetItem | any> | Store | DataSource | DataSourceOptions | null
-     * @default null
-     * @public
+     * Binds the UI component to data.
      */
     dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
-     * @docid
-     * @type Array<string | dxActionSheetItem | any>
-     * @fires dxActionSheetOptions.onOptionChanged
-     * @public
+     * An array of items displayed by the UI component.
      */
     items?: Array<TItem>;
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{ui/action_sheet:CancelClickEvent}
-     * @action
-     * @public
+     * A function that is executed when the Cancel button is clicked or tapped.
      */
     onCancelClick?: ((e: CancelClickEvent<TItem, TKey>) => void) | string;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not to display the Cancel button in action sheet.
      */
     showCancelButton?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * A Boolean value specifying whether or not the title of the action sheet is visible.
      */
     showTitle?: boolean;
     /**
-     * @docid
-     * @public
+     * Specifies the element the action sheet popover points at. Applies only if usePopover is true.
      */
     target?: string | UserDefinedElement;
     /**
-     * @docid
-     * @default ""
-     * @public
+     * The title of the action sheet.
      */
     title?: string;
     /**
-     * @docid
-     * @default false
-     * @default true &for(iPad)
-     * @public
+     * Specifies whether or not to show the action sheet within a Popover UI component.
      */
     usePopover?: boolean;
     /**
-     * @docid
-     * @default false
-     * @fires dxActionSheetOptions.onOptionChanged
-     * @public
+     * A Boolean value specifying whether or not the ActionSheet UI component is visible.
      */
     visible?: boolean;
 }
 /**
- * @docid
- * @inherits CollectionWidget
- * @namespace DevExpress.ui
- * @public
+ * The ActionSheet UI component is a sheet containing a set of buttons located one under the other. These buttons usually represent several choices relating to a single task.
  */
 export default class dxActionSheet<
     TItem extends ItemLike<TKey> = any,
     TKey = any,
 > extends CollectionWidget<dxActionSheetOptions<TItem, TKey>, TItem, TKey> {
     /**
-     * @docid
-     * @publicName hide()
-     * @return Promise<void>
-     * @public
+     * Hides the UI component.
      */
     hide(): DxPromise<void>;
     /**
-     * @docid
-     * @publicName show()
-     * @return Promise<void>
-     * @public
+     * Shows the UI component.
      */
     show(): DxPromise<void>;
     /**
-     * @docid
-     * @publicName toggle(showing)
-     * @return Promise<void>
-     * @public
+     * Shows or hides the UI component depending on the argument.
      */
     toggle(showing: boolean): DxPromise<void>;
 }
 
-/**
- * @public
- * @namespace DevExpress.ui.dxActionSheet
- */
 export type Item<TKey = any> = dxActionSheetItem<TKey>;
 
 /**
  * @deprecated Use Item instead
- * @namespace DevExpress.ui
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxActionSheetItem<TKey = any> extends CollectionWidgetItem {
     /**
-     * @docid
-     * @public
+     * Specifies the icon to be displayed on the action sheet button.
      */
     icon?: string;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:NativeEventInfo
-     * @type function
-     * @public
+     * A handler for the click event raised for the button representing the given action sheet button.
      */
     onClick?: ((e: NativeEventInfo<dxActionSheet<this, TKey>, MouseEvent | PointerEvent>) => void) | string;
     /**
-     * @docid
-     * @default 'normal'
-     * @public
+     * Specifies the type of the button that is an action sheet item.
      */
     type?: ButtonType;
     /**
-     * @docid
-     * @default 'outlined'
-     * @public
+     * Specifies which style to apply to the button that is an action sheet item.
      */
     stylingMode?: ButtonStyle;
 }
 
-/** @public */
 export type ExplicitTypes<
     TItem extends ItemLike<TKey>,
     TKey,
@@ -270,13 +189,15 @@ export type ExplicitTypes<
     OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
 };
 
-/** @public */
 export type Properties<
     TItem extends ItemLike<TKey> = any,
     TKey = any,
 > = dxActionSheetOptions<TItem, TKey>;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options<
     TItem extends ItemLike<TKey> = any,
     TKey = any,

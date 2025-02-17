@@ -13,145 +13,111 @@ import Widget, {
 } from './widget/ui.widget';
 
 /**
- * @docid _ui_defer_rendering_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxDeferRendering>;
 
 /**
- * @docid _ui_defer_rendering_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxDeferRendering>;
 
 /**
- * @docid _ui_defer_rendering_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxDeferRendering>;
 
 /**
- * @docid _ui_defer_rendering_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxDeferRendering> & ChangedOptionInfo;
 
 /**
- * @docid _ui_defer_rendering_RenderedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the rendered event handler&apos;s argument.
  */
 export type RenderedEvent = EventInfo<dxDeferRendering>;
 
 /**
- * @docid _ui_defer_rendering_ShownEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the shown event handler&apos;s argument.
  */
 export type ShownEvent = EventInfo<dxDeferRendering>;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering> {
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the animation to be used to show the rendered content.
      */
     animation?: AnimationConfig | undefined;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/defer_rendering:RenderedEvent}
-     * @action
-     * @public
+     * A function that is executed when the content is rendered but not yet displayed.
      */
     onRendered?: ((e: RenderedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/defer_rendering:ShownEvent}
-     * @action
-     * @public
+     * A function that is executed when the content is displayed and animation is completed.
      */
     onShown?: ((e: ShownEvent) => void);
     /**
-     * @docid
-     * @type DxPromise|bool|undefined
-     * @default undefined
-     * @public
+     * Specifies when the UI component content is rendered.
      */
     renderWhen?: PromiseLike<void> | boolean | undefined;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Indicates if a load indicator should be shown until the UI component&apos;s content is rendered.
      */
     showLoadIndicator?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies a jQuery selector of items that should be rendered using a staggered animation.
      */
     staggerItemSelector?: string | undefined;
 }
 /**
- * @docid
- * @inherits Widget
- * @namespace DevExpress.ui
- * @public
+ * The DeferRendering is a UI component that waits for its content to be ready before rendering it. While the content is getting ready, the DeferRendering displays a loading indicator.
  */
 export default class dxDeferRendering extends Widget<dxDeferRenderingOptions> { }
 
-/** @public */
 export type Properties = dxDeferRenderingOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxDeferRenderingOptions;
 
 ///#DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onRendered' | 'onShown'>;
 
 /**
-* @hidden
-*/
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Events = {
 /**
- * @docid dxDeferRenderingOptions.onContentReady
- * @type_function_param1 e:{ui/defer_rendering:ContentReadyEvent}
+ * A function that is executed when the UI component is rendered and each time the component is repainted.
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @docid dxDeferRenderingOptions.onDisposing
- * @type_function_param1 e:{ui/defer_rendering:DisposingEvent}
+ * A function that is executed before the UI component is disposed of.
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @docid dxDeferRenderingOptions.onInitialized
- * @type_function_param1 e:{ui/defer_rendering:InitializedEvent}
+ * A function used in JavaScript frameworks to save the UI component instance.
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @docid dxDeferRenderingOptions.onOptionChanged
- * @type_function_param1 e:{ui/defer_rendering:OptionChangedEvent}
+ * A function that is executed after a UI component property is changed.
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };

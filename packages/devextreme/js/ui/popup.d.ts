@@ -43,262 +43,176 @@ export {
 };
 
 /**
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface TitleRenderedInfo {
     readonly titleElement: DxElement;
 }
 
-/** @public */
 export type ToolbarLocation = 'bottom' | 'top';
 
-/** @public */
 export type ContentReadyEvent = EventInfo<dxPopup>;
 
-/** @public */
 export type DisposingEvent = EventInfo<dxPopup>;
 
-/** @public */
 export type HidingEvent = Cancelable & EventInfo<dxPopup>;
 
-/** @public */
 export type HiddenEvent = EventInfo<dxPopup>;
 
-/** @public */
 export type InitializedEvent = InitializedEventInfo<dxPopup>;
 
-/** @public */
 export type ShownEvent = EventInfo<dxPopup>;
 
-/** @public */
 export type ResizeEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
-/** @public */
 export type ResizeStartEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
-/** @public */
 export type ResizeEndEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
-/** @public */
 export type OptionChangedEvent = EventInfo<dxPopup> & ChangedOptionInfo;
 
-/** @public */
 export type ShowingEvent = Cancelable & EventInfo<dxPopup>;
 
-/** @public */
 export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent> {
     /**
-     * @docid
-     * @public
-     * @type object
+     * Configures UI component visibility animations. This object contains two fields: show and hide.
      */
     animation?: dxPopupAnimation;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the container in which to render the UI component.
      */
     container?: string | UserDefinedElement | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies an element with boundaries within which users can drag and resize the Popup. Ignored if the dragOutsideBoundary property is set to true.
      */
     dragAndResizeArea?: string | UserDefinedElement | undefined;
     /**
-     * @docid
-     * @default false
-     * @default true &for(desktop)
-     * @public
+     * Specifies whether or not to allow a user to drag the popup window.
      */
     dragEnabled?: boolean;
      /**
-     * @docid
-     * @default false
-     * @public
+     * Allows users to drag the Popup within the browser window or beyond the window&apos;s borders.
      */
     dragOutsideBoundary?: boolean;
     /**
-     * @docid
-     * @default true &for(desktop)
-     * @public
+     * Specifies whether the UI component can be focused using keyboard navigation.
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether to display the Popup in full-screen mode.
      */
     fullScreen?: boolean;
     /**
-     * @docid
-     * @fires dxPopupOptions.onResize
-     * @public
+     * Specifies the UI component&apos;s height.
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @type_function_param1_field event:event
-     * @action
-     * @public
+     * A function that is executed each time the UI component is resized by one pixel.
      */
     onResize?: ((e: ResizeEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @type_function_param1_field event:event
-     * @action
-     * @public
+     * A function that is executed when resizing ends.
      */
     onResizeEnd?: ((e: ResizeEndEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @type_function_param1_field event:event
-     * @action
-     * @public
+     * A function that is executed when resizing starts.
      */
     onResizeStart?: ((e: ResizeStartEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @action
-     * @public
+     * A function that is executed when the UI component&apos;s title is rendered.
      */
     onTitleRendered?: ((e: EventInfo<TComponent> & TitleRenderedInfo) => void);
     /**
-     * @docid
-     * @public
+     * Positions the UI component.
      */
     position?: PositionAlignment | PositionConfig | Function;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to enable page scrolling when the UI component is visible.
      */
     enableBodyScroll?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether or not an end user can resize the UI component.
      */
     resizeEnabled?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to display the widget at the initial position when users reopen it.
      */
     restorePosition?: boolean;
     /**
-     * @docid
-     * @default false
-     * @default true &for(desktop)
-     * @default false &for(Material)
-     * @public
+     * Specifies whether or not the UI component displays the Close button.
      */
     showCloseButton?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * A Boolean value specifying whether or not to display the title in the popup window.
      */
     showTitle?: boolean;
     /**
-     * @docid
-     * @default ""
-     * @public
+     * The title in the overlay window.
      */
     title?: string;
     /**
-     * @docid
-     * @default "title"
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies a custom template for the UI component title. Does not apply if the title is defined.
      */
     titleTemplate?: template | ((titleElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @type Array<dxPopupToolbarItem>
-     * @public
+     * Configures toolbar items.
      */
     toolbarItems?: Array<ToolbarItem>;
     /**
-     * @docid
-     * @fires dxPopupOptions.onResize
-     * @public
+     * Specifies the UI component&apos;s width.
      */
     width?: number | string | (() => number | string);
 }
 /**
- * @docid
- * @namespace DevExpress.ui
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxPopupAnimation extends dxOverlayAnimation {
     /**
-     * @docid dxPopupOptions.animation.hide
-     * @default { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } }} &for(iOS)
-     * @public
+     * An object that defines the animation properties used when the UI component is being hidden.
      */
     hide?: AnimationConfig;
     /**
-     * @docid dxPopupOptions.animation.show
-     * @default { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } }} &for(iOS)
-     * @public
+     * An object that defines the animation properties used when the UI component is being shown.
      */
     show?: AnimationConfig;
 }
 
 /**
  * @deprecated Use ToolbarItem instead
- * @namespace DevExpress.ui.dxPopup
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type dxPopupToolbarItem = ToolbarItem;
 
 /**
- * @public
- * @docid dxPopupToolbarItem
- * @inherits dxToolbarItem
- * @namespace DevExpress.ui.dxPopup
+ * 
  */
 export interface ToolbarItem extends dxToolbarItem {
     /**
-     * @docid dxPopupToolbarItem.toolbar
-     * @default 'top'
-     * @public
+     * Specifies whether the item is displayed on a top or bottom toolbar.
      */
     toolbar?: ToolbarLocation;
 }
 
 /**
- * @docid
- * @inherits dxOverlay
- * @hasTranscludedContent
- * @namespace DevExpress.ui
- * @public
+ * The Popup UI component is a pop-up window overlaying the current view.
  */
 export default class dxPopup<TProperties = Properties> extends dxOverlay<TProperties> {}
 
 interface PopupInstance extends dxPopup<Properties> { }
 
-/** @public */
 export type Properties = dxPopupOptions<PopupInstance>;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = Properties;

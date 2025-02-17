@@ -8,107 +8,72 @@ export {
 };
 
 /**
- * @docid
- * @hidden
- * @namespace DevExpress.common
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type PagerBase = {
     /**
-     * @docid
-     * @public
-     * @default "adaptive"
+     * Specifies the pager&apos;s display mode.
      */
     displayMode?: DisplayMode;
     /**
-     * @docid
-     * @public
-     * @default "Page {0} of {1} ({2} items)"
+     * Specifies the page information text.
      */
     infoText?: string;
     /**
-     * @docid
-     * @public
-     * @default false
+     * Specifies whether to show the page information.
      */
     showInfo?: boolean;
     /**
-     * @docid
-     * @public
-     * @default false
+     * Specifies whether to show navigation buttons.
      */
     showNavigationButtons?: boolean;
     /**
-     * @docid
-     * @public
-     * @default false
+     * Specifies whether to show the page size selector.
      */
     showPageSizeSelector?: boolean;
     /**
-     * @docid
-     * @public
-     * @default "Page Navigation"
+     * Specifies an aria-label attribute for the pager.
      */
     label?: string;
   };
 
-/**
- * @public
- */
 export type PageSize = number | 'all';
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @public
- * @docid
- * @inherits PagerBase
+ * 
+ * @deprecated 
  */
 export interface dxPaginationOptions extends PagerBase, WidgetOptions<dxPagination> {
     /**
-     * @docid
-     * @fires Properties.onOptionChanged
-     * @default 1
+     * Specifies the page index.
      */
     pageIndex?: number;
 
     /**
-     * @docid
-     * @fires Properties.onOptionChanged
-     * @default 5
+     * Specifies the page size.
      */
     pageSize?: number;
 
     /**
-     * @docid
-     * @default 1
+     * Specifies the total number of items.
      */
     itemCount?: number;
 
     /**
-     * @docid
-     * @default [5, 10]
-     * @type Array<number | string>
+     * Specifies page sizes available in the page size selector.
      */
     allowedPageSizes?: Array<PageSize>;
 }
 
 /**
- * @docid
- * @namespace DevExpress.ui
- * @public
- * @inherits Widget
- * @options dxPaginationOptions
+ * Pagination is a UI component that allows users to navigate through pages and change page size at runtime. Pagination UI includes a page navigator and several optional elements: a page size selector, navigation buttons, and page information.
  */
 export default class dxPagination extends Widget<Properties> {
     /**
-     * @docid
-     * @publicName getPageCount()
-     * @public
-     */
+      * Gets the number of pages.
+      */
      getPageCount(): number;
 }
 
-/**
- * @public
- */
 export type Properties = dxPaginationOptions;

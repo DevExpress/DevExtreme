@@ -33,46 +33,22 @@ interface Stack {
 }
 
 /**
- * @docid ui.notify
- * @static
- * @publicName notify(message,type,displayTime)
- * @param2 type:string|undefined
- * @param3 displayTime:integer|undefined
- * @public
+ * Creates a toast message.
  */
 declare function notify(message: string, type?: string, displayTime?: number): void;
 
 /**
- * @docid ui.notify
- * @static
- * @publicName notify(options,type,displayTime)
- * @param1 options:object
- * @param2 type:string|undefined
- * @param3 displayTime:integer|undefined
- * @public
+ * Creates a toast message.
  */
 declare function notify(options: any, type?: string, displayTime?: number): void;
 
 /**
- * @docid ui.notify
- * @static
- * @publicName notify(message,stack)
- * @param2 stack:object
- * @param2_field direction:string
- * @param2_field position:string
- * @public
+ * Creates a stackable toast message.
  */
 declare function notify(message: string, stack?: Stack): void;
 
 /**
- * @docid ui.notify
- * @static
- * @publicName notify(options,stack)
- * @param1 options:object
- * @param2 stack:object
- * @param2_field direction:string
- * @param2_field position:string
- * @public
+ * Creates a stackable toast message.
  */
 declare function notify(options: any, stack?: Stack): void;
 

@@ -14,6 +14,9 @@ import {
 export {
   DataSourceOptions,
 } from '../common/data';
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options<
     TStoreItem = any,
     TMappedItem = TStoreItem,
@@ -22,8 +25,8 @@ export type Options<
 > = DataSourceOptions<TStoreItem, TItem, TMappedItem, TKey>;
 
 /**
- * @docid
- * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type DataSourceLike<TItem, TKey = any> =
     string |
@@ -32,6 +35,9 @@ export type DataSourceLike<TItem, TKey = any> =
     DataSourceOptionsStub<any, any, TItem> |
     DataSource<TItem, TKey>;
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface DataSourceOptionsStub<
     TStoreItem = any,
     TMappedItem = TStoreItem,

@@ -20,186 +20,135 @@ import {
 } from '../../common';
 
 /**
- * @docid
- * @hidden
- * @type object
- * @inherits NativeEventInfo
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface ScrollEventInfo<T> extends NativeEventInfo<T, WheelEvent | MouseEvent | Event> {
-    /** @docid */
+    /**
+     * 
+     */
     readonly scrollOffset?: any;
-    /** @docid */
+    /**
+     * 
+     */
     readonly reachedLeft?: boolean;
-    /** @docid */
+    /**
+     * 
+     */
     readonly reachedRight?: boolean;
-    /** @docid */
+    /**
+     * 
+     */
     readonly reachedTop?: boolean;
-    /** @docid */
+    /**
+     * 
+     */
     readonly reachedBottom?: boolean;
 }
 
 /**
- * @namespace DevExpress.ui
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
-     * @docid
-     * @default false &for(desktop)
-     * @default true
-     * @public
+     * A Boolean value specifying whether to enable or disable the bounce-back effect.
      */
     bounceEnabled?: boolean;
     /**
-     * @docid
-     * @default "vertical"
-     * @public
+     * A string value specifying the available scrolling directions.
      */
     direction?: ScrollDirection;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the UI component responds to user interaction.
      */
     disabled?: boolean;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/scroll_view/ui.scrollable:ScrollEventInfo}
-     * @action
-     * @public
+     * A function that is executed on each scroll gesture.
      */
     onScroll?: ((e: ScrollEventInfo<TComponent>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/scroll_view/ui.scrollable:ScrollEventInfo}
-     * @action
-     * @public
+     * A function that is executed each time the UI component is updated.
      */
     onUpdated?: ((e: ScrollEventInfo<TComponent>) => void);
     /**
-     * @docid
-     * @default false &for(non-touch_devices)
-     * @default true
-     * @public
+     * A Boolean value specifying whether or not an end user can scroll the UI component content swiping it up or down. Applies only if useNative is false
      */
     scrollByContent?: boolean;
     /**
-     * @docid
-     * @default true &for(desktop)
-     * @default false
-     * @public
+     * Specifies whether a user can scroll the content with the scrollbar. Applies only if useNative is false.
      */
     scrollByThumb?: boolean;
     /**
-     * @docid
-     * @default 'onHover' &for(desktop)
-     * @default 'onScroll'
-     * @public
+     * Specifies when the UI component shows the scrollbar.
      */
     showScrollbar?: 'onScroll' | 'onHover' | 'always' | 'never';
     /**
-     * @docid
-     * @default false &for(desktop except Mac)
-     * @default true
-     * @public
+     * Indicates whether to use native or simulated scrolling.
      */
     useNative?: boolean;
 }
 /**
- * @docid
- * @inherits DOMComponent
- * @namespace DevExpress.ui
- * @hidden
+ * A UI component used to display scrollable content.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export default class dxScrollable<TProperties = Properties> extends DOMComponent<TProperties> {
     /**
-     * @docid
-     * @publicName clientHeight()
-     * @return numeric
-     * @public
+     * Gets the UI component&apos;s height.
      */
     clientHeight(): number;
     /**
-     * @docid
-     * @publicName clientWidth()
-     * @return numeric
-     * @public
+     * Gets the UI component&apos;s width.
      */
     clientWidth(): number;
     /**
-     * @docid
-     * @publicName content()
-     * @public
+     * Gets the UI component&apos;s content.
      */
     content(): DxElement;
     /**
-     * @docid
-     * @publicName scrollBy(distance)
-     * @param1 distance:numeric|object
-     * @public
+     * Scrolls the content by a specific distance.
      */
     scrollBy(distance: number | any): void;
     /**
-     * @docid
-     * @publicName scrollHeight()
-     * @return numeric
-     * @public
+     * Gets the scrollable content&apos;s height in pixels.
      */
     scrollHeight(): number;
     /**
-     * @docid
-     * @publicName scrollLeft()
-     * @return numeric
-     * @public
+     * Gets the left scroll offset.
      */
     scrollLeft(): number;
     /**
-     * @docid
-     * @publicName scrollOffset()
-     * @return object
-     * @public
+     * Gets the scroll offset.
      */
     scrollOffset(): any;
     /**
-     * @docid
-     * @publicName scrollTo(targetLocation)
-     * @param1 targetLocation:numeric|object
-     * @public
+     * Scrolls the content to a specific position.
      */
     scrollTo(targetLocation: number | any): void;
     /**
-     * @docid
-     * @publicName scrollToElement(element)
-     * @param1 element:Element|jQuery
-     * @public
+     * Scrolls content to an element.
      */
     scrollToElement(element: UserDefinedElement): void;
     /**
-     * @docid
-     * @publicName scrollTop()
-     * @return numeric
-     * @public
+     * Gets the top scroll offset.
      */
     scrollTop(): number;
     /**
-     * @docid
-     * @publicName scrollWidth()
-     * @return numeric
-     * @public
+     * Gets the scrollable content&apos;s width in pixels.
      */
     scrollWidth(): number;
     /**
-     * @docid
-     * @publicName update()
-     * @return Promise<void>
-     * @public
+     * Updates the scrollable contents&apos; dimensions.
      */
     update(): DxPromise<void>;
 }
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 interface ScrollableInstance extends dxScrollable<Properties> { }
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Properties = dxScrollableOptions<ScrollableInstance>;

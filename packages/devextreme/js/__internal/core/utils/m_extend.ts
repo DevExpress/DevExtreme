@@ -1,5 +1,8 @@
 import { isPlainObject } from '@js/core/utils/type';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export const extendFromObject = function (target, source, overrideExistingValues) {
   target = target || {};
   for (const prop in source) {
@@ -13,6 +16,9 @@ export const extendFromObject = function (target, source, overrideExistingValues
   return target;
 };
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export const extend: any = function (target) {
   target = target || {};
 

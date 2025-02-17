@@ -16,149 +16,124 @@ import {
 import dxTrackBar from './track_bar';
 
 /**
- * @docid _ui_range_slider_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxRangeSlider>;
 
 /**
- * @docid _ui_range_slider_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxRangeSlider>;
 
 /**
- * @docid _ui_range_slider_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxRangeSlider>;
 
 /**
- * @docid _ui_range_slider_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxRangeSlider> & ChangedOptionInfo;
 
 /**
- * @docid _ui_range_slider_ValueChangedEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ValueChangedInfo
+ * The type of the valueChanged event handler&apos;s argument.
  */
 export type ValueChangedEvent = NativeEventInfo<dxRangeSlider, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo & {
-    /** @docid _ui_range_slider_ValueChangedEvent.start */
+    /**
+     * 
+     */
     readonly start?: number;
-    /** @docid _ui_range_slider_ValueChangedEvent.end */
+    /**
+     * 
+     */
     readonly end?: number;
-    /** @docid _ui_range_slider_ValueChangedEvent.value */
+    /**
+     * 
+     */
     readonly value?: Array<number>;
 };
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider> {
     /**
-     * @docid
-     * @default 60
-     * @public
+     * The right edge of the interval currently selected using the range slider.
      */
     end?: number;
     /**
-     * @docid
-     * @default ""
-     * @public
+     * The value to be assigned to the name attribute of the underlying `` element.
      */
     endName?: string;
     /**
-     * @docid
-     * @type_function_param1 e:{ui/range_slider:ValueChangedEvent}
-     * @action
-     * @default null
-     * @public
+     * A function that is executed after the UI component&apos;s value is changed.
      */
     onValueChanged?: ((e: ValueChangedEvent) => void);
     /**
-     * @docid
-     * @default 40
-     * @public
+     * The left edge of the interval currently selected using the range slider.
      */
     start?: number;
     /**
-     * @docid
-     * @default ""
-     * @public
+     * The value to be assigned to the name attribute of the underlying `` element.
      */
     startName?: string;
     /**
-     * @docid
-     * @default [40, 60]
-     * @public
+     * Specifies the UI component&apos;s value.
      */
     value?: Array<number>;
 }
 /**
- * @docid
- * @isEditor
- * @inherits dxSliderBase
- * @namespace DevExpress.ui
- * @public
+ * The RangeSlider is a UI component that allows an end user to choose a range of numeric values.
  */
 export default class dxRangeSlider extends dxTrackBar<dxRangeSliderOptions> {
     /**
-     * @docid
-     * @publicName reset(value)
-     * @public
+     * Resets the value property to the value passed as an argument.
      */
     reset(value?: Array<number>): void;
  }
 
-/** @public */
 export type Properties = dxRangeSliderOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxRangeSliderOptions;
 
 ///#DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onValueChanged'>;
 
 /**
-* @hidden
-*/
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Events = {
 /**
- * @docid dxRangeSliderOptions.onContentReady
- * @type_function_param1 e:{ui/range_slider:ContentReadyEvent}
+ * A function that is executed when the UI component is rendered and each time the component is repainted.
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @docid dxRangeSliderOptions.onDisposing
- * @type_function_param1 e:{ui/range_slider:DisposingEvent}
+ * A function that is executed before the UI component is disposed of.
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @docid dxRangeSliderOptions.onInitialized
- * @type_function_param1 e:{ui/range_slider:InitializedEvent}
+ * A function used in JavaScript frameworks to save the UI component instance.
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @docid dxRangeSliderOptions.onOptionChanged
- * @type_function_param1 e:{ui/range_slider:OptionChangedEvent}
+ * A function that is executed after a UI component property is changed.
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };

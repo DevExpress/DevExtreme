@@ -20,111 +20,72 @@ import BaseWidget, {
 } from '../core/base_widget';
 
 /**
- * @namespace DevExpress.viz
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface BaseSparklineOptions<TComponent> extends BaseWidgetOptions<TComponent> {
     /**
-     * @docid
-     * @type object
-     * @hidden
+     * Configures the exporting and printing features.
      */
     export?: BaseWidgetExport;
     /**
-     * @docid
-     * @type object
-     * @hidden
+     * Configures the loading indicator.
      */
     loadingIndicator?: BaseWidgetLoadingIndicator;
     /**
-     * @docid
-     * @default null
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a tooltip becomes hidden.
      */
     onTooltipHidden?: ((e: EventInfo<TComponent>) => void);
     /**
-     * @docid
-     * @default null
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a tooltip appears.
      */
     onTooltipShown?: ((e: EventInfo<TComponent>) => void);
     /**
-     * @docid
-     * @hidden
+     * Specifies whether to redraw the UI component when the size of the container changes or a mobile device rotates.
      */
     redrawOnResize?: boolean;
     /**
-     * @docid
-     * @type object
-     * @hidden
+     * Configures the UI component&apos;s title.
      */
     title?: BaseWidgetTitle | string;
     /**
-     * @docid
-     * @type object
-     * @public
+     * Configures the tooltip.
      */
     tooltip?: BaseSparklineTooltip;
 }
 /**
- * @hidden
- * @docid
- * @namespace DevExpress.viz
+ * Configures the tooltip.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface BaseSparklineTooltip extends BaseWidgetTooltip {
     /**
-     * @docid BaseSparklineOptions.tooltip.contentTemplate
-     * @type_function_param1 pointsInfo:object
-     * @type_function_return string|Element|jQuery
-     * @default undefined
-     * @public
+     * Specifies a custom template for tooltips.
      */
     contentTemplate?: template | ((pointsInfo: any, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
-     * @docid BaseSparklineOptions.tooltip.customizeTooltip
-     * @type_function_param1 pointsInfo:object
-     * @type_function_return object
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Allows you to change tooltip appearance.
      */
     customizeTooltip?: ((pointsInfo: any) => any) | undefined;
     /**
-     * @docid BaseSparklineOptions.tooltip.enabled
-     * @default true
-     * @public
+     * Specifies whether a tooltip is enabled.
      */
     enabled?: boolean;
     /**
-     * @docid BaseSparklineOptions.tooltip.interactive
-     * @default false
-     * @public
+     * 
      */
     interactive?: boolean;
 }
 /**
- * @docid
- * @hidden
- * @inherits BaseWidget
- * @namespace DevExpress.viz
- * @options BaseSparklineOptions
+ * Overridden by descriptions for particular UI components.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export default class BaseSparkline<TProperties> extends BaseWidget<TProperties> {
     /**
-     * @docid
-     * @publicName hideLoadingIndicator()
-     * @hidden
+     * Hides the loading indicator.
      */
     hideLoadingIndicator(): void;
     /**
-     * @docid
-     * @publicName showLoadingIndicator()
-     * @hidden
+     * Shows the loading indicator.
      */
     showLoadingIndicator(): void;
 }

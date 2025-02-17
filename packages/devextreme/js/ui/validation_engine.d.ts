@@ -3,91 +3,43 @@ import {
 } from './validation_group';
 
 /**
- * @docid
- * @section Core
- * @namespace DevExpress
- * @public
- */
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
-export default class validationEngine {
+                                                                    * An object that serves as a namespace for the methods required to perform validation.
+                                                                    */
+                                                                   export default class validationEngine {
     /**
-     * @docid
-     * @section Core
-     * @publicName getGroupConfig()
-     * @return object
-     * @static
-     * @public
+     * Gets the default validation group.
      */
     static getGroupConfig(): any;
     /**
-     * @docid
-     * @section Core
-     * @publicName getGroupConfig(group)
-     * @param1 group:string|object
-     * @return object
-     * @static
-     * @public
+     * Gets a validation group with a specific key.
      */
     static getGroupConfig(group: string | any): any;
     /**
-     * @docid
-     * @publicName registerModelForValidation(model)
-     * @param1 model:object
-     * @static
-     * @public
+     * Registers all the Validator objects extending fields of the specified ViewModel.
      */
     static registerModelForValidation(model: any): void;
     /**
-     * @docid
-     * @section Core
-     * @publicName resetGroup()
-     * @static
-     * @public
+     * Resets the values and validation result of the editors that belong to the default validation group.
      */
     static resetGroup(): void;
     /**
-     * @docid
-     * @section Core
-     * @publicName resetGroup(group)
-     * @param1 group:string|object
-     * @static
-     * @public
+     * Resets the values and validation result of the editors that belong to the specified validation group.
      */
     static resetGroup(group: string | any): void;
     /**
-     * @docid
-     * @publicName unregisterModelForValidation(model)
-     * @param1 model:object
-     * @static
-     * @public
+     * Unregisters all the Validator objects extending fields of the specified ViewModel.
      */
     static unregisterModelForValidation(model: any): void;
     /**
-     * @docid
-     * @section Core
-     * @publicName validateGroup()
-     * @static
-     * @public
-     * @return dxValidationGroupResult
+     * Validates editors from the default validation group.
      */
     static validateGroup(): ValidationResult;
     /**
-     * @docid
-     * @section Core
-     * @publicName validateGroup(group)
-     * @param1 group:string|object
-     * @static
-     * @public
-     * @return dxValidationGroupResult
+     * Validates editors from a specific validation group.
      */
     static validateGroup(group: string | any): ValidationResult;
     /**
-     * @docid
-     * @publicName validateModel(model)
-     * @param1 model:object
-     * @return object
-     * @static
-     * @public
+     * Validates a view model.
      */
     static validateModel(model: any): any;
 }

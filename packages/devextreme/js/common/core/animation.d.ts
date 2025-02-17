@@ -12,357 +12,255 @@ import {
   DxPromise,
 } from '../../core/utils/deferred';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type AnimationType = 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
 
 /**
- * @docid utils.cancelAnimationFrame
- * @publicName cancelAnimationFrame(requestID)
- * @namespace DevExpress.common.core.animation
- * @public
+ * Cancels an animation frame request scheduled with the requestAnimationFrame method.
  */
 export function cancelAnimationFrame(requestID: number): void;
 
 /**
- * @docid utils.requestAnimationFrame
- * @publicName requestAnimationFrame(callback)
- * @namespace DevExpress.common.core.animation
- * @public
+ * Makes the browser call a function to update animation before the next repaint.
  */
 export function requestAnimationFrame(callback: Function): number;
 
 /**
- * @docid
- * @public
- * @type object
- * @namespace DevExpress.common.core.animation
+ * Describes an animation state.
  */
 export type AnimationState = string | number | {
     /**
-     * @docid
-     * @public
+     * Element opacity.
      */
     opacity: number;
 } | {
     /**
-     * @docid
-     * @public
+     * A value that controls element size.
      */
     scale: number;
 } | {
     /**
-     * @docid
-     * @public
+     * Element position.
      */
     position: PositionConfig;
 } | {
     /**
-    * @docid
-    * @public
-    */
+     * A shortcut that positions the element&apos;s left side relative to the parent element.
+     */
     left: number;
 } | {
     /**
-    * @docid
-    * @public
-    */
+     * A shortcut that positions the element&apos;s top side relative to the parent element.
+     */
     top: number;
 };
 
 /**
- * @docid
- * @namespace DevExpress.common.core.animation
- * @type object|number|string
- * @public
+ * Defines animation properties.
  */
 export type AnimationConfig = {
     /**
-     * @docid
-     * @public
+     * A function called after animation is completed.
      */
     complete?: (($element: DxElement, config: AnimationConfig) => void);
     /**
-     * @docid
-     * @default 0
-     * @public
+     * A number specifying wait time before animation execution.
      */
     delay?: number;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the animation direction for the &apos;slideIn&apos; and &apos;slideOut&apos; animation types.
      */
     direction?: Direction | undefined;
     /**
-     * @docid
-     * @default 400
-     * @public
+     * A number specifying the time in milliseconds spent on animation.
      */
     duration?: number;
     /**
-     * @docid
-     * @default 'ease'
-     * @public
+     * A string specifying the easing function for animation.
      */
     easing?: string;
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Specifies an initial animation state. Use the to property to specify the final state.
      */
     from?: AnimationState;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * A number specifying the time period to wait before the animation of the next stagger item starts.
      */
     staggerDelay?: number | undefined;
     /**
-     * @docid
-     * @public
+     * A function called before animation is started.
      */
     start?: (($element: DxElement, config: AnimationConfig) => void);
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Specifies a final animation state. Use the from property to specify an initial state.
      */
     to?: AnimationState;
     /**
-     * @docid
-     * @default 'custom'
-     * @public
+     * A string value specifying the animation type.
      */
     type?: AnimationType;
 };
 
 /**
- * @public
- * @docid
- * @section utils
- * @namespace DevExpress.common.core.animation
- */
-// eslint-disable-next-line @typescript-eslint/init-declarations
-export const fx: {
+                                                                  * An object that serves as a namespace for the methods that are used to animate UI elements.
+                                                                  */
+                                                                 export const fx: {
     /**
-     * @docid
-     * @publicName animate(element, config)
-     * @return Promise<void>
-     * @namespace DevExpress.fx
-     * @public
+     * Animates an element.
      */
     animate(element: Element, config: AnimationConfig): DxPromise<void>;
 
     /**
-     * @docid
-     * @publicName isAnimating(element)
-     * @namespace DevExpress.fx
-     * @public
+     * Checks whether an element is being animated.
      */
     isAnimating(element: Element): boolean;
 
     /**
-     * @docid
-     * @publicName stop(element, jumpToEnd)
-     * @namespace DevExpress.fx
-     * @public
+     * Stops an element&apos;s animation.
      */
     stop(element: Element, jumpToEnd: boolean): void;
 };
 
-/**
- * @public
- * @namespace DevExpress.common.core.animation
- */
 export type CollisionResolution = 'fit' | 'flip' | 'flipfit' | 'none';
-/**
- * @public
- * @namespace DevExpress.common.core.animation
- */
 export type CollisionResolutionCombination = 'fit' | 'fit flip' | 'fit flipfit' | 'fit none' | 'flip' | 'flip fit' | 'flip none' | 'flipfit' | 'flipfit fit' | 'flipfit none' | 'none' | 'none fit' | 'none flip' | 'none flipfit';
 
 /**
- * @docid
- * @namespace DevExpress.common.core.animation
- * @type object
- * @public
+ * Configures the position of an overlay element.
  */
 export type PositionConfig = {
     /**
-     * @docid
-     * @public
+     * Specifies the target element&apos;s side or corner where the overlay element should be positioned.
      */
     at?: PositionAlignment | {
       /**
-       * @docid
+       * Specifies a position in the horizontal direction (for left, right, or center alignment).
        */
       x?: HorizontalAlignment;
       /**
-       * @docid
+       * Specifies a position in the vertical direction (for top, bottom, or center alignment).
        */
       y?: VerticalAlignment;
     };
     /**
-     * @docid
-     * @public
+     * A boundary element in which the overlay element must be positioned.
      */
     boundary?: string | UserDefinedElement | Window;
     /**
-     * @docid
-     * @public
+     * Specifies the offset of boundaries from the boundary element.
      */
     boundaryOffset?: string | {
       /**
-       * @docid
-       * @default 0
+       * Specifies a horizontal offset.
        */
       x?: number;
       /**
-       * @docid
-       * @default 0
+       * Specifies a vertical offset.
        */
       y?: number;
     };
     /**
-     * @docid
-     * @public
+     * Specifies how to resolve collisions - when the overlay element exceeds the boundary element.
      */
     collision?: CollisionResolutionCombination | {
       /**
-       * @docid
-       * @default 'none'
+       * Specifies how to resolve horizontal collisions.
        */
       x?: CollisionResolution;
       /**
-       * @docid
-       * @default 'none'
+       * Specifies how to resolve vertical collisions.
        */
       y?: CollisionResolution;
     };
     /**
-     * @docid
-     * @public
+     * Specifies the overlay element&apos;s side or corner to align with a target element.
      */
     my?: PositionAlignment | {
       /**
-       * @docid
+       * Specifies a position in the horizontal direction (for left, right, or center alignment).
        */
       x?: HorizontalAlignment;
       /**
-       * @docid
+       * Specifies a position in the vertical direction (for top, bottom, or center alignment).
        */
       y?: VerticalAlignment;
     };
     /**
-     * @docid
-     * @public
+     * The target element relative to which the overlay element should be positioned.
      */
     of?: string | UserDefinedElement | Window;
     /**
-     * @docid
-     * @public
+     * Specifies the overlay element&apos;s offset from a specified position.
      */
     offset?: string | {
       /**
-       * @docid
-       * @default 0
+       * Specifies a horizontal offset.
        */
       x?: number;
       /**
-       * @docid
-       * @default 0
+       * Specifies a vertical offset.
        */
       y?: number;
     };
 };
 
 /**
- * @docid
- * @namespace DevExpress.common.core.animation
- * @public
- */
-// eslint-disable-next-line @typescript-eslint/init-declarations
-export const animationPresets: {
+                                                                  * A repository of animations.
+                                                                  */
+                                                                 export const animationPresets: {
   /**
-   * @docid
-   * @publicName applyChanges()
-   * @public
+   * Applies the changes made in the animation repository.
    */
   applyChanges(): void;
   /**
-   * @docid
-   * @publicName clear()
-   * @public
+   * Removes all animations from the repository.
    */
   clear(): void;
   /**
-   * @docid
-   * @publicName clear(name)
-   * @public
+   * Deletes an animation with a specific name.
    */
   clear(name: string): void;
   /**
-   * @docid
-   * @publicName getPreset(name)
-   * @public
+   * Gets the configuration of an animation with a specific name.
    */
   getPreset(name: string): AnimationConfig;
   /**
-   * @docid
-   * @publicName registerDefaultPresets()
-   * @public
+   * Registers predefined animations in the animation repository.
    */
   registerDefaultPresets(): void;
   /**
-   * @docid
-   * @publicName registerPreset(name, config)
-   * @public
+   * Adds an animation with a specific name to the animation repository.
    */
   registerPreset(name: string, config: { animation: AnimationConfig; device?: Device }): void;
   /**
-   * @docid
-   * @publicName resetToDefaults()
-   * @public
+   * Deletes all custom animations.
    */
   resetToDefaults(): void;
 };
 
 /**
- * @docid
- * @namespace DevExpress.common.core.animation
- * @public
+ * The manager that performs several specified animations at a time.
  */
 export class TransitionExecutor {
   /**
-   * @docid
-   * @publicName enter(elements, animation)
-   * @param1 elements:jQuery
-   * @public
+   * Registers the set of elements that should be animated as &apos;entering&apos; using the specified animation configuration.
    */
   enter(elements: UserDefinedElementsArray, animation: AnimationConfig | string): void;
   /**
-   * @docid
-   * @publicName leave(elements, animation)
-   * @param1 elements:jQuery
-   * @public
+   * Registers a set of elements that should be animated as &apos;leaving&apos; using the specified animation configuration.
    */
   leave(elements: UserDefinedElementsArray, animation: AnimationConfig | string): void;
   /**
-   * @docid
-   * @publicName reset()
-   * @public
+   * Deletes all the animations registered in the Transition Executor by using the enter(elements, animation) and leave(elements, animation) methods.
    */
   reset(): void;
   /**
-   * @docid
-   * @publicName start()
-   * @return Promise<void>
-   * @public
+   * Starts all the animations registered using the enter(elements, animation) and leave(elements, animation) methods beforehand.
    */
   start(): DxPromise<void>;
   /**
-   * @docid
-   * @publicName stop()
-   * @public
+   * Stops all started animations.
    */
   stop(): void;
 }

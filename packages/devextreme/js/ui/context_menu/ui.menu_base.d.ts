@@ -17,9 +17,8 @@ import {
 } from '../../common';
 
 /**
- * @namespace DevExpress.ui
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxMenuBaseOptions<
   TComponent extends dxMenuBase<any, TItem, TKey>,
@@ -27,95 +26,68 @@ export interface dxMenuBaseOptions<
   TKey = any,
 > extends Omit<HierarchicalCollectionWidgetOptions<TComponent, TItem, TKey>, 'dataSource'> {
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the UI component changes its visual state as a result of user interaction.
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid
-     * @default { show: { type: "fade", from: 0, to: 1, duration: 100 }, hide: { type: "fade", from: 1, to: 0, duration: 100 } }
-     * @ref
-     * @public
+     * Configures UI component visibility animations. This object contains two fields: show and hide.
      */
     animation?: {
       /**
-       * @docid
-       * @default { type: "fade", from: 1, to: 0, duration: 100 }
+       * An object that defines the animation properties used when the UI component is being hidden.
        */
       hide?: AnimationConfig;
       /**
-       * @docid
-       * @default { type: "fade", from: 0, to: 1, duration: 100 }
+       * An object that defines the animation properties used when the UI component is being shown.
        */
       show?: AnimationConfig;
     };
     /**
-     * @docid
-     * @default ""
-     * @public
+     * Specifies the name of the CSS class to be applied to the root menu level and all submenus.
      */
     cssClass?: string;
     /**
-     * @docid
-     * @default null
-     * @public
-     * @type Store|DataSource|DataSourceOptions|string|Array<dxMenuBaseItem>|null
+     * Binds the UI component to data.
      */
     dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
-     * @docid
-     * @public
-     * @type Array<dxMenuBaseItem>
+     * Holds an array of menu items.
      */
     items?: Array<TItem>;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether an item is selected if a user clicks it.
      */
     selectByClick?: boolean;
     /**
-     * @docid
-     * @default none
-     * @public
+     * Specifies the selection mode supported by the menu.
      */
     selectionMode?: SingleOrNone;
     /**
-     * @docid
-     * @default { name: "onHover", delay: { show: 50, hide: 300 } }
-     * @public
+     * Specifies properties of submenu showing and hiding.
      */
     showSubmenuMode?: {
       /**
-       * @docid
-       * @default { show: 50, hide: 300 }
+       * Specifies the delay of submenu show and hiding.
        */
       delay?: {
         /**
-         * @docid
-         * @default 300
+         * The time span after which the submenu is hidden.
          */
         hide?: number;
         /**
-         * @docid
-         * @default 50
+         * The time span after which the submenu is shown.
          */
         show?: number;
       } | number;
       /**
-       * @docid
-       * @default "onHover"
+       * Specifies the mode name.
        */
       name?: SubmenuShowMode;
     } | SubmenuShowMode;
 }
 /**
- * @docid
- * @inherits HierarchicalCollectionWidget
- * @hidden
- * @namespace DevExpress.ui
- * @options dxMenuBaseOptions
+ * The base class for UI components containing an item collection.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export default class dxMenuBase<
   TProperties extends dxMenuBaseOptions<any, TItem, TKey>,
@@ -123,15 +95,11 @@ export default class dxMenuBase<
   TKey = any,
 > extends HierarchicalCollectionWidget<TProperties, TItem, TKey> {
     /**
-     * @docid
-     * @publicName selectItem(itemElement)
-     * @public
+     * Selects an item found using its DOM node.
      */
     selectItem(itemElement: Element): void;
     /**
-     * @docid
-     * @publicName unselectItem(itemElement)
-     * @public
+     * Cancels the selection of an item found using its DOM node.
      */
     unselectItem(itemElement: Element): void;
 }

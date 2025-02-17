@@ -12,81 +12,56 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /**
- * @docid _ui_validation_summary_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxValidationSummary<TItem, TKey>>;
 
 /**
- * @docid _ui_validation_summary_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxValidationSummary<TItem, TKey>>;
 
 /**
- * @docid _ui_validation_summary_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxValidationSummary<TItem, TKey>>;
 
 /**
- * @docid _ui_validation_summary_ItemClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ItemInfo
+ * The type of the itemClick event handler&apos;s argument.
  */
 export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxValidationSummary<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_validation_summary_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxValidationSummary<TItem, TKey>> & ChangedOptionInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @public
- * @docid
+ * 
+ * @deprecated 
  */
 export interface dxValidationSummaryOptions<
     TItem extends ItemLike = any,
     TKey = any,
 > extends CollectionWidgetOptions<dxValidationSummary<TItem, TKey>, TItem, TKey> {
     /**
-     * @docid
-     * @ref
-     * @public
+     * Specifies the validation group for which summary should be generated.
      */
     validationGroup?: string;
 }
 /**
- * @docid
- * @inherits CollectionWidget
- * @namespace DevExpress.ui
- * @public
+ * A UI component for displaying the result of checking validation rules for editors.
  */
 export default class dxValidationSummary<
     TItem extends ItemLike = any,
     TKey = any,
 > extends CollectionWidget<dxValidationSummaryOptions<TItem, TKey>, TItem, TKey> {
     /**
-     * @docid
-     * @publicName refreshValidationGroup()
-     * @public
+     * Resubscribes the ValidationSummary to a target ValidationGroup.
      */
     refreshValidationGroup(): void;
 }
 
-/** @public */
 export type ExplicitTypes<
     TItem extends ItemLike,
     TKey,
@@ -99,13 +74,15 @@ export type ExplicitTypes<
     OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
 };
 
-/** @public */
 export type Properties<
     TItem extends ItemLike = any,
     TKey = any,
 > = dxValidationSummaryOptions<TItem, TKey>;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options<
     TItem extends ItemLike = any,
     TKey = any,
@@ -115,37 +92,38 @@ export type Options<
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemContextMenu' | 'onItemDeleted' | 'onItemDeleting' | 'onItemHold' | 'onItemRendered' | 'onItemReordered' | 'onItemSelect' | 'onSelectionChanging' | 'onSelectionChanged'>;
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
-* @hidden
-*/
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Events = {
 /**
- * @docid dxValidationSummaryOptions.onContentReady
- * @type_function_param1 e:{ui/validation_summary:ContentReadyEvent}
+ * A function that is executed when the UI component is rendered and each time the component is repainted.
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @docid dxValidationSummaryOptions.onDisposing
- * @type_function_param1 e:{ui/validation_summary:DisposingEvent}
+ * A function that is executed before the UI component is disposed of.
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @docid dxValidationSummaryOptions.onInitialized
- * @type_function_param1 e:{ui/validation_summary:InitializedEvent}
+ * A function used in JavaScript frameworks to save the UI component instance.
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @docid dxValidationSummaryOptions.onItemClick
- * @type_function_param1 e:{ui/validation_summary:ItemClickEvent}
+ * A function that is executed when a collection item is clicked or tapped.
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @docid dxValidationSummaryOptions.onOptionChanged
- * @type_function_param1 e:{ui/validation_summary:OptionChangedEvent}
+ * A function that is executed after a UI component property is changed.
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };

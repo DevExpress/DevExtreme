@@ -1,101 +1,79 @@
 /**
- * @public
- * @docid
- * @section commonObjectStructures
- * @namespace DevExpress.common.core.environment
+ * The device object defines the device on which the application is running.
  */
 export type Device = {
   /**
-   * @docid
-   * @public
+   * Indicates whether or not the device platform is Android.
    */
   android?: boolean;
   /**
-   * @docid
-   * @public
+   * Specifies the type of the device on which the application is running.
    */
   deviceType?: 'phone' | 'tablet' | 'desktop';
   /**
-   * @docid
-   * @public
+   * Indicates whether or not the device platform is generic, which means that the application will look and behave according to a generic &apos;light&apos; or &apos;dark&apos; theme.
    */
   generic?: boolean;
   /**
-   * @docid
-   * @public
+   * Specifies a performance grade of the current device.
    */
   grade?: 'A' | 'B' | 'C';
   /**
-   * @docid
-   * @public
+   * Indicates whether or not the device platform is iOS.
    */
   ios?: boolean;
   /**
-   * @docid
-   * @public
+   * Indicates whether or not the device type is &apos;phone&apos;.
    */
   phone?: boolean;
   /**
-   * @docid
-   * @public
+   * Specifies the platform of the device on which the application is running.
    */
   platform?: 'android' | 'ios' | 'generic';
   /**
-   * @docid
-   * @public
+   * Indicates whether or not the device type is &apos;tablet&apos;.
    */
   tablet?: boolean;
   /**
-   * @docid
-   * @public
+   * Specifies an array with the major and minor versions of the device platform.
    */
   version?: Array<number>;
 };
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventName = 'orientationChanged';
 
 /**
- * @docid
- * @publicName hideTopOverlay()
- * @namespace DevExpress.common.core.environment
- * @public
+ * Hides the last displayed overlay UI component.
  */
 export function hideTopOverlay(): boolean;
 
 /**
- * @docid utils.initMobileViewport
- * @publicName initMobileViewport(options)
- * @namespace DevExpress.common.core.environment
- * @public
+ * Sets parameters for the viewport meta tag. Takes effect for mobile applications only.
  */
 export function initMobileViewport(options: { allowZoom?: boolean; allowPan?: boolean; allowSelection?: boolean }): void;
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.core.environment
+ * A time zone object.
  */
 export type SchedulerTimeZone = {
   /**
-   * @docid
+   * A time zone text string from the IANA database.
    */
   id: string;
   /**
-   * @docid
+   * A GMT offset.
    */
   offset: number;
   /**
-   * @docid
+   * A time zone in the following format: `(GMT ±[hh]:[mm]) [id]`.
    */
   title: string;
 };
 
 /**
-* @docid utils.getTimeZones
-* @publicName getTimeZones(date)
-* @param1 date:Date|undefined
-* @namespace DevExpress.common.core.environment
-* @static
-* @public
-*/
+ * Gets the list of IANA time zone objects.
+ */
 export function getTimeZones(date?: Date): Array<SchedulerTimeZone>;

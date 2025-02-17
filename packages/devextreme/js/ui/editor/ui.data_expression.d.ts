@@ -14,59 +14,38 @@ import {
 } from '../collection/ui.collection_widget.base';
 
 /**
- * @namespace DevExpress.ui
- * @docid
- * @hidden
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
+                                                               * 
+                                                               * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+                                                               */
+                                                              export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     /**
-     * @docid
-     * @default null
-     * @type Store|DataSource|DataSourceOptions|string|Array<CollectionWidgetItem | any>|null
-     * @public
+     * Binds the UI component to data.
      */
     dataSource?: DataSourceLike<CollectionWidgetItem | any> | null;
     /**
-     * @docid
-     * @default undefined
-     * @type_function_param1 item:object
-     * @public
+     * Specifies the data field whose values should be displayed.
      */
     displayExpr?: string | ((item: any) => string) | undefined;
     /**
-     * @docid
-     * @default "item"
-     * @type_function_param1 itemData:object
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies a custom template for items.
      */
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @public
+     * An array of items displayed by the UI component.
      */
     items?: Array<CollectionWidgetItem | any>;
     /**
-     * @docid
-     * @default null
-     * @public
+     * Specifies the currently selected value. May be an object if dataSource contains objects, the store key is specified, and valueExpr is not set.
      */
     value?: any;
     /**
-     * @docid
-     * @default "this"
-     * @type_function_param1 item:object
-     * @public
+     * Specifies which data field provides unique values to the UI component&apos;s value.
      */
     valueExpr?: string | ((item: any) => string | number | boolean);
 }
 /**
- * @docid
- * @inherits DataHelperMixin
- * @hidden
- * @namespace DevExpress.ui
- * @options DataExpressionMixinOptions
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export default class DataExpressionMixin {
     constructor(options?: DataExpressionMixinOptions);

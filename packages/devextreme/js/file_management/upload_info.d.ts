@@ -1,36 +1,29 @@
 /**
- * @docid
- * @namespace DevExpress.fileManagement
- * @public
+ * An object that provides information about the file upload session.
  */
 export default interface UploadInfo {
     /**
-     * @docid
-     * @public
+     * The number of bytes that is uploaded to the server.
      */
     bytesUploaded: number;
 
     /**
-     * @docid
-     * @public
+     * The number of uploaded chunks and chunks that are to be uploaded.
      */
     chunkCount: number;
 
     /**
-     * @docid
-     * @public
+     * Custom information that you can pass during file upload. For instance, you can specify a custom file ID when the first part of a file is being uploaded.
      */
     customData: any;
 
     /**
-     * @docid
-     * @public
+     * The binary content of the uploading chunk.
      */
     chunkBlob: Blob;
 
     /**
-     * @docid
-     * @public
+     * The index of the uploading chunk.
      */
     chunkIndex: number;
 }

@@ -7,29 +7,29 @@ import {
 } from './store';
 import { LoadOptions } from '../common/data';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options<
   TItem = any,
   TKey = any,
   > = AbstractStoreOptions<TItem, TKey>;
 
 /**
- * @namespace DevExpress.common.data
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface AbstractStoreOptions<
   TItem = any,
   TKey = any,
   > extends StoreOptionsBase<TItem, TKey> {
   /**
-   * @docid StoreOptions.onLoaded
-   * @type_function_param2 loadOptions:LoadOptions
-   * @action
-   * @public
+   * A function that is executed after data is loaded to the store.
    */
   onLoaded?: ((result: Array<TItem>, loadOptions: LoadOptions<TItem>) => void);
 }
 
 /**
- * @namespace DevExpress.common.data
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export default class AbstractStore<
   TItem = any,
@@ -37,30 +37,23 @@ export default class AbstractStore<
   > extends StoreBase<TItem, TKey> {
   constructor(options?: Options<TItem, TKey>);
   /**
-   * @docid Store.load()
-   * @publicName load()
-   * @return Promise<any>
-   * @public
+   * Starts loading data.
    */
   load(): DxExtendedPromise<Array<TItem>>;
   /**
-   * @docid Store.load(options)
-   * @publicName load(options)
-   * @param1 options:LoadOptions
-   * @return Promise<any>
-   * @public
+   * Starts loading data.
    */
   load(options: LoadOptions<TItem>): DxExtendedPromise<Array<TItem>>;
 }
 
 /**
- * @namespace DevExpress.common.data
  * @deprecated Use StoreOptions from common/data instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type StoreOptions<TItem = any, TKey = any> = StoreOptionsBase<TItem, TKey>;
 
 /**
- * @namespace DevExpress.common.data
  * @deprecated Use Store from common/data instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type Store<TItem = any, TKey = any> = StoreBase<TItem, TKey>;

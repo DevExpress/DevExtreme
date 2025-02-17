@@ -25,104 +25,74 @@ export {
 };
 
 /**
- * @docid _ui_radio_group_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxRadioGroup>;
 
 /**
- * @docid _ui_radio_group_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxRadioGroup>;
 
 /**
- * @docid _ui_radio_group_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxRadioGroup>;
 
 /**
- * @docid _ui_radio_group_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxRadioGroup> & ChangedOptionInfo;
 
 /**
- * @docid _ui_radio_group_ValueChangedEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ValueChangedInfo
+ * The type of the valueChanged event handler&apos;s argument.
  */
 export type ValueChangedEvent = NativeEventInfo<dxRadioGroup, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataExpressionMixinOptions<dxRadioGroup> {
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the UI component changes its visual state as a result of user interaction.
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid
-     * @default true &for(desktop)
-     * @public
+     * Specifies whether the UI component can be focused using keyboard navigation.
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the UI component changes its state when a user pauses on it.
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid
-     * @default 'horizontal' &for(tablets)
-     * @default "vertical"
-     * @public
+     * Specifies the radio group layout.
      */
     layout?: Orientation;
     /**
-     * @docid
-     * @hidden false
-     * @public
+     * The value to be assigned to the `name` attribute of the underlying HTML element.
      */
     name?: string;
     /**
-     * @docid
-     * @ref
-     * @public
+     * Specifies the UI component&apos;s value.
      */
     value?: any;
 }
 /**
- * @docid
- * @isEditor
- * @inherits Editor, DataExpressionMixin
- * @namespace DevExpress.ui
- * @public
+ * The RadioGroup is a UI component that contains a set of radio buttons and allows an end user to make a single selection from the set.
  */
 export default class dxRadioGroup extends Editor<dxRadioGroupOptions> {
     getDataSource(): DataSource;
 }
 
-/** @public */
 export type Properties = dxRadioGroupOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxRadioGroupOptions;
 
 ///#DEBUG

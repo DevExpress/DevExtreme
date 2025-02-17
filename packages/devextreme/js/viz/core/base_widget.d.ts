@@ -36,850 +36,609 @@ import {
 } from '../../common/charts';
 
 /**
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface ExportInfo {
-  /** @docid */
+  /**
+   * 
+   */
   readonly fileName: string;
-  /** @docid */
+  /**
+   * 
+   */
   readonly format: string;
 }
 
 /**
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface IncidentInfo {
-  /** @docid */
+  /**
+   * 
+   */
   readonly target: any;
 }
 
 /**
- * @docid
- * @hidden
- * @inherits Cancelable
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type FileSavingEventInfo<T> = Cancelable & {
   /**
-   * @docid
-   * @type this
+   * 
    */
   readonly component: T;
-  /** @docid */
+  /**
+   * 
+   */
   readonly element: DxElement;
-  /** @docid */
+  /**
+   * 
+   */
   readonly fileName: string;
-  /** @docid */
+  /**
+   * 
+   */
   readonly format: string;
-  /** @docid */
+  /**
+   * 
+   */
   readonly data: Blob;
 };
 
 /**
- * @namespace DevExpress.viz
- * @docid
- * @type object
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
-     * @docid
-     * @default false
-     * @notUsedInTheme
-     * @public
+     * Specifies whether the UI component responds to user interaction.
      */
     disabled?: boolean;
     /**
-     * @docid
-     * @type object
-     * @public
+     * Configures the exporting and printing features.
      */
     export?: BaseWidgetExport;
     /**
-     * @docid
-     * @hidden
+     * Specifies the UI component&apos;s height.
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid
-     * @type object
-     * @public
+     * Configures the loading indicator.
      */
     loadingIndicator?: BaseWidgetLoadingIndicator;
     /**
-     * @docid
-     * @type object
-     * @public
+     * Generates space around the UI component.
      */
     margin?: BaseWidgetMargin;
     /**
-     * @docid
-     * @default null
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when the UI component&apos;s rendering has finished.
      */
     onDrawn?: ((e: EventInfo<TComponent>) => void);
     /**
-     * @docid
-     * @default null
-     * @action
-     * @public
+     * A function that is executed after the UI component is exported.
      */
     onExported?: ((e: EventInfo<TComponent>) => void);
     /**
-     * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @default null
-     * @action
-     * @public
+     * A function that is executed before the UI component is exported.
      */
     onExporting?: ((e: EventInfo<TComponent> & ExportInfo) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{viz/core/base_widget:FileSavingEventInfo}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed before a file with exported UI component is saved to the user&apos;s local storage.
      */
     onFileSaving?: ((e: FileSavingEventInfo<TComponent>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @action
-     * @public
+     * A function that is executed when an error or warning occurs.
      */
     onIncidentOccurred?: ((e: EventInfo<TComponent> & IncidentInfo) => void);
     /**
-     * @docid
-     * @default false
-     * @notUsedInTheme
-     * @public
+     * Notifies the UI component that it is embedded into an HTML page that uses a tag modifying the path.
      */
     pathModified?: boolean;
     /**
-     * @docid
-     * @default true
-     * @notUsedInTheme
-     * @public
+     * Specifies whether to redraw the UI component when the size of the container changes or a mobile device rotates.
      */
     redrawOnResize?: boolean;
     /**
-     * @docid
-     * @notUsedInTheme
-     * @default false
-     * @public
+     * Switches the UI component to a right-to-left representation.
      */
     rtlEnabled?: boolean;
     /**
-     * @docid
-     * @type object
-     * @default undefined
-     * @public
+     * Specifies the UI component&apos;s size in pixels.
      */
     size?: BaseWidgetSize | undefined;
     /**
-     * @docid
-     * @default 'generic.light'
-     * @public
+     * Sets the name of the theme the UI component uses.
      */
     theme?: Theme;
     /**
-     * @docid
-     * @type object|string
-     * @public
+     * Configures the UI component&apos;s title.
      */
     title?: BaseWidgetTitle | string;
     /**
-     * @docid
-     * @type object
-     * @public
+     * Configures tooltips - small pop-up rectangles that display information about a data-visualizing UI component element being pressed or hovered over with the mouse pointer.
      */
     tooltip?: BaseWidgetTooltip;
     /**
-     * @docid
-     * @hidden
+     * Specifies the UI component&apos;s width.
      */
     width?: number | string | (() => number | string);
 }
 /**
- * @hidden
- * @docid
- * @namespace DevExpress.viz
+ * Configures the exporting and printing features.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface BaseWidgetExport {
     /**
-     * @docid BaseWidgetOptions.export.backgroundColor
-     * @default '#ffffff'
-     * @public
+     * Specifies the color that will fill transparent regions in the resulting file or document.
      */
     backgroundColor?: string;
     /**
-     * @docid BaseWidgetOptions.export.enabled
-     * @default false
-     * @public
+     * Enables the client-side exporting in the UI component.
      */
     enabled?: boolean;
     /**
-     * @docid BaseWidgetOptions.export.fileName
-     * @default 'file'
-     * @public
+     * Specifies a default name for the file to which the UI component will be exported.
      */
     fileName?: string;
     /**
-     * @docid BaseWidgetOptions.export.formats
-     * @default ['PNG', 'PDF', 'JPEG', 'SVG', 'GIF']
-     * @public
+     * Specifies a set of export formats.
      */
     formats?: Array<ExportFormat>;
     /**
-     * @docid BaseWidgetOptions.export.margin
-     * @default 10
-     * @public
+     * Adds an empty space around the exported UI component; measured in pixels.
      */
     margin?: number;
     /**
-     * @docid BaseWidgetOptions.export.printingEnabled
-     * @default true
-     * @public
+     * Enables the printing feature in the UI component. Applies only if the export.enabled property is true.
      */
     printingEnabled?: boolean;
     /**
-     * @docid BaseWidgetOptions.export.svgToCanvas
-     * @type_function_return Promise<void>
-     * @default undefined
-     * @public
+     * A function that renders SVG markup on the HTML canvas. Required to export custom SVG elements (for example, markerTemplate).
      */
     svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => PromiseLike<void>) | undefined;
 }
 /**
- * @hidden
- * @docid
- * @namespace DevExpress.viz
+ * Configures the loading indicator.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface BaseWidgetLoadingIndicator {
     /**
-     * @docid BaseWidgetOptions.loadingIndicator.backgroundColor
-     * @default '#FFFFFF'
-     * @public
+     * Colors the background of the loading indicator.
      */
     backgroundColor?: string;
     /**
-     * @docid BaseWidgetOptions.loadingIndicator.enabled
-     * @default false
-     * @public
+     * Specifies whether the loading indicator should be displayed and hidden automatically.
      */
     enabled?: boolean;
     /**
-     * @docid BaseWidgetOptions.loadingIndicator.font
-     * @default '#767676' &prop(color)
-     * @type Font
-     * @public
+     * Specifies font properties for the loading indicator.
      */
     font?: CommonFont;
     /**
-     * @docid BaseWidgetOptions.loadingIndicator.show
-     * @default false
-     * @fires BaseWidgetOptions.onOptionChanged
-     * @public
+     * Allows you to change the loading indicator&apos;s visibility.
      */
     show?: boolean;
     /**
-     * @docid BaseWidgetOptions.loadingIndicator.text
-     * @default 'Loading...'
-     * @public
+     * Specifies the text to be displayed by the loading indicator.
      */
     text?: string;
 }
 /**
- * @hidden
- * @docid
- * @namespace DevExpress.viz
+ * Generates space around the UI component.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface BaseWidgetMargin {
     /**
-     * @docid BaseWidgetOptions.margin.bottom
-     * @default 0
-     * @public
+     * Specifies the bottom margin of the UI component in pixels.
      */
     bottom?: number;
     /**
-     * @docid BaseWidgetOptions.margin.left
-     * @default 0
-     * @public
+     * Specifies the left margin of the UI component in pixels.
      */
     left?: number;
     /**
-     * @docid BaseWidgetOptions.margin.right
-     * @default 0
-     * @public
+     * Specifies the right margin of the UI component in pixels.
      */
     right?: number;
     /**
-     * @docid BaseWidgetOptions.margin.top
-     * @default 0
-     * @public
+     * Specifies the top margin of the UI component in pixels.
      */
     top?: number;
 }
 /**
- * @hidden
- * @docid
- * @namespace DevExpress.viz
+ * Specifies the UI component&apos;s size in pixels.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface BaseWidgetSize {
     /**
-     * @docid BaseWidgetOptions.size.height
-     * @default undefined
-     * @public
+     * Specifies the height of the UI component in pixels.
      */
     height?: number | undefined;
     /**
-     * @docid BaseWidgetOptions.size.width
-     * @default undefined
-     * @public
+     * Specifies the width of the UI component in pixels.
      */
     width?: number | undefined;
 }
 /**
- * @hidden
- * @docid
- * @namespace DevExpress.viz
+ * Configures the UI component&apos;s title.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface BaseWidgetTitle {
     /**
-     * @docid BaseWidgetOptions.title.font
-     * @default '#232323' &prop(color)
-     * @default 28 &prop(size)
-     * @default 200 &prop(weight)
-     * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" &prop(family)
-     * @type Font
-     * @public
+     * Specifies font properties for the title.
      */
     font?: CommonFont;
     /**
-     * @docid BaseWidgetOptions.title.horizontalAlignment
-     * @default 'center'
-     * @public
+     * Specifies the title&apos;s alignment in a horizontal direction.
      */
     horizontalAlignment?: HorizontalAlignment;
     /**
-     * @docid BaseWidgetOptions.title.margin
-     * @default 10
-     * @public
+     * Generates space around the title.
      */
     margin?: number | {
       /**
-       * @docid BaseWidgetOptions.title.margin.bottom
-       * @default 10
+       * Specifies the bottom margin of the title.
        */
       bottom?: number;
       /**
-       * @docid BaseWidgetOptions.title.margin.left
-       * @default 10
+       * Specifies the left margin of the title.
        */
       left?: number;
       /**
-       * @docid BaseWidgetOptions.title.margin.right
-       * @default 10
+       * Specifies the right margin of the title.
        */
       right?: number;
       /**
-       * @docid BaseWidgetOptions.title.margin.top
-       * @default 10
+       * Specifies the top margin of the title.
        */
       top?: number;
     };
     /**
-     * @docid BaseWidgetOptions.title.placeholderSize
-     * @default undefined
-     * @public
+     * Reserves a pixel-measured space for the title.
      */
     placeholderSize?: number | undefined;
     /**
-     * @docid BaseWidgetOptions.title.subtitle
-     * @public
+     * Configures the UI component&apos;s subtitle.
      */
     subtitle?: {
       /**
-       * @docid BaseWidgetOptions.title.subtitle.font
-       * @default '#232323' &prop(color)
-       * @default 16 &prop(size)
-       * @default 200 &prop(weight)
-       * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" &prop(family)
-       * @type Font
+       * Specifies font properties for the subtitle.
        */
       font?: CommonFont;
       /**
-       * @docid BaseWidgetOptions.title.subtitle.offset
-       * @default 0
+       * Specifies the distance between the title and subtitle in pixels.
        */
       offset?: number;
       /**
-       * @docid BaseWidgetOptions.title.subtitle.text
-       * @default null
+       * Specifies text for the subtitle.
        */
       text?: string;
       /**
-       * @docid BaseWidgetOptions.title.subtitle.textOverflow
-       * @default "ellipsis"
+       * Specifies what to do with the subtitle when it overflows the allocated space after applying wordWrap: hide, truncate it and display an ellipsis, or do nothing.
        */
       textOverflow?: TextOverflow;
       /**
-       * @docid BaseWidgetOptions.title.subtitle.wordWrap
-       * @default "normal"
+       * Specifies how to wrap the subtitle if it does not fit into a single line.
        */
       wordWrap?: WordWrap;
     } | string;
     /**
-     * @docid BaseWidgetOptions.title.text
-     * @default null
-     * @public
+     * Specifies the title&apos;s text.
      */
     text?: string;
     /**
-     * @docid BaseWidgetOptions.title.textOverflow
-     * @default "ellipsis"
-     * @public
+     * Specifies what to do with the title when it overflows the allocated space after applying wordWrap: hide, truncate it and display an ellipsis, or do nothing.
      */
     textOverflow?: TextOverflow;
     /**
-     * @docid BaseWidgetOptions.title.verticalAlignment
-     * @default 'top'
-     * @public
+     * Specifies the title&apos;s alignment in a vertical direction.
      */
     verticalAlignment?: VerticalEdge;
     /**
-     * @docid BaseWidgetOptions.title.wordWrap
-     * @default "normal"
-     * @public
+     * Specifies how to wrap the title if it does not fit into a single line.
      */
     wordWrap?: WordWrap;
 }
 /**
- * @hidden
- * @docid
- * @namespace DevExpress.viz
+ * Configures tooltips - small pop-up rectangles that display information about a data-visualizing UI component element being pressed or hovered over with the mouse pointer.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface BaseWidgetTooltip {
     /**
-     * @docid BaseWidgetOptions.tooltip.arrowLength
-     * @default 10
-     * @public
+     * Specifies the length of a tooltip&apos;s arrow in pixels.
      */
     arrowLength?: number;
     /**
-     * @docid BaseWidgetOptions.tooltip.border
-     * @public
+     * Configures a tooltip&apos;s border.
      */
     border?: {
       /**
-       * @docid BaseWidgetOptions.tooltip.border.color
-       * @default '#d3d3d3'
+       * Colors a tooltip&apos;s border.
        */
       color?: string;
       /**
-       * @docid BaseWidgetOptions.tooltip.border.dashStyle
-       * @default 'solid'
+       * Specifies the dash style of a tooltip&apos;s border.
        */
       dashStyle?: DashStyle;
       /**
-       * @docid BaseWidgetOptions.tooltip.border.opacity
-       * @default undefined
+       * Specifies the transparency of a tooltip&apos;s border.
        */
       opacity?: number | undefined;
       /**
-       * @docid BaseWidgetOptions.tooltip.border.visible
-       * @default true
+       * Specifies whether a tooltip&apos;s border is visible.
        */
       visible?: boolean;
       /**
-       * @docid BaseWidgetOptions.tooltip.border.width
-       * @default 1
+       * Specifies the width of a tooltip&apos;s border in pixels.
        */
       width?: number;
     };
     /**
-     * @docid BaseWidgetOptions.tooltip.color
-     * @default '#ffffff'
-     * @public
+     * Colors all tooltips.
      */
     color?: string;
     /**
-     * @docid BaseWidgetOptions.tooltip.container
-     * @default undefined
-     * @public
+     * Specifies the container in which to draw tooltips. The default container is the HTML DOM `` element.
      */
     container?: string | UserDefinedElement | undefined;
     /**
-     * @docid BaseWidgetOptions.tooltip.cornerRadius
-     * @default 0
-     * @default 4 &for(Material)
-     * @default 4 &for(Fluent)
-     * @public
+     * Makes all the tooltip&apos;s corners rounded.
      */
     cornerRadius?: number;
     /**
-     * @docid BaseWidgetOptions.tooltip.enabled
-     * @default false
-     * @public
+     * Enables tooltips.
      */
     enabled?: boolean;
     /**
-     * @docid BaseWidgetOptions.tooltip.font
-     * @default '#232323' &prop(color)
-     * @type Font
-     * @public
+     * Specifies tooltips&apos; font properties.
      */
     font?: CommonFont;
     /**
-     * @docid BaseWidgetOptions.tooltip.format
-     * @default undefined
-     * @public
+     * Formats a value before it is displayed it in a tooltip.
      */
     format?: Format | undefined;
     /**
-     * @docid BaseWidgetOptions.tooltip.opacity
-     * @default undefined
-     * @public
+     * Specifies tooltips&apos; transparency.
      */
     opacity?: number | undefined;
     /**
-     * @docid BaseWidgetOptions.tooltip.paddingLeftRight
-     * @default 18
-     * @public
+     * Generates an empty space, measured in pixels, between a tooltip&apos;s left/right border and its text.
      */
     paddingLeftRight?: number;
     /**
-     * @docid BaseWidgetOptions.tooltip.paddingTopBottom
-     * @default 15
-     * @public
+     * Generates an empty space, measured in pixels, between a tooltip&apos;s top/bottom border and its text.
      */
     paddingTopBottom?: number;
     /**
-     * @docid BaseWidgetOptions.tooltip.shadow
-     * @public
+     * Configures a tooltip&apos;s shadow.
      */
     shadow?: {
       /**
-       * @docid BaseWidgetOptions.tooltip.shadow.blur
-       * @default 2
+       * Specifies the blur distance of a tooltip&apos;s shadow. The larger the value, the blurrier the shadow&apos;s edge.
        */
       blur?: number;
       /**
-       * @docid BaseWidgetOptions.tooltip.shadow.color
-       * @default #000000
+       * Colors a tooltip&apos;s shadow.
        */
       color?: string;
       /**
-       * @docid BaseWidgetOptions.tooltip.shadow.offsetX
-       * @default 0
+       * Specifies the horizontal offset of a tooltip&apos;s shadow relative to the tooltip itself. Measured in pixels.
        */
       offsetX?: number;
       /**
-       * @docid BaseWidgetOptions.tooltip.shadow.offsetY
-       * @default 4
+       * Specifies the vertical offset of a tooltip&apos;s shadow relative to the tooltip itself. Measured in pixels.
        */
       offsetY?: number;
       /**
-       * @docid BaseWidgetOptions.tooltip.shadow.opacity
-       * @default 0.4
+       * Specifies the transparency of a tooltip&apos;s shadow.
        */
       opacity?: number;
     };
     /**
-     * @docid BaseWidgetOptions.tooltip.zIndex
-     * @default undefined
-     * @public
+     * Specifies a tooltip&apos;s z-index.
      */
     zIndex?: number | undefined;
 }
 /**
- * @docid
- * @hidden
- * @inherits DOMComponent
- * @namespace DevExpress.viz
- * @options BaseWidgetOptions
+ * This section describes properties and methods that are common to all UI components.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export default class BaseWidget<TProperties> extends DOMComponent<TProperties> {
     /**
-     * @docid
-     * @static
-     * @publicName defaultOptions(rule)
-     * @param1 rule:Object
-     * @param1_field device:Device|function
-     * @param1_field options:Object
-     * @hidden
+     * Specifies the device-dependent default configuration properties for this component.
      */
     static defaultOptions<TProperties>(rule: DefaultOptionsRule<TProperties>): void;
     /**
-     * @docid
-     * @publicName exportTo(fileName, format)
-     * @public
+     * Exports the UI component.
      */
     exportTo(fileName: string, format: string): void;
     /**
-     * @docid
-     * @publicName getSize()
-     * @return BaseWidgetOptions.size
-     * @public
+     * Gets the current UI component size.
      */
     getSize(): BaseWidgetSize;
     /**
-     * @docid
-     * @publicName hideLoadingIndicator()
-     * @public
+     * Hides the loading indicator.
      */
     hideLoadingIndicator(): void;
     /**
-     * @docid
-     * @publicName print()
-     * @public
+     * Opens the browser&apos;s print window.
      */
     print(): void;
     /**
-     * @docid
-     * @publicName render()
-     * @public
+     * Redraws the UI component.
      */
     render(): void;
     /**
-     * @docid
-     * @publicName showLoadingIndicator()
-     * @public
+     * Shows the loading indicator.
      */
     showLoadingIndicator(): void;
     /**
-     * @docid
-     * @publicName svg()
-     * @public
+     * Gets the UI component&apos;s SVG markup.
      */
     svg(): string;
 }
 
 /**
- * @docid
- * @type object
- * @namespace DevExpress.viz
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface BaseWidgetAnnotationConfig {
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether users can drag and drop the annotation.
      */
     allowDragging?: boolean;
     /**
-     * @docid
-     * @default 14
-     * @public
+     * Specifies the length of the annotation&apos;s arrow in pixels.
      */
     arrowLength?: number;
     /**
-     * @docid
-     * @default 14
-     * @public
+     * Specifies the width of the annotation&apos;s arrow at its junction with the annotation rectangle.
      */
     arrowWidth?: number;
     /**
-     * @docid
-     * @public
+     * Configures the appearance of the annotation&apos;s border.
      */
     border?: {
       /**
-       * @docid
-       * @default '#dddddd'
+       * Colors the annotation&apos;s border.
        */
       color?: string;
       /**
-       * @docid
-       * @default 0
-       * @default 4 &for(Material)
-       * @default 4 &for(Fluent)
+       * Makes the annotation&apos;s corners rounded.
        */
       cornerRadius?: number;
       /**
-       * @docid
-       * @default 'solid'
+       * Specifies the dash style of the annotation&apos;s border.
        */
       dashStyle?: DashStyle;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the opacity of the annotation&apos;s border.
        */
       opacity?: number | undefined;
       /**
-       * @docid
-       * @default true
+       * Specifies the visibility of the annotation&apos;s border.
        */
       visible?: boolean;
       /**
-       * @docid
-       * @default 1
+       * Specifies the width of the annotation&apos;s border in pixels.
        */
       width?: number;
     };
     /**
-     * @docid
-     * @default '#ffffff'
-     * @public
+     * Specifies the color that fills the annotation.
      */
     color?: string;
     /**
-     * @docid
-     * @public
+     * A container for custom data.
      */
     data?: any;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the annotation&apos;s description in the tooltip.
      */
     description?: string | undefined;
     /**
-     * @docid
-     * @default '#333333' &prop(color)
-     * @type Font
-     * @public
+     * Specifies the annotation&apos;s font properties. Applies to text annotations only.
      */
     font?: CommonFont;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the annotation&apos;s height in pixels.
      */
     height?: number | undefined;
     /**
-     * @docid
-     * @public
+     * Configures the image to be displayed in the annotation. Applies only if the type is &apos;image&apos;.
      */
     image?: string | {
       /**
-       * @docid
-       * @default 30
+       * Specifies the image&apos;s height in pixels.
        */
       height?: number;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the image&apos;s URL.
        */
       url?: string | undefined;
       /**
-       * @docid
-       * @default 30
+       * Specifies the image&apos;s width in pixels.
        */
       width?: number;
     };
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Moves the annotation horizontally.
      */
     offsetX?: number | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Moves the annotation vertically.
      */
     offsetY?: number | undefined;
     /**
-     * @docid
-     * @default 0.9
-     * @public
+     * Specifies the annotation&apos;s opacity.
      */
     opacity?: number;
     /**
-     * @docid
-     * @default 10
-     * @public
+     * Used with paddingTopBottom to generate an empty space around the annotation&apos;s text or image (specified in pixels).
      */
     paddingLeftRight?: number;
     /**
-     * @docid
-     * @default 10
-     * @public
+     * Along with paddingLeftRight, generates an empty space around the annotation&apos;s text or image; specified in pixels.
      */
     paddingTopBottom?: number;
     /**
-     * @docid
-     * @public
+     * Configures the annotation&apos;s shadows.
      */
     shadow?: {
       /**
-       * @docid
-       * @default 4
+       * Specifies the blur distance of the shadows. A larger value increases the blur distance.
        */
       blur?: number;
       /**
-       * @docid
-       * @default '#000000'
+       * Colors the annotation&apos;s shadows.
        */
       color?: string;
       /**
-       * @docid
-       * @default 0
+       * Moves the shadows horizontally.
        */
       offsetX?: number;
       /**
-       * @docid
-       * @default 1
+       * Moves the shadows vertically.
        */
       offsetY?: number;
       /**
-       * @docid
-       * @default 0.15
+       * Specifies the opacity of the shadows.
        */
       opacity?: number;
     };
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the annotation&apos;s text. Applies only if the type is &apos;text&apos;.
      */
     text?: string | undefined;
     /**
-     * @docid
-     * @default "ellipsis"
-     * @public
+     * Specifies what to do with the annotation&apos;s text when it overflows the allocated space after applying wordWrap: hide, truncate it and display an ellipsis, or do nothing.
      */
     textOverflow?: TextOverflow;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the annotation tooltip is enabled.
      */
     tooltipEnabled?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies whether the annotation displays text, an image, or a template. This is a required setting.
      */
     type?: AnnotationType | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the annotation&apos;s width in pixels.
      */
     width?: number | undefined;
     /**
-     * @docid
-     * @default "normal"
-     * @public
+     * Specifies how to wrap the annotation&apos;s text if it does not fit into a single line.
      */
     wordWrap?: WordWrap;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Used with y to position the annotation&apos;s center at a specific pixel coordinate. (0, 0) is the upper left corner of the UI component.
      */
     x?: number | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Used with x to position the annotation&apos;s center at a specific pixel coordinate. (0, 0) is the upper left corner of the UI component.
      */
     y?: number | undefined;
 }
@@ -887,8 +646,8 @@ export interface BaseWidgetAnnotationConfig {
 // #region deprecated in 23.1
 
 /**
- * @namespace DevExpress.viz
  * @deprecated Use Font from common/charts instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type Font = CommonFont;
 

@@ -21,1738 +21,1439 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
-/**
- * @public
- * @namespace DevExpress.ui.dxDiagram
- */
 export type AutoZoomMode = 'fitContent' | 'fitWidth' | 'disabled';
-/**
- * @public
- * @namespace DevExpress.ui.dxDiagram
- */
 export type Command = 'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox';
-/**
- * @public
- * @namespace DevExpress.ui.dxDiagram
- */
 export type ConnectorLineEnd = 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle';
-/**
- * @public
- * @namespace DevExpress.ui.dxDiagram
- */
 export type ConnectorLineType = 'straight' | 'orthogonal';
-/**
- * @public
- * @namespace DevExpress.ui.dxDiagram
- */
 export type ConnectorPosition = 'start' | 'end';
-/**
- * @public
- * @namespace DevExpress.ui.dxDiagram
- */
 export type DataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
-/**
- * @public
- * @namespace DevExpress.ui.dxDiagram
- */
 export type DiagramExportFormat = 'svg' | 'png' | 'jpg';
-/**
- * @public
- * @namespace DevExpress.ui.dxDiagram
- */
 export type ItemType = 'shape' | 'connector';
-/**
- * @public
- * @namespace DevExpress.ui.dxDiagram
- */
 export type ModelOperation = 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText' | 'resizeShape' | 'moveShape';
-/**
- * @public
- * @namespace DevExpress.ui.dxDiagram
- */
 export type PanelVisibility = 'auto' | 'visible' | 'collapsed' | 'disabled';
-/**
- * @public
- * @namespace DevExpress.ui.dxDiagram
- */
 export type RequestEditOperationReason = 'checkUIElementAvailability' | 'modelModification';
-/**
- * @public
- * @namespace DevExpress.ui.dxDiagram
- */
 export type ShapeCategory = 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom';
-/**
- * @public
- * @namespace DevExpress.ui.dxDiagram
- */
 export type ShapeType = 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight';
-/**
- * @public
- * @namespace DevExpress.ui.dxDiagram
- */
 export type ToolboxDisplayMode = 'icons' | 'texts';
-/**
- * @public
- * @namespace DevExpress.ui.dxDiagram
- */
 export type Units = 'in' | 'cm' | 'px';
 
 /**
- * @docid _ui_diagram_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxDiagram>;
 
 /**
- * @docid _ui_diagram_CustomCommandEvent
- * @public
- * @type object
+ * The type of the customCommand event handler&apos;s argument.
  */
 export type CustomCommandEvent = {
     /**
-     * @docid _ui_diagram_CustomCommandEvent.component
-     * @type this
+     * 
      */
     readonly component: dxDiagram;
-    /** @docid _ui_diagram_CustomCommandEvent.element */
+    /**
+     * 
+     */
     readonly element: DxElement;
-    /** @docid _ui_diagram_CustomCommandEvent.name */
+    /**
+     * 
+     */
     readonly name: string;
 };
 
 /**
- * @docid _ui_diagram_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxDiagram>;
 
 /**
- * @docid _ui_diagram_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxDiagram>;
 
 /**
- * @docid _ui_diagram_ItemClickEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the itemClick event handler&apos;s argument.
  */
 export type ItemClickEvent = EventInfo<dxDiagram> & {
     /**
-     * @docid _ui_diagram_ItemClickEvent.item
-     * @type dxDiagramItem
+     * 
      */
     readonly item: Item;
 };
 
 /**
- * @docid _ui_diagram_ItemDblClickEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the itemDblClick event handler&apos;s argument.
  */
 export type ItemDblClickEvent = EventInfo<dxDiagram> & {
     /**
-     * @docid _ui_diagram_ItemDblClickEvent.item
-     * @type dxDiagramItem
+     * 
      */
     readonly item: Item;
 };
 
 /**
- * @docid _ui_diagram_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxDiagram> & ChangedOptionInfo;
 
 /**
- * @docid _ui_diagram_RequestEditOperationEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the requestEditOperation event handler&apos;s argument.
  */
 export type RequestEditOperationEvent = EventInfo<dxDiagram> & {
-    /** @docid _ui_diagram_RequestEditOperationEvent.operation */
+    /**
+     * 
+     */
     readonly operation: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints';
-    /** @docid _ui_diagram_RequestEditOperationEvent.args */
+    /**
+     * 
+     */
     readonly args: dxDiagramAddShapeArgs | dxDiagramAddShapeFromToolboxArgs | dxDiagramDeleteShapeArgs | dxDiagramDeleteConnectorArgs | dxDiagramChangeConnectionArgs | dxDiagramChangeConnectorPointsArgs | dxDiagramBeforeChangeShapeTextArgs | dxDiagramChangeShapeTextArgs | dxDiagramBeforeChangeConnectorTextArgs | dxDiagramChangeConnectorTextArgs | dxDiagramResizeShapeArgs | dxDiagramMoveShapeArgs;
-    /** @docid _ui_diagram_RequestEditOperationEvent.reason */
+    /**
+     * 
+     */
     readonly reason: RequestEditOperationReason;
-    /** @docid _ui_diagram_RequestEditOperationEvent.allowed */
+    /**
+     * 
+     */
     allowed?: boolean;
 };
 
 /**
- * @docid _ui_diagram_RequestLayoutUpdateEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the requestLayoutUpdate event handler&apos;s argument.
  */
 export type RequestLayoutUpdateEvent = EventInfo<dxDiagram> & {
     /**
-     * @docid _ui_diagram_RequestLayoutUpdateEvent.changes
-     * @type Array<any>
+     * 
      */
     readonly changes: any[];
-    /** @docid _ui_diagram_RequestLayoutUpdateEvent.allowed */
+    /**
+     * 
+     */
     allowed?: boolean;
 };
 
 /**
- * @docid _ui_diagram_SelectionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the selectionChanged event handler&apos;s argument.
  */
 export type SelectionChangedEvent = EventInfo<dxDiagram> & {
     /**
-     * @docid _ui_diagram_SelectionChangedEvent.items
-     * @type Array<dxDiagramItem>
+     * 
      */
     readonly items: Array<Item>;
 };
 
-/** @public */
 export type CustomShapeTemplateData = {
     readonly item: dxDiagramShape;
 };
 
-/** @public */
 export type CustomShapeToolboxTemplateData = {
     readonly item: dxDiagramShape;
 };
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
-     * @docid
-     * @default "disabled"
-     * @public
+     * Specifies how the Diagram UI component automatically zooms the work area.
      */
     autoZoomMode?: AutoZoomMode;
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Configures the context menu&apos;s settings.
      */
     contextMenu?: {
       /**
-       * @docid
-       * @default undefined
+       * Lists commands in the context menu.
        */
       commands?: Array<CustomCommand | Command>;
       /**
-       * @docid
-       * @default true
+       * Specifies whether the context menu is enabled.
        */
       enabled?: boolean;
     };
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Configures the context toolbox&apos;s settings.
      */
     contextToolbox?: {
       /**
-       * @docid
+       * Specifies the category of shapes that are displayed in the context toolbox.
        */
       category?: ShapeCategory | string;
       /**
-       * @docid
+       * Specifies how shapes are displayed in the context toolbox.
        */
       displayMode?: ToolboxDisplayMode;
       /**
-       * @docid
-       * @default true
+       * Specifies the context toolbox&apos;s availability.
        */
       enabled?: boolean;
       /**
-       * @docid
-       * @default 4
+       * Specifies the number of shape icons in a row.
        */
       shapeIconsPerRow?: number;
       /**
-       * @docid
+       * Lists the shapes that are displayed in the context toolbox. The built-in shape types are shown in the Shape Types section.
        */
       shapes?: Array<ShapeType> | Array<string>;
       /**
-       * @docid
-       * @default 152
+       * Specifies the context toolbox&apos;s width in pixels.
        */
       width?: number;
     };
     /**
-     * @docid
-     * @type_function_param1 e:{ui/diagram:CustomCommandEvent}
-     * @action
-     * @public
+     * A function that is executed after a custom command item was clicked and allows you to implement the custom command&apos;s logic.
      */
     onCustomCommand?: ((e: CustomCommandEvent) => void);
     /**
-     * @docid
-     * @type_function_param1 container:dxSVGElement
-     * @type_function_param2 data:object
-     * @type_function_return void
-     * @public
+     * Specifies a custom template for shapes.
      */
     customShapeTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeTemplateData) => any);
     /**
-     * @docid
-     * @type_function_param1 container:dxSVGElement
-     * @type_function_param2 data:object
-     * @type_function_return void
-     * @public
+     * Specifies a custom template for shapes in the toolbox.
      */
     customShapeToolboxTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any);
     /**
-     * @docid
-     * @default []
-     * @public
+     * Provide access to an array of custom shapes.
      */
     customShapes?: Array<{
       /**
-       * @docid
+       * Specifies whether a card shape&apos;s image can be edited.
        */
       allowEditImage?: boolean;
       /**
-       * @docid
+       * Specifies whether the shape&apos;s text can be edited.
        */
       allowEditText?: boolean;
       /**
-       * @docid
+       * Specifies whether the shape can be resized.
        */
       allowResize?: boolean;
       /**
-       * @docid
+       * Specifies the shape background image&apos;s fractional height.
        */
       backgroundImageHeight?: number;
       /**
-       * @docid
+       * Specifies the shape background image&apos;s left offset.
        */
       backgroundImageLeft?: number;
       /**
-       * @docid
+       * Specifies the shape background image&apos;s top offset.
        */
       backgroundImageTop?: number;
       /**
-       * @docid
+       * Specifies the shape background image&apos;s URL.
        */
       backgroundImageUrl?: string;
       /**
-       * @docid
+       * Specifies the shape image displayed in the toolbox.
        */
       backgroundImageToolboxUrl?: string;
       /**
-       * @docid
+       * Specifies the shape background image&apos;s fractional width.
        */
       backgroundImageWidth?: number;
       /**
-       * @docid
+       * Specifies the base shape type for the custom shape. The built-in shape types are shown in the Shape Types section.
        */
       baseType?: ShapeType | string;
       /**
-       * @docid
+       * Specifies a category to which the custom shape belongs.
        */
       category?: string;
       /**
-       * @docid
+       * An array of the shape&apos;s connection points.
        */
       connectionPoints?: Array<{
         /**
-         * @docid
+         * Specifies the horizontal offset.
          */
         x?: number;
         /**
-         * @docid
+         * Specifies the vertical offset.
          */
         y?: number;
       }>;
       /**
-       * @docid
+       * Specifies the initial height of the shape.
        */
       defaultHeight?: number;
       /**
-       * @docid
+       * Specifies the URL of an image displayed in a card shape.
        */
       defaultImageUrl?: string;
       /**
-       * @docid
+       * Specifies the initial text of the shape.
        */
       defaultText?: string;
       /**
-       * @docid
+       * Specifies the initial width of the shape.
        */
       defaultWidth?: number;
       /**
-       * @docid
+       * Specifies the shape image&apos;s fractional height.
        */
       imageHeight?: number;
       /**
-       * @docid
+       * Specifies the shape image&apos;s left offset.
        */
       imageLeft?: number;
       /**
-       * @docid
+       * Specifies the shape image&apos;s top offset.
        */
       imageTop?: number;
       /**
-       * @docid
+       * Specifies the shape image&apos;s fractional width.
        */
       imageWidth?: number;
       /**
-       * @docid
+       * Specifies whether the shape maintains its width-to-height ratio on auto resize.
        */
       keepRatioOnAutoSize?: boolean;
       /**
-       * @docid
+       * Specifies the maximum height of the shape.
        */
       maxHeight?: number;
       /**
-       * @docid
+       * Specifies the maximum width of the shape.
        */
       maxWidth?: number;
       /**
-       * @docid
+       * Specifies the maximum height of the shape.
        */
       minHeight?: number;
       /**
-       * @docid
+       * Specifies the minimum width of the shape.
        */
       minWidth?: number;
       /**
-       * @docid
-       * @type_function_param1 container:dxSVGElement
-       * @type_function_param2 data:object
-       * @type_function_return void
+       * Specifies a custom template for the shape.
        */
       template?: template | ((container: DxElement<SVGElement>, data: CustomShapeTemplateData) => any);
       /**
-       * @docid
+       * Specifies the shape template&apos;s fractional height.
        */
       templateHeight?: number;
       /**
-       * @docid
+       * Specifies the shape template&apos;s left offset.
        */
       templateLeft?: number;
       /**
-       * @docid
+       * Specifies the shape template&apos;s top offset.
        */
       templateTop?: number;
       /**
-       * @docid
+       * Specifies the shape template&apos;s fractional width.
        */
       templateWidth?: number;
       /**
-       * @docid
+       * Specifies the shape text container&apos;s height.
        */
       textHeight?: number;
       /**
-       * @docid
+       * Specifies the shape text&apos;s left offset.
        */
       textLeft?: number;
       /**
-       * @docid
+       * Specifies the shape text&apos;s top offset.
        */
       textTop?: number;
       /**
-       * @docid
+       * Specifies the shape text container&apos;s width.
        */
       textWidth?: number;
       /**
-       * @docid
+       * Specifies the shape&apos;s tooltip in the toolbox panel.
        */
       title?: string;
       /**
-       * @docid
-       * @type_function_param1 container:dxSVGElement
-       * @type_function_param2 data:object
-       * @type_function_return void
+       * Specifies a custom template for the shape in the toolbox.
        */
       toolboxTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any);
       /**
-       * @docid
+       * Specifies the aspect ratio of the shape in the toolbox.
        */
       toolboxWidthToHeightRatio?: number;
       /**
-       * @docid
+       * Specifies the custom shape&apos;s identifier.
        */
       type?: string;
     }>;
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Configures default item properties.
      */
     defaultItemProperties?: {
       /**
-       * @docid
+       * Specifies a default item style.
        */
       style?: Object;
       /**
-       * @docid
+       * Specifies an item&apos;s default text style.
        */
       textStyle?: Object;
       /**
-       * @docid
-       * @default 'orthogonal'
+       * Specifies the default type of a connector.
        */
       connectorLineType?: ConnectorLineType;
       /**
-       * @docid
-       * @default 'none'
+       * Specifies the default tip of a connector&apos;s start point.
        */
       connectorLineStart?: ConnectorLineEnd;
       /**
-       * @docid
-       * @default 'arrow'
+       * Specifies the default tip of a connector&apos;s end point.
        */
       connectorLineEnd?: ConnectorLineEnd;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the default minimum width of a shape.
        */
       shapeMinWidth?: number | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the default maximum width of a shape.
        */
       shapeMaxWidth?: number | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the default minimum height of a shape.
        */
       shapeMinHeight?: number | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the default maximum height of a shape.
        */
       shapeMaxHeight?: number | undefined;
     };
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Specifies which editing operations a user can perform.
      */
     editing?: {
       /**
-       * @docid
-       * @default true
+       * Specifies whether a user can add a shape.
        */
       allowAddShape?: boolean;
       /**
-       * @docid
-       * @default true
+       * Specifies whether a user can delete a shape.
        */
       allowDeleteShape?: boolean;
       /**
-       * @docid
-       * @default true
+       * Specifies whether a user can delete a connector.
        */
       allowDeleteConnector?: boolean;
       /**
-       * @docid
-       * @default true
+       * Specifies whether a user can change a connection.
        */
       allowChangeConnection?: boolean;
       /**
-       * @docid
-       * @default true
+       * Specifies whether a user can change connector points.
        */
       allowChangeConnectorPoints?: boolean;
       /**
-       * @docid
-       * @default true
+       * Specifies whether a user can change a connector&apos;s text.
        */
       allowChangeConnectorText?: boolean;
       /**
-       * @docid
-       * @default true
+       * Specifies whether a user can change a shape&apos;s text.
        */
       allowChangeShapeText?: boolean;
       /**
-       * @docid
-       * @default true
+       * Specifies whether a user can resize a shape.
        */
       allowResizeShape?: boolean;
       /**
-       * @docid
-       * @default true
+       * Specifies whether a user can move a shape.
        */
       allowMoveShape?: boolean;
     };
     /**
-     * @docid
-     * @default null
-     * @public
+     * Allows you to bind the collection of diagram edges to a data source. For more information, see the Data Binding section.
      */
     edges?: {
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns an edge&apos;s custom data.
        */
       customDataExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default null
-       * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
+       * Binds the edges collection to the specified data. Specify this property if you use node and edge data sources.
        */
       dataSource?: DataSourceLike<any> | null;
       /**
-       * @docid
-       * @default "from"
+       * Specifies the name of a data source field or an expression that returns an edge&apos;s start node key.
        */
       fromExpr?: string | ((data: any, value?: any) => any);
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns an edge&apos;s line start tip.
        */
       fromLineEndExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns an index of a shape connection point where an edge starts.
        */
       fromPointIndexExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default "id"
+       * Specifies the name of a data source field or an expression that returns an edge&apos;s key.
        */
       keyExpr?: string | ((data: any, value?: any) => any);
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns an edge&apos;s line type.
        */
       lineTypeExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression whose Boolean value indicates whether an edge is locked.
        */
       lockedExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns an edge&apos;s key points.
        */
       pointsExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns an edge style.
        */
       styleExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns edge text.
        */
       textExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns an edge&apos;s text style.
        */
       textStyleExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default "to"
+       * Specifies the name of a data source field or an expression that returns an edge&apos;s end node key.
        */
       toExpr?: string | ((data: any, value?: any) => any);
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns an edge&apos;s line end tip.
        */
       toLineEndExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns an index of a shape connection point where an edge ends.
        */
       toPointIndexExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns an edge&apos;s z-index.
        */
       zIndexExpr?: string | ((data: any, value?: any) => any) | undefined;
     };
     /**
-     * @docid
-     * @public
+     * Configures export settings.
      */
     export?: {
       /**
-       * @docid
-       * @default "Diagram"
+       * Specifies the name of the file to which the diagram is exported.
        */
       fileName?: string;
     };
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether or not to display the UI component in full-screen mode.
      */
     fullScreen?: boolean;
     /**
-     * @docid
-     * @public
+     * Specifies the grid pitch.
      */
     gridSize?: number | {
       /**
-       * @docid
+       * An array that specifies the _Grid Size_ combobox items on &apos;Properties&apos; panel.
        */
       items?: Array<number>;
       /**
-       * @docid
-       * @fires dxDiagramOptions.onOptionChanged
+       * Specifies the grid&apos;s pitch.
        */
       value?: number;
     };
     /**
-     * @docid
-     * @default null
-     * @public
+     * Allows you to bind the collection of diagram nodes to a data source. For more information, see the Data Binding section.
      */
     nodes?: {
       /**
-       * @docid
-       * @default "auto"
+       * Specifies an auto-layout algorithm that the UI component uses to build a diagram.
        */
       autoLayout?: DataLayoutType | {
         /**
-         * @docid
+         * Specifies the diagram layout orientation.
          */
         orientation?: Orientation;
         /**
-         * @docid
+         * Specifies an auto-layout algorithm that is used to automatically arrange shapes.
          */
         type?: DataLayoutType;
       };
       /**
-       * @docid
-       * @default true
+       * Specifies whether or not a shape size is automatically changed to fit the text when the UI component is bound to a data source.
        */
       autoSizeEnabled?: boolean;
       /**
-       * @docid
-       * @default "containerKey"
+       * Specifies the name of a data source field or an expression that returns a key of a node&apos;s parent container node.
        */
       containerKeyExpr?: string | ((data: any, value?: any) => any);
       /**
-       * @docid
-       * @default undefined
-       */
+        * Specifies the name of a data source field or an expression that returns a container&apos;s nested items.
+        */
        containerChildrenExpr?: string | ((data: any, value?: any) => any) | undefined;
        /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns a node&apos;s custom data.
        */
       customDataExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default null
-       * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
+       * Binds the nodes collection to the specified data. For more information, see the Data Binding section.
        */
       dataSource?: DataSourceLike<any> | null;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns a node&apos;s height.
        */
       heightExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns an image URL or Base64 encoded image for a node.
        */
       imageUrlExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns a node&apos;s child items.
        */
       itemsExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default "id"
+       * Specifies the name of a data source field or an expression that returns node keys.
        */
       keyExpr?: string | ((data: any, value?: any) => any);
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns the x-coordinate of a node&apos;s left border.
        */
       leftExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression whose Boolean value indicates whether a node is locked.
        */
       lockedExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns a parent node key for a node.
        */
       parentKeyExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns a node style.
        */
       styleExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default "text"
+       * Specifies the name of a data source field or an expression that returns node texts.
        */
       textExpr?: string | ((data: any, value?: any) => any);
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns a node&apos;s text style.
        */
       textStyleExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns the y-coordinate of a node&apos;s top border.
        */
       topExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default "type"
+       * Specifies the name of a data source field or an expression that returns the shape type for a node.
        */
       typeExpr?: string | ((data: any, value?: any) => any);
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns a node&apos;s width.
        */
       widthExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of a data source field or an expression that returns a node&apos;s z-index.
        */
       zIndexExpr?: string | ((data: any, value?: any) => any) | undefined;
     };
     /**
-     * @docid
-     * @default false
-     * @public
+     * Indicates whether diagram content has unsaved changes.
      */
     hasChanges?: boolean;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/diagram:ItemClickEvent}
-     * @action
-     * @public
+     * A function that is executed after a shape or connector is clicked.
      */
     onItemClick?: ((e: ItemClickEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/diagram:ItemDblClickEvent}
-     * @action
-     * @public
+     * A function that is executed after a shape or connector is double-clicked.
      */
     onItemDblClick?: ((e: ItemDblClickEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/diagram:SelectionChangedEvent}
-     * @action
-     * @public
+     * A function that is executed after the selection is changed in the Diagram.
      */
     onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/diagram:RequestEditOperationEvent}
-     * @action
-     * @public
+     * A function that allows you to prohibit an edit operation at run time.
      */
     onRequestEditOperation?: ((e: RequestEditOperationEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/diagram:RequestLayoutUpdateEvent}
-     * @action
-     * @public
+     * A function that allows you to specify whether or not the UI component should reapply its auto layout after diagram data is reloaded.
      */
     onRequestLayoutUpdate?: ((e: RequestLayoutUpdateEvent) => void);
     /**
-     * @docid
-     * @default "white"
-     * @public
+     * Specifies the color of a diagram page.
      */
     pageColor?: string;
     /**
-     * @docid
-     * @default "portrait"
-     * @public
+     * Specifies the page orientation.
      */
     pageOrientation?: PageOrientation;
     /**
-     * @docid
-     * @public
+     * Specifies a size of pages.
      */
     pageSize?: {
       /**
-       * @docid
-       * @fires dxDiagramOptions.onOptionChanged
+       * Specifies the page height.
        */
       height?: number;
       /**
-       * @docid
+       * An array that specifies the page size items in the _Page Size_ combobox on _Properties Panel_.
        */
       items?: Array<{
         /**
-         * @docid
+         * Specifies the page height.
          */
         height?: number;
         /**
-         * @docid
+         * Specifies the display text.
          */
         text?: string;
         /**
-         * @docid
+         * Specifies the page width.
          */
         width?: number;
       }>;
       /**
-       * @docid
-       * @fires dxDiagramOptions.onOptionChanged
+       * Specifies the page width.
        */
       width?: number;
     };
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Configures the Properties panel settings.
      */
     propertiesPanel?: {
       /**
-       * @docid
-       * @default undefined
+       * Contains an array of tabs in the Properties panel.
        */
       tabs?: Array<{
         /**
-         * @docid
+         * Lists commands in a tab.
          */
         commands?: Array<CustomCommand | Command>;
         /**
-         * @docid
+         * Contains an array of command groups in the tab.
          */
         groups?: Array<{
           /**
-           * @docid
+           * Lists commands in a group.
            */
           commands?: Array<CustomCommand | Command>;
           /**
-           * @docid
+           * Specifies a title of the group.
            */
           title?: string;
         }>;
         /**
-         * @docid
+         * Specifies the tab&apos;s title.
          */
         title?: string;
       }>;
       /**
-       * @docid
-       * @default 'auto'
+       * Specifies the panel&apos;s visibility.
        */
       visibility?: PanelVisibility;
     };
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the diagram is read-only.
      */
     readOnly?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether grid lines are visible.
      */
     showGrid?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Switch the Diagram UI component to simple view mode.
      */
     simpleView?: boolean;
     /**
-     * @docid
-     * @default true
-     * @default false &for(desktop except Mac)
-     * @public
-     */
+      * Specifies whether or not the UI component uses native scrolling.
+      */
      useNativeScrolling?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether diagram elements should snap to grid lines.
      */
     snapToGrid?: boolean;
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Configures the main toolbar settings.
      */
     mainToolbar?: {
       /**
-       * @docid
-       * @default undefined
+       * Lists commands in the toolbar.
        */
       commands?: Array<CustomCommand | Command>;
       /**
-       * @docid
-       * @default false
+       * Specifies the toolbar&apos;s visibility.
        */
       visible?: boolean;
     };
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Configures the history toolbar&apos;s settings.
      */
     historyToolbar?: {
       /**
-       * @docid
-       * @default undefined
+       * Lists commands in the history toolbar.
        */
       commands?: Array<CustomCommand | Command>;
       /**
-       * @docid
-       * @default true
+       * Specifies the history toolbar&apos;s visibility.
        */
       visible?: boolean;
     };
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Configures the view toolbar settings.
      */
     viewToolbar?: {
       /**
-       * @docid
-       * @default undefined
+       * Lists commands in the toolbar.
        */
       commands?: Array<CustomCommand | Command>;
       /**
-       * @docid
-       * @default true
+       * Specifies the view toolbar&apos;s visibility.
        */
       visible?: boolean;
     };
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Configures the toolbox settings.
      */
     toolbox?: {
       /**
-       * @docid
-       * @default undefined
+       * Lists toolbox groups.
        */
       groups?: Array<{
         /**
-         * @docid
+         * Specifies the category of shapes that are displayed in the group.
          */
         category?: ShapeCategory | string;
         /**
-         * @docid
+         * Specifies how shapes are displayed in the toolbox.
          */
         displayMode?: ToolboxDisplayMode;
         /**
-         * @docid
+         * Specifies whether the group is expanded.
          */
         expanded?: boolean;
         /**
-         * @docid
+         * Lists the shapes in the group. The built-in shape types are shown in the Shape Types section.
          */
         shapes?: Array<ShapeType> | Array<string>;
         /**
-         * @docid
+         * Specifies the group title in the toolbox.
          */
         title?: string;
       }> | Array<ShapeCategory>;
       /**
-       * @docid
-       * @default 3
+       * Specifies the number of shape icons in a row.
        */
       shapeIconsPerRow?: number;
       /**
-       * @docid
-       * @default true
+       * Specifies whether the search box is visible.
        */
       showSearch?: boolean;
       /**
-       * @docid
-       * @default 'auto'
+       * Specifies the toolbar&apos;s visibility.
        */
       visibility?: PanelVisibility;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the toolbox&apos;s width in pixels.
        */
       width?: number | undefined;
     };
     /**
-     * @docid
-     * @default "in"
-     * @public
+     * Specifies the measurement unit for size properties.
      */
     units?: Units;
     /**
-     * @docid
-     * @default "in"
-     * @public
+     * Specifies the measurement unit that is displayed in user interface elements.
      */
     viewUnits?: Units;
     /**
-     * @docid
-     * @default 1
-     * @public
+     * Specifies the zoom level.
      */
     zoomLevel?: number | {
       /**
-       * @docid
-       * @default undefined
+       * An array that specifies the zoom level items in the _Zoom Level_ combobox on &apos;Properties&apos; panel.
        */
       items?: Array<number>;
       /**
-       * @docid
-       * @default undefined
-       * @fires dxDiagramOptions.onOptionChanged
+       * Specifies the zoom level.
        */
       value?: number | undefined;
     };
 }
 /**
- * @docid
- * @inherits Widget
- * @namespace DevExpress.ui
- * @public
+ * The Diagram UI component provides a visual interface to help you design new and modify existing diagrams.
  */
 export default class dxDiagram extends Widget<dxDiagramOptions> {
     /**
-     * @docid
-     * @publicName getNodeDataSource()
-     * @public
+     * Gets the DataSource instance.
      */
     getNodeDataSource(): DataSource;
     /**
-     * @docid
-     * @publicName getEdgeDataSource()
-     * @public
+     * Returns the DataSource instance.
      */
     getEdgeDataSource(): DataSource;
     /**
-     * @docid
-     * @publicName getItemByKey(key)
-     * @return dxDiagramItem
-     * @public
+     * Returns a shape or connector object specified by its key.
      */
     getItemByKey(key: Object): Item;
     /**
-     * @docid
-     * @publicName getItemById(id)
-     * @return dxDiagramItem
-     * @public
+     * Returns a shape or connector object specified by its internal identifier.
      */
     getItemById(id: string): Item;
     /**
-     * @docid
-     * @publicName getItems()
-     * @return Array<dxDiagramItem>
-     * @public
-     */
+      * Returns an array of diagram items.
+      */
      getItems(): Array<Item>;
     /**
-     * @docid
-     * @publicName getSelectedItems()
-     * @return Array<dxDiagramItem>
-     * @public
-     */
+      * Returns an array of selected diagram items.
+      */
      getSelectedItems(): Array<Item>;
     /**
-     * @docid
-     * @publicName setSelectedItems(items)
-     * @param1 items:Array<dxDiagramItem>
-     * @public
-     */
+      * Selects the specified items.
+      */
      setSelectedItems(items: Array<Item>): void;
     /**
-     * @docid
-     * @publicName scrollToItem(item)
-     * @param1 item:dxDiagramItem
-     * @public
-     */
+      * Scrolls the view area to the specified item.
+      */
      scrollToItem(item: Item): void;
     /**
-     * @docid
-     * @publicName export()
-     * @public
+     * Exports the diagram data to a JSON object.
      */
     export(): string;
     /**
-     * @docid
-     * @publicName exportTo(format, callback)
-     * @param1 format:Enums.DiagramExportFormat
-     * @public
+     * Exports the diagram to an image format.
      */
     exportTo(format: DiagramExportFormat, callback: Function): void;
     /**
-     * @docid
-     * @publicName import(data, updateExistingItemsOnly)
-     * @param2 updateExistingItemsOnly?:boolean
-     * @public
+     * Imports the diagram data.
      */
     import(data: string, updateExistingItemsOnly?: boolean): void;
     /**
-     * @docid
-     * @publicName updateToolbox()
-     * @public
+     * Updates the diagram toolboxes.
      */
     updateToolbox(): void;
     /**
-     * @docid
-     * @publicName fitToContent()
-     * @public
-     */
+      * Fits the diagram content into the work area. The maximum scale is 100%.
+      */
      fitToContent(): void;
     /**
-     * @docid
-     * @publicName fitToWidth()
-     * @public
-     */
+      * Fits the diagram content&apos;s width into the work area width. The maximum scale is 100%.
+      */
      fitToWidth(): void;
 }
 
 /**
- * @docid
- * @inherits dxDiagramItem
- * @namespace DevExpress.ui
+ * An object that provides information about a connector in the Diagram UI component.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDiagramConnector extends Item {
     /**
-     * @docid
-     * @public
+     * Specifies the connector&apos;s start node key.
      */
     fromKey?: any;
     /**
-     * @docid
-     * @public
+     * Gets the connector&apos;s start node identifier.
      */
     fromId?: string;
     /**
-     * @docid
-     * @public
+     * The index of a shape connection point where the connector starts.
      */
     fromPointIndex?: number;
     /**
-     * @docid
-     * @public
+     * Gets the connector&apos;s key points.
      */
     points?: Array<{
       /**
-       * @docid
+       * A horizontal position of the point.
        */
       x?: number;
       /**
-       * @docid
+       * A vertical position of the point.
        */
       y?: number;
     }>;
 
     /**
-     * @docid
-     * @public
+     * Specifies the connector&apos;s text.
      */
     texts?: Array<string>;
     /**
-     * @docid
-     * @public
+     * Specifies the connector&apos;s end node key.
      */
     toKey?: any;
     /**
-     * @docid
-     * @public
+     * Gets the connector&apos;s end node identifier.
      */
     toId?: string;
     /**
-     * @docid
-     * @public
+     * The index of the shape connection point where the connector ends.
      */
     toPointIndex?: number;
 }
 
 /**
- * @public
- * @namespace DevExpress.ui.dxDiagram
- * @docid dxDiagramItem
+ * An object that provides information about an item (shape or connector) in the Diagram UI component.
  */
 export type Item = dxDiagramItem;
 
 /**
  * @deprecated Use Item instead
- * @namespace DevExpress.ui
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDiagramItem {
     /**
-     * @docid
-     * @public
+     * Returns the data item that is bound to the diagram item.
      */
     dataItem?: any;
     /**
-     * @docid
-     * @public
+     * Specifies the item&apos;s internal identifier.
      */
     id?: string;
     /**
-     * @docid
-     * @public
+     * Gets the item&apos;s key from a data source.
      */
     key?: Object;
     /**
-     * @docid
-     * @public
+     * Returns the type of the item.
      */
     itemType?: ItemType;
 }
 
 /**
- * @docid
- * @inherits dxDiagramItem
- * @namespace DevExpress.ui
+ * An object that provides information about a shape in the Diagram UI component.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDiagramShape extends Item {
     /**
-     * @docid
-     * @public
+     * Specifies the shape&apos;s text.
      */
     text?: string;
     /**
-     * @docid
-     * @public
+     * Specifies the shape type. The built-in shape types are shown in the Shape Types section.
      */
     type?: ShapeType | string;
     /**
-     * @docid
-     * @public
+     * Specifies the position of the top left shape corner relative to the top left corner of the diagram work area.
      */
     position?: {
       /**
-       * @docid
+       * The horizontal shape position specified in units.
        */
       x?: number;
       /**
-       * @docid
+       * The vertical shape position specified in units.
        */
       y?: number;
     };
 
     /**
-     * @docid
-     * @public
+     * Specifies the shape size.
      */
     size?: {
       /**
-       * @docid
+       * The shape height specified in units.
        */
       height?: number;
       /**
-       * @docid
+       * The shape width specified in units.
        */
       width?: number;
     };
     /**
-     * @docid
-     * @public
+     * Gets an array of attached connector identifiers.
      */
     attachedConnectorIds?: Array<String>;
     /**
-     * @docid dxDiagramShape.containerId
-     * @public
+     * Gets the identifier of the container that stores the shape.
      */
     containerId?: string;
     /**
-     * @docid dxDiagramShape.containerChildItemIds
-     * @public
+     * Gets identifiers of shapes stored in the container.
      */
     containerChildItemIds?: Array<String>;
     /**
-     * @docid dxDiagramShape.containerExpanded
-     * @public
+     * Gets whether the container is expanded.
      */
     containerExpanded?: boolean;
 }
 
 /**
  * @deprecated Use CustomCommand instead
- * @namespace DevExpress.ui
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type dxDiagramCustomCommand = CustomCommand;
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.ui.dxDiagram
+ * An object that provides information about a custom command in the Diagram UI component.
  */
 export type CustomCommand = {
     /**
-     * @docid
-     * @public
+     * Specifies the custom command&apos;s identifier.
      */
     name?: string | Command;
     /**
-     * @docid
-     * @public
+     * Specifies the custom command&apos;s text and tooltip text.
      */
     text?: string;
     /**
-     * @docid
-     * @public
+     * Specifies the custom command&apos;s icon.
      */
     icon?: string;
     /**
-     * @docid
-     * @public
+     * Lists command sub items.
      */
     items?: Array<CustomCommand | Command>;
     /**
-     * @docid
-     * @default "before"
-     * @public
+     * Specifies a location for the command or separator on the main toolbar.
      */
     location?: ToolbarItemLocation;
 };
 
 /**
- * @docid
- * @namespace DevExpress.ui
+ * Contains information about the processed shape.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDiagramAddShapeArgs {
     /**
-     * @docid
-     * @public
+     * The processed shape.
      */
     shape?: dxDiagramShape;
     /**
-     * @docid
+     * A position where the shape is being added.
      */
     position?: {
       /**
-       * @docid
+       * A horizontal position where the shape is being added.
        */
       x?: number;
       /**
-       * @docid
+       * A vertical position where the shape is being added.
        */
       y?: number;
     };
 }
 
 /**
- * @docid
- * @namespace DevExpress.ui
+ * Contains information about the processed shape.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDiagramAddShapeFromToolboxArgs {
   /**
-   * @docid
-   * @public
+   * The type of the processed shape.
    */
   shapeType?: ShapeType | string;
 }
 
 /**
- * @docid
- * @namespace DevExpress.ui
+ * Contains information about the processed shape.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDiagramDeleteShapeArgs {
   /**
-   * @docid
-   * @public
+   * The processed shape.
    */
   shape?: dxDiagramShape;
 }
 
 /**
- * @docid
- * @namespace DevExpress.ui
+ * Contains information about the processed connector.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDiagramDeleteConnectorArgs {
   /**
-   * @docid
-   * @public
+   * The processed connector.
    */
   connector?: dxDiagramConnector;
 }
 
 /**
- * @docid
- * @namespace DevExpress.ui
+ * Contains information about the processed connection.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDiagramChangeConnectionArgs {
   /**
-   * @docid
-   * @public
+   * The new connected shape.
    */
   newShape?: dxDiagramShape;
   /**
-   * @docid
-   * @public
+   * The previous connected shape.
    */
   oldShape?: dxDiagramShape;
   /**
-   * @docid
-   * @public
+   * The processed connector.
    */
   connector?: dxDiagramConnector;
   /**
-   * @docid
-   * @public
+   * The index of the processed point in the shape&apos;s connection point collection.
    */
   connectionPointIndex?: number;
   /**
-   * @docid
-   * @public
+   * The position of the connector in the processed point.
    */
   connectorPosition?: ConnectorPosition;
 }
 
 /**
- * @docid
- * @namespace DevExpress.ui
+ * Contains information about the processed connector.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDiagramChangeConnectorPointsArgs {
   /**
-   * @docid
-   * @public
+   * The processed connector.
    */
   connector?: dxDiagramConnector;
   /**
-   * @docid
+   * The array of new connection points.
    */
   newPoints?: Array<{
     /**
-     * @docid
+     * A horizontal position of the point.
      */
     x?: number;
     /**
-     * @docid
+     * A vertical position of the point.
      */
     y?: number;
   }>;
   /**
-   * @docid
+   * The array of previous connection points.
    */
   oldPoints?: Array<{
     /**
-     * @docid
+     * A horizontal position of the point.
      */
     x?: number;
     /**
-     * @docid
+     * A vertical position of the point.
      */
     y?: number;
   }>;
 }
 
 /**
- * @docid
- * @namespace DevExpress.ui
+ * Contains information about the processed shape.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDiagramBeforeChangeShapeTextArgs {
   /**
-   * @docid
-   * @public
+   * The processed shape.
    */
   shape?: dxDiagramShape;
 }
 
 /**
- * @docid
- * @namespace DevExpress.ui
+ * Contains information about the processed shape.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDiagramChangeShapeTextArgs {
   /**
-   * @docid
-   * @public
+   * The processed shape.
    */
   shape?: dxDiagramShape;
   /**
-   * @docid
-   * @public
+   * The new shape text.
    */
   text?: string;
 }
 
 /**
- * @docid
- * @namespace DevExpress.ui
+ * Contains information about the processed connector.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDiagramBeforeChangeConnectorTextArgs {
   /**
-   * @docid
-   * @public
+   * The processed connector.
    */
   connector?: dxDiagramConnector;
   /**
-   * @docid
-   * @public
+   * The index of the processed text in the connector&apos;s texts collection.
    */
   index?: number;
 }
 
 /**
- * @docid
- * @namespace DevExpress.ui
+ * Contains information about the processed connector.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDiagramChangeConnectorTextArgs {
   /**
-   * @docid
-   * @public
+   * The processed connector.
    */
   connector?: dxDiagramConnector;
   /**
-   * @docid
-   * @public
+   * The index of the processed text in the connector&apos;s texts collection.
    */
   index?: number;
   /**
-   * @docid
-   * @public
+   * The new connector text.
    */
   text?: string;
 }
 
 /**
- * @docid
- * @namespace DevExpress.ui
+ * Contains information about the processed shape.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDiagramResizeShapeArgs {
   /**
-   * @docid
-   * @public
+   * The processed shape.
    */
   shape?: dxDiagramShape;
   /**
-   * @docid
+   * The new shape size.
    */
   newSize?: {
     /**
-     * @docid
+     * The new shape height.
      */
     height?: number;
     /**
-     * @docid
+     * The new shape width.
      */
     width?: number;
   };
   /**
-   * @docid
+   * The previous shape size.
    */
   oldSize?: {
     /**
-     * @docid
+     * The previous shape height.
      */
     height?: number;
     /**
-     * @docid
+     * The previous shape width.
      */
     width?: number;
   };
 }
 
 /**
- * @docid
- * @namespace DevExpress.ui
+ * Contains information about the processed shape.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDiagramMoveShapeArgs {
   /**
-   * @docid
-   * @public
+   * The processed shape.
    */
   shape?: dxDiagramShape;
   /**
-   * @docid
+   * The new shape position.
    */
   newPosition?: {
       /**
-       * @docid
+       * The new horizontal shape position specified in units.
        */
       x?: number;
       /**
-       * @docid
+       * The new vertical shape position specified in units.
        */
       y?: number;
   };
   /**
-   * @docid
+   * The previous shape position.
    */
   oldPosition?: {
       /**
-       * @docid
+       * The previous horizontal shape position specified in units.
        */
       x?: number;
       /**
-       * @docid
+       * The previous vertical shape position specified in units.
        */
       y?: number;
   };
 }
 
-/** @public */
 export type Properties = dxDiagramOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxDiagramOptions;
 
 // #region deprecated in v24.1
 
-/** @deprecated Use AutoZoomMode instead */
+/**
+ * @deprecated Use AutoZoomMode instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type DiagramAutoZoomMode = AutoZoomMode;
 
-/** @deprecated Use Command instead */
+/**
+ * @deprecated Use Command instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type DiagramCommand = Command;
 
-/** @deprecated Use ConnectorLineEnd instead */
+/**
+ * @deprecated Use ConnectorLineEnd instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type DiagramConnectorLineEnd = ConnectorLineEnd;
 
-/** @deprecated Use ConnectorLineType instead */
+/**
+ * @deprecated Use ConnectorLineType instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type DiagramConnectorLineType = ConnectorLineType;
 
-/** @deprecated Use ConnectorPosition instead */
+/**
+ * @deprecated Use ConnectorPosition instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type DiagramConnectorPosition = ConnectorPosition;
 
-/** @deprecated Use DataLayoutType instead */
+/**
+ * @deprecated Use DataLayoutType instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type DiagramDataLayoutType = DataLayoutType;
 
 // /** @deprecated Use ExportFormat instead */
 // export type DiagramExportFormat = ExportFormat;
 // conflics with viz ExportFormat
 
-/** @deprecated Use ItemType instead */
+/**
+ * @deprecated Use ItemType instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type DiagramItemType = ItemType;
 
-/** @deprecated Use ModelOperation instead */
+/**
+ * @deprecated Use ModelOperation instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type DiagramModelOperation = ModelOperation;
 
-/** @deprecated Use PanelVisibility instead */
+/**
+ * @deprecated Use PanelVisibility instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type DiagramPanelVisibility = PanelVisibility;
 
-/** @deprecated Use RequestEditOperationReason instead */
+/**
+ * @deprecated Use RequestEditOperationReason instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type DiagramRequestEditOperationReason = RequestEditOperationReason;
 
-/** @deprecated Use ShapeCategory instead */
+/**
+ * @deprecated Use ShapeCategory instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type DiagramShapeCategory = ShapeCategory;
 
-/** @deprecated Use ShapeType instead */
+/**
+ * @deprecated Use ShapeType instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type DiagramShapeType = ShapeType;
 
-/** @deprecated Use ToolboxDisplayMode instead */
+/**
+ * @deprecated Use ToolboxDisplayMode instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type DiagramToolboxDisplayMode = ToolboxDisplayMode;
 
-/** @deprecated Use Units instead */
+/**
+ * @deprecated Use Units instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type DiagramUnits = Units;
 
 // #endregion
@@ -1761,32 +1462,34 @@ export type DiagramUnits = Units;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onCustomCommand' | 'onItemClick' | 'onItemDblClick' | 'onRequestEditOperation' | 'onRequestLayoutUpdate' | 'onSelectionChanged'>;
 
 /**
-* @hidden
-*/
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Events = {
 /**
- * @docid dxDiagramOptions.onContentReady
- * @type_function_param1 e:{ui/diagram:ContentReadyEvent}
+ * A function that is executed when the UI component is rendered and each time the component is repainted.
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @docid dxDiagramOptions.onDisposing
- * @type_function_param1 e:{ui/diagram:DisposingEvent}
+ * A function that is executed before the UI component is disposed of.
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @docid dxDiagramOptions.onInitialized
- * @type_function_param1 e:{ui/diagram:InitializedEvent}
+ * A function used in JavaScript frameworks to save the UI component instance.
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @docid dxDiagramOptions.onOptionChanged
- * @type_function_param1 e:{ui/diagram:OptionChangedEvent}
+ * A function that is executed after a UI component property is changed.
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };

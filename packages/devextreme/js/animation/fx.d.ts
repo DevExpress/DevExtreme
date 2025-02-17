@@ -7,7 +7,6 @@ export {
 } from '../common/core/animation';
 
 /**
- * @public
  * @deprecated Use the AnimationConfig type from common/core/animation instead
  */
 export type animationConfig = AnimationConfig;

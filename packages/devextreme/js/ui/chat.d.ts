@@ -21,291 +21,208 @@ import {
 import DataSource, { DataSourceLike } from '../data/data_source';
 
 /**
- * @docid _ui_chat_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxChat>;
 
 /**
- * @docid _ui_chat_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxChat>;
 
 /**
- * @docid _ui_chat_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxChat> & ChangedOptionInfo;
 
 /**
- * @docid _ui_chat_MessageEnteredEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the messageEntered event handler&apos;s argument.
  */
 export type MessageEnteredEvent = NativeEventInfo<dxChat, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
-    /** @docid _ui_chat_MessageEnteredEvent.message */
+    /**
+     * The message that was entered into the chat.
+     */
     readonly message?: Message;
 };
 
 /**
- * @docid _ui_chat_TypingStartEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the typingStart event handler&apos;s argument.
  */
 export type TypingStartEvent = NativeEventInfo<dxChat, UIEvent & { target: HTMLInputElement }> & {
-    /** @docid _ui_chat_TypingStartEvent.user */
+    /**
+     * The user who started typing.
+     */
     readonly user?: User;
 };
 
 /**
- * @docid _ui_chat_TypingEndEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the typingEnd event handler&apos;s argument.
  */
 export type TypingEndEvent = EventInfo<dxChat> & {
-    /** @docid _ui_chat_TypingEndEvent.user */
+    /**
+     * The user who stopped typing.
+     */
     readonly user?: User;
 };
 
 /**
- * @docid
- * @namespace DevExpress.ui.dxChat
- * @public
+ * A configuration object for a user.
  */
 export type User = {
     /**
-     * @docid
-     * @public
+     * User&apos;s identification number or string.
      */
     id?: number | string;
     /**
-     * @docid
-     * @public
+     * A user&apos;s name displayed in the chat.
      */
     name?: string;
     /**
-     * @docid
-     * @public
+     * An avatar URL.
      */
     avatarUrl?: string;
     /**
-     * @docid
-     * @public
+     * `alt` attribute for avatar image.
      */
     avatarAlt?: string;
 };
 
 /**
- * @docid
- * @namespace DevExpress.ui.dxChat
- * @public
+ * A configuration object for an alert.
  */
 export type Alert = {
     /**
-     * @docid
-     * @public
+     * Alert&apos;s identification number or string.
      */
     id?: number | string;
     /**
-     * @docid
-     * @public
+     * The alert&apos;s message.
      */
     message?: string;
 };
 
 /**
- * @docid
- * @namespace DevExpress.ui.dxChat
- * @public
+ * A configuration object for a message.
  */
 export type Message = {
     /**
-     * @docid
-     * @public
+     * Message&apos;s identification number or string.
      */
     id?: number | string;
     /**
-     * @docid
-     * @public
+     * A timestamp of when the message was sent.
      */
     timestamp?: Date | number | string;
     /**
-     * @docid
-     * @public
+     * A user who is the author of the message.
      */
     author?: User;
     /**
-     * @docid
-     * @public
+     * The message text.
      */
     text?: string;
 };
 
-/** @public */
 export type MessageTemplateData = {
     readonly component: dxChat;
     readonly message?: Message;
 };
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @public
- * @docid
+ * 
+ * @deprecated 
  */
 export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the UI component changes its visual state as a result of user interaction.
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the Chat&apos;s input element can be focused using keyboard navigation.
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the UI component changes its state when a user pauses on it.
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid
-     * @default { id: new Guid().toString() }
-     * @public
+     * Specifies the current chat user (messages displayed on the right side).
      */
     user?: User;
     /**
-     * @docid
-     * @fires dxChatOptions.onOptionChanged
-     * @public
+     * Specifies an array of chat messages.
      */
     items?: Array<Message>;
     /**
-     * @docid
-     * @type string | Array<Message> | Store | DataSource | DataSourceOptions | null
-     * @default null
-     * @public
+     * Binds the UI component to data.
      */
     dataSource?: DataSourceLike<Message> | null;
     /**
-     * @docid
-     * @default 'shortdate'
-     * @public
+     * Specifies the day header format.
      */
     dayHeaderFormat?: Format;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the Chat UI component displays newly entered messages immediately. This property only applies if dataSource is used.
      */
     reloadOnChange?: boolean;
     /**
-     * @docid
-     * @default []
-     * @public
+     * A list of available alerts.
      */
     alerts?: Array<Alert>;
     /**
-     * @docid
-     * @default null
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies a custom template for a chat message.
      */
     messageTemplate?: template | null | ((data: MessageTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default 'shorttime'
-     * @public
+     * Specifies the message timestamp format.
      */
     messageTimestampFormat?: Format;
     /**
-     * @docid
-     * @default []
-     * @public
+     * An array of users who are currently typing.
      */
     typingUsers?: Array<User>;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to show day headers.
      */
     showDayHeaders?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to show user names.
      */
     showUserName?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to show avatars.
      */
     showAvatar?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to show message time stamps.
      */
     showMessageTimestamp?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @type_function_param1 e:{ui/chat:MessageEnteredEvent}
-     * @action
-     * @public
+     * A function that is executed after a message is entered into the chat.
      */
     onMessageEntered?: ((e: MessageEnteredEvent) => void) | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @type_function_param1 e:{ui/chat:TypingStartEvent}
-     * @action
-     * @public
+     * A function that is called after a user starts typing.
      */
     onTypingStart?: ((e: TypingEndEvent) => void) | undefined ;
     /**
-     * @docid
-     * @default undefined
-     * @type_function_param1 e:{ui/chat:TypingEndEvent}
-     * @action
-     * @public
+     * A function that is called 2 seconds after a user stops typing or after a message is entered.
      */
     onTypingEnd?: ((e: TypingEndEvent) => void) | undefined;
 }
 
 /**
- * @docid
- * @inherits Widget, DataHelperMixin
- * @namespace DevExpress.ui
- * @public
+ * The Chat UI component is an interactive interface that allows users to send and receive messages in real time.
  */
 export default class dxChat extends Widget<Properties> {
     /**
-     * @docid
-     * @publicName renderMessage(message)
-     * @public
+     * Renders a new message.
      */
     renderMessage(message: Message): void;
 
     getDataSource(): DataSource<Message>;
 }
 
-/** @public */
 export type ExplicitTypes = {
     Properties: Properties;
     DisposingEvent: DisposingEvent;
@@ -313,34 +230,36 @@ export type ExplicitTypes = {
     OptionChangedEvent: OptionChangedEvent;
 };
 
-/** @public */
 export type Properties = dxChatOptions;
 
 ///#DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut' >;
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMessageEntered' | 'onTypingStart' | 'onTypingEnd'>;
 
 /**
-* @hidden
-*/
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Events = {
 /**
- * @docid dxChatOptions.onDisposing
- * @type_function_param1 e:{ui/chat:DisposingEvent}
+ * A function that is executed before the UI component is disposed of.
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @docid dxChatOptions.onInitialized
- * @type_function_param1 e:{ui/chat:InitializedEvent}
+ * A function used in JavaScript frameworks to save the UI component instance.
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @docid dxChatOptions.onOptionChanged
- * @type_function_param1 e:{ui/chat:OptionChangedEvent}
+ * A function that is executed after a UI component property is changed.
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };

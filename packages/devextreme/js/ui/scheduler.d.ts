@@ -46,18 +46,16 @@ interface AppointmentDraggingEvent {
 }
 
 /**
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface TargetedAppointmentInfo {
   /**
-   * @docid
-   * @type dxSchedulerAppointment
+   * 
    */
   readonly appointmentData: Appointment;
   /**
-   * @docid
-   * @type dxSchedulerAppointment
+   * 
    */
   readonly targetedAppointmentData?: Appointment;
 }
@@ -68,139 +66,117 @@ export {
     ScrollMode,
 };
 
-/** @public */
 export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
-/** @public */
 export type CellAppointmentsLimit = 'auto' | 'unlimited';
-/** @public */
 export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
-/** @public */
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 
 /**
- * @docid _ui_scheduler_AppointmentAddedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the appointmentAdded event handler&apos;s argument.
  */
 export type AppointmentAddedEvent = EventInfo<dxScheduler> & {
   /**
-   * @docid _ui_scheduler_AppointmentAddedEvent.appointmentData
-   * @type dxSchedulerAppointment
+   * 
    */
   readonly appointmentData: Appointment;
-  /** @docid _ui_scheduler_AppointmentAddedEvent.error */
+  /**
+   * 
+   */
   readonly error?: Error;
 };
 
 /**
- * @docid _ui_scheduler_AppointmentAddingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the appointmentAdding event handler&apos;s argument.
  */
 export type AppointmentAddingEvent = EventInfo<dxScheduler> & {
   /**
-   * @docid _ui_scheduler_AppointmentAddingEvent.appointmentData
-   * @type dxSchedulerAppointment
+   * 
    */
   readonly appointmentData: Appointment;
   /**
-   * @docid _ui_scheduler_AppointmentAddingEvent.cancel
-   * @type Boolean|Promise<Boolean>
+   * 
    */
   cancel: boolean | PromiseLike<boolean>;
 };
 
 /**
- * @docid _ui_scheduler_AppointmentClickEvent
- * @public
- * @type object
- * @inherits Cancelable,NativeEventInfo,TargetedAppointmentInfo
+ * The type of the appointmentClick event handler&apos;s argument.
  */
 export type AppointmentClickEvent = Cancelable & NativeEventInfo<dxScheduler, KeyboardEvent | MouseEvent | PointerEvent> & TargetedAppointmentInfo & {
-  /** @docid _ui_scheduler_AppointmentClickEvent.appointmentElement */
+  /**
+   * 
+   */
   readonly appointmentElement: DxElement;
 };
 
 /**
- * @docid _ui_scheduler_AppointmentContextMenuEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,TargetedAppointmentInfo
+ * The type of the appointmentContextMenu event handler&apos;s argument.
  */
 export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & TargetedAppointmentInfo & {
-  /** @docid _ui_scheduler_AppointmentContextMenuEvent.appointmentElement */
+  /**
+   * 
+   */
   readonly appointmentElement: DxElement;
 };
 
 /**
- * @docid _ui_scheduler_AppointmentDblClickEvent
- * @public
- * @type object
- * @inherits Cancelable,NativeEventInfo,TargetedAppointmentInfo
+ * The type of the appointmentDblClick event handler&apos;s argument.
  */
 export type AppointmentDblClickEvent = Cancelable & NativeEventInfo<dxScheduler, MouseEvent | PointerEvent> & TargetedAppointmentInfo & {
-  /** @docid _ui_scheduler_AppointmentDblClickEvent.appointmentElement */
+  /**
+   * 
+   */
   readonly appointmentElement: DxElement;
 };
 
 /**
- * @docid _ui_scheduler_AppointmentDeletedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the appointmentDeleted event handler&apos;s argument.
  */
 export type AppointmentDeletedEvent = EventInfo<dxScheduler> & {
   /**
-   * @docid _ui_scheduler_AppointmentDeletedEvent.appointmentData
-   * @type dxSchedulerAppointment
+   * 
    */
   readonly appointmentData: Appointment;
-  /** @docid _ui_scheduler_AppointmentDeletedEvent.error */
+  /**
+   * 
+   */
   readonly error?: Error;
 };
 
 /**
- * @docid _ui_scheduler_AppointmentDeletingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the appointmentDeleting event handler&apos;s argument.
  */
 export type AppointmentDeletingEvent = EventInfo<dxScheduler> & {
   /**
-   * @docid _ui_scheduler_AppointmentDeletingEvent.appointmentData
-   * @type dxSchedulerAppointment
+   * 
    */
   readonly appointmentData: Appointment;
   /**
-   * @docid _ui_scheduler_AppointmentDeletingEvent.cancel
-   * @type Boolean|Promise<Boolean>
+   * 
    */
   cancel: boolean | PromiseLike<boolean>;
 };
 
 /**
- * @docid _ui_scheduler_AppointmentFormOpeningEvent
- * @public
- * @type object
- * @inherits Cancelable,EventInfo
+ * The type of the appointmentFormOpening event handler&apos;s argument.
  */
 export type AppointmentFormOpeningEvent = Cancelable & EventInfo<dxScheduler> & {
   /**
-   * @docid _ui_scheduler_AppointmentFormOpeningEvent.appointmentData
-   * @type dxSchedulerAppointment
+   * 
    */
   readonly appointmentData?: Appointment;
-  /** @docid _ui_scheduler_AppointmentFormOpeningEvent.form */
+  /**
+   * 
+   */
   readonly form: dxForm;
-  /** @docid _ui_scheduler_AppointmentFormOpeningEvent.popup */
+  /**
+   * 
+   */
   readonly popup: dxPopup;
 };
 
 /**
- * @docid
- * @public
+ * Specifies appointments information in AppointmentTooltipShowingEvent.
  */
 export type AppointmentTooltipShowingAppointmentInfo = {
   readonly appointmentData: Appointment;
@@ -209,144 +185,115 @@ export type AppointmentTooltipShowingAppointmentInfo = {
 };
 
 /**
- * @docid _ui_scheduler_AppointmentTooltipShowingEvent
- * @public
- * @type object
- * @inherits Cancelable,EventInfo
+ * The type of the appointmentTooltipShowing event handler&apos;s argument.
  */
 export type AppointmentTooltipShowingEvent = Cancelable & EventInfo<dxScheduler> & {
-  /** @docid _ui_scheduler_AppointmentTooltipShowingEvent.targetElement */
+  /**
+   * 
+   */
   readonly targetElement: DxElement;
   /**
-   * @docid _ui_scheduler_AppointmentTooltipShowingEvent.appointments
-   * @type Array<object>
+   * 
    */
   readonly appointments: AppointmentTooltipShowingAppointmentInfo[];
 };
 
 /**
- * @docid _ui_scheduler_AppointmentRenderedEvent
- * @public
- * @type object
- * @inherits EventInfo,TargetedAppointmentInfo
+ * The type of the appointmentRendered event handler&apos;s argument.
  */
 export type AppointmentRenderedEvent = EventInfo<dxScheduler> & TargetedAppointmentInfo & {
-  /** @docid _ui_scheduler_AppointmentRenderedEvent.appointmentElement */
+  /**
+   * 
+   */
   readonly appointmentElement: DxElement;
 };
 
 /**
- * @docid _ui_scheduler_AppointmentUpdatedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the appointmentUpdated event handler&apos;s argument.
  */
 export type AppointmentUpdatedEvent = EventInfo<dxScheduler> & {
   /**
-   * @docid _ui_scheduler_AppointmentUpdatedEvent.appointmentData
-   * @type dxSchedulerAppointment
+   * 
    */
   readonly appointmentData: Appointment;
-  /** @docid _ui_scheduler_AppointmentUpdatedEvent.error */
+  /**
+   * 
+   */
   readonly error?: Error;
 };
 
 /**
- * @docid _ui_scheduler_AppointmentUpdatingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the appointmentUpdating event handler&apos;s argument.
  */
 export type AppointmentUpdatingEvent = EventInfo<dxScheduler> & {
   /**
-   * @docid _ui_scheduler_AppointmentUpdatingEvent.oldData
-   * @type Object
+   * 
    */
   readonly oldData: any;
   /**
-   * @docid _ui_scheduler_AppointmentUpdatingEvent.newData
-   * @type Object
+   * 
    */
   readonly newData: any;
   /**
-   * @docid _ui_scheduler_AppointmentUpdatingEvent.cancel
-   * @type Boolean|Promise<Boolean>
+   * 
    */
   cancel?: boolean | PromiseLike<boolean>;
 };
 
 /**
- * @docid _ui_scheduler_CellClickEvent
- * @public
- * @type object
- * @inherits Cancelable,NativeEventInfo
+ * The type of the cellClick event handler&apos;s argument.
  */
 export type CellClickEvent = Cancelable & NativeEventInfo<dxScheduler, KeyboardEvent | MouseEvent | PointerEvent> & {
   /**
-   * @docid _ui_scheduler_CellClickEvent.cellData
-   * @type object
+   * 
    */
   readonly cellData: any;
-  /** @docid _ui_scheduler_CellClickEvent.cellElement */
+  /**
+   * 
+   */
   readonly cellElement: DxElement;
 };
 
 /**
- * @docid _ui_scheduler_CellContextMenuEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the cellContextMenu event handler&apos;s argument.
  */
 export type CellContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & {
   /**
-   * @docid _ui_scheduler_CellContextMenuEvent.cellData
-   * @type object
+   * 
    */
   readonly cellData: any;
-  /** @docid _ui_scheduler_CellContextMenuEvent.cellElement */
+  /**
+   * 
+   */
   readonly cellElement: DxElement;
 };
 
 /**
- * @docid _ui_scheduler_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxScheduler>;
 
 /**
- * @docid _ui_scheduler_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxScheduler>;
 
 /**
- * @docid _ui_scheduler_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxScheduler>;
 
 /**
- * @docid _ui_scheduler_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxScheduler> & ChangedOptionInfo;
 
-/** @public */
 export type AppointmentDraggingAddEvent = AppointmentDraggingEvent & {
   readonly fromComponent?: dxSortable | dxDraggable;
   readonly toComponent?: dxSortable | dxDraggable;
   readonly toData?: any;
 };
 
-/** @public */
 export type AppointmentDraggingEndEvent = Cancelable & AppointmentDraggingEvent & {
   readonly fromComponent?: dxSortable | dxDraggable;
   readonly toComponent?: dxSortable | dxDraggable;
@@ -354,50 +301,41 @@ export type AppointmentDraggingEndEvent = Cancelable & AppointmentDraggingEvent 
   readonly toItemData?: any;
 };
 
-/** @public */
 export type AppointmentDraggingMoveEvent = Cancelable & AppointmentDraggingEvent & {
   readonly fromComponent?: dxSortable | dxDraggable;
   readonly toComponent?: dxSortable | dxDraggable;
   readonly toData?: any;
 };
 
-/** @public */
 export type AppointmentDraggingStartEvent = Cancelable & Omit<AppointmentDraggingEvent, 'itemData'> & {
   itemData?: any;
 };
 
-/** @public */
 export type AppointmentDraggingRemoveEvent = AppointmentDraggingEvent & {
   readonly fromComponent?: dxSortable | dxDraggable;
   readonly toComponent?: dxSortable | dxDraggable;
 };
 
 /**
- * @docid
- * @public
- * @inherits TargetedAppointmentInfo
+ * 
  */
 export type AppointmentTemplateData = TargetedAppointmentInfo;
 
 /**
- * @docid
- * @public
- * @inherits TargetedAppointmentInfo
+ * 
  */
 export type AppointmentTooltipTemplateData = TargetedAppointmentInfo & {
   /**
-   * @docid
+   * 
    */
   readonly isButtonClicked: boolean;
 };
 
-/** @public */
 export type AppointmentCollectorTemplateData = {
   readonly appointmentCount: number;
   readonly isCompact: boolean;
 };
 
-/** @public */
 export type DateNavigatorTextInfo = {
   readonly startDate: Date;
   readonly endDate: Date;
@@ -405,745 +343,485 @@ export type DateNavigatorTextInfo = {
 };
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the UI component adapts to small screens.
      */
     adaptivityEnabled?: boolean;
     /**
-     * @docid
-     * @default 'allDay'
-     * @public
+     * Specifies the name of the data source item field whose value defines whether or not the corresponding appointment is an all-day appointment.
      */
     allDayExpr?: string;
     /**
-     * @docid
-     * @default "appointmentCollector"
-     * @public
+     * Specifies a custom template for cell overflow indicators.
      */
     appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @public
+     * Configures appointment reordering using drag and drop gestures.
      */
     appointmentDragging?: {
       /**
-       * @docid
-       * @default true
+       * Enables automatic scrolling while dragging an appointment beyond the viewport.
        */
       autoScroll?: boolean;
       /**
-       * @docid
-       * @default undefined
+       * A container for custom data.
        */
       data?: any | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Allows you to group several UI components so that users can drag and drop appointments between them.
        */
       group?: string | undefined;
       /**
-       * @docid
-       * @type_function_param1 e:object
-       * @type_function_param1_field event:event
+       * A function that is called when a new appointment is added.
        */
       onAdd?: ((e: AppointmentDraggingAddEvent) => void);
       /**
-       * @docid
-       * @type_function_param1 e:object
-       * @type_function_param1_field event:event
+       * A function that is called when the dragged appointment&apos;s position is changed.
        */
       onDragEnd?: ((e: AppointmentDraggingEndEvent) => void);
       /**
-       * @docid
-       * @type_function_param1 e:object
-       * @type_function_param1_field event:event
+       * A function that is called every time a draggable appointment is moved.
        */
       onDragMove?: ((e: AppointmentDraggingMoveEvent) => void);
       /**
-       * @docid
-       * @type_function_param1 e:object
-       * @type_function_param1_field event:event
+       * A function that is called when the drag gesture is initialized.
        */
       onDragStart?: ((e: AppointmentDraggingStartEvent) => void);
       /**
-       * @docid
-       * @type_function_param1 e:object
-       * @type_function_param1_field event:event
+       * A function that is called when a draggable appointment is removed.
        */
       onRemove?: ((e: AppointmentDraggingRemoveEvent) => void);
       /**
-       * @docid
-       * @default 60
+       * Specifies the distance in pixels from the edge of viewport at which scrolling should start. Applies only if autoScroll is true.
        */
       scrollSensitivity?: number;
       /**
-       * @docid
-       * @default 60
+       * Specifies the scrolling speed when dragging an appointment beyond the viewport. Applies only if autoScroll is true.
        */
       scrollSpeed?: number;
     };
     /**
-     * @docid
-     * @default "item"
-     * @type_function_param1 model:{ui/scheduler:AppointmentTemplateData}
-     * @type_function_param1_field appointmentData:object
-     * @type_function_param1_field targetedAppointmentData:object
-     * @public
+     * Specifies a custom template for appointments.
      */
     appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default "appointmentTooltip"
-     * @type_function_param1 model:{ui/scheduler:AppointmentTooltipTemplateData}
-     * @type_function_param1_field appointmentData:object
-     * @type_function_param1_field targetedAppointmentData:object
-     * @public
+     * Specifies a custom template for tooltips displayed when users click an appointment or cell overflow indicator.
      */
     appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default 30
-     * @public
+     * Specifies cell duration in minutes. This property&apos;s value should divide the interval between startDayHour and endDayHour into even parts.
      */
     cellDuration?: number;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether or not an end user can scroll the view in both directions at the same time.
      */
     crossScrollingEnabled?: boolean;
     /**
-     * @docid
-     * @default new Date()
-     * @fires dxSchedulerOptions.onOptionChanged
-     * @public
+     * Specifies the current date.
      */
     currentDate?: Date | number | string;
     /**
-     * @docid
-     * @default "day"
-     * @fires dxSchedulerOptions.onOptionChanged
-     * @public
+     * Specifies the displayed view. Accepts name or type of a view available in the views array.
      */
     currentView?: ViewType | string;
     /**
-     * @docid
-     * @type_function_param1 info:object
-     * @default undefined
-     * @public
+     * Customizes the date navigator&apos;s text.
      */
     customizeDateNavigatorText?: ((info: DateNavigatorTextInfo) => string) | undefined;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 itemData:object
-     * @public
+     * Specifies a custom template for table cells.
      */
     dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default null
-     * @public
-     * @type string|Array<dxSchedulerAppointment>|Store|DataSource|DataSourceOptions|null
+     * Binds the UI component to data.
      */
     dataSource?: DataSourceLike<Appointment> | null;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 itemData:object
-     * @public
+     * Specifies a custom template for day scale items.
      */
     dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the format in which date-time values should be sent to the server.
      */
     dateSerializationFormat?: string | undefined;
     /**
-     * @docid
-     * @default 'description'
-     * @public
+     * Specifies the name of the data source item field whose value holds the description of the corresponding appointment.
      */
     descriptionExpr?: string;
     /**
-      * @docid
-      * @default "dropDownAppointment"
-      * @type_function_param1 itemData:object
-      * @type_function_return string|Element|jQuery
-      * @deprecated dxSchedulerOptions.appointmentTooltipTemplate
-      * @public
-      */
+     * Specifies a custom template for tooltips displayed when users click a cell overflow indicator.
+     * @deprecated Use the appointmentTooltipTemplate option instead.
+     */
     dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies which editing operations a user can perform on appointments.
      */
     editing?: boolean | {
       /**
-       * @docid
-       * @default true
+       * Specifies whether or not an end user can add appointments.
        */
       allowAdding?: boolean;
       /**
-       * @docid
-       * @default true
+       * Specifies whether or not an end user can delete appointments.
        */
       allowDeleting?: boolean;
       /**
-       * @docid
-       * @default true
-       * @default false &for(Android|iOS)
+       * Specifies whether users can drag and drop appointments.
        */
       allowDragging?: boolean;
       /**
-       * @docid
-       * @default true
-       * @default false &for(Android|iOS)
+       * Specifies whether or not an end user can change an appointment duration.
        */
       allowResizing?: boolean;
       /**
-       * @docid
-       * @default false
+       * Specifies whether users can edit appointment time zones.
        */
       allowTimeZoneEditing?: boolean;
       /**
-       * @docid
-       * @default true
+       * Specifies whether or not an end user can change appointment properties.
        */
       allowUpdating?: boolean;
     };
     /**
-     * @docid
-     * @default 'endDate'
-     * @public
+     * Specifies the name of the data source item field that defines the ending of an appointment.
      */
     endDateExpr?: string;
     /**
-     * @docid
-     * @default 'endDateTimeZone'
-     * @public
+     * Specifies the name of the data source item field that defines the timezone of the appointment end date.
      */
     endDateTimeZoneExpr?: string;
     /**
-     * @docid
-     * @default 24
-     * @public
+     * Specifies the last hour on the time scale. Accepts integer values from 0 to 24.
      */
     endDayHour?: number;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the first day of a week. Does not apply to the agenda view.
      */
     firstDayOfWeek?: FirstDayOfWeek | undefined;
     /**
-     * @docid
-     * @default true &for(desktop)
-     * @public
+     * Specifies whether the UI component can be focused using keyboard navigation.
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * If true, appointments are grouped by date first and then by resource; opposite if false. Applies only if appointments are grouped and groupOrientation is &apos;horizontal&apos;.
      */
     groupByDate?: boolean;
     /**
-     * @docid
-     * @default []
-     * @public
+     * Specifies the resource kinds by which the scheduler&apos;s appointments are grouped in a timetable.
      */
     groups?: Array<string>;
     /**
-     * @docid
-     * @default 300000
-     * @public
+     * Specifies the time interval between when the date-time indicator changes its position, in milliseconds.
      */
     indicatorUpdateInterval?: number;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * The latest date the UI component allows you to select.
      */
     max?: Date | number | string | undefined;
     /**
-     * @docid
-     * @default "auto"
-     * @public
+     * Specifies the limit of full-sized appointments displayed per cell. Applies to all views except &apos;agenda&apos;.
      */
     maxAppointmentsPerCell?: number | CellAppointmentsLimit;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * The earliest date the UI component allows you to select.
      */
     min?: Date | number | string | undefined;
     /**
-     * @docid
-     * @default "No data to display"
-     * @public
+     * Specifies the text or HTML markup displayed by the UI component if the item collection is empty. Available for the Agenda view only.
      */
     noDataText?: string;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/scheduler:AppointmentAddedEvent}
-     * @action
-     * @public
+     * A function that is executed after an appointment is added to the data source.
      */
     onAppointmentAdded?: ((e: AppointmentAddedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/scheduler:AppointmentAddingEvent}
-     * @action
-     * @public
+     * A function that is executed before an appointment is added to the data source.
      */
     onAppointmentAdding?: ((e: AppointmentAddingEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{ui/scheduler:AppointmentClickEvent}
-     * @action
-     * @public
+     * A function that is executed when an appointment is clicked or tapped.
      */
     onAppointmentClick?: ((e: AppointmentClickEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{ui/scheduler:AppointmentContextMenuEvent}
-     * @action
-     * @public
+     * A function that is executed when a user attempts to open the browser&apos;s context menu for an appointment. Allows you to replace this context menu with a custom context menu.
      */
     onAppointmentContextMenu?: ((e: AppointmentContextMenuEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{ui/scheduler:AppointmentDblClickEvent}
-     * @action
-     * @public
+     * A function that is executed when an appointment is double-clicked or double-tapped.
      */
     onAppointmentDblClick?: ((e: AppointmentDblClickEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/scheduler:AppointmentDeletedEvent}
-     * @action
-     * @public
+     * A function that is executed after an appointment is deleted from the data source.
      */
     onAppointmentDeleted?: ((e: AppointmentDeletedEvent) => void);
 
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/scheduler:AppointmentDeletingEvent}
-     * @action
-     * @public
+     * A function that is executed before an appointment is deleted from the data source.
      */
     onAppointmentDeleting?: ((e: AppointmentDeletingEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/scheduler:AppointmentTooltipShowingEvent}
-     * @action
-     * @public
+     * Occurs before showing an appointment&apos;s tooltip.
      */
     onAppointmentTooltipShowing?: ((e: AppointmentTooltipShowingEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/scheduler:AppointmentFormOpeningEvent}
-     * @action
-     * @public
+     * A function that is executed before an appointment details form appears. Use this function to customize the form.
      */
     onAppointmentFormOpening?: ((e: AppointmentFormOpeningEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/scheduler:AppointmentRenderedEvent}
-     * @action
-     * @public
+     * A function that is executed when an appointment is rendered.
      */
     onAppointmentRendered?: ((e: AppointmentRenderedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/scheduler:AppointmentUpdatedEvent}
-     * @action
-     * @public
+     * A function that is executed after an appointment is updated in the data source.
      */
     onAppointmentUpdated?: ((e: AppointmentUpdatedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/scheduler:AppointmentUpdatingEvent}
-     * @action
-     * @public
+     * A function that is executed before an appointment is updated in the data source.
      */
     onAppointmentUpdating?: ((e: AppointmentUpdatingEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{ui/scheduler:CellClickEvent}
-     * @action
-     * @public
+     * A function that is executed when a view cell is clicked.
      */
     onCellClick?: ((e: CellClickEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{ui/scheduler:CellContextMenuEvent}
-     * @action
-     * @public
+     * A function that is executed when a user attempts to open the browser&apos;s context menu for a cell. Allows you to replace this context menu with a custom context menu.
      */
     onCellContextMenu?: ((e: CellContextMenuEvent) => void) | string;
     /**
-     * @docid
-     * @default "dialog"
-     * @public
+     * Specifies the edit mode for recurring appointments.
      */
     recurrenceEditMode?: RecurrenceEditMode;
     /**
-     * @docid
-     * @default 'recurrenceException'
-     * @public
+     * Specifies the name of the data source item field that defines exceptions for the current recurring appointment.
      */
     recurrenceExceptionExpr?: string;
     /**
-     * @docid
-     * @default 'recurrenceRule'
-     * @public
+     * Specifies the name of the data source item field that defines a recurrence rule for generating recurring appointments.
      */
     recurrenceRuleExpr?: string;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether filtering is performed on the server or client side.
      */
     remoteFiltering?: boolean;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 itemData:object
-     * @public
+     * Specifies a custom template for resource headers.
      */
     resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default []
-     * @public
+     * Specifies an array of resources available in the scheduler.
      */
     resources?: Array<{
       /**
-       * @docid
-       * @default false
+       * Specifies whether you can assign several resources of this kind to an appointment.
        */
       allowMultiple?: boolean;
       /**
-       * @docid
-       * @default "color"
+       * Specifies the resource object field that is used as a resource color.
        */
       colorExpr?: string;
       /**
-       * @docid
-       * @default null
-       * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
+       * Specifies available resource instances.
        */
       dataSource?: DataSourceLike<any> | null;
       /**
-       * @docid
-       * @type_function_param1 resource:object
-       * @default 'text'
+       * Specifies which field from the resource data objects provides values to be displayed in the resource editor.
        */
       displayExpr?: string | ((resource: any) => string);
       /**
-       * @docid
-       * @default ""
+       * The name of the appointment object field that specifies a resource of this kind.
        */
       fieldExpr?: string;
       /**
-       * @docid
-       * @default ""
+       * Specifies the label of the Appointment popup window field that allows end users to assign a resource of this kind.
        */
       label?: string;
       /**
-       * @docid
-       * @default false
+       * Specifies whether appointments are colored like this resource kind.
        */
       useColorAsDefault?: boolean;
       /**
-       * @docid
-       * @default 'id'
+       * Specifies the resource object field that is used as a value of the Resource editor in the Appointment popup window.
        */
       valueExpr?: string | Function;
     }>;
     /**
-     * @docid
-     * @public
+     * Configures scrolling.
      */
     scrolling?: dxSchedulerScrolling;
     /**
-     * @docid
-     * @readonly
-     * @default []
-     * @public
+     * The data of the currently selected cells.
      */
     selectedCellData?: Array<any>;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether to apply shading to cover the timetable up to the current time.
      */
     shadeUntilCurrentTime?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies the &apos;All-day&apos; panel&apos;s visibility. Setting this property to false hides the panel along with the all-day appointments.
      */
     showAllDayPanel?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies the current date-time indicator&apos;s visibility.
      */
     showCurrentTimeIndicator?: boolean;
     /**
-     * @docid
-     * @default 'startDate'
-     * @public
+     * Specifies the name of the data source item field that defines the start of an appointment.
      */
     startDateExpr?: string;
     /**
-     * @docid
-     * @default 'startDateTimeZone'
-     * @public
+     * Specifies the name of the data source item field that defines the timezone of the appointment start date.
      */
     startDateTimeZoneExpr?: string;
     /**
-     * @docid
-     * @default 0
-     * @public
+     * Specifies the first hour on the time scale. Accepts integer values from 0 to 24.
      */
     startDayHour?: number;
     /**
-     * @docid
-     * @default 'text'
-     * @public
+     * Specifies the name of the data source item field that holds the subject of an appointment.
      */
     textExpr?: string;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 itemData:object
-     * @public
+     * Specifies a custom template for time scale items.
      */
     timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default ""
-     * @public
+     * Specifies the time zone for the Scheduler&apos;s grid. Accepts values from the IANA time zone database.
      */
     timeZone?: string;
     /**
-     * @docid
-     * @default false
-     * @default true &for(Android|iOS)
-     * @default true &for(Material)
-     * @default true &for(Fluent)
-     * @public
+     * Specifies whether a user can switch views using tabs or a drop-down menu.
      */
     useDropDownViewSwitcher?: boolean;
     /**
-     * @docid
-     * @default "all"
+     * Specifies the display mode for the All day panel.
      */
     allDayPanelMode?: AllDayPanelMode;
     /**
-     * @docid
-     * @default 0
-     * @public
+     * Specifies the minute offset within Scheduler indicating the starting point of a day.
      */
     offset?: number;
     /**
-     * @docid
-     * @default ['day', 'week']
-     * @public
+     * Specifies and configures the views to be available in the view switcher.
      */
     views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | {
       /**
-       * @docid
-       * @default 7
+       * Specifies the number of dates that can be shown at a time in the agenda view.
        */
       agendaDuration?: number;
       /**
-       * @docid
-       * @default "appointmentCollector"
+       * Specifies a custom template for cell overflow indicators in this view.
        */
       appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
       /**
-       * @docid
-       * @default "item"
-       * @type_function_param1 model:{ui/scheduler:AppointmentTemplateData}
-       * @type_function_param1_field appointmentData:object
-       * @type_function_param1_field targetedAppointmentData:object
+       * Specifies a custom template for appointments.
        */
       appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**
-       * @docid
-       * @default "appointmentTooltip"
-       * @type_function_param1 model:{ui/scheduler:AppointmentTooltipTemplateData}
-       * @type_function_param1_field appointmentData:object
-       * @type_function_param1_field targetedAppointmentData:object
+       * Specifies a custom template for tooltips displayed when users click an appointment or cell overflow indicator in this view.
        */
       appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**
-      * @docid
-      * @default "dropDownAppointment"
-      * @type_function_param1 itemData:object
-      * @type_function_return string|Element|jQuery
-      * @deprecated dxSchedulerOptions.views.appointmentTooltipTemplate
-      */
+       * Specifies a custom template for tooltips displayed when users click a cell overflow indicator in this view.
+       * @deprecated Use the views.appointmentTooltipTemplate option instead.
+       */
       dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**
-       * @docid
-       * @default 30
+       * The cell duration in minutes.
        */
       cellDuration?: number;
       /**
-       * @docid
-       * @default null
-       * @type_function_param1 itemData:object
+       * Specifies a custom template for table cells.
        */
       dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
       /**
-       * @docid
-       * @default null
-       * @type_function_param1 itemData:object
+       * Specifies a custom template for date scale items.
        */
       dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
       /**
-       * @docid
-       * @default 24
+       * Specifies the last hour on the view&apos;s time scale. Accepts integer values from 0 to 24.
        */
       endDayHour?: number;
       /**
-       * @docid
-       * @default undefined
+       * The first day of a week. Does not apply to the agenda view.
        */
       firstDayOfWeek?: FirstDayOfWeek | undefined;
       /**
-       * @docid
-       * @default false
+       * If true, appointments are grouped by date first and then by resource; opposite if false. Applies only if appointments are grouped and groupOrientation is &apos;horizontal&apos;.
        */
       groupByDate?: boolean;
       /**
-       * @docid
+       * Arranges resource headers vertically (in a column) or horizontally (in a row).
        */
       groupOrientation?: Orientation;
       /**
-       * @docid
-       * @default []
+       * The resource kinds by which appointments are grouped.
        */
       groups?: Array<string>;
       /**
-       * @docid
-       * @default 1
+       * Multiplies the default view interval. Applies to all view types except &apos;agenda&apos;.
        */
       intervalCount?: number;
       /**
-       * @docid
-       * @default "auto"
+       * Specifies the limit of full-sized appointments displayed per cell. Applies to all views except &apos;agenda&apos;.
        */
       maxAppointmentsPerCell?: number | CellAppointmentsLimit;
       /**
-       * @docid
-       * @default undefined
+       * A custom view name displayed in the view switcher.
        */
       name?: string | undefined;
       /**
-       * @docid
-       * @default null
-       * @type_function_param1 itemData:object
+       * Specifies a custom template for resource headers.
        */
       resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
       /**
-       * @docid
-       * @default undefined
+       * Specifies the date from which to start counting the view interval. Applies to all view types except &apos;agenda&apos;.
        */
       startDate?: Date | number | string | undefined;
       /**
-       * @docid
-       * @default 0
+       * Specifies the first hour on the view&apos;s time scale. Accepts integer values from 0 to 24.
        */
       startDayHour?: number;
       /**
-       * @docid
-       * @default null
-       * @type_function_param1 itemData:object
+       * Specifies a custom template for time scale items.
        */
       timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
       /**
-       * @docid
-       * @default undefined
+       * The type of the view.
        */
       type?: ViewType | undefined;
       /**
-       * @docid
+       * Configures scrolling for a view.
        */
       scrolling?: dxSchedulerScrolling;
       /**
-       * @docid
-       * @default "all"
-       */
+        * Specifies the display mode for the All day panel.
+        */
        allDayPanelMode?: AllDayPanelMode;
        /**
-        * @docid
-        * @default 0
-        * @public
+        * Specifies the minute offset within the view indicating the starting point of a day.
         */
        offset?: number;
     }>;
 }
 /**
- * @docid
- * @inherits Widget, DataHelperMixin
- * @namespace DevExpress.ui
- * @public
+ * The Scheduler is a UI component that represents scheduled data and allows a user to manage and edit it.
  */
 export default class dxScheduler extends Widget<dxSchedulerOptions> {
     /**
-     * @docid
-     * @publicName addAppointment(appointment)
-     * @param1 appointment:dxSchedulerAppointment
-     * @public
+     * Adds an appointment.
      */
     addAppointment(appointment: Appointment): void;
     /**
-     * @docid
-     * @publicName deleteAppointment(appointment)
-     * @param1 appointment:dxSchedulerAppointment
-     * @public
+     * Deletes an appointment from the timetable and its object from the data source.
      */
     deleteAppointment(appointment: Appointment): void;
     /**
-     * @docid
-     * @publicName deleteRecurrence(appointment, date, recurrenceEditMode)
-     * @param1 appointmentData:dxSchedulerAppointment
-     * @public
+     * Deletes a recurring appointment occurrence.
      */
     deleteRecurrence(
       appointmentData: Appointment,
@@ -1152,173 +830,122 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
     ): void;
     getDataSource(): DataSource;
     /**
-     * @docid
-     * @publicName getEndViewDate()
-     * @public
+     * Gets the current view&apos;s end date.
      */
     getEndViewDate(): Date;
     /**
-     * @docid
-     * @publicName getStartViewDate()
-     * @public
+     * Gets the current view&apos;s start date.
      */
     getStartViewDate(): Date;
     /**
-     * @docid
-     * @publicName hideAppointmentPopup(saveChanges)
-     * @param1 saveChanges:Boolean|undefined
-     * @public
+     * Hides an appointment details form.
      */
     hideAppointmentPopup(saveChanges?: boolean): void;
     /**
-     * @docid
-     * @publicName hideAppointmentTooltip()
-     * @public
+     * Hides an appointment&apos;s or cell overflow indicator&apos;s tooltip.
      */
     hideAppointmentTooltip(): void;
     /**
-     * @docid
-     * @publicName scrollTo(date, group, allDay)
-     * @param2 group:Object|undefined
-     * @param3 allDay:Boolean|undefined
-     * @public
+     * Scrolls the current view to a specified position. Available for all views except &apos;agenda&apos;. You should specify the height property to use this method.
      */
     scrollTo(date: Date, group?: object, allDay?: boolean): void;
     /**
-     * @docid
-     * @publicName scrollToTime(hours, minutes, date)
-     * @param3 date:Date|undefined
-     * @deprecated dxScheduler.scrollTo
-     * @public
+     * Scrolls the current view to a specific day and time.
+     * @deprecated Use the scrollTo(date, group, allDay) method instead.
      */
     scrollToTime(hours: number, minutes: number, date?: Date): void;
     /**
-     * @docid
-     * @publicName showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)
-     * @param1 appointmentData:dxSchedulerAppointment|undefined
-     * @param2 createNewAppointment:Boolean|undefined
-     * @param3 currentAppointmentData:dxSchedulerAppointment|undefined
-     * @public
+     * Shows the appointment details form.
      */
     showAppointmentPopup(appointmentData?: Appointment, createNewAppointment?: boolean, currentAppointmentData?: Appointment): void;
     /**
-     * @docid
-     * @publicName showAppointmentTooltip(appointmentData, target, currentAppointmentData)
-     * @param1 appointmentData:dxSchedulerAppointment
-     * @param2 target:string|Element|jQuery
-     * @param3 currentAppointmentData:dxSchedulerAppointment|undefined
-     * @public
+     * Shows a tooltip for a target element.
      */
     showAppointmentTooltip(appointmentData: Appointment, target: string | UserDefinedElement, currentAppointmentData?: Appointment): void;
     /**
-     * @docid
-     * @publicName updateAppointment(target, appointment)
-     * @param1 target:dxSchedulerAppointment
-     * @param2 appointment:dxSchedulerAppointment
-     * @public
+     * Updates an appointment.
      */
     updateAppointment(target: Appointment, appointment: Appointment): void;
 }
 
 /**
- * @public
- * @docid dxSchedulerAppointment
- * @namespace DevExpress.ui
- * @inherits CollectionWidgetItem
- * @type object
+ * An object that describes an appointment in the Scheduler UI component.
  */
 export type Appointment = dxSchedulerAppointment;
 
 /**
- * @namespace DevExpress.ui
  * @deprecated Use the Scheduler's Appointment type instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type dxSchedulerAppointment = CollectionWidgetItem & {
     /**
-     * @docid
-     * @public
+     * Specifies whether the appointment lasts all day.
      */
     allDay?: boolean;
     /**
-     * @docid
-     * @public
+     * Specifies a detail description of the appointment.
      */
     description?: string;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the appointment responds to user interaction.
      */
     disabled?: boolean;
     /**
-     * @docid
-     * @public
+     * Specifies the ending of the appointment.
      */
     endDate?: Date | string;
     /**
-     * @docid
-     * @public
+     * Specifies the time zone for an appointment&apos;s endDate. Accepts values from the IANA time zone database.
      */
     endDateTimeZone?: string;
     /**
-     * @docid
-     * @public
+     * Specifies the HTML markup to be inserted into the appointment element.
      */
     html?: string;
     /**
-     * @docid
-     * @public
+     * Specifies the start date and time of one or more appointments to exclude from a series. This property requires that you also set recurrenceRule.
      */
     recurrenceException?: string;
     /**
-     * @docid
-     * @public
+     * Specifies a recurrence rule based on which the Scheduler generates an appointment series.
      */
     recurrenceRule?: string;
     /**
-     * @docid
-     * @public
+     * Specifies the start of the appointment.
      */
     startDate?: Date | string;
     /**
-     * @docid
-     * @public
+     * Specifies the time zone for an appointment&apos;s startDate. Accepts values from the IANA time zone database.
      */
     startDateTimeZone?: string;
     /**
-     * @docid
-     * @public
+     * Specifies a template that should be used to render this appointment only.
      */
     template?: template;
     /**
-     * @docid
-     * @public
+     * Specifies the subject of the appointment.
      */
     text?: string;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not an appointment must be displayed.
      */
     visible?: boolean;
 } & Record<string, any>;
 
-/** @public */
 export type Properties = dxSchedulerOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxSchedulerOptions;
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.ui
+ * 
  */
 export interface dxSchedulerScrolling {
   /**
-   * @docid
-   * @default "standard"
-   * @public
+   * Specifies the scrolling mode.
    */
   mode?: ScrollMode;
 }

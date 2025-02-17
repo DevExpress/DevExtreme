@@ -10,140 +10,112 @@ import dxPopover, {
 } from './popover';
 
 /**
- * @docid _ui_tooltip_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxTooltip>;
 
 /**
- * @docid _ui_tooltip_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxTooltip>;
 
 /**
- * @docid _ui_tooltip_HidingEvent
- * @public
- * @type object
- * @inherits Cancelable,EventInfo
+ * The type of the hiding event handler&apos;s argument.
  */
 export type HidingEvent = Cancelable & EventInfo<dxTooltip>;
 
 /**
- * @docid _ui_tooltip_HiddenEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the hidden event handler&apos;s argument.
  */
 export type HiddenEvent = EventInfo<dxTooltip>;
 
 /**
- * @docid _ui_tooltip_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxTooltip>;
 
 /**
- * @docid _ui_tooltip_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxTooltip> & ChangedOptionInfo;
 
 /**
- * @docid _ui_tooltip_ShowingEvent
- * @public
- * @type object
- * @inherits Cancelable,EventInfo
+ * The type of the showing event handler&apos;s argument.
  */
 export type ShowingEvent = Cancelable & EventInfo<dxTooltip>;
 
 /**
- * @docid _ui_tooltip_ShownEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the shown event handler&apos;s argument.
  */
 export type ShownEvent = EventInfo<dxTooltip>;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> { }
 /**
- * @docid
- * @inherits dxPopover
- * @hasTranscludedContent
- * @namespace DevExpress.ui
- * @public
+ * The Tooltip UI component displays a tooltip for a specified element on the page.
  */
 export default class dxTooltip extends dxPopover<dxTooltipOptions> { }
 
-/** @public */
 export type Properties = dxTooltipOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxTooltipOptions;
 
 ///#DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onResize' | 'onResizeEnd' | 'onResizeStart' | 'onTitleRendered'>;
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
-* @hidden
-*/
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Events = {
 /**
- * @docid dxTooltipOptions.onContentReady
- * @type_function_param1 e:{ui/tooltip:ContentReadyEvent}
+ * A function that is executed when the UI component is rendered and each time the component is repainted.
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @docid dxTooltipOptions.onDisposing
- * @type_function_param1 e:{ui/tooltip:DisposingEvent}
+ * A function that is executed before the UI component is disposed of.
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @docid dxTooltipOptions.onHidden
- * @type_function_param1 e:{ui/tooltip:HiddenEvent}
+ * A function that is executed after the UI component is hidden.
  */
 onHidden?: ((e: HiddenEvent) => void);
 /**
- * @docid dxTooltipOptions.onHiding
- * @type_function_param1 e:{ui/tooltip:HidingEvent}
+ * A function that is executed before the UI component is hidden.
  */
 onHiding?: ((e: HidingEvent) => void);
 /**
- * @docid dxTooltipOptions.onInitialized
- * @type_function_param1 e:{ui/tooltip:InitializedEvent}
+ * A function used in JavaScript frameworks to save the UI component instance.
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @docid dxTooltipOptions.onOptionChanged
- * @type_function_param1 e:{ui/tooltip:OptionChangedEvent}
+ * A function that is executed after a UI component property is changed.
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @docid dxTooltipOptions.onShowing
- * @type_function_param1 e:{ui/tooltip:ShowingEvent}
+ * A function that is executed before the UI component is displayed.
  */
 onShowing?: ((e: ShowingEvent) => void);
 /**
- * @docid dxTooltipOptions.onShown
- * @type_function_param1 e:{ui/tooltip:ShownEvent}
+ * A function that is executed after the UI component is displayed.
  */
 onShown?: ((e: ShownEvent) => void);
 };

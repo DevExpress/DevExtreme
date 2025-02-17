@@ -13,6 +13,9 @@ const MODULE_NAMESPACE = 'dxHtmlEditorImageUpload';
 
 const HIDDEN_FILE_UPLOADER_CLASS = 'dx-htmleditor-hidden-content';
 // eslint-disable-next-line import/no-mutable-exports
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 let ImageUploadModule = BaseModule;
 
 if (Quill) {

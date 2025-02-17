@@ -13,264 +13,198 @@ import dxTextEditor, {
     dxTextEditorOptions,
 } from './text_box/ui.text_editor.base';
 
-/** @public */
 export type TextBoxType = 'email' | 'password' | 'search' | 'tel' | 'text' | 'url';
 
 /**
- * @docid _ui_text_box_ChangeEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the change event handler&apos;s argument.
  */
 export type ChangeEvent = NativeEventInfo<dxTextBox, Event>;
 
 /**
- * @docid _ui_text_box_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxTextBox>;
 
 /**
- * @docid _ui_text_box_CopyEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the copy event handler&apos;s argument.
  */
 export type CopyEvent = NativeEventInfo<dxTextBox, ClipboardEvent>;
 
 /**
- * @docid _ui_text_box_CutEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the cut event handler&apos;s argument.
  */
 export type CutEvent = NativeEventInfo<dxTextBox, ClipboardEvent>;
 
 /**
- * @docid _ui_text_box_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxTextBox>;
 
 /**
- * @docid _ui_text_box_EnterKeyEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the enterKey event handler&apos;s argument.
  */
 export type EnterKeyEvent = NativeEventInfo<dxTextBox, KeyboardEvent>;
 
 /**
- * @docid _ui_text_box_FocusInEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the focusIn event handler&apos;s argument.
  */
 export type FocusInEvent = NativeEventInfo<dxTextBox, FocusEvent>;
 
 /**
- * @docid _ui_text_box_FocusOutEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the focusOut event handler&apos;s argument.
  */
 export type FocusOutEvent = NativeEventInfo<dxTextBox, FocusEvent>;
 
 /**
- * @docid _ui_text_box_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxTextBox>;
 
 /**
- * @docid _ui_text_box_InputEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the input event handler&apos;s argument.
  */
 export type InputEvent = NativeEventInfo<dxTextBox, UIEvent & { target: HTMLInputElement }>;
 
 /**
- * @docid _ui_text_box_KeyDownEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the keyDown event handler&apos;s argument.
  */
 export type KeyDownEvent = NativeEventInfo<dxTextBox, KeyboardEvent>;
 
-/** @public */
 export type KeyPressEvent = NativeEventInfo<dxTextBox, KeyboardEvent>;
 
 /**
- * @docid _ui_text_box_KeyUpEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the keyUp event handler&apos;s argument.
  */
 export type KeyUpEvent = NativeEventInfo<dxTextBox, KeyboardEvent>;
 
 /**
- * @docid _ui_text_box_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxTextBox> & ChangedOptionInfo;
 
 /**
- * @docid _ui_text_box_PasteEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the paste event handler&apos;s argument.
  */
 export type PasteEvent = NativeEventInfo<dxTextBox, ClipboardEvent>;
 
 /**
- * @docid _ui_text_box_ValueChangedEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ValueChangedInfo
+ * The type of the valueChanged event handler&apos;s argument.
  */
 export type ValueChangedEvent = NativeEventInfo<dxTextBox, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TComponent> {
     /**
-     * @docid
-     * @default null
-     * @public
+     * Specifies the maximum number of characters you can enter into the textbox.
      */
     maxLength?: string | number;
     /**
-     * @docid
-     * @default "text"
-     * @public
+     * The &apos;mode&apos; attribute value of the actual HTML input element representing the text box.
      */
     mode?: TextBoxType;
     /**
-     * @docid
-     * @default ""
-     * @public
+     * Specifies a value the UI component displays.
      */
     value?: string;
 }
 /**
- * @docid
- * @isEditor
- * @inherits dxTextEditor
- * @namespace DevExpress.ui
- * @public
+ * The TextBox is a UI component that enables a user to enter and edit a single line of text.
  */
 export default class dxTextBox<TProperties = Properties> extends dxTextEditor<TProperties> {
     /**
-     * @docid
-     * @publicName reset(value)
-     * @public
+     * Resets the value property to the value passed as an argument.
      */
     reset(value?: string): void;
 }
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 interface TextBoxInstance extends dxTextBox<Properties> { }
 
-/** @public */
 export type Properties = dxTextBoxOptions<TextBoxInstance>;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = Properties;
 
 ///#DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
 /**
-* @hidden
-*/
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Events = {
 /**
- * @docid dxTextBoxOptions.onChange
- * @type_function_param1 e:{ui/text_box:ChangeEvent}
+ * A function that is executed when the UI component loses focus after the text field&apos;s content was changed using the keyboard.
  */
 onChange?: ((e: ChangeEvent) => void);
 /**
- * @docid dxTextBoxOptions.onContentReady
- * @type_function_param1 e:{ui/text_box:ContentReadyEvent}
+ * A function that is executed when the UI component is rendered and each time the component is repainted.
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @docid dxTextBoxOptions.onCopy
- * @type_function_param1 e:{ui/text_box:CopyEvent}
+ * A function that is executed when the UI component&apos;s input has been copied.
  */
 onCopy?: ((e: CopyEvent) => void);
 /**
- * @docid dxTextBoxOptions.onCut
- * @type_function_param1 e:{ui/text_box:CutEvent}
+ * A function that is executed when the UI component&apos;s input has been cut.
  */
 onCut?: ((e: CutEvent) => void);
 /**
- * @docid dxTextBoxOptions.onDisposing
- * @type_function_param1 e:{ui/text_box:DisposingEvent}
+ * A function that is executed before the UI component is disposed of.
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @docid dxTextBoxOptions.onEnterKey
- * @type_function_param1 e:{ui/text_box:EnterKeyEvent}
+ * A function that is executed when the Enter key has been pressed while the UI component is focused.
  */
 onEnterKey?: ((e: EnterKeyEvent) => void);
 /**
- * @docid dxTextBoxOptions.onFocusIn
- * @type_function_param1 e:{ui/text_box:FocusInEvent}
+ * A function that is executed when the UI component gets focus.
  */
 onFocusIn?: ((e: FocusInEvent) => void);
 /**
- * @docid dxTextBoxOptions.onFocusOut
- * @type_function_param1 e:{ui/text_box:FocusOutEvent}
+ * A function that is executed when the UI component loses focus.
  */
 onFocusOut?: ((e: FocusOutEvent) => void);
 /**
- * @docid dxTextBoxOptions.onInitialized
- * @type_function_param1 e:{ui/text_box:InitializedEvent}
+ * A function used in JavaScript frameworks to save the UI component instance.
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @docid dxTextBoxOptions.onInput
- * @type_function_param1 e:{ui/text_box:InputEvent}
+ * A function that is executed each time the UI component&apos;s input is changed while the UI component is focused.
  */
 onInput?: ((e: InputEvent) => void);
 /**
- * @docid dxTextBoxOptions.onKeyDown
- * @type_function_param1 e:{ui/text_box:KeyDownEvent}
+ * A function that is executed when a user is pressing a key on the keyboard.
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @docid dxTextBoxOptions.onKeyUp
- * @type_function_param1 e:{ui/text_box:KeyUpEvent}
+ * A function that is executed when a user releases a key on the keyboard.
  */
 onKeyUp?: ((e: KeyUpEvent) => void);
 /**
- * @docid dxTextBoxOptions.onOptionChanged
- * @type_function_param1 e:{ui/text_box:OptionChangedEvent}
+ * A function that is executed after a UI component property is changed.
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @docid dxTextBoxOptions.onPaste
- * @type_function_param1 e:{ui/text_box:PasteEvent}
+ * A function that is executed when the UI component&apos;s input has been pasted.
  */
 onPaste?: ((e: PasteEvent) => void);
 /**
- * @docid dxTextBoxOptions.onValueChanged
- * @type_function_param1 e:{ui/text_box:ValueChangedEvent}
+ * A function that is executed after the UI component&apos;s value is changed.
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };

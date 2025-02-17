@@ -20,6 +20,9 @@ const splitIndex = (combinedIndex: number): { group: number; item: number } => (
   group: combinedIndex >> SELECTION_SHIFT,
   item: combinedIndex & SELECTION_MASK,
 });
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 class GroupedEditStrategy extends EditStrategy {
   _groupElements() {
     return this._collectionWidget._itemContainer().find(`.${LIST_GROUP_CLASS}`);

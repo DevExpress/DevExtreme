@@ -72,536 +72,353 @@ import { PositionConfig } from './core/animation';
 import { PagerBase } from '../ui/pagination';
 
 /**
- * @docid
- * @hidden
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type AdaptiveDetailRowPreparingInfo = {
   /**
-   * @docid
-   * @type object
+   * 
    */
   readonly formOptions: any;
 };
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type ApplyFilterMode = 'auto' | 'onClick';
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type ApplyChangesMode = 'instantly' | 'onDemand';
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type FixedPosition = 'left' | 'right' | 'sticky';
 
 /**
- * @hidden
- * @docid GridBaseColumn
- * @namespace DevExpress.common.grids
- * @type object
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface ColumnBase<TRowData = any> {
   /**
-   * @docid GridBaseColumn.alignment
-   * @default undefined
-   * @acceptValues undefined
-   * @public
+   * Aligns the content of the column.
    */
   alignment?: HorizontalAlignment | undefined;
   /**
-   * @docid GridBaseColumn.allowEditing
-   * @default true
-   * @public
+   * Specifies whether a user can edit values in the column at runtime. By default, inherits the value of the editing.allowUpdating property.
    */
   allowEditing?: boolean;
   /**
-   * @docid GridBaseColumn.allowFiltering
-   * @default true
-   * @public
+   * Specifies whether data can be filtered by this column. Applies only if filterRow.visible is true.
    */
   allowFiltering?: boolean;
   /**
-   * @docid GridBaseColumn.allowFixing
-   * @default true
-   * @public
+   * Specifies whether a user can fix the column at runtime. Applies only if columnFixing.enabled is true.
    */
   allowFixing?: boolean;
   /**
-   * @docid GridBaseColumn.allowHeaderFiltering
-   * @default true
-   * @public
+   * Specifies whether the header filter can be used to filter data by this column. Applies only if headerFilter.visible is true. By default, inherits the value of the allowFiltering property.
    */
   allowHeaderFiltering?: boolean;
   /**
-   * @docid GridBaseColumn.allowHiding
-   * @default false &for(command column)
-   * @default true
-   * @public
+   * Specifies whether a user can hide the column using the column chooser at runtime. Applies only if columnChooser.enabled is true.
    */
   allowHiding?: boolean;
   /**
-   * @docid GridBaseColumn.allowReordering
-   * @default true
-   * @public
+   * Specifies whether users can reorder this column. Overrides the allowColumnReordering property value.
    */
   allowReordering?: boolean;
   /**
-   * @docid GridBaseColumn.allowResizing
-   * @default true
-   * @public
+   * Specifies whether a user can resize the column at runtime. Applies only if allowColumnResizing is true.
    */
   allowResizing?: boolean;
   /**
-   * @docid GridBaseColumn.allowSearch
-   * @default true
-   * @public
+   * Specifies whether this column can be searched. Applies only if searchPanel.visible is true. Inherits the value of the allowFiltering property by default.
    */
   allowSearch?: boolean;
   /**
-   * @docid GridBaseColumn.allowSorting
-   * @default true
-   * @public
+   * Specifies whether a user can sort rows by this column at runtime. Applies only if sorting.mode differs from &apos;none&apos;.
    */
   allowSorting?: boolean;
   /**
-   * @docid GridBaseColumn.calculateCellValue
-   * @type_function_context GridBaseColumn
-   * @type_function_param1 rowData:object
-   * @public
+   * Calculates custom cell values. Use this function to create an unbound data column.
    */
   calculateCellValue?: ((this: ColumnBase, rowData: TRowData) => any);
-  /**
-   * @public
-   */
   defaultCalculateCellValue?: this['calculateCellValue'];
   /**
-   * @docid GridBaseColumn.calculateDisplayValue
-   * @type_function_context GridBaseColumn
-   * @type_function_param1 rowData:object
-   * @public
+   * Calculates custom display values for column cells. Requires specifying the dataField or calculateCellValue property. Used in lookup optimization.
    */
   calculateDisplayValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
   /**
-   * @docid GridBaseColumn.calculateFilterExpression
-   * @type_function_context GridBaseColumn
-   * @type_function_return Filter expression
-   * @public
+   * Specifies the column&apos;s custom rules to filter data.
    */
   calculateFilterExpression?: ((this: ColumnBase, filterValue: any, selectedFilterOperation: string | null, target: string) => string | Array<any> | Function);
-  /**
-   * @public
-   */
   defaultCalculateFilterExpression?: this['calculateFilterExpression'];
   /**
-   * @docid GridBaseColumn.calculateSortValue
-   * @type_function_context GridBaseColumn
-   * @type_function_param1 rowData:object
-   * @public
+   * Calculates custom values used to sort this column.
    */
   calculateSortValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
   /**
-   * @docid GridBaseColumn.caption
-   * @default undefined
-   * @public
+   * Specifies a caption for the column.
    */
   caption?: string | undefined;
   /**
-   * @docid GridBaseColumn.cssClass
-   * @default undefined
-   * @public
+   * Specifies a CSS class to be applied to the column.
    */
   cssClass?: string | undefined;
   /**
-   * @docid GridBaseColumn.customizeText
-   * @type_function_context GridBaseColumn
-   * @type_function_param1 cellInfo:object
-   * @public
+   * Customizes the text displayed in column cells.
    */
   customizeText?: ((this: ColumnBase, cellInfo: ColumnCustomizeTextArg) => string);
   /**
-   * @docid GridBaseColumn.dataField
-   * @default undefined
-   * @public
+   * Binds the column to a field of the dataSource.
    */
   dataField?: string | undefined;
   /**
-   * @docid GridBaseColumn.dataType
-   * @default undefined
-   * @public
+   * Casts column values to a specific data type.
    */
   dataType?: DataType | undefined;
   /**
-   * @docid GridBaseColumn.editorOptions
-   * @public
+   * Configures the default UI component used for editing and filtering in the filter row.
    */
   editorOptions?: any;
   /**
-   * @docid GridBaseColumn.encodeHtml
-   * @default true
-   * @public
+   * Specifies whether HTML tags are displayed as plain text or applied to the values of the column.
    */
   encodeHtml?: boolean;
   /**
-   * @docid GridBaseColumn.falseText
-   * @default "false"
-   * @public
+   * In a boolean column, replaces all false items with a specified text. Applies only if showEditorAlways property is false.
    */
   falseText?: string;
   /**
-   * @docid GridBaseColumn.filterOperations
-   * @default undefined
-   * @public
+   * Specifies available filter operations. Applies if allowFiltering is true and the filterRow and/or filterPanel are visible.
    */
   filterOperations?: Array<FilterOperation | string>;
   /**
-   * @docid GridBaseColumn.filterType
-   * @default "include"
-   * @public
+   * Specifies whether a user changes the current filter by including (selecting) or excluding (clearing the selection of) values. Applies only if headerFilter.visible and allowHeaderFiltering are true.
    */
   filterType?: FilterType;
   /**
-   * @docid GridBaseColumn.filterValue
-   * @default undefined
-   * @fires GridBaseOptions.onOptionChanged
-   * @public
+   * Specifies the value to display in the filter row.
    */
   filterValue?: any | undefined;
   /**
-   * @docid GridBaseColumn.filterValues
-   * @default undefined
-   * @fires GridBaseOptions.onOptionChanged
-   * @public
+   * Sets the values in the header filter.
    */
   filterValues?: Array<any>;
   /**
-   * @docid GridBaseColumn.fixed
-   * @default false
-   * @public
+   * Fixes the column.
    */
   fixed?: boolean;
   /**
-   * @docid GridBaseColumn.fixedPosition
-   * @default undefined
-   * @public
+   * Specifies the column position. Applies only if columns[].fixed is true.
    */
   fixedPosition?: FixedPosition | undefined;
   /**
-   * @docid GridBaseColumn.formItem
-   * @type dxFormSimpleItem
-   * @public
+   * Configures the form item that the column produces in the editing state. Applies only if editing.mode is &apos;form&apos; or &apos;popup&apos;.
    */
   formItem?: SimpleItem;
   /**
-   * @docid GridBaseColumn.format
-   * @default ""
-   * @public
+   * Formats a value before it is displayed in a column cell.
    */
   format?: Format;
   /**
-   * @docid GridBaseColumn.headerFilter
-   * @type object
-   * @default undefined
-   * @public
+   * Specifies data settings for the header filter.
    */
   headerFilter?: ColumnHeaderFilter | undefined;
   /**
-   * @docid GridBaseColumn.hidingPriority
-   * @default undefined
-   * @public
+   * Specifies the order in which columns are hidden when the UI component adapts to the screen or container size. Ignored if allowColumnResizing is `true` and columnResizingMode is &apos;widget&apos;.
    */
   hidingPriority?: number | undefined;
   /**
-   * @docid GridBaseColumn.isBand
-   * @default undefined
-   * @public
+   * Specifies whether the column organizes other columns into bands.
    */
   isBand?: boolean | undefined;
   /**
-   * @docid GridBaseColumn.lookup
-   * @type object
-   * @default undefined
-   * @public
+   * Specifies properties of a lookup column.
    */
   lookup?: ColumnLookup | undefined;
   /**
-   * @docid GridBaseColumn.minWidth
-   * @default undefined
-   * @public
+   * Specifies the minimum width of the column.
    */
   minWidth?: number | undefined;
   /**
-   * @docid GridBaseColumn.name
-   * @default undefined
-   * @public
+   * Specifies the column&apos;s unique identifier. If not set in code, this value is inherited from the dataField.
    */
   name?: string | undefined;
   /**
-   * @docid GridBaseColumn.ownerBand
-   * @default undefined
-   * @public
+   * Specifies the band column that owns the current column. Accepts the index of the band column in the columns array.
    */
   ownerBand?: number | undefined;
   /**
-   * @docid GridBaseColumn.renderAsync
-   * @default false
-   * @public
+   * Specifies whether to render the column after other columns and elements. Use if column cells have a complex template. Requires the width property specified.
    */
   renderAsync?: boolean;
   /**
-   * @docid GridBaseColumn.selectedFilterOperation
-   * @default undefined
-   * @fires GridBaseOptions.onOptionChanged
-   * @public
+   * Specifies a filter operation that applies when users use the filter row to filter the column.
    */
   selectedFilterOperation?: SelectedFilterOperation | undefined;
   /**
-   * @docid GridBaseColumn.setCellValue
-   * @type_function_context GridBaseColumn
-   * @type_function_param1 newData:object
-   * @type_function_param3 currentRowData:object
-   * @type_function_return void|Promise<void>
-   * @public
+   * Specifies a function to be invoked after the user has edited a cell value, but before it is saved in the data source.
    */
   setCellValue?: ((this: ColumnBase, newData: DeepPartial<TRowData>, value: any, currentRowData: TRowData) => void | PromiseLike<void>);
-  /**
-   * @public
-   */
   defaultSetCellValue?: this['setCellValue'];
   /**
-   * @docid GridBaseColumn.showEditorAlways
-   * @default false
-   * @public
+   * Specifies whether the column displays its values in editors.
    */
   showEditorAlways?: boolean;
   /**
-   * @docid GridBaseColumn.showInColumnChooser
-   * @default true
-   * @public
+   * Specifies whether the column chooser can contain the column header.
    */
   showInColumnChooser?: boolean;
   /**
-   * @docid GridBaseColumn.sortIndex
-   * @default undefined
-   * @fires GridBaseOptions.onOptionChanged
-   * @public
+   * Specifies the index according to which columns participate in sorting.
    */
   sortIndex?: number | undefined;
   /**
-   * @docid GridBaseColumn.sortOrder
-   * @default undefined
-   * @acceptValues undefined
-   * @fires GridBaseOptions.onOptionChanged
-   * @public
+   * Specifies the sort order of column values.
    */
   sortOrder?: SortOrder | undefined;
   /**
-   * @docid GridBaseColumn.sortingMethod
-   * @default undefined
-   * @type_function_context GridBaseColumn
-   * @public
+   * Specifies a custom comparison function for sorting. Applies only when sorting is performed on the client.
    */
   sortingMethod?: ((this: ColumnBase, value1: any, value2: any) => number) | undefined;
   /**
-   * @docid GridBaseColumn.trueText
-   * @default "true"
-   * @public
+   * In a boolean column, replaces all true items with a specified text. Applies only if showEditorAlways property is false.
    */
   trueText?: string;
   /**
-   * @docid GridBaseColumn.validationRules
-   * @type Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>
-   * @public
+   * Specifies validation rules to be checked when cell values are updated.
    */
   validationRules?: Array<ValidationRule>;
   /**
-   * @docid GridBaseColumn.visible
-   * @default true
-   * @fires GridBaseOptions.onOptionChanged
-   * @public
+   * Specifies whether the column is visible, that is, occupies space in the table.
    */
   visible?: boolean;
   /**
-   * @docid GridBaseColumn.visibleIndex
-   * @default undefined
-   * @fires GridBaseOptions.onOptionChanged
-   * @public
+   * Specifies the position of the column regarding other columns in the resulting UI component.
    */
   visibleIndex?: number | undefined;
   /**
-   * @docid GridBaseColumn.width
-   * @default undefined
-   * @public
+   * Specifies the column&apos;s width in pixels or as a percentage. Ignored if it is less than minWidth.
    */
   width?: number | string | undefined;
 }
 
 /**
- * @hidden
- * @docid GridBaseColumnButton
- * @namespace DevExpress.common.grids
- * @type object
+ * Allows you to customize buttons in the edit column or create a custom command column. Applies only if the column&apos;s type is &apos;buttons&apos;.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface ColumnButtonBase {
   /**
-   * @docid GridBaseColumnButton.cssClass
-   * @public
+   * Specifies a CSS class to be applied to the button.
    */
   cssClass?: string;
   /**
-   * @docid GridBaseColumnButton.hint
-   * @public
+   * Specifies the text for the hint that appears when the button is hovered over or long-pressed.
    */
   hint?: string;
   /**
-   * @docid GridBaseColumnButton.icon
-   * @public
+   * Specifies the button&apos;s icon.
    */
   icon?: string;
   /**
-   * @docid GridBaseColumnButton.text
-   * @public
+   * Specifies the button&apos;s text. Applies only if the button&apos;s icon is not specified.
    */
   text?: string;
 }
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.grids
+ * Configures the column chooser.
  */
 export type ColumnChooser = {
   /**
-   * @docid GridBaseOptions.columnChooser.allowSearch
-   * @default false
-   * @deprecated
+   * Specifies whether searching is enabled in the column chooser.
+   * @deprecated Use DataGrid search.enabled or TreeList search.enabled instead.
    */
   allowSearch?: boolean;
   /**
-     * @docid GridBaseOptions.columnChooser.container
-     * @default undefined
-     * @public
-     */
+   * Specifies a container in which the column chooser should be rendered.
+   */
   container?: string | UserDefinedElement | undefined;
   /**
-   * @docid GridBaseOptions.columnChooser.emptyPanelText
-   * @default "Drag a column here to hide it"
+   * Specifies text displayed by the column chooser when it is empty.
    */
   emptyPanelText?: string;
   /**
-   * @docid GridBaseOptions.columnChooser.enabled
-   * @default false
+   * Specifies whether a user can open the column chooser.
    */
   enabled?: boolean;
   /**
-   * @docid GridBaseOptions.columnChooser.height
-   * @default 260
+   * Specifies the height of the column chooser.
    */
   height?: number | string;
   /**
-   * @docid GridBaseOptions.columnChooser.mode
-   * @default "dragAndDrop"
+   * Specifies how a user manages columns using the column chooser.
    */
   mode?: ColumnChooserMode;
   /**
-   * @docid GridBaseOptions.columnChooser.position
-   * @default undefined
+   * Configures the column chooser&apos;s position.
    */
   position?: PositionConfig | undefined;
   /**
-   * @docid GridBaseOptions.columnChooser.search
+   * Configures the column chooser&apos;s search functionality.
    */
   search?: ColumnChooserSearchConfig;
   /**
-   * @docid GridBaseOptions.columnChooser.searchTimeout
-   * @default 500
-   * @deprecated
+   * Specifies a delay in milliseconds between when a user finishes typing in the column chooser&apos;s search panel, and when the search is executed.
+   * @deprecated Use DataGrid search.timeout or TreeList search.timeout instead.
    */
   searchTimeout?: number;
   /**
-   * @docid GridBaseOptions.columnChooser.selection
+   * Configures column selection functionality within the column chooser.
    */
   selection?: ColumnChooserSelectionConfig;
   /**
-   * @docid GridBaseOptions.columnChooser.title
-   * @default "Column Chooser"
+   * Specifies the title of the column chooser.
    */
   title?: string;
   /**
-   * @docid GridBaseOptions.columnChooser.width
-   * @default 250
+   * Specifies the width of the column chooser.
    */
   width?: number | string;
   /**
-   * @docid GridBaseOptions.columnChooser.sortOrder
-   * @default undefined
+   * Specifies the sort order of column headers.
    */
   sortOrder?: SortOrder | undefined;
 };
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type ColumnChooserMode = 'dragAndDrop' | 'select';
 
 /**
- * @public
- * @docid
- * @namespace DevExpress.common.grids
+ * Configures the column chooser&apos;s search functionality.
  */
 export type ColumnChooserSearchConfig = {
   /**
-   * @docid
-   * @default {}
+   * Configures the search box.
    */
   editorOptions?: any;
   /**
-   * @docid
-   * @default false
+   * Specifies whether search is enabled in the column chooser.
    */
   enabled?: boolean;
   /**
-   * @docid
-   * @default 500
+   * Specifies a timeout, in milliseconds, during which a user may continue to modify the search value without starting the search operation.
    */
   timeout?: number;
 };
 
 /**
- * @public
- * @docid
- * @namespace DevExpress.common.grids
+ * Configures column selection functionality within the column chooser.
  */
 export type ColumnChooserSelectionConfig = {
   /**
-   * @docid
-   * @default false
+   * Specifies whether a &apos;Select All&apos; option is available to users.
    */
   allowSelectAll?: boolean;
   /**
-   * @docid
-   * @default false
+   * Specifies whether selection is recursive.
    */
   recursive?: boolean;
   /**
-   * @docid
-   * @default false
+   * Specifies whether an item becomes selected if a user clicks the item&apos;s label.
    */
   selectByClick?: boolean;
 };
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type ColumnCustomizeTextArg = {
   value?: any;
   valueText?: string;
@@ -610,275 +427,208 @@ export type ColumnCustomizeTextArg = {
 };
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.grids
+ * Configures column fixing.
  */
 export type ColumnFixing = {
   /**
-   * @docid GridBaseOptions.columnFixing.enabled
-   * @default false
+   * Enables column fixing.
    */
   enabled?: boolean;
   /**
-   * @docid GridBaseOptions.columnFixing.texts
-   * @type object
+   * Contains properties that specify texts for column fixing commands in the context menu of a column header.
    */
   texts?: ColumnFixingTexts;
   /**
-   * @docid GridBaseOptions.columnFixing.icons
-   * @type object
+   * Contains properties that specify icons for column fixing commands in the context menu of a column header.
    */
   icons?: ColumnFixingIcons;
 };
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.grids
+ * Contains properties that specify texts for column fixing commands in the context menu of a column header.
  */
 export type ColumnFixingTexts = {
   /**
-   * @docid GridBaseOptions.columnFixing.texts.fix
-   * @default "Fix"
+   * Specifies text for the context menu item that fixes a column.
    */
   fix?: string;
   /**
-   * @docid GridBaseOptions.columnFixing.texts.leftPosition
-   * @default "To the left"
+   * Specifies text for the context menu subitem that fixes a column to the left edge of the UI component.
    */
   leftPosition?: string;
   /**
-   * @docid GridBaseOptions.columnFixing.texts.rightPosition
-   * @default "To the right"
+   * Specifies text for the context menu subitem that fixes a column to the right edge of the UI component.
    */
   rightPosition?: string;
   /**
-   * @docid GridBaseOptions.columnFixing.texts.unfix
-   * @default "Unfix"
+   * Specifies text for the context menu item that unfixes a column.
    */
   unfix?: string;
   /**
-   * @docid GridBaseOptions.columnFixing.texts.stickyPosition
-   * @default "Stick in place"
+   * Specifies text for the context menu subitem that enables sticky column behavior.
    */
   stickyPosition?: string;
 };
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.grids
+ * Configures column fixing icons.
  */
 export type ColumnFixingIcons = {
   /**
-   * @docid GridBaseOptions.columnFixing.icons.fix
-   * @default "fix-column"
+   * Specifies an icon for the context menu item that fixes a column.
    */
   fix?: string;
   /**
-   * @docid GridBaseOptions.columnFixing.icons.leftPosition
-   * @default "fix-column-left"
+   * Specifies an icon for the context menu subitem that fixes a column to the left edge of the UI component.
    */
   leftPosition?: string;
   /**
-   * @docid GridBaseOptions.columnFixing.icons.rightPosition
-   * @default "fix-column-right"
+   * Specifies an icon for the context menu subitem that fixes a column to the right edge of the UI component.
    */
   rightPosition?: string;
   /**
-   * @docid GridBaseOptions.columnFixing.icons.unfix
-   * @default "unfix-column"
+   * Specifies an icon for the context menu item that unfixes a column.
    */
   unfix?: string;
   /**
-   * @docid GridBaseOptions.columnFixing.icons.stickyPosition
-   * @default "stick-column"
+   * Specifies an icon for the context menu subitem that enables sticky column behavior.
    */
   stickyPosition?: string;
 };
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type ColumnHeaderFilter = {
   /**
-   * @docid GridBaseColumn.headerFilter.allowSearch
-   * @default false
-   * @deprecated
+   * Specifies whether searching is enabled in the header filter.
+   * @deprecated Use DataGrid search.enabled, TreeList search.enabled, or Gantt search.enabled instead.
    */
   allowSearch?: boolean;
   /**
-   * @docid GridBaseColumn.headerFilter.allowSelectAll
-   * @default true
+   * Specifies whether a &apos;Select All&apos; option is available to users.
    */
   allowSelectAll?: boolean;
   /**
-   * @docid GridBaseColumn.headerFilter.dataSource
-   * @type_function_param1_field component:object
-   * @default undefined
-   * @type Array<any>|Store|DataSourceOptions|Function|null|undefined
+   * Specifies the header filter&apos;s data source.
    */
   dataSource?: FilterLookupDataSource<any> | ((options: { component?: any; dataSource?: DataSourceOptions | null }) => void) | undefined;
   /**
-   * @docid GridBaseColumn.headerFilter.groupInterval
-   * @default undefined
+   * Specifies how the header filter combines values into groups. Does not apply if you specify a custom header filter data source.
    */
   groupInterval?: HeaderFilterGroupInterval | number | undefined;
   /**
-   * @docid GridBaseColumn.headerFilter.height
-   * @default undefined
+   * Specifies the height of the popup menu containing filtering values.
    */
   height?: number | string | undefined;
   /**
-   * @docid GridBaseColumn.headerFilter.search
+   * Configures the header filter&apos;s search functionality.
    */
   search?: ColumnHeaderFilterSearchConfig;
   /**
-   * @docid GridBaseColumn.headerFilter.searchMode
-   * @default 'contains'
-   * @deprecated
+   * Specifies a comparison operation used to search header filter values.
+   * @deprecated Use DataGrid search.mode, TreeList search.mode, or Gantt search.mode instead.
    */
   searchMode?: SearchMode;
   /**
-   * @docid GridBaseColumn.headerFilter.width
-   * @default undefined
+   * Specifies the width of the popup menu containing filtering values.
    */
   width?: number | string | undefined;
 };
 
 /**
- * @public
- * @docid
- * @namespace DevExpress.common.grids
- * @inherits HeaderFilterSearchConfig
+ * Configures the header filter&apos;s search.
  */
 export type ColumnHeaderFilterSearchConfig = HeaderFilterSearchConfig & {
   /**
-   * @docid
-   * @type getter|Array<getter>|undefined
-   * @default undefined
+   * Specifies a data object&apos;s field name or an expression whose value is compared to the search string.
    */
   searchExpr?: string | Function | Array<string | Function> | undefined;
 };
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type ColumnLookup = {
   /**
-   * @docid GridBaseColumn.lookup.allowClearing
-   * @default false
+   * Specifies whether to display the Clear button in lookup column cells while they are being edited.
    */
   allowClearing?: boolean;
   /**
-   * @docid GridBaseColumn.lookup.dataSource
-   * @type_function_param1_field data:object
-   * @default undefined
-   * @type_function_return Array<any>|Store|DataSourceOptions
-   * @type Array<any>|Store|DataSourceOptions|Function|null|undefined
+   * Specifies the data source for the lookup column.
    */
   dataSource?: FilterLookupDataSource<any> | ((options: { data?: any; key?: any }) => FilterLookupDataSource<any>) | null | undefined;
   /**
-   * @docid GridBaseColumn.lookup.displayExpr
-   * @default undefined
-   * @type_function_param1 data:object
+   * Specifies the data source field whose values must be displayed.
    */
   displayExpr?: string | ((data: any) => string) | undefined;
   /**
-   * @docid GridBaseColumn.lookup.valueExpr
-   * @default undefined
+   * Specifies the data field whose values should be replaced with values from the displayExpr field.
    */
   valueExpr?: string | undefined;
   /**
-   * @docid GridBaseColumn.lookup.calculateCellValue
-   * @type_function_param1 rowData:object
-   * @public
+   * 
    */
   calculateCellValue?: ((rowData: any) => any);
 };
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type ColumnResizeMode = 'nextColumn' | 'widget';
 
 /**
- * @public
- * @docid
- * @namespace DevExpress.common.grids
+ * 
  */
 export type DataChange<TRowData = any, TKey = any> = {
   /**
-   * @docid
+   * The key of the row being created, updated, or removed.
    */
   key: TKey;
   /**
-   * @docid
+   * Data change type.
    */
   type: DataChangeType;
   /**
-   * @docid
-   * @type any
+   * An object with updated row fields.
    */
   data: DeepPartial<TRowData>;
   /**
-   * @docid
+   * A key that identifies a record after which a new record should be inserted. Applies only if the type is &apos;insert&apos;.
    */
   insertAfterKey?: TKey;
   /**
-   * @docid
+   * A key that identifies the record before which a new record should be inserted. Applies only if the type is &apos;insert&apos;.
    */
   insertBeforeKey?: TKey;
 };
 
 /**
- * @docid
- * @hidden
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type DataChangeInfo<TRowData = any, TKey = any> = {
   /**
-   * @docid
-   * @type Array<DataChange>
+   * 
    */
   readonly changes: Array<DataChange<TRowData, TKey>>;
 };
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type DataChangeType = 'insert' | 'update' | 'remove';
 
 /**
- * @docid
- * @hidden
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type DataErrorOccurredInfo = {
-  /** @docid */
+  /**
+   * 
+   */
   readonly error?: Error;
 };
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type DataRenderMode = 'standard' | 'virtual';
 
 /**
- * @namespace DevExpress.common.grids
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type DragDropInfo = {
   readonly dropInsideItem: boolean;
 };
 
 /**
- * @namespace DevExpress.common.grids
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type DragReorderInfo = {
   readonly dropInsideItem: boolean;
@@ -886,7 +636,7 @@ export type DragReorderInfo = {
 };
 
 /**
- * @namespace DevExpress.common.grids
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface DragStartEventInfo<TRowData = any> {
   itemData?: TRowData;
@@ -896,185 +646,119 @@ export interface DragStartEventInfo<TRowData = any> {
 }
 
 /**
- * @hidden
- * @docid
- * @namespace DevExpress.common.grids
+ * Overriden.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface EditingBase<TRowData = any, TKey = any> {
   /**
-   * @docid GridBaseOptions.editing.confirmDelete
-   * @default true
-   * @public
+   * Specifies if confirmation is required when a user deletes a row.
    */
   confirmDelete?: boolean;
   /**
-   * @docid GridBaseOptions.editing.changes
-   * @default []
-   * @fires GridBaseOptions.onOptionChanged
-   * @public
-   * @type Array<DataChange>
+   * An array of pending row changes.
    */
   changes?: Array<DataChange<TRowData, TKey>>;
   /**
-   * @docid GridBaseOptions.editing.editColumnName
-   * @default null
-   * @fires GridBaseOptions.onOptionChanged
-   * @public
+   * The name of a column being edited. Applies only if editing.mode is &apos;cell&apos; or &apos;batch&apos;.
    */
   editColumnName?: string;
   /**
-   * @docid GridBaseOptions.editing.editRowKey
-   * @default null
-   * @fires GridBaseOptions.onOptionChanged
-   * @public
+   * The key(s) of a row being edited.
    */
   editRowKey?: TKey;
   /**
-   * @docid GridBaseOptions.editing.form
-   * @public
-   * @type dxFormOptions
+   * Configures the form. Used only if editing.mode is &apos;form&apos; or &apos;popup&apos;.
    */
   form?: FormProperties;
   /**
-   * @docid GridBaseOptions.editing.mode
-   * @default "row"
-   * @public
+   * Specifies how a user edits data.
    */
   mode?: GridsEditMode;
   /**
-   * @docid GridBaseOptions.editing.popup
-   * @public
-   * @type dxPopupOptions
+   * Configures the popup. Used only if editing.mode is &apos;popup&apos;.
    */
   popup?: PopupProperties;
   /**
-   * @docid GridBaseOptions.editing.refreshMode
-   * @default "full"
-   * @public
+   * Specifies operations that are performed after saving changes.
    */
   refreshMode?: GridsEditRefreshMode;
   /**
-   * @docid GridBaseOptions.editing.selectTextOnEditStart
-   * @default false
-   * @public
+   * Specifies whether to select text in a cell when a user starts editing.
    */
   selectTextOnEditStart?: boolean;
   /**
-   * @docid GridBaseOptions.editing.startEditAction
-   * @default "click"
-   * @public
+   * Specifies whether a single or double click should switch a cell to the editing state. Applies if editing.mode is &apos;cell&apos; or &apos;batch&apos;.
    */
   startEditAction?: StartEditAction;
   /**
-   * @docid GridBaseOptions.editing.texts
-   * @type object
-   * @public
+   * Contains properties that specify texts for editing-related UI elements.
    */
   texts?: EditingTextsBase;
   /**
-   * @docid GridBaseOptions.editing.useIcons
-   * @default true &for(Material)
-   * @default true &for(Fluent)
-   * @default false
-   * @public
+   * Specifies whether the edit column uses icons instead of links.
    */
   useIcons?: boolean;
 }
 
 /**
- * @hidden
- * @docid
- * @namespace DevExpress.common.grids
+ * Contains properties that specify texts for editing-related UI elements.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface EditingTextsBase {
   /**
-   * @docid GridBaseOptions.editing.texts.addRow
-   * @default "Add a row"
-   * @public
+   * Specifies text for a hint that appears when a user pauses on the global &apos;Add&apos; button. Applies only if editing.allowAdding is true.
    */
   addRow?: string;
   /**
-   * @docid GridBaseOptions.editing.texts.cancelAllChanges
-   * @default "Discard changes"
-   * @public
+   * Specifies text for a hint that appears when a user pauses on the &apos;Discard&apos; button. Applies only if editing.mode is &apos;batch&apos;.
    */
   cancelAllChanges?: string;
   /**
-   * @docid GridBaseOptions.editing.texts.cancelRowChanges
-   * @default "Cancel"
-   * @public
+   * Specifies text for a button that cancels changes in a row. Applies only if editing.allowUpdating is true and editing.mode is &apos;row&apos;, &apos;popup&apos; or &apos;form&apos;.
    */
   cancelRowChanges?: string;
   /**
-   * @docid GridBaseOptions.editing.texts.confirmDeleteMessage
-   * @default "Are you sure you want to delete this record?"
-   * @public
+   * Specifies a message that prompts a user to confirm deletion.
    */
   confirmDeleteMessage?: string;
   /**
-   * @docid GridBaseOptions.editing.texts.confirmDeleteTitle
-   * @default ""
-   * @public
+   * Specifies a title for the window that asks a user to confirm deletion.
    */
   confirmDeleteTitle?: string;
   /**
-   * @docid GridBaseOptions.editing.texts.deleteRow
-   * @default "Delete"
-   * @public
+   * Specifies text for buttons that delete rows. Applies only if allowDeleting is true.
    */
   deleteRow?: string;
   /**
-   * @docid GridBaseOptions.editing.texts.editRow
-   * @default "Edit"
-   * @public
+   * Specifies text for buttons that switch rows into the editing state. Applies only if allowUpdating is true.
    */
   editRow?: string;
   /**
-   * @docid GridBaseOptions.editing.texts.saveAllChanges
-   * @default "Save changes"
-   * @public
+   * Specifies text for a hint that appears when a user pauses on the global &apos;Save&apos; button. Applies only if editing.mode is &apos;batch&apos;.
    */
   saveAllChanges?: string;
   /**
-   * @docid GridBaseOptions.editing.texts.saveRowChanges
-   * @default "Save"
-   * @public
+   * Specifies text for a button that saves changes made in a row. Applies only if allowUpdating is true and editing.mode is &apos;row&apos;, &apos;popup&apos; or &apos;form&apos;.
    */
   saveRowChanges?: string;
   /**
-   * @docid GridBaseOptions.editing.texts.undeleteRow
-   * @default "Undelete"
-   * @public
+   * Specifies text for buttons that recover deleted rows. Applies only if allowDeleting is true and editing.mode is &apos;batch&apos;.
    */
   undeleteRow?: string;
   /**
-   * @docid GridBaseOptions.editing.texts.validationCancelChanges
-   * @default "Cancel changes"
-   * @public
+   * Specifies text for a hint appearing when a user pauses on the button that cancels changes in a cell. Applies only if editing.mode is &apos;cell&apos; and data validation is enabled.
    */
   validationCancelChanges?: string;
 }
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type EnterKeyAction = 'startEdit' | 'moveFocus';
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type EnterKeyDirection = 'none' | 'column' | 'row';
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type FilterOperation = '=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between' | 'anyof' | 'noneof';
 
 /**
- * @namespace DevExpress.common.grids
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface FilterPanelCustomizeTextArg<TComponent> {
   readonly component: TComponent;
@@ -1083,1650 +767,1048 @@ export interface FilterPanelCustomizeTextArg<TComponent> {
 }
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.grids
+ * Specifies texts for the filter panel&apos;s elements.
  */
 export type FilterPanelTexts = {
   /**
-   * @docid GridBaseOptions.filterPanel.texts.clearFilter
-   * @default "Clear"
+   * The text of the &apos;Clear&apos; link.
    */
   clearFilter?: string;
   /**
-   * @docid GridBaseOptions.filterPanel.texts.createFilter
-   * @default "Create Filter"
+   * The text of the &apos;Create Filter&apos; link.
    */
   createFilter?: string;
   /**
-   * @docid GridBaseOptions.filterPanel.texts.filterEnabledHint
-   * @default "Enable the filter"
+   * The hint of the checkbox that applies the filter.
    */
   filterEnabledHint?: string;
 };
 
 /**
- * @docid
- * @namespace DevExpress.common.grids
+ * Configures the filter panel.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface FilterPanel<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> {
   /**
-   * @docid GridBaseOptions.filterPanel.customizeText
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field filterValue:object
+   * Customizes the filter expression&apos;s text representation.
    */
   customizeText?: ((e: FilterPanelCustomizeTextArg<TComponent>) => string);
   /**
-   * @docid GridBaseOptions.filterPanel.filterEnabled
-   * @default true
-   * @fires GridBaseOptions.onOptionChanged
+   * Specifies whether the filter expression is applied.
    */
   filterEnabled?: boolean;
   /**
-   * @docid GridBaseOptions.filterPanel.texts
-   * @type object
-   * @default {}
+   * Specifies texts for the filter panel&apos;s elements.
    */
   texts?: FilterPanelTexts;
   /**
-   * @docid GridBaseOptions.filterPanel.visible
-   * @default false
+   * Specifies whether the filter panel is visible.
    */
   visible?: boolean;
 }
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.grids
+ * Configures the filter row.
  */
 export type FilterRow = {
   /**
-   * @docid GridBaseOptions.filterRow.applyFilter
-   * @default "auto"
+   * Specifies when to apply a filter.
    */
   applyFilter?: ApplyFilterMode;
   /**
-   * @docid GridBaseOptions.filterRow.applyFilterText
-   * @default "Apply filter"
+   * Specifies text for a hint that appears when a user pauses on a button that applies the filter.
    */
   applyFilterText?: string;
   /**
-   * @docid GridBaseOptions.filterRow.betweenEndText
-   * @default "End"
+   * Specifies a placeholder for the editor that specifies the end of a range when a user selects the &apos;between&apos; filter operation.
    */
   betweenEndText?: string;
   /**
-   * @docid GridBaseOptions.filterRow.betweenStartText
-   * @default "Start"
+   * Specifies a placeholder for the editor that specifies the start of a range when a user selects the &apos;between&apos; filter operation.
    */
   betweenStartText?: string;
   /**
-   * @docid GridBaseOptions.filterRow.operationDescriptions
-   * @type object
+   * Specifies descriptions for filter operations on the filter list.
    */
   operationDescriptions?: FilterRowOperationDescriptions;
   /**
-   * @docid GridBaseOptions.filterRow.resetOperationText
-   * @default "Reset"
+   * Specifies text for the reset operation on the filter list.
    */
   resetOperationText?: string;
   /**
-   * @docid GridBaseOptions.filterRow.showAllText
-   * @default "(All)"
+   * Specifies text for the item that clears the applied filter. Used only when a cell of the filter row contains a select box.
    */
   showAllText?: string;
   /**
-   * @docid GridBaseOptions.filterRow.showOperationChooser
-   * @default true
+   * Specifies whether icons that open the filter lists are visible.
    */
   showOperationChooser?: boolean;
   /**
-   * @docid GridBaseOptions.filterRow.visible
-   * @default false
+   * Specifies whether the filter row is visible.
    */
   visible?: boolean;
 };
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.grids
+ * Specifies descriptions for filter operations on the filter list.
  */
 export type FilterRowOperationDescriptions = {
   /**
-   * @docid GridBaseOptions.filterRow.operationDescriptions.between
-   * @default "Between"
+   * A description for the &apos;between&apos; operation.
    */
   between?: string;
   /**
-   * @docid GridBaseOptions.filterRow.operationDescriptions.contains
-   * @default "Contains"
+   * A description for the &apos;contains&apos; operation.
    */
   contains?: string;
   /**
-   * @docid GridBaseOptions.filterRow.operationDescriptions.endsWith
-   * @default "Ends with"
+   * A description for the &apos;endswith&apos; operation.
    */
   endsWith?: string;
   /**
-   * @docid GridBaseOptions.filterRow.operationDescriptions.equal
-   * @default "Equals"
+   * A description for the &apos;=&apos; operation.
    */
   equal?: string;
   /**
-   * @docid GridBaseOptions.filterRow.operationDescriptions.greaterThan
-   * @default "Greater than"
+   * A description for the &apos;&gt;&apos; operation.
    */
   greaterThan?: string;
   /**
-   * @docid GridBaseOptions.filterRow.operationDescriptions.greaterThanOrEqual
-   * @default "Greater than or equal to"
+   * A description for the &apos;&gt;=&apos; operation.
    */
   greaterThanOrEqual?: string;
   /**
-   * @docid GridBaseOptions.filterRow.operationDescriptions.lessThan
-   * @default "Less than"
+   * A description for the &apos;&lt;&apos; operation.
    */
   lessThan?: string;
   /**
-   * @docid GridBaseOptions.filterRow.operationDescriptions.lessThanOrEqual
-   * @default "Less than or equal to"
+   * A description for the &apos;&lt;=&apos; operation.
    */
   lessThanOrEqual?: string;
   /**
-   * @docid GridBaseOptions.filterRow.operationDescriptions.notContains
-   * @default "Does not contain"
+   * A description for the &apos;notcontains&apos; operation.
    */
   notContains?: string;
   /**
-   * @docid GridBaseOptions.filterRow.operationDescriptions.notEqual
-   * @default "Does not equal"
+   * A description for the &apos;&lt;&gt;&apos; operation.
    */
   notEqual?: string;
   /**
-   * @docid GridBaseOptions.filterRow.operationDescriptions.startsWith
-   * @default "Starts with"
+   * A description for the &apos;startswith&apos; operation.
    */
   startsWith?: string;
 };
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type FilterType = 'exclude' | 'include';
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.grids
+ * Configures the header filter feature.
  */
 export type HeaderFilter = {
   /**
-   * @docid GridBaseOptions.headerFilter.allowSearch
-   * @default false
-   * @deprecated
+   * Specifies whether searching is enabled in the header filter.
+   * @deprecated Use DataGrid search.enabled or TreeList search.enabled instead.
    */
   allowSearch?: boolean;
   /**
-   * @docid GridBaseOptions.headerFilter.allowSelectAll
-   * @default true
+   * Specifies whether a &apos;Select All&apos; option is available to users.
    */
   allowSelectAll?: boolean;
   /**
-   * @docid GridBaseOptions.headerFilter.height
-   * @default 315 &for(Material)
-   * @default 315 &for(Fluent)
-   * @default 325
+   * Specifies the height of the popup menu that contains values for filtering.
    */
   height?: number | string;
   /**
-   * @docid GridBaseOptions.headerFilter.search
+   * Configures the header filter&apos;s search box.
    */
   search?: HeaderFilterSearchConfig;
   /**
-   * @docid GridBaseOptions.headerFilter.searchTimeout
-   * @default 500
-   * @deprecated
+   * Specifies a delay in milliseconds between when a user finishes typing in the header filter&apos;s search panel, and when the search is executed.
+   * @deprecated Use DataGrid search.timeout or TreeList search.timeout instead.
    */
   searchTimeout?: number;
   /**
-   * @docid GridBaseOptions.headerFilter.texts
-   * @type object
+   * Contains properties that specify text for various elements of the popup menu.
    */
   texts?: HeaderFilterTexts;
   /**
-   * @docid GridBaseOptions.headerFilter.visible
-   * @default false
+   * Specifies whether header filter icons are visible.
    */
   visible?: boolean;
   /**
-   * @docid GridBaseOptions.headerFilter.width
-   * @default 252
+   * Specifies the width of the popup menu that contains values for filtering.
    */
   width?: number | string;
 };
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year';
 
 /**
- * @public
- * @docid
- * @namespace DevExpress.common.grids
+ * Configures the header filter&apos;s search functionality.
  */
 export type HeaderFilterSearchConfig = {
   /**
-   * @docid
-   * @default {}
+   * 
    */
   editorOptions?: any;
   /**
-   * @docid
-   * @default false
+   * Specifies whether search UI is enabled in the header filter.
    */
   enabled?: boolean;
   /**
-   * @docid
-   * @default 'contains'
+   * Specifies a comparison operation used to search header filter values.
    */
   mode?: SearchMode;
   /**
-   * @docid
-   * @default 500
+   * Specifies a timeout, in milliseconds, during which a user may continue to modify the search value without starting the search operation.
    */
   timeout?: number;
 };
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.grids
+ * Contains properties that specify text for various elements of the popup menu.
  */
 export type HeaderFilterTexts = {
   /**
-   * @docid GridBaseOptions.headerFilter.texts.cancel
-   * @default "Cancel"
+   * Specifies text for the button that closes the popup menu without applying a filter.
    */
   cancel?: string;
   /**
-   * @docid GridBaseOptions.headerFilter.texts.emptyValue
-   * @default "(Blanks)"
+   * Specifies a name for the item that represents empty values in the popup menu.
    */
   emptyValue?: string;
   /**
-   * @docid GridBaseOptions.headerFilter.texts.ok
-   * @default "Ok"
+   * Specifies text for the button that applies the specified filter.
    */
   ok?: string;
 };
 
 /**
- * @docid
- * @inherits Widget, DataHelperMixin
- * @hidden
- * @namespace DevExpress.common.grids
- * @options GridBaseOptions
+ * The base class for UI components.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface GridBase<TRowData = any, TKey = any> {
   /**
-   * @docid
-   * @publicName beginCustomLoading(messageText)
-   * @public
+   * Shows the load panel.
    */
   beginCustomLoading(messageText: string): void;
   /**
-   * @docid
-   * @publicName byKey(key)
-   * @param1 key:object|string|number
-   * @return Promise<Object>
-   * @public
+   * Gets a data object with a specific key.
    */
   byKey(key: TKey): DxPromise<TRowData>;
   /**
-   * @docid
-   * @publicName cancelEditData()
-   * @public
+   * Discards changes that a user made to data.
    */
   cancelEditData(): void;
   /**
-   * @docid
-   * @publicName cellValue(rowIndex, dataField)
-   * @public
+   * Gets the value of a cell with a specific row index and a data field, column caption or name.
    */
   cellValue(rowIndex: number, dataField: string): any;
   /**
-   * @docid
-   * @publicName cellValue(rowIndex, dataField, value)
-   * @public
+   * Sets a new value to a cell with a specific row index and a data field, column caption or name.
    */
   cellValue(rowIndex: number, dataField: string, value: any): void;
   /**
-   * @docid
-   * @publicName cellValue(rowIndex, visibleColumnIndex)
-   * @public
+   * Gets the value of a cell with specific row and column indexes.
    */
   cellValue(rowIndex: number, visibleColumnIndex: number): any;
   /**
-   * @docid
-   * @publicName cellValue(rowIndex, visibleColumnIndex, value)
-   * @public
+   * Sets a new value to a cell with specific row and column indexes.
    */
   cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
   /**
-   * @docid
-   * @publicName clearFilter()
-   * @public
+   * Clears all filters applied to UI component rows.
    */
   clearFilter(): void;
   /**
-   * @docid
-   * @publicName clearFilter(filterName)
-   * @public
+   * Clears all row filters of a specific type.
    */
   clearFilter(filterName: string): void;
   /**
-   * @docid
-   * @publicName clearSelection()
-   * @public
+   * Clears selection of all rows on all pages.
    */
   clearSelection(): void;
   /**
-   * @docid
-   * @publicName clearSorting()
-   * @public
+   * Clears sorting settings of all columns at once.
    */
   clearSorting(): void;
   /**
-   * @docid
-   * @publicName closeEditCell()
-   * @public
+   * Switches the cell being edited back to the normal state. Takes effect only if editing.mode is batch or cell and showEditorAlways is false.
    */
   closeEditCell(): void;
   /**
-   * @docid
-   * @publicName collapseAdaptiveDetailRow()
-   * @public
+   * Collapses the currently expanded adaptive detail row (if there is one).
    */
   collapseAdaptiveDetailRow(): void;
   /**
-   * @docid
-   * @publicName columnCount()
-   * @public
+   * Gets the data column count. Includes visible and hidden columns, excludes command columns.
    */
   columnCount(): number;
   /**
-   * @docid
-   * @publicName columnOption(id)
-   * @return object
-   * @public
+   * Gets all properties of a column with a specific identifier.
    */
   columnOption(id: number | string): any;
   /**
-   * @docid
-   * @publicName columnOption(id, optionName)
-   * @public
+   * Gets the value of a single column property.
    */
   columnOption(id: number | string, optionName: string): any;
   /**
-   * @docid
-   * @publicName columnOption(id, optionName, optionValue)
-   * @public
+   * Updates the value of a single column property.
    */
   columnOption(id: number | string, optionName: string, optionValue: any): void;
   /**
-   * @docid
-   * @publicName columnOption(id, options)
-   * @param2 options:object
-   * @public
+   * Updates the values of several column properties.
    */
   columnOption(id: number | string, options: any): void;
   /**
-   * @docid
-   * @publicName deleteColumn(id)
-   * @public
+   * Removes a column.
    */
   deleteColumn(id: number | string): void;
   /**
-   * @docid
-   * @publicName deleteRow(rowIndex)
-   * @public
+   * Removes a row with a specific index.
    */
   deleteRow(rowIndex: number): void;
   /**
-   * @docid
-   * @publicName deselectAll()
-   * @return Promise<void>
-   * @public
+   * Clears the selection of all rows on all pages or the currently rendered page only.
    */
   deselectAll(): DxPromise<void>;
   /**
-   * @docid
-   * @publicName deselectRows(keys)
-   * @return Promise<any>
-   * @public
+   * Cancels the selection of rows with specific keys.
    */
   deselectRows(keys: Array<any>): DxPromise<any>;
   /**
-   * @docid
-   * @publicName editCell(rowIndex, dataField)
-   * @public
+   * Switches a cell with a specific row index and a data field to the editing state. Takes effect only if the editing mode is &apos;batch&apos; or &apos;cell&apos;.
    */
   editCell(rowIndex: number, dataField: string): void;
   /**
-   * @docid
-   * @publicName editCell(rowIndex, visibleColumnIndex)
-   * @public
+   * Switches a cell with specific row and column indexes to the editing state. Takes effect only if the editing mode is &apos;batch&apos; or &apos;cell&apos;.
    */
   editCell(rowIndex: number, visibleColumnIndex: number): void;
   /**
-   * @docid
-   * @publicName editRow(rowIndex)
-   * @public
+   * Switches a row with a specific index to the editing state. Takes effect only if the editing mode is &apos;row&apos;, &apos;popup&apos; or &apos;form&apos;.
    */
   editRow(rowIndex: number): void;
   /**
-   * @docid
-   * @publicName endCustomLoading()
-   * @public
+   * Hides the load panel.
    */
   endCustomLoading(): void;
   /**
-   * @docid
-   * @publicName expandAdaptiveDetailRow(key)
-   * @public
+   * Expands an adaptive detail row.
    */
   expandAdaptiveDetailRow(key: TKey): void;
   /**
-   * @docid
-   * @publicName filter()
-   * @public
+   * Gets a filter expression applied to the UI component&apos;s data source using the filter(filterExpr) method and the DataSource&apos;s filter property.
    */
   filter(): any;
   /**
-   * @docid
-   * @publicName filter(filterExpr)
-   * @public
+   * Applies a filter to the dataSource.
    */
   filter(filterExpr: any): void;
   focus(): void;
   /**
-   * @docid
-   * @publicName focus(element)
-   * @param1 element:Element|jQuery
-   * @public
+   * Sets focus on a specific cell.
    */
   focus(element: UserDefinedElement): void;
   /**
-   * @docid
-   * @publicName getCellElement(rowIndex, dataField)
-   * @public
+   * Gets a cell with a specific row index and a data field, column caption or name.
    */
   getCellElement(rowIndex: number, dataField: string): DxElement | undefined;
   /**
-   * @docid
-   * @publicName getCellElement(rowIndex, visibleColumnIndex)
-   * @public
+   * Gets a cell with specific row and column indexes.
    */
   getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
   /**
-   * @docid
-   * @publicName getCombinedFilter()
-   * @public
+   * Gets the total filter that combines all the filters applied.
    */
   getCombinedFilter(): any;
   /**
-   * @docid
-   * @publicName getCombinedFilter(returnDataField)
-   * @public
+   * Gets the total filter that combines all the filters applied.
    */
   getCombinedFilter(returnDataField: boolean): any;
   getDataSource(): DataSource<TRowData, TKey>;
   /**
-   * @docid
-   * @publicName getKeyByRowIndex(rowIndex)
-   * @param1 rowIndex:numeric
-   * @return any
-   * @public
+   * Gets the key of a row with a specific index.
    */
   getKeyByRowIndex(rowIndex: number): TKey | undefined;
   /**
-   * @docid
-   * @publicName getRowElement(rowIndex)
-   * @return Array<Element>|jQuery|undefined
-   * @public
+   * Gets the container of a row with a specific index.
    */
   getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
   /**
-   * @docid
-   * @publicName getRowIndexByKey(key)
-   * @param1 key:object|string|number
-   * @return numeric
-   * @public
+   * Gets the index of a row with a specific key.
    */
   getRowIndexByKey(key: TKey): number;
   /**
-   * @docid
-   * @publicName getScrollable()
-   * @public
-   * @return dxScrollable
+   * Gets the instance of the UI component&apos;s scrollable part.
    */
   getScrollable(): Scrollable;
   /**
-   * @docid
-   * @publicName getVisibleColumnIndex(id)
-   * @public
+   * Gets the index of a visible column.
    */
   getVisibleColumnIndex(id: number | string): number;
   /**
-   * @docid
-   * @publicName hasEditData()
-   * @public
+   * Checks whether the UI component has unsaved changes.
    */
   hasEditData(): boolean;
   /**
-   * @docid
-   * @publicName hideColumnChooser()
-   * @public
+   * Hides the column chooser.
    */
   hideColumnChooser(): void;
   /**
-   * @docid
-   * @publicName isAdaptiveDetailRowExpanded(key)
-   * @public
+   * Checks whether an adaptive detail row is expanded or collapsed.
    */
   isAdaptiveDetailRowExpanded(key: TKey): boolean;
   /**
-   * @docid
-   * @publicName isRowFocused(key)
-   * @public
+   * Checks whether a row with a specific key is focused.
    */
   isRowFocused(key: TKey): boolean;
   /**
-   * @docid
-   * @publicName isRowSelected(key)
-   * @public
+   * Checks whether a row with a specific key is selected.
    */
   isRowSelected(key: TKey): boolean;
   /**
-   * @docid
-   * @publicName keyOf(obj)
-   * @param1 obj:object
-   * @public
+   * Gets a data object&apos;s key.
    */
   keyOf(obj: TRowData): TKey;
   /**
-   * @docid
-   * @publicName navigateToRow(key)
-   * @public
-   * @return Promise<void>
+   * Navigates to a row with the specified key.
    */
   navigateToRow(key: TKey): DxPromise<void>;
   /**
-   * @docid
-   * @publicName pageCount()
-   * @return numeric
-   * @public
+   * Gets the total page count.
    */
   pageCount(): number;
   /**
-   * @docid
-   * @publicName pageIndex()
-   * @return numeric
-   * @public
+   * Gets the current page index.
    */
   pageIndex(): number;
   /**
-   * @docid
-   * @publicName pageIndex(newIndex)
-   * @param1 newIndex:numeric
-   * @return Promise<void>
-   * @public
+   * Switches the UI component to a specific page using a zero-based index.
    */
   pageIndex(newIndex: number): DxPromise<void>;
   /**
-   * @docid
-   * @publicName pageSize()
-   * @return numeric
-   * @public
+   * Gets the current page size.
    */
   pageSize(): number;
   /**
-   * @docid
-   * @publicName pageSize(value)
-   * @param1 value:numeric
-   * @public
+   * Sets the page size.
    */
   pageSize(value: number): void;
   /**
-   * @docid
-   * @publicName refresh()
-   * @return Promise<void>
-   * @public
+   * Reloads data and repaints data rows.
    */
   refresh(): DxPromise<void>;
   /**
-   * @docid
-   * @publicName refresh(changesOnly)
-   * @return Promise<void>
-   * @public
+   * Reloads data and repaints all or only updated data rows.
    */
   refresh(changesOnly: boolean): DxPromise<void>;
   /**
-   * @docid
-   * @publicName repaintRows(rowIndexes)
-   * @public
+   * Repaints specific rows.
    */
   repaintRows(rowIndexes: Array<number>): void;
   /**
-   * @docid
-   * @publicName saveEditData()
-   * @return Promise<void>
-   * @public
+   * Saves changes that a user made to data.
    */
   saveEditData(): DxPromise<void>;
   /**
-   * @docid
-   * @publicName searchByText(text)
-   * @public
+   * Seeks a search string in the columns whose allowSearch property is true.
    */
   searchByText(text: string): void;
   /**
-   * @docid
-   * @publicName selectAll()
-   * @return Promise<void>
-   * @public
+   * Selects all rows.
    */
   selectAll(): DxPromise<void>;
   /**
-   * @docid
-   * @publicName selectRows(keys, preserve)
-   * @return Promise<any>
-   * @public
+   * Selects rows with specific keys.
    */
   selectRows(keys: Array<TKey>, preserve: boolean): DxPromise<Array<TRowData>>;
   /**
-   * @docid
-   * @publicName selectRowsByIndexes(indexes)
-   * @return Promise<any>
-   * @public
+   * Selects rows with specific indexes.
    */
   selectRowsByIndexes(indexes: Array<number>): DxPromise<Array<TRowData>>;
   /**
-   * @docid
-   * @publicName showColumnChooser()
-   * @public
+   * Shows the column chooser.
    */
   showColumnChooser(): void;
   /**
-   * @docid
-   * @publicName state()
-   * @return object
-   * @public
+   * Gets the current UI component state.
    */
   state(): any;
   /**
-   * @docid
-   * @publicName state(state)
-   * @param1 state:object
-   * @public
+   * Sets the UI component state.
    */
   state(state: any): void;
   /**
-   * @docid
-   * @publicName undeleteRow(rowIndex)
-   * @public
+   * Recovers a row deleted in batch editing mode.
    */
   undeleteRow(rowIndex: number): void;
   /**
-   * @docid
-   * @publicName updateDimensions()
-   * @public
+   * Updates the UI component&apos;s content after resizing.
    */
   updateDimensions(): void;
 }
 
 /**
- * @namespace DevExpress.common.grids
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 interface GridBaseOptionsBlank<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> extends WidgetOptions<TComponent> {
     /**
-     * @hidden
-     * @docid GridBaseOptions.focusStateEnabled
+     * 
      */
     focusStateEnabled?: any;
 }
 
 /**
- * @namespace DevExpress.common.grids
- * @docid
- * @type object
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> = Omit<GridBaseOptionsBlank<TComponent, TRowData, TKey>, 'focusStateEnabled'> & {
   /**
-   * @docid
-   * @default false
-   * @public
+   * Specifies whether a user can reorder columns.
    */
   allowColumnReordering?: boolean;
   /**
-   * @docid
-   * @default false
-   * @public
+   * Specifies whether a user can resize columns.
    */
   allowColumnResizing?: boolean;
   /**
-   * @docid
-   * @default true
-   * @public
+   * Automatically scrolls the component to the focused row when the focusedRowKey is changed.
    */
   autoNavigateToFocusedRow?: boolean;
   /**
-   * @docid
-   * @default true
-   * @public
+   * Specifies whether data should be cached.
    */
   cacheEnabled?: boolean;
   /**
-   * @docid
-   * @default true
-   * @public
+   * Enables a hint that appears when a user hovers the mouse pointer over a cell with truncated content.
    */
   cellHintEnabled?: boolean;
   /**
-   * @docid
-   * @default false
-   * @public
+   * Specifies whether columns should adjust their widths to the content.
    */
   columnAutoWidth?: boolean;
   /**
-   * @docid
-   * @type object
-   * @public
-   * @inherits ColumnChooser
+   * Configures the column chooser.
    */
   columnChooser?: ColumnChooser;
   /**
-   * @docid
-   * @type object
-   * @public
+   * Configures column fixing.
    */
   columnFixing?: ColumnFixing;
   /**
-   * @docid
-   * @default false
-   * @public
+   * Specifies whether the UI component should hide columns to adapt to the screen or container size. Ignored if allowColumnResizing is true and columnResizingMode is &apos;widget&apos;.
    */
   columnHidingEnabled?: boolean;
   /**
-   * @docid
-   * @default undefined
-   * @public
+   * Specifies the minimum width of columns.
    */
   columnMinWidth?: number | undefined;
   /**
-   * @docid
-   * @default "nextColumn"
-   * @public
+   * Specifies how the UI component resizes columns. Applies only if allowColumnResizing is true.
    */
   columnResizingMode?: ColumnResizeMode;
   /**
-   * @docid
-   * @default undefined
-   * @public
+   * Specifies the width for all data columns. Has a lower priority than the column.width property.
    */
   columnWidth?: number | Mode | undefined;
   /**
-   * @docid
-   * @type Array<GridBaseColumn|string>
-   * @fires GridBaseOptions.onOptionChanged
-   * @default undefined
-   * @public
+   * Overridden.
    */
   columns?: Array<ColumnBase<TRowData> | string> | undefined;
   /**
-   * @docid
-   * @default null
-   * @public
-   * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
+   * Binds the UI component to data.
    */
   dataSource?: DataSourceLike<TRowData, TKey> | null;
   /**
-   * @docid
-   * @public
+   * Specifies the format in which date-time values should be sent to the server.
    */
   dateSerializationFormat?: string;
   /**
-   * @docid
-   * @public
-   * @type object
+   * Overriden.
    */
   editing?: EditingBase<TRowData, TKey>;
   /**
-   * @docid
-   * @default true
-   * @public
+   * Indicates whether to show the error row.
    */
   errorRowEnabled?: boolean;
   /**
-   * @docid
-   * @default {}
-   * @public
-   * @type dxFilterBuilderOptions
+   * Configures the integrated filter builder.
    */
   filterBuilder?: FilterBuilderProperties;
   /**
-   * @docid
-   * @default {}
-   * @public
-   * @type dxPopupOptions
+   * Configures the popup in which the integrated filter builder is shown.
    */
   filterBuilderPopup?: PopupProperties;
   /**
-   * @docid
-   * @type object
-   * @default {}
-   * @public
+   * Configures the filter panel.
    */
   filterPanel?: FilterPanel<TComponent, TRowData, TKey>;
   /**
-   * @docid
-   * @type object
-   * @public
+   * Configures the filter row.
    */
   filterRow?: FilterRow;
   /**
-   * @docid
-   * @default "auto"
-   * @public
+   * Specifies whether to synchronize the filter row, header filter, and filter builder. The synchronized filter expression is stored in the filterValue property.
    */
   filterSyncEnabled?: boolean | Mode;
   /**
-   * @docid
-   * @type Filter expression
-   * @default null
-   * @fires GridBase.onOptionChanged
-   * @public
+   * Specifies a filter expression.
    */
   filterValue?: string | Array<any> | Function;
   /**
-   * @docid
-   * @default -1
-   * @fires GridBaseOptions.onFocusedCellChanged
-   * @public
+   * The index of the column that contains the focused data cell. This index is taken from the columns array.
    */
   focusedColumnIndex?: number;
   /**
-   * @docid
-   * @default false
-   * @public
+   * Specifies whether the focused row feature is enabled.
    */
   focusedRowEnabled?: boolean;
   /**
-   * @docid
-   * @default -1
-   * @fires GridBaseOptions.onFocusedRowChanged
-   * @public
+   * Specifies or indicates the focused data row&apos;s index.
    */
   focusedRowIndex?: number;
   /**
-   * @docid
-   * @default undefined
-   * @fires GridBaseOptions.onFocusedRowChanged
-   * @public
+   * Specifies initially or currently focused grid row&apos;s key.
    */
   focusedRowKey?: TKey | undefined;
   /**
-   * @docid
-   * @type object
-   * @public
+   * Configures the header filter feature.
    */
   headerFilter?: HeaderFilter;
   /**
-   * @docid
-   * @default false
-   * @public
+   * Specifies whether to highlight rows and cells with edited data. repaintChangesOnly should be true.
    */
   highlightChanges?: boolean;
   /**
-   * @docid
-   * @type object
-   * @public
+   * Configures keyboard navigation.
    */
   keyboardNavigation?: KeyboardNavigation;
   /**
-   * @docid
-   * @type object
-   * @public
+   * Configures the load panel.
    */
   loadPanel?: LoadPanel;
   /**
-   * @docid
-   * @default "No data"
-   * @public
+   * Specifies a text string shown when the widget does not display any data.
    */
   noDataText?: string;
   /**
-   * @docid
-   * @default null
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field formOptions:object
-   * @action
-   * @public
+   * A function that is executed before an adaptive detail row is rendered.
    */
   onAdaptiveDetailRowPreparing?: ((e: EventInfo<TComponent> & AdaptiveDetailRowPreparingInfo) => void);
   /**
-   * @docid
-   * @default null
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @action
-   * @public
+   * A function that is executed when an error occurs in the data source.
    */
   onDataErrorOccurred?: ((e: EventInfo<TComponent> & DataErrorOccurredInfo) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field changes:Array<DataChange>
-   * @default null
-   * @action
-   * @public
+   * A function that is executed after row changes are discarded.
    */
   onEditCanceled?: ((e: EventInfo<TComponent> & DataChangeInfo<TRowData, TKey>) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field changes:Array<DataChange>
-   * @default null
-   * @action
-   * @public
+   * A function that is executed when the edit operation is canceled, but row changes are not yet discarded.
    */
   onEditCanceling?: ((e: Cancelable & EventInfo<TComponent> & DataChangeInfo<TRowData, TKey>) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field data:object
-   * @type_function_param1_field promise:Promise<void>
-   * @default null
-   * @action
-   * @public
+   * A function that is executed before a new row is added to the UI component.
    */
   onInitNewRow?: ((e: EventInfo<TComponent> & NewRowInfo<TRowData>) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field event:event
-   * @default null
-   * @action
-   * @public
+   * A function that is executed when the UI component is in focus and a key has been pressed down.
    */
   onKeyDown?: ((e: NativeEventInfo<TComponent, KeyboardEvent> & KeyDownInfo) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field key:any
-   * @default null
-   * @action
-   * @public
+   * A function that is executed after a row is collapsed.
    */
   onRowCollapsed?: ((e: EventInfo<TComponent> & RowKeyInfo<TKey>) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field key:any
-   * @default null
-   * @action
-   * @public
+   * A function that is executed before a row is collapsed.
    */
   onRowCollapsing?: ((e: Cancelable & EventInfo<TComponent> & RowKeyInfo<TKey>) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field key:any
-   * @default null
-   * @action
-   * @public
+   * A function that is executed after a row is expanded.
    */
   onRowExpanded?: ((e: EventInfo<TComponent> & RowKeyInfo<TKey>) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field key:any
-   * @default null
-   * @action
-   * @public
+   * A function that is executed before a row is expanded.
    */
   onRowExpanding?: ((e: Cancelable & EventInfo<TComponent> & RowKeyInfo<TKey>) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field data:object
-   * @type_function_param1_field key:any
-   * @default null
-   * @action
-   * @public
+   * A function that is executed after a new row has been inserted into the data source.
    */
   onRowInserted?: ((e: EventInfo<TComponent> & RowInsertedInfo<TRowData, TKey>) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field data:object
-   * @type_function_param1_field cancel:boolean|Promise<void>
-   * @default null
-   * @action
-   * @public
+   * A function that is executed before a new row is inserted into the data source.
    */
   onRowInserting?: ((e: EventInfo<TComponent> & RowInsertingInfo<TRowData>) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field data:object
-   * @type_function_param1_field key:any
-   * @default null
-   * @action
-   * @public
+   * A function that is executed after a row has been removed from the data source.
    */
   onRowRemoved?: ((e: EventInfo<TComponent> & RowRemovedInfo<TRowData, TKey>) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field data:object
-   * @type_function_param1_field key:any
-   * @type_function_param1_field cancel:boolean|Promise<void>
-   * @default null
-   * @action
-   * @public
+   * A function that is executed before a row is removed from the data source.
    */
   onRowRemoving?: ((e: EventInfo<TComponent> & RowRemovingInfo<TRowData, TKey>) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field data:object
-   * @type_function_param1_field key:any
-   * @default null
-   * @action
-   * @public
+   * A function that is executed after a row has been updated in the data source.
    */
   onRowUpdated?: ((e: EventInfo<TComponent> & RowUpdatedInfo<TRowData, TKey>) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field oldData:object
-   * @type_function_param1_field newData:object
-   * @type_function_param1_field key:any
-   * @type_function_param1_field cancel:boolean|Promise<void>
-   * @default null
-   * @action
-   * @public
+   * A function that is executed before a row is updated in the data source.
    */
   onRowUpdating?: ((e: EventInfo<TComponent> & RowUpdatingInfo<TRowData, TKey>) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field key:any
-   * @type_function_param1_field newData:object
-   * @type_function_param1_field oldData:object
-   * @type_function_param1_field promise:Promise<void>
-   * @type_function_param1_field brokenRules:Array<RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule>
-   * @default null
-   * @action
-   * @public
+   * A function that is executed after cells in a row are validated against validation rules.
    */
   onRowValidating?: ((e: EventInfo<TComponent> & RowValidatingInfo<TRowData, TKey>) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field changes:Array<DataChange>
-   * @default null
-   * @action
-   * @public
+   * A function that is executed after row changes are saved.
    */
   onSaved?: ((e: EventInfo<TComponent> & DataChangeInfo<TRowData, TKey>) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field changes:Array<DataChange>
-   * @type_function_param1_field promise:Promise<void>
-   * @default null
-   * @action
-   * @public
+   * A function that is executed before pending row changes are saved.
    */
   onSaving?: ((e: EventInfo<TComponent> & SavingInfo<TRowData, TKey>) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field currentSelectedRowKeys:Array<any>
-   * @type_function_param1_field currentDeselectedRowKeys:Array<any>
-   * @type_function_param1_field selectedRowKeys:Array<any>
-   * @type_function_param1_field selectedRowsData:Array<Object>
-   * @default null
-   * @action
-   * @public
+   * A function that is executed after selecting a row or clearing its selection.
    */
   onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo<TRowData, TKey>) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field toolbarOptions:dxToolbarOptions
-   * @default null
-   * @action
-   * @public
+   * A function that is executed before the toolbar is created.
    */
   onToolbarPreparing?: ((e: EventInfo<TComponent> & ToolbarPreparingInfo) => void);
   /**
-   * @docid
-   * @public
+   * Configures the pager.
    */
   pager?: Pager;
   /**
-   * @docid
-   * @public
-   * @type object
+   * Configures paging.
    */
   paging?: PagingBase;
   /**
-   * @docid
-   * @default false
-   * @public
+   * Specifies whether to render the filter row, command columns, and columns with showEditorAlways set to true after other elements.
    */
   renderAsync?: boolean;
   /**
-   * @docid
-   * @default false
-   * @public
+   * Specifies whether to repaint only those cells whose data changed.
    */
   repaintChangesOnly?: boolean;
   /**
-   * @docid
-   * @default false
-   * @public
+   * Specifies whether rows should be shaded differently.
    */
   rowAlternationEnabled?: boolean;
   /**
-   * @docid
-   * @type object
-   * @public
+   * Configures row reordering using drag and drop gestures.
    */
   rowDragging?: RowDragging<TComponent, TRowData, TKey>;
   /**
-   * @docid
-   * @public
-   * @type object
+   * 
    */
   scrolling?: ScrollingBase;
   /**
-   * @docid
-   * @type object
-   * @public
+   * Configures the search panel.
    */
   searchPanel?: SearchPanel;
   /**
-   * @docid
-   * @fires GridBaseOptions.onSelectionChanged
-   * @public
+   * Allows you to select rows or determine which rows are selected.
    */
   selectedRowKeys?: Array<TKey>;
   /**
-   * @docid
-   * @public
-   * @type object
+   * 
    */
   selection?: SelectionBase;
   /**
-   * @docid
-   * @default false
-   * @public
+   * Specifies whether the outer borders of the UI component are visible.
    */
   showBorders?: boolean;
   /**
-   * @docid
-   * @default true
-   * @public
+   * Specifies whether column headers are visible.
    */
   showColumnHeaders?: boolean;
   /**
-   * @docid
-   * @default false &for(Material)
-   * @default false &for(Fluent)
-   * @default true
-   * @public
+   * Specifies whether vertical lines that separate one column from another are visible.
    */
   showColumnLines?: boolean;
   /**
-   * @docid
-   * @default true &for(iOS)
-   * @default true &for(Material)
-   * @default true &for(Fluent)
-   * @default false
-   * @public
+   * Specifies whether horizontal lines that separate one row from another are visible.
    */
   showRowLines?: boolean;
   /**
-   * @docid
-   * @type object
-   * @public
+   * Configures runtime sorting.
    */
   sorting?: Sorting;
   /**
-   * @docid
-   * @type object
-   * @public
+   * Configures state storing.
    */
   stateStoring?: StateStoring;
   /**
-   * @docid
-   * @default true
-   * @public
+   * Specifies whether to enable two-way data binding.
    */
   twoWayBindingEnabled?: boolean;
   /**
-   * @docid
-   * @default false
-   * @public
+   * Specifies whether text that does not fit into a column should be wrapped.
    */
   wordWrapEnabled?: boolean;
   /**
-   * @docid
-   * @default true
-   * @public
+   * Specifies whether to show only relevant values in the header filter and filter row.
    */
   syncLookupFilterValues?: boolean;
 };
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type GridsEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type GroupExpandMode = 'buttonClick' | 'rowClick';
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.grids
+ * Configures keyboard navigation.
  */
 export type KeyboardNavigation = {
   /**
-   * @docid GridBaseOptions.keyboardNavigation.editOnKeyPress
-   * @default false
+   * Specifies whether users can enter a new cell value on a key press. Applies if editing.mode is &apos;cell&apos; or &apos;batch&apos;.
    */
   editOnKeyPress?: boolean;
   /**
-   * @docid GridBaseOptions.keyboardNavigation.enabled
-   * @default true
+   * Enables keyboard navigation.
    */
   enabled?: boolean;
   /**
-   * @docid GridBaseOptions.keyboardNavigation.enterKeyAction
-   * @default "startEdit"
+   * Specifies whether the Enter key switches the cell or row to the edit state or moves focus in the enterKeyDirection. Applies for all edit modes, except &apos;popup&apos;.
    */
   enterKeyAction?: EnterKeyAction;
   /**
-   * @docid GridBaseOptions.keyboardNavigation.enterKeyDirection
-   * @default "none"
+   * Specifies the direction in which to move focus when a user presses Enter. Applies if editing.mode is &apos;cell&apos; or &apos;batch&apos;.
    */
   enterKeyDirection?: EnterKeyDirection;
 };
 
 /**
- * @docid
- * @hidden
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type KeyDownInfo = {
-  /** @docid */
+  /**
+   * 
+   */
   handled: boolean;
 };
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.grids
+ * Configures the load panel.
  */
 export type LoadPanel = {
   /**
-   * @docid GridBaseOptions.loadPanel.enabled
-   * @default "auto"
+   * Enables displaying the load panel automatically.
    */
   enabled?: boolean | Mode;
   /**
-   * @docid GridBaseOptions.loadPanel.height
-   * @default 90
+   * Specifies the height of the load panel in pixels.
    */
   height?: number | string;
   /**
-   * @docid GridBaseOptions.loadPanel.indicatorSrc
-   * @default ""
+   * Specifies a URL pointing to an image to be used as a loading indicator.
    */
   indicatorSrc?: string;
   /**
-   * @docid GridBaseOptions.loadPanel.shading
-   * @default false
+   * Specifies whether to shade the UI component when the load panel is shown.
    */
   shading?: boolean;
   /**
-   * @docid GridBaseOptions.loadPanel.shadingColor
-   * @default ''
+   * Specifies the shading color. Applies only if shading is true.
    */
   shadingColor?: string;
   /**
-   * @docid GridBaseOptions.loadPanel.showIndicator
-   * @default true
+   * Specifies whether to show the loading indicator.
    */
   showIndicator?: boolean;
   /**
-   * @docid GridBaseOptions.loadPanel.showPane
-   * @default true
+   * Specifies whether to show the pane of the load panel.
    */
   showPane?: boolean;
   /**
-   * @docid GridBaseOptions.loadPanel.text
-   * @default "Loading..."
+   * Specifies text displayed on the load panel.
    */
   text?: string;
   /**
-   * @docid GridBaseOptions.loadPanel.width
-   * @default 200
+   * Specifies the width of the load panel in pixels.
    */
   width?: number | string;
 };
 
 /**
- * @docid
- * @hidden
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface NewRowInfo<TRowData = any> {
   /**
-   * @docid
-   * @type object
+   * 
    */
   data: TRowData;
   /**
-   * @docid
-   * @type Promise<void>
+   * 
    */
   promise?: PromiseLike<void>;
 }
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type NewRowPosition = 'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop';
 
 /**
- * @docid
- * @public
- * @inherits PagerBase
- * @namespace DevExpress.common.grids
+ * Configures the pager.
  */
 export type Pager = PagerBase & {
   /**
-   * @docid
-   * @public
-   * @default "auto"
+   * Specifies the available page sizes in the page size selector.
    */
   allowedPageSizes?: Array<(number | PagerPageSize)> | Mode;
 
   /**
-   * @docid
-   * @public
-   * @default "auto"
+   * Specifies whether the pager is visible.
    */
   visible?: boolean | Mode;
 };
 
 /**
  * @deprecated Use DisplayMode from /common instead
- * @namespace DevExpress.common.grids
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type PagerDisplayMode = DisplayMode;
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type PagerPageSize = 'all' | 'auto';
 
 /**
- * @hidden
- * @docid
- * @namespace DevExpress.common.grids
+ * Configures paging.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface PagingBase {
   /**
-   * @docid GridBaseOptions.paging.enabled
-   * @default true
-   * @public
+   * Enables paging.
    */
   enabled?: boolean;
   /**
-   * @docid GridBaseOptions.paging.pageIndex
-   * @default 0
-   * @fires GridBaseOptions.onOptionChanged
-   * @public
+   * Specifies the page to be displayed using a zero-based index.
    */
   pageIndex?: number;
   /**
-   * @docid GridBaseOptions.paging.pageSize
-   * @default 20
-   * @fires GridBaseOptions.onOptionChanged
-   * @public
+   * Specifies the page size.
    */
   pageSize?: number;
 }
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type ReducedNativeEventInfo<TComponent extends GridBase> = Required<Pick<NativeEventInfo<TComponent, PointerEvent | MouseEvent | TouchEvent>, 'component' | 'event'>>;
 
 /**
- * @docid
- * @namespace DevExpress.common.grids
+ * Configures row reordering using drag and drop gestures.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> = {
   /**
-   * @docid GridBaseOptions.rowDragging.allowDropInsideItem
-   * @default false
+   * Allows users to drop a row inside another row.
    */
   allowDropInsideItem?: boolean;
   /**
-   * @docid GridBaseOptions.rowDragging.allowReordering
-   * @default false
+   * Allows row reordering using drag and drop gestures.
    */
   allowReordering?: boolean;
   /**
-   * @docid GridBaseOptions.rowDragging.autoScroll
-   * @default true
+   * Enables automatic scrolling while dragging a row beyond the viewport.
    */
   autoScroll?: boolean;
   /**
-   * @docid GridBaseOptions.rowDragging.boundary
-   * @default undefined
+   * Specifies a DOM element that limits the dragging area.
    */
   boundary?: string | UserDefinedElement | undefined;
   /**
-   * @docid GridBaseOptions.rowDragging.container
-   * @default undefined
+   * Specifies a custom container in which the draggable row should be rendered.
    */
   container?: string | UserDefinedElement | undefined;
   /**
-   * @docid GridBaseOptions.rowDragging.cursorOffset
+   * Specifies the cursor offset from the dragged row.
    */
   cursorOffset?: string | {
     /**
-     * @docid GridBaseOptions.rowDragging.cursorOffset.x
-     * @default 0
+     * Specifies the horizontal cursor offset from the dragged row in pixels.
      */
     x?: number;
     /**
-     * @docid GridBaseOptions.rowDragging.cursorOffset.y
-     * @default 0
+     * Specifies the vertical cursor offset from the dragged row in pixels.
      */
     y?: number;
   };
   /**
-   * @docid GridBaseOptions.rowDragging.data
-   * @default undefined
+   * A container for custom data.
    */
   data?: any | undefined;
   /**
-   * @docid GridBaseOptions.rowDragging.dragDirection
-   * @default "both"
+   * Specifies the directions in which a row can be dragged.
    */
   dragDirection?: DragDirection;
   /**
-   * @docid GridBaseOptions.rowDragging.dragTemplate
-   * @type_function_param1 dragInfo:object
-   * @type_function_param1_field itemData:any
-   * @type_function_return string|Element|jQuery
-   * @default undefined
+   * Specifies custom markup to be shown instead of the item being dragged.
    */
   dragTemplate?: template | ((dragInfo: RowDraggingTemplateData<TRowData>, containerElement: DxElement) => string | UserDefinedElement) | undefined;
   /**
-   * @docid GridBaseOptions.rowDragging.dropFeedbackMode
-   * @default "indicate"
+   * Specifies how to highlight the row&apos;s drop position.
    */
   dropFeedbackMode?: DragHighlight;
   /**
-   * @docid GridBaseOptions.rowDragging.filter
-   * @deprecated
-   * @default "> *"
+   * Specifies a CSS selector for draggable rows.
+   * @deprecated 
    */
   filter?: string;
   /**
-   * @docid GridBaseOptions.rowDragging.group
-   * @default undefined
+   * Allows you to group several UI components so that users can drag and drop rows between them.
    */
   group?: string | undefined;
   /**
-   * @docid GridBaseOptions.rowDragging.handle
-   * @default ""
+   * Specifies a CSS selector (ID or class) for the element(s) that should act as the drag handle(s).
    */
   handle?: string;
   /**
-   * @docid GridBaseOptions.rowDragging.onAdd
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field event:event
-   * @type_function_param1_field itemData:any
-   * @type_function_param1_field fromComponent:dxSortable|dxDraggable
-   * @type_function_param1_field toComponent:dxSortable|dxDraggable
+   * A function that is called when a new row is added.
    */
   onAdd?: ((e: ReducedNativeEventInfo<TComponent> & RowDraggingEventInfo<TRowData> & DragDropInfo) => void);
   /**
-   * @docid GridBaseOptions.rowDragging.onDragChange
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field event:event
-   * @type_function_param1_field itemData:any
-   * @type_function_param1_field fromComponent:dxSortable|dxDraggable
-   * @type_function_param1_field toComponent:dxSortable|dxDraggable
+   * A function that is called when the dragged row&apos;s position is changed.
    */
   onDragChange?: ((e: Cancelable & ReducedNativeEventInfo<TComponent> & RowDraggingEventInfo<TRowData> & DragDropInfo) => void);
   /**
-   * @docid GridBaseOptions.rowDragging.onDragEnd
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field event:event
-   * @type_function_param1_field itemData:any
-   * @type_function_param1_field fromComponent:dxSortable|dxDraggable
-   * @type_function_param1_field toComponent:dxSortable|dxDraggable
+   * A function that is called when the drag gesture is finished.
    */
   onDragEnd?: ((e: Cancelable & ReducedNativeEventInfo<TComponent> & RowDraggingEventInfo<TRowData> & DragDropInfo) => void);
   /**
-   * @docid GridBaseOptions.rowDragging.onDragMove
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field event:event
-   * @type_function_param1_field itemData:any
-   * @type_function_param1_field fromComponent:dxSortable|dxDraggable
-   * @type_function_param1_field toComponent:dxSortable|dxDraggable
+   * A function that is called every time a draggable row is moved.
    */
   onDragMove?: ((e: Cancelable & ReducedNativeEventInfo<TComponent> & RowDraggingEventInfo<TRowData> & DragDropInfo) => void);
   /**
-   * @docid GridBaseOptions.rowDragging.onDragStart
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field event:event
-   * @type_function_param1_field itemData:any
+   * A function that is called when the drag gesture is initialized.
    */
   onDragStart?: ((e: Cancelable & ReducedNativeEventInfo<TComponent> & DragStartEventInfo<TRowData>) => void);
   /**
-   * @docid GridBaseOptions.rowDragging.onRemove
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field event:event
-   * @type_function_param1_field itemData:any
-   * @type_function_param1_field fromComponent:dxSortable|dxDraggable
-   * @type_function_param1_field toComponent:dxSortable|dxDraggable
+   * A function that is called when a draggable row is removed.
    */
   onRemove?: ((e: ReducedNativeEventInfo<TComponent> & RowDraggingEventInfo<TRowData>) => void);
   /**
-   * @docid GridBaseOptions.rowDragging.onReorder
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field event:event
-   * @type_function_param1_field itemData:any
-   * @type_function_param1_field promise:Promise<void>
-   * @type_function_param1_field fromComponent:dxSortable|dxDraggable
-   * @type_function_param1_field toComponent:dxSortable|dxDraggable
+   * A function that is called when the draggable rows are reordered.
    */
   onReorder?: ((e: ReducedNativeEventInfo<TComponent> & RowDraggingEventInfo<TRowData> & DragReorderInfo) => void);
   /**
-   * @docid GridBaseOptions.rowDragging.scrollSensitivity
-   * @default 60
+   * Specifies the distance in pixels from the edge of viewport at which scrolling should start. Applies only if autoScroll is true.
    */
   scrollSensitivity?: number;
   /**
-   * @docid GridBaseOptions.rowDragging.scrollSpeed
-   * @default 30
+   * Specifies the scrolling speed when dragging a row beyond the viewport. Applies only if autoScroll is true.
    */
   scrollSpeed?: number;
   /**
-   * @docid GridBaseOptions.rowDragging.showDragIcons
-   * @default true
+   * Shows or hides row dragging icons.
    */
   showDragIcons?: boolean;
 };
 
 /**
- * @namespace DevExpress.common.grids
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface RowDraggingEventInfo<TRowData = any> {
   readonly itemData?: TRowData;
@@ -2739,453 +1821,378 @@ export interface RowDraggingEventInfo<TRowData = any> {
   readonly toData?: any;
 }
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type RowDraggingTemplateData<TRowData = any> = {
   readonly itemData: TRowData;
   readonly itemElement: DxElement;
 };
 
 /**
- * @docid
- * @hidden
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type RowInsertedInfo<TRowData = any, TKey = any> = {
   /**
-   * @docid
-   * @type object
+   * 
    */
   readonly data: TRowData;
-  /** @docid */
+  /**
+   * 
+   */
   readonly key: TKey;
-  /** @docid */
+  /**
+   * 
+   */
   readonly error: Error;
 };
 
 /**
- * @docid
- * @hidden
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type RowInsertingInfo<TRowData = any> = {
   /**
-   * @docid
-   * @type object
+   * 
    */
   data: TRowData;
   /**
-   * @docid
-   * @type boolean|Promise<boolean>|Promise<void>
+   * 
    */
   cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
 };
 
 /**
- * @docid
- * @hidden
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type RowKeyInfo<TKey = any> = {
-  /** @docid */
+  /**
+   * 
+   */
   readonly key: TKey;
 };
 
 /**
- * @docid
- * @hidden
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface RowRemovedInfo<TRowData = any, TKey = any> {
   /**
-   * @docid
-   * @type object
+   * 
    */
   readonly data: TRowData;
-  /** @docid */
+  /**
+   * 
+   */
   readonly key: TKey;
-  /** @docid */
+  /**
+   * 
+   */
   readonly error: Error;
 }
 
 /**
- * @docid
- * @hidden
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface RowRemovingInfo<TRowData = any, TKey = any> {
   /**
-   * @docid
-   * @type object
+   * 
    */
   readonly data: TRowData;
-  /** @docid */
+  /**
+   * 
+   */
   readonly key: TKey;
   /**
-   * @docid
-   * @type boolean|Promise<boolean>|Promise<void>
+   * 
    */
   cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
 }
 
 /**
- * @docid
- * @hidden
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface RowUpdatedInfo<TRowData = any, TKey = any> {
   /**
-   * @docid
-   * @type object
+   * 
    */
   readonly data: TRowData;
-  /** @docid */
+  /**
+   * 
+   */
   readonly key: TKey;
-  /** @docid */
+  /**
+   * 
+   */
   readonly error: Error;
 }
 
 /**
- * @docid
- * @hidden
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface RowUpdatingInfo<TRowData = any, TKey = any> {
   /**
-   * @docid
-   * @type object
+   * 
    */
   readonly oldData: TRowData;
   /**
-   * @docid
-   * @type object
+   * 
    */
   newData: DeepPartial<TRowData>;
-  /** @docid */
+  /**
+   * 
+   */
   readonly key: TKey;
   /**
-   * @docid
-   * @type boolean|Promise<boolean>|Promise<void>
+   * 
    */
   cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
 }
 
 /**
- * @docid
- * @hidden
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface RowValidatingInfo<TRowData = any, TKey = any> {
-  /** @docid */
+  /**
+   * 
+   */
   readonly brokenRules: Array<ValidationRule>;
-  /** @docid */
+  /**
+   * 
+   */
   isValid: boolean;
-  /** @docid */
+  /**
+   * 
+   */
   readonly key: TKey;
   /**
-   * @docid
-   * @type object
+   * 
    */
   readonly newData: DeepPartial<TRowData>;
   /**
    * @docid
    * @type object
    */
-  /** @docid */
+  /**
+   * 
+   */
   readonly oldData: TRowData;
-  /** @docid */
+  /**
+   * 
+   */
   errorText: string;
   /**
-   * @docid
-   * @type Promise<void>
+   * 
    */
   promise?: PromiseLike<void>;
 }
 
 /**
- * @docid
- * @hidden
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface SavingInfo<TRowData = any, TKey = any> {
   /**
-   * @docid
-   * @type Array<DataChange>
+   * 
    */
   changes: Array<DataChange<TRowData, TKey>>;
   /**
-   * @docid
-   * @type Promise<void>
+   * 
    */
   promise?: PromiseLike<void>;
-  /** @docid */
+  /**
+   * 
+   */
   cancel: boolean;
 }
 
 /**
- * @hidden
- * @docid
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface ScrollingBase {
   /**
-   * @docid GridBaseOptions.scrolling.columnRenderingMode
-   * @default "standard"
-   * @public
+   * Specifies the rendering mode for columns. Applies when columns are left outside the viewport. Requires the columnWidth, columnAutoWidth, or width (for all columns) property specified.
    */
   columnRenderingMode?: DataRenderMode;
   /**
-   * @docid GridBaseOptions.scrolling.preloadEnabled
-   * @default false
-   * @public
+   * Specifies whether the UI component should load adjacent pages. Applies only if scrolling.mode is &apos;virtual&apos; or &apos;infinite&apos;.
    */
   preloadEnabled?: boolean;
   /**
-   * @docid GridBaseOptions.scrolling.rowRenderingMode
-   * @default "standard"
-   * @public
+   * Specifies the rendering mode for loaded rows.
    */
   rowRenderingMode?: DataRenderMode;
   /**
-   * @docid GridBaseOptions.scrolling.scrollByContent
-   * @default true
-   * @default false &for(non-touch_devices)
-   * @public
+   * Specifies whether a user can scroll the content with a swipe gesture. Applies only if useNative is false.
    */
   scrollByContent?: boolean;
   /**
-   * @docid GridBaseOptions.scrolling.scrollByThumb
-   * @default false
-   * @public
+   * Specifies whether a user can scroll the content with the scrollbar. Applies only if useNative is false.
    */
   scrollByThumb?: boolean;
   /**
-   * @docid GridBaseOptions.scrolling.showScrollbar
-   * @default 'onHover' &for(desktop)
-   * @default 'onScroll'
-   * @public
+   * Specifies when to show scrollbars. Applies only if useNative is false.
    */
   showScrollbar?: ScrollbarMode;
   /**
-   * @docid GridBaseOptions.scrolling.useNative
-   * @default "auto"
-   * @public
+   * Specifies whether the widget should use native or simulated scrolling.
    */
   useNative?: boolean | Mode;
   /**
-   * @docid GridBaseOptions.scrolling.renderAsync
-   * @default undefined
-   * @public
+   * Specifies whether to render rows after a user stops scrolling or at the same time as the user scrolls the widget.
    */
   renderAsync?: boolean | undefined;
 }
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.grids
+ * Configures the search panel.
  */
 export type SearchPanel = {
   /**
-   * @docid GridBaseOptions.searchPanel.highlightCaseSensitive
-   * @default false
+   * Notifies the UI component whether search is case-sensitive to ensure that search results are highlighted correctly. Applies only if highlightSearchText is true.
    */
   highlightCaseSensitive?: boolean;
   /**
-   * @docid GridBaseOptions.searchPanel.highlightSearchText
-   * @default true
+   * Specifies whether found substrings should be highlighted.
    */
   highlightSearchText?: boolean;
   /**
-   * @docid GridBaseOptions.searchPanel.placeholder
-   * @default "Search..."
+   * Specifies a placeholder for the search panel.
    */
   placeholder?: string;
   /**
-   * @docid GridBaseOptions.searchPanel.searchVisibleColumnsOnly
-   * @default false
+   * Specifies whether the UI component should search against all columns or only visible ones.
    */
   searchVisibleColumnsOnly?: boolean;
   /**
-   * @docid GridBaseOptions.searchPanel.text
-   * @default ""
-   * @fires GridBaseOptions.onOptionChanged
+   * Sets a search string for the search panel.
    */
   text?: string;
   /**
-   * @docid GridBaseOptions.searchPanel.visible
-   * @default false
+   * Specifies whether the search panel is visible or not.
    */
   visible?: boolean;
   /**
-   * @docid GridBaseOptions.searchPanel.width
-   * @default 160
+   * Specifies the width of the search panel in pixels.
    */
   width?: string | number;
 };
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type SelectedFilterOperation = '<' | '<=' | '<>' | '=' | '>' | '>=' | 'between' | 'contains' | 'endswith' | 'notcontains' | 'startswith';
 
 /**
- * @hidden
- * @docid
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface SelectionBase {
   /**
-   * @docid GridBaseOptions.selection.allowSelectAll
-   * @default true
-   * @public
+   * Allows users to simultaneously select all or current page rows (depending on the selectAllMode).
    */
   allowSelectAll?: boolean;
   /**
-   * @docid GridBaseOptions.selection.mode
-   * @default "none"
-   * @public
+   * Specifies the selection mode.
    */
   mode?: SingleMultipleOrNone;
 }
 
 /**
- * @docid _common_grids_SelectionChangedInfo
- * @hidden
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface SelectionChangedInfo<TRowData = any, TKey = any> {
   /**
-   * @docid _common_grids_SelectionChangedInfo.currentSelectedRowKeys
-   * @type Array<any>
+   * 
    */
   readonly currentSelectedRowKeys: Array<TKey>;
   /**
-   * @docid _common_grids_SelectionChangedInfo.currentDeselectedRowKeys
-   * @type Array<any>
+   * 
    */
   readonly currentDeselectedRowKeys: Array<TKey>;
   /**
-   * @docid _common_grids_SelectionChangedInfo.selectedRowKeys
-   * @type Array<any>
+   * 
    */
   readonly selectedRowKeys: Array<TKey>;
   /**
-   * @docid _common_grids_SelectionChangedInfo.selectedRowsData
-   * @type Array<Object>
+   * 
    */
   readonly selectedRowsData: Array<TRowData>;
 }
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type SelectionColumnDisplayMode = 'always' | 'none' | 'onClick' | 'onLongTap';
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.grids
+ * Configures runtime sorting.
  */
 export type Sorting = {
   /**
-   * @docid GridBaseOptions.sorting.ascendingText
-   * @default "Sort Ascending"
+   * Specifies text for the context menu item that sets an ascending sort order in a column.
    */
   ascendingText?: string;
   /**
-   * @docid GridBaseOptions.sorting.clearText
-   * @default "Clear Sorting"
+   * Specifies text for the context menu item that clears sorting settings for a column.
    */
   clearText?: string;
   /**
-   * @docid GridBaseOptions.sorting.descendingText
-   * @default "Sort Descending"
+   * Specifies text for the context menu item that sets a descending sort order in a column.
    */
   descendingText?: string;
   /**
-   * @docid GridBaseOptions.sorting.mode
-   * @default "single"
+   * Specifies the sorting mode.
    */
   mode?: SingleMultipleOrNone;
   /**
-   * @docid GridBaseOptions.sorting.showSortIndexes
-   * @default true
+   * Specifies whether to display sort indexes in column headers. Applies only when sorting.mode is &apos;multiple&apos; and data is sorted by two or more columns.
    */
   showSortIndexes?: boolean;
 };
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type StartEditAction = 'click' | 'dblClick';
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type StateStoreType = 'custom' | 'localStorage' | 'sessionStorage';
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.grids
+ * Configures state storing.
  */
 export type StateStoring = {
   /**
-   * @docid GridBaseOptions.stateStoring.customLoad
-   * @type Function
-   * @type_function_return Promise<Object>
+   * Specifies a function that is executed on state loading. Applies only if the type is &apos;custom&apos;.
    */
   customLoad?: (() => PromiseLike<any>);
   /**
-   * @docid GridBaseOptions.stateStoring.customSave
-   * @type_function_param1 gridState:object
-   * @type_function_return void
+   * Specifies a function that is executed on state change. Applies only if the type is &apos;custom&apos;.
    */
   customSave?: ((gridState: any) => any);
   /**
-   * @docid GridBaseOptions.stateStoring.enabled
-   * @default false
+   * Enables state storing.
    */
   enabled?: boolean;
   /**
-   * @docid GridBaseOptions.stateStoring.savingTimeout
-   * @default 2000
+   * Specifies the delay in milliseconds between when a user makes a change and when this change is saved.
    */
   savingTimeout?: number;
   /**
-   * @docid GridBaseOptions.stateStoring.storageKey
-   * @default null
+   * Specifies the key for storing the UI component state.
    */
   storageKey?: string;
   /**
-   * @docid GridBaseOptions.stateStoring.type
-   * @default "localStorage"
+   * Specifies the type of storage where the state is saved.
    */
   type?: StateStoreType;
 };
 
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type SummaryType = 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum';
 
 /**
- * @docid
- * @hidden
- * @namespace DevExpress.common.grids
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface ToolbarPreparingInfo {
   /**
-   * @docid
-   * @type dxToolbarOptions
+   * 
    */
   toolbarOptions: ToolbarProperties;
 }

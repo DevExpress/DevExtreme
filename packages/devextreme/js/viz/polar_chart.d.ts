@@ -67,11 +67,13 @@ import {
 } from '../common/charts';
 
 /**
- * @docid _viz_polar_chart_SeriesInteractionInfo
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface SeriesInteractionInfo {
-    /** @docid _viz_polar_chart_SeriesInteractionInfo.target */
+    /**
+     * 
+     */
     target: polarChartSeriesObject;
 }
 
@@ -94,2420 +96,1791 @@ export {
     ZoomPanAction,
 };
 
-/** @public */
 export type PolarChartSeriesType = 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
-/** @public */
 export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
 
 /**
- * @docid _viz_polar_chart_ArgumentAxisClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the argumentAxisClick event handler&apos;s argument.
  */
 export type ArgumentAxisClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & {
-    /** @docid _viz_polar_chart_ArgumentAxisClickEvent.argument */
+    /**
+     * 
+     */
     readonly argument: Date | number | string;
 };
 
 /**
- * @docid _viz_polar_chart_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxPolarChart>;
 
 /**
- * @docid _viz_polar_chart_DoneEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the done event handler&apos;s argument.
  */
 export type DoneEvent = EventInfo<dxPolarChart>;
 
 /**
- * @docid _viz_polar_chart_DrawnEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the drawn event handler&apos;s argument.
  */
 export type DrawnEvent = EventInfo<dxPolarChart>;
 
 /**
- * @docid _viz_polar_chart_ExportedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the exported event handler&apos;s argument.
  */
 export type ExportedEvent = EventInfo<dxPolarChart>;
 
 /**
- * @docid _viz_polar_chart_ExportingEvent
- * @public
- * @type object
- * @inherits EventInfo,ExportInfo
+ * The type of the exporting event handler&apos;s argument.
  */
 export type ExportingEvent = EventInfo<dxPolarChart> & ExportInfo;
 
 /**
- * @docid _viz_polar_chart_FileSavingEvent
- * @public
- * @type object
- * @inherits FileSavingEventInfo
+ * The type of the fileSaving event handler&apos;s argument.
  */
 export type FileSavingEvent = FileSavingEventInfo<dxPolarChart>;
 
 /**
- * @docid _viz_polar_chart_IncidentOccurredEvent
- * @public
- * @type object
- * @inherits EventInfo,IncidentInfo
+ * The type of the incidentOccurred event handler&apos;s argument.
  */
 export type IncidentOccurredEvent = EventInfo<dxPolarChart> & IncidentInfo;
 
 /**
- * @docid _viz_polar_chart_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxPolarChart>;
 
 /**
- * @docid _viz_polar_chart_LegendClickEvent
- * @public
- * @type object
- * @inherits Cancelable,NativeEventInfo
+ * The type of the legendClick event handler&apos;s argument.
  */
 export type LegendClickEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & {
-    /** @docid _viz_polar_chart_LegendClickEvent.target */
+    /**
+     * 
+     */
     readonly target: polarChartSeriesObject;
 };
 
 /**
- * @docid _viz_polar_chart_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxPolarChart> & ChangedOptionInfo;
 
 /**
- * @docid _viz_polar_chart_PointClickEvent
- * @public
- * @type object
- * @inherits Cancelable,NativeEventInfo,PointInteractionInfo
+ * The type of the pointClick event handler&apos;s argument.
  */
 export type PointClickEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & PointInteractionInfo;
 
 /**
- * @docid _viz_polar_chart_PointHoverChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,PointInteractionInfo
+ * The type of the pointHoverChanged event handler&apos;s argument.
  */
 export type PointHoverChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo;
 
 /**
- * @docid _viz_polar_chart_PointSelectionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,PointInteractionInfo
+ * The type of the pointSelectionChanged event handler&apos;s argument.
  */
 export type PointSelectionChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo;
 
 /**
- * @docid _viz_polar_chart_SeriesClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the seriesClick event handler&apos;s argument.
  */
 export type SeriesClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & {
-    /** @docid _viz_polar_chart_SeriesClickEvent.target */
+    /**
+     * 
+     */
     readonly target: polarChartSeriesObject;
 };
 
 /**
- * @docid _viz_polar_chart_SeriesHoverChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,_viz_polar_chart_SeriesInteractionInfo
+ * The type of the seriesHoverChanged event handler&apos;s argument.
  */
 export type SeriesHoverChangedEvent = EventInfo<dxPolarChart> & SeriesInteractionInfo;
 
 /**
- * @docid _viz_polar_chart_SeriesSelectionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,_viz_polar_chart_SeriesInteractionInfo
+ * The type of the seriesSelectionChanged event handler&apos;s argument.
  */
 export type SeriesSelectionChangedEvent = EventInfo<dxPolarChart> & SeriesInteractionInfo;
 
 /**
- * @docid _viz_polar_chart_TooltipHiddenEvent
- * @public
- * @type object
- * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
+ * The type of the tooltipHidden event handler&apos;s argument.
  */
 export type TooltipHiddenEvent = EventInfo<dxPolarChart> & TooltipInfo;
 
 /**
- * @docid _viz_polar_chart_TooltipShownEvent
- * @public
- * @type object
- * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
+ * The type of the tooltipShown event handler&apos;s argument.
  */
 export type TooltipShownEvent = EventInfo<dxPolarChart> & TooltipInfo;
 
 /**
- * @docid _viz_polar_chart_ZoomEndEvent
- * @public
- * @type object
- * @inherits Cancelable,NativeEventInfo
+ * The type of the zoomEnd event handler&apos;s argument.
  */
 export type ZoomEndEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | TouchEvent> & {
-    /** @docid _viz_polar_chart_ZoomEndEvent.axis */
+    /**
+     * 
+     */
     readonly axis: chartAxisObject;
-    /** @docid _viz_polar_chart_ZoomEndEvent.range */
+    /**
+     * 
+     */
     readonly range: VisualRange;
-    /** @docid _viz_polar_chart_ZoomEndEvent.previousRange */
+    /**
+     * 
+     */
     readonly previousRange: VisualRange;
     /**
-     * @docid _viz_polar_chart_ZoomEndEvent.actionType
-     * @type Enums.ZoomPanAction
+     * 
      */
     readonly actionType: ZoomPanAction;
-    /** @docid _viz_polar_chart_ZoomEndEvent.zoomFactor */
+    /**
+     * 
+     */
     readonly zoomFactor: number;
-    /** @docid _viz_polar_chart_ZoomEndEvent.shift */
+    /**
+     * 
+     */
     readonly shift: number;
 };
 /**
- * @docid _viz_polar_chart_ZoomStartEvent
- * @public
- * @type object
- * @inherits Cancelable,NativeEventInfo
+ * The type of the zoomStart event handler&apos;s argument.
  */
 export type ZoomStartEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | TouchEvent> & {
-    /** @docid _viz_polar_chart_ZoomStartEvent.axis */
+    /**
+     * 
+     */
     readonly axis: chartAxisObject;
-    /** @docid _viz_polar_chart_ZoomStartEvent.range */
+    /**
+     * 
+     */
     readonly range: VisualRange;
     /**
-     * @docid _viz_polar_chart_ZoomStartEvent.actionType
-     * @type Enums.ZoomPanAction
+     * 
      */
     readonly actionType: ZoomPanAction;
 };
 
 /**
- * @docid
- * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
- * @type object
- * @namespace DevExpress.viz
+ * Specifies properties for PolarChart UI component series.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the name that identifies the series.
      */
     name?: string | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies data about a series.
      */
     tag?: any | undefined;
     /**
-     * @docid
-     * @default 'scatter'
-     * @public
+     * Sets the series type.
      */
     type?: PolarChartSeriesType;
 }
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.viz
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
-     * @docid
-     * @type object
-     * @public
+     * Specifies adaptive layout properties.
      */
     adaptiveLayout?: AdaptiveLayout;
     /**
-     * @docid
-     * @inherits dxPolarChartOptions.commonAnnotationSettings
-     * @public
+     * Specifies the annotation collection.
      */
     annotations?: Array<dxPolarChartAnnotationConfig | any>;
     /**
-     * @docid
-     * @type object
-     * @inherits dxPolarChartOptions.commonAxisSettings
-     * @public
+     * Specifies argument axis properties for the PolarChart UI component.
      */
     argumentAxis?: ArgumentAxis;
     /**
-     * @docid
-     * @default 0.3
-     * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
-     * @public
+     * Controls the padding and consequently the angular width of a group of bars with the same argument using relative units. Ignored if the barGroupWidth property is set.
      */
     barGroupPadding?: number;
     /**
-     * @docid
-     * @default undefined
-     * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
-     * @public
+     * Specifies a fixed angular width for groups of bars with the same argument, measured in degrees. Takes precedence over the barGroupPadding property.
      */
     barGroupWidth?: number | undefined;
     /**
-     * @docid
-     * @public
+     * Specifies settings common for all annotations in the PolarChart.
      */
     commonAnnotationSettings?: dxPolarChartCommonAnnotationConfig;
     /**
-     * @docid
-     * @type object
-     * @public
+     * An object defining the configuration properties that are common for all axes of the PolarChart UI component.
      */
     commonAxisSettings?: CommonAxisSettings;
     /**
-     * @docid
-     * @type object
-     * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
-     * @hideDefaults true
-     * @inheritAll
-     * @public
+     * An object defining the configuration properties that are common for all series of the PolarChart UI component.
      */
     commonSeriesSettings?: CommonSeriesSettings;
     /**
-     * @docid
-     * @default '#FFFFFF'
-     * @public
+     * Specifies the color of the parent page element.
      */
     containerBackgroundColor?: string;
     /**
-     * @docid
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Customizes an individual annotation.
      */
     customizeAnnotation?: ((annotation: dxPolarChartAnnotationConfig | any) => dxPolarChartAnnotationConfig) | undefined;
     /**
-     * @docid
-     * @public
+     * An object providing properties for managing data from a data source.
      */
     dataPrepareSettings?: {
       /**
-       * @docid
-       * @default false
+       * Specifies whether or not to validate the values from a data source.
        */
       checkTypeForAllData?: boolean;
       /**
-       * @docid
-       * @default true
+       * Specifies whether or not to convert the values from a data source into the data type of an axis.
        */
       convertToAxisDataType?: boolean;
       /**
-       * @docid
-       * @default true
+       * Specifies how to sort the series points.
        */
       sortingMethod?: boolean | ((a: { arg?: Date | number | string; val?: Date | number | string }, b: { arg?: Date | number | string; val?: Date | number | string }) => number);
     };
     /**
-     * @docid
-     * @type object
-     * @public
+     * Specifies the properties of a chart&apos;s legend.
      */
     legend?: Legend;
     /**
-     * @docid
-     * @default false
-     * @propertyOf dxPolarChartSeriesTypes.stackedbarpolarseries
-     * @public
+     * Forces the UI component to treat negative values as zeroes. Applies to stacked-like series only.
      */
     negativesAsZeroes?: boolean;
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{viz/polar_chart:ArgumentAxisClickEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a label on the argument axis is clicked or tapped.
      */
     onArgumentAxisClick?: ((e: ArgumentAxisClickEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{viz/polar_chart:LegendClickEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a legend item is clicked or tapped.
      */
     onLegendClick?: ((e: LegendClickEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{viz/polar_chart:SeriesClickEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a series is clicked or tapped.
      */
     onSeriesClick?: ((e: SeriesClickEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/polar_chart:SeriesHoverChangedEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed after the pointer enters or leaves a series.
      */
     onSeriesHoverChanged?: ((e: SeriesHoverChangedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/polar_chart:SeriesSelectionChangedEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a series is selected or selection is canceled.
      */
     onSeriesSelectionChanged?: ((e: SeriesSelectionChangedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/polar_chart:ZoomEndEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when zooming or panning ends.
      */
     onZoomEnd?: ((e: ZoomEndEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/polar_chart:ZoomStartEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when zooming or panning begins.
      */
     onZoomStart?: ((e: ZoomStartEvent) => void);
     /**
-     * @docid
-     * @default "none"
-     * @public
+     * Specifies how the chart must behave when series point labels overlap.
      */
     resolveLabelOverlapping?: LabelOverlap;
     /**
-     * @docid
-     * @default undefined
-     * @hideDefaults true
-     * @notUsedInTheme
-     * @inheritAll
-     * @public
+     * Specifies properties for PolarChart UI component series.
      */
     series?: PolarChartSeries | Array<PolarChartSeries> | undefined;
     /**
-     * @docid
-     * @default 'single'
-     * @public
+     * Specifies whether a single series or multiple series can be selected in the chart.
      */
     seriesSelectionMode?: SingleOrMultiple;
     /**
-     * @docid
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Defines properties for the series template.
      */
     seriesTemplate?: {
       /**
-       * @docid
+       * Specifies a callback function that returns a series object with individual series settings.
        */
       customizeSeries?: ((seriesName: any) => PolarChartSeries);
       /**
-       * @docid
-       * @default 'series'
+       * Specifies a data source field that represents the series name.
        */
       nameField?: string;
     };
     /**
-     * @docid
-     * @type object
-     * @public
+     * Configures tooltips.
      */
     tooltip?: Tooltip;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Indicates whether to display a &apos;spider web&apos;.
      */
     useSpiderWeb?: boolean;
     /**
-     * @docid
-     * @type object
-     * @inherits dxPolarChartOptions.commonAxisSettings
-     * @public
+     * Specifies value axis properties for the PolarChart UI component.
      */
     valueAxis?: ValueAxis;
 }
 /**
- * @public
- * @docid dxPolarChartAdaptiveLayout
+ * Specifies adaptive layout properties.
  */
 export type AdaptiveLayout = BaseChartAdaptiveLayout & {
     /**
-     * @docid dxPolarChartOptions.adaptiveLayout.height
-     * @default 170
-     * @public
+     * Specifies the minimum container height at which the layout begins to adapt.
      */
     height?: number;
     /**
-     * @docid dxPolarChartOptions.adaptiveLayout.width
-     * @default 170
-     * @public
+     * Specifies the minimum container width at which the layout begins to adapt.
      */
     width?: number;
 };
 /**
- * @public
- * @docid dxPolarChartArgumentAxis
- * @type object
+ * Specifies argument axis properties for the PolarChart UI component.
  */
 export type ArgumentAxis = CommonAxisSettings & {
     /**
-     * @docid dxPolarChartOptions.argumentAxis.argumentType
-     * @default undefined
-     * @public
+     * Specifies the desired type of axis values.
      */
     argumentType?: ChartsDataType | undefined;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.axisDivisionFactor
-     * @default 50
-     * @public
+     * Specifies the minimum distance between two neighboring major ticks in pixels. Applies only to the axes of the &apos;continuous&apos; and &apos;logarithmic&apos; types.
      */
     axisDivisionFactor?: number;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.categories
-     * @public
+     * Specifies the order of categories on an axis of the &apos;discrete&apos; type.
      */
     categories?: Array<number | string | Date>;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.constantLines
-     * @type Array<Object>
-     * @inherits dxPolarChartOptions.commonAxisSettings.constantLineStyle
-     * @notUsedInTheme
-     * @public
+     * Defines an array of the argument axis constant lines.
      */
     constantLines?: Array<ArgumentAxisConstantLines>;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.firstPointOnStartAngle
-     * @default false
-     * @public
+     * Specifies whether or not to display the first point at the angle specified by the startAngle property.
      */
     firstPointOnStartAngle?: boolean;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.hoverMode
-     * @default 'none'
-     * @public
+     * Specifies the elements that will be highlighted when the argument axis is hovered over.
      */
     hoverMode?: ArgumentAxisHoverMode;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.label
-     * @type object
-     * @public
+     * Specifies properties for argument axis labels.
      */
     label?: ArgumentAxisLabel;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.linearThreshold
-     * @default undefined
-     * @public
+     * Specifies a value used to calculate the range on a logarithmic axis within which the axis should be linear. Applies only if the data source contains negative values or zeroes.
      */
     linearThreshold?: number | undefined;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.logarithmBase
-     * @default 10
-     * @public
+     * Specifies the value to be raised to a power when generating ticks for a logarithmic axis.
      */
     logarithmBase?: number;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.minorTick
-     * @type object
-     * @public
+     * Specifies the properties of the minor ticks.
      */
     minorTick?: ArgumentAxisMinorTick;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.minorTickCount
-     * @default undefined
-     * @public
+     * Specifies the number of minor ticks between two neighboring major ticks.
      */
     minorTickCount?: number | undefined;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.minorTickInterval
-     * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval
-     * @public
+     * Specifies the interval between minor ticks.
      */
     minorTickInterval?: TimeIntervalConfig;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.originValue
-     * @default undefined
-     * @public
+     * Specifies the value to be used as the origin for the argument axis.
      */
     originValue?: number | undefined;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.period
-     * @default undefined
-     * @public
+     * Specifies the period of the argument values in the data source.
      */
     period?: number | undefined;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.startAngle
-     * @default 0
-     * @public
+     * Specifies the angle in arc degrees to which the argument axis should be rotated. The positive values rotate the axis clockwise.
      */
     startAngle?: number;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.strips
-     * @type Array<Object>
-     * @notUsedInTheme
-     * @inherits dxPolarChartOptions.commonAxisSettings.stripStyle
-     * @public
+     * Specifies properties for argument axis strips.
      */
     strips?: Array<ArgumentAxisStrips>;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.tick
-     * @type object
-     * @public
+     * An object defining the configuration properties for axis ticks.
      */
     tick?: ArgumentAxisTick;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.tickInterval
-     * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval
-     * @public
+     * Specifies an interval between axis ticks/grid lines.
      */
     tickInterval?: TimeIntervalConfig;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.type
-     * @default undefined
-     * @public
+     * Specifies the required type of the argument axis.
      */
     type?: AxisScaleType | undefined;
 };
 /**
- * @public
- * @docid dxPolarChartArgumentAxisConstantLines
- * @type object
+ * Defines an array of the argument axis constant lines.
  */
 export type ArgumentAxisConstantLines = CommonAxisSettingsConstantLineStyle & {
     /**
-     * @docid dxPolarChartOptions.argumentAxis.constantLines.displayBehindSeries
-     * @default false
-     * @public
+     * Specifies whether to display the constant line behind or in front of the series.
      */
     displayBehindSeries?: boolean;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.constantLines.extendAxis
-     * @default false
-     * @public
+     * Specifies whether to extend the axis to display the constant line.
      */
     extendAxis?: boolean;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.constantLines.label
-     * @type object
-     * @public
+     * An object defining constant line label properties.
      */
     label?: ArgumentAxisConstantLinesLabel;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.constantLines.value
-     * @default undefined
-     * @public
+     * Specifies a value to be displayed by a constant line.
      */
     value?: number | Date | string | undefined;
 };
 /**
- * @public
- * @docid dxPolarChartArgumentAxisConstantLinesLabel
- * @type object
+ * An object defining constant line label properties.
  */
 export type ArgumentAxisConstantLinesLabel = CommonAxisSettingsConstantLineStyleLabel & {
     /**
-     * @docid dxPolarChartOptions.argumentAxis.constantLines.label.text
-     * @default undefined
-     * @public
+     * Specifies the text to be displayed in a constant line label.
      */
     text?: string | undefined;
 };
 /**
- * @public
- * @docid dxPolarChartArgumentAxisLabel
- * @type object
+ * Specifies properties for argument axis labels.
  */
 export type ArgumentAxisLabel = CommonAxisSettingsLabel & {
     /**
-     * @docid dxPolarChartOptions.argumentAxis.label.customizeHint
-     * @public
+     * Specifies the text for a hint that appears when a user hovers the mouse pointer over a label on the argument axis.
      */
     customizeHint?: ((argument: { value?: Date | number | string; valueText?: string }) => string);
     /**
-     * @docid dxPolarChartOptions.argumentAxis.label.customizeText
-     * @notUsedInTheme
-     * @public
+     * Specifies a callback function that returns the text to be displayed by argument axis labels.
      */
     customizeText?: ((argument: { value?: Date | number | string; valueText?: string }) => string);
     /**
-     * @docid dxPolarChartOptions.argumentAxis.label.format
-     * @default undefined
-     * @public
+     * Formats a value before it is displayed in an axis label.
      */
     format?: Format | undefined;
 };
 /**
- * @public
- * @docid dxPolarChartArgumentAxisMinorTick
- * @type object
+ * 
  */
 export type ArgumentAxisMinorTick = CommonAxisSettingsMinorTick & {
     /**
-     * @docid dxPolarChartOptions.argumentAxis.minorTick.shift
-     * @default 3
-     * @public
+     * Shifts minor ticks from the reference position.
      */
     shift?: number;
 };
 /**
- * @public
- * @docid dxPolarChartArgumentAxisStrips
- * @type object
+ * Specifies properties for argument axis strips.
  */
 export type ArgumentAxisStrips = CommonAxisSettingsStripStyle & {
     /**
-     * @docid dxPolarChartOptions.argumentAxis.strips.color
-     * @default undefined
-     * @public
+     * Specifies a color for a strip.
      */
     color?: string | undefined;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.strips.endValue
-     * @default undefined
-     * @public
+     * Specifies an end value for a strip.
      */
     endValue?: number | Date | string | undefined;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.strips.label
-     * @type object
-     * @public
+     * An object that defines the label configuration properties of a strip.
      */
     label?: ArgumentAxisStripsLabel;
     /**
-     * @docid dxPolarChartOptions.argumentAxis.strips.startValue
-     * @default undefined
-     * @public
+     * Specifies a start value for a strip.
      */
     startValue?: number | Date | string | undefined;
 };
 /**
- * @public
- * @docid dxPolarChartArgumentAxisStripsLabel
- * @type object
+ * An object that defines the label configuration properties of a strip.
  */
 export type ArgumentAxisStripsLabel = CommonAxisSettingsStripStyleLabel & {
     /**
-     * @docid dxPolarChartOptions.argumentAxis.strips.label.text
-     * @default undefined
-     * @public
+     * Specifies the text displayed in a strip.
      */
     text?: string | undefined;
 };
 /**
- * @public
- * @docid dxPolarChartArgumentAxisTick
- * @type object
+ * 
  */
 export type ArgumentAxisTick = CommonAxisSettingsTick & {
     /**
-     * @docid dxPolarChartOptions.argumentAxis.tick.shift
-     * @default 3
-     * @public
+     * Shifts ticks from the reference position.
      */
     shift?: number;
 };
 /**
- * @public
- * @docid dxPolarChartCommonAxisSettings
+ * An object defining the configuration properties that are common for all axes of the PolarChart UI component.
  */
 export type CommonAxisSettings = {
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.allowDecimals
-     * @default undefined
-     * @public
+     * Specifies whether to allow decimal values on the axis. When false, the axis contains integer values only.
      */
     allowDecimals?: boolean | undefined;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.color
-     * @default '#767676'
-     * @public
+     * Specifies the color of the line that represents an axis.
      */
     color?: string;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle
-     * @type object
-     * @public
+     * Specifies the appearance of all the UI component&apos;s constant lines.
      */
     constantLineStyle?: CommonAxisSettingsConstantLineStyle;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.discreteAxisDivisionMode
-     * @default 'betweenLabels'
-     * @public
+     * Specifies whether ticks/grid lines of a discrete axis are located between labels or cross the labels.
      */
     discreteAxisDivisionMode?: DiscreteAxisDivisionMode;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.endOnTick
-     * @default undefined
-     * @public
+     * Specifies whether to force the axis to start and end on ticks.
      */
     endOnTick?: boolean | undefined;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.grid
-     * @public
+     * An object defining the configuration properties for the grid lines of an axis in the PolarChart UI component.
      */
     grid?: {
       /**
-       * @docid dxPolarChartOptions.commonAxisSettings.grid.color
-       * @default '#d3d3d3'
+       * Specifies a color for grid lines.
        */
       color?: string;
       /**
-       * @docid dxPolarChartOptions.commonAxisSettings.grid.opacity
-       * @default undefined
+       * Specifies an opacity for grid lines.
        */
       opacity?: number | undefined;
       /**
-       * @docid dxPolarChartOptions.commonAxisSettings.grid.visible
-       * @default true
+       * Indicates whether or not the grid lines of an axis are visible.
        */
       visible?: boolean;
       /**
-       * @docid dxPolarChartOptions.commonAxisSettings.grid.width
-       * @default 1
+       * Specifies the width of grid lines.
        */
       width?: number;
     };
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.inverted
-     * @default false
-     * @public
+     * Indicates whether or not an axis is inverted.
      */
     inverted?: boolean;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.label
-     * @type object
-     * @public
+     * An object defining the label configuration properties that are common for all axes in the PolarChart UI component.
      */
     label?: CommonAxisSettingsLabel;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.minorGrid
-     * @public
+     * Specifies the properties of the minor grid.
      */
     minorGrid?: {
       /**
-       * @docid dxPolarChartOptions.commonAxisSettings.minorGrid.color
-       * @default '#d3d3d3'
+       * Specifies a color for the lines of the minor grid.
        */
       color?: string;
       /**
-       * @docid dxPolarChartOptions.commonAxisSettings.minorGrid.opacity
-       * @default undefined
+       * Specifies an opacity for the lines of the minor grid.
        */
       opacity?: number | undefined;
       /**
-       * @docid dxPolarChartOptions.commonAxisSettings.minorGrid.visible
-       * @default true
+       * Indicates whether the minor grid is visible or not.
        */
       visible?: boolean;
       /**
-       * @docid dxPolarChartOptions.commonAxisSettings.minorGrid.width
-       * @default 1
+       * Specifies a width for the lines of the minor grid.
        */
       width?: number;
     };
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.minorTick
-     * @type object
-     * @public
+     * Specifies the properties of the minor ticks.
      */
     minorTick?: CommonAxisSettingsMinorTick;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.opacity
-     * @default undefined
-     * @public
+     * Specifies the opacity of the line that represents an axis.
      */
     opacity?: number | undefined;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.stripStyle
-     * @type object
-     * @public
+     * An object defining configuration properties for strip style.
      */
     stripStyle?: CommonAxisSettingsStripStyle;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.tick
-     * @type object
-     * @public
+     * An object defining the configuration properties for axis ticks.
      */
     tick?: CommonAxisSettingsTick;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.visible
-     * @default true
-     * @public
+     * Indicates whether or not the line that represents an axis in a chart is visible.
      */
     visible?: boolean;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.width
-     * @default 1
-     * @public
+     * Specifies the width of the line that represents an axis in the chart.
      */
     width?: number;
 };
 /**
- * @public
- * @docid dxPolarChartCommonAxisSettingsConstantLineStyle
+ * Specifies the appearance of all the UI component&apos;s constant lines.
  */
 export type CommonAxisSettingsConstantLineStyle = {
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.color
-     * @default '#000000'
-     * @public
+     * Specifies a color for a constant line.
      */
     color?: string;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.dashStyle
-     * @default 'solid'
-     * @public
+     * Specifies a dash style for a constant line.
      */
     dashStyle?: DashStyle;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.label
-     * @type object
-     * @public
+     * An object defining constant line label properties.
      */
     label?: CommonAxisSettingsConstantLineStyleLabel;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.width
-     * @default 1
-     * @public
+     * Specifies a constant line width in pixels.
      */
     width?: number;
 };
 /**
- * @public
- * @docid dxPolarChartCommonAxisSettingsConstantLineStyleLabel
+ * An object defining constant line label properties.
  */
 export type CommonAxisSettingsConstantLineStyleLabel = {
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font
-     * @default '#767676' &prop(color)
-     * @public
+     * Specifies font properties for a constant line label.
      */
     font?: Font;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.visible
-     * @default true
-     * @public
+     * Indicates whether or not to display labels for the axis constant lines.
      */
     visible?: boolean;
 };
 /**
- * @public
- * @docid dxPolarChartCommonAxisSettingsLabel
+ * An object defining the label configuration properties that are common for all axes in the PolarChart UI component.
  */
 export type CommonAxisSettingsLabel = {
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.label.font
-     * @default '#767676' &prop(color)
-     * @public
+     * Specifies font properties for axis labels.
      */
     font?: Font;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.label.indentFromAxis
-     * @default 5
-     * @public
+     * Specifies the spacing between an axis and its labels in pixels.
      */
     indentFromAxis?: number;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.label.overlappingBehavior
-     * @default 'hide'
-     * @public
+     * Decides how to arrange axis labels when there is not enough space to keep all of them.
      */
     overlappingBehavior?: LabelOverlap;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.label.visible
-     * @default true
-     * @public
+     * Indicates whether or not axis labels are visible.
      */
     visible?: boolean;
 };
 /**
- * @public
- * @docid dxPolarChartCommonAxisSettingsMinorTick
+ * Specifies the properties of the minor ticks.
  */
 export type CommonAxisSettingsMinorTick = {
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.minorTick.color
-     * @default '#767676'
-     * @public
+     * Specifies a color for the minor ticks.
      */
     color?: string;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.minorTick.length
-     * @default 7
-     * @public
+     * Specifies minor tick length.
      */
     length?: number;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.minorTick.opacity
-     * @default 0.3
-     * @public
+     * Specifies an opacity for the minor ticks.
      */
     opacity?: number;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.minorTick.visible
-     * @default false
-     * @public
+     * Indicates whether or not the minor ticks are displayed on an axis.
      */
     visible?: boolean;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.minorTick.width
-     * @default 1
-     * @public
+     * Specifies minor tick width.
      */
     width?: number;
 };
 /**
- * @public
- * @docid dxPolarChartCommonAxisSettingsStripStyle
+ * An object defining configuration properties for strip style.
  */
 export type CommonAxisSettingsStripStyle = {
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.stripStyle.label
-     * @type object
-     * @public
+     * An object defining the configuration properties for a strip label style.
      */
     label?: CommonAxisSettingsStripStyleLabel;
 };
 /**
- * @public
- * @docid dxPolarChartCommonAxisSettingsStripStyleLabel
+ * An object defining the configuration properties for a strip label style.
  */
 export type CommonAxisSettingsStripStyleLabel = {
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.stripStyle.label.font
-     * @default '#767676' &prop(color)
-     * @public
+     * Specifies font properties for a strip label.
      */
     font?: Font;
 };
 /**
- * @public
- * @docid dxPolarChartCommonAxisSettingsTick
+ * An object defining the configuration properties for axis ticks.
  */
 export type CommonAxisSettingsTick = {
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.tick.color
-     * @default '#767676'
-     * @public
+     * Specifies ticks color.
      */
     color?: string;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.tick.length
-     * @default 7
-     * @public
+     * Specifies tick length.
      */
     length?: number;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.tick.opacity
-     * @default undefined
-     * @public
+     * Specifies tick opacity.
      */
     opacity?: number | undefined;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.tick.visible
-     * @default true
-     * @public
+     * Indicates whether or not ticks are visible on an axis.
      */
     visible?: boolean;
     /**
-     * @docid dxPolarChartOptions.commonAxisSettings.tick.width
-     * @default 1
-     * @public
+     * Specifies tick width.
      */
     width?: number;
 };
 /**
- * @public
- * @docid dxPolarChartCommonSeriesSetting
- * @type object
+ * An object defining the configuration properties that are common for all series of the PolarChart UI component.
  */
 export type CommonSeriesSettings = dxPolarChartSeriesTypesCommonPolarChartSeries & {
     /**
-     * @docid dxPolarChartOptions.commonSeriesSettings.area
-     * @public
+     * An object that specifies configuration properties for all series of the area type in the chart.
      */
     area?: any;
     /**
-     * @docid dxPolarChartOptions.commonSeriesSettings.bar
-     * @public
+     * An object that specifies configuration properties for all series of the &apos;bar&apos; type in the chart.
      */
     bar?: any;
     /**
-     * @docid dxPolarChartOptions.commonSeriesSettings.line
-     * @public
+     * An object that specifies configuration properties for all series of the &apos;line&apos; type in the chart.
      */
     line?: any;
     /**
-     * @docid dxPolarChartOptions.commonSeriesSettings.scatter
-     * @public
+     * An object that specifies configuration properties for all series of the &apos;scatter&apos; type in the chart.
      */
     scatter?: any;
     /**
-     * @docid dxPolarChartOptions.commonSeriesSettings.stackedbar
-     * @public
+     * An object that specifies configuration properties for all series of the &apos;stackedBar&apos; type in the chart.
      */
     stackedbar?: any;
     /**
-     * @docid dxPolarChartOptions.commonSeriesSettings.type
-     * @default 'scatter'
-     * @public
+     * Sets a series type.
      */
     type?: PolarChartSeriesType;
 };
 /**
- * @public
- * @docid dxPolarChartLegend
+ * Specifies the properties of a chart&apos;s legend.
  */
 export type Legend = BaseChartLegend & {
     /**
-     * @docid dxPolarChartOptions.legend.customizeHint
-     * @public
+     * Specifies the text for a hint that appears when a user hovers the mouse pointer over a legend item.
      */
     customizeHint?: ((seriesInfo: { seriesName?: any; seriesIndex?: number; seriesColor?: string }) => string);
     /**
-     * @docid dxPolarChartOptions.legend.customizeText
-     * @notUsedInTheme
-     * @public
+     * Specifies a callback function that returns the text to be displayed by legend items.
      */
     customizeText?: ((seriesInfo: { seriesName?: any; seriesIndex?: number; seriesColor?: string }) => string);
     /**
-     * @docid dxPolarChartOptions.legend.hoverMode
-     * @default 'includePoints'
-     * @public
+     * Specifies what series elements to highlight when a corresponding item in the legend is hovered over.
      */
     hoverMode?: LegendHoverMode;
 };
 /**
- * @public
- * @docid dxPolarChartTooltip
+ * 
  */
 export type Tooltip = BaseChartTooltip & {
     /**
-     * @docid dxPolarChartOptions.tooltip.shared
-     * @default false
-     * @public
+     * Specifies whether the tooltip is shared across all series points with the same argument.
      */
     shared?: boolean;
 };
 /**
- * @public
- * @docid dxPolarChartValueAxis
- * @type object
+ * Specifies value axis properties for the PolarChart UI component.
  */
 export type ValueAxis = CommonAxisSettings & {
     /**
-     * @docid dxPolarChartOptions.valueAxis.axisDivisionFactor
-     * @default 30
-     * @public
+     * Specifies a coefficient for dividing the value axis.
      */
     axisDivisionFactor?: number;
     /**
-     * @docid dxPolarChartOptions.valueAxis.categories
-     * @public
+     * Specifies the order of categories on an axis of the &apos;discrete&apos; type.
      */
     categories?: Array<number | string | Date>;
     /**
-     * @docid dxPolarChartOptions.valueAxis.constantLines
-     * @type Array<Object>
-     * @notUsedInTheme
-     * @inherits dxPolarChartOptions.commonAxisSettings.constantLineStyle
-     * @public
+     * Defines an array of the value axis constant lines.
      */
     constantLines?: Array<ValueAxisConstantLines>;
     /**
-     * @docid dxPolarChartOptions.valueAxis.endOnTick
-     * @default false
-     * @public
+     * Specifies whether to force the axis to start and end on ticks.
      */
     endOnTick?: boolean;
     /**
-     * @docid dxPolarChartOptions.valueAxis.label
-     * @type object
-     * @public
+     * Specifies properties for value axis labels.
      */
     label?: ValueAxisLabel;
     /**
-     * @docid dxPolarChartOptions.valueAxis.linearThreshold
-     * @default undefined
-     * @public
+     * Specifies a value used to calculate the range on a logarithmic axis within which the axis should be linear. Applies only if the data source contains negative values or zeroes.
      */
     linearThreshold?: number | undefined;
     /**
-     * @docid dxPolarChartOptions.valueAxis.logarithmBase
-     * @default 10
-     * @public
+     * Specifies the value to be raised to a power when generating ticks for a logarithmic axis.
      */
     logarithmBase?: number;
     /**
-     * @docid dxPolarChartOptions.valueAxis.maxValueMargin
-     * @default undefined
-     * @public
+     * Specifies a coefficient that determines the spacing between the maximum series point and the axis.
      */
     maxValueMargin?: number | undefined;
     /**
-     * @docid dxPolarChartOptions.valueAxis.minValueMargin
-     * @default undefined
-     * @public
+     * Specifies a coefficient that determines the spacing between the minimum series point and the axis.
      */
     minValueMargin?: number | undefined;
     /**
-     * @docid dxPolarChartOptions.valueAxis.minVisualRangeLength
-     * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval|undefined
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Specifies the minimum length of the visual range.
      */
     minVisualRangeLength?: TimeIntervalConfig;
     /**
-     * @docid dxPolarChartOptions.valueAxis.minorTickCount
-     * @default undefined
-     * @public
+     * Specifies the number of minor ticks between two neighboring major ticks.
      */
     minorTickCount?: number | undefined;
     /**
-     * @docid dxPolarChartOptions.valueAxis.minorTickInterval
-     * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval
-     * @public
+     * Specifies the interval between minor ticks.
      */
     minorTickInterval?: TimeIntervalConfig;
     /**
-     * @docid dxPolarChartOptions.valueAxis.showZero
-     * @default undefined
-     * @public
+     * Specifies whether or not to indicate a zero value on the value axis.
      */
     showZero?: boolean | undefined;
     /**
-     * @docid dxPolarChartOptions.valueAxis.strips
-     * @type Array<Object>
-     * @notUsedInTheme
-     * @inherits dxPolarChartOptions.commonAxisSettings.stripStyle
-     * @public
+     * Specifies properties for value axis strips.
      */
     strips?: Array<ValueAxisStrips>;
     /**
-     * @docid dxPolarChartOptions.valueAxis.tick
-     * @type object
-     * @public
+     * An object defining the configuration properties for axis ticks.
      */
     tick?: ValueAxisTick;
     /**
-     * @docid dxPolarChartOptions.valueAxis.tickInterval
-     * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval
-     * @public
+     * Specifies an interval between axis ticks/grid lines.
      */
     tickInterval?: TimeIntervalConfig;
     /**
-     * @docid dxPolarChartOptions.valueAxis.type
-     * @default undefined
-     * @public
+     * Specifies the required type of the value axis.
      */
     type?: AxisScaleType | undefined;
     /**
-     * @docid dxPolarChartOptions.valueAxis.valueMarginsEnabled
-     * @default true
-     * @public
+     * Indicates whether to display series with indents from axis boundaries.
      */
     valueMarginsEnabled?: boolean;
     /**
-     * @docid dxPolarChartOptions.valueAxis.valueType
-     * @default undefined
-     * @public
+     * Specifies the desired type of axis values.
      */
     valueType?: ChartsDataType | undefined;
     /**
-     * @docid dxPolarChartOptions.valueAxis.visualRange
-     * @fires BaseWidgetOptions.onOptionChanged
-     * @notUsedInTheme
-     * @public
+     * Defines the axis&apos; displayed range. Cannot be wider than the wholeRange.
      */
     visualRange?: VisualRange | Array<number | string | Date>;
     /**
-     * @docid dxPolarChartOptions.valueAxis.visualRangeUpdateMode
-     * @default 'auto'
-     * @public
+     * Specifies how the axis&apos;s visual range should behave when the PolarChart data is updated.
      */
     visualRangeUpdateMode?: ValueAxisVisualRangeUpdateMode;
     /**
-     * @docid dxPolarChartOptions.valueAxis.wholeRange
-     * @default undefined
-     * @public
+     * Defines the range where the axis can be zoomed.
      */
     wholeRange?: VisualRange | Array<number | string | Date> | undefined;
 };
 /**
- * @public
- * @docid dxPolarChartValueAxisConstantLines
- * @type object
+ * Defines an array of the value axis constant lines.
  */
 export type ValueAxisConstantLines = CommonAxisSettingsConstantLineStyle & {
     /**
-     * @docid dxPolarChartOptions.valueAxis.constantLines.displayBehindSeries
-     * @default false
-     * @public
+     * Specifies whether to display the constant line behind or in front of the series.
      */
     displayBehindSeries?: boolean;
     /**
-     * @docid dxPolarChartOptions.valueAxis.constantLines.extendAxis
-     * @default false
-     * @public
+     * Specifies whether to extend the axis to display the constant line.
      */
     extendAxis?: boolean;
     /**
-     * @docid dxPolarChartOptions.valueAxis.constantLines.label
-     * @type object
-     * @public
+     * An object defining constant line label properties.
      */
     label?: ValueAxisConstantLinesLabel;
     /**
-     * @docid dxPolarChartOptions.valueAxis.constantLines.value
-     * @default undefined
-     * @public
+     * Specifies a value to be displayed by a constant line.
      */
     value?: number | Date | string | undefined;
 };
 /**
- * @public
- * @docid dxPolarChartValueAxisConstantLinesLabel
- * @type object
+ * An object defining constant line label properties.
  */
 export type ValueAxisConstantLinesLabel = CommonAxisSettingsConstantLineStyleLabel & {
     /**
-     * @docid dxPolarChartOptions.valueAxis.constantLines.label.text
-     * @default undefined
-     * @public
+     * Specifies the text to be displayed in a constant line label.
      */
     text?: string | undefined;
 };
 /**
- * @public
- * @docid dxPolarChartValueAxisLabel
- * @type object
+ * Specifies properties for value axis labels.
  */
 export type ValueAxisLabel = CommonAxisSettingsLabel & {
     /**
-     * @docid dxPolarChartOptions.valueAxis.label.customizeHint
-     * @public
+     * Specifies the text for a hint that appears when a user hovers the mouse pointer over a label on the value axis.
      */
     customizeHint?: ((axisValue: { value?: Date | number | string; valueText?: string }) => string);
     /**
-     * @docid dxPolarChartOptions.valueAxis.label.customizeText
-     * @notUsedInTheme
-     * @public
+     * Specifies a callback function that returns the text to be displayed in value axis labels.
      */
     customizeText?: ((axisValue: { value?: Date | number | string; valueText?: string }) => string);
     /**
-     * @docid dxPolarChartOptions.valueAxis.label.format
-     * @default undefined
-     * @public
+     * Formats a value before it is displayed in an axis label.
      */
     format?: Format | undefined;
 };
 /**
- * @public
- * @docid dxPolarChartValueAxisStrips
- * @type object
+ * Specifies properties for value axis strips.
  */
 export type ValueAxisStrips = CommonAxisSettingsStripStyle & {
     /**
-     * @docid dxPolarChartOptions.valueAxis.strips.color
-     * @default undefined
-     * @public
+     * Specifies a color for a strip.
      */
     color?: string | undefined;
     /**
-     * @docid dxPolarChartOptions.valueAxis.strips.endValue
-     * @default undefined
-     * @public
+     * Specifies an end value for a strip.
      */
     endValue?: number | Date | string | undefined;
     /**
-     * @docid dxPolarChartOptions.valueAxis.strips.label
-     * @type object
-     * @public
+     * An object that defines the label configuration properties of a strip.
      */
     label?: ValueAxisStripsLabel;
     /**
-     * @docid dxPolarChartOptions.valueAxis.strips.startValue
-     * @default undefined
-     * @public
+     * Specifies a start value for a strip.
      */
     startValue?: number | Date | string | undefined;
 };
 /**
- * @public
- * @docid dxPolarChartValueAxisStripsLabel
- * @type object
+ * An object that defines the label configuration properties of a strip.
  */
 export type ValueAxisStripsLabel = CommonAxisSettingsStripStyleLabel & {
     /**
-     * @docid dxPolarChartOptions.valueAxis.strips.label.text
-     * @default undefined
-     * @public
+     * Specifies the text displayed in a strip.
      */
     text?: string | undefined;
 };
 /**
- * @public
- * @docid dxPolarChartValueAxisTick
- * @type object
+ * 
  */
 export type ValueAxisTick = CommonAxisSettingsTick & {
     /**
-     * @docid dxPolarChartOptions.valueAxis.tick.visible
-     * @default false
-     * @public
+     * Indicates whether or not ticks are visible on an axis.
      */
     visible?: boolean;
 };
 /**
- * @docid dxPolarChart
- * @inherits BaseChart
- * @namespace DevExpress.viz
- * @public
+ * The PolarChart is a UI component that visualizes data in a polar coordinate system.
  */
 export default class dxPolarChart extends BaseChart<dxPolarChartOptions> {
     /**
-     * @docid dxPolarChart.getValueAxis
-     * @publicName getValueAxis()
-     * @public
+     * Gets a value axis.
      */
     getValueAxis(): chartAxisObject;
     /**
-     * @docid dxPolarChart.resetVisualRange
-     * @publicName resetVisualRange()
-     * @public
+     * Resets the value axis&apos; visual range to the data range or to the whole range if it is within the data range.
      */
     resetVisualRange(): void;
 }
 
 /**
- * @docid
- * @type object
- * @inherits dxPolarChartCommonAnnotationConfig
- * @namespace DevExpress.viz
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxPolarChartAnnotationConfig extends dxPolarChartCommonAnnotationConfig {
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the annotation&apos;s name.
      */
     name?: string | undefined;
 }
 
 /**
- * @docid
- * @type object
- * @inherits BaseChartAnnotationConfig
- * @namespace DevExpress.viz
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the angle between the startAngle and the radius.
      */
     angle?: number | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Places an annotation at the specified distance from the center of the UI component.
      */
     radius?: number | undefined;
     /**
-     * @docid
-     * @type_function_return object
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Customizes the text and appearance of the annotation&apos;s tooltip.
      */
     customizeTooltip?: ((annotation: dxPolarChartAnnotationConfig | any) => any) | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @type_function_param1 annotation:dxPolarChartCommonAnnotationConfig|any
-     * @type_function_return string|SVGElement|jQuery
-     * @public
+     * Specifies a custom template for the annotation. Applies only if the type is &apos;custom&apos;.
      */
     template?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
-     * @docid
-     * @type_function_return string|Element|jQuery
-     * @default undefined
-     * @public
+     * Specifies a custom template for an annotation&apos;s tooltip.
      */
     tooltipTemplate?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: DxElement) => string | UserDefinedElement) | undefined;
 }
 
 /**
- * @docid
- * @type object
- * @namespace DevExpress.viz
+ * This section lists objects that define properties used to configure series of specific types.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxPolarChartSeriesTypes {
     /**
-     * @docid
-     * @type object
-     * @hidden
+     * An object that defines configuration properties for polar chart series.
      */
     CommonPolarChartSeries?: dxPolarChartSeriesTypesCommonPolarChartSeries;
     /**
-     * @docid
-     * @publicName AreaSeries
-     * @type object
-     * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
-     * @public
+     * An object defining a series of the area type.
      */
     areapolarseries?: dxPolarChartSeriesTypesAreapolarseries;
     /**
-     * @docid
-     * @publicName BarSeries
-     * @type object
-     * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
-     * @public
+     * An object defining a series of the bar type.
      */
     barpolarseries?: dxPolarChartSeriesTypesBarpolarseries;
     /**
-     * @docid
-     * @publicName LineSeries
-     * @type object
-     * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
-     * @public
+     * An object defining a series of the line type.
      */
     linepolarseries?: dxPolarChartSeriesTypesLinepolarseries;
     /**
-     * @docid
-     * @publicName ScatterSeries
-     * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
-     * @public
+     * An object defining a series of the scatter type.
      */
     scatterpolarseries?: any;
     /**
-     * @docid
-     * @publicName StackedBarSeries
-     * @type object
-     * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
-     * @public
+     * An object defining a series of the stackedBar type.
      */
     stackedbarpolarseries?: dxPolarChartSeriesTypesStackedbarpolarseries;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.argumentField
-     * @default 'arg'
-     * @notUsedInTheme
-     * @public
+     * Specifies the data source field that provides arguments for series points.
      */
     argumentField?: string;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.barPadding
-     * @default undefined
-     * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
-     * @public
+     * Controls the padding and consequently the angular width of all bars in a series using relative units. Ignored if the barWidth property is set.
      */
     barPadding?: number | undefined;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.barWidth
-     * @default undefined
-     * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
-     * @public
+     * Specifies a fixed angular width for all bars in a series, measured in degrees. Takes precedence over the barPadding property.
      */
     barWidth?: number | undefined;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.border
-     * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
-     * @public
+     * An object defining the series border configuration properties.
      */
     border?: {
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.border.color
-       * @default undefined
-       * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
+       * Sets a border color for a series.
        */
       color?: string | undefined;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.border.dashStyle
-       * @default undefined
-       * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
+       * Specifies a dash style for the borders of series points.
        */
       dashStyle?: DashStyle | undefined;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.border.visible
-       * @default false
-       * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
+       * Sets border visibility for a series.
        */
       visible?: boolean;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.border.width
-       * @default 2
-       * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
+       * Sets a border width for a series in pixels.
        */
       width?: number;
     };
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.closed
-     * @default true
-     * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.linepolarseries
-     * @public
+     * Specifies whether or not to close the chart by joining the end point with the first point.
      */
     closed?: boolean;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.color
-     * @default undefined
-     * @public
+     * Specifies a series color.
      */
     color?: string | ChartsColor | undefined;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.dashStyle
-     * @default 'solid'
-     * @propertyOf dxPolarChartSeriesTypes.linepolarseries
-     * @public
+     * Specifies the dash style of the series&apos; line.
      */
     dashStyle?: DashStyle;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverMode
-     * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.linepolarseries
-     * @public
+     * Specifies the series elements to highlight when a series is hovered over.
      */
     hoverMode?: SeriesHoverMode;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle
-     * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.linepolarseries
-     * @public
+     * An object defining configuration properties for a hovered series.
      */
     hoverStyle?: {
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border
-       * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
+       * An object defining the border properties for a hovered series.
        */
       border?: {
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.color
-         * @default undefined
+         * Sets a border color for a hovered series.
          */
         color?: string | undefined;
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.dashStyle
-         * @default 'solid'
+         * Specifies a dash style for the borders of point labels.
          */
         dashStyle?: DashStyle | undefined;
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.visible
-         * @default false
+         * Sets a border visibility for a hovered series.
          */
         visible?: boolean;
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.width
-         * @default 3
+         * Sets a border width for a hovered series.
          */
         width?: number;
       };
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.color
-       * @default undefined
+       * Sets a color for a series when it is hovered over.
        */
       color?: string | ChartsColor | undefined;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.dashStyle
-       * @default 'solid'
-       * @propertyOf dxPolarChartSeriesTypes.linepolarseries
+       * Specifies the dash style for the line in a hovered series.
        */
       dashStyle?: DashStyle;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching
-       * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
+       * Specifies the hatching properties to be applied when a series is hovered over.
        */
       hatching?: {
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.direction
-         * @default 'none'
+         * Specifies how to apply hatching to highlight the hovered series.
          */
         direction?: HatchDirection;
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.opacity
-         * @default 0.75
+         * Specifies the opacity of hatching lines.
          */
         opacity?: number;
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.step
-         * @default 6
+         * Specifies the distance between hatching lines in pixels.
          */
         step?: number;
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.width
-         * @default 2
+         * Specifies the width of hatching lines in pixels.
          */
         width?: number;
       };
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.highlight
-       * @default true
-       * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
+       * Specifies whether to lighten the series when a user points to it.
        */
       highlight?: boolean;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.width
-       * @default 3
-       * @propertyOf dxPolarChartSeriesTypes.linepolarseries
+       * Specifies the width of a line in a hovered series.
        */
       width?: number;
     };
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.ignoreEmptyPoints
-     * @default false
-     * @public
+     * Specifies whether the series should ignore null data points.
      */
     ignoreEmptyPoints?: boolean;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label
-     * @type object
-     * @public
+     * An object defining the label configuration properties.
      */
     label?: dxPolarChartSeriesTypesCommonPolarChartSeriesLabel;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.maxLabelCount
-     * @default undefined
-     * @public
+     * Specifies how many points are acceptable to be in a series to display all labels for these points. Otherwise, the labels will not be displayed.
      */
     maxLabelCount?: number | undefined;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.minBarSize
-     * @default undefined
-     * @propertyOf dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.barpolarseries
-     * @public
+     * Specifies the minimal length of a displayed bar in pixels.
      */
     minBarSize?: number | undefined;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.opacity
-     * @default 0.5
-     * @propertyOf dxPolarChartSeriesTypes.areapolarseries
-     * @public
+     * Specifies opacity for a series.
      */
     opacity?: number;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point
-     * @type object
-     * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
-     * @public
+     * An object defining configuration properties for points in line and area series.
      */
     point?: dxPolarChartSeriesTypesCommonPolarChartSeriesPoint;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionMode
-     * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.linepolarseries
-     * @public
+     * Specifies the series elements to highlight when the series is selected.
      */
     selectionMode?: SeriesSelectionMode;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle
-     * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.linepolarseries
-     * @public
+     * An object defining configuration properties for a selected series.
      */
     selectionStyle?: {
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border
-       * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
+       * An object defining the border properties for a selected series.
        */
       border?: {
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.color
-         * @default undefined
+         * Sets a border color for a selected series.
          */
         color?: string | undefined;
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.dashStyle
-         * @default 'solid'
+         * Specifies a dash style for the borders of point labels.
          */
         dashStyle?: DashStyle | undefined;
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.visible
-         * @default false
+         * Sets border visibility for a selected series.
          */
         visible?: boolean;
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.width
-         * @default 3
+         * Sets a border width for a selected series.
          */
         width?: number;
       };
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.color
-       * @default undefined
+       * Sets a color for a series when it is selected.
        */
       color?: string | ChartsColor | undefined;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.dashStyle
-       * @default 'solid'
-       * @propertyOf dxPolarChartSeriesTypes.linepolarseries
+       * Specifies the dash style for the line in a selected series.
        */
       dashStyle?: DashStyle;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching
-       * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
+       * Specifies the hatching properties to be applied when a series is selected.
        */
       hatching?: {
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.direction
-         * @default 'none'
+         * Specifies how to apply hatching to highlight a selected series.
          */
         direction?: HatchDirection;
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.opacity
-         * @default 0.5
+         * Specifies the opacity of hatching lines.
          */
         opacity?: number;
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.step
-         * @default 6
+         * Specifies the distance between hatching lines in pixels.
          */
         step?: number;
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.width
-         * @default 2
+         * Specifies the width of hatching lines in pixels.
          */
         width?: number;
       };
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.highlight
-       * @default true
-       * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
+       * Specifies whether to lighten the series when a user selects it.
        */
       highlight?: boolean;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.width
-       * @default 3
-       * @propertyOf dxPolarChartSeriesTypes.linepolarseries
+       * Specifies the width of a line in a selected series.
        */
       width?: number;
     };
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.showInLegend
-     * @default true
-     * @public
+     * Specifies whether or not to show the series in the chart&apos;s legend.
      */
     showInLegend?: boolean;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.stack
-     * @default 'default'
-     * @propertyOf dxPolarChartSeriesTypes.stackedbarpolarseries
-     * @public
+     * Specifies the name of the stack where the values of the &apos;stackedBar&apos; series must be located.
      */
     stack?: string;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.tagField
-     * @default 'tag'
-     * @notUsedInTheme
-     * @public
+     * Specifies the name of the data source field that provides data about a point.
      */
     tagField?: string;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar
-     * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.scatterpolarseries
-     * @public
+     * Configures error bars.
      */
     valueErrorBar?: {
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.color
-       * @default black
+       * Specifies the color of error bars.
        */
       color?: string;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.displayMode
-       * @default 'auto'
+       * Specifies whether error bars must be displayed in full or partially.
        */
       displayMode?: ValueErrorBarDisplayMode;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.edgeLength
-       * @default 8
+       * Specifies the length of the lines that indicate error bar edges.
        */
       edgeLength?: number;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.highValueField
-       * @default undefined
+       * Specifies the data field that provides data for high error values.
        */
       highValueField?: string | undefined;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.lineWidth
-       * @default 2
+       * Specifies the width of the error bar line.
        */
       lineWidth?: number;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.lowValueField
-       * @default undefined
+       * Specifies the data field that provides data for low error values.
        */
       lowValueField?: string | undefined;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.opacity
-       * @default undefined
+       * Specifies the opacity of error bars.
        */
       opacity?: number | undefined;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.type
-       * @default undefined
+       * Specifies how error bar values must be calculated.
        */
       type?: ValueErrorBarType | undefined;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.value
-       * @default 1
+       * Specifies the value to be used for generating error bars.
        */
       value?: number;
     };
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueField
-     * @default 'val'
-     * @notUsedInTheme
-     * @public
+     * Specifies the data source field that provides values for series points.
      */
     valueField?: string;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.visible
-     * @default true
-     * @public
+     * Specifies the visibility of a series.
      */
     visible?: boolean;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.width
-     * @default 2
-     * @propertyOf dxPolarChartSeriesTypes.linepolarseries
-     * @public
+     * Specifies a line width.
      */
     width?: number;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.argumentFormat
-     * @default undefined
-     * @public
+     * Formats the point argument before it is displayed in the point label. To format the point value, use the format property.
      */
     argumentFormat?: Format | undefined;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.backgroundColor
-     * @default undefined
-     * @public
+     * Colors the point labels&apos; background. The default color is inherited from the points.
      */
     backgroundColor?: string | undefined;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border
-     * @public
+     * Specifies border properties for point labels.
      */
     border?: {
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.color
-       * @default  '#d3d3d3'
+       * Specifies a border color for point labels.
        */
       color?: string | undefined;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.dashStyle
-       * @default 'solid'
+       * Specifies a dash style for the borders of point labels.
        */
       dashStyle?: DashStyle | undefined;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.visible
-       * @default false
+       * Indicates whether borders are visible in point labels.
        */
       visible?: boolean;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.width
-       * @default 1
+       * Specifies the border width for point labels.
        */
       width?: number;
     };
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.connector
-     * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.scatterpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
-     * @public
+     * Specifies connector properties for series point labels.
      */
     connector?: {
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.connector.color
-       * @default undefined
-       * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.scatterpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
+       * Specifies the color of label connectors.
        */
       color?: string | undefined;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.connector.visible
-       * @default false
-       * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.scatterpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
+       * Indicates whether or not label connectors are visible.
        */
       visible?: boolean;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.connector.width
-       * @default 1
-       * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.scatterpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
+       * Specifies the width of label connectors.
        */
       width?: number;
     };
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Specifies a callback function that returns the text to be displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font
-     * @default '#FFFFFF' &prop(color)
-     * @default 14 &prop(size)
-     * @public
+     * Specifies font properties for the text displayed in point labels.
      */
     font?: Font;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.format
-     * @default undefined
-     * @public
+     * Formats a value before it is displayed in a point label.
      */
     format?: Format | undefined;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.position
-     * @default 'outside'
-     * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
-     * @public
+     * Specifies a label position in bar-like series.
      */
     position?: RelativePosition;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.rotationAngle
-     * @default 0
-     * @public
+     * Specifies the angle used to rotate point labels from their initial position.
      */
     rotationAngle?: number;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.showForZeroValues
-     * @default true
-     * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
-     * @public
+     * Specifies whether or not to show a label when the point has a zero value.
      */
     showForZeroValues?: boolean;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.visible
-     * @default false
-     * @public
+     * Specifies the visibility of point labels.
      */
     visible?: boolean;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.displayFormat
-     * @default undefined
-     * @public
-     */
+      * Specifies the label&apos;s text.
+      */
      displayFormat?: string | undefined;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.border
-     * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
-     * @public
+     * Specifies border properties for points in the line and area series.
      */
     border?: {
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.border.color
-       * @default undefined
-       * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+       * Sets a border color for points in the line and area series.
        */
       color?: string | undefined;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.border.visible
-       * @default false
-       * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+       * Sets border visibility for points in the line and area series.
        */
       visible?: boolean;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.border.width
-       * @default 1
-       * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+       * Sets a border width for points in the line or area series.
        */
       width?: number;
     };
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.color
-     * @default undefined
-     * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
-     * @public
+     * Specifies the points color.
      */
     color?: string | ChartsColor | undefined;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverMode
-     * @default 'onlyPoint'
-     * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
-     * @public
+     * Specifies what series points to highlight when a point is hovered over.
      */
     hoverMode?: PointInteractionMode;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle
-     * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
-     * @public
+     * An object defining configuration properties for a hovered point.
      */
     hoverStyle?: {
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.border
-       * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+       * An object defining the border properties for a hovered point.
        */
       border?: {
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.border.color
-         * @default undefined
-         * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+         * Sets a border color for a hovered point.
          */
         color?: string | undefined;
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.border.visible
-         * @default true
-         * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+         * Sets border visibility for a hovered point.
          */
         visible?: boolean;
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.border.width
-         * @default 4
-         * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+         * Sets a border width for a hovered point.
          */
         width?: number;
       };
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.color
-       * @default undefined
-       * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+       * Sets a color for a point when it is hovered over.
        */
       color?: string | ChartsColor | undefined;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.size
-       * @default 12
-       * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+       * Specifies the diameter of a hovered point in the series that represents data points as symbols (not as bars for instance).
        */
       size?: number;
     };
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image
-     * @default undefined
-     * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
-     * @public
+     * An object specifying the parameters of an image that is used as a point marker.
      */
     image?: string | undefined | {
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image.height
-       * @default 30
-       * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+       * Specifies the height of an image that is used as a point marker.
        */
       height?: number;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image.url
-       * @default undefined
-       * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+       * Specifies a URL leading to the image to be used as a point marker.
        */
       url?: string | undefined;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image.width
-       * @default 30
-       * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+       * Specifies the width of an image that is used as a point marker.
        */
       width?: number;
     };
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionMode
-     * @default 'onlyPoint'
-     * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
-     * @public
+     * Specifies what series points to highlight when a point is selected.
      */
     selectionMode?: PointInteractionMode;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle
-     * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
-     * @public
+     * An object defining configuration properties for a selected point.
      */
     selectionStyle?: {
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.border
-       * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+       * An object defining the border properties for a selected point.
        */
       border?: {
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.border.color
-         * @default undefined
-         * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+         * Sets a border color for a selected point.
          */
         color?: string | undefined;
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.border.visible
-         * @default true
-         * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+         * Sets border visibility for a selected point.
          */
         visible?: boolean;
         /**
-         * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.border.width
-         * @default 4
-         * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+         * Sets a border width for a selected point.
          */
         width?: number;
       };
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.color
-       * @default undefined
-       * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+       * Sets a color for a point when it is selected.
        */
       color?: string | ChartsColor | undefined;
       /**
-       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.size
-       * @default 12
-       * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
+       * Specifies the diameter of a selected point in the series that represents data points as symbols (not as bars for instance).
        */
       size?: number;
     };
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.size
-     * @default 12
-     * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
-     * @public
+     * Specifies the point diameter in pixels for those series that represent data points as symbols (not as bars for instance).
      */
     size?: number;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.symbol
-     * @default 'circle'
-     * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
-     * @public
+     * Specifies a symbol for presenting points of the line and area series.
      */
     symbol?: PointSymbol;
     /**
-     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.visible
-     * @default true
-     * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
-     * @public
+     * Specifies the points visibility for a line and area series.
      */
     visible?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxPolarChartSeriesTypesAreapolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
-     * @docid dxPolarChartSeriesTypes.areapolarseries.hoverMode
-     * @default 'nearestPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to the series.
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxPolarChartSeriesTypes.areapolarseries.point
-     * @type object
-     * @public
+     * An object defining configuration properties for points in line and area series.
      */
     point?: dxPolarChartSeriesTypesAreapolarseriesPoint;
     /**
-     * @docid dxPolarChartSeriesTypes.areapolarseries.selectionMode
-     * @default 'includePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user selects the series.
      */
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxPolarChartSeriesTypesAreapolarseriesPoint extends dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
     /**
-     * @docid dxPolarChartSeriesTypes.areapolarseries.point.visible
-     * @default false
-     * @public
+     * Specifies the points visibility for a line and area series.
      */
     visible?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxPolarChartSeriesTypesBarpolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
-     * @docid dxPolarChartSeriesTypes.barpolarseries.hoverMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to the series.
      */
     hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     /**
-     * @docid dxPolarChartSeriesTypes.barpolarseries.selectionMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user selects the series.
      */
     selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxPolarChartSeriesTypesLinepolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
-     * @docid dxPolarChartSeriesTypes.linepolarseries.hoverMode
-     * @default 'excludePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user points to the series.
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxPolarChartSeriesTypes.linepolarseries.selectionMode
-     * @default 'includePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user selects the series.
      */
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxPolarChartSeriesTypesStackedbarpolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
-     * @docid dxPolarChartSeriesTypes.stackedbarpolarseries.hoverMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to the series.
      */
     hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     /**
-     * @docid dxPolarChartSeriesTypes.stackedbarpolarseries.label
-     * @type object
-     * @public
+     * An object defining the label configuration properties.
      */
     label?: dxPolarChartSeriesTypesStackedbarpolarseriesLabel;
     /**
-     * @docid dxPolarChartSeriesTypes.stackedbarpolarseries.selectionMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user selects the series.
      */
     selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxPolarChartSeriesTypesStackedbarpolarseriesLabel extends dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     /**
-     * @docid dxPolarChartSeriesTypes.stackedbarpolarseries.label.position
-     * @default 'inside'
-     * @public
+     * Specifies a label position in bar-like series.
      */
     position?: RelativePosition;
 }
 
 /**
- * @docid
- * @publicName Point
- * @type object
- * @inherits basePointObject
- * @namespace DevExpress.viz
+ * This section describes the Point object, which represents a series point.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface polarPointObject extends basePointObject {
 }
 
 /**
- * @docid
- * @publicName Series
- * @type object
- * @inherits baseSeriesObject
- * @namespace DevExpress.viz
+ * This section describes the Series object, which represents a series.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface polarChartSeriesObject extends baseSeriesObject {
 }
 
-/** @public */
 export type Properties = dxPolarChartOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxPolarChartOptions;
 
 // #region deprecated in v23.1
 
-/** @deprecated Use AdaptiveLayout instead */
+/**
+ * @deprecated Use AdaptiveLayout instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartAdaptiveLayout = AdaptiveLayout;
 
-/** @deprecated Use ArgumentAxis instead */
+/**
+ * @deprecated Use ArgumentAxis instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartArgumentAxis = ArgumentAxis;
 
-/** @deprecated Use ArgumentAxisConstantLines instead */
+/**
+ * @deprecated Use ArgumentAxisConstantLines instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartArgumentAxisConstantLines = ArgumentAxisConstantLines;
 
-/** @deprecated Use ArgumentAxisConstantLinesLabel instead */
+/**
+ * @deprecated Use ArgumentAxisConstantLinesLabel instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartArgumentAxisConstantLinesLabel = ArgumentAxisConstantLinesLabel;
 
-/** @deprecated Use ArgumentAxisLabel instead */
+/**
+ * @deprecated Use ArgumentAxisLabel instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartArgumentAxisLabel = ArgumentAxisLabel;
 
-/** @deprecated Use ArgumentAxisMinorTick instead */
+/**
+ * @deprecated Use ArgumentAxisMinorTick instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartArgumentAxisMinorTick = ArgumentAxisMinorTick;
 
-/** @deprecated Use ArgumentAxisStrips instead */
+/**
+ * @deprecated Use ArgumentAxisStrips instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartArgumentAxisStrips = ArgumentAxisStrips;
 
-/** @deprecated Use ArgumentAxisStripsLabel instead */
+/**
+ * @deprecated Use ArgumentAxisStripsLabel instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartArgumentAxisStripsLabel = ArgumentAxisStripsLabel;
 
-/** @deprecated Use ArgumentAxisTick instead */
+/**
+ * @deprecated Use ArgumentAxisTick instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartArgumentAxisTick = ArgumentAxisTick;
 
-/** @deprecated Use CommonAxisSettings instead */
+/**
+ * @deprecated Use CommonAxisSettings instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartCommonAxisSettings = CommonAxisSettings;
 
-/** @deprecated Use CommonAxisSettingsConstantLineStyle instead */
+/**
+ * @deprecated Use CommonAxisSettingsConstantLineStyle instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartCommonAxisSettingsConstantLineStyle = CommonAxisSettingsConstantLineStyle;
 
-/** @deprecated Use CommonAxisSettingsConstantLineStyleLabel instead */
+/**
+ * @deprecated Use CommonAxisSettingsConstantLineStyleLabel instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartCommonAxisSettingsConstantLineStyleLabel = CommonAxisSettingsConstantLineStyleLabel;
 
-/** @deprecated Use CommonAxisSettingsLabel instead */
+/**
+ * @deprecated Use CommonAxisSettingsLabel instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartCommonAxisSettingsLabel = CommonAxisSettingsLabel;
 
-/** @deprecated Use CommonAxisSettingsMinorTick instead */
+/**
+ * @deprecated Use CommonAxisSettingsMinorTick instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartCommonAxisSettingsMinorTick = CommonAxisSettingsMinorTick;
 
-/** @deprecated Use CommonAxisSettingsStripStyle instead */
+/**
+ * @deprecated Use CommonAxisSettingsStripStyle instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartCommonAxisSettingsStripStyle = CommonAxisSettingsStripStyle;
 
-/** @deprecated Use CommonAxisSettingsStripStyleLabel instead */
+/**
+ * @deprecated Use CommonAxisSettingsStripStyleLabel instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartCommonAxisSettingsStripStyleLabel = CommonAxisSettingsStripStyleLabel;
 
-/** @deprecated Use CommonAxisSettingsTick instead */
+/**
+ * @deprecated Use CommonAxisSettingsTick instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartCommonAxisSettingsTick = CommonAxisSettingsTick;
 
-/** @deprecated Use CommonSeriesSettings instead */
+/**
+ * @deprecated Use CommonSeriesSettings instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartCommonSeriesSettings = CommonSeriesSettings;
 
-/** @deprecated Use Legend instead */
+/**
+ * @deprecated Use Legend instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartLegend = Legend;
 
-/** @deprecated Use Tooltip instead */
+/**
+ * @deprecated Use Tooltip instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartTooltip = Tooltip;
 
-/** @deprecated Use ValueAxis instead */
+/**
+ * @deprecated Use ValueAxis instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartValueAxis = ValueAxis;
 
-/** @deprecated Use ValueAxisConstantLines instead */
+/**
+ * @deprecated Use ValueAxisConstantLines instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartValueAxisConstantLines = ValueAxisConstantLines;
 
-/** @deprecated Use ValueAxisConstantLinesLabel instead */
+/**
+ * @deprecated Use ValueAxisConstantLinesLabel instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartValueAxisConstantLinesLabel = ValueAxisConstantLinesLabel;
 
-/** @deprecated Use ValueAxisLabel instead */
+/**
+ * @deprecated Use ValueAxisLabel instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartValueAxisLabel = ValueAxisLabel;
 
-/** @deprecated Use ValueAxisStrips instead */
+/**
+ * @deprecated Use ValueAxisStrips instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartValueAxisStrips = ValueAxisStrips;
 
-/** @deprecated Use ValueAxisStripsLabel instead */
+/**
+ * @deprecated Use ValueAxisStripsLabel instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartValueAxisStripsLabel = ValueAxisStripsLabel;
 
-/** @deprecated Use ValueAxisTick instead */
+/**
+ * @deprecated Use ValueAxisTick instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPolarChartValueAxisTick = ValueAxisTick;
 
 // #endregion

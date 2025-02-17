@@ -76,11 +76,13 @@ import {
 } from '../common/charts';
 
 /**
- * @docid _viz_chart_SeriesInteractionInfo
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface SeriesInteractionInfo {
-    /** @docid _viz_chart_SeriesInteractionInfo.target */
+    /**
+     * 
+     */
     target: chartSeriesObject;
 }
 
@@ -112,4924 +114,3753 @@ export {
     ZoomPanAction,
 };
 
-/** @public */
 export type AggregatedPointsPosition = 'betweenTicks' | 'crossTicks';
-/** @public */
 export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
-/** @public */
 export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
-/** @public */
 export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
-/** @public */
 export type ChartRangeSeriesAggregationMethod = 'range' | 'custom';
-/** @public */
 export type ChartSeriesAggregationMethod = 'avg' | 'count' | 'max' | 'min' | 'ohlc' | 'range' | 'sum' | 'custom';
-/** @public */
 export type ChartSingleValueSeriesAggregationMethod = 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
-/** @public */
 export type ChartTooltipLocation = 'center' | 'edge';
-/** @public */
 export type ChartZoomAndPanMode = 'both' | 'none' | 'pan' | 'zoom';
-/** @public */
 export type EventKeyModifier = 'alt' | 'ctrl' | 'meta' | 'shift';
-/** @public */
 export type FinancialChartReductionLevel = 'close' | 'high' | 'low' | 'open';
 
 /**
- * @docid _viz_chart_ArgumentAxisClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the argumentAxisClick event handler&apos;s argument.
  */
 export type ArgumentAxisClickEvent = NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
-    /** @docid _viz_chart_ArgumentAxisClickEvent.argument */
+    /**
+     * 
+     */
     readonly argument: Date | number | string;
 };
 
 /**
- * @docid _viz_chart_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxChart>;
 
 /**
- * @docid _viz_chart_DoneEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the done event handler&apos;s argument.
  */
 export type DoneEvent = EventInfo<dxChart>;
 
 /**
- * @docid _viz_chart_DrawnEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the drawn event handler&apos;s argument.
  */
 export type DrawnEvent = EventInfo<dxChart>;
 
 /**
- * @docid _viz_chart_ExportedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the exported event handler&apos;s argument.
  */
 export type ExportedEvent = EventInfo<dxChart>;
 
 /**
- * @docid _viz_chart_ExportingEvent
- * @public
- * @type object
- * @inherits EventInfo,ExportInfo
+ * The type of the exporting event handler&apos;s argument.
  */
 export type ExportingEvent = EventInfo<dxChart> & ExportInfo;
 
 /**
- * @docid _viz_chart_FileSavingEvent
- * @public
- * @type object
- * @inherits FileSavingEventInfo
+ * The type of the fileSaving event handler&apos;s argument.
  */
 export type FileSavingEvent = FileSavingEventInfo<dxChart>;
 
 /**
- * @docid _viz_chart_IncidentOccurredEvent
- * @public
- * @type object
- * @inherits EventInfo,IncidentInfo
+ * The type of the incidentOccurred event handler&apos;s argument.
  */
 export type IncidentOccurredEvent = EventInfo<dxChart> & IncidentInfo;
 
 /**
- * @docid _viz_chart_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxChart>;
 
 /**
- * @docid _viz_chart_LegendClickEvent
- * @public
- * @type object
- * @inherits Cancelable,NativeEventInfo
+ * The type of the legendClick event handler&apos;s argument.
  */
 export type LegendClickEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
-    /** @docid _viz_chart_LegendClickEvent.target */
+    /**
+     * 
+     */
     readonly target: chartSeriesObject;
 };
 
 /**
- * @docid _viz_chart_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxChart> & ChangedOptionInfo;
 
 /**
- * @docid _viz_chart_PointClickEvent
- * @public
- * @type object
- * @inherits Cancelable,NativeEventInfo,PointInteractionInfo
+ * The type of the pointClick event handler&apos;s argument.
  */
 export type PointClickEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | PointerEvent> & PointInteractionInfo;
 
 /**
- * @docid _viz_chart_PointHoverChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,PointInteractionInfo
+ * The type of the pointHoverChanged event handler&apos;s argument.
  */
 export type PointHoverChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
 
 /**
- * @docid _viz_chart_PointSelectionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,PointInteractionInfo
+ * The type of the pointSelectionChanged event handler&apos;s argument.
  */
 export type PointSelectionChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
 
 /**
- * @docid _viz_chart_SeriesClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the seriesClick event handler&apos;s argument.
  */
 export type SeriesClickEvent = NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
-    /** @docid _viz_chart_SeriesClickEvent.target */
+    /**
+     * 
+     */
     readonly target: chartSeriesObject;
 };
 
 /**
- * @docid _viz_chart_SeriesHoverChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,_viz_chart_SeriesInteractionInfo
+ * The type of the seriesHoverChanged event handler&apos;s argument.
  */
 export type SeriesHoverChangedEvent = EventInfo<dxChart> & SeriesInteractionInfo;
 
 /**
- * @docid _viz_chart_SeriesSelectionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,_viz_chart_SeriesInteractionInfo
+ * The type of the seriesSelectionChanged event handler&apos;s argument.
  */
 export type SeriesSelectionChangedEvent = EventInfo<dxChart> & SeriesInteractionInfo;
 
 /**
- * @docid _viz_chart_TooltipHiddenEvent
- * @public
- * @type object
- * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
+ * The type of the tooltipHidden event handler&apos;s argument.
  */
 export type TooltipHiddenEvent = EventInfo<dxChart> & TooltipInfo;
 
 /**
- * @docid _viz_chart_TooltipShownEvent
- * @public
- * @type object
- * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
+ * The type of the tooltipShown event handler&apos;s argument.
  */
 export type TooltipShownEvent = EventInfo<dxChart> & TooltipInfo;
 
 /**
- * @docid _viz_chart_ZoomEndEvent
- * @public
- * @type object
- * @inherits Cancelable,NativeEventInfo
+ * The type of the zoomEnd event handler&apos;s argument.
  */
 export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
-    /** @docid _viz_chart_ZoomEndEvent.rangeStart */
+    /**
+     * 
+     */
     readonly rangeStart: Date | number;
-    /** @docid _viz_chart_ZoomEndEvent.rangeEnd */
+    /**
+     * 
+     */
     readonly rangeEnd: Date | number;
-    /** @docid _viz_chart_ZoomEndEvent.axis */
+    /**
+     * 
+     */
     readonly axis: chartAxisObject;
-    /** @docid _viz_chart_ZoomEndEvent.range */
+    /**
+     * 
+     */
     readonly range: VisualRange;
-    /** @docid _viz_chart_ZoomEndEvent.previousRange */
+    /**
+     * 
+     */
     readonly previousRange: VisualRange;
     /**
-     * @docid _viz_chart_ZoomEndEvent.actionType
-     * @type Enums.ZoomPanAction
+     * 
      */
     readonly actionType: ZoomPanAction;
-    /** @docid _viz_chart_ZoomEndEvent.zoomFactor */
+    /**
+     * 
+     */
     readonly zoomFactor: number;
-    /** @docid _viz_chart_ZoomEndEvent.shift */
+    /**
+     * 
+     */
     readonly shift: number;
 };
 
 /**
- * @docid _viz_chart_ZoomStartEvent
- * @public
- * @type object
- * @inherits Cancelable,NativeEventInfo
+ * The type of the zoomStart event handler&apos;s argument.
  */
 export type ZoomStartEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
-    /** @docid _viz_chart_ZoomStartEvent.axis */
+    /**
+     * 
+     */
     readonly axis: chartAxisObject;
-    /** @docid _viz_chart_ZoomStartEvent.range */
+    /**
+     * 
+     */
     readonly range: VisualRange;
     /**
-     * @docid _viz_chart_ZoomStartEvent.actionType
-     * @type Enums.ZoomPanAction
+     * 
      */
     readonly actionType?: ZoomPanAction;
 };
 
 /**
- * @docid
- * @publicName Label
- * @type object
- * @namespace DevExpress.viz
+ * This section describes the Label object, which represents a point label.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface baseLabelObject {
     /**
-     * @docid
-     * @publicName getBoundingRect()
-     * @return object
-     * @public
+     * Gets the parameters of the label&apos;s minimum bounding rectangle (MBR).
      */
     getBoundingRect(): any;
     /**
-     * @docid
-     * @publicName shift(x, y)
-     * @return object
-     * @public
+     * Moves label to the specified location.
      */
     shift(x: number, y: number): this;
     /**
-     * @docid
-     * @publicName hide()
-     * @public
+     * Hides the point label.
      */
     hide(): void;
     /**
-     * @docid
-     * @publicName hide(holdInvisible)
-     * @public
+     * Hides the point label and keeps it invisible until the show() method is called.
      */
     hide(holdInvisible: boolean): void;
     /**
-     * @docid
-     * @publicName isVisible()
-     * @public
+     * Checks whether the point label is visible.
      */
     isVisible(): boolean;
     /**
-     * @docid
-     * @publicName show()
-     * @public
+     * Shows the point label.
      */
     show(): void;
     /**
-     * @docid
-     * @publicName show(holdVisible)
-     * @public
+     * Shows the point label and keeps it visible until the hide() method is called.
      */
     show(holdVisible: boolean): void;
 }
 
 /**
- * @docid
- * @publicName Point
- * @type object
- * @namespace DevExpress.viz
+ * This section describes the Point object, which represents a series point.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface basePointObject {
     /**
-     * @docid
-     * @publicName clearHover()
-     * @public
+     * Switches the point from the hover state back to normal.
      */
     clearHover(): void;
     /**
-     * @docid
-     * @publicName clearSelection()
-     * @public
+     * Deselects the point.
      */
     clearSelection(): void;
     /**
-     * @docid
-     * @public
+     * Contains the data object that the series point represents.
      */
     data?: any;
     /**
-     * @docid basePointObject.fullState
-     * @public
+     * Provides information about the state of the point object.
      */
     fullState?: number;
     /**
-     * @docid
-     * @publicName getColor()
-     * @public
+     * Gets the color of a particular point.
      */
     getColor(): string;
     /**
-     * @docid
-     * @publicName getLabel()
-     * @public
+     * Allows you to obtain the label(s) of the series point.
      */
     getLabel(): baseLabelObject & Array<baseLabelObject>;
     /**
-     * @docid
-     * @publicName hideTooltip()
-     * @public
+     * Hides the tooltip of the point.
      */
     hideTooltip(): void;
     /**
-     * @docid
-     * @publicName hover()
-     * @public
+     * Switches the point into the hover state, the same as when a user places the mouse pointer on it.
      */
     hover(): void;
     /**
-     * @docid
-     * @publicName isHovered()
-     * @public
+     * Provides information about the hover state of a point.
      */
     isHovered(): boolean;
     /**
-     * @docid
-     * @publicName isSelected()
-     * @public
+     * Provides information about the selection state of a point.
      */
     isSelected(): boolean;
     /**
-     * @docid
-     * @public
+     * Returns the point&apos;s argument value that was set in the data source.
      */
     originalArgument?: string | number | Date;
     /**
-     * @docid
-     * @public
+     * Returns the point&apos;s value that was set in the data source.
      */
     originalValue?: string | number | Date;
     /**
-     * @docid
-     * @publicName select()
-     * @public
+     * Selects the point. The point is displayed in a &apos;selected&apos; style until another point is selected or the current point is deselected programmatically.
      */
     select(): void;
     /**
-     * @docid
-     * @public
+     * Returns the series object to which the point belongs.
      */
     series?: any;
     /**
-     * @docid
-     * @publicName showTooltip()
-     * @public
+     * Shows the tooltip of the point.
      */
     showTooltip(): void;
     /**
-     * @docid
-     * @public
+     * Returns the tag of the point.
      */
     tag?: any;
 }
 
 /**
- * @docid
- * @publicName Series
- * @type object
- * @namespace DevExpress.viz
+ * This section describes the Series object, which represents a series.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface baseSeriesObject {
     /**
-     * @docid
-     * @publicName clearHover()
-     * @public
+     * Switches the series from the hover state back to normal.
      */
     clearHover(): void;
     /**
-     * @docid
-     * @publicName clearSelection()
-     * @public
+     * Cancels the selection of this particular series. The series is displayed in its initial style.
      */
     clearSelection(): void;
     /**
-     * @docid
-     * @publicName deselectPoint(point)
-     * @public
+     * Deselects the specified point. The point is displayed in an initial style.
      */
     deselectPoint(point: basePointObject): void;
     /**
-     * @docid
-     * @public
+     * Provides information about the state of the series object.
      */
     fullState?: number;
     /**
-     * @docid
-     * @publicName getAllPoints()
-     * @public
+     * Gets all points in the series.
      */
     getAllPoints(): Array<basePointObject>;
     /**
-     * @docid
-     * @publicName getColor()
-     * @public
+     * Gets the color of a particular series.
      */
     getColor(): string;
     /**
-     * @docid
-     * @publicName getPointByPos(positionIndex)
-     * @public
+     * Gets a series point with the specified index.
      */
     getPointByPos(positionIndex: number): basePointObject;
     /**
-     * @docid
-     * @publicName getPointsByArg(pointArg)
-     * @public
+     * Gets a series point with the specified argument value.
      */
     getPointsByArg(pointArg: number | string | Date): Array<basePointObject>;
     /**
-     * @docid
-     * @publicName getVisiblePoints()
-     * @public
+     * Gets visible series points.
      */
     getVisiblePoints(): Array<basePointObject>;
     /**
-     * @docid
-     * @publicName hide()
-     * @public
+     * Hides a series at runtime.
      */
     hide(): void;
     /**
-     * @docid
-     * @publicName hover()
-     * @public
+     * Switches the series into the hover state, the same as when a user places the mouse pointer on it.
      */
     hover(): void;
     /**
-     * @docid
-     * @publicName isHovered()
-     * @public
+     * Provides information about the hover state of a series.
      */
     isHovered(): boolean;
     /**
-     * @docid
-     * @publicName isSelected()
-     * @public
+     * Provides information about the selection state of a series.
      */
     isSelected(): boolean;
     /**
-     * @docid
-     * @publicName isVisible()
-     * @public
+     * Provides information about the visibility state of a series.
      */
     isVisible(): boolean;
     /**
-     * @docid
-     * @public
+     * Returns the name of the series.
      */
     name?: any;
     /**
-     * @docid
-     * @publicName select()
-     * @public
+     * Selects the series.
      */
     select(): void;
     /**
-     * @docid
-     * @publicName selectPoint(point)
-     * @public
+     * Selects the specified point. The point is displayed in a &apos;selected&apos; style.
      */
     selectPoint(point: basePointObject): void;
     /**
-     * @docid
-     * @publicName show()
-     * @public
+     * Makes a particular series visible.
      */
     show(): void;
     /**
-     * @docid
-     * @public
+     * Returns the tag of the series.
      */
     tag?: any;
     /**
-     * @docid
-     * @public
+     * Returns the type of the series.
      */
     type?: string;
 }
 
 /**
- * @docid
- * @type object
- * @namespace DevExpress.viz
+ * This section describes the Axis object. This object represents a chart axis.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface chartAxisObject {
     /**
-     * @docid
-     * @publicName visualRange()
-     * @public
+     * Gets the axis&apos; displayed range.
      */
     visualRange(): VisualRange;
     /**
-     * @docid
-     * @publicName visualRange(visualRange)
-     * @public
+     * Sets the axis&apos;s displayed range.
      */
     visualRange(visualRange: Array<number | string | Date> | VisualRange): void;
 }
 
 /**
- * @docid
- * @publicName aggregationInfo
- * @type object
- * @namespace DevExpress.viz
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface chartPointAggregationInfoObject {
     /**
-     * @docid
-     * @public
+     * Contains the length of the aggregation interval in axis units (numbers or dates). If the interval is set in pixels (using the aggregationGroupWidth property), it will be converted to axis units.
      */
     aggregationInterval?: any;
     /**
-     * @docid
-     * @public
+     * Contains data objects that were aggregated into this point.
      */
     data?: Array<any>;
     /**
-     * @docid
-     * @public
+     * Contains the end value of the interval to which the point belongs.
      */
     intervalEnd?: any;
     /**
-     * @docid
-     * @public
+     * Contains the start value of the interval to which the point belongs.
      */
     intervalStart?: any;
 }
 
 /**
- * @docid
- * @publicName Point
- * @type object
- * @inherits basePointObject
- * @namespace DevExpress.viz
+ * This section describes the Point object, which represents a series point.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface chartPointObject extends basePointObject {
     /**
-     * @docid
-     * @public
+     * Provides information about the aggregation interval and the data objects that fall within it.
      */
     aggregationInfo?: chartPointAggregationInfoObject;
     /**
-     * @docid
-     * @publicName getBoundingRect()
-     * @return object
-     * @public
+     * Gets the parameters of the point&apos;s minimum bounding rectangle (MBR).
      */
     getBoundingRect(): any;
     /**
-     * @docid
-     * @public
+     * Contains the close value of the point. This field is useful for points belonging to a series of the candle stick or stock type only.
      */
     originalCloseValue?: number | string;
     /**
-     * @docid
-     * @public
+     * Contains the high value of the point. This field is useful for points belonging to a series of the candle stick or stock type only.
      */
     originalHighValue?: number | string;
     /**
-     * @docid
-     * @public
+     * Contains the low value of the point. This field is useful for points belonging to a series of the candle stick or stock type only.
      */
     originalLowValue?: number | string;
     /**
-     * @docid
-     * @public
+     * Contains the first value of the point. This field is useful for points belonging to a series of the range area or range bar type only.
      */
     originalMinValue?: string | number | Date;
     /**
-     * @docid
-     * @public
+     * Contains the open value of the point. This field is useful for points belonging to a series of the candle stick or stock type only.
      */
     originalOpenValue?: number | string;
     /**
-     * @docid
-     * @public
+     * Contains the size of the bubble as it was set in the data source. This field is useful for points belonging to a series of the bubble type only.
      */
     size?: number | string;
 }
 /**
- * @docid
- * @publicName Series
- * @type object
- * @inherits baseSeriesObject
- * @namespace DevExpress.viz
+ * This section describes the Series object, which represents a series.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface chartSeriesObject extends baseSeriesObject {
     /**
-     * @docid
-     * @public
+     * Returns the name of the value axis of the series.
      */
     axis?: string;
     /**
-     * @docid
-     * @public
+     * The name of the series&apos; barOverlapGroup.
      */
     barOverlapGroup?: string;
     /**
-     * @docid
-     * @publicName getArgumentAxis()
-     * @public
+     * Gets the argument axis to which the series belongs.
      */
     getArgumentAxis(): chartAxisObject;
     /**
-     * @docid
-     * @publicName getValueAxis()
-     * @public
+     * Gets the value axis to which the series belongs.
      */
     getValueAxis(): chartAxisObject;
     /**
-     * @docid
-     * @public
+     * Returns the name of the series pane.
      */
     pane?: string;
     /**
-     * @docid
-     * @public
+     * The name of the series&apos; stack.
      */
     stack?: string;
 }
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.viz
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxChartOptions extends BaseChartOptions<dxChart> {
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to adjust the value axis&apos;s visualRange when the argument axis is being zoomed or panned.
      */
     adjustOnZoom?: boolean;
     /**
-     * @docid
-     * @inherits dxChartOptions.commonAnnotationSettings
-     * @public
+     * Specifies the annotation collection.
      */
     annotations?: Array<dxChartAnnotationConfig | any>;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartOptions.commonAxisSettings
-     * @public
+     * Configures the argument axis.
      */
     argumentAxis?: ArgumentAxis;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to hide series point markers automatically to reduce visual clutter.
      */
     autoHidePointMarkers?: boolean;
     /**
-     * @docid
-     * @default 0.3
-     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
-     * @public
+     * Controls the padding and consequently the width of a group of bars with the same argument using relative units. Ignored if the barGroupWidth property is set.
      */
     barGroupPadding?: number;
     /**
-     * @docid
-     * @default undefined
-     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
-     * @public
+     * Specifies a fixed width for groups of bars with the same argument, measured in pixels. Takes precedence over the barGroupPadding property.
      */
     barGroupWidth?: number | undefined;
     /**
-     * @docid
-     * @public
+     * Specifies settings common for all annotations in the chart.
      */
     commonAnnotationSettings?: dxChartCommonAnnotationConfig;
     /**
-     * @docid
-     * @type object
-     * @public
+     * Defines common settings for both the argument and value axis in a chart.
      */
     commonAxisSettings?: CommonAxisSettings;
     /**
-     * @docid
-     * @type object
-     * @public
+     * Defines common settings for all panes in a chart.
      */
     commonPaneSettings?: CommonPaneSettings;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @hideDefaults true
-     * @inheritAll
-     * @public
+     * Specifies settings common for all series in the chart.
      */
     commonSeriesSettings?: CommonSeriesSettings;
     /**
-     * @docid
-     * @default '#FFFFFF'
-     * @public
+     * Specifies background color of the chart container.
      */
     containerBackgroundColor?: string;
     /**
-     * @docid
-     * @public
+     * Configures the crosshair feature.
      */
     crosshair?: {
       /**
-       * @docid
-       * @default '#f05b41'
+       * Specifies the color of the crosshair lines.
        */
       color?: string;
       /**
-       * @docid
-       * @default 'solid'
+       * Specifies the dash style of the crosshair lines.
        */
       dashStyle?: DashStyle;
       /**
-       * @docid
-       * @default false
+       * Enables the crosshair.
        */
       enabled?: boolean;
       /**
-       * @docid
+       * Configures the horizontal crosshair line individually.
        */
       horizontalLine?: {
         /**
-         * @docid
-         * @default "#f05b41"
+         * Specifies the color of the horizontal crosshair line.
          */
         color?: string;
         /**
-         * @docid
-         * @default 'solid'
+         * Specifies the dash style of the horizontal crosshair line.
          */
         dashStyle?: DashStyle;
         /**
-         * @docid
+         * Configures the label that belongs to the horizontal crosshair line.
          */
         label?: {
           /**
-           * @docid
-           * @default "#f05b41"
+           * Paints the background of the label that belongs to the horizontal crosshair line.
            */
           backgroundColor?: string;
           /**
-           * @docid
-           * @notUsedInTheme
+           * Customizes the text displayed by the label that belongs to the horizontal crosshair line.
            */
           customizeText?: ((info: { value?: Date | number | string; valueText?: string; point?: chartPointObject }) => string);
           /**
-           * @docid
-           * @default '#FFFFFF' &prop(color)
+           * Specifies font properties for the label of the horizontal crosshair line.
            */
           font?: Font;
           /**
-           * @docid
-           * @default undefined
+           * Formats a point value before it is displayed in the crosshair label.
            */
           format?: Format | undefined;
           /**
-           * @docid
-           * @default false
+           * Makes the label of the horizontal crosshair line visible. Applies only if the crosshair feature is enabled and the horizontal line is visible.
            */
           visible?: boolean;
         };
         /**
-         * @docid
-         * @default undefined
+         * Specifies how transparent the horizontal crosshair line should be.
          */
         opacity?: number | undefined;
         /**
-         * @docid
-         * @default true
+         * Specifies whether to show the horizontal crosshair line or not.
          */
         visible?: boolean;
         /**
-         * @docid
-         * @default 1
+         * Specifies the width of the horizontal crosshair line in pixels.
          */
         width?: number;
       } | boolean;
       /**
-       * @docid
+       * Configures the crosshair labels.
        */
       label?: {
         /**
-         * @docid
-         * @default "#f05b41"
+         * Paints the background of the crosshair labels.
          */
         backgroundColor?: string;
         /**
-         * @docid
-         * @notUsedInTheme
+         * Customizes the text displayed by the crosshair labels.
          */
         customizeText?: ((info: { value?: Date | number | string; valueText?: string; point?: chartPointObject }) => string);
         /**
-         * @docid
-         * @default '#FFFFFF' &prop(color)
+         * Specifies font properties for the crosshair labels.
          */
         font?: Font;
         /**
-         * @docid
-         * @default undefined
+         * Formats a point value/argument before it is displayed in the crosshair label.
          */
         format?: Format | undefined;
         /**
-         * @docid
-         * @default false
+         * Makes the crosshair labels visible. Applies only if the crosshair feature is enabled.
          */
         visible?: boolean;
       };
       /**
-       * @docid
-       * @default undefined
+       * Specifies how transparent the crosshair lines should be.
        */
       opacity?: number | undefined;
       /**
-       * @docid
+       * Configures the vertical crosshair line individually.
        */
       verticalLine?: {
         /**
-         * @docid
-         * @default "#f05b41"
+         * Specifies the color of the vertical crosshair line.
          */
         color?: string;
         /**
-         * @docid
-         * @default 'solid'
+         * Specifies the dash style of the vertical crosshair line.
          */
         dashStyle?: DashStyle;
         /**
-         * @docid
+         * Configures the label that belongs to the vertical crosshair line.
          */
         label?: {
           /**
-           * @docid
-           * @default "#f05b41"
+           * Paints the background of the label that belongs to the vertical crosshair line.
            */
           backgroundColor?: string;
           /**
-           * @docid
-           * @notUsedInTheme
+           * Customizes the text displayed by the label that belongs to the vertical crosshair line.
            */
           customizeText?: ((info: { value?: Date | number | string; valueText?: string; point?: chartPointObject }) => string);
           /**
-           * @docid
-           * @default '#FFFFFF' &prop(color)
+           * Specifies font properties for the label of the vertical crosshair line.
            */
           font?: Font;
           /**
-           * @docid
-           * @default undefined
+           * Formats the point argument before it is displayed in the crosshair label.
            */
           format?: Format | undefined;
           /**
-           * @docid
-           * @default false
+           * Makes the label of the vertical crosshair line visible. Applies only if the crosshair feature is enabled and the vertical line is visible.
            */
           visible?: boolean;
         };
         /**
-         * @docid
-         * @default undefined
+         * Specifies how transparent the vertical crosshair line should be.
          */
         opacity?: number | undefined;
         /**
-         * @docid
-         * @default true
+         * Specifies whether to show the vertical crosshair line or not.
          */
         visible?: boolean;
         /**
-         * @docid
-         * @default 1
+         * Specifies the width of the vertical crosshair line in pixels.
          */
         width?: number;
       } | boolean;
       /**
-       * @docid
-       * @default 1
+       * Specifies the width of the crosshair lines.
        */
       width?: number;
     };
     /**
-     * @docid
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Customizes an individual annotation.
      */
     customizeAnnotation?: ((annotation: dxChartAnnotationConfig | any) => dxChartAnnotationConfig) | undefined;
     /**
-     * @docid
-     * @public
+     * Processes data before visualizing it.
      */
     dataPrepareSettings?: {
       /**
-       * @docid
-       * @default false
+       * Validates the type of each value coming from the data source.
        */
       checkTypeForAllData?: boolean;
       /**
-       * @docid
-       * @default true
+       * Converts data coming from a data source into a data type supported by the axis.
        */
       convertToAxisDataType?: boolean;
       /**
-       * @docid
-       * @type_function_param1 a:object
-       * @type_function_param2 b:object
-       * @default true
+       * Specifies the sorting order in which series points should be drawn.
        */
       sortingMethod?: boolean | ((a: any, b: any) => number);
     };
     /**
-     * @docid
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Specifies which pane should be used by default.
      */
     defaultPane?: string | undefined;
     /**
-     * @docid
-     * @type object
-     * @public
+     * Specifies the properties of a chart&apos;s legend.
      */
     legend?: Legend;
     /**
-     * @docid
-     * @default 0.2
-     * @propertyOf dxChartSeriesTypes.BubbleSeries
-     * @public
+     * Specifies a coefficient determining the diameter of the largest bubble.
      */
     maxBubbleSize?: number;
     /**
-     * @docid
-     * @default 12
-     * @propertyOf dxChartSeriesTypes.BubbleSeries
-     * @public
+     * Specifies the diameter of the smallest bubble measured in pixels.
      */
     minBubbleSize?: number;
     /**
-     * @docid
-     * @default false
-     * @propertyOf dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries
-     * @public
+     * Forces the UI component to treat negative values as zeroes. Applies to stacked-like series only.
      */
     negativesAsZeroes?: boolean;
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{viz/chart:ArgumentAxisClickEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a label on the argument axis is clicked or tapped.
      */
     onArgumentAxisClick?: ((e: ArgumentAxisClickEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{viz/chart:LegendClickEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a legend item is clicked or tapped.
      */
     onLegendClick?: ((e: LegendClickEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{viz/chart:SeriesClickEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a series is clicked or tapped.
      */
     onSeriesClick?: ((e: SeriesClickEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/chart:SeriesHoverChangedEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed after the pointer enters or leaves a series.
      */
     onSeriesHoverChanged?: ((e: SeriesHoverChangedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/chart:SeriesSelectionChangedEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a series is selected or selection is canceled.
      */
     onSeriesSelectionChanged?: ((e: SeriesSelectionChangedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/chart:ZoomEndEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when zooming or panning ends.
      */
     onZoomEnd?: ((e: ZoomEndEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/chart:ZoomStartEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when zooming or panning begins.
      */
     onZoomStart?: ((e: ZoomStartEvent) => void);
     /**
-     * @docid
-     * @type Object|Array<Object>
-     * @inherits dxChartOptions.commonPaneSettings
-     * @notUsedInTheme
-     * @public
+     * Declares a collection of panes.
      */
     panes?: Panes | Array<Panes>;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether panes can be resized if other chart elements require more space after zooming or panning.
      */
     resizePanesOnZoom?: boolean;
     /**
-     * @docid
-     * @default "none"
-     * @public
+     * Specifies how the chart must behave when series point labels overlap.
      */
     resolveLabelOverlapping?: ChartsLabelOverlap;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Swaps the axes around making the value axis horizontal and the argument axis vertical.
      */
     rotated?: boolean;
     /**
-     * @docid
-     * @public
+     * Specifies the settings of the scroll bar.
      */
     scrollBar?: {
       /**
-       * @docid
-       * @default 'gray'
+       * Specifies the color of the scroll bar.
        */
       color?: string;
       /**
-       * @docid
-       * @default 5
+       * Specifies the spacing between the scroll bar and the chart&apos;s plot in pixels.
        */
       offset?: number;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the opacity of the scroll bar.
        */
       opacity?: number | undefined;
       /**
-       * @docid
-       * @default 'top'
+       * Specifies the position of the scroll bar in the chart.
        */
       position?: Position;
       /**
-       * @docid
-       * @default false
+       * Specifies whether the scroll bar is visible or not.
        */
       visible?: boolean;
       /**
-       * @docid
-       * @default 10
+       * Specifies the width of the scroll bar in pixels.
        */
       width?: number;
     };
     /**
-     * @docid
-     * @default undefined
-     * @hideDefaults true
-     * @notUsedInTheme
-     * @inheritAll
-     * @public
+     * Specifies properties for Chart UI component series.
      */
     series?: ChartSeries | Array<ChartSeries> | undefined;
     /**
-     * @docid
-     * @default 'single'
-     * @public
+     * Specifies whether a single series or multiple series can be selected in the chart.
      */
     seriesSelectionMode?: SingleOrMultiple;
     /**
-     * @docid
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Defines properties for the series template.
      */
     seriesTemplate?: {
       /**
-       * @docid
+       * Specifies a callback function that returns a series object with individual series settings.
        */
       customizeSeries?: ((seriesName: any) => ChartSeries);
       /**
-       * @docid
-       * @default 'series'
+       * Specifies a data source field that represents the series name.
        */
       nameField?: string;
     };
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether a point should remain in the hover state when the mouse pointer moves away.
      */
     stickyHovering?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Indicates whether or not to synchronize value axes when they are displayed on a single pane.
      */
     synchronizeMultiAxes?: boolean;
     /**
-     * @docid
-     * @type object
-     * @public
+     * Configures tooltips.
      */
     tooltip?: Tooltip;
     /**
-     * @docid
-     * @type Object|Array<Object>
-     * @inherits dxChartOptions.commonAxisSettings
-     * @public
+     * Configures the value axis.
      */
     valueAxis?: ValueAxis | Array<ValueAxis>;
     /**
-     * @docid
-     * @public
+     * Configures zooming and panning.
      */
     zoomAndPan?: {
       /**
-       * @docid
-       * @default true
+       * Specifies whether users can use the mouse wheel to zoom the chart. Applies only if zoom is allowed for the argument or value axis.
        */
       allowMouseWheel?: boolean;
       /**
-       * @docid
-       * @default true
+       * Specifies whether users can use touch gestures to zoom or pan the chart. Applies only if zoom and pan are allowed for the argument or value axis.
        */
       allowTouchGestures?: boolean;
       /**
-       * @docid
-       * @default 'none'
+       * Specifies whether users are allowed to zoom and/or pan the argument axis.
        */
       argumentAxis?: ChartZoomAndPanMode;
       /**
-       * @docid
+       * Configures the box that appears when users zoom the chart by selecting an area with the drag gesture. Applies only if dragToZoom is true.
        */
       dragBoxStyle?: {
         /**
-         * @docid
-         * @default undefined
+         * Specifies the drag box&apos;s color.
          */
         color?: string | undefined;
         /**
-         * @docid
-         * @default undefined
+         * Specifies the drag box&apos;s transparency.
          */
         opacity?: number | undefined;
       };
       /**
-       * @docid
-       * @default false
+       * Enables users to zoom the chart by selecting an area with the drag gesture. Applies only on devices that use a mouse.
        */
       dragToZoom?: boolean;
       /**
-       * @docid
-       * @default 'shift'
+       * Specifies the key that enables panning when dragToZoom is true. Applies only on devices that use a mouse.
        */
       panKey?: EventKeyModifier;
       /**
-       * @docid
-       * @default 'none'
+       * Specifies whether users are allowed to zoom and/or pan the value axis.
        */
       valueAxis?: ChartZoomAndPanMode;
     };
 }
 /**
- * @public
- * @docid dxChartArgumentAxis
- * @type object
+ * Configures the argument axis.
  */
 export type ArgumentAxis = CommonAxisSettings & {
     /**
-     * @docid dxChartOptions.argumentAxis.aggregateByCategory
-     * @default true
-     * @deprecated dxChartSeriesTypes.CommonSeries.aggregation.enabled
+     * Aggregates series points that fall into the same category.
+     * @deprecated Use CommonSeries.aggregation.enabled instead.
      */
     aggregateByCategory?: boolean;
     /**
-     * @docid dxChartOptions.argumentAxis.aggregationGroupWidth
-     * @default undefined
-     * @public
+     * Specifies the length of aggregation intervals in pixels. Applies only to axes of continuous and logarithmic types. May be ignored in favor of the aggregationInterval property.
      */
     aggregationGroupWidth?: number | undefined;
     /**
-     * @docid dxChartOptions.argumentAxis.aggregationInterval
-     * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval
-     * @public
+     * Specifies the length of aggregation intervals in axis units. Applies only to axes of continuous and logarithmic types.
      */
     aggregationInterval?: TimeIntervalConfig;
     /**
-     * @docid dxChartOptions.argumentAxis.argumentType
-     * @default undefined
-     * @public
+     * Casts arguments to a specified data type.
      */
     argumentType?: ChartsDataType | undefined;
     /**
-     * @docid dxChartOptions.argumentAxis.axisDivisionFactor
-     * @default 70
-     * @public
+     * Specifies the minimum distance between two neighboring major ticks in pixels. Applies only to the axes of the &apos;continuous&apos; and &apos;logarithmic&apos; types.
      */
     axisDivisionFactor?: number;
     /**
-     * @docid dxChartOptions.argumentAxis.breaks
-     * @default undefined
-     * @inherits ScaleBreak
-     * @notUsedInTheme
-     * @public
+     * Declares a scale break collection. Applies only if the axis&apos; type is &apos;continuous&apos; or &apos;logarithmic&apos;.
      */
     breaks?: Array<ScaleBreak>;
     /**
-     * @docid dxChartOptions.argumentAxis.categories
-     * @public
-     * @fires BaseWidgetOptions.onOptionChanged
+     * Specifies the order of categories on an axis of the &apos;discrete&apos; type.
      */
     categories?: Array<number | string | Date>;
     /**
-     * @docid dxChartOptions.argumentAxis.constantLineStyle
-     * @type object
-     * @public
+     * Specifies the appearance of those constant lines that belong to the argument axis.
      */
     constantLineStyle?: ArgumentAxisConstantLineStyle;
     /**
-     * @docid dxChartOptions.argumentAxis.constantLines
-     * @type Array<Object>
-     * @inherits dxChartOptions.commonAxisSettings.constantLineStyle
-     * @notUsedInTheme
-     * @public
+     * Declares a collection of constant lines belonging to the argument axis.
      */
     constantLines?: Array<ArgumentAxisConstantLines>;
     /**
-     * @docid dxChartOptions.argumentAxis.endOnTick
-     * @default false
-     * @public
+     * Specifies whether to force the axis to start and end on ticks.
      */
     endOnTick?: boolean;
     /**
-     * @docid dxChartOptions.argumentAxis.holidays
-     * @default undefined
-     * @public
+     * Dates to be excluded from the axis when workdaysOnly is true.
      */
     holidays?: Array<Date | string> | Array<number>;
     /**
-     * @docid dxChartOptions.argumentAxis.hoverMode
-     * @default 'none'
-     * @public
+     * Specifies chart elements to be highlighted when a user points to an axis label.
      */
     hoverMode?: ArgumentAxisHoverMode;
     /**
-     * @docid dxChartOptions.argumentAxis.label
-     * @type object
-     * @public
+     * Configures the labels of the argument axis.
      */
     label?: ArgumentAxisLabel;
     /**
-     * @docid dxChartOptions.argumentAxis.linearThreshold
-     * @default undefined
-     * @public
+     * Specifies a value used to calculate the range on a logarithmic axis within which the axis should be linear. Applies only if the data source contains negative values or zeroes.
      */
     linearThreshold?: number | undefined;
     /**
-     * @docid dxChartOptions.argumentAxis.logarithmBase
-     * @default 10
-     * @public
+     * Specifies the value to be raised to a power when generating ticks for an axis of the &apos;logarithmic&apos; type.
      */
     logarithmBase?: number;
     /**
-     * @docid dxChartOptions.argumentAxis.minVisualRangeLength
-     * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval|undefined
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Specifies the minimum length of the visual range.
      */
     minVisualRangeLength?: TimeIntervalConfig;
     /**
-     * @docid dxChartOptions.argumentAxis.minorTickCount
-     * @default undefined
-     * @public
+     * Specifies how many minor ticks to place between two neighboring major ticks.
      */
     minorTickCount?: number | undefined;
     /**
-     * @docid dxChartOptions.argumentAxis.minorTickInterval
-     * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval
-     * @public
+     * Specifies the interval between minor ticks. Applies only to the axes of the &apos;continuous&apos; type.
      */
     minorTickInterval?: TimeIntervalConfig;
     /**
-     * @docid dxChartOptions.argumentAxis.position
-     * @default 'bottom'
-     * @public
+     * Relocates the argument axis.
      */
     position?: Position;
     /**
-     * @docid dxChartOptions.argumentAxis.customPosition
-     * @default undefined
-     * @public
+     * Specifies the position of the argument axis on the value axis.
      */
     customPosition?: number | Date | string | undefined;
     /**
-     * @docid dxChartOptions.argumentAxis.customPositionAxis
-     * @default undefined
-     * @public
+     * Specifies the name of a value axis on which the argument axis should be positioned. Applies only to multi-axis charts.
      */
     customPositionAxis?: string | undefined;
     /**
-     * @docid dxChartOptions.argumentAxis.offset
-     * @default undefined
-     * @public
+     * Specifies the shift in pixels of the argument axis.
      */
     offset?: number | undefined;
     /**
-     * @docid dxChartOptions.argumentAxis.singleWorkdays
-     * @default undefined
-     * @public
+     * Dates to be included on the axis when workdaysOnly is true.
      */
     singleWorkdays?: Array<Date | string> | Array<number>;
     /**
-     * @docid dxChartOptions.argumentAxis.strips
-     * @type Array<Object>
-     * @notUsedInTheme
-     * @inherits dxChartOptions.commonAxisSettings.stripStyle
-     * @public
+     * Declares a collection of strips belonging to the argument axis.
      */
     strips?: Array<ArgumentAxisStrips>;
     /**
-     * @docid dxChartOptions.argumentAxis.tickInterval
-     * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval
-     * @public
+     * Specifies the interval between major ticks.
      */
     tickInterval?: TimeIntervalConfig;
     /**
-     * @docid dxChartOptions.argumentAxis.title
-     * @type string|object
-     * @public
+     * Configures the axis title.
      */
     title?: ArgumentAxisTitle;
     /**
-     * @docid dxChartOptions.argumentAxis.type
-     * @default undefined
-     * @public
+     * Specifies the type of the argument axis.
      */
     type?: AxisScaleType | undefined;
     /**
-     * @docid dxChartOptions.argumentAxis.visualRange
-     * @fires BaseWidgetOptions.onOptionChanged
-     * @notUsedInTheme
-     * @public
+     * Defines the axis&apos; displayed range. Cannot be wider than the wholeRange.
      */
     visualRange?: VisualRange | Array<number | string | Date>;
     /**
-     * @docid dxChartOptions.argumentAxis.visualRangeUpdateMode
-     * @default 'auto'
-     * @public
+     * Specifies how the axis&apos;s visual range should behave when chart data is updated.
      */
     visualRangeUpdateMode?: VisualRangeUpdateMode;
     /**
-     * @docid dxChartOptions.argumentAxis.wholeRange
-     * @default undefined
-     * @public
+     * Defines the range where the axis can be zoomed and panned.
      */
     wholeRange?: VisualRange | Array<number | string | Date> | undefined;
     /**
-     * @docid dxChartOptions.argumentAxis.workWeek
-     * @default [1, 2, 3, 4, 5]
-     * @public
+     * Specifies which days are workdays. The array can contain values from 0 (Sunday) to 6 (Saturday). Applies only if workdaysOnly is true.
      */
     workWeek?: Array<number>;
     /**
-     * @docid dxChartOptions.argumentAxis.workdaysOnly
-     * @default false
-     * @public
+     * Leaves only workdays on the axis: the work week days plus single workdays minus holidays. Applies only if the axis&apos; argumentType is &apos;datetime&apos;.
      */
     workdaysOnly?: boolean;
 };
 /**
- * @public
- * @docid dxChartArgumentAxisConstantLineStyle
- * @type object
+ * Specifies the appearance of those constant lines that belong to the argument axis.
  */
 export type ArgumentAxisConstantLineStyle = CommonAxisSettingsConstantLineStyle & {
     /**
-     * @docid dxChartOptions.argumentAxis.constantLineStyle.label
-     * @type object
-     * @public
+     * Specifies the appearance of the labels of those constant lines that belong to the argument axis.
      */
     label?: ArgumentAxisConstantLineStyleLabel;
 };
 /**
- * @public
- * @docid dxChartArgumentAxisConstantLineStyleLabel
- * @type object
+ * Specifies the appearance of the labels of those constant lines that belong to the argument axis.
  */
 export type ArgumentAxisConstantLineStyleLabel = CommonAxisSettingsConstantLineStyleLabel & {
     /**
-     * @docid dxChartOptions.argumentAxis.constantLineStyle.label.horizontalAlignment
-     * @default 'right'
-     * @public
+     * Aligns constant line labels in the horizontal direction.
      */
     horizontalAlignment?: HorizontalAlignment;
     /**
-     * @docid dxChartOptions.argumentAxis.constantLineStyle.label.verticalAlignment
-     * @default 'top'
-     * @public
+     * Aligns constant line labels in the vertical direction.
      */
     verticalAlignment?: VerticalAlignment;
 };
 /**
- * @public
- * @docid dxChartArgumentAxisConstantLines
- * @type object
+ * Declares a collection of constant lines belonging to the argument axis.
  */
 export type ArgumentAxisConstantLines = CommonAxisSettingsConstantLineStyle & {
     /**
-     * @docid dxChartOptions.argumentAxis.constantLines.displayBehindSeries
-     * @default false
-     * @public
+     * Specifies whether to display the constant line behind or in front of the series.
      */
     displayBehindSeries?: boolean;
     /**
-     * @docid dxChartOptions.argumentAxis.constantLines.extendAxis
-     * @default false
-     * @public
+     * Specifies whether to extend the axis&apos;s default visual range to display the constant line.
      */
     extendAxis?: boolean;
     /**
-     * @docid dxChartOptions.argumentAxis.constantLines.label
-     * @type object
-     * @public
+     * Configures the constant line label.
      */
     label?: ArgumentAxisConstantLinesLabel;
     /**
-     * @docid dxChartOptions.argumentAxis.constantLines.value
-     * @default undefined
-     * @public
+     * Specifies the value indicated by a constant line. Setting this property is necessary.
      */
     value?: number | Date | string | undefined;
 };
 /**
- * @public
- * @docid dxChartArgumentAxisConstantLinesLabel
- * @type object
+ * Configures the constant line label.
  */
 export type ArgumentAxisConstantLinesLabel = CommonAxisSettingsConstantLineStyleLabel & {
     /**
-     * @docid dxChartOptions.argumentAxis.constantLines.label.horizontalAlignment
-     * @default 'right'
-     * @public
+     * Aligns constant line labels in the horizontal direction.
      */
     horizontalAlignment?: HorizontalAlignment;
     /**
-     * @docid dxChartOptions.argumentAxis.constantLines.label.text
-     * @default undefined
-     * @public
+     * Specifies the text of a constant line label. By default, equals to the value of the constant line.
      */
     text?: string | undefined;
     /**
-     * @docid dxChartOptions.argumentAxis.constantLines.label.verticalAlignment
-     * @default 'top'
-     * @public
+     * Aligns constant line labels in the vertical direction.
      */
     verticalAlignment?: VerticalAlignment;
 };
 /**
- * @public
- * @docid dxChartArgumentAxisLabel
- * @type object
+ * Configures the labels of the argument axis.
  */
 export type ArgumentAxisLabel = CommonAxisSettingsLabel & {
     /**
-     * @docid dxChartOptions.argumentAxis.label.customizeHint
-     * @public
+     * Specifies the hint that appears when a user points to an axis label.
      */
     customizeHint?: ((argument: { value?: Date | number | string; valueText?: string }) => string);
     /**
-     * @docid dxChartOptions.argumentAxis.label.customizeText
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by axis labels.
      */
     customizeText?: ((argument: { value?: Date | number | string; valueText?: string }) => string);
     /**
-     * @docid dxChartOptions.argumentAxis.label.format
-     * @default undefined
-     * @public
+     * Formats a value before it is displayed in an axis label.
      */
     format?: Format | undefined;
 };
 /**
- * @public
- * @docid dxChartArgumentAxisStrips
- * @type object
+ * Declares a collection of strips belonging to the argument axis.
  */
 export type ArgumentAxisStrips = CommonAxisSettingsStripStyle & {
     /**
-     * @docid dxChartOptions.argumentAxis.strips.color
-     * @default undefined
-     * @public
+     * Specifies the color of the strip.
      */
     color?: string | undefined;
     /**
-     * @docid dxChartOptions.argumentAxis.strips.endValue
-     * @default undefined
-     * @public
+     * Along with the startValue property, limits the strip.
      */
     endValue?: number | Date | string | undefined;
     /**
-     * @docid dxChartOptions.argumentAxis.strips.label
-     * @type object
-     * @public
+     * Configures the strip label.
      */
     label?: ArgumentAxisStripsLabel;
     /**
-     * @docid dxChartOptions.argumentAxis.strips.startValue
-     * @default undefined
-     * @public
+     * Along with the endValue property, limits the strip.
      */
     startValue?: number | Date | string | undefined;
 };
 /**
- * @public
- * @docid dxChartArgumentAxisStripsLabel
- * @type object
+ * Configures the strip label.
  */
 export type ArgumentAxisStripsLabel = CommonAxisSettingsStripStyleLabel & {
     /**
-     * @docid dxChartOptions.argumentAxis.strips.label.text
-     * @default undefined
-     * @public
+     * Specifies the text of the strip label.
      */
     text?: string | undefined;
 };
 /**
- * @public
- * @docid dxChartArgumentAxisTitle
- * @type object
+ * Configures the axis title.
  */
 export type ArgumentAxisTitle = CommonAxisSettingsTitle & {
     /**
-     * @docid dxChartOptions.argumentAxis.title.text
-     * @default undefined
-     * @public
+     * Specifies the text of the axis title.
      */
     text?: string | undefined;
 };
 /**
- * @public
- * @docid dxChartCommonAxisSettings
- * @type object
+ * Defines common settings for both the argument and value axis in a chart.
  */
 export type CommonAxisSettings = {
     /**
-     * @docid dxChartOptions.commonAxisSettings.allowDecimals
-     * @default undefined
-     * @public
+     * Specifies whether to allow decimal values on the axis. When false, the axis contains integer values only.
      */
     allowDecimals?: boolean | undefined;
     /**
-     * @docid dxChartOptions.commonAxisSettings.breakStyle
-     * @public
+     * Configures the scale breaks&apos; appearance.
      */
     breakStyle?: {
       /**
-       * @docid dxChartOptions.commonAxisSettings.breakStyle.color
-       * @default "#ababab"
+       * Specifies the scale breaks&apos; color.
        */
       color?: string;
       /**
-       * @docid dxChartOptions.commonAxisSettings.breakStyle.line
-       * @default "waved"
+       * Specifies the scale breaks&apos; line style.
        */
       line?: ScaleBreakLineStyle;
       /**
-       * @docid dxChartOptions.commonAxisSettings.breakStyle.width
-       * @default 5
+       * Specifies the scale breaks&apos; width in pixels.
        */
       width?: number;
     };
     /**
-     * @docid dxChartOptions.commonAxisSettings.color
-     * @default '#767676'
-     * @public
+     * Specifies the color of the axis line.
      */
     color?: string;
     /**
-     * @docid dxChartOptions.commonAxisSettings.constantLineStyle
-     * @type object
-     * @public
+     * Configures the appearance of all constant lines in the UI component.
      */
     constantLineStyle?: CommonAxisSettingsConstantLineStyle;
     /**
-     * @docid dxChartOptions.commonAxisSettings.discreteAxisDivisionMode
-     * @default 'betweenLabels'
-     * @public
+     * Specifies whether ticks and grid lines should cross axis labels or lie between them. Applies only to the axes of the &apos;discrete&apos; type.
      */
     discreteAxisDivisionMode?: DiscreteAxisDivisionMode;
     /**
-     * @docid dxChartOptions.commonAxisSettings.aggregatedPointsPosition
-     * @default 'betweenTicks'
-     * @public
-     */
+      * Specifies the start position of the aggregated series points in the aggregation interval.
+      */
      aggregatedPointsPosition?: AggregatedPointsPosition;
     /**
-     * @docid dxChartOptions.commonAxisSettings.endOnTick
-     * @default undefined
-     * @public
+     * Specifies whether to force the axis to start and end on ticks.
      */
     endOnTick?: boolean | undefined;
     /**
-     * @docid dxChartOptions.commonAxisSettings.grid
-     * @public
+     * Configures the grid.
      */
     grid?: {
       /**
-       * @docid dxChartOptions.commonAxisSettings.grid.color
-       * @default '#d3d3d3'
+       * Specifies the color of grid lines.
        */
       color?: string;
       /**
-       * @docid dxChartOptions.commonAxisSettings.grid.opacity
-       * @default undefined
+       * Specifies how transparent grid lines should be.
        */
       opacity?: number | undefined;
       /**
-       * @docid dxChartOptions.commonAxisSettings.grid.visible
-       * @default false
+       * Makes grid lines visible.
        */
       visible?: boolean;
       /**
-       * @docid dxChartOptions.commonAxisSettings.grid.width
-       * @default 1
+       * Specifies the width of grid lines in pixels.
        */
       width?: number;
     };
     /**
-     * @docid dxChartOptions.commonAxisSettings.inverted
-     * @default false
-     * @public
+     * Inverts the axis.
      */
     inverted?: boolean;
     /**
-     * @docid dxChartOptions.commonAxisSettings.label
-     * @type object
-     * @public
+     * Configures axis labels.
      */
     label?: CommonAxisSettingsLabel;
     /**
-     * @docid dxChartOptions.commonAxisSettings.maxValueMargin
-     * @default undefined
-     * @public
+     * Controls the empty space between the maximum series points and the axis. Applies only to the axes of the &apos;continuous&apos; and &apos;logarithmic&apos; type.
      */
     maxValueMargin?: number | undefined;
     /**
-     * @docid dxChartOptions.commonAxisSettings.minValueMargin
-     * @default undefined
-     * @public
+     * Controls the empty space between the minimum series points and the axis. Applies only to the axes of the &apos;continuous&apos; and &apos;logarithmic&apos; type.
      */
     minValueMargin?: number | undefined;
     /**
-     * @docid dxChartOptions.commonAxisSettings.minorGrid
-     * @public
+     * Configures the minor grid.
      */
     minorGrid?: {
       /**
-       * @docid dxChartOptions.commonAxisSettings.minorGrid.color
-       * @default '#d3d3d3'
+       * Specifies a color for the lines of the minor grid.
        */
       color?: string;
       /**
-       * @docid dxChartOptions.commonAxisSettings.minorGrid.opacity
-       * @default undefined
+       * Specifies how transparent the lines of the minor grid should be.
        */
       opacity?: number | undefined;
       /**
-       * @docid dxChartOptions.commonAxisSettings.minorGrid.visible
-       * @default false
+       * Makes the minor grid visible.
        */
       visible?: boolean;
       /**
-       * @docid dxChartOptions.commonAxisSettings.minorGrid.width
-       * @default 1
+       * Specifies a width for the lines of the minor grid in pixels.
        */
       width?: number;
     };
     /**
-     * @docid dxChartOptions.commonAxisSettings.minorTick
-     * @public
+     * Configures the appearance of minor axis ticks.
      */
     minorTick?: {
       /**
-       * @docid dxChartOptions.commonAxisSettings.minorTick.color
-       * @default '#767676'
+       * Specifies the color of minor ticks.
        */
       color?: string;
       /**
-       * @docid dxChartOptions.commonAxisSettings.minorTick.length
-       * @default 7
+       * Specifies the length of minor ticks in pixels.
        */
       length?: number;
       /**
-       * @docid dxChartOptions.commonAxisSettings.minorTick.opacity
-       * @default 0.3
+       * Specifies how transparent minor ticks should be.
        */
       opacity?: number;
       /**
-       * @docid dxChartOptions.commonAxisSettings.minorTick.shift
-       * @default 3
+       * Shifts minor ticks from the reference position.
        */
       shift?: number;
       /**
-       * @docid dxChartOptions.commonAxisSettings.minorTick.visible
-       * @default false
+       * Makes minor ticks visible.
        */
       visible?: boolean;
       /**
-       * @docid dxChartOptions.commonAxisSettings.minorTick.width
-       * @default 1
+       * Specifies the width of minor ticks in pixels.
        */
       width?: number;
     };
     /**
-     * @docid dxChartOptions.commonAxisSettings.opacity
-     * @default undefined
-     * @public
+     * Specifies how transparent the axis line should be.
      */
     opacity?: number | undefined;
     /**
-     * @docid dxChartOptions.commonAxisSettings.placeholderSize
-     * @default null
-     * @public
+     * Reserves a pixel-measured space for the axis.
      */
     placeholderSize?: number;
     /**
-     * @docid dxChartOptions.commonAxisSettings.stripStyle
-     * @type object
-     * @public
+     * Configures the appearance of strips.
      */
     stripStyle?: CommonAxisSettingsStripStyle;
     /**
-     * @docid dxChartOptions.commonAxisSettings.tick
-     * @public
+     * Configures the appearance of major axis ticks.
      */
     tick?: {
       /**
-       * @docid dxChartOptions.commonAxisSettings.tick.color
-       * @default '#767676'
+       * Specifies the color of ticks.
        */
       color?: string;
       /**
-       * @docid dxChartOptions.commonAxisSettings.tick.length
-       * @default 7
+       * Specifies the length of ticks in pixels.
        */
       length?: number;
       /**
-       * @docid dxChartOptions.commonAxisSettings.tick.opacity
-       * @default undefined
+       * Specifies how transparent ticks should be.
        */
       opacity?: number | undefined;
       /**
-       * @docid dxChartOptions.commonAxisSettings.tick.shift
-       * @default 3
+       * Shifts ticks from the reference position.
        */
       shift?: number;
       /**
-       * @docid dxChartOptions.commonAxisSettings.tick.visible
-       * @default true
+       * Makes ticks visible.
        */
       visible?: boolean;
       /**
-       * @docid dxChartOptions.commonAxisSettings.tick.width
-       * @default 1
+       * Specifies the width of ticks in pixels.
        */
       width?: number;
     };
     /**
-     * @docid dxChartOptions.commonAxisSettings.title
-     * @type object
-     * @public
+     * Configures axis titles.
      */
     title?: CommonAxisSettingsTitle;
     /**
-     * @docid dxChartOptions.commonAxisSettings.valueMarginsEnabled
-     * @default true
-     * @public
+     * Adds an empty space between the axis and the minimum and maximum series points.
      */
     valueMarginsEnabled?: boolean;
     /**
-     * @docid dxChartOptions.commonAxisSettings.visible
-     * @default true
-     * @public
+     * Makes the axis line visible.
      */
     visible?: boolean;
     /**
-     * @docid dxChartOptions.commonAxisSettings.width
-     * @default 1
-     * @public
+     * Specifies the width of the axis line in pixels.
      */
     width?: number;
 };
 /**
- * @public
- * @docid dxChartCommonAxisSettingsConstantLineStyle
+ * Configures the appearance of all constant lines in the UI component.
  */
 export type CommonAxisSettingsConstantLineStyle = {
     /**
-     * @docid dxChartOptions.commonAxisSettings.constantLineStyle.color
-     * @default '#000000'
-     * @public
+     * Specifies the color of constant lines.
      */
     color?: string;
     /**
-     * @docid dxChartOptions.commonAxisSettings.constantLineStyle.dashStyle
-     * @default 'solid'
-     * @public
+     * Specifies the dash style of constant lines.
      */
     dashStyle?: DashStyle;
     /**
-     * @docid dxChartOptions.commonAxisSettings.constantLineStyle.label
-     * @type object
-     * @public
+     * Configures constant line labels.
      */
     label?: CommonAxisSettingsConstantLineStyleLabel;
     /**
-     * @docid dxChartOptions.commonAxisSettings.constantLineStyle.paddingLeftRight
-     * @default 10
-     * @public
+     * Generates a pixel-measured empty space between the left/right side of a constant line and the constant line label.
      */
     paddingLeftRight?: number;
     /**
-     * @docid dxChartOptions.commonAxisSettings.constantLineStyle.paddingTopBottom
-     * @default 10
-     * @public
+     * Generates a pixel-measured empty space between the top/bottom side of a constant line and the constant line label.
      */
     paddingTopBottom?: number;
     /**
-     * @docid dxChartOptions.commonAxisSettings.constantLineStyle.width
-     * @default 1
-     * @public
+     * Specifies the width of constant lines in pixels.
      */
     width?: number;
 };
 /**
- * @public
- * @docid dxChartCommonAxisSettingsConstantLineStyleLabel
+ * Configures constant line labels.
  */
 export type CommonAxisSettingsConstantLineStyleLabel = {
     /**
-     * @docid dxChartOptions.commonAxisSettings.constantLineStyle.label.font
-     * @default '#767676' &prop(color)
-     * @public
+     * Specifies font properties for constant line labels.
      */
     font?: Font;
     /**
-     * @docid dxChartOptions.commonAxisSettings.constantLineStyle.label.position
-     * @default 'inside'
-     * @public
+     * Specifies the position of constant line labels on the chart plot.
      */
     position?: RelativePosition;
     /**
-     * @docid dxChartOptions.commonAxisSettings.constantLineStyle.label.visible
-     * @default true
-     * @public
+     * Makes constant line labels visible.
      */
     visible?: boolean;
 };
 /**
- * @public
- * @docid dxChartCommonAxisSettingsLabel
+ * Configures axis labels.
  */
 export type CommonAxisSettingsLabel = {
     /**
-     * @docid dxChartOptions.commonAxisSettings.label.template
-     * @default undefined
-     * @type_function_param1_field value:Date|Number|string
-     * @type_function_param1_field valueText:string
-     * @type_function_return string|SVGElement|jQuery
-     * @public
+     * Specifies a custom template for axis labels.
      */
     template?: template | ((data: object, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
-     * @docid dxChartOptions.commonAxisSettings.label.alignment
-     * @default undefined
-     * @public
+     * Aligns axis labels in relation to ticks.
      */
     alignment?: HorizontalAlignment | undefined;
     /**
-     * @docid dxChartOptions.commonAxisSettings.label.displayMode
-     * @default 'standard'
-     * @public
+     * Allows you to rotate or stagger axis labels. Applies to the horizontal axis only.
      */
     displayMode?: ChartLabelDisplayMode;
     /**
-     * @docid dxChartOptions.commonAxisSettings.label.font
-     * @default '#767676' &prop(color)
-     * @public
+     * Specifies font properties for axis labels.
      */
     font?: Font;
     /**
-     * @docid dxChartOptions.commonAxisSettings.label.indentFromAxis
-     * @default 10
-     * @public
+     * Adds a pixel-measured empty space between an axis and its labels.
      */
     indentFromAxis?: number;
     /**
-     * @docid dxChartOptions.commonAxisSettings.label.overlappingBehavior
-     * @default 'hide'
-     * @public
+     * Decides how to arrange axis labels when there is not enough space to display all of them.
      */
     overlappingBehavior?: ChartsAxisLabelOverlap;
     /**
-     * @docid dxChartOptions.commonAxisSettings.label.position
-     * @default 'outside'
-     * @public
+     * Specifies the position of labels relative to the chart or its axis.
      */
     position?: RelativePosition | Position;
     /**
-     * @docid dxChartOptions.commonAxisSettings.label.rotationAngle
-     * @default 90
-     * @public
+     * Specifies the rotation angle of axis labels. Applies only if displayMode or overlappingBehavior is &apos;rotate&apos;.
      */
     rotationAngle?: number;
     /**
-     * @docid dxChartOptions.commonAxisSettings.label.staggeringSpacing
-     * @default 5
-     * @public
+     * Adds a pixel-measured empty space between two staggered rows of axis labels. Applies only if displayMode or overlappingBehavior is &apos;stagger&apos;.
      */
     staggeringSpacing?: number;
     /**
-     * @docid dxChartOptions.commonAxisSettings.label.textOverflow
-     * @default "none"
-     * @public
+     * Specifies what to do with axis labels that overflow the allocated space after applying wordWrap: hide, truncate them and display an ellipsis, or do nothing.
      */
     textOverflow?: TextOverflow;
     /**
-     * @docid dxChartOptions.commonAxisSettings.label.visible
-     * @default true
-     * @public
+     * Shows/hides axis labels.
      */
     visible?: boolean;
     /**
-     * @docid dxChartOptions.commonAxisSettings.label.wordWrap
-     * @default "normal"
-     * @public
+     * Specifies how to wrap texts that do not fit into a single line.
      */
     wordWrap?: WordWrap;
 };
 /**
- * @public
- * @docid dxChartCommonAxisSettingsStripStyle
+ * Configures the appearance of strips.
  */
 export type CommonAxisSettingsStripStyle = {
     /**
-     * @docid dxChartOptions.commonAxisSettings.stripStyle.label
-     * @type object
-     * @public
+     * Configures the appearance of strip labels.
      */
     label?: CommonAxisSettingsStripStyleLabel;
     /**
-     * @docid dxChartOptions.commonAxisSettings.stripStyle.paddingLeftRight
-     * @default 10
-     * @public
+     * Generates a pixel-measured empty space between the left/right border of a strip and the strip label.
      */
     paddingLeftRight?: number;
     /**
-     * @docid dxChartOptions.commonAxisSettings.stripStyle.paddingTopBottom
-     * @default 5
-     * @public
+     * Generates a pixel-measured empty space between the top/bottom border of a strip and the strip label.
      */
     paddingTopBottom?: number;
 };
 /**
- * @public
- * @docid dxChartCommonAxisSettingsStripStyleLabel
+ * Configures the appearance of strip labels.
  */
 export type CommonAxisSettingsStripStyleLabel = {
     /**
-     * @docid dxChartOptions.commonAxisSettings.stripStyle.label.font
-     * @default '#767676' &prop(color)
-     * @public
+     * Specifies font properties for strip labels.
      */
     font?: Font;
     /**
-     * @docid dxChartOptions.commonAxisSettings.stripStyle.label.horizontalAlignment
-     * @default 'left'
-     * @public
+     * Aligns strip labels in the horizontal direction.
      */
     horizontalAlignment?: HorizontalAlignment;
     /**
-     * @docid dxChartOptions.commonAxisSettings.stripStyle.label.verticalAlignment
-     * @default 'center'
-     * @public
+     * Aligns strip labels in the vertical direction.
      */
     verticalAlignment?: VerticalAlignment;
 };
 /**
- * @public
- * @docid dxChartCommonAxisSettingsTitle
+ * Configures axis titles.
  */
 export type CommonAxisSettingsTitle = {
     /**
-     * @docid dxChartOptions.commonAxisSettings.title.alignment
-     * @default 'center'
-     * @public
+     * Aligns the axis title to the left, center, or right of the axis.
      */
     alignment?: HorizontalAlignment;
     /**
-     * @docid dxChartOptions.commonAxisSettings.title.font
-     * @default '#767676' &prop(color)
-     * @default 16 &prop(size)
-     * @public
+     * Specifies font properties for the axis title.
      */
     font?: Font;
     /**
-     * @docid dxChartOptions.commonAxisSettings.title.margin
-     * @default 6
-     * @public
+     * Adds a pixel-measured empty space between the axis title and axis labels.
      */
     margin?: number;
     /**
-     * @docid dxChartOptions.commonAxisSettings.title.textOverflow
-     * @default "ellipsis"
-     * @public
+     * Specifies what to do with the axis title when it overflows the allocated space after applying wordWrap: hide, truncate them and display an ellipsis, or do nothing.
      */
     textOverflow?: TextOverflow;
     /**
-     * @docid dxChartOptions.commonAxisSettings.title.wordWrap
-     * @default "normal"
-     * @public
+     * Specifies how to wrap the axis title if it does not fit into a single line.
      */
     wordWrap?: WordWrap;
 };
 /**
- * @public
- * @docid dxChartCommonPaneSettings
+ * Defines common settings for all panes in a chart.
  */
 export type CommonPaneSettings = {
     /**
-     * @docid dxChartOptions.commonPaneSettings.backgroundColor
-     * @default 'none'
-     * @public
+     * Specifies the color of the pane&apos;s background.
      */
     backgroundColor?: string | ChartsColor;
     /**
-     * @docid dxChartOptions.commonPaneSettings.border
-     * @public
+     * Configures the pane border.
      */
     border?: {
       /**
-       * @docid dxChartOptions.commonPaneSettings.border.bottom
-       * @default true
+       * Shows/hides the bottom border of the pane. Applies only when the border.visible property is true.
        */
       bottom?: boolean;
       /**
-       * @docid dxChartOptions.commonPaneSettings.border.color
-       * @default '#d3d3d3'
+       * Specifies the color of the pane border.
        */
       color?: string;
       /**
-       * @docid dxChartOptions.commonPaneSettings.border.dashStyle
-       * @default 'solid'
+       * Specifies the dash style of the pane border.
        */
       dashStyle?: DashStyle;
       /**
-       * @docid dxChartOptions.commonPaneSettings.border.left
-       * @default true
+       * Shows/hides the left border of the pane. Applies only when the border.visible property is true.
        */
       left?: boolean;
       /**
-       * @docid dxChartOptions.commonPaneSettings.border.opacity
-       * @default undefined
+       * Specifies how transparent the pane border should be.
        */
       opacity?: number | undefined;
       /**
-       * @docid dxChartOptions.commonPaneSettings.border.right
-       * @default true
+       * Shows/hides the right border of the pane. Applies only when the border.visible property is true.
        */
       right?: boolean;
       /**
-       * @docid dxChartOptions.commonPaneSettings.border.top
-       * @default true
+       * Shows/hides the top border of the pane. Applies only when the border.visible property is true.
        */
       top?: boolean;
       /**
-       * @docid dxChartOptions.commonPaneSettings.border.visible
-       * @default false
+       * Shows the pane border.
        */
       visible?: boolean;
       /**
-       * @docid dxChartOptions.commonPaneSettings.border.width
-       * @default 1
+       * Specifies the width of the pane border in pixels.
        */
       width?: number;
     };
 };
 /**
- * @public
- * @docid dxChartCommonSeriesSettings
- * @type object
+ * Specifies settings common for all series in the chart.
  */
 export type CommonSeriesSettings = dxChartSeriesTypesCommonSeries & {
     /**
-     * @docid dxChartOptions.commonSeriesSettings.area
-     * @public
+     * Defines common settings for all area series.
      */
     area?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.bar
-     * @public
+     * Defines common settings for all bar series.
      */
     bar?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.bubble
-     * @public
+     * Defines common settings for all bubble series.
      */
     bubble?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.candlestick
-     * @public
+     * Defines common settings for all candlestick series.
      */
     candlestick?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.fullstackedarea
-     * @public
+     * Defines common settings for all full-stacked area series.
      */
     fullstackedarea?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.fullstackedbar
-     * @public
+     * Defines common settings for all full-stacked bar series.
      */
     fullstackedbar?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.fullstackedline
-     * @public
+     * Defines common settings for all full-stacked line series.
      */
     fullstackedline?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.fullstackedspline
-     * @public
+     * Defines common settings for all full-stacked spline series.
      */
     fullstackedspline?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.fullstackedsplinearea
-     * @public
+     * Defines common settings for all full-stacked spline area series.
      */
     fullstackedsplinearea?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.line
-     * @public
+     * Defines common settings for all line series.
      */
     line?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.rangearea
-     * @public
+     * Defines common settings for all range area series.
      */
     rangearea?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.rangebar
-     * @public
+     * Defines common settings for all range bar series.
      */
     rangebar?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.scatter
-     * @public
+     * Defines common settings for all scatter series.
      */
     scatter?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.spline
-     * @public
+     * Defines common settings for all spline series.
      */
     spline?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.splinearea
-     * @public
+     * Defines common settings for all spline area series.
      */
     splinearea?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.stackedarea
-     * @public
+     * Defines common settings for all stacked area series.
      */
     stackedarea?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.stackedbar
-     * @public
+     * Defines common settings for all stacked bar series.
      */
     stackedbar?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.stackedline
-     * @public
+     * Defines common settings for all stacked line series.
      */
     stackedline?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.stackedspline
-     * @public
+     * Defines common settings for all stacked spline series.
      */
     stackedspline?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.stackedsplinearea
-     * @public
+     * Defines common settings for all stacked spline area series.
      */
     stackedsplinearea?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.steparea
-     * @public
+     * Defines common settings for all step area series.
      */
     steparea?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.stepline
-     * @public
+     * Defines common settings for all step line series.
      */
     stepline?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.stock
-     * @public
+     * Defines common settings for all stock series.
      */
     stock?: any;
     /**
-     * @docid dxChartOptions.commonSeriesSettings.type
-     * @default 'line'
-     * @type Enums.SeriesType
-     * @public
+     * Specifies the type of the series.
      */
     type?: SeriesType;
 };
 /**
- * @public
- * @docid dxChartLegend
+ * Specifies the properties of a chart&apos;s legend.
  */
 export type Legend = BaseChartLegend & {
     /**
-     * @docid dxChartOptions.legend.customizeHint
-     * @public
+     * Specifies the text for a hint that appears when a user hovers the mouse pointer over a legend item.
      */
     customizeHint?: ((seriesInfo: { seriesName?: any; seriesIndex?: number; seriesColor?: string }) => string);
     /**
-     * @docid dxChartOptions.legend.customizeText
-     * @notUsedInTheme
-     * @public
+     * Specifies a callback function that returns the text to be displayed by a legend item.
      */
     customizeText?: ((seriesInfo: { seriesName?: any; seriesIndex?: number; seriesColor?: string }) => string);
     /**
-     * @docid dxChartOptions.legend.hoverMode
-     * @default 'includePoints'
-     * @public
+     * Specifies what series elements to highlight when a corresponding item in the legend is hovered over.
      */
     hoverMode?: LegendHoverMode;
     /**
-     * @docid dxChartOptions.legend.position
-     * @default 'outside'
-     * @public
+     * Specifies whether the legend is located outside or inside the chart&apos;s plot.
      */
     position?: RelativePosition;
 };
 /**
- * @public
- * @docid dxChartPanes
- * @type object
+ * Declares a collection of panes.
  */
 export type Panes = CommonPaneSettings & {
     /**
-     * @docid dxChartOptions.panes.height
-     * @default undefined
-     * @public
+     * Specifies the pane&apos;s height (or width when the chart is rotated) in a multi-pane chart.
      */
     height?: number | string | undefined;
     /**
-     * @docid dxChartOptions.panes.name
-     * @default undefined
-     * @public
+     * Specifies the name of the pane.
      */
     name?: string | undefined;
 };
 /**
- * @bublic
- * @docid dxChartTooltip
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type Tooltip = BaseChartTooltip & {
     /**
-     * @docid dxChartOptions.tooltip.location
-     * @default 'center'
-     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.StockSeries,dxChartSeriesTypes.CandleStickSeries
-     * @public
+     * Specifies whether the tooltip must be located in the center of a series point or on its edge. Applies to bar-like and bubble series only.
      */
     location?: ChartTooltipLocation;
 };
 /**
- * @public
- * @docid dxChartValueAxis
- * @type object
+ * Configures the value axis.
  */
 export type ValueAxis = CommonAxisSettings & {
     /**
-     * @docid dxChartOptions.valueAxis.autoBreaksEnabled
-     * @default false
-     * @public
+     * Enables auto-calculated scale breaks. Applies only if the axis&apos; type is &apos;continuous&apos; or &apos;logarithmic&apos; and valueType is &apos;numeric&apos;.
      */
     autoBreaksEnabled?: boolean;
     /**
-     * @docid dxChartOptions.valueAxis.axisDivisionFactor
-     * @default 40
-     * @public
+     * Specifies the minimum distance between two neighboring major ticks in pixels. Applies only to the axes of the &apos;continuous&apos; and &apos;logarithmic&apos; types.
      */
     axisDivisionFactor?: number;
     /**
-     * @docid dxChartOptions.valueAxis.breaks
-     * @inherits ScaleBreak
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Declares a custom scale break collection. Applies only if the axis&apos; type is &apos;continuous&apos; or &apos;logarithmic&apos;.
      */
     breaks?: Array<ScaleBreak>;
     /**
-     * @docid dxChartOptions.valueAxis.categories
-     * @public
-     * @fires BaseWidgetOptions.onOptionChanged
+     * Specifies the order of categories on an axis of the &apos;discrete&apos; type.
      */
     categories?: Array<number | string | Date>;
     /**
-     * @docid dxChartOptions.valueAxis.constantLineStyle
-     * @type object
-     * @public
+     * Specifies the appearance of those constant lines that belong to the value axis.
      */
     constantLineStyle?: ValueAxisConstantLineStyle;
     /**
-     * @docid dxChartOptions.valueAxis.constantLines
-     * @type Array<Object>
-     * @notUsedInTheme
-     * @inherits dxChartOptions.commonAxisSettings.constantLineStyle
-     * @public
+     * Declares a collection of constant lines belonging to the value axis.
      */
     constantLines?: Array<ValueAxisConstantLines>;
     /**
-     * @docid dxChartOptions.valueAxis.endOnTick
-     * @default undefined
-     * @public
+     * Specifies whether to force the axis to start and end on ticks.
      */
     endOnTick?: boolean | undefined;
     /**
-     * @docid dxChartOptions.valueAxis.label
-     * @type object
-     * @public
+     * Configures the labels of the value axis.
      */
     label?: ValueAxisLabel;
     /**
-     * @docid dxChartOptions.valueAxis.linearThreshold
-     * @default undefined
-     * @public
+     * Specifies a value used to calculate the range on a logarithmic axis within which the axis should be linear. Applies only if the data source contains negative values or zeroes.
      */
     linearThreshold?: number | undefined;
     /**
-     * @docid dxChartOptions.valueAxis.logarithmBase
-     * @default 10
-     * @public
+     * Specifies the value to be raised to a power when generating ticks for an axis of the &apos;logarithmic&apos; type.
      */
     logarithmBase?: number;
     /**
-     * @docid dxChartOptions.valueAxis.maxAutoBreakCount
-     * @default 4
-     * @public
+     * Sets a limit on auto-calculated scale breaks. Custom scale breaks are not counted.
      */
     maxAutoBreakCount?: number;
     /**
-     * @docid dxChartOptions.valueAxis.minVisualRangeLength
-     * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval|undefined
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Specifies the minimum length of the visual range.
      */
     minVisualRangeLength?: TimeIntervalConfig;
     /**
-     * @docid dxChartOptions.valueAxis.minorTickCount
-     * @default undefined
-     * @public
+     * Specifies how many minor ticks to place between two neighboring major ticks.
      */
     minorTickCount?: number | undefined;
     /**
-     * @docid dxChartOptions.valueAxis.minorTickInterval
-     * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval
-     * @public
+     * Specifies the interval between minor ticks. Applies only to continuous axes.
      */
     minorTickInterval?: TimeIntervalConfig;
     /**
-     * @docid dxChartOptions.valueAxis.multipleAxesSpacing
-     * @default 5
-     * @public
+     * Adds a pixel-measured empty space between two side-by-side value axes. Applies if several value axes are located on one side of the chart.
      */
     multipleAxesSpacing?: number;
     /**
-     * @docid dxChartOptions.valueAxis.name
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Specifies the name of the value axis.
      */
     name?: string | undefined;
     /**
-     * @docid dxChartOptions.valueAxis.pane
-     * @default undefined
-     * @public
+     * Binds the value axis to a pane.
      */
     pane?: string | undefined;
     /**
-     * @docid dxChartOptions.valueAxis.position
-     * @default 'left'
-     * @public
+     * Relocates the value axis.
      */
     position?: Position;
     /**
-     * @docid dxChartOptions.valueAxis.customPosition
-     * @default undefined
-     * @public
+     * Specifies the position of the value axis on the argument axis.
      */
     customPosition?: number | Date | string | undefined;
     /**
-     * @docid dxChartOptions.valueAxis.offset
-     * @default undefined
-     * @public
+     * Specifies the shift in pixels of the value axis.
      */
     offset?: number | undefined;
     /**
-     * @docid dxChartOptions.valueAxis.showZero
-     * @default undefined
-     * @public
+     * Specifies whether or not to show zero on the value axis.
      */
     showZero?: boolean | undefined;
     /**
-     * @docid dxChartOptions.valueAxis.strips
-     * @type Array<Object>
-     * @notUsedInTheme
-     * @inherits dxChartOptions.commonAxisSettings.stripStyle
-     * @public
+     * Declares a collection of strips belonging to the value axis.
      */
     strips?: Array<ValueAxisStrips>;
     /**
-     * @docid dxChartOptions.valueAxis.synchronizedValue
-     * @default undefined
-     * @public
+     * Synchronizes two or more value axes with each other at a specific value.
      */
     synchronizedValue?: number | undefined;
     /**
-     * @docid dxChartOptions.valueAxis.tickInterval
-     * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval
-     * @public
+     * Specifies the interval between major ticks. Does not apply to discrete axes.
      */
     tickInterval?: TimeIntervalConfig;
     /**
-     * @docid dxChartOptions.valueAxis.title
-     * @type string|object
-     * @public
+     * Configures the axis title.
      */
     title?: ValueAxisTitle;
     /**
-     * @docid dxChartOptions.valueAxis.type
-     * @default undefined
-     * @public
+     * Specifies the type of the value axis.
      */
     type?: AxisScaleType | undefined;
     /**
-     * @docid dxChartOptions.valueAxis.valueType
-     * @default undefined
-     * @public
+     * Casts values to a specified data type.
      */
     valueType?: ChartsDataType | undefined;
     /**
-     * @docid dxChartOptions.valueAxis.visualRange
-     * @fires BaseWidgetOptions.onOptionChanged
-     * @notUsedInTheme
-     * @public
+     * Defines the axis&apos; displayed range. Cannot be wider than the wholeRange.
      */
     visualRange?: VisualRange | Array<number | string | Date>;
     /**
-     * @docid dxChartOptions.valueAxis.visualRangeUpdateMode
-     * @default 'auto'
-     * @public
+     * Specifies how the axis&apos;s visual range should behave when chart data is updated.
      */
     visualRangeUpdateMode?: VisualRangeUpdateMode;
     /**
-     * @docid dxChartOptions.valueAxis.wholeRange
-     * @default undefined
-     * @public
+     * Defines the range where the axis can be zoomed and panned.
      */
     wholeRange?: VisualRange | Array<number | string | Date> | undefined;
 };
 /**
- * @public
- * @docid dxChartValueAxisConstantLineStyle
- * @type object
+ * Specifies the appearance of those constant lines that belong to the value axis.
  */
 export type ValueAxisConstantLineStyle = CommonAxisSettingsConstantLineStyle & {
     /**
-     * @docid dxChartOptions.valueAxis.constantLineStyle.label
-     * @type object
-     * @public
+     * Specifies the appearance of the labels of those constant lines that belong to the value axis.
      */
     label?: ValueAxisConstantLineStyleLabel;
 };
 /**
- * @public
- * @docid dxChartValueAxisConstantLineStyleLabel
- * @type object
+ * Specifies the appearance of the labels of those constant lines that belong to the value axis.
  */
 export type ValueAxisConstantLineStyleLabel = CommonAxisSettingsConstantLineStyleLabel & {
     /**
-     * @docid dxChartOptions.valueAxis.constantLineStyle.label.horizontalAlignment
-     * @default 'left'
-     * @public
+     * Aligns constant line labels in the horizontal direction.
      */
     horizontalAlignment?: HorizontalAlignment;
     /**
-     * @docid dxChartOptions.valueAxis.constantLineStyle.label.verticalAlignment
-     * @default 'top'
-     * @public
+     * Aligns constant line labels in the vertical direction.
      */
     verticalAlignment?: VerticalAlignment;
 };
 /**
- * @public
- * @docid dxChartValueAxisConstantLines
- * @type object
+ * Declares a collection of constant lines belonging to the value axis.
  */
 export type ValueAxisConstantLines = CommonAxisSettingsConstantLineStyle & {
     /**
-     * @docid dxChartOptions.valueAxis.constantLines.displayBehindSeries
-     * @default false
-     * @public
+     * Specifies whether to display the constant line behind or in front of the series.
      */
     displayBehindSeries?: boolean;
     /**
-     * @docid dxChartOptions.valueAxis.constantLines.extendAxis
-     * @default false
-     * @public
+     * Specifies whether to extend the axis&apos;s default visual range to display the constant line.
      */
     extendAxis?: boolean;
     /**
-     * @docid dxChartOptions.valueAxis.constantLines.label
-     * @type object
-     * @public
+     * Configures the constant line label.
      */
     label?: ValueAxisConstantLinesLabel;
     /**
-     * @docid dxChartOptions.valueAxis.constantLines.value
-     * @default undefined
-     * @public
+     * Specifies the value indicated by a constant line. Setting this property is necessary.
      */
     value?: number | Date | string | undefined;
 };
 /**
- * @public
- * @docid dxChartValueAxisConstantLinesLabel
- * @type object
+ * Configures the constant line label.
  */
 export type ValueAxisConstantLinesLabel = CommonAxisSettingsConstantLineStyleLabel & {
     /**
-     * @docid dxChartOptions.valueAxis.constantLines.label.horizontalAlignment
-     * @default 'left'
-     * @public
+     * Aligns constant line labels in the horizontal direction.
      */
     horizontalAlignment?: HorizontalAlignment;
     /**
-     * @docid dxChartOptions.valueAxis.constantLines.label.text
-     * @default undefined
-     * @public
+     * Specifies the text of a constant line label. By default, equals to the value of the constant line.
      */
     text?: string | undefined;
     /**
-     * @docid dxChartOptions.valueAxis.constantLines.label.verticalAlignment
-     * @default 'top'
-     * @public
+     * Aligns constant line labels in the vertical direction.
      */
     verticalAlignment?: VerticalAlignment;
 };
 /**
- * @public
- * @docid dxChartValueAxisLabel
- * @type object
+ * Configures the labels of the value axis.
  */
 export type ValueAxisLabel = CommonAxisSettingsLabel & {
     /**
-     * @docid dxChartOptions.valueAxis.label.customizeHint
-     * @public
+     * Specifies the hint that appears when a user points to an axis label.
      */
     customizeHint?: ((axisValue: { value?: Date | number | string; valueText?: string }) => string);
     /**
-     * @docid dxChartOptions.valueAxis.label.customizeText
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by axis labels.
      */
     customizeText?: ((axisValue: { value?: Date | number | string; valueText?: string }) => string);
     /**
-     * @docid dxChartOptions.valueAxis.label.format
-     * @default undefined
-     * @public
+     * Formats a value before it is displayed in an axis label.
      */
     format?: Format | undefined;
 };
 /**
- * @public
- * @docid dxChartValueAxisStrips
- * @type object
+ * Declares a collection of strips belonging to the value axis.
  */
 export type ValueAxisStrips = CommonAxisSettingsStripStyle & {
     /**
-     * @docid dxChartOptions.valueAxis.strips.color
-     * @default undefined
-     * @public
+     * Specifies the color of the strip.
      */
     color?: string | undefined;
     /**
-     * @docid dxChartOptions.valueAxis.strips.endValue
-     * @default undefined
-     * @public
+     * Along with the startValue property, limits the strip.
      */
     endValue?: number | Date | string | undefined;
     /**
-     * @docid dxChartOptions.valueAxis.strips.label
-     * @type object
-     * @public
+     * Configures the strip label.
      */
     label?: ValueAxisStripsLabel;
     /**
-     * @docid dxChartOptions.valueAxis.strips.startValue
-     * @default undefined
-     * @public
+     * Along with the endValue property, limits the strip.
      */
     startValue?: number | Date | string | undefined;
 };
 /**
- * @public
- * @docid dxChartValueAxisStripsLabel
- * @type object
+ * Configures the strip label.
  */
 export type ValueAxisStripsLabel = CommonAxisSettingsStripStyleLabel & {
     /**
-     * @docid dxChartOptions.valueAxis.strips.label.text
-     * @default undefined
-     * @public
+     * Specifies the text of the strip label.
      */
     text?: string | undefined;
 };
 /**
- * @public
- * @docid dxChartValueAxisTitle
- * @type object
+ * Configures the axis title.
  */
 export type ValueAxisTitle = CommonAxisSettingsTitle & {
     /**
-     * @docid dxChartOptions.valueAxis.title.text
-     * @default undefined
-     * @public
+     * Specifies the text of the axis title.
      */
     text?: string | undefined;
 };
 /**
- * @docid
- * @inherits BaseChart
- * @namespace DevExpress.viz
- * @public
+ * The Chart is a UI component that visualizes data from a local or remote storage using a great variety of series types along with different interactive elements, such as tooltips, crosshair pointer, legend, etc.
  */
 export default class dxChart extends BaseChart<dxChartOptions> {
     /**
-     * @docid
-     * @publicName getArgumentAxis()
-     * @public
+     * Gets the argument axis.
      */
     getArgumentAxis(): chartAxisObject;
     /**
-     * @docid
-     * @publicName getValueAxis()
-     * @public
+     * Gets a value axis.
      */
     getValueAxis(): chartAxisObject;
     /**
-     * @docid
-     * @publicName getValueAxis(name)
-     * @public
+     * Gets a value axis with the specified name.
      */
     getValueAxis(name: string): chartAxisObject;
     /**
-     * @docid
-     * @publicName resetVisualRange()
-     * @public
+     * Resets the visual ranges of both axes to the data range or to the whole range if it is within the data range.
      */
     resetVisualRange(): void;
     /**
-     * @docid
-     * @publicName zoomArgument(startValue,endValue)
-     * @public
+     * Sets the argument axis&apos; start and end values.
      */
     zoomArgument(startValue: number | Date | string, endValue: number | Date | string): void;
 }
 
 /**
- * @docid
- * @type object
- * @inherits dxChartCommonAnnotationConfig
- * @namespace DevExpress.viz
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxChartAnnotationConfig extends dxChartCommonAnnotationConfig {
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the annotation&apos;s name.
      */
     name?: string | undefined;
 }
 
 /**
- * @docid
- * @type object
- * @inherits BaseChartAnnotationConfig
- * @namespace DevExpress.viz
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the name of the value axis on which the value is specified. Useful for a multi-axis chart.
      */
     axis?: string | undefined;
     /**
-     * @docid
-     * @type_function_return object
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Customizes the text and appearance of the annotation&apos;s tooltip.
      */
     customizeTooltip?: ((annotation: dxChartAnnotationConfig | any) => any) | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @type_function_return string|SVGElement|jQuery
-     * @public
+     * Specifies a custom template for the annotation. Applies only if the type is &apos;custom&apos;.
      */
     template?: template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
-     * @docid
-     * @type_function_return string|Element|jQuery
-     * @default undefined
-     * @public
+     * Specifies a custom template for an annotation&apos;s tooltip.
      */
     tooltipTemplate?: template | ((annotation: dxChartAnnotationConfig | any, element: DxElement) => string | UserDefinedElement) | undefined;
 }
 
 /**
- * @docid
- * @type object
- * @namespace DevExpress.viz
+ * This section lists objects that define properties used to configure series of specific types.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxChartSeriesTypes {
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the area type.
      */
     AreaSeries?: dxChartSeriesTypesAreaSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the bar type.
      */
     BarSeries?: dxChartSeriesTypesBarSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the bubble type.
      */
     BubbleSeries?: dxChartSeriesTypesBubbleSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the candlestick type.
      */
     CandleStickSeries?: dxChartSeriesTypesCandleStickSeries;
     /**
-     * @docid
-     * @type object
-     * @hidden
+     * An object that defines configuration properties for chart series.
      */
     CommonSeries?: dxChartSeriesTypesCommonSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the full-stacked area type.
      */
     FullStackedAreaSeries?: dxChartSeriesTypesFullStackedAreaSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the full-stacked bar type.
      */
     FullStackedBarSeries?: dxChartSeriesTypesFullStackedBarSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the full-stacked line type.
      */
     FullStackedLineSeries?: dxChartSeriesTypesFullStackedLineSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the full-stacked spline area type.
      */
     FullStackedSplineAreaSeries?: dxChartSeriesTypesFullStackedSplineAreaSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the full-stacked spline area type. An object defining a series of the fullStackedSpline type.
      */
     FullStackedSplineSeries?: dxChartSeriesTypesFullStackedSplineSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the line type.
      */
     LineSeries?: dxChartSeriesTypesLineSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the range area type.
      */
     RangeAreaSeries?: dxChartSeriesTypesRangeAreaSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the range bar type.
      */
     RangeBarSeries?: dxChartSeriesTypesRangeBarSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the scatter type.
      */
     ScatterSeries?: dxChartSeriesTypesScatterSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the spline area type.
      */
     SplineAreaSeries?: dxChartSeriesTypesSplineAreaSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the spline type.
      */
     SplineSeries?: dxChartSeriesTypesSplineSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the stacked area type.
      */
     StackedAreaSeries?: dxChartSeriesTypesStackedAreaSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the stacked bar type.
      */
     StackedBarSeries?: dxChartSeriesTypesStackedBarSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the stacked line type.
      */
     StackedLineSeries?: dxChartSeriesTypesStackedLineSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the stacked spline area type.
      */
     StackedSplineAreaSeries?: dxChartSeriesTypesStackedSplineAreaSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the stacked spline type.
      */
     StackedSplineSeries?: dxChartSeriesTypesStackedSplineSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the step rea type.
      */
     StepAreaSeries?: dxChartSeriesTypesStepAreaSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the step line type.
      */
     StepLineSeries?: dxChartSeriesTypesStepLineSeries;
     /**
-     * @docid
-     * @type object
-     * @inherits dxChartSeriesTypes.CommonSeries
-     * @public
+     * Describes settings supported by a series of the stock type.
      */
     StockSeries?: dxChartSeriesTypesStockSeries;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesAreaSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.AreaSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesAreaSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.AreaSeries.hoverMode
-     * @default 'nearestPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.AreaSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesAreaSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.AreaSeries.point
-     * @type object
-     * @public
+     * Configures series points in scatter, line- and area-like series.
      */
     point?: dxChartSeriesTypesAreaSeriesPoint;
     /**
-     * @docid dxChartSeriesTypes.AreaSeries.selectionMode
-     * @default 'includePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a series.
      */
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.AreaSeries.aggregation.method
-     * @default 'avg'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesAreaSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.AreaSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesAreaSeriesPoint extends SeriesPoint {
     /**
-     * @docid dxChartSeriesTypes.AreaSeries.point.visible
-     * @default false
-     * @public
+     * Makes the series points visible.
      */
     visible?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesBarSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.BarSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesBarSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.BarSeries.hoverMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.BarSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesBarSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.BarSeries.selectionMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a bar.
      */
     selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.BarSeries.aggregation.method
-     * @default 'sum'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesBarSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.BarSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesBubbleSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.BubbleSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesBubbleSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.BubbleSeries.hoverMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.BubbleSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesBubbleSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.BubbleSeries.selectionMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a bubble.
      */
     selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesBubbleSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.BubbleSeries.aggregation.method
-     * @default 'avg'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartBubbleSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesBubbleSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.BubbleSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesCandleStickSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.CandleStickSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesCandleStickSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.CandleStickSeries.argumentField
-     * @default 'date'
-     * @public
+     * Specifies which data source field provides arguments for series points.
      */
     argumentField?: string;
     /**
-     * @docid dxChartSeriesTypes.CandleStickSeries.hoverMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user pauses on a series.
      */
     hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.CandleStickSeries.hoverStyle
-     * @type object
-     * @public
+     * Configures the appearance adopted by the series when a user points to it.
      */
     hoverStyle?: dxChartSeriesTypesCandleStickSeriesHoverStyle;
     /**
-     * @docid dxChartSeriesTypes.CandleStickSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesCandleStickSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.CandleStickSeries.selectionMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a point.
      */
     selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.CandleStickSeries.selectionStyle
-     * @type object
-     * @public
+     * Configures the appearance adopted by the series when a user selects it.
      */
     selectionStyle?: dxChartSeriesTypesCandleStickSeriesSelectionStyle;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesCandleStickSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.CandleStickSeries.aggregation.method
-     * @default 'ohlc'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartFinancialSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesCandleStickSeriesHoverStyle extends dxChartSeriesTypesCommonSeriesHoverStyle {
     /**
-     * @docid dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching
-     * @type object
-     * @public
+     * Configures hatching that applies when a user points to the series.
      */
     hatching?: dxChartSeriesTypesCandleStickSeriesHoverStyleHatching;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesCandleStickSeriesHoverStyleHatching extends dxChartSeriesTypesCommonSeriesHoverStyleHatching {
     /**
-     * @docid dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching.direction
-     * @default 'none'
-     * @public
+     * Specifies the direction of hatching lines.
      */
     direction?: HatchDirection;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesCandleStickSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.CandleStickSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesCandleStickSeriesSelectionStyle extends dxChartSeriesTypesCommonSeriesSelectionStyle {
     /**
-     * @docid dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching
-     * @type object
-     * @public
+     * Configures hatching that applies when a user selects the series.
      */
     hatching?: dxChartSeriesTypesCandleStickSeriesSelectionStyleHatching;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesCandleStickSeriesSelectionStyleHatching extends dxChartSeriesTypesCommonSeriesSelectionStyleHatching {
     /**
-     * @docid dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching.direction
-     * @default 'none'
-     * @public
+     * Specifies the direction of hatching lines.
      */
     direction?: HatchDirection;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesCommonSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.argumentField
-     * @default 'arg'
-     * @notUsedInTheme
-     * @public
+     * Specifies which data source field provides arguments for series points.
      */
     argumentField?: string;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.axis
-     * @default undefined
-     * @public
+     * Binds the series to a value axis.
      */
     axis?: string | undefined;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.barOverlapGroup
-     * @default undefined
-     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.RangeBarSeries
-     * @public
+     * Allows you to group bar series so that bars with the same argument overlap.
      */
     barOverlapGroup?: string | undefined;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.barPadding
-     * @default undefined
-     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
-     * @public
+     * Controls the padding and consequently the width of all bars in a series using relative units. Ignored if the barWidth property is set.
      */
     barPadding?: number | undefined;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.barWidth
-     * @default undefined
-     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
-     * @public
+     * Specifies a fixed width for all bars in a series, measured in pixels. Takes precedence over the barPadding property.
      */
     barWidth?: number | undefined;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.border
-     * @type object
-     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
-     * @public
+     * Configures the series border (in area-like series) or the series point border (in bar-like and bubble series).
      */
     border?: dxChartSeriesTypesCommonSeriesBorder;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.closeValueField
-     * @default 'close'
-     * @propertyOf dxChartSeriesTypes.StockSeries,dxChartSeriesTypes.CandleStickSeries
-     * @notUsedInTheme
-     * @public
+     * Specifies which data source field provides close values for points of a financial series.
      */
     closeValueField?: string;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.color
-     * @default undefined
-     * @public
+     * Specifies the color of the series.
      */
     color?: string | ChartsColor | undefined;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.cornerRadius
-     * @default 0
-     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
-     * @public
+     * Makes bars look rounded. Applies only to bar-like series.
      */
     cornerRadius?: number;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.dashStyle
-     * @default 'solid'
-     * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries
-     * @public
+     * Specifies the dash style of the series line. Applies only to line-like series.
      */
     dashStyle?: DashStyle;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.highValueField
-     * @default 'high'
-     * @propertyOf dxChartSeriesTypes.StockSeries,dxChartSeriesTypes.CandleStickSeries
-     * @notUsedInTheme
-     * @public
+     * Specifies which data source field provides high values for points of a financial series.
      */
     highValueField?: string;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.hoverMode
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: SeriesHoverMode;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle
-     * @type object
-     * @public
+     * Configures the appearance adopted by the series when a user points to it.
      */
     hoverStyle?: dxChartSeriesTypesCommonSeriesHoverStyle;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.ignoreEmptyPoints
-     * @default false
-     * @public
+     * Specifies whether the series should ignore null data points.
      */
     ignoreEmptyPoints?: boolean;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.innerColor
-     * @default '#ffffff'
-     * @propertyOf dxChartSeriesTypes.CandleStickSeries
-     * @public
+     * Specifies a filling color for the body of a series point that visualizes a non-reduced value. Applies only to candlestick series.
      */
     innerColor?: string;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: SeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.lowValueField
-     * @default 'low'
-     * @propertyOf dxChartSeriesTypes.StockSeries,dxChartSeriesTypes.CandleStickSeries
-     * @notUsedInTheme
-     * @public
+     * Specifies which data source field provides low values for points of a financial series.
      */
     lowValueField?: string;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.maxLabelCount
-     * @default undefined
-     * @public
+     * Specifies a limit for the number of point labels.
      */
     maxLabelCount?: number | undefined;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.minBarSize
-     * @default undefined
-     * @propertyOf dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.RangeBarSeries
-     * @public
+     * Specifies the minimal possible height (or length if the chart is rotated) of a bar in pixels. Applies only to bar-like series.
      */
     minBarSize?: number | undefined;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.opacity
-     * @default 0.5
-     * @propertyOf dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries
-     * @public
+     * Specifies how transparent the series should be.
      */
     opacity?: number;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.openValueField
-     * @default 'open'
-     * @propertyOf dxChartSeriesTypes.StockSeries,dxChartSeriesTypes.CandleStickSeries
-     * @notUsedInTheme
-     * @public
+     * Specifies which data source field provides open values for points of a financial series.
      */
     openValueField?: string;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.pane
-     * @default 'default'
-     * @public
+     * Specifies which pane the series should belong to. Accepts the name of the pane.
      */
     pane?: string;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.point
-     * @type object
-     * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-     * @public
+     * Configures series points in scatter, line- and area-like series.
      */
     point?: SeriesPoint;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.rangeValue1Field
-     * @default 'val1'
-     * @notUsedInTheme
-     * @propertyOf dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.RangeAreaSeries
-     * @public
+     * Coupled with the rangeValue2Field property, specifies which data source field provides values for a range-like series.
      */
     rangeValue1Field?: string;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.rangeValue2Field
-     * @default 'val2'
-     * @notUsedInTheme
-     * @propertyOf dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.RangeAreaSeries
-     * @public
+     * Coupled with the rangeValue1Field property, specifies which data source field provides values for a range-like series.
      */
     rangeValue2Field?: string;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.reduction
-     * @propertyOf dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.StockSeries
-     * @public
+     * Specifies reduction properties for financial series.
      */
     reduction?: {
       /**
-       * @docid dxChartSeriesTypes.CommonSeries.reduction.color
-       * @default '#ff0000'
-       * @propertyOf dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.StockSeries
+       * Specifies a color for the points whose price has decreased in comparison to the price of the previous point.
        */
       color?: string;
       /**
-       * @docid dxChartSeriesTypes.CommonSeries.reduction.level
-       * @default 'close'
-       * @propertyOf dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.StockSeries
+       * Specifies whether high, low, open or close prices of points should be compared.
        */
       level?: FinancialChartReductionLevel;
     };
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.selectionMode
-     * @public
+     * Specifies series elements to be highlighted when a user selects a series.
      */
     selectionMode?: SeriesSelectionMode;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle
-     * @type object
-     * @public
+     * Configures the appearance adopted by the series when a user selects it.
      */
     selectionStyle?: dxChartSeriesTypesCommonSeriesSelectionStyle;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.showInLegend
-     * @default true
-     * @public
+     * Specifies whether to show the series in the legend or not.
      */
     showInLegend?: boolean;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.sizeField
-     * @default 'size'
-     * @propertyOf dxChartSeriesTypes.BubbleSeries
-     * @public
+     * Specifies which data source field provides size values for bubbles. Required by and applies only to bubble series.
      */
     sizeField?: string;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.stack
-     * @default 'default'
-     * @propertyOf dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries
-     * @public
+     * Specifies which stack the series should belongs to. Applies only to stacked bar and full-stacked bar series.
      */
     stack?: string;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.tagField
-     * @default 'tag'
-     * @notUsedInTheme
-     * @public
+     * Specifies which data source field provides auxiliary data for series points.
      */
     tagField?: string;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar
-     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StepLineSeries
-     * @public
+     * Configures error bars.
      */
     valueErrorBar?: {
       /**
-       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.color
-       * @default 'black'
+       * Specifies the color of error bars.
        */
       color?: string;
       /**
-       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.displayMode
-       * @default 'auto'
+       * Specifies whether error bars must be displayed in full or partially.
        */
       displayMode?: ValueErrorBarDisplayMode;
       /**
-       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.edgeLength
-       * @default 8
+       * Specifies the length of the lines that indicate error bar edges.
        */
       edgeLength?: number;
       /**
-       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.highValueField
-       * @default undefined
+       * Specifies which data field provides high error values.
        */
       highValueField?: string | undefined;
       /**
-       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.lineWidth
-       * @default 2
+       * Specifies the width of the error bar line.
        */
       lineWidth?: number;
       /**
-       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.lowValueField
-       * @default undefined
+       * Specifies which data field provides low error values.
        */
       lowValueField?: string | undefined;
       /**
-       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.opacity
-       * @default undefined
+       * Specifies how trasparent error bars should be.
        */
       opacity?: number | undefined;
       /**
-       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.type
-       * @default undefined
+       * Specifies how error bar values must be calculated.
        */
       type?: ValueErrorBarType | undefined;
       /**
-       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.value
-       * @default 1
+       * Specifies the value to be used for generating error bars.
        */
       value?: number;
     };
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.valueField
-     * @default 'val'
-     * @notUsedInTheme
-     * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.BubbleSeries
-     * @public
+     * Specifies which data source field provides values for series points.
      */
     valueField?: string;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.visible
-     * @default true
-     * @public
+     * Specifies whether the series is visible or not.
      */
     visible?: boolean;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.width
-     * @default 2
-     * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.StockSeries
-     * @public
+     * Specifies the width of the series line in pixels. Applies only to line-like series.
      */
     width?: number;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.aggregation.calculate
-     * @type_function_return object|Array<object>
-     * @default undefined
-     * @public
+     * Specifies a custom aggregate function. Applies only if the aggregation method is &apos;custom&apos;.
      */
     calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => any | Array<any>) | undefined;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.aggregation.enabled
-     * @default false
-     * @public
+     * Enables data aggregation for the series.
      */
     enabled?: boolean;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.aggregation.method
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesCommonSeriesBorder {
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.border.color
-     * @default undefined
-     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
-     * @public
+     * Colors the series border (in area-like series) or the series point border (in bar-like and bubble series).
      */
     color?: string | undefined;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.border.dashStyle
-     * @default undefined
-     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
-     * @public
+     * Sets a dash style for the series border (in area-like series) or for the series point border (in bar-like and bubble series).
      */
     dashStyle?: DashStyle | undefined;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.border.visible
-     * @default false
-     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
-     * @public
+     * Shows the series border (in area-like series) or the series point border (in bar-like and bubble series).
      */
     visible?: boolean;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.border.width
-     * @default 2
-     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
-     * @public
+     * Sets a pixel-measured width for the series border (in area-like series) or for the series point border (in bar-like and bubble series).
      */
     width?: number;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesCommonSeriesHoverStyle {
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border
-     * @type object
-     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
-     * @public
+     * Configures the appearance adopted by the series border (in area-like series) or the series point border (in bar-like and bubble series) when a user points to the series.
      */
     border?: dxChartSeriesTypesCommonSeriesHoverStyleBorder;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.color
-     * @default undefined
-     * @public
+     * Specifies the color of the series in the hovered state.
      */
     color?: string | ChartsColor | undefined;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.dashStyle
-     * @default 'solid'
-     * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries
-     * @public
+     * Specifies the dash style of the series line when the series is in the hovered state. Applies only to line-like series.
      */
     dashStyle?: DashStyle;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.hatching
-     * @type object
-     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.BubbleSeries
-     * @public
+     * Configures hatching that applies when a user points to the series.
      */
     hatching?: dxChartSeriesTypesCommonSeriesHoverStyleHatching;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.width
-     * @default 3
-     * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.StockSeries
-     * @public
+     * Specifies the pixel-measured width of the series line when the series is in the hovered state.
      */
     width?: number;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.highlight
-     * @default true
-     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
+     * Specifies whether to lighten the series when a user hovers the mouse pointer over it.
      */
     highlight?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesCommonSeriesHoverStyleBorder {
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border.color
-     * @default undefined
-     * @public
+     * Colors the series border (in area-like series) or the series point border (in bar-like and bubble series) when a user points to the series.
      */
     color?: string | undefined;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border.dashStyle
-     * @default 'solid'
-     * @public
+     * Sets a dash style for the series border (in area-like series) or for the series point border (in bar-like and bubble series) when a user points to the series.
      */
     dashStyle?: DashStyle | undefined;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border.visible
-     * @default false
-     * @public
+     * Shows the series border (in area-like series) or the series point border (in bar-like and bubble series) when a user points to the series.
      */
     visible?: boolean;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border.width
-     * @default 3
-     * @public
+     * Sets a pixel-measured width for the series border (in area-like series) or for the series point border (in bar-like and bubble series) when a user points to the series.
      */
     width?: number;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesCommonSeriesHoverStyleHatching {
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.direction
-     * @default 'right'
-     * @public
+     * Specifies the direction of hatching lines.
      */
     direction?: HatchDirection;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.opacity
-     * @default 0.75
-     * @public
+     * Specifies how transparent hatching lines should be.
      */
     opacity?: number;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.step
-     * @default 6
-     * @public
+     * Specifies the distance between two side-by-side hatching lines in pixels.
      */
     step?: number;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.width
-     * @default 2
-     * @public
+     * Specifies the width of hatching lines in pixels.
      */
     width?: number;
 }
 
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesCommonSeriesSelectionStyle {
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.border
-     * @type object
-     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
-     * @public
+     * Configures the appearance adopted by the series border (in area-like series) or the series point border (in bar-like and bubble series) when a user selects the series.
      */
     border?: dxChartSeriesTypesCommonSeriesSelectionStyleBorder;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.color
-     * @default undefined
-     * @public
+     * Specifies the color of the series in the selected state.
      */
     color?: string | ChartsColor | undefined;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.dashStyle
-     * @default 'solid'
-     * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries
-     * @public
+     * Specifies the dash style of the series line when the series is in the selected state. Applies only to line-like series.
      */
     dashStyle?: DashStyle;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.hatching
-     * @type object
-     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.BubbleSeries
-     * @public
+     * Configures hatching that applies when a user selects the series.
      */
     hatching?: dxChartSeriesTypesCommonSeriesSelectionStyleHatching;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.width
-     * @default 3
-     * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.StockSeries
-     * @public
+     * Specifies the pixel-measured width of the series line when the series is in the selected state.
      */
     width?: number;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.highlight
-     * @default true
-     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
+     * Specifies whether to lighten the series when a user selects it.
      */
     highlight?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesCommonSeriesSelectionStyleBorder {
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.border.color
-     * @default undefined
-     * @public
+     * Colors the series border (in area-like series) or the series point border (in bar-like and bubble series) when a user selects the series.
      */
     color?: string | undefined;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.border.dashStyle
-     * @default 'solid'
-     * @public
+     * Sets a dash style for the series border (in area-like series) or for the series point border (in bar-like and bubble series) when a user selects the series.
      */
     dashStyle?: DashStyle | undefined;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.border.visible
-     * @default false
-     * @public
+     * Shows the series border (in area-like series) or the series point border (in bar-like and bubble series) when a user selects the series.
      */
     visible?: boolean;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.border.width
-     * @default 3
-     * @public
+     * Sets a pixel-measured width for the series border (in area-like series) or for the series point border (in bar-like and bubble series) when a user selects the series.
      */
     width?: number;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesCommonSeriesSelectionStyleHatching {
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.direction
-     * @default 'right'
-     * @public
+     * Specifies the direction of hatching lines.
      */
     direction?: HatchDirection;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.opacity
-     * @default 0.5
-     * @public
+     * Specifies how transparent hatching lines should be.
      */
     opacity?: number;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.step
-     * @default 6
-     * @public
+     * Specifies the distance between two side-by-side hatching lines in pixels.
      */
     step?: number;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.width
-     * @default 2
-     * @public
+     * Specifies the width of hatching lines in pixels.
      */
     width?: number;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesFullStackedAreaSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.FullStackedAreaSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesFullStackedAreaSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.FullStackedAreaSeries.hoverMode
-     * @default 'nearestPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.FullStackedAreaSeries.label
-     * @type object
-     * @public
+     * An object defining the label configuration properties.
      */
     label?: dxChartSeriesTypesFullStackedAreaSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.FullStackedAreaSeries.point
-     * @type object
-     * @public
+     * Configures series points in scatter, line- and area-like series.
      */
     point?: dxChartSeriesTypesFullStackedAreaSeriesPoint;
     /**
-     * @docid dxChartSeriesTypes.FullStackedAreaSeries.selectionMode
-     * @default 'includePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a series.
      */
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesFullStackedAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.FullStackedAreaSeries.aggregation.method
-     * @default 'avg'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesFullStackedAreaSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.FullStackedAreaSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesFullStackedAreaSeriesPoint extends SeriesPoint {
     /**
-     * @docid dxChartSeriesTypes.FullStackedAreaSeries.point.visible
-     * @default false
-     * @public
+     * Makes the series points visible.
      */
     visible?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesFullStackedBarSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.FullStackedBarSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesFullStackedBarSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.FullStackedBarSeries.hoverMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.FullStackedBarSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesFullStackedBarSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.FullStackedBarSeries.selectionMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a bar.
      */
     selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesFullStackedBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.FullStackedBarSeries.aggregation.method
-     * @default 'sum'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesFullStackedBarSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.FullStackedBarSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
     /**
-     * @docid dxChartSeriesTypes.FullStackedBarSeries.label.position
-     * @default 'inside'
-     * @public
+     * Specifies whether to display point labels inside or outside of series points. Applies only to bubble, range-like and bar-like series.
      */
     position?: RelativePosition;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesFullStackedLineSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.FullStackedLineSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesFullStackedLineSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.FullStackedLineSeries.hoverMode
-     * @default 'nearestPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.FullStackedLineSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesFullStackedLineSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.FullStackedLineSeries.selectionMode
-     * @default 'includePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a series.
      */
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesFullStackedLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.FullStackedLineSeries.aggregation.method
-     * @default 'avg'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesFullStackedLineSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.FullStackedLineSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesFullStackedSplineAreaSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesFullStackedSplineAreaSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.FullStackedSplineAreaSeries.hoverMode
-     * @default 'nearestPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.FullStackedSplineAreaSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesFullStackedSplineAreaSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.FullStackedSplineAreaSeries.point
-     * @type object
-     * @public
+     * Configures series points in scatter, line- and area-like series.
      */
     point?: dxChartSeriesTypesFullStackedSplineAreaSeriesPoint;
     /**
-     * @docid dxChartSeriesTypes.FullStackedSplineAreaSeries.selectionMode
-     * @default 'includePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a series.
      */
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesFullStackedSplineAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation.method
-     * @default 'avg'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesFullStackedSplineAreaSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.FullStackedSplineAreaSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesFullStackedSplineAreaSeriesPoint extends SeriesPoint {
     /**
-     * @docid dxChartSeriesTypes.FullStackedSplineAreaSeries.point.visible
-     * @default false
-     * @public
+     * Makes the series points visible.
      */
     visible?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesFullStackedSplineSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.FullStackedSplineSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesFullStackedSplineSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.FullStackedSplineSeries.hoverMode
-     * @default 'nearestPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.FullStackedSplineSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesFullStackedSplineSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.FullStackedSplineSeries.selectionMode
-     * @default 'includePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a series.
      */
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesFullStackedSplineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.FullStackedSplineSeries.aggregation.method
-     * @default 'avg'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesFullStackedSplineSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.FullStackedSplineSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesLineSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.LineSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesLineSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.LineSeries.hoverMode
-     * @default 'nearestPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.LineSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesLineSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.LineSeries.selectionMode
-     * @default 'includePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a series.
      */
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.LineSeries.aggregation.method
-     * @default 'avg'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesLineSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.LineSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesRangeAreaSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.RangeAreaSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesRangeAreaSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.RangeAreaSeries.hoverMode
-     * @default 'nearestPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.RangeAreaSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesRangeAreaSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.RangeAreaSeries.point
-     * @type object
-     * @public
+     * Configures series points in scatter, line- and area-like series.
      */
     point?: dxChartSeriesTypesRangeAreaSeriesPoint;
     /**
-     * @docid dxChartSeriesTypes.RangeAreaSeries.selectionMode
-     * @default 'includePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a series.
      */
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesRangeAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.RangeAreaSeries.aggregation.method
-     * @default 'range'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartRangeSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesRangeAreaSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.RangeAreaSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesRangeAreaSeriesPoint extends SeriesPoint {
     /**
-     * @docid dxChartSeriesTypes.RangeAreaSeries.point.visible
-     * @default false
-     * @public
+     * Makes the series points visible.
      */
     visible?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesRangeBarSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.RangeBarSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesRangeBarSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.RangeBarSeries.hoverMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.RangeBarSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesRangeBarSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.RangeBarSeries.selectionMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a range bar.
      */
     selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesRangeBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.RangeBarSeries.aggregation.method
-     * @default 'range'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartRangeSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesRangeBarSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.RangeBarSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesScatterSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.ScatterSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesScatterSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.ScatterSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesScatterSeriesLabel;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesScatterSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.ScatterSeries.aggregation.method
-     * @default 'avg'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesScatterSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.ScatterSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesSplineAreaSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.SplineAreaSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesSplineAreaSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.SplineAreaSeries.hoverMode
-     * @default 'nearestPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.SplineAreaSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesSplineAreaSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.SplineAreaSeries.point
-     * @type object
-     * @public
+     * Configures series points in scatter, line- and area-like series.
      */
     point?: dxChartSeriesTypesSplineAreaSeriesPoint;
     /**
-     * @docid dxChartSeriesTypes.SplineAreaSeries.selectionMode
-     * @default 'includePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a series.
      */
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesSplineAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.SplineAreaSeries.aggregation.method
-     * @default 'avg'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesSplineAreaSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.SplineAreaSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesSplineAreaSeriesPoint extends SeriesPoint {
     /**
-     * @docid dxChartSeriesTypes.SplineAreaSeries.point.visible
-     * @default false
-     * @public
+     * Makes the series points visible.
      */
     visible?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesSplineSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.SplineSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesSplineSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.SplineSeries.hoverMode
-     * @default 'nearestPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.SplineSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesSplineSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.SplineSeries.selectionMode
-     * @default 'includePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a series.
      */
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesSplineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.SplineSeries.aggregation.method
-     * @default 'avg'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesSplineSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.SplineSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStackedAreaSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.StackedAreaSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesStackedAreaSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.StackedAreaSeries.hoverMode
-     * @default 'nearestPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.StackedAreaSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesStackedAreaSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.StackedAreaSeries.point
-     * @type object
-     * @public
+     * Configures series points in scatter, line- and area-like series.
      */
     point?: dxChartSeriesTypesStackedAreaSeriesPoint;
     /**
-     * @docid dxChartSeriesTypes.StackedAreaSeries.selectionMode
-     * @default 'includePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a series.
      */
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStackedAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.StackedAreaSeries.aggregation.method
-     * @default 'avg'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStackedAreaSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.StackedAreaSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStackedAreaSeriesPoint extends SeriesPoint {
     /**
-     * @docid dxChartSeriesTypes.StackedAreaSeries.point.visible
-     * @default false
-     * @public
+     * Makes the series points visible.
      */
     visible?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStackedBarSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.StackedBarSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesStackedBarSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.StackedBarSeries.hoverMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.StackedBarSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesStackedBarSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.StackedBarSeries.selectionMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a bar.
      */
     selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStackedBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.StackedBarSeries.aggregation.method
-     * @default 'sum'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStackedBarSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.StackedBarSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
     /**
-     * @docid dxChartSeriesTypes.StackedBarSeries.label.position
-     * @default 'inside'
-     * @public
+     * Specifies whether to display point labels inside or outside of series points. Applies only to bubble, range-like and bar-like series.
      */
     position?: RelativePosition;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStackedLineSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.StackedLineSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesStackedLineSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.StackedLineSeries.hoverMode
-     * @default 'nearestPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.StackedLineSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesStackedLineSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.StackedLineSeries.selectionMode
-     * @default 'includePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a series.
      */
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStackedLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.StackedLineSeries.aggregation.method
-     * @default 'avg'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStackedLineSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.StackedLineSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStackedSplineAreaSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.StackedSplineAreaSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesStackedSplineAreaSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.StackedSplineAreaSeries.hoverMode
-     * @default 'nearestPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.StackedSplineAreaSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesStackedSplineAreaSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.StackedSplineAreaSeries.point
-     * @type object
-     * @public
+     * Configures series points in scatter, line- and area-like series.
      */
     point?: dxChartSeriesTypesStackedSplineAreaSeriesPoint;
     /**
-     * @docid dxChartSeriesTypes.StackedSplineAreaSeries.selectionMode
-     * @default 'includePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a series.
      */
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStackedSplineAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.StackedSplineAreaSeries.aggregation.method
-     * @default 'avg'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStackedSplineAreaSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.StackedSplineAreaSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStackedSplineAreaSeriesPoint extends SeriesPoint {
     /**
-     * @docid dxChartSeriesTypes.StackedSplineAreaSeries.point.visible
-     * @default false
-     * @public
+     * Makes the series points visible.
      */
     visible?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStackedSplineSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.StackedSplineSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesStackedSplineSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.StackedSplineSeries.hoverMode
-     * @default 'nearestPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.StackedSplineSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesStackedSplineSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.StackedSplineSeries.selectionMode
-     * @default 'includePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a series.
      */
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStackedSplineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.StackedSplineSeries.aggregation.method
-     * @default 'avg'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStackedSplineSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.StackedSplineSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStepAreaSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.StepAreaSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesStepAreaSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.StepAreaSeries.border
-     * @type object
-     * @public
+     * Configures the series border (in area-like series) or the series point border (in bar-like and bubble series).
      */
     border?: dxChartSeriesTypesStepAreaSeriesBorder;
     /**
-     * @docid dxChartSeriesTypes.StepAreaSeries.hoverMode
-     * @default 'nearestPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.StepAreaSeries.hoverStyle
-     * @type object
-     * @public
+     * Configures the appearance adopted by the series when a user points to it.
      */
     hoverStyle?: dxChartSeriesTypesStepAreaSeriesHoverStyle;
     /**
-     * @docid dxChartSeriesTypes.StepAreaSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesStepAreaSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.StepAreaSeries.point
-     * @type object
-     * @public
+     * Configures series points in scatter, line- and area-like series.
      */
     point?: dxChartSeriesTypesStepAreaSeriesPoint;
     /**
-     * @docid dxChartSeriesTypes.StepAreaSeries.selectionMode
-     * @default 'includePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a series.
      */
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.StepAreaSeries.selectionStyle
-     * @type object
-     * @public
+     * Configures the appearance adopted by the series when a user selects it.
      */
     selectionStyle?: dxChartSeriesTypesStepAreaSeriesSelectionStyle;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStepAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.StepAreaSeries.aggregation.method
-     * @default 'avg'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStepAreaSeriesBorder extends dxChartSeriesTypesCommonSeriesBorder {
     /**
-     * @docid dxChartSeriesTypes.StepAreaSeries.border.visible
-     * @default true
-     * @public
+     * Shows the series border (in area-like series) or the series point border (in bar-like and bubble series).
      */
     visible?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStepAreaSeriesHoverStyle extends dxChartSeriesTypesCommonSeriesHoverStyle {
     /**
-     * @docid dxChartSeriesTypes.StepAreaSeries.hoverStyle.border
-     * @type object
-     * @public
+     * Configures the appearance adopted by the series border (in area-like series) or the series point border (in bar-like and bubble series) when a user points to the series.
      */
     border?: dxChartSeriesTypesStepAreaSeriesHoverStyleBorder;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStepAreaSeriesHoverStyleBorder extends dxChartSeriesTypesCommonSeriesHoverStyleBorder {
     /**
-     * @docid dxChartSeriesTypes.StepAreaSeries.hoverStyle.border.visible
-     * @default true
-     * @public
+     * Shows the series border (in area-like series) or the series point border (in bar-like and bubble series) when a user points to the series.
      */
     visible?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStepAreaSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.StepAreaSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStepAreaSeriesPoint extends SeriesPoint {
     /**
-     * @docid dxChartSeriesTypes.StepAreaSeries.point.visible
-     * @default false
-     * @public
+     * Makes the series points visible.
      */
     visible?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStepAreaSeriesSelectionStyle extends dxChartSeriesTypesCommonSeriesSelectionStyle {
     /**
-     * @docid dxChartSeriesTypes.StepAreaSeries.selectionStyle.border
-     * @type object
-     * @public
+     * Configures the appearance adopted by the series border (in area-like series) or the series point border (in bar-like and bubble series) when a user selects the series.
      */
     border?: dxChartSeriesTypesStepAreaSeriesSelectionStyleBorder;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStepAreaSeriesSelectionStyleBorder extends dxChartSeriesTypesCommonSeriesSelectionStyleBorder {
     /**
-     * @docid dxChartSeriesTypes.StepAreaSeries.selectionStyle.border.visible
-     * @default false
-     * @public
+     * Shows the series border (in area-like series) or the series point border (in bar-like and bubble series) when a user selects the series.
      */
     visible?: boolean;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStepLineSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.StepLineSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesStepLineSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.StepLineSeries.hoverMode
-     * @default 'nearestPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user points to a series.
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.StepLineSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesStepLineSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.StepLineSeries.selectionMode
-     * @default 'includePoints'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a series.
      */
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStepLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.StepLineSeries.aggregation.method
-     * @default 'avg'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartSingleValueSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStepLineSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.StepLineSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStockSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid dxChartSeriesTypes.StockSeries.aggregation
-     * @type object
-     * @public
+     * Configures data aggregation for the series.
      */
     aggregation?: dxChartSeriesTypesStockSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.StockSeries.argumentField
-     * @default 'date'
-     * @public
+     * Specifies which data source field provides arguments for series points.
      */
     argumentField?: string;
     /**
-     * @docid dxChartSeriesTypes.StockSeries.hoverMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user pauses on a series.
      */
     hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     /**
-     * @docid dxChartSeriesTypes.StockSeries.label
-     * @type object
-     * @public
+     * Configures point labels.
      */
     label?: dxChartSeriesTypesStockSeriesLabel;
     /**
-     * @docid dxChartSeriesTypes.StockSeries.selectionMode
-     * @default 'onlyPoint'
-     * @public
+     * Specifies series elements to be highlighted when a user selects a point.
      */
     selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStockSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
-     * @docid dxChartSeriesTypes.StockSeries.aggregation.method
-     * @default 'ohlc'
-     * @public
+     * Specifies how to aggregate series points.
      */
     method?: ChartFinancialSeriesAggregationMethod;
 }
-/** @namespace DevExpress.viz */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxChartSeriesTypesStockSeriesLabel extends SeriesLabel {
     /**
-     * @docid dxChartSeriesTypes.StockSeries.label.customizeText
-     * @type_function_param1 pointInfo:object
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by point labels.
      */
     customizeText?: ((pointInfo: any) => string);
 }
 
-/** @public */
 export type Properties = dxChartOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxChartOptions;
 
 // #region deprecated in v23.1
 
-    /** @deprecated Use ArgumentAxis instead */
+    /**
+     * @deprecated Use ArgumentAxis instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartArgumentAxis = ArgumentAxis;
 
-    /** @deprecated Use ArgumentAxisConstantLines instead */
+    /**
+     * @deprecated Use ArgumentAxisConstantLines instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartArgumentAxisConstantLines = ArgumentAxisConstantLines;
 
-    /** @deprecated Use ArgumentAxisConstantLinesLabel instead */
+    /**
+     * @deprecated Use ArgumentAxisConstantLinesLabel instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartArgumentAxisConstantLinesLabel = ArgumentAxisConstantLinesLabel;
 
-    /** @deprecated Use ArgumentAxisConstantLineStyle instead */
+    /**
+     * @deprecated Use ArgumentAxisConstantLineStyle instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartArgumentAxisConstantLineStyle = ArgumentAxisConstantLineStyle;
 
-    /** @deprecated Use ArgumentAxisConstantLineStyleLabel instead */
+    /**
+     * @deprecated Use ArgumentAxisConstantLineStyleLabel instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartArgumentAxisConstantLineStyleLabel = ArgumentAxisConstantLineStyleLabel;
 
-    /** @deprecated Use ArgumentAxisLabel instead */
+    /**
+     * @deprecated Use ArgumentAxisLabel instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartArgumentAxisLabel = ArgumentAxisLabel;
 
-    /** @deprecated Use ArgumentAxisStrips instead */
+    /**
+     * @deprecated Use ArgumentAxisStrips instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartArgumentAxisStrips = ArgumentAxisStrips;
 
-    /** @deprecated Use ArgumentAxisStripsLabel instead */
+    /**
+     * @deprecated Use ArgumentAxisStripsLabel instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartArgumentAxisStripsLabel = ArgumentAxisStripsLabel;
 
-    /** @deprecated Use ArgumentAxisTitle instead */
+    /**
+     * @deprecated Use ArgumentAxisTitle instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartArgumentAxisTitle = ArgumentAxisTitle;
 
-    /** @deprecated Use CommonAxisSettings instead */
+    /**
+     * @deprecated Use CommonAxisSettings instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartCommonAxisSettings = CommonAxisSettings;
 
-    /** @deprecated Use CommonAxisSettingsConstantLineStyle instead */
+    /**
+     * @deprecated Use CommonAxisSettingsConstantLineStyle instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartCommonAxisSettingsConstantLineStyle = CommonAxisSettingsConstantLineStyle;
 
-    /** @deprecated Use CommonAxisSettingsConstantLineStyleLabel instead */
+    /**
+     * @deprecated Use CommonAxisSettingsConstantLineStyleLabel instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartCommonAxisSettingsConstantLineStyleLabel = CommonAxisSettingsConstantLineStyleLabel;
 
-    /** @deprecated Use CommonAxisSettingsLabel instead */
+    /**
+     * @deprecated Use CommonAxisSettingsLabel instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartCommonAxisSettingsLabel = CommonAxisSettingsLabel;
 
-    /** @deprecated Use CommonAxisSettingsStripStyle instead */
+    /**
+     * @deprecated Use CommonAxisSettingsStripStyle instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartCommonAxisSettingsStripStyle = CommonAxisSettingsStripStyle;
 
-    /** @deprecated Use CommonAxisSettingsStripStyleLabel instead */
+    /**
+     * @deprecated Use CommonAxisSettingsStripStyleLabel instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartCommonAxisSettingsStripStyleLabel = CommonAxisSettingsStripStyleLabel;
 
-    /** @deprecated Use CommonAxisSettingsTitle instead */
+    /**
+     * @deprecated Use CommonAxisSettingsTitle instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartCommonAxisSettingsTitle = CommonAxisSettingsTitle;
 
-    /** @deprecated Use CommonPaneSettings instead */
+    /**
+     * @deprecated Use CommonPaneSettings instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartCommonPaneSettings = CommonPaneSettings;
 
-    /** @deprecated Use CommonSeriesSettings instead */
+    /**
+     * @deprecated Use CommonSeriesSettings instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartCommonSeriesSettings = CommonSeriesSettings;
 
-    /** @deprecated Use Legend instead */
+    /**
+     * @deprecated Use Legend instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartLegend = Legend;
 
-    /** @deprecated Use Panes instead */
+    /**
+     * @deprecated Use Panes instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartPanes = Panes;
 
-    /** @deprecated Use Tooltip instead */
+    /**
+     * @deprecated Use Tooltip instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartTooltip = Tooltip;
 
-    /** @deprecated Use ValueAxis instead */
+    /**
+     * @deprecated Use ValueAxis instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartValueAxis = ValueAxis;
 
-    /** @deprecated Use ValueAxisConstantLines instead */
+    /**
+     * @deprecated Use ValueAxisConstantLines instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartValueAxisConstantLines = ValueAxisConstantLines;
 
-    /** @deprecated Use ValueAxisConstantLinesLabel instead */
+    /**
+     * @deprecated Use ValueAxisConstantLinesLabel instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartValueAxisConstantLinesLabel = ValueAxisConstantLinesLabel;
 
-    /** @deprecated Use ValueAxisConstantLineStyle instead */
+    /**
+     * @deprecated Use ValueAxisConstantLineStyle instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartValueAxisConstantLineStyle = ValueAxisConstantLineStyle;
 
-    /** @deprecated Use ValueAxisConstantLineStyleLabel instead */
+    /**
+     * @deprecated Use ValueAxisConstantLineStyleLabel instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartValueAxisConstantLineStyleLabel = ValueAxisConstantLineStyleLabel;
 
-    /** @deprecated Use ValueAxisLabel instead */
+    /**
+     * @deprecated Use ValueAxisLabel instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartValueAxisLabel = ValueAxisLabel;
 
-    /** @deprecated Use ValueAxisStrips instead */
+    /**
+     * @deprecated Use ValueAxisStrips instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartValueAxisStrips = ValueAxisStrips;
 
-    /** @deprecated Use ValueAxisStripsLabel instead */
+    /**
+     * @deprecated Use ValueAxisStripsLabel instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartValueAxisStripsLabel = ValueAxisStripsLabel;
 
-    /** @deprecated Use ValueAxisTitle instead */
+    /**
+     * @deprecated Use ValueAxisTitle instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type dxChartValueAxisTitle = ValueAxisTitle;
 
 // #endregion
@@ -5037,13 +3868,13 @@ export type Options = dxChartOptions;
 // #region deprecated in 22.2
 
 /**
- * @namespace DevExpress.viz
  * @deprecated Use SeriesPoint from common/charts instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type dxChartSeriesTypesCommonSeriesPoint = SeriesPoint;
 /**
- * @namespace DevExpress.viz
  * @deprecated Use SeriesLabel from common/charts instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type dxChartSeriesTypesCommonSeriesLabel = SeriesLabel;
 

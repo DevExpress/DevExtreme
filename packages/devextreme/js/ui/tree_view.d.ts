@@ -35,22 +35,24 @@ import {
 import dxScrollable from './scroll_view/ui.scrollable';
 
 /**
- * @docid _ui_tree_view_ItemInfo
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface ItemInfo<TKey = any> {
     /**
-     * @docid _ui_tree_view_ItemInfo.itemData
-     * @type object
+     * 
      */
     readonly itemData?: Item;
-    /** @docid _ui_tree_view_ItemInfo.itemElement */
+    /**
+     * 
+     */
     readonly itemElement?: DxElement;
-    /** @docid _ui_tree_view_ItemInfo.itemIndex */
+    /**
+     * 
+     */
     readonly itemIndex?: number;
     /**
-     * @docid _ui_tree_view_ItemInfo.node
-     * @type dxTreeViewNode
+     * 
      */
     readonly node?: Node<TKey>;
 }
@@ -61,564 +63,346 @@ export {
     ScrollDirection,
 };
 
-/** @public */
 export type TreeViewCheckBoxMode = 'none' | 'normal' | 'selectAll';
-/** @public */
 export type TreeViewExpandEvent = 'dblclick' | 'click';
 
 /**
- * @docid _ui_tree_view_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
 
 /**
- * @docid _ui_tree_view_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
 
 /**
- * @docid _ui_tree_view_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent<TKey = any> = InitializedEventInfo<dxTreeView<TKey>>;
 
 /**
- * @docid _ui_tree_view_ItemClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,_ui_tree_view_ItemInfo
+ * The type of the itemClick event handler&apos;s argument.
  */
 export type ItemClickEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TKey>;
 
 /**
- * @docid _ui_tree_view_ItemCollapsedEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,_ui_tree_view_ItemInfo
+ * The type of the itemCollapsed event handler&apos;s argument.
  */
 export type ItemCollapsedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent> & ItemInfo<TKey>;
 
 /**
- * @docid _ui_tree_view_ItemContextMenuEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,_ui_tree_view_ItemInfo
+ * The type of the itemContextMenu event handler&apos;s argument.
  */
 export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TKey>;
 
 /**
- * @docid _ui_tree_view_ItemExpandedEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,_ui_tree_view_ItemInfo
+ * The type of the itemExpanded event handler&apos;s argument.
  */
 export type ItemExpandedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent> & ItemInfo<TKey>;
 
 /**
- * @docid _ui_tree_view_ItemHoldEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,_ui_tree_view_ItemInfo
+ * The type of the itemHold event handler&apos;s argument.
  */
 export type ItemHoldEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TKey>;
 
 /**
- * @docid _ui_tree_view_ItemRenderedEvent
- * @public
- * @type object
- * @inherits EventInfo,_ui_tree_view_ItemInfo
+ * The type of the itemRendered event handler&apos;s argument.
  */
 export type ItemRenderedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
 
 /**
- * @docid _ui_tree_view_ItemSelectionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,_ui_tree_view_ItemInfo
+ * The type of the itemSelectionChanged event handler&apos;s argument.
  */
 export type ItemSelectionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
 
 /**
- * @docid _ui_tree_view_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & ChangedOptionInfo;
 
 /**
- * @docid _ui_tree_view_SelectAllValueChangedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the selectAllValueChanged event handler&apos;s argument.
  */
 export type SelectAllValueChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & {
-    /** @docid _ui_tree_view_SelectAllValueChangedEvent.value */
+    /**
+     * 
+     */
     readonly value?: boolean | undefined;
 };
 
 /**
- * @docid _ui_tree_view_SelectionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the selectionChanged event handler&apos;s argument.
  */
 export type SelectionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @public
- * @docid
+ * 
+ * @deprecated 
  */
 export interface dxTreeViewOptions<TKey = any>
     extends Omit<HierarchicalCollectionWidgetOptions<dxTreeView<TKey>, dxTreeViewItem, TKey>, 'dataSource'>, SearchBoxMixinOptions {
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not to animate item collapsing and expanding.
      */
     animationEnabled?: boolean;
     /**
-     * @docid
-     * @type_function_param1 parentNode:dxTreeViewNode
-     * @type_function_return Promise<any>|Array<Object>
-     * @public
+     * Allows you to load nodes on demand.
      */
     createChildren?: ((parentNode: Node<TKey>) => PromiseLike<any> | Array<any>);
     /**
-     * @docid
-     * @type string | Array<dxTreeViewItem> | Store | DataSource | DataSourceOptions | null
-     * @default null
-     * @public
+     * Binds the UI component to data.
      */
     dataSource?: DataSourceLike<Item, TKey> | null;
     /**
-     * @docid
-     * @default 'tree'
-     * @public
+     * Notifies the UI component of the data structure in use.
      */
     dataStructure?: DataStructure;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether or not a user can expand all tree view items by the &apos;*&apos; hot key.
      */
     expandAllEnabled?: boolean;
     /**
-     * @docid
-     * @default "dblclick"
-     * @public
+     * Specifies the event on which to expand/collapse a node.
      */
     expandEvent?: TreeViewExpandEvent;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not all parent nodes of an initially expanded node are displayed expanded.
      */
     expandNodesRecursive?: boolean;
     /**
-     * @docid
-     * @default 'expanded'
-     * @hidden false
-     * @public
+     * Specifies which data source field specifies whether an item is expanded.
      */
     expandedExpr?: string | Function;
     /**
-     * @docid
-     * @default 'hasItems'
-     * @public
+     * Specifies the name of the data source item field whose value defines whether or not the corresponding node includes child nodes.
      */
     hasItemsExpr?: string | Function;
     /**
-     * @docid
-     * @type Array<dxTreeViewItem>
-     * @public
+     * An array of items displayed by the UI component.
      */
     items?: Array<Item>;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/tree_view:ItemClickEvent}
-
-     * @action
-     * @public
+     * A function that is executed when a collection item is clicked or tapped.
      */
     onItemClick?: ((e: ItemClickEvent<TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/tree_view:ItemCollapsedEvent}
-     * @action
-     * @public
+     * A function that is executed when a tree view item is collapsed.
      */
     onItemCollapsed?: ((e: ItemCollapsedEvent<TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/tree_view:ItemContextMenuEvent}
-     * @action
-     * @public
+     * A function that is executed when a collection item is right-clicked or pressed.
      */
     onItemContextMenu?: ((e: ItemContextMenuEvent<TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/tree_view:ItemExpandedEvent}
-     * @action
-     * @public
+     * A function that is executed when a tree view item is expanded.
      */
     onItemExpanded?: ((e: ItemExpandedEvent<TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/tree_view:ItemHoldEvent}
-     * @action
-     * @public
+     * A function that is executed when a collection item has been held for a specified period.
      */
     onItemHold?: ((e: ItemHoldEvent<TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/tree_view:ItemRenderedEvent}
-     * @action
-     * @public
+     * A function that is executed after a collection item is rendered.
      */
     onItemRendered?: ((e: ItemRenderedEvent<TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/tree_view:ItemSelectionChangedEvent}
-     * @action
-     * @public
+     * A function that is executed when a single TreeView item is selected or selection is canceled.
      */
     onItemSelectionChanged?: ((e: ItemSelectionChangedEvent<TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/tree_view:SelectAllValueChangedEvent}
-     * @action
-     * @public
+     * A function that is executed when the &apos;Select All&apos; check box value is changed. Applies only if showCheckBoxesMode is &apos;selectAll&apos; and selectionMode is &apos;multiple&apos;.
      */
     onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/tree_view:SelectionChangedEvent}
-     * @action
-     * @public
-     * @override
+     * A function that is executed when a TreeView item is selected or selection is canceled.
      */
     onSelectionChanged?: ((e: SelectionChangedEvent<TKey>) => void);
     /**
-     * @docid
-     * @default 'parentId'
-     * @hidden false
-     * @public
+     * Specifies the name of the data source item field for holding the parent key of the corresponding node.
      */
     parentIdExpr?: string | Function;
     /**
-     * @docid
-     * @default 0
-     * @public
+     * Specifies the parent ID value of the root item.
      */
     rootValue?: any;
     /**
-     * @docid
-     * @default "vertical"
-     * @public
+     * A string value specifying available scrolling directions.
      */
     scrollDirection?: ScrollDirection;
     /**
-     * @docid
-     * @default "Select All"
-     * @public
+     * Specifies the text displayed at the &apos;Select All&apos; check box.
      */
     selectAllText?: string;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether an item is selected if a user clicks it.
      */
     selectByClick?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether all child nodes should be selected when their parent node is selected. Applies only if the selectionMode is &apos;multiple&apos;.
      */
     selectNodesRecursive?: boolean;
     /**
-     * @docid
-     * @default "multiple"
-     * @public
+     * Specifies item selection mode. Applies only if selection is enabled.
      */
     selectionMode?: SingleOrMultiple;
     /**
-     * @docid
-     * @default 'none'
-     * @public
+     * Specifies the checkbox display mode.
      */
     showCheckBoxesMode?: TreeViewCheckBoxMode;
     /**
-     * @docid
-     * @default null
-     * @public
+     * Specifies a custom collapse icon.
      */
     collapseIcon?: string | null;
     /**
-     * @docid
-     * @default null
-     * @public
+     * Specifies a custom expand icon.
      */
     expandIcon?: string | null;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Enables the virtual mode in which nodes are loaded on demand. Use it to enhance the performance on large datasets.
      */
     virtualModeEnabled?: boolean;
     /**
-     * @docid
-     * @default true
-     * @default false &for(desktop except Mac)
-     * @public
+     * Specifies whether or not the UI component uses native scrolling.
      */
     useNativeScrolling?: boolean;
 }
 /**
- * @docid
- * @inherits HierarchicalCollectionWidget, SearchBoxMixin
- * @namespace DevExpress.ui
- * @public
+ * The TreeView UI component is a tree-like representation of textual data.
  */
 export default class dxTreeView<TKey = any>
     extends HierarchicalCollectionWidget<dxTreeViewOptions<TKey>, dxTreeViewItem, TKey> {
     /**
-     * @docid
-     * @publicName collapseAll()
-     * @public
+     * Collapses all items.
      */
     collapseAll(): void;
     /**
-     * @docid
-     * @publicName collapseItem(itemData)
-     * @param1 itemData:dxTreeViewItem
-     * @param1_field items:Array<dxTreeViewItem>
-     * @return Promise<void>
-     * @public
+     * Collapses an item with a specific key.
      */
     collapseItem(itemData: Item): DxPromise<void>;
     /**
-     * @docid
-     * @publicName collapseItem(itemElement)
-     * @return Promise<void>
-     * @public
+     * Collapses an item found using its DOM node.
      */
     collapseItem(itemElement: Element): DxPromise<void>;
     /**
-     * @docid
-     * @publicName collapseItem(key)
-     * @return Promise<void>
-     * @public
+     * Collapses an item with a specific key.
      */
     collapseItem(key: TKey): DxPromise<void>;
     /**
-     * @docid
-     * @publicName expandAll()
-     * @public
+     * Expands all items. If you load items on demand, this method expands only the loaded items.
      */
     expandAll(): void;
     /**
-     * @docid
-     * @publicName expandItem(itemData)
-     * @param1 itemData:dxTreeViewItem
-     * @param1_field items:Array<dxTreeViewItem>
-     * @return Promise<void>
-     * @public
+     * Expands an item found using its data object.
      */
     expandItem(itemData: Item): DxPromise<void>;
     /**
-     * @docid
-     * @publicName expandItem(itemElement)
-     * @return Promise<void>
-     * @public
+     * Expands an item found using its DOM node.
      */
     expandItem(itemElement: Element): DxPromise<void>;
     /**
-     * @docid
-     * @publicName expandItem(key)
-     * @return Promise<void>
-     * @public
+     * Expands an item with a specific key.
      */
     expandItem(key: TKey): DxPromise<void>;
     /**
-     * @docid
-     * @publicName getNodes()
-     * @public
-     * @return Array<dxTreeViewNode>
+     * Gets all nodes.
      */
     getNodes(): Array<Node<TKey>>;
     /**
-     * @docid
-     * @publicName getSelectedNodes()
-     * @public
-     * @return Array<dxTreeViewNode>
+     * Gets selected nodes.
      */
     getSelectedNodes(): Array<Node<TKey>>;
     /**
-     * @docid
-     * @publicName getSelectedNodeKeys()
-     * @public
+     * Gets the keys of selected nodes.
      */
     getSelectedNodeKeys(): Array<TKey>;
     /**
-     * @docid
-     * @publicName selectAll()
-     * @public
+     * Selects all nodes.
      */
     selectAll(): void;
     /**
-     * @docid
-     * @publicName getScrollable()
-     * @public
-     * @return dxScrollable
+     * Gets the instance of the UI component&apos;s scrollable part.
      */
     getScrollable(): Scrollable;
     /**
-     * @docid
-     * @publicName selectItem(itemData)
-     * @param1 itemData:dxTreeViewItem
-     * @param1_field items:Array<dxTreeViewItem>
-     * @public
+     * Selects a node found using its data object.
      */
     selectItem(itemData: Item): boolean;
     /**
-     * @docid
-     * @publicName selectItem(itemElement)
-     * @public
+     * Selects a TreeView node found using its DOM node.
      */
     selectItem(itemElement: Element): boolean;
     /**
-     * @docid
-     * @publicName selectItem(key)
-     * @public
+     * Selects a node with a specific key.
      */
     selectItem(key: TKey): boolean;
     /**
-     * @docid
-     * @publicName unselectAll()
-     * @public
+     * Cancels the selection of all nodes.
      */
     unselectAll(): void;
     /**
-     * @docid
-     * @publicName unselectItem(itemData)
-     * @param1 itemData:dxTreeViewItem
-     * @param1_field items:Array<dxTreeViewItem>
-     * @public
+     * Cancels the selection of a node found using its data object.
      */
     unselectItem(itemData: Item): boolean;
     /**
-     * @docid
-     * @publicName unselectItem(itemElement)
-     * @public
+     * Cancels the selection of a TreeView node found using its DOM node.
      */
     unselectItem(itemElement: Element): boolean;
     /**
-     * @docid
-     * @publicName unselectItem(key)
-     * @public
+     * Cancels the selection of a node with a specific key.
      */
     unselectItem(key: TKey): boolean;
     /**
-     * @docid
-     * @publicName updateDimensions()
-     * @return Promise<void>
-     * @public
+     * Updates the tree view scrollbars according to the current size of the UI component content.
      */
     updateDimensions(): DxPromise<void>;
     /**
-     * @docid
-     * @publicName scrollToItem(itemData)
-     * @param1 itemData:dxTreeViewItem
-     * @param1_field items:Array<dxTreeViewItem>
-     * @return Promise<void>
-     * @public
+     * Scrolls the content to an item found using its data.
      */
     scrollToItem(itemData: Item): DxPromise<void>;
     /**
-     * @docid
-     * @publicName scrollToItem(itemElement)
-     * @return Promise<void>
-     * @public
+     * Scrolls the content to an item found using its DOM node.
      */
     scrollToItem(itemElement: Element): DxPromise<void>;
     /**
-     * @docid
-     * @publicName scrollToItem(key)
-     * @return Promise<void>
-     * @public
+     * Scrolls the content to an item found using its key.
      */
     scrollToItem(key: TKey): DxPromise<void>;
 }
 
-/**
- * @public
- * @namespace DevExpress.ui.dxTreeView
- */
 export type Item = dxTreeViewItem;
 
 /**
  * @deprecated Use Item instead
- * @namespace DevExpress.ui
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxTreeViewItem extends CollectionWidgetItem {
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether or not the tree view item is displayed expanded.
      */
     expanded?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies whether or not the tree view item has children.
      */
     hasItems?: boolean | undefined;
     /**
-     * @docid
-     * @public
+     * Specifies the tree view item&apos;s icon.
      */
     icon?: string;
     /**
-     * @docid
-     * @public
+     * Specifies nested tree view items.
      */
     items?: Array<dxTreeViewItem>;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Holds the unique key of an item.
      */
     id?: number | string | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Holds the key of the parent item.
      */
     parentId?: number | string | undefined;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the TreeView item should be displayed as selected.
      */
     selected?: boolean;
 
@@ -626,68 +410,52 @@ export interface dxTreeViewItem extends CollectionWidgetItem {
 }
 
 /**
- * @public
- * @docid dxTreeViewNode
- * @type object
+ * A TreeView node.
  */
 export type Node<TKey = any> = dxTreeViewNode<TKey>;
 
 /**
- * @docid
- * @deprecated {ui/tree_view.Node}
- * @type object
- * @namespace DevExpress.ui
+ * A TreeView node.
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxTreeViewNode<TKey = any> {
     /**
-     * @docid
-     * @public
-     * @type Array<dxTreeViewNode>;
+     * Contains all the child nodes of the current node.
      */
     children?: Array<dxTreeViewNode<TKey>>;
     /**
-     * @docid
-     * @public
+     * Equals to true if the node is disabled; otherwise false.
      */
     disabled?: boolean;
     /**
-     * @docid
-     * @public
+     * Equals true if the node is expanded; false if collapsed.
      */
     expanded?: boolean;
     /**
-     * @docid
-     * @public
-     * @type dxTreeViewItem
+     * Contains the data source object corresponding to the node.
      */
     itemData?: Item;
     /**
-     * @docid
-     * @public
+     * Contains the key value of the node.
      */
     key?: TKey;
     /**
-     * @docid
-     * @public
-     * @type dxTreeViewNode
+     * Refers to the parent node of the current node.
      */
     parent?: dxTreeViewNode<TKey>;
     /**
-     * @docid
-     * @public
+     * Equals to true if the node is selected; false if not.
      */
     selected?: boolean;
     /**
-     * @docid
-     * @public
+     * Contains the text displayed by the node.
      */
     text?: string;
 }
 
-/** @public */
 export type Scrollable = Omit<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;
 
-/** @public */
 export type ExplicitTypes<TKey = any> = {
     Properties: Properties<TKey>;
     Node: Node<TKey>;
@@ -706,10 +474,12 @@ export type ExplicitTypes<TKey = any> = {
     SelectionChangedEvent: SelectionChangedEvent<TKey>;
 };
 
-/** @public */
 export type Properties<TKey = any> = dxTreeViewOptions<TKey>;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options<TKey = any> = Properties<TKey>;
 
 ///#DEBUG

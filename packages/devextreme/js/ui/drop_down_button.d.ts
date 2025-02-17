@@ -44,336 +44,220 @@ export {
 };
 
 /**
- * @docid _ui_drop_down_button_ButtonClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the buttonClick event handler&apos;s argument.
  */
 export type ButtonClickEvent = NativeEventInfo<dxDropDownButton, KeyboardEvent | MouseEvent | PointerEvent> & {
     /**
-     * @docid _ui_drop_down_button_ButtonClickEvent.selectedItem
-     * @type object
+     * 
      */
     readonly selectedItem?: any;
 };
 
 /**
- * @docid _ui_drop_down_button_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxDropDownButton>;
 
 /**
- * @docid _ui_drop_down_button_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxDropDownButton>;
 
 /**
- * @docid _ui_drop_down_button_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxDropDownButton>;
 
 /**
- * @docid _ui_drop_down_button_ItemClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the itemClick event handler&apos;s argument.
  */
 export type ItemClickEvent = NativeEventInfo<dxDropDownButton, KeyboardEvent | MouseEvent | PointerEvent> & {
     /**
-     * @docid _ui_drop_down_button_ItemClickEvent.itemData
-     * @type object
+     * 
      */
     readonly itemData?: any;
-    /** @docid _ui_drop_down_button_ItemClickEvent.itemElement */
+    /**
+     * 
+     */
     readonly itemElement: DxElement;
 };
 
 /**
- * @docid _ui_drop_down_button_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxDropDownButton> & ChangedOptionInfo;
 
 /**
- * @docid _ui_drop_down_button_SelectionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the selectionChanged event handler&apos;s argument.
  */
 export type SelectionChangedEvent = EventInfo<dxDropDownButton> & {
     /**
-     * @docid _ui_drop_down_button_SelectionChangedEvent.item
-     * @type object
+     * 
      */
     readonly item: any;
     /**
-     * @docid _ui_drop_down_button_SelectionChangedEvent.previousItem
-     * @type object
+     * 
      */
     readonly previousItem: any;
 };
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton> {
     /**
-     * @docid
-     * @type string | Array<dxDropDownButtonItem | any> | Store | DataSource | DataSourceOptions | null
-     * @default null
-     * @public
+     * Provides data for the drop-down menu.
      */
     dataSource?: DataSourceLike<Item | any> | null;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to wait until the drop-down menu is opened the first time to render its content. Specifies whether to render the view&apos;s content when it is displayed. If false, the content is rendered immediately.
      */
     deferRendering?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @type_function_param1 itemData:object
-     * @public
+     * Specifies the data field whose values should be displayed in the drop-down menu.
      */
     displayExpr?: string | ((itemData: any) => string) | undefined;
     /**
-     * @docid
-     * @default "content"
-     * @type_function_param1 data:Array<string,number,Object>|DataSource
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies custom content for the drop-down field.
      */
     dropDownContentTemplate?: template | ((data: Array<string | number | any> | DataSource, contentElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default {}
-     * @public
-     * @type dxPopupOptions
+     * Configures the drop-down field.
      */
     dropDownOptions?: PopupProperties;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether users can use keyboard to focus the UI component.
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the UI component changes its state when a user hovers the mouse pointer over it.
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the button&apos;s icon.
      */
     icon?: string | undefined;
     /**
-     * @docid
-     * @default "item"
-     * @type_function_param1 itemData:object
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies a custom template for drop-down menu items.
      */
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @type Array<dxDropDownButtonItem | any>
-     * @default null
-     * @public
+     * Provides drop-down menu items.
      */
     items?: Array<Item | any>;
     /**
-     * @docid
-     * @default 'this'
-     * @public
+     * Specifies which data field provides keys used to distinguish between the selected drop-down menu items.
      */
     keyExpr?: string;
     /**
-     * @docid
-     * @default 'No data to display'
-     * @public
+     * Specifies the text or HTML markup displayed in the drop-down menu when it does not contain any items.
      */
     noDataText?: string;
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{ui/drop_down_button:ButtonClickEvent}
-     * @action
-     * @public
+     * A function that is executed when the button is clicked or tapped. If splitButton is true, this function is executed for the action button only.
      */
     onButtonClick?: ((e: ButtonClickEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{ui/drop_down_button:ItemClickEvent}
-     * @action
-     * @public
+     * A function that is executed when a drop-down menu item is clicked.
      */
     onItemClick?: ((e: ItemClickEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{ui/drop_down_button:SelectionChangedEvent}
-     * @action
-     * @public
+     * A function that is executed when an item is selected or selection is canceled. In effect when useSelectMode is true.
      */
     onSelectionChanged?: ((e: SelectionChangedEvent) => void) | string;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the drop-down menu is opened.
      */
     opened?: boolean;
     /**
-     * @docid
-     * @default null
-     * @readonly
-     * @public
+     * Contains the selected item&apos;s data. Available when useSelectMode is true.
      */
     selectedItem?: string | number | any;
     /**
-     * @docid
-     * @default null
-     * @public
+     * Contains the selected item&apos;s key and allows you to specify the initially selected item. Applies when useSelectMode is true.
      */
     selectedItemKey?: string | number;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the arrow icon should be displayed.
      */
     showArrowIcon?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether to split the button in two: one executes an action, the other opens and closes the drop-down menu.
      */
     splitButton?: boolean;
     /**
-     * @docid
-     * @default 'outlined'
-     * @public
+     * Specifies how the button is styled.
      */
     stylingMode?: ButtonStyle;
     /**
-     * @docid
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies a custom template for the base button in DropDownButton.
      */
     template?: template | ((data: TemplateData, contentElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default ""
-     * @public
+     * Specifies the button&apos;s text. Applies only if useSelectMode is false.
      */
     text?: string;
     /**
-     * @docid
-     * @default 'normal'
-     * @public
+     * Specifies the drop-down button type.
      */
     type?: ButtonType;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the UI component stores the selected drop-down menu item.
      */
     useSelectMode?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether text that exceeds the drop-down list width should be wrapped.
      */
     wrapItemText?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the widget uses item&apos;s text a title attribute.
      */
     useItemTextAsTitle?: boolean;
 }
 /**
- * @docid
- * @inherits Widget, DataHelperMixin
- * @namespace DevExpress.ui
- * @public
+ * The DropDownButton is a button that opens a drop-down menu.
  */
 export default class dxDropDownButton extends Widget<dxDropDownButtonOptions> {
     /**
-     * @docid
-     * @publicName close()
-     * @return Promise<void>
-     * @public
+     * Closes the drop-down menu.
      */
     close(): DxPromise<void>;
     getDataSource(): DataSource;
     /**
-     * @docid
-     * @publicName open()
-     * @return Promise<void>
-     * @public
+     * Opens the drop-down menu.
      */
     open(): DxPromise<void>;
     /**
-     * @docid
-     * @publicName toggle()
-     * @return Promise<void>
-     * @public
+     * Opens or closes the drop-down menu, reversing the current state.
      */
     toggle(): DxPromise<void>;
     /**
-     * @docid
-     * @publicName toggle(visibility)
-     * @return Promise<void>
-     * @public
+     * Opens or closes the drop-down menu, depending on the argument.
      */
     toggle(visibility: boolean): DxPromise<void>;
 }
 
-/**
- * @public
- * @namespace DevExpress.ui.dxDropDownButton
- */
 export type Item = dxDropDownButtonItem;
 
 /**
  * @deprecated Use Item instead
- * @namespace DevExpress.ui
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDropDownButtonItem extends dxListItem {
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{ui/drop_down_button:ItemClickEvent}
-     * @public
-     */
+      * A handler for the click event raised for a certain item in the drop-down field.
+      */
      onClick?: ((e: ItemClickEvent) => void) | string;
 }
 
-/** @public */
 export type Properties = dxDropDownButtonOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxDropDownButtonOptions;
 
 ///#DEBUG

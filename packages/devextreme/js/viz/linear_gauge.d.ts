@@ -33,226 +33,174 @@ export {
 };
 
 /**
- * @docid _viz_linear_gauge_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxLinearGauge>;
 
 /**
- * @docid _viz_linear_gauge_DrawnEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the drawn event handler&apos;s argument.
  */
 export type DrawnEvent = EventInfo<dxLinearGauge>;
 
 /**
- * @docid _viz_linear_gauge_ExportedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the exported event handler&apos;s argument.
  */
 export type ExportedEvent = EventInfo<dxLinearGauge>;
 
 /**
- * @docid _viz_linear_gauge_ExportingEvent
- * @public
- * @type object
- * @inherits EventInfo,ExportInfo
+ * The type of the exporting event handler&apos;s argument.
  */
 export type ExportingEvent = EventInfo<dxLinearGauge> & ExportInfo;
 
 /**
- * @docid _viz_linear_gauge_FileSavingEvent
- * @public
- * @type object
- * @inherits FileSavingEventInfo
+ * The type of the fileSaving event handler&apos;s argument.
  */
 export type FileSavingEvent = FileSavingEventInfo<dxLinearGauge>;
 
 /**
- * @docid _viz_linear_gauge_IncidentOccurredEvent
- * @public
- * @type object
- * @inherits EventInfo,IncidentInfo
+ * The type of the incidentOccurred event handler&apos;s argument.
  */
 export type IncidentOccurredEvent = EventInfo<dxLinearGauge> & IncidentInfo;
 
 /**
- * @docid _viz_linear_gauge_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxLinearGauge>;
 
 /**
- * @docid _viz_linear_gauge_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxLinearGauge> & ChangedOptionInfo;
 
 /**
- * @docid _viz_linear_gauge_TooltipHiddenEvent
- * @public
- * @type object
- * @inherits EventInfo,_viz_base_gauge_TooltipInfo
+ * The type of the tooltipHidden event handler&apos;s argument.
  */
 export type TooltipHiddenEvent = EventInfo<dxLinearGauge> & TooltipInfo;
 
 /**
- * @docid _viz_linear_gauge_TooltipShownEvent
- * @public
- * @type object
- * @inherits EventInfo,_viz_base_gauge_TooltipInfo
+ * The type of the tooltipShown event handler&apos;s argument.
  */
 export type TooltipShownEvent = EventInfo<dxLinearGauge> & TooltipInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.viz
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
     /**
-     * @docid
-     * @public
+     * Specifies the properties required to set the geometry of the LinearGauge UI component.
      */
     geometry?: {
       /**
-       * @docid
-       * @default 'horizontal'
+       * Indicates whether to display the LinearGauge UI component vertically or horizontally.
        */
       orientation?: Orientation;
     };
     /**
-     * @docid
-     * @type object
-     * @public
+     * Specifies gauge range container properties.
      */
     rangeContainer?: RangeContainer;
     /**
-     * @docid
-     * @type object
-     * @public
+     * Specifies the gauge&apos;s scale properties.
      */
     scale?: Scale;
     /**
-     * @docid
-     * @inheritAll
-     * @public
+     * Specifies the appearance properties of subvalue indicators.
      */
     subvalueIndicator?: GaugeIndicator;
     /**
-     * @docid
-     * @inheritAll
-     * @public
+     * Specifies the appearance properties of the value indicator.
      */
     valueIndicator?: GaugeIndicator;
 }
 /**
- * @public
- * @docid dxLinearGaugeRangeContainer
+ * Specifies gauge range container properties.
  */
 export type RangeContainer = BaseGaugeRangeContainer & {
     /**
-     * @docid dxLinearGaugeOptions.rangeContainer.horizontalOrientation
-     * @default 'right'
-     * @public
+     * Specifies the orientation of the range container. Applies only if the geometry.orientation property is &apos;vertical&apos;.
      */
     horizontalOrientation?: HorizontalAlignment;
     /**
-     * @docid dxLinearGaugeOptions.rangeContainer.verticalOrientation
-     * @default 'bottom'
-     * @public
+     * Specifies the orientation of the range container. Applies only if the geometry.orientation property is &apos;horizontal&apos;.
      */
     verticalOrientation?: VerticalAlignment;
     /**
-     * @docid dxLinearGaugeOptions.rangeContainer.width
-     * @public
+     * Specifies the width of the range container&apos;s start and end boundaries in the LinearGauge UI component.
      */
     width?: {
       /**
-       * @docid dxLinearGaugeOptions.rangeContainer.width.start
-       * @default 5
+       * Specifies a start width of a range container.
        */
       start?: number;
       /**
-       * @docid dxLinearGaugeOptions.rangeContainer.width.end
-       * @default 5
+       * Specifies an end width of a range container.
        */
       end?: number;
     } | number;
 };
 /**
- * @public
- * @docid dxLinearGaugeScale
+ * Specifies the gauge&apos;s scale properties.
  */
 export type Scale = BaseGaugeScale & {
     /**
-     * @docid dxLinearGaugeOptions.scale.horizontalOrientation
-     * @default 'right'
-     * @public
+     * Specifies the orientation of scale ticks. Applies only if the geometry.orientation property is &apos;vertical&apos;.
      */
     horizontalOrientation?: HorizontalAlignment;
     /**
-     * @docid dxLinearGaugeOptions.scale.label
-     * @type object
-     * @public
+     * Specifies common properties for scale labels.
      */
     label?: ScaleLabel;
     /**
-     * @docid dxLinearGaugeOptions.scale.scaleDivisionFactor
-     * @default 25
-     * @public
+     * Specifies the minimum distance between two neighboring major ticks in pixels.
      */
     scaleDivisionFactor?: number;
     /**
-     * @docid dxLinearGaugeOptions.scale.verticalOrientation
-     * @default 'bottom'
-     * @public
+     * Specifies the orientation of scale ticks. Applies only if the geometry.orientation property is &apos;horizontal&apos;.
      */
     verticalOrientation?: VerticalAlignment;
 };
 /**
- * @public
- * @docid dxLinearGaugeScaleLabel
+ * Specifies common properties for scale labels.
  */
 export type ScaleLabel = BaseGaugeScaleLabel & {
     /**
-     * @docid dxLinearGaugeOptions.scale.label.indentFromTick
-     * @default -10
-     * @public
+     * Specifies the spacing between scale labels and ticks.
      */
     indentFromTick?: number;
 };
 /**
- * @docid
- * @inherits BaseGauge
- * @namespace DevExpress.viz
- * @public
+ * The LinearGauge is a UI component that indicates values on a linear numeric scale.
  */
 export default class dxLinearGauge extends BaseGauge<dxLinearGaugeOptions> { }
 
-/** @public */
 export type Properties = dxLinearGaugeOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxLinearGaugeOptions;
 
 // #region deprecated in v23.1
 
-/** @deprecated Use RangeContainer instead */
+/**
+ * @deprecated Use RangeContainer instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxLinearGaugeRangeContainer = RangeContainer;
 
-/** @deprecated Use Scale instead */
+/**
+ * @deprecated Use Scale instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxLinearGaugeScale = Scale;
 
-/** @deprecated Use ScaleLabel instead */
+/**
+ * @deprecated Use ScaleLabel instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxLinearGaugeScaleLabel = ScaleLabel;
 
 // #endregion

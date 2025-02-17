@@ -53,789 +53,610 @@ export {
     VisualRangeUpdateMode,
 };
 
-/** @public */
 export type BackgroundImageLocation = 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop';
-/** @public */
 export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
-/** @public */
 export type AxisScale = 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete';
-/** @public */
 export type ChartAxisScale = 'continuous' | 'logarithmic';
 
 /**
- * @docid _viz_range_selector_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxRangeSelector>;
 
 /**
- * @docid _viz_range_selector_DrawnEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the drawn event handler&apos;s argument.
  */
 export type DrawnEvent = EventInfo<dxRangeSelector>;
 
 /**
- * @docid _viz_range_selector_ExportedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the exported event handler&apos;s argument.
  */
 export type ExportedEvent = EventInfo<dxRangeSelector>;
 
 /**
- * @docid _viz_range_selector_ExportingEvent
- * @public
- * @type object
- * @inherits EventInfo,ExportInfo
+ * The type of the exporting event handler&apos;s argument.
  */
 export type ExportingEvent = EventInfo<dxRangeSelector> & ExportInfo;
 
 /**
- * @docid _viz_range_selector_FileSavingEvent
- * @public
- * @type object
- * @inherits FileSavingEventInfo
+ * The type of the fileSaving event handler&apos;s argument.
  */
 export type FileSavingEvent = FileSavingEventInfo<dxRangeSelector>;
 
 /**
- * @docid _viz_range_selector_IncidentOccurredEvent
- * @public
- * @type object
- * @inherits EventInfo,IncidentInfo
+ * The type of the incidentOccurred event handler&apos;s argument.
  */
 export type IncidentOccurredEvent = EventInfo<dxRangeSelector> & IncidentInfo;
 
 /**
- * @docid _viz_range_selector_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxRangeSelector>;
 
 /**
- * @docid _viz_range_selector_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxRangeSelector> & ChangedOptionInfo;
 
 /**
- * @docid _viz_range_selector_ValueChangedEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the valueChanged event handler&apos;s argument.
  */
 export type ValueChangedEvent = NativeEventInfo<dxRangeSelector, MouseEvent | TouchEvent> & {
-  /** @docid _viz_range_selector_ValueChangedEvent.value */
+  /**
+   * 
+   */
   readonly value: Array<number | string | Date>;
-  /** @docid _viz_range_selector_ValueChangedEvent.previousValue */
+  /**
+   * 
+   */
   readonly previousValue: Array<number | string | Date>;
 };
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.viz
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelector> {
     /**
-     * @docid
-     * @public
+     * Specifies the properties for the range selector&apos;s background.
      */
     background?: {
       /**
-       * @docid
-       * @default '#C0BAE1'
+       * Specifies the background color for the RangeSelector.
        */
       color?: string;
       /**
-       * @docid
+       * Specifies image properties.
        */
       image?: {
         /**
-         * @docid
-         * @default 'full'
+         * Specifies a location for the image in the background of a range selector.
          */
         location?: BackgroundImageLocation;
         /**
-         * @docid
-         * @default undefined
+         * Specifies the image&apos;s URL.
          */
         url?: string | undefined;
       };
       /**
-       * @docid
-       * @default true
+       * Indicates whether or not the background (background color and/or image) is visible.
        */
       visible?: boolean;
     };
     /**
-     * @docid
-     * @public
+     * Specifies the RangeSelector&apos;s behavior properties.
      */
     behavior?: {
       /**
-       * @docid
-       * @default true
+       * Indicates whether or not you can swap sliders.
        */
       allowSlidersSwap?: boolean;
       /**
-       * @docid
-       * @default true
+       * Indicates whether or not animation is enabled.
        */
       animationEnabled?: boolean;
       /**
-       * @docid
-       * @default 'onMovingComplete'
-       * @deprecated
+       * Specifies when to call the onValueChanged function.
+       * @deprecated Use the valueChangeMode property instead.
        */
       callValueChanged?: ValueChangedCallMode;
       /**
-       * @docid
-       * @default true
+       * Indicates whether or not an end user can specify the range using a mouse, without the use of sliders.
        */
       manualRangeSelectionEnabled?: boolean;
       /**
-       * @docid
-       * @default true
+       * Indicates whether or not an end user can shift the selected range to the required location on a scale by clicking.
        */
       moveSelectedRangeByClick?: boolean;
       /**
-       * @docid
-       * @default true
+       * Indicates whether to snap a slider to ticks.
        */
       snapToTicks?: boolean;
       /**
-       * @docid
-       * @default 'onHandleRelease'
+       * Specifies when to change the component&apos;s value.
        */
       valueChangeMode?: SliderValueChangeMode;
     };
     /**
-     * @docid
-     * @public
+     * Specifies the properties required to display a chart as the range selector&apos;s background.
      */
     chart?: {
       /**
-       * @docid
-       * @default 0.3
-       * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
+       * Controls the padding and consequently the width of a group of bars with the same argument using relative units. Ignored if the barGroupWidth property is set.
        */
       barGroupPadding?: number;
       /**
-       * @docid
-       * @default undefined
-       * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
+       * Specifies a fixed width for groups of bars with the same argument, measured in pixels. Takes precedence over the barGroupPadding property.
        */
       barGroupWidth?: number | undefined;
       /**
-       * @docid
-       * @default 0
+       * Specifies an indent from the background&apos;s bottom to the lowest chart point. Accepts values from 0 to 1.
        */
       bottomIndent?: number;
       /**
-       * @docid
-       * @type dxChartOptions.commonSeriesSettings
+       * An object defining the common configuration properties for the chart&apos;s series.
        */
       commonSeriesSettings?: dxChartCommonSeriesSettings;
       /**
-       * @docid
+       * An object providing properties for managing data from a data source.
        */
       dataPrepareSettings?: {
         /**
-         * @docid
-         * @default false
+         * Specifies whether or not to validate values from a data source.
          */
         checkTypeForAllData?: boolean;
         /**
-         * @docid
-         * @default true
+         * Specifies whether or not to convert the values from a data source into the data type of an axis.
          */
         convertToAxisDataType?: boolean;
         /**
-         * @docid
-         * @default true
+         * Specifies how to sort series points.
          */
         sortingMethod?: boolean | ((a: { arg?: Date | number | string; val?: Date | number | string }, b: { arg?: Date | number | string; val?: Date | number | string }) => number);
       };
       /**
-       * @docid
-       * @default 0.2
-       * @propertyOf dxChartSeriesTypes.BubbleSeries
+       * Specifies a coefficient that determines the diameter of the largest bubble.
        */
       maxBubbleSize?: number;
       /**
-       * @docid
-       * @default 12
-       * @propertyOf dxChartSeriesTypes.BubbleSeries
+       * Specifies the diameter of the smallest bubble measured in pixels.
        */
       minBubbleSize?: number;
       /**
-       * @docid
-       * @default false
+       * Forces the UI component to treat negative values as zeroes. Applies to stacked-like series only.
        */
       negativesAsZeroes?: boolean;
       /**
-       * @docid
-       * @default "Material"
+       * Sets the palette to be used to colorize series in the chart.
        */
       palette?: Array<string> | Palette;
       /**
-       * @docid
-       * @default 'blend'
+       * Specifies what to do with colors in the palette when their number is less than the number of series in the chart.
        */
       paletteExtensionMode?: PaletteExtensionMode;
       /**
-       * @docid
-       * @default undefined
-       * @notUsedInTheme
+       * An object defining the chart&apos;s series.
        */
       series?: ChartSeries | Array<ChartSeries> | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Defines properties for the series template.
        */
       seriesTemplate?: {
         /**
-         * @docid
+         * Specifies a callback function that returns a series object with individual series settings.
          */
         customizeSeries?: ((seriesName: any) => ChartSeries);
         /**
-         * @docid
-         * @default 'series'
+         * Specifies a data source field that represents the series name.
          */
         nameField?: string;
       };
       /**
-       * @docid
-       * @default 0.1
+       * Specifies an indent from the background&apos;s top to the topmost chart point. Accepts values from 0 to 1.
        */
       topIndent?: number;
       /**
-       * @docid
+       * Configures the chart value axis.
        */
       valueAxis?: {
         /**
-         * @docid
-         * @default false
+         * Indicates whether or not the chart&apos;s value axis must be inverted.
          */
         inverted?: boolean;
         /**
-         * @docid
-         * @default 10
+         * Specifies the value to be raised to a power when generating ticks for a logarithmic value axis.
          */
         logarithmBase?: number;
         /**
-         * @docid
-         * @default undefined
+         * Specifies the maximum value of the chart&apos;s value axis.
          */
         max?: number | undefined;
         /**
-         * @docid
-         * @default undefined
+         * Specifies the minimum value of the chart&apos;s value axis.
          */
         min?: number | undefined;
         /**
-         * @docid
-         * @default undefined
+         * Specifies the type of the value axis.
          */
         type?: ChartAxisScale | undefined;
         /**
-         * @docid
-         * @default undefined
+         * Specifies the desired type of axis values.
          */
         valueType?: ChartsDataType | undefined;
       };
     };
     /**
-     * @docid
-     * @default '#FFFFFF'
-     * @public
+     * Specifies the color of the parent page element.
      */
     containerBackgroundColor?: string;
     /**
-     * @docid
-     * @notUsedInTheme
-     * @public
-     * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
+     * Specifies a data source for the scale values and for the chart at the background.
      */
     dataSource?: DataSourceLike<any> | null;
     /**
-     * @docid
-     * @default 'arg'
-     * @public
+     * Specifies the data source field that provides data for the scale.
      */
     dataSourceField?: string;
     /**
-     * @docid
-     * @public
+     * Range selector&apos;s indent properties.
      */
     indent?: {
       /**
-       * @docid
-       * @default undefined
-       * @notUsedInTheme
+       * Specifies range selector&apos;s left indent.
        */
       left?: number | undefined;
       /**
-       * @docid
-       * @default undefined
-       * @notUsedInTheme
+       * Specifies range selector&apos;s right indent.
        */
       right?: number | undefined;
     };
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/range_selector:ValueChangedEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed after the UI component&apos;s value is changed.
      */
     onValueChanged?: ((e: ValueChangedEvent) => void);
     /**
-     * @docid
-     * @public
+     * Specifies properties of the range selector&apos;s scale.
      */
     scale?: {
       /**
-       * @docid
-       * @default true
-       * @deprecated  dxChartSeriesTypes.CommonSeries.aggregation.enabled
+       * Aggregates series points that fall into the same category.
+       * @deprecated Use CommonSeries.aggregation.enabled instead.
        */
       aggregateByCategory?: boolean;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the length of aggregation intervals in pixels. Does not apply if aggregateByCategory is true. May be ignored in favor of the aggregationInterval property.
        */
       aggregationGroupWidth?: number | undefined;
       /**
-       * @docid
-       * @inherits VizTimeInterval
-       * @type number|object|Enums.TimeInterval
+       * Specifies the length of aggregation intervals in scale units. Applies only to the scale of the continuous or logarithmic type.
        */
       aggregationInterval?: TimeIntervalConfig;
       /**
-       * @docid
-       * @default 'betweenLabels'
-       * @public
+       * Specifies whether ticks/grid lines of a discrete axis are located between labels or cross the labels.
        */
       discreteAxisDivisionMode?: DiscreteAxisDivisionMode;
       /**
-       * @docid
-       * @default undefined
+       * Specifies whether to allow decimal values on the scale. When false, the scale contains integer values only.
        */
       allowDecimals?: boolean | undefined;
       /**
-       * @docid
+       * Configures the scale breaks&apos; appearance.
        */
       breakStyle?: {
         /**
-         * @docid
-         * @default "#ababab"
+         * Specifies the scale breaks&apos; color.
          */
         color?: string;
         /**
-         * @docid
-         * @default "waved"
+         * Specifies the scale breaks&apos; line style.
          */
         line?: ScaleBreakLineStyle;
         /**
-         * @docid
-         * @default 5
+         * Specifies the scale breaks&apos; width in pixels.
          */
         width?: number;
       };
       /**
-       * @docid
-       * @inherits ScaleBreak
-       * @default undefined
-       * @notUsedInTheme
+       * Declares a scale break collection. Applies only if the scale&apos;s type is &apos;continuous&apos; or &apos;logarithmic&apos;.
        */
       breaks?: Array<ScaleBreak>;
       /**
-       * @docid
+       * Specifies the order of arguments on a discrete scale.
        */
       categories?: Array<number | string | Date>;
       /**
-       * @docid
-       * @default false
+       * Specifies whether to force the scale to start and end on ticks.
        */
       endOnTick?: boolean;
       /**
-       * @docid
-       * @default undefined
-       * @notUsedInTheme
+       * Specifies the scale&apos;s end value.
        */
       endValue?: number | Date | string | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Days to be excluded from the scale when workdaysOnly is true.
        */
       holidays?: Array<Date | string> | Array<number>;
       /**
-       * @docid
+       * Specifies common properties for scale labels.
        */
       label?: {
         /**
-         * @docid
-         * @notUsedInTheme
+         * Specifies a callback function that returns the text to be displayed in scale labels.
          */
         customizeText?: ((scaleValue: { value?: Date | number | string; valueText?: string }) => string);
         /**
-         * @docid
-         * @default '#767676' &prop(color)
-         * @default 11 &prop(size)
+         * Specifies font properties for the text displayed in the range selector&apos;s scale labels.
          */
         font?: Font;
         /**
-         * @docid
-         * @default undefined
+         * Formats a value before it is displayed in a scale label.
          */
         format?: Format | undefined;
         /**
-         * @docid
-         * @default "hide"
+         * Decides how to arrange scale labels when there is not enough space to keep all of them.
          */
         overlappingBehavior?: LabelOverlap;
         /**
-         * @docid
-         * @default 7
+         * Specifies a spacing between scale labels and the background bottom edge.
          */
         topIndent?: number;
         /**
-         * @docid
-         * @default true
+         * Specifies whether or not the scale&apos;s labels are visible.
          */
         visible?: boolean;
       };
       /**
-       * @docid
-       * @default 0
+       * Specifies a value used to calculate the range on a logarithmic scale within which the scale should be linear. Applies only if the data source contains negative values or zeroes.
        */
       linearThreshold?: number;
       /**
-       * @docid
-       * @default 10
+       * Specifies the value to be raised to a power when generating ticks for a logarithmic scale.
        */
       logarithmBase?: number;
       /**
-       * @docid
+       * Specifies properties for the date-time scale&apos;s markers.
        */
       marker?: {
         /**
-         * @docid
+         * Defines the properties that can be set for the text that is displayed by the scale markers.
          */
         label?: {
           /**
-           * @docid
-           * @notUsedInTheme
+           * Specifies a callback function that returns the text to be displayed in scale markers.
            */
           customizeText?: ((markerValue: { value?: Date | number; valueText?: string }) => string);
           /**
-           * @docid
-           * @default undefined
+           * Formats a value before it is displayed in a scale marker.
            */
           format?: Format | undefined;
         };
         /**
-         * @docid
-         * @default 33
+         * Specifies the height of the marker&apos;s separator.
          */
         separatorHeight?: number;
         /**
-         * @docid
-         * @default 7
+         * Specifies the space between the marker label and the marker separator.
          */
         textLeftIndent?: number;
         /**
-         * @docid
-         * @default 11
+         * Specifies the space between the marker&apos;s label and the top edge of the marker&apos;s separator.
          */
         textTopIndent?: number;
         /**
-         * @docid
-         * @default 10
+         * Specified the indent between the marker and the scale labels.
          */
         topIndent?: number;
         /**
-         * @docid
-         * @default true
+         * Indicates whether scale markers are visible.
          */
         visible?: boolean;
       };
       /**
-       * @docid
-       * @inherits VizTimeInterval
-       * @type number|object|Enums.TimeInterval
+       * Specifies the maximum range that can be selected.
        */
       maxRange?: TimeIntervalConfig;
       /**
-       * @docid
-       * @inherits VizTimeInterval
-       * @type number|object|Enums.TimeInterval
+       * Specifies the minimum range that can be selected.
        */
       minRange?: TimeIntervalConfig;
       /**
-       * @docid
+       * Specifies properties of the range selector&apos;s minor ticks.
        */
       minorTick?: {
         /**
-         * @docid
-         * @default '#000000'
+         * Specifies the color of the scale&apos;s minor ticks.
          */
         color?: string;
         /**
-         * @docid
-         * @default 0.06
+         * Specifies the opacity of the scale&apos;s minor ticks.
          */
         opacity?: number;
         /**
-         * @docid
-         * @default true
+         * Indicates whether scale minor ticks are visible or not.
          */
         visible?: boolean;
         /**
-         * @docid
-         * @default 1
+         * Specifies the width of the scale&apos;s minor ticks.
          */
         width?: number;
       };
       /**
-       * @docid
-       * @default undefined
+       * Specifies the number of minor ticks between neighboring major ticks.
        */
       minorTickCount?: number | undefined;
       /**
-       * @docid
-       * @inherits VizTimeInterval
-       * @type number|object|Enums.TimeInterval
+       * Specifies an interval between minor ticks.
        */
       minorTickInterval?: TimeIntervalConfig;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the height of the space reserved for the scale in pixels.
        */
       placeholderHeight?: number | undefined;
       /**
-       * @docid
-       * @default true
+       * Specifies whether or not to show ticks for the boundary scale values, when neither major ticks nor minor ticks are created for these values.
        */
       showCustomBoundaryTicks?: boolean;
       /**
-       * @docid
-       * @default undefined
+       * Days to be included in the scale when workdaysOnly is true.
        */
       singleWorkdays?: Array<Date | string> | Array<number>;
       /**
-       * @docid
-       * @default undefined
-       * @notUsedInTheme
+       * Specifies the scale&apos;s start value.
        */
       startValue?: number | Date | string | undefined;
       /**
-       * @docid
+       * Specifies properties defining the appearance of scale ticks.
        */
       tick?: {
         /**
-         * @docid
-         * @default '#000000'
+         * Specifies the color of scale ticks (major ticks only).
          */
         color?: string;
         /**
-         * @docid
-         * @default 0.1
+         * Specifies the opacity of scale ticks (major ticks only).
          */
         opacity?: number;
         /**
-         * @docid
-         * @default 1
+         * Specifies the width of the scale&apos;s ticks (major ticks only).
          */
         width?: number;
       };
       /**
-       * @docid
-       * @inherits VizTimeInterval
-       * @type number|object|Enums.TimeInterval
+       * Specifies an interval between axis ticks.
        */
       tickInterval?: TimeIntervalConfig;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the type of the scale.
        */
       type?: AxisScale | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the type of values on the scale.
        */
       valueType?: ChartsDataType | undefined;
       /**
-       * @docid
-       * @default [1, 2, 3, 4, 5]
+       * Specifies which days are workdays. The array can contain values from 0 (Sunday) to 6 (Saturday). Applies only if workdaysOnly is true.
        */
       workWeek?: Array<number>;
       /**
-       * @docid
-       * @default false
+       * Leaves only workdays on the scale: the work week days plus single workdays minus holidays. Applies only if the scale&apos;s valueType is &apos;datetime&apos;.
        */
       workdaysOnly?: boolean;
     };
     /**
-     * @docid
-     * @default "#606060"
-     * @public
+     * Specifies the color of the selected range.
      */
     selectedRangeColor?: string;
     /**
-     * @docid
-     * @default "reset"
-     * @public
+     * Specifies how the selected range should behave when data is updated. Applies only when the RangeSelector is bound to a data source.
      */
     selectedRangeUpdateMode?: VisualRangeUpdateMode;
     /**
-     * @docid
-     * @public
+     * Specifies range selector shutter properties.
      */
     shutter?: {
       /**
-       * @docid
-       * @default undefined
+       * Specifies shutter color.
        */
       color?: string | undefined;
       /**
-       * @docid
-       * @default 0.75
+       * Specifies the opacity of the color of shutters.
        */
       opacity?: number;
     };
     /**
-     * @docid
-     * @public
+     * Specifies the appearance of the range selector&apos;s slider handles.
      */
     sliderHandle?: {
       /**
-       * @docid
-       * @default '#000000'
+       * Specifies the color of the slider handles.
        */
       color?: string;
       /**
-       * @docid
-       * @default 0.2
+       * Specifies the opacity of the slider handles.
        */
       opacity?: number;
       /**
-       * @docid
-       * @default 1
+       * Specifies the width of the slider handles.
        */
       width?: number;
     };
     /**
-     * @docid
-     * @public
+     * Defines the properties of the range selector slider markers.
      */
     sliderMarker?: {
       /**
-       * @docid
-       * @default '#9B9B9B'
+       * Specifies the color of the slider markers.
        */
       color?: string;
       /**
-       * @docid
-       * @notUsedInTheme
+       * Specifies a callback function that returns the text to be displayed by slider markers.
        */
       customizeText?: ((scaleValue: { value?: Date | number | string; valueText?: string }) => string);
       /**
-       * @docid
-       * @default '#FFFFFF' &prop(color)
-       * @default 14 &prop(size)
+       * Specifies font properties for the text displayed by the range selector slider markers.
        */
       font?: Font;
       /**
-       * @docid
-       * @default undefined
+       * Formats a value before it is displayed in a slider marker.
        */
       format?: Format | undefined;
       /**
-       * @docid
-       * @default 'red'
+       * Specifies the color used for the slider marker text when the currently selected range does not match the minRange and maxRange values.
        */
       invalidRangeColor?: string;
       /**
-       * @docid
-       * @default 4
+       * Specifies the empty space between the marker&apos;s left and right borders and the marker&apos;s text.
        */
       paddingLeftRight?: number;
       /**
-       * @docid
-       * @default 2
+       * Specifies the empty space between the marker&apos;s top and bottom borders and the marker&apos;s text.
        */
       paddingTopBottom?: number;
       /**
-       * @docid
-       * @default undefined
-       * @notUsedInTheme
+       * Specifies the placeholder height of the slider marker.
        */
       placeholderHeight?: number | undefined;
       /**
-       * @docid
-       * @default true
+       * Indicates whether or not the slider markers are visible.
        */
       visible?: boolean;
     };
     /**
-     * @docid
-     * @type object
-     * @hidden
+     * Configures tooltips - small pop-up rectangles that display information about a data-visualizing UI component element being pressed or hovered over with the mouse pointer.
      */
     tooltip?: BaseWidgetTooltip;
     /**
-     * @docid
-     * @fires dxRangeSelectorOptions.onValueChanged
-     * @notUsedInTheme
-     * @public
+     * The selected range (initial or current). Equals the entire scale when not set.
      */
     value?: Array<number | string | Date> | VisualRange;
 }
 /**
- * @docid
- * @inherits BaseWidget, DataHelperMixin
- * @namespace DevExpress.viz
- * @public
+ * The RangeSelector is a UI component that allows a user to select a range of values on a scale.
  */
 export default class dxRangeSelector extends BaseWidget<dxRangeSelectorOptions> {
     getDataSource(): DataSource;
     /**
-     * @docid
-     * @publicName getValue()
-     * @public
+     * Gets the currently selected range.
      */
     getValue(): Array<number | string | Date>;
     render(): void;
     /**
-     * @docid
-     * @publicName render(skipChartAnimation)
-     * @public
+     * Redraws the UI component.
      */
     render(skipChartAnimation: boolean): void;
     /**
-     * @docid
-     * @publicName setValue(value)
-     * @public
+     * Sets the selected range.
      */
     setValue(value: Array<number | string | Date> | VisualRange): void;
 }
 
-/** @public */
 export type Properties = dxRangeSelectorOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxRangeSelectorOptions;
 
 ///#DEBUG

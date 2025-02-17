@@ -14,257 +14,189 @@ import dxTextBox, {
 } from './text_box';
 
 /**
- * @docid _ui_text_area_ChangeEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the change event handler&apos;s argument.
  */
 export type ChangeEvent = NativeEventInfo<dxTextArea, Event>;
 
 /**
- * @docid _ui_text_area_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxTextArea>;
 
 /**
- * @docid _ui_text_area_CopyEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the copy event handler&apos;s argument.
  */
 export type CopyEvent = NativeEventInfo<dxTextArea, ClipboardEvent>;
 
 /**
- * @docid _ui_text_area_CutEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the cut event handler&apos;s argument.
  */
 export type CutEvent = NativeEventInfo<dxTextArea, ClipboardEvent>;
 
 /**
- * @docid _ui_text_area_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxTextArea>;
 
 /**
- * @docid _ui_text_area_EnterKeyEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the enterKey event handler&apos;s argument.
  */
 export type EnterKeyEvent = NativeEventInfo<dxTextArea, KeyboardEvent>;
 
 /**
- * @docid _ui_text_area_FocusInEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the focusIn event handler&apos;s argument.
  */
 export type FocusInEvent = NativeEventInfo<dxTextArea, FocusEvent>;
 
 /**
- * @docid _ui_text_area_FocusOutEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the focusOut event handler&apos;s argument.
  */
 export type FocusOutEvent = NativeEventInfo<dxTextArea, FocusEvent>;
 
 /**
- * @docid _ui_text_area_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxTextArea>;
 
 /**
- * @docid _ui_text_area_InputEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the input event handler&apos;s argument.
  */
 export type InputEvent = NativeEventInfo<dxTextArea, UIEvent & { target: HTMLInputElement }>;
 
 /**
- * @docid _ui_text_area_KeyDownEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the keyDown event handler&apos;s argument.
  */
 export type KeyDownEvent = NativeEventInfo<dxTextArea, KeyboardEvent>;
 
-/** @public */
 export type KeyPressEvent = NativeEventInfo<dxTextArea, KeyboardEvent>;
 
 /**
- * @docid _ui_text_area_KeyUpEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the keyUp event handler&apos;s argument.
  */
 export type KeyUpEvent = NativeEventInfo<dxTextArea, KeyboardEvent>;
 
 /**
- * @docid _ui_text_area_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxTextArea> & ChangedOptionInfo;
 
 /**
- * @docid _ui_text_area_PasteEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the paste event handler&apos;s argument.
  */
 export type PasteEvent = NativeEventInfo<dxTextArea, ClipboardEvent>;
 
 /**
- * @docid _ui_text_area_ValueChangedEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ValueChangedInfo
+ * The type of the valueChanged event handler&apos;s argument.
  */
 export type ValueChangedEvent = NativeEventInfo<dxTextArea, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
     /**
-     * @docid
-     * @default false
-     * @public
+     * A Boolean value specifying whether or not the auto resizing mode is enabled.
      */
     autoResizeEnabled?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the maximum height of the UI component.
      */
     maxHeight?: number | string | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the minimum height of the UI component.
      */
     minHeight?: number | string | undefined;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not the UI component checks the inner text for spelling mistakes.
      */
     spellcheck?: boolean;
 }
 /**
- * @docid
- * @isEditor
- * @inherits dxTextBox
- * @namespace DevExpress.ui
- * @public
+ * The TextArea is a UI component that enables a user to enter and edit a multi-line text.
  */
 export default class dxTextArea extends dxTextBox<dxTextAreaOptions> { }
 
-/** @public */
 export type Properties = dxTextAreaOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxTextAreaOptions;
 
 ///#DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
 /**
-* @hidden
-*/
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Events = {
 /**
- * @docid dxTextAreaOptions.onChange
- * @type_function_param1 e:{ui/text_area:ChangeEvent}
+ * A function that is executed when the UI component loses focus after the text field&apos;s content was changed using the keyboard.
  */
 onChange?: ((e: ChangeEvent) => void);
 /**
- * @docid dxTextAreaOptions.onContentReady
- * @type_function_param1 e:{ui/text_area:ContentReadyEvent}
+ * A function that is executed when the UI component is rendered and each time the component is repainted.
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @docid dxTextAreaOptions.onCopy
- * @type_function_param1 e:{ui/text_area:CopyEvent}
+ * A function that is executed when the UI component&apos;s input has been copied.
  */
 onCopy?: ((e: CopyEvent) => void);
 /**
- * @docid dxTextAreaOptions.onCut
- * @type_function_param1 e:{ui/text_area:CutEvent}
+ * A function that is executed when the UI component&apos;s input has been cut.
  */
 onCut?: ((e: CutEvent) => void);
 /**
- * @docid dxTextAreaOptions.onDisposing
- * @type_function_param1 e:{ui/text_area:DisposingEvent}
+ * A function that is executed before the UI component is disposed of.
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @docid dxTextAreaOptions.onEnterKey
- * @type_function_param1 e:{ui/text_area:EnterKeyEvent}
+ * A function that is executed when the Enter key has been pressed while the UI component is focused.
  */
 onEnterKey?: ((e: EnterKeyEvent) => void);
 /**
- * @docid dxTextAreaOptions.onFocusIn
- * @type_function_param1 e:{ui/text_area:FocusInEvent}
+ * A function that is executed when the UI component gets focus.
  */
 onFocusIn?: ((e: FocusInEvent) => void);
 /**
- * @docid dxTextAreaOptions.onFocusOut
- * @type_function_param1 e:{ui/text_area:FocusOutEvent}
+ * A function that is executed when the UI component loses focus.
  */
 onFocusOut?: ((e: FocusOutEvent) => void);
 /**
- * @docid dxTextAreaOptions.onInitialized
- * @type_function_param1 e:{ui/text_area:InitializedEvent}
+ * A function used in JavaScript frameworks to save the UI component instance.
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @docid dxTextAreaOptions.onInput
- * @type_function_param1 e:{ui/text_area:InputEvent}
+ * A function that is executed each time the UI component&apos;s input is changed while the UI component is focused.
  */
 onInput?: ((e: InputEvent) => void);
 /**
- * @docid dxTextAreaOptions.onKeyDown
- * @type_function_param1 e:{ui/text_area:KeyDownEvent}
+ * A function that is executed when a user is pressing a key on the keyboard.
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @docid dxTextAreaOptions.onKeyUp
- * @type_function_param1 e:{ui/text_area:KeyUpEvent}
+ * A function that is executed when a user releases a key on the keyboard.
  */
 onKeyUp?: ((e: KeyUpEvent) => void);
 /**
- * @docid dxTextAreaOptions.onOptionChanged
- * @type_function_param1 e:{ui/text_area:OptionChangedEvent}
+ * A function that is executed after a UI component property is changed.
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @docid dxTextAreaOptions.onPaste
- * @type_function_param1 e:{ui/text_area:PasteEvent}
+ * A function that is executed when the UI component&apos;s input has been pasted.
  */
 onPaste?: ((e: PasteEvent) => void);
 /**
- * @docid dxTextAreaOptions.onValueChanged
- * @type_function_param1 e:{ui/text_area:ValueChangedEvent}
+ * A function that is executed after the UI component&apos;s value is changed.
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };

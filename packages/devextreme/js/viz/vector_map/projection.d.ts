@@ -1,57 +1,36 @@
-/** @public */
 export type VectorMapProjection = 'equirectangular' | 'lambert' | 'mercator' | 'miller';
 
 /**
- * @docid
- * @namespace DevExpress.viz
- * @type object
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface VectorMapProjectionConfig {
     /**
-     * @docid
-     * @default 1
-     * @public
+     * Specifies the projection&apos;s ratio of the width to the height.
      */
     aspectRatio?: number;
     /**
-     * @docid
-     * @public
+     * Converts coordinates from [x, y] to [lon, lat].
      */
     from?: ((coordinates: Array<number>) => Array<number>);
     /**
-     * @docid
-     * @public
+     * Converts coordinates from [lon, lat] to [x, y].
      */
     to?: ((coordinates: Array<number>) => Array<number>);
 }
 
 /**
- * @docid viz.map.projection
- * @publicName projection(data)
- * @param1 data:VectorMapProjectionConfig
- * @return object
- * @static
- * @namespace DevExpress.viz.map
- */
-// eslint-disable-next-line @typescript-eslint/init-declarations
-export const projection: {
+                                                                  * Creates a new projection.
+                                                                  * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+                                                                  */
+                                                                 export const projection: {
     /**
-     * @docid viz.map.projection.add
-     * @publicName add(name, projectionConfig)
-     * @param2 projectionConfig:VectorMapProjectionConfig|object
-     * @namespace DevExpress.viz.map.projection
-     * @static
-     * @public
+     * Adds a new projection to the internal projection storage.
      */
     add(name: string, projectionConfig: VectorMapProjectionConfig | any): void;
 
     /**
-     * @docid viz.map.projection.get
-     * @publicName get(name)
-     * @return object
-     * @namespace DevExpress.viz.map.projection
-     * @static
-     * @hidden
+     * Gets a predefined or custom projection from the projection storage.
      */
     get(name: VectorMapProjection | string): any;
 

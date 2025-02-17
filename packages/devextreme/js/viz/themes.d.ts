@@ -1,49 +1,29 @@
 /**
- * @docid viz.currentTheme
- * @publicName currentTheme()
- * @static
- * @public
+ * Gets the current theme&apos;s name.
  */
 export function currentTheme(): string;
 
 /**
- * @docid viz.currentTheme
- * @publicName currentTheme(platform, colorScheme)
- * @static
- * @public
+ * Changes the current theme for all data visualization UI components on the page. The color scheme is defined separately.
  */
 export function currentTheme(platform: string, colorScheme: string): void;
 
 /**
- * @docid viz.currentTheme
- * @publicName currentTheme(theme)
- * @static
- * @public
+ * Changes the current theme for all data visualization UI components on the page.
  */
 export function currentTheme(theme: string): void;
 
 /**
- * @docid viz.getTheme
- * @publicName getTheme(theme)
- * @return object
- * @static
- * @public
+ * Gets a predefined or registered theme&apos;s settings.
  */
 export function getTheme(theme: string): any;
 
 /**
- * @docid viz.refreshTheme
- * @publicName refreshTheme()
- * @static
- * @public
+ * Refreshes the current theme and palette in all data visualization UI components on the page.
  */
 export function refreshTheme(): void;
 
 /**
- * @docid viz.registerTheme
- * @publicName registerTheme(customTheme, baseTheme)
- * @param1 customTheme:object
- * @static
- * @public
+ * Registers a new theme based on the existing one.
  */
 export function registerTheme(customTheme: any, baseTheme: string): void;

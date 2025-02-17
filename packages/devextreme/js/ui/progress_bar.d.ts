@@ -14,142 +14,112 @@ import dxTrackBar, {
 } from './track_bar';
 
 /**
- * @docid _ui_progress_bar_CompleteEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the complete event handler&apos;s argument.
  */
 export type CompleteEvent = NativeEventInfo<dxProgressBar>;
 
 /**
- * @docid _ui_progress_bar_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxProgressBar>;
 
 /**
- * @docid _ui_progress_bar_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxProgressBar>;
 
 /**
- * @docid _ui_progress_bar_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxProgressBar>;
 
 /**
- * @docid _ui_progress_bar_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxProgressBar> & ChangedOptionInfo;
 
 /**
- * @docid _ui_progress_bar_ValueChangedEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ValueChangedInfo
+ * The type of the valueChanged event handler&apos;s argument.
  */
 export type ValueChangedEvent = NativeEventInfo<dxProgressBar> & ValueChangedInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/progress_bar:CompleteEvent}
-     * @action
-     * @public
+     * A function that is executed when the value reaches the maximum.
      */
     onComplete?: ((e: CompleteEvent) => void);
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not the UI component displays a progress status.
      */
     showStatus?: boolean;
     /**
-     * @docid
-     * @default function(ratio, value) { return "Progress: " + Math.round(ratio * 100) + "%" }
-     * @public
+     * Specifies a format for the progress status.
      */
     statusFormat?: string | ((ratio: number, value: number) => string);
     /**
-     * @docid
-     * @default 0
-     * @public
+     * The current UI component value.
      */
     value?: number | false;
 }
 /**
- * @docid
- * @inherits dxTrackBar
- * @namespace DevExpress.ui
- * @public
+ * The ProgressBar is a UI component that shows current progress.
  */
 export default class dxProgressBar extends dxTrackBar<dxProgressBarOptions> {
     /**
-     * @docid
-     * @publicName reset(value)
-     * @public
+     * Resets the value property to the value passed as an argument.
      */
     reset(value?: Number | false): void;
 }
 
-/** @public */
 export type Properties = dxProgressBarOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxProgressBarOptions;
 
 ///#DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onComplete'>;
 
 /**
-* @hidden
-*/
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Events = {
 /**
- * @docid dxProgressBarOptions.onContentReady
- * @type_function_param1 e:{ui/progress_bar:ContentReadyEvent}
+ * A function that is executed when the UI component is rendered and each time the component is repainted.
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @docid dxProgressBarOptions.onDisposing
- * @type_function_param1 e:{ui/progress_bar:DisposingEvent}
+ * A function that is executed before the UI component is disposed of.
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @docid dxProgressBarOptions.onInitialized
- * @type_function_param1 e:{ui/progress_bar:InitializedEvent}
+ * A function used in JavaScript frameworks to save the UI component instance.
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @docid dxProgressBarOptions.onOptionChanged
- * @type_function_param1 e:{ui/progress_bar:OptionChangedEvent}
+ * A function that is executed after a UI component property is changed.
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @docid dxProgressBarOptions.onValueChanged
- * @type_function_param1 e:{ui/progress_bar:ValueChangedEvent}
+ * A function that is executed after the UI component&apos;s value is changed.
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };

@@ -11,45 +11,26 @@ export {
 };
 
 /**
- * @docid viz.currentPalette
- * @publicName currentPalette()
- * @static
- * @public
+ * Gets the current palette&apos;s name.
  */
 export function currentPalette(): string;
 
 /**
- * @docid viz.currentPalette
- * @publicName currentPalette(paletteName)
- * @static
- * @public
+ * Changes the current palette for all data visualization UI components on the page.
  */
 export function currentPalette(paletteName: string): void;
 
 /**
- * @docid viz.generateColors
- * @publicName generateColors(palette, count, options)
- * @param1 palette:Enums.Palette|Array<string>
- * @param3_field paletteExtensionMode:Enums.PaletteExtensionMode
- * @static
- * @public
+ * Returns a subset of palette colors.
  */
 export function generateColors(palette: Palette | Array<string>, count: number, options: { paletteExtensionMode?: PaletteExtensionMode; baseColorSet?: PaletteColorSet }): Array<string>;
 
 /**
- * @docid viz.getPalette
- * @publicName getPalette(paletteName)
- * @return object
- * @static
- * @public
+ * Gets the color sets of a predefined or registered palette.
  */
 export function getPalette(paletteName: string): any;
 
 /**
- * @docid viz.registerPalette
- * @publicName registerPalette(paletteName, palette)
- * @param2 palette:object
- * @static
- * @public
+ * Registers a new palette.
  */
 export function registerPalette(paletteName: string, palette: any): void;

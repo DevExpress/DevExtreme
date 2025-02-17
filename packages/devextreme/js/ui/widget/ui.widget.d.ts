@@ -8,106 +8,74 @@ import {
 } from '../../common/core/events';
 
 /**
- * @namespace DevExpress.ui
- * @docid
- * @type object
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface WidgetOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the shortcut key that sets focus on the UI component.
      */
     accessKey?: string | undefined;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the UI component changes its visual state as a result of user interaction.
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the UI component responds to user interaction.
      */
     disabled?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the UI component can be focused using keyboard navigation.
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies text for a hint that appears when a user pauses on the UI component.
      */
     hint?: string | undefined;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the UI component changes its state when a user pauses on it.
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid
-     * @default null
-     * @action
-     * @public
+     * A function that is executed when the UI component is rendered and each time the component is repainted.
      */
     onContentReady?: ((e: EventInfo<TComponent>) => void);
     /**
-     * @docid
-     * @default 0
-     * @public
+     * Specifies the number of the element when the Tab key is used for navigating.
      */
     tabIndex?: number;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the UI component is visible.
      */
     visible?: boolean;
 }
 /**
- * @docid
- * @inherits DOMComponent
- * @hidden
- * @namespace DevExpress.ui
- * @options WidgetOptions
+ * The base class for UI components.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export default class Widget<TProperties> extends DOMComponent<TProperties> {
     /**
-     * @docid
-     * @publicName focus()
-     * @public
+     * Sets focus on the UI component.
      */
     focus(): void;
     /**
-     * @docid
-     * @publicName registerKeyHandler(key, handler)
-     * @public
+     * Registers a handler to be executed when a user presses a specific key.
      */
     registerKeyHandler(key: string, handler: Function): void;
     /**
-     * @docid
-     * @publicName repaint()
-     * @public
+     * Renders the component again without reloading data. Use the method to update the component&apos;s markup and appearance dynamically.
      */
     repaint(): void;
 }
 
 /**
- * @const dxItem
- * @section uiWidgetMarkupComponents
- * @public
- * @namespace DevExpress.ui
- */
-// eslint-disable-next-line vars-on-top, import/no-mutable-exports, no-var, @typescript-eslint/init-declarations, @typescript-eslint/no-explicit-any
-export var dxItem: any;
+                                                                                                                                                      * Specifies markup for a UI component item.
+                                                                                                                                                      */
+                                                                                                                                                     export var dxItem: any;
 
 /**
- * @docid
- * @deprecated
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type format = Format;

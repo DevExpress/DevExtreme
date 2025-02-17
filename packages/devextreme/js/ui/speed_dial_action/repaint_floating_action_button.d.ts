@@ -1,7 +1,4 @@
 /**
- * @docid ui.repaintFloatingActionButton
- * @static
- * @publicName repaintFloatingActionButton()
- * @public
+ * Repaints the Floating Action Button.
  */
 export default function repaintFloatingActionButton(): void;

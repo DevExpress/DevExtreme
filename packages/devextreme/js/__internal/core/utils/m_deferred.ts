@@ -110,6 +110,9 @@ deferredConfig.forEach(function (config) {
   };
 });
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export function fromPromise(promise, context?: any) {
   if (isDeferred(promise)) {
     return promise;
@@ -164,15 +167,24 @@ let whenFunc = function () {
   return deferred.promise();
 };
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export function setStrategy(value) {
   DeferredObj = value.Deferred;
   whenFunc = value.when;
 }
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export function Deferred() {
   return new DeferredObj();
 }
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export function when() {
   // @ts-expect-error
   return whenFunc.apply(this, arguments);

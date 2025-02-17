@@ -47,439 +47,319 @@ export {
 };
 
 /**
- * @docid
- * @type object
- * @namespace DevExpress.viz
+ * An object that provides information about a bar in the BarGauge UI component.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface BarGaugeBarInfo {
     /**
-     * @docid
-     * @public
+     * The bar&apos;s hexadecimal color code.
      */
     color?: string;
     /**
-     * @docid
-     * @public
+     * The bar&apos;s zero-based index. Bars closest to the gauge&apos;s center have higher indexes.
      */
     index?: number;
     /**
-     * @docid
-     * @public
+     * The bar&apos;s value.
      */
     value?: number;
 }
 
 /**
- * @public
- * @docid BarGaugeLegendItem
- * @namespace DevExpress.viz.dxBarGauge
- * @inherits BaseLegendItem
- * @type object
+ * An object that provides information about a legend item in the BarGauge UI component.
  */
 export type LegendItem = BarGaugeLegendItem;
 
 /**
  * @deprecated Use LegendItem instead
- * @namespace DevExpress.viz
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface BarGaugeLegendItem extends BaseLegendItem {
     /**
-     * @docid
-     * @public
+     * The bar that the legend item represents.
      */
     item?: BarGaugeBarInfo;
 }
 
 /**
- * @docid _viz_bar_gauge_TooltipInfo
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface TooltipInfo {
     /**
-     * @docid _viz_bar_gauge_TooltipInfo.target
-     * @type object
+     * 
      */
     target?: any;
 }
 
 /**
- * @docid _viz_bar_gauge_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxBarGauge>;
 
 /**
- * @docid _viz_bar_gauge_DrawnEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the drawn event handler&apos;s argument.
  */
 export type DrawnEvent = EventInfo<dxBarGauge>;
 
 /**
- * @docid _viz_bar_gauge_ExportedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the exported event handler&apos;s argument.
  */
 export type ExportedEvent = EventInfo<dxBarGauge>;
 
 /**
- * @docid _viz_bar_gauge_ExportingEvent
- * @public
- * @type object
- * @inherits EventInfo,ExportInfo
+ * The type of the exporting event handler&apos;s argument.
  */
 export type ExportingEvent = EventInfo<dxBarGauge> & ExportInfo;
 
 /**
- * @docid _viz_bar_gauge_FileSavingEvent
- * @public
- * @type object
- * @inherits FileSavingEventInfo
+ * The type of the fileSaving event handler&apos;s argument.
  */
 export type FileSavingEvent = FileSavingEventInfo<dxBarGauge>;
 
 /**
- * @docid _viz_bar_gauge_IncidentOccurredEvent
- * @public
- * @type object
- * @inherits EventInfo,IncidentInfo
+ * The type of the incidentOccurred event handler&apos;s argument.
  */
 export type IncidentOccurredEvent = EventInfo<dxBarGauge> & IncidentInfo;
 
 /**
- * @docid _viz_bar_gauge_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxBarGauge>;
 
 /**
- * @docid _viz_bar_gauge_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxBarGauge> & ChangedOptionInfo;
 
 /**
- * @docid _viz_bar_gauge_TooltipHiddenEvent
- * @public
- * @type object
- * @inherits EventInfo,_viz_bar_gauge_TooltipInfo
+ * The type of the tooltipHidden event handler&apos;s argument.
  */
 export type TooltipHiddenEvent = EventInfo<dxBarGauge> & TooltipInfo;
 
 /**
- * @docid _viz_bar_gauge_TooltipShownEvent
- * @public
- * @type object
- * @inherits EventInfo,_viz_bar_gauge_TooltipInfo
+ * The type of the tooltipShown event handler&apos;s argument.
  */
 export type TooltipShownEvent = EventInfo<dxBarGauge> & TooltipInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.viz
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**
-     * @docid
-     * @inherits BaseGaugeOptions.animation
-     * @public
+     * Specifies animation properties.
      */
     animation?: any;
     /**
-     * @docid
-     * @default '#e0e0e0'
-     * @public
+     * Specifies a color for the remaining segment of the bar&apos;s track.
      */
     backgroundColor?: string;
     /**
-     * @docid
-     * @default 4
-     * @public
+     * Specifies a distance between bars in pixels.
      */
     barSpacing?: number;
     /**
-     * @docid
-     * @default 0
-     * @notUsedInTheme
-     * @public
+     * Specifies a base value for bars.
      */
     baseValue?: number;
     /**
-     * @docid
-     * @default 100
-     * @notUsedInTheme
-     * @public
+     * Specifies an end value for the gauge&apos;s invisible scale.
      */
     endValue?: number;
     /**
-     * @docid
-     * @public
+     * Defines the shape of the gauge&apos;s arc.
      */
     geometry?: {
       /**
-       * @docid
-       * @default 315
+       * Specifies the end angle of the bar gauge&apos;s arc.
        */
       endAngle?: number;
       /**
-       * @docid
-       * @default 225
+       * Specifies the start angle of the bar gauge&apos;s arc.
        */
       startAngle?: number;
     };
     /**
-     * @docid
-     * @default undefined
-     * @type_function_return string|SVGElement|jQuery
-     * @public
+     * Specifies a custom template for content in the component&apos;s center.
      */
     centerTemplate?: template | ((component: dxBarGauge, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
-     * @docid
-     * @public
+     * Specifies the properties of the labels that accompany gauge bars.
      */
     label?: {
       /**
-       * @docid
-       * @default undefined
+       * Specifies a color for the label connector text.
        */
       connectorColor?: string | undefined;
       /**
-       * @docid
-       * @default 2
+       * Specifies the width of the label connector in pixels.
        */
       connectorWidth?: number;
       /**
-       * @docid
-       * @notUsedInTheme
+       * Specifies a callback function that returns a text for labels.
        */
       customizeText?: ((barValue: { value?: number; valueText?: string }) => string);
       /**
-       * @docid
-       * @default 16 &prop(size)
+       * Specifies font properties for bar labels.
        */
       font?: Font;
       /**
-       * @docid
-       * @default undefined
+       * Formats a value before it is displayed in a label. Accepts only numeric formats.
        */
       format?: Format | undefined;
       /**
-       * @docid
-       * @default 20
+       * Specifies the distance between the upper bar and bar labels in pixels.
        */
       indent?: number;
       /**
-       * @docid
-       * @default true
+       * Specifies whether bar labels appear on a gauge or not.
        */
       visible?: boolean;
     };
     /**
-     * @docid
-     * @inherits BaseLegend
-     * @type object
-     * @public
+     * Configures the legend.
      */
     legend?: Legend;
     /**
-     * @docid
-     * @type object
-     * @public
+     * Configures the loading indicator.
      */
     loadingIndicator?: LoadingIndicator;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/bar_gauge:TooltipHiddenEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a tooltip becomes hidden.
      */
     onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/bar_gauge:TooltipShownEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a tooltip appears.
      */
     onTooltipShown?: ((e: TooltipShownEvent) => void);
     /**
-     * @docid
-     * @default "Material"
-     * @public
+     * Sets the palette to be used for colorizing bars in the gauge.
      */
     palette?: Array<string> | Palette;
     /**
-     * @docid
-     * @default 'blend'
-     * @public
+     * Specifies what to do with colors in the palette when their number is less than the number of bars in the gauge.
      */
     paletteExtensionMode?: PaletteExtensionMode;
     /**
-     * @docid
-     * @default 0.3
-     * @public
+     * Defines the radius of the bar that is closest to the center relatively to the radius of the topmost bar.
      */
     relativeInnerRadius?: number;
     /**
-     * @docid
-     * @default 'hide'
-     * @public
+     * Specifies how the UI component should behave when bar labels overlap.
      */
     resolveLabelOverlapping?: ShiftLabelOverlap;
     /**
-     * @docid
-     * @default 0
-     * @notUsedInTheme
-     * @public
+     * Specifies a start value for the gauge&apos;s invisible scale.
      */
     startValue?: number;
     /**
-     * @docid
-     * @type object
-     * @public
+     * Configures tooltips.
      */
     tooltip?: Tooltip;
     /**
-     * @docid
-     * @default []
-     * @notUsedInTheme
-     * @fires BaseWidgetOptions.onOptionChanged
-     * @public
+     * Specifies the array of values to be indicated on a bar gauge.
      */
     values?: Array<number>;
 }
 
 /**
- * @public
- * @docid dxBarGaugeLegend
+ * Configures the legend.
  */
 export type Legend = BaseLegend & {
     /**
-     * @docid dxBarGaugeOptions.legend.customizeHint
-     * @public
+     * Specifies the hint that appears when a user hovers the mouse pointer over a legend item.
      */
     customizeHint?: ((arg: { item?: BarGaugeBarInfo; text?: string }) => string);
     /**
-     * @docid dxBarGaugeOptions.legend.customizeItems
-     * @type_function_param1 items:Array<BarGaugeLegendItem>
-     * @type_function_return Array<BarGaugeLegendItem>
-     * @public
+     * Allows you to change the order, text, and visibility of legend items.
      */
     customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
     /**
-     * @docid dxBarGaugeOptions.legend.customizeText
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by legend items.
      */
     customizeText?: ((arg: { item?: BarGaugeBarInfo; text?: string }) => string);
     /**
-     * @docid dxBarGaugeOptions.legend.itemTextFormat
-     * @default undefined
-     * @public
+     * Formats the item text before it is displayed. Accepts only numeric formats. When unspecified, it inherits the label&apos;s format.
      */
     itemTextFormat?: Format | undefined;
     /**
-     * @docid dxBarGaugeOptions.legend.markerTemplate
-     * @default undefined
-     * @type_function_param1 legendItem:BarGaugeLegendItem
-     * @type_function_return string|SVGElement|jQuery
-     * @public
+     * Specifies an SVG element that serves as a custom legend item marker.
      */
     markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
-     * @docid dxBarGaugeOptions.legend.visible
-     * @default false
-     * @public
+     * Specifies whether the legend is visible.
      */
     visible?: boolean;
 };
 
 /**
- * @public
- * @docid dxBarGaugeLoadingIndicator
+ * Configures the loading indicator.
  */
 export type LoadingIndicator = BaseWidgetLoadingIndicator & {
     /**
-     * @docid dxBarGaugeOptions.loadingIndicator.enabled
-     * @hidden
+     * Specifies whether the loading indicator should be displayed and hidden automatically.
      */
     enabled?: boolean;
 };
 /**
- * @public
- * @docid dxBarGaugeTooltip
+ * Configures tooltips.
  */
 export type Tooltip = BaseWidgetTooltip & {
     /**
-     * @docid dxBarGaugeOptions.tooltip.contentTemplate
-     * @type_function_return string|Element|jQuery
-     * @default undefined
-     * @public
+     * Specifies a custom template for a tooltip.
      */
     contentTemplate?: template | ((scaleValue: { value?: number; valueText?: string; index?: number }, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
-     * @docid dxBarGaugeOptions.tooltip.customizeTooltip
-     * @default undefined
-     * @type_function_return object
-     * @public
+     * Allows you to change tooltip appearance.
      */
     customizeTooltip?: ((scaleValue: { value?: number; valueText?: string; index?: number }) => any) | undefined;
     /**
-     * @docid dxBarGaugeOptions.tooltip.interactive
-     * @default false
-     * @public
+     * 
      */
     interactive?: boolean;
 };
 /**
- * @docid
- * @inherits BaseWidget
- * @namespace DevExpress.viz
- * @public
+ * The BarGauge UI component contains several circular bars that each indicates a single value.
  */
 export default class dxBarGauge extends BaseWidget<dxBarGaugeOptions> {
     /**
-     * @docid
-     * @publicName values()
-     * @public
+     * Gets all the values.
      */
     values(): Array<number>;
     /**
-     * @docid
-     * @publicName values(newValues)
-     * @public
+     * Updates all the values.
      */
     values(values: Array<number>): void;
 }
 
-/** @public */
 export type Properties = dxBarGaugeOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxBarGaugeOptions;
 
 // #region deprecated in v23.1
 
-/** @deprecated Use Legend instead */
+/**
+ * @deprecated Use Legend instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxBarGaugeLegend = Legend;
 
-/** @deprecated Use LoadingIndicator instead */
+/**
+ * @deprecated Use LoadingIndicator instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxBarGaugeLoadingIndicator = LoadingIndicator;
 
-/** @deprecated Use Tooltip instead */
+/**
+ * @deprecated Use Tooltip instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxBarGaugeTooltip = Tooltip;
 
 // #endregion

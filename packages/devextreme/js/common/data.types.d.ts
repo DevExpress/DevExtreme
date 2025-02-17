@@ -5,22 +5,22 @@ import {
 } from '../data/data.types';
 
 /**
- * @namespace DevExpress.data
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type SearchOperation = '=' | '<>' | '>' | '>=' | '<' | '<=' | 'startswith' | 'endswith' | 'contains' | 'notcontains';
 
 /**
- * @namespace DevExpress.data
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type GroupingInterval = 'year' | 'quarter' | 'month' | 'day' | 'dayOfWeek' | 'hour' | 'minute' | 'second';
 
 /**
- * @namespace DevExpress.data
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type SortDescriptor<T> = KeySelector<T> | OrderingDescriptor<T>;
 
 /**
- * @namespace DevExpress.data
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type GroupDescriptor<T> = KeySelector<T> | (OrderingDescriptor<T> & {
   groupInterval?: number | GroupingInterval;
@@ -28,126 +28,100 @@ export type GroupDescriptor<T> = KeySelector<T> | (OrderingDescriptor<T> & {
 });
 
 /**
- * @namespace DevExpress.data
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type SelectDescriptor<T> = string | Array<string> | ((source: T) => any);
 
 /**
- * @namespace DevExpress.data
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type FilterDescriptor = any;
 
 /**
- * @namespace DevExpress.data
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type SummaryDescriptor<T> = KeySelector<T> | SelectionDescriptor<T> & {
   summaryType?: 'sum' | 'avg' | 'min' | 'max' | 'count';
 };
 
 /**
- * @namespace DevExpress.data
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface LoadOptions<T = any> {
   /**
-   * @docid
-   * @public
+   * An object for storing additional settings that should be sent to the server. Relevant to the ODataStore only.
    */
   customQueryParams?: any;
   /**
-   * @docid
-   * @public
+   * Specifies the start date of the date navigator range. Relevant to the Scheduler only.
    */
   startDate?: Date;
   /**
-   * @docid
-   * @public
+   * Specifies the end date of the date navigator range. Relevant to the Scheduler only.
    */
   endDate?: Date;
   /**
-   * @docid
-   * @public
+   * An array of strings that represent the names of navigation properties to be loaded simultaneously with the ODataStore.
    */
   expand?: Array<string>;
   /**
-   * @docid
-   * @public
-   * @type object
+   * A filter expression.
    */
   filter?: FilterDescriptor | Array<FilterDescriptor>;
   /**
-   * @docid
-   * @public
-   * @type object
+   * A group expression.
    */
   group?: GroupDescriptor<T> | Array<GroupDescriptor<T>>;
   /**
-   * @docid
-   * @public
-   * @type SummaryDescriptor | Array<SummaryDescriptor>
+   * A group summary expression. Used with the group setting.
    */
   groupSummary?: SummaryDescriptor<T> | Array<SummaryDescriptor<T>>;
   /**
-   * @docid
-   * @public
+   * The IDs of the rows being expanded. Relevant only when the CustomStore is used in the TreeList UI component.
    */
   parentIds?: Array<any>;
   /**
-   * @docid
-   * @public
+   * Indicates whether a top-level group count is required. Used in conjunction with the filter, take, skip, requireTotalCount, and group settings.
    */
   requireGroupCount?: boolean;
   /**
-   * @docid
-   * @public
+   * Indicates whether the total count of data objects is needed.
    */
   requireTotalCount?: boolean;
   /**
-   * @docid
-   * @type getter|Array<getter>
-   * @public
+   * A data field or expression whose value is compared to the search value.
    */
   searchExpr?: string | Function | Array<string | Function>;
   /**
-   * @docid
-   * @public
+   * A comparison operation.
    */
   searchOperation?: SearchOperation;
   /**
-   * @docid
-   * @public
+   * The current search value.
    */
   searchValue?: any;
   /**
-   * @docid
-   * @public
-   * @type object
+   * A select expression.
    */
   select?: SelectDescriptor<T>;
   /**
-   * @docid
-   * @public
+   * The number of data objects to be skipped from the result set&apos;s start. In conjunction with take, used to implement paging.
    */
   skip?: number;
   /**
-   * @docid
-   * @public
-   * @type object
+   * A sort expression.
    */
   sort?: SortDescriptor<T> | Array<SortDescriptor<T>>;
   /**
-   * @docid
-   * @public
+   * The number of data objects to be loaded. In conjunction with skip, used to implement paging.
    */
   take?: number;
   /**
-   * @docid
-   * @public
-   * @type SummaryDescriptor | Array<SummaryDescriptor>
+   * A total summary expression.
    */
   totalSummary?: SummaryDescriptor<T> | Array<SummaryDescriptor<T>>;
   /**
-   * @docid
-   * @public
+   * An object for storing additional settings that should be sent to the server.
    */
   userData?: any;
 }

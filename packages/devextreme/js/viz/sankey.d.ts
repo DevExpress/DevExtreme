@@ -40,731 +40,558 @@ export {
     TextOverflow,
 };
 
-/** @public */
 export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
 
 /**
- * @docid _viz_sankey_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxSankey>;
 
 /**
- * @docid _viz_sankey_DrawnEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the drawn event handler&apos;s argument.
  */
 export type DrawnEvent = EventInfo<dxSankey>;
 
 /**
- * @docid _viz_sankey_ExportedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the exported event handler&apos;s argument.
  */
 export type ExportedEvent = EventInfo<dxSankey>;
 
 /**
- * @docid _viz_sankey_ExportingEvent
- * @public
- * @type object
- * @inherits EventInfo,ExportInfo
+ * The type of the exporting event handler&apos;s argument.
  */
 export type ExportingEvent = EventInfo<dxSankey> & ExportInfo;
 
 /**
- * @docid _viz_sankey_FileSavingEvent
- * @public
- * @type object
- * @inherits FileSavingEventInfo
+ * The type of the fileSaving event handler&apos;s argument.
  */
 export type FileSavingEvent = FileSavingEventInfo<dxSankey>;
 
 /**
- * @docid _viz_sankey_IncidentOccurredEvent
- * @public
- * @type object
- * @inherits EventInfo,IncidentInfo
+ * The type of the incidentOccurred event handler&apos;s argument.
  */
 export type IncidentOccurredEvent = EventInfo<dxSankey> & IncidentInfo;
 
 /**
- * @docid _viz_sankey_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxSankey>;
 
 /**
- * @docid _viz_sankey_LinkClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the linkClick event handler&apos;s argument.
  */
 export type LinkClickEvent = NativeEventInfo<dxSankey, MouseEvent | PointerEvent> & {
-    /** @docid _viz_sankey_LinkClickEvent.target */
+    /**
+     * 
+     */
     readonly target: dxSankeyLink;
 };
 /**
- * @docid _viz_sankey_LinkHoverEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the linkHoverChanged event handler&apos;s argument.
  */
 export type LinkHoverEvent = EventInfo<dxSankey> & {
-    /** @docid _viz_sankey_LinkHoverEvent.target */
+    /**
+     * 
+     */
     readonly target: dxSankeyLink;
 };
 /**
- * @docid _viz_sankey_NodeClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the nodeClick event handler&apos;s argument.
  */
 export type NodeClickEvent = NativeEventInfo<dxSankey, MouseEvent | PointerEvent> & {
-    /** @docid _viz_sankey_NodeClickEvent.target */
+    /**
+     * 
+     */
     readonly target: dxSankeyNode;
 };
 /**
- * @docid _viz_sankey_NodeHoverEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the nodeHoverChanged event handler&apos;s argument.
  */
 export type NodeHoverEvent = EventInfo<dxSankey> & {
-    /** @docid _viz_sankey_NodeHoverEvent.target */
+    /**
+     * 
+     */
     readonly target: dxSankeyNode;
 };
 
 /**
- * @docid _viz_sankey_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxSankey> & ChangedOptionInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.viz
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
-     * @docid
-     * @public
+     * Specifies adaptive layout properties.
      */
     adaptiveLayout?: {
       /**
-       * @docid
-       * @default 80
+       * Specifies the minimum container height at which the layout begins to adapt.
        */
       height?: number;
       /**
-       * @docid
-       * @default true
+       * Specifies whether node labels should be kept when the UI component adapts the layout.
        */
       keepLabels?: boolean;
       /**
-       * @docid
-       * @default 80
+       * Specifies the minimum container width at which the layout begins to adapt.
        */
       width?: number;
     };
     /**
-     * @docid
-     * @default 'center'
-     * @public
+     * Aligns node columns vertically.
      */
     alignment?: VerticalAlignment | Array<VerticalAlignment>;
     /**
-     * @docid
-     * @notUsedInTheme
-     * @public
-     * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
+     * Binds the UI component to data.
      */
     dataSource?: DataSourceLike<any> | null;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether nodes and links change their style when they are hovered over or pressed.
      */
     hoverEnabled?: boolean;
     /**
-     * @docid
-     * @public
+     * Configures sankey nodes&apos; labels.
      */
     label?: {
       /**
-       * @docid
+       * Configures the labels&apos; borders.
        */
       border?: {
         /**
-         * @docid
-         * @default '#000000'
+         * Colors the labels&apos; borders.
          */
         color?: string | undefined;
         /**
-         * @docid
-         * @default false
+         * Specifies whether the borders are visible.
          */
         visible?: boolean | undefined;
         /**
-         * @docid
-         * @default 2
+         * Sets the borders&apos; width in pixels.
          */
         width?: number | undefined;
       };
       /**
-       * @docid
-       * @notUsedInTheme
+       * Customizes the labels&apos; texts.
        */
       customizeText?: ((itemInfo: dxSankeyNode) => string);
       /**
-       * @docid
-       * @default '#FFFFFF' &prop(color)
+       * Specifies the labels&apos; font properties.
        */
       font?: Font;
       /**
-       * @docid
-       * @default 5
+       * Moves the labels horizontally from their initial positions.
        */
       horizontalOffset?: number;
       /**
-       * @docid
-       * @default 'ellipsis'
+       * Specifies how to arrange labels when there is insufficient space to display them all.
        */
       overlappingBehavior?: TextOverflow;
       /**
-       * @docid
+       * Configures the labels&apos; shadows.
        */
       shadow?: {
         /**
-         * @docid
-         * @default 1
+         * Specifies the shadows&apos; blur distance. A larger value increases the blur distance.
          */
         blur?: number;
         /**
-         * @docid
-         * @default '#000000'
+         * Colors the labels&apos; shadows.
          */
         color?: string;
         /**
-         * @docid
-         * @default 0
+         * Moves the shadows horizontally from their initial positions.
          */
         offsetX?: number;
         /**
-         * @docid
-         * @default 1
+         * Moves the shadows vertically from their initial positions.
          */
         offsetY?: number;
         /**
-         * @docid
-         * @default 0
+         * Specifies the shadows&apos; transparency.
          */
         opacity?: number;
       };
       /**
-       * @docid
-       * @default false
+       * Specifies whether to color labels in the nodes&apos; colors.
        */
       useNodeColors?: boolean;
       /**
-       * @docid
-       * @default 0
+       * Moves the labels vertically from their initial positions.
        */
       verticalOffset?: number;
       /**
-       * @docid
-       * @default true
+       * Specifies whether the labels are visible.
        */
       visible?: boolean;
     };
     /**
-     * @docid
-     * @public
+     * Configures sankey links&apos; appearance.
      */
     link?: {
       /**
-       * @docid
+       * Configures the links&apos; borders.
        */
       border?: {
         /**
-         * @docid
-         * @default '#000000'
+         * Colors the links&apos; borders.
          */
         color?: string | undefined;
         /**
-         * @docid
-         * @default false
+         * Specifies whether the borders are visible.
          */
         visible?: boolean | undefined;
         /**
-         * @docid
-         * @default 2
+         * Sets the borders&apos; width in pixels.
          */
         width?: number | undefined;
       };
       /**
-       * @docid
-       * @default '#000000'
+       * Colors the sankey links. Applies only if colorMode is &apos;none&apos;.
        */
       color?: string;
       /**
-       * @docid
-       * @default 'none'
+       * Specifies how to color links.
        */
       colorMode?: SankeyColorMode;
       /**
-       * @docid
+       * Configures the appearance a link changes to when it is hovered over or pressed.
        */
       hoverStyle?: {
         /**
-         * @docid
+         * Configures the appearance a link&apos;s border changes to when the link is hovered over or pressed.
          */
         border?: {
           /**
-           * @docid
-           * @default undefined
+           * Specifies the color a link&apos;s border changes to when the link is hovered over or pressed.
            */
           color?: string | undefined;
           /**
-           * @docid
-           * @default undefined
+           * Specifies whether a link&apos;s border is visible when the link is hovered over or pressed.
            */
           visible?: boolean | undefined;
           /**
-           * @docid
-           * @default undefined
+           * Specifies the width a link&apos;s border changes to when the link is hovered over or pressed.
            */
           width?: number | undefined;
         };
         /**
-         * @docid
-         * @default undefined
+         * Specifies the color a link changes to when it is hovered over or pressed.
          */
         color?: string | undefined;
         /**
-         * @docid
+         * Applies hatching to a link when it is hovered over or pressed.
          */
         hatching?: {
           /**
-           * @docid
-           * @default 'right'
+           * Specifies hatching lines&apos; direction.
            */
           direction?: HatchDirection;
           /**
-           * @docid
-           * @default 0.75
+           * Specifies hatching lines&apos; transparency.
            */
           opacity?: number;
           /**
-           * @docid
-           * @default 6
+           * Specifies the distance in pixels between two hatching lines.
            */
           step?: number;
           /**
-           * @docid
-           * @default 2
+           * Specifies hatching lines&apos; width.
            */
           width?: number;
         };
         /**
-         * @docid
-         * @default 0.5
+         * Specifies the transparency a link changes to when it is hovered over or pressed.
          */
         opacity?: number | undefined;
       };
       /**
-       * @docid
-       * @default 0.3
+       * Specifies the links&apos; transparency.
        */
       opacity?: number;
     };
     /**
-     * @docid
-     * @public
+     * Configures sankey nodes&apos; appearance.
      */
     node?: {
       /**
-       * @docid
+       * Configures the nodes&apos; borders.
        */
       border?: {
         /**
-         * @docid
-         * @default '#000000'
+         * Colors the nodes&apos; borders.
          */
         color?: string | undefined;
         /**
-         * @docid
-         * @default false
+         * Specifies whether the borders are visible.
          */
         visible?: boolean | undefined;
         /**
-         * @docid
-         * @default 1
+         * Sets the borders&apos; width in pixels.
          */
         width?: number | undefined;
       };
       /**
-       * @docid
-       * @default undefined
+       * Colors the sankey nodes.
        */
       color?: string | undefined;
       /**
-       * @docid
+       * Configures the appearance a node changes to when it is hovered over or pressed.
        */
       hoverStyle?: {
         /**
-         * @docid
+         * Configures the appearance a node&apos;s border changes to when the node is hovered over or pressed.
          */
         border?: {
           /**
-           * @docid
-           * @default undefined
+           * Specifies the color a node&apos;s border changes to when the node is hovered over or pressed.
            */
           color?: string | undefined;
           /**
-           * @docid
-           * @default undefined
+           * Specifies whether a node&apos;s border is visible when the node is hovered over or pressed.
            */
           visible?: boolean | undefined;
           /**
-           * @docid
-           * @default undefined
+           * Specifies the width a node&apos;s border changes to when the node is hovered over or pressed.
            */
           width?: number | undefined;
         };
         /**
-         * @docid
-         * @default undefined
+         * Specifies the color a node changes to when it is hovered over or pressed.
          */
         color?: string | undefined;
         /**
-         * @docid
+         * Applies hatching to a node when it is hovered over or pressed.
          */
         hatching?: {
           /**
-           * @docid
-           * @default 'right'
+           * Specifies hatching lines&apos; direction.
            */
           direction?: HatchDirection;
           /**
-           * @docid
-           * @default 0.75
+           * Specifies hatching lines&apos; transparency.
            */
           opacity?: number;
           /**
-           * @docid
-           * @default 6
+           * Specifies the distance in pixels between two hatching lines.
            */
           step?: number;
           /**
-           * @docid
-           * @default 2
+           * Specifies hatching lines&apos; width.
            */
           width?: number;
         };
         /**
-         * @docid
-         * @default undefined
+         * Specifies the transparency a node changes to when it is hovered over or pressed.
          */
         opacity?: number | undefined;
       };
       /**
-       * @docid
-       * @default 1
+       * Specifies the nodes&apos; transparency.
        */
       opacity?: number;
       /**
-       * @docid
-       * @default 30
+       * Specifies the vertical distance, in pixels, between two nodes.
        */
       padding?: number;
       /**
-       * @docid
-       * @default 15
+       * Specifies the nodes&apos; width in pixels.
        */
       width?: number;
     };
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{viz/sankey:LinkClickEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a sankey link is clicked or tapped.
      */
     onLinkClick?: ((e: LinkClickEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/sankey:LinkHoverEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed after the pointer enters or leaves a sankey link.
      */
     onLinkHoverChanged?: ((e: LinkHoverEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{viz/sankey:NodeClickEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a sankey node is clicked or tapped.
      */
     onNodeClick?: ((e: NodeClickEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/sankey:NodeHoverEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed after the pointer enters or leaves a sankey node.
      */
     onNodeHoverChanged?: ((e: NodeHoverEvent) => void);
     /**
-     * @docid
-     * @default "Material"
-     * @public
+     * Sets the palette to be used to colorize sankey nodes.
      */
     palette?: Array<string> | Palette;
     /**
-     * @docid
-     * @default 'blend'
-     * @public
+     * Specifies how to extend the palette when it contains less colors than the number of sankey nodes.
      */
     paletteExtensionMode?: PaletteExtensionMode;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies nodes&apos; sorting order in their columns.
      */
     sortData?: any | undefined;
     /**
-     * @docid
-     * @default 'source'
-     * @public
+     * Specifies which data source field provides links&apos; source nodes.
      */
     sourceField?: string;
     /**
-     * @docid
-     * @default 'target'
-     * @public
+     * Specifies which data source field provides links&apos; target nodes.
      */
     targetField?: string;
     /**
-     * @docid
-     * @type object
-     * @public
+     * Configures tooltips - small pop-up rectangles that display information about a data-visualizing UI component element being pressed or hovered over with the mouse pointer.
      */
     tooltip?: Tooltip;
     /**
-     * @docid
-     * @default 'weight'
-     * @public
+     * Specifies which data source field provides links&apos; weights.
      */
     weightField?: string;
 }
 /**
- * @public
- * @docid dxSankeyTooltip
+ * 
  */
 export type Tooltip = BaseWidgetTooltip & {
     /**
-     * @docid  dxSankeyOptions.tooltip.customizeLinkTooltip
-     * @default undefined
-     * @type_function_return object
-     * @public
+     * Customizes link tooltips&apos; appearance.
      */
     customizeLinkTooltip?: ((info: { source?: string; target?: string; weight?: number }) => any) | undefined;
     /**
-     * @docid  dxSankeyOptions.tooltip.customizeNodeTooltip
-     * @default undefined
-     * @type_function_param1_field title:string:deprecated(label)
-     * @type_function_return object
-     * @public
+     * Customizes node tooltips&apos; appearance.
      */
     customizeNodeTooltip?: ((info: { title?: string; label?: string; weightIn?: number; weightOut?: number }) => any) | undefined;
     /**
-     * @docid dxSankeyOptions.tooltip.enabled
-     * @default true
-     * @public
+     * Specifies whether the tooltip is enabled.
      */
     enabled?: boolean;
     /**
-     * @docid dxSankeyOptions.tooltip.linkTooltipTemplate
-     * @type_function_return string|Element|jQuery
-     * @default undefined
-     * @public
+     * Specifies a custom template for a link&apos;s tooltip.
      */
     linkTooltipTemplate?: template | ((info: { source?: string; target?: string; weight?: number }, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
-     * @docid dxSankeyOptions.tooltip.nodeTooltipTemplate
-     * @type_function_return string|Element|jQuery
-     * @default undefined
-     * @public
+     * Specifies a custom template for a node&apos;s tooltip.
      */
     nodeTooltipTemplate?: template | ((info: { label?: string; weightIn?: number; weightOut?: number }, element: DxElement) => string | UserDefinedElement) | undefined;
 };
 /**
- * @docid
- * @inherits BaseWidget, DataHelperMixin
- * @namespace DevExpress.viz
- * @public
+ * The Sankey is a UI component that visualizes the flow magnitude between value sets. The values being connected are called nodes; the connections - links. The higher the flow magnitude, the wider the link is.
  */
 export default class dxSankey extends BaseWidget<dxSankeyOptions> {
     /**
-     * @docid
-     * @publicName getAllLinks()
-     * @public
+     * Gets all sankey links.
      */
     getAllLinks(): Array<dxSankeyLink>;
     /**
-     * @docid
-     * @publicName getAllNodes()
-     * @public
+     * Gets all sankey nodes.
      */
     getAllNodes(): Array<dxSankeyNode>;
     getDataSource(): DataSource;
     /**
-     * @docid
-     * @publicName hideTooltip()
-     * @public
+     * Hides all UI component tooltips.
      */
     hideTooltip(): void;
 }
 
 /**
- * @docid
- * @publicName connection
- * @type object
- * @namespace DevExpress.viz
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxSankeyConnectionInfoObject {
     /**
-     * @docid
-     * @public
+     * The title of the link&apos;s source node.
      */
     source?: string;
     /**
-     * @docid
-     * @public
+     * The title of the link&apos;s target node.
      */
     target?: string;
     /**
-     * @docid
-     * @public
+     * The link&apos;s weight.
      */
     weight?: number;
 }
 
 /**
- * @docid
- * @publicName Link
- * @namespace DevExpress.viz
+ * A sankey link&apos;s structure.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxSankeyLink {
     /**
-     * @docid
-     * @public
+     * An object that describes the connection.
      */
     connection?: dxSankeyConnectionInfoObject;
     /**
-     * @docid
-     * @publicName hideTooltip()
-     * @public
+     * Hides the sankey link&apos;s tooltip.
      */
     hideTooltip(): void;
     /**
-     * @docid
-     * @publicName hover(state)
-     * @public
+     * Changes the sankey link&apos;s hover state.
      */
     hover(state: boolean): void;
     /**
-     * @docid
-     * @publicName isHovered()
-     * @public
+     * Indicates whether the sankey link is in the hover state.
      */
     isHovered(): boolean;
     /**
-     * @docid
-     * @publicName showTooltip()
-     * @public
+     * Shows the sankey link&apos;s tooltip.
      */
     showTooltip(): void;
 }
 
 /**
- * @docid
- * @publicName Node
- * @namespace DevExpress.viz
+ * A sankey node&apos;s structure.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxSankeyNode {
     /**
-     * @docid
-     * @publicName hideTooltip()
-     * @public
+     * Hides the sankey node&apos;s tooltip.
      */
     hideTooltip(): void;
     /**
-     * @docid
-     * @publicName hover(state)
-     * @public
+     * Changes the sankey node&apos;s hover state.
      */
     hover(state: boolean): void;
     /**
-     * @docid
-     * @publicName isHovered()
-     * @public
+     * Indicates whether the sankey node is in the hover state.
      */
     isHovered(): boolean;
     /**
-     * @docid
-     * @public
+     * The node&apos;s label.
      */
     label?: string;
     /**
-     * @docid
-     * @public
+     * The node&apos;s incoming links.
      */
     linksIn?: Array<any>;
     /**
-     * @docid
-     * @public
+     * The node&apos;s outgoing links.
      */
     linksOut?: Array<any>;
     /**
-     * @docid
-     * @publicName showTooltip()
-     * @public
+     * Shows the sankey node&apos;s tooltip.
      */
     showTooltip(): void;
     /**
-     * @docid
-     * @deprecated dxSankeyNode.label
-     * @public
+     * The node&apos;s label.
+     * @deprecated Use label instead.
      */
     title?: string;
 }
 
-/** @public */
 export type Properties = dxSankeyOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxSankeyOptions;
 
 // #region deprecated in v23.1
 
-/** @deprecated Use Tooltip instead */
+/**
+ * @deprecated Use Tooltip instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxSankeyTooltip = Tooltip;
 
 // #endregion

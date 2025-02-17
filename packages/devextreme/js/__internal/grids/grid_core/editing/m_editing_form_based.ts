@@ -37,6 +37,9 @@ import {
 import type { EditingController } from './m_editing';
 import { forEachFormItems, getEditorType } from './m_editing_utils';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface IFormBasedEditingControllerExtender {
   // eslint-disable-next-line @typescript-eslint/method-signature-style
   renderFormEditorTemplate(detailCellOptions, item, formTemplateOptions, container, isReadOnly?): any;
@@ -595,6 +598,9 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedE
   }
 };
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export const editingFormBasedModule = {
   extenders: {
     controllers: {

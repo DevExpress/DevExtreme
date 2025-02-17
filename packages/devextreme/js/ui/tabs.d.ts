@@ -22,6 +22,9 @@ import {
     TabsStyle,
 } from '../common';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type ItemLike = string | Item | any;
 
 export {
@@ -32,90 +35,58 @@ export {
 };
 
 /**
- * @docid _ui_tabs_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabs<TItem, TKey>>;
 
 /**
- * @docid _ui_tabs_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabs<TItem, TKey>>;
 
 /**
- * @docid _ui_tabs_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxTabs<TItem, TKey>>;
 
 /**
- * @docid _ui_tabs_ItemClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ItemInfo
+ * The type of the itemClick event handler&apos;s argument.
  */
 export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabs<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_tabs_ItemContextMenuEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ItemInfo
+ * The type of the itemContextMenu event handler&apos;s argument.
  */
 export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabs<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_tabs_ItemHoldEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ItemInfo
+ * The type of the itemHold event handler&apos;s argument.
  */
 export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabs<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_tabs_ItemRenderedEvent
- * @public
- * @type object
- * @inherits EventInfo,ItemInfo
+ * The type of the itemRendered event handler&apos;s argument.
  */
 export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabs<TItem, TKey>> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_tabs_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabs<TItem, TKey>> & ChangedOptionInfo;
 
 /**
- * @docid _ui_tabs_SelectionChangingEvent
- * @public
- * @type object
- * @inherits AsyncCancelable,EventInfo,SelectionChangeInfo
+ * The type of the selectionChanging event handler&apos;s argument.
  */
 export type SelectionChangingEvent<TItem extends ItemLike = any, TKey = any> = SelectionChangingEventBase<dxTabs<TItem, TKey>>;
 
 /**
- * @docid _ui_tabs_SelectionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,SelectionChangeInfo
+ * The type of the selectionChanged event handler&apos;s argument.
  */
 export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabs<TItem, TKey>> & SelectionChangeInfo<TItem>;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @public
- * @docid
+ * 
+ * @deprecated 
  */
 export interface dxTabsOptions<
     TItem extends ItemLike = any,
@@ -123,9 +94,9 @@ export interface dxTabsOptions<
 > extends Properties<TItem, TKey> {}
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid dxTabsOptions
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxTabsBaseOptions<
     TComponent extends dxTabs<TItem, TKey> = dxTabs<any, any>,
@@ -133,122 +104,80 @@ export interface dxTabsBaseOptions<
     TKey = any,
 > extends CollectionWidgetOptions<TComponent, TItem, TKey> {
     /**
-     * @docid dxTabsOptions.dataSource
-     * @type string | Array<string | dxTabsItem | any> | Store | DataSource | DataSourceOptions | null
-     * @default null
-     * @public
+     * Binds the UI component to data.
      */
     dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
-     * @docid dxTabsOptions.focusStateEnabled
-     * @default true &for(desktop)
-     * @public
+     * Specifies whether the UI component can be focused using keyboard navigation.
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxTabsOptions.hoverStateEnabled
-     * @default true
-     * @public
+     * Specifies whether the UI component changes its state when a user pauses on it.
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxTabsOptions.iconPosition
-     * @default 'start'
-     * @default 'top' &for(Material)
-     * @default 'top' &for(Fluent)
-     * @public
+     * Specifies icon position relative to the text inside the tab.
      */
     iconPosition?: TabsIconPosition;
     /**
-     * @docid dxTabsOptions.items
-     * @type Array<string | dxTabsItem | any>
-     * @fires dxTabsOptions.onOptionChanged
-     * @public
+     * An array of items displayed by the UI component.
      */
     items?: Array<TItem>;
     /**
-     * @docid dxTabsOptions.orientation
-     * @default 'horizontal'
-     * @public
+     * Specifies component orientation.
      */
     orientation?: Orientation;
     /**
-     * @docid dxTabsOptions.repaintChangesOnly
-     * @default false
-     * @public
+     * Specifies whether to repaint only those elements whose data changed.
      */
     repaintChangesOnly?: boolean;
     /**
-     * @docid dxTabsOptions.scrollByContent
-     * @default true
-     * @default false &for(desktop)
-     * @public
+     * Specifies whether or not an end user can scroll tabs by swiping.
      */
     scrollByContent?: boolean;
     /**
-     * @docid dxTabsOptions.scrollingEnabled
-     * @default true
-     * @public
+     * Specifies whether or not an end user can scroll tabs.
      */
     scrollingEnabled?: boolean;
     /**
-     * @docid dxTabsOptions.selectionMode
-     * @default 'single'
-     * @public
+     * Specifies whether the UI component enables an end user to select only a single item or multiple items.
      */
     selectionMode?: SingleOrMultiple;
     /**
-     * @docid dxTabsOptions.showNavButtons
-     * @default true
-     * @default false &for(mobile_devices)
-     * @public
+     * Specifies whether navigation buttons should be available when tabs exceed the UI component&apos;s width.
      */
     showNavButtons?: boolean;
     /**
-     * @docid dxTabsOptions.stylingMode
-     * @default 'primary'
-     * @default 'secondary' &for(Fluent)
-     * @public
+     * Specifies the styling mode for the active tab.
      */
     stylingMode?: TabsStyle;
 }
 
 /**
- * @docid
- * @inherits CollectionWidget
- * @namespace DevExpress.ui
- * @public
- * @options dxTabsOptions
+ * The Tabs component is a tab strip used to switch between pages or views. This UI component is included in the TabPanel UI component, but you can use Tabs separately as well.
  */
 export default class dxTabs<
     TItem extends ItemLike = any,
     TKey = any,
 > extends CollectionWidget<Properties<TItem, TKey>, TItem, TKey> { }
 
-/**
- * @public
- * @namespace DevExpress.ui.dxTabs
- */
 export type Item = dxTabsItem;
 
 /**
  * @deprecated Use Item instead
- * @namespace DevExpress.ui
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxTabsItem extends CollectionWidgetItem {
     /**
-     * @docid
-     * @public
+     * Specifies a badge text for the tab.
      */
     badge?: string;
     /**
-     * @docid
-     * @public
+     * Specifies the icon to be displayed on the tab.
      */
     icon?: string;
 }
 
-/** @public */
 export type ExplicitTypes<
     TItem extends ItemLike,
     TKey,
@@ -266,13 +195,15 @@ export type ExplicitTypes<
     SelectionChangingEvent: SelectionChangingEvent<TItem, TKey>;
 };
 
-/** @public */
 export type Properties<
     TItem extends ItemLike = any,
     TKey = any,
 > = dxTabsBaseOptions<dxTabs<TItem, TKey>, TItem, TKey>;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options<
     TItem extends ItemLike = any,
     TKey = any,

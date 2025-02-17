@@ -4,252 +4,193 @@ import {
   EventObject as EventObjectInternal,
 } from '../../events/events.types';
 
-/**
- * @section commonObjectStructures
- * @public
- * @namespace DevExpress.common.core.events
- */
 export type EventObject = EventObjectInternal;
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.core.events
+ * Specifies arguments of `initialized` event.
  */
 export type InitializedEventInfo<TComponent> = {
   /**
-   * @docid
-   * @type this
+   * The UI component&apos;s instance.
    */
   readonly component?: TComponent;
-  /** @docid */
+  /**
+   * The UI component&apos;s container.
+   */
   readonly element?: DxElement;
 };
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.core.events
+ * A type that contains fields common for all events (`component`, `element`, `model`).
  */
 export type EventInfo<TComponent> = {
   /**
-   * @docid
-   * @type this
+   * The UI component&apos;s instance.
    */
   readonly component: TComponent;
-  /** @docid */
+  /**
+   * The UI component&apos;s container.
+   */
   readonly element: DxElement;
   /**
-   * @docid
-   * @hidden
+   * Model data. Available only if you use Knockout.
    */
   readonly model?: any;
 };
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.core.events
+ * A type that contains fields common for all events (`component`, `element`, `model`) and the `event` field.
  */
 export type NativeEventInfo<TComponent, TNativeEvent = Event> = {
   /**
-   * @docid
-   * @type this
+   * The UI component&apos;s instance.
    */
   readonly component: TComponent;
-  /** @docid */
+  /**
+   * The UI component&apos;s container.
+   */
   readonly element: DxElement;
   /**
-   * @docid
-   * @hidden
+   * Model data. Available only if you use Knockout.
    */
   readonly model?: any;
   /**
-   * @docid
-   * @type event
+   * A native browser event with additional fields from `EventObject`.
    */
   readonly event?: DxEvent<TNativeEvent>;
 };
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.core.events
+ * Specifies arguments of `optionChanged` event.
  */
 export type ChangedOptionInfo = {
-  /** @docid */
+  /**
+   * The modified property if it belongs to the first level. Otherwise, the first-level property into which it is nested.
+   */
   readonly name: string;
-  /** @docid */
+  /**
+   * The path to the modified property that includes all parent properties.
+   */
   readonly fullName: string;
-  /** @docid */
+  /**
+   * The modified property&apos;s new value.
+   */
   readonly value?: any;
-  /** @docid */
+  /**
+   * The UI component&apos;s previous value.
+   */
   readonly previousValue?: any;
 };
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.core.events
+ * Specifies item information used in events related to a component&apos;s items.
  */
 export type ItemInfo<TItemData = any> = {
   /**
-   * @docid
-   * @type object
+   * The item&apos;s data.
    */
   readonly itemData?: TItemData;
-  /** @docid */
+  /**
+   * The item&apos;s container.
+   */
   readonly itemElement: DxElement;
-  /** @docid */
+  /**
+   * The item&apos;s index.
+   */
   readonly itemIndex: number;
 };
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.core.events
+ * A type used in events. Specifies whether the event is cancelable.
  */
 export type Cancelable = {
-  /** @docid */
+  /**
+   * Specifies whether the event is cancelable.
+   */
   cancel?: boolean;
 };
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.core.events
+ * 
  */
 export type AsyncCancelable = {
   /**
-   * @docid
-   * @type boolean|Promise<boolean>
+   * 
    */
   cancel: boolean | PromiseLike<boolean>;
 };
 
 /**
- * @docid eventsMethods.off
- * @publicName off(element)
- * @namespace DevExpress.common.core.events
- * @public
+ * Detaches all handlers from the specified elements.
  */
 export function off(element: Element | Array<Element>): void;
 
 /**
- * @docid eventsMethods.off
- * @publicName off(element, eventName)
- * @namespace DevExpress.common.core.events
- * @public
+ * Detaches all handlers of the specified event from the specified elements.
  */
 export function off(element: Element | Array<Element>, eventName: string): void;
 
 /**
- * @docid eventsMethods.off
- * @publicName off(element, eventName, handler)
- * @namespace DevExpress.common.core.events
- * @public
+ * Detaches an event handler from the specified elements.
  */
 export function off(element: Element | Array<Element>, eventName: string, handler: Function): void;
 
 /**
- * @docid eventsMethods.off
- * @publicName off(element, eventName, selector)
- * @namespace DevExpress.common.core.events
- * @public
+ * Detaches all event handlers of the specified type attached using the on(element, eventName, selector, data, handler) or on(element, eventName, selector, handler) method.
  */
 export function off(element: Element | Array<Element>, eventName: string, selector: string): void;
 
 /**
- * @docid eventsMethods.off
- * @publicName off(element, eventName, selector, handler)
- * @namespace DevExpress.common.core.events
- * @public
+ * Detaches the specified event handler attached using the on(element, eventName, selector, data, handler) or on(element, eventName, selector, handler) method.
  */
 export function off(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
 
 /**
- * @docid eventsMethods.on
- * @publicName on(element, eventName, data, handler)
- * @namespace DevExpress.common.core.events
- * @param3 data:object
- * @public
+ * Attaches an event handler to the specified elements. Allows you to pass custom data to the handler.
  */
 export function on(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
 
 /**
- * @docid eventsMethods.on
- * @publicName on(element, eventName, handler)
- * @namespace DevExpress.common.core.events
- * @public
+ * Attaches an event handler to the specified elements.
  */
 export function on(element: Element | Array<Element>, eventName: string, handler: Function): void;
 
 /**
- * @docid eventsMethods.on
- * @publicName on(element, eventName, selector, data, handler)
- * @namespace DevExpress.common.core.events
- * @param4 data:object
- * @public
+ * Attaches an event handler to the specified elements&apos; descendants. Allows you to pass custom data to the handler.
  */
 export function on(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
 
 /**
- * @docid eventsMethods.on
- * @publicName on(element, eventName, selector, handler)
- * @namespace DevExpress.common.core.events
- * @public
+ * Attaches an event handler to the specified elements&apos; descendants.
  */
 export function on(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
 
 /**
- * @docid eventsMethods.one
- * @publicName one(element, eventName, data, handler)
- * @namespace DevExpress.common.core.events
- * @param3 data:object
- * @public
+ * Attaches an event handler that is executed only once to the specified elements. Allows you to pass custom data to the handler.
  */
 export function one(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
 
 /**
- * @docid eventsMethods.one
- * @publicName one(element, eventName, handler)
- * @namespace DevExpress.common.core.events
- * @public
+ * Attaches an event handler that is executed only once to the specified elements.
  */
 export function one(element: Element | Array<Element>, eventName: string, handler: Function): void;
 
 /**
- * @docid eventsMethods.one
- * @publicName one(element, eventName, selector, data, handler)
- * @namespace DevExpress.common.core.events
- * @param4 data:object
- * @public
+ * Attaches an event handler that is executed only once to the specified elements&apos; descendants. Allows you to pass custom data to the handler.
  */
 export function one(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
 
 /**
- * @docid eventsMethods.one
- * @publicName one(element, eventName, selector, handler)
- * @namespace DevExpress.common.core.events
- * @public
+ * Attaches an event handler that is executed only once to the specified elements&apos; descendants.
  */
 export function one(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
 
 /**
- * @docid eventsMethods.trigger
- * @publicName trigger(element, event)
- * @namespace DevExpress.common.core.events
- * @param2 event:string|event
- * @public
+ * Triggers an event for the specified elements.
  */
 export function trigger(element: Element | Array<Element>, event: string | DxEvent): void;
 
 /**
- * @docid eventsMethods.trigger
- * @publicName trigger(element, event, extraParameters)
- * @namespace DevExpress.common.core.events
- * @param2 event:string|event
- * @param3 extraParameters:object
- * @public
+ * Triggers an event for the specified elements. Allows you to pass custom parameters to event handlers.
  */
 export function trigger(element: Element | Array<Element>, event: string | DxEvent, extraParameters: any): void;

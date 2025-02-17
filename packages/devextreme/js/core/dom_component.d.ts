@@ -19,14 +19,16 @@ import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
 import { DefaultOptionsRule } from './options';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type OptionChangedEventInfo<TComponent> = EventInfo<TComponent> & ChangedOptionInfo;
 
 /* eslint-disable no-underscore-dangle */
 
 /**
- * @namespace DevExpress
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface DOMComponentOptions<TComponent> extends ComponentOptions<
     EventInfo<TComponent>,
@@ -34,58 +36,37 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
     OptionChangedEventInfo<TComponent>
 > {
     /**
-     * @docid
-     * @default {}
-     * @public
+     * 
      */
     bindingOptions?: { [key: string]: any };
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Specifies the global attributes to be attached to the UI component&apos;s container element.
      */
     elementAttr?: { [key: string]: any };
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the UI component&apos;s height.
      */
     height?: number | string | (() => number | string) | undefined;
     /**
-     * @docid
-     * @action
-     * @default null
-     * @public
+     * A function that is executed before the UI component is disposed of.
      */
     onDisposing?: ((e: EventInfo<TComponent>) => void);
     /**
-     * @docid
-     * @action
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:<DOMComponent>
-     * @public
+     * A function that is executed after a UI component property is changed.
      */
     onOptionChanged?: ((e: OptionChangedEventInfo<TComponent>) => void);
     /**
-     * @docid
-     * @default false
-     * @public
+     * Switches the UI component to a right-to-left representation.
      */
     rtlEnabled?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the UI component&apos;s width.
      */
     width?: number | string | (() => number | string) | undefined;
 }
 /**
- * @docid
- * @section uiWidgets
- * @inherits Component
- * @namespace DevExpress
- * @hidden
+ * A base class for all components.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export default class DOMComponent<TProperties = Properties> extends Component<TProperties> {
     _templateManager: TemplateManager;
@@ -95,38 +76,21 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
     constructor(element: UserDefinedElement, options?: TProperties);
 
     /**
-     * @docid
-     * @static
-     * @section uiWidgets
-     * @publicName getInstance(element)
-     * @param1 element:Element|JQuery
-     * @return DOMComponent
-     * @public
+     * Gets the instance of a UI component found using its DOM node.
      */
     static getInstance(element: UserDefinedElement): DOMComponent<Properties>;
 
     /**
-     * @docid
-     * @static
-     * @section uiWidgets
-     * @publicName defaultOptions(rule)
-     * @param1 rule:Object
-     * @param1_field device:Device|function
-     * @param1_field options:Object
-     * @public
+     * Specifies the device-dependent default configuration properties for this component.
      */
     static defaultOptions<TProperties = Properties>(rule: DefaultOptionsRule<TProperties>): void;
 
     /**
-     * @docid
-     * @publicName dispose()
-     * @public
+     * Disposes of all the resources allocated to the widget instance.
      */
     dispose(): void;
     /**
-     * @docid
-     * @publicName element()
-     * @public
+     * Gets the root UI component element.
      */
     element(): DxElement;
 
@@ -139,14 +103,26 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
     _validateOptions(options: TProperties): TProperties;
 }
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type ComponentClass<TProperties> = {
     new(element: HTMLDivElement, options?: TProperties): DOMComponent<TProperties>;
     getInstance(widgetRef: HTMLDivElement): DOMComponent<TProperties>;
 };
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 interface DOMComponentInstance extends DOMComponent<Properties> { }
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Properties = DOMComponentOptions<DOMComponentInstance>;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = Properties;

@@ -1,129 +1,73 @@
 /**
- * @namespace DevExpress
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface ComponentOptions<TDisposingEvent, TInitializedEvent, TOptionChangedEvent> {
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @default null
-   * @action
-   * @public
+   * A function that is executed before the UI component is disposed of.
    */
   onDisposing?: ((e: TDisposingEvent) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field element:DxElement
-   * @default null
-   * @action
-   * @public
+   * A function used in JavaScript frameworks to save the UI component instance.
    */
   onInitialized?: ((e: TInitializedEvent) => void);
   /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field name:string
-   * @type_function_param1_field fullName:string
-   * @type_function_param1_field value:any
-   * @default null
-   * @action
-   * @public
+   * A function that is executed after a UI component property is changed.
    */
   onOptionChanged?: ((e: TOptionChangedEvent) => void);
 }
 /**
- * @docid Component
- * @namespace DevExpress
- * @hidden
- * @wrappable
- * @options ComponentOptions
+ * A base class for all components and UI components.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export class Component<TProperties> {
   constructor(options?: TProperties);
   /**
-   * @docid
-   * @publicName beginUpdate()
-   * @public
+   * Postpones rendering that can negatively affect performance until the endUpdate() method is called.
    */
   beginUpdate(): void;
   /**
-   * @docid
-   * @publicName endUpdate()
-   * @public
+   * Refreshes the UI component after a call of the beginUpdate() method.
    */
   endUpdate(): void;
   /**
-   * @docid
-   * @publicName instance()
-   * @return this
-   * @public
+   * Gets the UI component&apos;s instance. Use it to access other methods of the UI component.
    */
   instance(): this;
   /**
-   * @docid
-   * @publicName off(eventName)
-   * @return this
-   * @public
+   * Detaches all event handlers from a single event.
    */
   off(eventName: string): this;
   /**
-   * @docid
-   * @publicName off(eventName, eventHandler)
-   * @return this
-   * @public
+   * Detaches a particular event handler from a single event.
    */
   off(eventName: string, eventHandler: Function): this;
   /**
-   * @docid
-   * @publicName on(eventName, eventHandler)
-   * @return this
-   * @public
+   * Subscribes to an event.
    */
   on(eventName: string, eventHandler: Function): this;
   /**
-   * @docid
-   * @publicName on(events)
-   * @return this
-   * @public
+   * Subscribes to events.
    */
   on(events: { [key: string]: Function }): this;
   /**
-   * @docid
-   * @publicName option()
-   * @return object
-   * @public
+   * Gets all UI component properties.
    */
   option(): TProperties;
   /**
-   * @docid
-   * @publicName option(optionName)
-   * @param1 optionName:string
-   * @public
-   */
+    * Gets the value of a single property.
+    */
    option<TPropertyName extends string>(optionName: TPropertyName): TPropertyName extends (keyof TProperties) ? TProperties[TPropertyName] : unknown;
   /**
-   * @docid
-   * @publicName option(optionName, optionValue)
-   * @param1 optionName:string
-   * @public
-   */
+    * Updates the value of a single property.
+    */
    option<TPropertyName extends string>(optionName: TPropertyName, optionValue: TPropertyName extends keyof TProperties ? TProperties[TPropertyName] : unknown): void;
   /**
-   * @docid
-   * @publicName option(options)
-   * @param1 options:object
-   * @public
-   */
+    * Updates the values of several properties.
+    */
    option(options: Partial<TProperties>): void;
   /**
-   * @docid
-   * @publicName resetOption(optionName)
-   * @public
+   * Resets a property to its default value.
    */
   resetOption(optionName: string): void;
 }

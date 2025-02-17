@@ -1,27 +1,22 @@
 import FileSystemItem from './file_system_item';
 
 /**
- * @docid FileSystemError
- * @namespace DevExpress.fileManagement
- * @public
+ * An object that contains information about the error.
  */
 export default class FileSystemError {
    constructor(errorCode?: number, fileSystemItem?: FileSystemItem, errorText?: string);
     /**
-     * @docid FileSystemError.fileSystemItem
-     * @public
+     * The processed file or directory.
      */
     fileSystemItem?: FileSystemItem;
 
     /**
-     * @docid FileSystemError.errorCode
-     * @public
+     * The error code.
      */
     errorCode?: number;
 
     /**
-     * @docid FileSystemError.errorText
-     * @public
-     */
+      * The error message.
+      */
      errorText?: string;
 }

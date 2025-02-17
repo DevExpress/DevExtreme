@@ -27,146 +27,110 @@ import {
     EventInfo,
 } from '../../common/core/events';
 
-/** @public */
 export type DropDownPredefinedButton = 'clear' | 'dropDown';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface DropDownButtonTemplateDataModel {
     readonly text?: string;
     readonly icon?: string;
 }
 
 /**
- * @namespace DevExpress.ui
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptions<TComponent>, 'validationMessagePosition'> {
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not the UI component allows an end user to enter a custom value.
      */
     acceptCustomValue?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the UI component changes its visual state as a result of user interaction.
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid
-     * @default "instantly"
-     * @public
+     * Specifies the way an end user applies the selected value.
      */
     applyValueMode?: ApplyValueMode;
     /**
-     * @docid
-     * @default {}
-     * @public
-     * @type dxPopupOptions | dxPopoverOptions
+     * Configures the drop-down field which holds the content.
      */
     dropDownOptions?: PopupProperties | PopoverProperties;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Allows you to add custom buttons to the input text field.
      */
     buttons?: Array<DropDownPredefinedButton | TextEditorButton>;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to render the drop-down field&apos;s content when it is displayed. If false, the content is rendered immediately.
      */
     deferRendering?: boolean;
     /**
-     * @docid
-     * @default "dropDownButton"
-     * @type_function_param1 buttonData:object
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies a custom template for the drop-down button.
      */
     dropDownButtonTemplate?: template | ((buttonData: DropDownButtonTemplateDataModel, contentElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default null
-     * @action
-     * @public
+     * A function that is executed once the drop-down editor is closed.
      */
     onClosed?: ((e: EventInfo<TComponent>) => void);
     /**
-     * @docid
-     * @default null
-     * @action
-     * @public
+     * A function that is executed once the drop-down editor is opened.
      */
     onOpened?: ((e: EventInfo<TComponent>) => void);
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether a user can open the drop-down list by clicking a text field.
      */
     openOnFieldClick?: boolean;
     /**
-     * @docid
-     * @default false
-     * @fires dxDropDownEditorOptions.onOpened
-     * @fires dxDropDownEditorOptions.onClosed
-     * @public
+     * Specifies whether or not the drop-down editor is displayed.
      */
     opened?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the drop-down button is visible.
      */
     showDropDownButton?: boolean;
     /**
-     * @docid
-     * @default 'auto'
-     * @public
+     * Specifies the position of a validation message relative to the component. The validation message describes the validation rules that this component&apos;s value does not satisfy.
      */
     validationMessagePosition?: Position | Mode;
     /**
-     * @docid
-     * @default null
-     * @public
+     * Specifies the currently selected value.
      */
     value?: any;
 }
 /**
- * @docid
- * @inherits dxTextBox
- * @hidden
- * @namespace DevExpress.ui
- * @options dxDropDownEditorOptions
+ * A drop-down editor UI component.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export default class dxDropDownEditor<TProperties> extends dxTextBox<TProperties> {
     /**
-     * @docid
-     * @publicName close()
-     * @public
+     * Closes the drop-down editor.
      */
     close(): void;
     /**
-     * @docid
-     * @publicName content()
-     * @public
+     * Gets the popup window&apos;s content.
      */
     content(): DxElement;
     /**
-     * @docid
-     * @publicName field()
-     * @public
+     * Gets the UI component&apos;s `` element.
      */
     field(): DxElement;
     /**
-     * @docid
-     * @publicName open()
-     * @public
+     * Opens the drop-down editor.
      */
     open(): void;
 }
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 interface DropDownEditorInstance extends dxDropDownEditor<Properties> { }
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Properties = dxDropDownEditorOptions<DropDownEditorInstance>;
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = Properties;

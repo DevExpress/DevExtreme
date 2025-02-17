@@ -59,716 +59,529 @@ export {
     WordWrap,
 };
 
-/** @public */
 export type FunnelAlgorithm = 'dynamicHeight' | 'dynamicSlope';
 /**
  * @deprecated Use ShiftLabelOverlap from 'devextreme/common/charts' instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type FunnelLabelOverlap = ShiftLabelOverlap;
 
 /**
- * @public
- * @docid FunnelLegendItem
- * @inherits BaseLegendItem
- * @type object
- * @namespace DevExpress.viz.dxFunnel
+ * An object that provides information about a legend item in the Funnel UI component.
  */
 export type LegendItem = FunnelLegendItem;
 
 /**
  * @deprecated Use LegendItem instead
- * @namespace DevExpress.viz
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface FunnelLegendItem extends BaseLegendItem {
     /**
-     * @docid
-     * @type dxFunnelItem
-     * @public
+     * The funnel item that the legend item represents.
      */
     item?: Item;
 }
 
 /**
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface FunnelItemInfo {
   /**
-   * @docid
-   * @type dxFunnelItem
+   * 
    */
   readonly item: Item;
 }
 
 /**
- * @docid _viz_funnel_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxFunnel>;
 
 /**
- * @docid _viz_funnel_DrawnEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the drawn event handler&apos;s argument.
  */
 export type DrawnEvent = EventInfo<dxFunnel>;
 
 /**
- * @docid _viz_funnel_ExportedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the exported event handler&apos;s argument.
  */
 export type ExportedEvent = EventInfo<dxFunnel>;
 
 /**
- * @docid _viz_funnel_ExportingEvent
- * @public
- * @type object
- * @inherits EventInfo,ExportInfo
+ * The type of the exporting event handler&apos;s argument.
  */
 export type ExportingEvent = EventInfo<dxFunnel> & ExportInfo;
 
 /**
- * @docid _viz_funnel_FileSavingEvent
- * @public
- * @type object
- * @inherits FileSavingEventInfo
+ * The type of the fileSaving event handler&apos;s argument.
  */
 export type FileSavingEvent = FileSavingEventInfo<dxFunnel>;
 
 /**
- * @docid _viz_funnel_HoverChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,FunnelItemInfo
+ * The type of the hoverChanged event handler&apos;s argument.
  */
 export type HoverChangedEvent = EventInfo<dxFunnel> & FunnelItemInfo;
 
 /**
- * @docid _viz_funnel_IncidentOccurredEvent
- * @public
- * @type object
- * @inherits EventInfo,IncidentInfo
+ * The type of the incidentOccurred event handler&apos;s argument.
  */
 export type IncidentOccurredEvent = EventInfo<dxFunnel> & IncidentInfo;
 
 /**
- * @docid _viz_funnel_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxFunnel>;
 
 /**
- * @docid _viz_funnel_ItemClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,FunnelItemInfo
+ * The type of the itemClick event handler&apos;s argument.
  */
 export type ItemClickEvent = NativeEventInfo<dxFunnel, MouseEvent | PointerEvent> & FunnelItemInfo;
 
 /**
- * @docid _viz_funnel_LegendClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,FunnelItemInfo
+ * The type of the legendClick event handler&apos;s argument.
  */
 export type LegendClickEvent = NativeEventInfo<dxFunnel, MouseEvent | PointerEvent> & FunnelItemInfo;
 
 /**
- * @docid _viz_funnel_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxFunnel> & ChangedOptionInfo;
 
 /**
- * @docid _viz_funnel_SelectionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,FunnelItemInfo
+ * The type of the selectionChanged event handler&apos;s argument.
  */
 export type SelectionChangedEvent = EventInfo<dxFunnel> & FunnelItemInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.viz
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
-     * @docid
-     * @public
+     * Specifies adaptive layout properties.
      */
     adaptiveLayout?: {
       /**
-       * @docid
-       * @default 80
+       * Specifies the minimum container height at which the layout begins to adapt.
        */
       height?: number;
       /**
-       * @docid
-       * @default true
+       * Specifies whether item labels should be kept when the UI component adapts the layout.
        */
       keepLabels?: boolean;
       /**
-       * @docid
-       * @default 80
+       * Specifies the minimum container width at which the layout begins to adapt.
        */
       width?: number;
     };
     /**
-     * @docid
-     * @default 'dynamicSlope'
-     * @public
+     * Specifies the algorithm for building the funnel.
      */
     algorithm?: FunnelAlgorithm;
     /**
-     * @docid
-     * @default 'arg'
-     * @public
+     * Specifies which data source field provides arguments for funnel items. The argument identifies a funnel item and represents it on the legend.
      */
     argumentField?: string;
     /**
-     * @docid
-     * @default 'color'
-     * @public
+     * Specifies which data source field provides colors for funnel items. If this field is absent, the palette provides the colors.
      */
     colorField?: string;
     /**
-     * @docid
-     * @notUsedInTheme
-     * @public
-     * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
+     * Binds the UI component to data.
      */
     dataSource?: DataSourceLike<any> | null;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether funnel items change their style when a user pauses on them.
      */
     hoverEnabled?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Turns the funnel upside down.
      */
     inverted?: boolean;
     /**
-     * @docid
-     * @public
+     * Configures funnel items&apos; appearance.
      */
     item?: {
       /**
-       * @docid
+       * Configures a funnel item&apos;s border.
        */
       border?: {
         /**
-         * @docid
-         * @default #ffffff
+         * Colors a funnel item&apos;s border.
          */
         color?: string | undefined;
         /**
-         * @docid
-         * @default false
+         * Makes a funnel item&apos;s border visible.
          */
         visible?: boolean | undefined;
         /**
-         * @docid
-         * @default 2
+         * Sets the width of a funnel item&apos;s border in pixels.
          */
         width?: number | undefined;
       };
       /**
-       * @docid
+       * Configures a funnel item&apos;s appearance when a user presses the item or hovers the mouse pointer over it.
        */
       hoverStyle?: {
         /**
-         * @docid
+         * Configures a funnel item&apos;s border appearance when a user presses the item or hovers the mouse pointer over it.
          */
         border?: {
           /**
-           * @docid
-           * @default undefined
+           * Colors a funnel item&apos;s border when a user presses the item or hovers the mouse pointer over it.
            */
           color?: string | undefined;
           /**
-           * @docid
-           * @default undefined
+           * Shows a funnel item&apos;s border when a user presses the item or hovers the mouse pointer over it.
            */
           visible?: boolean | undefined;
           /**
-           * @docid
-           * @default undefined
+           * Thickens a funnel item&apos;s border when a user presses the item or hovers the mouse pointer over it.
            */
           width?: number | undefined;
         };
         /**
-         * @docid
+         * Applies hatching to a funnel item when a user presses the item or hovers the mouse pointer over it.
          */
         hatching?: {
           /**
-           * @docid
-           * @default 'right'
+           * Specifies hatching line direction.
            */
           direction?: HatchDirection;
           /**
-           * @docid
-           * @default 0.75
+           * Specifies the transparency of hatching lines.
            */
           opacity?: number;
           /**
-           * @docid
-           * @default 6
+           * Specifies the distance between two side-by-side hatching lines in pixels.
            */
           step?: number;
           /**
-           * @docid
-           * @default 2
+           * Specifies hatching lines&apos; width in pixels.
            */
           width?: number;
         };
       };
       /**
-       * @docid
+       * Configures a funnel item&apos;s appearance when a user selects it.
        */
       selectionStyle?: {
         /**
-         * @docid
+         * Configures a funnel item&apos;s border appearance when a user selects this item.
          */
         border?: {
           /**
-           * @docid
-           * @default undefined
+           * Colors the selected funnel item&apos;s border.
            */
           color?: string | undefined;
           /**
-           * @docid
-           * @default undefined
+           * Shows the selected funnel item&apos;s border.
            */
           visible?: boolean | undefined;
           /**
-           * @docid
-           * @default undefined
+           * Thickens the selected funnel item&apos;s border.
            */
           width?: number | undefined;
         };
         /**
-         * @docid
+         * Applies hatching to a selected funnel item.
          */
         hatching?: {
           /**
-           * @docid
-           * @default "right"
+           * Specifies hatching line direction.
            */
           direction?: HatchDirection;
           /**
-           * @docid
-           * @default 0.5
+           * Specifies hatching line transparency.
            */
           opacity?: number;
           /**
-           * @docid
-           * @default 6
+           * Specifies the distance between two side-by-side hatching lines in pixels.
            */
           step?: number;
           /**
-           * @docid
-           * @default 2
+           * Specifies hatching line width in pixels.
            */
           width?: number;
         };
       };
     };
     /**
-     * @docid
-     * @public
+     * Configures funnel item labels.
      */
     label?: {
       /**
-       * @docid
+       * Colors the labels&apos; background. The default color is inherited from the funnel items.
        */
       backgroundColor?: string;
       /**
-       * @docid
+       * Configures the label borders.
        */
       border?: {
         /**
-         * @docid
-         * @default '#d3d3d3'
+         * Colors the label borders.
          */
         color?: string;
         /**
-         * @docid
-         * @default 'solid'
+         * Sets the label border dash style.
          */
         dashStyle?: DashStyle;
         /**
-         * @docid
-         * @default false
+         * Shows the label borders.
          */
         visible?: boolean;
         /**
-         * @docid
-         * @default 1
+         * Specifies the label border width.
          */
         width?: number;
       };
       /**
-       * @docid
+       * Configures label connectors.
        */
       connector?: {
         /**
-         * @docid
-         * @default undefined
+         * Colors label connectors.
          */
         color?: string | undefined;
         /**
-         * @docid
-         * @default 0.5
+         * Specifies the transparency of label connectors.
          */
         opacity?: number;
         /**
-         * @docid
-         * @default true
+         * Shows label connectors.
          */
         visible?: boolean;
         /**
-         * @docid
-         * @default 1
+         * Specifies the label connector width in pixels.
          */
         width?: number;
       };
       /**
-       * @docid
-       * @type_function_param1_field item:dxFunnelItem
-       * @notUsedInTheme
+       * Customizes labels&apos; text.
        */
       customizeText?: ((itemInfo: { item?: Item; value?: number; valueText?: string; percent?: number; percentText?: string }) => string);
       /**
-       * @docid
-       * @default '#767676' &prop(color)
+       * Specifies labels&apos; font properties.
        */
       font?: Font;
       /**
-       * @docid
-       * @default undefined
+       * Formats the item value before displaying it in the label.
        */
       format?: Format | undefined;
       /**
-       * @docid
-       * @default 'right'
+       * Specifies labels&apos; position in relation to the funnel items.
        */
       horizontalAlignment?: HorizontalEdge;
       /**
-       * @docid
-       * @default 0
+       * Moves labels from their initial positions.
        */
       horizontalOffset?: number;
       /**
-       * @docid
-       * @default 'columns'
+       * Specifies whether to display labels inside or outside funnel items or arrange them in columns.
        */
       position?: LabelPosition;
       /**
-       * @docid
-       * @default false
+       * Specifies whether to show labels for items with zero value.
        */
       showForZeroValues?: boolean;
       /**
-       * @docid
-       * @default 'ellipsis'
+       * Specifies what to do with label texts that overflow the allocated space after applying wordWrap: hide, truncate them and display an ellipsis, or do nothing.
        */
       textOverflow?: TextOverflow;
       /**
-       * @docid
-       * @default true
+       * Controls the labels&apos; visibility.
        */
       visible?: boolean;
       /**
-       * @docid
-       * @default 'normal'
+       * Specifies how to wrap label texts if they do not fit into a single line.
        */
       wordWrap?: WordWrap;
     };
     /**
-     * @docid
-     * @inherits BaseLegend
-     * @type object
-     * @public
+     * Configures the legend.
      */
     legend?: Legend;
     /**
-     * @docid
-     * @default 0
-     * @public
+     * Specifies the ratio between the height of the neck and that of the whole funnel. Accepts values from 0 to 1. Applies only if the algorithm is &apos;dynamicHeight&apos;.
      */
     neckHeight?: number;
     /**
-     * @docid
-     * @default 0
-     * @public
+     * Specifies the ratio between the width of the neck and that of the whole funnel. Accepts values from 0 to 1. Applies only if the algorithm is &apos;dynamicHeight&apos;.
      */
     neckWidth?: number;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/funnel:HoverChangedEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed after the pointer enters or leaves a funnel item.
      */
     onHoverChanged?: ((e: HoverChangedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{viz/funnel:ItemClickEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a funnel item is clicked or tapped.
      */
     onItemClick?: ((e: ItemClickEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{viz/funnel:LegendClickEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a legend item is clicked or tapped.
      */
     onLegendClick?: ((e: LegendClickEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/funnel:SelectionChangedEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a funnel item is selected or selection is canceled.
      */
     onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
-     * @docid
-     * @default "Material"
-     * @public
+     * Sets the palette to be used to colorize funnel items.
      */
     palette?: Array<string> | Palette;
     /**
-     * @docid
-     * @default 'blend'
-     * @public
+     * Specifies what to do with colors in the palette when their number is less than the number of funnel items.
      */
     paletteExtensionMode?: PaletteExtensionMode;
     /**
-     * @docid
-     * @default "shift"
-     * @public
+     * Specifies how item labels should behave when they overlap.
      */
     resolveLabelOverlapping?: ShiftLabelOverlap;
     /**
-     * @docid
-     * @default 'single'
-     * @public
+     * Specifies whether a single or multiple funnel items can be in the selected state at a time. Assigning &apos;none&apos; disables the selection feature.
      */
     selectionMode?: SingleMultipleOrNone;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to sort funnel items.
      */
     sortData?: boolean;
     /**
-     * @docid
-     * @type object
-     * @public
+     * Configures tooltips - small pop-up rectangles that display information about a data-visualizing UI component element being pressed or hovered over with the mouse pointer.
      */
     tooltip?: Tooltip;
     /**
-     * @docid
-     * @default 'val'
-     * @public
+     * Specifies which data source field provides values for funnel items. The value defines a funnel item&apos;s area.
      */
     valueField?: string;
 }
 /**
- * @public
- * @docid dxFunnelLegend
+ * Configures the legend.
  */
 export type Legend = BaseLegend & {
     /**
-     * @docid dxFunnelOptions.legend.customizeHint
-     * @type_function_param1_field item:dxFunnelItem
-     * @public
+     * Specifies the hint that appears when a user hovers the mouse pointer over a legend item.
      */
     customizeHint?: ((itemInfo: { item?: Item; text?: string }) => string);
     /**
-     * @docid dxFunnelOptions.legend.customizeItems
-     * @type_function_param1 items:Array<FunnelLegendItem>
-     * @type_function_return Array<FunnelLegendItem>
-     * @public
+     * Allows you to change the order, text, and visibility of legend items.
      */
     customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
     /**
-     * @docid dxFunnelOptions.legend.customizeText
-     * @type_function_param1_field item:dxFunnelItem
-     * @notUsedInTheme
-     * @public
+     * Customizes the text displayed by legend items.
      */
     customizeText?: ((itemInfo: { item?: Item; text?: string }) => string);
     /**
-     * @docid dxFunnelOptions.legend.markerTemplate
-     * @default undefined
-     * @type_function_param1 legendItem:FunnelLegendItem
-     * @type_function_return string|SVGElement|jQuery
-     * @public
+     * Specifies an SVG element that serves as a custom legend item marker.
      */
     markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
-     * @docid dxFunnelOptions.legend.visible
-     * @default false
-     * @public
+     * Specifies whether the legend is visible.
      */
     visible?: boolean;
 };
 /**
- * @public
- * @docid dxFunnelTooltip
+ * 
  */
 export type Tooltip = BaseWidgetTooltip & {
     /**
-     * @docid dxFunnelOptions.tooltip.contentTemplate
-     * @type_function_param1_field item:dxFunnelItem
-     * @type_function_return string|Element|jQuery
-     * @default undefined
-     * @public
+     * Specifies a custom template for a tooltip.
      */
     contentTemplate?: template | ((info: { item?: Item; value?: number; valueText?: string; percent?: number; percentText?: string }, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
-     * @docid dxFunnelOptions.tooltip.customizeTooltip
-     * @default undefined
-     * @type_function_param1_field item:dxFunnelItem
-     * @type_function_return object
-     * @public
+     * Customizes a specific tooltip&apos;s appearance.
      */
     customizeTooltip?: ((info: { item?: Item; value?: number; valueText?: string; percent?: number; percentText?: string }) => any) | undefined;
 };
 /**
- * @docid
- * @inherits BaseWidget, DataHelperMixin
- * @namespace DevExpress.viz
- * @public
+ * The Funnel is a UI component that visualizes a value at different stages. It helps assess value changes throughout these stages and identify potential issues. The Funnel UI component conveys information using different interactive elements (tooltips, labels, legend) and enables you to create not only a funnel, but also a pyramid chart.
  */
 export default class dxFunnel extends BaseWidget<dxFunnelOptions> {
     /**
-     * @docid
-     * @publicName clearSelection()
-     * @public
+     * Cancels the selection of all funnel items.
      */
     clearSelection(): void;
     /**
-     * @docid
-     * @publicName getAllItems()
-     * @return Array<dxFunnelItem>
-     * @public
+     * Provides access to all funnel items.
      */
     getAllItems(): Array<Item>;
     getDataSource(): DataSource;
     /**
-     * @docid
-     * @publicName hideTooltip()
-     * @public
+     * Hides all UI component tooltips.
      */
     hideTooltip(): void;
 }
 
-/**
- * @public
- * @namespace DevExpress.viz.dxFunnel
- */
 export type Item = dxFunnelItem;
 
 /**
  * @deprecated Use Item instead
- * @namespace DevExpress.viz
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxFunnelItem {
     /**
-     * @docid
-     * @public
+     * The item&apos;s argument.
      */
     argument?: string | Date | number;
     /**
-     * @docid
-     * @public
+     * The item&apos;s original data object.
      */
     data?: any;
     /**
-     * @docid
-     * @publicName getColor()
-     * @public
+     * Gets the funnel item&apos;s color specified in the data source or palette.
      */
     getColor(): string;
     /**
-     * @docid
-     * @publicName hover(state)
-     * @public
+     * Changes the funnel item&apos;s hover state.
      */
     hover(state: boolean): void;
     /**
-     * @docid
-     * @publicName isHovered()
-     * @public
+     * Indicates whether the funnel item is in the hover state.
      */
     isHovered(): boolean;
     /**
-     * @docid
-     * @publicName isSelected()
-     * @public
+     * Indicates whether the funnel item is selected.
      */
     isSelected(): boolean;
     /**
-     * @docid
-     * @public
+     * The item&apos;s calculated percentage value.
      */
     percent?: number;
     /**
-     * @docid
-     * @publicName select(state)
-     * @public
+     * Selects or cancels the funnel item&apos;s selection.
      */
     select(state: boolean): void;
     /**
-     * @docid
-     * @publicName showTooltip()
-     * @public
+     * Shows the funnel item&apos;s tooltip.
      */
     showTooltip(): void;
     /**
-     * @docid
-     * @public
+     * The item&apos;s value.
      */
     value?: number;
 }
 
-/** @public */
 export type Properties = dxFunnelOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxFunnelOptions;
 
 // #region deprecated in v23.1
 
-/** @deprecated Use Legend instead */
+/**
+ * @deprecated Use Legend instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxFunnelLegend = Legend;
 
-/** @deprecated Use Tooltip instead */
+/**
+ * @deprecated Use Tooltip instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxFunnelTooltip = Tooltip;
 
 // #endregion

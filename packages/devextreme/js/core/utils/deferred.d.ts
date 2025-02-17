@@ -1,7 +1,13 @@
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 interface Callback<T> {
     // eslint-disable-next-line @typescript-eslint/prefer-function-type
     (value: T, ...args: T[]): void;
 }
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export class DeferredObj<T> {
     constructor();
     state(): 'pending' | 'rejected' | 'resolved';
@@ -20,20 +26,26 @@ export class DeferredObj<T> {
     promise(target?: T): Promise<T>;
 }
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export function Deferred<T>(): DeferredObj<T>;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface PromiseType<T> { }
 
 /**
- * @docid
- * @type Promise<void>
- * @namespace DevExpress.core.utils
- */
-// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-export type DxPromise<T = void> = {} extends PromiseType<T> ? Promise<T> : PromiseType<T>;
+                                                                     * 
+                                                                     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+                                                                     */
+                                                                    export type DxPromise<T = void> = {} extends PromiseType<T> ? Promise<T> : PromiseType<T>;
 
-/** @namespace DevExpress.core.utils */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type DxExtendedPromise<T> = DxPromise<T> & {
     then<TResult1 = T, TResult2 = never>(
         onFulfilled?: ((value: T, extraParameters?: any) => TResult1 | PromiseLike<TResult1>) | undefined | null,
@@ -41,4 +53,7 @@ export type DxExtendedPromise<T> = DxPromise<T> & {
     ): PromiseLike<TResult1 | TResult2>;
 };
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export function when<T>(...args: (DeferredObj<T> | T)[]): DeferredObj<T>;

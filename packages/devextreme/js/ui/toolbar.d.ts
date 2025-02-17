@@ -25,9 +25,7 @@ import CollectionWidget, {
 
 type ItemLike = string | Item | any;
 
-/** @public */
 export type LocateInMenuMode = 'always' | 'auto' | 'never';
-/** @public */
 export type ShowTextMode = 'always' | 'inMenu';
 
 export {
@@ -36,173 +34,115 @@ export {
 };
 
 /**
- * @docid _ui_toolbar_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxToolbar<TItem, TKey>>;
 
 /**
- * @docid _ui_toolbar_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxToolbar<TItem, TKey>>;
 
 /**
- * @docid _ui_toolbar_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxToolbar<TItem, TKey>>;
 
 /**
- * @docid _ui_toolbar_ItemClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ItemInfo
+ * The type of the itemClick event handler&apos;s argument.
  */
 export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxToolbar<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_toolbar_ItemContextMenuEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ItemInfo
+ * The type of the itemContextMenu event handler&apos;s argument.
  */
 export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxToolbar<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_toolbar_ItemHoldEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ItemInfo
+ * The type of the itemHold event handler&apos;s argument.
  */
 export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxToolbar<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_toolbar_ItemRenderedEvent
- * @public
- * @type object
- * @inherits EventInfo,ItemInfo
+ * The type of the itemRendered event handler&apos;s argument.
  */
 export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxToolbar<TItem, TKey>> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_toolbar_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxToolbar<TItem, TKey>> & ChangedOptionInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @public
- * @docid
+ * 
+ * @deprecated 
  */
 export interface dxToolbarOptions<
     TItem extends ItemLike = any,
     TKey = any,
 > extends CollectionWidgetOptions<dxToolbar<TItem, TKey>, TItem, TKey> {
     /**
-     * @docid
-     * @type string | Array<string | dxToolbarItem | any> | Store | DataSource | DataSourceOptions | null
-     * @default null
-     * @public
+     * Binds the UI component to data.
      */
     dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
-     * @docid
-     * @type Array<string | dxToolbarItem | any>
-     * @fires dxToolbarOptions.onOptionChanged
-     * @public
+     * An array of items displayed by the UI component.
      */
     items?: Array<TItem>;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether or not the Toolbar arranges items into multiple lines when their combined width exceeds the Toolbar width.
      */
     multiline?: boolean;
     /**
-     * @docid
-     * @default "menuItem"
-     * @type_function_param1 itemData:object
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies a custom template for menu items.
      */
     menuItemTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
 }
 /**
- * @docid
- * @inherits CollectionWidget
- * @namespace DevExpress.ui
- * @public
+ * The Toolbar is a UI component containing items that usually manage screen content. Those items can be plain text or UI components.
  */
 export default class dxToolbar<
     TItem extends ItemLike = any,
     TKey = any,
 > extends CollectionWidget<dxToolbarOptions<TItem, TKey>, TItem, TKey> { }
 
-/**
- * @public
- * @namespace DevExpress.ui.dxToolbar
- * */
 export type Item = dxToolbarItem;
 
 /**
  * @deprecated Use Item instead
- * @namespace DevExpress.ui
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxToolbarItem extends CollectionWidgetItem {
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies a CSS class to be applied to the item.
      */
     cssClass?: string | undefined;
     /**
-     * @docid
-     * @default 'never'
-     * @public
+     * Specifies when to display an item in the toolbar&apos;s overflow menu.
      */
     locateInMenu?: LocateInMenuMode;
     /**
-     * @docid
-     * @default 'center'
-     * @public
+     * Specifies a location for the item on the toolbar.
      */
     location?: ToolbarItemLocation;
     /**
-     * @docid
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies a template that should be used to render a menu item.
      */
     menuItemTemplate?: template | (() => string | UserDefinedElement);
     /**
-     * @docid
-     * @public
+     * Configures the DevExtreme UI component used as a toolbar item.
      */
     options?: any;
     /**
-     * @docid
-     * @default 'always'
-     * @public
+     * Specifies when to display the text for the UI component item.
      */
     showText?: ShowTextMode;
     /**
-     * @docid
-     * @public
+     * A UI component that presents a toolbar item. To configure it, use the options object.
      */
     widget?: ToolbarItemComponent;
 }
 
-/** @public */
 export type ExplicitTypes<
     TItem extends ItemLike,
     TKey,
@@ -218,13 +158,15 @@ export type ExplicitTypes<
     OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
 };
 
-/** @public */
 export type Properties<
     TItem extends ItemLike = any,
     TKey = any,
 > = dxToolbarOptions<TItem, TKey>;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options<
     TItem extends ItemLike = any,
     TKey = any,

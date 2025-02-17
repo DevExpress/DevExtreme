@@ -10,10 +10,8 @@ export {
 export default LocalStore;
 
 /**
-* @public
-* @deprecated Use LocalStoreOptions from /common/data instead
-* @namespace DevExpress.data.LocalStore
-*/
+ * @deprecated Use LocalStoreOptions from /common/data instead
+ */
 export type Options<
   TItem = any,
   TKey = any,

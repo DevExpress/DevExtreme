@@ -7,56 +7,39 @@ import {
 } from '../../common';
 
 /**
- * @namespace DevExpress.ui
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface SearchBoxMixinOptions {
     /**
-     * @docid
-     * @default {}
-     * @public
-     * @type dxTextBoxOptions
+     * Configures the search panel.
      */
     searchEditorOptions?: TextBoxProperties;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the search panel is visible.
      */
     searchEnabled?: boolean;
     /**
-     * @docid
-     * @type getter|Array<getter>
-     * @default null
-     * @public
+     * Specifies a data object&apos;s field name or an expression whose value is compared to the search string.
      */
     searchExpr?: string | Function | Array<string | Function>;
     /**
-     * @docid
-     * @default 'contains'
-     * @public
+     * Specifies a comparison operation used to search UI component items.
      */
     searchMode?: SearchMode;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies a delay in milliseconds between when a user finishes typing, and the search is executed.
      */
     searchTimeout?: number | undefined;
     /**
-     * @docid
-     * @default ""
-     * @public
+     * Specifies the current search string.
      */
     searchValue?: string;
 }
 /**
- * @docid
- * @hidden
- * @options SearchBoxMixinOptions
- */
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
-export default class SearchBoxMixin {
+                                                                    * 
+                                                                    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+                                                                    */
+                                                                   export default class SearchBoxMixin {
     constructor(options?: SearchBoxMixinOptions);
 }

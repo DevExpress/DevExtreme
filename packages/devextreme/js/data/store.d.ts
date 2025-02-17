@@ -3,103 +3,71 @@ import { DeepPartial } from '../core';
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from '../common/data';
 
 /**
- * @docid StoreOptions
- * @namespace DevExpress.common.data
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type StoreOptions<
     TItem = any,
     TKey = any,
 > = {
     /**
-     * @docid StoreOptions.errorHandler
-     * @public
+     * Specifies the function that is executed when the store throws an error.
      */
     errorHandler?: Function;
     /**
-     * @docid StoreOptions.key
-     * @public
+     * Specifies the key property (or properties) that provide(s) key values to access data items. Each key value must be unique.
      */
     key?: string | Array<string>;
     /**
-     * @docid StoreOptions.onInserted
-     * @type_function_param1 values:object
-     * @type_function_param2 key:object|string|number
-     * @action
-     * @public
+     * A function that is executed after a data item is added to the store.
      */
     onInserted?: ((values: TItem, key: TKey) => void);
     /**
-     * @docid StoreOptions.onInserting
-     * @type_function_param1 values:object
-     * @action
-     * @public
+     * A function that is executed before a data item is added to the store.
      */
     onInserting?: ((values: TItem) => void);
     /**
-     * @docid StoreOptions.onLoading
-     * @type_function_param1 loadOptions:LoadOptions
-     * @action
-     * @public
+     * A function that is executed before data is loaded to the store.
      */
     onLoading?: ((loadOptions: LoadOptions<TItem>) => void);
     /**
-     * @docid StoreOptions.onModified
-     * @action
-     * @public
+     * A function that is executed after a data item is added, updated, or removed from the store.
      */
     onModified?: Function;
     /**
-     * @docid StoreOptions.onModifying
-     * @action
-     * @public
+     * A function that is executed before a data item is added, updated, or removed from the store.
      */
     onModifying?: Function;
     /**
-     * @docid StoreOptions.onPush
-     * @action
-     * @public
+     * The function executed before changes are pushed to the store.
      */
     onPush?: ((changes: Array<TItem>) => void);
     /**
-     * @docid StoreOptions.onRemoved
-     * @type_function_param1 key:object|string|number
-     * @action
-     * @public
+     * A function that is executed after a data item is removed from the store.
      */
     onRemoved?: ((key: TKey) => void);
     /**
-     * @docid StoreOptions.onRemoving
-     * @type_function_param1 key:object|string|number
-     * @action
-     * @public
+     * A function that is executed before a data item is removed from the store.
      */
     onRemoving?: ((key: TKey) => void);
     /**
-     * @docid StoreOptions.onUpdated
-     * @type_function_param1 key:object|string|number
-     * @type_function_param2 values:object
-     * @action
-     * @public
+     * A function that is executed after a data item is updated in the store.
      */
     onUpdated?: ((key: TKey, values: TItem) => void);
     /**
-     * @docid StoreOptions.onUpdating
-     * @type_function_param1 key:object|string|number
-     * @type_function_param2 values:object
-     * @action
-     * @public
+     * A function that is executed before a data item is updated in the store.
      */
     onUpdating?: ((key: TKey, values: TItem) => void);
 };
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type StoreEventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | 'updating' | 'push' | 'removed' | 'removing' | 'modified' | 'modifying';
 
 /**
- * @docid Store
- * @namespace DevExpress.common.data
- * @hidden
- * @options StoreOptions
+ * The base class for all Stores.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export class Store<
     TItem = any,
@@ -107,90 +75,47 @@ export class Store<
 > {
     constructor(options?: StoreOptions<TItem, TKey>);
     /**
-     * @docid
-     * @publicName insert(values)
-     * @param1 values:object
-     * @return Promise<any>
-     * @public
+     * Adds a data item to the store.
      */
     insert(values: TItem): DxExtendedPromise<TItem>;
     /**
-     * @docid
-     * @publicName key()
-     * @public
+     * Gets the key property (or properties) as specified in the key property.
      */
     key(): string | Array<string>;
     /**
-     * @docid
-     * @publicName keyOf(obj)
-     * @param1 obj:object
-     * @return any|string|number
-     * @public
+     * Gets a data item&apos;s key value.
      */
     keyOf(obj: TItem): TKey;
     /**
-     * @docid
-     * @publicName off(eventName)
-     * @param1 eventName:string
-     * @return this
-     * @public
+     * Detaches all event handlers from a single event.
      */
     off(eventName: StoreEventName): this;
     /**
-     * @docid
-     * @publicName off(eventName, eventHandler)
-     * @param1 eventName:string
-     * @return this
-     * @public
+     * Detaches a particular event handler from a single event.
      */
     off(eventName: StoreEventName, eventHandler: Function): this;
     /**
-     * @docid
-     * @publicName on(eventName, eventHandler)
-     * @param1 eventName:string
-     * @return this
-     * @public
+     * Subscribes to an event.
      */
     on(eventName: StoreEventName, eventHandler: Function): this;
     /**
-     * @docid
-     * @publicName on(events)
-     * @param1 events:object
-     * @return this
-     * @public
+     * Subscribes to events.
      */
     on(events: { [key in StoreEventName]?: Function }): this;
     /**
-     * @docid
-     * @publicName push(changes)
-     * @param1 changes:Array<any>
-     * @public
+     * Pushes data changes to the store and notifies the DataSource.
      */
     push(changes: Array<{ type: 'insert' | 'update' | 'remove'; data?: DeepPartial<TItem>; key?: TKey; index?: number }>): void;
     /**
-     * @docid
-     * @publicName remove(key)
-     * @param1 key:object|string|number
-     * @return Promise<void>
-     * @public
+     * Removes a data item with a specific key from the store.
      */
     remove(key: TKey): DxPromise<void>;
     /**
-     * @docid
-     * @publicName totalCount(options)
-     * @param1_field filter:object
-     * @param1_field group:object
-     * @return Promise<number>
-     * @public
+     * Gets the total count of items the load() function returns.
      */
     totalCount(obj: { filter?: FilterDescriptor | Array<FilterDescriptor>; group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>> }): DxPromise<number>;
     /**
-     * @docid
-     * @publicName update(key, values)
-     * @param1 key:object|string|number
-     * @param2 values:object
-     * @return Promise<any>
-     * @public
+     * Updates a data item with a specific key.
      */
     update(key: TKey, values: DeepPartial<TItem>): DxExtendedPromise<TItem>;
 }

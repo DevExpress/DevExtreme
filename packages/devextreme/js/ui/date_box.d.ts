@@ -28,465 +28,327 @@ import {
     Properties as PopupProperties,
 } from './popup';
 
-/** @public */
 export type DateType = 'date' | 'datetime' | 'time';
-/** @public */
 export type DatePickerType = 'calendar' | 'list' | 'native' | 'rollers';
 
 /**
- * @docid _ui_date_box_ChangeEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the change event handler&apos;s argument.
  */
 export type ChangeEvent = NativeEventInfo<dxDateBox, Event>;
 
 /**
- * @docid _ui_date_box_ClosedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the closed event handler&apos;s argument.
  */
 export type ClosedEvent = EventInfo<dxDateBox>;
 
 /**
- * @docid _ui_date_box_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxDateBox>;
 
 /**
- * @docid _ui_date_box_CopyEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the copy event handler&apos;s argument.
  */
 export type CopyEvent = NativeEventInfo<dxDateBox, ClipboardEvent>;
 
 /**
- * @docid _ui_date_box_CutEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the cut event handler&apos;s argument.
  */
 export type CutEvent = NativeEventInfo<dxDateBox, ClipboardEvent>;
 
 /**
- * @docid _ui_date_box_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxDateBox>;
 
 /**
- * @docid _ui_date_box_EnterKeyEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the enterKey event handler&apos;s argument.
  */
 export type EnterKeyEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
 /**
- * @docid _ui_date_box_FocusInEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the focusIn event handler&apos;s argument.
  */
 export type FocusInEvent = NativeEventInfo<dxDateBox, FocusEvent>;
 
 /**
- * @docid _ui_date_box_FocusOutEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the focusOut event handler&apos;s argument.
  */
 export type FocusOutEvent = NativeEventInfo<dxDateBox, FocusEvent>;
 
 /**
- * @docid _ui_date_box_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxDateBox>;
 
 /**
- * @docid _ui_date_box_InputEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the input event handler&apos;s argument.
  */
 export type InputEvent = NativeEventInfo<dxDateBox, UIEvent & { target: HTMLInputElement }>;
 
 /**
- * @docid _ui_date_box_KeyDownEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the keyDown event handler&apos;s argument.
  */
 export type KeyDownEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
-/** @public */
 export type KeyPressEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
 /**
- * @docid _ui_date_box_KeyUpEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the keyUp event handler&apos;s argument.
  */
 export type KeyUpEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
 /**
- * @docid _ui_date_box_OpenedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the opened event handler&apos;s argument.
  */
 export type OpenedEvent = EventInfo<dxDateBox>;
 
 /**
- * @docid _ui_date_box_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxDateBox> & ChangedOptionInfo;
 
 /**
- * @docid _ui_date_box_PasteEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the paste event handler&apos;s argument.
  */
 export type PasteEvent = NativeEventInfo<dxDateBox, ClipboardEvent>;
 
 /**
- * @docid _ui_date_box_ValueChangedEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ValueChangedInfo
+ * The type of the valueChanged event handler&apos;s argument.
  */
 export type ValueChangedEvent = NativeEventInfo<dxDateBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
-/** @public */
 export type DisabledDate = ComponentDisabledDate<dxDateBox>;
 
-/** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether or not adaptive UI component rendering is enabled on a small screen.
      */
     adaptivityEnabled?: boolean;
     /**
-     * @docid
-     * @default "Value is out of range"
-     * @public
+     * Specifies the message displayed if the specified date is later than the max value or earlier than the min value.
      */
     dateOutOfRangeMessage?: string;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 data:object
-     * @type_function_param1_field component:dxDateBox
-     * @public
+     * Specifies dates that users cannot select. Applies only if pickerType is &apos;calendar&apos;.
      */
     disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Specifies the attributes to be passed on to the underlying HTML element.
      */
     inputAttr?: any;
     /**
-     * @docid
-     * @default 30
-     * @public
+     * Specifies the interval between neighboring values in the popup list in minutes.
      */
     interval?: number;
     /**
-     * @docid
-     * @default "Value must be a date or time"
-     * @public
+     * Specifies the message displayed if the typed value is not a valid date or time.
      */
     invalidDateMessage?: string;
     /**
-     * @docid
-     * @default ''
-     * @public
+     * Specifies a text string used to annotate the editor&apos;s value.
      */
     label?: string;
     /**
-     * @docid
-     * @default null
-     * @public
+     * Specifies the maximum number of characters you can enter into the textbox.
      */
     maxLength?: string | number;
     /**
-     * @docid
-     * @default ""
-     * @public
+     * The value to be assigned to the `name` attribute of the underlying HTML element.
      */
     name?: string;
     /**
-     * @docid
-     * @default 'calendar'
-     * @default 'native' &for(iOS)
-     * @default 'native' &for(Android)
-     * @public
+     * Specifies the type of the date/time picker.
      */
     pickerType?: DatePickerType;
     /**
-     * @docid
-     * @default ""
-     * @public
+     * Specifies a placeholder for the input field.
      */
     placeholder?: string;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to show the analog clock in the value picker. Applies only if type is &apos;datetime&apos; and pickerType is &apos;calendar&apos;.
      */
     showAnalogClock?: boolean;
     /**
-     * @docid
-     * @readonly
-     * @public
+     * The read-only property that stores the text displayed by the UI component input element.
      */
     text?: string;
     /**
-     * @docid
-     * @default "date"
-     * @public
+     * A format used to display date/time information.
      */
     type?: DateType;
     /**
-     * @docid
-     * @default null
-     * @public
+     * Specifies the currently selected date and time.
      */
     value?: Date | number | string;
 }
 
 /**
- * @hidden
- * @docid
- * @namespace DevExpress.ui
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<TComponent> {
     /**
-     * @docid
-     * @default "OK"
-     * @public
+     * Specifies the Apply button&apos;s text.
      */
     applyButtonText?: string;
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Configures the calendar&apos;s value picker.
      */
     calendarOptions?: dxCalendarOptions;
     /**
-     * @docid
-     * @default "Cancel"
-     * @public
+     * Specifies the Cancel button&apos;s text.
      */
     cancelButtonText?: string;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the date value serialization format.
      */
     dateSerializationFormat?: string | undefined;
     /**
-     * @docid
-     * @default null
-     * @public
+     * Specifies the date&apos;s display format.
      */
     displayFormat?: Format;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * The latest date that can be selected in the UI component.
      */
     max?: Date | number | string | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * The earliest date that can be selected in the UI component.
      */
     min?: Date | number | string | undefined;
     /**
-     * @docid
-     * @default "Today"
-     * @public
+     * Specified the Today button&apos;s text.
      */
     todayButtonText?: string;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether to use an input mask based on the displayFormat property.
      */
     useMaskBehavior?: boolean;
     /**
-     * @docid
-     * @type dxPopupOptions
+     * Configures the drop-down that holds the content.
      */
     dropDownOptions?: PopupProperties;
 }
 
 /**
- * @docid
- * @isEditor
- * @inherits dxDropDownEditor
- * @namespace DevExpress.ui
- * @hidden
- * @options DateBoxBaseOptions
+ * A drop-down editor UI component.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export class DateBoxBase<TProperties = Properties> extends dxDropDownEditor<TProperties> {
     /**
-     * @docid
-     * @publicName close()
-     * @public
+     * Closes the drop-down editor.
      */
     close(): void;
     /**
-     * @docid
-     * @publicName open()
-     * @public
+     * Opens the drop-down editor.
      */
     open(): void;
 }
 
 /**
- * @docid
- * @isEditor
- * @inherits DateBoxBase
- * @namespace DevExpress.ui
- * @public
+ * The DateBox is a UI component that displays date and time in a specified format, and enables a user to pick or type in the required date/time value.
  */
 export default class dxDateBox extends DateBoxBase<Properties> {
     /**
-     * @docid
-     * @publicName reset(value)
-     * @public
+     * Resets the value property to the value passed as an argument.
      */
     reset(value?: Date | number | string | null): void;
 }
 
-/**
- * @public
- */
 export type Properties = dxDateBoxOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = Properties;
 
 ///#DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
 /**
-* @hidden
-*/
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Events = {
 /**
- * @docid dxDateBoxOptions.onChange
- * @type_function_param1 e:{ui/date_box:ChangeEvent}
+ * A function that is executed when the UI component loses focus after the text field&apos;s content was changed using the keyboard.
  */
 onChange?: ((e: ChangeEvent) => void);
 /**
- * @docid dxDateBoxOptions.onClosed
- * @type_function_param1 e:{ui/date_box:ClosedEvent}
+ * A function that is executed once the drop-down editor is closed.
  */
 onClosed?: ((e: ClosedEvent) => void);
 /**
- * @docid dxDateBoxOptions.onContentReady
- * @type_function_param1 e:{ui/date_box:ContentReadyEvent}
+ * A function that is executed when the UI component is rendered and each time the component is repainted.
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @docid dxDateBoxOptions.onCopy
- * @type_function_param1 e:{ui/date_box:CopyEvent}
+ * A function that is executed when the UI component&apos;s input has been copied.
  */
 onCopy?: ((e: CopyEvent) => void);
 /**
- * @docid dxDateBoxOptions.onCut
- * @type_function_param1 e:{ui/date_box:CutEvent}
+ * A function that is executed when the UI component&apos;s input has been cut.
  */
 onCut?: ((e: CutEvent) => void);
 /**
- * @docid dxDateBoxOptions.onDisposing
- * @type_function_param1 e:{ui/date_box:DisposingEvent}
+ * A function that is executed before the UI component is disposed of.
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @docid dxDateBoxOptions.onEnterKey
- * @type_function_param1 e:{ui/date_box:EnterKeyEvent}
+ * A function that is executed when the Enter key has been pressed while the UI component is focused.
  */
 onEnterKey?: ((e: EnterKeyEvent) => void);
 /**
- * @docid dxDateBoxOptions.onFocusIn
- * @type_function_param1 e:{ui/date_box:FocusInEvent}
+ * A function that is executed when the UI component gets focus.
  */
 onFocusIn?: ((e: FocusInEvent) => void);
 /**
- * @docid dxDateBoxOptions.onFocusOut
- * @type_function_param1 e:{ui/date_box:FocusOutEvent}
+ * A function that is executed when the UI component loses focus.
  */
 onFocusOut?: ((e: FocusOutEvent) => void);
 /**
- * @docid dxDateBoxOptions.onInitialized
- * @type_function_param1 e:{ui/date_box:InitializedEvent}
+ * A function used in JavaScript frameworks to save the UI component instance.
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @docid dxDateBoxOptions.onInput
- * @type_function_param1 e:{ui/date_box:InputEvent}
+ * A function that is executed each time the UI component&apos;s input is changed while the UI component is focused.
  */
 onInput?: ((e: InputEvent) => void);
 /**
- * @docid dxDateBoxOptions.onKeyDown
- * @type_function_param1 e:{ui/date_box:KeyDownEvent}
+ * A function that is executed when a user is pressing a key on the keyboard.
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @docid dxDateBoxOptions.onKeyUp
- * @type_function_param1 e:{ui/date_box:KeyUpEvent}
+ * A function that is executed when a user releases a key on the keyboard.
  */
 onKeyUp?: ((e: KeyUpEvent) => void);
 /**
- * @docid dxDateBoxOptions.onOpened
- * @type_function_param1 e:{ui/date_box:OpenedEvent}
+ * A function that is executed once the drop-down editor is opened.
  */
 onOpened?: ((e: OpenedEvent) => void);
 /**
- * @docid dxDateBoxOptions.onOptionChanged
- * @type_function_param1 e:{ui/date_box:OptionChangedEvent}
+ * A function that is executed after a UI component property is changed.
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @docid dxDateBoxOptions.onPaste
- * @type_function_param1 e:{ui/date_box:PasteEvent}
+ * A function that is executed when the UI component&apos;s input has been pasted.
  */
 onPaste?: ((e: PasteEvent) => void);
 /**
- * @docid dxDateBoxOptions.onValueChanged
- * @type_function_param1 e:{ui/date_box:ValueChangedEvent}
+ * A function that is executed after the UI component&apos;s value is changed.
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };

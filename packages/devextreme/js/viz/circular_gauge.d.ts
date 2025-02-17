@@ -28,222 +28,169 @@ import {
     TooltipInfo,
 } from './gauges/base_gauge';
 
-/** @public */
 export type CircularGaugeElementOrientation = 'center' | 'inside' | 'outside';
-/** @public */
 export type CircularGaugeLabelOverlap = 'first' | 'last';
 
 /**
- * @docid _viz_circular_gauge_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxCircularGauge>;
 
 /**
- * @docid _viz_circular_gauge_DrawnEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the drawn event handler&apos;s argument.
  */
 export type DrawnEvent = EventInfo<dxCircularGauge>;
 
 /**
- * @docid _viz_circular_gauge_ExportedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the exported event handler&apos;s argument.
  */
 export type ExportedEvent = EventInfo<dxCircularGauge>;
 
 /**
- * @docid _viz_circular_gauge_ExportingEvent
- * @public
- * @type object
- * @inherits EventInfo,ExportInfo
+ * The type of the exporting event handler&apos;s argument.
  */
 export type ExportingEvent = EventInfo<dxCircularGauge> & ExportInfo;
 
 /**
- * @docid _viz_circular_gauge_FileSavingEvent
- * @public
- * @type object
- * @inherits FileSavingEventInfo
+ * The type of the fileSaving event handler&apos;s argument.
  */
 export type FileSavingEvent = FileSavingEventInfo<dxCircularGauge>;
 
 /**
- * @docid _viz_circular_gauge_IncidentOccurredEvent
- * @public
- * @type object
- * @inherits EventInfo,IncidentInfo
+ * The type of the incidentOccurred event handler&apos;s argument.
  */
 export type IncidentOccurredEvent = EventInfo<dxCircularGauge> & IncidentInfo;
 
 /**
- * @docid _viz_circular_gauge_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxCircularGauge>;
 
 /**
- * @docid _viz_circular_gauge_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxCircularGauge> & ChangedOptionInfo;
 
 /**
- * @docid _viz_circular_gauge_TooltipHiddenEvent
- * @public
- * @type object
- * @inherits EventInfo,_viz_base_gauge_TooltipInfo
+ * The type of the tooltipHidden event handler&apos;s argument.
  */
 export type TooltipHiddenEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 
 /**
- * @docid _viz_circular_gauge_TooltipShownEvent
- * @public
- * @type object
- * @inherits EventInfo,_viz_base_gauge_TooltipInfo
+ * The type of the tooltipShown event handler&apos;s argument.
  */
 export type TooltipShownEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.viz
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge> {
     /**
-     * @docid
-     * @public
+     * Specifies the properties required to set the geometry of the CircularGauge UI component.
      */
     geometry?: {
       /**
-       * @docid
-       * @default 315
+       * Specifies the end angle of the circular gauge&apos;s arc.
        */
       endAngle?: number;
       /**
-       * @docid
-       * @default 225
+       * Specifies the start angle of the circular gauge&apos;s arc.
        */
       startAngle?: number;
     };
     /**
-     * @docid
-     * @default undefined
-     * @type_function_return string|SVGElement|jQuery
-     * @public
+     * Specifies a custom template for content in the component&apos;s center.
      */
     centerTemplate?: template | ((component: dxCircularGauge, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
-     * @docid
-     * @type object
-     * @public
+     * Specifies gauge range container properties.
      */
     rangeContainer?: RangeContainer;
     /**
-     * @docid
-     * @type object
-     * @public
+     * Specifies a gauge&apos;s scale properties.
      */
     scale?: Scale;
     /**
-     * @docid
-     * @inheritAll
-     * @public
+     * Specifies the appearance properties of subvalue indicators.
      */
     subvalueIndicator?: GaugeIndicator;
     /**
-     * @docid
-     * @inheritAll
-     * @public
+     * Specifies the appearance properties of the value indicator.
      */
     valueIndicator?: GaugeIndicator;
 }
 /**
- * @public
- * @docid dxCircularGaugeRangeContainer
+ * Specifies gauge range container properties.
  */
 export type RangeContainer = BaseGaugeRangeContainer & {
     /**
-     * @docid dxCircularGaugeOptions.rangeContainer.orientation
-     * @default 'outside'
-     * @public
+     * Specifies the orientation of the range container in the CircularGauge UI component.
      */
     orientation?: CircularGaugeElementOrientation;
     /**
-     * @docid dxCircularGaugeOptions.rangeContainer.width
-     * @default 5
-     * @public
+     * Specifies the range container&apos;s width in pixels.
      */
     width?: number;
 };
 /**
- * @public
- * @docid dxCircularGaugeScale
+ * Specifies a gauge&apos;s scale properties.
  */
 export type Scale = BaseGaugeScale & {
     /**
-     * @docid dxCircularGaugeOptions.scale.label
-     * @type object
-     * @public
+     * Specifies common properties for scale labels.
      */
     label?: ScaleLabel;
     /**
-     * @docid dxCircularGaugeOptions.scale.orientation
-     * @default 'outside'
-     * @public
+     * Specifies the orientation of scale ticks.
      */
     orientation?: CircularGaugeElementOrientation;
 };
 /**
- * @public
- * @docid dxCircularGaugeScaleLabel
+ * Specifies common properties for scale labels.
  */
 export type ScaleLabel = BaseGaugeScaleLabel & {
     /**
-     * @docid dxCircularGaugeOptions.scale.label.hideFirstOrLast
-     * @default 'last'
-     * @public
+     * Specifies which label to hide in case of overlapping.
      */
     hideFirstOrLast?: CircularGaugeLabelOverlap;
     /**
-     * @docid dxCircularGaugeOptions.scale.label.indentFromTick
-     * @default 10
-     * @public
+     * Specifies the spacing between scale labels and ticks.
      */
     indentFromTick?: number;
 };
 /**
- * @docid
- * @inherits BaseGauge
- * @namespace DevExpress.viz
- * @public
+ * The CircularGauge is a UI component that indicates values on a circular numeric scale.
  */
 export default class dxCircularGauge extends BaseGauge<dxCircularGaugeOptions> { }
 
-/** @public */
 export type Properties = dxCircularGaugeOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxCircularGaugeOptions;
 
 // #region deprecated in v23.1
 
-/** @deprecated Use RangeContainer instead */
+/**
+ * @deprecated Use RangeContainer instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxCircularGaugeRangeContainer = RangeContainer;
 
-/** @deprecated Use Scale instead */
+/**
+ * @deprecated Use Scale instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxCircularGaugeScale = Scale;
 
-/** @deprecated Use ScaleLabel instead */
+/**
+ * @deprecated Use ScaleLabel instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxCircularGaugeScaleLabel = ScaleLabel;
 
 // #endregion
@@ -252,60 +199,53 @@ export type dxCircularGaugeScaleLabel = ScaleLabel;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
 /**
-* @hidden
-*/
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Events = {
 /**
- * @docid dxCircularGaugeOptions.onDisposing
- * @type_function_param1 e:{viz/circular_gauge:DisposingEvent}
+ * A function that is executed before the UI component is disposed of.
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @docid dxCircularGaugeOptions.onDrawn
- * @type_function_param1 e:{viz/circular_gauge:DrawnEvent}
+ * A function that is executed when the UI component&apos;s rendering has finished.
  */
 onDrawn?: ((e: DrawnEvent) => void);
 /**
- * @docid dxCircularGaugeOptions.onExported
- * @type_function_param1 e:{viz/circular_gauge:ExportedEvent}
+ * A function that is executed after the UI component is exported.
  */
 onExported?: ((e: ExportedEvent) => void);
 /**
- * @docid dxCircularGaugeOptions.onExporting
- * @type_function_param1 e:{viz/circular_gauge:ExportingEvent}
+ * A function that is executed before the UI component is exported.
  */
 onExporting?: ((e: ExportingEvent) => void);
 /**
- * @docid dxCircularGaugeOptions.onFileSaving
- * @type_function_param1 e:{viz/circular_gauge:FileSavingEvent}
+ * A function that is executed before a file with exported UI component is saved to the user&apos;s local storage.
  */
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
- * @docid dxCircularGaugeOptions.onIncidentOccurred
- * @type_function_param1 e:{viz/circular_gauge:IncidentOccurredEvent}
+ * A function that is executed when an error or warning occurs.
  */
 onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 /**
- * @docid dxCircularGaugeOptions.onInitialized
- * @type_function_param1 e:{viz/circular_gauge:InitializedEvent}
+ * A function used in JavaScript frameworks to save the UI component instance.
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @docid dxCircularGaugeOptions.onOptionChanged
- * @type_function_param1 e:{viz/circular_gauge:OptionChangedEvent}
+ * A function that is executed after a UI component property is changed.
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @docid dxCircularGaugeOptions.onTooltipHidden
- * @type_function_param1 e:{viz/circular_gauge:TooltipHiddenEvent}
+ * A function that is executed when a tooltip becomes hidden.
  */
 onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
 /**
- * @docid dxCircularGaugeOptions.onTooltipShown
- * @type_function_param1 e:{viz/circular_gauge:TooltipShownEvent}
+ * A function that is executed when a tooltip appears.
  */
 onTooltipShown?: ((e: TooltipShownEvent) => void);
 };

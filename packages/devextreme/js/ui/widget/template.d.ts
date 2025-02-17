@@ -3,10 +3,7 @@ import type {
 } from '../../common';
 
 /**
- * @docid ui.template
- * @namespace DevExpress.ui
- * @deprecated
- * @type object
- * @public
+ * 
+ * @deprecated 
  */
 export type Template = template;

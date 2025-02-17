@@ -41,752 +41,558 @@ export {
     WordWrap,
 };
 
-/** @public */
 export type TreeMapColorizerType = 'discrete' | 'gradient' | 'none' | 'range';
-/** @public */
 export type TreeMapLayoutAlgorithm = 'sliceanddice' | 'squarified' | 'strip';
-/** @public */
 export type TreeMapLayoutDirection = 'leftBottomRightTop' | 'leftTopRightBottom' | 'rightBottomLeftTop' | 'rightTopLeftBottom';
 
 /**
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface InteractionInfo {
-  /** @docid */
+  /**
+   * 
+   */
   readonly node: dxTreeMapNode;
 }
 
 /**
- * @docid _viz_tree_map_ClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the click event handler&apos;s argument.
  */
 export type ClickEvent = NativeEventInfo<dxTreeMap, MouseEvent | PointerEvent> & {
-  /** @docid _viz_tree_map_ClickEvent.node */
+  /**
+   * 
+   */
   readonly node: dxTreeMapNode;
 };
 
 /**
- * @docid _viz_tree_map_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxTreeMap>;
 
 /**
- * @docid _viz_tree_map_DrawnEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the drawn event handler&apos;s argument.
  */
 export type DrawnEvent = EventInfo<dxTreeMap>;
 
 /**
- * @docid _viz_tree_map_DrillEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the drill event handler&apos;s argument.
  */
 export type DrillEvent = EventInfo<dxTreeMap> & {
-  /** @docid _viz_tree_map_DrillEvent.node */
+  /**
+   * 
+   */
   readonly node: dxTreeMapNode;
 };
 
 /**
- * @docid _viz_tree_map_ExportedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the exported event handler&apos;s argument.
  */
 export type ExportedEvent = EventInfo<dxTreeMap>;
 
 /**
- * @docid _viz_tree_map_ExportingEvent
- * @public
- * @type object
- * @inherits EventInfo,ExportInfo
+ * The type of the exporting event handler&apos;s argument.
  */
 export type ExportingEvent = EventInfo<dxTreeMap> & ExportInfo;
 
 /**
- * @docid _viz_tree_map_FileSavingEvent
- * @public
- * @type object
- * @inherits FileSavingEventInfo
+ * The type of the fileSaving event handler&apos;s argument.
  */
 export type FileSavingEvent = FileSavingEventInfo<dxTreeMap>;
 
 /**
- * @docid _viz_tree_map_HoverChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,InteractionInfo
+ * The type of the hoverChanged event handler&apos;s argument.
  */
 export type HoverChangedEvent = EventInfo<dxTreeMap> & InteractionInfo;
 
 /**
- * @docid _viz_tree_map_IncidentOccurredEvent
- * @public
- * @type object
- * @inherits EventInfo,IncidentInfo
+ * The type of the incidentOccurred event handler&apos;s argument.
  */
 export type IncidentOccurredEvent = EventInfo<dxTreeMap> & IncidentInfo;
 
 /**
- * @docid _viz_tree_map_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxTreeMap>;
 
 /**
- * @docid _viz_tree_map_NodesInitializedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the nodesInitialized event handler&apos;s argument.
  */
 export type NodesInitializedEvent = EventInfo<dxTreeMap> & {
-    /** @docid _viz_tree_map_NodesInitializedEvent.root */
+    /**
+     * 
+     */
     readonly root: dxTreeMapNode;
 };
 
 /**
- * @docid _viz_tree_map_NodesRenderingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the nodesRendering event handler&apos;s argument.
  */
 export type NodesRenderingEvent = EventInfo<dxTreeMap> & {
-    /** @docid _viz_tree_map_NodesRenderingEvent.node */
+    /**
+     * 
+     */
     readonly node: dxTreeMapNode;
 };
 
 /**
- * @docid _viz_tree_map_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxTreeMap> & ChangedOptionInfo;
 
 /**
- * @docid _viz_tree_map_SelectionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,InteractionInfo
+ * The type of the selectionChanged event handler&apos;s argument.
  */
 export type SelectionChangedEvent = EventInfo<dxTreeMap> & InteractionInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.viz
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
-     * @docid
-     * @default 'items'
-     * @public
+     * Specifies the name of the data source field that provides nested items for a group. Applies to hierarchical data sources only.
      */
     childrenField?: string;
     /**
-     * @docid
-     * @default 'color'
-     * @public
+     * Specifies the name of the data source field that provides colors for tiles.
      */
     colorField?: string;
     /**
-     * @docid
-     * @public
+     * Manages the color settings.
      */
     colorizer?: {
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of the data source field whose values define the color of a tile. Applies only if the type property is &apos;gradient&apos; or &apos;range&apos;.
        */
       colorCodeField?: string | undefined;
       /**
-       * @docid
-       * @default false
+       * Specifies whether or not all tiles in a group must be colored uniformly. Applies only if the type property is &apos;discrete&apos;.
        */
       colorizeGroups?: boolean;
       /**
-       * @docid
-       * @default "Material"
+       * Sets the palette to be used to colorize tiles.
        */
       palette?: Array<string> | Palette;
       /**
-       * @docid
-       * @default 'blend'
+       * Specifies what to do with colors in the palette when their number is less than the number of treemap tiles.
        */
       paletteExtensionMode?: PaletteExtensionMode;
       /**
-       * @docid
-       * @default undefined
+       * Allows you to paint tiles with similar values uniformly. Applies only if the type property is &apos;gradient&apos; or &apos;range&apos;.
        */
       range?: Array<number>;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the colorizing algorithm.
        */
       type?: TreeMapColorizerType | undefined;
     };
     /**
-     * @docid
-     * @notUsedInTheme
-     * @public
-     * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
+     * Binds the UI component to data.
      */
     dataSource?: DataSourceLike<any> | null;
     /**
-     * @docid
-     * @public
+     * Configures groups.
      */
     group?: {
       /**
-       * @docid
+       * Configures the group borders.
        */
       border?: {
         /**
-         * @docid
-         * @default "#d3d3d3"
+         * Colors the group borders.
          */
         color?: string | undefined;
         /**
-         * @docid
-         * @default 1
+         * Specifies the width of the group borders in pixels.
          */
         width?: number | undefined;
       };
       /**
-       * @docid
-       * @default "#eeeeee"
+       * Colors the group headers.
        */
       color?: string;
       /**
-       * @docid
-       * @default 4
+       * Specifies the distance in pixels between group borders and content.
        */
       padding?: number;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the height of the group headers in pixels.
        */
       headerHeight?: number | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies whether groups change their style when a user pauses on them.
        */
       hoverEnabled?: boolean | undefined;
       /**
-       * @docid
+       * Specifies the appearance of groups in the hover state.
        */
       hoverStyle?: {
         /**
-         * @docid
+         * Configures the appearance of the group borders in the hover state.
          */
         border?: {
           /**
-           * @docid
-           * @default undefined
+           * Colors the group borders in the hover state.
            */
           color?: string | undefined;
           /**
-           * @docid
-           * @default undefined
+           * Specifies the width of the group borders in pixels. Applies to a group in the hover state.
            */
           width?: number | undefined;
         };
         /**
-         * @docid
-         * @default undefined
+         * Colors the group headers in the hover state.
          */
         color?: string | undefined;
       };
       /**
-       * @docid
+       * Configures the group labels.
        */
       label?: {
         /**
-         * @docid
-         * @default '#767676' &prop(color)
-         * @default 600 &prop(weight)
+         * Specifies the font settings of the group labels.
          */
         font?: Font;
         /**
-         * @docid
-         * @default "ellipsis"
+         * Specifies what to do with labels that overflow their group headers: hide, truncated them with ellipsis, or leave them as they are.
          */
         textOverflow?: TextOverflow;
         /**
-         * @docid
-         * @default true
+         * Changes the visibility of the group labels.
          */
         visible?: boolean;
       };
       /**
-       * @docid
+       * Specifies the appearance of groups in the selected state.
        */
       selectionStyle?: {
         /**
-         * @docid
+         * Configures the appearance of the group borders in the selected state.
          */
         border?: {
           /**
-           * @docid
-           * @default "#232323"
+           * Colors the group borders in the selected state.
            */
           color?: string | undefined;
           /**
-           * @docid
-           * @default undefined
+           * Specifies the width of the group borders in pixels. Applies to a group in the selected state.
            */
           width?: number | undefined;
         };
         /**
-         * @docid
-         * @default undefined
+         * Colors the group headers in the selected state.
          */
         color?: string | undefined;
       };
     };
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies whether tiles and groups change their style when a user pauses on them.
      */
     hoverEnabled?: boolean | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the name of the data source field that provides IDs for items. Applies to plain data sources only.
      */
     idField?: string | undefined;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the user will interact with a single tile or its group.
      */
     interactWithGroup?: boolean;
     /**
-     * @docid
-     * @default 'name'
-     * @public
+     * Specifies the name of the data source field that provides texts for tile and group labels.
      */
     labelField?: string;
     /**
-     * @docid
-     * @type Enums.TreeMapLayoutAlgorithm | function
-     * @default 'squarified'
-     * @type_function_return void
-     * @public
+     * Specifies the layout algorithm.
      */
     layoutAlgorithm?: TreeMapLayoutAlgorithm | ((e: { rect?: Array<number>; sum?: number; items?: Array<any> }) => any);
     /**
-     * @docid
-     * @default 'leftTopRightBottom'
-     * @public
+     * Specifies the direction in which the items will be laid out.
      */
     layoutDirection?: TreeMapLayoutDirection;
     /**
-     * @docid
-     * @type object
-     * @hidden
+     * Generates space around the UI component.
      */
     margin?: BaseWidgetMargin;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies how many hierarchical levels must be visualized.
      */
     maxDepth?: number | undefined;
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{viz/tree_map:ClickEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a node is clicked or tapped.
      */
     onClick?: ((e: ClickEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/tree_map:DrillEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a user drills up or down.
      */
     onDrill?: ((e: DrillEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/tree_map:HoverChangedEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed after the pointer enters or leaves a node.
      */
     onHoverChanged?: ((e: HoverChangedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/tree_map:NodesInitializedEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed only once, after the nodes are initialized.
      */
     onNodesInitialized?: ((e: NodesInitializedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/tree_map:NodesRenderingEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed before the nodes are displayed and each time the collection of active nodes is changed.
      */
     onNodesRendering?: ((e: NodesRenderingEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/tree_map:SelectionChangedEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a node is selected or selection is canceled.
      */
     onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the name of the data source field that provides parent IDs for items. Applies to plain data sources only.
      */
     parentField?: string | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies whether a single or multiple nodes can be in the selected state simultaneously.
      */
     selectionMode?: SingleMultipleOrNone | undefined;
     /**
-     * @docid
-     * @public
+     * Configures tiles.
      */
     tile?: {
       /**
-       * @docid
+       * Configures the tile borders.
        */
       border?: {
         /**
-         * @docid
-         * @default "#000000"
+         * Colors the tile borders.
          */
         color?: string | undefined;
         /**
-         * @docid
-         * @default 1
+         * Specifies the width of the tile borders in pixels.
          */
         width?: number | undefined;
       };
       /**
-       * @docid
-       * @default "#$5f8b95"
+       * Specifies a single color for all tiles.
        */
       color?: string;
       /**
-       * @docid
+       * Specifies the appearance of tiles in the hover state.
        */
       hoverStyle?: {
         /**
-         * @docid
+         * Configures the appearance of the tile borders in the hover state.
          */
         border?: {
           /**
-           * @docid
-           * @default undefined
+           * Colors the tile borders in the hover state.
            */
           color?: string | undefined;
           /**
-           * @docid
-           * @default undefined
+           * Specifies the width of the tile borders in pixels. Applies to a tile in the hover state.
            */
           width?: number | undefined;
         };
         /**
-         * @docid
-         * @default undefined
+         * Colors tiles in the hover state.
          */
         color?: string | undefined;
       };
       /**
-       * @docid
+       * Configures the tile labels.
        */
       label?: {
         /**
-         * @docid
-         * @default '#FFFFFF' &prop(color)
-         * @default 300 &prop(weight)
+         * Specifies the font settings of the tile labels.
          */
         font?: Font;
         /**
-         * @docid
-         * @default "ellipsis"
+         * Specifies what to do with labels that overflow their tiles after applying wordWrap: hide, truncate them and display an ellipsis, or do nothing.
          */
         textOverflow?: TextOverflow;
         /**
-         * @docid
-         * @defaultValue true
+         * Changes the visibility of the tile labels.
          */
         visible?: boolean;
         /**
-         * @docid
-         * @default "normal"
+         * Specifies how to wrap texts that do not fit into a single line.
          */
         wordWrap?: WordWrap;
       };
       /**
-       * @docid
+       * Specifies the appearance of tiles in the selected state.
        */
       selectionStyle?: {
         /**
-         * @docid
+         * Configures the appearance of the tile borders in the selected state.
          */
         border?: {
           /**
-           * @docid
-           * @default "#232323"
+           * Colors the tile borders in the selected state.
            */
           color?: string | undefined;
           /**
-           * @docid
-           * @default undefined
+           * Specifies the width of the tile borders in pixels. Applies to a tile in the selected state.
            */
           width?: number | undefined;
         };
         /**
-         * @docid
-         * @default undefined
+         * Colors tiles in the selected state.
          */
         color?: string | undefined;
       };
     };
     /**
-     * @docid
-     * @type object
-     * @public
+     * Configures tooltips - small pop-up rectangles that display information about a data-visualizing UI component element being pressed or hovered over with the mouse pointer.
      */
     tooltip?: Tooltip;
     /**
-     * @docid
-     * @default 'value'
-     * @public
+     * Specifies the name of the data source field that provides values for tiles.
      */
     valueField?: string;
 }
 /**
- * @public
- * @docid dxTreeMapTooltip
+ * 
  */
 export type Tooltip = BaseWidgetTooltip & {
     /**
-     * @docid dxTreeMapOptions.tooltip.contentTemplate
-     * @type_function_return string|Element|jQuery
-     * @default undefined
-     * @public
+     * Specifies a custom template for a tooltip.
      */
     contentTemplate?: template | ((info: { value?: number; valueText?: string; node?: dxTreeMapNode }, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
-     * @docid dxTreeMapOptions.tooltip.customizeTooltip
-     * @default undefined
-     * @type_function_return object
-     * @public
+     * Allows you to change tooltip appearance.
      */
     customizeTooltip?: ((info: { value?: number; valueText?: string; node?: dxTreeMapNode }) => any) | undefined;
 };
 /**
- * @docid
- * @inherits BaseWidget, DataHelperMixin
- * @namespace DevExpress.viz
- * @public
+ * The TreeMap is a UI component that displays hierarchical data by using nested rectangles.
  */
 export default class dxTreeMap extends BaseWidget<dxTreeMapOptions> {
     /**
-     * @docid
-     * @publicName clearSelection()
-     * @public
+     * Deselects all nodes in the UI component.
      */
     clearSelection(): void;
     /**
-     * @docid
-     * @publicName drillUp()
-     * @public
+     * Drills one level up.
      */
     drillUp(): void;
     /**
-     * @docid
-     * @publicName getCurrentNode()
-     * @public
+     * Gets the current node.
      */
     getCurrentNode(): dxTreeMapNode;
     getDataSource(): DataSource;
     /**
-     * @docid
-     * @publicName getRootNode()
-     * @public
+     * Gets the root node.
      */
     getRootNode(): dxTreeMapNode;
     /**
-     * @docid
-     * @publicName hideTooltip()
-     * @public
+     * Hides the tooltip.
      */
     hideTooltip(): void;
     /**
-     * @docid
-     * @publicName resetDrillDown()
-     * @public
+     * Resets the drill down level.
      */
     resetDrillDown(): void;
 }
 
 /**
- * @docid
- * @publicName Node
- * @namespace DevExpress.viz
+ * This section describes the Node object, which represents a treemap node.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxTreeMapNode {
     /**
-     * @docid
-     * @publicName customize(options)
-     * @param1 options:object
-     * @public
+     * Customizes the node.
      */
     customize(options: any): void;
     /**
-     * @docid
-     * @public
+     * The object from the data source visualized by the node.
      */
     data?: any;
     /**
-     * @docid
-     * @publicName drillDown()
-     * @public
+     * Drills down into the node.
      */
     drillDown(): void;
     /**
-     * @docid
-     * @publicName getAllChildren()
-     * @public
+     * Returns all nodes nested in the current node.
      */
     getAllChildren(): Array<dxTreeMapNode>;
     /**
-     * @docid
-     * @publicName getAllNodes()
-     * @public
+     * Returns all descendant nodes.
      */
     getAllNodes(): Array<dxTreeMapNode>;
     /**
-     * @docid
-     * @publicName getChild(index)
-     * @public
+     * Gets a specific node from a collection of direct descendants.
      */
     getChild(index: number): dxTreeMapNode;
     /**
-     * @docid
-     * @publicName getChildrenCount()
-     * @public
+     * Indicates how many direct descendants the current node has.
      */
     getChildrenCount(): number;
     /**
-     * @docid
-     * @publicName getParent()
-     * @public
+     * Returns the parent node of the current node.
      */
     getParent(): dxTreeMapNode;
     /**
-     * @docid
-     * @public
+     * The index of the current node in the array of all nodes on the same level.
      */
     index?: number;
     /**
-     * @docid
-     * @publicName isActive()
-     * @public
+     * Indicates whether the current node is active.
      */
     isActive(): boolean;
     /**
-     * @docid
-     * @publicName isHovered()
-     * @public
+     * Indicates whether the node is in the hover state or not.
      */
     isHovered(): boolean;
     /**
-     * @docid
-     * @publicName isLeaf()
-     * @public
+     * Indicates whether the node is visualized by a tile or a group of tiles.
      */
     isLeaf(): boolean;
     /**
-     * @docid
-     * @publicName isSelected()
-     * @public
+     * Indicates whether the node is selected or not.
      */
     isSelected(): boolean;
     /**
-     * @docid
-     * @publicName label()
-     * @public
+     * Returns the label of the node.
      */
     label(): string;
     /**
-     * @docid
-     * @publicName label(label)
-     * @public
+     * Sets the label to the node.
      */
     label(label: string): void;
     /**
-     * @docid
-     * @public
+     * The level that the current node occupies in the hierarchy of nodes.
      */
     level?: number;
     /**
-     * @docid
-     * @publicName resetCustomization()
-     * @public
+     * Reverts the appearance of the node to the initial state.
      */
     resetCustomization(): void;
     /**
-     * @docid
-     * @publicName select(state)
-     * @public
+     * Sets the selection state of a node.
      */
     select(state: boolean): void;
     /**
-     * @docid
-     * @publicName showTooltip()
-     * @public
+     * Shows the tooltip.
      */
     showTooltip(): void;
     /**
-     * @docid
-     * @publicName value()
-     * @public
+     * Gets the raw value of the node.
      */
     value(): number;
 }
 
-/** @public */
 export type Properties = dxTreeMapOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxTreeMapOptions;
 
 // #region deprecated in v23.1
 
-/** @deprecated Use Tooltip instead */
+/**
+ * @deprecated Use Tooltip instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxTreeMapTooltip = Tooltip;
 
 // #endregion

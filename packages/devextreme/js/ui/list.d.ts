@@ -48,775 +48,514 @@ export {
 type ItemLike = string | Item | any;
 
 /**
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface ListItemInfo<TItem extends ItemLike> {
     /**
-     * @docid
-     * @type object
+     * 
      */
     readonly itemData?: TItem;
-    /** @docid */
+    /**
+     * 
+     */
     readonly itemElement: DxElement;
-    /** @docid */
+    /**
+     * 
+     */
     readonly itemIndex: number | { group: number; item: number };
 }
 
-/** @public */
 export type ItemDeleteMode = 'context' | 'slideButton' | 'slideItem' | 'static' | 'swipe' | 'toggle';
-/** @public */
 export type ListMenuMode = 'context' | 'slide';
 
 /**
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface ScrollInfo {
     /**
-     * @docid
-     * @type object
+     * 
      */
     readonly scrollOffset?: any;
-    /** @docid */
+    /**
+     * 
+     */
     readonly reachedLeft: boolean;
-    /** @docid */
+    /**
+     * 
+     */
     readonly reachedRight: boolean;
-    /** @docid */
+    /**
+     * 
+     */
     readonly reachedTop: boolean;
-    /** @docid */
+    /**
+     * 
+     */
     readonly reachedBottom: boolean;
 }
 
 /**
- * @docid _ui_list_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>>;
 
 /**
- * @docid _ui_list_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>>;
 
 /**
- * @docid _ui_list_GroupRenderedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the groupRendered event handler&apos;s argument.
  */
 export type GroupRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & {
     /**
-     * @docid _ui_list_GroupRenderedEvent.groupData
-     * @type object
+     * 
      */
     readonly groupData?: any;
-    /** @docid _ui_list_GroupRenderedEvent.groupElement */
+    /**
+     * 
+     */
     readonly groupElement?: DxElement;
-    /** @docid _ui_list_GroupRenderedEvent.groupIndex */
+    /**
+     * 
+     */
     readonly groupIndex?: number;
 };
 
 /**
- * @docid _ui_list_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxList<TItem, TKey>>;
 
 /**
- * @docid _ui_list_ItemClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ListItemInfo
+ * The type of the itemClick event handler&apos;s argument.
  */
 export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ListItemInfo<TItem>;
 
 /**
- * @docid _ui_list_ItemContextMenuEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ListItemInfo
+ * The type of the itemContextMenu event handler&apos;s argument.
  */
 export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo<TItem>;
 
 /**
- * @docid _ui_list_ItemDeletedEvent
- * @public
- * @type object
- * @inherits EventInfo,ListItemInfo
+ * The type of the itemDeleted event handler&apos;s argument.
  */
 export type ItemDeletedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem>;
 
 /**
- * @docid _ui_list_ItemDeletingEvent
- * @public
- * @type object
- * @inherits EventInfo,ListItemInfo
+ * The type of the itemDeleting event handler&apos;s argument.
  */
 export type ItemDeletingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem> & {
     /**
-     * @docid _ui_list_ItemDeletingEvent.cancel
-     * @type boolean
+     * 
      */
     cancel?: boolean | PromiseLike<boolean> | PromiseLike<void>;
 };
 
 /**
- * @docid _ui_list_ItemHoldEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ListItemInfo
+ * The type of the itemHold event handler&apos;s argument.
  */
 export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo<TItem>;
 
 /**
- * @docid _ui_list_ItemRenderedEvent
- * @public
- * @type object
- * @inherits EventInfo,ItemInfo
+ * The type of the itemRendered event handler&apos;s argument.
  */
 export type ItemRenderedEvent<TItem extends Item | any = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_list_ItemReorderedEvent
- * @public
- * @type object
- * @inherits EventInfo,ListItemInfo
+ * The type of the itemReordered event handler&apos;s argument.
  */
 export type ItemReorderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem> & {
-    /** @docid _ui_list_ItemReorderedEvent.fromIndex */
+    /**
+     * 
+     */
     readonly fromIndex: number;
-    /** @docid _ui_list_ItemReorderedEvent.toIndex */
+    /**
+     * 
+     */
     readonly toIndex: number;
 };
 
 /**
- * @docid _ui_list_ItemSwipeEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ListItemInfo
+ * The type of the itemSwipe event handler&apos;s argument.
  */
 export type ItemSwipeEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo<TItem> & {
-    /** @docid _ui_list_ItemSwipeEvent.direction */
+    /**
+     * 
+     */
     readonly direction: string;
 };
 
 /**
- * @docid _ui_list_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ChangedOptionInfo;
 
 /**
- * @docid _ui_list_PageLoadingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the pageLoading event handler&apos;s argument.
  */
 export type PageLoadingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>>;
 
 /**
- * @docid _ui_list_PullRefreshEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the pullRefresh event handler&apos;s argument.
  */
 export type PullRefreshEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>>;
 
 /**
- * @docid _ui_list_ScrollEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ScrollInfo
+ * The type of the scroll event handler&apos;s argument.
  */
 export type ScrollEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, Event> & ScrollInfo;
 
 /**
- * @docid _ui_list_SelectAllValueChangedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the selectAllValueChanged event handler&apos;s argument.
  */
 export type SelectAllValueChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & {
-    /** @docid _ui_list_SelectAllValueChangedEvent.value */
+    /**
+     * 
+     */
     readonly value: boolean;
 };
 
 /**
- * @docid _ui_list_SelectionChangingEvent
- * @public
- * @type object
- * @inherits AsyncCancelable,EventInfo,SelectionChangeInfo
+ * The type of the selectionChanging event handler&apos;s argument.
  */
 export type SelectionChangingEvent<TItem extends ItemLike = any, TKey = any> = SelectionChangingEventBase<dxList<TItem, TKey>>;
 
 /**
- * @docid _ui_list_SelectionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,SelectionChangeInfo
+ * The type of the selectionChanged event handler&apos;s argument.
  */
 export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & SelectionChangeInfo<TItem>;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @public
- * @docid
+ * 
+ * @deprecated 
  */
 export interface dxListOptions<
     TItem extends ItemLike = any,
     TKey = any,
 > extends CollectionWidgetOptions<dxList<TItem, TKey>, TItem, TKey>, SearchBoxMixinOptions {
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the UI component changes its visual state as a result of user interaction.
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether or not an end user can delete list items.
      */
     allowItemDeleting?: boolean;
     /**
-     * @docid
-     * @default true
-     * @default false &for(desktop)
-     * @public
+     * A Boolean value specifying whether to enable or disable the bounce-back effect.
      */
     bounceEnabled?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether or not an end user can collapse groups.
      */
     collapsibleGroups?: boolean;
     /**
-     * @docid
-     * @type string | Array<string | dxListItem | any> | Store | DataSource | DataSourceOptions | null
-     * @default null
-     * @public
+     * Binds the UI component to data.
      */
     dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
-     * @docid
-     * @default undefined
-     * @type_function_param1 item:object
-     * @public
+     * Specifies the data field whose values should be displayed. Defaults to &apos;text&apos; when the data source contains objects.
      */
     displayExpr?: string | ((item: TItem) => string) | undefined;
     /**
-     * @docid
-     * @default true &for(desktop)
-     * @public
+     * Specifies whether the UI component can be focused using keyboard navigation.
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid
-     * @default "group"
-     * @type_function_param1 groupData:object
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies a custom template for group captions.
      */
     groupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether data items should be grouped.
      */
     grouped?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the UI component changes its state when a user pauses on it.
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not to show the loading panel when the DataSource bound to the UI component is loading data.
      */
     indicateLoading?: boolean;
     /**
-     * @docid
-     * @default 'static'
-     * @default 'slideItem' &for(iOS)
-     * @default 'swipe' &for(Android)
-     * @public
+     * Specifies the way a user can delete items from the list.
      */
     itemDeleteMode?: ItemDeleteMode;
     /**
-     * @docid
-     * @public
+     * Configures item reordering using drag and drop gestures.
      */
     itemDragging?: dxSortableOptions;
     /**
-     * @docid
-     * @type Array<string | dxListItem | any>
-     * @fires dxListOptions.onOptionChanged
-     * @public
+     * An array of items displayed by the UI component.
      */
     items?: Array<TItem>;
     /**
-     * @docid
-     * @default []
-     * @public
+     * Specifies the array of items for a context menu called for a list item.
      */
     menuItems?: Array<{
       /**
-       * @docid
-       * @type_function_param2 itemData:object
-       * @type_function_return void
+       * Holds on a function called when the item is clicked.
        */
       action?: ((itemElement: DxElement, itemData: TItem) => any);
       /**
-       * @docid
+       * Specifies the menu item text.
        */
       text?: string;
     }>;
     /**
-     * @docid
-     * @default 'context'
-     * @default 'slide' &for(iOS)
-     * @public
+     * Specifies whether an item context menu is shown when a user holds or swipes an item.
      */
     menuMode?: ListMenuMode;
     /**
-     * @docid
-     * @default "More"
-     * @public
+     * The text displayed on the button used to load the next page from the data source.
      */
     nextButtonText?: string;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/list:GroupRenderedEvent}
-     * @action
-     * @public
+     * A function that is executed when a group element is rendered.
      */
     onGroupRendered?: ((e: GroupRenderedEvent<TItem, TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{ui/list:ItemClickEvent}
-     * @action
-     * @public
+     * A function that is executed when a collection item is clicked or tapped.
      */
     onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/list:ItemContextMenuEvent}
-     * @action
-     * @public
+     * A function that is executed when a collection item is right-clicked or pressed.
      */
     onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/list:ItemDeletedEvent}
-     * @action
-     * @hidden false
-     * @public
+     * A function that is executed after a list item is deleted from the data source.
      */
     onItemDeleted?: ((e: ItemDeletedEvent<TItem, TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/list:ItemDeletingEvent}
-     * @action
-     * @hidden false
-     * @public
+     * A function that is executed before a collection item is deleted from the data source.
      */
     onItemDeleting?: ((e: ItemDeletingEvent<TItem, TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/list:ItemHoldEvent}
-     * @action
-     * @public
+     * A function that is executed when a collection item has been held for a specified period.
      */
     onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/list:ItemReorderedEvent}
-     * @action
-     * @hidden false
-     * @public
+     * A function that is executed after a list item is moved to another position.
      */
     onItemReordered?: ((e: ItemReorderedEvent<TItem, TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/list:ItemSwipeEvent}
-     * @action
-     * @public
+     * A function that is executed when a list item is swiped.
      */
     onItemSwipe?: ((e: ItemSwipeEvent<TItem, TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/list:PageLoadingEvent}
-     * @action
-     * @public
+     * A function that is executed before the next page is loaded.
      */
     onPageLoading?: ((e: PageLoadingEvent<TItem, TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/list:PullRefreshEvent}
-     * @action
-     * @public
+     * A function that is executed when the &apos;pull to refresh&apos; gesture is performed. Supported on mobile devices only.
      */
     onPullRefresh?: ((e: PullRefreshEvent<TItem, TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/list:ScrollEvent}
-     * @action
-     * @public
+     * A function that is executed on each scroll gesture.
      */
     onScroll?: ((e: ScrollEvent<TItem, TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/list:SelectAllValueChangedEvent}
-     * @action
-     * @public
+     * A function that is executed when the &apos;Select All&apos; check box value is changed. Applies only if the selectionMode is &apos;all&apos;.
      */
     onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void);
     /**
-     * @docid
-     * @default "scrollBottom"
-     * @default "nextButton" &for(desktop except Mac)
-     * @public
+     * Specifies whether the next page is loaded when a user scrolls the UI component to the bottom or when the &apos;next&apos; button is clicked.
      */
     pageLoadMode?: PageLoadMode;
     /**
-     * @docid
-     * @default "Loading..."
-     * @default "" &for(Material)
-     * @default "" &for(Fluent)
-     * @public
+     * Specifies the text shown in the pullDown panel, which is displayed when the list is scrolled to the bottom.
      */
     pageLoadingText?: string;
     /**
-     * @docid
-     * @default false
-     * @public
+     * A Boolean value specifying whether or not the UI component supports the &apos;pull down to refresh&apos; gesture.
      */
     pullRefreshEnabled?: boolean;
     /**
-     * @docid
-     * @default "Release to refresh..."
-     * @default "" &for(Material)
-     * @default "" &for(Fluent)
-     * @public
+     * Specifies the text displayed in the pullDown panel when the list is pulled below the refresh threshold.
      */
     pulledDownText?: string;
     /**
-     * @docid
-     * @default "Pull down to refresh..."
-     * @default "" &for(Material)
-     * @default "" &for(Fluent)
-     * @public
+     * Specifies the text shown in the pullDown panel while the list is being pulled down to the refresh threshold.
      */
     pullingDownText?: string;
     /**
-     * @docid
-     * @default "Refreshing..."
-     * @default "" &for(Material)
-     * @default "" &for(Fluent)
-     * @public
+     * Specifies the text displayed in the pullDown panel while the list is being refreshed.
      */
     refreshingText?: string;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether to repaint only those elements whose data changed.
      */
     repaintChangesOnly?: boolean;
     /**
-     * @docid
-     * @default true
-     * @default false &for(non-touch_devices)
-     * @public
+     * A Boolean value specifying if the list is scrolled by content.
      */
     scrollByContent?: boolean;
     /**
-     * @docid
-     * @default false
-     * @default true &for(desktop)
-     * @public
+     * Specifies whether a user can scroll the content with the scrollbar. Applies only if useNativeScrolling is false.
      */
     scrollByThumb?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * A Boolean value specifying whether to enable or disable list scrolling.
      */
     scrollingEnabled?: boolean;
     /**
-     * @docid
-     * @default 'page'
-     * @public
+     * Specifies the mode in which all items are selected.
      */
     selectAllMode?: SelectAllMode;
     /**
-     * @docid
-     * @default 'true'
-     * @public
+     * Specifies whether an item is selected if a user clicks it.
      */
     selectByClick?: boolean;
     /**
-     * @docid
-     * @default 'none'
-     * @public
+     * Specifies item selection mode.
      */
     selectionMode?: SingleMultipleAllOrNone;
     /**
-     * @docid
-     * @default 'onScroll'
-     * @default 'onHover' &for(desktop)
-     * @public
+     * Specifies when the UI component shows the scrollbar.
      */
     showScrollbar?: ScrollbarMode;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether or not to display controls used to select list items. Not available if selectionMode is set to &apos;none&apos;.
      */
     showSelectionControls?: boolean;
     /**
-     * @docid
-     * @default "Select All"
-     * @public
+     * Specifies the text displayed at the &apos;Select All&apos; check box.
      */
     selectAllText?: string;
     /**
-     * @docid
-     * @default false &for(desktop except Mac)
-     * @default true
-     * @public
+     * Specifies whether or not the UI component uses native scrolling.
      */
     useNativeScrolling?: boolean;
 }
 /**
- * @docid
- * @inherits CollectionWidget, SearchBoxMixin
- * @namespace DevExpress.ui
- * @public
+ * The List is a UI component that represents a collection of items in a scrollable list.
  */
 export default class dxList<
     TItem extends ItemLike = any,
     TKey = any,
 > extends CollectionWidget<dxListOptions<TItem, TKey>, TItem, TKey> {
     /**
-     * @docid
-     * @publicName clientHeight()
-     * @return numeric
-     * @public
+     * Gets the UI component&apos;s height in pixels.
      */
     clientHeight(): number;
     /**
-     * @docid
-     * @publicName collapseGroup(groupIndex)
-     * @return Promise<void>
-     * @public
+     * Collapses a group with a specific index.
      */
     collapseGroup(groupIndex: number): DxPromise<void>;
     /**
-     * @docid
-     * @publicName deleteItem(itemElement)
-     * @return Promise<void>
-     * @public
+     * Removes an item found using its DOM node.
      */
     deleteItem(itemElement: Element): DxPromise<void>;
     /**
-     * @docid
-     * @publicName deleteItem(itemIndex)
-     * @param1 itemIndex:Number|Object
-     * @return Promise<void>
-     * @public
+     * Removes an item with a specific index.
      */
     deleteItem(itemIndex: number | any): DxPromise<void>;
     /**
-     * @docid
-     * @publicName expandGroup(groupIndex)
-     * @return Promise<void>
-     * @public
+     * Expands a group with a specific index.
      */
     expandGroup(groupIndex: number): DxPromise<void>;
     /**
-     * @docid
-     * @publicName isItemSelected(itemElement)
-     * @public
+     * Checks whether an item found using its DOM node is selected.
      */
     isItemSelected(itemElement: Element): boolean;
     /**
-     * @docid
-     * @publicName isItemSelected(itemIndex)
-     * @param1 itemIndex:Number|Object
-     * @public
+     * Checks whether an item with a specific index is selected.
      */
     isItemSelected(itemIndex: number | any): boolean;
     /**
-     * @docid
-     * @publicName reload()
-     * @public
+     * Reloads list data.
      */
     reload(): void;
     /**
-     * @docid
-     * @publicName reorderItem(itemElement, toItemElement)
-     * @return Promise<void>
-     * @public
+     * Reorders items found using their DOM nodes.
      */
     reorderItem(itemElement: Element, toItemElement: Element): DxPromise<void>;
     /**
-     * @docid
-     * @publicName reorderItem(itemIndex, toItemIndex)
-     * @param1 itemIndex:Number|Object
-     * @param2 toItemIndex:Number|Object
-     * @return Promise<void>
-     * @public
+     * Reorders items with specific indexes.
      */
     reorderItem(itemIndex: number | any, toItemIndex: number | any): DxPromise<void>;
     /**
-     * @docid
-     * @publicName scrollBy(distance)
-     * @param1 distance:numeric
-     * @public
+     * Scrolls the content by a specified distance.
      */
     scrollBy(distance: number): void;
     /**
-     * @docid
-     * @publicName scrollHeight()
-     * @return numeric
-     * @public
+     * Gets the content&apos;s height in pixels.
      */
     scrollHeight(): number;
     /**
-     * @docid
-     * @publicName scrollTo(location)
-     * @param1 location:numeric
-     * @public
+     * Scrolls the content to a specific position.
      */
     scrollTo(location: number): void;
     /**
-     * @docid
-     * @publicName scrollToItem(itemElement)
-     * @public
+     * Scrolls the content to an item found using its DOM node.
      */
     scrollToItem(itemElement: Element): void;
     /**
-     * @docid
-     * @publicName scrollToItem(itemIndex)
-     * @param1 itemIndex:Number|Object
-     * @public
+     * Scrolls the content to an item with a specific index.
      */
     scrollToItem(itemIndex: number | any): void;
     /**
-     * @docid
-     * @publicName scrollTop()
-     * @return numeric
-     * @public
+     * Gets the top scroll offset.
      */
     scrollTop(): number;
     /**
-     * @docid
-     * @publicName selectAll()
-     * @public
+     * Selects all items.
      */
     selectAll(): void;
     /**
-     * @docid
-     * @publicName selectItem(itemElement)
-     * @public
+     * Selects an item found using its DOM node.
      */
     selectItem(itemElement: Element): void;
     /**
-     * @docid
-     * @publicName selectItem(itemIndex)
-     * @param1 itemIndex:Number|Object
-     * @public
+     * Selects an item with a specific index.
      */
     selectItem(itemIndex: number | any): void;
     /**
-     * @docid
-     * @publicName unselectAll()
-     * @public
+     * Cancels the selection of all items.
      */
     unselectAll(): void;
     /**
-     * @docid
-     * @publicName unselectItem(itemElement)
-     * @public
+     * Cancels the selection of an item found using its DOM node.
      */
     unselectItem(itemElement: Element): void;
     /**
-     * @docid
-     * @publicName unselectItem(itemIndex)
-     * @param1 itemIndex:Number|Object
-     * @public
+     * Cancels the selection of an item with a specific index.
      */
     unselectItem(itemIndex: number | any): void;
     /**
-     * @docid
-     * @publicName updateDimensions()
-     * @return Promise<void>
-     * @public
+     * Updates the UI component scrollbar according to UI component content size.
      */
     updateDimensions(): DxPromise<void>;
 }
 
-/**
- * @public
- * @namespace DevExpress.ui.dxList
- */
 export type Item = dxListItem;
 
 /**
  * @deprecated Use Item instead
- * @namespace DevExpress.ui
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxListItem extends CollectionWidgetItem {
     /**
-     * @docid
-     * @public
+     * Specifies the text of a badge displayed for the list item.
      */
     badge?: string;
     /**
-     * @docid
-     * @public
+     * Specifies the list item&apos;s icon.
      */
     icon?: string;
     /**
-     * @docid
-     * @public
+     * Specifies the name of the list items group in a grouped list.
      */
     key?: string;
     /**
-     * @docid
-     * @public
+     * Specifies whether or not to display a chevron for the list item.
      */
     showChevron?: boolean;
 }
 
-/** @public */
 export type ExplicitTypes<
     TItem extends ItemLike,
     TKey,
@@ -843,13 +582,15 @@ export type ExplicitTypes<
     SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
 };
 
-/** @public */
 export type Properties<
     TItem extends ItemLike = any,
     TKey = any,
 > = dxListOptions<TItem, TKey>;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options<
     TItem extends ItemLike = any,
     TKey = any,

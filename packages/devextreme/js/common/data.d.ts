@@ -18,101 +18,60 @@ import type {
     LoadOptions as LoadOptionsInternal,
 } from './data.types';
 
-/**
- * @namespace DevExpress.common.data
- * @public
- */
 export type SearchOperation = SearchOperationInternal;
 
-/**
- * @namespace DevExpress.common.data
- * @public
- */
 export type GroupingInterval = GroupingIntervalInternal;
 
 /**
- * @docid
- * @public
- * @type object
- * @skip
- * @namespace DevExpress.common.data
+ * 
  */
 export type SortDescriptor<T> = SortDescriptorInternal<T>;
 
 /**
- * @docid
- * @public
- * @type object
- * @skip
- * @namespace DevExpress.common.data
+ * 
  */
 export type GroupDescriptor<T> = GroupDescriptorInternal<T>;
 
 /**
- * @docid
- * @public
- * @type object
- * @skip
- * @namespace DevExpress.common.data
+ * 
  */
 export type SelectDescriptor<T> = SelectDescriptorInternal<T>;
 
 /**
- * @docid
- * @public
- * @type object
- * @namespace DevExpress.common.data
+ * 
  */
 export type FilterDescriptor = FilterDescriptorInternal;
 
 /**
- * @public
- * @docid
- * @type object
- * @namespace DevExpress.common.data
+ * This section describes the loadOptions object&apos;s fields.
  */
 export type LoadOptions<T = any> = LoadOptionsInternal<T>;
 
 /**
- * @docid
- * @public
- * @type object
- * @namespace DevExpress.common.data
+ * A total summary expression for `loadOptions`.
  */
 export type SummaryDescriptor<T> = SummaryDescriptorInternal<T>;
 
 /**
- * @docid Utils.applyChanges
- * @publicName applyChanges(data, changes, options)
- * @param3 options?:any
- * @namespace DevExpress.common.data
- * @public
+ * Applies an array of changes to a source data array.
  */
 export function applyChanges(data: Array<any>, changes: Array<any>, options?: { keyExpr?: string | Array<string>; immutable?: boolean }): Array<any>;
 
 /**
- * @docid
- * @namespace DevExpress.common.data
- * @public
- * @type object
- * @inherits StoreOptions
+ * 
  */
 export type ArrayStoreOptions<
     TItem = any,
     TKey = any,
 > = AbstractStoreOptions<TItem, TKey> & {
     /**
-     * @docid
-     * @public
+     * Specifies the store&apos;s associated array.
      */
     data?: Array<TItem>;
 };
 
 /**
- * @docid
- * @namespace DevExpress.common.data
- * @public
- * @options ArrayStoreOptions
+ * The ArrayStore is a store that provides an interface for loading and editing an in-memory array and handling related events.
  */
 export class ArrayStore<
     TItem = any,
@@ -120,75 +79,72 @@ export class ArrayStore<
 > extends AbstractStore<TItem, TKey> {
     constructor(options?: ArrayStoreOptions<TItem, TKey>);
     /**
-     * @docid
-     * @publicName byKey(key)
-     * @param1 key:object|string|number
-     * @return Promise<any>
-     * @public
+     * Gets a data item with a specific key.
      */
     byKey(key: TKey): DxPromise<TItem>;
     /**
-     * @docid
-     * @publicName clear()
-     * @public
+     * Clears all the ArrayStore&apos;s associated data.
      */
     clear(): void;
     /**
-     * @docid
-     * @publicName createQuery()
-     * @return object
-     * @public
+     * Creates a Query for the underlying array.
      */
     createQuery(): Query;
 }
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.data
+ * An additional type for LoadResult.
  */
 export type GroupItem<
     TItem = any,
 > = {
-  /** @docid */
+  /**
+   * A key to group items by.
+   */
   key: any | string | number;
   /**
-   * @docid
-   * @type Array<any>|Array<GroupItem>|null
+   * Contains an array of items or GroupItems, or nothing.
    */
   items: Array<TItem> | Array<GroupItem<TItem>> | null;
-  /** @docid */
+  /**
+   * A total number of items.
+   */
   count?: number;
-  /** @docid */
+  /**
+   * A summary array that contains the resulting values in the same order as the summary definitions.
+   */
   summary?: Array<any>;
 };
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type LoadResultArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.data
+ * An additional type for LoadResult.
  */
 export type LoadResultObject<TItem = any> = {
     /**
-     * @docid
-     * @type Array<any>|Array<GroupItem>
-    */
+     * Contains an array of items or GroupItems.
+     */
     data: Array<TItem> | Array<GroupItem<TItem>>;
-    /** @docid */
+    /**
+     * A total number of items.
+     */
     totalCount?: number;
-    /** @docid */
+    /**
+     * A summary array that contains the resulting values in the same order as the summary definitions.
+     */
     summary?: Array<any>;
-    /** @docid */
+    /**
+     * A number of groups.
+     */
     groupCount?: number;
   };
 
 /**
- * @docid
- * @public
- * @type object
- * @namespace DevExpress.common.data
+ * Specifies returned data of the `load()` method in CustomStore.
  */
 export type LoadResult<
     TItem = any,
@@ -198,126 +154,82 @@ export type LoadResult<
   | LoadResultObject<TItem>;
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.data
+ * A type guard function that checks whether LoadResult is a LoadResultObject.
  */
 export function isLoadResultObject<TItem>(res: LoadResult<TItem>): res is LoadResultObject<TItem>;
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.data
+ * A type guard function that checks whether LoadResult is an array of GroupItems.
  */
 export function isGroupItemsArray<TItem>(res: LoadResult<TItem>): res is Array<GroupItem<TItem>>;
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.data
+ * A type guard function that checks whether LoadResult is an array of items.
  */
 export function isItemsArray<TItem>(res: LoadResult<TItem>): res is Array<TItem>;
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type LoadFunctionResult<T> = T | DxPromise<T> | PromiseLike<T>;
 
 /**
- * @docid
- * @public
- * @type object
- * @deprecated Use LoadResult instead
- * @namespace DevExpress.common.data
+ * Specifies returned data of the `load()` method in CustomStore.
+ * @deprecated Use LoadResult instead.
  */
 export type ResolvedData<TItem = any> = LoadResult<TItem>;
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.data
- * @type object
+ * 
  */
 export type CustomStoreOptions<
     TItem = any,
     TKey = any,
 > = StoreOptionsBase<TItem, TKey> & {
     /**
-     * @docid
-     * @public
-     * @type_function_param1 key:object|string|number
-     * @type_function_param2 extraOptions:LoadOptions
-     * @type_function_return Promise<any>
+     * Specifies a custom implementation of the byKey(key) method.
      */
     byKey?: ((key: TKey, extraOptions?: LoadOptions<TItem>) => PromiseLike<TItem>);
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether raw data should be saved in the cache. Applies only if loadMode is &apos;raw&apos;.
      */
     cacheRawData?: boolean;
     /**
-     * @docid
-     * @type_function_param1 values:object
-     * @type_function_return Promise<any>
-     * @public
+     * Specifies a custom implementation of the insert(values) method.
      */
     insert?: ((values: TItem) => PromiseLike<TItem>);
     /**
-     * @docid
-     * @type_function_param1 options:LoadOptions
-     * @type_function_return LoadResult|Promise<LoadResult>
-     * @public
+     * Specifies a custom implementation of the load(options) method.
      */
     load: (options: LoadOptions<TItem>) => LoadFunctionResult<LoadResult<TItem>>;
     /**
-     * @docid
-     * @default 'processed'
-     * @public
+     * Specifies how data returned by the load function is treated.
      */
     loadMode?: 'processed' | 'raw';
     /**
-     * @docid
-     * @type_function_param1 result:LoadResult
-     * @type_function_param2 loadOptions:LoadOptions
-     * @action
-     * @public
+     * A function that is executed after data is loaded to the store.
      */
     onLoaded?: ((result: LoadResult<TItem>, loadOptions: LoadOptions<TItem>) => void);
     /**
-     * @docid
-     * @type_function_param1 key:object|string|number
-     * @type_function_return Promise<void>
-     * @public
+     * Specifies a custom implementation of the remove(key) method.
      */
     remove?: ((key: TKey) => PromiseLike<void>);
     /**
-     * @docid
-     * @type_function_param1_field filter:object
-     * @type_function_param1_field group:object
-     * @type_function_return Promise<number>
-     * @public
+     * Specifies a custom implementation of the totalCount(options) method.
      */
     totalCount?: ((loadOptions: { filter?: FilterDescriptor | Array<FilterDescriptor>; group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>> }) => PromiseLike<number>);
     /**
-     * @docid
-     * @type_function_param1 key:object|string|number
-     * @type_function_param2 values:object
-     * @type_function_return Promise<any>
-     * @public
+     * Specifies a custom implementation of the update(key, values) method.
      */
     update?: ((key: TKey, values: TItem) => PromiseLike<any>);
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies whether the store combines the search and filter expressions. Defaults to true if the loadMode is &apos;raw&apos; and false if it is &apos;processed&apos;.
      */
     useDefaultSearch?: boolean | undefined;
 };
 
 /**
- * @docid
- * @inherits Store
- * @public
- * @options CustomStoreOptions
- * @namespace DevExpress.common.data
+ * The CustomStore enables you to implement custom data access logic for consuming data from any source.
  */
 export class CustomStore<
     TItem = any,
@@ -325,44 +237,30 @@ export class CustomStore<
 > extends StoreBase<TItem, TKey> {
     constructor(options?: CustomStoreOptions<TItem, TKey>);
     /**
-     * @docid
-     * @publicName byKey(key, extraOptions)
-     * @param1 key:object|string|number
-     * @param2 extraOptions:LoadOptions
-     * @return Promise<any>
-     * @public
+     * Gets a data item with a specific key.
      */
     byKey(key: TKey, extraOptions?: LoadOptions<TItem>): DxPromise<TItem>;
     /**
-     * @docid
-     * @publicName clearRawDataCache()
-     * @public
+     * Deletes data from the cache. Takes effect only if the cacheRawData property is true.
      */
     clearRawDataCache(): void;
     /**
-     * @docid
-     * @publicName load()
-     * @return Promise<any>
-     * @public
+     * Starts loading data.
      */
     load(): DxExtendedPromise<LoadResult<TItem>>;
     /**
-     * @docid
-     * @publicName load(options)
-     * @param1 options:LoadOptions
-     * @return Promise<LoadResult>
-     * @public
+     * Starts loading data.
      */
     load(options: LoadOptions<TItem>): DxExtendedPromise<LoadResult<TItem>>;
 }
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type DataSourceEventName = 'changed' | 'loadError' | 'loadingChanged';
 
 /**
- * @namespace DevExpress.common.data
- * @docid
- * @public
- * @type object
+ * 
  */
 export type DataSourceOptions<
     TStoreItem = any,
@@ -371,138 +269,93 @@ export type DataSourceOptions<
     TKey = any,
 > = {
     /**
-     * @docid
-     * @public
+     * Custom parameters that should be passed to an OData service with the load query. Available only for the ODataStore.
      */
     customQueryParams?: any;
     /**
-     * @docid
-     * @public
+     * Specifies the navigation properties to be loaded with the OData entity. Available only for the ODataStore.
      */
     expand?: Array<string> | string;
     /**
-     * @docid
-     * @type Filter expression
-     * @public
+     * Specifies data filtering conditions.
      */
     filter?: FilterDescriptor | Array<FilterDescriptor>;
     /**
-     * @docid
-     * @type Group expression
-     * @public
+     * Specifies data grouping properties.
      */
     group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     /**
-     * @docid
-     * @public
-     */
-    // eslint-disable-next-line spellcheck/spell-checker
-    langParams?: LangParams;
+                                                              * Specifies parameters for language-specific sorting and filtering.
+                                                              */
+                                                             langParams?: LangParams;
     /**
-     * @docid
-     * @type_function_param1 dataItem:object
-     * @type_function_return object
-     * @public
+     * Specifies an item mapping function.
      */
     map?: ((dataItem: TStoreItem) => TMappedItem);
     /**
-     * @docid
-     * @type_function_param1_field changes:Array<any>
-     * @action
-     * @public
+     * A function that is executed after data is loaded.
      */
     onChanged?: ((e: { readonly changes?: Array<TMappedItem> }) => void);
     /**
-     * @docid
-     * @action
-     * @public
+     * A function that is executed when data loading fails.
      */
     onLoadError?: ((error: { readonly message?: string }) => void);
     /**
-     * @docid
-     * @action
-     * @public
+     * A function that is executed when the data loading status changes.
      */
     onLoadingChanged?: ((isLoading: boolean) => void);
     /**
-     * @docid
-     * @default 20
-     * @public
+     * Specifies the maximum number of data items per page. Applies only if paginate is true.
      */
     pageSize?: number;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies whether the DataSource loads data items by pages or all at once. Defaults to false if group is set; otherwise, true.
      */
     paginate?: boolean | undefined;
     /**
-     * @docid
-     * @type_function_param1 data:Array<any>
-     * @type_function_return Array<any>
-     * @public
+     * Specifies a post processing function.
      */
     postProcess?: ((data: Array<TMappedItem>) => Array<TItem>);
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the period (in milliseconds) when changes are aggregated before pushing them to the DataSource.
      */
     pushAggregationTimeout?: number | undefined;
     /**
-     * @docid
-     * @public
+     * Specifies whether the DataSource requests the total count of data items in the storage.
      */
     requireTotalCount?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether to reapply sorting, filtering, grouping, and other data processing operations after receiving a push.
      */
     reshapeOnPush?: boolean;
     /**
-     * @docid
-     * @type getter|Array<getter>
-     * @public
+     * Specifies the fields to search.
      */
     searchExpr?: string | Function | Array<string | Function>;
     /**
-     * @docid
-     * @default "contains"
-     * @public
+     * Specifies the comparison operation used in searching.
      */
     searchOperation?: SearchOperation;
     /**
-     * @docid
-     * @default null
-     * @public
+     * Specifies the value to which the search expression is compared.
      */
     searchValue?: any;
     /**
-     * @docid
-     * @type Select expression
-     * @public
+     * Specifies the fields to select from data objects.
      */
     select?: SelectDescriptor<TItem>;
     /**
-     * @docid
-     * @type Sort expression
-     * @public
+     * Specifies data sorting properties.
      */
     sort?: SortDescriptor<TItem> | Array<SortDescriptor<TItem>>;
     /**
-     * @docid
-     * @public
-     * @type Store|StoreOptions|Array<any>
+     * Configures the store underlying the DataSource.
      */
     store?: Array<TStoreItem> | Store<TStoreItem, TKey> | StoreOptions<TStoreItem, TKey>;
 };
 
 /**
- * @docid
- * @public
- * @options DataSourceOptions
- * @namespace DevExpress.common.data
+ * The DataSource is an object that provides an API for processing data from an underlying store.
  */
 export class DataSource<
     TItem = any,
@@ -513,296 +366,179 @@ export class DataSource<
     constructor(store: Store<TItem, TKey>);
     constructor(url: string);
     /**
-     * @docid
-     * @publicName cancel(operationId)
-     * @public
+     * Cancels the load operation with a specific identifier.
      */
     cancel(operationId: number): boolean;
     /**
-     * @docid
-     * @publicName dispose()
-     * @public
+     * Disposes of all the resources allocated to the DataSource instance.
      */
     dispose(): void;
     /**
-     * @docid
-     * @publicName filter()
-     * @return object
-     * @public
+     * Gets the filter property&apos;s value.
      */
     filter(): FilterDescriptor | Array<FilterDescriptor>;
     /**
-     * @docid
-     * @publicName filter(filterExpr)
-     * @param1 filterExpr:object
-     * @public
+     * Sets the filter property&apos;s value.
      */
     filter(filterExpr: FilterDescriptor | Array<FilterDescriptor>): void;
     /**
-     * @docid
-     * @publicName group()
-     * @return object
-     * @public
+     * Gets the group property&apos;s value.
      */
     group(): GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     /**
-     * @docid
-     * @publicName group(groupExpr)
-     * @param1 groupExpr:object
-     * @public
+     * Sets the group property&apos;s value.
      */
     group(groupExpr: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>): void;
     /**
-     * @docid
-     * @publicName isLastPage()
-     * @public
+     * Checks whether the count of items on the current page is less than the pageSize. Takes effect only with enabled paging.
      */
     isLastPage(): boolean;
     /**
-     * @docid
-     * @publicName isLoaded()
-     * @public
+     * Checks whether data is loaded in the DataSource.
      */
     isLoaded(): boolean;
     /**
-     * @docid
-     * @publicName isLoading()
-     * @public
+     * Checks whether data is being loaded in the DataSource.
      */
     isLoading(): boolean;
     /**
-     * @docid
-     * @publicName items()
-     * @public
+     * Gets an array of data items on the current page.
      */
     items(): Array<any>;
     /**
-     * @docid
-     * @publicName key()
-     * @public
+     * Gets the value of the underlying store&apos;s key property.
      */
     key(): string | Array<string>;
     /**
-     * @docid
-     * @publicName load()
-     * @return Promise<any>
-     * @public
+     * Starts loading data.
      */
     load(): DxExtendedPromise<any>;
     /**
-     * @docid
-     * @publicName loadOptions()
-     * @return object
-     * @public
+     * Gets an object with current data processing settings.
      */
     loadOptions(): LoadOptions<TItem>;
     /**
-     * @docid
-     * @publicName off(eventName)
-     * @param1 eventName:string
-     * @return this
-     * @public
+     * Detaches all event handlers from a single event.
      */
     off(eventName: DataSourceEventName): this;
     /**
-     * @docid
-     * @publicName off(eventName, eventHandler)
-     * @param1 eventName:string
-     * @return this
-     * @public
+     * Detaches a particular event handler from a single event.
      */
     off(eventName: DataSourceEventName, eventHandler: Function): this;
     /**
-     * @docid
-     * @publicName on(eventName, eventHandler)
-     * @param1 eventName:string
-     * @return this
-     * @public
+     * Subscribes to an event.
      */
     on(eventName: DataSourceEventName, eventHandler: Function): this;
     /**
-     * @docid
-     * @publicName on(events)
-     * @param1 events:object
-     * @return this
-     * @public
+     * Subscribes to events.
      */
     on(events: { [key in DataSourceEventName]?: Function }): this;
     /**
-     * @docid
-     * @publicName pageIndex()
-     * @return numeric
-     * @public
+     * Gets the current page index.
      */
     pageIndex(): number;
     /**
-     * @docid
-     * @publicName pageIndex(newIndex)
-     * @param1 newIndex:numeric
-     * @public
+     * Sets the index of the page that should be loaded on the next load() method call.
      */
     pageIndex(newIndex: number): void;
     /**
-     * @docid
-     * @publicName pageSize()
-     * @return numeric
-     * @public
+     * Gets the page size.
      */
     pageSize(): number;
     /**
-     * @docid
-     * @publicName pageSize(value)
-     * @param1 value:numeric
-     * @public
+     * Sets the page size.
      */
     pageSize(value: number): void;
     /**
-     * @docid
-     * @publicName paginate()
-     * @public
+     * Gets the paginate property&apos;s value.
      */
     paginate(): boolean;
     /**
-     * @docid
-     * @publicName paginate(value)
-     * @public
+     * Sets the paginate property&apos;s value.
      */
     paginate(value: boolean): void;
     /**
-     * @docid
-     * @publicName reload()
-     * @return Promise<any>
-     * @public
+     * Clears currently loaded DataSource items and calls the load() method.
      */
     reload(): DxExtendedPromise<any>;
     /**
-     * @docid
-     * @publicName requireTotalCount()
-     * @public
+     * Gets the requireTotalCount property&apos;s value.
      */
     requireTotalCount(): boolean;
     /**
-     * @docid
-     * @publicName requireTotalCount(value)
-     * @public
+     * Sets the requireTotalCount property&apos;s value.
      */
     requireTotalCount(value: boolean): void;
     /**
-     * @docid
-     * @publicName searchExpr()
-     * @return getter|Array<getter>
-     * @public
+     * Gets the searchExpr property&apos;s value.
      */
     searchExpr(): string & Function & Array<string | Function>;
     /**
-     * @docid
-     * @publicName searchExpr(expr)
-     * @param1 expr:getter|Array<getter>
-     * @public
+     * Sets the searchExpr property&apos;s value.
      */
     searchExpr(expr: string | Function | Array<string | Function>): void;
     /**
-     * @docid
-     * @publicName searchOperation()
-     * @public
+     * Gets the searchOperation property&apos;s value.
      */
     searchOperation(): string;
     /**
-     * @docid
-     * @publicName searchOperation(op)
-     * @public
+     * Sets the searchOperation property&apos;s value.
      */
     searchOperation(op: string): void;
     /**
-     * @docid
-     * @publicName searchValue()
-     * @public
+     * Gets the searchValue property&apos;s value.
      */
     searchValue(): any;
     /**
-     * @docid
-     * @publicName searchValue(value)
-     * @public
+     * Sets the searchValue property&apos;s value.
      */
     searchValue(value: any): void;
     /**
-     * @docid
-     * @publicName select()
-     * @return any
-     * @public
+     * Gets the select property&apos;s value.
      */
     select(): SelectDescriptor<TItem>;
     /**
-     * @docid
-     * @publicName select(expr)
-     * @param1 expr:any
-     * @public
+     * Sets the select property&apos;s value.
      */
     select(expr: SelectDescriptor<TItem>): void;
     /**
-     * @docid
-     * @publicName sort()
-     * @return any
-     * @public
+     * Gets the sort property&apos;s value.
      */
     sort(): SortDescriptor<TItem> | Array<SortDescriptor<TItem>>;
     /**
-     * @docid
-     * @publicName sort(sortExpr)
-     * @param1 sortExpr:any
-     * @public
+     * Sets the sort property&apos;s value.
      */
     sort(sortExpr: SortDescriptor<TItem> | Array<SortDescriptor<TItem>>): void;
     /**
-     * @docid
-     * @publicName store()
-     * @return object
-     * @public
+     * Gets the instance of the store underlying the DataSource.
      */
     store(): Store<TItem, TKey>;
     /**
-     * @docid
-     * @publicName totalCount()
-     * @return numeric
-     * @public
+     * Gets the number of data items in the store after the last load() operation without paging. Takes effect only if requireTotalCount is true
      */
     totalCount(): number;
 }
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.data
+ * Specifies parameters for language-specific sorting and filtering.
  */
 export type LangParams = {
   /**
-   * @docid
-   * @public
+   * Specifies the locale whose features affect sorting and filtering.
    */
   locale: string;
   /**
-   * @docid
-   * @public
-   * @type object
+   * Specifies Intl.Collator options.
    */
   collatorOptions?: Intl.CollatorOptions;
 };
 
-/**
-* @public
-* @namespace DevExpress.data.utils
-*/
 export type Store<TItem = any, TKey = any> =
   CustomStore<TItem, TKey> |
   ArrayStore<TItem, TKey> |
   LocalStore<TItem, TKey> |
   ODataStore<TItem, TKey>;
 
-/**
-* @public
-* @namespace DevExpress.data.utils
-* @type object
-*/
 export type StoreOptions<TItem = any, TKey = any> =
   CustomStoreOptions<TItem, TKey> |
   ArrayStoreOptions<TItem, TKey> & { type: 'array' } |
@@ -810,71 +546,50 @@ export type StoreOptions<TItem = any, TKey = any> =
   ODataStoreOptions<TItem, TKey> & { type: 'odata' };
 
 /**
- * @docid
- * @namespace DevExpress.common.data
- * @public
+ * The EndpointSelector is an object for managing OData endpoints in your application.
  */
 export class EndpointSelector {
   constructor(options: any);
   /**
-   * @docid
-   * @publicName urlFor(key)
-   * @public
+   * Gets an endpoint with a specific key.
    */
   urlFor(key: string): string;
 }
 
 /**
- * @docid Utils.errorHandler
- * @type function(e)
- * @namespace DevExpress.common.data
- * @deprecated Utils.setErrorHandler
- * @public
+ * Specifies the function that is executed when a data layer object throws an error.
+ * @deprecated Use setErrorHandler instead.
  */
 export function errorHandler(e: Error): void;
 
 /**
- * @docid Utils.setErrorHandler
- * @type function(handler)
- * @namespace DevExpress.common.data
- * @public
+ * A method that specifies a function to be executed when a Data Layer component throws an error.
  */
 export function setErrorHandler(handler: (e: Error) => void): void;
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.data
+ * 
  */
 export type LocalStoreOptions<
     TItem = any,
     TKey = any,
 > = ArrayStoreOptions<TItem, TKey> & {
     /**
-     * @docid
-     * @default 10000
-     * @public
+     * Specifies a delay in milliseconds between when data changes and the moment these changes are saved in the local storage. Applies only if immediate is false.
      */
     flushInterval?: number;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the LocalStore saves changes in the local storage immediately.
      */
     immediate?: boolean;
     /**
-     * @docid
-     * @public
+     * Specifies the name under which data should be saved in the local storage. The `dx-data-localStore-` prefix will be added to the name.
      */
     name?: string;
 };
 
 /**
- * @docid
- * @inherits ArrayStore
- * @public
- * @options LocalStoreOptions
- * @namespace DevExpress.common.data
+ * The LocalStore is a store that provides an interface for loading and editing data from HTML Web Storage (also known as window.localStorage) and handling related events.
  */
 export class LocalStore<
     TItem = any,
@@ -882,220 +597,133 @@ export class LocalStore<
 > extends ArrayStore<TItem, TKey> {
     constructor(options?: LocalStoreOptions<TItem, TKey>);
     /**
-     * @docid
-     * @publicName clear()
-     * @public
+     * Removes data from the local storage.
      */
     clear(): void;
 }
 
 /**
- * @docid
- * @type object
- * @public
- * @namespace DevExpress.common.data
+ * The Query is an object that provides a chainable interface for making data queries.
  */
 export type Query = {
     /**
-     * @docid
-     * @publicName aggregate(seed, step, finalize)
-     * @param1 seed:object
-     * @return Promise<any>
-     * @public
+     * Calculates a custom summary for all data items.
      */
     aggregate(seed: any, step: Function, finalize: Function): DxPromise<any>;
     /**
-     * @docid
-     * @publicName aggregate(step)
-     * @return Promise<any>
-     * @public
+     * Calculates a custom summary for all data items.
      */
     aggregate(step: Function): DxPromise<any>;
     /**
-     * @docid
-     * @publicName avg()
-     * @return Promise<number>
-     * @public
+     * Calculates the average of all values. Applies only to numeric arrays.
      */
     avg(): DxPromise<number>;
     /**
-     * @docid
-     * @publicName avg(getter)
-     * @param1 getter:object
-     * @return Promise<number>
-     * @public
+     * Calculates the average of all values found using a getter.
      */
     avg(getter: any): DxPromise<number>;
     /**
-     * @docid
-     * @publicName count()
-     * @return Promise<number>
-     * @public
+     * Calculates the number of data items.
      */
     count(): DxPromise<number>;
     /**
-     * @docid
-     * @publicName enumerate()
-     * @return Promise<any>
-     * @public
+     * Executes the Query. This is an asynchronous alternative to the toArray() method.
      */
     enumerate(): DxPromise<any>;
     /**
-     * @docid
-     * @publicName filter(criteria)
-     * @public
+     * Filters data items using a filter expression.
      */
     filter(criteria: Array<any>): Query;
     /**
-     * @docid
-     * @publicName filter(predicate)
-     * @public
+     * Filters data items using a custom function.
      */
     filter(predicate: Function): Query;
     /**
-     * @docid
-     * @publicName groupBy(getter)
-     * @param1 getter:object
-     * @public
+     * Groups data items by the specified getter.
      */
     groupBy(getter: any): Query;
     /**
-     * @docid
-     * @publicName max()
-     * @return Promise<number,Date>
-     * @public
+     * Calculates the maximum value. Applies only to numeric arrays.
      */
     max(): DxPromise<number | Date>;
     /**
-     * @docid
-     * @publicName max(getter)
-     * @param1 getter:object
-     * @return Promise<number,Date>
-     * @public
+     * Calculates the maximum of all values found using a getter.
      */
     max(getter: any): DxPromise<number | Date>;
     /**
-     * @docid
-     * @publicName min()
-     * @return Promise<number,Date>
-     * @public
+     * Calculates the minimum value. Applies only to numeric arrays.
      */
     min(): DxPromise<number | Date>;
     /**
-     * @docid
-     * @publicName min(getter)
-     * @param1 getter:object
-     * @return Promise<number,Date>
-     * @public
+     * Calculates the minumum of all values found using a getter.
      */
     min(getter: any): DxPromise<number | Date>;
     /**
-     * @docid
-     * @publicName select(getter)
-     * @param1 getter:object|Array<getter>
-     * @public
+     * Selects individual fields from data objects.
      */
     select(...getters: any[]): Query;
     /**
-     * @docid
-     * @publicName slice(skip, take)
-     * @param2 take:number|undefined
-     * @public
+     * Gets a specified number of data items starting from a given index.
      */
     slice(skip: number, take?: number): Query;
     /**
-     * @docid
-     * @publicName sortBy(getter)
-     * @param1 getter:object
-     * @public
+     * Sorts data items by the specified getter in ascending order.
      */
     sortBy(getter: any): Query;
     /**
-     * @docid
-     * @publicName sortBy(getter, desc)
-     * @param1 getter:object
-     * @public
+     * Sorts data items by the specified getter in the specified sorting order.
      */
     sortBy(getter: any, desc: boolean): Query;
     /**
-     * @docid
-     * @publicName sum()
-     * @return Promise<number>
-     * @public
+     * Calculates the sum of all values.
      */
     sum(): DxPromise<number>;
     /**
-     * @docid
-     * @publicName sum(getter)
-     * @param1 getter:object
-     * @return Promise<number>
-     * @public
+     * Calculates the sum of all values found using a getter.
      */
     sum(getter: any): DxPromise<number>;
     /**
-     * @docid
-     * @publicName thenBy(getter)
-     * @param1 getter:object
-     * @public
+     * Sorts data items by one more getter in ascending order.
      */
     thenBy(getter: any): Query;
     /**
-     * @docid
-     * @publicName thenBy(getter, desc)
-     * @param1 getter:object
-     * @public
+     * Sorts data items by one more getter in the specified sorting order.
      */
     thenBy(getter: any, desc: boolean): Query;
     /**
-     * @docid
-     * @publicName toArray()
-     * @public
+     * Gets data items associated with the Query. This is a synchronous alternative to the enumerate() method.
      */
     toArray(): Array<any>;
 };
 
 /**
- * @docid Utils.query
- * @publicName query(array, queryOptions)
- * @param2 queryOptions:object
- * @namespace DevExpress.common.data
- * @public
+ * Creates a Query instance.
  */
 export function query(array: Array<any>, queryOptions?: any): Query;
 
 /**
- * @docid Utils.query
- * @publicName query(url, queryOptions)
- * @param2 queryOptions:object
- * @namespace DevExpress.common.data
- * @public
+ * Creates a Query instance that accesses a remote data service using its URL.
  */
 export function query(url: string, queryOptions: any): Query;
 
 /**
- * @docid Utils.base64_encode
- * @publicName base64_encode(input)
- * @namespace DevExpress.common.data
- * @public
+ * Encodes a string or array of bytes in Base64.
  */
 export function base64_encode(input: string | Array<number>): string;
 
 /**
- * @docid Utils.compileGetter
- * @publicName compileGetter(expr)
- * @namespace DevExpress.common.data
- * @public
+ * Compiles a getter function from a getter expression.
  */
 export function compileGetter(expr: string | Array<string>): Function;
 
 /**
- * @docid Utils.compileSetter
- * @publicName compileSetter(expr)
- * @namespace DevExpress.common.data
- * @public
+ * Compiles a setter function from a setter expression.
  */
 export function compileSetter(expr: string | Array<string>): Function;
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface ODataRequestOptions {
     accepts: any;
     async: boolean;
@@ -1110,188 +738,123 @@ export interface ODataRequestOptions {
     xhrFields: any;
 }
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'MERGE';
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.data
- * @type object
+ * 
  */
 export type ODataContextOptions = {
     /**
-     * @docid
-     * @type_function_param1_field params:object
-     * @type_function_param1_field payload:object
-     * @type_function_param1_field headers:object
-     * @public
+     * Specifies a function that customizes the request before it is sent to the server.
      */
     beforeSend?: ((options: { url: string; async: boolean; method: string; timeout: number; params: any; payload: any; headers: any }) => void);
     /**
-     * @docid
-     * @public
+     * Specifies whether stores in the ODataContext serialize/parse date-time values.
      */
     deserializeDates?: boolean;
     /**
-     * @docid
-     * @public
+     * Specifies entity collections to be accessed.
      */
     entities?: any;
     /**
-     * @docid
-     * @type_function_param1 e:Error
-     * @type_function_param1_field errorDetails:object
-     * @type_function_param1_field requestOptions:object
-     * @public
+     * Specifies a function that is executed when the ODataContext throws an error.
      */
     errorHandler?: ((e: { httpStatus: number; errorDetails: any; requestOptions: ODataRequestOptions }) => void);
     /**
-     * @docid
-     * @public
+     * Specifies whether to convert string values to lowercase in filter and search requests. Applies to the following operations: &apos;startswith&apos;, &apos;endswith&apos;, &apos;contains&apos;, and &apos;notcontains&apos;.
      */
     filterToLower?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether data should be sent using JSONP.
      */
     jsonp?: boolean;
     /**
-     * @docid
-     * @public
+     * Specifies the URL of an OData service.
      */
     url?: string;
     /**
-     * @docid
-     * @default 4
-     * @acceptValues 2|3|4
-     * @public
+     * Specifies the OData version.
      */
     version?: number;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether to send cookies, authorization headers, and client certificates in a cross-origin request.
      */
     withCredentials?: boolean;
 };
 
 /**
- * @docid
- * @public
- * @options ODataContextOptions
- * @namespace DevExpress.common.data
+ * The ODataContext is an object that provides access to an entire OData service.
  */
 export class ODataContext {
     constructor(options?: ODataContextOptions);
     /**
-     * @docid
-     * @publicName get(operationName, params)
-     * @param2 params:object
-     * @return Promise<any>
-     * @public
+     * Invokes an OData operation that returns a value.
      */
     get(operationName: string, params: any): DxPromise<any>;
     /**
-     * @docid
-     * @publicName invoke(operationName, params, httpMethod)
-     * @param2 params:object
-     * @param3 httpMethod:string
-     * @return Promise<void>
-     * @public
+     * Invokes an OData operation that returns nothing.
      */
     invoke(operationName: string, params: any, httpMethod: HttpMethod): DxPromise<void>;
     /**
-     * @docid
-     * @publicName objectLink(entityAlias, key)
-     * @param2 key:object|string|number
-     * @return object
-     * @public
+     * Gets a link to an entity with a specific key.
      */
     objectLink(entityAlias: string, key: any | string | number): any;
 }
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.data
- * @type object
+ * 
  */
 export type ODataStoreOptions<
     TItem = any,
     TKey = any,
 > = AbstractStoreOptions<TItem, TKey> & {
     /**
-     * @docid
-     * @type_function_param1_field params:object
-     * @type_function_param1_field payload:object
-     * @type_function_param1_field headers:object
-     * @public
+     * Specifies a function that customizes the request before it is sent to the server.
      */
     beforeSend?: ((options: { url: string; async: boolean; method: string; timeout: number; params: any; payload: any; headers: any }) => void);
     /**
-     * @docid
-     * @public
+     * Specifies whether the store serializes/parses date-time values.
      */
     deserializeDates?: boolean;
     /**
-     * @docid
-     * @type_function_param1 e:Error
-     * @type_function_param1_field errorDetails:object
-     * @type_function_param1_field requestOptions:object
-     * @public
+     * Specifies a function that is executed when the ODataStore throws an error.
      */
     errorHandler?: ((e: { httpStatus: number; errorDetails: any; requestOptions: ODataRequestOptions }) => void);
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Specifies the data field types. Accepts the following types: &apos;String&apos;, &apos;Int32&apos;, &apos;Int64&apos;, &apos;Boolean&apos;, &apos;Single&apos;, &apos;Decimal&apos; and &apos;Guid&apos;.
      */
     fieldTypes?: any;
     /**
-     * @docid
-     * @public
+     * Specifies whether to convert string values to lowercase in filter and search requests. Applies to the following operations: &apos;startswith&apos;, &apos;endswith&apos;, &apos;contains&apos;, and &apos;notcontains&apos;.
      */
     filterToLower?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether data should be sent using JSONP.
      */
     jsonp?: boolean;
     /**
-     * @docid
-     * @type string|object
-     * @acceptValues "String"|"Int32"|"Int64"|"Guid"|"Boolean"|"Single"|"Decimal"
-     * @public
+     * Specifies the type of the key property or properties.
      */
     keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | any;
     /**
-     * @docid
-     * @public
+     * Specifies the URL of an OData entity collection.
      */
     url?: string;
     /**
-     * @docid
-     * @default 4
-     * @acceptValues 2|3|4
-     * @public
+     * Specifies the OData version.
      */
     version?: number;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether to send cookies, authorization headers, and client certificates in a cross-origin request.
      */
     withCredentials?: boolean;
 };
 
 /**
- * @docid
- * @inherits Store
- * @public
- * @options ODataStoreOptions
- * @namespace DevExpress.common.data
+ * The ODataStore is a store that provides an interface for loading and editing data from an individual OData entity collection and handling related events.
  */
 export class ODataStore<
     TItem = any,
@@ -1299,42 +862,27 @@ export class ODataStore<
 > extends AbstractStore<TItem, TKey> {
     constructor(options?: ODataStoreOptions<TItem, TKey>);
     /**
-     * @docid
-     * @publicName byKey(key, extraOptions)
-     * @param1 key:object|string|number
-     * @return Promise<any>
-     * @public
+     * Gets an entity with a specific key.
      */
     byKey(key: TKey, extraOptions?: { expand?: string | Array<string>; select?: string | Array<string> }): DxPromise<TItem>;
     /**
-     * @docid
-     * @publicName createQuery(loadOptions)
-     * @return object
-     * @public
+     * Creates a Query for the OData endpoint.
      */
     createQuery(loadOptions?: { expand?: string | Array<string>; requireTotalCount?: boolean; customQueryParams?: any }): Query;
 }
 
 /**
- * @docid
- * @namespace DevExpress.common.data
- * @public
+ * The EdmLiteral is an object for working with primitive data types from the OData&apos;s Abstract Type System that are not supported in JavaScript.
  */
 export class EdmLiteral {
     constructor(value: string);
     /**
-     * @docid
-     * @publicName valueOf()
-     * @public
+     * Gets the EdmLiteral&apos;s value converted to a string.
      */
     valueOf(): string;
 }
 
 /**
- * @const Utils.keyConverters
- * @publicName odata.keyConverters
- * @namespace DevExpress.common.data
- * @public
- */
-// eslint-disable-next-line vars-on-top, import/no-mutable-exports, no-var, @typescript-eslint/init-declarations, @typescript-eslint/no-explicit-any
-export var keyConverters: any;
+                                                                                                                                                      * Contains built-in OData type converters (for String, Int32, Int64, Boolean, Single, Decimal, and Guid) and allows you to register a custom type converter.
+                                                                                                                                                      */
+                                                                                                                                                     export var keyConverters: any;

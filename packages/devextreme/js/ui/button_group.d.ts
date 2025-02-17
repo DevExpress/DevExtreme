@@ -34,179 +34,123 @@ export {
 };
 
 /**
- * @docid _ui_button_group_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxButtonGroup>;
 
 /**
- * @docid _ui_button_group_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxButtonGroup>;
 
 /**
- * @docid _ui_button_group_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxButtonGroup>;
 
 /**
- * @docid _ui_button_group_ItemClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ItemInfo
+ * The type of the itemClick event handler&apos;s argument.
  */
 export type ItemClickEvent = NativeEventInfo<dxButtonGroup, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /**
- * @docid _ui_button_group_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxButtonGroup> & ChangedOptionInfo;
 
 /**
- * @docid _ui_button_group_SelectionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,SelectionChangeInfo
+ * The type of the selectionChanged event handler&apos;s argument.
  */
 export type SelectionChangedEvent = EventInfo<dxButtonGroup> & SelectionChangeInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     /**
-     * @docid
-     * @default "content"
-     * @type_function_param1 buttonData:object
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies a template for all the buttons in the group.
      */
     buttonTemplate?: template | ((buttonData: any, buttonContent: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the UI component can be focused using keyboard navigation.
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the UI component changes its state when a user pauses on it.
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid
-     * @type Array<dxButtonGroupItem>
-     * @public
+     * Configures buttons in the group.
      */
     items?: Array<Item>;
     /**
-     * @docid
-     * @default 'text'
-     * @public
+     * Specifies which data field provides keys used to distinguish between the selected buttons.
      */
     keyExpr?: string | Function;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/button_group:ItemClickEvent}
-     * @action
-     * @public
+     * A function that is executed when a button is clicked or tapped.
      */
     onItemClick?: ((e: ItemClickEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/button_group:SelectionChangedEvent}
-     * @action
-     * @public
+     * A function that is executed when a button is selected or selection is canceled.
      */
     onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
-     * @docid
-     * @fires dxButtonGroupOptions.onSelectionChanged
-     * @public
+     * Contains keys of selected buttons and allows you to specify initial button selection state.
      */
     selectedItemKeys?: Array<any>;
     /**
-     * @docid
-     * @fires dxButtonGroupOptions.onSelectionChanged
-     * @public
+     * Contains the data objects that correspond to the selected buttons. The data objects are taken from the items array.
      */
     selectedItems?: Array<any>;
     /**
-     * @docid
-     * @default 'single'
-     * @public
+     * Specifies the button selection mode.
      */
     selectionMode?: SingleMultipleOrNone;
     /**
-     * @docid
-     * @default 'contained'
-     * @public
+     * Specifies how buttons in the group are styled.
      */
     stylingMode?: ButtonStyle;
 }
 /**
- * @docid
- * @inherits Widget
- * @namespace DevExpress.ui
- * @public
+ * The ButtonGroup is a UI component that contains a set of toggle buttons and can be used as a mode switcher.
  */
 export default class dxButtonGroup extends Widget<dxButtonGroupOptions> { }
 
-/**
- * @public
- * @namespace DevExpress.ui.dxButtonGroup
- */
 export type Item = dxButtonGroupItem;
 
 /**
  * @deprecated Use Item instead
- * @namespace DevExpress.ui
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxButtonGroupItem extends CollectionWidgetItem {
     /**
-     * @docid
-     * @public
+     * Specifies a text for the hint that appears when the button is hovered over or long-pressed.
      */
     hint?: string;
     /**
-     * @docid
-     * @public
+     * Specifies the icon to be displayed on the button.
      */
     icon?: string;
     /**
-     * @docid
-     * @default 'normal'
-     * @public
+     * Specifies the button type.
      */
     type?: ButtonType;
 
     /**
-     * @docid
-     * @public
+     * Specifies the global attributes to be attached to the button group item&apos;s container element.
      */
     elementAttr?: { [key: string]: any };
 }
 
-/** @public */
 export type Properties = dxButtonGroupOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxButtonGroupOptions;
 
 ///#DEBUG

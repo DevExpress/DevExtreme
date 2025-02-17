@@ -36,386 +36,282 @@ import dxSelectBox, {
 } from './select_box';
 
 /**
- * @docid _ui_tag_box_ChangeEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the change event handler&apos;s argument.
  */
 export type ChangeEvent = NativeEventInfo<dxTagBox, Event>;
 
 /**
- * @docid _ui_tag_box_ClosedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the closed event handler&apos;s argument.
  */
 export type ClosedEvent = EventInfo<dxTagBox>;
 
 /**
- * @docid _ui_tag_box_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxTagBox>;
 
 /**
- * @docid _ui_tag_box_CustomItemCreatingEvent
- * @public
- * @type object
- * @inherits EventInfo,CustomItemCreatingInfo
+ * The type of the customItemCreating event handler&apos;s argument.
  */
 export type CustomItemCreatingEvent = EventInfo<dxTagBox> & CustomItemCreatingInfo;
 
 /**
- * @docid _ui_tag_box_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxTagBox>;
 
 /**
- * @docid _ui_tag_box_EnterKeyEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the enterKey event handler&apos;s argument.
  */
 export type EnterKeyEvent = NativeEventInfo<dxTagBox, KeyboardEvent>;
 
 /**
- * @docid _ui_tag_box_FocusInEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the focusIn event handler&apos;s argument.
  */
 export type FocusInEvent = NativeEventInfo<dxTagBox, FocusEvent>;
 
 /**
- * @docid _ui_tag_box_FocusOutEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the focusOut event handler&apos;s argument.
  */
 export type FocusOutEvent = NativeEventInfo<dxTagBox, FocusEvent>;
 
 /**
- * @docid _ui_tag_box_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxTagBox>;
 
 /**
- * @docid _ui_tag_box_InputEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the input event handler&apos;s argument.
  */
 export type InputEvent = NativeEventInfo<dxTagBox, UIEvent & { target: HTMLInputElement }>;
 
 /**
- * @docid _ui_tag_box_ItemClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ItemInfo
+ * The type of the itemClick event handler&apos;s argument.
  */
 export type ItemClickEvent = NativeEventInfo<dxTagBox> & ItemInfo;
 
 /**
- * @docid _ui_tag_box_KeyDownEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the keyDown event handler&apos;s argument.
  */
 export type KeyDownEvent = NativeEventInfo<dxTagBox, KeyboardEvent>;
 
-/** @public */
 export type KeyPressEvent = NativeEventInfo<dxTagBox, KeyboardEvent>;
 
 /**
- * @docid _ui_tag_box_KeyUpEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the keyUp event handler&apos;s argument.
  */
 export type KeyUpEvent = NativeEventInfo<dxTagBox, KeyboardEvent>;
 
 /**
- * @docid _ui_tag_box_MultiTagPreparingEvent
- * @public
- * @type object
- * @inherits Cancelable,EventInfo
+ * The type of the multiTagPreparing event handler&apos;s argument.
  */
 export type MultiTagPreparingEvent = Cancelable & EventInfo<dxTagBox> & {
-    /** @docid _ui_tag_box_MultiTagPreparingEvent.multiTagElement */
+    /**
+     * 
+     */
     readonly multiTagElement: DxElement;
     /**
-     * @docid _ui_tag_box_MultiTagPreparingEvent.selectedItems
-     * @type Array<string,number,Object>
+     * 
      */
     readonly selectedItems?: Array<string | number | any>;
-    /** @docid _ui_tag_box_MultiTagPreparingEvent.text */
+    /**
+     * 
+     */
     text?: string;
 };
 
 /**
- * @docid _ui_tag_box_OpenedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the opened event handler&apos;s argument.
  */
 export type OpenedEvent = EventInfo<dxTagBox>;
 
 /**
- * @docid _ui_tag_box_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxTagBox> & ChangedOptionInfo;
 
 /**
- * @docid _ui_tag_box_SelectAllValueChangedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the selectAllValueChanged event handler&apos;s argument.
  */
 export type SelectAllValueChangedEvent = EventInfo<dxTagBox> & {
-    /** @docid _ui_tag_box_SelectAllValueChangedEvent.value */
+    /**
+     * 
+     */
     readonly value: boolean;
 };
 
 /**
- * @docid _ui_tag_box_SelectionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,SelectionChangeInfo
+ * The type of the selectionChanged event handler&apos;s argument.
  */
 export type SelectionChangedEvent = EventInfo<dxTagBox> & SelectionChangeInfo<string | number | any>;
 
 /**
- * @docid _ui_tag_box_ValueChangedEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ValueChangedInfo
+ * The type of the valueChanged event handler&apos;s argument.
  */
 export type ValueChangedEvent = NativeEventInfo<dxTagBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
-/** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>> {
     /**
-     * @docid
-     * @default "instantly"
-     * @public
+     * Specifies how the UI component applies values.
      */
     applyValueMode?: ApplyValueMode;
     /**
-     * @docid
-     * @default false
-     * @public
+     * A Boolean value specifying whether or not to hide selected items.
      */
     hideSelectedItems?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the limit on displayed tags. On exceeding it, the UI component replaces all tags with a single multi-tag that displays the number of selected items.
      */
     maxDisplayedTags?: number | undefined;
     /**
-     * @docid
-     * @default true
-     * @public
+     * A Boolean value specifying whether or not the UI component is multiline.
      */
     multiline?: boolean;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/tag_box:MultiTagPreparingEvent}
-     * @action
-     * @public
+     * A function that is executed before the multi-tag is rendered.
      */
     onMultiTagPreparing?: ((e: MultiTagPreparingEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/tag_box:SelectAllValueChangedEvent}
-     * @action
-     * @public
+     * A function that is executed when the &apos;Select All&apos; check box value is changed. Applies only if showSelectionControls is true.
      */
     onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/tag_box:SelectionChangedEvent}
-     * @action
-     * @public
+     * A function that is executed when a list item is selected or selection is canceled.
      */
     onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
-     * @docid
-     * @default 'page'
-     * @public
+     * Specifies the mode in which all items are selected.
      */
     selectAllMode?: SelectAllMode;
     /**
-     * @docid
-     * @readonly
-     * @public
+     * Gets the currently selected items.
      */
     selectedItems?: Array<string | number | any>;
     /**
-     * @docid
-     * @default "Select All"
-     * @public
+     * Specifies the text displayed at the &apos;Select All&apos; check box.
      */
     selectAllText?: string;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the drop-down button is visible.
      */
     showDropDownButton?: boolean;
     /**
-     * @docid
-     * @default 1500
-     * @public
+     * Specifies the maximum filter query length in characters.
      */
     maxFilterQueryLength?: number;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the multi-tag is shown without ordinary tags.
      */
     showMultiTagOnly?: boolean;
     /**
-     * @docid
-     * @default "tag"
-     * @type_function_param1 itemData:object
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies a custom template for tags.
      */
     tagTemplate?: template | ((itemData: any, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default []
-     * @public
+     * Specifies the selected items.
      */
     value?: Array<string | number | any>;
 }
 /**
- * @docid
- * @isEditor
- * @inherits dxSelectBox
- * @namespace DevExpress.ui
- * @public
+ * The TagBox UI component is an editor that allows an end user to select multiple items from a drop-down list.
  */
 export default class dxTagBox extends dxSelectBox<dxTagBoxOptions> { }
 
-/** @public */
 export type Properties = dxTagBoxOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxTagBoxOptions;
 
 ///#DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type FilterOutHidden<T> = Omit<T, 'onCopy' | 'onCut' | 'onPaste'>;
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMultiTagPreparing' | 'onSelectAllValueChanged' | 'onSelectionChanged'>;
 
 /**
-* @hidden
-*/
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Events = {
 /**
- * @docid dxTagBoxOptions.onChange
- * @type_function_param1 e:{ui/tag_box:ChangeEvent}
+ * A function that is executed when the UI component loses focus after the text field&apos;s content was changed using the keyboard.
  */
 onChange?: ((e: ChangeEvent) => void);
 /**
- * @docid dxTagBoxOptions.onClosed
- * @type_function_param1 e:{ui/tag_box:ClosedEvent}
+ * A function that is executed once the drop-down editor is closed.
  */
 onClosed?: ((e: ClosedEvent) => void);
 /**
- * @docid dxTagBoxOptions.onContentReady
- * @type_function_param1 e:{ui/tag_box:ContentReadyEvent}
+ * A function that is executed when the UI component is rendered and each time the component is repainted.
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @docid dxTagBoxOptions.onCustomItemCreating
- * @type_function_param1 e:{ui/tag_box:CustomItemCreatingEvent}
+ * A function that is executed when a user adds a custom item. Requires acceptCustomValue to be set to true.
  */
 onCustomItemCreating?: ((e: CustomItemCreatingEvent) => void);
 /**
- * @docid dxTagBoxOptions.onDisposing
- * @type_function_param1 e:{ui/tag_box:DisposingEvent}
+ * A function that is executed before the UI component is disposed of.
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @docid dxTagBoxOptions.onEnterKey
- * @type_function_param1 e:{ui/tag_box:EnterKeyEvent}
+ * A function that is executed when the Enter key has been pressed while the UI component is focused.
  */
 onEnterKey?: ((e: EnterKeyEvent) => void);
 /**
- * @docid dxTagBoxOptions.onFocusIn
- * @type_function_param1 e:{ui/tag_box:FocusInEvent}
+ * A function that is executed when the UI component gets focus.
  */
 onFocusIn?: ((e: FocusInEvent) => void);
 /**
- * @docid dxTagBoxOptions.onFocusOut
- * @type_function_param1 e:{ui/tag_box:FocusOutEvent}
+ * A function that is executed when the UI component loses focus.
  */
 onFocusOut?: ((e: FocusOutEvent) => void);
 /**
- * @docid dxTagBoxOptions.onInitialized
- * @type_function_param1 e:{ui/tag_box:InitializedEvent}
+ * A function used in JavaScript frameworks to save the UI component instance.
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @docid dxTagBoxOptions.onInput
- * @type_function_param1 e:{ui/tag_box:InputEvent}
+ * A function that is executed each time the UI component&apos;s input is changed while the UI component is focused.
  */
 onInput?: ((e: InputEvent) => void);
 /**
- * @docid dxTagBoxOptions.onItemClick
- * @type_function_param1 e:{ui/tag_box:ItemClickEvent}
+ * A function that is executed when a list item is clicked or tapped.
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @docid dxTagBoxOptions.onKeyDown
- * @type_function_param1 e:{ui/tag_box:KeyDownEvent}
+ * A function that is executed when a user is pressing a key on the keyboard.
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @docid dxTagBoxOptions.onKeyUp
- * @type_function_param1 e:{ui/tag_box:KeyUpEvent}
+ * A function that is executed when a user releases a key on the keyboard.
  */
 onKeyUp?: ((e: KeyUpEvent) => void);
 /**
- * @docid dxTagBoxOptions.onOpened
- * @type_function_param1 e:{ui/tag_box:OpenedEvent}
+ * A function that is executed once the drop-down editor is opened.
  */
 onOpened?: ((e: OpenedEvent) => void);
 /**
- * @docid dxTagBoxOptions.onOptionChanged
- * @type_function_param1 e:{ui/tag_box:OptionChangedEvent}
+ * A function that is executed after a UI component property is changed.
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @docid dxTagBoxOptions.onValueChanged
- * @type_function_param1 e:{ui/tag_box:ValueChangedEvent}
+ * A function that is executed after the UI component&apos;s value is changed.
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };

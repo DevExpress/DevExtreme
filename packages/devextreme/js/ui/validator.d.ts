@@ -23,204 +23,172 @@ export {
 };
 
 /**
- * @docid _ui_validator_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxValidator>;
 
 /**
- * @docid _ui_validator_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxValidator>;
 
 /**
- * @docid _ui_validator_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxValidator> & ChangedOptionInfo;
 
 /**
- * @docid _ui_validator_ValidatedEvent
- * @public
- * @type object
+ * The type of the validated event handler&apos;s argument.
  */
 export type ValidatedEvent = {
-    /** @docid _ui_validator_ValidatedEvent.name */
+    /**
+     * The value of the name property.
+     */
     name?: string;
-    /** @docid _ui_validator_ValidatedEvent.isValid */
+    /**
+     * Indicates whether the value satisfies all rules.
+     */
     isValid?: boolean;
     /**
-     * @docid _ui_validator_ValidatedEvent.value
-     * @type object
+     * The validated value.
      */
     value?: any;
-    /** @docid _ui_validator_ValidatedEvent.validationRules */
+    /**
+     * An array of validation rules specified for the current dxValidator object.
+     */
     validationRules?: Array<ValidationRule>;
-    /** @docid _ui_validator_ValidatedEvent.brokenRule */
+    /**
+     * The object that represents the first broken rule on the list of specified validation rules.
+     */
     brokenRule?: ValidationRule;
-    /** @docid _ui_validator_ValidatedEvent.brokenRules */
+    /**
+     * An array of validationRules that failed to pass the check.
+     */
     brokenRules?: Array<ValidationRule>;
-    /** @docid _ui_validator_ValidatedEvent.status */
+    /**
+     * Indicates the validation status.
+     */
     status?: ValidationStatus;
 };
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
     /**
-     * @docid
-     * @public
+     * An object that specifies what and when to validate, and how to apply the validation result.
      */
     adapter?: {
       /**
-       * @docid
+       * A function that the Validator UI component calls after validating a specified value.
        */
       applyValidationResults?: Function;
       /**
-       * @docid
+       * A function that returns a Boolean value specifying whether or not to bypass validation.
        */
       bypass?: Function;
       /**
-       * @docid
+       * A function that sets focus to a validated editor when the corresponding ValidationSummary item is focused.
        */
       focus?: Function;
       /**
-       * @docid
+       * A function that returns the value to be validated.
        */
       getValue?: Function;
       /**
-       * @docid
+       * A function that resets the validated values.
        */
       reset?: Function;
       /**
-       * @docid
+       * Callbacks to be executed on the value validation.
        */
       validationRequestsCallbacks?: Array<Function>;
     };
     /**
-     * @docid
-     * @public
+     * Specifies the editor name to be used in the validation default messages.
      */
     name?: string;
     /**
-     * @docid
-     * @type_function_param1 validatedInfo:{ui/validator:ValidatedEvent}
-     * @action
-     * @public
+     * A function that is executed after a value is validated.
      */
     onValidated?: ((validatedInfo: ValidatedEvent) => void);
     /**
-     * @docid
-     * @ref
-     * @public
+     * Specifies the validation group the editor will be related to.
      */
     validationGroup?: string;
     /**
-     * @docid
-     * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-     * @public
+     * An array of validation rules to be checked for the editor with which the dxValidator object is associated.
      */
     validationRules?: Array<ValidationRule>;
 }
 /**
- * @docid
- * @inherits DOMComponent
- * @extension
- * @namespace DevExpress.ui
- * @public
+ * A UI component that is used to validate the associated DevExtreme editors against the defined validation rules.
  */
 export default class dxValidator extends DOMComponent<dxValidatorOptions> {
     /**
-     * @docid
-     * @publicName focus()
-     * @public
+     * Sets focus to the editor associated with the current Validator object.
      */
     focus(): void;
     /**
-     * @docid
-     * @publicName reset()
-     * @public
+     * Resets the value and validation result of the editor associated with the current Validator object.
      */
     reset(): void;
     /**
-     * @docid
-     * @publicName validate()
-     * @public
-     * @return dxValidatorResult
+     * Validates the value of the editor that is controlled by the current Validator object against the list of the specified validation rules.
      */
     validate(): ValidationResult;
 }
 
-/** @public */
 export type ValidationResult = dxValidatorResult;
 
 /**
- * @docid
- * @type object
- * @namespace DevExpress.ui
- * @deprecated {ui/validator.ValidationResult}
+ * A validation result.
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxValidatorResult {
     /**
-     * @docid
-     * @type RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule
-     * @public
+     * A rule that failed to pass the check. Contains the first item from the brokenRules array.
      */
     brokenRule?: ValidationRule;
     /**
-     * @docid
-     * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-     * @public
+     * An array of the validationRules that failed to pass the check.
      */
     brokenRules?: Array<ValidationRule>;
     /**
-     * @docid
-     * @type Promise<dxValidatorResult>
-     * @public
+     * A promise that is fulfilled when all async rules are validated.
      */
     complete?: DxPromise<dxValidatorResult>;
     /**
-     * @docid
-     * @public
+     * Indicates whether all the checked rules are satisfied.
      */
     isValid?: boolean;
     /**
-     * @docid
-     * @public
+     * An array of async rules whose promises are not fulfilled or rejected. Contains items only when the status is &apos;pending&apos;.
      */
     pendingRules?: Array<AsyncRule>;
     /**
-     * @docid
-     * @public
+     * Indicates the validation status.
      */
     status?: ValidationStatus;
     /**
-     * @docid
-     * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-     * @public
+     * Validation rules specified for the Validator.
      */
     validationRules?: Array<ValidationRule>;
     /**
-     * @docid
-     * @public
+     * The value being validated.
      */
     value?: any;
 }
 
-/** @public */
 export type Properties = dxValidatorOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxValidatorOptions;
 
 ///#DEBUG

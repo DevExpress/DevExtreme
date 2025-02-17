@@ -1,114 +1,96 @@
 /**
- * @namespace DevExpress.events
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type EventObject = {
   /**
-   * @docid
-   * @public
+   * The DOM element within the current event propagation stage.
    */
   currentTarget: Element;
 
   /**
-   * @docid
-   * @public
+   * Data passed to the event handler.
    */
   data: any;
 
   /**
-   * @docid
-   * @public
+   * The DOM element to which the currently-called event handler was attached.
    */
   delegateTarget: Element;
 
   /**
-   * @docid
-   * @public
+   * The DOM element that initiated the event.
    */
   target: Element;
   /**
-   * @docid
-   * @publicName isDefaultPrevented()
-   * @public
+   * Checks if the preventDefault() method was called on this event object.
    */
   isDefaultPrevented(): boolean;
   /**
-   * @docid
-   * @publicName isImmediatePropagationStopped()
-   * @public
+   * Checks if the stopImmediatePropagation() method was called on this event object.
    */
   isImmediatePropagationStopped(): boolean;
   /**
-   * @docid
-   * @publicName isPropagationStopped()
-   * @public
+   * Checks if the stopPropagation() method was called on this event object.
    */
   isPropagationStopped(): boolean;
   /**
-   * @docid
-   * @publicName preventDefault()
-   * @public
+   * Prevents the event&apos;s default action from triggering.
    */
   preventDefault(): void;
   /**
-   * @docid
-   * @publicName stopImmediatePropagation()
-   * @public
+   * Stops the event&apos;s propagation up the DOM tree, preventing the rest of the handlers from being executed.
    */
   stopImmediatePropagation(): void;
   /**
-   * @docid
-   * @publicName stopPropagation()
-   * @public
+   * Stops the event&apos;s propagation up the DOM tree, keeping parent handlers unnotified of the event.
    */
   stopPropagation(): void;
 };
 
 /**
- * @docid
- * @publicName handler(event, extraParameters)
- * @param2 extraParameters:object
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export function eventsHandler(event: DxEvent, extraParameters: any): boolean;
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface EventExtension { }
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface EventType { }
 /* eslint-enable @typescript-eslint/no-empty-interface */
 
 /**
- * @docid
- * @type EventObject|jQuery.Event
- *
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type DxEvent<TNativeEvent = Event> = {} extends EventType ? (EventObject & TNativeEvent) : EventType;
 
-/** @deprecated EventObject */
+/**
+ * @deprecated EventObject
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxEvent = EventObject;
 
 /**
- * @docid
- * @type EventObject|jQuery.Event
- * @hidden
- * @deprecated DxEvent
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type event = DxEvent;
 
 /**
- * @docid eventsMethods.triggerHandler
- * @publicName triggerHandler(element, event)
- * @namespace DevExpress.events
- * @param2 event:string|event
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export function triggerHandler(element: Element | Array<Element>, event: string | DxEvent): void;
 
 /**
- * @docid eventsMethods.triggerHandler
- * @publicName triggerHandler(element, event, extraParameters)
- * @namespace DevExpress.events
- * @param2 event:string|event
- * @param3 extraParameters:object
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export function triggerHandler(element: Element | Array<Element>, event: string | DxEvent, extraParameters: any): void;

@@ -10,191 +10,144 @@ import {
     ChangedOptionInfo,
 } from '../common/core/events';
 
-/** @public */
 export type ResizeHandle = 'bottom' | 'left' | 'right' | 'top' | 'all';
 
 /**
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface ResizeInfo {
-    /** @docid */
+    /**
+     * 
+     */
     readonly width: number;
-    /** @docid */
+    /**
+     * 
+     */
     readonly height: number;
 }
 
 /**
- * @docid _ui_resizable_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxResizable>;
 
 /**
- * @docid _ui_resizable_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxResizable>;
 
 /**
- * @docid _ui_resizable_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxResizable> & ChangedOptionInfo;
 
 /**
- * @docid _ui_resizable_ResizeEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ResizeInfo
+ * The type of the resize event handler&apos;s argument.
  */
 export type ResizeEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
 
 /**
- * @docid _ui_resizable_ResizeStartEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ResizeInfo
+ * The type of the resizeStart event handler&apos;s argument.
  */
 export type ResizeStartEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
 
 /**
- * @docid _ui_resizable_ResizeEndEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ResizeInfo
+ * The type of the resizeEnd event handler&apos;s argument.
  */
 export type ResizeEndEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the area within which users can resize the UI component.
      */
     area?: string | UserDefinedElement | undefined;
     /**
-     * @docid
-     * @default "all"
-     * @public
+     * Specifies which borders of the UI component element are used as a handle.
      */
     handles?: ResizeHandle | string;
     /**
-     * @docid
-     * @fires dxResizableOptions.onResize
-     * @public
+     * Specifies the UI component&apos;s height.
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to resize the UI component&apos;s content proportionally when you use corner handles.
      */
     keepAspectRatio?: boolean;
     /**
-     * @docid
-     * @default Infinity
-     * @public
+     * Specifies the upper height boundary for resizing.
      */
     maxHeight?: number;
     /**
-     * @docid
-     * @default Infinity
-     * @public
+     * Specifies the upper width boundary for resizing.
      */
     maxWidth?: number;
     /**
-     * @docid
-     * @default 30
-     * @public
+     * Specifies the lower height boundary for resizing.
      */
     minHeight?: number;
     /**
-     * @docid
-     * @default 30
-     * @public
+     * Specifies the lower width boundary for resizing.
      */
     minWidth?: number;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/resizable:ResizeEvent}
-     * @action
-     * @public
+     * A function that is executed each time the UI component is resized by one pixel.
      */
     onResize?: ((e: ResizeEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/resizable:ResizeEndEvent}
-     * @action
-     * @public
+     * A function that is executed when resizing ends.
      */
     onResizeEnd?: ((e: ResizeEndEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/resizable:ResizeStartEvent}
-     * @action
-     * @public
+     * A function that is executed when resizing starts.
      */
     onResizeStart?: ((e: ResizeStartEvent) => void);
     /**
-     * @docid
-     * @fires dxResizableOptions.onResize
-     * @public
+     * Specifies the UI component&apos;s width.
      */
     width?: number | string | (() => number | string);
 }
 /**
- * @docid
- * @inherits DOMComponent
- * @hasTranscludedContent
- * @namespace DevExpress.ui
- * @public
+ * The Resizable UI component enables its content to be resizable in the UI.
  */
 export default class dxResizable extends DOMComponent<dxResizableOptions> { }
 
-/** @public */
 export type Properties = dxResizableOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxResizableOptions;
 
 ///#DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onResize' | 'onResizeEnd' | 'onResizeStart'>;
 
 /**
-* @hidden
-*/
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Events = {
 /**
- * @docid dxResizableOptions.onDisposing
- * @type_function_param1 e:{ui/resizable:DisposingEvent}
+ * A function that is executed before the UI component is disposed of.
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @docid dxResizableOptions.onInitialized
- * @type_function_param1 e:{ui/resizable:InitializedEvent}
+ * A function used in JavaScript frameworks to save the UI component instance.
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @docid dxResizableOptions.onOptionChanged
- * @type_function_param1 e:{ui/resizable:OptionChangedEvent}
+ * A function that is executed after a UI component property is changed.
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };

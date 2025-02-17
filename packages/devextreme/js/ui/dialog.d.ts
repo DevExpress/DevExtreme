@@ -6,9 +6,6 @@ import {
     dxButtonOptions,
 } from './button';
 
-/**
- * @public
- */
 export interface CustomDialogOptions {
     title?: string;
     messageHtml?: string;
@@ -18,34 +15,16 @@ export interface CustomDialogOptions {
     dragEnabled?: boolean;
 }
 /**
- * @docid ui.dialog.alert
- * @publicName alert(messageHtml,title)
- * @return Promise<void>
- * @static
- * @namespace DevExpress.ui.dialog
- * @public
+ * Displays an alert dialog with a message and OK button.
  */
 export function alert(messageHtml: string, title: string): DxPromise<void>;
 
 /**
- * @docid ui.dialog.confirm
- * @publicName confirm(messageHtml,title)
- * @return Promise<boolean>
- * @static
- * @namespace DevExpress.ui.dialog
- * @public
+ * Creates a confirmation dialog with a message and Yes and No buttons.
  */
 export function confirm(messageHtml: string, title: string): DxPromise<boolean>;
 
 /**
- * @docid ui.dialog.custom
- * @publicName custom(options)
- * @return Object
- * @param1 options:object
- * @param1_field buttons:Array<dxButtonOptions>
- * @param1_field message:String:deprecated(messageHtml)
- * @static
- * @namespace DevExpress.ui.dialog
- * @public
+ * Creates a dialog with custom buttons.
  */
 export function custom(options: CustomDialogOptions): any;

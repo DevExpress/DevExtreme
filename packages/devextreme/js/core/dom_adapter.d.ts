@@ -1,3 +1,6 @@
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface DomAdapter {
   querySelectorAll: (element, selector) => any;
   elementMatches: (element, selector) => any;
@@ -35,5 +38,8 @@ export interface DomAdapter {
   insertElement: (parentElement: HTMLElement, newElement: HTMLElement, nextSiblingElement?: HTMLElement) => void;
 }
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 declare const domAdapter: DomAdapter;
 export default domAdapter;

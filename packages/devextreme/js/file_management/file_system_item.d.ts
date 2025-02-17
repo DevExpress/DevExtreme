@@ -1,75 +1,61 @@
 /**
- * @docid FileSystemItem
- * @namespace DevExpress.fileManagement
- * @public
+ * An object that provides information about a file system item (file or directory) in the FileManager UI component.
  */
 export default class FileSystemItem {
     constructor(path: string, isDirectory: boolean, pathKeys?: Array<string>);
 
     /**
-     * @docid FileSystemItem.path
-     * @public
+     * The file system item&apos;s path.
      */
     path: string;
 
     /**
-     * @docid FileSystemItem.pathKeys
-     * @public
+     * The file system item&apos;s path specified in keys.
      */
     pathKeys: Array<string>;
 
     /**
-     * @docid FileSystemItem.key
-     * @public
+     * The file system item&apos;s key.
      */
     key: string;
 
     /**
-     * @docid FileSystemItem.name
-     * @public
+     * The file system item&apos;s name.
      */
     name: string;
 
     /**
-     * @docid FileSystemItem.dateModified
-     * @public
+     * A timestamp that indicates when the file system item was last modified.
      */
     dateModified: Date;
 
     /**
-     * @docid FileSystemItem.size
-     * @public
+     * The file system item&apos;s size (in bytes).
      */
     size: number;
 
     /**
-     * @docid FileSystemItem.isDirectory
-     * @public
+     * Specifies whether the file system item is a directory.
      */
     isDirectory: boolean;
 
     /**
-     * @docid FileSystemItem.hasSubDirectories
-     * @public
+     * Specifies whether a directory has subdirectories.
      */
     hasSubDirectories: boolean;
 
     /**
-     * @docid FileSystemItem.thumbnail
-     * @public
+     * An icon (URL) to be used as the file system item&apos;s thumbnail.
      */
     thumbnail: string;
 
     /**
-     * @docid FileSystemItem.dataItem
-     * @public
+     * The file system data object that stores information about the file system item (name, size, modification date, etc.).
      */
     dataItem: any;
 
     /**
-     * @docid FileSystemItem.getFileExtension
-     * @publicName getFileExtension()
-     * @public
+     * Gets a file&apos;s extension.
      */
     getFileExtension(): string;
 }

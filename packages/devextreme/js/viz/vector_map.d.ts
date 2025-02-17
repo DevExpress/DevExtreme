@@ -55,929 +55,669 @@ export {
     VerticalEdge,
 };
 
-/** @public */
 export type VectorMapLayerType = 'area' | 'line' | 'marker';
-/** @public */
 export type VectorMapMarkerShape = 'circle' | 'square';
-/** @public */
 export type VectorMapMarkerType = 'bubble' | 'dot' | 'image' | 'pie';
 
 /**
- * @docid _viz_vector_map_TooltipInfo
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface TooltipInfo {
-    /** @docid _viz_vector_map_TooltipInfo.target */
+    /**
+     * 
+     */
     target?: MapLayerElement | dxVectorMapAnnotationConfig;
 }
 
 /**
- * @docid _viz_vector_map_CenterChangedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the centerChanged event handler&apos;s argument.
  */
 export type CenterChangedEvent = EventInfo<dxVectorMap> & {
     /**
-     * @docid _viz_vector_map_CenterChangedEvent.center
-     * @type Array<number>
+     * 
      */
     readonly center: Array<number>;
 };
 
 /**
- * @docid _viz_vector_map_ClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the click event handler&apos;s argument.
  */
 export type ClickEvent = NativeEventInfo<dxVectorMap, MouseEvent | PointerEvent> & {
-    /** @docid _viz_vector_map_ClickEvent.target */
+    /**
+     * 
+     */
     readonly target: MapLayerElement;
 };
 
 /**
- * @docid _viz_vector_map_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxVectorMap>;
 
 /**
- * @docid _viz_vector_map_DrawnEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the drawn event handler&apos;s argument.
  */
 export type DrawnEvent = EventInfo<dxVectorMap>;
 
 /**
- * @docid _viz_vector_map_ExportedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the exported event handler&apos;s argument.
  */
 export type ExportedEvent = EventInfo<dxVectorMap>;
 
 /**
- * @docid _viz_vector_map_ExportingEvent
- * @public
- * @type object
- * @inherits EventInfo,ExportInfo
+ * The type of the exporting event handler&apos;s argument.
  */
 export type ExportingEvent = EventInfo<dxVectorMap> & ExportInfo;
 
 /**
- * @docid _viz_vector_map_FileSavingEvent
- * @public
- * @type object
- * @inherits FileSavingEventInfo
+ * The type of the fileSaving event handler&apos;s argument.
  */
 export type FileSavingEvent = FileSavingEventInfo<dxVectorMap>;
 
 /**
- * @docid _viz_vector_map_IncidentOccurredEvent
- * @public
- * @type object
- * @inherits EventInfo,IncidentInfo
+ * The type of the incidentOccurred event handler&apos;s argument.
  */
 export type IncidentOccurredEvent = EventInfo<dxVectorMap> & IncidentInfo;
 
 /**
- * @docid _viz_vector_map_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxVectorMap>;
 
 /**
- * @docid _viz_vector_map_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxVectorMap> & ChangedOptionInfo;
 
 /**
- * @docid _viz_vector_map_SelectionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the selectionChanged event handler&apos;s argument.
  */
 export type SelectionChangedEvent = EventInfo<dxVectorMap> & {
-    /** @docid _viz_vector_map_SelectionChangedEvent.target */
+    /**
+     * 
+     */
     readonly target: MapLayerElement;
 };
 
 /**
- * @docid _viz_vector_map_TooltipHiddenEvent
- * @public
- * @type object
- * @inherits EventInfo,_viz_vector_map_TooltipInfo
+ * The type of the tooltipHidden event handler&apos;s argument.
  */
 export type TooltipHiddenEvent = EventInfo<dxVectorMap> & TooltipInfo;
 
 /**
- * @docid _viz_vector_map_TooltipShownEvent
- * @public
- * @type object
- * @inherits EventInfo,_viz_vector_map_TooltipInfo
+ * The type of the tooltipShown event handler&apos;s argument.
  */
 export type TooltipShownEvent = EventInfo<dxVectorMap> & TooltipInfo;
 
 /**
- * @docid _viz_vector_map_ZoomFactorChangedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the zoomFactorChanged event handler&apos;s argument.
  */
 export type ZoomFactorChangedEvent = EventInfo<dxVectorMap> & {
-    /** @docid _viz_vector_map_ZoomFactorChangedEvent.zoomFactor */
+    /**
+     * 
+     */
     readonly zoomFactor: number;
 };
 
 /**
- * @docid
- * @publicName Layer
- * @namespace DevExpress.viz
+ * This section describes the Layer object, which represents a vector map layer.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface MapLayer {
     /**
-     * @docid
-     * @publicName clearSelection()
-     * @public
+     * Deselects all layer elements.
      */
     clearSelection(): void;
     /**
-     * @docid
-     * @public
+     * The type of the layer elements.
      */
     elementType?: string;
     /**
-     * @docid
-     * @publicName getDataSource()
-     * @public
+     * Returns the DataSource instance.
      */
     getDataSource(): DataSource;
     /**
-     * @docid
-     * @publicName getElements()
-     * @public
+     * Gets all layer elements.
      */
     getElements(): Array<MapLayerElement>;
     /**
-     * @docid
-     * @public
+     * The layer index in the layers array.
      */
     index?: number;
     /**
-     * @docid
-     * @public
+     * The name of the layer.
      */
     name?: string;
     /**
-     * @docid
-     * @public
+     * The layer type. Can be &apos;area&apos;, &apos;line&apos; or &apos;marker&apos;.
      */
     type?: string;
 }
 
 /**
- * @docid
- * @publicName Layer Element
- * @namespace DevExpress.viz
+ * This section describes the Layer Element object, which represents a vector map layer element.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface MapLayerElement {
     /**
-     * @docid
-     * @publicName applySettings(settings)
-     * @param1 settings:object
-     * @public
+     * Applies the layer element settings and updates element appearance.
      */
     applySettings(settings: any): void;
     /**
-     * @docid
-     * @publicName attribute(name)
-     * @public
+     * Gets the value of an attribute.
      */
     attribute(name: string): any;
     /**
-     * @docid
-     * @publicName attribute(name, value)
-     * @public
+     * Sets the value of an attribute.
      */
     attribute(name: string, value: any): void;
     /**
-     * @docid
-     * @publicName coordinates()
-     * @return object
-     * @public
+     * Gets the layer element coordinates.
      */
     coordinates(): any;
     /**
-     * @docid
-     * @public
+     * The parent layer of the layer element.
      */
     layer?: any;
     /**
-     * @docid
-     * @publicName selected()
-     * @public
+     * Gets the selection state of the layer element.
      */
     selected(): boolean;
     /**
-     * @docid
-     * @publicName selected(state)
-     * @public
+     * Sets the selection state of the layer element.
      */
     selected(state: boolean): void;
 }
 
 /**
- * @public
- * @docid VectorMapLegendItem
- * @namespace DevExpress.viz.dxVectorMap
- * @inherits BaseLegendItem
- * @type object
+ * An object that provides information about a legend item in the VectorMap UI component.
  */
 export type LegendItem = VectorMapLegendItem;
 
 /**
  * @deprecated Use LegendItem instead
- * @namespace DevExpress.viz
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface VectorMapLegendItem extends BaseLegendItem {
     /**
-     * @docid
-     * @public
+     * The color of the legend item&apos;s marker.
      */
     color?: string;
     /**
-     * @docid
-     * @public
+     * The end value of the group that the legend item indicates.
      */
     end?: number;
     /**
-     * @docid
-     * @public
+     * The diameter of the legend item&apos;s marker in pixels.
      */
     size?: number;
     /**
-     * @docid
-     * @public
+     * The start value of the group that the legend item indicates.
      */
     start?: number;
 }
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.viz
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
-     * @docid
-     * @public
+     * Specifies the properties for the map background.
      */
     background?: {
       /**
-       * @docid
-       * @default '#cacaca'
+       * Specifies a color for the background border.
        */
       borderColor?: string;
       /**
-       * @docid
-       * @default '#ffffff'
+       * Specifies a color for the background.
        */
       color?: string;
     };
     /**
-     * @docid
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Specifies the positioning of a map in geographical coordinates.
      */
     bounds?: Array<number>;
     /**
-     * @docid
-     * @default [0, 0]
-     * @notUsedInTheme
-     * @public
+     * Specifies the geographical coordinates of the center for a map.
      */
     center?: Array<number>;
     /**
-     * @docid
-     * @public
+     * Configures the control bar.
      */
     controlBar?: {
       /**
-       * @docid
-       * @default '#5d5d5d'
+       * Specifies a color for the outline of the control bar elements.
        */
       borderColor?: string;
       /**
-       * @docid
-       * @default '#ffffff'
+       * Specifies a color for the inner area of the control bar elements.
        */
       color?: string;
       /**
-       * @docid
-       * @default true
+       * Specifies whether or not to display the control bar.
        */
       enabled?: boolean;
       /**
-       * @docid
-       * @default 'true'
+       * Specifies whether the pan control is visible.
        */
       panVisible?: boolean;
       /**
-       * @docid
-       * @default 'true'
+       * Specifies whether the zoom bar is visible.
        */
       zoomVisible?: boolean;
       /**
-       * @docid
-       * @default 'left'
+       * Specifies the position of the control bar.
        */
       horizontalAlignment?: HorizontalAlignment;
       /**
-       * @docid
-       * @default 20
+       * Specifies the margin of the control bar in pixels.
        */
       margin?: number;
       /**
-       * @docid
-       * @default 0.3
+       * Specifies the opacity of the control bar.
        */
       opacity?: number;
       /**
-       * @docid
-       * @default 'top'
+       * Specifies the position of the control bar.
        */
       verticalAlignment?: VerticalEdge;
     };
     /**
-     * @docid
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Specifies properties for VectorMap UI component layers.
      */
     layers?: Array<{
       /**
-       * @docid
-       * @default '#9d9d9d'
+       * Specifies a color for the border of the layer elements.
        */
       borderColor?: string;
       /**
-       * @docid
-       * @default 1
+       * Specifies the line width (for layers of a line type) or width of the layer elements border in pixels.
        */
       borderWidth?: number;
       /**
-       * @docid
-       * @default '#d2d2d2'
+       * Specifies a color for layer elements.
        */
       color?: string;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the field that provides data to be used for coloring of layer elements.
        */
       colorGroupingField?: string | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Allows you to paint layer elements with similar attributes in the same color.
        */
       colorGroups?: Array<number>;
       /**
-       * @docid
-       * @notUsedInTheme
+       * A function that customizes each layer element individually.
        */
       customize?: ((elements: Array<MapLayerElement>) => void);
       /**
-       * @docid
-       * @default undefined
+       * Specifies the name of the attribute containing marker data. Setting this property makes sense only if the layer type is &apos;marker&apos; and the elementType is &apos;bubble&apos;, &apos;pie&apos; or &apos;image&apos;.
        */
       dataField?: string | undefined;
       /**
-       * @docid
-       * @type object|Store|DataSource|DataSourceOptions|string|Array<any>|null
-       * @notUsedInTheme
+       * Specifies a data source for the layer.
        */
       dataSource?: object | DataSourceLike<any> | null;
       /**
-       * @docid
-       * @notUsedInTheme
+       * Specifies the type of a marker element. Setting this property makes sense only if the layer type is &apos;marker&apos;.
        */
       elementType?: VectorMapMarkerType;
       /**
-       * @docid
-       * @default true
+       * Specifies whether or not to change the appearance of a layer element when it is hovered over.
        */
       hoverEnabled?: boolean;
       /**
-       * @docid
-       * @default '#303030'
+       * Specifies a color for the border of the layer element when it is hovered over.
        */
       hoveredBorderColor?: string;
       /**
-       * @docid
-       * @default 1
+       * Specifies the pixel-measured line width (for layers of a line type) or width for the border of the layer element when it is hovered over.
        */
       hoveredBorderWidth?: number;
       /**
-       * @docid
-       * @default '#d2d2d2'
+       * Specifies a color for a layer element when it is hovered over.
        */
       hoveredColor?: string;
       /**
-       * @docid
+       * Specifies marker label properties.
        */
       label?: {
         /**
-         * @docid
+         * The name of the data source attribute containing marker texts.
          */
         dataField?: string;
         /**
-         * @docid
-         * @default <i>true</i> for markers; <i>false</i> for areas
+         * Enables marker labels.
          */
         enabled?: boolean;
         /**
-         * @docid
-         * @default '#2b2b2b' &prop(color)
+         * Specifies font properties for marker labels.
          */
         font?: Font;
       };
       /**
-       * @docid
-       * @default 50
+       * Specifies the pixel-measured diameter of the marker that represents the biggest value. Setting this property makes sense only if the layer type is &apos;marker&apos;.
        */
       maxSize?: number;
       /**
-       * @docid
-       * @default 20
+       * Specifies the pixel-measured diameter of the marker that represents the smallest value. Setting this property makes sense only if the layer type is &apos;marker&apos;.
        */
       minSize?: number;
       /**
-       * @docid
-       * @notUsedInTheme
+       * Specifies the layer name.
        */
       name?: string;
       /**
-       * @docid
-       * @default 1
+       * Specifies the layer opacity (from 0 to 1).
        */
       opacity?: number;
       /**
-       * @docid
-       * @default "Material"
+       * The name of a predefined palette or a custom range of colors to be used as a palette.
        */
       palette?: Array<string> | Palette;
       /**
-       * @docid
-       * @default 0
+       * Specifies the number of colors in a palette.
        */
       paletteSize?: number;
       /**
-       * @docid
+       * The position of a color in the palette[] array. Should not exceed the value of the paletteSize property.
        */
       paletteIndex?: number;
       /**
-       * @docid
-       * @default '#303030'
+       * Specifies a color for the border of the layer element when it is selected.
        */
       selectedBorderColor?: string;
       /**
-       * @docid
-       * @default 2
+       * Specifies a pixel-measured line width (for layers of a line type) or width for the border of the layer element when it is selected.
        */
       selectedBorderWidth?: number;
       /**
-       * @docid
-       * @default '#d2d2d2'
+       * Specifies a color for the layer element when it is selected.
        */
       selectedColor?: string;
       /**
-       * @docid
-       * @default 'single'
+       * Specifies whether single or multiple map elements can be selected on a vector map.
        */
       selectionMode?: SingleMultipleOrNone;
       /**
-       * @docid
-       * @default 8
+       * Specifies the size of markers. Setting this property makes sense only if the layer type is &apos;marker&apos; and the elementType is &apos;dot&apos;, &apos;pie&apos; or &apos;image&apos;.
        */
       size?: number;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the field that provides data to be used for sizing bubble markers. Setting this property makes sense only if the layer type is &apos;marker&apos; and the elementType is &apos;bubble&apos;.
        */
       sizeGroupingField?: string | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Allows you to display bubbles with similar attributes in the same size. Setting this property makes sense only if the layer type is &apos;marker&apos; and the elementType is &apos;bubble&apos;.
        */
       sizeGroups?: Array<number>;
       /**
-       * @docid
-       * @notUsedInTheme
+       * Specifies layer type.
        */
       type?: VectorMapLayerType;
     }> | { borderColor?: string; borderWidth?: number; color?: string; colorGroupingField?: string; colorGroups?: Array<number>; customize?: ((elements: Array<MapLayerElement>) => any); dataField?: string; dataSource?: object | DataSourceLike<any> | null; elementType?: 'bubble' | 'dot' | 'image' | 'pie'; hoverEnabled?: boolean; hoveredBorderColor?: string; hoveredBorderWidth?: number; hoveredColor?: string; label?: { dataField?: string; enabled?: boolean; font?: Font }; maxSize?: number; minSize?: number; name?: string; opacity?: number; palette?: Array<string> | Palette; paletteSize?: number; selectedBorderColor?: string; selectedBorderWidth?: number; selectedColor?: string; selectionMode?: SingleMultipleOrNone; size?: number; sizeGroupingField?: string; sizeGroups?: Array<number>; type?: 'area' | 'line' | 'marker' };
     /**
-     * @docid
-     * @type Array<Object>
-     * @inherits BaseLegend
-     * @default undefined
-     * @public
+     * Configures map legends.
      */
     legends?: Array<Legend> | undefined;
     /**
-     * @docid
-     * @type object
-     * @hidden
+     * Generates space around the UI component.
      */
     margin?: BaseWidgetMargin;
     /**
-     * @docid
-     * @default 256
-     * @notUsedInTheme
-     * @public
+     * Specifies a map&apos;s maximum zoom factor.
      */
     maxZoomFactor?: number;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/vector_map:CenterChangedEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed each time the center coordinates are changed.
      */
     onCenterChanged?: ((e: CenterChangedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{viz/vector_map:ClickEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when any location on the map is clicked or tapped.
      */
     onClick?: ((e: ClickEvent) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/vector_map:SelectionChangedEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a layer element is selected or selection is canceled.
      */
     onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/vector_map:TooltipHiddenEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a tooltip becomes hidden.
      */
     onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/vector_map:TooltipShownEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed when a tooltip appears.
      */
     onTooltipShown?: ((e: TooltipShownEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{viz/vector_map:ZoomFactorChangedEvent}
-     * @notUsedInTheme
-     * @action
-     * @public
+     * A function that is executed each time the zoom factor is changed.
      */
     onZoomFactorChanged?: ((e: ZoomFactorChangedEvent) => void);
     /**
-     * @docid
-     * @default true
-     * @public
+     * Disables the panning capability.
      */
     panningEnabled?: boolean;
     /**
-     * @docid
-     * @type Enums.VectorMapProjection|VectorMapProjectionConfig|string|object
-     * @default "mercator"
-     * @notUsedInTheme
-     * @public
+     * Specifies the map projection.
      */
     projection?: VectorMapProjection | VectorMapProjectionConfig | string | any;
     /**
-     * @docid
-     * @type object
-     * @public
+     * Configures tooltips.
      */
     tooltip?: Tooltip;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the map should respond to touch gestures.
      */
     touchEnabled?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not the map should respond when a user rolls the mouse wheel.
      */
     wheelEnabled?: boolean;
     /**
-     * @docid
-     * @default 1
-     * @notUsedInTheme
-     * @public
+     * Specifies a number that is used to zoom a map initially.
      */
     zoomFactor?: number;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Disables the zooming capability.
      */
     zoomingEnabled?: boolean;
     /**
-     * @docid
-     * @public
+     * Specifies settings common for all annotations in the VectorMap.
      */
     commonAnnotationSettings?: dxVectorMapCommonAnnotationConfig;
     /**
-     * @docid
-     * @inherits dxVectorMapOptions.commonAnnotationSettings
-     * @public
+     * Specifies the annotation collection.
      */
     annotations?: Array<dxVectorMapAnnotationConfig | any>;
     /**
-     * @docid
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Customizes an individual annotation.
      */
     customizeAnnotation?: ((annotation: dxVectorMapAnnotationConfig | any) => dxVectorMapAnnotationConfig) | undefined;
 }
 
 /**
- * @docid
- * @inherits dxVectorMapCommonAnnotationConfig
- * @type object
- * @namespace DevExpress.viz
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotationConfig {
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the annotation&apos;s name.
      */
     name?: string | undefined;
 }
 
 /**
- * @docid
- * @inherits BaseWidgetAnnotationConfig
- * @type object
- * @namespace DevExpress.viz
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Positions the annotation&apos;s center at specified geographic coordinates: [longitude, latitude].
      */
     coordinates?: Array<number>;
     /**
-     * @docid
-     * @type_function_return object
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Customizes the text and appearance of the annotation&apos;s tooltip.
      */
     customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => any) | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @type_function_return string|SVGElement|jQuery
-     * @public
+     * Specifies a custom template for the annotation. Applies only if the type is &apos;custom&apos;.
      */
     template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
-     * @docid
-     * @type_function_return string|Element|jQuery
-     * @default undefined
-     * @public
+     * Specifies a custom template for an annotation&apos;s tooltip.
      */
     tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: DxElement) => string | UserDefinedElement) | undefined;
 }
 
 /**
- * @public
- * @docid dxVectorMapLegends
+ * Configures map legends.
  */
 export type Legend = BaseLegend & {
     /**
-     * @docid dxVectorMapOptions.legends.customizeHint
-     * @notUsedInTheme
-     * @public
+     * Specifies text for a hint that appears when a user hovers the mouse pointer over the text of a legend item.
      */
     customizeHint?: ((itemInfo: { start?: number; end?: number; index?: number; color?: string; size?: number }) => string);
     /**
-     * @docid dxVectorMapOptions.legends.customizeItems
-     * @type_function_param1 items:Array<VectorMapLegendItem>
-     * @type_function_return Array<VectorMapLegendItem>
-     * @public
+     * Allows you to change the order and visibility of legend items.
      */
     customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
     /**
-     * @docid dxVectorMapOptions.legends.customizeText
-     * @notUsedInTheme
-     * @public
+     * Specifies text for legend items.
      */
     customizeText?: ((itemInfo: { start?: number; end?: number; index?: number; color?: string; size?: number }) => string);
     /**
-     * @docid dxVectorMapOptions.legends.font
-     * @default '#2b2b2b' &prop(color)
-     * @public
+     * Specifies the legend items&apos; font properties.
      */
     font?: Font;
     /**
-     * @docid dxVectorMapOptions.legends.markerColor
-     * @default undefined
-     * @public
+     * Specifies the color of item markers in the legend. The specified color applied only when the legend uses &apos;size&apos; source.
      */
     markerColor?: string | undefined;
     /**
-     * @docid dxVectorMapOptions.legends.markerShape
-     * @default "square"
-     * @public
+     * Specifies the shape of item markers.
      */
     markerShape?: VectorMapMarkerShape;
     /**
-     * @docid dxVectorMapOptions.legends.markerSize
-     * @default 12
-     * @public
+     * Specifies the marker&apos;s size in a legend item in pixels.
      */
     markerSize?: number;
     /**
-     * @docid dxVectorMapOptions.legends.markerTemplate
-     * @default undefined
-     * @type_function_param1 legendItem:VectorMapLegendItem
-     * @type_function_return string|SVGElement|jQuery
-     * @public
+     * Specifies an SVG element that serves as a custom legend item marker.
      */
     markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
-     * @docid dxVectorMapOptions.legends.source
-     * @notUsedInTheme
-     * @public
+     * Specifies the source of data for the legend.
      */
     source?: {
       /**
-       * @docid dxVectorMapOptions.legends.source.grouping
-       * @notUsedInTheme
+       * Specifies the type of the legend grouping.
        */
       grouping?: string;
       /**
-       * @docid dxVectorMapOptions.legends.source.layer
-       * @notUsedInTheme
+       * Specifies a layer to which the legend belongs.
        */
       layer?: string;
     };
 };
 /**
- * @public
- * @docid dxVectorMapTooltip
+ * Configures tooltips.
  */
 export type Tooltip = BaseWidgetTooltip & {
     /**
-     * @docid dxVectorMapOptions.tooltip.contentTemplate
-     * @type_function_return string|Element|jQuery
-     * @default undefined
-     * @public
+     * Specifies a custom template for a tooltip.
      */
     contentTemplate?: template | ((info: MapLayerElement, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
-     * @docid dxVectorMapOptions.tooltip.customizeTooltip
-     * @type_function_return object
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Specifies text and appearance of a set of tooltips.
      */
     customizeTooltip?: ((info: MapLayerElement) => any) | undefined;
     /**
-     * @docid dxVectorMapOptions.tooltip.format
-     * @hidden
+     * 
      */
     format?: Format;
 };
 /**
- * @docid
- * @inherits BaseWidget
- * @namespace DevExpress.viz
- * @public
+ * The VectorMap is a UI component that visualizes geographical locations. This UI component represents a geographical map that contains areas and markers. Areas embody continents and countries. Markers flag specific points on the map, for example, towns, cities or capitals.
  */
 export default class dxVectorMap extends BaseWidget<dxVectorMapOptions> {
     /**
-     * @docid
-     * @publicName center()
-     * @public
+     * Gets the current map center coordinates.
      */
     center(): Array<number>;
     /**
-     * @docid
-     * @publicName center(centerCoordinates)
-     * @public
+     * Sets the map center coordinates.
      */
     center(centerCoordinates: Array<number>): void;
     /**
-     * @docid
-     * @publicName clearSelection()
-     * @public
+     * Deselects all the selected area and markers on a map at once. The areas and markers are displayed in their initial style after.
      */
     clearSelection(): void;
     /**
-     * @docid
-     * @publicName convertCoordinates(x, y)
-     * @deprecated dxVectorMap.convertToGeo
-     * @public
+     * Converts client area coordinates into map coordinates.
+     * @deprecated Use the convertToGeo(x, y) method instead.
      */
     convertCoordinates(x: number, y: number): Array<number>;
     /**
-     * @docid
-     * @publicName convertToGeo(x, y)
-     * @public
+     * Converts coordinates from pixels to the dataSource coordinate system.
      */
     convertToGeo(x: number, y: number): Array<number>;
     /**
-     * @docid
-     * @publicName convertToXY(longitude, latitude)
-     * @public
+     * Converts coordinates from the dataSource coordinate system to pixels.
      */
     convertToXY(longitude: number, latitude: number): Array<number>;
     /**
-     * @docid
-     * @publicName getLayerByIndex(index)
-     * @public
+     * Gets a layer with a specific index.
      */
     getLayerByIndex(index: number): MapLayer;
     /**
-     * @docid
-     * @publicName getLayerByName(name)
-     * @public
+     * Gets a layer with a specific name.
      */
     getLayerByName(name: string): MapLayer;
     /**
-     * @docid
-     * @publicName getLayers()
-     * @public
+     * Gets all layers.
      */
     getLayers(): Array<MapLayer>;
     /**
-     * @docid
-     * @publicName viewport()
-     * @public
+     * Gets the current map viewport coordinates.
      */
     viewport(): Array<number>;
     /**
-     * @docid
-     * @publicName viewport(viewportCoordinates)
-     * @public
+     * Sets the map viewport coordinates.
      */
     viewport(viewportCoordinates: Array<number>): void;
     /**
-     * @docid
-     * @publicName zoomFactor()
-     * @public
+     * Gets the current zoom factor value.
      */
     zoomFactor(): number;
     /**
-     * @docid
-     * @publicName zoomFactor(zoomFactor)
-     * @public
+     * Sets the zoom factor value.
      */
     zoomFactor(zoomFactor: number): void;
 }
 
-/** @public */
 export type Properties = dxVectorMapOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxVectorMapOptions;
 
 // #region deprecated in v23.1
 
-/** @deprecated Use Legend instead */
+/**
+ * @deprecated Use Legend instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxVectorMapLegends = Legend;
 
-/** @deprecated Use Tooltip instead */
+/**
+ * @deprecated Use Tooltip instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxVectorMapTooltip = Tooltip;
 
 // #endregion

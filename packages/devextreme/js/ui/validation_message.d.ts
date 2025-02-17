@@ -6,7 +6,9 @@ import dxOverlay, {
     dxOverlayOptions,
 } from './overlay';
 
-/** @namespace DevExpress.ui */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export interface dxValidationMessageOptions extends dxOverlayOptions<dxValidationMessage> {
     mode?: string;
 
@@ -18,11 +20,15 @@ export interface dxValidationMessageOptions extends dxOverlayOptions<dxValidatio
 
     offset?: object;
 }
-/** @namespace DevExpress.ui */
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export default class dxValidationMessage extends dxOverlay<dxValidationMessageOptions> { }
 
-/** @public */
 export type Properties = dxValidationMessageOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxValidationMessageOptions;

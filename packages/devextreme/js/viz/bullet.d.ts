@@ -15,222 +15,162 @@ import BaseSparkline, {
 } from './sparklines/base_sparkline';
 
 /**
- * @docid _viz_bullet_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxBullet>;
 
 /**
- * @docid _viz_bullet_DrawnEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the drawn event handler&apos;s argument.
  */
 export type DrawnEvent = EventInfo<dxBullet>;
 
 /**
- * @docid _viz_bullet_ExportedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the exported event handler&apos;s argument.
  */
 export type ExportedEvent = EventInfo<dxBullet>;
 
 /**
- * @docid _viz_bullet_ExportingEvent
- * @public
- * @type object
- * @inherits EventInfo,ExportInfo
+ * The type of the exporting event handler&apos;s argument.
  */
 export type ExportingEvent = EventInfo<dxBullet> & ExportInfo;
 
 /**
- * @docid _viz_bullet_FileSavingEvent
- * @public
- * @type object
- * @inherits FileSavingEventInfo
+ * The type of the fileSaving event handler&apos;s argument.
  */
 export type FileSavingEvent = FileSavingEventInfo<dxBullet>;
 
 /**
- * @docid _viz_bullet_IncidentOccurredEvent
- * @public
- * @type object
- * @inherits EventInfo,IncidentInfo
+ * The type of the incidentOccurred event handler&apos;s argument.
  */
 export type IncidentOccurredEvent = EventInfo<dxBullet> & IncidentInfo;
 
 /**
- * @docid _viz_bullet_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxBullet>;
 
 /**
- * @docid _viz_bullet_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxBullet> & ChangedOptionInfo;
 
 /**
- * @docid _viz_bullet_TooltipHiddenEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the tooltipHidden event handler&apos;s argument.
  */
 export type TooltipHiddenEvent = EventInfo<dxBullet>;
 
 /**
- * @docid _viz_bullet_TooltipShownEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the tooltipShown event handler&apos;s argument.
  */
 export type TooltipShownEvent = EventInfo<dxBullet>;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.viz
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
     /**
-     * @docid
-     * @default '#e8c267'
-     * @public
+     * Specifies a color for the bullet bar.
      */
     color?: string;
     /**
-     * @docid
-     * @default undefined
-     * @notUsedInTheme
-     * @public
+     * Specifies an end value for the invisible scale.
      */
     endScaleValue?: number | undefined;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not to show the target line.
      */
     showTarget?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not to show the line indicating zero on the invisible scale.
      */
     showZeroLevel?: boolean;
     /**
-     * @docid
-     * @default 0
-     * @notUsedInTheme
-     * @public
+     * Specifies a start value for the invisible scale.
      */
     startScaleValue?: number;
     /**
-     * @docid
-     * @default 0
-     * @notUsedInTheme
-     * @public
+     * Specifies the value indicated by the target line.
      */
     target?: number;
     /**
-     * @docid
-     * @default '#666666'
-     * @public
+     * Specifies a color for both the target and zero level lines.
      */
     targetColor?: string;
     /**
-     * @docid
-     * @default 4
-     * @public
+     * Specifies the width of the target line.
      */
     targetWidth?: number;
     /**
-     * @docid
-     * @default 0
-     * @notUsedInTheme
-     * @public
+     * Specifies the primary value indicated by the bullet bar.
      */
     value?: number;
 }
 /**
- * @docid
- * @inherits BaseSparkline
- * @namespace DevExpress.viz
- * @public
+ * The Bullet UI component is useful when you need to compare a single measure to a target value. The UI component comprises a horizontal bar indicating the measure and a vertical line indicating the target value.
  */
 export default class dxBullet extends BaseSparkline<dxBulletOptions> { }
 
-/** @public */
 export type Properties = dxBulletOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxBulletOptions;
 
 ///#DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
 /**
-* @hidden
-*/
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Events = {
 /**
- * @docid dxBulletOptions.onDisposing
- * @type_function_param1 e:{viz/bullet:DisposingEvent}
+ * A function that is executed before the UI component is disposed of.
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @docid dxBulletOptions.onDrawn
- * @type_function_param1 e:{viz/bullet:DrawnEvent}
+ * A function that is executed when the UI component&apos;s rendering has finished.
  */
 onDrawn?: ((e: DrawnEvent) => void);
 /**
- * @docid dxBulletOptions.onExported
- * @type_function_param1 e:{viz/bullet:ExportedEvent}
+ * A function that is executed after the UI component is exported.
  */
 onExported?: ((e: ExportedEvent) => void);
 /**
- * @docid dxBulletOptions.onExporting
- * @type_function_param1 e:{viz/bullet:ExportingEvent}
+ * A function that is executed before the UI component is exported.
  */
 onExporting?: ((e: ExportingEvent) => void);
 /**
- * @docid dxBulletOptions.onFileSaving
- * @type_function_param1 e:{viz/bullet:FileSavingEvent}
+ * A function that is executed before a file with exported UI component is saved to the user&apos;s local storage.
  */
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
- * @docid dxBulletOptions.onIncidentOccurred
- * @type_function_param1 e:{viz/bullet:IncidentOccurredEvent}
+ * A function that is executed when an error or warning occurs.
  */
 onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 /**
- * @docid dxBulletOptions.onInitialized
- * @type_function_param1 e:{viz/bullet:InitializedEvent}
+ * A function used in JavaScript frameworks to save the UI component instance.
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @docid dxBulletOptions.onOptionChanged
- * @type_function_param1 e:{viz/bullet:OptionChangedEvent}
+ * A function that is executed after a UI component property is changed.
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @docid dxBulletOptions.onTooltipHidden
- * @type_function_param1 e:{viz/bullet:TooltipHiddenEvent}
+ * A function that is executed when a tooltip becomes hidden.
  */
 onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
 /**
- * @docid dxBulletOptions.onTooltipShown
- * @type_function_param1 e:{viz/bullet:TooltipShownEvent}
+ * A function that is executed when a tooltip appears.
  */
 onTooltipShown?: ((e: TooltipShownEvent) => void);
 };

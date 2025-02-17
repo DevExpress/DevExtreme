@@ -42,778 +42,624 @@ export {
     StateStoreType,
 };
 
-/** @public */
 export type PivotGridDataFieldArea = 'column' | 'row';
-/** @public */
 export type PivotGridRowHeaderLayout = 'standard' | 'tree';
-/** @public */
 export type PivotGridTotalDisplayMode = 'both' | 'columns' | 'none' | 'rows';
 
 /**
- * @docid _ui_pivot_grid_CellClickEvent
- * @public
- * @type object
- * @inherits Cancelable,NativeEventInfo
+ * The type of the cellClick event handler&apos;s argument.
  */
 export type CellClickEvent = Cancelable & NativeEventInfo<dxPivotGrid, MouseEvent | PointerEvent> & {
-    /** @docid _ui_pivot_grid_CellClickEvent.area */
+    /**
+     * 
+     */
     readonly area?: string;
-    /** @docid _ui_pivot_grid_CellClickEvent.cellElement */
+    /**
+     * 
+     */
     readonly cellElement?: DxElement;
     /**
-     * @docid _ui_pivot_grid_CellClickEvent.cell
-     * @type dxPivotGridPivotGridCell
+     * 
      */
     readonly cell?: Cell;
-    /** @docid _ui_pivot_grid_CellClickEvent.rowIndex */
+    /**
+     * 
+     */
     readonly rowIndex?: number;
-    /** @docid _ui_pivot_grid_CellClickEvent.columnIndex */
+    /**
+     * 
+     */
     readonly columnIndex?: number;
     /**
-     * @docid _ui_pivot_grid_CellClickEvent.columnFields
-     * @type Array<PivotGridDataSourceOptions.fields>
+     * 
      */
     readonly columnFields?: Array<Field>;
     /**
-     * @docid _ui_pivot_grid_CellClickEvent.rowFields
-     * @type Array<PivotGridDataSourceOptions.fields>
+     * 
      */
     readonly rowFields?: Array<Field>;
     /**
-     * @docid _ui_pivot_grid_CellClickEvent.dataFields
-     * @type Array<PivotGridDataSourceOptions.fields>
+     * 
      */
     readonly dataFields?: Array<Field>;
 };
 
 /**
- * @docid _ui_pivot_grid_CellPreparedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the cellPrepared event handler&apos;s argument.
  */
 export type CellPreparedEvent = EventInfo<dxPivotGrid> & {
-    /** @docid _ui_pivot_grid_CellPreparedEvent.area */
+    /**
+     * 
+     */
     readonly area?: string;
-    /** @docid _ui_pivot_grid_CellPreparedEvent.cellElement */
+    /**
+     * 
+     */
     readonly cellElement?: DxElement;
     /**
-     * @docid _ui_pivot_grid_CellPreparedEvent.cell
-     * @type dxPivotGridPivotGridCell
+     * 
      */
     readonly cell?: Cell;
-    /** @docid _ui_pivot_grid_CellPreparedEvent.rowIndex */
+    /**
+     * 
+     */
     readonly rowIndex?: number;
-    /** @docid _ui_pivot_grid_CellPreparedEvent.columnIndex */
+    /**
+     * 
+     */
     readonly columnIndex?: number;
 };
 
 /**
- * @docid _ui_pivot_grid_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxPivotGrid>;
 
 /**
- * @docid _ui_pivot_grid_ContextMenuPreparingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contextMenuPreparing event handler&apos;s argument.
  */
 export type ContextMenuPreparingEvent = EventInfo<dxPivotGrid> & {
-    /** @docid _ui_pivot_grid_ContextMenuPreparingEvent.area */
+    /**
+     * 
+     */
     readonly area?: string;
     /**
-     * @docid _ui_pivot_grid_ContextMenuPreparingEvent.cell
-     * @type dxPivotGridPivotGridCell
+     * 
      */
     readonly cell?: Cell;
-    /** @docid _ui_pivot_grid_ContextMenuPreparingEvent.cellElement */
+    /**
+     * 
+     */
     readonly cellElement?: DxElement;
-    /** @docid _ui_pivot_grid_ContextMenuPreparingEvent.columnIndex */
+    /**
+     * 
+     */
     readonly columnIndex?: number;
-    /** @docid _ui_pivot_grid_ContextMenuPreparingEvent.rowIndex */
+    /**
+     * 
+     */
     readonly rowIndex?: number;
     /**
-     * @docid _ui_pivot_grid_ContextMenuPreparingEvent.dataFields
-     * @type Array<PivotGridDataSourceOptions.fields>
+     * 
      */
     readonly dataFields?: Array<Field>;
     /**
-     * @docid _ui_pivot_grid_ContextMenuPreparingEvent.rowFields
-     * @type Array<PivotGridDataSourceOptions.fields>
+     * 
      */
     readonly rowFields?: Array<Field>;
     /**
-     * @docid _ui_pivot_grid_ContextMenuPreparingEvent.columnFields
-     * @type Array<PivotGridDataSourceOptions.fields>
+     * 
      */
     readonly columnFields?: Array<Field>;
     /**
-     * @docid _ui_pivot_grid_ContextMenuPreparingEvent.field
-     * @type object
+     * 
      */
     readonly field?: Field;
     /**
-     * @docid _ui_pivot_grid_ContextMenuPreparingEvent.items
-     * @type Array<Object>
+     * 
      */
     items?: Array<any>;
 };
 
 /**
- * @docid _ui_pivot_grid_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxPivotGrid>;
 
 /**
- * @docid _ui_pivot_grid_ExportingEvent
- * @public
- * @type object
- * @inherits Cancelable,EventInfo
+ * The type of the exporting event handler&apos;s argument.
  */
 export type ExportingEvent = Cancelable & EventInfo<dxPivotGrid> & {
-    /** @docid _ui_pivot_grid_ExportingEvent.fileName */
+    /**
+     * 
+     */
     fileName?: string;
 };
 
 /**
- * @docid _ui_pivot_grid_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxPivotGrid>;
 
 /**
- * @docid _ui_pivot_grid_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxPivotGrid> & ChangedOptionInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     /**
-     * @docid
-     * @default false
-     * @public
+     * Allows users to expand/collapse all header items within the same header level. Ignored if the PivotGridDataSource&apos;s paginate property is true.
      */
     allowExpandAll?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Allows a user to filter fields by selecting or deselecting values in the popup menu.
      */
     allowFiltering?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Allows an end user to change sorting properties.
      */
     allowSorting?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Allows users to sort the pivot grid by summary values instead of field values. Ignored if the PivotGridDataSource&apos;s paginate property is true.
      */
     allowSortingBySummary?: boolean;
     /**
-     * @docid
-     * @default "column"
-     * @public
+     * Specifies the area to which data field headers must belong.
      */
     dataFieldArea?: PivotGridDataFieldArea;
     /**
-     * @docid
-     * @default null
-     * @public
+     * Binds the UI component to data.
      */
     dataSource?: Array<any> | PivotGridDataSource | PivotGridDataSourceOptions | null;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether HTML tags are displayed as plain text or applied to cell values.
      */
     encodeHtml?: boolean;
     /**
-     * @docid
-     * @public
+     * Configures client-side exporting.
      */
     export?: {
       /**
-       * @docid
-       * @default false
+       * Enables client-side exporting.
        */
       enabled?: boolean;
     };
     /**
-     * @docid
-     * @public
+     * The Field Chooser configuration properties.
      */
     fieldChooser?: {
       /**
-       * @docid
-       * @default false
+       * Specifies whether the field chooser allows search operations in the &apos;All Fields&apos; section.
        */
       allowSearch?: boolean;
       /**
-       * @docid
-       * @default "instantly"
+       * Specifies when to apply changes made in the field chooser to the PivotGrid.
        */
       applyChangesMode?: ApplyChangesMode;
       /**
-       * @docid
-       * @default true
+       * Enables or disables the field chooser.
        */
       enabled?: boolean;
       /**
-       * @docid
-       * @default 600
+       * Specifies the field chooser height.
        */
       height?: number;
       /**
-       * @docid
-       * @default 0
+       * Specifies the field chooser layout.
        */
       layout?: FieldChooserLayout;
       /**
-       * @docid
-       * @default 500
+       * Specifies a delay in milliseconds between when a user finishes typing in the field chooser&apos;s search panel, and when the search is executed.
        */
       searchTimeout?: number;
       /**
-       * @docid
+       * Strings that can be changed or localized in the pivot grid&apos;s integrated Field Chooser.
        */
       texts?: {
         /**
-         * @docid
-         * @default 'All Fields'
+         * The string to display instead of All Fields.
          */
         allFields?: string;
         /**
-         * @docid
-         * @default 'Column Fields'
+         * The string to display instead of Column Fields.
          */
         columnFields?: string;
         /**
-         * @docid
-         * @default 'Data Fields'
+         * The string to display instead of Data Fields.
          */
         dataFields?: string;
         /**
-         * @docid
-         * @default 'Filter Fields'
+         * The string to display instead of Filter Fields.
          */
         filterFields?: string;
         /**
-         * @docid
-         * @default 'Row Fields'
+         * The string to display instead of Row Fields.
          */
         rowFields?: string;
       };
       /**
-       * @docid
-       * @default "Field Chooser"
+       * Specifies the text to display as a title of the field chooser popup window.
        */
       title?: string;
       /**
-       * @docid
-       * @default 600
+       * Specifies the field chooser width.
        */
       width?: number;
     };
     /**
-     * @docid
-     * @public
+     * Configures the field panel.
      */
     fieldPanel?: {
       /**
-       * @docid
-       * @default true
+       * Makes fields on the field panel draggable.
        */
       allowFieldDragging?: boolean;
       /**
-       * @docid
-       * @default true
+       * Shows/hides column fields on the field panel.
        */
       showColumnFields?: boolean;
       /**
-       * @docid
-       * @default true
+       * Shows/hides data fields on the field panel.
        */
       showDataFields?: boolean;
       /**
-       * @docid
-       * @default true
+       * Shows/hides filter fields on the field panel.
        */
       showFilterFields?: boolean;
       /**
-      * @docid
-      * @default true
-      */
+       * Shows/hides row fields on the field panel.
+       */
       showRowFields?: boolean;
       /**
-       * @docid
+       * Specifies the placeholders of the field areas.
        */
       texts?: {
         /**
-         * @docid
-         * @default "Drop Column Fields Here"
+         * Specifies the placeholder of the column field area.
          */
         columnFieldArea?: string;
         /**
-         * @docid
-         * @default "Drop Data Fields Here"
+         * Specifies the placeholder of the data field area.
          */
         dataFieldArea?: string;
         /**
-         * @docid
-         * @default "Drop Filter Fields Here"
+         * Specifies the placeholder of the filter field area.
          */
         filterFieldArea?: string;
         /**
-         * @docid
-         * @default "Drop Row Fields Here"
+         * Specifies the placeholder of the row field area.
          */
         rowFieldArea?: string;
       };
       /**
-       * @docid
-       * @default false
+       * Shows/hides the field panel.
        */
       visible?: boolean;
     };
     /**
-     * @docid
-     * @public
+     * Configures the header filter feature.
      */
     headerFilter?: {
       /**
-       * @docid
-       * @default false
-       * @deprecated
+       * Specifies whether searching is enabled in the header filter.
+       * @deprecated Use search.enabled instead.
        */
       allowSearch?: boolean;
       /**
-       * @docid
-       * @default true
+       * Specifies whether a &apos;Select All&apos; option is available to users.
        */
       allowSelectAll?: boolean;
       /**
-       * @docid
-       * @default 325
+       * Specifies the height of the popup menu containing filtering values.
        */
       height?: number;
       /**
-       * @docid
+       * Configures the header filter&apos;s search functionality.
        */
       search?: HeaderFilterSearchConfig;
       /**
-       * @docid
-       * @default 500
-       * @deprecated
+       * Specifies a delay in milliseconds between when a user finishes typing in the header filter&apos;s search panel, and when the search is executed.
+       * @deprecated Use search.timeout instead.
        */
       searchTimeout?: number;
       /**
-       * @docid
-       * @default false
+       * Specifies whether to show all field values or only those that satisfy the other applied filters.
        */
       showRelevantValues?: boolean;
       /**
-       * @docid
+       * Configures the texts of the popup menu&apos;s elements.
        */
       texts?: {
         /**
-         * @docid
-         * @default "Cancel"
+         * Specifies the text of the button that closes the popup menu without applying a filter.
          */
         cancel?: string;
         /**
-         * @docid
-         * @default "(Blanks)"
+         * Specifies the name of the item that represents empty values in the popup menu.
          */
         emptyValue?: string;
         /**
-         * @docid
-         * @default "Ok"
+         * Specifies the text of the button that applies a filter.
          */
         ok?: string;
       };
       /**
-       * @docid
-       * @default 252
+       * Specifies the width of the popup menu containing filtering values.
        */
       width?: number;
     };
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not to hide rows and columns with no data.
      */
     hideEmptySummaryCells?: boolean;
     /**
-     * @docid
-     * @public
+     * Specifies properties configuring the load panel.
      */
     loadPanel?: {
       /**
-       * @docid
-       * @default true
+       * Enables or disables the load panel.
        */
       enabled?: boolean;
       /**
-       * @docid
-       * @default 70
+       * Specifies the height of the load panel.
        */
       height?: number;
       /**
-       * @docid
-       * @default ""
+       * Specifies the URL pointing to an image that will be used as a load indicator.
        */
       indicatorSrc?: string;
       /**
-       * @docid
-       * @default false
+       * Specifies whether to shade the UI component when the load panel appears.
        */
       shading?: boolean;
       /**
-       * @docid
-       * @default ''
+       * Specifies the shading color. Applies only if shading is true.
        */
       shadingColor?: string;
       /**
-       * @docid
-       * @default true
+       * Specifies whether or not to show a load indicator.
        */
       showIndicator?: boolean;
       /**
-       * @docid
-       * @default true
+       * Specifies whether or not to show load panel background.
        */
       showPane?: boolean;
       /**
-       * @docid
-       * @default 'Loading...'
+       * Specifies the text to display inside a load panel.
        */
       text?: string;
       /**
-       * @docid
-       * @default 200
+       * Specifies the width of the load panel.
        */
       width?: number;
     };
     /**
-     * @docid
-     * @type_function_param1 e:{ui/pivot_grid:CellClickEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed when a pivot grid cell is clicked or tapped.
      */
     onCellClick?: ((e: CellClickEvent) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/pivot_grid:CellPreparedEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed after a pivot grid cell is created.
      */
     onCellPrepared?: ((e: CellPreparedEvent) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/pivot_grid:ContextMenuPreparingEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed before the context menu is rendered.
      */
     onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/pivot_grid:ExportingEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed before data is exported.
      */
     onExporting?: ((e: ExportingEvent) => void);
     /**
-     * @docid
-     * @default "standard"
-     * @public
+     * Specifies the layout of items in the row header.
      */
     rowHeaderLayout?: PivotGridRowHeaderLayout;
     /**
-     * @docid
-     * @public
+     * A configuration object specifying scrolling properties.
      */
     scrolling?: {
       /**
-       * @docid
-       * @default "standard"
+       * Specifies the scrolling mode.
        */
       mode?: ScrollMode;
       /**
-       * @docid
-       * @default "auto"
+       * Specifies whether or not the UI component uses native scrolling.
        */
       useNative?: boolean | Mode;
     };
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the outer borders of the grid are visible or not.
      */
     showBorders?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to display the Grand Total column.
      */
     showColumnGrandTotals?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to display the Total columns.
      */
     showColumnTotals?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to display the Grand Total row.
      */
     showRowGrandTotals?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to display the Total rows. Applies only if rowHeaderLayout is &apos;standard&apos;.
      */
     showRowTotals?: boolean;
     /**
-     * @docid
-     * @default "none"
-     * @public
+     * Specifies where to show the total rows or columns.
      */
     showTotalsPrior?: PivotGridTotalDisplayMode;
     /**
-     * @docid
-     * @public
+     * A configuration object specifying properties related to state storing.
      */
     stateStoring?: {
       /**
-       * @docid
-       * @type_function_return Promise<Object>
+       * Specifies a function that is executed on state loading. Applies only if the type is &apos;custom&apos;.
        */
       customLoad?: (() => PromiseLike<any>);
       /**
-       * @docid
-       * @type_function_param1 state:object
-       * @type_function_return void
+       * Specifies a function that is executed on state change. Applies only if the type is &apos;custom&apos;.
        */
       customSave?: ((state: any) => any);
       /**
-       * @docid
-       * @default false
+       * Specifies whether or not a grid saves its state.
        */
       enabled?: boolean;
       /**
-       * @docid
-       * @default 2000
+       * Specifies the delay between the last change of a grid state and the operation of saving this state in milliseconds.
        */
       savingTimeout?: number;
       /**
-       * @docid
-       * @default null
+       * Specifies a unique key to be used for storing the grid state.
        */
       storageKey?: string;
       /**
-       * @docid
-       * @default "localStorage"
+       * Specifies the type of storage to be used for state storing.
        */
       type?: StateStoreType;
     };
     /**
-     * @docid
-     * @public
+     * Strings that can be changed or localized in the PivotGrid UI component.
      */
     texts?: {
       /**
-       * @docid
-       * @default 'Collapse All'
+       * The string to display as a Collapse All context menu item.
        */
       collapseAll?: string;
       /**
-       * @docid
-       * @default "N/A"
+       * Specifies text displayed in a cell when its data is unavailable for some reason.
        */
       dataNotAvailable?: string;
       /**
-       * @docid
-       * @default 'Expand All'
+       * The string to display as an Expand All context menu item.
        */
       expandAll?: string;
       /**
-       * @docid
-       * @default "Export to Excel file"
+       * The string to display as an Export to Excel file context menu item.
        */
       exportToExcel?: string;
       /**
-       * @docid
-       * @default 'Grand Total'
+       * The string to display as a header of the Grand Total row and column.
        */
       grandTotal?: string;
       /**
-       * @docid
-       * @default 'No data'
+       * Specifies the text displayed when a pivot grid does not contain any fields.
        */
       noData?: string;
       /**
-       * @docid
-       * @default 'Remove All Sorting'
+       * The string to display as a Remove All Sorting context menu item.
        */
       removeAllSorting?: string;
       /**
-       * @docid
-       * @default 'Show Field Chooser'
+       * The string to display as a Show Field Chooser context menu item.
        */
       showFieldChooser?: string;
       /**
-       * @docid
-       * @default 'Sort {0} by This Column'
+       * The string to display as a Sort Column by Summary Value context menu item.
        */
       sortColumnBySummary?: string;
       /**
-       * @docid
-       * @default 'Sort {0} by This Row'
+       * The string to display as a Sort Row by Summary Value context menu item.
        */
       sortRowBySummary?: string;
       /**
-       * @docid
-       * @default '{0} Total'
+       * The string to display as a header of the Total row and column.
        */
       total?: string;
     };
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether long text in header items should be wrapped.
      */
     wordWrapEnabled?: boolean;
 }
 /**
- * @docid
- * @inherits Widget
- * @namespace DevExpress.ui
- * @public
+ * The PivotGrid is a UI component that allows you to display and analyze multi-dimensional data from a local storage or an OLAP cube.
  */
 export default class dxPivotGrid extends Widget<dxPivotGridOptions> {
     /**
-     * @docid
-     * @publicName bindChart(chart, integrationOptions)
-     * @param1 chart:string|jQuery|object
-     * @param2_field processCell:function(cellData)
-     * @param2_field customizeChart:function(chartOptions)
-     * @param2_field customizeSeries:function(seriesName, seriesOptions)
-     * @public
+     * Binds a Chart to the PivotGrid.
      */
     bindChart(chart: string | DxElement | any, integrationOptions: { inverted?: boolean; dataFieldsDisplayMode?: string; putDataFieldsInto?: string; alternateDataFields?: boolean; processCell?: Function; customizeChart?: Function; customizeSeries?: Function }): Function & null;
     /**
-     * @docid
-     * @publicName getDataSource()
-     * @public
+     * Gets the PivotGridDataSource instance.
      */
     getDataSource(): PivotGridDataSource;
     /**
-     * @docid
-     * @publicName getFieldChooserPopup()
-     * @public
+     * Gets the Popup instance of the field chooser window.
      */
     getFieldChooserPopup(): dxPopup;
     /**
-     * @docid
-     * @publicName updateDimensions()
-     * @public
+     * Updates the UI component to the size of its content.
      */
     updateDimensions(): void;
 }
 
-/**
- * @public
- * @namespace DevExpress.ui.dxPivotGrid
- */
 export type Cell = dxPivotGridPivotGridCell;
 
 /**
- * @namespace DevExpress.ui
  * @deprecated Use Cell instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxPivotGridPivotGridCell {
     /**
-     * @docid
-     * @public
+     * The cell&apos;s column path. Available for data area cells only.
      */
     columnPath?: Array<string | number | Date>;
     /**
-     * @docid
-     * @public
+     * The type of the column to which the cell belongs. Available for data area cells only.
      */
     columnType?: 'D' | 'T' | 'GT';
     /**
-     * @docid
-     * @public
+     * The data field&apos;s index. Available for data area cells only.
      */
     dataIndex?: number;
     /**
-     * @docid
-     * @public
+     * Indicates whether the cell is expanded. Available for row or column area cells only.
      */
     expanded?: boolean;
     /**
-     * @docid
-     * @public
+     * The path to the row/column cell. Available for row or column area cells only.
      */
     path?: Array<string | number | Date>;
     /**
-     * @docid
-     * @public
+     * The cell&apos;s row path. Available for data area cells only.
      */
     rowPath?: Array<string | number | Date>;
     /**
-     * @docid
-     * @public
+     * The type of the row to which the cell belongs. Available for data area cells only.
      */
     rowType?: 'D' | 'T' | 'GT';
     /**
-     * @docid
-     * @public
+     * The text displayed in the cell.
      */
     text?: string;
     /**
-     * @docid
-     * @public
+     * The cell&apos;s type. Available for row or column area cells only.
      */
     type?: 'D' | 'T' | 'GT';
     /**
-     * @docid
-     * @public
+     * The cell&apos;s value.
      */
     value?: any;
 }
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxPivotGridSummaryCell = SummaryCell;
 
-/** @public */
 export type Properties = dxPivotGridOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxPivotGridOptions;
 
 ///#DEBUG

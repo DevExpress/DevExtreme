@@ -29,258 +29,195 @@ export {
 };
 
 /**
- * @docid _ui_pivot_grid_field_chooser_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxPivotGridFieldChooser>;
 
 /**
- * @docid _ui_pivot_grid_field_chooser_ContextMenuPreparingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contextMenuPreparing event handler&apos;s argument.
  */
 export type ContextMenuPreparingEvent = EventInfo<dxPivotGridFieldChooser> & {
-    /** @docid _ui_pivot_grid_field_chooser_ContextMenuPreparingEvent.area */
+    /**
+     * 
+     */
     readonly area?: string;
     /**
-     * @docid _ui_pivot_grid_field_chooser_ContextMenuPreparingEvent.field
-     * @type object
+     * 
      */
     readonly field?: Field;
     /**
-     * @docid _ui_pivot_grid_field_chooser_ContextMenuPreparingEvent.event
-     * @type event
+     * 
      */
     readonly event?: DxEvent;
     /**
-     * @docid _ui_pivot_grid_field_chooser_ContextMenuPreparingEvent.items
-     * @type Array<Object>
+     * 
      */
     items?: Array<any>;
 };
 
 /**
- * @docid _ui_pivot_grid_field_chooser_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxPivotGridFieldChooser>;
 
 /**
- * @docid _ui_pivot_grid_field_chooser_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxPivotGridFieldChooser>;
 
 /**
- * @docid _ui_pivot_grid_field_chooser_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxPivotGridFieldChooser> & ChangedOptionInfo;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGridFieldChooser> {
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the field chooser allows search operations in the &apos;All Fields&apos; section.
      */
     allowSearch?: boolean;
     /**
-     * @docid
-     * @default "instantly"
-     * @public
+     * Specifies when to apply changes made in the UI component to the PivotGrid.
      */
     applyChangesMode?: ApplyChangesMode;
     /**
-     * @docid
-     * @default null
-     * @ref
-     * @public
+     * The data source of a PivotGrid UI component.
      */
     dataSource?: PivotGridDataSource | null;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether HTML tags are displayed as plain text or applied to the values of the header filter.
      */
     encodeHtml?: boolean;
     /**
-     * @docid
-     * @public
+     * Configures the header filter feature.
      */
     headerFilter?: {
       /**
-       * @docid
-       * @default false
-       * @deprecated
+       * Specifies whether searching is enabled in the header filter.
+       * @deprecated Use search.enabled instead.
        */
       allowSearch?: boolean;
       /**
-       * @docid
-       * @default true
+       * Specifies whether a &apos;Select All&apos; option is available to users.
        */
       allowSelectAll?: boolean;
       /**
-       * @docid
-       * @default 325
+       * Specifies the height of the popup menu containing filtering values.
        */
       height?: number;
       /**
-       * @docid
+       * Configures the header filter&apos;s search functionality.
        */
       search?: HeaderFilterSearchConfig;
       /**
-       * @docid
-       * @default 500
-       * @deprecated
+       * Specifies a delay in milliseconds between when a user finishes typing in the header filter&apos;s search panel, and when the search is executed.
+       * @deprecated Use search.timeout instead.
        */
       searchTimeout?: number;
       /**
-       * @docid
-       * @default false
+       * Specifies whether to show all field values or only those that satisfy the other applied filters.
        */
       showRelevantValues?: boolean;
       /**
-       * @docid
+       * Configures the texts of the popup menu&apos;s elements.
        */
       texts?: {
         /**
-         * @docid
-         * @default "Cancel"
+         * Specifies the text of the button that closes the popup menu without applying a filter.
          */
         cancel?: string;
         /**
-         * @docid
-         * @default "(Blanks)"
+         * Specifies the name of the item that represents empty values in the popup menu.
          */
         emptyValue?: string;
         /**
-         * @docid
-         * @default "Ok"
+         * Specifies the text of the button that applies a filter.
          */
         ok?: string;
       };
       /**
-       * @docid
-       * @default 252
+       * Specifies the width of the popup menu containing filtering values.
        */
       width?: number;
     };
     /**
-     * @docid
-     * @default 400
-     * @public
+     * Specifies the UI component&apos;s height.
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid
-     * @default 0
-     * @public
+     * Specifies the field chooser layout.
      */
     layout?: FieldChooserLayout;
     /**
-     * @docid
-     * @type_function_param1 e:{ui/pivot_grid_field_chooser:ContextMenuPreparingEvent}
-     * @default null
-
-     * @action
-     * @public
+     * A function that is executed before the context menu is rendered.
      */
     onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
     /**
-     * @docid
-     * @default 500
-     * @public
+     * Specifies a delay in milliseconds between when a user finishes typing in the field chooser&apos;s search panel, and when the search is executed.
      */
     searchTimeout?: number;
     /**
-     * @docid
-     * @default null
-     * @public
+     * The UI component&apos;s state.
      */
     state?: any;
     /**
-     * @docid
-     * @public
+     * Strings that can be changed or localized in the PivotGridFieldChooser UI component.
      */
     texts?: {
       /**
-       * @docid
-       * @default 'All Fields'
+       * The string to display instead of All Fields.
        */
       allFields?: string;
       /**
-       * @docid
-       * @default 'Column Fields'
+       * The string to display instead of Column Fields.
        */
       columnFields?: string;
       /**
-       * @docid
-       * @default 'Data Fields'
+       * The string to display instead of Data Fields.
        */
       dataFields?: string;
       /**
-       * @docid
-       * @default 'Filter Fields'
+       * The string to display instead of Filter Fields.
        */
       filterFields?: string;
       /**
-       * @docid
-       * @default 'Row Fields'
+       * The string to display instead of Row Fields.
        */
       rowFields?: string;
     };
 }
 /**
- * @docid
- * @inherits Widget
- * @namespace DevExpress.ui
- * @public
+ * A complementary UI component for the PivotGrid that allows you to manage data displayed in the PivotGrid. The field chooser is already integrated in the PivotGrid and can be invoked using the context menu. If you need to continuously display the field chooser near the PivotGrid UI component, use the PivotGridFieldChooser UI component.
  */
 export default class dxPivotGridFieldChooser extends Widget<dxPivotGridFieldChooserOptions> {
     /**
-     * @docid
-     * @publicName applyChanges()
-     * @public
+     * Applies changes made in the UI component to the PivotGrid. Takes effect only if applyChangesMode is &apos;onDemand&apos;.
      */
     applyChanges(): void;
     /**
-     * @docid
-     * @publicName cancelChanges()
-     * @public
+     * Cancels changes made in the UI component without applying them to the PivotGrid. Takes effect only if applyChangesMode is &apos;onDemand&apos;.
      */
     cancelChanges(): void;
     /**
-     * @docid
-     * @publicName getDataSource()
-     * @public
+     * Gets the PivotGridDataSource instance.
      */
     getDataSource(): PivotGridDataSource;
     /**
-     * @docid
-     * @publicName updateDimensions()
-     * @public
+     * Updates the UI component to the size of its content.
      */
     updateDimensions(): void;
 }
 
-/** @public */
 export type Properties = dxPivotGridFieldChooserOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxPivotGridFieldChooserOptions;
 
 ///#DEBUG

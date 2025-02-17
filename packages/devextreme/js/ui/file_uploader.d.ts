@@ -16,578 +16,449 @@ import Editor, {
 
 import UploadInfo from '../file_management/upload_info';
 
-/** @public */
 export type FileUploadMode = 'instantly' | 'useButtons' | 'useForm';
-/** @public */
 export type UploadHttpMethod = 'POST' | 'PUT';
 
 /**
- * @docid _ui_file_uploader_BeforeSendEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the beforeSend event handler&apos;s argument.
  */
 export type BeforeSendEvent = EventInfo<dxFileUploader> & {
-    /** @docid _ui_file_uploader_BeforeSendEvent.request */
+    /**
+     * 
+     */
     readonly request: XMLHttpRequest;
-    /** @docid _ui_file_uploader_BeforeSendEvent.file */
+    /**
+     * 
+     */
     readonly file: File;
-    /** @docid _ui_file_uploader_BeforeSendEvent.uploadInfo */
+    /**
+     * 
+     */
     readonly uploadInfo?: UploadInfo;
 };
 
 /**
- * @docid _ui_file_uploader_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxFileUploader>;
 
 /**
- * @docid _ui_file_uploader_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxFileUploader>;
 
 /**
- * @docid _ui_file_uploader_DropZoneEnterEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the dropZoneEnter event handler&apos;s argument.
  */
 export type DropZoneEnterEvent = NativeEventInfo<dxFileUploader, PointerEvent | MouseEvent> & {
-    /** @docid _ui_file_uploader_DropZoneEnterEvent.dropZoneElement */
+    /**
+     * 
+     */
     readonly dropZoneElement: DxElement;
 };
 
 /**
- * @docid _ui_file_uploader_DropZoneLeaveEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the dropZoneLeave event handler&apos;s argument.
  */
 export type DropZoneLeaveEvent = NativeEventInfo<dxFileUploader, PointerEvent | MouseEvent> & {
-    /** @docid _ui_file_uploader_DropZoneLeaveEvent.dropZoneElement */
+    /**
+     * 
+     */
     readonly dropZoneElement: DxElement;
 };
 
 /**
- * @docid _ui_file_uploader_FilesUploadedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the filesUploaded event handler&apos;s argument.
  */
 export type FilesUploadedEvent = EventInfo<dxFileUploader>;
 
 /**
- * @docid _ui_file_uploader_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxFileUploader>;
 
 /**
- * @docid _ui_file_uploader_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxFileUploader> & ChangedOptionInfo;
 
 /**
- * @docid _ui_file_uploader_ProgressEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the progress event handler&apos;s argument.
  */
 export type ProgressEvent = NativeEventInfo<dxFileUploader> & {
-    /** @docid _ui_file_uploader_ProgressEvent.file */
+    /**
+     * 
+     */
     readonly file: File;
-    /** @docid _ui_file_uploader_ProgressEvent.segmentSize */
+    /**
+     * 
+     */
     readonly segmentSize: number;
-    /** @docid _ui_file_uploader_ProgressEvent.bytesLoaded */
+    /**
+     * 
+     */
     readonly bytesLoaded: number;
-    /** @docid _ui_file_uploader_ProgressEvent.bytesTotal */
+    /**
+     * 
+     */
     readonly bytesTotal: number;
-    /** @docid _ui_file_uploader_ProgressEvent.request */
+    /**
+     * 
+     */
     readonly request: XMLHttpRequest;
 };
 
 /**
- * @docid _ui_file_uploader_UploadAbortedEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the uploadAborted event handler&apos;s argument.
  */
 export type UploadAbortedEvent = NativeEventInfo<dxFileUploader> & {
-    /** @docid _ui_file_uploader_UploadAbortedEvent.file */
+    /**
+     * 
+     */
     readonly file: File;
-    /** @docid _ui_file_uploader_UploadAbortedEvent.request */
+    /**
+     * 
+     */
     readonly request: XMLHttpRequest;
-    /** @docid _ui_file_uploader_UploadAbortedEvent.message */
+    /**
+     * 
+     */
     message: string;
 };
 
 /**
- * @docid _ui_file_uploader_UploadedEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the uploaded event handler&apos;s argument.
  */
 export type UploadedEvent = NativeEventInfo<dxFileUploader> & {
-    /** @docid _ui_file_uploader_UploadedEvent.file */
+    /**
+     * 
+     */
     readonly file: File;
-    /** @docid _ui_file_uploader_UploadedEvent.request */
+    /**
+     * 
+     */
     readonly request: XMLHttpRequest;
-    /** @docid _ui_file_uploader_UploadedEvent.message */
+    /**
+     * 
+     */
     message: string;
 };
 
 /**
- * @docid _ui_file_uploader_UploadErrorEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the uploadError event handler&apos;s argument.
  */
 export type UploadErrorEvent = NativeEventInfo<dxFileUploader> & {
-    /** @docid _ui_file_uploader_UploadErrorEvent.file */
+    /**
+     * 
+     */
     readonly file: File;
-    /** @docid _ui_file_uploader_UploadErrorEvent.request */
+    /**
+     * 
+     */
     readonly request: XMLHttpRequest;
-    /** @docid _ui_file_uploader_UploadErrorEvent.error */
+    /**
+     * 
+     */
     readonly error: any;
-    /** @docid _ui_file_uploader_UploadErrorEvent.message */
+    /**
+     * 
+     */
     message: string;
 };
 
 /**
- * @docid _ui_file_uploader_UploadStartedEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the uploadStarted event handler&apos;s argument.
  */
 export type UploadStartedEvent = NativeEventInfo<dxFileUploader> & {
-    /** @docid _ui_file_uploader_UploadStartedEvent.file */
+    /**
+     * 
+     */
     readonly file: File;
-    /** @docid _ui_file_uploader_UploadStartedEvent.request */
+    /**
+     * 
+     */
     readonly request: XMLHttpRequest;
 };
 
 /**
- * @docid _ui_file_uploader_ValueChangedEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the valueChanged event handler&apos;s argument.
  */
 export type ValueChangedEvent = NativeEventInfo<dxFileUploader> & {
     /**
-     * @docid _ui_file_uploader_ValueChangedEvent.value
-     * @type Array<File>
+     * 
      */
     readonly value?: Array<File>;
     /**
-     * @docid _ui_file_uploader_ValueChangedEvent.previousValue
-     * @type Array<File>
+     * 
      */
     readonly previousValue?: Array<File>;
 };
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
-     * @docid
-     * @type_function_param2 uploadInfo?:UploadInfo
-     * @type_function_return Promise<any>|any
-     * @public
+     * A function that cancels the file upload.
      */
     abortUpload?: ((file: File, uploadInfo?: UploadInfo) => PromiseLike<any> | any);
     /**
-     * @docid
-     * @default ""
-     * @public
+     * Specifies a file type or several types accepted by the UI component.
      */
     accept?: string;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies if an end user can remove a file from the selection and interrupt uploading.
      */
     allowCanceling?: boolean;
     /**
-     * @docid
-     * @default []
-     * @public
+     * Restricts file extensions that can be uploaded to the server.
      */
     allowedFileExtensions?: Array<string>;
     /**
-     * @docid
-     * @default 0
-     * @public
+     * Specifies the chunk size in bytes. Applies only if uploadMode is &apos;instantly&apos; or &apos;useButtons&apos;. Requires a server that can process file chunks.
      */
     chunkSize?: number;
     /**
-     * @docid
-     * @default true &for(desktop)
-     * @public
+     * Specifies whether the UI component can be focused using keyboard navigation.
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the FileUploader component changes the state of all its buttons when users hover over them.
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid
-     * @default "File type is not allowed"
-     * @public
+     * The text displayed when the extension of the file being uploaded is not an allowed file extension.
      */
     invalidFileExtensionMessage?: string;
     /**
-     * @docid
-     * @default "File is too large"
-     * @public
+     * The text displayed when the size of the file being uploaded is greater than the maxFileSize.
      */
     invalidMaxFileSizeMessage?: string;
     /**
-     * @docid
-     * @default "File is too small"
-     * @public
+     * The text displayed when the size of the file being uploaded is less than the minFileSize.
      */
     invalidMinFileSizeMessage?: string;
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Specifies the attributes to be passed on to the underlying `` element of the `file` type.
      */
     inputAttr?: any;
     /**
-     * @docid
-     * @default "or Drop file here"
-     * @default "" &for(InternetExplorer|desktop)
-     * @public
+     * Specifies the text displayed on the area to which an end user can drop a file.
      */
     labelText?: string;
     /**
-     * @docid
-     * @default 0
-     * @public
+     * Specifies the maximum file size (in bytes) allowed for uploading. Applies only if uploadMode is &apos;instantly&apos; or &apos;useButtons&apos;.
      */
     maxFileSize?: number;
     /**
-     * @docid
-     * @default 0
-     * @public
+     * Specifies the minimum file size (in bytes) allowed for uploading. Applies only if uploadMode is &apos;instantly&apos; or &apos;useButtons&apos;.
      */
     minFileSize?: number;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether the UI component enables an end user to select a single file or multiple files.
      */
     multiple?: boolean;
     /**
-     * @docid
-     * @default "files[]"
-     * @public
+     * Specifies the value passed to the name attribute of the underlying input element. Required to access uploaded files on the server.
      */
     name?: string;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/file_uploader:BeforeSendEvent}
-     * @action
-     * @public
+     * A function that allows you to customize the request before it is sent to the server.
      */
     onBeforeSend?: ((e: BeforeSendEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/file_uploader:DropZoneEnterEvent}
-     * @action
-     * @public
+     * A function that is executed when the mouse enters a drop zone while dragging a file.
      */
     onDropZoneEnter?: ((e: DropZoneEnterEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/file_uploader:DropZoneLeaveEvent}
-     * @action
-     * @public
+     * A function that is executed when the mouse leaves a drop zone as it drags a file.
      */
     onDropZoneLeave?: ((e: DropZoneLeaveEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/file_uploader:FilesUploadedEvent}
-     * @action
-     * @public
+     * A function that is executed when the file upload process is complete.
      */
     onFilesUploaded?: ((e: FilesUploadedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/file_uploader:ProgressEvent}
-     * @action
-     * @public
+     * A function that is executed when a file segment is uploaded.
      */
     onProgress?: ((e: ProgressEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/file_uploader:UploadAbortedEvent}
-     * @action
-     * @public
+     * A function that is executed when the file upload is aborted.
      */
     onUploadAborted?: ((e: UploadAbortedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/file_uploader:UploadErrorEvent}
-     * @action
-     * @public
+     * A function that is executed when an error occurs during the file upload.
      */
     onUploadError?: ((e: UploadErrorEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/file_uploader:UploadStartedEvent}
-     * @action
-     * @public
+     * A function that is executed when the file upload is started.
      */
     onUploadStarted?: ((e: UploadStartedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/file_uploader:UploadedEvent}
-     * @action
-     * @public
+     * A function that is executed when a file is successfully uploaded.
      */
     onUploaded?: ((e: UploadedEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/file_uploader:ValueChangedEvent}
-     * @action
-     * @public
+     * A function that is executed when one or several files are added to or removed from the selection.
      */
     onValueChanged?: ((e: ValueChangedEvent) => void);
     /**
-     * @docid
-     * @default 0
-     * @public
+     * Gets the current progress in percentages.
      */
     progress?: number;
     /**
-     * @docid
-     * @default "Ready to upload"
-     * @public
+     * The message displayed by the UI component when it is ready to upload the specified files.
      */
     readyToUploadMessage?: string;
     /**
-     * @docid
-     * @default "Select File"
-     * @public
+     * The text displayed on the button that opens the file browser.
      */
     selectButtonText?: string;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not the UI component displays the list of selected files.
      */
     showFileList?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the HTML element which invokes the file upload dialog.
      */
     dialogTrigger?: string | UserDefinedElement | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the HTML element in which users can drag and drop files for upload.
      */
     dropZone?: string | UserDefinedElement | undefined;
     /**
-     * @docid
-     * @default "Upload"
-     * @public
+     * The text displayed on the button that starts uploading.
      */
     uploadButtonText?: string;
     /**
-     * @docid
-     * @type_function_return Promise<any>|any
-     * @public
+     * A function that uploads a file in chunks.
      */
     uploadChunk?: ((file: File, uploadInfo: UploadInfo) => PromiseLike<any> | any);
     /**
-     * @docid
-     * @default "Upload failed"
-     * @public
+     * The message displayed by the UI component on uploading failure.
      */
     uploadFailedMessage?: string;
     /**
-     * @docid
-     * @default "Upload cancelled"
-     * @public
+     * The message displayed by the UI component when the file upload is cancelled.
      */
     uploadAbortedMessage?: string;
     /**
-     * @docid
-     * @type_function_return Promise<any>|any
-     * @public
+     * A function that uploads a file.
      */
     uploadFile?: ((file: File, progressCallback: Function) => PromiseLike<any> | any);
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Specifies headers for the upload request.
      */
     uploadHeaders?: any;
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Specifies custom data for the upload request.
      */
     uploadCustomData?: any;
     /**
-     * @docid
-     * @default "POST"
-     * @public
+     * Specifies the method for the upload request.
      */
     uploadMethod?: UploadHttpMethod;
     /**
-     * @docid
-     * @default "instantly"
-     * @public
+     * Specifies how the UI component uploads files.
      */
     uploadMode?: FileUploadMode;
     /**
-     * @docid
-     * @default "/"
-     * @public
+     * Specifies a target Url for the upload request.
      */
     uploadUrl?: string;
     /**
-     * @docid
-     * @default "Uploaded"
-     * @public
+     * The message displayed by the UI component when uploading is finished.
      */
     uploadedMessage?: string;
     /**
-     * @docid
-     * @default []
-     * @public
+     * Specifies a File instance representing the selected file. Read-only when uploadMode is &apos;useForm&apos;.
      */
     value?: Array<File>;
 }
 /**
- * @docid
- * @inherits Editor
- * @namespace DevExpress.ui
- * @public
+ * The FileUploader UI component enables an end user to upload files to the server. An end user can select files in the file explorer or drag and drop files to the FileUploader area on the page.
  */
 export default class dxFileUploader extends Editor<dxFileUploaderOptions> {
     /**
-     * @docid
-     * @publicName upload()
-     * @public
+     * Uploads all the selected files.
      */
     upload(): void;
     /**
-     * @docid
-     * @publicName upload(fileIndex)
-     * @public
+     * Uploads a file with the specified index.
      */
     upload(fileIndex: number): void;
     /**
-     * @docid
-     * @publicName upload(file)
-     * @public
+     * Uploads the specified file.
      */
     upload(file: File): void;
     /**
-     * @docid
-     * @publicName abortUpload()
-     * @public
+     * Cancels the file upload.
      */
     abortUpload(): void;
     /**
-     * @docid
-     * @publicName abortUpload(fileIndex)
-     * @public
+     * Cancels the file upload.
      */
     abortUpload(fileIndex: number): void;
     /**
-     * @docid
-     * @publicName abortUpload(file)
-     * @public
+     * Cancels the file upload.
      */
     abortUpload(file: File): void;
     /**
-     * @docid
-     * @publicName removeFile(fileIndex)
-     * @public
+     * Removes a file with the specified index.
      */
     removeFile(fileIndex: number): void;
     /**
-     * @docid
-     * @publicName removeFile(file)
-     * @public
+     * Removes a file.
      */
     removeFile(file: File): void;
     /**
-     * @docid
-     * @publicName reset(value)
-     * @public
+     * Resets the value property to the value passed as an argument.
      */
     reset(value?: Array<File>): void;
 }
 
-/** @public */
 export type Properties = dxFileUploaderOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxFileUploaderOptions;
 
 ///#DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onBeforeSend' | 'onDropZoneEnter' | 'onDropZoneLeave' | 'onFilesUploaded' | 'onProgress' | 'onUploadAborted' | 'onUploaded' | 'onUploadError' | 'onUploadStarted' | 'onValueChanged'>;
 
 /**
-* @hidden
-*/
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Events = {
 /**
- * @docid dxFileUploaderOptions.onContentReady
- * @type_function_param1 e:{ui/file_uploader:ContentReadyEvent}
+ * A function that is executed when the UI component is rendered and each time the component is repainted.
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @docid dxFileUploaderOptions.onDisposing
- * @type_function_param1 e:{ui/file_uploader:DisposingEvent}
+ * A function that is executed before the UI component is disposed of.
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @docid dxFileUploaderOptions.onInitialized
- * @type_function_param1 e:{ui/file_uploader:InitializedEvent}
+ * A function used in JavaScript frameworks to save the UI component instance.
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @docid dxFileUploaderOptions.onOptionChanged
- * @type_function_param1 e:{ui/file_uploader:OptionChangedEvent}
+ * A function that is executed after a UI component property is changed.
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };

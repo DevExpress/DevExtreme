@@ -38,291 +38,191 @@ export {
 type ItemLike = string | Item | any;
 
 /**
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface TabPanelItemInfo<TItem extends ItemLike> {
     /**
-     * @docid
-     * @type object
+     * 
      */
     readonly itemData?: TItem;
-    /** @docid */
+    /**
+     * 
+     */
     readonly itemElement?: DxElement;
 }
 
 /**
- * @docid _ui_tab_panel_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>>;
 
 /**
- * @docid _ui_tab_panel_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>>;
 
 /**
- * @docid _ui_tab_panel_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxTabPanel<TItem, TKey>>;
 
 /**
- * @docid _ui_tab_panel_ItemClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ItemInfo
+ * The type of the itemClick event handler&apos;s argument.
  */
 export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_tab_panel_ItemContextMenuEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ItemInfo
+ * The type of the itemContextMenu event handler&apos;s argument.
  */
 export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_tab_panel_ItemHoldEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ItemInfo
+ * The type of the itemHold event handler&apos;s argument.
  */
 export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_tab_panel_ItemRenderedEvent
- * @public
- * @type object
- * @inherits EventInfo,ItemInfo
+ * The type of the itemRendered event handler&apos;s argument.
  */
 export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & ItemInfo<TItem>;
 
 /**
- * @docid _ui_tab_panel_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & ChangedOptionInfo;
 
 /**
- * @docid _ui_tab_panel_SelectionChangingEvent
- * @public
- * @type object
- * @inherits AsyncCancelable,EventInfo,SelectionChangeInfo
+ * The type of the selectionChanging event handler&apos;s argument.
  */
 export type SelectionChangingEvent<TItem extends ItemLike = any, TKey = any> = SelectionChangingEventBase<dxTabPanel<TItem, TKey>>;
 
 /**
- * @docid _ui_tab_panel_SelectionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,SelectionChangeInfo
+ * The type of the selectionChanged event handler&apos;s argument.
  */
 export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & SelectionChangeInfo<TItem>;
 
 /**
- * @docid _ui_tab_panel_TitleClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,TabPanelItemInfo
+ * The type of the titleClick event handler&apos;s argument.
  */
 export type TitleClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & TabPanelItemInfo<TItem>;
 
 /**
- * @docid _ui_tab_panel_TitleHoldEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,TabPanelItemInfo
+ * The type of the titleHold event handler&apos;s argument.
  */
 export type TitleHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & TabPanelItemInfo<TItem>;
 
 /**
- * @docid _ui_tab_panel_TitleRenderedEvent
- * @public
- * @type object
- * @inherits EventInfo,TabPanelItemInfo
+ * The type of the titleRendered event handler&apos;s argument.
  */
 export type TitleRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & TabPanelItemInfo<TItem>;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @public
- * @docid
+ * 
+ * @deprecated 
  */
 export interface dxTabPanelOptions<
     TItem extends ItemLike = any,
     TKey = any,
 > extends dxMultiViewBaseOptions<dxTabPanel<TItem, TKey>, TItem, TKey> {
     /**
-     * @docid
-     * @default false
-     * @default true &for(Android|iOS)
-     * @public
+     * Specifies whether or not to animate the displayed item change.
      */
     animationEnabled?: boolean;
     /**
-     * @docid
-     * @type string | Array<string | dxTabPanelItem | any> | Store | DataSource | DataSourceOptions | null
-     * @default null
-     * @public
+     * Binds the UI component to data.
      */
     dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the UI component changes its state when a user pauses on it.
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid
-     * @default "title"
-     * @type_function_param1 itemData:object
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies a custom template for item titles.
      */
     itemTitleTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default 'start'
-     * @default 'top' &for(Material)
-     * @default 'top' &for(Fluent)
-     * @public
+     * Specifies icon position relative to the text inside the tab.
      */
     iconPosition?: TabsIconPosition;
     /**
-     * @docid
-     * @type Array<string | dxTabPanelItem | any>
-     * @fires dxTabPanelOptions.onOptionChanged
-     * @public
+     * An array of items displayed by the UI component.
      */
     items?: Array<TItem>;
     /**
-     * @docid
-     * @default null
-     * @type function
-     * @type_function_param1 e:{ui/tab_panel:TitleClickEvent}
-     * @action
-     * @public
+     * A function that is executed when a tab is clicked or tapped.
      */
     onTitleClick?: ((e: TitleClickEvent<TItem, TKey>) => void) | string;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/tab_panel:TitleHoldEvent}
-     * @action
-     * @public
+     * A function that is executed when a tab has been held for a specified period.
      */
     onTitleHold?: ((e: TitleHoldEvent<TItem, TKey>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/tab_panel:TitleRenderedEvent}
-     * @action
-     * @public
+     * A function that is executed after a tab is rendered.
      */
     onTitleRendered?: ((e: TitleRenderedEvent<TItem, TKey>) => void);
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether to repaint only those elements whose data changed.
      */
     repaintChangesOnly?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * A Boolean value specifying if tabs in the title are scrolled by content.
      */
     scrollByContent?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * A Boolean indicating whether or not to add scrolling support for tabs in the title.
      */
     scrollingEnabled?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether navigation buttons should be available when tabs exceed the UI component&apos;s width.
      */
     showNavButtons?: boolean;
     /**
-     * @docid
-     * @default 'primary'
-     * @default 'secondary' &for(Fluent)
-     * @public
+     * Specifies the styling mode for the active tab.
      */
     stylingMode?: TabsStyle;
     /**
-     * @docid
-     * @default false &for(non-touch_devices)
-     * @public
+     * A Boolean value specifying whether or not to allow users to change the selected index by swiping.
      */
     swipeEnabled?: boolean;
     /**
-     * @docid
-     * @default 'top'
-     * @public
+     * Specifies tab position relative to the panel.
      */
     tabsPosition?: Position;
 }
 /**
- * @docid
- * @inherits dxMultiView
- * @namespace DevExpress.ui
- * @public
+ * The TabPanel is a UI component consisting of the Tabs and MultiView UI components. It automatically synchronizes the selected tab with the currently displayed view, and vice versa.
  */
 export default class dxTabPanel<
     TItem extends ItemLike = any,
     TKey = any,
 > extends CollectionWidget<Properties<TItem, TKey>, TItem, TKey> { }
 
-/**
- * @public
- * @namespace DevExpress.ui.dxTabPanel
- */
 export type Item = dxTabPanelItem;
 
 /**
  * @deprecated Use Item instead
- * @namespace DevExpress.ui
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxTabPanelItem extends dxMultiViewItem {
     /**
-     * @docid
-     * @public
+     * Specifies a badge text for the tab.
      */
     badge?: string;
     /**
-     * @docid
-     * @public
+     * Specifies the icon to be displayed in the tab&apos;s title.
      */
     icon?: string;
     /**
-     * @docid
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies a template that should be used to render the tab for this item only.
      */
     tabTemplate?: template | (() => string | UserDefinedElement);
     /**
-     * @docid
-     * @public
+     * Specifies the item title text displayed on a corresponding tab.
      */
     title?: string;
 }
 
-/** @public */
 export type ExplicitTypes<
     TItem extends ItemLike,
     TKey,
@@ -343,13 +243,15 @@ export type ExplicitTypes<
     TitleRenderedEvent: TitleRenderedEvent<TItem, TKey>;
 };
 
-/** @public */
 export type Properties<
     TItem extends ItemLike = any,
     TKey = any,
 > = dxTabPanelOptions<TItem, TKey>;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options<
     TItem extends ItemLike = any,
     TKey = any,

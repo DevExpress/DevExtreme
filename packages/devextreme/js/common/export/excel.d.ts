@@ -9,129 +9,76 @@ import {
     ExcelPivotGridCell,
 } from '../../excel_exporter.types';
 
-/**
- * @public
- * @namespace DevExpress.common.Export.excel
- */
 export type DataGridCell = ExcelDataGridCell;
 
-/**
- * @public
- * @namespace DevExpress.common.Export.excel
- */
 export type PivotGridCell = ExcelPivotGridCell;
 
 /**
- * @docid ExcelExportDataGridProps
- * @public
- * @namespace DevExpress.common.Export.excel
- * @inherits ExcelExportBaseOptions
- * @type object
+ * Properties that can be passed to the exportDataGrid(options) method from the excelExporter module.
  */
 export type DataGridExportOptions = ExcelExportBaseOptions & {
     /**
-     * @docid ExcelExportDataGridProps.component
-     * @default undefined
-     * @public
+     * A DataGrid instance. This setting is required.
      */
     component?: dxDataGrid | undefined;
     /**
-     * @docid ExcelExportDataGridProps.selectedRowsOnly
-     * @default false
-     * @public
+     * Specifies whether to export only selected rows.
      */
     selectedRowsOnly?: boolean;
     /**
-     * @docid ExcelExportDataGridProps.autoFilterEnabled
-     * @default false
-     * @public
+     * Specifies whether to enable Excel filtering in the document.
      */
     autoFilterEnabled?: boolean;
     /**
-     * @docid ExcelExportDataGridProps.customizeCell
-     * @type_function_param1_field gridCell:ExcelDataGridCell
-     * @type_function_param1_field excelCell:Object
-     * @public
+     * Customizes an Excel cell after creation.
      */
     customizeCell?: ((options: { gridCell?: DataGridCell; excelCell?: any }) => void);
 };
 
 /**
- * @docid
- * @public
- * @namespace DevExpress.common.Export.excel
- * @inherits ExcelExportBaseOptions
- * @type object
+ * Properties that can be passed to the exportPivotGrid(options) method from the excelExporter module.
  */
 export type PivotGridExportOptions = ExcelExportBaseOptions & {
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * A PivotGrid instance. This setting is required.
      */
     component?: dxPivotGrid | undefined;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to merge neighbouring cells in the row field if they have the same values.
      */
     mergeRowFieldValues?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to merge neighbouring cells in the column field if they have the same values.
      */
     mergeColumnFieldValues?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether to export headers of the filter fields on the field panel.
      */
     exportFilterFieldHeaders?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether to export headers of the data fields on the field panel.
      */
     exportDataFieldHeaders?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether to export headers of the column fields on the field panel.
      */
     exportColumnFieldHeaders?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether to export headers of the row fields on the field panel.
      */
     exportRowFieldHeaders?: boolean;
     /**
-     * @docid
-     * @type_function_param1_field pivotCell:ExcelPivotGridCell
-     * @type_function_param1_field excelCell:Object
-     * @public
+     * Customizes an Excel cell after creation.
      */
     customizeCell?: ((options: { pivotCell?: PivotGridCell; excelCell?: any }) => void);
 };
 
 /**
- * @docid excelExporter.exportDataGrid
- * @publicName exportDataGrid(options)
- * @param1 options:ExcelExportDataGridProps
- * @return Promise<CellRange>
- * @namespace DevExpress.common.Export.excel
- * @static
- * @public
+ * Exports grid data to Excel.
  */
 export function exportDataGrid(options: DataGridExportOptions): DxPromise<CellRange>;
 
 /**
- * @docid excelExporter.exportPivotGrid
- * @publicName exportPivotGrid(options)
- * @return Promise<CellRange>
- * @namespace DevExpress.common.Export.excel
- * @static
- * @public
+ * Exports pivot grid data to Excel.
  */
 export function exportPivotGrid(options: PivotGridExportOptions): DxPromise<CellRange>;

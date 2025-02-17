@@ -68,39 +68,52 @@ import dxScrollable from './scroll_view/ui.scrollable';
 import Widget from './widget/ui.widget';
 
 /**
- * @docid
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface CellInfo<TRowData = any, TKey = any> {
     /**
-     * @docid
-     * @type object
+     * 
      */
     readonly data: TRowData;
-    /** @docid */
+    /**
+     * 
+     */
     readonly key: TKey;
-    /** @docid */
+    /**
+     * 
+     */
     readonly value?: any;
-    /** @docid */
+    /**
+     * 
+     */
     readonly displayValue?: any;
-    /** @docid */
+    /**
+     * 
+     */
     readonly text: string;
-    /** @docid */
+    /**
+     * 
+     */
     readonly columnIndex: number;
     /**
-     * @docid
-     * @type dxTreeListColumn
+     * 
      */
     readonly column: Column<TRowData, TKey>;
-    /** @docid */
+    /**
+     * 
+     */
     readonly rowIndex: number;
-    /** @docid */
+    /**
+     * 
+     */
     readonly rowType: string;
-    /** @docid */
+    /**
+     * 
+     */
     readonly cellElement: DxElement;
     /**
-     * @docid
-     * @type dxTreeListRowObject
+     * 
      */
     readonly row: Row<TRowData, TKey>;
 }
@@ -165,670 +178,635 @@ export {
     ToolbarItemLocation,
 };
 
-/** @public */
 export type TreeListPredefinedColumnButton = 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
-/** @public */
 export type TreeListPredefinedToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
-/** @public */
 export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
-/** @public */
 export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
 
-/** @public */
 export type Scrollable = Omit<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;
 
 /**
- * @docid _ui_tree_list_AdaptiveDetailRowPreparingEvent
- * @public
- * @type object
- * @inherits EventInfo,AdaptiveDetailRowPreparingInfo
+ * The type of the adaptiveDetailRowPreparing event handler&apos;s argument.
  */
 export type AdaptiveDetailRowPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & AdaptiveDetailRowPreparingInfo;
 
 /**
- * @docid _ui_tree_list_CellClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,CellInfo
+ * The type of the cellClick event handler&apos;s argument.
  */
 export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & CellInfo<TRowData, TKey>;
 
 /**
- * @docid _ui_tree_list_CellDblClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,CellInfo
+ * The type of the cellDblClick event handler&apos;s argument.
  */
 export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & CellInfo<TRowData, TKey>;
 
 /**
- * @docid _ui_tree_list_CellHoverChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,CellInfo
+ * The type of the cellHoverChanged event handler&apos;s argument.
  */
 export type CellHoverChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey> & {
-    /** @docid _ui_tree_list_CellHoverChangedEvent.eventType */
+    /**
+     * 
+     */
     readonly eventType: string;
 };
 
 /**
- * @docid _ui_tree_list_CellPreparedEvent
- * @public
- * @type object
- * @inherits EventInfo,CellInfo
+ * The type of the cellPrepared event handler&apos;s argument.
  */
 export type CellPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey> & {
-    /** @docid _ui_tree_list_CellPreparedEvent.isSelected */
+    /**
+     * 
+     */
     readonly isSelected?: boolean;
-    /** @docid _ui_tree_list_CellPreparedEvent.isExpanded */
+    /**
+     * 
+     */
     readonly isExpanded?: boolean;
-    /** @docid _ui_tree_list_CellPreparedEvent.isNewRow */
+    /**
+     * 
+     */
     readonly isNewRow?: boolean;
-    /** @docid _ui_tree_list_CellPreparedEvent.watch */
+    /**
+     * 
+     */
     readonly watch?: Function;
-    /** @docid _ui_tree_list_CellPreparedEvent.oldValue */
+    /**
+     * 
+     */
     readonly oldValue?: any;
 };
 
 /**
- * @docid _ui_tree_list_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>>;
 
 /**
- * @docid _ui_tree_list_ContextMenuPreparingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contextMenuPreparing event handler&apos;s argument.
  */
 export type ContextMenuPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
     /**
-     * @docid _ui_tree_list_ContextMenuPreparingEvent.items
-     * @type Array<Object>
+     * 
      */
     items?: Array<any>;
-    /** @docid _ui_tree_list_ContextMenuPreparingEvent.target */
+    /**
+     * 
+     */
     readonly target: string;
-    /** @docid _ui_tree_list_ContextMenuPreparingEvent.targetElement */
+    /**
+     * 
+     */
     readonly targetElement: DxElement;
-    /** @docid _ui_tree_list_ContextMenuPreparingEvent.columnIndex */
+    /**
+     * 
+     */
     readonly columnIndex: number;
     /**
-     * @docid _ui_tree_list_ContextMenuPreparingEvent.column
-     * @type dxTreeListColumn
+     * 
      */
     readonly column?: Column<TRowData, TKey>;
-    /** @docid _ui_tree_list_ContextMenuPreparingEvent.rowIndex */
+    /**
+     * 
+     */
     readonly rowIndex: number;
     /**
-     * @docid _ui_tree_list_ContextMenuPreparingEvent.row
-     * @type dxTreeListRowObject
+     * 
      */
     readonly row?: Row<TRowData, TKey>;
 };
 
 /**
- * @docid _ui_tree_list_DataErrorOccurredEvent
- * @public
- * @type object
- * @inherits EventInfo,DataErrorOccurredInfo
+ * The type of the dataErrorOccurred event handler&apos;s argument.
  */
 export type DataErrorOccurredEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & DataErrorOccurredInfo;
 
 /**
- * @docid _ui_tree_list_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>>;
 
 /**
- * @docid _ui_tree_list_EditCanceledEvent
- * @public
- * @type object
- * @inherits EventInfo,DataChangeInfo
+ * The type of the editCanceled event handler&apos;s argument.
  */
 export type EditCanceledEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
 
 /**
- * @docid _ui_tree_list_EditCancelingEvent
- * @public
- * @type object
- * @inherits Cancelable,EventInfo,DataChangeInfo
+ * The type of the editCanceling event handler&apos;s argument.
  */
 export type EditCancelingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
 
 /**
- * @docid _ui_tree_list_EditingStartEvent
- * @public
- * @type object
- * @inherits Cancelable,EventInfo
+ * The type of the editingStart event handler&apos;s argument.
  */
 export type EditingStartEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & {
     /**
-     * @docid _ui_tree_list_EditingStartEvent.data
-     * @type object
+     * 
      */
     readonly data: TRowData;
     /**
-     * @docid _ui_tree_list_EditingStartEvent.key
-     * @type any
+     * 
      */
     readonly key: TKey;
     /**
-     * @docid _ui_tree_list_EditingStartEvent.column
-     * @type object
+     * 
      */
     readonly column: Column<TRowData, TKey>;
 };
 
 /**
- * @docid _ui_tree_list_EditorPreparedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the editorPrepared event handler&apos;s argument.
  */
 export type EditorPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
-    /** @docid _ui_tree_list_EditorPreparedEvent.parentType */
+    /**
+     * 
+     */
     readonly parentType: string;
-    /** @docid _ui_tree_list_EditorPreparedEvent.value */
+    /**
+     * 
+     */
     readonly value?: any;
-    /** @docid _ui_tree_list_EditorPreparedEvent.setValue */
+    /**
+     * 
+     */
     readonly setValue?: any;
-    /** @docid _ui_tree_list_EditorPreparedEvent.updateValueTimeout */
+    /**
+     * 
+     */
     readonly updateValueTimeout?: number;
-    /** @docid _ui_tree_list_EditorPreparedEvent.width */
+    /**
+     * 
+     */
     readonly width?: number;
-    /** @docid _ui_tree_list_EditorPreparedEvent.disabled */
+    /**
+     * 
+     */
     readonly disabled: boolean;
-    /** @docid _ui_tree_list_EditorPreparedEvent.rtlEnabled */
+    /**
+     * 
+     */
     readonly rtlEnabled: boolean;
-    /** @docid _ui_tree_list_EditorPreparedEvent.editorElement */
+    /**
+     * 
+     */
     readonly editorElement: DxElement;
-    /** @docid _ui_tree_list_EditorPreparedEvent.readOnly */
+    /**
+     * 
+     */
     readonly readOnly: boolean;
-    /** @docid _ui_tree_list_EditorPreparedEvent.dataField */
+    /**
+     * 
+     */
     readonly dataField?: string;
     /**
-     * @docid _ui_tree_list_EditorPreparedEvent.row
-     * @type dxTreeListRowObject
+     * 
      */
     readonly row?: Row<TRowData, TKey>;
 };
 
 /**
- * @docid _ui_tree_list_EditorPreparingEvent
- * @public
- * @type object
- * @inherits Cancelable,EventInfo
+ * The type of the editorPreparing event handler&apos;s argument.
  */
 export type EditorPreparingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & {
-    /** @docid _ui_tree_list_EditorPreparingEvent.parentType */
+    /**
+     * 
+     */
     readonly parentType: string;
-    /** @docid _ui_tree_list_EditorPreparingEvent.value */
+    /**
+     * 
+     */
     readonly value?: any;
-    /** @docid _ui_tree_list_EditorPreparingEvent.setValue */
+    /**
+     * 
+     */
     readonly setValue?: any;
-    /** @docid _ui_tree_list_EditorPreparingEvent.updateValueTimeout */
+    /**
+     * 
+     */
     updateValueTimeout?: number;
-    /** @docid _ui_tree_list_EditorPreparingEvent.width */
+    /**
+     * 
+     */
     readonly width?: number;
-    /** @docid _ui_tree_list_EditorPreparingEvent.disabled */
+    /**
+     * 
+     */
     readonly disabled: boolean;
-    /** @docid _ui_tree_list_EditorPreparingEvent.rtlEnabled */
+    /**
+     * 
+     */
     readonly rtlEnabled: boolean;
-    /** @docid _ui_tree_list_EditorPreparingEvent.editorElement */
+    /**
+     * 
+     */
     readonly editorElement: DxElement;
-    /** @docid _ui_tree_list_EditorPreparingEvent.readOnly */
+    /**
+     * 
+     */
     readonly readOnly: boolean;
-    /** @docid _ui_tree_list_EditorPreparingEvent.editorName */
+    /**
+     * 
+     */
     editorName: string;
     /**
-     * @docid _ui_tree_list_EditorPreparingEvent.editorOptions
-     * @type object
+     * 
      */
     editorOptions: any;
-    /** @docid _ui_tree_list_EditorPreparingEvent.dataField */
+    /**
+     * 
+     */
     readonly dataField?: string;
     /**
-     * @docid _ui_tree_list_EditorPreparingEvent.row
-     * @type dxTreeListRowObject
+     * 
      */
     readonly row?: Row<TRowData, TKey>;
 };
 
 /**
- * @docid _ui_tree_list_FocusedCellChangedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the focusedCellChanged event handler&apos;s argument.
  */
 export type FocusedCellChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
-    /** @docid _ui_tree_list_FocusedCellChangedEvent.cellElement */
+    /**
+     * 
+     */
     readonly cellElement: DxElement;
-    /** @docid _ui_tree_list_FocusedCellChangedEvent.columnIndex */
+    /**
+     * 
+     */
     readonly columnIndex: number;
-    /** @docid _ui_tree_list_FocusedCellChangedEvent.rowIndex */
+    /**
+     * 
+     */
     readonly rowIndex: number;
     /**
-     * @docid _ui_tree_list_FocusedCellChangedEvent.row
-     * @type dxTreeListRowObject
+     * 
      */
     readonly row: Row<TRowData, TKey>;
     /**
-     * @docid _ui_tree_list_FocusedCellChangedEvent.column
-     * @type dxTreeListColumn
+     * 
      */
     readonly column: Column<TRowData, TKey>;
 };
 
 /**
- * @docid _ui_tree_list_FocusedCellChangingEvent
- * @public
- * @type object
- * @inherits Cancelable,NativeEventInfo
+ * The type of the focusedCellChanging event handler&apos;s argument.
  */
 export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
-    /** @docid _ui_tree_list_FocusedCellChangingEvent.cellElement */
+    /**
+     * 
+     */
     readonly cellElement: DxElement;
-    /** @docid _ui_tree_list_FocusedCellChangingEvent.prevColumnIndex */
+    /**
+     * 
+     */
     readonly prevColumnIndex: number;
-    /** @docid _ui_tree_list_FocusedCellChangingEvent.prevRowIndex */
+    /**
+     * 
+     */
     readonly prevRowIndex: number;
-    /** @docid _ui_tree_list_FocusedCellChangingEvent.newColumnIndex */
+    /**
+     * 
+     */
     newColumnIndex: number;
-    /** @docid _ui_tree_list_FocusedCellChangingEvent.newRowIndex */
+    /**
+     * 
+     */
     newRowIndex: number;
     /**
-     * @docid _ui_tree_list_FocusedCellChangingEvent.rows
-     * @type Array<dxTreeListRowObject>
+     * 
      */
     readonly rows: Array<Row<TRowData, TKey>>;
     /**
-     * @docid _ui_tree_list_FocusedCellChangingEvent.columns
-     * @type Array<dxTreeListColumn>
+     * 
      */
     readonly columns: Array<Column<TRowData, TKey>>;
-    /** @docid _ui_tree_list_FocusedCellChangingEvent.isHighlighted */
+    /**
+     * 
+     */
     isHighlighted: boolean;
 };
 
 /**
- * @docid _ui_tree_list_FocusedRowChangedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the focusedRowChanged event handler&apos;s argument.
  */
 export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
-    /** @docid _ui_tree_list_FocusedRowChangedEvent.rowElement */
+    /**
+     * 
+     */
     readonly rowElement: DxElement;
-    /** @docid _ui_tree_list_FocusedRowChangedEvent.rowIndex */
+    /**
+     * 
+     */
     readonly rowIndex: number;
     /**
-     * @docid _ui_tree_list_FocusedRowChangedEvent.row
-     * @type dxTreeListRowObject
+     * 
      */
     readonly row: Row<TRowData, TKey>;
 };
 
 /**
- * @docid _ui_tree_list_FocusedRowChangingEvent
- * @public
- * @type object
- * @inherits Cancelable,NativeEventInfo
+ * The type of the focusedRowChanging event handler&apos;s argument.
  */
 export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
-    /** @docid _ui_tree_list_FocusedRowChangingEvent.rowElement */
+    /**
+     * 
+     */
     readonly rowElement: DxElement;
-    /** @docid _ui_tree_list_FocusedRowChangingEvent.prevRowIndex */
+    /**
+     * 
+     */
     readonly prevRowIndex: number;
-    /** @docid _ui_tree_list_FocusedRowChangingEvent.newRowIndex */
+    /**
+     * 
+     */
     newRowIndex: number;
     /**
-     * @docid _ui_tree_list_FocusedRowChangingEvent.rows
-     * @type Array<dxTreeListRowObject>
+     * 
      */
     readonly rows: Array<Row<TRowData, TKey>>;
 };
 
 /**
- * @docid _ui_tree_list_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent<TRowData = any, TKey = any> = InitializedEventInfo<dxTreeList<TRowData, TKey>>;
 
 /**
- * @docid _ui_tree_list_InitNewRowEvent
- * @public
- * @type object
- * @inherits EventInfo,NewRowInfo
+ * The type of the initNewRow event handler&apos;s argument.
  */
 export type InitNewRowEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & NewRowInfo<TRowData>;
 
 /**
- * @docid _ui_tree_list_KeyDownEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,KeyDownInfo
+ * The type of the keyDown event handler&apos;s argument.
  */
 export type KeyDownEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent> & KeyDownInfo;
 
 /**
- * @docid _ui_tree_list_NodesInitializedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the nodesInitialized event handler&apos;s argument.
  */
 export type NodesInitializedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
     /**
-     * @docid _ui_tree_list_NodesInitializedEvent.root
-     * @type dxTreeListNode
+     * 
      */
     readonly root: Node<TRowData, TKey>;
 };
 
 /**
- * @docid _ui_tree_list_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & ChangedOptionInfo;
 
 /**
- * @docid _ui_tree_list_RowClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the rowClick event handler&apos;s argument.
  */
 export type RowClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & {
     /**
-     * @docid _ui_tree_list_RowClickEvent.data
-     * @type object
+     * 
      */
     readonly data: TRowData;
     /**
-     * @docid _ui_tree_list_RowClickEvent.key
-     * @type any
+     * 
      */
     readonly key: TKey;
     /**
-     * @docid _ui_tree_list_RowClickEvent.values
-     * @type Array<any>
+     * 
      */
     readonly values: Array<any>;
     /**
-     * @docid _ui_tree_list_RowClickEvent.columns
-     * @type Array<Object>
+     * 
      */
     readonly columns: Array<Column<TRowData, TKey>>;
-    /** @docid _ui_tree_list_RowClickEvent.rowIndex */
+    /**
+     * 
+     */
     readonly rowIndex: number;
-    /** @docid _ui_tree_list_RowClickEvent.rowType */
+    /**
+     * 
+     */
     readonly rowType: string;
-    /** @docid _ui_tree_list_RowClickEvent.isSelected */
+    /**
+     * 
+     */
     readonly isSelected?: boolean;
-    /** @docid _ui_tree_list_RowClickEvent.isExpanded */
+    /**
+     * 
+     */
     readonly isExpanded?: boolean;
-    /** @docid _ui_tree_list_RowClickEvent.isNewRow */
+    /**
+     * 
+     */
     readonly isNewRow?: boolean;
-    /** @docid _ui_tree_list_RowClickEvent.rowElement */
+    /**
+     * 
+     */
     readonly rowElement: DxElement;
-    /** @docid _ui_tree_list_RowClickEvent.handled */
+    /**
+     * 
+     */
     readonly handled: boolean;
     /**
-     * @docid _ui_tree_list_RowClickEvent.node
-     * @type dxTreeListNode
+     * 
      */
     readonly node: Node<TRowData, TKey>;
-    /** @docid _ui_tree_list_RowClickEvent.level */
+    /**
+     * 
+     */
     readonly level: number;
 };
 
 /**
- * @docid _ui_tree_list_RowCollapsedEvent
- * @public
- * @type object
- * @inherits EventInfo,RowKeyInfo
+ * The type of the rowCollapsed event handler&apos;s argument.
  */
 export type RowCollapsedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /**
- * @docid _ui_tree_list_RowCollapsingEvent
- * @public
- * @type object
- * @inherits Cancelable,EventInfo,RowKeyInfo
+ * The type of the rowCollapsing event handler&apos;s argument.
  */
 export type RowCollapsingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /**
- * @docid _ui_tree_list_RowDblClickEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the rowDblClick event handler&apos;s argument.
  */
 export type RowDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & {
     /**
-     * @docid _ui_tree_list_RowDblClickEvent.data
-     * @type object
+     * 
      */
     readonly data: TRowData;
     /**
-     * @docid _ui_tree_list_RowDblClickEvent.key
-     * @type any
+     * 
      */
     readonly key: TKey;
     /**
-     * @docid _ui_tree_list_RowDblClickEvent.values
-     * @type Array<any>
+     * 
      */
     readonly values: Array<any>;
     /**
-     * @docid _ui_tree_list_RowDblClickEvent.columns
-     * @type Array<dxTreeListColumn>
+     * 
      */
     readonly columns: Array<Column<TRowData, TKey>>;
-    /** @docid _ui_tree_list_RowDblClickEvent.rowIndex */
+    /**
+     * 
+     */
     readonly rowIndex: number;
-    /** @docid _ui_tree_list_RowDblClickEvent.rowType */
+    /**
+     * 
+     */
     readonly rowType: string;
-    /** @docid _ui_tree_list_RowDblClickEvent.isSelected */
+    /**
+     * 
+     */
     readonly isSelected?: boolean;
-    /** @docid _ui_tree_list_RowDblClickEvent.isExpanded */
+    /**
+     * 
+     */
     readonly isExpanded?: boolean;
-    /** @docid _ui_tree_list_RowDblClickEvent.isNewRow */
+    /**
+     * 
+     */
     readonly isNewRow?: boolean;
-    /** @docid _ui_tree_list_RowDblClickEvent.rowElement */
+    /**
+     * 
+     */
     readonly rowElement: DxElement;
 };
 
 /**
- * @docid _ui_tree_list_RowExpandedEvent
- * @public
- * @type object
- * @inherits EventInfo,RowKeyInfo
+ * The type of the rowExpanded event handler&apos;s argument.
  */
 export type RowExpandedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /**
- * @docid _ui_tree_list_RowExpandingEvent
- * @public
- * @type object
- * @inherits Cancelable,EventInfo,RowKeyInfo
+ * The type of the rowExpanding event handler&apos;s argument.
  */
 export type RowExpandingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /**
- * @docid _ui_tree_list_RowInsertedEvent
- * @public
- * @type object
- * @inherits EventInfo,RowInsertedInfo
+ * The type of the rowInserted event handler&apos;s argument.
  */
 export type RowInsertedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowInsertedInfo<TRowData, TKey>;
 
 /**
- * @docid _ui_tree_list_RowInsertingEvent
- * @public
- * @type object
- * @inherits EventInfo,RowInsertingInfo
+ * The type of the rowInserting event handler&apos;s argument.
  */
 export type RowInsertingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowInsertingInfo<TRowData>;
 
 /**
- * @docid _ui_tree_list_RowPreparedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the rowPrepared event handler&apos;s argument.
  */
 export type RowPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
     /**
-     * @docid _ui_tree_list_RowPreparedEvent.data
-     * @type object
+     * 
      */
     readonly data: TRowData;
     /**
-     * @docid _ui_tree_list_RowPreparedEvent.key
-     * @type any
+     * 
      */
     readonly key: TKey;
     /**
-     * @docid _ui_tree_list_RowPreparedEvent.values
-     * @type Array<any>
+     * 
      */
     readonly values: Array<any>;
     /**
-     * @docid _ui_tree_list_RowPreparedEvent.columns
-     * @type Array<dxTreeListColumn>
+     * 
      */
     readonly columns: Array<Column<TRowData, TKey>>;
-    /** @docid _ui_tree_list_RowPreparedEvent.rowIndex */
+    /**
+     * 
+     */
     readonly rowIndex: number;
-    /** @docid _ui_tree_list_RowPreparedEvent.rowType */
+    /**
+     * 
+     */
     readonly rowType: string;
-    /** @docid _ui_tree_list_RowPreparedEvent.isSelected */
+    /**
+     * 
+     */
     readonly isSelected?: boolean;
-    /** @docid _ui_tree_list_RowPreparedEvent.isExpanded */
+    /**
+     * 
+     */
     readonly isExpanded?: boolean;
-    /** @docid _ui_tree_list_RowPreparedEvent.isNewRow */
+    /**
+     * 
+     */
     readonly isNewRow?: boolean;
-    /** @docid _ui_tree_list_RowPreparedEvent.rowElement */
+    /**
+     * 
+     */
     readonly rowElement: DxElement;
     /**
-     * @docid _ui_tree_list_RowPreparedEvent.node
-     * @type dxTreeListNode
+     * 
      */
     readonly node: Node<TRowData, TKey>;
-    /** @docid _ui_tree_list_RowPreparedEvent.level */
+    /**
+     * 
+     */
     readonly level: number;
 };
 
 /**
- * @docid _ui_tree_list_RowRemovedEvent
- * @public
- * @type object
- * @inherits EventInfo,RowRemovedInfo
+ * The type of the rowRemoved event handler&apos;s argument.
  */
 export type RowRemovedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowRemovedInfo<TRowData, TKey>;
 
 /**
- * @docid _ui_tree_list_RowRemovingEvent
- * @public
- * @type object
- * @inherits EventInfo,RowRemovingInfo
+ * The type of the rowRemoving event handler&apos;s argument.
  */
 export type RowRemovingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowRemovingInfo<TRowData, TKey>;
 
 /**
- * @docid _ui_tree_list_RowUpdatedEvent
- * @public
- * @type object
- * @inherits EventInfo,RowUpdatedInfo
+ * The type of the rowUpdated event handler&apos;s argument.
  */
 export type RowUpdatedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowUpdatedInfo<TRowData, TKey>;
 
 /**
- * @docid _ui_tree_list_RowUpdatingEvent
- * @public
- * @type object
- * @inherits EventInfo,RowUpdatingInfo
+ * The type of the rowUpdating event handler&apos;s argument.
  */
 export type RowUpdatingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowUpdatingInfo<TRowData, TKey>;
 
 /**
- * @docid _ui_tree_list_RowValidatingEvent
- * @public
- * @type object
- * @inherits EventInfo,RowValidatingInfo
+ * The type of the rowValidating event handler&apos;s argument.
  */
 export type RowValidatingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowValidatingInfo<TRowData, TKey>;
 
 /**
- * @docid _ui_tree_list_SavedEvent
- * @public
- * @type object
- * @inherits EventInfo,DataChangeInfo
+ * The type of the saved event handler&apos;s argument.
  */
 export type SavedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
 
 /**
- * @docid _ui_tree_list_SavingEvent
- * @public
- * @type object
- * @inherits EventInfo,SavingInfo
+ * The type of the saving event handler&apos;s argument.
  */
 export type SavingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & SavingInfo<TRowData, TKey>;
 
 /**
- * @docid _ui_tree_list_SelectionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,_common_grids_SelectionChangedInfo
+ * The type of the selectionChanged event handler&apos;s argument.
  */
 export type SelectionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & SelectionChangedInfo<TRowData, TKey>;
 
 /**
- * @docid _ui_tree_list_ToolbarPreparingEvent
- * @public
- * @type object
- * @inherits EventInfo,ToolbarPreparingInfo
+ * The type of the toolbarPreparing event handler&apos;s argument.
  */
 export type ToolbarPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & ToolbarPreparingInfo;
 
-/** @public */
 export type RowDraggingAddEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
 
-/** @public */
 export type RowDraggingChangeEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
 
-/** @public */
 export type RowDraggingEndEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
 
-/** @public */
 export type RowDraggingMoveEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
 
-/** @public */
 export type RowDraggingStartEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & DragStartEventInfo<TRowData>;
 
-/** @public */
 export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData>;
 
-/** @public */
 export type RowDraggingReorderEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragReorderInfo;
 
-/** @public */
 export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & {
     row?: Row<TRowData, TKey>;
     column?: Column<TRowData, TKey>;
 };
 
-/** @public */
 export type ColumnButtonTemplateData<TRowData = any, TKey = any> = {
     readonly component: dxTreeList<TRowData, TKey>;
     readonly data: TRowData;
@@ -840,7 +818,6 @@ export type ColumnButtonTemplateData<TRowData = any, TKey = any> = {
     readonly row: Row<TRowData, TKey>;
 };
 
-/** @public */
 export type ColumnCellTemplateData<TRowData = any, TKey = any> = {
     readonly data: TRowData;
     readonly component: dxTreeList<TRowData, TKey>;
@@ -856,7 +833,6 @@ export type ColumnCellTemplateData<TRowData = any, TKey = any> = {
     readonly watch?: Function;
 };
 
-/** @public */
 export type ColumnEditCellTemplateData<TRowData = any, TKey = any> = {
     readonly setValue?: any;
     readonly data: TRowData;
@@ -872,6 +848,9 @@ export type ColumnEditCellTemplateData<TRowData = any, TKey = any> = {
     readonly watch?: Function;
 };
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type ColumnHeaderCellTemplateData<TRowData = any, TKey = any> = {
     readonly component: dxTreeList<TRowData, TKey>;
     readonly columnIndex: number;
@@ -881,533 +860,334 @@ export type ColumnHeaderCellTemplateData<TRowData = any, TKey = any> = {
 type OverriddenKeys = 'autoExpandAll' | 'columns' | 'customizeColumns' | 'dataStructure' | 'editing' | 'expandedRowKeys' | 'expandNodesOnFiltering' | 'filterMode' | 'hasItemsExpr' | 'itemsExpr' | 'keyExpr' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onNodesInitialized' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared' | 'paging' | 'parentIdExpr' | 'remoteOperations' | 'rootValue' | 'scrolling' | 'selection' | 'toolbar';
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @public
- * @docid
- * @type object
+ * 
+ * @deprecated 
  */
 export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey>, OverriddenKeys> & {
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether all rows are expanded initially.
      */
     autoExpandAll?: boolean;
     /**
-     * @docid
-     * @type Array<dxTreeListColumn|string>
-     * @default undefined
-     * @public
+     * Configures columns.
      */
     columns?: Array<Column<TRowData, TKey> | string> | undefined;
     /**
-     * @docid
-     * @type_function_param1 columns:Array<dxTreeListColumn>
-     * @public
+     * Customizes columns after they are created.
      */
     customizeColumns?: ((columns: Array<Column<TRowData, TKey>>) => void);
     /**
-     * @docid
-     * @default "plain"
-     * @public
+     * Notifies the UI component of the used data structure.
      */
     dataStructure?: DataStructure;
     /**
-     * @docid
-     * @public
-     * @type object
+     * Configures editing.
      */
     editing?: Editing<TRowData, TKey>;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether nodes appear expanded or collapsed after filtering is applied.
      */
     expandNodesOnFiltering?: boolean;
     /**
-     * @docid
-     * @default []
-     * @fires dxTreeListOptions.onOptionChanged
-     * @public
+     * Specifies keys of the initially expanded rows.
      */
     expandedRowKeys?: Array<TKey>;
     /**
-     * @docid
-     * @default "withAncestors"
-     * @public
+     * Specifies whether filter and search results should include matching rows only, matching rows with ancestors, or matching rows with ancestors and descendants (full branch).
      */
     filterMode?: TreeListFilterMode;
     /**
-     * @docid
-     * @public
+     * Specifies which data field defines whether the node has children.
      */
     hasItemsExpr?: string | Function;
     /**
-     * @docid
-     * @default "items"
-     * @public
+     * Specifies which data field contains nested items. Set this property when your data has a hierarchical structure.
      */
     itemsExpr?: string | Function;
     /**
-     * @docid
-     * @default "id"
-     * @public
+     * Specifies the key property (or properties) that provide(s) key values to access data items. Each key value must be unique.
      */
     keyExpr?: string | Function;
     /**
-     * @docid
-     * @type_function_param1 e:{ui/tree_list:CellClickEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed when a cell is clicked or tapped. Executed before onRowClick.
      */
     onCellClick?: ((e: CellClickEvent<TRowData, TKey>) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/tree_list:CellDblClickEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed when a cell is double-clicked or double-tapped. Executed before onRowDblClick.
      */
     onCellDblClick?: ((e: CellDblClickEvent<TRowData, TKey>) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/tree_list:CellHoverChangedEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed after the pointer enters or leaves a cell.
      */
     onCellHoverChanged?: ((e: CellHoverChangedEvent<TRowData, TKey>) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/tree_list:CellPreparedEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed after a grid cell is created.
      */
     onCellPrepared?: ((e: CellPreparedEvent<TRowData, TKey>) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/tree_list:ContextMenuPreparingEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed before the context menu is rendered.
      */
     onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TRowData, TKey>) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/tree_list:EditingStartEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed before a cell or row switches to the editing state.
      */
     onEditingStart?: ((e: EditingStartEvent<TRowData, TKey>) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/tree_list:EditorPreparedEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed after an editor is created. Not executed for cells with an editCellTemplate.
      */
     onEditorPrepared?: ((options: EditorPreparedEvent<TRowData, TKey>) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/tree_list:EditorPreparingEvent}
-     * @default null
-     * @action
-     * @public
+     * A function used to customize a cell&apos;s editor. Not executed for cells with an editCellTemplate.
      */
     onEditorPreparing?: ((e: EditorPreparingEvent<TRowData, TKey>) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/tree_list:FocusedCellChangedEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed after the focused cell changes. Applies only to cells in data rows.
      */
     onFocusedCellChanged?: ((e: FocusedCellChangedEvent<TRowData, TKey>) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/tree_list:FocusedCellChangingEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed before the focused cell changes. Applies only to cells in data rows.
      */
     onFocusedCellChanging?: ((e: FocusedCellChangingEvent<TRowData, TKey>) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/tree_list:FocusedRowChangedEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that executed when the focused row changes. Applies only to data rows. focusedRowEnabled should be true.
      */
     onFocusedRowChanged?: ((e: FocusedRowChangedEvent<TRowData, TKey>) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/tree_list:FocusedRowChangingEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed before the focused row changes. Applies only to data rows. focusedRowEnabled should be true.
      */
     onFocusedRowChanging?: ((e: FocusedRowChangingEvent<TRowData, TKey>) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/tree_list:NodesInitializedEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed after the loaded nodes are initialized.
      */
     onNodesInitialized?: ((e: NodesInitializedEvent<TRowData, TKey>) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/tree_list:RowClickEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed when a grid row is clicked or tapped.
      */
     onRowClick?: ((e: RowClickEvent<TRowData, TKey>) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/tree_list:RowDblClickEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed when a row is double-clicked or double-tapped. Executed after onCellDblClick.
      */
     onRowDblClick?: ((e: RowDblClickEvent<TRowData, TKey>) => void);
     /**
-     * @docid
-     * @type_function_param1 e:{ui/tree_list:RowPreparedEvent}
-     * @default null
-     * @action
-     * @public
+     * A function that is executed after a row is created.
      */
     onRowPrepared?: ((e: RowPreparedEvent<TRowData, TKey>) => void);
     /**
-     * @docid
-     * @public
-     * @type object
+     * Configures paging.
      */
     paging?: Paging;
     /**
-     * @docid
-     * @default "parentId"
-     * @public
+     * Specifies which data field provides parent keys.
      */
     parentIdExpr?: string | Function;
     /**
-     * @docid
-     * @default "auto"
-     * @public
+     * Notifies the TreeList of the server&apos;s data processing operations. Applies only if data has a plain structure.
      */
     remoteOperations?: {
         /**
-         * @docid
-         * @default false
+         * Specifies whether filtering should be performed on the server.
          */
         filtering?: boolean;
         /**
-         * @docid
-         * @default false
+         * Specifies whether grouping should be performed on the server.
          */
         grouping?: boolean;
         /**
-         * @docid
-         * @default false
+         * Specifies whether sorting should be performed on the server.
          */
         sorting?: boolean;
     } | Mode;
     /**
-     * @docid
-     * @default 0
-     * @public
+     * Specifies the root node&apos;s identifier. Applies if dataStructure is &apos;plain&apos;.
      */
     rootValue?: TKey;
     /**
-     * @docid
-     * @public
-     * @type object
+     * Configures scrolling.
      */
     scrolling?: Scrolling;
     /**
-     * @docid
-     * @public
-     * @type object
+     * Configures runtime selection.
      */
     selection?: Selection;
     /**
-     * @docid
-     * @type dxTreeListToolbar | undefined
-     * @default undefined
-     * @public
+     * Configures the toolbar.
      */
     toolbar?: Toolbar | undefined;
 };
 
 /**
- * @namespace DevExpress.ui
  * @deprecated Use Editing instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type dxTreeListEditing<TRowData = any, TKey = any> = Editing<TRowData, TKey>;
 
 /**
- * @docid dxTreeListEditing
- * @public
- * @type object
+ * Configures editing.
  */
 export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowData, TKey> {
     /**
-     * @docid dxTreeListOptions.editing.allowAdding
-     * @default false
-     * @type boolean|function
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field row:dxTreeListRowObject
-     * @public
+     * Specifies whether a user can add new rows. It is called for each data row when defined as a function.
      */
     allowAdding?: boolean | ((options: { readonly component: dxTreeList<TRowData, TKey>; readonly row?: Row<TRowData, TKey> }) => boolean);
     /**
-     * @docid dxTreeListOptions.editing.allowDeleting
-     * @default false
-     * @type boolean|function
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field row:dxTreeListRowObject
-     * @public
+     * Specifies whether a user can delete rows. It is called for each data row when defined as a function.
      */
     allowDeleting?: boolean | ((options: { readonly component: dxTreeList<TRowData, TKey>; readonly row?: Row<TRowData, TKey> }) => boolean);
     /**
-     * @docid dxTreeListOptions.editing.allowUpdating
-     * @default false
-     * @type boolean|function
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field row:dxTreeListRowObject
-     * @public
+     * Specifies whether a user can update rows. It is called for each data row when defined as a function
      */
     allowUpdating?: boolean | ((options: { readonly component: dxTreeList<TRowData, TKey>; readonly row?: Row<TRowData, TKey> }) => boolean);
     /**
-     * @docid dxTreeListOptions.editing.texts
-     * @type object
-     * @public
+     * Contains properties that specify texts for editing-related UI elements.
      */
     texts?: EditingTexts;
 }
 
 /**
- * @namespace DevExpress.ui
  * @deprecated Use EditingTexts instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type dxTreeListEditingTexts = EditingTexts;
 
 /**
- * @public
- * @docid dxTreeListEditingTexts
+ * Contains properties that specify texts for editing-related UI elements.
  */
 export type EditingTexts = EditingTextsBase & {
     /**
-     * @docid dxTreeListOptions.editing.texts.addRowToNode
-     * @default "Add"
-     * @public
+     * Specifies text for the button that adds a new nested row. Applies if the editing.mode is &apos;batch&apos; or &apos;cell&apos;.
      */
     addRowToNode?: string;
 };
 
 /**
- * @namespace DevExpress.ui
  * @deprecated Use Paging instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type dxTreeListPaging = Paging;
 
 /**
- * @public
- * @docid dxTreeListPaging
+ * An object that configures paging.
  */
 export type Paging = PagingBase & {
     /**
-     * @docid dxTreeListOptions.paging.enabled
-     * @default false
-     * @public
+     * Specifies whether paging is enabled.
      */
     enabled?: boolean;
 };
 
 /**
- * @namespace DevExpress.ui
  * @deprecated Use Scrolling instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type dxTreeListScrolling = Scrolling;
 
 /**
- * @docid dxTreeListScrolling
- * @public
- * @type object
+ * Configures scrolling.
  */
 export interface Scrolling extends ScrollingBase {
     /**
-     * @docid dxTreeListOptions.scrolling.mode
-     * @default "virtual"
-     * @public
+     * Specifies the scrolling mode.
      */
     mode?: ScrollMode;
 }
 
 /**
- * @namespace DevExpress.ui
  * @deprecated Use Selection instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type dxTreeListSelection = Selection;
 
 /**
- * @docid
- * @public
+ * Configures runtime selection.
  */
 export interface Selection extends SelectionBase {
     /**
-     * @docid dxTreeListOptions.selection.recursive
-     * @default false
-     * @public
+     * Specifies whether selection is recursive.
      */
     recursive?: boolean;
 }
 /**
- * @docid
- * @inherits GridBase
- * @namespace DevExpress.ui
- * @public
- * @options dxTreeListOptions
+ * The TreeList is a UI component that represents data from a local or remote source in the form of a multi-column tree view. This UI component offers such features as sorting, filtering, editing, selection, etc.
  */
 export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTreeListOptions<TRowData, TKey>> implements GridBase<TRowData, TKey> {
     /**
-     * @docid
-     * @publicName addColumn(columnOptions)
-     * @param1 columnOptions:object|string
-     * @public
+     * Adds a new column.
      */
     addColumn(columnOptions: Column<TRowData, TKey> | string): void;
     /**
-     * @docid
-     * @publicName addRow()
-     * @return Promise<void>
-     * @public
+     * Adds an empty data row to the highest hierarchical level and switches it to the editing state.
      */
     addRow(): DxPromise<void>;
     /**
-     * @docid
-     * @publicName addRow(parentId)
-     * @return Promise<void>
-     * @public
+     * Adds an empty data row to a specified parent row.
      */
     addRow(parentId: TKey): DxPromise<void>;
     /**
-     * @docid
-     * @publicName collapseRow(key)
-     * @return Promise<void>
-     * @public
+     * Collapses a row with a specific key.
      */
     collapseRow(key: TKey): DxPromise<void>;
     /**
-     * @docid
-     * @publicName expandRow(key)
-     * @return Promise<void>
-     * @public
+     * Expands a row with a specific key.
      */
     expandRow(key: TKey): DxPromise<void>;
     /**
-     * @docid
-     * @publicName forEachNode(callback)
-     * @public
+     * Performs a pre-order tree traversal, executing a function on each visited node. Starts traversing from the top level nodes.
      */
     forEachNode(callback: Function): void;
     /**
-     * @docid
-     * @publicName forEachNode(nodes, callback)
-     * @param1 nodes:Array<dxTreeListNode>
-     * @public
+     * Performs a pre-order tree traversal, executing a function on each visited node. Starts traversing from the specified nodes.
      */
     forEachNode(nodes: Array<Node<TRowData, TKey>>, callback: Function): void;
     /**
-     * @docid
-     * @publicName getNodeByKey(key)
-     * @param1 key:object|string|number
-     * @return dxTreeListNode
-     * @public
+     * Gets a node with a specific key.
      */
     getNodeByKey(key: TKey): Node<TRowData, TKey>;
     /**
-     * @docid
-     * @publicName getRootNode()
-     * @return dxTreeListNode
-     * @public
+     * Gets the root node.
      */
     getRootNode(): Node<TRowData, TKey>;
     /**
-     * @docid
-     * @publicName getSelectedRowKeys()
-     * @public
+     * Gets the keys of the rows selected explicitly via the API or via a click or tap.
      */
     getSelectedRowKeys(): Array<TKey>;
     /**
-     * @docid
-     * @publicName getSelectedRowKeys(mode)
-     * @public
+     * Gets selected row keys.
      */
     getSelectedRowKeys(mode: string): Array<TKey>;
     /**
-     * @docid
-     * @publicName getSelectedRowsData()
-     * @public
+     * Gets the data objects of the rows selected explicitly via the API or via a click or tap.
      */
     getSelectedRowsData(): Array<TRowData>;
     /**
-     * @docid
-     * @publicName getSelectedRowsData(mode)
-     * @public
+     * Gets selected row data objects.
      */
     getSelectedRowsData(mode: string): Array<TRowData>;
     /**
-     * @docid
-     * @publicName getVisibleColumns()
-     * @return Array<dxTreeListColumn>
-     * @public
+     * Gets all visible columns.
      */
     getVisibleColumns(): Array<Column<TRowData, TKey>>;
     /**
-     * @docid
-     * @publicName getVisibleColumns(headerLevel)
-     * @return Array<dxTreeListColumn>
-     * @public
+     * Gets all visible columns at a specific hierarchical level of column headers. Use it to access banded columns.
      */
     getVisibleColumns(headerLevel: number): Array<Column<TRowData, TKey>>;
     /**
-     * @docid
-     * @publicName getVisibleRows()
-     * @return Array<dxTreeListRowObject>
-     * @public
+     * Gets currently rendered rows.
      */
     getVisibleRows(): Array<Row<TRowData, TKey>>;
     /**
-     * @docid
-     * @publicName isRowExpanded(key)
-     * @public
+     * Checks whether a row is expanded or collapsed.
      */
     isRowExpanded(key: TKey): boolean;
     /**
-     * @docid
-     * @publicName loadDescendants()
-     * @return Promise<void>
-     * @public
+     * Loads all root node descendants (all data items). Takes effect only if data has the plain structure and remoteOperations.filtering is true.
      */
     loadDescendants(): DxPromise<void>;
     /**
-     * @docid
-     * @publicName loadDescendants(keys)
-     * @return Promise<void>
-     * @public
+     * Loads a specific node&apos;s descendants. Takes effect only if data has the plain structure and remoteOperations.filtering is true.
      */
     loadDescendants(keys: Array<TKey>): DxPromise<void>;
     /**
-     * @docid
-     * @publicName loadDescendants(keys, childrenOnly)
-     * @return Promise<void>
-     * @public
+     * Loads all or only direct descendants of specific nodes. Takes effect only if data has the plain structure and remoteOperations.filtering is true.
      */
     loadDescendants(keys: Array<TKey>, childrenOnly: boolean): DxPromise<void>;
 
@@ -1480,289 +1260,206 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
 }
 
 type DefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxTreeListToolbar = Toolbar;
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type dxTreeListToolbarItem = ToolbarItem;
 
 /**
- * @docid dxTreeListToolbarItem
- * @inherits dxToolbarItem
- * @namespace DevExpress.ui.dxTreeList
+ * Configures toolbar items.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface ToolbarItem extends dxToolbarItem {
     /**
-     * @docid dxTreeListToolbarItem.name
-     * @public
+     * A name used to identify the toolbar item.
      */
     name?: TreeListPredefinedToolbarItem | string;
     /**
-     * @docid dxTreeListToolbarItem.location
-     * @default 'after'
-     * @public
+     * Specifies a location for the item on the toolbar.
      */
     location?: ToolbarItemLocation;
 }
 
 /**
- * @public
- * @docid dxTreeListToolbar
- * @namespace DevExpress.ui.dxTreeList
+ * Configures the toolbar.
  */
 export type Toolbar = {
     /**
-     * @docid dxTreeListToolbar.items
-     * @type Array<dxTreeListToolbarItem,Enums.TreeListPredefinedToolbarItem>
-     * @public
+     * Configures toolbar items.
      */
     items?: Array<TreeListPredefinedToolbarItem | ToolbarItem>;
     /**
-     * @docid dxTreeListToolbar.visible
-     * @default undefined
-     * @public
+     * Specifies whether the toolbar is visible.
      */
     visible?: boolean | undefined;
     /**
-     * @docid dxTreeListToolbar.disabled
-     * @default false
-     * @public
+     * Specifies whether the toolbar responds to user interaction.
      */
     disabled?: boolean;
 };
 
-/**
- * @public
- */
 export type Column<TRowData = any, TKey = any> = dxTreeListColumn<TRowData, TKey>;
 
 /**
- * @namespace DevExpress.ui
  * @deprecated Use the Column type instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxTreeListColumn<TRowData = any, TKey = any> extends ColumnBase<TRowData> {
     /**
-     * @docid dxTreeListColumn.buttons
-     * @type Array<Enums.TreeListPredefinedColumnButton,dxTreeListColumnButton>
-     * @public
+     * Allows you to customize buttons in the edit column or create a custom command column. Applies only if the column&apos;s type is &apos;buttons&apos;.
      */
     buttons?: Array<TreeListPredefinedColumnButton | ColumnButton<TRowData, TKey>>;
     /**
-     * @docid dxTreeListColumn.cellTemplate
-     * @type_function_param2 cellInfo:object
-     * @type_function_param2_field data:object
-     * @type_function_param2_field column:dxTreeListColumn
-     * @type_function_param2_field row:dxTreeListRowObject
-     * @public
+     * Specifies a custom template for data cells.
      */
     cellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnCellTemplateData<TRowData, TKey>) => any);
     /**
-     * @docid dxTreeListColumn.columns
-     * @type Array<dxTreeListColumn|string>
-     * @default undefined
-     * @public
+     * Configures columns.
      */
     columns?: Array<Column<TRowData, TKey> | string> | undefined;
     /**
-     * @docid dxTreeListColumn.editCellTemplate
-     * @type_function_param2 cellInfo:object
-     * @type_function_param2_field setValue(newValue, newText):any
-     * @type_function_param2_field data:object
-     * @type_function_param2_field column:dxTreeListColumn
-     * @type_function_param2_field row:dxTreeListRowObject
-     * @public
+     * Specifies a custom template for data cells in an editing state.
      */
     editCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnEditCellTemplateData<TRowData, TKey>) => any);
     /**
-     * @docid dxTreeListColumn.headerCellTemplate
-     * @type_function_param2 headerInfo:object
-     * @type_function_param2_field column:dxTreeListColumn
-     * @public
+     * Specifies a custom template for column headers.
      */
     headerCellTemplate?: template | ((columnHeader: DxElement, headerInfo: ColumnHeaderCellTemplateData<TRowData, TKey>) => any);
     /**
-     * @docid dxTreeListColumn.type
-     * @publicName type
-     * @public
+     * Specifies the command column that this object customizes.
      */
     type?: TreeListCommandColumnType;
 }
 
-/**
- * @public
- */
 export type ColumnButton<TRowData = any, TKey = any> = dxTreeListColumnButton<TRowData, TKey>;
 
 /**
- * @namespace DevExpress.ui
  * @deprecated Use the TreeList's ColumnButton type instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxTreeListColumnButton<TRowData = any, TKey = any> extends ColumnButtonBase {
     /**
-     * @docid dxTreeListColumnButton.name
-     * @public
+     * The name used to identify a built-in button.
      */
     name?: TreeListPredefinedColumnButton | string;
     /**
-     * @docid dxTreeListColumnButton.onClick
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field event:event
-     * @type_function_param1_field row:dxTreeListRowObject
-     * @type_function_param1_field column:dxTreeListColumn
-     * @public
+     * A function that is executed when the button is clicked or tapped.
      */
     onClick?: ((e: ColumnButtonClickEvent<TRowData, TKey>) => void);
     /**
-     * @docid dxTreeListColumnButton.template
-     * @type_function_param2 cellInfo:object
-     * @type_function_param2_field data:object
-     * @type_function_param2_field key:any
-     * @type_function_param2_field column:dxTreeListColumn
-     * @type_function_param2_field row:dxTreeListRowObject
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies a custom button template.
      */
     template?: template | ((cellElement: DxElement, cellInfo: ColumnButtonTemplateData<TRowData, TKey>) => string | UserDefinedElement);
     /**
-     * @docid dxTreeListColumnButton.visible
-     * @default true
-     * @type boolean | function
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field row:dxTreeListRowObject
-     * @type_function_param1_field column:dxTreeListColumn
-     * @public
+     * Specifies the button&apos;s visibility.
      */
     visible?: boolean | ((options: { readonly component: dxTreeList<TRowData, TKey>; readonly row?: Row<TRowData, TKey>; readonly column: Column<TRowData, TKey> }) => boolean);
     /**
-     * @docid dxTreeListColumnButton.disabled
-     * @default false
-     * @type boolean | function
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field row:dxTreeListRowObject
-     * @type_function_param1_field column:dxTreeListColumn
-     * @public
+     * Specifies whether the button is disabled.
      */
     disabled?: boolean | ((options: { readonly component: dxTreeList<TRowData, TKey>; readonly row?: Row<TRowData, TKey>; readonly column: Column<TRowData, TKey> }) => boolean);
 }
 
 /**
- * @namespace DevExpress.ui
  * @deprecated Use Node instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type dxTreeListNode<TRowData = any, TKey = any> = Node<TRowData, TKey>;
 
 /**
- * @public
- * @docid dxTreeListNode
+ * A TreeList node&apos;s structure.
  */
 export type Node<TRowData = any, TKey = any> = {
     /**
-     * @docid dxTreeListNode.children
-     * @type  Array<dxTreeListNode>
-     * @public
+     * Contains all child nodes.
      */
     children?: Array<Node<TRowData, TKey>>;
     /**
-     * @docid dxTreeListNode.data
-     * @public
+     * The node&apos;s data object.
      */
     data?: TRowData;
     /**
-     * @docid dxTreeListNode.hasChildren
-     * @public
+     * Indicates whether the node has child nodes.
      */
     hasChildren?: boolean;
     /**
-     * @docid dxTreeListNode.key
-     * @public
+     * The node&apos;s key.
      */
     key: TKey;
     /**
-     * @docid dxTreeListNode.level
-     * @public
+     * The node&apos;s hierarchical level.
      */
     level: number;
     /**
-     * @docid dxTreeListNode.parent
-     * @type dxTreeListNode
-     * @public
+     * The parent node.
      */
     parent?: Node<TRowData, TKey>;
     /**
-     * @docid dxTreeListNode.visible
-     * @public
+     * Indicates whether the node is visualized as a row.
      */
     visible?: boolean;
 };
 
 /**
- * @namespace DevExpress.ui
  * @deprecated Use Row instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export type dxTreeListRowObject<TRowData = any, TKey = any> = Row<TRowData, TKey>;
 
 /**
- * @public
- * @docid dxTreeListRowObject
+ * A grid row.
  */
 export type Row<TRowData = any, TKey = any> = {
     /**
-     * @docid dxTreeListRowObject.isEditing
-     * @public
+     * Indicates whether the row is in the editing state.
      */
     readonly isEditing?: boolean;
     /**
-     * @docid dxTreeListRowObject.isExpanded
-     * @public
+     * Indicates whether the row is expanded or collapsed. Available if rowType is &apos;data&apos;.
      */
     readonly isExpanded?: boolean;
     /**
-     * @docid dxTreeListRowObject.isNewRow
-     * @public
+     * Indicates that the row is added, but not yet saved. Available if rowType is &apos;data&apos;.
      */
     readonly isNewRow?: boolean;
     /**
-     * @docid dxTreeListRowObject.isSelected
-     * @public
+     * Indicates whether the row is selected. Available if rowType is &apos;data&apos; or &apos;detail&apos;.
      */
     readonly isSelected?: boolean;
     /**
-     * @docid dxTreeListRowObject.key
-     * @public
+     * The row&apos;s key. Available if rowType is &apos;data&apos;, &apos;detail&apos; or &apos;detailAdaptive&apos;.
      */
     readonly key: TKey;
     /**
-     * @docid dxTreeListRowObject.level
-     * @public
+     * The row&apos;s hierarchical level. Available if rowType is &apos;data&apos; or &apos;detail&apos;.
      */
     readonly level: number;
     /**
-     * @docid dxTreeListRowObject.node
-     * @type dxTreeListNode
-     * @public
+     * The row&apos;s node. Available if rowType is &apos;data&apos; or &apos;detail&apos;.
      */
     readonly node: Node<TRowData, TKey>;
     /**
-     * @docid dxTreeListRowObject.rowIndex
-     * @public
+     * The row&apos;s visible index. This index is zero-based and available if rowType is &apos;data&apos;, &apos;detail&apos; or &apos;detailAdaptive&apos;.
      */
     readonly rowIndex: number;
     /**
-     * @docid dxTreeListRowObject.rowType
-     * @public
+     * The row&apos;s type.
      */
     readonly rowType: string;
     /**
-     * @docid dxTreeListRowObject.values
-     * @public
+     * Values displayed in the row&apos;s cells.
      */
     readonly values: Array<any>;
     /**
-     * @docid dxTreeListRowObject.data
-     * @public
+     * A data object that the row visualizes.
      */
     readonly data: TRowData;
 };
 
-/** @public */
 export type ExplicitTypes<TRowData, TKey> = {
   AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<TRowData, TKey>;
   CellClickEvent: CellClickEvent<TRowData, TKey>;
@@ -1825,10 +1522,12 @@ export type ExplicitTypes<TRowData, TKey> = {
   ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
 };
 
-/** @public */
 export type Properties<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;
 
 ///#DEBUG

@@ -1,7 +1,4 @@
 /**
- * @docid ui.hideToasts
- * @static
- * @publicName hideToasts()
- * @public
+ * Hides all the Toast components in the application.
  */
 export default function hideToasts(): void;

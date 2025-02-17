@@ -5,80 +5,48 @@ export {
 } from '../common/core/environment';
 
 /**
-* @docid
-* @publicName devices
-* @section Utils
-* @public
-*/
+ * An object that serves as a namespace for the methods and events specifying information on the current device.
+ */
 declare class DevicesObject {
   constructor(options?: { window?: Window });
   /**
-   * @docid
-   * @publicName current()
-   * @public
+   * Gets information on the current device.
    */
   current(): Device;
   /**
-   * @docid
-   * @publicName current(deviceName)
-   * @public
+   * Overrides actual device information to force the application to operate as if it was running on a specified device.
    */
   current(deviceName: string | Device): void;
   /**
-   * @docid
-   * @publicName off(eventName)
-   * @param1 eventName:string
-   * @return this
-   * @public
+   * Detaches all event handlers from a single event.
    */
   off(eventName: EventName): this;
   /**
-   * @docid
-   * @publicName off(eventName, eventHandler)
-   * @param1 eventName:string
-   * @return this
-   * @public
+   * Detaches a particular event handler from a single event.
    */
   off(eventName: EventName, eventHandler: Function): this;
   /**
-   * @docid
-   * @publicName on(eventName, eventHandler)
-   * @param1 eventName:string
-   * @return this
-   * @public
+   * Subscribes to an event.
    */
   on(eventName: EventName, eventHandler: Function): this;
   /**
-   * @docid
-   * @publicName on(events)
-   * @param1 events:object
-   * @return this
-   * @public
+   * Subscribes to events.
    */
   on(events: { [key in EventName]?: Function }): this;
   /**
-   * @docid
-   * @publicName orientation()
-   * @return String
-   * @public
+   * Returns the current device orientation.
    */
   orientation(): 'portrait' | 'landscape' | undefined;
   /**
-   * @docid
-   * @publicName real()
-   * @public
+   * Returns real information about the current device regardless of the value passed to the DevExpress.devices.current(deviceName) method.
    */
   real(): Device;
   isSimulator(): boolean;
 }
 
 /**
-* @const devices
-* @namespace DevExpress.common.core.environment
-* @hidden
-* @public
-*/
-// eslint-disable-next-line @typescript-eslint/init-declarations
-declare const devices: DevicesObject;
+                                                                  * 
+                                                                  */
+                                                                 declare const devices: DevicesObject;
 
 export default devices;

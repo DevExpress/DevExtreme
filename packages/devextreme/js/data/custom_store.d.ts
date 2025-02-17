@@ -7,9 +7,7 @@ export {
 } from '../common/data';
 
 /**
- * @public
  * @deprecated Use CustomStoreOptions from /common/data instead
- * @namespace DevExpress.data.CustomStore
  */
 export type Options<
     TItem = any,

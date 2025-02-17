@@ -27,236 +27,158 @@ import Widget, {
 } from './widget/ui.widget';
 
 /**
- * @namespace DevExpress.ui
- * @docid
- * @type object
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> {
     /**
-     * @docid
-     * @ref
-     * @public
-     * @type object
+     * Configures UI component visibility animations. This object contains two fields: show and hide.
      */
     animation?: dxOverlayAnimation;
     /**
-     * @docid
-     * @deprecated dxOverlayOptions.hideOnOutsideClick
-     * @default false
-     * @type_function_param1 event:event
-     * @public
+     * Specifies whether to close the UI component if a user clicks outside it.
+     * @deprecated Use the hideOnOutsideClick option instead.
      */
     closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
-     * @docid
-     * @default "content"
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies a custom template for the UI component content.
      */
     contentTemplate?: template | ((contentElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to render the UI component&apos;s content when it is displayed. If false, the content is rendered immediately.
      */
     deferRendering?: boolean;
     /**
-     * @docid
-     * @deprecated
-     * @default {}
-     * @hidden
+     * Specifies the global attributes to be attached to the UI component&apos;s container element.
+     * @deprecated 
      */
     elementAttr?: any;
     /**
-     * @docid
-     * @default false
-     * @type boolean | function
-     * @type_function_param1 event:event
-     * @public
+     * Specifies whether to hide the UI component if a user clicks outside it.
      */
     hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether to hide the widget when users scroll one of its parent elements.
      */
     hideOnParentScroll?: boolean;
     /**
-     * @docid
-     * @default '80vh'
-     * @public
+     * Specifies the UI component&apos;s height.
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid
-     * @default null
-     * @public
+     * Specifies the maximum height the UI component can reach while resizing.
      */
     maxHeight?: number | string | (() => number | string);
     /**
-     * @docid
-     * @default null
-     * @public
+     * Specifies the maximum width the UI component can reach while resizing.
      */
     maxWidth?: number | string | (() => number | string);
     /**
-     * @docid
-     * @default null
-     * @public
+     * Specifies the minimum height the UI component can reach while resizing.
      */
     minHeight?: number | string | (() => number | string);
     /**
-     * @docid
-     * @default null
-     * @public
+     * Specifies the minimum width the UI component can reach while resizing.
      */
     minWidth?: number | string | (() => number | string);
     /**
-     * @docid
-     * @default null
-     * @action
-     * @public
+     * A function that is executed after the UI component is hidden.
      */
     onHidden?: ((e: EventInfo<TComponent>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @type_function_param1_field cancel:boolean | Promise<boolean>
-     * @action
-     * @public
+     * A function that is executed before the UI component is hidden.
      */
     onHiding?: ((e: Cancelable & EventInfo<TComponent>) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @type_function_param1_field cancel:boolean | Promise<boolean>
-     * @action
-     * @public
+     * A function that is executed before the UI component is displayed.
      */
     onShowing?: ((e: Cancelable & EventInfo<TComponent>) => void);
     /**
-     * @docid
-     * @default null
-     * @action
-     * @public
+     * A function that is executed after the UI component is displayed.
      */
     onShown?: ((e: EventInfo<TComponent>) => void);
     /**
-     * @docid
-     * @default { my: 'center', at: 'center', of: window }
-     * @fires dxOverlayOptions.onPositioned
-     * @public
+     * Positions the UI component.
      */
     position?: any;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether to shade the background when the UI component is active.
      */
     shading?: boolean;
     /**
-     * @docid
-     * @default ''
-     * @public
+     * Specifies the shading color. Applies only if shading is enabled.
      */
     shadingColor?: string;
     /**
-     * @docid
-     * @default false
-     * @fires dxOverlayOptions.onShowing
-     * @fires dxOverlayOptions.onHiding
-     * @public
+     * A Boolean value specifying whether or not the UI component is visible.
      */
     visible?: boolean;
     /**
-     * @docid
-     * @default '80vw'
-     * @public
+     * Specifies the UI component&apos;s width.
      */
     width?: number | string | (() => number | string);
     /**
-     * @docid
-     * @default {}
-     * @public
+     * Specifies the global attributes for the UI component&apos;s wrapper element.
      */
     wrapperAttr?: any;
 }
 /**
- * @docid
- * @namespace DevExpress.ui
+ * Configures UI component visibility animations. This object contains two fields: show and hide.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxOverlayAnimation {
     /**
-     * @docid dxOverlayOptions.animation.hide
-     * @default { type: "pop", duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 } } }
-     * @public
+     * An object that defines the animation properties used when the UI component is being hidden.
      */
     hide?: AnimationConfig;
     /**
-     * @docid dxOverlayOptions.animation.show
-     * @default { type: "pop", duration: 400, from: { scale: 0.55 } }
-     * @public
+     * An object that defines the animation properties used when the UI component is being shown.
      */
     show?: AnimationConfig;
 }
 /**
- * @docid
- * @inherits Widget
- * @hidden
- * @namespace DevExpress.ui
- * @options dxOverlayOptions
+ * The Overlay UI component represents a window overlaying the current view. It displays data located within the HTML element representing the UI component.
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export default class dxOverlay<TProperties> extends Widget<TProperties> {
     /**
-     * @docid
-     * @publicName content()
-     * @public
+     * Gets the UI component&apos;s content.
      */
     content(): DxElement;
     /**
-     * @docid
-     * @publicName hide()
-     * @return Promise<boolean>
-     * @public
+     * Hides the UI component.
      */
     hide(): DxPromise<boolean>;
     /**
-     * @docid
-     * @publicName repaint()
-     * @public
+     * Recalculates the UI component&apos;s size and position without rerendering.
      */
     repaint(): void;
     /**
-     * @docid
-     * @publicName show()
-     * @return Promise<boolean>
-     * @public
+     * Shows the UI component.
      */
     show(): DxPromise<boolean>;
     /**
-     * @docid
-     * @publicName toggle(showing)
-     * @return Promise<boolean>
-     * @public
+     * Shows or hides the UI component depending on the argument.
      */
     toggle(showing: boolean): DxPromise<boolean>;
 }
 
 /**
- * @docid ui.dxOverlay.baseZIndex
- * @publicName baseZIndex(zIndex)
- * @namespace DevExpress.ui.dxOverlay
- * @static
- * @public
+ * Specifies the base z-index for all overlay UI components.
  */
 export function baseZIndex(zIndex: number): void;
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 interface OverlayInstance extends dxOverlay<Properties> { }
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Properties = dxOverlayOptions<OverlayInstance>;
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = Properties;

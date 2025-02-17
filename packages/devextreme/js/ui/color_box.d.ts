@@ -29,305 +29,226 @@ import {
 } from './popup';
 
 /**
- * @docid _ui_color_box_ChangeEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the change event handler&apos;s argument.
  */
 export type ChangeEvent = NativeEventInfo<dxColorBox, Event>;
 
 /**
- * @docid _ui_color_box_ClosedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the closed event handler&apos;s argument.
  */
 export type ClosedEvent = EventInfo<dxColorBox>;
 
 /**
- * @docid _ui_color_box_CopyEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the copy event handler&apos;s argument.
  */
 export type CopyEvent = NativeEventInfo<dxColorBox, ClipboardEvent>;
 
 /**
- * @docid _ui_color_box_CutEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the cut event handler&apos;s argument.
  */
 export type CutEvent = NativeEventInfo<dxColorBox, ClipboardEvent>;
 
 /**
- * @docid _ui_color_box_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxColorBox>;
 
 /**
- * @docid _ui_color_box_EnterKeyEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the enterKey event handler&apos;s argument.
  */
 export type EnterKeyEvent = NativeEventInfo<dxColorBox, KeyboardEvent>;
 
 /**
- * @docid _ui_color_box_FocusInEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the focusIn event handler&apos;s argument.
  */
 export type FocusInEvent = NativeEventInfo<dxColorBox, FocusEvent>;
 
 /**
- * @docid _ui_color_box_FocusOutEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the focusOut event handler&apos;s argument.
  */
 export type FocusOutEvent = NativeEventInfo<dxColorBox, FocusEvent>;
 
 /**
- * @docid _ui_color_box_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxColorBox>;
 
 /**
- * @docid _ui_color_box_InputEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the input event handler&apos;s argument.
  */
 export type InputEvent = NativeEventInfo<dxColorBox, UIEvent & { target: HTMLInputElement }>;
 
 /**
- * @docid _ui_color_box_KeyDownEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the keyDown event handler&apos;s argument.
  */
 export type KeyDownEvent = NativeEventInfo<dxColorBox, KeyboardEvent>;
 
-/** @public */
 export type KeyPressEvent = NativeEventInfo<dxColorBox, KeyboardEvent>;
 
 /**
- * @docid _ui_color_box_KeyUpEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the keyUp event handler&apos;s argument.
  */
 export type KeyUpEvent = NativeEventInfo<dxColorBox, KeyboardEvent>;
 
 /**
- * @docid _ui_color_box_OpenedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the opened event handler&apos;s argument.
  */
 export type OpenedEvent = EventInfo<dxColorBox>;
 
 /**
- * @docid _ui_color_box_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxColorBox> & ChangedOptionInfo;
 
 /**
- * @docid _ui_color_box_PasteEvent
- * @public
- * @type object
- * @inherits NativeEventInfo
+ * The type of the paste event handler&apos;s argument.
  */
 export type PasteEvent = NativeEventInfo<dxColorBox, ClipboardEvent>;
 
 /**
- * @docid _ui_color_box_ValueChangedEvent
- * @public
- * @type object
- * @inherits NativeEventInfo,ValueChangedInfo
+ * The type of the valueChanged event handler&apos;s argument.
  */
 export type ValueChangedEvent = NativeEventInfo<dxColorBox, KeyboardEvent | MouseEvent | PointerEvent | UIEvent | Event> & ValueChangedInfo;
 
-/** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     /**
-     * @docid
-     * @default "OK"
-     * @public
+     * Specifies the text displayed on the button that applies changes and closes the drop-down editor.
      */
     applyButtonText?: string;
     /**
-     * @docid
-     * @default "useButtons"
-     * @public
+     * Specifies the way an end user applies the selected value.
      */
     applyValueMode?: ApplyValueMode;
     /**
-     * @docid
-     * @default "Cancel"
-     * @public
+     * Specifies the text displayed on the button that cancels changes and closes the drop-down editor.
      */
     cancelButtonText?: string;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether or not the UI component value includes the alpha channel component.
      */
     editAlphaChannel?: boolean;
     /**
-     * @docid
-     * @default null
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies a custom template for the input field. Must contain the TextBox UI component.
      */
     fieldTemplate?: template | ((value: string, fieldElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default 1
-     * @public
+     * Specifies the size of a step by which a handle is moved using a keyboard shortcut.
      */
     keyStep?: number;
     /**
-     * @docid
-     * @public
+     * Specifies the currently selected value.
      */
     value?: string;
     /**
-     * @docid
-     * @type dxPopupOptions
+     * Configures the drop-down field which holds the content.
      */
     dropDownOptions?: PopupProperties;
 }
 /**
- * @docid
- * @isEditor
- * @inherits dxDropDownEditor
- * @namespace DevExpress.ui
- * @public
+ * The ColorBox is a UI component that allows an end user to enter a color or pick it out from the drop-down editor.
  */
 export default class dxColorBox extends dxDropDownEditor<dxColorBoxOptions> {
     /**
-     * @docid
-     * @publicName reset(value)
-     * @public
+     * Resets the value property to the value passed as an argument.
      */
     reset(value?: string | null): void;
 }
 
-/** @public */
 export type Properties = dxColorBoxOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxColorBoxOptions;
 
 ///#DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type FilterOutHidden<T> = Omit<T, 'onContentReady'>;
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
-* @hidden
-*/
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Events = {
 /**
- * @docid dxColorBoxOptions.onChange
- * @type_function_param1 e:{ui/color_box:ChangeEvent}
+ * A function that is executed when the UI component loses focus after the text field&apos;s content was changed using the keyboard.
  */
 onChange?: ((e: ChangeEvent) => void);
 /**
- * @docid dxColorBoxOptions.onClosed
- * @type_function_param1 e:{ui/color_box:ClosedEvent}
+ * A function that is executed once the drop-down editor is closed.
  */
 onClosed?: ((e: ClosedEvent) => void);
 /**
- * @docid dxColorBoxOptions.onCopy
- * @type_function_param1 e:{ui/color_box:CopyEvent}
+ * A function that is executed when the UI component&apos;s input has been copied.
  */
 onCopy?: ((e: CopyEvent) => void);
 /**
- * @docid dxColorBoxOptions.onCut
- * @type_function_param1 e:{ui/color_box:CutEvent}
+ * A function that is executed when the UI component&apos;s input has been cut.
  */
 onCut?: ((e: CutEvent) => void);
 /**
- * @docid dxColorBoxOptions.onDisposing
- * @type_function_param1 e:{ui/color_box:DisposingEvent}
+ * A function that is executed before the UI component is disposed of.
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @docid dxColorBoxOptions.onEnterKey
- * @type_function_param1 e:{ui/color_box:EnterKeyEvent}
+ * A function that is executed when the Enter key has been pressed while the UI component is focused.
  */
 onEnterKey?: ((e: EnterKeyEvent) => void);
 /**
- * @docid dxColorBoxOptions.onFocusIn
- * @type_function_param1 e:{ui/color_box:FocusInEvent}
+ * A function that is executed when the UI component gets focus.
  */
 onFocusIn?: ((e: FocusInEvent) => void);
 /**
- * @docid dxColorBoxOptions.onFocusOut
- * @type_function_param1 e:{ui/color_box:FocusOutEvent}
+ * A function that is executed when the UI component loses focus.
  */
 onFocusOut?: ((e: FocusOutEvent) => void);
 /**
- * @docid dxColorBoxOptions.onInitialized
- * @type_function_param1 e:{ui/color_box:InitializedEvent}
+ * A function used in JavaScript frameworks to save the UI component instance.
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @docid dxColorBoxOptions.onInput
- * @type_function_param1 e:{ui/color_box:InputEvent}
+ * A function that is executed each time the UI component&apos;s input is changed while the UI component is focused.
  */
 onInput?: ((e: InputEvent) => void);
 /**
- * @docid dxColorBoxOptions.onKeyDown
- * @type_function_param1 e:{ui/color_box:KeyDownEvent}
+ * A function that is executed when a user is pressing a key on the keyboard.
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @docid dxColorBoxOptions.onKeyUp
- * @type_function_param1 e:{ui/color_box:KeyUpEvent}
+ * A function that is executed when a user releases a key on the keyboard.
  */
 onKeyUp?: ((e: KeyUpEvent) => void);
 /**
- * @docid dxColorBoxOptions.onOpened
- * @type_function_param1 e:{ui/color_box:OpenedEvent}
+ * A function that is executed once the drop-down editor is opened.
  */
 onOpened?: ((e: OpenedEvent) => void);
 /**
- * @docid dxColorBoxOptions.onOptionChanged
- * @type_function_param1 e:{ui/color_box:OptionChangedEvent}
+ * A function that is executed after a UI component property is changed.
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @docid dxColorBoxOptions.onPaste
- * @type_function_param1 e:{ui/color_box:PasteEvent}
+ * A function that is executed when the UI component&apos;s input has been pasted.
  */
 onPaste?: ((e: PasteEvent) => void);
 /**
- * @docid dxColorBoxOptions.onValueChanged
- * @type_function_param1 e:{ui/color_box:ValueChangedEvent}
+ * A function that is executed after the UI component&apos;s value is changed.
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };

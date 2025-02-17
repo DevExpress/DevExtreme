@@ -17,258 +17,187 @@ import dxOverlay, {
     dxOverlayOptions,
 } from './overlay';
 
-/** @public */
 export type ToastType = 'custom' | 'error' | 'info' | 'success' | 'warning';
 
 /**
- * @docid _ui_toast_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxToast>;
 
 /**
- * @docid _ui_toast_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxToast>;
 
 /**
- * @docid _ui_toast_HidingEvent
- * @public
- * @type object
- * @inherits Cancelable,EventInfo
+ * The type of the hiding event handler&apos;s argument.
  */
 export type HidingEvent = Cancelable & EventInfo<dxToast>;
 
 /**
- * @docid _ui_toast_HiddenEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the hidden event handler&apos;s argument.
  */
 export type HiddenEvent = EventInfo<dxToast>;
 
 /**
- * @docid _ui_toast_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxToast>;
 
 /**
- * @docid _ui_toast_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxToast> & ChangedOptionInfo;
 
 /**
- * @docid _ui_toast_ShowingEvent
- * @public
- * @type object
- * @inherits Cancelable,EventInfo
+ * The type of the showing event handler&apos;s argument.
  */
 export type ShowingEvent = Cancelable & EventInfo<dxToast>;
 
 /**
- * @docid _ui_toast_ShownEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the shown event handler&apos;s argument.
  */
 export type ShownEvent = EventInfo<dxToast>;
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
-     * @docid
-     * @public
-     * @type object
+     * Configures UI component visibility animations. This object contains two fields: show and hide.
      */
     animation?: dxToastAnimation;
     /**
-     * @docid
-     * @default false
-     * @public
+     * A Boolean value specifying whether or not the toast is closed if a user clicks it.
      */
     closeOnClick?: boolean;
     /**
-     * @docid
-     * @deprecated dxToastOptions.hideOnOutsideClick
-     * @type_function_param1 event:event
-     * @default true &for(Android)
-     * @public
+     * Specifies whether to close the UI component if a user clicks outside it.
+     * @deprecated Use the hideOnOutsideClick option instead.
      */
     closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
-     * @docid
-     * @default true
-     * @public
+     * A Boolean value specifying whether or not the toast is closed if a user swipes it out of the screen boundaries.
      */
     closeOnSwipe?: boolean;
     /**
-     * @docid
-     * @default 2000
-     * @default 4000 &for(Material)
-     * @default 4000 &for(Fluent)
-     * @public
+     * The time span in milliseconds during which the Toast UI component is visible.
      */
     displayTime?: number;
     /**
-     * @docid
-     * @type boolean | function
-     * @type_function_param1 event:event
-     * @default true &for(Android)
-     * @public
+     * Specifies whether to hide the UI component if a user clicks outside it.
      */
     hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
-     * @docid
-     * @default 'auto'
-     * @public
+     * Specifies the UI component&apos;s height.
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid
-     * @default 568 &for(Material)
-     * @default 568 &for(Fluent)
-     * @public
+     * Specifies the maximum width the UI component can reach while resizing.
      */
     maxWidth?: number | string | (() => number | string);
     /**
-     * @docid
-     * @default ""
-     * @public
+     * The Toast message text.
      */
     message?: string;
     /**
-     * @docid
-     * @default 344 &for(Material)
-     * @default 344 &for(Fluent)
-     * @public
+     * Specifies the minimum width the UI component can reach while resizing.
      */
     minWidth?: number | string | (() => number | string);
     /**
-     * @docid
-     * @default "bottom center"
-     * @default { at: 'bottom left', my: 'bottom left', offset: '20 -20'} &for(Android)
-     * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } &for(phones_on_Android)
-     * @public
+     * Positions the UI component.
      */
     position?: PositionConfig | string;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether to shade the background when the UI component is active.
      */
     shading?: boolean;
     /**
-     * @docid
-     * @default 'info'
-     * @public
+     * Specifies the Toast UI component type.
      */
     type?: ToastType;
     /**
-     * @docid
-     * @default '80vw'
-     * @default 'auto' &for(Android)
-     * @default '100vw' &for(phones_on_Android)
-     * @public
+     * Specifies the UI component&apos;s width.
      */
     width?: number | string | (() => number | string);
 }
 /**
- * @docid
- * @namespace DevExpress.ui
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxToastAnimation extends dxOverlayAnimation {
     /**
-     * @docid dxToastOptions.animation.hide
-     * @default { type: "fade", duration: 400, to: 0 }
-     * @public
+     * An object that defines the animation properties used when the UI component is being hidden.
      */
     hide?: AnimationConfig;
     /**
-     * @docid dxToastOptions.animation.show
-     * @default { type: "fade", duration: 400, from: 0, to: 1 }
-     * @public
+     * An object that defines the animation properties used when the UI component is being shown.
      */
     show?: AnimationConfig;
 }
 /**
- * @docid
- * @inherits dxOverlay
- * @namespace DevExpress.ui
- * @public
+ * The Toast is a UI component that provides pop-up notifications.
  */
 export default class dxToast extends dxOverlay<dxToastOptions> { }
 
-/** @public */
 export type Properties = dxToastOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxToastOptions;
 
 ///#DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
+/**
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
-* @hidden
-*/
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 type Events = {
 /**
- * @docid dxToastOptions.onContentReady
- * @type_function_param1 e:{ui/toast:ContentReadyEvent}
+ * A function that is executed when the UI component is rendered and each time the component is repainted.
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @docid dxToastOptions.onDisposing
- * @type_function_param1 e:{ui/toast:DisposingEvent}
+ * A function that is executed before the UI component is disposed of.
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @docid dxToastOptions.onHidden
- * @type_function_param1 e:{ui/toast:HiddenEvent}
+ * A function that is executed after the UI component is hidden.
  */
 onHidden?: ((e: HiddenEvent) => void);
 /**
- * @docid dxToastOptions.onHiding
- * @type_function_param1 e:{ui/toast:HidingEvent}
+ * A function that is executed before the UI component is hidden.
  */
 onHiding?: ((e: HidingEvent) => void);
 /**
- * @docid dxToastOptions.onInitialized
- * @type_function_param1 e:{ui/toast:InitializedEvent}
+ * A function used in JavaScript frameworks to save the UI component instance.
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @docid dxToastOptions.onOptionChanged
- * @type_function_param1 e:{ui/toast:OptionChangedEvent}
+ * A function that is executed after a UI component property is changed.
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @docid dxToastOptions.onShowing
- * @type_function_param1 e:{ui/toast:ShowingEvent}
+ * A function that is executed before the UI component is displayed.
  */
 onShowing?: ((e: ShowingEvent) => void);
 /**
- * @docid dxToastOptions.onShown
- * @type_function_param1 e:{ui/toast:ShownEvent}
+ * A function that is executed after the UI component is displayed.
  */
 onShown?: ((e: ShownEvent) => void);
 };

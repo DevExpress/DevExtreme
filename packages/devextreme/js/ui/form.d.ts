@@ -53,88 +53,66 @@ export {
     VerticalAlignment,
 };
 
-/** @public */
 export type FormItemComponent = 'dxAutocomplete' | 'dxCalendar' | 'dxCheckBox' | 'dxColorBox' | 'dxDateBox' | 'dxDateRangeBox' | 'dxDropDownBox' | 'dxHtmlEditor' | 'dxLookup' | 'dxNumberBox' | 'dxRadioGroup' | 'dxRangeSlider' | 'dxSelectBox' | 'dxSlider' | 'dxSwitch' | 'dxTagBox' | 'dxTextArea' | 'dxTextBox';
-/** @public */
 export type FormItemType = 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
-/** @public */
 export type LabelLocation = 'left' | 'right' | 'top';
-/** @public */
 export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
 
 /**
- * @docid _ui_form_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the contentReady event handler&apos;s argument.
  */
 export type ContentReadyEvent = EventInfo<dxForm>;
 
 /**
- * @docid _ui_form_DisposingEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the disposing event handler&apos;s argument.
  */
 export type DisposingEvent = EventInfo<dxForm>;
 
 /**
- * @docid _ui_form_EditorEnterKeyEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the editorEnterKey event handler&apos;s argument.
  */
 export type EditorEnterKeyEvent = EventInfo<dxForm> & {
-    /** @docid _ui_form_EditorEnterKeyEvent.dataField */
+    /**
+     * 
+     */
     readonly dataField?: string;
 };
 
 /**
- * @docid _ui_form_FieldDataChangedEvent
- * @public
- * @type object
- * @inherits EventInfo
+ * The type of the fieldDataChanged event handler&apos;s argument.
  */
 export type FieldDataChangedEvent = EventInfo<dxForm> & {
-    /** @docid _ui_form_FieldDataChangedEvent.dataField */
+    /**
+     * 
+     */
     readonly dataField?: string;
     /**
-     * @docid _ui_form_FieldDataChangedEvent.value
-     * @type object
+     * 
      */
     readonly value?: any;
 };
 
 /**
- * @docid _ui_form_InitializedEvent
- * @public
- * @type object
- * @inherits InitializedEventInfo
+ * The type of the initialized event handler&apos;s argument.
  */
 export type InitializedEvent = InitializedEventInfo<dxForm>;
 
 /**
- * @docid _ui_form_OptionChangedEvent
- * @public
- * @type object
- * @inherits EventInfo,ChangedOptionInfo
+ * The type of the optionChanged event handler&apos;s argument.
  */
 export type OptionChangedEvent = EventInfo<dxForm> & ChangedOptionInfo;
 
-/** @public */
 export type GroupItemTemplateData = {
     readonly component: dxForm;
     readonly formData?: any;
 };
 
-/** @public */
 export type GroupCaptionTemplateData = {
     readonly caption?: string;
     readonly component: dxForm;
     readonly name?: string;
 };
 
-/** @public */
 export type SimpleItemTemplateData = {
     readonly component: dxForm;
     readonly dataField?: string;
@@ -143,734 +121,485 @@ export type SimpleItemTemplateData = {
     readonly name?: string;
 };
 
-/** @public */
 export type SimpleItemLabelTemplateData = SimpleItemTemplateData & { text: string };
 
 /**
- * @deprecated use Properties instead
- * @namespace DevExpress.ui
- * @docid
+ * 
+ * @deprecated 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether all item labels are aligned. Applies only to labels outside their editors (see labelMode).
      */
     alignItemLabels?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether item labels in all groups are aligned. Applies only to labels outside their editors (see labelMode).
      */
     alignItemLabelsInAllGroups?: boolean;
     /**
-     * @docid
-     * @default 1
-     * @public
+     * The count of columns in the form layout.
      */
     colCount?: number | Mode;
     /**
-     * @docid
-     * @type object
-     * @inherits ColCountResponsible
-     * @default undefined
-     * @public
+     * Specifies dependency between the screen factor and the count of columns in the form layout.
      */
     colCountByScreen?: any | undefined;
     /**
-     * @docid
-     * @type_function_param1 item:dxFormSimpleItem|dxFormGroupItem|dxFormTabbedItem|dxFormEmptyItem|dxFormButtonItem
-     * @type_function_param1_field colSpan::hidden
-     * @type_function_param1_field cssClass::hidden
-     * @type_function_param1_field itemType::hidden
-     * @type_function_param1_field name::hidden
-     * @type_function_param1_field visible::hidden
-     * @type_function_param1_field visibleIndex::hidden
-     * @public
+     * Specifies a function that customizes a form item after it has been created.
      */
     customizeItem?: ((item: Item) => void);
     /**
-     * @docid
-     * @default {}
-     * @fires dxFormOptions.onFieldDataChanged
-     * @public
+     * Provides the Form&apos;s data. Gets updated every time form fields change.
      */
     formData?: any;
     /**
-     * @docid
-     * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
-     * @default undefined
-     * @public
+     * Holds an array of form items.
      */
     items?: Array<Item> | undefined;
     /**
-     * @docid
-     * @default "left"
-     * @default "top" &for(Material)
-     * @default "top" &for(Fluent)
-     * @public
+     * Specifies the location of a label against the editor. Applies only to labels outside their editors (see labelMode).
      */
     labelLocation?: LabelLocation;
     /**
-     * @docid
-     * @default "outside"
-     * @public
-     */
+      * Specifies a display mode for item labels.
+      */
      labelMode?: FormLabelMode;
     /**
-     * @docid
-     * @default 200
-     * @public
+     * The minimum column width used for calculating column count in the form layout. Applies only if colCount property is &apos;auto&apos;.
      */
     minColWidth?: number;
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/form:EditorEnterKeyEvent}
-     * @action
-     * @public
+     * A function that is executed when the Enter key has been pressed while an editor is focused.
      */
     onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void);
     /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/form:FieldDataChangedEvent}
-     * @action
-     * @public
+     * A function that is executed when the value of a formData object field is changed.
      */
     onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
     /**
-     * @docid
-     * @default "optional"
-     * @public
+     * The text displayed for optional fields. Applies only if showOptionalMark is true.
      */
     optionalMark?: string;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether all editors on the form are read-only. Applies only to non-templated items.
      */
     readOnly?: boolean;
     /**
-     * @docid
-     * @default "*"
-     * @public
+     * The text displayed for required fields.
      */
     requiredMark?: string;
     /**
-     * @docid
-     * @default "{0} is required"
-     * @public
+     * Specifies the message that is shown for end-users if a required field value is not specified.
      */
     requiredMessage?: string;
     /**
-     * @docid
-     * @default null
-     * @public
+     * Specifies a function that categorizes screens by their width.
      */
     screenByWidth?: Function;
     /**
-     * @docid
-     * @default false
-     * @public
+     * A Boolean value specifying whether to enable or disable form scrolling.
      */
     scrollingEnabled?: boolean;
     /**
-     * @docid
-     * @default true
-     * @default false &for(Material)
-     * @public
+     * Specifies whether a colon is displayed at the end of form labels. Applies only to labels outside their editors (see labelMode).
      */
     showColonAfterLabel?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether or not the optional mark is displayed for optional fields.
      */
     showOptionalMark?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not the required mark is displayed for required fields.
      */
     showRequiredMark?: boolean;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether or not the total validation summary is displayed on the form.
      */
     showValidationSummary?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Gives a name to the internal validation group.
      */
     validationGroup?: string | undefined;
     /**
-     * @docid
-     * @default false
-     * @public
+     * Specifies whether current editor values differ from initial values.
      */
     readonly isDirty?: boolean;
 }
 /**
- * @docid
- * @inherits Widget
- * @namespace DevExpress.ui
- * @public
+ * The Form UI component represents fields of a data object as a collection of label-editor pairs. These pairs can be arranged in several groups, tabs and columns.
  */
 export default class dxForm extends Widget<dxFormOptions> {
     /**
-     * @docid
-     * @publicName getButton(name)
-     * @public
+     * Gets a button&apos;s instance.
      */
     getButton(name: string): dxButton | undefined;
     /**
-     * @docid
-     * @publicName getEditor(dataField)
-     * @public
+     * Gets an editor instance. Takes effect only if the form item is visible.
      */
     getEditor(dataField: string): Editor | undefined;
     /**
-     * @docid
-     * @publicName itemOption(id)
-     * @public
+     * Gets a form item&apos;s configuration.
      */
     itemOption(id: string): any;
     /**
-     * @docid
-     * @publicName itemOption(id, option, value)
-     * @public
+     * Updates the value of a single item option.
      */
     itemOption(id: string, option: string, value: any): void;
     /**
-     * @docid
-     * @publicName itemOption(id, options)
-     * @param2 options:object
-     * @public
+     * Updates the values of several item properties.
      */
     itemOption(id: string, options: any): void;
     /**
-     * @docid
-     * @publicName clear()
-     * @public
+     * Resets editor values to their default values.
      */
     clear(): void;
     /**
-     * @docid
-     * @publicName resetValues()
-     * @public
-     * @deprecated dxForm.clear
+     * Resets the editor&apos;s value to undefined.
+     * @deprecated Use the clear() method instead.
      */
     resetValues(): void;
     /**
-     * @docid
-     * @publicName reset(editorsData)
-     * @param1 editorsData:object
-     * @public
+     * Resets editor values. Every editor attempts to obtain its new value from the argument list. If an editor is not included in the list, that editor resets to its initial value.
      */
     reset(editorsData?: Record<string, any>): void;
     /**
-     * @docid
-     * @publicName updateData(data)
-     * @param1 data:object
-     * @public
+     * Merges the passed `data` object with formData. Matching properties in formData are overwritten and new properties added.
      */
     updateData(data: any): void;
     /**
-     * @docid
-     * @publicName updateData(dataField, value)
-     * @param2 value:object
-     * @public
+     * Updates a formData field and the corresponding editor.
      */
     updateData(dataField: string, value: any): void;
     /**
-     * @docid
-     * @publicName updateDimensions()
-     * @return Promise<void>
-     * @public
+     * Updates the dimensions of the UI component contents.
      */
     updateDimensions(): DxPromise<void>;
     /**
-     * @docid
-     * @publicName validate()
-     * @public
-     * @return dxValidationGroupResult
+     * Validates the values of all editors on the form against the list of the validation rules specified for each form item.
      */
     validate(): ValidationResult;
 }
 
-/**
- * @public
- * @namespace DevExpress.ui.dxForm
- */
 export type Item = SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem;
 
-/**
- * @public
- * @namespace DevExpress.ui.dxForm
- */
 export type ButtonItem = dxFormButtonItem;
 
 /**
  * @deprecated Use ButtonItem instead
- * @namespace DevExpress.ui
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxFormButtonItem {
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Configures the button.
      */
     buttonOptions?: dxButtonOptions | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies how many columns the item spans.
      */
     colSpan?: number | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies a CSS class to be applied to the item.
      */
     cssClass?: string | undefined;
     /**
-     * @docid
-     * @default "right"
-     * @public
+     * Specifies the button&apos;s horizontal alignment.
      */
     horizontalAlignment?: HorizontalAlignment;
     /**
-     * @docid
-     * @default "simple"
-     * @public
+     * Specifies the item&apos;s type. Set it to &apos;button&apos; to create a button item.
      */
     itemType?: FormItemType;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the item&apos;s identifier.
      */
     name?: string | undefined;
     /**
-     * @docid
-     * @default "top"
-     * @public
+     * Specifies the button&apos;s vertical alignment.
      */
     verticalAlignment?: VerticalAlignment;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether the item is visible.
      */
     visible?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the item&apos;s position regarding other items in a group, tab, or the whole UI component.
      */
     visibleIndex?: number | undefined;
 }
 
-/**
- * @public
- * @namespace DevExpress.ui.dxForm
- */
 export type EmptyItem = dxFormEmptyItem;
 
 /**
  * @deprecated Use EmptyItem instead
- * @namespace DevExpress.ui
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxFormEmptyItem {
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the number of columns spanned by the item.
      */
     colSpan?: number | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies a CSS class to be applied to the form item.
      */
     cssClass?: string | undefined;
     /**
-     * @docid
-     * @default "simple"
-     * @public
+     * Specifies the item&apos;s type. Set it to &apos;empty&apos; to create an empty item.
      */
     itemType?: FormItemType;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies a name that identifies the form item.
      */
     name?: string | undefined;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not the current form item is visible.
      */
     visible?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the sequence number of the item in a form, group or tab.
      */
     visibleIndex?: number | undefined;
 }
 
-/**
- * @public
- * @namespace DevExpress.ui.dxForm
- */
 export type GroupItem = dxFormGroupItem;
 
 /**
  * @deprecated Use GroupItem instead
- * @namespace DevExpress.ui
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxFormGroupItem {
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not all group item labels are aligned.
      */
     alignItemLabels?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the group caption.
      */
     caption?: string | undefined;
     /**
-     * @docid
-     * @type_function_return string|Element|jQuery
-     * @public
+     * Specifies a template that can be used to replace group captions with custom content.
      */
     captionTemplate?: template | ((data: GroupCaptionTemplateData, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default 1
-     * @public
+     * The count of columns in the group layout.
      */
     colCount?: number;
     /**
-     * @docid
-     * @type object
-     * @inherits ColCountResponsible
-     * @default undefined
-     * @public
+     * Specifies the relation between the screen size qualifier and the number of columns in the grouped layout.
      */
     colCountByScreen?: any | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the number of columns spanned by the item.
      */
     colSpan?: number | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies a CSS class to be applied to the form item.
      */
     cssClass?: string | undefined;
     /**
-     * @docid
-     * @default "simple"
-     * @public
+     * Specifies the item&apos;s type. Set it to &apos;group&apos; to create a group item.
      */
     itemType?: FormItemType;
     /**
-     * @docid
-     * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
-     * @default undefined
-     * @public
+     * Holds an array of form items displayed within the group.
      */
     items?: Array<Item> | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies a name that identifies the form item.
      */
     name?: string | undefined;
     /**
-     * @docid
-     * @type_function_param1 data:object
-     * @type_function_param1_field formData:object
-     * @type_function_return string|Element|jQuery
-     * @public
+     * A template to be used for rendering a group item.
      */
     template?: template | ((data: GroupItemTemplateData, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not the current form item is visible.
      */
     visible?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the sequence number of the item in a form, group or tab.
      */
     visibleIndex?: number | undefined;
 }
 
-/**
- * @public
- * @namespace DevExpress.ui.dxForm
- */
 export type SimpleItem = dxFormSimpleItem;
 
 /**
  * @deprecated Use SimpleItem instead
- * @namespace DevExpress.ui
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxFormSimpleItem {
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the number of columns spanned by the item.
      */
     colSpan?: number | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies a CSS class to be applied to the form item.
      */
     cssClass?: string | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the path to the formData object field bound to the current form item.
      */
     dataField?: string | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Configures the form item&apos;s editor.
      */
     editorOptions?: any | undefined;
     /**
-     * @docid
-     * @public
+     * Specifies which editor UI component is used to display and edit the form item value.
      */
     editorType?: FormItemComponent;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the help text displayed for the current form item.
      */
     helpText?: string | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies whether the current form item is required.
      */
     isRequired?: boolean | undefined;
     /**
-     * @docid
-     * @default "simple"
-     * @public
+     * Specifies the item&apos;s type. Set it to &apos;simple&apos; to create a simple item.
      */
     itemType?: FormItemType;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies properties for the form item label.
      */
     label?: {
       /**
-       * @docid
-       * @default "left"
+       * Specifies the label&apos;s horizontal alignment. Applies only to labels outside their editors (see labelMode).
        */
       alignment?: HorizontalAlignment;
       /**
-       * @docid
-       * @default "left"
+       * Specifies the location of a label against the editor. Applies only to labels outside their editors (see labelMode).
        */
       location?: LabelLocation;
       /**
-       * @docid
-       * @default from showColonAfterLabel
+       * Specifies whether a colon is displayed at the end of the current label. Applies only to labels outside their editors (see labelMode).
        */
       showColon?: boolean;
       /**
-       * @docid
-       * @type_function_return string|Element|jQuery
-       * @public
+       * A template that can be used to replace the label with custom content. Applies only to labels outside their editors (see labelMode).
        */
       template?: template | ((itemData: SimpleItemLabelTemplateData, itemElement: DxElement) => string | UserDefinedElement);
       /**
-       * @docid
-       * @default undefined
+       * Specifies the label text.
        */
       text?: string | undefined;
       /**
-       * @docid
-       * @default true
+       * Controls the visibility of the label outside the editor.
        */
       visible?: boolean;
     };
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies a name that identifies the form item.
      */
     name?: string | undefined;
     /**
-     * @docid
-     * @type_function_param1 data:object
-     * @type_function_param1_field editorOptions:object
-     * @type_function_return string|Element|jQuery
-     * @public
+     * A template that can be used to replace the default editor with custom content.
      */
     template?: template | ((data: SimpleItemTemplateData, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * An array of validation rules to be checked for the form item editor.
      */
     validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not the current form item is visible.
      */
     visible?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the sequence number of the item in a form, group or tab.
      */
     visibleIndex?: number | undefined;
 }
 
-/**
- * @public
- * @namespace DevExpress.ui.dxForm
- */
 export type TabbedItem = dxFormTabbedItem;
 
 /**
  * @deprecated Use TabbedItem instead
- * @namespace DevExpress.ui
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface dxFormTabbedItem {
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the number of columns spanned by the item.
      */
     colSpan?: number | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies a CSS class to be applied to the form item.
      */
     cssClass?: string | undefined;
     /**
-     * @docid
-     * @default "simple"
-     * @public
+     * Specifies the item&apos;s type. Set it to &apos;tabbed&apos; to create a tabbed item.
      */
     itemType?: FormItemType;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies a name that identifies the form item.
      */
     name?: string | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Holds a configuration object for the TabPanel UI component used to display the current form item.
      */
     tabPanelOptions?: dxTabPanelOptions | undefined;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * An array of tab configuration objects.
      */
     tabs?: Array<{
       /**
-       * @docid
-       * @default true
+       * Specifies whether or not labels of items displayed within the current tab are aligned.
        */
       alignItemLabels?: boolean;
       /**
-       * @docid
-       * @default undefined
+       * Specifies a badge text for the tab.
        */
       badge?: string | undefined;
       /**
-       * @docid
-       * @default 1
+       * The count of columns in the tab layout.
        */
       colCount?: number;
       /**
-       * @docid
-       * @type object
-       * @inherits ColCountResponsible
-       * @default undefined
+       * Specifies the relation between the screen size qualifier and the number of columns in the tabbed layout.
        */
       colCountByScreen?: any | undefined;
       /**
-       * @docid
-       * @default false
+       * Specifies whether the tab responds to user interaction.
        */
       disabled?: boolean;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the icon to be displayed on the tab.
        */
       icon?: string | undefined;
       /**
-       * @docid
-       * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
-       * @default undefined
+       * Holds an array of form items displayed within the tab.
        */
       items?: Array<Item> | undefined;
       /**
-       * @docid
-       * @type_function_param1 tabData:object
-       * @default undefined
+       * The template to be used for rendering the tab.
        */
       tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any) | undefined;
       /**
-       * @docid
-       * @type_function_param1 tabData:object
-       * @default undefined
+       * The template to be used for rendering the tab content.
        */
       template?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any) | undefined;
       /**
-       * @docid
-       * @default undefined
+       * Specifies the tab title.
        */
       title?: string | undefined;
     }>;
     /**
-     * @docid
-     * @default true
-     * @public
+     * Specifies whether or not the current form item is visible.
      */
     visible?: boolean;
     /**
-     * @docid
-     * @default undefined
-     * @public
+     * Specifies the sequence number of the item in a form, group or tab.
      */
     visibleIndex?: number | undefined;
 }
 
-/** @public */
 export type Properties = dxFormOptions;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+ */
 export type Options = dxFormOptions;
 
 // TODO: temporary commented out to fix jquery generation error in R1

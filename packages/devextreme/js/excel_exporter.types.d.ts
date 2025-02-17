@@ -3,156 +3,123 @@ import { Cell } from './ui/pivot_grid';
 import { Column } from './ui/data_grid';
 
 /**
- * @docid
- * @namespace DevExpress.excelExporter
- * @type object
- * @hidden
+ * 
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface ExcelExportBaseOptions {
   /**
-   * @docid
-   * @default undefined
-   * @public
+   * An Excel worksheet to which the grid should be exported.
    */
   worksheet?: object | undefined;
   /**
-   * @docid
-   * @default { row: 1, column: 1 }
-   * @public
+   * A cell used as a start position for export.
    */
   topLeftCell?: CellAddress | string;
   /**
-   * @docid
-   * @default true
-   * @public
+   * Specifies whether Excel columns should have the same width as their source UI component&apos;s columns.
    */
   keepColumnWidths?: boolean;
   /**
-   * @docid
-   * @public
+   * Configures the load panel.
    */
   loadPanel?: ExportLoadPanel;
   /**
-   * @docid
-   * @default false
-   * @public
-   */
+    * Specifies if the CSV export routine saves potentially dangerous content as plain text data.
+    */
    encodeExecutableContent?: boolean;
 }
 
 /**
- * @namespace DevExpress.excelExporter
  * @deprecated Use PivotGridCell instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface ExcelPivotGridCell extends Cell {
   /**
-   * @docid
-   * @public
+   * The area to which the cell belongs.
    */
   area?: 'column' | 'row' | 'data';
   /**
-   * @docid
-   * @public
+   * A zero-based index that indicates the position of the cell&apos;s row.
    */
   rowIndex?: number;
   /**
-   * @docid
-   * @public
+   * A zero-based index that indicates the position of the cell&apos;s column.
    */
   columnIndex?: number;
   /**
-   * @docid
-   * @public
+   * The header type. Available if the cell belongs to the field panel.
    */
   headerType?: 'column' | 'row' | 'data' | 'filter';
 }
 
 /**
- * @docid
- * @namespace DevExpress.excelExporter
- * @type object
- * @public
+ * 
  */
 export interface CellAddress {
   /**
-   * @docid
-   * @public
+   * The index of a row that contains the cell.
    */
   row?: number;
   /**
-   * @docid
-   * @public
+   * The index of a column that contains the cell.
    */
   column?: number;
 }
 
 /**
-* @docid
-* @namespace DevExpress.excelExporter
-* @type object
-* @public
-*/
+ * The coordinates of the exported DataGrid in the Excel file.
+ */
 export interface CellRange {
   /**
-   * @docid
-   * @public
+   * Coordinates of the top left cell.
    */
   from?: CellAddress;
   /**
-   * @docid
-   * @public
+   * Coordinates of the bottom right cell.
    */
   to?: CellAddress;
 }
 
 /**
- * @namespace DevExpress.excelExporter
  * @deprecated Use DataGridCell instead
+ * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
  */
 export interface ExcelDataGridCell {
   /**
-   * @docid
-   * @public
-   * @type dxDataGridColumn
+   * The configuration of the cell&apos;s column.
    */
   column?: Column;
   /**
-   * @docid
-   * @public
+   * The data object of the cell&apos;s row.
    */
   data?: any;
   /**
-   * @docid
-   * @public
+   * The group index of the cell&apos;s row. Available when the rowType is &apos;group&apos;.
    */
   groupIndex?: number;
   /**
-   * @docid
-   * @public
+   * Information about group summary items the cell represents.
    */
   groupSummaryItems?: Array<{
     /**
-     * @docid
+     * The group summary item&apos;s identifier.
      */
     name?: string;
     /**
-     * @docid
+     * The group summary item&apos;s raw value.
      */
     value?: any;
   }>;
   /**
-   * @docid
-   * @public
+   * The type of the cell&apos;s row.
    */
   rowType?: string;
   /**
-   * @docid
-   * @public
+   * The identifier of the total summary item that the cell represents.
    */
   totalSummaryItemName?: string;
   /**
-   * @docid
-   * @public
+   * The cell&apos;s raw value.
    */
   value?: any;
 }
