@@ -76,6 +76,8 @@ export interface Properties extends PublicProperties {
   _uploadButtonType?: ButtonType;
 }
 
+type FileDialogEventTarget = dxElementWrapper | Properties['dialogTrigger'];
+
 class FileUploader extends Editor<Properties> {
   // Temporary solution. Move to component level
   public NAME!: string;
@@ -860,7 +862,7 @@ class FileUploader extends Editor<Properties> {
     this._isCustomClickEvent = false;
   }
 
-  _attachSelectFileDialogHandlers(target): void {
+  _attachSelectFileDialogHandlers(target: FileDialogEventTarget): void {
     if (!isDefined(target)) {
       return;
     }
@@ -881,7 +883,7 @@ class FileUploader extends Editor<Properties> {
     });
   }
 
-  _detachSelectFileDialogHandlers(target): void {
+  _detachSelectFileDialogHandlers(target: FileDialogEventTarget): void {
     if (!isDefined(target)) {
       return;
     }
