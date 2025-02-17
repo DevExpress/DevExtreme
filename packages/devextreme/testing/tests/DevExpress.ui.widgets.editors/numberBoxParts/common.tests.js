@@ -67,6 +67,34 @@ QUnit.module('basics', {}, () => {
         assert.equal($element.find('.' + INPUT_CLASS).attr('inputmode'), 'decimal', 'inputmode is correct');
     });
 
+    QUnit.module('Tabindex', () => {
+        const testCases = [
+            { initial: false, updated: true, expectedInitial: -1, expectedUpdated: 0 },
+            { initial: true, updated: false, expectedInitial: 0, expectedUpdated: -1 }
+        ];
+
+        testCases.forEach(({ initial, updated, expectedInitial, expectedUpdated }) => {
+            QUnit.test(`should be ${expectedInitial} if focusStateEnabled = ${initial} on init (T1275314)`, function(assert) {
+                const element = $('#numberbox').dxNumberBox({ focusStateEnabled: initial });
+                const $input = element.find(`.${INPUT_CLASS}`);
+
+                assert.strictEqual($input.prop('tabindex'), expectedInitial);
+            });
+
+            QUnit.test(`should update from ${expectedInitial} to ${expectedUpdated} when focusStateEnabled changes to ${updated} (T1275314)`, function(assert) {
+                const element = $('#numberbox').dxNumberBox({ focusStateEnabled: initial });
+                const instance = element.dxNumberBox('instance');
+                const $input = element.find(`.${INPUT_CLASS}`);
+
+                assert.strictEqual($input.prop('tabindex'), expectedInitial, 'Initial tabindex is correct');
+
+                instance.option('focusStateEnabled', updated);
+
+                assert.strictEqual($input.prop('tabindex'), expectedUpdated, 'Updated tabindex is correct');
+            });
+        });
+    });
+
     QUnit.test('onContentReady fired after the widget is fully ready', function(assert) {
         assert.expect(2);
 

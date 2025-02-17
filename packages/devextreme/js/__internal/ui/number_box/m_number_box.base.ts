@@ -206,6 +206,8 @@ const NumberBoxBase = TextEditor.inherit({
       step: this.option('step'),
     });
 
+    this._toggleTabIndex();
+
     this.setAria({
       // eslint-disable-next-line spellcheck/spell-checker
       valuemin: ensureDefined(this.option('min'), ''),
