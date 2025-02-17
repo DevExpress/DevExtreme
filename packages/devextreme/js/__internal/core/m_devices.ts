@@ -13,7 +13,7 @@ import { sessionStorage as SessionStorage } from '@js/core/utils/storage';
 import { isPlainObject } from '@js/core/utils/type';
 import { changeCallback, value as viewPort } from '@js/core/utils/view_port';
 import { getNavigator, getWindow, hasWindow } from '@js/core/utils/window';
-import { waitUntilFirstWidgetCreating } from '@ts/core/utils/m_common';
+import { uiLayerInitialized } from '@ts/core/utils/m_common';
 
 export interface Device {
   android?: boolean;
@@ -389,7 +389,7 @@ class Devices {
 
 const devices = new Devices();
 
-when(waitUntilFirstWidgetCreating).done(() => {
+when(uiLayerInitialized).done(() => {
   const viewPortElement = viewPort();
   if (viewPortElement) {
     devices.attachCssClasses(viewPortElement);

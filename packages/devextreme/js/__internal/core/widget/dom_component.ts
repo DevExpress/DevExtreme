@@ -17,7 +17,7 @@ import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import license, { peekValidationPerformed } from '@ts/core/license/license_validation';
 import TemplateManagerModule from '@ts/core/m_template_manager';
-import { waitUntilFirstWidgetCreating } from '@ts/core/utils/m_common';
+import { uiLayerInitialized } from '@ts/core/utils/m_common';
 
 import { Component } from './component';
 import type { OptionChanged } from './types';
@@ -87,8 +87,6 @@ class DOMComponent<
   }
 
   ctor(element: Element, options: TProperties): void {
-    waitUntilFirstWidgetCreating.resolve();
-
     this._customClass = null;
 
     this._createElement(element);
@@ -101,6 +99,8 @@ class DOMComponent<
     if (!validationAlreadyPerformed && peekValidationPerformed()) {
       config({ licenseKey: '' });
     }
+
+    uiLayerInitialized.resolve();
   }
 
   _createElement(element: Element): void {
