@@ -109,11 +109,22 @@ export default [
     plugins,
   },
   {
-    input: NG_BASE_DIR + `rehype-minify-whitespace/index.js`,
+      input: NG_BASE_DIR + `rehype-minify-whitespace/index.js`,
+      output: {
+          file: OUTPUT_DIR + `unified/rehype-minify-whitespace.bundle.js`,
+          format,
+          name: 'rehypeRemark',
+          globals: { },
+      },
+      external: [],
+      plugins,
+  },
+  {
+    input: NG_BASE_DIR + `canvg/dist/index.js`,
     output: {
-      file: OUTPUT_DIR + `unified/rehype-minify-whitespace.bundle.js`,
+      file: OUTPUT_DIR + `canvg.bundle.js`,
       format,
-      name: 'rehypeRemark',
+      name: 'canvg',
       globals: { },
     },
     external: [],

@@ -11,7 +11,7 @@ import ValidationEngine from './m_validation_engine';
 const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
 const ITEM_CLASS = `${VALIDATION_SUMMARY_CLASS}-item`;
 const ITEM_DATA_KEY = `${VALIDATION_SUMMARY_CLASS}-item-data`;
-
+// @ts-expect-error
 const ValidationSummary = CollectionWidget.inherit({
   _getDefaultOptions() {
     return extend(this.callBase(), {

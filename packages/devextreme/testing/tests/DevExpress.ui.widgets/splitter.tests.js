@@ -1328,6 +1328,285 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     });
 });
 
+QUnit.module('Pane visibility', moduleConfig, () => {
+    ['horizontal', 'vertical'].forEach(orientation => {
+        [{
+            dataSource: [{ visible: true }],
+            scenarios: [{
+                paneIndex: 0,
+                visible: false,
+                expected: {
+                    layout: ['100'],
+                    itemSizes: [1000],
+                    handlesCount: 0
+                }
+            }, {
+                paneIndex: 0,
+                visible: true,
+                expected: {
+                    layout: ['100'],
+                    itemSizes: [1000],
+                    handlesCount: 0
+                }
+            }]
+        }, {
+            dataSource: [{ visible: true }, { visible: true }],
+            scenarios: [{
+                paneIndex: 0,
+                visible: false,
+                expected: {
+                    layout: ['0', '100'],
+                    itemSizes: [0, 1000],
+                    handlesCount: 0
+                }
+            }, {
+                paneIndex: 0,
+                visible: true,
+                expected: {
+                    layout: ['50', '50'],
+                    itemSizes: [496, 496],
+                    handlesCount: 1
+                }
+            }]
+        }, {
+            dataSource: [{ visible: true }, { visible: false }],
+            scenarios: [{
+                paneIndex: 1,
+                visible: true,
+                expected: {
+                    layout: ['50', '50'],
+                    itemSizes: [496, 496],
+                    handlesCount: 1
+                }
+            }, {
+                paneIndex: 1,
+                visible: false,
+                expected: {
+                    layout: ['100', '0'],
+                    itemSizes: [1000, 0],
+                    handlesCount: 0
+                }
+            }]
+        }, {
+            dataSource: [{ visible: true }, { visible: true }],
+            scenarios: [{
+                paneIndex: 1,
+                visible: false,
+                expected: {
+                    layout: ['100', '0'],
+                    itemSizes: [1000, 0],
+                    handlesCount: 0
+                }
+            }, {
+                paneIndex: 1,
+                visible: true,
+                expected: {
+                    layout: ['50', '50'],
+                    itemSizes: [496, 496],
+                    handlesCount: 1
+                }
+            }]
+        }, {
+            dataSource: [{ size: '200px' }, { size: '500px' }, {}],
+            scenarios: [{
+                paneIndex: 1,
+                visible: true,
+                expected: {
+                    layout: ['20.3252', '50.813', '28.8618'],
+                    itemSizes: [200, 500, 284],
+                    handlesCount: 2
+                }
+            }, {
+                paneIndex: 1,
+                visible: false,
+                expected: {
+                    layout: ['20.3252', '0', '79.6748'],
+                    itemSizes: [201.625, 0, 790.375],
+                    handlesCount: 1
+                }
+            }, {
+                paneIndex: 1,
+                visible: true,
+                expected: {
+                    layout: ['20.3252', '50.813', '28.8618'],
+                    itemSizes: [200, 500, 284],
+                    handlesCount: 2
+                }
+            }]
+        }, {
+            dataSource: [{ size: '200px' }, { size: '500px' }, { visible: false }],
+            scenarios: [{
+                paneIndex: 2,
+                visible: true,
+                expected: {
+                    layout: ['20.1613', '39.9194', '39.9194'],
+                    itemSizes: [198.391, 392.805, 392.805],
+                    handlesCount: 2
+                }
+            }]
+        }, {
+            dataSource: [{ size: '200px' }, { size: '600px' }, {}],
+            scenarios: [{
+                paneIndex: 2,
+                visible: false,
+                expected: {
+                    layout: ['20.3252', '79.6748', 0],
+                    itemSizes: [201.625, 790.375, 0],
+                    handlesCount: 1
+                }
+            }, {
+                paneIndex: 2,
+                visible: true,
+                expected: {
+                    layout: ['20.3252', '60.9756', '18.6992'],
+                    itemSizes: [200, 600, 184],
+                    handlesCount: 2
+                }
+            }]
+        }, {
+            dataSource: [{ }, { visible: true }, { }],
+            scenarios: [{
+                paneIndex: 1,
+                visible: false,
+                expected: {
+                    layout: ['33.3333', '0', '66.6667'],
+                    itemSizes: [330.664, 0, 661.336],
+                    handlesCount: 1
+                }
+            },
+            {
+                paneIndex: 1,
+                visible: true,
+                expected: {
+                    layout: ['33.3333', '33.3333', '33.3333'],
+                    itemSizes: [328, 328, 328],
+                    handlesCount: 2
+                }
+            }]
+        }, {
+            dataSource: [{ visible: false }, { }, { }],
+            scenarios: [{
+                paneIndex: 0,
+                visible: true,
+                expected: {
+                    layout: ['25', '25', '50'],
+                    itemSizes: [246, 246, 492],
+                    handlesCount: 2
+                }
+            }]
+        }, {
+            dataSource: [{ visible: true, minSize: '100px' }, { }, { }],
+            scenarios: [{
+                paneIndex: 0,
+                visible: false,
+                expected: {
+                    layout: ['0', '66.6667', '33.3333'],
+                    itemSizes: [0, 661.336, 330.664],
+                    handlesCount: 1
+                }
+            }]
+        }, {
+            dataSource: [{ visible: false, maxSize: '100px' }, { }, { }],
+            scenarios: [{
+                paneIndex: 0,
+                visible: true,
+                expected: {
+                    layout: ['10.1626', '39.8374', '50'],
+                    itemSizes: [100, 392, 492],
+                    handlesCount: 2
+                }
+            }]
+        }, {
+            dataSource: [{ visible: false, size: '100px' }, { size: 250 }, { }, { size: 200 }],
+            scenarios: [{
+                paneIndex: 2,
+                visible: false,
+                expected: {
+                    layout: ['0', '25.4065', '0', '74.5935'],
+                    itemSizes: [0, 252.031, 0, 739.969],
+                    handlesCount: 1
+                }
+            }, {
+                paneIndex: 3,
+                visible: false,
+                expected: {
+                    layout: ['0', '100', '0', '0'],
+                    itemSizes: [0, 1000, 0, 0],
+                    handlesCount: 0
+                }
+            }, {
+                paneIndex: 3,
+                visible: true,
+                expected: {
+                    layout: ['0', '25.4065', '0', '74.5935'],
+                    itemSizes: [0, 252.031, 0, 739.969],
+                    handlesCount: 1
+                }
+            }, {
+                paneIndex: 2,
+                visible: true,
+                expected: {
+                    layout: ['0', '25.4065', '54.2683', '20.3252'],
+                    itemSizes: [0, 250, 534, 200],
+                    handlesCount: 2
+                }
+            }]
+        }, {
+            dataSource: [{ visible: true, size: '100px' }, { }, { size: 250, resizable: false }, { size: 200 }],
+            scenarios: [{
+                paneIndex: 1,
+                visible: false,
+                expected: {
+                    layout: ['10.1215', '0', '69.6356', '20.2429'],
+                    itemSizes: [100.812, 0, 693.57, 201.617],
+                    handlesCount: 2
+                }
+            }]
+        }, {
+            dataSource: [{ visible: true, size: '100px' }, { }, { size: 100, maxSize: 250 }, { size: 200 }],
+            scenarios: [{
+                paneIndex: 1,
+                visible: false,
+                expected: {
+                    layout: ['10.2459', '0', '69.2623', '20.4918'],
+                    itemSizes: [100.812, 0, 681.539, 201.617],
+                    handlesCount: 2
+                }
+            }]
+        }].forEach(({ dataSource, scenarios }) => {
+            QUnit.test(`Size distribution after changing pane.visibility at runtime, dataSource: ${JSON.stringify(dataSource)}, ${orientation} orientation`, function(assert) {
+                this.reinit({
+                    orientation,
+                    dataSource: dataSource
+                });
+
+                scenarios.forEach(({ paneIndex, visible, expected }) => {
+                    this.instance.option(`items[${paneIndex}].visible`, visible);
+
+                    const { layout, itemSizes, handlesCount } = expected;
+                    this.assertLayout(layout);
+                    this.checkItemSizes(itemSizes);
+
+                    assert.strictEqual(this.getResizeHandles().length, handlesCount, 'resize handles count');
+                });
+            });
+        });
+
+        QUnit.test('Changing pane visibility does not trigger full rerender (T1267030)', function(assert) {
+            this.reinit({
+                orientation,
+                dataSource: [{}, {}, {}]
+            });
+
+            const initialPaneId = this.getPanes().eq(0).attr('id');
+
+            this.instance.option('items[2].visible', false);
+
+            assert.strictEqual(initialPaneId, this.getPanes().eq(0).attr('id'), 'neighbour pane was not rerendered');
+        });
+    });
+});
+
 QUnit.module('Resizing', moduleConfig, () => {
     ['horizontal', 'vertical'].forEach(orientation => {
         QUnit.test(`collapsed pane should move its neighboring pane on expansion to left, orientation ${orientation}`, function(assert) {
@@ -1551,9 +1830,7 @@ QUnit.module('Resizing', moduleConfig, () => {
                 dataSource: [{ visible: false }, { }]
             });
 
-            const resizeHandles = this.$element.find(`.${RESIZE_HANDLE_CLASS}`);
-
-            assert.strictEqual(resizeHandles.length, 0);
+            assert.strictEqual(this.getResizeHandles(false).length, 0);
         });
 
         QUnit.test(`splitter should have 3 resize handles if 4 out of 6 are visible, ${orientation} orientation`, function(assert) {
@@ -1562,9 +1839,7 @@ QUnit.module('Resizing', moduleConfig, () => {
                 dataSource: [{ }, { }, { visible: false }, { }, { }, { visible: false }]
             });
 
-            const resizeHandles = this.$element.find(`.${RESIZE_HANDLE_CLASS}`);
-
-            assert.strictEqual(resizeHandles.length, 3);
+            assert.strictEqual(this.getResizeHandles(false).length, 3);
         });
 
         [
@@ -2619,6 +2894,41 @@ QUnit.module('Visibility of control elements', {
             $collapseButton.trigger('dxclick');
 
             assert.ok($resizeHandleIcon.hasClass(STATE_INVISIBLE_CLASS), 'resize handle icon is invisible');
+        });
+    });
+
+    [{
+        dataSource: [{ visible: false, collapsible: false, }, { collapsible: true }],
+        scenarios: [{
+            paneIndex: 0,
+            visible: true,
+            expectedVisibleIcons: [{ prev: false, resize: true, next: true }]
+        }, ]
+    }, {
+        dataSource: [{ visible: false, resizable: false, collapsible: false }, { collapsible: false }],
+        scenarios: [{
+            paneIndex: 0,
+            visible: true,
+            expectedVisibleIcons: [{ prev: false, resize: false, next: false }]
+        }, ]
+    }, {
+        dataSource: [{ visible: false }, { }, { }],
+        scenarios: [{
+            paneIndex: 0,
+            visible: true,
+            expectedVisibleIcons: [{ prev: false, resize: true, next: false }, { prev: false, resize: true, next: false }]
+        }]
+    }].forEach(({ dataSource, scenarios }) => {
+        QUnit.test(`Control elements visibility distribution after changing pane.visibility at runtime, dataSource: ${JSON.stringify(dataSource)}`, function(assert) {
+            this.reinit({
+                dataSource: dataSource
+            });
+
+            scenarios.forEach(({ paneIndex, visible, expectedVisibleIcons }) => {
+                this.instance.option(`items[${paneIndex}].visible`, visible);
+
+                this.checkIconsVisibility(expectedVisibleIcons);
+            });
         });
     });
 });

@@ -8,6 +8,14 @@
       height="420px"
     >
       <path
+          d="M 0 0 L 820 0 L 820 420 L 0 420 L 0 0"
+          stroke="#999999"
+          stroke-width="1"
+          stroke-linecap="butt"
+          fill="white"
+          stroke-linejoin="miter"
+      />
+      <path
         d="M 13 407 L 128 407 L 232 39 L 13 39"
         fill="#6D39C3"
       />
@@ -46,15 +54,6 @@
           y="19.2"
         >custom elements</tspan>
       </text>
-      <path
-        opacity="0.8"
-        d="M 0 0 L 820 0 L 820 420 L 0 420 L 0 0"
-        stroke="#999999"
-        stroke-width="1"
-        stroke-linecap="butt"
-        fill="none"
-        stroke-linejoin="miter"
-      />
     </svg>
   </div>
 </template>

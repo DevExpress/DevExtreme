@@ -271,6 +271,11 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
 
     let syncRendering = true;
     when.apply(this, items).done(() => {
+      const isGroupInDom = !groups[0]?.element || !!$(groups[0].element.closest('svg')).length;
+      if (!isGroupInDom) {
+        return;
+      }
+
       if (syncRendering) {
         this._setGroupsVisibility(groups, 'visible');
         return;

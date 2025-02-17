@@ -22,7 +22,7 @@ import {
 import { isDefined, isObject, isString } from '@js/core/utils/type';
 import swatchContainer from '@js/ui/widget/swatch_container';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ColumnPoint, ModuleType } from '@ts/grids/grid_core/m_types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ColumnChooserView } from '../column_chooser/m_column_chooser';
@@ -914,27 +914,60 @@ export class ColumnsResizerViewController extends modules.ViewController {
     }
   }
 
+  private _generateColumnsTopYIndex(needToCheckPrevPoint = false) {
+    const that = this;
+    const rowCount = that._columnsController.getRowCount();
+    const topYMap: Record<number, number> = {};
+    const pointCreated = (point: ColumnPoint): boolean => {
+      const x = Math.ceil(point.x);
+
+      if (!topYMap[x]) {
+        topYMap[x] = point.y;
+      }
+
+      return true;
+    };
+
+    for (let rowIndex = 0; rowIndex < rowCount - 1; rowIndex++) {
+      const cells = that._columnHeadersView.getColumnElements(rowIndex);
+
+      if (cells && cells.length > 0) {
+        gridCoreUtils.getPointsByColumns(cells, pointCreated, false, 0, needToCheckPrevPoint);
+      }
+    }
+
+    return topYMap;
+  }
+
   /**
    * @extended: column_fixing
    * @protected
    */
   protected _generatePointsByColumns(needToCheckPrevPoint = false) {
     const that = this;
+    const topYMap = that._generateColumnsTopYIndex(needToCheckPrevPoint);
     const columns = that._columnsController ? that._columnsController.getVisibleColumns() : [];
     const cells = that._columnHeadersView.getColumnElements();
-    let pointsByColumns: any = [];
+    const correctColumnY = (point: ColumnPoint): ColumnPoint => {
+      const x = Math.ceil(point.x);
 
+      if (topYMap[x]) {
+        point.y = topYMap[x];
+      }
+
+      return point;
+    };
+
+    that._pointsByColumns = [];
     if (cells && cells.length > 0) {
-      pointsByColumns = gridCoreUtils.getPointsByColumns(
+      that._pointsByColumns = gridCoreUtils.getPointsByColumns(
         cells,
-        (point) => that._pointCreated(point, cells.length, columns),
+        (point) => that._pointCreated(correctColumnY(point), cells.length, columns),
         false,
         0,
         needToCheckPrevPoint,
       );
     }
-
-    that._pointsByColumns = pointsByColumns;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

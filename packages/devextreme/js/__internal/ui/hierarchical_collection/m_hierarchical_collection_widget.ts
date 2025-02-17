@@ -1,4 +1,6 @@
 import devices from '@js/core/devices';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { noop } from '@js/core/utils/common';
@@ -7,17 +9,29 @@ import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
 import { isFunction, isObject } from '@js/core/utils/type';
-import CollectionWidget from '@js/ui/collection/ui.collection_widget.async';
+import CollectionWidgetAsync from '@js/ui/collection/ui.collection_widget.async';
+import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { CollectionWidgetEditProperties } from '@ts/ui/collection/m_collection_widget.edit';
 
 import HierarchicalDataAdapter from './m_data_adapter';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const ITEM_URL_CLASS = 'dx-item-url';
 
-const HierarchicalCollectionWidget = CollectionWidget.inherit({
+class HierarchicalCollectionWidget<
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+TProperties extends CollectionWidgetEditProperties<any, TItem, TKey>,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+TItem extends ItemLike = any,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+TKey = any,
+> extends CollectionWidgetAsync<TProperties> {
+  _dataAdapter?: any;
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+  _getDefaultOptions(): TProperties {
+    return {
+      ...super._getDefaultOptions(),
       keyExpr: 'id',
       displayExpr: 'text',
       selectedExpr: 'selected',
@@ -26,34 +40,37 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
       hoverStateEnabled: true,
       parentIdExpr: 'parentId',
       expandedExpr: 'expanded',
-    });
-  },
+    };
+  }
 
-  _defaultOptionsRules() {
-    return this.callBase().concat([
+  _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
+    return super._defaultOptionsRules().concat([
       {
         device() {
           return devices.real().deviceType === 'desktop' && !devices.isSimulator();
         },
+        // @ts-expect-error ts-error
         options: {
           focusStateEnabled: true,
         },
       },
     ]);
-  },
+  }
 
   _init() {
-    this.callBase();
+    super._init();
 
     this._initAccessors();
     this._initDataAdapter();
     this._initDynamicTemplates();
-  },
+  }
 
   _initDataSource() {
-    this.callBase();
+    // @ts-expect-error ts-error
+    super._initDataSource();
+    // @ts-expect-error ts-error
     this._dataSource && this._dataSource.paginate(false);
-  },
+  }
 
   _initDataAdapter() {
     const accessors = this._createDataAdapterAccessors();
@@ -67,11 +84,12 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
         items: this.option('items'),
       }, this._getDataAdapterOptions()),
     );
-  },
+  }
 
-  _getDataAdapterOptions: noop,
+  _getDataAdapterOptions() {}
 
-  _getItemExtraPropNames: noop,
+  // @ts-expect-error
+  _getItemExtraPropNames(): string[] {}
 
   _initDynamicTemplates() {
     const fields = ['text', 'html', 'items', 'icon'].concat(this._getItemExtraPropNames());
@@ -79,19 +97,29 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
     this._templateManager.addDefaultTemplates({
       item: new BindableTemplate(this._addContent.bind(this), fields, this.option('integrationOptions.watchMethod'), {
         text: this._displayGetter,
+        // @ts-expect-error
         items: this._itemsGetter,
       }),
     });
-  },
+  }
 
-  _addContent($container, itemData) {
+  _addContent($container: dxElementWrapper, itemData: TItem): void {
     $container
+      // @ts-expect-error
       .html(itemData.html)
+      // @ts-expect-error
       .append(this._getIconContainer(itemData))
       .append(this._getTextContainer(itemData));
-  },
+  }
 
-  _getLinkContainer(iconContainer, textContainer, { linkAttr, url }) {
+  _getLinkContainer(
+    iconContainer: dxElementWrapper,
+    textContainer: dxElementWrapper,
+    itemData: TItem,
+  ): dxElementWrapper {
+    // @ts-expect-error
+    const { linkAttr, url } = itemData;
+
     const linkAttributes = isObject(linkAttr) ? linkAttr : {};
     return $('<a>')
       .addClass(ITEM_URL_CLASS)
@@ -99,17 +127,18 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
       .attr({ ...linkAttributes, href: url })
       .append(iconContainer)
       .append(textContainer);
-  },
+  }
 
-  _getIconContainer(itemData) {
+  _getIconContainer(itemData: TItem): dxElementWrapper | undefined | null {
+    // @ts-expect-error
     if (!itemData.icon) {
       return undefined;
     }
-
+    // @ts-expect-error
     const $imageContainer = getImageContainer(itemData.icon);
     // @ts-expect-error
     if ($imageContainer.is('img')) {
-      const componentName = this.NAME.startsWith('dxPrivateComponent')
+      const componentName = this.NAME?.startsWith('dxPrivateComponent')
         ? ''
         : `${this.NAME} `;
       // @ts-expect-error
@@ -117,39 +146,42 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
     }
 
     return $imageContainer;
-  },
+  }
 
-  _getTextContainer(itemData) {
+  _getTextContainer(itemData: TItem): dxElementWrapper {
+    // @ts-expect-error
     return $('<span>').text(itemData.text);
-  },
+  }
 
-  _initAccessors() {
+  _initAccessors(): void {
     const that = this;
     each(this._getAccessors(), (_, accessor) => {
       that._compileAccessor(accessor);
     });
 
     this._compileDisplayGetter();
-  },
+  }
 
   _getAccessors() {
     return ['key', 'selected', 'items', 'disabled', 'parentId', 'expanded'];
-  },
+  }
 
-  _getChildNodes(node) {
+  _getChildNodes(node: TItem): TItem[] {
     const that = this;
     const arr = [];
+    // @ts-expect-error
     each(node.internalFields.childrenKeys, (_, key) => {
       const childNode = that._dataAdapter.getNodeByKey(key);
       // @ts-expect-error
       arr.push(childNode);
     });
     return arr;
-  },
+  }
 
-  _hasChildren(node) {
+  _hasChildren(node: TItem): number | undefined {
+    // @ts-expect-error
     return node && node.internalFields.childrenKeys.length;
-  },
+  }
 
   _compileAccessor(optionName) {
     const getter = `_${optionName}Getter`;
@@ -165,10 +197,11 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
       this[getter] = function (obj) { return obj[optionExpr()]; };
       return;
     }
-
+    // @ts-expect-error
     this[getter] = compileGetter(optionExpr);
+    // @ts-expect-error
     this[setter] = compileSetter(optionExpr);
-  },
+  }
 
   _createDataAdapterAccessors() {
     const that = this;
@@ -189,27 +222,34 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
     accessors.getters.display = !this._displayGetter ? (itemData) => itemData.text : this._displayGetter;
 
     return accessors;
-  },
+  }
 
-  _initMarkup() {
-    this.callBase();
+  _initMarkup(): void {
+    super._initMarkup();
     this._addWidgetClass();
-  },
+  }
 
-  _addWidgetClass() {
+  _addWidgetClass(): void {
     this._focusTarget().addClass(this._widgetClass());
-  },
+  }
 
-  _widgetClass: noop,
+  // @ts-expect-error ts-error
+  _widgetClass(): string {}
 
-  _renderItemFrame(index, itemData) {
-    const $itemFrame = this.callBase.apply(this, arguments);
-
+  _renderItemFrame(
+    index: number,
+    itemData: TItem,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    $itemContainer: dxElementWrapper,
+  ): dxElementWrapper {
+    // @ts-expect-error ts-error
+    const $itemFrame = super._renderItemFrame.apply(this, arguments);
+    // @ts-expect-error ts-error
     $itemFrame.toggleClass(DISABLED_STATE_CLASS, !!this._disabledGetter(itemData));
     return $itemFrame;
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     switch (args.name) {
       case 'displayExpr':
       case 'keyExpr':
@@ -228,12 +268,12 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
         break;
       case 'items':
         this._initDataAdapter();
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
-});
+  }
+}
 
 export default HierarchicalCollectionWidget;

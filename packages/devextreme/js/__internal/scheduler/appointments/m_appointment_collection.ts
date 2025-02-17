@@ -42,7 +42,7 @@ const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 const DBLCLICK_EVENT_NAME = addNamespace(dblclickEvent, 'dxSchedulerAppointment');
 
 const toMs = dateUtils.dateToMilliseconds;
-
+// @ts-expect-error
 class SchedulerAppointments extends CollectionWidget {
   _virtualAppointments: any;
 

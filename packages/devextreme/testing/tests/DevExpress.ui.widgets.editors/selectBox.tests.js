@@ -22,35 +22,33 @@ const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 
 QUnit.testStart(() => {
     const markup =
-        '<div id="qunit-fixture">\
-            <div id="selectBox"></div>\
-            \
-            <div id="selectBoxWithItemTemplate">\
-                <div data-options="dxTemplate: { name: \'item\'}">\
-                    itemTemplate\
-                </div>\
+        '<div id="selectBox"></div>\
+        \
+        <div id="selectBoxWithItemTemplate">\
+            <div data-options="dxTemplate: { name: \'item\'}">\
+                itemTemplate\
             </div>\
-            \
-            <div id="selectBoxFieldTemplateWithoutTextBox">\
-                <div data-options="dxTemplate: { name: \'field\' }">\
-                    <span>test</span>\
-                </div>\
+        </div>\
+        \
+        <div id="selectBoxFieldTemplateWithoutTextBox">\
+            <div data-options="dxTemplate: { name: \'field\' }">\
+                <span>test</span>\
             </div>\
+        </div>\
 \
-            <div id="selectBoxFieldTemplate">\
-                <div data-options="dxTemplate: { name: \'field\' }">\
-                    fieldTemplate\
-                </div>\
-                <div data-options="dxTemplate: { name: \'item\'}">\
-                    itemTemplate\
-                </div>\
+        <div id="selectBoxFieldTemplate">\
+            <div data-options="dxTemplate: { name: \'field\' }">\
+                fieldTemplate\
             </div>\
-            \
-            <div id="selectBoxWithoutScrollWrapper">\
-                <div id="selectBoxWithoutScroll"></div>\
+            <div data-options="dxTemplate: { name: \'item\'}">\
+                itemTemplate\
             </div>\
-            <div id="test-container"></div>\
-        </div>';
+        </div>\
+        \
+        <div id="selectBoxWithoutScrollWrapper">\
+            <div id="selectBoxWithoutScroll"></div>\
+        </div>\
+        <div id="test-container"></div>';
 
     $('#qunit-fixture').html(markup);
 

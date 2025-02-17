@@ -109,7 +109,7 @@ export class GanttTreeList {
         if(e.row?.rowType === 'data') {
             this.setOption('selectedRowKeys', [e.row.data[this._gantt.option('tasks.keyExpr')]]);
         }
-        e.items = [];
+
         const info = {
             cancel: false,
             event: e.event,
@@ -118,6 +118,7 @@ export class GanttTreeList {
             position: { x: e.event.pageX, y: e.event.pageY }
         };
         this._gantt._showPopupMenu(info);
+        e.event.preventDefault();
     }
 
     _getHeight() {

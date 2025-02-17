@@ -76,8 +76,6 @@ class ContextMenu extends MenuBase {
 
   _overlayContentId?: string;
 
-  _actions?: any;
-
   _showContextMenuEventHandler?: (event: unknown) => any;
 
   getShowEvent(showEventOption: {
@@ -230,6 +228,7 @@ class ContextMenu extends MenuBase {
         $newTarget = $activeItemHighlighted ? this._prevItem($items) : $oldTarget;
         this._setFocusedElement($newTarget);
         if ($oldTarget.is($items.first())) {
+          // @ts-expect-error
           this._actions.onLeftFirstItem($oldTarget);
         }
         break;
@@ -237,6 +236,7 @@ class ContextMenu extends MenuBase {
         $newTarget = $activeItemHighlighted ? this._nextItem($items) : $oldTarget;
         this._setFocusedElement($newTarget);
         if ($oldTarget.is($items.last())) {
+          // @ts-expect-error
           this._actions.onLeftLastItem($oldTarget);
         }
         break;
@@ -313,11 +313,11 @@ class ContextMenu extends MenuBase {
       this._hideSubmenu($curItem.closest(`.${DX_SUBMENU_CLASS}`));
       return $parentItem;
     }
-
+    // @ts-expect-error
     this._actions.onCloseRootSubmenu($curItem);
   }
 
-  _expandSubmenuHandler($items, location) {
+  _expandSubmenuHandler($items, location): dxElementWrapper | undefined {
     const $curItem = this._getActiveItem(true);
     const itemData = this._getItemData($curItem);
     const node = this._dataAdapter.getNodeByItem(itemData);
@@ -332,7 +332,7 @@ class ContextMenu extends MenuBase {
 
       return this._nextItem(this._getItemsByLocation(location));
     }
-
+    // @ts-expect-error
     this._actions.onExpandLastSubmenu($curItem);
     return undefined;
   }
@@ -480,7 +480,7 @@ class ContextMenu extends MenuBase {
     }, { validatingTargetName: 'target' });
 
     const handler = (e) => contextMenuAction({ event: e, target: $(e.currentTarget) });
-    // @ts-expect-error
+
     contextMenuAction = this._createAction(contextMenuAction);
     // @ts-expect-error
     if (isRenderer(target) || target.nodeType || isWindow(target)) {

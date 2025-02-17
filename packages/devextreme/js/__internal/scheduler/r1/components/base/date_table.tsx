@@ -1,6 +1,6 @@
 import type { InfernoEffect } from '@devextreme/runtime/inferno';
 import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
-import type { JSXTemplate, RefObject } from '@devextreme-generator/declarations';
+import type { JSXTemplate, RefObject } from '@ts/core/r1/types';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
 import type { CellTemplateProps, DefaultProps } from '../types';
@@ -17,7 +17,6 @@ export interface DateTableProps extends LayoutProps {
 
 export const DateTableDefaultProps: DefaultProps<DateTableProps> = {
   ...LayoutDefaultProps,
-  // @ts-expect-error Different types between React and Inferno
   cellTemplate: DateTableCellBase,
 };
 

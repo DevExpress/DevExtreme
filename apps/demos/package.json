@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "@angular/cli": "17.3.11",
+        "@angular-devkit/build-angular": "17.3.11",
         "@angular/common": "17.3.12",
         "@angular/compiler": "17.3.12",
         "@angular/compiler-cli": "17.3.12",
@@ -28,6 +29,7 @@
         "@rollup/plugin-commonjs": "19.0.2",
         "@vue/compiler-sfc": "3.4.27",
         "@vue/shared": "^3.2.47",
+        "canvg": "4.0.2",
         "cldr-core": "40.0.0",
         "cldr-data": "36.0.1",
         "cldr-dates-full": "40.0.0",
@@ -36,8 +38,8 @@
         "core-js": "2.6.12",
         "devexpress-diagram": "2.2.5",
         "devexpress-gantt": "4.1.54",
-        "devextreme-aspnet-data": "3.0.0",
-        "devextreme-aspnet-data-nojquery": "3.0.0",
+        "devextreme-aspnet-data": "5.0.0",
+        "devextreme-aspnet-data-nojquery": "5.0.0",
         "devextreme-cldr-data": "1.0.3",
         "devextreme-quill": "1.7.1",
         "dx-systemjs-vue-browser": "1.1.1",
@@ -163,7 +165,11 @@
         "prepare-bundles": "pnpm run generate-devextreme-angular-umd && gulp bundles && gulp update-config",
         "convert-to-js": "ts-node ./utils/ts-to-js-converter/cli.ts",
         "create-typestat-cfg": "cd ./utils/internal && node ./create-typestat-cfg.js",
-        "make-demos-bundle": "ts-node ./utils/create-bundles"
+        "make-demos-bundle": "ts-node ./utils/create-bundles",
+        "update-angular-json": "ts-node ./utils/create-bundles/Angular/update-angular-json.ts",
+        "build-angular": "ng build",
+        "post-process-angular": "ts-node ./utils/create-bundles/Angular/post-process-index.ts",
+        "webserver-gh": "cd ./publish-demos && http-server --port 5645"
     },
     "license": "SEE LICENSE IN README.md",
     "keywords": [
