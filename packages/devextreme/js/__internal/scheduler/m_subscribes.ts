@@ -1,6 +1,5 @@
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
-import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isPlainObject } from '@js/core/utils/type';
 
@@ -72,43 +71,28 @@ const subscribes = {
     return this._getUpdatedData(rawAppointment);
   },
 
-  updateAppointmentAfterDrag({
-    event, element, rawAppointment, newCellIndex, oldCellIndex,
-  }) {
+  updateAppointmentAfterDrag({ event, element, rawAppointment }) {
     const info = utils.dataAccessors.getAppointmentInfo(element);
+    const targetedRawAppointment = this._getUpdatedData(rawAppointment);
 
-    const appointment = createAppointmentAdapter(rawAppointment, this._dataAccessors, this.timeZoneCalculator);
-    const targetedAppointment = createAppointmentAdapter(
-      extend({}, rawAppointment, this._getUpdatedData(rawAppointment)),
-      this._dataAccessors,
-      this.timeZoneCalculator,
-    );
-    const targetedRawAppointment = targetedAppointment.source();
-
-    const becomeAllDay = targetedAppointment.allDay;
-    const wasAllDay = appointment.allDay;
-
-    const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow()
-            && (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
-
+    const toAllDay = targetedRawAppointment.allDay;
+    const fromAllDay = rawAppointment.allDay;
+    const isDropBetweenAllDay = this._workSpace.supportAllDayRow() && fromAllDay !== toAllDay;
     const isDragAndDropBetweenComponents = event.fromComponent !== event.toComponent;
+    const isDropToSelfScheduler = this._workSpace.hasDroppableCell();
+    const isDropToDifferentCell = rawAppointment.startDate.getTime() !== targetedRawAppointment.startDate.getTime();
 
-    if (newCellIndex === -1) {
-      if (!isDragAndDropBetweenComponents) { // TODO dragging inside component
-        this._appointments.moveAppointmentBack(event);
-      }
-      return;
-    }
-
-    if ((newCellIndex !== oldCellIndex) || isDragAndDropBetweenComponents || movedBetweenAllDayAndSimple) {
+    if (isDropToSelfScheduler && (isDropToDifferentCell || isDragAndDropBetweenComponents || isDropBetweenAllDay)) {
       this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.startDate, () => {
-        this._updateAppointment(rawAppointment, targetedRawAppointment, function () {
+        this._updateAppointment(rawAppointment, targetedRawAppointment, () => {
           this._appointments.moveAppointmentBack(event);
         }, event);
       }, undefined, undefined, event);
-    } else {
-      this._appointments.moveAppointmentBack(event);
+
+      return;
     }
+
+    this._appointments.moveAppointmentBack(event);
   },
 
   onDeleteButtonPress(options) {

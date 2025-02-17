@@ -1490,12 +1490,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     return index;
   }
 
-  getDroppableCellIndex() {
-    const $droppableCell = this._getDroppableCell();
-    const $row = $droppableCell.parent();
-    const rowIndex = $row.index();
-
-    return rowIndex * $row.find('td').length + $droppableCell.index();
+  hasDroppableCell() {
+    return this._getDroppableCell().length > 0;
   }
 
   getDataByDroppableCell() {
