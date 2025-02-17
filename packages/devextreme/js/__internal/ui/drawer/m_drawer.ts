@@ -391,6 +391,17 @@ const Drawer = (Widget as any).inherit({
 
   _renderPosition(isDrawerOpened, disableAnimation, jumpToEnd) {
     this.stopAnimations(jumpToEnd);
+    this._whenAnimationCompleted = Deferred();
+
+    let { animationEnabled } = this.option();
+
+    if (disableAnimation === true) {
+      animationEnabled = false;
+    }
+
+    if (!animationEnabled) {
+      this._whenAnimationCompleted.resolve();
+    }
 
     if (!hasWindow()) {
       return;
@@ -402,11 +413,6 @@ const Drawer = (Widget as any).inherit({
     $(this.viewContent()).css('paddingTop', 0);
     $(this.viewContent()).css('paddingBottom', 0);
 
-    let animationEnabled = this.option('animationEnabled');
-    if (disableAnimation === true) {
-      animationEnabled = false;
-    }
-
     if (isDrawerOpened) {
       this._toggleShaderVisibility(isDrawerOpened);
     }
@@ -417,9 +423,7 @@ const Drawer = (Widget as any).inherit({
   _animationCompleteHandler() {
     this.resizeViewContent();
 
-    if (this._whenAnimationCompleted) {
-      this._whenAnimationCompleted.resolve();
-    }
+    this._whenAnimationCompleted.resolve();
   },
 
   _getPositionCorrection() {
@@ -572,7 +576,6 @@ const Drawer = (Widget as any).inherit({
   toggle(opened) {
     const targetOpened = opened === undefined ? !this.option('opened') : opened;
 
-    this._whenAnimationCompleted = Deferred();
     this.option('opened', targetOpened);
 
     return this._whenAnimationCompleted.promise();
