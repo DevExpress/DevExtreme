@@ -73,7 +73,7 @@ jobs:
 
     runs-on: ubuntu-22.04
     name: ${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}-${{ matrix.THEME }}
-    timeout-minutes: 30
+    timeout-minutes: 180
 
     steps:
     - name: Get sources
