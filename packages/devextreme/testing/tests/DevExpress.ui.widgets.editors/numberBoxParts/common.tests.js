@@ -68,22 +68,22 @@ QUnit.module('basics', {}, () => {
     });
 
     QUnit.module('Tabindex', () => {
-        [false, true].forEach((initialFocusState) => {
-            QUnit.test(`should be ${initialFocusState ? 0 : -1} if focusStateEnabled = ${initialFocusState} on init (T1275314)`, function(assert) {
-                const $element = $('#numberbox').dxNumberBox({ focusStateEnabled: initialFocusState });
+        [false, true].forEach((initialFocusStateEnabled) => {
+            QUnit.test(`should be ${initialFocusStateEnabled ? 0 : -1} if focusStateEnabled = ${initialFocusStateEnabled} on init (T1275314)`, function(assert) {
+                const $element = $('#numberbox').dxNumberBox({ focusStateEnabled: initialFocusStateEnabled });
                 const $input = $element.find(`.${INPUT_CLASS}`);
 
-                assert.strictEqual($input.prop('tabindex'), initialFocusState ? 0 : -1);
+                assert.strictEqual($input.prop('tabindex'), initialFocusStateEnabled ? 0 : -1);
             });
 
-            QUnit.test(`should be updated when focusStateEnabled changes from ${initialFocusState} to ${!initialFocusState}`, function(assert) {
-                const $element = $('#numberbox').dxNumberBox({ focusStateEnabled: initialFocusState });
+            QUnit.test(`should be updated when focusStateEnabled changes from ${initialFocusStateEnabled} to ${!initialFocusStateEnabled}`, function(assert) {
+                const $element = $('#numberbox').dxNumberBox({ focusStateEnabled: initialFocusStateEnabled });
                 const instance = $element.dxNumberBox('instance');
                 const $input = $element.find(`.${INPUT_CLASS}`);
 
-                instance.option('focusStateEnabled', !initialFocusState);
+                instance.option('focusStateEnabled', !initialFocusStateEnabled);
 
-                assert.strictEqual($input.prop('tabindex'), initialFocusState ? -1 : 0, 'Updated tabindex is correct');
+                assert.strictEqual($input.prop('tabindex'), initialFocusStateEnabled ? -1 : 0, 'Updated tabindex is correct');
             });
         });
     });

@@ -109,7 +109,7 @@ const NumberBoxBase = TextEditor.inherit({
     this.$element().addClass(WIDGET_CLASS);
 
     this.callBase();
-    this._applyTabIndex();
+    this._toggleTabIndex();
   },
 
   _getDefaultAttributes() {
@@ -443,16 +443,6 @@ const NumberBoxBase = TextEditor.inherit({
     }
   },
 
-  _applyTabIndex() {
-    const { tabIndex, focusStateEnabled, disabled } = this.option();
-
-    if (disabled || !focusStateEnabled) {
-      this._input().attr('tabIndex', -1);
-    } else {
-      this._input().attr('tabIndex', tabIndex);
-    }
-  },
-
   _optionChanged(args) {
     switch (args.name) {
       case 'value':
@@ -463,12 +453,10 @@ const NumberBoxBase = TextEditor.inherit({
         break;
       case 'step':
         this._renderProps();
-        this._applyTabIndex();
         break;
       case 'min':
       case 'max':
         this._renderProps();
-        this._applyTabIndex();
         this.option('value', this._parseValue(this.option('value')));
         break;
       case 'showSpinButtons':
