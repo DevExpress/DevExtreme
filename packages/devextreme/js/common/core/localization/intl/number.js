@@ -90,7 +90,9 @@ export default {
             return getFormatter(format)(value);
         }
 
-        return this.callBase.apply(this, arguments);
+        const result = this.callBase.apply(this, arguments);
+
+        return result;
     },
     _getCurrencySymbolInfo: function(currency) {
         const formatter = getCurrencyFormatter(currency);
