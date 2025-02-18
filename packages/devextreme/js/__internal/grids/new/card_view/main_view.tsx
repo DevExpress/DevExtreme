@@ -6,22 +6,26 @@ import { PagerView } from '@ts/grids/new/grid_core/pager/view';
 import { ToolbarView } from '@ts/grids/new/grid_core/toolbar/view';
 import type { ComponentType } from 'inferno';
 
+import { ContentView } from './content_view/view';
 import { HeaderPanelView } from './header_panel/view';
 
 interface MainViewProps {
   Toolbar: ComponentType;
+  Content: ComponentType;
   Pager: ComponentType;
   HeaderPanel: ComponentType;
 }
 
 function MainViewComponent({
-  Toolbar, Pager, HeaderPanel,
+  Toolbar, Content, Pager, HeaderPanel,
 }: MainViewProps): JSX.Element {
   return (<>
     {/* @ts-expect-error */}
     <Toolbar/>
     {/* @ts-expect-error */}
     <HeaderPanel/>
+    {/* @ts-expect-error */}
+    <Content/>
     <div>
       {/*
         Pager, as renovated component, has strange disposing.
@@ -40,10 +44,11 @@ export class MainView extends View<MainViewProps> {
   protected override component = MainViewComponent;
 
   public static dependencies = [
-    PagerView, ToolbarView, HeaderPanelView,
+    ContentView, PagerView, ToolbarView, HeaderPanelView,
   ] as const;
 
   constructor(
+    private readonly content: ContentView,
     private readonly pager: PagerView,
     private readonly toolbar: ToolbarView,
     private readonly headerPanel: HeaderPanelView,
@@ -56,6 +61,7 @@ export class MainView extends View<MainViewProps> {
   protected override getProps() {
     return combined({
       Toolbar: this.toolbar.asInferno(),
+      Content: this.content.asInferno(),
       Pager: this.pager.asInferno(),
       HeaderPanel: this.headerPanel.asInferno(),
     });

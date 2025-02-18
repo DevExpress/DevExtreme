@@ -7,16 +7,21 @@ import { MainView as MainViewBase } from '@ts/grids/new/grid_core/main_view';
 import { OptionsController as OptionsControllerBase } from '@ts/grids/new/grid_core/options_controller/options_controller';
 import { GridCoreNew } from '@ts/grids/new/grid_core/widget';
 
+import * as ContentViewModule from './content_view/index';
 import { HeaderPanelView } from './header_panel/view';
 import { MainView } from './main_view';
 import { defaultOptions } from './options';
 import { OptionsController } from './options_controller';
 
 export class CardViewBase extends GridCoreNew {
+  contentView!: ContentViewModule.View;
+
   headerPanel!: HeaderPanelView;
 
   protected _registerDIContext(): void {
     super._registerDIContext();
+
+    this.diContext.register(ContentViewModule.View);
     this.diContext.register(HeaderPanelView);
     this.diContext.register(MainViewBase, MainView);
 
@@ -33,6 +38,7 @@ export class CardViewBase extends GridCoreNew {
 
   protected _initDIContext(): void {
     super._initDIContext();
+    this.contentView = this.diContext.get(ContentViewModule.View);
     this.headerPanel = this.diContext.get(HeaderPanelView);
   }
 
@@ -46,7 +52,7 @@ export class CardViewBase extends GridCoreNew {
   }
 }
 
-export class CardView extends CardViewBase {}
+export class CardView extends ContentViewModule.PublicMethods(CardViewBase) {}
 
 // @ts-expect-error
 registerComponent('dxCardView', CardView);
