@@ -75,24 +75,28 @@ const subscribes = {
     const info = utils.dataAccessors.getAppointmentInfo(element);
     const targetedRawAppointment = this._getUpdatedData(rawAppointment);
 
-    const toAllDay = targetedRawAppointment.allDay;
     const fromAllDay = rawAppointment.allDay;
+    const toAllDay = targetedRawAppointment.allDay;
     const isDropBetweenAllDay = this._workSpace.supportAllDayRow() && fromAllDay !== toAllDay;
+
     const isDragAndDropBetweenComponents = event.fromComponent !== event.toComponent;
     const isDropToSelfScheduler = this._workSpace.hasDroppableCell();
-    const isDropToDifferentCell = rawAppointment.startDate.getTime() !== targetedRawAppointment.startDate.getTime();
+
+    const fromTime = new Date(rawAppointment.startDate).getTime();
+    const toTime = new Date(targetedRawAppointment.startDate).getTime();
+    const isDropToDifferentCell = fromTime !== toTime;
+
+    const onCancel = (): void => {
+      this._appointments.moveAppointmentBack(event);
+    };
 
     if (isDropToSelfScheduler && (isDropToDifferentCell || isDragAndDropBetweenComponents || isDropBetweenAllDay)) {
       this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.startDate, () => {
-        this._updateAppointment(rawAppointment, targetedRawAppointment, () => {
-          this._appointments.moveAppointmentBack(event);
-        }, event);
+        this._updateAppointment(rawAppointment, targetedRawAppointment, onCancel, event);
       }, undefined, undefined, event);
-
-      return;
+    } else {
+      onCancel();
     }
-
-    this._appointments.moveAppointmentBack(event);
   },
 
   onDeleteButtonPress(options) {
