@@ -143,6 +143,12 @@ $pivotgrid-expand-icon-text-offset: 0;
   }
 
   .dx-column-header {
+    .dx-pivotgrid-fields-area-head {
+      tr > td:first-child {
+        padding-left: 0;
+      }
+    }
+
     .dx-pivotgrid-fields-area {
       .dx-area-field-container {
         display: block;
@@ -152,24 +158,10 @@ $pivotgrid-expand-icon-text-offset: 0;
     }
   }
 
-  .dx-filter-header {
-    .dx-pivotgrid-fields-area {
-      overflow: hidden;
-    }
-  }
-
   .dx-data-header,
   .dx-column-header,
   .dx-area-description-cell.dx-pivotgrid-background {
     background-color: $pivotgrid-totalcolor;
-  }
-
-  .dx-column-header {
-    .dx-pivotgrid-fields-area-head {
-      tr > td:first-child {
-        padding-left: 0;
-      }
-    }
   }
 
   .dx-filter-header {
@@ -186,6 +178,10 @@ $pivotgrid-expand-icon-text-offset: 0;
       tr > td:first-child {
         padding-left: $pivotgrid-common-field-padding;
       }
+    }
+
+    .dx-pivotgrid-fields-area {
+      overflow: hidden;
     }
   }
 
