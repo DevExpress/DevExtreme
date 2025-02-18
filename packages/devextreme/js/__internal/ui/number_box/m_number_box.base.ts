@@ -109,6 +109,7 @@ const NumberBoxBase = TextEditor.inherit({
     this.$element().addClass(WIDGET_CLASS);
 
     this.callBase();
+    this._applyTabIndex();
   },
 
   _getDefaultAttributes() {
@@ -200,7 +201,6 @@ const NumberBoxBase = TextEditor.inherit({
   },
 
   _renderProps() {
-    this.callBase();
     this._input().prop({
       min: this.option('min'),
       max: this.option('max'),
@@ -443,6 +443,16 @@ const NumberBoxBase = TextEditor.inherit({
     }
   },
 
+  _applyTabIndex() {
+    const { tabIndex, focusStateEnabled, disabled } = this.option();
+
+    if (disabled || !focusStateEnabled) {
+      this._input().attr('tabIndex', -1);
+    } else {
+      this._input().attr('tabIndex', tabIndex);
+    }
+  },
+
   _optionChanged(args) {
     switch (args.name) {
       case 'value':
@@ -453,14 +463,12 @@ const NumberBoxBase = TextEditor.inherit({
         break;
       case 'step':
         this._renderProps();
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        this._isFocusable() && this._renderFocusTarget();
+        this._applyTabIndex();
         break;
       case 'min':
       case 'max':
         this._renderProps();
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        this._isFocusable() && this._renderFocusTarget();
+        this._applyTabIndex();
         this.option('value', this._parseValue(this.option('value')));
         break;
       case 'showSpinButtons':

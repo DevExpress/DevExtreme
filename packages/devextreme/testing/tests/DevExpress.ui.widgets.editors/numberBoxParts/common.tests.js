@@ -68,27 +68,22 @@ QUnit.module('basics', {}, () => {
     });
 
     QUnit.module('Tabindex', () => {
-        const testCases = [
-            { initialFocusState: false, updatedFocusState: true, expectedInitialFocusState: -1, expectedUpdatedFocusState: 0 },
-            { initialFocusState: true, updatedFocusState: false, expectedInitialFocusState: 0, expectedUpdatedFocusState: -1 }
-        ];
-
-        testCases.forEach(({ initialFocusState, updatedFocusState, expectedInitialFocusState, expectedUpdatedFocusState }) => {
-            QUnit.test(`should be ${expectedInitialFocusState} if focusStateEnabled = ${initialFocusState} on init (T1275314)`, function(assert) {
+        [false, true].forEach((initialFocusState) => {
+            QUnit.test(`should be ${initialFocusState ? 0 : -1} if focusStateEnabled = ${initialFocusState} on init (T1275314)`, function(assert) {
                 const $element = $('#numberbox').dxNumberBox({ focusStateEnabled: initialFocusState });
                 const $input = $element.find(`.${INPUT_CLASS}`);
 
-                assert.strictEqual($input.prop('tabindex'), expectedInitialFocusState);
+                assert.strictEqual($input.prop('tabindex'), initialFocusState ? 0 : -1);
             });
 
-            QUnit.test(`should be updated from ${expectedInitialFocusState} to ${expectedUpdatedFocusState} when focusStateEnabled changes to ${updatedFocusState}`, function(assert) {
+            QUnit.test(`should be updated when focusStateEnabled changes from ${initialFocusState} to ${!initialFocusState}`, function(assert) {
                 const $element = $('#numberbox').dxNumberBox({ focusStateEnabled: initialFocusState });
                 const instance = $element.dxNumberBox('instance');
                 const $input = $element.find(`.${INPUT_CLASS}`);
 
-                instance.option('focusStateEnabled', updatedFocusState);
+                instance.option('focusStateEnabled', !initialFocusState);
 
-                assert.strictEqual($input.prop('tabindex'), expectedUpdatedFocusState, 'Updated tabindex is correct');
+                assert.strictEqual($input.prop('tabindex'), initialFocusState ? -1 : 0, 'Updated tabindex is correct');
             });
         });
     });
