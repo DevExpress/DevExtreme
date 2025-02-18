@@ -109,6 +109,7 @@ const NumberBoxBase = TextEditor.inherit({
     this.$element().addClass(WIDGET_CLASS);
 
     this.callBase();
+    this._toggleTabIndex();
   },
 
   _getDefaultAttributes() {
