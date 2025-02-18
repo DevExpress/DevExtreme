@@ -111,7 +111,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         },
         props,
       },
-      props.children,
       childrenContainer,
       Symbol('initial update token'),
       'component',

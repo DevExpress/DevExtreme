@@ -50,7 +50,7 @@ const NestedOption = function NestedOption<P>(
   const [
     config,
     context,
-  ] = useOptionScanning(optionElement, children, mainContainer, treeUpdateToken, 'option');
+  ] = useOptionScanning(optionElement, mainContainer, treeUpdateToken, 'option');
 
   useLayoutEffect(() => {
     if (!isTemplateRendering) {
