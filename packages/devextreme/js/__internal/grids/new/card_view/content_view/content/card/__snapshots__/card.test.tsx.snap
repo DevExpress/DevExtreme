@@ -1,0 +1,153 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Rendering should be rendered correctly 1`] = `
+<div>
+  <div
+    class="dx-cardview-card"
+    style="min-width: undefinedpx; max-width: undefinedpx;"
+    tabindex="0"
+  >
+    <div
+      class="dx-cardview-card-header"
+    >
+      <div
+        class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection"
+        role="toolbar"
+      >
+        <div
+          class="dx-toolbar-items-container"
+        >
+          <div
+            class="dx-toolbar-before"
+            role="presentation"
+          >
+            <div
+              class="dx-item dx-toolbar-item dx-toolbar-button"
+            >
+              <div
+                class="dx-item-content dx-toolbar-item-content"
+              >
+                <div
+                  aria-checked="false"
+                  aria-invalid="false"
+                  aria-readonly="false"
+                  class="dx-widget dx-checkbox"
+                  role="checkbox"
+                  tabindex="0"
+                >
+                  <input
+                    type="hidden"
+                    value="false"
+                  />
+                  <div
+                    class="dx-checkbox-container"
+                  >
+                    <span
+                      class="dx-checkbox-icon"
+                    />
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="dx-item dx-toolbar-item dx-toolbar-label"
+            >
+              <div
+                class="dx-item-content dx-toolbar-item-content"
+              >
+                <div>
+                  Card Header
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="dx-toolbar-center"
+            role="presentation"
+          />
+          <div
+            class="dx-toolbar-after"
+            role="presentation"
+          >
+            <div
+              class="dx-item dx-toolbar-item dx-toolbar-button"
+            >
+              <div
+                class="dx-item-content dx-toolbar-item-content"
+              >
+                <div
+                  aria-label="edit"
+                  class="dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-icon"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="dx-button-content"
+                  >
+                    <i
+                      class="dx-icon dx-icon-edit"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="dx-item dx-toolbar-item dx-toolbar-button"
+            >
+              <div
+                class="dx-item-content dx-toolbar-item-content"
+              >
+                <div
+                  aria-label="trash"
+                  class="dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-icon"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="dx-button-content"
+                  >
+                    <i
+                      class="dx-icon dx-icon-trash"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="dx-card-cover"
+    >
+      <img
+        alt="Card Cover"
+        class="dx-card-cover-image"
+        src="https://www.devexpress.com/support/demos/i/demo-thumbs/aspnetcore-grid.png"
+        style="width: 100%; height: auto;"
+      />
+    </div>
+    <div
+      class="dx-cardview-card-content"
+    >
+      <div
+        class="dx-cardview-field"
+        tabindex="0"
+      >
+        <span
+          class="dx-cardview-field-name"
+        >
+          Field
+          :
+        </span>
+        <span
+          class="dx-cardview-field-value"
+        >
+          devextreme
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

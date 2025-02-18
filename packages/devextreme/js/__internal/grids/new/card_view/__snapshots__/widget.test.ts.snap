@@ -38,6 +38,62 @@ exports[`common initial render should be successfull 1`] = `
       </div>
     </div>
   </div>
+  <div
+    class="dx-gridcore-contentview"
+  >
+    <div
+      class="dx-overlay dx-widget dx-state-invisible dx-visibility-change-handler dx-loadpanel"
+    >
+      <div
+        class="dx-overlay-content"
+        style="width: 222px; height: 90px;"
+      />
+    </div>
+    <div
+      class="dx-scrollable dx-visibility-change-handler dx-scrollable-both dx-scrollable-simulated"
+    >
+      <div
+        class="dx-scrollable-wrapper"
+      >
+        <div
+          class="dx-scrollable-container"
+          tabindex="0"
+        >
+          <div
+            class="dx-scrollable-content"
+            style="left: 0px; top: 0px; transform: none;"
+          />
+          <div
+            class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
+          >
+            <div
+              class="dx-scrollable-scroll dx-state-invisible"
+              style="width: 15px; transform: translate(0px, 0px);"
+            >
+              <div
+                class="dx-scrollable-scroll-content"
+              />
+            </div>
+          </div>
+          <div
+            class="dx-scrollable-scrollbar dx-widget dx-scrollbar-vertical"
+          >
+            <div
+              class="dx-scrollable-scroll dx-state-invisible"
+              style="height: 15px; transform: translate(0px, 0px);"
+            >
+              <div
+                class="dx-scrollable-scroll-content"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="dx-gridcore-error-row"
+    />
+  </div>
   <div>
     
   </div>
