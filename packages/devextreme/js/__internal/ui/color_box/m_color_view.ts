@@ -884,7 +884,7 @@ const ColorView = (Editor as any).inherit({
         }
 
         this._updateByDrag = false;
-        this.callBase(args);
+        this.callBase({ ...args, value: this.option('value') });
         break;
       case 'matchValue':
         this._setBaseColor(value);

@@ -500,6 +500,21 @@ QUnit.module('Color Box', {
         assert.equal(colorBox.option('value'), 'rgba(100, 0, 0, 1)');
     });
 
+    QUnit.test('In "instantly" mode value should not throw an error when invalid value is set (T1274981)', function(assert) {
+        try {
+            const colorBox = showColorBox.call(this, {
+                applyValueMode: 'instantly',
+            }).dxColorBox('instance');
+
+            colorBox.option('value', 'invalid');
+            assert.strictEqual(colorBox.option('value'), '#000000');
+
+            assert.ok(true, 'no errors');
+        } catch(e) {
+            assert.ok(false, `The '${e.message}' is raised`);
+        }
+    });
+
 
     QUnit.test('Option changes', function(assert) {
         const colorBox = showColorBox.call(this).dxColorBox('instance');
