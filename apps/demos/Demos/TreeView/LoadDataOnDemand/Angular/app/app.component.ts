@@ -28,7 +28,7 @@ export class AppComponent {
       const parentId = parent ? parent.itemData.id : '';
 
       return lastValueFrom(
-        http.get(`https://js.devexpress.com/Demos/Mvc/api/TreeViewData?parentId=${parentId}`),
+        http.get(`https://js.devexpress.com/Demos/NetCore/api/TreeViewData?parentId=${parentId}`),
       );
     };
   }

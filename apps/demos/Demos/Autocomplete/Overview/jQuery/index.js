@@ -68,7 +68,7 @@ $(() => {
         });
 
         $.ajax({
-          url: 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi/CustomersLookup',
+          url: 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi/CustomersLookup',
           dataType: 'json',
           data: args,
           success(result) {

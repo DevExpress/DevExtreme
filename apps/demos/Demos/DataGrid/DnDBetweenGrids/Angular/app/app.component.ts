@@ -30,7 +30,7 @@ export class AppComponent {
 
   tasksStore: AspNetData.CustomStore;
 
-  url = 'https://js.devexpress.com/Demos/Mvc/api/DnDBetweenGrids';
+  url = 'https://js.devexpress.com/Demos/NetCore/api/DnDBetweenGrids';
 
   statuses = [1, 2];
 
