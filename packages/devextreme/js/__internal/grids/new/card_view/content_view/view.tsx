@@ -10,6 +10,7 @@ import { ContentView as ContentViewBase } from '../../grid_core/content_view/vie
 import type { DataObject } from '../../grid_core/data_controller/types';
 import type { ContentViewProps } from './content_view';
 import { ContentView as ContentViewComponent } from './content_view';
+import { factors } from './utils';
 
 export class ContentView extends ContentViewBase<ContentViewProps> {
   // @ts-expect-error
@@ -25,12 +26,6 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
         return cardsPerRowProp;
       }
 
-      function factors(n) {
-        const res: number[] = [];
-        for (let i = 1; i <= n; i += 1) if (n % i === 0) res.push(i);
-        return res;
-      }
-
       const result = factors(pageSize).reverse().find((cardsPerRow) => {
         const cardWidth = (width - 6 * (cardsPerRow - 1)) / cardsPerRow;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -40,32 +35,6 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
       return result ?? 1;
     },
     [this.width, this.cardMinWidth, this.dataController.pageSize, this.options.oneWay('cardsPerRow')],
-  );
-
-  private readonly virtualState = computed(
-    (items, scrollTop, viewportHeight, rowHeight, cardsPerRow) => {
-      const scrollHeight = (items.length / cardsPerRow) * rowHeight;
-
-      const scrollBottom = scrollHeight - viewportHeight - scrollTop;
-
-      const nonVisibleRowCountUp = Math.floor(scrollTop / rowHeight);
-      const nonVisibleRowCountBottom = Math.floor(scrollBottom / rowHeight);
-
-      const virtualTop = nonVisibleRowCountUp * rowHeight;
-      const virtualBottom = nonVisibleRowCountBottom * rowHeight;
-
-      const virtualItems = items.slice(
-        nonVisibleRowCountUp * cardsPerRow,
-        items.length - nonVisibleRowCountBottom * cardsPerRow,
-      );
-
-      return {
-        virtualTop,
-        virtualBottom,
-        virtualItems,
-      };
-    },
-    [this.items, this.scrollTop, this.viewportHeight, this.rowHeight, this.cardsPerRow],
   );
 
   // @ts-expect-error
@@ -100,12 +69,6 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           toolbar: this.options.oneWay('cardHeader.items') as any,
         }),
-      }),
-      virtualScrollingProps: combined({
-        heightUp: 0,
-        heightDown: 0,
-        // heightUp: computed((virtualState) => virtualState.virtualTop, [this.virtualState]),
-        // heightDown: computed((virtualState) => virtualState.virtualBottom, [this.virtualState]),
       }),
     });
   }

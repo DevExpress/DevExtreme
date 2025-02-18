@@ -146,19 +146,13 @@ export class Card extends Component<CardProps> {
   }
 
   handleMouseEnter = (): void => {
-    const { onHoverChanged, hoverStateEnabled, row } = this.props;
-    if (!hoverStateEnabled) {
-      return;
-    }
+    const { onHoverChanged, row } = this.props;
 
     onHoverChanged?.({ isHovered: true, row });
   };
 
   handleMouseLeave = (): void => {
-    const { onHoverChanged, hoverStateEnabled, row } = this.props;
-    if (!hoverStateEnabled) {
-      return;
-    }
+    const { onHoverChanged, row } = this.props;
 
     onHoverChanged?.({ isHovered: false, row });
   };
