@@ -378,6 +378,7 @@ test('Header, fixed columns and virtual scroll bar should have stable position d
     keyExpr: 'field1',
     showBorders: true,
     width: 500,
+    height: 173,
     columnWidth: 100,
     scrolling: {
       rowRenderingMode: 'virtual',
