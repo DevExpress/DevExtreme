@@ -131,7 +131,7 @@ const refreshButtonOptions = {
   },
 };
 </script>
-<style scoped>
+<style>
 
 #gridContainer .informer {
   display: grid;

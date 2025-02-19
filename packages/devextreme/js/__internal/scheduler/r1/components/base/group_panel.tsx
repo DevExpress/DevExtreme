@@ -1,6 +1,6 @@
 import type { InfernoEffect } from '@devextreme/runtime/inferno';
 import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
-import type { RefObject } from '@devextreme-generator/declarations';
+import type { RefObject } from '@ts/core/r1/types';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
 import { VERTICAL_GROUP_ORIENTATION } from '../../const';

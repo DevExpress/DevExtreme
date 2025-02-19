@@ -900,6 +900,10 @@ prepareConfigurationComponentConfig(DxValueIndicatorConfig);
 const DxValueIndicator = defineComponent(DxValueIndicatorConfig);
 
 (DxValueIndicator as any).$_optionName = "valueIndicator";
+(DxValueIndicator as any).$_expectedChildren = {
+  color: { isCollectionItem: false, optionName: "color" },
+  text: { isCollectionItem: false, optionName: "text" }
+};
 
 const DxWidthConfig = {
   emits: {

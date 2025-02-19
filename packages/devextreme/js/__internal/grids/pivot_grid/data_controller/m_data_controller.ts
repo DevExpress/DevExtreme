@@ -1091,39 +1091,34 @@ const DataController = Class.inherit((function () {
         ? hiddenGrandTotals.length !== dataFields.length
         : true;
 
-      const rowOptions: any = {
-        isEmptyGrandTotal: data.isEmptyGrandTotalRow,
-        texts: options.texts || {},
-        hiddenTotals,
-        hiddenValues,
-        hiddenGrandTotals: [],
-        showTotals: options.showRowTotals,
-        showGrandTotals: options.showRowGrandTotals !== false
-          && grandTotalsAreHiddenForNotAllDataFields,
-        sortBySummaryPaths: createSortPaths(columnFields, dataFields),
-        showTotalsPrior: options.showTotalsPrior === 'rows' || options.showTotalsPrior === 'both',
-        showEmpty: !options.hideEmptySummaryCells,
-        layout: options.rowHeaderLayout,
-        fields: rowFields,
-        dataFields,
-        progress: 0,
-      };
-      const columnOptions: any = {
-        isEmptyGrandTotal: data.isEmptyGrandTotalColumn,
+      const commonOptions: any = {
         texts: options.texts || {},
         hiddenTotals,
         hiddenValues,
         hiddenGrandTotals,
-        showTotals: options.showColumnTotals,
-        showTotalsPrior: options.showTotalsPrior === 'columns' || options.showTotalsPrior === 'both',
-        showGrandTotals: options.showColumnGrandTotals !== false
-          && grandTotalsAreHiddenForNotAllDataFields,
-        sortBySummaryPaths: createSortPaths(rowFields, dataFields),
         showEmpty: !options.hideEmptySummaryCells,
-        fields: columnFields,
         dataFields,
         progress: 0,
       };
+      const rowOptions: any = extend({}, commonOptions, {
+        isEmptyGrandTotal: data.isEmptyGrandTotalRow,
+        showTotals: options.showRowTotals,
+        showTotalsPrior: options.showTotalsPrior === 'rows' || options.showTotalsPrior === 'both',
+        showGrandTotals: options.showRowGrandTotals !== false
+                         && grandTotalsAreHiddenForNotAllDataFields,
+        sortBySummaryPaths: createSortPaths(columnFields, dataFields),
+        layout: options.rowHeaderLayout,
+        fields: rowFields,
+      });
+      const columnOptions: any = extend({}, commonOptions, {
+        isEmptyGrandTotal: data.isEmptyGrandTotalColumn,
+        showTotals: options.showColumnTotals,
+        showTotalsPrior: options.showTotalsPrior === 'columns' || options.showTotalsPrior === 'both',
+        showGrandTotals: options.showColumnGrandTotals !== false
+                         && grandTotalsAreHiddenForNotAllDataFields,
+        sortBySummaryPaths: createSortPaths(rowFields, dataFields),
+        fields: columnFields,
+      });
 
       const notifyProgress = function (progress) {
         // - @ts-expect-error

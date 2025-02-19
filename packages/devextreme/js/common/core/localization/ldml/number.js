@@ -19,8 +19,36 @@ function getGroupSizes(formatString) {
     });
 }
 
+function splitSignParts(format, separatorChar = ';', escapingChar = ESCAPING_CHAR) {
+    const parts = [];
+    let currentPart = '';
+    let state = 'searchingSeparator';
+
+    for(let i = 0; i < format.length; i++) {
+        const char = format[i];
+        if(state === 'searchingSeparator' && char === escapingChar) {
+            state = 'skippingSeparationInsideEscaping';
+        } else if(state === 'skippingSeparationInsideEscaping' && char === escapingChar) {
+            state = 'searchingSeparator';
+        } else if(state === 'searchingSeparator' && char === separatorChar) {
+            state = 'separating';
+            parts.push(currentPart);
+            currentPart = '';
+        }
+
+        if(state !== 'separating') {
+            currentPart += char;
+        } else {
+            state = 'searchingSeparator';
+        }
+    }
+    parts.push(currentPart);
+
+    return parts;
+}
+
 function getSignParts(format) {
-    const signParts = format.split(';');
+    const signParts = splitSignParts(format);
 
     if(signParts.length === 1) {
         signParts.push('-' + signParts[0]);
@@ -38,7 +66,7 @@ function isPercentFormat(format) {
 }
 
 function removeStubs(str) {
-    return str.replace(/'.+'/g, '');
+    return str.replace(/'[^']*'/g, '');
 }
 
 function getNonRequiredDigitCount(floatFormat) {

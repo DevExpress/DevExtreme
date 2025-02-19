@@ -28,7 +28,7 @@ type DateRange = Parameters<typeof exportGanttToPdf>[0]['dateRange'];
 
 let modulePrefix = '';
 // @ts-ignore
-if (window && window.config.packageConfigPaths) {
+if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 

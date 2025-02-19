@@ -10,7 +10,10 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -30,6 +33,7 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiTreeListToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
@@ -463,6 +467,14 @@ export class DxoTreeListFilterBuilderPopupComponent extends NestedOption impleme
         return 'filterBuilderPopup';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiTreeListToolbarItemComponent))
+    get toolbarItemsChildren(): QueryList<DxiTreeListToolbarItemComponent> {
+        return this._getOption('toolbarItems');
+    }
+    set toolbarItemsChildren(value) {
+        this.setChildren('toolbarItems', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

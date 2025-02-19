@@ -120,6 +120,7 @@ const Button = Object.assign<typeof _componentButton, NestedComponentMeta>(_comp
 
 // owners:
 // TreeView
+// Item
 type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   expanded?: boolean;
@@ -142,6 +143,9 @@ const _componentItem = (props: IItemProps) => {
     elementDescriptor: {
       OptionName: "items",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        item: { optionName: "items", isCollectionItem: true }
+      },
       TemplateProps: [{
         tmplOption: "template",
         render: "render",

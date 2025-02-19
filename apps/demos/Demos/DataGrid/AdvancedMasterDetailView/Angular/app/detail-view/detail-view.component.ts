@@ -6,14 +6,14 @@ import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 
 let modulePrefix = '';
 // @ts-ignore
-if (window && window.config.packageConfigPaths) {
+if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
 @Component({
   selector: 'detail-view',
-  templateUrl: `.${modulePrefix}/detail-view/detail-view.component.html`,
-  styleUrls: [`.${modulePrefix}/detail-view/detail-view.component.css`],
+  templateUrl: `.${modulePrefix && (modulePrefix + '/detail-view')}/detail-view.component.html`,
+  styleUrls: [`.${modulePrefix && (modulePrefix + '/detail-view')}/detail-view.component.css`],
   providers: [],
 })
 export class DetailViewComponent implements AfterViewInit {
