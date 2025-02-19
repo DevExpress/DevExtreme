@@ -4,7 +4,7 @@ import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTex
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
-import { getNumberData } from '../helpers/generateDataSourceData';
+import { getNumberData, getData } from '../helpers/generateDataSourceData';
 
 fixture.disablePageReloads`FilterRow`
   .page(url(__dirname, '../../container.html'));
@@ -106,3 +106,54 @@ test('FilterRow range overlay screenshot', async (t) => {
     applyFilter: 'auto',
   },
 }));
+
+// T1267481
+test('Filter Row\'s Reset button does not work after a custom filter is set in Filter Builder', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
+
+  await dataGrid.isReady();
+
+  await t
+    .expect(dataGrid.dataRows.count)
+    .eql(0);
+
+  await t
+    .click(filterEditor.menuButton)
+    .click(filterEditor.menu.getItemByText('Reset'));
+
+  await t
+    .expect(dataGrid.dataRows.count)
+    .notEql(0);
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: getData(20, 1),
+    height: 400,
+    showBorders: true,
+    filterRow: {
+      visible: true,
+      applyFilter: 'auto',
+    },
+    filterBuilder: {
+      customOperations: [
+        {
+          name: 'custom',
+          caption: 'custom',
+          dataTypes: ['string'],
+          icon: 'check',
+          hasValue: false,
+          calculateFilterExpression() {
+            return [
+              ['Field 0', '=', 0],
+            ];
+          },
+        },
+      ],
+      allowHierarchicalFields: true,
+    },
+    filterPanel: { visible: true },
+    filterValue: [
+      ['field_0', 'custom'],
+    ],
+  });
+});

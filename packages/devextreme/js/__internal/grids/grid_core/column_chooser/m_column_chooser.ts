@@ -9,7 +9,6 @@ import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import Button from '@js/ui/button';
 import Popup from '@js/ui/popup/ui.popup';
-// @ts-expect-error
 import { current, isGeneric, isMaterial as isMaterialTheme } from '@js/ui/themes';
 import TreeView from '@js/ui/tree_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';

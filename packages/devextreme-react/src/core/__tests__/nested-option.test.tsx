@@ -13,6 +13,9 @@ const NestedComponent = function NestedComponent(props: any) {
     <ConfigurationComponent<{ a: number } & React.PropsWithChildren>
       elementDescriptor={{
         OptionName: 'option',
+        ExpectedChildren: {
+          test: { optionName: "test", isCollectionItem: false },
+        },
       }}
       {...props}
     />
@@ -28,6 +31,9 @@ const NestedComponentWithPredfeinedProps = function NestedComponentWithPredfeine
         OptionName: 'option',
         PredefinedProps: {
           predefinedProp: 'predefined-value',
+        },
+        ExpectedChildren: {
+          test: { optionName: "test", isCollectionItem: false },
         },
       }}
       {...props}
@@ -46,6 +52,9 @@ const CollectionNestedWithPredfeinedProps1 = function CollectionNestedWithPredfe
         PredefinedProps: {
           predefinedProp: 'predefined-value-1',
         },
+        ExpectedChildren: {
+          test: { optionName: "test", isCollectionItem: false },
+        },
       }}
       {...props}
     />
@@ -63,6 +72,9 @@ const CollectionNestedWithPredfeinedProps2 = function CollectionNestedWithPredfe
         PredefinedProps: {
           predefinedProp: 'predefined-value-2',
         },
+        ExpectedChildren: {
+          test: { optionName: "test", isCollectionItem: false },
+        },
       }}
       {...props}
     />
@@ -76,6 +88,9 @@ const SubNestedComponent = function SubNestedComponent(props: any) {
     <ConfigurationComponent<{ d: string }>
       elementDescriptor={{
         OptionName: 'subOption',
+        ExpectedChildren: {
+          test: { optionName: "test", isCollectionItem: false },
+        },
       }}
       {...props}
     />
@@ -89,6 +104,9 @@ const AnotherSubNestedComponent = function AnotherSubNestedComponent(props: any)
     <ConfigurationComponent<{ e: string }>
       elementDescriptor={{
         OptionName: 'anotherSubOption',
+        ExpectedChildren: {
+          test: { optionName: "test", isCollectionItem: false },
+        },
       }}
       {...props}
     />
@@ -102,6 +120,9 @@ const AnotherNestedComponent = function AnotherNestedComponent(props: any) {
     <ConfigurationComponent<{ b: string }>
       elementDescriptor={{
         OptionName: 'anotherOption',
+        ExpectedChildren: {
+          test: { optionName: "test", isCollectionItem: false },
+        },
       }}
       {...props}
     />
@@ -116,6 +137,9 @@ const CollectionNestedComponent = function CollectionNestedComponent(props: any)
       elementDescriptor={{
         OptionName: 'itemOptions',
         IsCollectionItem: true,
+        ExpectedChildren: {
+          test: { optionName: "test", isCollectionItem: false },
+        },
       }}
       {...props}
     />
@@ -130,6 +154,9 @@ const CollectionSubNestedComponent = function CollectionSubNestedComponent(props
       elementDescriptor={{
         OptionName: 'subItemsOptions',
         IsCollectionItem: true,
+        ExpectedChildren: {
+          test: { optionName: "test", isCollectionItem: false },
+        },
       }}
       {...props}
     />
@@ -201,7 +228,7 @@ describe('nested option', () => {
     expect(Widget.option.mock.calls[0][1]).toEqual({ a: 345 });
   });
 
-  it('is pulled form nested component', () => {
+  it('is pulled from nested component', () => {
     render(
       <TestComponent
         templateProps={[{
@@ -237,7 +264,7 @@ describe('nested option', () => {
       </TestComponent>,
     );
 
-    expect(WidgetClass.mock.calls[3][1]).toEqual({
+    expect(WidgetClass.mock.calls[2][1]).toEqual({
       templatesRenderAsynchronously: true,
       option: {
         a: 345,

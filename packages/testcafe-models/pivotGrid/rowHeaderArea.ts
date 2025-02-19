@@ -1,6 +1,7 @@
 const CLASSES = {
   rowHeader: 'dx-area-description-cell',
   action: 'dx-pivotgrid-action',
+  field: 'dx-area-field',
 };
 
 export default class RowHeaderArea {
@@ -12,5 +13,9 @@ export default class RowHeaderArea {
 
   getAction(idx = 0): Selector {
     return this.element.find(`.${CLASSES.action}`).nth(idx);
+  }
+
+  getField(idx = 0): Selector {
+    return this.element.find(`.${CLASSES.field}`).nth(idx);
   }
 }

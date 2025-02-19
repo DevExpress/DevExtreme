@@ -43,7 +43,7 @@
         "devextreme-cldr-data": "1.0.3",
         "devextreme-quill": "1.7.1",
         "dx-systemjs-vue-browser": "1.1.1",
-        "esbuild": "0.19.3",
+        "esbuild": "0.25.0",
         "esbuild-plugin-vue3": "0.3.2",
         "eslint-plugin-react-hooks": "4.6.0",
         "exceljs": "4.4.0",
