@@ -634,7 +634,7 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
     const expandedRowKeys = [];
 
     if (parentIds && parentIds.length || this._isReload) {
-      if (options.fullData && options.fullData.length > options.data.length) {
+      if (options.fullData) {
         data = options.fullData;
         visibleItems = visibleItems || options.data;
       }

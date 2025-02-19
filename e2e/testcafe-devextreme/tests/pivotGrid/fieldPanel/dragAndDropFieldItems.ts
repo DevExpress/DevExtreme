@@ -9,10 +9,12 @@ import { DRAG_MOUSE_OPTIONS } from '../const';
 fixture.disablePageReloads`pivotGrid_fieldPanel_drag-n-drop`
   .page(url(__dirname, '../../container.html'));
 
+const PIVOT_GRID_SELECTOR = '#container';
+
 test('Field panel items markup in the middle of the drag-n-drop', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  const pivotGrid = new PivotGrid('#container');
+  const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
   const columnFirstAction = pivotGrid.getColumnHeaderArea().getAction();
   const rowFirstAction = pivotGrid.getRowHeaderArea().getAction();
   const dataFirstAction = pivotGrid.getDataHeaderArea().getAction();
@@ -69,6 +71,56 @@ test('Field panel items markup in the middle of the drag-n-drop', async (t) => {
         countC: 1,
         date: '2013/01/13',
       }],
+    },
+  });
+});
+
+test('Should show d-n-d indicator during drag to first place in columns fields', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
+  const rowFirstField = pivotGrid.getRowHeaderArea().getField();
+  const columnHeaderAreaElement = pivotGrid.getColumnHeaderArea().element;
+
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
+
+  const rowFirsFieldX = await rowFirstField.offsetLeft;
+  const rowFirsFieldY = await rowFirstField.offsetTop;
+  const columnHeaderX = await columnHeaderAreaElement.offsetLeft;
+  const columnHeaderY = await columnHeaderAreaElement.offsetTop;
+  const deltaOffsetX = 20;
+  const dragOffsetX = columnHeaderX - rowFirsFieldX - deltaOffsetX;
+  const dragOffsetY = rowFirsFieldY - columnHeaderY;
+
+  await t.drag(rowFirstField, dragOffsetX, dragOffsetY, DRAG_MOUSE_OPTIONS);
+
+  await testScreenshot(t, takeScreenshot, 'field-panel_column-field_dnd-first.png', { element: pivotGrid.element });
+
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxPivotGrid', {
+    showBorders: true,
+    fieldPanel: {
+      visible: true,
+    },
+    dataSource: {
+      fields: [{
+        dataField: 'row1',
+        area: 'row',
+      }, {
+        dataField: 'row2',
+        area: 'row',
+      }, {
+        dataField: 'column1',
+        area: 'column',
+      }, {
+        dataField: 'column2',
+        area: 'column',
+      }],
+      store: [],
     },
   });
 });
