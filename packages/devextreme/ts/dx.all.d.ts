@@ -9779,7 +9779,7 @@ declare module DevExpress.ui {
         /**
          * [descr:_ui_chat_MessageEnteredEvent.message]
          */
-        readonly message?: Message;
+        readonly message: Message;
       };
     export type MessageTemplateData = {
       readonly component: dxChat;
@@ -9800,7 +9800,7 @@ declare module DevExpress.ui {
         /**
          * [descr:_ui_chat_TypingEndEvent.user]
          */
-        readonly user?: User;
+        readonly user: User;
       };
     /**
      * [descr:_ui_chat_TypingStartEvent]
