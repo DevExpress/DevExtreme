@@ -49,7 +49,7 @@ import CustomStore from 'devextreme/data/custom_store';
 
 import { Task, Employee } from './data.ts';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/RowReordering';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridRowReordering';
 
 const tasksStore: CustomStore<Task, number> = createStore({
   key: 'ID',

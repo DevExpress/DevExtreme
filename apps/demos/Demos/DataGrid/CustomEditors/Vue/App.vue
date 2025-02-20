@@ -107,7 +107,7 @@ import EmployeeDropDownBoxComponent from './EmployeeDropDownBoxComponent.vue';
 import EmployeeTagBoxComponent from './EmployeeTagBoxComponent.vue';
 import { statuses, Task } from './data.ts';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/CustomEditors';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridCustomEditors';
 
 const employees = createStore({
   key: 'ID',

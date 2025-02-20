@@ -36,7 +36,7 @@ import {
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import 'whatwg-fetch';
 
-const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridBatchUpdateWebApi';
+const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridBatchUpdateWebApi';
 
 const ordersStore = createStore({
   key: 'OrderID',

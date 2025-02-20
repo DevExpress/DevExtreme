@@ -16,7 +16,7 @@ import { statuses } from './data.ts';
 import EmployeeDropDownBoxComponent from './EmployeeDropDownBoxComponent.tsx';
 import EmployeeTagBoxComponent from './EmployeeTagBoxComponent.tsx';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/CustomEditors';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridCustomEditors';
 const statusLabel = { 'aria-label': 'Status' };
 
 const employees = createStore({

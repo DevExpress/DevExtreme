@@ -3,7 +3,7 @@ import DataGrid, { Column, Editing, Pager } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import 'whatwg-fetch';
 
-const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridBatchUpdateWebApi';
+const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridBatchUpdateWebApi';
 const ordersStore = createStore({
   key: 'OrderID',
   loadUrl: `${URL}/Orders`,
