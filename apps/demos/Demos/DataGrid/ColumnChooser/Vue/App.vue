@@ -124,7 +124,7 @@ import {
 } from 'devextreme-vue/data-grid';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
-import { DxTextBoxTypes } from 'devextreme-vue/text-box';
+import { type DxTextBoxTypes } from 'devextreme-vue/text-box';
 
 import { employees } from './data.ts';
 

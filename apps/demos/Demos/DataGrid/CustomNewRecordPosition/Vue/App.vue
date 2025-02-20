@@ -87,7 +87,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxDataGrid, {
-  DxColumn, DxEditing, DxValidationRule, DxButton, DxToolbar, DxItem, DxScrolling, DxDataGridTypes, DxPager,
+  DxColumn, DxEditing, DxValidationRule, DxButton, DxToolbar, DxItem, DxScrolling, type DxDataGridTypes, DxPager,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import Guid from 'devextreme/core/guid';

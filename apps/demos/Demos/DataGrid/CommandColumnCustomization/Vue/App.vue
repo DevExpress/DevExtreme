@@ -69,7 +69,7 @@ import {
   DxButton,
   DxPaging,
   DxLookup,
-  DxDataGridTypes,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import {
   employees as defaultEmployees, states, getMaxID, Employee,

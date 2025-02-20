@@ -31,7 +31,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxDataGrid, DxColumn, DxEditing, DxDataGridTypes, DxPager,
+  DxDataGrid, DxColumn, DxEditing, type DxDataGridTypes, DxPager,
 } from 'devextreme-vue/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import 'whatwg-fetch';

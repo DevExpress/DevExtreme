@@ -68,7 +68,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {
-  DxDataGrid, DxColumn, DxFilterRow, DxSelection, DxDataGridTypes, DxPager,
+  DxDataGrid, DxColumn, DxFilterRow, DxSelection, type DxDataGridTypes, DxPager,
 } from 'devextreme-vue/data-grid';
 import DxButton from 'devextreme-vue/button';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';

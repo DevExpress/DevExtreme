@@ -33,7 +33,7 @@ import {
   DxSize,
   DxTooltip,
 } from 'devextreme-vue/bullet';
-import { DxDataGridTypes } from 'devextreme-vue/data-grid';
+import { type DxDataGridTypes } from 'devextreme-vue/data-grid';
 
 defineProps<{
   cellData: DxDataGridTypes.ColumnCellTemplateData

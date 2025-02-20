@@ -41,7 +41,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxDataGrid, DxColumn, DxLookup, DxScrolling, DxRowDragging, DxSorting, DxDataGridTypes,
+  DxDataGrid, DxColumn, DxLookup, DxScrolling, DxRowDragging, DxSorting, type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 
 import { createStore } from 'devextreme-aspnet-data-nojquery';

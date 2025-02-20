@@ -76,7 +76,7 @@ import {
   DxEditing,
   DxColumn,
   DxKeyboardNavigation,
-  DxTreeListTypes,
+  type DxTreeListTypes,
 } from 'devextreme-vue/tree-list';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';

@@ -39,7 +39,7 @@ import {
   DxScrolling,
   DxPager,
   DxPaging,
-  DxTreeListTypes,
+  type DxTreeListTypes,
 } from 'devextreme-vue/tree-list';
 import { employees } from './data.ts';
 

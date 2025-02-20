@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {
-  DxDataGrid, DxColumn, DxSelection, DxDataGridTypes,
+  DxDataGrid, DxColumn, DxSelection, type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import { employees, Employee } from './data.ts';
 

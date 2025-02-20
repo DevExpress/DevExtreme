@@ -75,7 +75,7 @@ import {
   DxLookup,
   DxToolbar,
   DxItem,
-  DxDataGridTypes,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import { DxButton } from 'devextreme-vue/button';
 

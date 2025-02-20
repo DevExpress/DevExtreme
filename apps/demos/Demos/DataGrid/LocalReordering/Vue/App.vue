@@ -55,10 +55,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {
-  DxDataGrid, DxColumn, DxLookup, DxScrolling, DxRowDragging, DxSorting, DxDataGridTypes,
+  DxDataGrid, DxColumn, DxLookup, DxScrolling, DxRowDragging, DxSorting, type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DxCheckBox from 'devextreme-vue/check-box';
-import { tasks as defaultTasks, employees, Task } from './data.ts';
+import { tasks as defaultTasks, employees, type Task } from './data.ts';
 
 const showDragIcons = ref(true);
 

@@ -71,10 +71,10 @@ import {
   DxSelection,
   DxToolbar,
   DxItem,
-  DxDataGridTypes,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DxButton from 'devextreme-vue/button';
-import DxSelectBox, { DxSelectBoxTypes } from 'devextreme-vue/select-box';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { employees, Employee } from './data.ts';
 
 const dataGridRef = ref<DxDataGrid | null>(null);

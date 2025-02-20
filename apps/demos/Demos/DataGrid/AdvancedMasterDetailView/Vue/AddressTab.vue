@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { DxForm, DxFormTypes } from 'devextreme-vue/form';
+import { DxForm, type DxFormTypes } from 'devextreme-vue/form';
 import { Supplier } from './data.ts';
 
 defineProps<{

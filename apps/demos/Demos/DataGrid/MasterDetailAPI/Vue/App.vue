@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import DxDataGrid, {
   DxColumn,
-  DxDataGridTypes,
+  type DxDataGridTypes,
   DxMasterDetail,
   DxSelection,
 } from 'devextreme-vue/data-grid';

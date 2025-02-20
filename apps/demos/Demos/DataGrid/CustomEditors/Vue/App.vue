@@ -99,7 +99,7 @@ import {
   DxColumn,
   DxLookup,
   DxRequiredRule,
-  DxDataGridTypes,
+  type DxDataGridTypes,
   DxPager,
 } from 'devextreme-vue/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';

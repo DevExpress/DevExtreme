@@ -46,7 +46,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxDataGrid, DxColumn, DxEditing, DxLookup, DxDataGridTypes,
+  DxDataGrid, DxColumn, DxEditing, DxLookup, type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import {
   employees, states, cities, Employee, City,

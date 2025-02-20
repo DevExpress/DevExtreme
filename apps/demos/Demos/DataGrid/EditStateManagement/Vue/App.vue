@@ -52,7 +52,7 @@
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import {
-  DxDataGrid, DxColumn, DxEditing, DxDataGridTypes, DxPager,
+  DxDataGrid, DxColumn, DxEditing, type DxDataGridTypes, DxPager,
 } from 'devextreme-vue/data-grid';
 import { DxLoadPanel } from 'devextreme-vue/load-panel';
 import { State } from './store.ts';

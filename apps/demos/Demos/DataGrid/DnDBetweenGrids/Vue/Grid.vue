@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import {
-  DxDataGrid, DxColumn, DxRowDragging, DxScrolling, DxLookup, DxDataGridTypes,
+  DxDataGrid, DxColumn, DxRowDragging, DxScrolling, DxLookup, type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import CustomStore from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';

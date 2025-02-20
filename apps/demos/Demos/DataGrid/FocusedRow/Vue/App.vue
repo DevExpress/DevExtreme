@@ -81,7 +81,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {
-  DxDataGrid, DxColumn, DxPaging, DxDataGridTypes, DxPager,
+  DxDataGrid, DxColumn, DxPaging, type DxDataGridTypes, DxPager,
 } from 'devextreme-vue/data-grid';
 import DxNumberBox from 'devextreme-vue/number-box';
 import DxCheckBox from 'devextreme-vue/check-box';
