@@ -108,4 +108,26 @@ QUnit.module('Refresh', moduleConfig, () => {
         assert.ok(dataLoaded);
         assert.equal(this.instance.getTaskData(1).title, 'test');
     });
+    test('check selected row index index after refresh', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        this.clock.tick(10);
+
+        assert.equal(this.instance.option('selectedRowKey'), undefined);
+
+        this.$element
+            .find(Consts.TREELIST_DATA_ROW_SELECTOR)
+            .eq(2)
+            .trigger('dxclick');
+
+        this.clock.tick(10);
+
+        assert.notEqual(this.instance.option('selectedRowKey'), undefined);
+
+        const selectedRowKey = this.instance.option('selectedRowKey');
+
+        this.instance.refresh();
+        this.clock.tick(10);
+
+        assert.equal(this.instance.option('selectedRowKey'), selectedRowKey);
+    });
 });

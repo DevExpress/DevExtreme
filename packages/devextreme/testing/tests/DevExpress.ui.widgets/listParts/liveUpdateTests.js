@@ -6,6 +6,7 @@ import 'ui/list';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_GROUP_CLASS = 'dx-list-group';
+const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 
 QUnit.module('live update', {
     beforeEach: function() {
@@ -206,6 +207,26 @@ QUnit.module('live update', {
         assert.equal(list.option('items').length, 1);
         assert.deepEqual(this.itemDeletedSpy.callCount, 1, 'check removed items count');
         assert.deepEqual(this.itemDeletedSpy.firstCall.args[0].itemData.id, pushData[0].key, 'check removed item key');
+    });
+
+    QUnit.test('Empty message should be hidden after new element is pushed to empty store (T1277567)', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const list = this.createList({
+            dataSource: new DataSource({
+                key: 'id',
+                store: []
+            })
+        });
+        const store = list.getDataSource().store();
+
+        assert.strictEqual(list.$element().find(`.${EMPTY_MESSAGE_CLASS}`).length, 1, 'empty message is shown');
+
+        store.push([{ type: 'insert', data: { id: 2 }, index: 0 }]);
+        clock.tick(0);
+
+        assert.strictEqual(list.$element().find(`.${EMPTY_MESSAGE_CLASS}`).length, 0, 'empty message is hidden');
+
+        clock.restore();
     });
 
     QUnit.test('remove two items', function(assert) {

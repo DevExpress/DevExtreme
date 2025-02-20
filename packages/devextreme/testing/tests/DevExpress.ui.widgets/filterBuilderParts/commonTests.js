@@ -75,7 +75,7 @@ QUnit.module('Rendering', function() {
         });
 
         container.find('.' + FILTER_BUILDER_GROUP_OPERATION_CLASS).trigger('dxclick');
-        const popupInstance = container.find('.' + FILTER_BUILDER_OVERLAY_CLASS).dxPopup('instance');
+        const popupInstance = container.find(`.${FILTER_BUILDER_OVERLAY_CLASS}.dx-popup`).dxPopup('instance');
         assert.ok(popupInstance.option('deferRendering'));
     });
 
@@ -409,7 +409,7 @@ QUnit.module('Rendering', function() {
         $('.' + FILTER_BUILDER_GROUP_OPERATION_CLASS).trigger('dxclick');
 
         // assert
-        assert.notOk($container.find('.' + FILTER_BUILDER_OVERLAY_CLASS).dxPopup('instance').option('target'), 'popup target shoud not be set');
+        assert.notOk($container.find(`.${FILTER_BUILDER_OVERLAY_CLASS}.dx-popup`).dxPopup('instance').option('target'), 'popup target shoud not be set');
     });
 
     QUnit.test('Menu wrapper has filter builder overlay class', function(assert) {
@@ -1299,7 +1299,8 @@ QUnit.module('on value changed', function() {
     });
 
     // T824147
-    QUnit.test('Add-condition popup should be closed on scroll', function(assert) {
+    // T1273328 - new
+    QUnit.test('Add-condition popup should not be closed on scroll', function(assert) {
         // arrange
         const container = $('#container');
         const value = [['CompanyName', 'K&S Music']];
@@ -1315,7 +1316,7 @@ QUnit.module('on value changed', function() {
         const popupInstance = container.children('.dx-filterbuilder-overlay').dxPopup('instance');
 
         // assert
-        assert.equal(popupInstance.option('hideOnParentScroll'), true, 'popup\'s hideOnParentScroll');
+        assert.equal(popupInstance.option('hideOnParentScroll'), false, 'popup\'s hideOnParentScroll');
     });
 
     // T804262
@@ -1601,7 +1602,7 @@ QUnit.module('Group operations', function() {
         assert.equal(popup.length, 0);
     });
 
-    QUnit.test('nested level of groups = 1', function(assert) {
+    QUnit.test('nested level of groups = 2', function(assert) {
         const container = $('#container');
         container.dxFilterBuilder({
             fields: fields,
@@ -1611,7 +1612,7 @@ QUnit.module('Group operations', function() {
 
         $('.' + FILTER_BUILDER_IMAGE_ADD_CLASS).trigger('dxclick');
         let popup = container.find(`.${FILTER_BUILDER_OVERLAY_CLASS}`);
-        assert.equal(popup.length, 1);
+        assert.equal(popup.length, 2);
 
         selectMenuItem(1);
 

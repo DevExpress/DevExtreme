@@ -1,7 +1,6 @@
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import { findChanges } from '@js/core/utils/array_compare';
-import { noop } from '@js/core/utils/common';
 import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -191,7 +190,9 @@ export default CollectionWidget.inherit({
     }
   },
 
-  _afterItemElementInserted: noop,
+  _afterItemElementInserted(): void {
+    this._renderEmptyMessage();
+  },
 
   _removeByChange(keyInfo, items, change, isPartialRefresh) {
     const index = isPartialRefresh ? change.index : indexByKey(keyInfo, items, change.key);

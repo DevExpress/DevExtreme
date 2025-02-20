@@ -226,6 +226,8 @@ export class FooterView extends ColumnsView {
       this._updateContent(this._renderTable({ change }), change);
       needUpdateScrollLeft && this._updateScrollLeftPosition();
     }
+
+    return super._renderCore(change);
   }
 
   protected _updateContent($newTable, change) {

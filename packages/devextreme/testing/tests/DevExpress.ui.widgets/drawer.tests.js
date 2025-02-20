@@ -143,39 +143,125 @@ QUnit.module('Drawer behavior', () => {
         assert.equal($element.attr('tabIndex'), undefined, 'tabIndex was removed');
     });
 
-    QUnit.test('subscribe on toggle function should fired at the end of animation', function(assert) {
-        const $element = $('#drawer').dxDrawer({
-            opened: false
-        });
+    [true, false].forEach((animationEnabled) => {
+        QUnit.test(`Toggle promise should be resolved after toggle finished (animationEnabled=${animationEnabled})`, function(assert) {
+            assert.expect(1);
 
-        const instance = $element.dxDrawer('instance');
-        let count = 0;
-        const done = assert.async();
-
-        instance.toggle().then(() => {
-            count++;
-            assert.equal(count, 1, 'callback not fired at animation start');
-            done();
-        });
-
-        assert.equal(count, 0, 'callback not fired at animation start');
-    });
-
-    [true, false].forEach(opened => {
-        QUnit.test(`drawer panel should ${opened ? '' : 'not'} have a hidden class before it was ${opened ? 'closed' : 'shown'} (T1239845)`, function(assert) {
-            const $element = $('#drawer').dxDrawer({ animationDuration: 0, opened });
-            const instance = $element.dxDrawer('instance');
-            const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+            const instance = $('#drawer').dxDrawer({
+                animationEnabled,
+                animationDuration: 0,
+            }).dxDrawer('instance');
 
             const done = assert.async();
 
+            const timeout = setTimeout(() => {
+                assert.ok(false, 'toggle promise was not resolved');
+                done();
+            }, 10);
+
             instance.toggle().then(() => {
-                assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), opened, 'dx-drawer-panel-content-hidden is not set');
+                clearTimeout(timeout);
+                assert.ok(true, 'toggle promise was resolved');
                 done();
             });
-
-            assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is set');
         });
+    });
+
+    [
+        {
+            opened: true,
+            scenario: 'show method call if drawer is already opened',
+        },
+        {
+            opened: false,
+            scenario: 'hide method call if drawer is already closed',
+        },
+    ].forEach(({ opened, scenario }) => {
+        QUnit.test(`Promise should be resolved after ${scenario} (T1263952)`, function(assert) {
+            assert.expect(1);
+
+            const instance = $('#drawer').dxDrawer({
+                opened
+            }).dxDrawer('instance');
+
+            const done = assert.async();
+
+            const timeout = setTimeout(() => {
+                assert.ok(false, 'promise was not resolved');
+                done();
+            }, 10);
+
+            const methodToCall = opened ? 'show' : 'hide';
+
+            instance[methodToCall]().then(() => {
+                clearTimeout(timeout);
+                assert.ok(true, 'promise was resolved');
+                done();
+            });
+        });
+    });
+
+    QUnit.test('Drawer panel should add a hidden class after hide animation is completed, toggle method is used (T1239845)', function(assert) {
+        const $element = $('#drawer').dxDrawer({ animationDuration: 0, opened: true });
+        const instance = $element.dxDrawer('instance');
+        const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+
+        const done = assert.async();
+
+        instance.toggle().then(() => {
+            assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), true, 'dx-drawer-panel-content-hidden is set after animation completed');
+            done();
+        });
+
+        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set before animation start');
+    });
+
+    QUnit.test('Drawer panel should add a hidden class after hide animation is completed, opened option is changed (T1277636)', function(assert) {
+        const $element = $('#drawer').dxDrawer({ animationDuration: 0, opened: true });
+        const instance = $element.dxDrawer('instance');
+        const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+
+        const done = assert.async();
+
+        instance.option('opened', false);
+
+        setTimeout(() => {
+            assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), true, 'dx-drawer-panel-content-hidden is set after animation completed');
+            done();
+        }, 0);
+
+        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set before animation start');
+    });
+
+    QUnit.test('Drawer panel should remove a hidden class before show animation is started, toggle method is used (T1239845)', function(assert) {
+        const $element = $('#drawer').dxDrawer({ animationDuration: 0, opened: false });
+        const instance = $element.dxDrawer('instance');
+        const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+
+        const done = assert.async();
+
+        instance.toggle().then(() => {
+            assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set after animation completed');
+            done();
+        });
+
+        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set before animation start');
+    });
+
+    QUnit.test('Drawer panel should remove a hidden class before show animation is started, opened option is changed (T1277636)', function(assert) {
+        const $element = $('#drawer').dxDrawer({ animationDuration: 0, opened: false });
+        const instance = $element.dxDrawer('instance');
+        const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+
+        const done = assert.async();
+
+        instance.option('opened', true);
+        setTimeout(() => {
+            assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set after animation completed');
+            done();
+        }, 0);
+
+        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set before animation start');
     });
 
     QUnit.test('Check dxresize event: opened:false,animationEnabled:true -> drawer.toggle()', function(assert) {

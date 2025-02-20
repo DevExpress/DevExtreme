@@ -16,7 +16,7 @@ import { isDefined, isFunction, isNumeric } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace, isTouchEvent } from '@js/events/utils/index';
+import { addNamespace, isTouchEvent, normalizeKeyName } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import type { ButtonStyle, ButtonType } from '@js/ui/button';
 import Button from '@js/ui/button';
@@ -59,6 +59,13 @@ const FILEUPLOADER_AFTER_LOAD_DELAY = 400;
 const FILEUPLOADER_CHUNK_META_DATA_NAME = 'chunkMetadata';
 const DRAG_EVENT_DELTA = 1;
 
+const DIALOG_TRIGGER_EVENT_NAMESPACE = 'dxFileUploaderDialogTrigger';
+
+const keyUpEventName = 'keyup';
+
+const ENTER_KEY = 'enter';
+const SPACE_KEY = 'space';
+
 let renderFileUploaderInput = () => $('<input>').attr('type', 'file');
 // @ts-expect-error
 const isFormDataSupported = () => !!window.FormData;
@@ -68,6 +75,8 @@ export interface Properties extends PublicProperties {
 
   _uploadButtonType?: ButtonType;
 }
+
+type FileDialogEventTarget = dxElementWrapper | Properties['dialogTrigger'];
 
 class FileUploader extends Editor<Properties> {
   // Temporary solution. Move to component level
@@ -105,8 +114,6 @@ class FileUploader extends Editor<Properties> {
   _totalLoadedFilesSize?: any;
 
   _totalFilesSize?: any;
-
-  _selectFileDialogHandler?: any;
 
   _isCustomClickEvent?: any;
 
@@ -826,19 +833,21 @@ class FileUploader extends Editor<Properties> {
       disabled: this.option('readOnly'),
       hoverStateEnabled: this.option('hoverStateEnabled'),
     });
-    this._selectFileDialogHandler = this._selectButtonClickHandler.bind(this);
 
     // NOTE: click triggering on input 'file' works correctly only in native click handler when device is used
     if (devices.real().deviceType === 'desktop') {
-      this._selectButton.option('onClick', this._selectFileDialogHandler);
+      this._selectButton.option('onClick', () => this._selectFileDialogClickHandler());
     } else {
-      this._attachSelectFileDialogHandler(this._selectButton.$element());
+      this._attachSelectFileDialogHandlers(this._selectButton.$element());
     }
-    this._attachSelectFileDialogHandler(this.option('dialogTrigger'));
+
+    const { dialogTrigger } = this.option();
+
+    this._attachSelectFileDialogHandlers(dialogTrigger);
   }
 
   // @ts-expect-error
-  _selectButtonClickHandler() {
+  _selectFileDialogClickHandler() {
     if (this.option('useNativeInputClick')) {
       return;
     }
@@ -853,19 +862,35 @@ class FileUploader extends Editor<Properties> {
     this._isCustomClickEvent = false;
   }
 
-  _attachSelectFileDialogHandler(target) {
+  _attachSelectFileDialogHandlers(target: FileDialogEventTarget): void {
     if (!isDefined(target)) {
       return;
     }
-    this._detachSelectFileDialogHandler(target);
-    eventsEngine.on($(target), 'click', this._selectFileDialogHandler);
+
+    this._detachSelectFileDialogHandlers(target);
+
+    const $target = $(target);
+
+    eventsEngine.on($target, addNamespace(clickEventName, DIALOG_TRIGGER_EVENT_NAMESPACE), () => {
+      this._selectFileDialogClickHandler();
+    });
+    eventsEngine.on($target, addNamespace(keyUpEventName, DIALOG_TRIGGER_EVENT_NAMESPACE), (e: KeyboardEvent) => {
+      const normalizedKeyName = normalizeKeyName(e);
+
+      if (normalizedKeyName === ENTER_KEY || normalizedKeyName === SPACE_KEY) {
+        this._selectFileDialogClickHandler();
+      }
+    });
   }
 
-  _detachSelectFileDialogHandler(target) {
+  _detachSelectFileDialogHandlers(target: FileDialogEventTarget): void {
     if (!isDefined(target)) {
       return;
     }
-    eventsEngine.off($(target), 'click', this._selectFileDialogHandler);
+
+    const $target = $(target);
+
+    eventsEngine.off($target, `.${DIALOG_TRIGGER_EVENT_NAMESPACE}`);
   }
 
   _renderUploadButton() {
@@ -1143,7 +1168,10 @@ class FileUploader extends Editor<Properties> {
     this._$fileInput.detach();
     // @ts-expect-error
     delete this._$filesContainer;
-    this._detachSelectFileDialogHandler(this.option('dialogTrigger'));
+
+    const { dialogTrigger } = this.option();
+
+    this._detachSelectFileDialogHandlers(dialogTrigger);
     this._detachDragEventHandlers(this.option('dropZone'));
 
     if (this._files) {
@@ -1426,8 +1454,8 @@ class FileUploader extends Editor<Properties> {
         });
         break;
       case 'dialogTrigger':
-        this._detachSelectFileDialogHandler(previousValue);
-        this._attachSelectFileDialogHandler(value);
+        this._detachSelectFileDialogHandlers(previousValue);
+        this._attachSelectFileDialogHandlers(value);
         break;
       case 'dropZone':
         this._detachDragEventHandlers(previousValue);

@@ -819,7 +819,7 @@ class FilterBuilder extends Widget<any> {
       visible: true,
       focusStateEnabled: false,
       preventScrollEvents: false,
-      hideOnParentScroll: this.option('closePopupOnTargetScroll'),
+      container: $popup,
       hideOnOutsideClick: true,
       onShown: options.popup.onShown,
       shading: false,
