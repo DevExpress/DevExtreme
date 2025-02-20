@@ -193,8 +193,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     replaceWrongEndDate(adapter, startDate, endDate, this.cellDuration, this.dataAccessors);
   }
 
-  // TODO: get rid of an extra 'needClearSettings' argument
-  calculateRows(appointments, agendaDuration, currentDate, needClearSettings?) {
+  calculateRows(appointments, agendaDuration, currentDate) {
     this._rows = [];
     currentDate = dateUtils.trimTime(new Date(currentDate));
 
@@ -217,8 +216,6 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
         const endDate = ExpressionUtils.getField(this.dataAccessors, 'endDate', appointment);
 
         this.replaceWrongAppointmentEndDate(appointment, startDate, endDate);
-
-        needClearSettings && delete appointment.settings;
 
         const result = this.instance.getAppointmentsInstance()._processRecurrenceAppointment(appointment, index, false);
         appts.parts = appts.parts.concat(result.parts);
