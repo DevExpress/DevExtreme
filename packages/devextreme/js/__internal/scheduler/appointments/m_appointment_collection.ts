@@ -75,7 +75,6 @@ class SchedulerAppointments extends CollectionWidget {
     this._virtualAppointments = {};
   }
 
-  // TODO: remove when Collection moved to TS
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   option(optionName?: string, value?: any) {
     return super.option(...arguments);

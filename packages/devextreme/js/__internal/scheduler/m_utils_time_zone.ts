@@ -292,7 +292,7 @@ const isEqualLocalTimeZoneByDeclaration = (timeZoneName: string, date: Date): bo
   return false;
 };
 
-// TODO: Getting two dates in january or june is the standard mechanism for determining that an offset has occurred.
+// Getting two dates in january or june is the standard mechanism for determining that an offset has occurred.
 const getExtremeDates = () => {
   const nowDate = new Date(Date.now());
 
