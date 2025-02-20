@@ -1,8 +1,8 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import url from '../../../helpers/getPageUrl';
+import { scrollTo } from '../utils';
 import {
   createScheduler,
-  scrollTo,
   selectCells,
   moveMouse,
   checkSelectionWhenFocusedInViewport,

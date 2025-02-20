@@ -8,7 +8,7 @@ import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
 import { generateOptionMatrix } from '../../../../helpers/generateOptionMatrix';
-import { scrollTo } from '../../virtualScrolling/utils';
+import { scrollToDate } from '../../utils';
 
 fixture.disablePageReloads`Layout:Templates:appointmentTemplate:targetedData`
   .page(url(__dirname, '../../../container.html'));
@@ -263,7 +263,7 @@ testOptions.forEach(({
 
     // eslint-disable-next-line no-restricted-syntax
     for (const { date, group } of scrollOptions) {
-      await scrollTo(date, group);
+      await scrollToDate(date, group);
       await t.wait(50);
     }
   });

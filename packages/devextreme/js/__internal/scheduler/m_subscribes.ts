@@ -1,5 +1,6 @@
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
+import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isPlainObject } from '@js/core/utils/type';
 
@@ -71,26 +72,29 @@ const subscribes = {
     return this._getUpdatedData(rawAppointment);
   },
 
-  updateAppointmentAfterDrag({ event, element, rawAppointment }) {
+  updateAppointmentAfterDrag({
+    event, element, rawAppointment, isDropToTheSameCell, isDropToSelfScheduler,
+  }) {
     const info = utils.dataAccessors.getAppointmentInfo(element);
-    const targetedRawAppointment = this._getUpdatedData(rawAppointment);
+    // NOTE: enrich target appointment with additional data from the source
+    // in case of one appointment of series will change
+    const targetedRawAppointment = extend({}, rawAppointment, this._getUpdatedData(rawAppointment));
 
-    const fromAllDay = rawAppointment.allDay;
-    const toAllDay = targetedRawAppointment.allDay;
+    const fromAllDay = Boolean(rawAppointment.allDay);
+    const toAllDay = Boolean(targetedRawAppointment.allDay);
     const isDropBetweenAllDay = this._workSpace.supportAllDayRow() && fromAllDay !== toAllDay;
 
     const isDragAndDropBetweenComponents = event.fromComponent !== event.toComponent;
-    const isDropToSelfScheduler = this._workSpace.hasDroppableCell();
-
-    const fromTime = new Date(rawAppointment.startDate).getTime();
-    const toTime = new Date(targetedRawAppointment.startDate).getTime();
-    const isDropToDifferentCell = fromTime !== toTime;
 
     const onCancel = (): void => {
       this._appointments.moveAppointmentBack(event);
     };
+    if (!isDropToSelfScheduler && isDragAndDropBetweenComponents) {
+      // drop between schedulers
+      return;
+    }
 
-    if (isDropToSelfScheduler && (isDropToDifferentCell || isDragAndDropBetweenComponents || isDropBetweenAllDay)) {
+    if (isDropToSelfScheduler && (!isDropToTheSameCell || isDragAndDropBetweenComponents || isDropBetweenAllDay)) {
       this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.startDate, () => {
         this._updateAppointment(rawAppointment, targetedRawAppointment, onCancel, event);
       }, undefined, undefined, event);
@@ -138,7 +142,7 @@ const subscribes = {
     const { allDay } = options;
     const groups = this._getCurrentViewOption('groups');
 
-    if (groups && groups.length) {
+    if (groups?.length) {
       if (allDay || this.getLayoutManager().getRenderingStrategyInstance()._needHorizontalGroupBounds()) {
         const horizontalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
         return {
