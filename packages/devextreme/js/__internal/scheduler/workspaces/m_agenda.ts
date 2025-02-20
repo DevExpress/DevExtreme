@@ -461,7 +461,6 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   _getGroupRowHeight(groupRows) {
-    // TODO: hotfix
     if (!groupRows) {
       return;
     }

@@ -183,7 +183,6 @@ export class VirtualScrollingDispatcher {
     let cellWidth = this.options.getCellWidth();
     const minCellWidth = this.options.getCellMinWidth();
 
-    // TODO: Remove this after CSS refactoring
     if (!cellWidth || cellWidth < minCellWidth) {
       cellWidth = minCellWidth;
     }

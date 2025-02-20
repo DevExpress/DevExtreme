@@ -100,7 +100,6 @@ export const getPathToLeaf = (leafIndex, groups) => {
   return makeBranch(leaf).reverse();
 };
 
-// TODO rework
 export const getCellGroups = (groupIndex, groups) => {
   const result: any = [];
 
@@ -498,7 +497,7 @@ const getTransformedResourceData = (resource, data) => {
       text: displayGetter(item),
     };
 
-    if (item.color) { // TODO for passed tests
+    if (item.color) { // for tests
       result.color = item.color;
     }
 

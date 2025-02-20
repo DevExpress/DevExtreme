@@ -13,7 +13,7 @@ export interface DateHeaderCellProps extends CellBaseProps {
   colSpan: number;
   isWeekDayCell: boolean;
   splitText: boolean;
-  // TODO: this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
+  // this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
   isTimeCellTemplate: boolean;
   timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
   dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
@@ -65,7 +65,7 @@ export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
     const DateCellTemplateComponent = getTemplate(dateCellTemplate);
 
     const children = useTemplate ? (
-        // TODO: this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
+        // this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
         <>
           {isTimeCellTemplate && TimeCellTemplateComponent
             && TimeCellTemplateComponent({

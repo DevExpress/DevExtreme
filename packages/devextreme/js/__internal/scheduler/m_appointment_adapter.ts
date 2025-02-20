@@ -169,7 +169,7 @@ class AppointmentAdapter {
 
   source(serializeDate = false) {
     if (serializeDate) {
-      // TODO: hack for use dateSerializationFormat
+      // hack for use dateSerializationFormat
       const clonedAdapter = this.clone();
       clonedAdapter.startDate = this.startDate;
       clonedAdapter.endDate = this.endDate;
