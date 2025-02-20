@@ -62,9 +62,12 @@ export class AppointmentForm {
 
   form: any;
 
+  isFormUpdating: boolean;
+
   constructor(scheduler) {
     this.scheduler = scheduler;
     this.form = null;
+    this.isFormUpdating = false;
   }
 
   get dxForm() {
@@ -187,7 +190,7 @@ export class AppointmentForm {
     const dateEditor = this.form.getEditor(dateExpr);
     const dateValue = dateSerialization.deserializeDate(dateEditor.option('value'));
 
-    if (dateValue && value && isNeedCorrect(dateValue, value)) {
+    if (!this.isFormUpdating && dateValue && value && isNeedCorrect(dateValue, value)) {
       const duration = previousValue ? dateValue.getTime() - previousValue.getTime() : 0;
       dateEditor.option('value', new Date(value.getTime() + duration));
     }
@@ -330,7 +333,7 @@ export class AppointmentForm {
               const endDateEditor = this.form.getEditor(dataExprs.endDateExpr);
               const startDate = dateSerialization.deserializeDate(startDateEditor.option('value'));
 
-              if (startDate) {
+              if (!this.isFormUpdating && startDate) {
                 if (value) {
                   const allDayStartDate = dateUtils.trimTime(startDate);
                   startDateEditor.option('value', new Date(allDayStartDate));
@@ -452,6 +455,7 @@ export class AppointmentForm {
   }
 
   updateFormData(formData) {
+    this.isFormUpdating = true; // prevent double value set during form updating
     this.form.option('formData', formData);
 
     const dataAccessors = this.scheduler.getDataAccessors();
@@ -470,6 +474,7 @@ export class AppointmentForm {
     this.updateRecurrenceEditorStartDate(startDate, expr.recurrenceRuleExpr);
 
     this.setEditorsType(allDay);
+    this.isFormUpdating = false;
   }
 
   private createDateBoxEditor(dataField, colSpan, firstDayOfWeek, label, cssClass, onValueChanged) {
