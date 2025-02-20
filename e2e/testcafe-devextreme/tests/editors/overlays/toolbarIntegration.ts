@@ -7,7 +7,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture.disablePageReloads`Popup_toolbar`
+fixture`Popup_toolbar`
   .page(url(__dirname, '../../container.html'));
 
 [
