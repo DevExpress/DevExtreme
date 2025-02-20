@@ -62,12 +62,12 @@ export class AppointmentForm {
 
   form: any;
 
-  isFormUpdating: boolean;
+  // NOTE: flag to prevent double value set during form updating
+  private isFormUpdating = false;
 
   constructor(scheduler) {
     this.scheduler = scheduler;
     this.form = null;
-    this.isFormUpdating = false;
   }
 
   get dxForm() {
@@ -455,7 +455,7 @@ export class AppointmentForm {
   }
 
   updateFormData(formData) {
-    this.isFormUpdating = true; // prevent double value set during form updating
+    this.isFormUpdating = true;
     this.form.option('formData', formData);
 
     const dataAccessors = this.scheduler.getDataAccessors();
