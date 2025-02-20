@@ -1,5 +1,6 @@
 import errors from '@js/core/errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import { macroTaskArray } from '@ts/scheduler/utils/index';
 
 import dateUtils from '../../core/utils/date';
 import DateAdapter from './m_date_adapter';
@@ -9,6 +10,7 @@ import timeZoneList from './timezones/timezone_list';
 const toMs = dateUtils.dateToMilliseconds;
 const MINUTES_IN_HOUR = 60;
 const MS_IN_MINUTE = 60000;
+const GET_TIMEZONES_BATCH_SIZE = 20;
 const GMT = 'GMT';
 const offsetFormatRegexp = /^GMT(?:[+-]\d{2}:\d{2})?$/;
 
@@ -36,12 +38,6 @@ const createDateFromUTCWithLocalOffset = (date) => {
 
   return result.source;
 };
-
-const getTimeZones = (date = new Date()) => timeZoneList.value.map((tz) => ({
-  offset: calculateTimezoneByValue(tz, date),
-  title: getTimezoneTitle(tz, date),
-  id: tz,
-}));
 
 const createUTCDate = (date) => new Date(Date.UTC(
   date.getUTCFullYear(),
@@ -326,6 +322,25 @@ const addOffsetsWithoutDST = (date: Date, ...offsets: number[]): Date => {
     : newDate;
 };
 
+const getTimeZonesAsyncBatch = (
+  date = new Date(),
+): Promise<({ id: string; title?: string })[]> => macroTaskArray.map(
+  timeZoneList.value,
+  (timezoneId) => ({
+    id: timezoneId,
+    title: getTimezoneTitle(timezoneId, date),
+  }),
+  GET_TIMEZONES_BATCH_SIZE,
+);
+
+const getTimeZones = (
+  date = new Date(),
+): ({ id: string; title?: string; offset?: number })[] => timeZoneList.value.map((timezoneId) => ({
+  id: timezoneId,
+  title: getTimezoneTitle(timezoneId, date),
+  offset: calculateTimezoneByValue(timezoneId, date),
+}));
+
 const utils = {
   getDaylightOffset,
   getDaylightOffsetInMs,
@@ -347,10 +362,12 @@ const utils = {
   hasDSTInLocalTimeZone,
   isEqualLocalTimeZone,
   isEqualLocalTimeZoneByDeclaration,
-  getTimeZones,
 
   setOffsetsToDate,
   addOffsetsWithoutDST,
+
+  getTimeZonesAsyncBatch,
+  getTimeZones,
 };
 
 export default utils;
