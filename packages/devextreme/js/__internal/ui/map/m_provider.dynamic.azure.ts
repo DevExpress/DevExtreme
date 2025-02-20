@@ -330,7 +330,7 @@ const AzureProvider = DynamicProvider.inherit({
 
     options = this._parseTooltipOptions(options);
 
-    const $content = $('<div>').text(options.text).addClass(MAP_MARKER_TOOLTIP_CLASS);
+    const $content = $('<div>').html(options.text).addClass(MAP_MARKER_TOOLTIP_CLASS);
     const popup = new atlas.Popup({
       content: $content[0],
       position: location,

@@ -200,6 +200,7 @@ const Delay = Object.assign<typeof _componentDelay, NestedComponentMeta>(_compon
 
 // owners:
 // Hide
+// Show
 type IFromProps = React.PropsWithChildren<{
   left?: number;
   opacity?: number;
@@ -256,6 +257,7 @@ const Hide = Object.assign<typeof _componentHide, NestedComponentMeta>(_componen
 
 // owners:
 // Menu
+// Item
 type IItemProps = React.PropsWithChildren<{
   beginGroup?: boolean;
   closeMenuOnClick?: boolean;
@@ -278,6 +280,9 @@ const _componentItem = (props: IItemProps) => {
     elementDescriptor: {
       OptionName: "items",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        item: { optionName: "items", isCollectionItem: true }
+      },
       TemplateProps: [{
         tmplOption: "template",
         render: "render",
@@ -331,6 +336,7 @@ const Offset = Object.assign<typeof _componentOffset, NestedComponentMeta>(_comp
 
 // owners:
 // From
+// To
 type IPositionProps = React.PropsWithChildren<{
   at?: Record<string, any> | PositionAlignment | {
     x?: HorizontalAlignment;
@@ -394,6 +400,10 @@ const _componentShow = (props: IShowProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "show",
+      ExpectedChildren: {
+        from: { optionName: "from", isCollectionItem: false },
+        to: { optionName: "to", isCollectionItem: false }
+      },
     },
   });
 };
@@ -454,6 +464,7 @@ const ShowSubmenuMode = Object.assign<typeof _componentShowSubmenuMode, NestedCo
 
 // owners:
 // Hide
+// Show
 type IToProps = React.PropsWithChildren<{
   left?: number;
   opacity?: number;
@@ -466,6 +477,9 @@ const _componentTo = (props: IToProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "to",
+      ExpectedChildren: {
+        position: { optionName: "position", isCollectionItem: false }
+      },
     },
   });
 };

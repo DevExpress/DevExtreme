@@ -10,7 +10,10 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -137,6 +140,14 @@ export class DxiMenuItemComponent extends CollectionNestedOption implements Afte
         return 'items';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiMenuItemComponent))
+    get itemsChildren(): QueryList<DxiMenuItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

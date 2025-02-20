@@ -99,6 +99,7 @@ const RangeSelector = memo(
 
 // owners:
 // CommonSeriesSettings
+// Series
 type IAggregationProps = React.PropsWithChildren<{
   calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>) | undefined;
   enabled?: boolean;
@@ -144,7 +145,7 @@ const AggregationInterval = Object.assign<typeof _componentAggregationInterval, 
 });
 
 // owners:
-// CommonSeriesSettingsLabel
+// Label
 type IArgumentFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | Date) => string);
@@ -238,12 +239,11 @@ const Behavior = Object.assign<typeof _componentBehavior, NestedComponentMeta>(_
 
 // owners:
 // CommonSeriesSettings
-// CommonSeriesSettingsHoverStyle
-// CommonSeriesSettingsLabel
-// CommonSeriesSettingsSelectionStyle
+// HoverStyle
+// Label
+// SelectionStyle
+// Series
 // Point
-// PointHoverStyle
-// PointSelectionStyle
 type IBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
   dashStyle?: DashStyle | undefined;
@@ -357,11 +357,10 @@ const Chart = Object.assign<typeof _componentChart, NestedComponentMeta>(_compon
 
 // owners:
 // CommonSeriesSettings
-// CommonSeriesSettingsHoverStyle
+// HoverStyle
 // Point
-// PointHoverStyle
-// PointSelectionStyle
-// CommonSeriesSettingsSelectionStyle
+// SelectionStyle
+// Series
 type IColorProps = React.PropsWithChildren<{
   base?: string | undefined;
   fillId?: string | undefined;
@@ -599,6 +598,7 @@ const CommonSeriesSettings = Object.assign<typeof _componentCommonSeriesSettings
 
 // owners:
 // CommonSeriesSettings
+// Series
 type ICommonSeriesSettingsHoverStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string | undefined;
@@ -638,6 +638,7 @@ const CommonSeriesSettingsHoverStyle = Object.assign<typeof _componentCommonSeri
 
 // owners:
 // CommonSeriesSettings
+// Series
 type ICommonSeriesSettingsLabelProps = React.PropsWithChildren<{
   alignment?: HorizontalAlignment;
   argumentFormat?: LocalizationFormat | undefined;
@@ -687,6 +688,7 @@ const CommonSeriesSettingsLabel = Object.assign<typeof _componentCommonSeriesSet
 
 // owners:
 // CommonSeriesSettings
+// Series
 type ICommonSeriesSettingsSelectionStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string | undefined;
@@ -725,7 +727,7 @@ const CommonSeriesSettingsSelectionStyle = Object.assign<typeof _componentCommon
 });
 
 // owners:
-// CommonSeriesSettingsLabel
+// Label
 type IConnectorProps = React.PropsWithChildren<{
   color?: string | undefined;
   visible?: boolean;
@@ -789,7 +791,7 @@ const Export = Object.assign<typeof _componentExport, NestedComponentMeta>(_comp
 });
 
 // owners:
-// CommonSeriesSettingsLabel
+// Label
 // ScaleLabel
 // SliderMarker
 // LoadingIndicator
@@ -816,7 +818,7 @@ const Font = Object.assign<typeof _componentFont, NestedComponentMeta>(_componen
 });
 
 // owners:
-// CommonSeriesSettingsLabel
+// Label
 // ScaleLabel
 // MarkerLabel
 // SliderMarker
@@ -842,8 +844,8 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 });
 
 // owners:
-// CommonSeriesSettingsHoverStyle
-// CommonSeriesSettingsSelectionStyle
+// HoverStyle
+// SelectionStyle
 type IHatchingProps = React.PropsWithChildren<{
   direction?: HatchDirection;
   opacity?: number;
@@ -864,7 +866,7 @@ const Hatching = Object.assign<typeof _componentHatching, NestedComponentMeta>(_
 });
 
 // owners:
-// PointImage
+// Image
 type IHeightProps = React.PropsWithChildren<{
   rangeMaxPoint?: number | undefined;
   rangeMinPoint?: number | undefined;
@@ -884,6 +886,7 @@ const Height = Object.assign<typeof _componentHeight, NestedComponentMeta>(_comp
 
 // owners:
 // CommonSeriesSettings
+// Series
 // Point
 type IHoverStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
@@ -981,6 +984,7 @@ const Indent = Object.assign<typeof _componentIndent, NestedComponentMeta>(_comp
 
 // owners:
 // CommonSeriesSettings
+// Series
 // Scale
 // Marker
 type ILabelProps = React.PropsWithChildren<{
@@ -1263,6 +1267,7 @@ const MinRange = Object.assign<typeof _componentMinRange, NestedComponentMeta>(_
 
 // owners:
 // CommonSeriesSettings
+// Series
 type IPointProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string | undefined;
@@ -1314,14 +1319,10 @@ const _componentPoint = (props: IPointProps) => {
     elementDescriptor: {
       OptionName: "point",
       ExpectedChildren: {
-        border: { optionName: "border", isCollectionItem: false },
         color: { optionName: "color", isCollectionItem: false },
         hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
         image: { optionName: "image", isCollectionItem: false },
         pointBorder: { optionName: "border", isCollectionItem: false },
-        pointHoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
-        pointImage: { optionName: "image", isCollectionItem: false },
-        pointSelectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
         selectionStyle: { optionName: "selectionStyle", isCollectionItem: false }
       },
     },
@@ -1334,8 +1335,8 @@ const Point = Object.assign<typeof _componentPoint, NestedComponentMeta>(_compon
 
 // owners:
 // Point
-// PointHoverStyle
-// PointSelectionStyle
+// HoverStyle
+// SelectionStyle
 type IPointBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
   visible?: boolean;
@@ -1448,6 +1449,7 @@ const PointSelectionStyle = Object.assign<typeof _componentPointSelectionStyle, 
 
 // owners:
 // CommonSeriesSettings
+// Series
 type IReductionProps = React.PropsWithChildren<{
   color?: string;
   level?: FinancialChartReductionLevel;
@@ -1639,6 +1641,7 @@ const ScaleLabel = Object.assign<typeof _componentScaleLabel, NestedComponentMet
 // owners:
 // Point
 // CommonSeriesSettings
+// Series
 type ISelectionStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string | undefined;
@@ -1853,6 +1856,21 @@ const _componentSeries = (props: ISeriesProps) => {
     elementDescriptor: {
       OptionName: "series",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        aggregation: { optionName: "aggregation", isCollectionItem: false },
+        border: { optionName: "border", isCollectionItem: false },
+        color: { optionName: "color", isCollectionItem: false },
+        commonSeriesSettingsHoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
+        commonSeriesSettingsLabel: { optionName: "label", isCollectionItem: false },
+        commonSeriesSettingsSelectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
+        hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
+        label: { optionName: "label", isCollectionItem: false },
+        point: { optionName: "point", isCollectionItem: false },
+        reduction: { optionName: "reduction", isCollectionItem: false },
+        selectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
+        seriesBorder: { optionName: "border", isCollectionItem: false },
+        valueErrorBar: { optionName: "valueErrorBar", isCollectionItem: false }
+      },
     },
   });
 };
@@ -1863,9 +1881,10 @@ const Series = Object.assign<typeof _componentSeries, NestedComponentMeta>(_comp
 
 // owners:
 // CommonSeriesSettings
-// CommonSeriesSettingsHoverStyle
-// CommonSeriesSettingsLabel
-// CommonSeriesSettingsSelectionStyle
+// HoverStyle
+// Label
+// SelectionStyle
+// Series
 type ISeriesBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
   dashStyle?: DashStyle | undefined;
@@ -2106,7 +2125,7 @@ const Title = Object.assign<typeof _componentTitle, NestedComponentMeta>(_compon
 });
 
 // owners:
-// PointImage
+// Image
 type IUrlProps = React.PropsWithChildren<{
   rangeMaxPoint?: string | undefined;
   rangeMinPoint?: string | undefined;
@@ -2190,6 +2209,7 @@ const ValueAxis = Object.assign<typeof _componentValueAxis, NestedComponentMeta>
 
 // owners:
 // CommonSeriesSettings
+// Series
 type IValueErrorBarProps = React.PropsWithChildren<{
   color?: string;
   displayMode?: ValueErrorBarDisplayMode;
@@ -2215,7 +2235,7 @@ const ValueErrorBar = Object.assign<typeof _componentValueErrorBar, NestedCompon
 });
 
 // owners:
-// PointImage
+// Image
 type IWidthProps = React.PropsWithChildren<{
   rangeMaxPoint?: number | undefined;
   rangeMinPoint?: number | undefined;
