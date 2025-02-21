@@ -1798,7 +1798,7 @@ module('Timezone Editors', moduleOptions, () => {
         assert.equal(endDateTimezoneEditor.option('value'), null, 'Value is correct');
     });
 
-    test('timeZone editors should have correct options', function(assert) {
+    test('timeZone editors should have correct options', async function(assert) {
         const scheduler = createInstance({
             onAppointmentFormOpening: function(e) {
                 e.form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.startDateTimeZone`, { visible: true });
@@ -1808,7 +1808,7 @@ module('Timezone Editors', moduleOptions, () => {
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
 
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const form = scheduler.instance.getAppointmentDetailsForm();
         const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
@@ -1826,7 +1826,7 @@ module('Timezone Editors', moduleOptions, () => {
         });
     });
 
-    QUnit.test('timeZone editors should have correct value & display value on init', function(assert) {
+    QUnit.test('timeZone editors should have correct value & display value on init', async function(assert) {
         const scheduler = createInstance({
             editing: {
                 allowTimeZoneEditing: true,
@@ -1834,6 +1834,8 @@ module('Timezone Editors', moduleOptions, () => {
         });
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), startDateTimeZone: 'Europe/Paris', endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+        await this.clock.tickAsync(10);
 
         const form = scheduler.instance.getAppointmentDetailsForm();
         const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
@@ -1845,7 +1847,7 @@ module('Timezone Editors', moduleOptions, () => {
         });
     });
 
-    QUnit.test('timeZone editor should have correct display value for timezones with different offsets ', function(assert) {
+    QUnit.test('timeZone editor should have correct display value for timezones with different offsets ', async function(assert) {
         const scheduler = createInstance({
             editing: {
                 allowTimeZoneEditing: true,
@@ -1853,6 +1855,8 @@ module('Timezone Editors', moduleOptions, () => {
         });
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+        await this.clock.tickAsync(10);
 
         const form = scheduler.instance.getAppointmentDetailsForm();
         const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
@@ -1863,7 +1867,7 @@ module('Timezone Editors', moduleOptions, () => {
         assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT -08:00) America - Los Angeles', 'displayValue is ok');
     });
 
-    QUnit.test('timeZone editor display value for timeZone with DST should depend on date', function(assert) {
+    QUnit.test('timeZone editor display value for timeZone with DST should depend on date', async function(assert) {
         const scheduler = createInstance({
             editing: {
                 allowTimeZoneEditing: true,
@@ -1871,6 +1875,8 @@ module('Timezone Editors', moduleOptions, () => {
         });
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), startDateTimeZone: 'Europe/Paris', endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+        await this.clock.tickAsync(10);
 
         let form = scheduler.instance.getAppointmentDetailsForm();
         let startDateTimezoneEditor = form.getEditor('startDateTimeZone');
@@ -1880,13 +1886,15 @@ module('Timezone Editors', moduleOptions, () => {
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2020, 5, 1, 1), startDateTimeZone: 'Europe/Paris', endDate: new Date(2020, 5, 1, 2), text: 'test_text' });
 
+        await this.clock.tickAsync(10);
+
         form = scheduler.instance.getAppointmentDetailsForm();
         startDateTimezoneEditor = form.getEditor('startDateTimeZone');
 
         assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +02:00) Europe - Paris', 'displayValue is ok, DST');
     });
 
-    QUnit.test('dataSource of timezoneEditor should be filtered', function(assert) {
+    QUnit.test('dataSource of timezoneEditor should be filtered', async function(assert) {
         const scheduler = createInstance({
             editing: {
                 allowTimeZoneEditing: true,
@@ -1901,6 +1909,9 @@ module('Timezone Editors', moduleOptions, () => {
         });
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+        await this.clock.tickAsync(10);
+
         const form = scheduler.instance.getAppointmentDetailsForm();
         const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
         const expectedItemCount = 45; // US/Pacific-New is excluded
