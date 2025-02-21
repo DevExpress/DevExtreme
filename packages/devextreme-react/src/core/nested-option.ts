@@ -36,8 +36,8 @@ const NestedOption = function NestedOption<P>(
     return null;
   }
 
-  const usesNamedTemplate = elementDescriptor.TemplateProps?.some(prop => 
-    props[prop.tmplOption] && typeof props[prop.tmplOption] === 'string'
+  const usesNamedTemplate = elementDescriptor.TemplateProps?.some(
+    (prop) => props[prop.tmplOption] && typeof props[prop.tmplOption] === 'string',
   );
 
   const renderChildren = hasExpectedChildren(elementDescriptor) || usesNamedTemplate;

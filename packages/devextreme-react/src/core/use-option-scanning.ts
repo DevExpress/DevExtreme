@@ -68,10 +68,9 @@ export function useOptionScanning(
   };
 
   useLayoutEffect(() => {
-    const hasTemplate =
-      'testContainer' in templateInfo && !!templateInfo.testContainer.childNodes.length ||
-      'testContainerRef' in templateInfo && !!templateInfo.testContainerRef.current?.childNodes.length ||
-      'hasTemplate' in templateInfo && templateInfo.hasTemplate;
+    const hasTemplate = ('testContainer' in templateInfo && !!templateInfo.testContainer.childNodes.length)
+      || ('testContainerRef' in templateInfo && !!templateInfo.testContainerRef.current?.childNodes.length)
+      || ('hasTemplate' in templateInfo && templateInfo.hasTemplate);
 
     configBuilder.updateAnonymousTemplates(hasTemplate);
   }, [parentUpdateToken]);
