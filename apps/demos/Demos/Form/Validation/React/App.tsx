@@ -12,7 +12,7 @@ import Form, {
   StringLengthRule,
   AsyncRule,
   CustomRule,
-  FormTypes,
+  type FormTypes,
   FormRef,
 } from 'devextreme-react/form';
 import { ButtonType } from 'devextreme-react/common';

@@ -16,7 +16,7 @@ import RangeSelector, {
   Scale,
   MinorTick,
   Behavior,
-  RangeSelectorTypes,
+  type RangeSelectorTypes,
 } from 'devextreme-react/range-selector';
 
 import { VisualRange } from 'devextreme-react/common/charts';

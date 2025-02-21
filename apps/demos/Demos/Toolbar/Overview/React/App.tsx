@@ -7,7 +7,7 @@ import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import 'devextreme/ui/select_box';
 
-import { productTypes, products } from './data.ts';
+import { type productTypes, products } from './data.ts';
 
 const renderLabel = () => <div className="toolbar-label"><b>Tom&apos;s Club</b> Products</div>;
 

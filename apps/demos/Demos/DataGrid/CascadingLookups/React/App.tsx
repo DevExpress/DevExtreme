@@ -1,6 +1,6 @@
 import React from 'react';
 import DataGrid, {
-  Column, DataGridTypes, Editing, Lookup,
+  Column, type DataGridTypes, Editing, Lookup,
 } from 'devextreme-react/data-grid';
 import {
   employees, states, cities, Employee,

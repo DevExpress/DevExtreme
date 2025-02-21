@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import Button from 'devextreme-react/button';
-import ButtonGroup, { ButtonGroupTypes } from 'devextreme-react/button-group';
+import ButtonGroup, { type ButtonGroupTypes } from 'devextreme-react/button-group';
 import Resizable from 'devextreme-react/resizable';
 import CheckBox from 'devextreme-react/check-box';
-import DropDownButton, { DropDownButtonTypes } from 'devextreme-react/drop-down-button';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
+import DropDownButton, { type DropDownButtonTypes } from 'devextreme-react/drop-down-button';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import themes from 'devextreme/ui/themes';
 import notify from 'devextreme/ui/notify';
 import 'devextreme/ui/select_box';
@@ -17,7 +17,7 @@ import {
   headings,
   textAlignItems,
   textAlignItemsExtended,
-  listTypes,
+  type listTypes,
   fontInputAttr,
   textStyleInputAttr,
 } from './data.ts';

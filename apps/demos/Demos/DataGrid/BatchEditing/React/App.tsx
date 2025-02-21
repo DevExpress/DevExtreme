@@ -4,10 +4,10 @@ import DataGrid, {
   Editing,
   Paging,
   Lookup,
-  DataGridTypes,
+  type DataGridTypes,
 } from 'devextreme-react/data-grid';
-import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
+import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import { employees, states } from './data.ts';
 
 const startEditActions = ['click', 'dblClick'];
