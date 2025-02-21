@@ -335,7 +335,7 @@ const SKIPPED_TESTS = {
     Pagination: ['Overview'],
     Diagram: [
       { demo: 'UICustomization', themes: [THEME.material] },
-    ]
+    ],
   },
 };
 
