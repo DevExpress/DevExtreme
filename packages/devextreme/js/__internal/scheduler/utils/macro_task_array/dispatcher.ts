@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-restricted-globals
-const macroTaskIdSet = new Set<ReturnType<typeof setTimeout>>();
+export const macroTaskIdSet = new Set<ReturnType<typeof setTimeout>>();
 
-export const schedule = async (
+const schedule = async (
   callback: () => void,
   macroTaskTimeoutMs: number,
 ): Promise<void> => new Promise<void>((resolve) => {
@@ -16,8 +16,11 @@ export const schedule = async (
   macroTaskIdSet.add(taskId);
 });
 
-export const dispose = (): void => {
-  macroTaskIdSet.forEach((id) => clearTimeout(id));
+const dispose = (): void => {
+  Array.from(macroTaskIdSet).forEach((id) => {
+    clearTimeout(id);
+    macroTaskIdSet.delete(id);
+  });
 };
 
 export default {

@@ -10,16 +10,19 @@ export const macroTaskArrayForEach = async <TItem>(
   macroTaskTimeoutMs = DEFAULT_MACRO_TASK_TIMEOUT,
 ): Promise<void> => {
   const promises: Promise<void>[] = [];
-  const maxBatchIdx = array.length + step - 1;
+  const batchesCount = Math.ceil(array.length / step);
 
-  for (let batchIdx = 0; batchIdx < maxBatchIdx; batchIdx += step) {
-    promises.push(macroTaskDispatcher.schedule(() => {
-      const maxIdx = batchIdx + step - 1;
+  for (let batchIdx = 0; batchIdx < batchesCount; batchIdx += 1) {
+    const scheduledTask = macroTaskDispatcher.schedule(() => {
+      const startIdx = batchIdx * step;
+      const maxIdx = startIdx + step;
 
-      for (let idx = batchIdx; idx < maxIdx && !!array[idx]; idx += 1) {
+      for (let idx = startIdx; idx < maxIdx && array[idx] !== undefined; idx += 1) {
         callback(array[idx]);
       }
-    }, macroTaskTimeoutMs));
+    }, macroTaskTimeoutMs);
+
+    promises.push(scheduledTask);
   }
 
   await Promise.all(promises);
