@@ -446,11 +446,10 @@ export class AppointmentForm {
   }
 
   private setupTimezoneEditorDataSource(
-    formData: Record<string, any>,
     editorName: string,
+    selectedTimezoneId: string | null,
     date: Date,
   ): void {
-    const selectedTimezoneId = formData[editorName] ?? null;
     const selectedTimezoneLabel = selectedTimezoneId
       ? timeZoneUtils.getTimeZoneLabel(selectedTimezoneId, date)
       : null;
@@ -473,13 +472,15 @@ export class AppointmentForm {
 
     const rawStartDate = ExpressionUtils.getField(dataAccessors, 'startDate', formData);
     const rawEndDate = ExpressionUtils.getField(dataAccessors, 'endDate', formData);
+    const startDateTimezone = ExpressionUtils.getField(dataAccessors, 'startDateTimeZone', formData) ?? null;
+    const endDateTimezone = ExpressionUtils.getField(dataAccessors, 'endDateTimeZone', formData) ?? null;
 
     const allDay = ExpressionUtils.getField(dataAccessors, 'allDay', formData);
     const startDate = new Date(rawStartDate);
     const endDate = new Date(rawEndDate);
 
-    this.setupTimezoneEditorDataSource(formData, expr.startDateTimeZoneExpr, startDate);
-    this.setupTimezoneEditorDataSource(formData, expr.endDateTimeZoneExpr, endDate);
+    this.setupTimezoneEditorDataSource(expr.startDateTimeZoneExpr, startDateTimezone, startDate);
+    this.setupTimezoneEditorDataSource(expr.endDateTimeZoneExpr, endDateTimezone, endDate);
 
     this.updateRecurrenceEditorStartDate(startDate, expr.recurrenceRuleExpr);
 
