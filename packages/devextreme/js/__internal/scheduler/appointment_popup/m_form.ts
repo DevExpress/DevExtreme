@@ -435,13 +435,24 @@ export class AppointmentForm {
     date: Date,
   ): void {
     timeZoneUtils.getTimeZoneLabelsAsyncBatch(date)
-      .catch(() => [])
-      .then((timezones) => {
+      .catch(() => [] as TimezoneLabel[])
+      .then(async (timezones) => {
         const store = dataSource.store();
 
-        store.remove(selectedTimezoneLabel?.id).catch(() => {});
-        timezones.forEach((timezone) => { store.insert(timezone).catch(() => {}); });
+        await store.remove(selectedTimezoneLabel?.id);
+
+        // NOTE: Unfortunately, our store not support bulk operations
+        // So, we update it record-by-record
+        const insertPromises = timezones.reduce<Promise<void>[]>((result, timezone) => {
+          result.push(store.insert(timezone));
+          return result;
+        }, []);
+
+        // NOTE: We should wait for all insertions before reload & repaint
+        await Promise.all(insertPromises);
+
         dataSource.reload();
+        this.form.repaint();
       }).catch(() => {});
   }
 
