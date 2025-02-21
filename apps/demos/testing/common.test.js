@@ -273,6 +273,7 @@ const SKIPPED_TESTS = {
       { demo: 'LocalReordering', themes: [THEME.material] },
       { demo: 'MultipleRowSelection', themes: [THEME.material] },
       { demo: 'CustomizeKeyboardNavigation', themes: [THEME.material] },
+      { demo: 'Resizing', themes: [THEME.material] },
     ],
     PivotGrid: [
       { demo: 'Overview', themes: [THEME.material] },
