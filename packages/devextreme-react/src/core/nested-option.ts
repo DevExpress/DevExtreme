@@ -30,10 +30,17 @@ const NestedOption = function NestedOption<P>(
 ): React.ReactElement | null {
   const { children } = props;
   const { elementDescriptor, ...restProps } = props;
+  const { isTemplateRendering } = useContext(TemplateRenderingContext);
 
-  if (!elementDescriptor || typeof document === 'undefined') {
+  if (!elementDescriptor || typeof document === 'undefined' || isTemplateRendering) {
     return null;
   }
+
+  const usesNamedTemplate = elementDescriptor.TemplateProps?.some(prop => 
+    props[prop.tmplOption] && typeof props[prop.tmplOption] === 'string'
+  );
+
+  const renderChildren = hasExpectedChildren(elementDescriptor) || usesNamedTemplate;
 
   const {
     parentExpectedChildren,
@@ -42,28 +49,22 @@ const NestedOption = function NestedOption<P>(
     treeUpdateToken,
   } = useContext(NestedOptionContext);
 
-  const { isTemplateRendering } = useContext(TemplateRenderingContext);
   const [optionComponentKey] = useState(getOptionComponentKey());
   const optionElement = getOptionInfo(elementDescriptor, restProps, parentExpectedChildren);
   const mainContainer = useMemo(() => document.createElement('div'), []);
 
+  const templateInfo = renderChildren ? { testContainer: mainContainer } : { hasTemplate: !!children };
+
   const [
     config,
     context,
-  ] = useOptionScanning(optionElement, mainContainer, treeUpdateToken, 'option');
+  ] = useOptionScanning(optionElement, templateInfo, treeUpdateToken, 'option');
 
   useLayoutEffect(() => {
-    if (!isTemplateRendering) {
-      triggerParentOptionsReady(config, optionElement.descriptor, treeUpdateToken, optionComponentKey);
-    }
+    triggerParentOptionsReady(config, optionElement.descriptor, treeUpdateToken, optionComponentKey);
   }, [treeUpdateToken]);
 
-  if (children && !isTemplateRendering && !hasExpectedChildren(elementDescriptor)) {
-    mainContainer.appendChild(document.createElement('div'));
-    return null;
-  }
-
-  return isTemplateRendering ? null : React.createElement(
+  return renderChildren ? React.createElement(
     React.Fragment,
     {},
     createPortal(
@@ -76,7 +77,7 @@ const NestedOption = function NestedOption<P>(
       ),
       mainContainer,
     ),
-  );
+  ) : null;
 };
 
 export default NestedOption;

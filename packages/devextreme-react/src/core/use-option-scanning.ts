@@ -10,9 +10,11 @@ import { mergeNameParts } from './configuration/utils';
 import { createConfigBuilder, IConfigNode } from './configuration/config-node';
 import { NestedOptionContext, NestedOptionContextContent } from './contexts';
 
+export type TemplateInfo = { testContainer: HTMLDivElement } | { testContainerRef: RefObject<HTMLDivElement> } | { hasTemplate: boolean };
+
 export function useOptionScanning(
   optionElement: IOptionElement,
-  templateContainer: HTMLDivElement | RefObject<HTMLDivElement>,
+  templateInfo: TemplateInfo,
   parentUpdateToken: symbol,
   parentType: 'option' | 'component',
 ): [
@@ -66,12 +68,12 @@ export function useOptionScanning(
   };
 
   useLayoutEffect(() => {
-    const container = templateContainer && 'current' in templateContainer
-      ? templateContainer.current
-      : templateContainer;
+    const hasTemplate =
+      'testContainer' in templateInfo && !!templateInfo.testContainer.childNodes.length ||
+      'testContainerRef' in templateInfo && !!templateInfo.testContainerRef.current?.childNodes.length ||
+      'hasTemplate' in templateInfo && templateInfo.hasTemplate;
 
-    const hasTemplateRendered = !!container && container.childNodes.length > 0;
-    configBuilder.updateAnonymousTemplates(hasTemplateRendered);
+    configBuilder.updateAnonymousTemplates(hasTemplate);
   }, [parentUpdateToken]);
 
   return [configBuilder.node, context];

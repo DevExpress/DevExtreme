@@ -94,7 +94,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     const updateTemplates = useRef<(callback: () => void) => void>();
 
     const prevPropsRef = useRef<P & ComponentBaseProps>();
-    const childrenContainer = useRef<HTMLDivElement>(null);
+    const childrenContainerRef = useRef<HTMLDivElement>(null);
 
     const { parentType } = useContext(NestedOptionContext);
 
@@ -111,7 +111,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         },
         props,
       },
-      childrenContainer,
+      { testContainerRef: childrenContainerRef },
       Symbol('initial update token'),
       'component',
     );
@@ -435,7 +435,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     return (
       <RestoreTreeContext.Provider value={restoreTree}>
         <TemplateRenderingContext.Provider value={renderContextValue}>
-          <div ref={childrenContainer} {...getElementProps()}>
+          <div ref={childrenContainerRef} {...getElementProps()}>
             <NestedOptionContext.Provider value={context}>
               {renderContent()}
             </NestedOptionContext.Provider>
