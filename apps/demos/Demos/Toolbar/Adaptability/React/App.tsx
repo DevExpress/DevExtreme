@@ -17,7 +17,7 @@ import {
   headings,
   textAlignItems,
   textAlignItemsExtended,
-  type listTypes,
+  listTypes,
   fontInputAttr,
   textStyleInputAttr,
 } from './data.ts';
