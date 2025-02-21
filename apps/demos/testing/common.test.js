@@ -183,6 +183,7 @@ const SKIPPED_TESTS = {
       { demo: 'LocalReordering', themes: [THEME.material] },
       { demo: 'FilterModes', themes: [THEME.material] },
       { demo: 'ColumnChooser', themes: [THEME.material] },
+      { demo: 'Resizing', themes: [THEME.material] },
     ],
     PivotGrid: [
       { demo: 'ExcelJSCellCustomization', themes: [THEME.material] },

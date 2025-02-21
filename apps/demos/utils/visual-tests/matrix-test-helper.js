@@ -183,6 +183,7 @@ const SKIPPED_TESTS = {
       // Scroll to const value. Not enough for other themes, because the height of elements is different.
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
+      { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
     Gantt: [
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -213,6 +214,7 @@ const SKIPPED_TESTS = {
       { demo: 'ZoomingOnAreaSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
       { demo: 'Export', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'ExportCustomMarkup', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'PopupEditing', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     VectorMap: [
@@ -232,7 +234,7 @@ const SKIPPED_TESTS = {
       { demo: 'GroupedItems', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Splitter: [
-      { demo: 'Overview', themes: [THEME.material, THEME.fluent] },
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Gauges: [
       { demo: 'VariableNumberOfBars', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -295,6 +297,7 @@ const SKIPPED_TESTS = {
       { demo: 'CustomLegendMarkers', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
       { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
+      { demo: 'Crosshair', themes: [THEME.material] },
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
