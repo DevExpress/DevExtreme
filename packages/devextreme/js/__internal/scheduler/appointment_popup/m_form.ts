@@ -11,11 +11,13 @@ import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { extend } from '@js/core/utils/extend';
+import type AbstractStore from '@js/data/abstract_store';
 import Form from '@js/ui/form';
 import { current, isFluent } from '@js/ui/themes';
 import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
 
 import { createAppointmentAdapter } from '../m_appointment_adapter';
+import type { TimezoneLabel } from '../m_utils_time_zone';
 import timeZoneUtils from '../m_utils_time_zone';
 
 const SCREEN_SIZE_OF_SINGLE_COLUMN = 600;
@@ -427,21 +429,42 @@ export class AppointmentForm {
     editor && this.form.itemOption(editorPath, 'editorOptions', extend({}, editor.editorOptions, options));
   }
 
-  setTimeZoneEditorDataSourceAsync(date: Date, editorName: string): void {
-    timeZoneUtils.getTimeZonesAsyncBatch(date)
+  private scheduleTimezoneEditorDataSourceUpdate(
+    dataSource: { store: () => AbstractStore; reload: () => void },
+    selectedTimezoneLabel: TimezoneLabel | null,
+    date: Date,
+  ): void {
+    timeZoneUtils.getTimeZoneLabelsAsyncBatch(date)
       .catch(() => [])
       .then((timezones) => {
-        const dataSource = new DataSource({
-          store: timezones,
-          ...DEFAULT_TIMEZONE_EDITOR_DATA_SOURCE_OPTIONS,
-        });
+        const store = dataSource.store();
 
-        this.setEditorOptions(editorName, 'Main', { dataSource });
-      })
-      .catch(() => []);
+        store.remove(selectedTimezoneLabel?.id).catch(() => {});
+        timezones.forEach((timezone) => { store.insert(timezone).catch(() => {}); });
+        dataSource.reload();
+      }).catch(() => {});
   }
 
-  updateFormData(formData) {
+  private setupTimezoneEditorDataSource(
+    formData: Record<string, any>,
+    editorName: string,
+    date: Date,
+  ): void {
+    const selectedTimezoneId = formData[editorName] ?? null;
+    const selectedTimezoneLabel = selectedTimezoneId
+      ? timeZoneUtils.getTimeZoneLabel(selectedTimezoneId, date)
+      : null;
+
+    const dataSource = new DataSource({
+      ...DEFAULT_TIMEZONE_EDITOR_DATA_SOURCE_OPTIONS,
+      store: selectedTimezoneLabel ? [selectedTimezoneLabel] : [],
+    });
+
+    this.setEditorOptions(editorName, 'Main', { dataSource });
+    this.scheduleTimezoneEditorDataSourceUpdate(dataSource, selectedTimezoneLabel, date);
+  }
+
+  updateFormData(formData: Record<string, any>): void {
     this.isFormUpdating = true;
     this.form.option('formData', formData);
 
@@ -455,8 +478,8 @@ export class AppointmentForm {
     const startDate = new Date(rawStartDate);
     const endDate = new Date(rawEndDate);
 
-    this.setTimeZoneEditorDataSourceAsync(startDate, expr.startDateTimeZoneExpr);
-    this.setTimeZoneEditorDataSourceAsync(endDate, expr.endDateTimeZoneExpr);
+    this.setupTimezoneEditorDataSource(formData, expr.startDateTimeZoneExpr, startDate);
+    this.setupTimezoneEditorDataSource(formData, expr.endDateTimeZoneExpr, endDate);
 
     this.updateRecurrenceEditorStartDate(startDate, expr.recurrenceRuleExpr);
 
