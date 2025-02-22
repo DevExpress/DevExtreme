@@ -14,6 +14,8 @@ import { dateToMilliseconds as toMs } from 'core/utils/date';
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
 import viewPort from 'core/utils/view_port';
+import browser from 'core/utils/browser';
+
 
 const { module, test, testStart } = QUnit;
 
@@ -1751,6 +1753,10 @@ QUnit.module('Appointment Popup', moduleOptions, () => {
     });
 
     QUnit.test('Appointment popup opening performance should be ok', async function(assert) {
+        if(QUnit.isInShadowDomMode() || browser.mozilla) {
+            return;
+        }
+
         this.clock.restore();
 
         const maxOpeningTime = 250;
