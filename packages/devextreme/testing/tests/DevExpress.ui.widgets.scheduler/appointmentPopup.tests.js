@@ -1696,8 +1696,7 @@ QUnit.module('Appointment Popup', moduleOptions, () => {
         assert.ok(isResizeEventTriggered, 'The resize event of popup is triggered');
     });
 
-    QUnit.test('Popup should not be closed until the valid value is typed', function(assert) {
-        this.clock.restore();
+    QUnit.test('Popup should not be closed until the valid value is typed', async function(assert) {
         const startDate = new Date(2015, 1, 1, 1);
         const validValue = 'Test';
         const done = assert.async();
@@ -1727,12 +1726,21 @@ QUnit.module('Appointment Popup', moduleOptions, () => {
             text: 'caption'
         });
 
+        await this.clock.tickAsync(10);
         scheduler.appointmentForm.setSubject('caption1');
-        scheduler.appointmentPopup.saveAppointmentData().done(() => {
+        await this.clock.tickAsync(10);
+        const firstSavePromise = scheduler.appointmentPopup.saveAppointmentData();
+        await this.clock.tickAsync(10);
+
+        firstSavePromise.done(async() => {
             assert.equal(scheduler.appointmentForm.getInvalidEditorsCount.call(scheduler), 1, 'the only invalid editor is displayed in the form');
 
             scheduler.appointmentForm.setSubject(validValue);
-            scheduler.appointmentPopup.saveAppointmentData().done(() => {
+            await this.clock.tickAsync(10);
+            const secondSavePromise = scheduler.appointmentPopup.saveAppointmentData();
+            await this.clock.tickAsync(10);
+
+            secondSavePromise.done(() => {
                 assert.notOk(scheduler.appointmentPopup.getPopupInstance().option('visible'), 'the form is closed');
 
                 done();
@@ -1740,6 +1748,36 @@ QUnit.module('Appointment Popup', moduleOptions, () => {
         });
 
         assert.equal(scheduler.appointmentForm.getPendingEditorsCount.call(scheduler), 1, 'the only pending editor is displayed in the form');
+    });
+
+    QUnit.test('Appointment popup opening performance should be ok', async function(assert) {
+        this.clock.restore();
+
+        const maxOpeningTime = 250;
+        let resolvePopupShown = null;
+        const popupShownPromise = new Promise((resolve) => { resolvePopupShown = resolve; });
+
+        const scheduler = createInstance({
+            currentDate: new Date(2015, 1, 1, 1),
+            onAppointmentFormOpening: function(e) {
+                e.popup.option('onShown', () => {
+                    resolvePopupShown(performance.now());
+                });
+            }
+        });
+
+        const startTime = performance.now();
+
+        scheduler.instance.showAppointmentPopup({
+            startDate: new Date(2025, 1, 1, 1),
+            endDate: new Date(2025, 1, 1, 2),
+            text: 'caption'
+        });
+
+        const endTime = await popupShownPromise;
+        const openingTime = endTime - startTime;
+
+        assert.ok(openingTime <= maxOpeningTime, `popup opening time greater than ${maxOpeningTime} ms`);
     });
 });
 
