@@ -17,7 +17,7 @@ export interface TimezoneLabel {
 }
 
 export interface TimezoneData extends TimezoneLabel {
-  /** timezone offset in ... */
+  /** timezone offset in hours */
   offset?: number;
 }
 

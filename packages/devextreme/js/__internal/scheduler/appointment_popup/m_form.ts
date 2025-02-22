@@ -430,6 +430,7 @@ export class AppointmentForm {
   }
 
   private scheduleTimezoneEditorDataSourceUpdate(
+    editorName: string,
     dataSource: { store: () => AbstractStore; reload: () => void },
     selectedTimezoneLabel: TimezoneLabel | null,
     date: Date,
@@ -448,11 +449,13 @@ export class AppointmentForm {
           return result;
         }, []);
 
-        // NOTE: We should wait for all insertions before reload & repaint
+        // NOTE: We should wait for all insertions before reload
         await Promise.all(insertPromises);
 
         dataSource.reload();
-        this.form.repaint();
+        // NOTE: We should re-assign dataSource to the editor
+        // to repaint this editor after dataSource update
+        this.setEditorOptions(editorName, 'Main', { dataSource });
       }).catch(() => {});
   }
 
@@ -471,7 +474,12 @@ export class AppointmentForm {
     });
 
     this.setEditorOptions(editorName, 'Main', { dataSource });
-    this.scheduleTimezoneEditorDataSourceUpdate(dataSource, selectedTimezoneLabel, date);
+    this.scheduleTimezoneEditorDataSourceUpdate(
+      editorName,
+      dataSource,
+      selectedTimezoneLabel,
+      date,
+    );
   }
 
   updateFormData(formData: Record<string, any>): void {
