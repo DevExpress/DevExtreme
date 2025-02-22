@@ -52,7 +52,7 @@ export type OptionChangedEvent = EventInfo<dxChat> & ChangedOptionInfo;
  */
 export type MessageEnteredEvent = NativeEventInfo<dxChat, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
     /** @docid _ui_chat_MessageEnteredEvent.message */
-    readonly message?: Message;
+    readonly message: Message;
 };
 
 /**
@@ -74,7 +74,7 @@ export type TypingStartEvent = NativeEventInfo<dxChat, UIEvent & { target: HTMLI
  */
 export type TypingEndEvent = EventInfo<dxChat> & {
     /** @docid _ui_chat_TypingEndEvent.user */
-    readonly user?: User;
+    readonly user: User;
 };
 
 /**

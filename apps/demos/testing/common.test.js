@@ -210,6 +210,9 @@ const SKIPPED_TESTS = {
     ],
   },
   Vue: {
+    Accordion: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Charts: [
       { demo: 'TilingAlgorithms', themes: [THEME.material] },
       { demo: 'ExportAndPrintingAPI', themes: [THEME.material] },
