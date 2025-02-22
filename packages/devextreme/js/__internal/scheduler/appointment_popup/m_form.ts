@@ -14,7 +14,6 @@ import messageLocalization from '@js/localization/message';
 import Form from '@js/ui/form';
 import { current, isFluent } from '@js/ui/themes';
 import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
-import { Semaphore } from '@ts/scheduler/r1/semaphore/index';
 
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import timeZoneUtils from '../m_utils_time_zone';
@@ -63,15 +62,12 @@ export class AppointmentForm {
 
   form: any;
 
-  // TODO: Why we need the "semaphore" in the sync code?
-  //  We should research it and delete it if redundant
-  semaphore: Semaphore;
+  // NOTE: flag to prevent double value set during form updating
+  private isFormUpdating = false;
 
   constructor(scheduler) {
     this.scheduler = scheduler;
     this.form = null;
-
-    this.semaphore = new Semaphore();
   }
 
   get dxForm() {
@@ -194,7 +190,7 @@ export class AppointmentForm {
     const dateEditor = this.form.getEditor(dateExpr);
     const dateValue = dateSerialization.deserializeDate(dateEditor.option('value'));
 
-    if (this.semaphore.isFree() && dateValue && value && isNeedCorrect(dateValue, value)) {
+    if (!this.isFormUpdating && dateValue && value && isNeedCorrect(dateValue, value)) {
       const duration = previousValue ? dateValue.getTime() - previousValue.getTime() : 0;
       dateEditor.option('value', new Date(value.getTime() + duration));
     }
@@ -337,7 +333,7 @@ export class AppointmentForm {
               const endDateEditor = this.form.getEditor(dataExprs.endDateExpr);
               const startDate = dateSerialization.deserializeDate(startDateEditor.option('value'));
 
-              if (this.semaphore.isFree() && startDate) {
+              if (!this.isFormUpdating && startDate) {
                 if (value) {
                   const allDayStartDate = dateUtils.trimTime(startDate);
                   startDateEditor.option('value', new Date(allDayStartDate));
@@ -459,8 +455,7 @@ export class AppointmentForm {
   }
 
   updateFormData(formData) {
-    this.semaphore.take();
-
+    this.isFormUpdating = true;
     this.form.option('formData', formData);
 
     const dataAccessors = this.scheduler.getDataAccessors();
@@ -479,8 +474,7 @@ export class AppointmentForm {
     this.updateRecurrenceEditorStartDate(startDate, expr.recurrenceRuleExpr);
 
     this.setEditorsType(allDay);
-
-    this.semaphore.release();
+    this.isFormUpdating = false;
   }
 
   private createDateBoxEditor(dataField, colSpan, firstDayOfWeek, label, cssClass, onValueChanged) {

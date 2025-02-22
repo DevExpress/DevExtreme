@@ -33,7 +33,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
   _createListOption(target, dataList) {
     // @ts-expect-error
     const result: any = super._createListOption(target, dataList);
-    // TODO:T724287 this condition is not covered by tests, because touch variable cannot be overridden.
+    // T724287 this condition is not covered by tests, because touch variable cannot be overridden.
     // In the future, it is necessary to cover the tests
     result.showScrollbar = touch ? 'always' : 'onHover';
     return result;

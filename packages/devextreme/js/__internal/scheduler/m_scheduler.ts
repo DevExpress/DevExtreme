@@ -1493,7 +1493,7 @@ class Scheduler extends Widget<any> {
     this._validateKeyFieldIfAgendaExist();
   }
 
-  _isDataSourceLoaded() { // TODO
+  _isDataSourceLoaded() {
     return this._dataSource && this._dataSource.isLoaded();
   }
 
@@ -1604,17 +1604,13 @@ class Scheduler extends Widget<any> {
     return this._getCurrentViewOption('cellDuration');
   }
 
-  _getCurrentViewType() { // TODO get rid of mapping
-    return this.currentViewType;
-  }
-
   _renderWorkSpace(groups) {
     this._readyToRenderAppointments && this._toggleSmallClass();
     const $workSpace = $('<div>').appendTo(this._mainContainer);
 
     const countConfig = this._getViewCountConfig();
 
-    const workSpaceComponent = VIEWS_CONFIG[this._getCurrentViewType()].workSpace;
+    const workSpaceComponent = VIEWS_CONFIG[this.currentViewType].workSpace;
     const workSpaceConfig = this._workSpaceConfig(groups, countConfig);
     // @ts-expect-error
     this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig);
@@ -2203,7 +2199,7 @@ class Scheduler extends Widget<any> {
   }
 
   /// #DEBUG
-  getAppointmentDetailsForm() { // TODO for tests
+  getAppointmentDetailsForm() { // for tests
     return this._appointmentForm.form;
   }
   /// #ENDDEBUG
@@ -2614,7 +2610,6 @@ class Scheduler extends Widget<any> {
   private validateOptions(): void {
     const currentViewOptions = {
       ...this.option(),
-      // TODO: Check it before 24.1 release
       // NOTE: We override this.option values here
       // because the old validation logic checked only current view options.
       // Changing it and validate all views configuration will be a BC.

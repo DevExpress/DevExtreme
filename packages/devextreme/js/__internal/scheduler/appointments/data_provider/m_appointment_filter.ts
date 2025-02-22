@@ -255,11 +255,6 @@ export class AppointmentFilterBaseStrategy {
     }]];
   }
 
-  // TODO get rid of wrapper
-  _createAppointmentFilter(filterOptions) {
-    return this._createCombinedFilter(filterOptions);
-  }
-
   _filterAppointmentByResources(appointment, resources) {
     const checkAppointmentResourceValues = (resourceName, resourceIndex) => {
       const resourceGetter = this.dataAccessors.resources.getter[resourceName];
@@ -346,7 +341,7 @@ export class AppointmentFilterBaseStrategy {
   }
 
   filterPreparedItems(filterOptions, preparedItems) {
-    const combinedFilter = this._createAppointmentFilter(filterOptions);
+    const combinedFilter = this._createCombinedFilter(filterOptions);
 
     return query(preparedItems)
       .filter(combinedFilter)
@@ -447,7 +442,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
     filterOptions.forEach((option) => {
       combinedFilters.length && combinedFilters.push('or');
 
-      const filter = this._createAppointmentFilter(option);
+      const filter = this._createCombinedFilter(option);
 
       combinedFilters.push(filter);
     });
