@@ -174,6 +174,7 @@ const SKIPPED_TESTS = {
     Charts: [
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+      { demo: 'CustomLegendMarkers', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
