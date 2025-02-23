@@ -62,17 +62,38 @@ const getTestSpecificSkipRules = (testName) => {
 
 const SKIPPED_TESTS = {
   jQuery: {
+    Chat: [
+      // TODO Chrome133: skipped during chrome update
+      // error "ReferenceError: AzureOpenAI is not defined"
+      { demo: 'AIAndChatbotIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Charts: [
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
     ],
+    Gantt: [
+      { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Map: [
+      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
   },
   Angular: {
+    Chat: [
+      // TODO Chrome133: skipped during chrome update
+      // error "ReferenceError: AzureOpenAI is not defined"
+      { demo: 'AIAndChatbotIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     DataGrid: [
+      { demo: 'EditStateManagement', themes: [THEME.generic] },
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
       { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
       { demo: 'SignalRService', themes: [THEME.fluent, THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
+      { demo: 'RemoteGrouping', themes: [THEME.generic] },
     ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
@@ -89,6 +110,11 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleSeriesSelection', themes: [THEME.material] },
       { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
       { demo: 'APISelectAPoint', themes: [THEME.material] },
+    ],
+    Map: [
+      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
@@ -117,6 +143,8 @@ const SKIPPED_TESTS = {
     ],
     Gantt: [
       { demo: 'ContextMenu', themes: [THEME.material] },
+      { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     VectorMap: [
       { demo: 'Palette', themes: [THEME.material] },
@@ -131,9 +159,15 @@ const SKIPPED_TESTS = {
     ],
   },
   React: {
+    Chat: [
+      // TODO Chrome133: skipped during chrome update
+      // error "ReferenceError: AzureOpenAI is not defined"
+      { demo: 'AIAndChatbotIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Charts: [
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
+      { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
     ],
@@ -145,6 +179,9 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
     ],
+    Gantt: [
+      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'GroupByDate', themes: [THEME.fluent, THEME.material] },
@@ -153,13 +190,20 @@ const SKIPPED_TESTS = {
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
       { demo: 'ItemDragging', themes: [THEME.fluent, THEME.material] },
     ],
+    Map: [
+      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     VectorMap: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'PieMarkers', themes: [THEME.material] },
+      { demo: 'CustomAnnotations', themes: [THEME.material] },
       { demo: 'CustomMapData', themes: [THEME.material] },
       { demo: 'CustomProjection', themes: [THEME.material] },
       { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
       { demo: 'MultipleLayers', themes: [THEME.material] },
+      { demo: 'Palette', themes: [THEME.material] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     RangeSelector: [
@@ -178,6 +222,14 @@ const SKIPPED_TESTS = {
     ],
   },
   Vue: {
+    Accordion: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Chat: [
+      // TODO Chrome133: skipped during chrome update
+      // error "ReferenceError: AzureOpenAI is not defined"
+      { demo: 'AIAndChatbotIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Charts: [
       { demo: 'TilingAlgorithms', themes: [THEME.material] },
       { demo: 'ExportAndPrintingAPI', themes: [THEME.material] },
@@ -206,12 +258,34 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'DeferredSelection', themes: [THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
+      { demo: 'PopupEditing', themes: [THEME.generic] },
+      { demo: 'RecordPaging', themes: [THEME.generic] },
+    ],
+    FieldSet: [
+      { demo: 'Overview', themes: [THEME.fluent] },
+    ],
+    FileManager: [
+      { demo: 'BindingToFileSystem', themes: [THEME.material] },
+      { demo: 'CustomThumbnails', themes: [THEME.generic] },
+    ],
+    FilterBuilder: [
+      { demo: 'Customization', themes: [THEME.material] },
+    ],
+    Form: [
+      { demo: 'ColumnsAdaptability', themes: [THEME.generic] },
+      { demo: 'UpdateItemsDynamically', themes: [THEME.generic] },
     ],
     TreeList: [
       { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'MultipleRowSelection', themes: [THEME.material] },
     ],
     List: [
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
+    ],
+    Map: [
+      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Gauges: [
       { demo: 'Overview', themes: [THEME.material] },
@@ -246,6 +320,7 @@ const SKIPPED_TESTS = {
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
+    Pagination: ['Overview'],
   },
 };
 
