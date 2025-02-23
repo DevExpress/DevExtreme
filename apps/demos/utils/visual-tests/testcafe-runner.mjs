@@ -220,12 +220,6 @@ async function main() {
     .concurrency(concurrency || 1)
     .run({
       quarantineMode: process.env.TCQUARANTINE ? { successThreshold: 1, attemptLimit: 5 } : false,
-      hooks: {
-        before: async (t) => {
-          // TODO: Move to a single const (look at restoreBrowserSize helper module)
-          await t.resizeWindow(1200, 800);
-        },
-      },
     });
 
   await tester.close();
