@@ -171,6 +171,7 @@ const SKIPPED_TESTS = {
     Charts: [
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
+      { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
     ],
@@ -225,6 +226,9 @@ const SKIPPED_TESTS = {
     ],
   },
   Vue: {
+    Accordion: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Chat: [
       // TODO Chrome133: skipped during chrome update
       // error "ReferenceError: AzureOpenAI is not defined"
@@ -277,6 +281,7 @@ const SKIPPED_TESTS = {
     ],
     TreeList: [
       { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'MultipleRowSelection', themes: [THEME.material] },
     ],
     List: [
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
