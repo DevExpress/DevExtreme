@@ -58,7 +58,7 @@ const getTestSpecificSkipRules = (testName) => {
       return ['label'];
     case 'Map-Markers':
     case 'Map-Routes':
-      return ['aria-hidden-focus', 'image-alt', 'image-redundant-alt', 'aria-prohibited-attr'];
+      return ['aria-hidden-focus', 'image-alt', 'image-redundant-alt'];
     default:
       return [];
   }
@@ -66,11 +66,6 @@ const getTestSpecificSkipRules = (testName) => {
 
 const SKIPPED_TESTS = {
   jQuery: {
-    // TODO Chrome133: skipped during chrome update
-    // error: "AzureOpenAI is not defined"
-    Chat: [
-      { demo: 'AIAndChatbotIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
     Charts: [
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
     ],
@@ -94,38 +89,13 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'RemoteGrouping', themes: [THEME.generic] },
     ],
-    TreeList: [
-      { demo: 'BatchEditing', themes: [THEME.material] },
-      { demo: 'RowEditing', themes: [THEME.material] },
-      { demo: 'PopupEditing', themes: [THEME.material] },
-      { demo: 'FormEditing', themes: [THEME.material] },
-      { demo: 'CellEditing', themes: [THEME.material] },
-      { demo: 'Resizing', themes: [THEME.material] },
-      { demo: 'SummaryDisplayModes', themes: [THEME.material] },
-      { demo: 'ExcelJsHeaderAndFooter', themes: [THEME.material] },
-      { demo: 'FilterModes', themes: [THEME.material] },
-      { demo: 'ColumnChooser', themes: [THEME.material] },
-      { demo: 'CustomizeKeyboardNavigation', themes: [THEME.material] },
-    ],
-    PivotGrid: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'ChartIntegration', themes: [THEME.material] },
-      { demo: 'FieldPanel', themes: [THEME.material] },
-    ],
-    // TODO Chrome133: skipped during chrome update
-    // error: "AzureOpenAI is not defined"
-    Chat: [
-      { demo: 'AIAndChatbotIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'AjaxRequest', themes: [THEME.material] },
       { demo: 'Strips', themes: [THEME.material] },
       { demo: 'Bubble', themes: [THEME.material] },
       { demo: 'PointImage', themes: [THEME.material] },
       { demo: 'BiDirectionalBarChart', themes: [THEME.material] },
       { demo: 'CustomizePointsAndLabels', themes: [THEME.material] },
-      { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'MultiplePointSelection', themes: [THEME.material] },
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
@@ -143,6 +113,18 @@ const SKIPPED_TESTS = {
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
     ],
+    PivotGrid: [
+      { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'ChartIntegration', themes: [THEME.material] },
+    ],
+    TreeList: [
+      { demo: 'BatchEditing', themes: [THEME.material] },
+      { demo: 'RowEditing', themes: [THEME.material] },
+      { demo: 'PopupEditing', themes: [THEME.material] },
+      { demo: 'FormEditing', themes: [THEME.material] },
+      { demo: 'CellEditing', themes: [THEME.material] },
+      { demo: 'Resizing', themes: [THEME.material] },
+    ],
     Gauges: [
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
       { demo: 'BaseValueForRangeBar', themes: [THEME.material] },
@@ -152,7 +134,6 @@ const SKIPPED_TESTS = {
     ],
     RangeSelector: [
       { demo: 'DiscreteScale', themes: [THEME.material] },
-      { demo: 'UseRangeSelectionForFiltering', themes: [THEME.material] },
     ],
     Gantt: [
       { demo: 'ContextMenu', themes: [THEME.material] },
@@ -172,16 +153,9 @@ const SKIPPED_TESTS = {
     ],
   },
   React: {
-    // TODO Chrome133: skipped during chrome update
-    // error: "AzureOpenAI is not defined"
-    Chat: [
-      { demo: 'AIAndChatbotIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
     Charts: [
-      { demo: 'AjaxRequest', themes: [THEME.material] },
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
     ],
@@ -193,26 +167,8 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
     ],
-    TreeList: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'LocalReordering', themes: [THEME.material] },
-      { demo: 'FilterModes', themes: [THEME.material] },
-      { demo: 'ColumnChooser', themes: [THEME.material] },
-      { demo: 'Resizing', themes: [THEME.material] },
-    ],
-    PivotGrid: [
-      { demo: 'ExcelJSCellCustomization', themes: [THEME.material] },
-      { demo: 'ExcelJsHeaderAndFooter', themes: [THEME.material] },
-      { demo: 'LayoutCustomization', themes: [THEME.material] },
-      { demo: 'SummaryDisplayModes', themes: [THEME.material] },
-      { demo: 'StatePersistence', themes: [THEME.material] },
-      { demo: 'StandaloneFieldChooser', themes: [THEME.material] },
-      { demo: 'FieldPanel', themes: [THEME.material] },
-    ],
     Gantt: [
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Toolbar', themes: [THEME.material] },
-      { demo: 'ContextMenu', themes: [THEME.material] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
@@ -242,6 +198,10 @@ const SKIPPED_TESTS = {
       { demo: 'DiscreteScale', themes: [THEME.material] },
       { demo: 'UseRangeSelectionForCalculation', themes: [THEME.material] },
     ],
+    PivotGrid: [
+      { demo: 'ExcelJSCellCustomization', themes: [THEME.material] },
+      { demo: 'LayoutCustomization', themes: [THEME.material] },
+    ],
     Gauges: [
       { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
       { demo: 'VariableNumberOfSubvalueIndicators', themes: [THEME.material] },
@@ -250,14 +210,6 @@ const SKIPPED_TESTS = {
     ],
   },
   Vue: {
-    Accordion: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    // TODO Chrome133: skipped during chrome update
-    // error: "AzureOpenAI is not defined"
-    Chat: [
-      { demo: 'AIAndChatbotIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
     Charts: [
       { demo: 'TilingAlgorithms', themes: [THEME.material] },
       { demo: 'ExportAndPrintingAPI', themes: [THEME.material] },
@@ -289,20 +241,6 @@ const SKIPPED_TESTS = {
       { demo: 'PopupEditing', themes: [THEME.generic] },
       { demo: 'RecordPaging', themes: [THEME.generic] },
     ],
-    TreeList: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'LocalReordering', themes: [THEME.material] },
-      { demo: 'MultipleRowSelection', themes: [THEME.material] },
-      { demo: 'CustomizeKeyboardNavigation', themes: [THEME.material] },
-      { demo: 'Resizing', themes: [THEME.material] },
-    ],
-    PivotGrid: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'LayoutCustomization', themes: [THEME.material] },
-      { demo: 'SummaryDisplayModes', themes: [THEME.material] },
-      { demo: 'ExcelJsHeaderAndFooter', themes: [THEME.material] },
-      { demo: 'StandaloneFieldChooser', themes: [THEME.material] },
-    ],
     FieldSet: [
       { demo: 'Overview', themes: [THEME.fluent] },
     ],
@@ -316,6 +254,9 @@ const SKIPPED_TESTS = {
     Form: [
       { demo: 'ColumnsAdaptability', themes: [THEME.generic] },
       { demo: 'UpdateItemsDynamically', themes: [THEME.generic] },
+    ],
+    TreeList: [
+      { demo: 'Overview', themes: [THEME.material] },
     ],
     List: [
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
@@ -337,6 +278,10 @@ const SKIPPED_TESTS = {
       { demo: 'UseRangeSelectionForCalculation', themes: [THEME.material] },
       { demo: 'DiscreteScale', themes: [THEME.material] },
     ],
+    PivotGrid: [
+      { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'LayoutCustomization', themes: [THEME.material] },
+    ],
     VectorMap: [
       { demo: 'CustomProjection', themes: [THEME.material] },
       { demo: 'Spline', themes: [THEME.material] },
@@ -355,9 +300,6 @@ const SKIPPED_TESTS = {
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Pagination: ['Overview'],
-    Diagram: [
-      { demo: 'UICustomization', themes: [THEME.material] },
-    ],
   },
 };
 
@@ -367,6 +309,7 @@ const SKIPPED_TESTS = {
     .beforeEach(async (t) => {
       // eslint-disable-next-line spellcheck/spell-checker
       t.ctx.watchDogHandle = setTimeout(() => { throw new Error('test timeout exceeded'); }, 3 * 60 * 1000);
+      await t.resizeWindow(1000, 800);
     })
     // eslint-disable-next-line spellcheck/spell-checker
     .afterEach((t) => clearTimeout(t.ctx.watchDogHandle))
