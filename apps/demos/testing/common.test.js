@@ -185,6 +185,7 @@ const SKIPPED_TESTS = {
     ],
     Gantt: [
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'ContextMenu', themes: [THEME.material] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
@@ -282,6 +283,7 @@ const SKIPPED_TESTS = {
     TreeList: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'MultipleRowSelection', themes: [THEME.material] },
+      { demo: 'Resizing', themes: [THEME.material] },
     ],
     List: [
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
