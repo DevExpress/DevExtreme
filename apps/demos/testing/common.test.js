@@ -407,10 +407,7 @@ const SKIPPED_TESTS = {
       return;
     }
 
-    if (
-        process.env.STRATEGY !== 'accessibility'
-        && shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)
-    ) {
+    if (shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)) {
       return;
     }
 
