@@ -1752,11 +1752,11 @@ QUnit.module('Appointment Popup', moduleOptions, () => {
         assert.equal(scheduler.appointmentForm.getPendingEditorsCount.call(scheduler), 1, 'the only pending editor is displayed in the form');
     });
 
-    QUnit.test('Appointment popup opening performance should be ok', async function(assert) {
-        if(QUnit.isInShadowDomMode() || browser.mozilla) {
-            return;
-        }
+    const performanceTest = QUnit.isInShadowDomMode() || browser.mozilla
+        ? QUnit.test.skip
+        : QUnit.test;
 
+    performanceTest('Appointment popup opening performance should be ok', async function(assert) {
         this.clock.restore();
 
         const maxOpeningTime = 250;
