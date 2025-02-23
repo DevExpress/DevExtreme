@@ -406,6 +406,14 @@ const SKIPPED_TESTS = {
     if (isGitHubDemos && (widgetName !== 'DataGrid' || gitHubIgnored.includes(demoName))) {
       return;
     }
+
+    if (
+        process.env.STRATEGY !== 'accessibility'
+        && shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)
+    ) {
+      return;
+    }
+
     runTestAtPage(
       test,
       pageURL,
@@ -445,10 +453,6 @@ const SKIPPED_TESTS = {
           await t.expect(results.violations.length === 0).ok(createReport(results.violations));
         } else {
           const testTheme = process.env.THEME;
-
-          if (shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)) {
-            return;
-          }
 
           let comparisonResult;
           if (isGitHubDemos) {
