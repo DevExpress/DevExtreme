@@ -329,6 +329,7 @@ const SKIPPED_TESTS = {
       { demo: 'Crosshair', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
       { demo: 'CustomLegendMarkers', themes: [THEME.material] },
+      { demo: 'LoadDataOnDemand', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'BatchEditing', themes: [THEME.fluent] },

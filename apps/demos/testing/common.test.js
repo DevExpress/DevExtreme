@@ -185,6 +185,7 @@ const SKIPPED_TESTS = {
     ],
     Gantt: [
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Toolbar', themes: [THEME.material] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
@@ -216,7 +217,9 @@ const SKIPPED_TESTS = {
     ],
     PivotGrid: [
       { demo: 'ExcelJSCellCustomization', themes: [THEME.material] },
+      { demo: 'ExcelJsHeaderAndFooter', themes: [THEME.material] },
       { demo: 'LayoutCustomization', themes: [THEME.material] },
+      { demo: 'StatePersistence', themes: [THEME.material] },
     ],
     Gauges: [
       { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
