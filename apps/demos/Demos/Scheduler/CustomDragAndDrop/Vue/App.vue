@@ -43,7 +43,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxScheduler, { DxAppointmentDragging, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
-import DxDraggable, { DxDraggableTypes } from 'devextreme-vue/draggable';
+import DxDraggable, { type DxDraggableTypes } from 'devextreme-vue/draggable';
 import DxScrollView from 'devextreme-vue/scroll-view';
 import { appointments as appointmentsData, tasks as tasksData, Task } from './data.ts';
 

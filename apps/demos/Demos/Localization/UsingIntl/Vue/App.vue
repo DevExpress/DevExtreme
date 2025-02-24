@@ -62,7 +62,7 @@ import { onBeforeMount, ref } from 'vue';
 import {
   DxDataGrid, DxColumn, DxEditing, DxFilterRow,
 } from 'devextreme-vue/data-grid';
-import DxSelectBox, { DxSelectBoxTypes } from 'devextreme-vue/select-box';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/no-webpack-loader-syntax */
 import * as deMessages from 'npm:devextreme/localization/messages/de.json!json';
@@ -76,9 +76,9 @@ const locales: { name: string, value: Locale } = service.getLocales();
 const payments: Record<string, string | number>[] = service.getPayments();
 const locale: Locale = getLocale();
 const editPopupOptions = { width: 700, height: 345 };
-const amountEditorOptions = { 
-  format: 'currency', 
-  showClearButton: true, 
+const amountEditorOptions = {
+  format: 'currency',
+  showClearButton: true,
   inputAttr: {
     'aria-label': 'Filter cell',
   },
