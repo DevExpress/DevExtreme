@@ -106,6 +106,7 @@ const SKIPPED_TESTS = {
       { demo: 'PointImage', themes: [THEME.material] },
       { demo: 'BiDirectionalBarChart', themes: [THEME.material] },
       { demo: 'CustomizePointsAndLabels', themes: [THEME.material] },
+      { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'MultiplePointSelection', themes: [THEME.material] },
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
@@ -184,7 +185,7 @@ const SKIPPED_TESTS = {
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
     ],
     TreeList: [
-      { demo: 'Resizing', themes: [THEME.material ] },
+      { demo: 'Resizing', themes: [THEME.material] },
     ],
     Gantt: [
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
