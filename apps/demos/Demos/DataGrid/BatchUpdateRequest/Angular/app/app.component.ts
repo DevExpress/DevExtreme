@@ -10,7 +10,7 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridBatchUpdateWebApi';
+const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridBatchUpdateWebApi';
 
 let modulePrefix = '';
 // @ts-ignore

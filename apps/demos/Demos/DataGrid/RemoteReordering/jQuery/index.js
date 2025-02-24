@@ -1,5 +1,5 @@
 $(() => {
-  const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridRowReordering';
+  const url = 'https://js.devexpress.com/Demos/Mvc/api/RowReordering';
   const tasksStore = DevExpress.data.AspNet.createStore({
     key: 'ID',
     loadUrl: `${url}/Tasks`,
