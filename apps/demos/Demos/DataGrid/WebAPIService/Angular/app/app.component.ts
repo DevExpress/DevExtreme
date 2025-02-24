@@ -29,7 +29,7 @@ export class AppComponent {
   url: string;
 
   constructor() {
-    this.url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
+    this.url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 
     this.dataSource = AspNetData.createStore({
       key: 'OrderID',

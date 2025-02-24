@@ -24,7 +24,7 @@ import ProductInfo from './ProductInfo.vue';
 const dataSource = new DataSource({
   store: createStore({
     key: 'ProductID',
-    loadUrl: 'https://js.devexpress.com/Demos/Mvc/api/ListData/Orders',
+    loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/ListData',
   }),
   sort: 'ProductName',
   group: 'Category.CategoryName',

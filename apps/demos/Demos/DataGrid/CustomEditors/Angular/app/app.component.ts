@@ -37,7 +37,7 @@ export class AppComponent {
     itemTemplate: 'statusTemplate',
   };
 
-  url = 'https://js.devexpress.com/Demos/Mvc/api/CustomEditors';
+  url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridCustomEditors';
 
   constructor(service: Service) {
     this.statuses = service.getStatuses();

@@ -30,7 +30,7 @@ export class AppComponent {
 
   constructor() {
     this.remoteProvider = new RemoteFileSystemProvider({
-      endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-file-system-images',
+      endpointUrl: 'https://js.devexpress.com/Demos/NetCore/api/file-manager-file-system-images',
     });
   }
 

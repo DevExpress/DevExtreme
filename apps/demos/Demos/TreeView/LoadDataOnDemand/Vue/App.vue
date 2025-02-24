@@ -17,7 +17,7 @@ import 'whatwg-fetch';
 function createChildren(parent) {
   const parentId = parent ? parent.itemData.id : '';
 
-  return fetch(`https://js.devexpress.com/Demos/Mvc/api/TreeViewData?parentId=${parentId}`)
+  return fetch(`https://js.devexpress.com/Demos/NetCore/api/TreeViewData?parentId=${parentId}`)
     .then((response) => response.json())
     .catch(() => { throw new Error('Data Loading Error'); });
 }
