@@ -141,7 +141,9 @@
         "stylelint-config-standard": "35.0.0",
         "systemjs-builder": "0.16.15",
         "testcafe": "2.6.2",
-        "ts-node": "10.9.2"
+        "ts-node": "10.9.2",
+        "vue-tsc": "^2.2.2",
+        "@vue/tsconfig": "^0.7.0"
     },
     "scripts": {
         "test": "jest --coverage --runInBand",
