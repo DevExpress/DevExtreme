@@ -99,7 +99,7 @@ import CustomStore from 'devextreme/data/custom_store';
 import { formatDate } from 'devextreme/localization';
 import 'whatwg-fetch';
 
-const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
+const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 
 const ordersData = new CustomStore({
   key: 'OrderID',

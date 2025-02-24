@@ -1,5 +1,5 @@
 $(() => {
-  const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
+  const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 
   const loadPanel = $('#loadPanel').dxLoadPanel({
     position: {

@@ -1,4 +1,4 @@
-const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetailView';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
 
 $(() => {
   $('#gridContainer').dxDataGrid({

@@ -9,7 +9,7 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/TreeListTasks';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 
 let modulePrefix = '';
 // @ts-ignore
