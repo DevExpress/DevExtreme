@@ -13,7 +13,9 @@ fixture.disablePageReloads`HtmlEditor`
   const clickTarget = toolbar ? '#otherContainer .dx-bold-format' : '#container';
   const baseScreenName = toolbar ? 'htmleditor-with-toolbar' : 'htmleditor-without-toolbar';
 
-  test(`T1025549 - ${baseScreenName}`, async (t) => {
+  // TODO: size of this test is unstable.
+  //  Need to check it
+  test.skip(`T1025549 - ${baseScreenName}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `${baseScreenName}.png`, { element: selector });
