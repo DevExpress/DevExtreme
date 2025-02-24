@@ -111,7 +111,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         },
         props,
       },
-      { testContainerRef: childrenContainerRef },
+      () => !!childrenContainerRef.current?.childNodes.length,
       Symbol('initial update token'),
       'component',
     );

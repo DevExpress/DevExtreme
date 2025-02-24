@@ -40,8 +40,6 @@ const NestedOption = function NestedOption<P>(
     (prop) => props[prop.tmplOption] && typeof props[prop.tmplOption] === 'string',
   );
 
-  const renderChildren = hasExpectedChildren(elementDescriptor) || usesNamedTemplate;
-
   const {
     parentExpectedChildren,
     onChildOptionsReady: triggerParentOptionsReady,
@@ -52,13 +50,16 @@ const NestedOption = function NestedOption<P>(
   const [optionComponentKey] = useState(getOptionComponentKey());
   const optionElement = getOptionInfo(elementDescriptor, restProps, parentExpectedChildren);
   const mainContainer = useMemo(() => document.createElement('div'), []);
+  const renderChildren = hasExpectedChildren(elementDescriptor) || usesNamedTemplate;
 
-  const templateInfo = renderChildren ? { testContainer: mainContainer } : { hasTemplate: !!children };
+  const getHasTemplate = renderChildren
+    ? () => !!mainContainer.childNodes.length
+    : () => !!children;
 
   const [
     config,
     context,
-  ] = useOptionScanning(optionElement, templateInfo, treeUpdateToken, 'option');
+  ] = useOptionScanning(optionElement, getHasTemplate, treeUpdateToken, 'option');
 
   useLayoutEffect(() => {
     triggerParentOptionsReady(config, optionElement.descriptor, treeUpdateToken, optionComponentKey);

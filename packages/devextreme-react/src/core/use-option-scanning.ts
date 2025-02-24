@@ -2,7 +2,6 @@ import {
   useContext,
   useRef,
   useLayoutEffect,
-  RefObject,
 } from 'react';
 
 import { IOptionElement } from './configuration/react/element';
@@ -10,11 +9,9 @@ import { mergeNameParts } from './configuration/utils';
 import { createConfigBuilder, IConfigNode } from './configuration/config-node';
 import { NestedOptionContext, NestedOptionContextContent } from './contexts';
 
-export type TemplateInfo = { testContainer: HTMLDivElement } | { testContainerRef: RefObject<HTMLDivElement> } | { hasTemplate: boolean };
-
 export function useOptionScanning(
   optionElement: IOptionElement,
-  templateInfo: TemplateInfo,
+  getHasTemplate: () => boolean,
   parentUpdateToken: symbol,
   parentType: 'option' | 'component',
 ): [
@@ -68,11 +65,7 @@ export function useOptionScanning(
   };
 
   useLayoutEffect(() => {
-    const hasTemplate = ('testContainer' in templateInfo && !!templateInfo.testContainer.childNodes.length)
-      || ('testContainerRef' in templateInfo && !!templateInfo.testContainerRef.current?.childNodes.length)
-      || ('hasTemplate' in templateInfo && templateInfo.hasTemplate);
-
-    configBuilder.updateAnonymousTemplates(hasTemplate);
+    configBuilder.updateAnonymousTemplates(getHasTemplate());
   }, [parentUpdateToken]);
 
   return [configBuilder.node, context];
