@@ -3,11 +3,11 @@ import {
   describe, expect, it, jest,
 } from '@jest/globals';
 
-import dispatcher from '../dispatcher';
-import { macroTaskArrayForEach, macroTaskArrayMap } from '../methods';
+import dispatcher from './dispatcher';
+import { macroTaskArrayForEach, macroTaskArrayMap } from './methods';
 
-jest.mock('../dispatcher', () => {
-  const actualModule = jest.requireActual<any>('../dispatcher');
+jest.mock('./dispatcher', () => {
+  const actualModule = jest.requireActual<any>('./dispatcher');
   return {
     ...actualModule.default,
     schedule: jest.fn(),

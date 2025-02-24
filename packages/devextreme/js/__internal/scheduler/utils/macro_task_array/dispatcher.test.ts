@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
 
-import dispatcher, { macroTaskIdSet } from '../dispatcher';
+import dispatcher, { macroTaskIdSet } from './dispatcher';
 
 jest.useFakeTimers();
 

@@ -1,4 +1,3 @@
-/* globals Intl */
 // TODO(Refactoring): move this module to ./utils directory
 import errors from '@js/core/errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
