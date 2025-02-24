@@ -79,6 +79,7 @@ const NumberBoxBase = TextEditor.inherit({
 
     return (
       browser.chrome && version >= 66
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             || browser.safari && version >= 12
     );
   },

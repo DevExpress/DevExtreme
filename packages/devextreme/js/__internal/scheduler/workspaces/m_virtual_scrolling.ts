@@ -523,12 +523,10 @@ class VirtualScrollingBase {
   }
 
   getTotalItemCount(): any {
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw 'getTotalItemCount method should be implemented';
   }
 
   getRenderState(): any {
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw 'getRenderState method should be implemented';
   }
 

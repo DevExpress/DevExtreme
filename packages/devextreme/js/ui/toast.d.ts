@@ -219,7 +219,7 @@ export type Properties = dxToastOptions;
 /** @deprecated use Properties instead */
 export type Options = dxToastOptions;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -272,4 +272,4 @@ onShowing?: ((e: ShowingEvent) => void);
  */
 onShown?: ((e: ShownEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

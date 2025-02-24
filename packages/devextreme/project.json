@@ -151,17 +151,6 @@
       ],
       "cache": true
     },
-    "lint-renovation": {
-      "executor": "nx:run-script",
-      "options": {
-        "script": "lint-renovation"
-      },
-      "inputs": [
-        "{projectRoot}/js/renovation/**/*.ts?(x)",
-        "{projectRoot}/.eslint*"
-      ],
-      "cache": true
-    },
     "test-jest": {
       "executor": "nx:run-script",
       "options": {

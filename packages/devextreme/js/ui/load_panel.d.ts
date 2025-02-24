@@ -216,7 +216,7 @@ export type Properties = dxLoadPanelOptions;
 /** @deprecated use Properties instead */
 export type Options = dxLoadPanelOptions;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -269,4 +269,4 @@ onShowing?: ((e: ShowingEvent) => void);
  */
 onShown?: ((e: ShownEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

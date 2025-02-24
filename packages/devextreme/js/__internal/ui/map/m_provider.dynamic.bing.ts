@@ -24,7 +24,7 @@ const MIN_LOCATION_RECT_LENGTH = 0.0000000000000001;
 
 const msMapsLoaded = function () {
   // @ts-expect-error
-  return window.Microsoft && window.Microsoft.Maps;
+  return window.Microsoft?.Maps;
 };
 
 let msMapsLoader;
@@ -439,7 +439,7 @@ const BingProvider = DynamicProvider.inherit({
 
   _extendBounds(location) {
     if (this._bounds) {
-      // eslint-disable-next-line max-len, new-cap
+      // eslint-disable-next-line @stylistic/max-len, new-cap
       this._bounds = new Microsoft.Maps.LocationRect.fromLocations(this._bounds.getNorthwest(), this._bounds.getSoutheast(), location);
     } else {
       this._bounds = new Microsoft.Maps.LocationRect(location, MIN_LOCATION_RECT_LENGTH, MIN_LOCATION_RECT_LENGTH);

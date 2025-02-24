@@ -342,7 +342,7 @@ export type Properties<TKey = any> = dxContextMenuOptions<TKey>;
 /** @deprecated use Properties instead */
 export type Options<TKey = any> = Properties<TKey>;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -395,4 +395,4 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
  */
 onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

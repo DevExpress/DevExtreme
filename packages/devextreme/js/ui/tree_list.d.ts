@@ -1831,7 +1831,7 @@ export type Properties<TRowData = any, TKey = any> = dxTreeListOptions<TRowData,
 /** @deprecated use Properties instead */
 export type Options<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -1969,4 +1969,4 @@ onSelectionChanged?: ((e: SelectionChangedEvent) => void);
  */
 onToolbarPreparing?: ((e: ToolbarPreparingEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

@@ -5049,7 +5049,7 @@ export type dxChartSeriesTypesCommonSeriesLabel = SeriesLabel;
 
 // #endregion
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -5130,4 +5130,4 @@ onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
  */
 onTooltipShown?: ((e: TooltipShownEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

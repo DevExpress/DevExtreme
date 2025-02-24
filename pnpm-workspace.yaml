@@ -3,3 +3,32 @@ packages:
   - 'e2e/*'
   - 'packages/*'
   - 'packages/devextreme/artifacts/npm/devextreme-dist'
+
+catalog:
+  eslint: 9.18.0
+  eslint-config-airbnb-typescript: 18.0.0
+  eslint-plugin-i18n: 2.4.0
+  eslint-plugin-import: 2.31.0
+  eslint-plugin-no-only-tests: 3.3.0
+  eslint-plugin-qunit: 8.1.2
+  globals: 15.14.0
+  gulp-eslint-new: 2.4.0
+  "@babel/eslint-parser": 7.26.5
+  "@eslint-stylistic/metadata": ^2.13.0
+  "@eslint/eslintrc": 3.2.0
+  "@stylistic/eslint-plugin": 2.13.0
+  "@typescript-eslint/eslint-plugin": 8.23.0
+  "@typescript-eslint/parser": 8.23.0
+
+catalogs:
+  eslint8:
+    eslint: 8.56.0
+    eslint-config-airbnb-typescript: 17.1.0
+    eslint-plugin-i18n: 2.3.0
+    eslint-plugin-import: 2.29.0
+    eslint-plugin-no-only-tests: 3.1.0
+    eslint-plugin-qunit: 7.3.4
+    gulp-eslint-new: 1.9.1
+    "@babel/eslint-parser": 7.23.10
+    "@typescript-eslint/eslint-plugin": 5.62.0
+    "@typescript-eslint/parser": 5.62.0

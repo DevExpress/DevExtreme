@@ -396,7 +396,7 @@ export type DataSourceOptions<
      * @docid
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
+
     langParams?: LangParams;
     /**
      * @docid
@@ -1336,5 +1336,5 @@ export class EdmLiteral {
  * @namespace DevExpress.common.data
  * @public
  */
-// eslint-disable-next-line vars-on-top, import/no-mutable-exports, no-var, @typescript-eslint/init-declarations, @typescript-eslint/no-explicit-any
+// eslint-disable-next-line vars-on-top, import/no-mutable-exports, no-var, @typescript-eslint/init-declarations
 export var keyConverters: any;
