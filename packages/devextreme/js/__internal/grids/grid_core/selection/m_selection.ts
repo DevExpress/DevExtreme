@@ -67,7 +67,7 @@ const processLongTap = function (that, dxEvent) {
 const isSeveralRowsSelected = function (that, selectionFilter) {
   let keyIndex = 0;
   const store = that._dataController.store();
-  const key = store && store.key();
+  const key = store?.key();
   const isComplexKey = Array.isArray(key);
 
   if (!selectionFilter.length) {
@@ -720,7 +720,7 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
   private _updateSelectAllValue() {
     const that = this;
     const $element = that.element();
-    const $editor = $element && $element.find(`.${SELECT_CHECKBOX_CLASS}`);
+    const $editor = $element?.find(`.${SELECT_CHECKBOX_CLASS}`);
 
     if ($element && $editor.length && that.option('selection.mode') === 'multiple') {
       const selectAllValue = that._selectionController.isSelectAll();
@@ -759,6 +759,7 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
       dataType: 'boolean',
       value: this._selectionController.isSelectAll(),
       editorOptions: {
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         visible: !isEmptyData && (that.option('selection.allowSelectAll') || this._selectionController.isSelectAll() !== false),
       },
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing

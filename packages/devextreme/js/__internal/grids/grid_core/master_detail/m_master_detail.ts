@@ -341,7 +341,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExten
   }
 
   protected _isDetailRow(row) {
-    return row && row.rowType && row.rowType.indexOf('detail') === 0;
+    return row?.rowType && row.rowType.indexOf('detail') === 0;
   }
 
   protected _createRow(row) {
@@ -369,6 +369,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExten
       super._renderCells.apply(this, arguments as any);
     }
   }
+
   protected _renderMasterDetailCell($row, row, options): dxElementWrapper {
     const visibleColumns = this._columnsController.getVisibleColumns();
 

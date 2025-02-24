@@ -238,7 +238,7 @@ export type Properties = dxColorBoxOptions;
 /** @deprecated use Properties instead */
 export type Options = dxColorBoxOptions;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -331,4 +331,4 @@ onPaste?: ((e: PasteEvent) => void);
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

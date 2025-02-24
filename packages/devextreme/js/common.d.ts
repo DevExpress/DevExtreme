@@ -427,7 +427,7 @@ export type MaskMode = 'always' | 'onFocus';
  * @public
  * @namespace DevExpress.common
  */
-export type Mode = 'auto'; // eslint-disable-line @typescript-eslint/no-type-alias
+export type Mode = 'auto';
 
 /**
  * @docid
@@ -743,7 +743,7 @@ export type TabsStyle = 'primary' | 'secondary';
  * @public
  * @namespace DevExpress.common
  */
-export type TextBoxPredefinedButton = 'clear'; // eslint-disable-line @typescript-eslint/no-type-alias
+export type TextBoxPredefinedButton = 'clear';
 
 /**
  * @public
@@ -901,7 +901,7 @@ export function config(): GlobalConfig;
  * @namespace DevExpress
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/no-shadow
+
 export function config(config: GlobalConfig): void;
 
 /**

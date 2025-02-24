@@ -328,7 +328,7 @@ export default class dxDateRangeBox extends DateRangeBoxBase {
   reset(value?: Array<Date | number | string | null>): void;
 }
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -424,4 +424,4 @@ onPaste?: ((e: PasteEvent) => void);
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

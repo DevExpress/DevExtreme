@@ -83,9 +83,9 @@ function isOnClickApplyFilterMode(that) {
 }
 
 const getEditorInstance = function ($editorContainer) {
-  const $editor = $editorContainer && $editorContainer.children();
-  const componentNames = $editor && $editor.data('dxComponents');
-  const editor = componentNames && componentNames.length && $editor.data(componentNames[0]);
+  const $editor = $editorContainer?.children();
+  const componentNames = $editor?.data('dxComponents');
+  const editor = componentNames?.length && $editor.data(componentNames[0]);
 
   if (editor instanceof Editor) {
     return editor;
@@ -240,7 +240,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
           that._updateEditorValue(column, $editorRangeElements.first());
           that._updateEditorValue(column, $editorRangeElements.last());
         }
-        if (!overlayInstance || !overlayInstance.option('visible')) {
+        if (!overlayInstance?.option('visible')) {
           that._updateFilterRangeContent($cell, getRangeTextByFilterValue(that, column));
         }
       }
@@ -366,7 +366,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   private _updateFilterRangeOverlay(options) {
     const overlayInstance = this._filterRangeOverlayInstance;
 
-    overlayInstance && overlayInstance.option(options);
+    overlayInstance?.option(options);
   }
 
   private _showFilterRange($cell, column) {
@@ -379,18 +379,18 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     }
 
     if (!overlayInstance.option('visible')) {
-      that._filterRangeOverlayInstance && that._filterRangeOverlayInstance.hide();
+      that._filterRangeOverlayInstance?.hide();
       that._filterRangeOverlayInstance = overlayInstance;
 
       that._updateFilterRangeOverlay({ width: getOuterWidth($cell, true) + CORRECT_FILTER_RANGE_OVERLAY_WIDTH });
-      that._filterRangeOverlayInstance && that._filterRangeOverlayInstance.show();
+      that._filterRangeOverlayInstance?.show();
     }
   }
 
   private _hideFilterRange() {
     const overlayInstance = this._filterRangeOverlayInstance;
 
-    overlayInstance && overlayInstance.hide();
+    overlayInstance?.hide();
   }
 
   private getFilterRangeOverlayInstance() {
@@ -447,7 +447,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       $cell.find(EDITORS_INPUT_SELECTOR).first().css('textAlign', column.alignment);
     }
 
-    if (column.filterOperations && column.filterOperations.length) {
+    if (column.filterOperations?.length) {
       that._renderFilterOperationChooser($container, column, $editorContainer);
     }
   }
@@ -589,7 +589,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       showFirstSubmenuMode: 'onHover',
       hideSubmenuOnMouseLeave: true,
       items: [{
-        disabled: !(column.filterOperations && column.filterOperations.length),
+        disabled: !column.filterOperations?.length,
         icon: OPERATION_ICONS[getColumnSelectedFilterOperation(that, column) || 'default'],
         selectable: false,
         items: that._getFilterOperationMenuItems(column),
@@ -688,9 +688,10 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const that = this;
     let result: any = [{}];
     const filterRowOptions = that.option('filterRow');
-    const operationDescriptions = filterRowOptions && filterRowOptions.operationDescriptions || {};
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const operationDescriptions = filterRowOptions?.operationDescriptions || {};
 
-    if (column.filterOperations && column.filterOperations.length) {
+    if (column.filterOperations?.length) {
       const availableFilterOperations = column.filterOperations.filter((value) => isDefined(OPERATION_DESCRIPTORS[value]));
       result = map(availableFilterOperations, (value) => {
         const descriptionName = OPERATION_DESCRIPTORS[value];
@@ -705,7 +706,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
       result.push({
         name: null,
-        text: filterRowOptions && filterRowOptions.resetOperationText,
+        text: filterRowOptions?.resetOperationText,
         icon: OPERATION_ICONS.default,
       });
     }
@@ -827,8 +828,7 @@ export class ApplyFilterViewController extends modules.ViewController {
 
   public setHighLight($element, value) {
     if (isOnClickApplyFilterMode(this)) {
-      $element
-      && $element.toggleClass(HIGHLIGHT_OUTLINE_CLASS, value)
+      $element?.toggleClass(HIGHLIGHT_OUTLINE_CLASS, value)
       && $element.closest(`.${EDITOR_CELL_CLASS}`).toggleClass(FILTER_MODIFIED_CLASS, value);
       this._getHeaderPanel().enableApplyButton(value);
     }

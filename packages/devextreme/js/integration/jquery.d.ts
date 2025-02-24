@@ -101,7 +101,7 @@ declare module '../common/core/events' {
     }
 }
 
-/* eslint-disable @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 declare global {
     interface JQueryPromise<T> { }
     interface JQueryEventObject { }
@@ -601,7 +601,7 @@ declare global {
         dxVectorMap(options: string, ...params: any[]): any;
     }
 }
-/* eslint-enable @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars */
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 // eslint-disable-next-line no-empty-pattern
 export const { };

@@ -11,7 +11,6 @@ class EditStrategy<
   // @ts-expect-error ts-error
   TComponent extends CollectionWidget<CollectionWidgetEditProperties>,
   // @ts-expect-error dxClass inheritance issue
-  // eslint-disable-next-line @typescript-eslint/ban-types
 > extends (Class.inherit({}) as new() => {}) {
   _collectionWidget!: TComponent;
 

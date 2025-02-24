@@ -68,26 +68,24 @@ export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
     const children = useTemplate ? (
         // this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
         <>
-          {isTimeCellTemplate && TimeCellTemplateComponent
-            && TimeCellTemplateComponent({
-              data: {
-                date: startDate,
-                text,
-                groups,
-                groupIndex,
-              },
-              index,
-            })}
-          {!isTimeCellTemplate && DateCellTemplateComponent
-            && DateCellTemplateComponent({
-              data: {
-                date: startDate,
-                text,
-                groups,
-                groupIndex,
-              },
-              index,
-            })}
+          {isTimeCellTemplate && TimeCellTemplateComponent?.({
+            data: {
+              date: startDate,
+              text,
+              groups,
+              groupIndex,
+            },
+            index,
+          })}
+          {!isTimeCellTemplate && DateCellTemplateComponent?.({
+            data: {
+              date: startDate,
+              text,
+              groups,
+              groupIndex,
+            },
+            index,
+          })}
         </>
     )
       : (

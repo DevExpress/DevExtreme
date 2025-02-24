@@ -17,6 +17,15 @@
     "minimist": "1.2.8",
     "mockdate": "3.0.5",
     "nconf": "0.12.1",
-    "testcafe": "2.5.0"
+    "testcafe": "2.5.0",
+    "eslint": "catalog:eslint8",
+    "eslint-config-airbnb-typescript": "catalog:eslint8",
+    "eslint-plugin-i18n": "catalog:eslint8",
+    "eslint-plugin-import": "catalog:eslint8",
+    "eslint-plugin-no-only-tests": "catalog:eslint8",
+    "eslint-plugin-qunit": "catalog:eslint8",
+    "@babel/eslint-parser": "catalog:eslint8",
+    "@typescript-eslint/eslint-plugin": "catalog:eslint8",
+    "@typescript-eslint/parser": "catalog:eslint8"
   }
 }
