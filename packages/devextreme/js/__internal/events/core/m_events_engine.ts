@@ -367,7 +367,6 @@ function getHandlersController(element, eventName) {
       if (eventNameIsDefined) {
         removeByEventName(eventName);
       } else {
-        // eslint-disable-next-line no-restricted-syntax, guard-for-in
         for (const name in elementData) {
           removeByEventName(name);
         }
@@ -545,7 +544,6 @@ function iterate(callback) {
     if (typeof eventName === 'object') {
       const args: any = Array.prototype.slice.call(arguments, 0);
 
-      // eslint-disable-next-line no-restricted-syntax, guard-for-in
       for (const name in eventName) {
         args[1] = name;
         args[args.length - 1] = eventName[name];
@@ -585,6 +583,7 @@ function calculateWhich(event) {
   };
 
   if (setForKeyEvent(event)) {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return event.charCode != null ? event.charCode : event.keyCode;
   }
 

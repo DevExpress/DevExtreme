@@ -515,7 +515,7 @@ const Calendar = Editor.inherit({
       // @ts-expect-error
       cell: new FunctionTemplate((options) => {
         const data = options.model;
-        $(options.container).append($('<span>').text(data && data.text || String(data)));
+        $(options.container).append($('<span>').text(data?.text || String(data)));
       }),
     });
     this.callBase();
@@ -644,7 +644,7 @@ const Calendar = Editor.inherit({
     }
 
     // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/space-infix-ops, radix
+    // eslint-disable-next-line @stylistic/space-infix-ops, radix
     return parseInt(endDate.getFullYear() / zoomCorrection)- parseInt(startDate.getFullYear() / zoomCorrection);
   },
 
@@ -1213,10 +1213,10 @@ const Calendar = Editor.inherit({
       const newView = this._renderSpecificView(value);
 
       if (offset > 0) {
-        this._afterView && this._afterView.$element().remove();
+        this._afterView?.$element().remove();
         this._afterView = newView;
       } else {
-        this._beforeView && this._beforeView.$element().remove();
+        this._beforeView?.$element().remove();
         this._beforeView = newView;
       }
 
@@ -1346,9 +1346,9 @@ const Calendar = Editor.inherit({
 
   _disposeViews() {
     this._view.$element().remove();
-    this._beforeView && this._beforeView.$element().remove();
-    this._additionalView && this._additionalView.$element().remove();
-    this._afterView && this._afterView.$element().remove();
+    this._beforeView?.$element().remove();
+    this._additionalView?.$element().remove();
+    this._afterView?.$element().remove();
     delete this._view;
     delete this._additionalView;
     delete this._beforeView;

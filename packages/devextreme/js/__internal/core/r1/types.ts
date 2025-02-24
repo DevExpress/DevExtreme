@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import type * as CSS from 'csstype';
 import type { Component, StatelessComponent, VNode } from 'inferno';
 

@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils';
 import * as events from 'devextreme/events';
 import config from 'devextreme/core/config';
 import {
-  App, createVNode, defineComponent, h, nextTick, renderSlot,
+  App, createVNode, defineComponent, h, nextTick, renderSlot, ref,
 } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
@@ -18,8 +18,8 @@ import { getNodeOptions } from '../vue-helper';
 import {
   prepareComponentConfig,
   prepareExtensionComponentConfig,
-  prepareConfigurationComponentConfig
-} from "../index";
+  prepareConfigurationComponentConfig,
+} from '../index';
 
 interface CustomApp extends App {
   test: string;
@@ -154,6 +154,111 @@ describe('component rendering', () => {
     });
     const wrapper = mount(vm);
     expect(wrapper.element.className).toBe('my-class my-class2');
+  });
+
+  describe('correctly forwards classes', () => {
+    it('forwards correct attrs in the render method', async () => {
+      const component = defineComponent({
+        template:
+                  `
+                    <test-component id="component" class="custom-class" :class="{'dx-chat-disabled': isDisabled}"></test-component>
+                    <button @click="toggleDisabledState($event)">Click me</button>
+                  `,
+        components: { TestComponent },
+        setup() {
+          const isDisabled = ref(false);
+
+          function toggleDisabledState() {
+            isDisabled.value = !isDisabled.value;
+          }
+
+          return { isDisabled, toggleDisabledState };
+        },
+      });
+
+      const wrapper = mount(component);
+
+      const componentContainer = wrapper.find('#component');
+
+      await wrapper.find('button').trigger('click');
+
+      expect(componentContainer.element.className).toBe('custom-class dx-chat-disabled');
+
+      const attrsPassedToVNodeInRenderMethod = wrapper.vm.$.subTree?.children?.[0]?.component?.subTree?.props?.class;
+
+      const expectedClasses = 'custom-class dx-chat-disabled';
+
+      expect(attrsPassedToVNodeInRenderMethod).toBe(expectedClasses);
+      expect(componentContainer.element.className).toBe(expectedClasses);
+    });
+
+    it('forwards correct classes when a dynamic and static attrs were defined', async () => {
+      const component = defineComponent({
+        template:
+                  `
+                    <test-component id="component" class="custom-class" :class="{'dx-chat-disabled': isDisabled}"></test-component>
+                    <button @click="toggleDisabledState($event)">Click me</button>
+                  `,
+        components: { TestComponent },
+        setup() {
+          const isDisabled = ref(false);
+
+          function toggleDisabledState() {
+            isDisabled.value = !isDisabled.value;
+          }
+
+          return { isDisabled, toggleDisabledState };
+        },
+      });
+
+      const wrapper = mount(component);
+
+      const componentContainer = wrapper.find('#component');
+
+      componentContainer.element.classList.add('should-be-removed-class', 'dx-chat', 'dx-hover');
+
+      await wrapper.find('button').trigger('click');
+
+      expect(componentContainer.element.className).toBe('custom-class dx-chat dx-hover dx-chat-disabled');
+
+      await wrapper.find('button').trigger('click');
+
+      expect(componentContainer.element.className).toBe('custom-class dx-chat dx-hover');
+    });
+
+    it('forwards correct classes when only a dynamic attr was defined', async () => {
+      const component = defineComponent({
+        template:
+                  `
+                    <test-component id="component" :class="{'dx-chat-disabled': isDisabled}"></test-component>
+                    <button @click="toggleDisabledState($event)">Click me</button>
+                  `,
+        components: { TestComponent },
+        setup() {
+          const isDisabled = ref(false);
+
+          function toggleDisabledState() {
+            isDisabled.value = !isDisabled.value;
+          }
+
+          return { isDisabled, toggleDisabledState };
+        },
+      });
+
+      const wrapper = mount(component);
+
+      const componentContainer = wrapper.find('#component');
+
+      componentContainer.element.classList.add('should-be-removed-class', 'dx-chat', 'dx-hover');
+
+      await wrapper.find('button').trigger('click');
+
+      expect(componentContainer.element.className).toBe('dx-chat dx-hover dx-chat-disabled');
+
+      await wrapper.find('button').trigger('click');
+
+      expect(componentContainer.element.className).toBe('dx-chat dx-hover');
+    });
   });
 
   it('passes styles to element', () => {
@@ -1213,9 +1318,9 @@ describe('component rendering', () => {
 
       mount(vm);
 
-      const container = document.createElement("div");
+      const container = document.createElement('div');
       renderItemTemplate({}, container);
-      events.triggerHandler(container.children[0], "dxremove");
+      events.triggerHandler(container.children[0], 'dxremove');
 
       expect(container.children.length).toEqual(0);
     });
@@ -1234,9 +1339,9 @@ describe('component rendering', () => {
 
       mount(vm);
 
-      const container = document.createElement("div");
+      const container = document.createElement('div');
       renderItemTemplate({}, container);
-      events.triggerHandler(container.children[0], "dxremove");
+      events.triggerHandler(container.children[0], 'dxremove');
 
       expect(container.children.length).toEqual(0);
     });
@@ -1371,7 +1476,7 @@ describe('component rendering', () => {
       const vm = defineComponent({
         template: `<test-component>
                                 <template #item="{ data }">
-                                    <div class='custom-class'></div>
+                                    <div class='should-be-removed-class'></div>
                                 </template>
                             </test-component>`,
         components: {
@@ -1382,7 +1487,7 @@ describe('component rendering', () => {
       mount(vm);
       const renderedTemplate = renderItemTemplate({});
 
-      expect(renderedTemplate.className).toBe(`custom-class ${DX_TEMPLATE_WRAPPER}`);
+      expect(renderedTemplate.className).toBe(`should-be-removed-class ${DX_TEMPLATE_WRAPPER}`);
     });
 
     it('preserves custom-attrs', () => {

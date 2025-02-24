@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import { ComponentWrapper } from '../../core/r1/component_wrapper';
 import type { Option } from '../../core/r1/types';
 import { validateOptions } from '../utils/validation_utils';

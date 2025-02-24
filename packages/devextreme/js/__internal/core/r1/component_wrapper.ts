@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable class-methods-use-this */
 import '@js/common/core/events/click';
 import '@js/common/core/events/core/emitter.feedback';
 import '@js/common/core/events/hover';
@@ -9,7 +6,6 @@ import domAdapter from '@js/core/dom_adapter';
 import DOMComponent from '@js/core/dom_component';
 import type { UserDefinedElement } from '@js/core/element';
 import { getPublicElement } from '@js/core/element';
-// eslint-disable-next-line import/named
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
@@ -33,7 +29,6 @@ const setDefaultOptionValue = (
   defaultValueGetter: (name: string) => unknown,
 ) => (name: string): void => {
   if (Object.prototype.hasOwnProperty.call(options, name) && options[name] === undefined) {
-    // eslint-disable-next-line no-param-reassign
     options[name] = defaultValueGetter(name);
   }
 };
@@ -121,7 +116,6 @@ export class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {
 
   _checkContentReadyOption(fullName: string): boolean {
     const contentReadyOptions = this._getContentReadyOptions().reduce((options, name) => {
-      // eslint-disable-next-line no-param-reassign
       options[name] = true;
       return options;
     }, {});
@@ -449,7 +443,6 @@ export class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {
       ): void => {
         Object.keys(actArgs).forEach((name) => {
           if (isDefined(actArgs[name]) && domAdapter.isNode(actArgs[name])) {
-            // eslint-disable-next-line no-param-reassign
             actArgs[name] = getPublicElement($(actArgs[name]));
           }
         });
@@ -553,7 +546,7 @@ export class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {
     try {
       const result = $(value);
       const element = result?.get(0);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
       return element?.nodeType ? element : value;
     } catch (error) {
       return value;
@@ -598,7 +591,7 @@ export class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {
 
   // NOTE: this method will be deprecated
   //       aria changes should be defined in declaration or passed through property
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   setAria(name: string, value: string): void {
     this._aria[name] = value;
     this._initMarkup();
@@ -610,6 +603,3 @@ export class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {
 }
 
 ComponentWrapper.IS_RENOVATED_WIDGET = true;
-
-/* eslint-enable @typescript-eslint/ban-types */
-/* eslint-enable @typescript-eslint/no-unsafe-member-access */

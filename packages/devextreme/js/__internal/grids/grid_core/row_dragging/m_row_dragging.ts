@@ -30,6 +30,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
   private _allowReordering() {
     const rowDragging = this.option('rowDragging');
 
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return !!(rowDragging && (rowDragging.allowReordering || rowDragging.allowDropInsideItem || rowDragging.group));
   }
 
@@ -107,7 +108,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
           this.getController('keyboardNavigation')?._resetFocusedCell();
 
           const row = e.component.getVisibleRows()[e.fromIndex];
-          e.itemData = row && row.data;
+          e.itemData = row?.data;
 
           const isDataRow = row && row.rowType === 'data';
 

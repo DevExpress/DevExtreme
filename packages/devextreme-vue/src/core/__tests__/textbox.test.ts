@@ -103,7 +103,7 @@ describe('two-way binding', () => {
     const component = wrapper.getComponent('#component');
     await wrapper.setProps({ customClass: false });
     await nextTick(() => {
-      expect(component.element.classList.toString()).toBe(' dx-show-invalid-badge dx-textbox dx-texteditor dx-editor-outlined dx-texteditor-empty dx-widget');
+      expect(component.element.classList.toString()).toBe('dx-show-invalid-badge dx-textbox dx-texteditor dx-editor-outlined dx-texteditor-empty dx-widget');
     });
   });
 });

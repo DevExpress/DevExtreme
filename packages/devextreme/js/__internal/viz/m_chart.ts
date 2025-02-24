@@ -1488,6 +1488,7 @@ const dxChart = AdvancedChart.inherit({
     const pane = this.panes[paneIndex];
     const paneVisibility = pane?.border?.visible as boolean;
 
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return paneVisibility === undefined ? commonPaneBorderVisible : paneVisibility;
   },
 

@@ -133,7 +133,7 @@ export type Properties = dxCheckBoxOptions;
 /** @deprecated use Properties instead */
 export type Options = dxCheckBoxOptions;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -171,4 +171,4 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG
