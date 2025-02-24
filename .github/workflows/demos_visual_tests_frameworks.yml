@@ -190,6 +190,7 @@ jobs:
         include:
           - name: Lint code base (excluding demos)
             command: pnpx nx lint-non-demos
+            check-vue-ts: pnpm exec vue-tsc --noEmit --project tsconfig.vue-check.json
           # NOTE: skipped due to enormous number of errors
           # - name: Lint demos (1/4)
           #   command: CONSTEL=1/4 npm run lint-demos
@@ -262,6 +263,10 @@ jobs:
         CHANGEDFILEINFOSPATH: changed-files.json
         DEBUG: 'eslint:cli-engine,stylelint:standalone'
       run: ${{ matrix.command }}
+
+    - name: Run check TS for Vue
+      working-directory: apps/demos
+      run: ${{ matrix.check-vue-ts }}
 
   check_generated_demos:
     name: ${{ matrix.name }}
@@ -344,6 +349,8 @@ jobs:
             echo "If you see another diff, ensure that extra listed files have LF endings."
             exit 1
         fi
+
+
 
   testcafe:
     needs: build-demos

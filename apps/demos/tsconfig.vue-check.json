@@ -1,0 +1,9 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "compilerOptions": {
+    "strict": false
+  },
+  "include": [
+    "Demos/Charts/**/*.vue"
+  ]
+}
