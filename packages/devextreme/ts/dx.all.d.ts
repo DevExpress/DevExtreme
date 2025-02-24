@@ -21074,7 +21074,12 @@ declare module DevExpress.ui {
     export type ClickEvent = DevExpress.common.core.events.NativeEventInfo<
       dxMap,
       MouseEvent | PointerEvent
-    >;
+    > & {
+      /**
+       * [descr:_ui_map_ClickEvent.location]
+       */
+      location: MapLocation;
+    };
     /**
      * [descr:_ui_map_DisposingEvent]
      */
@@ -31045,6 +31050,9 @@ declare module DevExpress.ui {
      */
     selectedExpr?: string | Function;
   }
+  /**
+   * [descr:MapLocation]
+   */
   export interface MapLocation {
     /**
      * [descr:MapLocation.lat]

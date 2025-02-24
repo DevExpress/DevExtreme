@@ -1525,6 +1525,8 @@ QUnit.test('click', function(assert) {
     let clicked = 0;
     let eventFired = 0;
 
+    let mouseEvent;
+
     const $map = $('#map').dxMap({
         provider: 'google',
         width: 400,
@@ -1534,6 +1536,7 @@ QUnit.test('click', function(assert) {
                 lat: 2,
                 lng: 10
             }, 'correct location passed');
+            assert.strictEqual(e.event, mouseEvent.domEvent, 'click event is equal to the original event');
             clicked++;
         },
         onReady: function() {
@@ -1546,7 +1549,8 @@ QUnit.test('click', function(assert) {
     });
 
     d.done(function() {
-        window.google.clickActionCallback(new google.maps.MouseEvent(new google.maps.LatLng(2, 10)));
+        mouseEvent = new google.maps.MouseEvent(new google.maps.LatLng(2, 10));
+        window.google.clickActionCallback(mouseEvent);
         assert.equal(clicked, 1);
         assert.equal(eventFired, 1);
         done();

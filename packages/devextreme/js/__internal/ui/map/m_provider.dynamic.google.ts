@@ -228,7 +228,7 @@ const GoogleProvider = DynamicProvider.inherit({
   },
 
   _clickActionHandler(e) {
-    this._fireClickAction({ location: this._normalizeLocation(e.latLng) });
+    this._fireClickAction({ location: this._normalizeLocation(e.latLng), event: e.domEvent });
   },
 
   updateDimensions() {

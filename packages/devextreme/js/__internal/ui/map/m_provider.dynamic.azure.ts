@@ -195,7 +195,10 @@ const AzureProvider = DynamicProvider.inherit({
 
   _clickActionHandler(e) {
     if (e.type === 'click') {
-      this._fireClickAction({ location: this._normalizeLocation(e.position) });
+      this._fireClickAction({
+        location: this._normalizeLocation(e.position),
+        event: e.originalEvent,
+      });
     }
   },
 
