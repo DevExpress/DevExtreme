@@ -17,7 +17,6 @@ const PAGER_PAGE_INDEX_CLASS = 'dx-page-index';
 const LIGHT_PAGES_CLASS = 'dx-light-pages';
 const PAGER_PAGES_COUNT_CLASS = 'dx-pages-count';
 
-// eslint-disable-next-line @typescript-eslint/no-type-alias
 type PaginationSmallPropsType = Pick<PaginationProps, 'pageCount' | 'pageIndex' | 'pageIndexChangedInternal' | 'pagesCountText'>;
 
 export const PaginationSmallDefaultProps: PaginationSmallPropsType = {
@@ -56,8 +55,10 @@ export class PagesSmall extends InfernoComponent<PaginationSmallPropsType> {
 
   updateWidth(): void {
     const el = this.pageIndexRef.current?.querySelector(`.${PAGER_PAGE_INDEX_CLASS}`);
+    const minWidth = el ? getElementMinWidth(el) : 0;
+
     this.setState((state) => ({
-      minWidth: (el && getElementMinWidth(el)) || state.minWidth,
+      minWidth: minWidth > 0 ? minWidth : state.minWidth,
     }));
   }
 

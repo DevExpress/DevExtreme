@@ -67,6 +67,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 @Component({
     selector: 'dx-range-slider',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

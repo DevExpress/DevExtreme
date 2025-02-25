@@ -58,6 +58,7 @@ import { DxiTabsItemComponent } from 'devextreme-angular/ui/tabs/nested';
 @Component({
     selector: 'dx-tabs',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

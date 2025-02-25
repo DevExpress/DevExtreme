@@ -71,6 +71,7 @@ import { DxiSchedulerViewComponent } from 'devextreme-angular/ui/scheduler/neste
 @Component({
     selector: 'dx-scheduler',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

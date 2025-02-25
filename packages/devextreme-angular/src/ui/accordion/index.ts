@@ -57,6 +57,7 @@ import { DxiAccordionItemComponent } from 'devextreme-angular/ui/accordion/neste
 @Component({
     selector: 'dx-accordion',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

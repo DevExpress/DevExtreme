@@ -183,7 +183,6 @@ export class VirtualScrollingDispatcher {
     let cellWidth = this.options.getCellWidth();
     const minCellWidth = this.options.getCellMinWidth();
 
-    // TODO: Remove this after CSS refactoring
     if (!cellWidth || cellWidth < minCellWidth) {
       cellWidth = minCellWidth;
     }
@@ -524,12 +523,10 @@ class VirtualScrollingBase {
   }
 
   getTotalItemCount(): any {
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw 'getTotalItemCount method should be implemented';
   }
 
   getRenderState(): any {
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw 'getRenderState method should be implemented';
   }
 

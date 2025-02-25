@@ -381,7 +381,7 @@ export type Properties = dxLookupOptions;
 /** @deprecated use Properties instead */
 export type Options = dxLookupOptions;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -434,4 +434,4 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
  */
 onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

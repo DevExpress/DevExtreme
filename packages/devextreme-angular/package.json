@@ -42,8 +42,8 @@
     "codelyzer": "6.0.2",
     "core-js": "2.6.12",
     "cross-env": "7.0.3",
+    "css-loader": "6.10.0",
     "del": "2.2.2",
-    "eslint": "8.56.0",
     "gulp": "4.0.2",
     "gulp-header": "2.0.9",
     "gulp-replace": "0.6.1",
@@ -60,11 +60,17 @@
     "reflect-metadata": "0.1.13",
     "rxjs": "7.8.1",
     "stream-browserify": "3.0.0",
+    "style-loader": "3.3.4",
     "tslib": "2.6.3",
     "typescript": "5.4.5",
     "webpack": "5.96.1",
     "yargs": "17.7.2",
-    "zone.js": "0.14.10"
+    "zone.js": "0.14.10",
+    "eslint": "catalog:eslint8",
+    "eslint-config-airbnb-typescript": "catalog:eslint8",
+    "eslint-plugin-import": "catalog:eslint8",
+    "@typescript-eslint/eslint-plugin": "catalog:eslint8",
+    "@typescript-eslint/parser": "catalog:eslint8"
   },
   "main": "./src/index.ts",
   "keywords": [

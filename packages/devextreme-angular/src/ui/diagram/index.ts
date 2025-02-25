@@ -103,6 +103,7 @@ import { DxiDiagramCustomShapeComponent } from 'devextreme-angular/ui/diagram/ne
 @Component({
     selector: 'dx-diagram',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

@@ -55,9 +55,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: |
-        corepack enable
-        pnpm install
+      run: pnpm install
 
     - name: Build
       run: pnpx nx build devextreme
@@ -151,6 +149,7 @@ jobs:
           { componentFolder: "pagination", name: "pagination" },
           { componentFolder: "pagination", name: "pagination - material", theme: 'material.blue.light' },
           { componentFolder: "pagination", name: "pagination - fluent", theme: 'fluent.blue.light' },
+          { componentFolder: "gantt", name: "gantt" },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
@@ -177,7 +176,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '121.0.6167.160'
+        chrome-version: '121.0.6167.184'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
@@ -205,9 +204,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: |
-        corepack enable
-        pnpm install
+      run: pnpm install
 
     - name: Run TestCafe tests
       working-directory: ./e2e/testcafe-devextreme

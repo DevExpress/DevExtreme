@@ -287,7 +287,12 @@ const numberLocalization = dependencyInjector({
         if(!numberConfig) {
             const formatterConfig = this._getSeparators();
             formatterConfig.unlimitedIntegerDigits = format.unlimitedIntegerDigits;
-            return this.convertDigits(getFormatter(format.type, formatterConfig)(value));
+
+            const formatter = getFormatter(format.type, formatterConfig)(value);
+
+            const result = this.convertDigits(formatter);
+
+            return result;
         }
 
         return this._formatNumber(value, numberConfig, format);

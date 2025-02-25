@@ -30,7 +30,7 @@ const clientsStore = new CustomStore({
       }
     });
     params = params.slice(0, -1);
-    return fetch(`https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi/CustomersLookup${params}`)
+    return fetch(`https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi/CustomersLookup${params}`)
       .then((response) => response.json())
       .then((data) => ({
         data: data.data,

@@ -466,6 +466,7 @@ QUnit.module('basic options', moduleConfig, () => {
     QUnit.test('Should add onClick handler with correct args', function(assert) {
         const done = assert.async();
         let clickFired = 0;
+        const originalEvent = new PointerEvent({ type: 'click' });
 
         const map = $('#map').dxMap({
             provider: 'azure',
@@ -473,11 +474,16 @@ QUnit.module('basic options', moduleConfig, () => {
                 assert.strictEqual(e.component, map, 'click event includes component instance');
                 assert.strictEqual($(e.element).is($('#map')), true, 'click event includes root element');
                 assert.deepEqual(e.location, { lat: 88, lng: 88 }, 'click event includes correct location');
+                assert.deepEqual(e.event, originalEvent, 'click event is equal to passed originalEvent');
 
                 clickFired++;
             },
             onReady: () => {
-                atlas.clickActionCallback({ type: 'click', position: [88, 88] });
+                atlas.clickActionCallback({
+                    type: 'click',
+                    position: [88, 88],
+                    originalEvent,
+                });
                 assert.strictEqual(clickFired, 1, 'click action fired');
 
                 done();
@@ -561,6 +567,24 @@ QUnit.module('Markers', moduleConfig, () => {
                 assert.strictEqual(atlas.addedPopups[0] instanceof atlas.Popup, true, 'Popup class is correct');
                 assert.deepEqual(atlas.popupOptions.position, [20, 10], 'Popup position is correct');
                 assert.deepEqual(popupText, marker.tooltip, 'Popup text is correct');
+
+                done();
+            }
+        });
+    });
+
+    QUnit.test('It should be possible to pass a markup to marker tooltip.text option', function(assert) {
+        const done = assert.async();
+        const marker = { location: [10, 20], tooltip: { text: '<b>Austin</b>, Texas' } };
+        $('#map').dxMap({
+            provider: 'azure',
+            markers: [marker],
+            onReady: () => {
+                const $popupContent = $(atlas.popupOptions.content);
+                const $b = $popupContent.find('b');
+
+                assert.strictEqual($b.length, 1, '<b> element is passed to Popup');
+                assert.strictEqual($b.text(), 'Austin', 'text is correct');
 
                 done();
             }

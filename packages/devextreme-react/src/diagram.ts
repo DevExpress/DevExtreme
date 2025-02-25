@@ -158,6 +158,9 @@ const _componentCommand = (props: ICommandProps) => {
     elementDescriptor: {
       OptionName: "commands",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        item: { optionName: "items", isCollectionItem: true }
+      },
     },
   });
 };

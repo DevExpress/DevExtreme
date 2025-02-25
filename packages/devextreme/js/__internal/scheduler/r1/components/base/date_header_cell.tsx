@@ -1,5 +1,5 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
-import type { JSXTemplate } from '@devextreme-generator/declarations';
+import type { JSXTemplate } from '@ts/core/r1/types';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
 import { combineClasses } from '../../../../core/r1/utils/render_utils';
@@ -14,7 +14,7 @@ export interface DateHeaderCellProps extends CellBaseProps {
   colSpan: number;
   isWeekDayCell: boolean;
   splitText: boolean;
-  // TODO: this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
+  // this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
   isTimeCellTemplate: boolean;
   timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
   dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
@@ -66,28 +66,26 @@ export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
     const DateCellTemplateComponent = getTemplate(dateCellTemplate);
 
     const children = useTemplate ? (
-        // TODO: this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
+        // this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
         <>
-          {isTimeCellTemplate && TimeCellTemplateComponent
-            && TimeCellTemplateComponent({
-              data: {
-                date: startDate,
-                text,
-                groups,
-                groupIndex,
-              },
-              index,
-            })}
-          {!isTimeCellTemplate && DateCellTemplateComponent
-            && DateCellTemplateComponent({
-              data: {
-                date: startDate,
-                text,
-                groups,
-                groupIndex,
-              },
-              index,
-            })}
+          {isTimeCellTemplate && TimeCellTemplateComponent?.({
+            data: {
+              date: startDate,
+              text,
+              groups,
+              groupIndex,
+            },
+            index,
+          })}
+          {!isTimeCellTemplate && DateCellTemplateComponent?.({
+            data: {
+              date: startDate,
+              text,
+              groups,
+              groupIndex,
+            },
+            index,
+          })}
         </>
     )
       : (

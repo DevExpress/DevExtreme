@@ -571,6 +571,13 @@ prepareConfigurationComponentConfig(DxCommonAnnotationSettingsConfig);
 const DxCommonAnnotationSettings = defineComponent(DxCommonAnnotationSettingsConfig);
 
 (DxCommonAnnotationSettings as any).$_optionName = "commonAnnotationSettings";
+(DxCommonAnnotationSettings as any).$_expectedChildren = {
+  annotationBorder: { isCollectionItem: false, optionName: "border" },
+  border: { isCollectionItem: false, optionName: "border" },
+  font: { isCollectionItem: false, optionName: "font" },
+  image: { isCollectionItem: false, optionName: "image" },
+  shadow: { isCollectionItem: false, optionName: "shadow" }
+};
 
 const DxCommonSeriesSettingsConfig = {
   emits: {
@@ -1172,6 +1179,15 @@ const DxSeries = defineComponent(DxSeriesConfig);
 
 (DxSeries as any).$_optionName = "series";
 (DxSeries as any).$_isCollectionItem = true;
+(DxSeries as any).$_expectedChildren = {
+  border: { isCollectionItem: false, optionName: "border" },
+  color: { isCollectionItem: false, optionName: "color" },
+  hoverStyle: { isCollectionItem: false, optionName: "hoverStyle" },
+  label: { isCollectionItem: false, optionName: "label" },
+  selectionStyle: { isCollectionItem: false, optionName: "selectionStyle" },
+  seriesBorder: { isCollectionItem: false, optionName: "border" },
+  smallValuesGrouping: { isCollectionItem: false, optionName: "smallValuesGrouping" }
+};
 
 const DxSeriesBorderConfig = {
   emits: {

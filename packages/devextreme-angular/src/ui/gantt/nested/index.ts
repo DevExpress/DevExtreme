@@ -2,6 +2,7 @@ export * from './column-dxi';
 export * from './column-header-filter-search';
 export * from './column-header-filter';
 export * from './context-menu-item-dxi';
+export * from './context-menu-item-item-dxi';
 export * from './context-menu';
 export * from './dependencies';
 export * from './editing';

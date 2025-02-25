@@ -24,7 +24,7 @@ jobs:
       - name: Setup Chrome
         uses: ./.github/actions/setup-chrome
         with:
-          chrome-version: '121.0.6167.160'
+          chrome-version: '121.0.6167.184'
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -52,9 +52,7 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: |
-          corepack enable
-          pnpm install
+        run: pnpm install
 
       - name: Build devextreme package
         env:

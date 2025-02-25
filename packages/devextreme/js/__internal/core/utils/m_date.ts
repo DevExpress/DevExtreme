@@ -1,4 +1,3 @@
-/* globals Intl */
 // TODO refactoring: Review all date utils functions and move useful to __internal/core/utils/date.ts
 import dateSerialization from '@js/core/utils/date_serialization';
 import { camelize } from '@js/core/utils/inflector';

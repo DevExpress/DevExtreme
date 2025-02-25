@@ -210,7 +210,9 @@ class CollectionWidgetLiveUpdate<
     }
   }
 
-  _afterItemElementInserted(): void {}
+  _afterItemElementInserted(): void {
+    this._renderEmptyMessage();
+  }
 
   _removeByChange(keyInfo, items, change, isPartialRefresh): void {
     const index = isPartialRefresh ? change.index : indexByKey(keyInfo, items, change.key);

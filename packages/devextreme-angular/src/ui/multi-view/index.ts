@@ -57,6 +57,7 @@ import { DxiMultiViewItemComponent } from 'devextreme-angular/ui/multi-view/nest
 @Component({
     selector: 'dx-multi-view',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

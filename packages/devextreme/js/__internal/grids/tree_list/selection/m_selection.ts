@@ -260,6 +260,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
   private _updateSelectionStateCore(keys, isSelected) {
     const dataController = this._dataController;
 
+    this._selectionStateByKey = {};
     for (let i = 0; i < keys.length; i++) {
       this._selectionStateByKey[keys[i]] = isSelected;
       // @ts-expect-error

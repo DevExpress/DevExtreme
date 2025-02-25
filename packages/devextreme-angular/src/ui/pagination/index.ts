@@ -48,6 +48,7 @@ import {
 @Component({
     selector: 'dx-pagination',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,

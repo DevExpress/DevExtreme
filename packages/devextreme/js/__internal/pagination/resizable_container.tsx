@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
-import type { JSXTemplate } from '@devextreme-generator/declarations';
+import type { JSXTemplate } from '@ts/core/r1/types';
 import { createRef as infernoCreateRef } from 'inferno';
 
 import resizeCallbacks from '../../core/utils/resize_callbacks';
@@ -71,7 +70,7 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
 
   public pagesRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
 
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   public allowedPageSizesRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
 
   public elementsWidth: ChildElements<number> = {} as ChildElements<number>;
