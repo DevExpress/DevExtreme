@@ -729,7 +729,7 @@ class Overlay<
     this._toggleSubscriptions(visible);
   }
 
-  _updateZIndexStackPosition(pushToStack): void {
+  _updateZIndexStackPosition(pushToStack: boolean): void {
     const overlayStack = this._overlayStack();
     // @ts-expect-error ts-error
     const index = overlayStack.indexOf(this);
@@ -944,10 +944,10 @@ class Overlay<
     }
 
     let isHidden = false;
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     $parent.add($parent.parents()).each((index, element) => {
       const $element = $(element);
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       if ($element.css('display') === 'none') {
         isHidden = true;
         return false;
@@ -1096,7 +1096,6 @@ class Overlay<
   }
 
   _renderGeometryImpl(): void {
-    // @ts-expect-error ts-error
     // NOTE: position can be specified as a function which needs to be called strict on render start
     this._positionController.updatePosition(this._getOptionValue('position'));
     this._renderWrapper();
@@ -1104,7 +1103,8 @@ class Overlay<
     this._renderPosition();
   }
 
-  _renderPosition(): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _renderPosition(state?): void {
     this._positionController.positionContent();
   }
 

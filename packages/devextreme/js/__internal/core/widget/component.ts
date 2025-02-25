@@ -480,7 +480,7 @@ export class Component<
 
   // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-  _getOptionValue(name: string, context: any): any {
+  _getOptionValue(name: string, context?: any): any {
     const value = this.option(name);
 
     if (isFunction(value)) {

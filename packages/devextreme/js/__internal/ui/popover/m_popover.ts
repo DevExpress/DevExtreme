@@ -108,7 +108,7 @@ const detachEvent = function (that, target, name, event?: unknown) {
     eventsEngine.off(getPublicElement($(target)), eventName);
   }
 };
-
+// @ts-expect-error ts-error
 const Popover = Popup.inherit({
   _getDefaultOptions() {
     return extend(this.callBase(), {
