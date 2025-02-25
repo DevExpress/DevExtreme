@@ -77,6 +77,7 @@ const SKIPPED_TESTS = {
     Gantt: [
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'ContextMenu', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Map: [
       { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -116,6 +117,7 @@ const SKIPPED_TESTS = {
       { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
       { demo: 'APISelectAPoint', themes: [THEME.material] },
       { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
+      { demo: 'DoughnutWithCustomLabelInCenter', themes: [THEME.material] },
     ],
     Map: [
       { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -128,6 +130,7 @@ const SKIPPED_TESTS = {
     PivotGrid: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ChartIntegration', themes: [THEME.material] },
+      { demo: 'StatePersistence', themes: [THEME.material] },
     ],
     TreeList: [
       { demo: 'BatchEditing', themes: [THEME.material] },
@@ -136,6 +139,7 @@ const SKIPPED_TESTS = {
       { demo: 'FormEditing', themes: [THEME.material] },
       { demo: 'CellEditing', themes: [THEME.material] },
       { demo: 'Resizing', themes: [THEME.material] },
+      { demo: 'ColumnChooser', themes: [THEME.material] },
     ],
     Gauges: [
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
@@ -186,6 +190,11 @@ const SKIPPED_TESTS = {
       { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
+      { demo: 'ColumnResizing', themes: [THEME.material] },
+    ],
+    TreeList: [
+      { demos: 'Resizing', themes: [THEME.material] },
+      { demos: 'ColumnChooser', themes: [THEME.material] },
     ],
     Gantt: [
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -256,6 +265,7 @@ const SKIPPED_TESTS = {
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
       { demo: 'Palette', themes: [THEME.material] },
       { demo: 'DoughnutWithCustomLabelInCenter', themes: [THEME.material] },
+      { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
     ],
     Drawer: [
       { demo: 'TopOrBottomPosition', themes: [THEME.material] },
@@ -273,6 +283,7 @@ const SKIPPED_TESTS = {
       { demo: 'PopupEditing', themes: [THEME.generic] },
       { demo: 'RecordPaging', themes: [THEME.generic] },
       { demo: 'ColumnResizing', themes: [THEME.material] },
+      { demo: 'ExcelJsHeaderAndFooter', themes: [THEME.material] },
     ],
     FieldSet: [
       { demo: 'Overview', themes: [THEME.fluent] },

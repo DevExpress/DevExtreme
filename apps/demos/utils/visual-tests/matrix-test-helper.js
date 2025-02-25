@@ -338,7 +338,6 @@ const SKIPPED_TESTS = {
       { demo: 'CustomAnnotations', themes: [THEME.material] },
       { demo: 'CustomLegendMarkers', themes: [THEME.material] },
       { demo: 'LoadDataOnDemand', themes: [THEME.material] },
-      { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     DataGrid: [
       { demo: 'BatchEditing', themes: [THEME.fluent] },
@@ -351,6 +350,7 @@ const SKIPPED_TESTS = {
       { demo: 'Filtering', themes: [THEME.fluent, THEME.material] },
       { demo: 'RecordGrouping', themes: [THEME.material] },
       { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
