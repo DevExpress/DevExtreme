@@ -35,9 +35,6 @@ runs:
           sudo dpkg -i /tmp/chrome.deb
           unlink /tmp/chrome.deb
           google-chrome-stable --version
-          popd
-        
-          rm -rf google-chrome-setup  
         else
           echo "Skip Chrome upgrade"
         fi
