@@ -418,7 +418,8 @@ class Overlay<
     return OVERLAY_STACK;
   }
 
-  _zIndexInitValue() {
+  // eslint-disable-next-line class-methods-use-this
+  _zIndexInitValue(): number {
     // @ts-expect-error ts-error
     return Overlay.baseZIndex();
   }
@@ -519,7 +520,7 @@ class Overlay<
     }
   }
 
-  _show() {
+  _show(): DeferredObj<unknown> | Promise<unknown> {
     this._showingDeferred = Deferred();
 
     this._parentHidden = this._isParentHidden();
