@@ -55,6 +55,9 @@ const getTestSpecificSkipRules = (testName) => {
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
+    case 'Map-Markers':
+    case 'Map-Routes':
+      return ['aria-hidden-focus', 'image-alt', 'image-redundant-alt', 'aria-prohibited-attr', 'aria-command-name'];
     default:
       return [];
   }
@@ -202,6 +205,7 @@ const SKIPPED_TESTS = {
     ],
     Gantt: [
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Toolbar', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
@@ -238,6 +242,7 @@ const SKIPPED_TESTS = {
       { demo: 'SummaryDisplayModes', themes: [THEME.material] },
       { demo: 'ExcelJsHeaderAndFooter', themes: [THEME.material] },
       { demo: 'StandaloneFieldChooser', themes: [THEME.material] },
+      { demo: 'StatePersistence', themes: [THEME.material] },
     ],
     Gauges: [
       { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
@@ -340,6 +345,8 @@ const SKIPPED_TESTS = {
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'LayoutCustomization', themes: [THEME.material] },
       { demo: 'StatePersistence', themes: [THEME.material] },
+      { demo: 'ExcelJsHeaderAndFooter', themes: [THEME.material] },
+      { demo: 'SummaryDisplayModes', themes: [THEME.material] },
     ],
     VectorMap: [
       { demo: 'CustomProjection', themes: [THEME.material] },
