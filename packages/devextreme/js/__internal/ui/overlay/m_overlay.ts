@@ -1368,7 +1368,7 @@ class Overlay<
     }
   }
 
-  toggle(showing?) {
+  toggle(showing?): Promise<unknown> {
     showing = showing === undefined ? !this.option('visible') : showing;
     const result = Deferred();
 
@@ -1400,7 +1400,7 @@ class Overlay<
     return this._$content;
   }
 
-  show() {
+  show(): Promise<unknown> {
     return this.toggle(true);
   }
 

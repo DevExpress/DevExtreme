@@ -29,11 +29,11 @@ import {
 import { isDefined, isObject } from '@js/core/utils/type';
 import { compare as compareVersions } from '@js/core/utils/version';
 import Button from '@js/ui/button';
-import Overlay from '@js/ui/overlay/ui.overlay';
 import type { dxPopupAnimation, Properties, ToolbarItem } from '@js/ui/popup';
 import Resizable from '@js/ui/resizable';
 import { isFluent, isMaterial, isMaterialBased } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
+import Overlay from '@ts/ui/overlay/m_overlay';
 import * as zIndexPool from '@ts/ui/overlay/m_z_index';
 
 import windowUtils from '../../core/utils/m_window';
@@ -41,6 +41,8 @@ import PopupDrag from './m_popup_drag';
 import type { OverflowManager } from './m_popup_overflow_manager';
 import { createBodyOverflowManager } from './m_popup_overflow_manager';
 import { PopupPositionController } from './m_popup_position_controller';
+
+// STYLE popup
 
 const window = windowUtils.getWindow();
 
