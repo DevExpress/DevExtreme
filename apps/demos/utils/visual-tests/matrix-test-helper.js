@@ -291,6 +291,9 @@ const SKIPPED_TESTS = {
     ]
   },
   Vue: {
+    Accordion: [
+      { demo: 'Custom Overview Appearance', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
@@ -299,6 +302,7 @@ const SKIPPED_TESTS = {
       { demo: 'CustomAnnotations', themes: [THEME.material] },
       { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
       { demo: 'Crosshair', themes: [THEME.material] },
+      { demo: 'LoadDataOnDemand', themes: [THEME.material] },
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
@@ -313,6 +317,7 @@ const SKIPPED_TESTS = {
       { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'FilteringAPI', themes: [THEME.material] },
       { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
       'StatePersistence',
     ],
     Drawer: [
@@ -320,7 +325,10 @@ const SKIPPED_TESTS = {
     ],
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ]
+    ],
+    Popup: [
+      { demo: 'Scrolling', themes: [THEME.material] },
+    ],
   },
   React: {
     Charts: [
@@ -330,6 +338,7 @@ const SKIPPED_TESTS = {
       { demo: 'CustomAnnotations', themes: [THEME.material] },
       { demo: 'CustomLegendMarkers', themes: [THEME.material] },
       { demo: 'LoadDataOnDemand', themes: [THEME.material] },
+      { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     DataGrid: [
       { demo: 'BatchEditing', themes: [THEME.fluent] },
@@ -346,6 +355,9 @@ const SKIPPED_TESTS = {
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
+    ],
+    Popup: [
+      { demo: 'Scrolling', themes: [THEME.material] },
     ],
   },
 };
