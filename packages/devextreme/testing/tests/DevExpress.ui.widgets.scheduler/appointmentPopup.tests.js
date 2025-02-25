@@ -14,6 +14,8 @@ import { dateToMilliseconds as toMs } from 'core/utils/date';
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
 import viewPort from 'core/utils/view_port';
+import browser from 'core/utils/browser';
+
 
 const { module, test, testStart } = QUnit;
 
@@ -44,6 +46,7 @@ const createInstance = (options) => {
 
 const moduleOptions = {
     beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
         fx.off = true;
         this.tasks = [
             {
@@ -59,6 +62,7 @@ const moduleOptions = {
         ];
     },
     afterEach: function() {
+        this.clock.restore();
         fx.off = false;
     }
 };
@@ -107,10 +111,12 @@ testStart(() => {
 
 const moduleConfig = {
     beforeEach() {
+        this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
 
     afterEach() {
+        this.clock.restore();
         fx.off = false;
     }
 };
@@ -344,11 +350,9 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
     });
 
     QUnit.test('Appointment popup should work properly', function(assert) {
-        const clock = sinon.useFakeTimers();
-
         try {
             const NEW_EXPECTED_SUBJECT = 'NEW SUBJECT';
-            const scheduler = createScheduler({}, clock);
+            const scheduler = createScheduler({}, this.clock);
             const appointmentPopup = scheduler.appointmentPopup;
 
             assert.notOk(appointmentPopup.isVisible(), 'Appointment popup should be invisible in on init');
@@ -371,7 +375,7 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
             assert.ok(appointmentPopup.form.isRecurrenceEditorVisible(), 'Recurrence editor should be visible after click on recurrence appointment');
             assert.equal(appointmentPopup.form.getSubject(), defaultData[0].text, 'Subject in form should equal selected appointment');
         } finally {
-            clock.restore();
+            this.clock.restore();
         }
     });
 
@@ -440,6 +444,8 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
 
         assert.ok(scheduler.appointmentPopup.hasLoadPanel(), 'has load panel');
 
+        this.clock.tick(200);
+
         deferred.done(() => {
             assert.notOk(scheduler.appointmentPopup.hasLoadPanel(), 'has no load panel');
             assert.equal(scheduler.appointments.getTitleText(0), 'New Subject', 'Subject is correct');
@@ -477,6 +483,8 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
         const deferred = scheduler.appointmentPopup.saveAppointmentData();
 
         assert.ok(scheduler.appointmentPopup.hasLoadPanel(), 'has load panel');
+
+        this.clock.tick(200);
 
         deferred.done(() => {
             assert.notOk(scheduler.appointmentPopup.hasLoadPanel(), 'has no load panel');
@@ -537,7 +545,6 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
         });
 
         QUnit.test(`onAppointmentDeleting and e.cancel=${cancel}`, function(assert) {
-            const clock = sinon.useFakeTimers();
             const data = [{
                 text: 'Some Text',
                 startDate: new Date(2015, 4, 24, 9),
@@ -553,14 +560,12 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
             });
 
             scheduler.instance.deleteAppointment(data[0]);
-            clock.tick(10);
+            this.clock.tick(10);
 
             assert.notOk(scheduler.appointmentPopup.hasLoadPanel(), 'Has no load panel');
 
             const subject = cancel ? 'Some Text' : '';
             assert.equal(scheduler.appointments.getTitleText(0), subject, 'Subject is correct');
-
-            clock.restore();
         });
     });
 
@@ -1693,7 +1698,7 @@ QUnit.module('Appointment Popup', moduleOptions, () => {
         assert.ok(isResizeEventTriggered, 'The resize event of popup is triggered');
     });
 
-    QUnit.test('Popup should not be closed until the valid value is typed', function(assert) {
+    QUnit.test('Popup should not be closed until the valid value is typed', async function(assert) {
         const startDate = new Date(2015, 1, 1, 1);
         const validValue = 'Test';
         const done = assert.async();
@@ -1723,12 +1728,21 @@ QUnit.module('Appointment Popup', moduleOptions, () => {
             text: 'caption'
         });
 
+        await this.clock.tickAsync(10);
         scheduler.appointmentForm.setSubject('caption1');
-        scheduler.appointmentPopup.saveAppointmentData().done(() => {
+        await this.clock.tickAsync(10);
+        const firstSavePromise = scheduler.appointmentPopup.saveAppointmentData();
+        await this.clock.tickAsync(10);
+
+        firstSavePromise.done(async() => {
             assert.equal(scheduler.appointmentForm.getInvalidEditorsCount.call(scheduler), 1, 'the only invalid editor is displayed in the form');
 
             scheduler.appointmentForm.setSubject(validValue);
-            scheduler.appointmentPopup.saveAppointmentData().done(() => {
+            await this.clock.tickAsync(10);
+            const secondSavePromise = scheduler.appointmentPopup.saveAppointmentData();
+            await this.clock.tickAsync(10);
+
+            secondSavePromise.done(() => {
                 assert.notOk(scheduler.appointmentPopup.getPopupInstance().option('visible'), 'the form is closed');
 
                 done();
@@ -1736,6 +1750,40 @@ QUnit.module('Appointment Popup', moduleOptions, () => {
         });
 
         assert.equal(scheduler.appointmentForm.getPendingEditorsCount.call(scheduler), 1, 'the only pending editor is displayed in the form');
+    });
+
+    const performanceTest = QUnit.isInShadowDomMode() || browser.mozilla
+        ? QUnit.test.skip
+        : QUnit.test;
+
+    performanceTest('Appointment popup opening performance should be ok', async function(assert) {
+        this.clock.restore();
+
+        const maxOpeningTime = 250;
+        let resolvePopupShown = null;
+        const popupShownPromise = new Promise((resolve) => { resolvePopupShown = resolve; });
+
+        const scheduler = createInstance({
+            currentDate: new Date(2015, 1, 1, 1),
+            onAppointmentFormOpening: function(e) {
+                e.popup.option('onShown', () => {
+                    resolvePopupShown(performance.now());
+                });
+            }
+        });
+
+        const startTime = performance.now();
+
+        scheduler.instance.showAppointmentPopup({
+            startDate: new Date(2025, 1, 1, 1),
+            endDate: new Date(2025, 1, 1, 2),
+            text: 'caption'
+        });
+
+        const endTime = await popupShownPromise;
+        const openingTime = endTime - startTime;
+
+        assert.ok(openingTime <= maxOpeningTime, `popup opening time greater than ${maxOpeningTime} ms`);
     });
 });
 
@@ -1794,7 +1842,7 @@ module('Timezone Editors', moduleOptions, () => {
         assert.equal(endDateTimezoneEditor.option('value'), null, 'Value is correct');
     });
 
-    test('timeZone editors should have correct options', function(assert) {
+    test('timeZone editors should have correct options', async function(assert) {
         const scheduler = createInstance({
             onAppointmentFormOpening: function(e) {
                 e.form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.startDateTimeZone`, { visible: true });
@@ -1803,6 +1851,8 @@ module('Timezone Editors', moduleOptions, () => {
         });
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
+
+        await this.clock.tickAsync(10);
 
         const form = scheduler.instance.getAppointmentDetailsForm();
         const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
@@ -1820,7 +1870,7 @@ module('Timezone Editors', moduleOptions, () => {
         });
     });
 
-    QUnit.test('timeZone editors should have correct value & display value on init', function(assert) {
+    QUnit.test('timeZone editors should have correct value & display value on init', async function(assert) {
         const scheduler = createInstance({
             editing: {
                 allowTimeZoneEditing: true,
@@ -1828,6 +1878,8 @@ module('Timezone Editors', moduleOptions, () => {
         });
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), startDateTimeZone: 'Europe/Paris', endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+        await this.clock.tickAsync(10);
 
         const form = scheduler.instance.getAppointmentDetailsForm();
         const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
@@ -1839,7 +1891,7 @@ module('Timezone Editors', moduleOptions, () => {
         });
     });
 
-    QUnit.test('timeZone editor should have correct display value for timezones with different offsets ', function(assert) {
+    QUnit.test('timeZone editor should have correct display value for timezones with different offsets ', async function(assert) {
         const scheduler = createInstance({
             editing: {
                 allowTimeZoneEditing: true,
@@ -1847,6 +1899,8 @@ module('Timezone Editors', moduleOptions, () => {
         });
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+        await this.clock.tickAsync(10);
 
         const form = scheduler.instance.getAppointmentDetailsForm();
         const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
@@ -1857,7 +1911,7 @@ module('Timezone Editors', moduleOptions, () => {
         assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT -08:00) America - Los Angeles', 'displayValue is ok');
     });
 
-    QUnit.test('timeZone editor display value for timeZone with DST should depend on date', function(assert) {
+    QUnit.test('timeZone editor display value for timeZone with DST should depend on date', async function(assert) {
         const scheduler = createInstance({
             editing: {
                 allowTimeZoneEditing: true,
@@ -1865,6 +1919,8 @@ module('Timezone Editors', moduleOptions, () => {
         });
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), startDateTimeZone: 'Europe/Paris', endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+        await this.clock.tickAsync(10);
 
         let form = scheduler.instance.getAppointmentDetailsForm();
         let startDateTimezoneEditor = form.getEditor('startDateTimeZone');
@@ -1874,13 +1930,15 @@ module('Timezone Editors', moduleOptions, () => {
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2020, 5, 1, 1), startDateTimeZone: 'Europe/Paris', endDate: new Date(2020, 5, 1, 2), text: 'test_text' });
 
+        await this.clock.tickAsync(10);
+
         form = scheduler.instance.getAppointmentDetailsForm();
         startDateTimezoneEditor = form.getEditor('startDateTimeZone');
 
         assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +02:00) Europe - Paris', 'displayValue is ok, DST');
     });
 
-    QUnit.test('dataSource of timezoneEditor should be filtered', function(assert) {
+    QUnit.test('dataSource of timezoneEditor should be filtered', async function(assert) {
         const scheduler = createInstance({
             editing: {
                 allowTimeZoneEditing: true,
@@ -1895,6 +1953,9 @@ module('Timezone Editors', moduleOptions, () => {
         });
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+        await this.clock.tickAsync(10);
+
         const form = scheduler.instance.getAppointmentDetailsForm();
         const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
         const expectedItemCount = 45; // US/Pacific-New is excluded
