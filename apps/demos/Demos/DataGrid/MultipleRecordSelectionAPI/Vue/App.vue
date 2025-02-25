@@ -75,7 +75,7 @@ import {
 } from 'devextreme-vue/data-grid';
 import DxButton from 'devextreme-vue/button';
 import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
-import { employees, Employee } from './data.ts';
+import { employees, type Employee } from './data.ts';
 
 const dataGridRef = ref<DxDataGrid | null>(null);
 

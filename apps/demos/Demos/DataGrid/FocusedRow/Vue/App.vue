@@ -85,9 +85,9 @@ import {
 } from 'devextreme-vue/data-grid';
 import DxNumberBox from 'devextreme-vue/number-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { type Options as DataSourceOptions } from 'devextreme/data/data_source';
 import 'devextreme/data/odata/store';
-import { Task } from './data.ts';
+import { type Task } from './data.ts';
 
 const taskSubject = ref('');
 const taskDetails = ref('');
@@ -120,7 +120,7 @@ const onFocusedRowChanging = (e: DxDataGridTypes.FocusedRowChangingEvent) => {
   const rowsCount = e.component.getVisibleRows().length;
   const pageCount = e.component.pageCount();
   const pageIndex = e.component.pageIndex();
-  const key = e.event?.key;
+  const key = (e.event as KeyboardEvent)?.key;
 
   if (key && e.prevRowIndex === e.newRowIndex) {
     if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {

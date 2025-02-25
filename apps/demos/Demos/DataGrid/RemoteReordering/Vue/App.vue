@@ -47,7 +47,7 @@ import {
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import CustomStore from 'devextreme/data/custom_store';
 
-import { Task, Employee } from './data.ts';
+import type { Task, Employee } from './data.ts';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/RowReordering';
 

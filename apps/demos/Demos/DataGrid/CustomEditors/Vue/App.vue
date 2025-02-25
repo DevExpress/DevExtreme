@@ -105,7 +105,7 @@ import {
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import EmployeeDropDownBoxComponent from './EmployeeDropDownBoxComponent.vue';
 import EmployeeTagBoxComponent from './EmployeeTagBoxComponent.vue';
-import { statuses, Task } from './data.ts';
+import { statuses, type Task } from './data.ts';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridCustomEditors';
 

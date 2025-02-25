@@ -1,9 +1,13 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
+    "lib": ["es2022", "DOM", "DOM.Iterable"],
     "strict": false
   },
   "include": [
-    "Demos/Charts/**/*.vue"
+    "Demos/A*/**/*.vue",
+    "Demos/B*/**/*.vue",
+    "Demos/C*/**/*.vue",
+    "Demos/D*/**/*.vue"
   ]
 }

@@ -8,7 +8,7 @@
 import { formatNumber } from 'devextreme/localization';
 import { type DxDataGridTypes } from 'devextreme-vue/data-grid';
 
-import { WeekData, DiffValueProperties } from './data.ts';
+import type { WeekData, DiffValueProperties } from './data.ts';
 
 const props = defineProps<{
   column: DxDataGridTypes.Column,

@@ -55,7 +55,7 @@ import {
   DxDataGrid, DxColumn, DxEditing, type DxDataGridTypes, DxPager,
 } from 'devextreme-vue/data-grid';
 import { DxLoadPanel } from 'devextreme-vue/load-panel';
-import { State } from './store.ts';
+import { type State } from './store.ts';
 
 const loadPanelPosition = { of: '#gridContainer' };
 

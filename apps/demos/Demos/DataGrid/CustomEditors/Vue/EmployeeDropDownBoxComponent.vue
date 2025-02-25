@@ -62,7 +62,7 @@ function getSelectedRowKeys<T>(value: T | null): T[] {
   return value !== null && value !== undefined ? [value] : [];
 }
 
-const onContextMenuPreparing = (e: DxDataGridTypes.ContextMenuPreparing) => {
+const onContextMenuPreparing = (e: DxDataGridTypes.ContextMenuPreparingEvent) => {
   e.items = [];
 };
 const onSelectionChanged = (e: DxDataGridTypes.SelectionChangedEvent) => {

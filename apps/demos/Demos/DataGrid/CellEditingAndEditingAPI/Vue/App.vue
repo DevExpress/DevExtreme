@@ -82,7 +82,7 @@ import { DxButton } from 'devextreme-vue/button';
 import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
 
-import { Employee, employees, states } from './data.ts';
+import { type Employee, employees, states } from './data.ts';
 
 const dataSource = new DataSource<Employee, number>({
   store: new ArrayStore({

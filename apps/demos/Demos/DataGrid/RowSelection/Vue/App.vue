@@ -48,7 +48,7 @@ import { ref } from 'vue';
 import {
   DxDataGrid, DxColumn, DxSelection, type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
-import { employees, Employee } from './data.ts';
+import { employees, type Employee } from './data.ts';
 
 const showEmployeeInfo = ref(false);
 const selectedRowNotes = ref('');

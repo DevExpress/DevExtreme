@@ -71,7 +71,7 @@ import {
   DxDataGrid, DxColumn, DxFilterRow, DxSelection, type DxDataGridTypes, DxPager,
 } from 'devextreme-vue/data-grid';
 import DxButton from 'devextreme-vue/button';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { type Options as DataSourceOptions } from 'devextreme/data/data_source';
 import query from 'devextreme/data/query';
 import 'devextreme/data/odata/store';
 
