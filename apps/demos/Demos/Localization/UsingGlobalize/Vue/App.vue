@@ -69,16 +69,22 @@ import 'devextreme/localization/globalize/currency';
 import 'devextreme/localization/globalize/message';
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/no-webpack-loader-syntax */
+// @ts-ignore
 import * as deMessages from 'npm:devextreme/localization/messages/de.json!json';
+// @ts-ignore
 import * as ruMessages from 'npm:devextreme/localization/messages/ru.json!json';
+// @ts-ignore
 import * as deCldrData from 'npm:devextreme-cldr-data/de.json!json';
+// @ts-ignore
 import * as ruCldrData from 'npm:devextreme-cldr-data/ru.json!json';
+// @ts-ignore
 import * as supplementalCldrData from 'npm:devextreme-cldr-data/supplemental.json!json';
+
 import * as Globalize from 'globalize';
 import service from './data.ts';
 
 type Locale = string;
-const locales: { name: string, value: Locale } = service.getLocales();
+const locales: { Name: string, Value: Locale }[] = service.getLocales();
 const payments: Record<string, string | number>[] = service.getPayments();
 const locale: Locale = getLocale();
 const editPopupOptions = { width: 700, height: 345 };

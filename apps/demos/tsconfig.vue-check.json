@@ -8,6 +8,11 @@
     "Demos/A*/**/*.vue",
     "Demos/B*/**/*.vue",
     "Demos/C*/**/*.vue",
-    "Demos/D*/**/*.vue"
+    "Demos/D*/**/*.vue",
+    "Demos/F*/**/*.vue",
+    "Demos/G*/**/*.vue",
+    "Demos/H*/**/*.vue",
+    "Demos/L*/**/*.vue",
+    "Demos/M*/**/*.vue"
   ]
 }

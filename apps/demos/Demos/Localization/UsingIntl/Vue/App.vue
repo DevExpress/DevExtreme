@@ -65,14 +65,16 @@ import {
 import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/no-webpack-loader-syntax */
+// @ts-ignore
 import * as deMessages from 'npm:devextreme/localization/messages/de.json!json';
+// @ts-ignore
 import * as ruMessages from 'npm:devextreme/localization/messages/ru.json!json';
 import { locale as dxLocale, loadMessages, formatMessage as dxFormatMessage } from 'devextreme/localization';
 import service from './data.ts';
 
 type Locale = string;
 
-const locales: { name: string, value: Locale } = service.getLocales();
+const locales: { Name: string, Value: Locale }[] = service.getLocales();
 const payments: Record<string, string | number>[] = service.getPayments();
 const locale: Locale = getLocale();
 const editPopupOptions = { width: 700, height: 345 };
