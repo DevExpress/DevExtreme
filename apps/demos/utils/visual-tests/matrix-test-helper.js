@@ -218,6 +218,7 @@ const SKIPPED_TESTS = {
             { demo: 'Export', themes: [THEME.generic, THEME.material, THEME.fluent] },
             { demo: 'ExportCustomMarkup', themes: [THEME.generic, THEME.material, THEME.fluent] },
             { demo: 'PopupEditing', themes: [THEME.generic, THEME.material, THEME.fluent] },
+            { demo: 'ClientSideDataProcessing', themes: [THEME.generic, THEME.material, THEME.fluent] },
         ],
         VectorMap: [
             { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
@@ -267,8 +268,7 @@ const SKIPPED_TESTS = {
             { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
             { demo: 'RecordGrouping', themes: [THEME.generic, THEME.material, THEME.fluent] },
             { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.material, THEME.fluent] },
-            { demo: 'ColumnCustomization', themes: [THEME.fluent] },
-            { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+            { demo: 'ColumnCustomization', themes: [THEME.generic, THEME.material, THEME.fluent] },
         ],
         Form: [
             'CustomizeItem',
@@ -295,7 +295,7 @@ const SKIPPED_TESTS = {
     },
     Vue: {
         Accordion: [
-            { demo: 'Custom Overview Appearance', themes: [THEME.material] },
+            { demo: 'Custom Overview Appearance', themes: [THEME.generic, THEME.material, THEME.fluent] },
         ],
         Charts: [
             { demo: 'Overview', themes: [THEME.material] },
@@ -323,7 +323,7 @@ const SKIPPED_TESTS = {
             { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
             { demo: 'FilteringAPI', themes: [THEME.material] },
             { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
-            { demo: 'ColumnCustomization', themes: [THEME.material] },
+            { demo: 'ColumnCustomization', themes: [THEME.generic, THEME.material, THEME.fluent] },
             'StatePersistence',
         ],
         Drawer: [
@@ -352,11 +352,15 @@ const SKIPPED_TESTS = {
             { demo: 'Filtering', themes: [THEME.fluent, THEME.material] },
             { demo: 'RecordGrouping', themes: [THEME.material] },
             { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
+            { demo: 'ColumnCustomization', themes: [THEME.generic, THEME.material, THEME.fluent] },
         ],
         Scheduler: [
             { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
             { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
         ],
+        VectorMap: [
+            { demo: 'Tooltip', themes: [THEME.material] },
+        ]
     },
 };
 

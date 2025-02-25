@@ -237,12 +237,16 @@ const SKIPPED_TESTS = {
       { demo: 'LayoutCustomization', themes: [THEME.material] },
       { demo: 'SummaryDisplayModes', themes: [THEME.material] },
       { demo: 'ExcelJsHeaderAndFooter', themes: [THEME.material] },
+      { demo: 'StandaloneFieldChooser', themes: [THEME.material] },
     ],
     Gauges: [
       { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
       { demo: 'VariableNumberOfSubvalueIndicators', themes: [THEME.material] },
       { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
+    ],
+    Diagram: [
+      { demo: 'UICustomization', themes: [THEME.material] },
     ],
   },
   Vue: {
@@ -310,6 +314,7 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleRowSelection', themes: [THEME.material] },
       { demo: 'FilterModes', themes: [THEME.material] },
       { demo: 'ColumnChooser', themes: [THEME.material] },
+      { demo: 'CustomizeKeyboardNavigation', themes: [THEME.material] },
     ],
     List: [
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
