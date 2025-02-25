@@ -476,6 +476,7 @@ export class AppointmentForm {
     this.setEditorOptions(editorName, 'Main', { dataSource });
     this.scheduleTimezoneEditorDataSourceUpdate(
       editorName,
+      // @ts-expect-error bad DataSource types
       dataSource,
       selectedTimezoneLabel,
       date,
