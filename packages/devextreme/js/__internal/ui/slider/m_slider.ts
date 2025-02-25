@@ -12,13 +12,13 @@ import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-// @ts-expect-error
+// @ts-expect-error ts-error
 import { applyServerDecimalSeparator } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { getExponentLength, getRemainderByDivision, roundFloatPart } from '@js/core/utils/math';
 import { getWidth, setWidth } from '@js/core/utils/size';
-import type { Properties } from '@js/ui/slider';
+import type { dxSliderBaseOptions } from '@js/ui/slider';
 import { current as currentTheme, isMaterial } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -38,10 +38,16 @@ const SLIDER_TOOLTIP_POSITION_CLASS_PREFIX = 'dx-slider-tooltip-position-';
 const INVALID_MESSAGE_VISIBLE_CLASS = 'dx-invalid-message-visible';
 const SLIDER_VALIDATION_NAMESPACE = 'Validation';
 
-export interface SliderProperties extends Omit<Properties, 'onValueChanged' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {}
+// STYLE slider
+
+export interface SliderBaseProperties extends Omit<dxSliderBaseOptions<Slider>, 'onValueChanged' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {}
+
+export interface SliderProperties extends SliderBaseProperties {
+  value?: number;
+}
 
 class Slider<
-  TProperties extends SliderProperties = SliderProperties,
+  TProperties extends SliderBaseProperties = SliderProperties,
 > extends TrackBar<TProperties> {
   _inkRipple?: {
     showWave: (config: {
@@ -56,7 +62,7 @@ class Slider<
 
   _$submitElement!: dxElementWrapper;
 
-  _actualValue?: number;
+  _actualValue?: number | number[];
 
   _$handle!: dxElementWrapper;
 
@@ -337,7 +343,10 @@ class Slider<
     this._$handle = this._renderHandleImpl(value, this._$handle);
   }
 
-  _renderHandleImpl(value: number | undefined, $element: dxElementWrapper): dxElementWrapper {
+  _renderHandleImpl(
+    value: number | undefined,
+    $element: dxElementWrapper,
+  ): dxElementWrapper {
     const $handle = $element || $('<div>').appendTo(this._$range);
     const { tooltip } = this.option();
 
@@ -605,8 +614,10 @@ class Slider<
     }
   }
 
-  _getActualValue() {
-    return this._actualValue ?? this.option('value');
+  _getActualValue(): number[] {
+    const { value } = this.option();
+
+    return this._actualValue ?? value;
   }
 
   _isSingleValuePossible(): boolean {
