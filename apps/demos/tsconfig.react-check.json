@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "strict": false,
+    "verbatimModuleSyntax": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowImportingTsExtensions": true,
+    "jsx": "react-jsx",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "Demos/DataGrid/**/*.tsx"
+  ]
+}

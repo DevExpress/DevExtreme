@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "module": "ESNext",
+    "moduleResolution": "Node"
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    "fullTemplateTypeCheck": true
+  },
+  "_exclude": ["node_modules", "../../node_modules/**/*"],
+  "include": [
+    "Demos/DataGrid/Lo*/Angular/**/*.ts"
+  ]
+}
