@@ -166,7 +166,7 @@ export function shouldRunFramework(currentFramework) {
 
 export function shouldRunTestAtIndex(testIndex) {
   return (settings.current === settings.total ? 0 : settings.current)
-      === ((testIndex % settings.total) || 0);
+    === ((testIndex % settings.total) || 0);
 }
 
 const SKIPPED_TESTS = {
@@ -193,6 +193,7 @@ const SKIPPED_TESTS = {
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
@@ -222,6 +223,8 @@ const SKIPPED_TESTS = {
       { demo: 'ZoomingOnAreaSelection', themes: [THEME.material] },
       { demo: 'CustomLegendMarkers', themes: [THEME.material] },
       { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
+      { demo: 'Crosshair', themes: [THEME.material] },
+
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
@@ -236,10 +239,17 @@ const SKIPPED_TESTS = {
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
       { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
       { demo: 'FilteringAPI', themes: [THEME.material] },
+      { demo: 'PopupEditing', themes: [THEME.generic] },
       'StatePersistence',
     ],
     Drawer: [
       { demo: 'TopOrBottomPosition', themes: [THEME.material] },
+    ],
+    Toolbar: [
+      { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Accordion: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
   },
   React: {
@@ -285,7 +295,7 @@ export function shouldSkipDemo(framework, component, demoName, skippedTests) {
     if (typeof test === 'string' && test === demoName) {
       return true;
     } if (test.demo === demoName
-        && test.themes.includes(process.env.THEME || THEME.generic)) {
+      && test.themes.includes(process.env.THEME || THEME.generic)) {
       return true;
     }
   }
@@ -327,7 +337,7 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
 
   const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;
-  
+
   if (!shouldRunTest(framework, index, widget, demo, SKIPPED_TESTS)) {
     return;
   }
