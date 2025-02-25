@@ -94,6 +94,8 @@ const SKIPPED_TESTS = {
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'RemoteGrouping', themes: [THEME.generic] },
+      { demo: 'ColumnChooser', themes: [THEME.material] },
+      { demo: 'RealTimeUpdates', themes: [THEME.material] },
     ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
@@ -110,6 +112,7 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleSeriesSelection', themes: [THEME.material] },
       { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
       { demo: 'APISelectAPoint', themes: [THEME.material] },
+      { demo: 'DoughnutWithCustomLabelInCenter', themes: [THEME.material] },
     ],
     Map: [
       { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -122,6 +125,10 @@ const SKIPPED_TESTS = {
     PivotGrid: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ChartIntegration', themes: [THEME.material] },
+      { demo: 'SummaryDisplayModes', themes: [THEME.material] },
+      { demo: 'ExcelJsHeaderAndFooter', themes: [THEME.material] },
+      { demo: 'StatePersistence', themes: [THEME.material] },
+      { demo: 'StandaloneFieldChooser', themes: [THEME.material] },
     ],
     TreeList: [
       { demo: 'BatchEditing', themes: [THEME.material] },
@@ -130,6 +137,10 @@ const SKIPPED_TESTS = {
       { demo: 'FormEditing', themes: [THEME.material] },
       { demo: 'CellEditing', themes: [THEME.material] },
       { demo: 'Resizing', themes: [THEME.material] },
+      { demo: 'CustomizeKeyboardNavigation', themes: [THEME.material] },
+      { demo: 'LocalReordering', themes: [THEME.material] },
+      { demo: 'ColumnChooser', themes: [THEME.material] },
+      { demo: 'FilterModes', themes: [THEME.material] },
     ],
     Gauges: [
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
@@ -140,11 +151,13 @@ const SKIPPED_TESTS = {
     ],
     RangeSelector: [
       { demo: 'DiscreteScale', themes: [THEME.material] },
+      { demo: 'UseRangeSelectionForFiltering', themes: [THEME.material] },
     ],
     Gantt: [
       { demo: 'ContextMenu', themes: [THEME.material] },
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Toolbar', themes: [THEME.material] },
     ],
     VectorMap: [
       { demo: 'Palette', themes: [THEME.material] },
@@ -170,6 +183,7 @@ const SKIPPED_TESTS = {
       { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
+      { demo: 'DoughnutWithCustomLabelInCenter', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.material, THEME.fluent] },
@@ -178,6 +192,13 @@ const SKIPPED_TESTS = {
       { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
+      { demo: 'ColumnChooser', themes: [THEME.material] },
+    ],
+    TreeList: [
+      { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'CustomizeKeyboardNavigation', themes: [THEME.material] },
+      { demo: 'FilterModes', themes: [THEME.material] },
+      { demo: 'ColumnChooser', themes: [THEME.material] },
     ],
     Gantt: [
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -209,10 +230,13 @@ const SKIPPED_TESTS = {
     RangeSelector: [
       { demo: 'DiscreteScale', themes: [THEME.material] },
       { demo: 'UseRangeSelectionForCalculation', themes: [THEME.material] },
+      { demo: 'UseRangeSelectionForFiltering', themes: [THEME.material] },
     ],
     PivotGrid: [
       { demo: 'ExcelJSCellCustomization', themes: [THEME.material] },
       { demo: 'LayoutCustomization', themes: [THEME.material] },
+      { demo: 'SummaryDisplayModes', themes: [THEME.material] },
+      { demo: 'ExcelJsHeaderAndFooter', themes: [THEME.material] },
     ],
     Gauges: [
       { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
@@ -244,9 +268,14 @@ const SKIPPED_TESTS = {
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
       { demo: 'Palette', themes: [THEME.material] },
+      { demo: 'DoughnutWithCustomLabelInCenter', themes: [THEME.material] },
+      { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
     ],
     Drawer: [
       { demo: 'TopOrBottomPosition', themes: [THEME.material] },
+    ],
+    Diagram: [
+      { demo: 'UICustomization', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.fluent, THEME.material] },
@@ -260,6 +289,7 @@ const SKIPPED_TESTS = {
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
       { demo: 'PopupEditing', themes: [THEME.generic] },
       { demo: 'RecordPaging', themes: [THEME.generic] },
+      { demo: 'ColumnChooser', themes: [THEME.material] },
     ],
     FieldSet: [
       { demo: 'Overview', themes: [THEME.fluent] },
@@ -278,6 +308,8 @@ const SKIPPED_TESTS = {
     TreeList: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'MultipleRowSelection', themes: [THEME.material] },
+      { demo: 'FilterModes', themes: [THEME.material] },
+      { demo: 'ColumnChooser', themes: [THEME.material] },
     ],
     List: [
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
@@ -302,6 +334,7 @@ const SKIPPED_TESTS = {
     PivotGrid: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'LayoutCustomization', themes: [THEME.material] },
+      { demo: 'StatePersistence', themes: [THEME.material] },
     ],
     VectorMap: [
       { demo: 'CustomProjection', themes: [THEME.material] },
@@ -319,6 +352,7 @@ const SKIPPED_TESTS = {
       { demo: 'ContextMenu', themes: [THEME.material] },
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Toolbar', themes: [THEME.material] },
     ],
     Pagination: ['Overview'],
   },

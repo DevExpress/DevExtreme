@@ -267,6 +267,8 @@ const SKIPPED_TESTS = {
             { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
             { demo: 'RecordGrouping', themes: [THEME.generic, THEME.material, THEME.fluent] },
             { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.material, THEME.fluent] },
+            { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+            { demo: 'ColumnCustomization', themes: [THEME.fluent] },
         ],
         Form: [
             'CustomizeItem',
@@ -292,6 +294,9 @@ const SKIPPED_TESTS = {
         ]
     },
     Vue: {
+        Accordion: [
+            { demo: 'Custom Overview Appearance', themes: [THEME.material] },
+        ],
         Charts: [
             { demo: 'Overview', themes: [THEME.material] },
             { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
@@ -300,9 +305,13 @@ const SKIPPED_TESTS = {
             { demo: 'CustomAnnotations', themes: [THEME.material] },
             { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
             { demo: 'Crosshair', themes: [THEME.material] },
+            { demo: 'Custom Overview Appearance', themes: [THEME.material] },
         ],
         VectorMap: [
             { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+        ],
+        Diagram: [
+            { demo: 'UICustomization', themes: [THEME.material] },
         ],
         DataGrid: [
             { demo: 'BatchEditing', themes: [THEME.fluent] },
@@ -314,6 +323,7 @@ const SKIPPED_TESTS = {
             { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
             { demo: 'FilteringAPI', themes: [THEME.material] },
             { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
+            { demo: 'ColumnCustomization', themes: [THEME.material] },
             'StatePersistence',
         ],
         Drawer: [
