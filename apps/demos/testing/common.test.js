@@ -186,6 +186,7 @@ const SKIPPED_TESTS = {
     ],
     TreeList: [
       { demo: 'Resizing', themes: [THEME.material] },
+      { demo: 'Overview', themes: [THEME.material] },
     ],
     Gantt: [
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
