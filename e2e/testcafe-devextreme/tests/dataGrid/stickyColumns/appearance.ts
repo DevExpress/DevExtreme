@@ -27,7 +27,7 @@ fixture.disablePageReloads`FixedColumns - appearance`
 ] as const).forEach(
   ([theme, showRowLines]) => {
     // T1268664
-    const showRowLinesState = `showRowLines=${showRowLines? 'true': 'false'}`;
+    const showRowLinesState = `showRowLines=${showRowLines ? 'true' : 'false'}`;
     test(`Row height for selected, focus and edit state should not differ from the default one if ${showRowLinesState}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
