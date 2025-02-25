@@ -50,7 +50,7 @@
 </template>
 <script setup lang="ts">
 import { DxTreeList, DxColumn, DxColumnFixing } from 'devextreme-vue/tree-list';
-import { Employee, employees } from './data.ts';
+import { type Employee, employees } from './data.ts';
 
 function calculateCellValue(data: Employee) {
   return [data.Title, data.FirstName, data.LastName].join(' ');

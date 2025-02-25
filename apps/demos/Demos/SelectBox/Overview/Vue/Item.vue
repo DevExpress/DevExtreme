@@ -13,6 +13,6 @@
 withDefaults(defineProps<{
   itemData?: Record<string, any>
 }>(), {
-  itemData: () => {},
+  itemData: () => ({} as Record<string, any>),
 });
 </script>

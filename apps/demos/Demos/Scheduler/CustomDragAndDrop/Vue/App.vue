@@ -45,7 +45,7 @@ import { ref } from 'vue';
 import DxScheduler, { DxAppointmentDragging, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import DxDraggable, { type DxDraggableTypes } from 'devextreme-vue/draggable';
 import DxScrollView from 'devextreme-vue/scroll-view';
-import { appointments as appointmentsData, tasks as tasksData, Task } from './data.ts';
+import { appointments as appointmentsData, tasks as tasksData, type Task } from './data.ts';
 
 const draggingGroupName = ref('appointmentsGroup');
 const views = ref([{ type: 'day', intervalCount: 3 }]);

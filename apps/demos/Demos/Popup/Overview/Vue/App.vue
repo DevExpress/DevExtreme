@@ -76,7 +76,7 @@ import { employees } from './data.ts';
 
 type Employee = typeof employees[0];
 
-const currentEmployee = ref<Employee>({});
+const currentEmployee = ref<Employee>();
 const popupVisible = ref(false);
 const positionOf = ref('');
 const closeButtonOptions = {

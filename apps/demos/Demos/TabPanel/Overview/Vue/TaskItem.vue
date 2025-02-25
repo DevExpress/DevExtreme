@@ -16,7 +16,7 @@
 withDefaults(defineProps<{
   task?: Record<string, any>
 }>(), {
-  task: () => ({}),
+  task: () => ({} as Record<string, any>),
 });
 </script>
 

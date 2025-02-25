@@ -44,7 +44,7 @@ import {
 import { employees } from './data.ts';
 
 const dataSource = employees;
-const columns: DxTreeListTypes.Column[] = [
+const columns: (DxTreeListTypes.Column | string)[] = [
   'Full_Name',
   {
     dataField: 'Title',

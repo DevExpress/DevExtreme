@@ -86,7 +86,7 @@ const dataSource = employees;
 const expandedRowKeys = [1, 2, 4, 5];
 const editOnKeyPress = ref(true);
 const enterKeyActions: DxTreeListTypes.EnterKeyAction[] = ['startEdit', 'moveFocus'];
-const enterKeyDirections: DxTreeListTypes.EnterKeyDirection = ['none', 'column', 'row'];
+const enterKeyDirections: DxTreeListTypes.EnterKeyDirection[] = ['none', 'column', 'row'];
 const enterKeyDirection = ref<DxTreeListTypes.EnterKeyDirection>('column');
 const enterKeyAction = ref<DxTreeListTypes.EnterKeyAction>('moveFocus');
 

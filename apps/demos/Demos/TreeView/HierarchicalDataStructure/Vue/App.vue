@@ -21,7 +21,7 @@ import { ref } from 'vue';
 import DxTreeView from 'devextreme-vue/tree-view';
 import service from './data.ts';
 
-const products = service.getProducts();
+const products: Record<string, any> = service.getProducts();
 const currentItem = ref(products[0]);
 
 function selectItem({ itemData }) {
