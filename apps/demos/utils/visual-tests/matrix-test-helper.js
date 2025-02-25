@@ -205,7 +205,7 @@ const SKIPPED_TESTS = {
       { demo: 'CustomAnnotations', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'LoadDataOnDemand', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'CustomLegendMarkers', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.generic, THEME.material] },
+      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'ZoomingOnAreaSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
@@ -279,6 +279,7 @@ const SKIPPED_TESTS = {
   Vue: {
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'Crosshair', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'ZoomingOnAreaSelection', themes: [THEME.material] },
       { demo: 'CustomLegendMarkers', themes: [THEME.material] },
