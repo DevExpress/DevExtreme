@@ -1778,14 +1778,14 @@ importers:
         version: link:../devextreme/artifacts/npm/devextreme
     devDependencies:
       '@babel/eslint-parser':
-        specifier: catalog:eslint8
-        version: 7.23.10(@babel/core@7.24.0)(eslint@8.56.0)
+        specifier: 'catalog:'
+        version: 7.26.5(@babel/core@7.24.0)(eslint@9.18.0(jiti@1.21.6))
       '@typescript-eslint/eslint-plugin':
-        specifier: catalog:eslint8
-        version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@4.9.5))(eslint@8.56.0)(typescript@4.9.5)
+        specifier: 'catalog:'
+        version: 8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5)
       '@typescript-eslint/parser':
-        specifier: catalog:eslint8
-        version: 5.62.0(eslint@8.56.0)(typescript@4.9.5)
+        specifier: 'catalog:'
+        version: 8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5)
       '@vue/compiler-sfc':
         specifier: 3.3.4
         version: 3.3.4
@@ -1799,29 +1799,29 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       eslint:
-        specifier: catalog:eslint8
-        version: 8.56.0
+        specifier: 'catalog:'
+        version: 9.18.0(jiti@1.21.6)
       eslint-config-airbnb-base:
         specifier: 15.0.0
-        version: 15.0.0(eslint-plugin-import@2.29.0(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@4.9.5))(eslint@8.56.0))(eslint@8.56.0)
+        version: 15.0.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6)))(eslint@9.18.0(jiti@1.21.6))
       eslint-config-airbnb-typescript:
-        specifier: catalog:eslint8
-        version: 17.1.0(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@4.9.5))(eslint@8.56.0)(typescript@4.9.5))(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@4.9.5))(eslint-plugin-import@2.29.0(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@4.9.5))(eslint@8.56.0))(eslint@8.56.0)
+        specifier: 'catalog:'
+        version: 18.0.0(@typescript-eslint/eslint-plugin@8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6)))(eslint@9.18.0(jiti@1.21.6))
       eslint-config-devextreme:
         specifier: 1.1.5
-        version: 1.1.5(x2rugoatnectwbdt7nelvgmpbm)
+        version: 1.1.5(tegwiszkcetciamfkcgav5h5lu)
       eslint-plugin-i18n:
-        specifier: catalog:eslint8
-        version: 2.3.0
+        specifier: 'catalog:'
+        version: 2.4.0
       eslint-plugin-import:
-        specifier: catalog:eslint8
-        version: 2.29.0(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@4.9.5))(eslint@8.56.0)
+        specifier: 'catalog:'
+        version: 2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))
       eslint-plugin-no-only-tests:
-        specifier: catalog:eslint8
-        version: 3.1.0
+        specifier: 'catalog:'
+        version: 3.3.0
       eslint-plugin-spellcheck:
         specifier: 0.0.20
-        version: 0.0.20(eslint@8.56.0)
+        version: 0.0.20(eslint@9.18.0(jiti@1.21.6))
       gulp:
         specifier: 4.0.2
         version: 4.0.2
@@ -17381,17 +17381,17 @@ snapshots:
       eslint-visitor-keys: 2.1.0
       semver: 6.3.1
 
-  '@babel/eslint-parser@7.23.10(@babel/core@7.24.0)(eslint@8.56.0)':
-    dependencies:
-      '@babel/core': 7.24.0
-      '@nicolo-ribaudo/eslint-scope-5-internals': 5.1.1-v1
-      eslint: 8.56.0
-      eslint-visitor-keys: 2.1.0
-      semver: 6.3.1
-
   '@babel/eslint-parser@7.26.5(@babel/core@7.23.9)(eslint@9.18.0(jiti@1.21.6))':
     dependencies:
       '@babel/core': 7.23.9
+      '@nicolo-ribaudo/eslint-scope-5-internals': 5.1.1-v1
+      eslint: 9.18.0(jiti@1.21.6)
+      eslint-visitor-keys: 2.1.0
+      semver: 6.3.1
+
+  '@babel/eslint-parser@7.26.5(@babel/core@7.24.0)(eslint@9.18.0(jiti@1.21.6))':
+    dependencies:
+      '@babel/core': 7.24.0
       '@nicolo-ribaudo/eslint-scope-5-internals': 5.1.1-v1
       eslint: 9.18.0(jiti@1.21.6)
       eslint-visitor-keys: 2.1.0
@@ -20517,13 +20517,15 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))':
+  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
       '@parcel/core': 2.12.0(@swc/helpers@0.5.15)
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/logger': 2.12.0
       '@parcel/utils': 2.12.0
       lmdb: 2.8.5
+    transitivePeerDependencies:
+      - '@swc/helpers'
 
   '@parcel/codeframe@2.12.0':
     dependencies:
@@ -20583,7 +20585,7 @@ snapshots:
   '@parcel/core@2.12.0(@swc/helpers@0.5.15)':
     dependencies:
       '@mischnic/json-sourcemap': 0.1.1
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/diagnostic': 2.12.0
       '@parcel/events': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -20998,7 +21000,7 @@ snapshots:
 
   '@parcel/types@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/diagnostic': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -27202,6 +27204,22 @@ snapshots:
       eslint-plugin-qunit: 8.1.2(eslint@8.56.0)
       eslint-plugin-rulesdir: 0.2.2
       eslint-plugin-spellcheck: 0.0.20(eslint@8.56.0)
+      stylelint: 16.5.0(typescript@4.9.5)
+      stylelint-config-standard: 35.0.0(stylelint@16.5.0(typescript@4.9.5))
+
+  eslint-config-devextreme@1.1.5(tegwiszkcetciamfkcgav5h5lu):
+    dependencies:
+      '@typescript-eslint/eslint-plugin': 8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5)
+      eslint: 9.18.0(jiti@1.21.6)
+      eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6)))(eslint@9.18.0(jiti@1.21.6))
+      eslint-config-airbnb-typescript: 18.0.0(@typescript-eslint/eslint-plugin@8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6)))(eslint@9.18.0(jiti@1.21.6))
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))
+      eslint-plugin-jest: 27.6.0(@typescript-eslint/eslint-plugin@8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(jest@29.7.0(@types/node@20.12.8)(node-notifier@9.0.1)(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@20.12.8)(typescript@5.4.5)))(typescript@4.9.5)
+      eslint-plugin-jest-formatting: 3.1.0(eslint@9.18.0(jiti@1.21.6))
+      eslint-plugin-jsx-a11y: 6.8.0(eslint@9.18.0(jiti@1.21.6))
+      eslint-plugin-qunit: 8.1.2(eslint@9.18.0(jiti@1.21.6))
+      eslint-plugin-rulesdir: 0.2.2
+      eslint-plugin-spellcheck: 0.0.20(eslint@9.18.0(jiti@1.21.6))
       stylelint: 16.5.0(typescript@4.9.5)
       stylelint-config-standard: 35.0.0(stylelint@16.5.0(typescript@4.9.5))
 
