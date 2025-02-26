@@ -35,7 +35,10 @@ runs:
         if [ -n "$CHROME_VERSION" ]; then
           sudo apt-get update
           sudo apt-get -y install libu2f-udev
-        
+          
+          curl -sS https://webi.sh/gh | sh
+          source ~/.config/envman/PATH.env
+          
           mkdir google-chrome-setup 
           gh release download 1.0.0 --repo DevExpress/tmp-chrome-image --pattern "*.deb" --dir ./google-chrome-setup  
           sudo dpkg -i google-chrome-setup/google-chrome-stable_121.0.6167.184-1_amd64.deb
