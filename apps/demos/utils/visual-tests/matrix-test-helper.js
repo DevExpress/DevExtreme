@@ -433,7 +433,8 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
     await t.resizeWindow(width, height);
 
     if (framework === 'Angular') {
-      await waitForAngularLoading();
+      // await waitForAngularLoading();
+      await t.expect(Boolean(document.querySelector('.dx-widget'))).ok({ timeout: 120000 });
     }
   });
 
