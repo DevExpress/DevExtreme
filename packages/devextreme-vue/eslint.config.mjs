@@ -4,7 +4,6 @@ import tsParser from "@typescript-eslint/parser";
 import importPlugin from "eslint-plugin-import";
 import noOnlyTests from "eslint-plugin-no-only-tests";
 import i18n from "eslint-plugin-i18n";
-import spellCheck from "devextreme/spell-check";
 
 export default [
   {
@@ -34,6 +33,7 @@ export default [
       import: importPlugin,
       "no-only-tests": noOnlyTests,
       i18n: i18n,
+      "spellcheck": "devextreme/spell-check",
     },
     rules: {
       "i18n/no-russian-character": ["error", { includeIdentifier: true }],
