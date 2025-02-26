@@ -4,12 +4,12 @@ import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import DataGrid, { Properties } from "devextreme/ui/data_grid";
 import  DataSource from "devextreme/data/data_source";
+import  dxDataGrid from "devextreme/ui/data_grid";
 import  dxOverlay from "devextreme/ui/overlay";
 import  DOMComponent from "devextreme/core/dom_component";
 import  dxPopup from "devextreme/ui/popup";
 import  dxSortable from "devextreme/ui/sortable";
 import  dxDraggable from "devextreme/ui/draggable";
-import  dxDataGrid from "devextreme/ui/data_grid";
 import {
  ColumnResizeMode,
  Pager,
@@ -84,13 +84,12 @@ import {
  SelectionChangedEvent,
  ToolbarPreparingEvent,
  dxDataGridToolbar,
- dxDataGridColumnButtonOptions,
+ dxDataGridRowObject,
  DataGridPredefinedColumnButton,
  ColumnButtonClickEvent,
  dxDataGridColumnButton,
  DataGridCommandColumnType,
  SelectionSensitivity,
- dxDataGridEditingOptions,
  DataGridExportFormat,
  DataGridPredefinedToolbarItem,
  DataGridScrollMode,
@@ -706,14 +705,14 @@ const DxButtonConfig = {
   },
   props: {
     cssClass: String,
-    disabled: [Boolean, Function] as PropType<boolean | (((options: dxDataGridColumnButtonOptions) => boolean))>,
+    disabled: [Boolean, Function] as PropType<boolean | (((options: { column: dxDataGridColumn, component: dxDataGrid, row: dxDataGridRowObject }) => boolean))>,
     hint: String,
     icon: String,
     name: String as PropType<DataGridPredefinedColumnButton | string>,
     onClick: Function as PropType<((e: ColumnButtonClickEvent) => void)>,
     template: {},
     text: String,
-    visible: [Boolean, Function] as PropType<boolean | (((options: dxDataGridColumnButtonOptions) => boolean))>
+    visible: [Boolean, Function] as PropType<boolean | (((options: { column: dxDataGridColumn, component: dxDataGrid, row: dxDataGridRowObject }) => boolean))>
   }
 };
 
@@ -1417,8 +1416,8 @@ const DxEditingConfig = {
   },
   props: {
     allowAdding: Boolean,
-    allowDeleting: [Boolean, Function] as PropType<boolean | (((options: dxDataGridEditingOptions) => boolean))>,
-    allowUpdating: [Boolean, Function] as PropType<boolean | (((options: dxDataGridEditingOptions) => boolean))>,
+    allowDeleting: [Boolean, Function] as PropType<boolean | (((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean))>,
+    allowUpdating: [Boolean, Function] as PropType<boolean | (((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean))>,
     changes: Array as PropType<Array<DataChange>>,
     confirmDelete: Boolean,
     editColumnName: String,

@@ -9,7 +9,7 @@ import dxDataGrid, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { dxDataGridColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxDataGridColumnButtonOptions, DataGridPredefinedColumnButton, ColumnButtonClickEvent, dxDataGridRowObject, dxDataGridColumnButton, DataGridCommandColumnType, SelectionSensitivity, dxDataGridEditingOptions, DataGridExportFormat, DataGridPredefinedToolbarItem, DataGridScrollMode, dxDataGridToolbarItem } from "devextreme/ui/data_grid";
+import type { dxDataGridColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent, dxDataGridColumnButton, DataGridCommandColumnType, SelectionSensitivity, DataGridExportFormat, DataGridPredefinedToolbarItem, DataGridScrollMode, dxDataGridToolbarItem } from "devextreme/ui/data_grid";
 import type { DataChange, DataChangeType, FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterSearchConfig, SelectionColumnDisplayMode, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, GridBase, ApplyFilterMode, GroupExpandMode, SummaryType, EnterKeyAction, EnterKeyDirection, PagerPageSize, DataRenderMode, StateStoreType } from "devextreme/common/grids";
 import type { Mode, ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, DataType, Format as CommonFormat, SearchMode, SortOrder, ComparisonOperator, SingleMultipleOrNone, SelectAllMode, PositionAlignment, Direction, ToolbarItemLocation, ToolbarItemComponent, DisplayMode, DragDirection, DragHighlight, ScrollbarMode } from "devextreme/common";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
@@ -300,14 +300,14 @@ const BoundaryOffset = Object.assign<typeof _componentBoundaryOffset, NestedComp
 // Column
 type IButtonProps = React.PropsWithChildren<{
   cssClass?: string;
-  disabled?: boolean | ((options: dxDataGridColumnButtonOptions) => boolean);
+  disabled?: boolean | ((options: { column: dxDataGridColumn, component: dxDataGrid, row: dxDataGridRowObject }) => boolean);
   hint?: string;
   icon?: string;
   name?: DataGridPredefinedColumnButton | string;
   onClick?: ((e: ColumnButtonClickEvent) => void);
   template?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, key: any, row: dxDataGridRowObject, rowIndex: number, rowType: string }) => string | any) | template;
   text?: string;
-  visible?: boolean | ((options: dxDataGridColumnButtonOptions) => boolean);
+  visible?: boolean | ((options: { column: dxDataGridColumn, component: dxDataGrid, row: dxDataGridRowObject }) => boolean);
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
@@ -977,8 +977,8 @@ const DataGridSelection = Object.assign<typeof _componentDataGridSelection, Nest
 // DataGrid
 type IEditingProps = React.PropsWithChildren<{
   allowAdding?: boolean;
-  allowDeleting?: boolean | ((options: dxDataGridEditingOptions) => boolean);
-  allowUpdating?: boolean | ((options: dxDataGridEditingOptions) => boolean);
+  allowDeleting?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean);
+  allowUpdating?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean);
   changes?: Array<DataChange>;
   confirmDelete?: boolean;
   editColumnName?: string;

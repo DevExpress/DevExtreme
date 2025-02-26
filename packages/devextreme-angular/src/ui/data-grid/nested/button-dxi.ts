@@ -16,7 +16,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxDataGridColumnButtonOptions, DataGridPredefinedColumnButton, ColumnButtonClickEvent } from 'devextreme/ui/data_grid';
+import dxDataGrid from 'devextreme/ui/data_grid';
+import { dxDataGridColumn, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent } from 'devextreme/ui/data_grid';
 
 import {
     NestedOptionHost,
@@ -45,10 +46,10 @@ export class DxiDataGridButtonComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get disabled(): boolean | ((options: dxDataGridColumnButtonOptions) => boolean) {
+    get disabled(): boolean | ((options: { column: dxDataGridColumn, component: dxDataGrid, row: dxDataGridRowObject }) => boolean) {
         return this._getOption('disabled');
     }
-    set disabled(value: boolean | ((options: dxDataGridColumnButtonOptions) => boolean)) {
+    set disabled(value: boolean | ((options: { column: dxDataGridColumn, component: dxDataGrid, row: dxDataGridRowObject }) => boolean)) {
         this._setOption('disabled', value);
     }
 
@@ -101,10 +102,10 @@ export class DxiDataGridButtonComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get visible(): boolean | ((options: dxDataGridColumnButtonOptions) => boolean) {
+    get visible(): boolean | ((options: { column: dxDataGridColumn, component: dxDataGrid, row: dxDataGridRowObject }) => boolean) {
         return this._getOption('visible');
     }
-    set visible(value: boolean | ((options: dxDataGridColumnButtonOptions) => boolean)) {
+    set visible(value: boolean | ((options: { column: dxDataGridColumn, component: dxDataGrid, row: dxDataGridRowObject }) => boolean)) {
         this._setOption('visible', value);
     }
 

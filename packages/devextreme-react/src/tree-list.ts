@@ -9,7 +9,7 @@ import dxTreeList, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { dxTreeListColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxTreeListColumnButtonOptions, TreeListPredefinedColumnButton, dxTreeListRowObject, dxTreeListColumnButton, TreeListCommandColumnType, dxTreeListEditingOptions, TreeListPredefinedToolbarItem, dxTreeListToolbarItem } from "devextreme/ui/tree_list";
+import type { dxTreeListColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxTreeListRowObject, TreeListPredefinedColumnButton, dxTreeListColumnButton, TreeListCommandColumnType, TreeListPredefinedToolbarItem, dxTreeListToolbarItem } from "devextreme/ui/tree_list";
 import type { DataChange, DataChangeType, FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, GridsEditMode, GridsEditRefreshMode, StartEditAction, GridBase, ApplyFilterMode, HeaderFilterSearchConfig, EnterKeyAction, EnterKeyDirection, PagerPageSize, DataRenderMode, StateStoreType } from "devextreme/common/grids";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
 import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, dxFormSimpleItem, dxFormOptions, OptionChangedEvent as FormOptionChangedEvent, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent, FormItemType } from "devextreme/ui/form";
@@ -272,14 +272,14 @@ const BoundaryOffset = Object.assign<typeof _componentBoundaryOffset, NestedComp
 // Column
 type IButtonProps = React.PropsWithChildren<{
   cssClass?: string;
-  disabled?: boolean | ((options: dxTreeListColumnButtonOptions) => boolean);
+  disabled?: boolean | ((options: { column: dxTreeListColumn, component: dxTreeList, row: dxTreeListRowObject }) => boolean);
   hint?: string;
   icon?: string;
   name?: string | TreeListPredefinedColumnButton;
   onClick?: ((e: { column: dxTreeListColumn, component: dxTreeList, element: any, event: event, model: any, row: dxTreeListRowObject }) => void);
   template?: ((cellElement: any, cellInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList, data: Record<string, any>, key: any, row: dxTreeListRowObject, rowIndex: number, rowType: string }) => string | any) | template;
   text?: string;
-  visible?: boolean | ((options: dxTreeListColumnButtonOptions) => boolean);
+  visible?: boolean | ((options: { column: dxTreeListColumn, component: dxTreeList, row: dxTreeListRowObject }) => boolean);
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
@@ -833,9 +833,9 @@ const CustomRule = Object.assign<typeof _componentCustomRule, NestedComponentMet
 // owners:
 // TreeList
 type IEditingProps = React.PropsWithChildren<{
-  allowAdding?: boolean | ((options: dxTreeListEditingOptions) => boolean);
-  allowDeleting?: boolean | ((options: dxTreeListEditingOptions) => boolean);
-  allowUpdating?: boolean | ((options: dxTreeListEditingOptions) => boolean);
+  allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean);
+  allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean);
+  allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean);
   changes?: Array<DataChange>;
   confirmDelete?: boolean;
   editColumnName?: string;
