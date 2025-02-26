@@ -2,19 +2,33 @@ import js from "@eslint/js";
 import ts from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import importPlugin from "eslint-plugin-import";
+import { FlatCompat } from '@eslint/eslintrc';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import noOnlyTests from "eslint-plugin-no-only-tests";
 import i18n from "eslint-plugin-i18n";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const compat = new FlatCompat({
+    baseDirectory: __dirname,
+    recommendedConfig: js.configs.recommended,
+    allConfig: js.configs.all
+});
 
 export default [
   {
     ignores: ["metadata/*"],
   },
+  ...compat.extends('devextreme/spell-check'),
   js.configs.recommended,
   {
-    files: ["*.js"],
+    files: ["src/core/**/*.{js,ts,tsx}"],
     languageOptions: {
-      parser: "@babel/eslint-parser",
+      parser: tsParser,
       parserOptions: {
+        project: './tsconfig.json',
+        tsconfigRootDir: __dirname,
         requireConfigFile: false,
         ecmaVersion: 6,
         sourceType: "module",
@@ -33,7 +47,6 @@ export default [
       import: importPlugin,
       "no-only-tests": noOnlyTests,
       i18n: i18n,
-      "spellcheck": "devextreme/spell-check",
     },
     rules: {
       "i18n/no-russian-character": ["error", { includeIdentifier: true }],
