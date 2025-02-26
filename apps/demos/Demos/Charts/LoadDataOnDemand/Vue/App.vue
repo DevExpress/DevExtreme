@@ -90,10 +90,11 @@ const currentVisualRange = computed({
 
 function onVisualRangeChanged() {
   const component = chart.value.instance;
-  const items: {date: Date}[] = component.getDataSource().items();
+  const items: { date: Date }[] = component.getDataSource().items();
+  console.log('->>>>>>>>>>>>>>>>>>', items, items[0]);
   if (!items.length
-    || items[0].date?.getTime() - visualRange.value.startValue?.getTime() >= HALFDAY
-    || visualRange.value.endValue?.getTime() - items[items.length - 1].date?.getTime() >= HALFDAY) {
+    || items[0].date.getTime() - visualRange.value.startValue.getTime() >= HALFDAY
+    || visualRange.value.endValue.getTime() - items[items.length - 1].date.getTime() >= HALFDAY) {
     uploadDataByVisualRange(visualRange.value, component);
   }
 }
