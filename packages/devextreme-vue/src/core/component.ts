@@ -1,3 +1,7 @@
+/* eslint-disable no-prototype-builtins */
+/* eslint-disable spellcheck/spell-checker */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable import/named */
 import {
     ComponentPublicInstance, defineComponent, h, VNode,
 } from 'vue';
