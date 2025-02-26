@@ -38,7 +38,7 @@ import DxFunnel, {
 } from 'devextreme-vue/funnel';
 import { dataSource } from './data.ts';
 
-const formatLabel = ({ percentText, item: { argument } }) => `<span class="label">${percentText}</span><br/>${argument}`;
+const formatLabel = ({ percentText, item: { argument } }: Record<string, any>) => `<span class="label">${percentText}</span><br/>${argument}`;
 </script>
 
 <style>
