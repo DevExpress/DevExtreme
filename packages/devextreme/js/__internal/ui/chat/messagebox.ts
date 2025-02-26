@@ -6,10 +6,9 @@ import Button from '@js/ui/button';
 import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import TextArea from '@ts/ui/m_text_area';
 
 import type { EnterKeyEvent, InputEvent } from '../../../ui/text_area';
-import type dxTextArea from '../../../ui/text_area';
-import TextArea from '../m_text_area';
 
 const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
@@ -38,7 +37,7 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
 }
 
 class MessageBox extends DOMComponent<MessageBox, Properties> {
-  _textArea!: dxTextArea;
+  _textArea!: TextArea;
 
   _button!: Button;
 
