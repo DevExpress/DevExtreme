@@ -2246,10 +2246,8 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
         super.ngOnChanges(changes);
         this.setupChanges('columns', changes);
         this.setupChanges('dataSource', changes);
-        this.setupChanges('filterValue', changes);
         this.setupChanges('keyExpr', changes);
         this.setupChanges('selectedRowKeys', changes);
-        this.setupChanges('selectionFilter', changes);
         this.setupChanges('sortByGroupSummaryInfo', changes);
     }
 
@@ -2262,10 +2260,8 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     ngDoCheck() {
         this._idh.doCheck('columns');
         this._idh.doCheck('dataSource');
-        this._idh.doCheck('filterValue');
         this._idh.doCheck('keyExpr');
         this._idh.doCheck('selectedRowKeys');
-        this._idh.doCheck('selectionFilter');
         this._idh.doCheck('sortByGroupSummaryInfo');
         this._watcherHelper.checkWatchers();
         super.ngDoCheck();

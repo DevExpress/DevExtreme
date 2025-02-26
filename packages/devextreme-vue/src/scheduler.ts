@@ -31,6 +31,11 @@ import {
  OptionChangedEvent,
  RecurrenceEditMode,
  dxSchedulerScrolling,
+ Toolbar,
+ SchedulerPredefinedToolbarItem,
+ DateNavigatorItemProperties,
+ SchedulerPredefinedDateNavigatorItem,
+ ToolbarItem,
 } from "devextreme/ui/scheduler";
 import {
  DataSourceOptions,
@@ -40,12 +45,31 @@ import {
 } from "devextreme/data/store";
 import {
  FirstDayOfWeek,
+ ToolbarItemLocation,
+ ToolbarItemComponent,
+ ButtonType,
+ SingleMultipleOrNone,
+ ButtonStyle,
  ScrollMode,
  Orientation,
 } from "devextreme/common";
 import {
  event,
 } from "devextreme/events/events.types";
+import {
+ LocateInMenuMode,
+ ShowTextMode,
+} from "devextreme/ui/toolbar";
+import {
+ dxButtonGroupOptions,
+ dxButtonGroupItem,
+ ContentReadyEvent as ButtonGroupContentReadyEvent,
+ DisposingEvent as ButtonGroupDisposingEvent,
+ InitializedEvent as ButtonGroupInitializedEvent,
+ ItemClickEvent,
+ OptionChangedEvent as ButtonGroupOptionChangedEvent,
+ SelectionChangedEvent,
+} from "devextreme/ui/button_group";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -123,6 +147,7 @@ type AccessibleOptions = Pick<Properties,
   "textExpr" |
   "timeCellTemplate" |
   "timeZone" |
+  "toolbar" |
   "useDropDownViewSwitcher" |
   "views" |
   "visible" |
@@ -209,6 +234,7 @@ const componentConfig = {
     textExpr: String,
     timeCellTemplate: {},
     timeZone: String,
+    toolbar: Object as PropType<Toolbar | Record<string, any>>,
     useDropDownViewSwitcher: Boolean,
     views: Array as PropType<Array<Record<string, any> | string>>,
     visible: Boolean,
@@ -291,6 +317,7 @@ const componentConfig = {
     "update:textExpr": null,
     "update:timeCellTemplate": null,
     "update:timeZone": null,
+    "update:toolbar": null,
     "update:useDropDownViewSwitcher": null,
     "update:views": null,
     "update:visible": null,
@@ -309,6 +336,7 @@ const componentConfig = {
       editing: { isCollectionItem: false, optionName: "editing" },
       resource: { isCollectionItem: true, optionName: "resources" },
       scrolling: { isCollectionItem: false, optionName: "scrolling" },
+      toolbar: { isCollectionItem: false, optionName: "toolbar" },
       view: { isCollectionItem: true, optionName: "views" }
     };
   }
@@ -381,6 +409,162 @@ const DxEditing = defineComponent(DxEditingConfig);
 
 (DxEditing as any).$_optionName = "editing";
 
+const DxItemConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:cssClass": null,
+    "update:disabled": null,
+    "update:elementAttr": null,
+    "update:hint": null,
+    "update:html": null,
+    "update:icon": null,
+    "update:locateInMenu": null,
+    "update:location": null,
+    "update:menuItemTemplate": null,
+    "update:name": null,
+    "update:options": null,
+    "update:showText": null,
+    "update:template": null,
+    "update:text": null,
+    "update:type": null,
+    "update:visible": null,
+    "update:widget": null,
+  },
+  props: {
+    cssClass: String,
+    disabled: Boolean,
+    elementAttr: Object as PropType<Record<string, any>>,
+    hint: String,
+    html: String,
+    icon: String,
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
+    menuItemTemplate: {},
+    name: String as PropType<SchedulerPredefinedToolbarItem>,
+    options: Object as PropType<DateNavigatorItemProperties | Record<string, any> | dxButtonGroupOptions>,
+    showText: String as PropType<ShowTextMode>,
+    template: {},
+    text: String,
+    type: String as PropType<ButtonType | string>,
+    visible: Boolean,
+    widget: String as PropType<ToolbarItemComponent>
+  }
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
+(DxItem as any).$_optionName = "items";
+(DxItem as any).$_isCollectionItem = true;
+(DxItem as any).$_expectedChildren = {
+  options: { isCollectionItem: false, optionName: "options" }
+};
+
+const DxOptionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:accessKey": null,
+    "update:activeStateEnabled": null,
+    "update:bindingOptions": null,
+    "update:buttonTemplate": null,
+    "update:disabled": null,
+    "update:elementAttr": null,
+    "update:focusStateEnabled": null,
+    "update:height": null,
+    "update:hint": null,
+    "update:hoverStateEnabled": null,
+    "update:items": null,
+    "update:keyExpr": null,
+    "update:onContentReady": null,
+    "update:onDisposing": null,
+    "update:onInitialized": null,
+    "update:onItemClick": null,
+    "update:onOptionChanged": null,
+    "update:onSelectionChanged": null,
+    "update:rtlEnabled": null,
+    "update:selectedItemKeys": null,
+    "update:selectedItems": null,
+    "update:selectionMode": null,
+    "update:stylingMode": null,
+    "update:tabIndex": null,
+    "update:visible": null,
+    "update:width": null,
+  },
+  props: {
+    accessKey: String,
+    activeStateEnabled: Boolean,
+    bindingOptions: Object as PropType<Record<string, any>>,
+    buttonTemplate: {},
+    disabled: Boolean,
+    elementAttr: Object as PropType<Record<string, any>>,
+    focusStateEnabled: Boolean,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    hint: String,
+    hoverStateEnabled: Boolean,
+    items: Array as PropType<Array<dxButtonGroupItem | SchedulerPredefinedDateNavigatorItem>>,
+    keyExpr: [Function, String] as PropType<((() => void)) | string>,
+    onContentReady: Function as PropType<((e: ButtonGroupContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: ButtonGroupDisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: ButtonGroupInitializedEvent) => void)>,
+    onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: ButtonGroupOptionChangedEvent) => void)>,
+    onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
+    rtlEnabled: Boolean,
+    selectedItemKeys: Array as PropType<Array<any>>,
+    selectedItems: Array as PropType<Array<any>>,
+    selectionMode: String as PropType<SingleMultipleOrNone>,
+    stylingMode: String as PropType<ButtonStyle>,
+    tabIndex: Number,
+    visible: Boolean,
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+  }
+};
+
+prepareConfigurationComponentConfig(DxOptionsConfig);
+
+const DxOptions = defineComponent(DxOptionsConfig);
+
+(DxOptions as any).$_optionName = "options";
+(DxOptions as any).$_expectedChildren = {
+  item: { isCollectionItem: true, optionName: "items" },
+  optionsItem: { isCollectionItem: true, optionName: "items" }
+};
+
+const DxOptionsItemConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:disabled": null,
+    "update:elementAttr": null,
+    "update:hint": null,
+    "update:icon": null,
+    "update:template": null,
+    "update:text": null,
+    "update:type": null,
+    "update:visible": null,
+  },
+  props: {
+    disabled: Boolean,
+    elementAttr: Object as PropType<Record<string, any>>,
+    hint: String,
+    icon: String,
+    template: {},
+    text: String,
+    type: String as PropType<ButtonType | string>,
+    visible: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxOptionsItemConfig);
+
+const DxOptionsItem = defineComponent(DxOptionsItemConfig);
+
+(DxOptionsItem as any).$_optionName = "items";
+(DxOptionsItem as any).$_isCollectionItem = true;
+
 const DxResourceConfig = {
   emits: {
     "update:isActive": null,
@@ -429,6 +613,78 @@ prepareConfigurationComponentConfig(DxScrollingConfig);
 const DxScrolling = defineComponent(DxScrollingConfig);
 
 (DxScrolling as any).$_optionName = "scrolling";
+
+const DxToolbarConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:disabled": null,
+    "update:items": null,
+    "update:multiline": null,
+    "update:visible": null,
+  },
+  props: {
+    disabled: Boolean,
+    items: Array as PropType<Array<SchedulerPredefinedToolbarItem | ToolbarItem>>,
+    multiline: Boolean,
+    visible: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxToolbarConfig);
+
+const DxToolbar = defineComponent(DxToolbarConfig);
+
+(DxToolbar as any).$_optionName = "toolbar";
+(DxToolbar as any).$_expectedChildren = {
+  item: { isCollectionItem: true, optionName: "items" },
+  toolbarItem: { isCollectionItem: true, optionName: "items" }
+};
+
+const DxToolbarItemConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:cssClass": null,
+    "update:disabled": null,
+    "update:html": null,
+    "update:locateInMenu": null,
+    "update:location": null,
+    "update:menuItemTemplate": null,
+    "update:name": null,
+    "update:options": null,
+    "update:showText": null,
+    "update:template": null,
+    "update:text": null,
+    "update:visible": null,
+    "update:widget": null,
+  },
+  props: {
+    cssClass: String,
+    disabled: Boolean,
+    html: String,
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
+    menuItemTemplate: {},
+    name: String as PropType<SchedulerPredefinedToolbarItem>,
+    options: Object as PropType<DateNavigatorItemProperties | Record<string, any> | dxButtonGroupOptions>,
+    showText: String as PropType<ShowTextMode>,
+    template: {},
+    text: String,
+    visible: Boolean,
+    widget: String as PropType<ToolbarItemComponent>
+  }
+};
+
+prepareConfigurationComponentConfig(DxToolbarItemConfig);
+
+const DxToolbarItem = defineComponent(DxToolbarItemConfig);
+
+(DxToolbarItem as any).$_optionName = "items";
+(DxToolbarItem as any).$_isCollectionItem = true;
+(DxToolbarItem as any).$_expectedChildren = {
+  options: { isCollectionItem: false, optionName: "options" }
+};
 
 const DxViewConfig = {
   emits: {
@@ -502,8 +758,13 @@ export {
   DxScheduler,
   DxAppointmentDragging,
   DxEditing,
+  DxItem,
+  DxOptions,
+  DxOptionsItem,
   DxResource,
   DxScrolling,
+  DxToolbar,
+  DxToolbarItem,
   DxView
 };
 import type * as DxSchedulerTypes from "devextreme/ui/scheduler_types";

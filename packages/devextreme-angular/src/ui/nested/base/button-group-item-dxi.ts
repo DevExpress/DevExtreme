@@ -18,6 +18,7 @@ import { ButtonItem, EmptyItem, FormItemComponent, FormItemType, GroupItem, Labe
 import { GanttPredefinedContextMenuItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
 import { HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
 import { dxMenuItem } from 'devextreme/ui/menu';
+import { DateNavigatorItemProperties, SchedulerPredefinedToolbarItem } from 'devextreme/ui/scheduler';
 import { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
 import { Properties as dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
@@ -280,10 +281,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('label', value);
     }
 
-    get name(): string | undefined | DataGridPredefinedToolbarItem | Command | FileManagerPredefinedContextMenuItem | FileManagerPredefinedToolbarItem | GanttPredefinedContextMenuItem | GanttPredefinedToolbarItem | HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | TreeListPredefinedToolbarItem {
+    get name(): string | undefined | DataGridPredefinedToolbarItem | Command | FileManagerPredefinedContextMenuItem | FileManagerPredefinedToolbarItem | GanttPredefinedContextMenuItem | GanttPredefinedToolbarItem | HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | SchedulerPredefinedToolbarItem | TreeListPredefinedToolbarItem {
         return this._getOption('name');
     }
-    set name(value: string | undefined | DataGridPredefinedToolbarItem | Command | FileManagerPredefinedContextMenuItem | FileManagerPredefinedToolbarItem | GanttPredefinedContextMenuItem | GanttPredefinedToolbarItem | HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | TreeListPredefinedToolbarItem) {
+    set name(value: string | undefined | DataGridPredefinedToolbarItem | Command | FileManagerPredefinedContextMenuItem | FileManagerPredefinedToolbarItem | GanttPredefinedContextMenuItem | GanttPredefinedToolbarItem | HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | SchedulerPredefinedToolbarItem | TreeListPredefinedToolbarItem) {
         this._setOption('name', value);
     }
 
@@ -406,10 +407,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('menuItemTemplate', value);
     }
 
-    get options(): any {
+    get options(): any | DateNavigatorItemProperties {
         return this._getOption('options');
     }
-    set options(value: any) {
+    set options(value: any | DateNavigatorItemProperties) {
         this._setOption('options', value);
     }
 

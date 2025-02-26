@@ -8,7 +8,12 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
+    Output,
+    EventEmitter,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -20,6 +25,7 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoButtonOptions } from './base/button-options';
+import { DxiItemComponent } from './item-dxi';
 
 
 @Component({
@@ -53,19 +59,54 @@ import { DxoButtonOptions } from './base/button-options';
         'useSubmitBehavior',
         'validationGroup',
         'visible',
-        'width'
+        'width',
+        'buttonTemplate',
+        'items',
+        'keyExpr',
+        'onItemClick',
+        'onSelectionChanged',
+        'selectedItemKeys',
+        'selectedItems',
+        'selectionMode'
     ]
 })
 export class DxoOptionsComponent extends DxoButtonOptions implements OnDestroy, OnInit  {
 
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() selectedItemKeysChange: EventEmitter<Array<any>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() selectedItemsChange: EventEmitter<Array<any>>;
     protected get _optionPath() {
         return 'options';
     }
 
 
+    @ContentChildren(forwardRef(() => DxiItemComponent))
+    get itemsChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
+
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
+
+        this._createEventEmitters([
+            { emit: 'selectedItemKeysChange' },
+            { emit: 'selectedItemsChange' }
+        ]);
+
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

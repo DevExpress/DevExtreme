@@ -5,8 +5,10 @@ import {
     Component,
 } from '@angular/core';
 
-import { ButtonStyle, ButtonType } from 'devextreme/common';
+import { ButtonStyle, ButtonType, SingleMultipleOrNone } from 'devextreme/common';
 import { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/button';
+import { ContentReadyEvent, DisposingEvent, dxButtonGroupItem, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
+import { SchedulerPredefinedDateNavigatorItem } from 'devextreme/ui/scheduler';
 
 @Component({
     template: ''
@@ -178,5 +180,61 @@ export abstract class DxoButtonOptions extends NestedOption {
     }
     set width(value: number | Function | string | undefined) {
         this._setOption('width', value);
+    }
+
+    get buttonTemplate(): any {
+        return this._getOption('buttonTemplate');
+    }
+    set buttonTemplate(value: any) {
+        this._setOption('buttonTemplate', value);
+    }
+
+    get items(): Array<dxButtonGroupItem | SchedulerPredefinedDateNavigatorItem> {
+        return this._getOption('items');
+    }
+    set items(value: Array<dxButtonGroupItem | SchedulerPredefinedDateNavigatorItem>) {
+        this._setOption('items', value);
+    }
+
+    get keyExpr(): Function | string {
+        return this._getOption('keyExpr');
+    }
+    set keyExpr(value: Function | string) {
+        this._setOption('keyExpr', value);
+    }
+
+    get onItemClick(): ((e: ItemClickEvent) => void) {
+        return this._getOption('onItemClick');
+    }
+    set onItemClick(value: ((e: ItemClickEvent) => void)) {
+        this._setOption('onItemClick', value);
+    }
+
+    get onSelectionChanged(): ((e: SelectionChangedEvent) => void) {
+        return this._getOption('onSelectionChanged');
+    }
+    set onSelectionChanged(value: ((e: SelectionChangedEvent) => void)) {
+        this._setOption('onSelectionChanged', value);
+    }
+
+    get selectedItemKeys(): Array<any> {
+        return this._getOption('selectedItemKeys');
+    }
+    set selectedItemKeys(value: Array<any>) {
+        this._setOption('selectedItemKeys', value);
+    }
+
+    get selectedItems(): Array<any> {
+        return this._getOption('selectedItems');
+    }
+    set selectedItems(value: Array<any>) {
+        this._setOption('selectedItems', value);
+    }
+
+    get selectionMode(): SingleMultipleOrNone {
+        return this._getOption('selectionMode');
+    }
+    set selectionMode(value: SingleMultipleOrNone) {
+        this._setOption('selectionMode', value);
     }
 }
