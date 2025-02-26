@@ -577,7 +577,7 @@ export interface dxListOptions<
     selectAllMode?: SelectAllMode;
     /**
      * @docid
-     * @default 'true'
+     * @default true
      * @public
      */
     selectByClick?: boolean;
