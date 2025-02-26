@@ -1,14 +1,17 @@
+/* eslint-disable import/named */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable spellcheck/spell-checker */
 import {
-  ComponentPublicInstance, h, Slot, VNode,
+    ComponentPublicInstance, h, Slot, VNode,
 } from 'vue';
 import { IConfigurable } from './configuration-component';
 import {
-  configurationDefaultTemplate,
-  configurationTemplate,
-  declaredTemplates,
-  getChildren,
-  getConfigurationOptions,
-  mount,
+    configurationDefaultTemplate,
+    configurationTemplate,
+    declaredTemplates,
+    getChildren,
+    getConfigurationOptions,
+    mount,
 } from './vue-helper';
 
 import { IBaseComponent } from './component';
@@ -24,103 +27,103 @@ interface IEventBusHolder {
 }
 
 function asConfigurable(component: VNode): IConfigurable | undefined {
-  const componentOptions = component as any as IConfigurable;
-  if (!componentOptions) {
-    return;
-  }
-  if (!componentOptions.$_config || !componentOptions.$_config.name) {
-    return undefined;
-  }
+    const componentOptions = component as any as IConfigurable;
+    if(!componentOptions) {
+        return;
+    }
+    if(!componentOptions.$_config || !componentOptions.$_config.name) {
+        return undefined;
+    }
 
-  return componentOptions;
+    return componentOptions;
 }
 
 function hasTemplate(component: VNode) {
-  return TEMPLATE_PROP in (component.type as any).props && configurationTemplate(component);
+    return TEMPLATE_PROP in (component.type as any).props && configurationTemplate(component);
 }
 
 function discover(component: ComponentPublicInstance): Record<string, Slot> {
-  const templates: Record<string, Slot> = {};
-  const namedTeplates = declaredTemplates(component);
-  for (const slotName in namedTeplates) {
-    if (slotName === 'default' && component.$slots.default) {
-      continue;
+    const templates: Record<string, Slot> = {};
+    const namedTeplates = declaredTemplates(component);
+    for(const slotName in namedTeplates) {
+        if(slotName === 'default' && component.$slots.default) {
+            continue;
+        }
+
+        const slot = namedTeplates[slotName];
+        if(!slot) {
+            continue;
+        }
+
+        templates[slotName] = slot;
+    }
+    const componentChildren = getChildren(component as IBaseComponent);
+    for(const childComponent of componentChildren) {
+        const configurable = asConfigurable(childComponent);
+        if(!configurable) {
+            continue;
+        }
+
+        const defaultSlot = configurationDefaultTemplate(childComponent);
+        if(!defaultSlot || !hasTemplate(childComponent)) {
+            continue;
+        }
+
+        const templateName = `${configurable.$_config.fullPath}.${TEMPLATE_PROP}`;
+        templates[templateName] = defaultSlot;
     }
 
-    const slot = namedTeplates[slotName];
-    if (!slot) {
-      continue;
-    }
-
-    templates[slotName] = slot;
-  }
-  const componentChildren = getChildren(component as IBaseComponent);
-  for (const childComponent of componentChildren) {
-    const configurable = asConfigurable(childComponent);
-    if (!configurable) {
-      continue;
-    }
-
-    const defaultSlot = configurationDefaultTemplate(childComponent);
-    if (!defaultSlot || !hasTemplate(childComponent)) {
-      continue;
-    }
-
-    const templateName = `${configurable.$_config.fullPath}.${TEMPLATE_PROP}`;
-    templates[templateName] = defaultSlot;
-  }
-
-  return templates;
+    return templates;
 }
 
 function clearConfiguration(content: VNode[]) {
-  const newContent: VNode[] = [];
-  content.forEach((item) => {
-    const configurable = getConfigurationOptions(item);
-    if (!configurable || !configurable.$_optionName) {
-      newContent.push(item);
-    }
-  });
-  return newContent;
+    const newContent: VNode[] = [];
+    content.forEach((item) => {
+        const configurable = getConfigurationOptions(item);
+        if(!configurable || !configurable.$_optionName) {
+            newContent.push(item);
+        }
+    });
+    return newContent;
 }
 
 function mountTemplate(
-  getSlot: () => Slot,
-  parent: ComponentPublicInstance,
-  data: any,
-  name: string,
-  placeholder: Element,
+    getSlot: () => Slot,
+    parent: ComponentPublicInstance,
+    data: any,
+    name: string,
+    placeholder: Element,
 ): ComponentPublicInstance {
-  return mount({
-    name,
-    inject: ['eventBus'],
-    created(this: any & IEventBusHolder) {
-      this.eventBus.add(this.$_updatedHandler);
-    },
-    mounted() {
-      data.onRendered();
-    },
-    unmounted() {
-      this.eventBus.remove(this.$_updatedHandler);
-    },
-    methods: {
-      $_updatedHandler() {
-        (this as any as ComponentPublicInstance).$forceUpdate();
-      },
-    },
-    render: (): VNode | VNode[] => {
-      const content = clearConfiguration(getSlot()(data));
-      if (!content) {
-        return h('div');
-      }
+    return mount({
+        name,
+        inject: ['eventBus'],
+        created(this: any & IEventBusHolder) {
+            this.eventBus.add(this.$_updatedHandler);
+        },
+        mounted() {
+            data.onRendered();
+        },
+        unmounted() {
+            this.eventBus.remove(this.$_updatedHandler);
+        },
+        methods: {
+            $_updatedHandler() {
+                (this as any as ComponentPublicInstance).$forceUpdate();
+            },
+        },
+        render: (): VNode | VNode[] => {
+            const content = clearConfiguration(getSlot()(data));
+            if(!content) {
+                return h('div');
+            }
 
-      return content.length > 1 ? content : content[0];
-    },
-  }, parent, placeholder);
+            return content.length > 1 ? content : content[0];
+        },
+    }, parent, placeholder);
 }
 
 export {
-  mountTemplate,
-  discover,
-  IEventBusHolder,
+    mountTemplate,
+    discover,
+    IEventBusHolder,
 };

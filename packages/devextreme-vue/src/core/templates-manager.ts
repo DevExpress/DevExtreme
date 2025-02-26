@@ -1,116 +1,119 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable import/named */
 import { ComponentPublicInstance, Slot } from 'vue';
 
 import domAdapter from 'devextreme/core/dom_adapter';
 import { one } from 'devextreme/events';
 import {
-  discover as discoverSlots,
-  mountTemplate,
+    discover as discoverSlots,
+    mountTemplate,
 } from './templates-discovering';
 import { DX_REMOVE_EVENT, DX_TEMPLATE_WRAPPER_CLASS } from './constants';
 import { allKeysAreEqual } from './helpers';
 
 class TemplatesManager {
-  private readonly _component: ComponentPublicInstance;
+    private readonly _component: ComponentPublicInstance;
 
-  private _slots: Record<string, Slot> = {};
+    private _slots: Record<string, Slot> = {};
 
-  private _templates: Record<string, object> = {};
+    private _templates: Record<string, object> = {};
 
-  private _isDirty = false;
+    private _isDirty = false;
 
-  constructor(component: ComponentPublicInstance) {
-    this._component = component;
-    this.discover();
-  }
-
-  public discover() {
-    this._slots = {
-      ...discoverSlots(this._component),
-    };
-
-    if (!allKeysAreEqual(this._templates, this._slots)) {
-      this._prepareTemplates();
-    }
-  }
-
-  public get templates() {
-    return this._templates;
-  }
-
-  public get isDirty() {
-    return this._isDirty;
-  }
-
-  public resetDirtyFlag() {
-    this._isDirty = false;
-  }
-
-  private _prepareTemplates() {
-    this._templates = {};
-
-    for (const name of Object.keys(this._slots)) {
-      this._templates[name] = this.createDxTemplate(name);
+    constructor(component: ComponentPublicInstance) {
+        this._component = component;
+        this.discover();
     }
 
-    this._isDirty = true;
-  }
+    public discover() {
+        this._slots = {
+            ...discoverSlots(this._component),
+        };
 
-  private createDxTemplate(name: string) {
-    return {
-      render: (data: any) => {
-        const rendered = ((onRendered, counter = 0) => () => {
-          if (counter === 1 && onRendered) {
-            onRendered();
-          }
-          counter++;
-        })(data.onRendered);
-        const scopeData = { data: data.model, index: data.index, onRendered: rendered };
+        if(!allKeysAreEqual(this._templates, this._slots)) {
+            this._prepareTemplates();
+        }
+    }
 
-        const placeholder = document.createElement('div');
-        const container = data.container.get ? data.container.get(0) : data.container;
-        container.appendChild(placeholder);
-        const mountedTemplate = mountTemplate(
-          () => this._slots[name],
-          this._component,
-          scopeData,
-          name,
-          placeholder,
-        );
+    public get templates() {
+        return this._templates;
+    }
 
-        const element = mountedTemplate.$el as HTMLElement;
-        container.removeChild(placeholder);
+    public get isDirty() {
+        return this._isDirty;
+    }
 
-        while (placeholder.firstChild) {
-          container.appendChild(placeholder.firstChild);
+    public resetDirtyFlag() {
+        this._isDirty = false;
+    }
+
+    private _prepareTemplates() {
+        this._templates = {};
+
+        for(const name of Object.keys(this._slots)) {
+            this._templates[name] = this.createDxTemplate(name);
         }
 
-        domAdapter.setClass(element, DX_TEMPLATE_WRAPPER_CLASS, true);
+        this._isDirty = true;
+    }
 
-        if (element.nodeType === Node.TEXT_NODE) {
-          const removalListener = document.createElement(container.nodeName === 'TABLE' ? 'tbody' : 'span');
-          removalListener.style.display = 'none';
-          container.insertBefore(removalListener, container.firstChild);
+    private createDxTemplate(name: string) {
+        return {
+            render: (data: any) => {
+                const rendered = ((onRendered, counter = 0) => () => {
+                    if(counter === 1 && onRendered) {
+                        onRendered();
+                    }
+                    counter++;
+                })(data.onRendered);
+                const scopeData = { data: data.model, index: data.index, onRendered: rendered };
 
-          one(
-            removalListener,
-            DX_REMOVE_EVENT,
-            () => {
-              mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate)();
-              removalListener.remove();
+                const placeholder = document.createElement('div');
+                const container = data.container.get ? data.container.get(0) : data.container;
+                container.appendChild(placeholder);
+                const mountedTemplate = mountTemplate(
+                    () => this._slots[name],
+                    this._component,
+                    scopeData,
+                    name,
+                    placeholder,
+                );
+
+                const element = mountedTemplate.$el as HTMLElement;
+                container.removeChild(placeholder);
+
+                while(placeholder.firstChild) {
+                    container.appendChild(placeholder.firstChild);
+                }
+
+                domAdapter.setClass(element, DX_TEMPLATE_WRAPPER_CLASS, true);
+
+                if(element.nodeType === Node.TEXT_NODE) {
+                    const removalListener = document.createElement(container.nodeName === 'TABLE' ? 'tbody' : 'span');
+                    removalListener.style.display = 'none';
+                    container.insertBefore(removalListener, container.firstChild);
+
+                    one(
+                        removalListener,
+                        DX_REMOVE_EVENT,
+                        () => {
+                            mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate)();
+                            removalListener.remove();
+                        },
+                    );
+                } else {
+                    one(
+                        element,
+                        DX_REMOVE_EVENT,
+                        mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate),
+                    );
+                }
+                rendered();
+                return element;
             },
-          );
-        } else {
-          one(
-            element,
-            DX_REMOVE_EVENT,
-            mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate),
-          );
-        }
-        rendered();
-        return element;
-      },
-    };
-  }
+        };
+    }
 }
 
 export { TemplatesManager };
