@@ -48,20 +48,20 @@
       />
       <p>
         Full Name:
-        <span>{{ currentEmployee.FirstName }}</span>
-        <span>{{ currentEmployee.LastName }}</span>
+        <span>{{ currentEmployee?.FirstName }}</span>
+        <span>{{ currentEmployee?.LastName }}</span>
       </p>
       <p>
-        Birth Date: <span>{{ currentEmployee.BirthDate }}</span>
+        Birth Date: <span>{{ currentEmployee?.BirthDate }}</span>
       </p>
       <p>
-        Address: <span>{{ currentEmployee.Address }}</span>
+        Address: <span>{{ currentEmployee?.Address }}</span>
       </p>
       <p>
-        Hire Date: <span>{{ currentEmployee.HireDate }}</span>
+        Hire Date: <span>{{ currentEmployee?.HireDate }}</span>
       </p>
       <p>
-        Position: <span>{{ currentEmployee.Position }}</span>
+        Position: <span>{{ currentEmployee?.Position }}</span>
       </p>
     </DxPopup>
 
@@ -90,7 +90,7 @@ const closeButtonOptions = {
 const moreInfoButtonOptions = {
   text: 'More info',
   onClick: () => {
-    const message = `More info about ${currentEmployee.value.FirstName} ${currentEmployee.value.LastName}`;
+    const message = `More info about ${currentEmployee.value?.FirstName} ${currentEmployee.value?.LastName}`;
     notify({
       message,
       position: {
@@ -105,7 +105,7 @@ const emailButtonOptions = {
   stylingMode: 'contained',
   text: 'Send',
   onClick: () => {
-    const message = `Email is sent to ${currentEmployee.value.FirstName} ${currentEmployee.value.LastName}`;
+    const message = `Email is sent to ${currentEmployee.value?.FirstName} ${currentEmployee.value?.LastName}`;
     notify({
       message,
       position: {

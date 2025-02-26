@@ -146,11 +146,12 @@ import {
   DxRequiredRule,
 } from 'devextreme-vue/validator';
 import notify from 'devextreme/ui/notify';
+import type { EditorStyle, LabelMode } from 'devextreme/common';
 import { states } from './data.ts';
 
 const birthDate = ref(new Date(1981, 5, 3));
-const stylingMode = ref('outlined');
-const labelMode = ref('static');
+const stylingMode = ref<EditorStyle>('outlined');
+const labelMode = ref<LabelMode>('static');
 const text = ref('Olivia loves to sell. She has been selling DevAV products since 2012.');
 const phoneRules = {
   X: /[02-9]/,

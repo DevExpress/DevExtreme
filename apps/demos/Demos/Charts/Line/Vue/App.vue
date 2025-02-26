@@ -60,14 +60,15 @@ import {
   DxTitle,
   DxSubtitle,
   DxTooltip,
+  type DxChartTypes,
 } from 'devextreme-vue/chart';
 import DxSelectBox from 'devextreme-vue/select-box';
 import service from './data.ts';
 
 const dataSource = service.getCountriesInfo();
 const energySources = service.getEnergySources();
-const types = ['line', 'stackedline', 'fullstackedline'];
-const type = ref('line');
+const types: DxChartTypes.SeriesType[] = ['line', 'stackedline', 'fullstackedline'];
+const type = ref<DxChartTypes.SeriesType>('line');
 </script>
 <style>
 .options {
