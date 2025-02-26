@@ -9,6 +9,9 @@ inputs:
   chrome-version:
     description: Chrome version to install
     default: "latest"
+  token:
+    description: github PAT
+    required: true
 
 runs:
   using: composite
@@ -27,7 +30,7 @@ runs:
       shell: bash
       env:
         CHROME_VERSION: ${{ inputs.chrome-version }}
-        GH_TOKEN: ${{ secrets.TMP_CHROME_PAT }}
+        GH_TOKEN: ${{ inputs.token }}
       run: |
         if [ -n "$CHROME_VERSION" ]; then
           sudo apt-get update
