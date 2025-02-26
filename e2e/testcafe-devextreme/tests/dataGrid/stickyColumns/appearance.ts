@@ -11,23 +11,31 @@ const DATA_GRID_SELECTOR = '#container';
 fixture.disablePageReloads`FixedColumns - appearance`
   .page(url(__dirname, '../../container.html'));
 
-[
-  Themes.genericLight,
-  Themes.genericLightCompact,
-  Themes.materialBlue,
-  Themes.materialBlueCompact,
-  Themes.fluentBlue,
-  Themes.fluentBlueCompact,
-].forEach(
-  (theme) => {
-    test('Row height for selected, focus and edit state should not differ from the default one', async (t) => {
+([
+  [Themes.genericLight, false],
+  [Themes.genericLightCompact, false],
+  [Themes.materialBlue, false],
+  [Themes.materialBlueCompact, false],
+  [Themes.fluentBlue, false],
+  [Themes.fluentBlueCompact, false],
+  [Themes.genericLight, true],
+  [Themes.genericLightCompact, true],
+  [Themes.materialBlue, true],
+  [Themes.materialBlueCompact, true],
+  [Themes.fluentBlue, true],
+  [Themes.fluentBlueCompact, true],
+] as const).forEach(
+  ([theme, showRowLines]) => {
+    // T1268664
+    const showRowLinesState = `showRowLines=${showRowLines ? 'true' : 'false'}`;
+    test(`Row height for selected, focus and edit state should not differ from the default one if ${showRowLinesState}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`datagrid_default_state_(${theme}).png`, dataGrid.element);
+      await takeScreenshot(`datagrid_default_state_with_${showRowLinesState}_(${theme}).png`, dataGrid.element);
 
       await t
         .click(dataGrid.getDataRow(2).getCommandCell(41).getButton(0))
@@ -36,7 +44,7 @@ fixture.disablePageReloads`FixedColumns - appearance`
 
       await t.debug();
 
-      await takeScreenshot(`datagrid_selected_focused_edit_state_(${theme}).png`, dataGrid.element);
+      await takeScreenshot(`datagrid_selected_focused_edit_state_with_${showRowLinesState}_(${theme}).png`, dataGrid.element);
 
       await t
         .expect(compareResults.isValid())
@@ -62,7 +70,7 @@ fixture.disablePageReloads`FixedColumns - appearance`
         allowColumnReordering: true,
         allowColumnResizing: true,
         focusedRowEnabled: true,
-        showRowLines: false,
+        showRowLines,
         selection: {
           mode: 'multiple',
         },
