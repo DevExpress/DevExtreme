@@ -87,7 +87,15 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxDataGrid, {
-  DxColumn, DxEditing, DxValidationRule, DxButton, DxToolbar, DxItem, DxScrolling, type DxDataGridTypes, DxPager,
+  DxColumn,
+  DxEditing,
+  DxValidationRule,
+  DxButton,
+  DxToolbar,
+  DxItem,
+  DxPager,
+  DxScrolling,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import Guid from 'devextreme/core/guid';
@@ -97,7 +105,7 @@ const newRowPositionOptions = ['first', 'last', 'pageTop', 'pageBottom', 'viewpo
 const scrollingModeOptions = ['standard', 'virtual'];
 
 const newRowPosition = ref('viewportTop');
-const scrollingMode = ref('standard');
+const scrollingMode = ref<DxDataGridTypes.DataGridScrollMode>('standard');
 const changes = ref<DxDataGridTypes.DataChange[]>([]);
 const editRowKey = ref<string | null>(null);
 

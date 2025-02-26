@@ -30,11 +30,12 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
+import { type SearchMode } from 'devextreme/common';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxList from 'devextreme-vue/list';
 import { products } from './data.ts';
 
-const searchMode = ref('contains');
+const searchMode = ref<SearchMode>('contains');
 </script>
 <style>
 .dx-list-item-content > div {

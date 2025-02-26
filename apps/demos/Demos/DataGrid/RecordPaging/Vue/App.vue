@@ -68,16 +68,20 @@ import {
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
+import { type DisplayMode } from 'devextreme/common';
 import { generateData } from './data.ts';
 
 const dataSource = generateData(100000);
-const displayModes = [
+const displayModes: {
+  text: string,
+  value: DisplayMode,
+}[] = [
   { text: 'Display Mode \'full\'', value: 'full' },
   { text: 'Display Mode \'compact\'', value: 'compact' },
 ];
 const pageSizes = [5, 10, 'all'];
 
-const displayMode = ref('full');
+const displayMode = ref(displayModes[0].value);
 const showPageSizeSelector = ref(true);
 const showInfo = ref(true);
 const showNavButtons = ref(true);

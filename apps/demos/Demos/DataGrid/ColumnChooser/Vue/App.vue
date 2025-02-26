@@ -119,8 +119,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {
-  DxDataGrid, DxColumn, DxColumnChooser, DxColumnChooserSearch, DxColumnChooserSelection,
+  DxDataGrid,
+  DxColumn,
+  DxColumnChooser,
+  DxColumnChooserSearch,
+  DxColumnChooserSelection,
   DxPosition,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
@@ -136,7 +141,7 @@ const columnChooserModes = [{
   name: 'Select',
 }];
 
-const mode = ref('select');
+const mode = ref<DxDataGridTypes.ColumnChooserMode>('select');
 const searchEnabled = ref(true);
 const allowSelectAll = ref(true);
 const selectByClick = ref(true);

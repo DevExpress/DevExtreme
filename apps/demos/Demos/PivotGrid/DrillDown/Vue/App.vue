@@ -80,7 +80,7 @@ const dataSource = new PivotGridDataSource({
   ],
   store: sales,
 });
-const dataGridRef = ref<DxDataGrid>();
+const dataGridRef = ref();
 const drillDownDataSource = ref<DataSource>(null);
 const popupTitle = ref('');
 const popupVisible = ref(false);

@@ -139,7 +139,7 @@ import DxSelectBox from 'devextreme-vue/select-box';
 import DxTextBox from 'devextreme-vue/text-box';
 import DxTextArea from 'devextreme-vue/text-area';
 import DxDateBox from 'devextreme-vue/date-box';
-import DxButton from 'devextreme-vue/button';
+import DxButton, { type DxButtonTypes } from 'devextreme-vue/button';
 import DxDateRangeBox from 'devextreme-vue/date-range-box';
 import {
   DxValidator,
@@ -157,7 +157,7 @@ const phoneRules = {
   X: /[02-9]/,
 };
 
-function validateClick({ validationGroup }) {
+function validateClick({ validationGroup }: DxButtonTypes.ClickEvent) {
   const result = validationGroup.validate();
   if (result.isValid) {
     notify('The task was saved successfully.', 'success');
