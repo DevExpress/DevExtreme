@@ -55,7 +55,7 @@ const SelectBox = (DropDownList as any).inherit({
           this._resetCaretPosition(true);
         }
 
-        parent.tab && parent.tab.apply(this, arguments);
+        parent.tab?.apply(this, arguments);
 
         if (!popupHasFocusableElements) {
           this._cancelSearchIfNeed();
@@ -85,18 +85,18 @@ const SelectBox = (DropDownList as any).inherit({
       },
       rightArrow() {
         searchIfNeeded();
-        parent.rightArrow && parent.rightArrow.apply(this, arguments);
+        parent.rightArrow?.apply(this, arguments);
       },
       home() {
         searchIfNeeded();
-        parent.home && parent.home.apply(this, arguments);
+        parent.home?.apply(this, arguments);
       },
       end() {
         searchIfNeeded();
-        parent.end && parent.end.apply(this, arguments);
+        parent.end?.apply(this, arguments);
       },
       escape() {
-        const result = parent.escape && parent.escape.apply(this, arguments);
+        const result = parent.escape?.apply(this, arguments);
         this._cancelEditing();
 
         return result ?? true;
@@ -126,7 +126,7 @@ const SelectBox = (DropDownList as any).inherit({
             return isOpened;
           }
 
-          if (parent.enter && parent.enter.apply(this, arguments)) {
+          if (parent.enter?.apply(this, arguments)) {
             return isOpened;
           }
         }
@@ -269,7 +269,7 @@ const SelectBox = (DropDownList as any).inherit({
   },
 
   _scrollToSelectedItem() {
-    this._list && this._list.scrollToItem(this._list.option('selectedItem'));
+    this._list?.scrollToItem(this._list.option('selectedItem'));
   },
 
   _listContentReadyHandler() {
@@ -534,16 +534,20 @@ const SelectBox = (DropDownList as any).inherit({
       return;
     }
 
-    this._loadItemDeferred && this._loadItemDeferred.always(() => {
+    this._loadItemDeferred?.always(() => {
       const {
         acceptCustomValue,
         text,
         selectedItem: initialSelectedItem,
+        customItemCreateEvent,
       } = this.option();
 
       if (acceptCustomValue) {
         if (!saveEditingValue && !this._isValueChanging) {
-          this._updateField(initialSelectedItem ?? this._createCustomItem(text));
+          const initialItem = initialSelectedItem
+            ?? (customItemCreateEvent !== '' ? this._createCustomItem(text) : null);
+
+          this._updateField(initialItem);
           this._clearFilter();
         }
         return;
@@ -664,7 +668,7 @@ const SelectBox = (DropDownList as any).inherit({
   _fieldRenderData() {
     const $listFocused = this._list && this.option('opened') && $(this._list.option('focusedElement'));
 
-    if ($listFocused && $listFocused.length) {
+    if ($listFocused?.length) {
       return this._list._getItemData($listFocused);
     }
 
