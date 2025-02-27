@@ -353,6 +353,8 @@ const DropDownEditor = TextBox.inherit({
       container: getPublicElement($templateWrapper),
       onRendered: () => {
         if (this._activeRenderContext !== currentRenderContext) {
+          $templateWrapper.empty();
+
           return;
         }
 
