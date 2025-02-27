@@ -389,12 +389,12 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
       enabled?: boolean;
       /**
        * @docid
-       * @default 'true'
+       * @default true
        */
       panVisible?: boolean;
       /**
        * @docid
-       * @default 'true'
+       * @default true
        */
       zoomVisible?: boolean;
       /**

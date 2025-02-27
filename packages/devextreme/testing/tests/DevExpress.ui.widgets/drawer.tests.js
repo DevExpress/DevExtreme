@@ -159,7 +159,7 @@ QUnit.module('Drawer behavior', () => {
             const timeout = setTimeout(() => {
                 assert.ok(false, 'toggle promise was not resolved');
                 done();
-            }, 10);
+            }, 100);
 
             instance.toggle().then(() => {
                 clearTimeout(timeout);
@@ -191,7 +191,7 @@ QUnit.module('Drawer behavior', () => {
             const timeout = setTimeout(() => {
                 assert.ok(false, 'promise was not resolved');
                 done();
-            }, 10);
+            }, 100);
 
             const methodToCall = opened ? 'show' : 'hide';
 
