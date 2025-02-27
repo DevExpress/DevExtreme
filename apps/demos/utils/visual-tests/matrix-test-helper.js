@@ -298,7 +298,7 @@ const SKIPPED_TESTS = {
     },
     Vue: {
         Accordion: [
-            { demo: 'Custom Overview Appearance', themes: [THEME.generic, THEME.material, THEME.fluent] },
+            { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
         ],
         Charts: [
             { demo: 'Overview', themes: [THEME.material] },
