@@ -188,9 +188,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Lint code base (excluding demos)
+          - name: Check code base (TS and Lint)
             command: pnpx nx lint-non-demos
-            check-vue-ts: pnpm exec vue-tsc --noEmit --project tsconfig.vue-check.json
+            check-vue-ts: pnpm run ts-check-vue
           # NOTE: skipped due to enormous number of errors
           # - name: Lint demos (1/4)
           #   command: CONSTEL=1/4 npm run lint-demos
