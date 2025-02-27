@@ -81,7 +81,7 @@ export class DxTemplateDirective {
       }
 
       one(element, 'dxremove', ({}, params) => {
-        if (!params || !params._angularIntegration) {
+        if (!params?._angularIntegration) {
           childView.destroy();
         }
       });

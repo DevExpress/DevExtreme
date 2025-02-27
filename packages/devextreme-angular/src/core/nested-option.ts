@@ -114,7 +114,7 @@ export abstract class BaseNestedOption implements INestedOptionContainer, IColle
   }
 
   get instance() {
-    return this._host && this._host.instance;
+    return this._host?.instance;
   }
 
   get resetOptions() {
@@ -193,7 +193,7 @@ export abstract class NestedOption extends BaseNestedOption {
 
 export interface ICollectionNestedOption {
   _index: number;
-  _value: Object;
+  _value: object;
 }
 
 @Component({
