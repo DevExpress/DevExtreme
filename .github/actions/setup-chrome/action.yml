@@ -30,7 +30,7 @@ runs:
       shell: bash
       env:
         CHROME_VERSION: ${{ inputs.chrome-version }}
-        GH_TOKEN: ${{ inputs.token }}
+        GH_TOKEN: ${{ github.token }}
       run: |
         if [ -n "$CHROME_VERSION" ]; then
           sudo apt-get update
