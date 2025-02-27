@@ -358,12 +358,6 @@ const DropDownEditor = TextBox.inherit({
           return;
         }
 
-        const isRenderedInRoot = !!this.$element().find($templateWrapper).length;
-
-        if (!isRenderedInRoot) {
-          return;
-        }
-
         const $input = this._input();
 
         if (!$input.length) {

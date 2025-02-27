@@ -4404,7 +4404,7 @@ QUnit.module('Async tests', {}, () => {
 
                                 result.appendTo(args.container);
                                 args.onRendered();
-                            }, 0);
+                            }, TIME_TO_WAIT);
 
                             return result;
                         }
@@ -4421,9 +4421,9 @@ QUnit.module('Async tests', {}, () => {
         clock.tick(TIME_TO_WAIT);
 
         const $wrapper = $selectBox.find(toSelector(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER));
-
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
         assert.strictEqual($wrapper.children().length, 1, 'only 1 element is rendered');
-        assert.strictEqual(instance._input().val(), '', 'last value is applied');
+        assert.strictEqual($input.val(), '', 'last value is applied');
 
         clock.restore();
     });
