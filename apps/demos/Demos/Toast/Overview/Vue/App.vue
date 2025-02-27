@@ -20,13 +20,13 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxToast } from 'devextreme-vue/toast';
+import { DxToast, type DxToastTypes } from 'devextreme-vue/toast';
 import { products } from './data.ts';
 import ProductItem from './ProductItem.vue';
 
 const isVisible = ref(false);
 const message = ref('');
-const type = ref('info');
+const type = ref<DxToastTypes.ToastType>('info');
 
 function checkAvailability(e, product) {
   type.value = e.value ? 'success' : 'error';

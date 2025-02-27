@@ -13,7 +13,8 @@ const products = [{
     id: '1_1',
     text: 'Super Mart of the West',
     expanded: true,
-    items: [{
+    items: [
+        {
       id: '1_1_1',
       text: 'Video Players',
       items: [{
@@ -89,6 +90,7 @@ const products = [{
     }, {
       id: '1_1_4',
       text: 'Projectors',
+      expanded: false,
       items: [{
         id: '1_1_4_1',
         text: 'Projector Plus',
@@ -102,9 +104,11 @@ const products = [{
       }],
     }],
 
-  }, {
+  },
+    {
     id: '1_2',
     text: 'Braeburn',
+    expanded: false,
     items: [{
       id: '1_2_1',
       text: 'Video Players',
@@ -162,9 +166,11 @@ const products = [{
       }],
     }],
 
-  }, {
+  },
+    {
     id: '1_3',
     text: 'E-Mart',
+    expanded: false,
     items: [{
       id: '1_3_1',
       text: 'Video Players',
@@ -202,9 +208,11 @@ const products = [{
         }],
       }],
     }],
-  }, {
+  },
+    {
     id: '1_4',
     text: 'Walters',
+    expanded: false,
     items: [{
       id: '1_4_1',
       text: 'Video Players',

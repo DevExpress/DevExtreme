@@ -22,12 +22,13 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
+import { type SearchMode } from 'devextreme/common';
 import DxTreeView from 'devextreme-vue/tree-view';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { products } from './data.ts';
 
-const options = ['contains', 'startswith', 'equals'];
-const searchMode = ref('contains');
+const options: SearchMode[] = ['contains', 'startswith', 'equals'];
+const searchMode = ref(options[0]);
 </script>
 <style scoped>
 #treeview {
