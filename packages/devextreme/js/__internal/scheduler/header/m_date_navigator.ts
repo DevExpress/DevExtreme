@@ -30,6 +30,7 @@ interface DateNavigatorItem extends ButtonGroupItem {
 const isPreviousButtonDisabled = (header: SchedulerHeader): boolean => {
   const minOption = header.option('min');
 
+  // TODO(2): replace with isValidDate
   if (!minOption) return false;
 
   let min = new Date(minOption);
@@ -37,13 +38,14 @@ const isPreviousButtonDisabled = (header: SchedulerHeader): boolean => {
 
   min = trimTime(min);
 
-  const previousDate = header._getNextDate(-1, caption.endDate);
+  const previousDate = header._getNextDate(Direction.Left, caption.endDate);
   return previousDate < min;
 };
 
 const isNextButtonDisabled = (header: SchedulerHeader): boolean => {
   const maxOption = header.option('max');
 
+  // TODO(2): replace with isValidDate
   if (!maxOption) return false;
 
   const max = new Date(maxOption);
@@ -51,7 +53,7 @@ const isNextButtonDisabled = (header: SchedulerHeader): boolean => {
 
   max.setHours(23, 59, 59);
 
-  const nextDate = header._getNextDate(1, caption.startDate);
+  const nextDate = header._getNextDate(Direction.Right, caption.startDate);
   return nextDate > max;
 };
 
@@ -158,7 +160,6 @@ export const getDateNavigator = (header: SchedulerHeader, item): ToolbarItem => 
     },
   }, item);
   const options = config.options as ButtonGroupOptions;
-  const { onItemClick } = options;
 
   options.items = (options.items ?? DEFAULT_ITEMS).map((groupItem) => {
     switch (groupItem) {
@@ -172,10 +173,6 @@ export const getDateNavigator = (header: SchedulerHeader, item): ToolbarItem => 
         return groupItem;
     }
   });
-  options.onItemClick = (event): void => {
-    event.itemData.onClick(event);
-    onItemClick?.(event);
-  };
 
   return config;
 };

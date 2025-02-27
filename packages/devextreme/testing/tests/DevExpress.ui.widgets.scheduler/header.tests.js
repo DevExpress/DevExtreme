@@ -88,37 +88,53 @@ module('Toolbar config', () => {
         const scheduler = createWrapper({
             currentView: 'month',
             views: ['month'],
-            toolbar: [
-                {
-                    location: 'before',
-                    defaultElement: 'viewSwitcher',
-                },
-                {
-                    location: 'after',
-                    defaultElement: 'dateNavigator',
-                }
-            ],
+            toolbar: {
+                items: [
+                    { location: 'before', name: 'viewSwitcher' },
+                    { location: 'after', name: 'dateNavigator' },
+                ]
+            },
         });
 
         const viewSwitcher = scheduler.header.viewSwitcher.getElement();
         const dateNavigator = scheduler.header.navigator.getElement();
 
-        assert.equal(viewSwitcher.length, 1, 'viewSwitcher disaplayed');
-        assert.equal(dateNavigator.length, 1, 'dateNavigator disaplayed');
+        assert.equal(viewSwitcher.length, 1, 'viewSwitcher displayed');
+        assert.equal(dateNavigator.length, 1, 'dateNavigator displayed');
+    });
+
+    test('should not display viewSwitcher and dateNavigator when visible is false', function(assert) {
+        const scheduler = createWrapper({
+            currentView: 'month',
+            views: ['month'],
+            toolbar: {
+                visible: false,
+                items: [
+                    { location: 'before', name: 'viewSwitcher' },
+                    { location: 'after', name: 'dateNavigator' },
+                ]
+            },
+        });
+
+        const viewSwitcherCount = scheduler.header.viewSwitcher.getElement().length;
+        const dateNavigatorCount = scheduler.header.navigator.getElement().length;
+
+        assert.equal(viewSwitcherCount, 0, 'viewSwitcher not displayed');
+        assert.equal(dateNavigatorCount, 0, 'dateNavigator not displayed');
     });
 
     test('should not display viewSwitcher and dateNavigator', function(assert) {
         const scheduler = createWrapper({
             currentView: 'month',
             views: ['month'],
-            toolbar: [],
+            toolbar: { items: [] },
         });
 
         const viewSwitcherCount = scheduler.header.viewSwitcher.getElement().length;
         const dateNavigatorCount = scheduler.header.navigator.getElement().length;
 
-        assert.equal(viewSwitcherCount, 0, 'viewSwitcher not disaplayed');
-        assert.equal(dateNavigatorCount, 0, 'dateNavigator not disaplayed');
+        assert.equal(viewSwitcherCount, 0, 'viewSwitcher not displayed');
+        assert.equal(dateNavigatorCount, 0, 'dateNavigator not displayed');
     });
 
     test('should display custom today button', function(assert) {
@@ -126,24 +142,24 @@ module('Toolbar config', () => {
             currentDate: new Date(2020, 6, 7),
             currentView: 'month',
             views: ['month'],
-            toolbar: [
-                {
-                    defaultElement: 'dateNavigator',
-                },
-                {
-                    location: 'after',
-                    widget: 'dxButton',
-                    options: {
-                        text: 'Today',
-                        elementAttr: {
-                            class: 'today-button'
+            toolbar: {
+                items: [
+                    { name: 'dateNavigator' },
+                    {
+                        location: 'after',
+                        widget: 'dxButton',
+                        options: {
+                            text: 'Today',
+                            elementAttr: {
+                                class: 'today-button'
+                            },
+                            onClick: function() {
+                                scheduler.option('currentDate', new Date());
+                            },
                         },
-                        onClick: function() {
-                            scheduler.option('currentDate', new Date());
-                        },
-                    },
-                }
-            ],
+                    }
+                ]
+            },
         });
 
         const todayButton = $('.today-button');
