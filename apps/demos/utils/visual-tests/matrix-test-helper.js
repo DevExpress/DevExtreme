@@ -42,7 +42,7 @@ export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) 
   const demoAppIntervalHandle = setInterval(() => {
     const demoApp = document.querySelector('demo-app');
     if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 120) {
-      setTimeout(resolve, 1000);
+      setTimeout(resolve, 2000);
       clearInterval(demoAppIntervalHandle);
     }
     demoAppCounter += 1;
@@ -433,8 +433,7 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
     await t.resizeWindow(width, height);
 
     if (framework === 'Angular') {
-      // await waitForAngularLoading();
-      await t.expect(Boolean(Selector('.dx-widget'))).ok({ timeout: 120000 });
+      await waitForAngularLoading();
     }
   });
 
