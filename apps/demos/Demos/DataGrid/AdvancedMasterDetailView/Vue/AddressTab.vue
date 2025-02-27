@@ -22,7 +22,14 @@ defineProps<{
   data: Supplier
 }>();
 
-const items = ['Address', 'City', 'Region', 'PostalCode', 'Country', 'Phone'];
+const items = [
+  { dataField: 'Address'},
+  { dataField: 'City'},
+  { dataField: 'Region'},
+  { dataField: 'PostalCode'},
+  { dataField: 'Country'},
+  { dataField: 'Phone' },
+];
 
 const customizeItem = (item: DxFormTypes.SimpleItem) => {
   item.template = 'form-item';
