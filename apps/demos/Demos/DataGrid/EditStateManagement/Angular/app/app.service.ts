@@ -35,7 +35,7 @@ class Response<T> {
 export class Service {
   private orders$ = new BehaviorSubject<Order[]>([]);
 
-  private url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
+  private url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 
   constructor(private http: HttpClient) { }
 

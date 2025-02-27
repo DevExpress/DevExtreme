@@ -18,9 +18,9 @@ describe('isInteger', () => {
     ${-1.5} | ${false}
     ${0}    | ${true}
   `.it('should detect integer correctly', ({ value, expectedResult }) => {
-    const result = isInteger(value);
-    expect(result).toEqual(expectedResult);
-  });
+        const result = isInteger(value);
+        expect(result).toEqual(expectedResult);
+      });
 });
 
 describe('greaterThat', () => {
@@ -41,14 +41,14 @@ describe('greaterThat', () => {
     ${-10}  | ${-5}   | ${false}  | ${false}
     ${-10}  | ${-15}  | ${false}  | ${true}
   `.it('should compare numbers correctly', ({
-    value,
-    min,
-    strict,
-    expectedResult,
-  }) => {
-    const result = greaterThan(value, min, strict);
-    expect(result).toEqual(expectedResult);
-  });
+        value,
+        min,
+        strict,
+        expectedResult,
+      }) => {
+        const result = greaterThan(value, min, strict);
+        expect(result).toEqual(expectedResult);
+      });
 });
 
 describe('lessThat', () => {
@@ -69,14 +69,14 @@ describe('lessThat', () => {
     ${-10}  | ${-5}   | ${false}  | ${true}
     ${-10}  | ${-15}  | ${false}  | ${false}
   `.it('should compare numbers correctly', ({
-    value,
-    min,
-    strict,
-    expectedResult,
-  }) => {
-    const result = lessThan(value, min, strict);
-    expect(result).toEqual(expectedResult);
-  });
+        value,
+        min,
+        strict,
+        expectedResult,
+      }) => {
+        const result = lessThan(value, min, strict);
+        expect(result).toEqual(expectedResult);
+      });
 });
 
 describe('inRange', () => {
@@ -93,13 +93,13 @@ describe('inRange', () => {
     ${-5} | ${[-10, -6]}  | ${false}
     ${-5} | ${[-4, 0]}    | ${false}
   `.it('should determine interval correctly', ({
-    value,
-    range,
-    expectedResult,
-  }) => {
-    const result = inRange(value, range);
-    expect(result).toEqual(expectedResult);
-  });
+        value,
+        range,
+        expectedResult,
+      }) => {
+        const result = inRange(value, range);
+        expect(result).toEqual(expectedResult);
+      });
 });
 
 describe('divisibleBy', () => {
@@ -116,11 +116,11 @@ describe('divisibleBy', () => {
     ${4}   | ${-2}     | ${true}
     ${5}   | ${-2}     | ${false}
   `.it('should determine divisible by correctly', ({
-    value,
-    divider,
-    expectedResult,
-  }) => {
-    const result = divisibleBy(value, divider);
-    expect(result).toEqual(expectedResult);
-  });
+        value,
+        divider,
+        expectedResult,
+      }) => {
+        const result = divisibleBy(value, divider);
+        expect(result).toEqual(expectedResult);
+      });
 });

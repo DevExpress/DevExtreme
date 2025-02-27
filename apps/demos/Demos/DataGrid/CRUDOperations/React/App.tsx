@@ -12,7 +12,7 @@ import { formatDate } from 'devextreme/localization';
 import 'whatwg-fetch';
 
 const refreshModeLabel = { 'aria-label': 'Refresh Mode' };
-const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
+const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 
 const REFRESH_MODES = ['full', 'reshape', 'repaint'];
 

@@ -397,6 +397,7 @@
             MouseEvent: function(latLng) {
                 this.stop = function() {};
                 this.latLng = latLng;
+                this.domEvent = new MouseEvent({ type: 'click' });
             }
         }
     };

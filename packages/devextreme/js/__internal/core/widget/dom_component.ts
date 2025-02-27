@@ -54,7 +54,7 @@ class DOMComponent<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _templateManager!: any;
 
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   static getInstance(element) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -140,7 +140,7 @@ class DOMComponent<
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _setOptionsByDevice(instanceCustomRules): void {
     // @ts-expect-error
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     super._setOptionsByDevice([].concat(this.constructor._classCustomRules || [], instanceCustomRules || []));
   }
 
@@ -148,7 +148,7 @@ class DOMComponent<
     // @ts-expect-error
     const isCustomOption = this.constructor._classCustomRules
             // @ts-expect-error
-            // eslint-disable-next-line max-len
+            // eslint-disable-next-line @stylistic/max-len
             && Object.prototype.hasOwnProperty.call(this._convertRulesToOptions(this.constructor._classCustomRules), name);
 
     return !isCustomOption && super._isInitialOptionValue(name);
@@ -308,7 +308,7 @@ class DOMComponent<
   }
 
   _dispose(): void {
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     // eslint-disable-next-line @typescript-eslint/prefer-optional-chain, @typescript-eslint/no-unused-expressions
     this._templateManager && this._templateManager.dispose();
     super._dispose();
@@ -557,14 +557,14 @@ class DOMComponent<
     }
   }
 
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   _getTemplateByOption(optionName) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._getTemplate(this.option(optionName));
   }
 
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   _getTemplate(templateSource) {
     const templates = this.option('integrationOptions.templates');

@@ -1,4 +1,4 @@
-const url = 'https://js.devexpress.com/Demos/Mvc/api/DnDBetweenGrids';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DnDBetweenGrids';
 const priorities = [{
   id: 1, text: 'Low',
 }, {

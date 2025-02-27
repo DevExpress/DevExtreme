@@ -212,7 +212,7 @@ export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComp
  * @namespace DevExpress.ui
  * @options dxSliderBaseOptions
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+
 export interface dxSliderBase { }
 
 /** @public */
@@ -221,7 +221,7 @@ export type Properties = dxSliderOptions;
 /** @deprecated use Properties instead */
 export type Options = dxSliderOptions;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -259,4 +259,4 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

@@ -94,7 +94,6 @@ export const utils = {
         component = widget._createComponent(container, componentClass, viewModel);
         widget[componentName] = component;
       } else {
-        // TODO: this is a workaround for setTablesSizes. Remove after CSS refactoring
         const $element = component.$element();
         const elementStyle = $element.get(0).style;
         const { height } = elementStyle;

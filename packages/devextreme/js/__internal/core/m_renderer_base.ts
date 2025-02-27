@@ -103,6 +103,7 @@ initRender.prototype.attr = function (attrName, value) {
   }
   if (typeof attrName === 'string' && arguments.length === 1) {
     const result = this[0].getAttribute(attrName);
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return result == null ? undefined : result;
   } if (isPlainObject(attrName)) {
     for (const key in attrName) {

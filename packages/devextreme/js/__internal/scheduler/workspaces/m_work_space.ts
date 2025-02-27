@@ -97,7 +97,7 @@ interface RenderRWorkspaceOptions {
 
 const { tableCreator } = tableCreatorModule;
 
-// TODO: The constant is needed so that the dragging is not sharp. To prevent small twitches
+// The constant is needed so that the dragging is not sharp. To prevent small twitches
 const DRAGGING_MOUSE_FAULT = 10;
 
 // @ts-expect-error
@@ -1277,7 +1277,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     return this._dom_getDateCell(indexes);
   }
 
-  // TODO DOM adapter
   _dom_getDateCell(position) {
     return this._$dateTable
       .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
@@ -1759,7 +1758,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       scrolledRowCount += 1;
     }
 
-    // TODO horizontal v-scrolling
+    // horizontal v-scrolling
     const fullScrolledColumnCount = scrollableScrollLeft / cellWidth;
     let scrolledColumnCount = Math.floor(fullScrolledColumnCount);
     if (scrollableScrollLeft % cellWidth !== 0) {

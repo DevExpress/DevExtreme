@@ -39,6 +39,7 @@ $material-menu-font-size: $material-base-font-size;
 
   .dx-menu-vertical {
     .dx-menu-item-popout {
+      margin-inline-start: $material-menu-icon-to-text-offset;
       display: flex;
       align-items: center;
       justify-content: center;

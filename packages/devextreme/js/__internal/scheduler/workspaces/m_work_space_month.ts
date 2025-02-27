@@ -45,8 +45,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     };
   }
 
-  // TODO: temporary fix, in the future, if we replace table layout on div layout, getCellWidth method need remove. Details in T712431
-  // TODO: there is a test for this bug, when changing the layout, the test will also be useless
+  // temporary fix, in the future, if we replace table layout on div layout, getCellWidth method need remove. Details in T712431
+  // there is a test for this bug, when changing the layout, the test will also be useless
   getCellWidth() {
     return this.cache.get('cellWidth', () => {
       const DAYS_IN_WEEK = 7;

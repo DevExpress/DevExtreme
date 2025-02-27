@@ -60,7 +60,7 @@ class Widget<
 
   private _isReady?: boolean;
 
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
   static getOptionsFromContainer({ name, fullName, value }) {
     let options = {};
@@ -138,7 +138,7 @@ class Widget<
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _innerWidgetOptionChanged(innerWidget, args): void {
     const options = Widget.getOptionsFromContainer(args);
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions, @typescript-eslint/prefer-optional-chain
     innerWidget && innerWidget.option(options);
     this._options.cache(args.name, options);
@@ -201,14 +201,13 @@ class Widget<
     // eslint-disable-next-line no-void
     deferRender(() => (!this._disposed ? this._renderContentImpl() : void 0))
       // @ts-expect-error
-      // eslint-disable-next-line no-void, @typescript-eslint/no-unsafe-return
+      // eslint-disable-next-line no-void
       .done(() => (!this._disposed ? this._fireContentReadyAction() : void 0));
   }
 
   _renderContentImpl(): void {}
 
   _fireContentReadyAction(): Promise<void> | DeferredObj<void> | void {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return deferRender(() => this._contentReadyAction?.());
   }
 
@@ -273,7 +272,6 @@ class Widget<
   }
 
   _findActiveTarget($element: dxElementWrapper): dxElementWrapper {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return $element.find(this._activeStateUnit).not(`.${DISABLED_STATE_CLASS}`);
   }
 
@@ -342,7 +340,6 @@ class Widget<
   }
 
   _hasFocusClass(element?: dxElementWrapper): boolean {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const $focusTarget = $(element ?? this._focusTarget());
 
     return $focusTarget.hasClass(FOCUSED_STATE_CLASS);
@@ -396,12 +393,11 @@ class Widget<
     const keyboardListeners = this._getKeyboardListeners();
     const { onKeyboardHandled } = this.option();
 
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/prefer-optional-chain
     keyboardListeners.forEach((listener) => listener && listener._keyboardHandler(options));
 
-    // eslint-disable-next-line max-len
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions, @typescript-eslint/prefer-optional-chain
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     onKeyboardHandled && onKeyboardHandled(options);
 
     return true;
@@ -515,8 +511,7 @@ class Widget<
   }
 
   _findHoverTarget($el?: dxElementWrapper): dxElementWrapper | undefined {
-    // eslint-disable-next-line max-len
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/prefer-optional-chain
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     return $el && $el.closest(this._activeStateUnit || this._eventBindingTarget());
   }
 
@@ -525,14 +520,14 @@ class Widget<
 
     // eslint-disable-next-line no-param-reassign
     $previous = this._findHoverTarget($previous);
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions, @typescript-eslint/prefer-optional-chain
     $previous && $previous.toggleClass('dx-state-hover', false);
 
     if ($el && hoverStateEnabled && !disabled && !isActive) {
       const newHoveredElement = this._findHoverTarget($el);
 
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions, @typescript-eslint/prefer-optional-chain
       newHoveredElement && newHoveredElement.toggleClass('dx-state-hover', true);
     }
@@ -673,7 +668,6 @@ class Widget<
   }
 
   isReady(): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._ready();
   }
 
@@ -688,7 +682,7 @@ class Widget<
   registerKeyHandler(key: string, handler: () => void): void {
     const currentKeys = this._supportedKeys();
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, max-len
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @stylistic/max-len
     this._supportedKeys = (): Record<string, (e) => boolean> => extend(currentKeys, { [key]: handler });
   }
 }

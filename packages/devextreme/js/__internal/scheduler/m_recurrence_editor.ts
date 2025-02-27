@@ -36,7 +36,7 @@ const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
 
 const recurrentEditorNumberBoxWidth = 70;
 const recurrentEditorSelectBoxWidth = 120;
-const defaultRecurrenceTypeIndex = 1; // TODO default daily recurrence
+const defaultRecurrenceTypeIndex = 1; // default daily recurrence
 
 const frequenciesMessages = [
   /* {

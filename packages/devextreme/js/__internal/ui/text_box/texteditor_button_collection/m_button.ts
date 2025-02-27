@@ -38,7 +38,6 @@ export default class TextEditorButton {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _attachEvents(instance: any, $element: dxElementWrapper) {
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw 'Not implemented';
   }
 
@@ -46,7 +45,6 @@ export default class TextEditorButton {
     instance: any;
     $element: dxElementWrapper;
   } {
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw 'Not implemented';
   }
 
@@ -61,7 +59,6 @@ export default class TextEditorButton {
   }
 
   _isDisabled() {
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw 'Not implemented';
   }
 
@@ -78,7 +75,7 @@ export default class TextEditorButton {
       this.instance = null;
     }
 
-    $placeMarker && $placeMarker.remove();
+    $placeMarker?.remove();
   }
 
   render($container = this.$container) {

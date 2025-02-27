@@ -43,9 +43,9 @@ export function sha1(text: string): Uint8Array {
     let e = h[4];
 
     for (let j = 0; j < 80; j += 1) {
-      const [f, k] = j < 20 ? [(b & c) | (~b & d), 0x5A827999] // eslint-disable-line no-nested-ternary, max-len
-        : j < 40 ? [b ^ c ^ d, 0x6ED9EBA1] // eslint-disable-line no-nested-ternary, max-len
-          : j < 60 ? [(b & c) | (b & d) | (c & d), 0x8F1BBCDC] // eslint-disable-line no-nested-ternary, max-len
+      const [f, k] = j < 20 ? [(b & c) | (~b & d), 0x5A827999] // eslint-disable-line no-nested-ternary,@stylistic/max-len
+        : j < 40 ? [b ^ c ^ d, 0x6ED9EBA1] // eslint-disable-line no-nested-ternary, @stylistic/max-len
+          : j < 60 ? [(b & c) | (b & d) | (c & d), 0x8F1BBCDC] // eslint-disable-line @stylistic/max-len
             : [b ^ c ^ d, 0xCA62C1D6];
 
       const temp = leftRotate(a, 5) + f + e + k + w[j];

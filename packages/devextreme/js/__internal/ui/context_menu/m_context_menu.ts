@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import type { PositionConfig } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import animationPosition from '@js/common/core/animation/position';
@@ -787,7 +786,7 @@ class ContextMenu extends MenuBase {
     const $submenu = $itemElement.children(`.${DX_SUBMENU_CLASS}`);
     const submenuPosition = this._getSubmenuPosition($itemElement);
 
-    if (this._overlay && this._overlay.option('visible')) {
+    if (this._overlay?.option('visible')) {
       if (!isDefined(this._shownSubmenus)) {
         this._shownSubmenus = [];
       }
@@ -885,7 +884,7 @@ class ContextMenu extends MenuBase {
     if ($submenu.length === 0) {
       const $prevSubmenu = $($itemElement.parents(`.${DX_SUBMENU_CLASS}`)[0]);
       this._hideSubmenu($prevSubmenu);
-      if (!actionArgs.canceled && this._overlay && this._overlay.option('visible')) {
+      if (!actionArgs.canceled && this._overlay?.option('visible')) {
         this.option('visible', false);
       }
     } else {
@@ -1029,7 +1028,7 @@ class ContextMenu extends MenuBase {
         this._setSubMenuHeight($subMenu, position.of, false);
       }
       promise = this._overlay.show();
-      event && event.stopPropagation();
+      event?.stopPropagation();
 
       this._setAriaAttributes();
 
@@ -1079,7 +1078,7 @@ class ContextMenu extends MenuBase {
     const isInitialPosition = this._isInitialOptionValue('position');
     const positioningAction = this._createActionByOption('onPositioning');
 
-    if (jQEvent && jQEvent.preventDefault && isInitialPosition) {
+    if (jQEvent?.preventDefault && isInitialPosition) {
       position.of = jQEvent;
     }
 
@@ -1129,7 +1128,7 @@ class ContextMenu extends MenuBase {
 
   toggle(showing: boolean | undefined): Promise<unknown> {
     const visible = this.option('visible');
-
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     showing = showing === undefined ? !visible : showing;
 
     return this._renderVisibility(showing);
