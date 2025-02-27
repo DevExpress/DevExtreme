@@ -93,7 +93,6 @@ jobs:
       with:
         constel: ${{ matrix.CONSTEL }}
         useCsp: "false"
-        token: ${{ secrets.TMP_CHROME_PAT }}
 
   notify:
     runs-on: devextreme-shr2

@@ -31,9 +31,6 @@ inputs:
   useCsp:
     description: "Indicates if tests should run with Content Security Policy (CSP) enabled"
     default: "true"
-  token:
-    description: "Tmp PAT for downloading Chrome"
-    required: true
 
 runs:
   using: composite
@@ -58,7 +55,6 @@ runs:
       uses: ./.github/actions/setup-chrome
       with:
         chrome-version: '121.0.6167.184'
-        token: ${{ inputs.token }}
 
     - name: Setup Firefox profile
       if: ${{ inputs.browser == 'firefox' }}

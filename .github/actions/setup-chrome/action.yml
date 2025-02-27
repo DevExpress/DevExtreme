@@ -9,9 +9,6 @@ inputs:
   chrome-version:
     description: Chrome version to install
     default: "latest"
-  token:
-    description: github PAT
-    required: true
 
 runs:
   using: composite
@@ -30,19 +27,19 @@ runs:
       shell: bash
       env:
         CHROME_VERSION: ${{ inputs.chrome-version }}
-        GH_TOKEN: ${{ inputs.token }}
       run: |
         if [ -n "$CHROME_VERSION" ]; then
           sudo apt-get update
           sudo apt-get -y install libu2f-udev
-          
-          curl -sS https://webi.sh/gh | sh
-          source ~/.config/envman/PATH.env
-          
+        
           mkdir google-chrome-setup 
-          gh release download 1.0.0 --repo DevExpress/tmp-chrome-image --pattern "*.deb" --dir ./google-chrome-setup  
-          sudo dpkg -i google-chrome-setup/google-chrome-stable_121.0.6167.184-1_amd64.deb
+          pushd google-chrome-setup
+          npm init -y
+          npm set //npm.pkg.github.com/:_authToken="${{ github.token }}"  
+          npm i @devexpress/devextreme-google-chrome-image@1.0.0 --registry=https://npm.pkg.github.com
+          sudo dpkg -i node_modules/@devexpress/devextreme-google-chrome-image/google-chrome-stable_121.0.6167.184-1_amd64.deb
           google-chrome-stable --version
+          popd
         
           rm -rf google-chrome-setup  
         else

@@ -110,7 +110,6 @@ jobs:
           headless: 'true'
           useJQuery: 'false'
           useCsp: 'true'
-          token: ${{ secrets.TMP_CHROME_PAT }}
 
   qunit-tests-performance:
     needs: build
@@ -130,7 +129,6 @@ jobs:
           useJQuery: 'true'
           headless: 'false'
           useCsp: 'false'
-          token: ${{ secrets.TMP_CHROME_PAT }}
 
   qunit-tests-mobile-and-shadow-dom:
     needs: build
@@ -188,7 +186,6 @@ jobs:
           useShadowDom: ${{ matrix.useShadowDom }}
           headless: ${{ matrix.headless }}
           useCsp: 'true'
-          token: ${{ secrets.TMP_CHROME_PAT }}
 
   qunit-tests-firefox:
     needs: build
@@ -227,7 +224,6 @@ jobs:
           useJQuery: 'true'
           headless: 'true'
           useCsp: 'true'
-          token: ${{ secrets.TMP_CHROME_PAT }}
 
   qunit-tests-common:
     needs: build
@@ -252,7 +248,6 @@ jobs:
           useJQuery: 'true'
           headless: 'true'
           useCsp: 'true'
-          token: ${{ secrets.TMP_CHROME_PAT }}
 
   qunit-tests-no-csp:
     needs: build
@@ -277,7 +272,6 @@ jobs:
           useJQuery: 'true'
           headless: 'true'
           useCsp: 'false'
-          token: ${{ secrets.TMP_CHROME_PAT }}
 
   notify:
     runs-on: devextreme-shr2

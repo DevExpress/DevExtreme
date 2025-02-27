@@ -55,7 +55,6 @@ jobs:
               uses: ./devextreme/.github/actions/setup-chrome
               with:
                 chrome-version: '121.0.6167.184'
-                token: ${{ secrets.TMP_CHROME_PAT }}
 
             - uses: pnpm/action-setup@v3
               with:
@@ -77,7 +76,7 @@ jobs:
               run: |
                 corepack enable
                 pnpm install
-
+            
             - name: Run TestCafe tests
               working-directory: devextreme/apps/demos
               env:
