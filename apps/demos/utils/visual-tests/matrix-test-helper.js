@@ -434,7 +434,9 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
 
     if (framework === 'Angular') {
       // await waitForAngularLoading();
-      await t.expect(Boolean(document.querySelector('.dx-widget'))).ok({ timeout: 120000 });
+      ClientFunction(async () => {
+        await t.expect(Boolean(document.querySelector('.dx-widget'))).ok({ timeout: 120000 });
+      }, { dependencies: { t } })();
     }
   });
 
