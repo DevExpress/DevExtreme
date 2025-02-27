@@ -5,6 +5,8 @@ packages:
   - 'packages/devextreme/artifacts/npm/devextreme-dist'
 
 catalog:
+  devexpress-diagram: 2.2.15
+  devexpress-gantt: 4.1.58
   eslint: 9.18.0
   eslint-config-airbnb-typescript: 18.0.0
   eslint-plugin-i18n: 2.4.0
