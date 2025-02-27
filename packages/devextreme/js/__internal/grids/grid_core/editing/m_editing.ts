@@ -269,6 +269,7 @@ class EditingControllerImpl extends modules.ViewController {
     const needReset = changes?.length;
     if (needReset) {
       this._silentOption(EDITING_CHANGES_OPTION_NAME, []);
+      this._internalState.clear();
     }
   }
 
