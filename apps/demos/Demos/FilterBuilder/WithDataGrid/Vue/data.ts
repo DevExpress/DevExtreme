@@ -15,7 +15,8 @@ export const fields: DxFilterBuilderTypes.Field[] = [
     caption: 'ID',
     dataField: 'Product_ID',
     dataType: 'number',
-  }, {
+    width: 50,
+  } as DxFilterBuilderTypes.Field, {
     dataField: 'Product_Name',
     dataType: 'string',
   }, {
