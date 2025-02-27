@@ -5,7 +5,7 @@ const itemsDriveC = [{
   icon: 'activefolder',
   isDirectory: true,
   expanded: true,
-  parentId: '',
+  parentId: undefined,
 }, {
   id: '2',
   parentId: '1',
@@ -50,7 +50,7 @@ const itemsDriveC = [{
   expanded: true,
 }, {
   id: '8',
-  parentId: '',
+  parentId: undefined,
   name: 'Images',
   icon: 'activefolder',
   isDirectory: true,
@@ -71,7 +71,7 @@ const itemsDriveC = [{
   expanded: true,
 }, {
   id: '11',
-  parentId: '',
+  parentId: undefined,
   name: 'System',
   icon: 'activefolder',
   isDirectory: true,
@@ -92,14 +92,14 @@ const itemsDriveC = [{
   expanded: true,
 }, {
   id: '14',
-  parentId: '',
+  parentId: undefined,
   name: 'Description.rtf',
   icon: 'file',
   isDirectory: false,
   expanded: true,
 }, {
   id: '15',
-  parentId: '',
+  parentId: undefined,
   name: 'Description.txt',
   icon: 'file',
   isDirectory: false,
