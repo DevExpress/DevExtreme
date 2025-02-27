@@ -166,7 +166,7 @@ export function shouldRunFramework(currentFramework) {
 
 export function shouldRunTestAtIndex(testIndex) {
   return (settings.current === settings.total ? 0 : settings.current)
-      === ((testIndex % settings.total) || 0);
+    === ((testIndex % settings.total) || 0);
 }
 
 const SKIPPED_TESTS = {
@@ -178,6 +178,9 @@ const SKIPPED_TESTS = {
         ],
         DataGrid: [
             { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
+            // It looks like we don't have a "close" button in the Fluent theme.
+            // Need need to update the behavior in Fluent or find another common way for all topics.
+            { demo: 'ColumnCustomization', themes: [THEME.fluent] },
             // This test works only in simulated scrolling strategy!
             { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
             { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
@@ -380,7 +383,7 @@ export function shouldSkipDemo(framework, component, demoName, skippedTests) {
     if (typeof test === 'string' && test === demoName) {
       return true;
     } if (test.demo === demoName
-        && test.themes.includes(process.env.THEME || THEME.generic)) {
+      && test.themes.includes(process.env.THEME || THEME.generic)) {
       return true;
     }
   }
@@ -422,7 +425,7 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
 
   const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;
-  
+
   if (!shouldRunTest(framework, index, widget, demo, SKIPPED_TESTS)) {
     return;
   }

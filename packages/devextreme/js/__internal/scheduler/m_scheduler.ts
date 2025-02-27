@@ -43,6 +43,7 @@ import {
   getPreparedDataItems,
   isDateAndTimeView, isTimelineView, viewsUtils,
 } from '@ts/scheduler/r1/utils/index';
+import { macroTaskArray } from '@ts/scheduler/utils/index';
 
 import { AppointmentForm } from './appointment_popup/m_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
@@ -1279,6 +1280,9 @@ class Scheduler extends Widget<any> {
 
     this._asyncTemplatesTimers.forEach(clearTimeout);
     this._asyncTemplatesTimers = [];
+
+    // NOTE: Stop all scheduled macro tasks
+    macroTaskArray.dispose();
 
     // @ts-expect-error
     super._dispose();
