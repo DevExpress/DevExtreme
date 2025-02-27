@@ -386,7 +386,7 @@ export type Properties = dxSortableOptions;
 /** @deprecated use Properties instead */
 export type Options = dxSortableOptions;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -414,4 +414,4 @@ onInitialized?: ((e: InitializedEvent) => void);
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

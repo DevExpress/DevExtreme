@@ -49,11 +49,6 @@ export default Map;
  */
 
 /**
- * @name MapLocation
- * @hidden
- */
-
-/**
  * @name dxMapOptions.onContentReady
  * @hidden true
  * @action

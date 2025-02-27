@@ -193,7 +193,7 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
 
   get restAttributes(): Record<string, unknown> {
     const {
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       accessKey, activeStateEnabled, aria, children, className, classes, defaultValue, disabled, focusStateEnabled, height, hint, hoverStateEnabled, inputAttr, isDirty, isValid, name, onClick, onFocusIn, onKeyDown, readOnly, rtlEnabled, tabIndex, validationError, validationErrors, validationMessageMode, validationMessagePosition, validationStatus, value, valueChange, visible, width,
       ...restProps
     } = this.props;

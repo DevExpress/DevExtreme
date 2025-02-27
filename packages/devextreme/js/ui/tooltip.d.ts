@@ -94,7 +94,7 @@ export type Properties = dxTooltipOptions;
 /** @deprecated use Properties instead */
 export type Options = dxTooltipOptions;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -147,4 +147,4 @@ onShowing?: ((e: ShowingEvent) => void);
  */
 onShown?: ((e: ShownEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

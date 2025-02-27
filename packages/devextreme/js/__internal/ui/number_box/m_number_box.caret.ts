@@ -63,6 +63,7 @@ const _getDigitPositionByIndex = function (digitIndex, text) {
     result = regExp.exec(text);
   }
 
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
   return index === null ? text.length : index;
 };
 

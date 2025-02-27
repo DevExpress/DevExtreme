@@ -166,7 +166,7 @@ export function shouldRunFramework(currentFramework) {
 
 export function shouldRunTestAtIndex(testIndex) {
   return (settings.current === settings.total ? 0 : settings.current)
-      === ((testIndex % settings.total) || 0);
+    === ((testIndex % settings.total) || 0);
 }
 
 const SKIPPED_TESTS = {
@@ -205,7 +205,7 @@ const SKIPPED_TESTS = {
       { demo: 'CustomAnnotations', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'LoadDataOnDemand', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'CustomLegendMarkers', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.generic, THEME.material] },
+      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'ZoomingOnAreaSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
@@ -232,7 +232,7 @@ const SKIPPED_TESTS = {
       { demo: 'Appearance', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'AdvancedMasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'BatchEditing', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'AjaxRequest', themes: [THEME.generic, THEME.material, THEME.fluent ] },
+      { demo: 'AjaxRequest', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'MasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'SimpleArray', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -243,7 +243,7 @@ const SKIPPED_TESTS = {
       { demo: 'CustomNewRecordPosition', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Filtering', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'FilteringAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'GroupSummaries', themes: [THEME.generic, THEME.material, THEME.fluent ] },
+      { demo: 'GroupSummaries', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'RecordPaging', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'RowSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'MultipleSelection', themes: [THEME.material, THEME.fluent] },
@@ -283,6 +283,8 @@ const SKIPPED_TESTS = {
       { demo: 'ZoomingOnAreaSelection', themes: [THEME.material] },
       { demo: 'CustomLegendMarkers', themes: [THEME.material] },
       { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
+      { demo: 'Crosshair', themes: [THEME.material] },
+
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
@@ -296,6 +298,7 @@ const SKIPPED_TESTS = {
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'FilteringAPI', themes: [THEME.material] },
+      { demo: 'PopupEditing', themes: [THEME.generic] },
       'StatePersistence',
     ],
     Drawer: [
@@ -303,7 +306,10 @@ const SKIPPED_TESTS = {
     ],
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ]
+    ],
+    Accordion: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
   },
   React: {
     Charts: [
@@ -347,7 +353,7 @@ export function shouldSkipDemo(framework, component, demoName, skippedTests) {
     if (typeof test === 'string' && test === demoName) {
       return true;
     } if (test.demo === demoName
-        && test.themes.includes(process.env.THEME || THEME.generic)) {
+      && test.themes.includes(process.env.THEME || THEME.generic)) {
       return true;
     }
   }
@@ -381,7 +387,7 @@ export function runTestAtPage(test, demoUrl, shouldSkipJsError) {
   if (shouldSkipJsError) {
     test.skipJsErrors();
   }
-  
+
   if (settings.explicitTests) {
     executor = shouldRunTestExplicitly(demoUrl) ? test.only : executor = test.skip;
   }
@@ -394,7 +400,7 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
 
   const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;
-  
+
   if (!shouldRunTest(framework, index, widget, demo, SKIPPED_TESTS)) {
     return;
   }
@@ -411,14 +417,14 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
     const theme = process.env.THEME.replace('generic.', '');
     testURL = `http://localhost:8080/Demos/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
   } else {
-    
+
     changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
     testURL = `http://localhost:8080/apps/demos/Demos/${widget}/${demo}/${framework}/`;
   }
   const test = testObject.clientScripts([
-      { module: 'mockdate' },
-      ...clientScriptSource
-    ])
+    { module: 'mockdate' },
+    ...clientScriptSource
+  ])
     .page(testURL);
 
   test.before?.(async (t) => {

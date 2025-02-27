@@ -11,7 +11,7 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
+const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 
 let modulePrefix = '';
 // @ts-ignore

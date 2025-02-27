@@ -33,7 +33,7 @@ export class AppComponent {
   ];
 
   constructor() {
-    const url = 'https://js.devexpress.com/Demos/Mvc/api/TreeListTasks';
+    const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 
     this.tasksData = AspNetData.createStore({
       key: 'Task_ID',

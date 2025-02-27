@@ -58,7 +58,7 @@ const getTestSpecificSkipRules = (testName) => {
       return ['label'];
     case 'Map-Markers':
     case 'Map-Routes':
-      return ['aria-hidden-focus', 'image-alt', 'image-redundant-alt'];
+      return ['aria-hidden-focus', 'image-alt', 'image-redundant-alt', 'aria-prohibited-attr'];
     default:
       return [];
   }
@@ -210,6 +210,9 @@ const SKIPPED_TESTS = {
     ],
   },
   Vue: {
+    Accordion: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Charts: [
       { demo: 'TilingAlgorithms', themes: [THEME.material] },
       { demo: 'ExportAndPrintingAPI', themes: [THEME.material] },

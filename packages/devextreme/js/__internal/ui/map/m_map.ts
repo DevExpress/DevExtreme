@@ -161,7 +161,7 @@ const Map = Widget.inherit({
   },
 
   _cancelEvent(e) {
-    const cancelByProvider = this._provider && this._provider.isEventsCanceled(e) && !this.option('disabled');
+    const cancelByProvider = this._provider?.isEventsCanceled(e) && !this.option('disabled');
     if (cancelByProvider) {
       e.stopPropagation();
     }
@@ -382,7 +382,6 @@ const Map = Widget.inherit({
         const removing = optionValue.splice(index, 1)[0];
         removingValues.splice(removingIndex, 1, removing);
       } else {
-        // eslint-disable-next-line @typescript-eslint/no-throw-literal
         throw errors.log('E1021', titleize(optionName.substring(0, optionName.length - 1)), removingValue);
       }
     });

@@ -320,8 +320,7 @@ const ColorBox = (DropDownEditor as any).inherit({
   },
 
   _optionChanged(args) {
-    const { value } = args;
-    const { name } = args;
+    const { name, value } = args;
 
     switch (name) {
       case 'value':

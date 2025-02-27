@@ -355,7 +355,7 @@ export type Options<
     TKey = any,
 > = Properties<TItem, TKey>;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -419,4 +419,4 @@ onSelectionChanging?: ((e: SelectionChangingEvent) => void);
  */
 onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

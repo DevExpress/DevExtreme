@@ -8,7 +8,7 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/SchedulerData';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/SchedulerData';
 
 let modulePrefix = '';
 // @ts-ignore
@@ -25,10 +25,10 @@ export class AppComponent {
 
   appointmentsData: AspNetData.CustomStore = AspNetData.createStore({
     key: 'AppointmentId',
-    loadUrl: `${url}/Get`,
-    insertUrl: `${url}/Post`,
-    updateUrl: `${url}/Put`,
-    deleteUrl: `${url}/Delete`,
+    loadUrl: url,
+    insertUrl: url,
+    updateUrl: url,
+    deleteUrl: url,
     onBeforeSend(method, ajaxOptions) {
       ajaxOptions.xhrFields = { withCredentials: true };
     },

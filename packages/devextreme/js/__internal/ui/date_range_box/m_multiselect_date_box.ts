@@ -19,6 +19,7 @@ export interface MultiselectDateBoxProperties extends Properties {
   _showValidationMessage?: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare class ExtendedDateBox extends DateBoxBase<MultiselectDateBoxProperties> {
   reset(value?: Date | number | string | null): void;
 }

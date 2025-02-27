@@ -14,6 +14,8 @@ runManualTest('SelectBox', 'GroupedItems', ['jQuery', 'React', 'Vue', 'Angular']
     const SELECT_BOX_CLASS = 'dx-selectbox';
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+    await t.wait(1000);
+
     await t
       .click($(`.${SELECT_BOX_CLASS}`).nth(0))
       .wait(200);
