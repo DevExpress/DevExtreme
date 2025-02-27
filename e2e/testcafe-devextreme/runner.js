@@ -161,7 +161,7 @@ function setShadowDom(args) {
 function expandBrowserAlias(browser, componentFolder) {
     switch(browser) {
         case 'chrome:devextreme-shr2':
-            return 'chrome:headless --disable-gpu --window-size=1200,800';
+            return 'chrome:headless --disable-gpu --window-size=1200,800 --hide-scrollbars';
         case 'chrome:docker':
             return 'chromium:headless --no-sandbox --disable-gpu --window-size=1200,800';
     }
