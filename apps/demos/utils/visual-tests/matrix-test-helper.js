@@ -1,6 +1,6 @@
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
 import { gitHubIgnored } from './github-ignored-list';
 
@@ -434,9 +434,7 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
 
     if (framework === 'Angular') {
       // await waitForAngularLoading();
-      ClientFunction(async () => {
-        await t.expect(Boolean(document.querySelector('.dx-widget'))).ok({ timeout: 120000 });
-      }, { dependencies: { t } })();
+      await t.expect(Boolean(Selector('.dx-widget'))).ok({ timeout: 120000 });
     }
   });
 
