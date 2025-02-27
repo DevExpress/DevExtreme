@@ -57,7 +57,7 @@ function setStateValue(
 ) {
   newData.CityID = null;
 
-  this.defaultSetCellValue!(newData, value, currentRowData);
+  this.defaultSetCellValue?.(newData, value, currentRowData);
 }
 
 const getFilteredCities = (options: { data: City }) => ({

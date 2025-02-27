@@ -1023,8 +1023,8 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       padding-top: $generic-grid-base-cell-padding + 1px;
     }
 
-    .dx-selection.dx-row:not(.dx-edit-row) > td:not(.dx-editor-cell, .dx-master-detail-cell),
-    .dx-row-focused.dx-row:not(.dx-edit-row) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+    .dx-row.dx-selection:not(.dx-edit-row):not(.dx-row-lines) > td:not(.dx-editor-cell, .dx-master-detail-cell),
+    .dx-row.dx-row-focused:not(.dx-edit-row):not(.dx-row-lines) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
       padding-bottom: $generic-grid-base-cell-padding - 1px;
     }
 
