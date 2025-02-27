@@ -77,7 +77,7 @@ import {
 
 const showResources = ref(true);
 const disableContextMenu = ref(false);
-const contextMenuItems: (DxGanttTypes.ContextMenuItem | DxGanttTypes.GanttPredefinedContextMenuItem)[]= [
+const contextMenuItems = [
   'addTask',
   'taskDetails',
   'deleteTask',
@@ -85,7 +85,7 @@ const contextMenuItems: (DxGanttTypes.ContextMenuItem | DxGanttTypes.GanttPredef
     name: 'ToggleDisplayOfResources',
     text: 'Toggle Display of Resources',
   },
-];
+] as DxGanttTypes.GanttPredefinedContextMenuItem[];
 const contextMenuActualItems = ref(contextMenuItems);
 
 function onContextMenuPreparing(e) {

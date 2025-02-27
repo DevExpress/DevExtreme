@@ -53,7 +53,7 @@ const currentDate = ref(new Date(2021, 3, 26));
 const tasks = ref<Task[]>(tasksData);
 const appointments = ref<DxSchedulerTypes.Appointment[]>(appointmentsData);
 
-function onAppointmentRemove({ itemData }: DxSchedulerTypes.AppointmentDraggingRemoveEvent) {
+function onAppointmentRemove({ itemData }: any) {
   const index = appointments.value.indexOf(itemData);
 
   if (index >= 0) {
@@ -62,7 +62,7 @@ function onAppointmentRemove({ itemData }: DxSchedulerTypes.AppointmentDraggingR
     tasks.value = [...tasks.value, itemData];
   }
 }
-function onAppointmentAdd(e: DxSchedulerTypes.AppointmentDraggingAddEvent) {
+function onAppointmentAdd(e: any) {
   const index = tasks.value.indexOf(e.fromData);
 
   if (index >= 0) {

@@ -68,7 +68,7 @@ const employeesStore: CustomStore<Employee, number> = createStore({
   },
 });
 
-const onReorder = (e: DxDataGridTypes.RowDraggingReorderEvent<Task>) => {
+const onReorder = (e: any) => {
   e.promise = processReorder(e);
 };
 

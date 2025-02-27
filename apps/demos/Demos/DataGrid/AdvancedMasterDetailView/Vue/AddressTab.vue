@@ -23,11 +23,11 @@ defineProps<{
 }>();
 
 const items = [
-  { dataField: 'Address'},
-  { dataField: 'City'},
-  { dataField: 'Region'},
-  { dataField: 'PostalCode'},
-  { dataField: 'Country'},
+  { dataField: 'Address' },
+  { dataField: 'City' },
+  { dataField: 'Region' },
+  { dataField: 'PostalCode' },
+  { dataField: 'Country' },
   { dataField: 'Phone' },
 ];
 

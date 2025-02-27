@@ -64,7 +64,7 @@ const dataSource = new DataSource({
 
 const filterExpr = ['Status', '=', props.status];
 
-const onAdd = (e: DxDataGridTypes.RowDraggingAddEvent) => {
+const onAdd = (e: any) => {
   const key = e.itemData.ID;
   const values = { Status: e.toData };
 
