@@ -54,13 +54,6 @@ Promise<void> => ClientFunction(
   },
 )();
 
-export const scrollTo = ClientFunction((x, y) => {
-  const instance = ($('#container') as any).dxScheduler('instance');
-  const scrollable = instance.getWorkSpaceScrollable();
-
-  scrollable.scrollTo({ y, x });
-});
-
 export const checkSelectionWhenFocusedInViewport = async (
   t: TestController,
   scheduler: Scheduler,
