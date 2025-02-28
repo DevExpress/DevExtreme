@@ -73,41 +73,33 @@ const subscribes = {
   },
 
   updateAppointmentAfterDrag({
-    event, element, rawAppointment, newCellIndex, oldCellIndex,
+    event, element, rawAppointment, isDropToTheSameCell, isDropToSelfScheduler,
   }) {
     const info = utils.dataAccessors.getAppointmentInfo(element);
+    // NOTE: enrich target appointment with additional data from the source
+    // in case of one appointment of series will change
+    const targetedRawAppointment = extend({}, rawAppointment, this._getUpdatedData(rawAppointment));
 
-    const appointment = createAppointmentAdapter(rawAppointment, this._dataAccessors, this.timeZoneCalculator);
-    const targetedAppointment = createAppointmentAdapter(
-      extend({}, rawAppointment, this._getUpdatedData(rawAppointment)),
-      this._dataAccessors,
-      this.timeZoneCalculator,
-    );
-    const targetedRawAppointment = targetedAppointment.source();
-
-    const becomeAllDay = targetedAppointment.allDay;
-    const wasAllDay = appointment.allDay;
-
-    const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow()
-            && (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
+    const fromAllDay = Boolean(rawAppointment.allDay);
+    const toAllDay = Boolean(targetedRawAppointment.allDay);
+    const isDropBetweenAllDay = this._workSpace.supportAllDayRow() && fromAllDay !== toAllDay;
 
     const isDragAndDropBetweenComponents = event.fromComponent !== event.toComponent;
 
-    if (newCellIndex === -1) {
-      if (!isDragAndDropBetweenComponents) { // TODO dragging inside component
-        this._appointments.moveAppointmentBack(event);
-      }
+    const onCancel = (): void => {
+      this._appointments.moveAppointmentBack(event);
+    };
+    if (!isDropToSelfScheduler && isDragAndDropBetweenComponents) {
+      // drop between schedulers
       return;
     }
 
-    if ((newCellIndex !== oldCellIndex) || isDragAndDropBetweenComponents || movedBetweenAllDayAndSimple) {
+    if (isDropToSelfScheduler && (!isDropToTheSameCell || isDragAndDropBetweenComponents || isDropBetweenAllDay)) {
       this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.startDate, () => {
-        this._updateAppointment(rawAppointment, targetedRawAppointment, function () {
-          this._appointments.moveAppointmentBack(event);
-        }, event);
+        this._updateAppointment(rawAppointment, targetedRawAppointment, onCancel, event);
       }, undefined, undefined, event);
     } else {
-      this._appointments.moveAppointmentBack(event);
+      onCancel();
     }
   },
 
@@ -150,7 +142,7 @@ const subscribes = {
     const { allDay } = options;
     const groups = this._getCurrentViewOption('groups');
 
-    if (groups && groups.length) {
+    if (groups?.length) {
       if (allDay || this.getLayoutManager().getRenderingStrategyInstance()._needHorizontalGroupBounds()) {
         const horizontalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
         return {
