@@ -175,8 +175,8 @@ jobs:
           path: apps/demos/changed-files.json
           retention-days: 1
 
-  lint:
-    name: ${{ matrix.name }}
+  check-code:
+    # name: ${{ matrix.name }}
     needs:
       - build-devextreme
       - get-changes
@@ -184,13 +184,13 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 60
 
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: Check code base (TS and Lint)
-            command: pnpx nx lint-non-demos
-            check-vue-ts: pnpm run ts-check-vue
+   # strategy:
+   #   fail-fast: false
+   #   matrix:
+   #     include:
+   #       - name: Check code base (TS and Lint)
+   #         command: pnpx nx lint-non-demos
+   #         check-vue-ts: pnpm run ts-check-vue
           # NOTE: skipped due to enormous number of errors
           # - name: Lint demos (1/4)
           #   command: CONSTEL=1/4 npm run lint-demos
@@ -262,11 +262,11 @@ jobs:
       env:
         CHANGEDFILEINFOSPATH: changed-files.json
         DEBUG: 'eslint:cli-engine,stylelint:standalone'
-      run: ${{ matrix.command }}
+      run: npx nx lint-non-demos
 
     - name: Run check TS for Vue
       working-directory: apps/demos
-      run: ${{ matrix.check-vue-ts }}
+      run: pnpm run ts-check-vue
 
   check_generated_demos:
     name: ${{ matrix.name }}
