@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { mount } from '@vue/test-utils';
 import { defineComponent, nextTick } from 'vue';
 

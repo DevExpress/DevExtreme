@@ -4,7 +4,7 @@ import tsParser from "@typescript-eslint/parser";
 import babelParser from '@babel/eslint-parser';
 import importPlugin from "eslint-plugin-import";
 import spellcheck from "eslint-plugin-spellcheck";
-import i18n from "eslint-plugin-i18n";
+import i18N from "eslint-plugin-i18n";
 import noOnlyTests from "eslint-plugin-no-only-tests";
 import { rules as stylisticRules } from '@eslint-stylistic/metadata';
 import stylistic from '@stylistic/eslint-plugin';
@@ -36,6 +36,15 @@ const processDevExtremeRules = devExtremeRules => (
 export default [
     ...compat.extends('devextreme/spell-check'),
     {
+        plugins: {
+            import: importPlugin,
+            spellcheck,
+            'no-only-tests': noOnlyTests,
+            i18n: i18N,
+            '@stylistic': stylistic,
+        },
+    },
+    {
         files: ["**/*.js"],
         languageOptions: {
             parser: babelParser,
@@ -51,12 +60,6 @@ export default [
                 module: true,
                 exports: true,
             },
-        },
-        plugins: {
-            import: importPlugin,
-            spellcheck,
-            i18n,
-            "no-only-tests": noOnlyTests,
         },
         ...importPlugin.flatConfigs.recommended,
         rules: {
@@ -147,8 +150,6 @@ export default [
         },
         plugins: { 
           "@typescript-eslint": ts,
-          '@stylistic': stylistic,
-          i18n,
         },
         rules: {
             "prefer-regex-literals": "off",
@@ -193,7 +194,7 @@ export default [
         files: ["**/*.d.ts"],
         plugins: {
           '@stylistic': stylistic,
-          i18n
+          i18n: i18N,
         },
         languageOptions: {
             parser: tsParser,

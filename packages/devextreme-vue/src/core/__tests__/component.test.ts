@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/init-declarations */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable @stylistic/max-len */
+/* eslint-disable @typescript-eslint/no-shadow */
 import { PatchFlags } from '@vue/shared';
 import { mount } from '@vue/test-utils';
 import * as events from 'devextreme/events';
@@ -1368,7 +1373,7 @@ describe('component rendering', () => {
       const config = {
         globalProperties: { name: 'test' },
       };
-      // @ts-expect-error
+      // @ts-expect-error config
       mount(vm, { global: { config } });
       renderItemTemplate();
       expect(templateGlobalProperties).toEqual(config.globalProperties);

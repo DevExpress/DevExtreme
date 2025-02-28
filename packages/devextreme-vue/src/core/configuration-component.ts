@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/named
+/* eslint-disable @stylistic/max-len */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import { getNodeOptions, getNodeTypeOfComponent } from './vue-helper';
 
@@ -26,87 +26,87 @@ interface IComponentInfo {
 }
 
 function getConfig(vueInstance: Pick<ComponentPublicInstance, '$'>): Configuration | undefined {
-    const componentOptions = getNodeOptions(vueInstance) as any as IConfigurable;
-    if(!componentOptions) {
-        return;
-    }
+  const componentOptions = getNodeOptions(vueInstance) as any as IConfigurable;
+  if (!componentOptions) {
+    return;
+  }
 
-    return componentOptions.$_config || (vueInstance as any as IConfigurable).$_config;
+  return componentOptions.$_config || (vueInstance as any as IConfigurable).$_config;
 }
 
 function getInnerChanges(vueInstance: Pick<ComponentPublicInstance, '$'>): any {
-    const componentOptions = getNodeOptions(vueInstance) as any as IConfigurable;
-    if(!componentOptions) {
-        return;
-    }
+  const componentOptions = getNodeOptions(vueInstance) as any as IConfigurable;
+  if (!componentOptions) {
+    return;
+  }
 
-    return componentOptions.$_innerChanges || (vueInstance as any as IConfigurable).$_innerChanges;
+  return componentOptions.$_innerChanges || (vueInstance as any as IConfigurable).$_innerChanges;
 }
 
 function initOptionChangedFunc(
-    config,
-    props: any,
-    vueInstance: Pick<ComponentPublicInstance, '$' | '$props' | '$emit' | '$options'>,
-    innerChanges: any,
+  config,
+  props: any,
+  vueInstance: Pick<ComponentPublicInstance, '$' | '$props' | '$emit' | '$options'>,
+  innerChanges: any,
 ) {
-    if(!config) {
-        return;
-    }
+  if (!config) {
+    return;
+  }
 
-    config.init(Object.keys(props));
-    if(vueInstance) {
-        setEmitOptionChangedFunc(config, vueInstance, innerChanges);
-    }
+  config.init(Object.keys(props));
+  if (vueInstance) {
+    setEmitOptionChangedFunc(config, vueInstance, innerChanges);
+  }
 }
 
 function getComponentInfo({ name, isCollectionItem, ownerConfig }: Configuration, removed?: boolean): IComponentInfo {
-    const parentPath = ownerConfig && ownerConfig.fullPath;
-    const optionPath = name && parentPath ? `${parentPath}.${name}` : name || '';
+  const parentPath = ownerConfig?.fullPath;
+  const optionPath = name && parentPath ? `${parentPath}.${name}` : name || '';
 
-    return {
-        optionPath,
-        isCollection: isCollectionItem,
-        removed,
-    };
+  return {
+    optionPath,
+    isCollection: isCollectionItem,
+    removed,
+  };
 }
 
 function initDxConfiguration() {
-    return defineComponent({
-        beforeMount() {
-            const thisComponent = this as any as IConfigurationComponent;
-            const config = getConfig(thisComponent) as Configuration;
-            const innerChanges = getInnerChanges(thisComponent);
-            initOptionChangedFunc(config, getNodeTypeOfComponent(thisComponent).props, thisComponent, innerChanges);
-            bindOptionWatchers(config, this, innerChanges);
-        },
+  return defineComponent({
+    beforeMount() {
+      const thisComponent = this as any as IConfigurationComponent;
+      const config = getConfig(thisComponent) as Configuration;
+      const innerChanges = getInnerChanges(thisComponent);
+      initOptionChangedFunc(config, getNodeTypeOfComponent(thisComponent).props, thisComponent, innerChanges);
+      bindOptionWatchers(config, this, innerChanges);
+    },
 
-        mounted() {
-            if((this.$parent as any).$_instance) {
-                (this.$parent as any).$_config.componentsCountChanged
-                    .push(getComponentInfo(getConfig(this as any as IConfigurationComponent) as Configuration));
-            }
-        },
+    mounted() {
+      if ((this.$parent as any).$_instance) {
+        (this.$parent as any).$_config.componentsCountChanged
+          .push(getComponentInfo(getConfig(this as any as IConfigurationComponent) as Configuration));
+      }
+    },
 
-        beforeUnmount() {
-            const config = getConfig(this as any as IConfigurationComponent) as Configuration;
-            if(config) {
-                (this.$parent as any).$_config.componentsCountChanged
-                    .push(getComponentInfo(config, true));
-            }
-        },
+    beforeUnmount() {
+      const config = getConfig(this as any as IConfigurationComponent) as Configuration;
+      if (config) {
+        (this.$parent as any).$_config.componentsCountChanged
+          .push(getComponentInfo(config, true));
+      }
+    },
 
-        render(): null {
-            return null;
-        },
-    });
+    render(): null {
+      return null;
+    },
+  });
 }
 
 export {
-    initDxConfiguration,
-    IComponentInfo,
-    IConfigurable,
-    IConfigurationComponent,
-    initOptionChangedFunc,
-    getConfig,
-    getInnerChanges,
+  initDxConfiguration,
+  IComponentInfo,
+  IConfigurable,
+  IConfigurationComponent,
+  initOptionChangedFunc,
+  getConfig,
+  getInnerChanges,
 };
