@@ -6,9 +6,9 @@ import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
+import type { Properties } from '@js/ui/scroll_view';
 import { convertToLocation } from '@ts/ui/scroll_view/utils/convert_location';
 
 import Scrollable from '../scroll_view/m_scrollable';
@@ -22,9 +22,12 @@ const DATEVIEW_ROLLER_ITEM_SELECTED_CLASS = 'dx-dateview-item-selected';
 const DATEVIEW_ROLLER_ITEM_SELECTED_FRAME_CLASS = 'dx-dateview-item-selected-frame';
 const DATEVIEW_ROLLER_ITEM_SELECTED_BORDER_CLASS = 'dx-dateview-item-selected-border';
 
+export interface DateViewRollerProperties extends Properties {}
+
 class DateViewRoller extends Scrollable {
-  _getDefaultOptions() {
-    return extend(super._getDefaultOptions(), {
+  _getDefaultOptions(): DateViewRollerProperties {
+    return {
+      ...super._getDefaultOptions(),
       showScrollbar: 'never',
       useNative: false,
       selectedIndex: 0,
@@ -34,7 +37,7 @@ class DateViewRoller extends Scrollable {
       onClick: null,
       onSelectedIndexChanged: null,
       scrollByContent: true,
-    });
+    };
   }
 
   _init(): void {

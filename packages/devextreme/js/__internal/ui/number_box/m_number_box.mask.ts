@@ -36,7 +36,9 @@ const CARET_TIMEOUT_DURATION = 0;
 export interface NumberBoxMaskProperties extends Omit<Properties, 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' |
 'onKeyDown' | 'onKeyUp' | 'onPaste' | 'onValueChanged' | 'onContentReady' | 'onDisposing' |
 'onOptionChanged' | 'onInitialized' > {
-  useMaskBehavior: boolean;
+  useMaskBehavior?: boolean;
+
+  displayValueFormatter?: ((value: any) => string);
 }
 
 class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
@@ -546,7 +548,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     return inRange(value, min, max);
   }
 
-  _setInputText(text) {
+  _setInputText(text): void {
     const normalizedText = number.convertDigits(text, true);
     const newCaret = getCaretAfterFormat(this._getInputVal(), normalizedText, this._caret(), this._getFormatPattern());
 
@@ -561,7 +563,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
 
   _useMaskBehavior(): boolean {
     const { useMaskBehavior } = this.option();
-
+    // @ts-expect-error ts-error
     return !!this.option('format') && useMaskBehavior;
   }
 
