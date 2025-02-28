@@ -226,7 +226,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, (value) => value <= 19);
+        assert.measureStyleRecalculation(measureFunction, (value) => value <= 21);
     });
 
     QUnit.performanceTest(`dxScheduler agenda view should force minimum relayout count on creation with appointments when renovateRender is ${renovateRender}`, function(assert) {

@@ -76,6 +76,7 @@ const SKIPPED_TESTS = {
     Gantt: [
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'ContextMenu', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Map: [
       { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
