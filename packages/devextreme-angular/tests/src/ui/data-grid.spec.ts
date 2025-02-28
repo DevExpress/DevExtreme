@@ -186,7 +186,8 @@ describe('DxDataGrid', () => {
       fail();
     } else {
       expect(column?.columns?.length).toBe(1);
-      expect(column?.columns?.[0].dataField).toBe('Field');
+      // eslint-disable-next-line
+      expect(column?.columns?.[0]['dataField']).toBe('Field');
     }
   });
 

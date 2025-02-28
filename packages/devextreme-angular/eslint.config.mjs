@@ -16,7 +16,13 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: ['src/index.ts', 'src/common', 'src/ui', '**/node_modules', '**/dist'],
+    ignores: [
+      'src/index.ts',
+      'src/common',
+      'src/ui',
+      'tests/src/server/component-names.ts',
+      '**/node_modules',
+      '**/dist'],
   },
   {
     plugins: {
@@ -146,6 +152,7 @@ export default [
       '@typescript-eslint/no-useless-constructor': 'warn',
       '@typescript-eslint/no-empty-function': 'warn',
       '@typescript-eslint/require-await': 'warn',
+      '@typescript-eslint/no-floating-promises': 'warn',
       'import/order': 'warn',
       'no-restricted-globals': 'warn',
       'no-self-assign': 'warn',

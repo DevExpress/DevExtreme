@@ -73,7 +73,7 @@ describe('DxTagBox', () => {
     fixture.detectChanges();
     expect(testSpy).toHaveBeenCalledTimes(0);
     const { instance } = fixture.componentInstance.tagBox;
-    const removeButton = instance.element().querySelector('.dx-tag-remove-button');
+    const removeButton: any = instance.element().querySelector('.dx-tag-remove-button');
     removeButton.click();
     fixture.detectChanges();
     expect(testSpy).toHaveBeenCalledTimes(1);
