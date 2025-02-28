@@ -1,4 +1,5 @@
 import Color from '@js/color';
+import type { ApplyValueMode } from '@js/common';
 import { locate, move } from '@js/common/core/animation/translator';
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
@@ -13,11 +14,11 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getHeight, getOuterHeight, getWidth } from '@js/core/utils/size';
 import Draggable from '@js/ui/draggable';
-import NumberBox from '@js/ui/number_box';
-import TextBox from '@js/ui/text_box';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { EditorProperties } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
+import NumberBox from '@ts/ui/number_box/m_number_box';
+import TextBox from '@ts/ui/text_box/m_text_box';
 
 const COLOR_VIEW_CLASS = 'dx-colorview';
 const COLOR_VIEW_CONTAINER_CLASS = 'dx-colorview-container';
@@ -63,13 +64,17 @@ const TEXT_EDITOR_INPUT = 'dx-texteditor-input';
 const BLACK_COLOR = '#000000';
 
 export interface ColorViewProperties extends EditorProperties {
-  keyStep: number;
+  keyStep?: number;
 
   matchValue?: string;
 
   editAlphaChannel?: boolean;
 
-  onEnterKeyPressed?: () => void;
+  onEnterKeyPressed?: (event?) => void;
+
+  applyValueMode?: ApplyValueMode;
+
+  target?: string | Element | dxElementWrapper | null;
 }
 
 class ColorView extends Editor<ColorViewProperties> {
@@ -139,6 +144,7 @@ class ColorView extends Editor<ColorViewProperties> {
       let step = 100 / that._paletteWidth;
       if (e.shiftKey) {
         const { keyStep } = that.option();
+        // @ts-expect-error ts-error
         step *= keyStep;
       }
 
@@ -161,7 +167,7 @@ class ColorView extends Editor<ColorViewProperties> {
       let step = 100 / that._paletteHeight;
       if (e.shiftKey) {
         const { keyStep } = that.option();
-
+        // @ts-expect-error ts-error
         step *= keyStep;
       }
 
@@ -192,6 +198,7 @@ class ColorView extends Editor<ColorViewProperties> {
       let step = 360 / (that._hueScaleWrapperHeight - that._hueScaleHandleHeight);
       if (e.shiftKey) {
         const { keyStep } = that.option();
+        // @ts-expect-error ts-error
         step *= keyStep;
       }
 
@@ -208,6 +215,7 @@ class ColorView extends Editor<ColorViewProperties> {
       let step = 1 / that._alphaChannelScaleWorkWidth;
       if (e.shiftKey) {
         const { keyStep } = that.option();
+        // @ts-expect-error ts-error
         step *= keyStep;
       }
 
@@ -735,9 +743,7 @@ class ColorView extends Editor<ColorViewProperties> {
   }
 
   _renderHexInput(): void {
-    // @ts-expect-error ts-error
     this._hexInput = TextBox.getInstance(
-      // @ts-expect-error ts-error
       this._renderEditorWithLabel(this.hexInputOptions())
         .appendTo(this._$controlsContainer)
         .find('.dx-textbox'),
@@ -853,7 +859,7 @@ class ColorView extends Editor<ColorViewProperties> {
     const previousTransparency = this._alphaChannelInput.option('value');
     transparency = Math.max(transparency, 0);
     transparency = Math.min(transparency, 1);
-
+    // @ts-expect-error ts-error
     if (transparency === previousTransparency) {
       this._updateByDrag = false;
     } else {
@@ -898,6 +904,7 @@ class ColorView extends Editor<ColorViewProperties> {
     let newColor;
 
     if (isHex) {
+      // eslint-disable-next-line @typescript-eslint/no-base-to-string
       newColor = this._validateHex(`#${this._hexInput.option('value')}`);
     } else {
       rgba = this._validateRgb();

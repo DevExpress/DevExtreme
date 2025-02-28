@@ -732,8 +732,7 @@ class TagBox<
     this._renderTags()
     // @ts-expect-error ts-error
       .done(() => {
-        // @ts-expect-error ts-error
-        this._popup && this._popup.refreshPosition();
+        this._popup?.refreshPosition();
         d.resolve();
       })
       .fail(d.reject);
@@ -1441,7 +1440,7 @@ class TagBox<
 
     const useButtons = applyValueMode === 'useButtons';
     const valueIndex = this._valueIndex(value);
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+
     const values = (useButtons ? this._list?.option('selectedItemKeys') || [] : this._getValue()).slice();
 
     if (valueIndex >= 0) {
