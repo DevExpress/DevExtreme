@@ -127,7 +127,7 @@ jobs:
           { componentFolder: "filterBuilder", name: "filterBuilder - fluent", theme: 'fluent.blue.light' },
         ]
     runs-on: devextreme-shr2
-    timeout-minutes: 90
+    timeout-minutes: 180
 
     steps:
     - name: Set machine timezone
@@ -141,7 +141,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '121.0.6167.184'
+        chrome-version: '133.0.6943.53'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
