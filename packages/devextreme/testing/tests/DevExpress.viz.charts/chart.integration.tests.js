@@ -2387,6 +2387,45 @@ QUnit.test('Series should hide the points when all the points are overlapped', f
     assert.ok(series[2].getVisiblePoints()[0].graphic);
 });
 
+[true, false].forEach((pointVisible) => {
+    QUnit.test(`Series usePointsToDefineAutoHiding method should return ${pointVisible} when series points are ${pointVisible ? 'visible' : 'hidden'} (T1256753)`, function(assert) {
+        const dataSource = [{
+            country: 'USA',
+            val1: 10,
+            val2: 10,
+        }, {
+            country: 'China',
+            val1: 10,
+            val2: 10,
+        }, {
+            country: 'Russia',
+            val1: 10,
+            val2: 10,
+        }];
+
+        const chart = moduleSetup.createChart.call(this, {
+            dataSource,
+            commonSeriesSettings: {
+                argumentField: 'country',
+                point: { visible: pointVisible }
+            },
+            series: [
+                { valueField: 'val1', name: 'val1' },
+            ],
+        });
+
+        const series = chart.getAllSeries()[0];
+        const usePointsToDefineAutoHiding = series.usePointsToDefineAutoHiding;
+        const usePointsToDefineAutoHidingSpy = sinon.spy(function() { return usePointsToDefineAutoHiding.apply(series, arguments); });
+
+        series.usePointsToDefineAutoHiding = usePointsToDefineAutoHidingSpy;
+
+        chart.resetVisualRange();
+
+        assert.equal(usePointsToDefineAutoHidingSpy.getCall(0).returnValue, pointVisible);
+    });
+});
+
 QUnit.test('Series should not hide points when not all points are overlapped in the series', function(assert) {
     const dataSource = [{
         country: 'USA',
