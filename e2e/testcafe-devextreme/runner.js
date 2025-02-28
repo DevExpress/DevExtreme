@@ -8,15 +8,15 @@ const parseArgs = require('minimist');
 const testPageUtils = require('./helpers/clearPage');
 require('nconf').argv();
 
-const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new Promise((resolve) => {
+const changeTheme = async(t, themeName) => createTestCafe.ClientFunction(() => new Promise((resolve) => {
     // eslint-disable-next-line no-undef
     window.DevExpress.ui.themes.ready(resolve);
     // eslint-disable-next-line no-undef
     window.DevExpress.ui.themes.current(themeName);
 }),
-{ dependencies: { themeName } })();
+{ dependencies: { themeName } }).with({ boundTestRun: t })();
 
-const addShadowRootTree = async function() {
+const addShadowRootTree = async(t) => {
     await createTestCafe.ClientFunction(() => {
         const root = document.querySelector('#parentContainer');
         const childNodes = root.childNodes;
@@ -29,7 +29,7 @@ const addShadowRootTree = async function() {
         shadowContainer.append.apply(shadowContainer, Array.from(childNodes));
 
         root.shadowRoot.appendChild(shadowContainer);
-    })();
+    }).with({ boundTestRun: t })();
 };
 
 let testCafe;
@@ -117,13 +117,16 @@ createTestCafe({
 
         runOptions.hooks = {
             test: {
-                before: async() => {
+                before: async(t) => {
+                    // TODO: Move to a single const (look at restoreBrowserSize helper module)
+                    await t.resizeWindow(1200, 800);
+
                     if(args.shadowDom) {
-                        await addShadowRootTree();
+                        await addShadowRootTree(t);
                     }
 
                     if(args.theme) {
-                        await changeTheme(args.theme);
+                        await changeTheme(t, args.theme);
                     }
                 },
                 after: async() => {
