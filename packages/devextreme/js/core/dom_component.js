@@ -10,7 +10,7 @@ import { cleanDataRecursive } from './element_data';
 import { each } from './utils/iterator';
 import { extend } from './utils/extend';
 import { getPublicElement } from '../core/element';
-import { grep, noop } from './utils/common';
+import { grep, noop, uiLayerInitialized } from './utils/common';
 import { isString, isDefined, isFunction } from './utils/type';
 import { hasWindow } from '../core/utils/window';
 import { resize as resizeEvent, visibility as visibilityEvents } from '../events/short';
@@ -54,6 +54,7 @@ const DOMComponent = Component.inherit({
         if(!validationAlreadyPerformed && peekValidationPerformed()) {
             config({ licenseKey: '' });
         }
+        uiLayerInitialized.resolve();
     },
 
     _createElement(element) {
