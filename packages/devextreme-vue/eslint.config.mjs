@@ -193,7 +193,6 @@ export default [
     {
         files: ["**/*.d.ts"],
         plugins: {
-          '@stylistic': stylistic,
           i18n: i18N,
         },
         languageOptions: {
