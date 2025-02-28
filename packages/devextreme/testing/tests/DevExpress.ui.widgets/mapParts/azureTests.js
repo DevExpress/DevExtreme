@@ -129,8 +129,7 @@ QUnit.module('map loading', moduleConfig, () => {
         });
     });
 
-    // TODO Chrome133: skipped during chrome update
-    QUnit.skip.test('map ready action', function(assert) {
+    QUnit.test('map ready action', function(assert) {
         const done = assert.async();
 
         $('#map').dxMap({
