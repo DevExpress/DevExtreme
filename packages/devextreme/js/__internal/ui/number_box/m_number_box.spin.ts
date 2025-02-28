@@ -4,10 +4,13 @@ import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
-import Widget from '@js/ui/widget/ui.widget';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { Properties } from '@ts/core/widget/widget';
+import Widget from '@ts/core/widget/widget';
 
 const SPIN_CLASS = 'dx-numberbox-spin';
 const SPIN_BUTTON_CLASS = 'dx-numberbox-spin-button';
@@ -17,33 +20,50 @@ const SPIN_HOLD_DELAY = 100;
 const NUMBER_BOX = 'dxNumberBox';
 const POINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, NUMBER_BOX);
 const POINTERCANCEL_EVENT_NAME = addNamespace(pointerEvents.cancel, NUMBER_BOX);
-// @ts-expect-error
-const SpinButton = Widget.inherit({
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+export interface SpinButtonProperties extends Properties {
+  direction?: string;
+
+  onChange?: () => void;
+}
+
+class SpinButton extends Widget<SpinButtonProperties> {
+  _feedBackDeferred?: DeferredObj<unknown>;
+
+  _spinIcon?: dxElementWrapper;
+
+  _holdTimer?: ReturnType<typeof setTimeout>;
+
+  _spinChangeHandler!: (event?: Record<string, unknown>) => void;
+
+  _getDefaultOptions(): SpinButtonProperties {
+    return {
+      ...super._getDefaultOptions(),
       direction: 'up',
+      // @ts-expect-error ts-error
       onChange: null,
       activeStateEnabled: true,
       hoverStateEnabled: true,
-    });
-  },
+    };
+  }
 
-  _initMarkup() {
-    this.callBase();
+  _initMarkup(): void {
+    super._initMarkup();
 
-    const direction = `${SPIN_CLASS}-${this.option('direction')}`;
+    const { direction: spinDirection } = this.option();
+
+    const direction = `${SPIN_CLASS}-${spinDirection}`;
 
     this.$element()
       .addClass(SPIN_BUTTON_CLASS)
       .addClass(direction);
 
     this._spinIcon = $('<div>').addClass(`${direction}-icon`).appendTo(this.$element());
-  },
+  }
 
-  _render() {
-    this.callBase();
-
+  _render(): void {
+    super._render();
+    // @ts-expect-error ts-error
     const eventName = addNamespace(pointerEvents.down, this.NAME);
     const $element = this.$element();
 
@@ -51,9 +71,9 @@ const SpinButton = Widget.inherit({
     eventsEngine.on($element, eventName, this._spinDownHandler.bind(this));
 
     this._spinChangeHandler = this._createActionByOption('onChange');
-  },
+  }
 
-  _spinDownHandler(e) {
+  _spinDownHandler(e): void {
     e.preventDefault();
 
     this._clearTimer();
@@ -70,14 +90,14 @@ const SpinButton = Widget.inherit({
     eventsEngine.on(document, POINTERCANCEL_EVENT_NAME, this._clearTimer.bind(this));
 
     this._spinChangeHandler({ event: e });
-  },
+  }
 
-  _dispose() {
+  _dispose(): void {
     this._clearTimer();
-    this.callBase();
-  },
+    super._dispose();
+  }
 
-  _clearTimer() {
+  _clearTimer(): void {
     eventsEngine.off(this.$element(), holdEvent.name);
 
     const document = domAdapter.getDocument();
@@ -90,18 +110,18 @@ const SpinButton = Widget.inherit({
     if (this._holdTimer) {
       clearInterval(this._holdTimer);
     }
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<SpinButtonProperties>): void {
     switch (args.name) {
       case 'onChange':
       case 'direction':
         this._invalidate();
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
-});
+  }
+}
 
 export default SpinButton;
