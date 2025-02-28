@@ -2008,8 +2008,6 @@ class Scheduler extends Widget<any> {
       return dateUtilsTs.addOffsets(result, [-viewOffset]);
     };
 
-    const isValidDate = (date: any): boolean => !isNaN(new Date(date).getTime());
-
     const targetCell = this.getTargetCellData();
     const appointment = createAppointmentAdapter(
       rawAppointment,
@@ -2026,19 +2024,19 @@ class Scheduler extends Widget<any> {
     appointmentEndDate = dateUtilsTs.addOffsets(appointmentEndDate, [-viewOffset]);
     let resultedStartDate = cellStartDate ?? appointmentStartDate;
 
-    if (!isValidDate(appointmentStartDate)) {
+    if (!dateUtilsTs.isValidDate(appointmentStartDate)) {
       appointmentStartDate = resultedStartDate;
     }
 
-    if (!isValidDate(appointmentEndDate)) {
+    if (!dateUtilsTs.isValidDate(appointmentEndDate)) {
       appointmentEndDate = cellEndDate!;
     }
 
     const duration = appointmentEndDate.getTime() - appointmentStartDate.getTime();
 
     const isKeepAppointmentHours = this._workSpace.keepOriginalHours()
-            && isValidDate(appointment.startDate)
-            && isValidDate(cellStartDate);
+            && dateUtilsTs.isValidDate(appointment.startDate)
+            && dateUtilsTs.isValidDate(cellStartDate);
 
     if (isKeepAppointmentHours) {
       const startDate = this.timeZoneCalculator.createDate(appointmentStartDate, { path: 'toGrid' });

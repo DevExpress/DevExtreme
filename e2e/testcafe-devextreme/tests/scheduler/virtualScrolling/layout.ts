@@ -2,11 +2,11 @@ import { createScreenshotsComparer, compareScreenshot } from 'devextreme-screens
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { scrollToDate } from '../utils';
 import {
   resources,
   createDataSetForScreenShotTests,
   views,
-  scrollTo,
   horizontalViews,
   scrollConfig,
   groupedByDateViews,
@@ -43,13 +43,13 @@ test('Virtual scrolling layout in scheduler views', async (t) => {
     const view = views[i];
 
     await scheduler.option('currentView', view.type);
-    await scrollTo(scrollConfig[i].firstDate);
+    await scrollToDate(scrollConfig[i].firstDate);
 
     await t.expect(
       await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll.png`),
     ).ok();
 
-    await scrollTo(scrollConfig[i].lastDate);
+    await scrollToDate(scrollConfig[i].lastDate);
 
     await t.expect(
       await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll.png`),
@@ -73,13 +73,13 @@ test('Virtual scrolling layout in scheduler views when horizontal grouping is en
     const view = views[i];
 
     await scheduler.option('currentView', view.type);
-    await scrollTo(scrollConfig[i].firstDate, { resourceId: 6 });
+    await scrollToDate(scrollConfig[i].firstDate, { resourceId: 6 });
 
     await t.expect(
       await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll-horizontal-grouping.png`),
     ).ok();
 
-    await scrollTo(scrollConfig[i].lastDate, { resourceId: 0 });
+    await scrollToDate(scrollConfig[i].lastDate, { resourceId: 0 });
 
     await t.expect(
       await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll-horizontal-grouping.png`),
@@ -107,13 +107,13 @@ test('Virtual scrolling layout in scheduler views when grouping by date is enabl
 
     await scheduler.option('currentView', view.type);
 
-    await scrollTo(scrollConfig[i].firstDate, { resourceId: 3 });
+    await scrollToDate(scrollConfig[i].firstDate, { resourceId: 3 });
 
     await t.expect(
       await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll-grouping-by-date.png`),
     ).ok();
 
-    await scrollTo(scrollConfig[i].lastDate, { resourceId: 0 });
+    await scrollToDate(scrollConfig[i].lastDate, { resourceId: 0 });
 
     await t.expect(
       await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll-grouping-by-date.png`),

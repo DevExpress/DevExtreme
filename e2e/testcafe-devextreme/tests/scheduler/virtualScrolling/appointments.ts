@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { getStyleAttribute, setStyleAttribute } from '../../../helpers/domUtils';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { scrollTo } from './utils';
+import { scrollToDate } from '../utils';
 
 fixture.disablePageReloads`Scheduler: Virtual Scrolling`
   .page(url(__dirname, '../../container.html'));
@@ -15,7 +15,7 @@ test.skip('Appointment should not repaint after scrolling if present on viewport
   await setStyleAttribute(element, 'background-color: red;');
   await t.expect(await getStyleAttribute(element)).eql('transform: translate(525px, 200px); width: 49px; height: 100px; background-color: red;');
 
-  await scrollTo(new Date(2020, 8, 17, 4));
+  await scrollToDate(new Date(2020, 8, 17, 4));
 
   await t.expect(await getStyleAttribute(element)).eql('transform: translate(525px, 200px); width: 49px; height: 100px; background-color: red;');
 }).before(async () => {
@@ -45,7 +45,7 @@ test('The appointment should render correctly when scrolling vertically (T126342
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await scrollTo(new Date('2024-11-12T09:00:00+0100'));
+  await scrollToDate(new Date('2024-11-12T09:00:00+0100'));
 
   await takeScreenshot('T1263428-virtual-scrolling-render-appointment.png', scheduler.element);
 
