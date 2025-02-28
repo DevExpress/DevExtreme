@@ -23,7 +23,7 @@ const { trimTime } = dateUtils;
 
 interface DateNavigatorItem extends ButtonGroupItem {
   key: string;
-  onClick: (event: ItemClickEvent) => void;
+  clickHandler: (event: ItemClickEvent) => void;
   onContentReady: (event: ContentReadyEvent) => void;
 }
 
@@ -67,7 +67,7 @@ const getPreviousButtonOptions = (header: SchedulerHeader): DateNavigatorItem =>
       class: PREVIOUS_BUTTON_CLASS,
       'aria-label': ariaMessage,
     },
-    onClick: () => header._updateDateByDirection(Direction.Left),
+    clickHandler: () => header._updateDateByDirection(Direction.Left),
     onContentReady: (event): void => {
       const previousButton = event.component;
       previousButton.option('disabled', isPreviousButtonDisabled(header));
@@ -91,7 +91,7 @@ const getCalendarButtonOptions = (header: SchedulerHeader): DateNavigatorItem =>
   key: CALENDAR_BUTTON_NAME,
   text: header.captionText,
   elementAttr: { class: CALENDAR_BUTTON_CLASS },
-  onClick: (event) => header._showCalendar(event),
+  clickHandler: (event) => header._showCalendar(event),
   onContentReady: (event): void => {
     const calendarButton = event.component;
 
@@ -127,7 +127,7 @@ const getNextButtonOptions = (header: SchedulerHeader): DateNavigatorItem => {
       class: NEXT_BUTTON_CLASS,
       'aria-label': ariaMessage,
     },
-    onClick: () => header._updateDateByDirection(Direction.Right),
+    clickHandler: () => header._updateDateByDirection(Direction.Right),
     onContentReady: (event): void => {
       const nextButton = event.component;
 
@@ -160,6 +160,7 @@ export const getDateNavigator = (header: SchedulerHeader, item): ToolbarItem => 
     },
   }, item);
   const options = config.options as ButtonGroupOptions;
+  const { onItemClick } = options;
 
   options.items = (options.items ?? DEFAULT_ITEMS).map((groupItem) => {
     switch (groupItem) {
@@ -173,6 +174,10 @@ export const getDateNavigator = (header: SchedulerHeader, item): ToolbarItem => 
         return groupItem;
     }
   });
+  options.onItemClick = (event): void => {
+    event.itemData.clickHandler?.(event);
+    onItemClick?.(event);
+  };
 
   return config;
 };

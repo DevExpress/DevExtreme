@@ -48,9 +48,9 @@ describe('getDateNavigator', () => {
       },
     });
   });
-  it('should call custom click callback', () => {
+  it('should handle default and custom click callback', () => {
     const customClick = jest.fn();
-    const event = {};
+    const event = { itemData: { clickHandler: jest.fn() } };
     const config = getDateNavigator({} as any, {
       options: { onItemClick: customClick },
     });
@@ -58,6 +58,7 @@ describe('getDateNavigator', () => {
     config.options.onItemClick(event);
 
     expect(customClick).toHaveBeenCalledWith(event);
+    expect(event.itemData.clickHandler).toHaveBeenCalledWith(event);
     expect(config).toEqual({
       widget: 'dxButtonGroup',
       cssClass: DATE_NAVIGATOR_CLASS,
