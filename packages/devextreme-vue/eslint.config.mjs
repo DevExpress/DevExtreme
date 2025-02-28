@@ -200,7 +200,7 @@ export default [
             parserOptions: {
                 createDefaultProgram: true,
                 project: "./tsconfig.json",
-                tsconfigRootDir: import.meta.dirname,
+                tsconfigRootDir: __dirname,
                 ecmaVersion: 6,
                 sourceType: "module",
                 ecmaFeatures: { globalReturn: true, jsx: true },
