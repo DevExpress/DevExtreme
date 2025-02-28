@@ -42,8 +42,6 @@ fixture.disablePageReloads`FixedColumns - appearance`
         .click(dataGrid.getDataRow(3).getCommandCell(0).element)
         .click(dataGrid.getDataRow(4).getDataCell(4).element);
 
-      await t.debug();
-
       await takeScreenshot(`datagrid_selected_focused_edit_state_with_${showRowLinesState}_(${theme}).png`, dataGrid.element);
 
       await t
