@@ -79,7 +79,7 @@ const NativeStrategy = Class.inherit({
     if (!this._isDirection(direction)) {
       return;
     }
-
+    // @ts-expect-error ts-error
     this._scrollbars[direction] = new Scrollbar($('<div>').appendTo(this._$element), {
       direction,
       expandable: this._component.option('scrollByThumb'),

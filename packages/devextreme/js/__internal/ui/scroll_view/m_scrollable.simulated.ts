@@ -138,6 +138,7 @@ export const Scroller = Class.inherit({
   },
 
   _initScrollbar() {
+    // @ts-expect-error ts-error
     this._scrollbar = new Scrollbar($('<div>').appendTo(this._$container), {
       direction: this._direction,
       visible: this._scrollByThumb,
