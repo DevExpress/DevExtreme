@@ -920,6 +920,9 @@ importers:
       eslint-plugin-qunit:
         specifier: catalog:eslint8
         version: 7.3.4(eslint@8.56.0)
+      glob:
+        specifier: 10.4.5
+        version: 10.4.5
       minimist:
         specifier: 1.2.8
         version: 1.2.8
@@ -35622,7 +35625,7 @@ snapshots:
       schema-utils: 3.3.0
       serialize-javascript: 6.0.2
       terser: 5.36.0
-      webpack: 5.94.0(@swc/core@1.9.2(@swc/helpers@0.5.15))(webpack-cli@5.1.4)
+      webpack: 5.94.0(@swc/core@1.9.2(@swc/helpers@0.5.15))(webpack-cli@4.10.0)
     optionalDependencies:
       '@swc/core': 1.9.2(@swc/helpers@0.5.15)
 
