@@ -4,11 +4,11 @@ import numberLocalization from '@js/common/core/localization/number';
 import Class from '@js/core/class';
 import errors from '@js/core/errors';
 import { EventsStrategy } from '@js/core/events_strategy';
-// @ts-expect-error
+// @ts-expect-error ts-error
 import { grep } from '@js/core/utils/common';
 import {
   Deferred,
-  // @ts-expect-error
+  // @ts-expect-error ts-error
   fromPromise,
 } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -38,13 +38,13 @@ class BaseRuleValidator {
     this.NAME = 'base';
   }
 
-  defaultMessage(value) {
-    // @ts-expect-error
+  defaultMessage(value): string {
+    // @ts-expect-error ts-error
     return messageLocalization.getFormatter(`validation-${this.NAME}`)(value);
   }
 
-  defaultFormattedMessage(value) {
-    // @ts-expect-error
+  defaultFormattedMessage(value): string {
+    // @ts-expect-error ts-error
     return messageLocalization.getFormatter(`validation-${this.NAME}-formatted`)(value);
   }
 
@@ -58,12 +58,12 @@ class BaseRuleValidator {
 
     if (valueArray.length) {
       valueArray.every((itemValue) => {
-        // @ts-expect-error
+        // @ts-expect-error ts-error
         result = this._validate(itemValue, rule);
         return result;
       });
     } else {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       result = this._validate(null, rule);
     }
 
@@ -837,7 +837,7 @@ const ValidationEngine = {
         return newStatus !== validationStatus ? { validationStatus: newStatus } : {};
       }
       case 'validationErrors': {
-        const validationError = !value || !value.length ? null : value[0];
+        const validationError = !value?.length ? null : value[0];
 
         return options.validationError !== validationError ? { validationError } : {};
       }
