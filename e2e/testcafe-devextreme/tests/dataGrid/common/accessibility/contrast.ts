@@ -1,14 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
-import { getData } from '../helpers/generateDataSourceData';
-import { Themes } from '../../../helpers/themes';
-import { changeTheme } from '../../../helpers/changeTheme';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import { getData } from '../../helpers/generateDataSourceData';
+import { Themes } from '../../../../helpers/themes';
+import { changeTheme } from '../../../../helpers/changeTheme';
 
 fixture.disablePageReloads`DataGrid - contrast`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 // T1257970
 [

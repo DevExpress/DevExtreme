@@ -1,12 +1,12 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../../../helpers/createWidget';
-import url from '../../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../../../helpers/createWidget';
+import url from '../../../../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
-import { changeTheme } from '../../../../../helpers/changeTheme';
+import { changeTheme } from '../../../../../../helpers/changeTheme';
 
 fixture.disablePageReloads`Scheduler: Material theme layout`
-  .page(url(__dirname, '../../../../container.html'))
+  .page(url(__dirname, '../../../../../container.html'))
   .afterEach(async () => {
     await changeTheme('generic.light');
   });

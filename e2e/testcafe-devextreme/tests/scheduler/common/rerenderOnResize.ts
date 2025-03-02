@@ -1,11 +1,11 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { getStyleAttribute, setStyleAttribute } from '../../helpers/domUtils';
-import { createWidget } from '../../helpers/createWidget';
-import url from '../../helpers/getPageUrl';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
+import { getStyleAttribute, setStyleAttribute } from '../../../helpers/domUtils';
+import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Re-render on resize`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const createScheduler = async (container, options?): Promise<void> => createWidget('dxScheduler', {
   ...options,

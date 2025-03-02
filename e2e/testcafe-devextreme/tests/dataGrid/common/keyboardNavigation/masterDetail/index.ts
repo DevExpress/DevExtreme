@@ -1,11 +1,11 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import url from '../../../../helpers/getPageUrl';
-import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../../helpers/createWidget';
 import { gridOptions } from './options';
 
 fixture
   .disablePageReloads`Keyboard Navigation - screenshots`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
 

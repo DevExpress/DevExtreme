@@ -3,16 +3,16 @@ import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid, { CLASS } from 'devextreme-testcafe-models/dataGrid';
 import type { Column } from 'devextreme/ui/data_grid';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const showDataGrid = ClientFunction(() => {
   $('#wrapperContainer').css('display', '');
 });
 
 fixture.disablePageReloads`Virtual  Columns`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const generateData = (rowCount: number, columnCount: number): Record<string, unknown>[] => {
   const items: Record<string, unknown>[] = [];

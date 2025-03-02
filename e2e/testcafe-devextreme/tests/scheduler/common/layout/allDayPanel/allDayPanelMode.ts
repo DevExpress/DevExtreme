@@ -1,10 +1,10 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import asyncForEach from '../../../../helpers/asyncForEach';
-import { createWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
+import asyncForEach from '../../../../../helpers/asyncForEach';
+import { createWidget } from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Layout:AllDayPanelMode`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';
 const ALL_DAY_PANEL_OPTION_NAME = 'allDayPanelMode';
