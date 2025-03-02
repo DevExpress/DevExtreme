@@ -63,8 +63,8 @@ createTestCafe({
         const browsers = args.browsers
             .split(' ')
             .map((browser) => expandBrowserAlias(browser, args.componentFolder.trim()));
-        // eslint-disable-next-line no-console
-        console.log('Browsers:', browsers);
+
+        console.info('Browsers:', browsers);
 
         const runner = testCafe.createRunner()
             .browsers(browsers)
@@ -97,28 +97,19 @@ createTestCafe({
             const [current, total] = indices.split(/_|of|\\|\//ig).map(x => +x);
             const fixtures = globSync([`./tests/${componentFolder}/*.ts`]);
             const fixtureChunks = split(fixtures, total);
-            const targetFixtureChunk = fixtureChunks[current - 1];
+            const targetFixtureChunk = fixtureChunks[current - 1] ?? [];
 
-            console.log('glob: ', [`./tests/${componentFolder}/*.ts`]);
-            console.log('all fixtures: ', fixtureChunks);
-            console.log('fixtures: ', targetFixtureChunk);
+            console.info(' === test run config ===');
+            console.info(` > indices: current = ${current} | total = ${total}`);
+            console.info(' > glob: ', [`./tests/${componentFolder}/*.ts`]);
+            console.info(' > all fixtures: ', fixtureChunks);
+            console.info(' > fixtures: ', targetFixtureChunk, '\n');
 
             filters.push((testName, fixtureName, fixturePath) => {
                 // TODO: improve performance
                 return targetFixtureChunk.some((path) => fixturePath.includes(path));
             });
         }
-
-        // if(indices) {
-        //     const [current, total] = indices.split(/_|of|\\|\//ig).map(x => +x);
-        //     const testIndex = 0;
-        //
-        //     filters.push(() => {
-        //         const result = (testIndex % total) === (current - 1);
-        //         testIndex += 1;
-        //         return result;
-        //     });
-        // }
 
         if(testName) {
             filters.push(name => name === testName);
