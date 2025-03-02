@@ -1,10 +1,10 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
 
 fixture`Editing - undefined values`
   .disablePageReloads
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Should properly set nested undefined values (T1226946)', async (t) => {
   const dataGrid = new DataGrid('#container');

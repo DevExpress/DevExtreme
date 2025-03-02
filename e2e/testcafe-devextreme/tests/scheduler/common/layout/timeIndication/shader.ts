@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
-import { createWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
+import { insertStylesheetRulesToPage } from '../../../../../helpers/domUtils';
+import { createWidget } from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Scheduler: Current Time Indication: Shader`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const views = ['day', 'week', 'timelineDay', 'timelineWeek', 'timelineMonth'];
 const style = `

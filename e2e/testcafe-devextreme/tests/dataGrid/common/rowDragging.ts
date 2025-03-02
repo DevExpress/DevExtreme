@@ -3,10 +3,10 @@ import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid, { CLASS as DataGridClassNames } from 'devextreme-testcafe-models/dataGrid';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
-import { MouseUpEvents, MouseAction } from '../../helpers/mouseUpEvents';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
+import { MouseUpEvents, MouseAction } from '../../../helpers/mouseUpEvents';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const CLASS = { ...DataGridClassNames, ...ClassNames };
 
@@ -56,7 +56,7 @@ const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
 };
 
 fixture.disablePageReloads`Row dragging`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 // T903351
 safeSizeTest('The placeholder should appear when a cross-component dragging rows after scrolling the window', async (t) => {

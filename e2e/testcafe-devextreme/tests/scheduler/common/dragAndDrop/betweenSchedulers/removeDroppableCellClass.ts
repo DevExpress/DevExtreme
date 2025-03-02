@@ -1,11 +1,11 @@
 import { Selector } from 'testcafe';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import url from '../../../../helpers/getPageUrl';
-import { createWidget } from '../../../../helpers/createWidget';
-import { setStyleAttribute, appendElementTo } from '../../../../helpers/domUtils';
+import url from '../../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../../helpers/createWidget';
+import { setStyleAttribute, appendElementTo } from '../../../../../helpers/domUtils';
 
 fixture.disablePageReloads`Cancel drag-n-drop when dragging an appointment from one scheduler to another`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const FIRST_SCHEDULER_SELECTOR = 'scheduler-first';
 const SECOND_SCHEDULER_SELECTOR = 'scheduler-second';

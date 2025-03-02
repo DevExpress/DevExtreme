@@ -1,10 +1,10 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { getData } from '../helpers/generateDataSourceData';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { getData } from '../../helpers/generateDataSourceData';
 
 fixture.disablePageReloads`HoveringRows`.page(
-  url(__dirname, '../../container.html'),
+  url(__dirname, '../../../container.html'),
 );
 
 test('Hover over rows in the middle', async (t) => {
