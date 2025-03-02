@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "devextreme": "~24.1.10",
+    "glob": "^10.4.5",
     "testcafe": "2.5.0"
   }
 }
