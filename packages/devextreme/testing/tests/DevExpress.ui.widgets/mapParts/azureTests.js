@@ -281,8 +281,7 @@ QUnit.module('basic options', moduleConfig, () => {
         });
     });
 
-    // TODO Chrome133: skipped during chrome update
-    QUnit.test.skip('center should be geocoded if adress is passed as a string', function(assert) {
+    QUnit.test('center should be geocoded if adress is passed as a string', function(assert) {
         const done = assert.async();
         const center = 'Cedar Park, Texas';
 
