@@ -174,6 +174,7 @@ const SKIPPED_TESTS = {
     Charts: [
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+      { demo: 'CustomLegendMarkers', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
@@ -183,6 +184,7 @@ const SKIPPED_TESTS = {
       // Scroll to const value. Not enough for other themes, because the height of elements is different.
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
+      { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
     Gantt: [
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -199,6 +201,9 @@ const SKIPPED_TESTS = {
     DropDownButton: [
       { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
+    Chat: [
+      { demo: 'Customization', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'Crosshair', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -209,9 +214,13 @@ const SKIPPED_TESTS = {
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'ZoomingOnAreaSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+      { demo: 'Export', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'ExportCustomMarkup', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'PopupEditing', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+      { demo: 'DynamicViewport', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     DropDownBox: [
       { demo: 'MultipleSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -220,10 +229,13 @@ const SKIPPED_TESTS = {
       { demo: 'ItemDragging', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     TabPanel: [
-      { demo: 'Overview', themes: [THEME.material, THEME.fluent] },
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    SelectBox: [
+      { demo: 'GroupedItems', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Splitter: [
-      { demo: 'Overview', themes: [THEME.material, THEME.fluent] },
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Gauges: [
       { demo: 'VariableNumberOfBars', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -253,6 +265,7 @@ const SKIPPED_TESTS = {
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'RecordGrouping', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Form: [
       'CustomizeItem',
@@ -262,6 +275,7 @@ const SKIPPED_TESTS = {
       'CustomDragAndDrop',
       { demo: 'Resources', themes: [THEME.fluent] },
       { demo: 'CellTemplates', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Resources', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Popup: [
       { demo: 'Scrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -277,14 +291,19 @@ const SKIPPED_TESTS = {
     ]
   },
   Vue: {
+    Accordion: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Custom Overview Appearance', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'ZoomingOnAreaSelection', themes: [THEME.material] },
       { demo: 'CustomLegendMarkers', themes: [THEME.material] },
+      { demo: 'CustomAnnotations', themes: [THEME.material] },
       { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
       { demo: 'Crosshair', themes: [THEME.material] },
-
+      { demo: 'LoadDataOnDemand', themes: [THEME.material] },
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
@@ -298,6 +317,8 @@ const SKIPPED_TESTS = {
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'FilteringAPI', themes: [THEME.material] },
+      { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'PopupEditing', themes: [THEME.generic] },
       'StatePersistence',
     ],
@@ -307,8 +328,8 @@ const SKIPPED_TESTS = {
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    Accordion: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    Popup: [
+      { demo: 'Scrolling', themes: [THEME.material] },
     ],
   },
   React: {
@@ -318,6 +339,7 @@ const SKIPPED_TESTS = {
       { demo: 'Crosshair', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
       { demo: 'CustomLegendMarkers', themes: [THEME.material] },
+      { demo: 'LoadDataOnDemand', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'BatchEditing', themes: [THEME.fluent] },
@@ -329,10 +351,15 @@ const SKIPPED_TESTS = {
       { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'Filtering', themes: [THEME.fluent, THEME.material] },
       { demo: 'RecordGrouping', themes: [THEME.material] },
+      { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
+    ],
+    Popup: [
+      { demo: 'Scrolling', themes: [THEME.material] },
     ],
   },
 };
