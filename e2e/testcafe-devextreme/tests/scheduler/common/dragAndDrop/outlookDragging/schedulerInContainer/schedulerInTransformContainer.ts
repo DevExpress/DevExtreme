@@ -4,12 +4,12 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import {
   appendElementTo,
   setStyleAttribute,
-} from '../../../../../helpers/domUtils';
-import { createWidget } from '../../../../../helpers/createWidget';
-import url from '../../../../../helpers/getPageUrl';
+} from '../../../../../../helpers/domUtils';
+import { createWidget } from '../../../../../../helpers/createWidget';
+import url from '../../../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Outlook dragging, for case scheduler in container with transform style`
-  .page(url(__dirname, '../../../../container.html'));
+  .page(url(__dirname, '../../../../../container.html'));
 
 test('Dragging should be work right in case dxScheduler placed in container with transform style', async (t) => {
   const scheduler = new Scheduler('#scheduler');

@@ -1,4 +1,4 @@
-import { BrowserSizeType } from '../../../helpers/restoreBrowserSize';
+import { BrowserSizeType } from '../../../../helpers/restoreBrowserSize';
 
 const ADAPTIVE_SIZE: BrowserSizeType = [400, 600];
 

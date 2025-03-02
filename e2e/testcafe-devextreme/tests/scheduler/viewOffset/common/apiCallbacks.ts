@@ -1,14 +1,14 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { CallbackTestHelper, WindowCallbackExtended } from '../../../helpers/callbackTestHelper';
-import { createWidget } from '../../../helpers/createWidget';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
-import url from '../../../helpers/getPageUrl';
+import { CallbackTestHelper, WindowCallbackExtended } from '../../../../helpers/callbackTestHelper';
+import { createWidget } from '../../../../helpers/createWidget';
+import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
+import url from '../../../../helpers/getPageUrl';
 
 // NOTE: Disable page reloads will break the tests!
 fixture`Offset: Api callbacks`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';
 const REDUCE_CELLS_CSS = `

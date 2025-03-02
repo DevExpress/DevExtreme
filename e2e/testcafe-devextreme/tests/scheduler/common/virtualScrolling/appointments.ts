@@ -1,12 +1,12 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { getStyleAttribute, setStyleAttribute } from '../../../helpers/domUtils';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
+import { getStyleAttribute, setStyleAttribute } from '../../../../helpers/domUtils';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
 import { scrollTo } from './utils';
 
 fixture.disablePageReloads`Scheduler: Virtual Scrolling`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Appointment should not repaint after scrolling if present on viewport', async (t) => {
   const scheduler = new Scheduler('#container');

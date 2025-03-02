@@ -1,10 +1,10 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { MouseAction, MouseUpEvents } from '../../../helpers/mouseUpEvents';
+import { MouseAction, MouseUpEvents } from '../../../../helpers/mouseUpEvents';
 import createScheduler from './init/widget.setup';
-import url from '../../../helpers/getPageUrl';
+import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Cancel appointment Drag-and-Drop`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const APPOINTMENT_DRAG_SOURCE_CLASS = '.dx-scheduler-appointment-drag-source';
 

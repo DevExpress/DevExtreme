@@ -1,13 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
 
 const SCHEDULER_SELECTOR = '#container';
 const INITIAL_APPOINTMENT_TITLE = 'appointment';
 
 fixture.disablePageReloads`Recurrence dialog`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Recurrence edit dialog screenshot', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
