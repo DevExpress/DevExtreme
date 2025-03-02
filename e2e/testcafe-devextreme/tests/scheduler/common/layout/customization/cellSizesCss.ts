@@ -1,10 +1,10 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import url from '../../../../helpers/getPageUrl';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
-import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
+import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../../helpers/domUtils';
+import { createWidget } from '../../../../../helpers/createWidget';
 
 fixture.disablePageReloads`Scheduler: Layout Customization: Cell Sizes CSS classes`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const SELECTOR = '#container';
 

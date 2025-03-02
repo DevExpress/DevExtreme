@@ -1,13 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
-import { Themes } from '../../helpers/themes';
-import { changeTheme } from '../../helpers/changeTheme';
-import { getData } from './helpers/generateDataSourceData';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { Themes } from '../../../helpers/themes';
+import { changeTheme } from '../../../helpers/changeTheme';
+import { getData } from '../helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Header Panel`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Drop-down window should be positioned correctly after resizing the toolbar (T1037975)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

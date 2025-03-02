@@ -1,15 +1,15 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
-import { createWidget } from '../../helpers/createWidget';
-import url from '../../helpers/getPageUrl';
-import { makeRowsViewTemplatesAsync } from './helpers/asyncTemplates';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
+import { makeRowsViewTemplatesAsync } from '../helpers/asyncTemplates';
 
 const DATA_GRID_SELECTOR = '#container';
 
 fixture`FixedColumns`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 // T1156153
 test('Fixed columns should have same width as not fixed columns with columnAutoWidth: true', async (t) => {

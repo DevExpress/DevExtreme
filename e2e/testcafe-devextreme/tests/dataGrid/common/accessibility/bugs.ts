@@ -1,9 +1,9 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
 
 fixture`Accessibility bugs`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('T1187314 - DataGrid displays an incorrect row count in "aria-label" if there is no data after filtering', async (t) => {
   const dataGrid = new DataGrid('#container');

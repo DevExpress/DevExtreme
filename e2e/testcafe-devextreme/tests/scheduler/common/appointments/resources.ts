@@ -1,10 +1,10 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import TagBox from 'devextreme-testcafe-models/tagBox';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
 
 fixture.disablePageReloads`Appointment resources`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const dataSource = [{
   text: 'test-appt-1',

@@ -3,11 +3,11 @@ import { ClientFunction, Selector } from 'testcafe';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { Overlay } from 'devextreme-testcafe-models/dataGrid/overlay';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
 
 fixture`Editing events`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 // T1186997
 const testCases = [{

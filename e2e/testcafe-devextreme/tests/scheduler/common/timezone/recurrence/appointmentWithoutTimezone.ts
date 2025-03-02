@@ -2,12 +2,12 @@ import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import SelectBox from 'devextreme-testcafe-models/selectBox';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import url from '../../../../helpers/getPageUrl';
+import url from '../../../../../helpers/getPageUrl';
 import { getScreenshotName } from '../timezoneTestingUtils';
-import { createWidget } from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../../helpers/createWidget';
 
 fixture.disablePageReloads`Recurrent appointments without timezone in scheduler with timezone`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const SELECT_SELECTOR = '#container';
 const SCHEDULER_SELECTOR = '#otherContainer';

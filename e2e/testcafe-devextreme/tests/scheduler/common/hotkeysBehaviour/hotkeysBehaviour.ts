@@ -2,10 +2,10 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import FocusableElement from 'devextreme-testcafe-models/internal/focusable';
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
-import url from '../../../helpers/getPageUrl';
+import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Hotkeys for appointments update and navigation`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 ['week', 'month'].forEach((view) => {
   test(`Navigate between appointments in the "${view}" view (Tab/Shift+Tab)`, async (t) => {

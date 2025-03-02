@@ -1,10 +1,10 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { simpleData, allDayData } from './init/widget.data';
 import createScheduler from './init/widget.setup';
-import url from '../../../helpers/getPageUrl';
+import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Appointment overlapping in Scheduler`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Multi-day appointment should not overlap other appointments when specific width is set, \'auto\' mode (T864456)', async (t) => {
   const scheduler = new Scheduler('#container');

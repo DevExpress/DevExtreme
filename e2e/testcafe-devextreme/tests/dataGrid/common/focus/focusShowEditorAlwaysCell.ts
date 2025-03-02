@@ -1,11 +1,11 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import List from 'devextreme-testcafe-models/list';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
 
 fixture`Focus - cell with showEditorAlways`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const SELECTOR = '#container';
 const OVERLAY_SELECTOR = '.dx-overlay-wrapper';

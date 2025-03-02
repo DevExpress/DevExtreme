@@ -1,12 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
-import { getData } from '../helpers/generateDataSourceData';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import { getData } from '../../helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Header Filter`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const GRID_CONTAINER = '#container';
 
