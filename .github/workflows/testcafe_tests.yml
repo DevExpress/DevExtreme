@@ -122,7 +122,8 @@ jobs:
           { componentFolder: "scheduler/common", name: "scheduler / common (2/5)", indices: "2/5" },
           { componentFolder: "scheduler/common", name: "scheduler / common (3/5)", indices: "3/5" },
           { componentFolder: "scheduler/common", name: "scheduler / common (4/5)", indices: "4/5" },
-          { componentFolder: "scheduler/common", name: "scheduler / common (5/5)", indices: "5/5" },
+          # Scheduler has error between fixtures, concurrency may help to avoid these errors
+          { componentFolder: "scheduler/common", name: "scheduler / common (5/5)", indices: "5/5", concurrency: 1 },
           { componentFolder: "scheduler/viewOffset/common", name: "scheduler / offset (1/4)", indices: "1/2" },
           { componentFolder: "scheduler/viewOffset/common", name: "scheduler / offset (2/4)", indices: "2/2" },
           { componentFolder: "scheduler/viewOffset/markup", name: "scheduler / offset (3/4)", indices: "1/2" },

@@ -10,7 +10,7 @@ fixture`XSS`
           throw Error('XSS alert was invoked!');
         }
       })
-      .navigateTo(url(__dirname, '../../../security/pages/XSS.html'));
+      .navigateTo(url(__dirname, './pages/XSS.html'));
   })
   .afterEach(async (t) => {
     await t.navigateTo(url(__dirname, '../../../container.html'));
