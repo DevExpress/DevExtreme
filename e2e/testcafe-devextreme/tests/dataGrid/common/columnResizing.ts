@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
 
 fixture`Column resizing`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('column separator should starts from the parent', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

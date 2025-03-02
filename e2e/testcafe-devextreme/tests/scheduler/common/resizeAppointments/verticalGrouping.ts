@@ -1,9 +1,9 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import createScheduler from './init/widget.setup';
-import url from '../../../helpers/getPageUrl';
+import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Resize appointments in the Scheduler with vertical groupping`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Should correctly calculate group resizing area (T1025952)', async (t) => {
   const scheduler = new Scheduler('#container');

@@ -2,10 +2,10 @@ import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { ClassNames as CLASS } from 'devextreme-testcafe-models/dataGrid/classNames';
-import { removeStylesheetRulesFromPage, insertStylesheetRulesToPage } from '../../helpers/domUtils';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
+import { removeStylesheetRulesFromPage, insertStylesheetRulesToPage } from '../../../helpers/domUtils';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { salesApiMock } from './apiMocks/salesApiMock';
 
 async function getMaxRightOffset(dataGrid: DataGrid): Promise<number> {
@@ -38,7 +38,7 @@ async function getTestLoadCount(): Promise<number> {
 }
 
 fixture`Scrolling`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('DataGrid should set the scrollbar position to the left on resize (T934842)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -1151,7 +1151,7 @@ safeSizeTest('The page should not be changed when hiding/showing the grid view a
 })());
 
 fixture`Remote Scrolling`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test.meta({ unstable: true })('Scroll to the bottom after expand several group', async (t) => {
   const dataGrid = new DataGrid('#container');

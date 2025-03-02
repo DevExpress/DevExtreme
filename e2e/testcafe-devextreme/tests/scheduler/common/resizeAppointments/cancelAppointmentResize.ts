@@ -1,11 +1,11 @@
 import { ClientFunction } from 'testcafe';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { MouseAction, MouseUpEvents } from '../../../helpers/mouseUpEvents';
+import { MouseAction, MouseUpEvents } from '../../../../helpers/mouseUpEvents';
 import createScheduler from '../dragAndDrop/init/widget.setup';
-import url from '../../../helpers/getPageUrl';
+import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Cancel appointment Resizing`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('onAppointmentUpdating - newDate should be correct after cancel appointment resize and cellDuration=24h (T1070565)', async (t) => {
   const scheduler = new Scheduler('#container');

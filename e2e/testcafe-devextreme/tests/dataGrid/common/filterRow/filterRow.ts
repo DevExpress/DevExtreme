@@ -1,13 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
-import { changeTheme } from '../../../helpers/changeTheme';
-import { getNumberData, getData } from '../helpers/generateDataSourceData';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import { changeTheme } from '../../../../helpers/changeTheme';
+import { getNumberData, getData } from '../../helpers/generateDataSourceData';
 
 fixture.disablePageReloads`FilterRow`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Filter should reset if the filter row editor text is cleared (T1257261)', async (t) => {
   const dataGrid = new DataGrid('#container');

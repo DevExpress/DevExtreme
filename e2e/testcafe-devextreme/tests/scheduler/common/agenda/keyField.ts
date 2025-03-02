@@ -1,11 +1,11 @@
 import { ClientFunction } from 'testcafe';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
 
 // TODO fixture.disablePageReloads lead to fail random test in current file
 fixture`Agenda:KeyField`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const hasWarningCode = (message) => message.startsWith('W1023');
 

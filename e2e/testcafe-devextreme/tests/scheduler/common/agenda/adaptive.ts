@@ -1,11 +1,11 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { ADAPTIVE_SIZE } from '../const';
 
 fixture.disablePageReloads`Agenda:adaptive`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const createScheduler = async (groups: undefined | string[], rtlEnabled: boolean):
 Promise<void> => {
