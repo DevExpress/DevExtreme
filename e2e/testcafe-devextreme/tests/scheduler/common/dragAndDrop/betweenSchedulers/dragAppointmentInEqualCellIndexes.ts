@@ -1,11 +1,11 @@
 import { Selector } from 'testcafe';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { setStyleAttribute, appendElementTo } from '../../../../helpers/domUtils';
-import url from '../../../../helpers/getPageUrl';
-import { createWidget } from '../../../../helpers/createWidget';
+import { setStyleAttribute, appendElementTo } from '../../../../../helpers/domUtils';
+import url from '../../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../../helpers/createWidget';
 
 fixture.disablePageReloads`Drag-n-drop appointments between two schedulers with equal cell indexes (T1094035)`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const FIRST_SCHEDULER_SELECTOR = 'scheduler-first';
 const SECOND_SCHEDULER_SELECTOR = 'scheduler-second';

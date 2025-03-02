@@ -1,11 +1,11 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import { setZoomLevel } from '../virtualScrolling/utils';
 
 fixture.disablePageReloads`Resize appointments - Zooming`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Vertical resize with zooming', async (t) => {
   const scheduler = new Scheduler('#container');

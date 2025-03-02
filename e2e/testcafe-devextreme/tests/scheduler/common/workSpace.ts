@@ -3,14 +3,14 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Button from 'devextreme-testcafe-models/button';
 import Scheduler, { CLASS } from 'devextreme-testcafe-models/scheduler';
 import { extend } from 'devextreme/core/utils/extend';
-import { createWidget } from '../../helpers/createWidget';
-import url from '../../helpers/getPageUrl';
-import { changeTheme } from '../../helpers/changeTheme';
-import { Themes } from '../../helpers/themes';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../helpers/domUtils';
+import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
+import { changeTheme } from '../../../helpers/changeTheme';
+import { Themes } from '../../../helpers/themes';
+import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Scheduler: Workspace`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const FIXED_PARENT_CONTAINER_SIZE = `
 #parentContainer {

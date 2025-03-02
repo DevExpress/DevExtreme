@@ -1,10 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { createWidget } from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import { ADAPTIVE_SIZE } from '../../const';
-import { changeTheme } from '../../../../helpers/changeTheme';
+import { changeTheme } from '../../../../../helpers/changeTheme';
 import {
   createDataSetForScreenShotTests,
   resourceDataSource,
@@ -14,7 +14,7 @@ import {
 } from '../utils';
 
 fixture.disablePageReloads`Scheduler: Adaptive layout in themes`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,

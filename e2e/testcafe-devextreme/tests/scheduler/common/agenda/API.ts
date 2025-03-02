@@ -1,9 +1,9 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Agenda:API`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Html elements should be absent in Agenda view', async (t) => {
   const scheduler = new Scheduler('#container');

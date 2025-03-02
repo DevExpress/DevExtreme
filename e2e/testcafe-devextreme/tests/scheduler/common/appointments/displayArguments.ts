@@ -1,10 +1,10 @@
 import { ClientFunction } from 'testcafe';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Display* arguments in appointment templates and events`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 [undefined, 'America/Los_Angeles'].forEach((timeZone) => {
   test(`displayStartDate and displayEndDate arguments should be right with timeZone='${timeZone}'`, async (t) => {

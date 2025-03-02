@@ -1,9 +1,9 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../helpers/createWidget';
-import url from '../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Interaction of two schedulers`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const createScheduler = async (container): Promise<void> => {
   await createWidget('dxScheduler', {

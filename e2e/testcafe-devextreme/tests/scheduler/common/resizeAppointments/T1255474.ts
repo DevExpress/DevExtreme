@@ -1,11 +1,11 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { getTimezoneTest, MACHINE_TIMEZONES } from '../../../helpers/machineTimezones';
-import url from '../../../helpers/getPageUrl';
+import { getTimezoneTest, MACHINE_TIMEZONES } from '../../../../helpers/machineTimezones';
+import url from '../../../../helpers/getPageUrl';
 import createScheduler from './init/widget.setup';
 
 fixture.disablePageReloads`Resize appointment that cross DTC time`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const appointmentText = 'Book Flights to San Fran for Sales Trip';
 

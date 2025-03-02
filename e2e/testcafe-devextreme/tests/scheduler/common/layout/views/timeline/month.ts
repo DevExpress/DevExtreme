@@ -1,10 +1,10 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../../../helpers/createWidget';
-import url from '../../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../../../helpers/createWidget';
+import url from '../../../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Scheduler: Layout Views: Timeline Month`
-  .page(url(__dirname, '../../../../container.html'));
+  .page(url(__dirname, '../../../../../container.html'));
 
 test('Header cells should be aligned with date-table cells in timeline-month when current date changes', async (t) => {
   const scheduler = new Scheduler('#container');

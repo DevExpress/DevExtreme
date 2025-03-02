@@ -1,9 +1,9 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Scheduler: Virtual scrolling`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('it should correctly render virtual table if scheduler sizes are set in % (T1091980)', async (t) => {
   const scheduler = new Scheduler('#container');

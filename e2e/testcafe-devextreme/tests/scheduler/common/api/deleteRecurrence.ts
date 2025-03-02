@@ -1,9 +1,9 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
 
 fixture.disablePageReloads`Scheduler API - deleteRecurrence`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('should delete recurrent appointment if mode is "series"', async (t) => {
   const scheduler = new Scheduler('#container');
