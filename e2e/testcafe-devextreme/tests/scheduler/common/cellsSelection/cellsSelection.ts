@@ -1,9 +1,9 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
 
 fixture.disablePageReloads`Scheduler: Cells Selection in Virtual Scrolling`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Selection should work correctly with all-day panel appointments', async (t) => {
   const scheduler = new Scheduler('#container');

@@ -1,11 +1,11 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { ClientFunction, Selector } from 'testcafe';
-import { MouseAction, MouseUpEvents } from '../../../helpers/mouseUpEvents';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
+import { MouseAction, MouseUpEvents } from '../../../../helpers/mouseUpEvents';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Scheduler Drag-and-Drop Fix`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const DRAGGABLE_ITEM_CLASS = 'dx-card';
 const draggingGroupName = 'appointmentsGroup';

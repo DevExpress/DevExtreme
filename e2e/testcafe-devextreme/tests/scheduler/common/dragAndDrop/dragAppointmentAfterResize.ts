@@ -1,9 +1,9 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import createScheduler from './init/widget.setup';
-import url from '../../../helpers/getPageUrl';
+import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Drag-n-drop appointment after resize (T835545)`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 ['day', 'week', 'month', 'timelineDay', 'timelineWeek', 'timelineMonth'].forEach((view) => test(`After drag-n-drop appointment, size of appointment shouldn't change in the '${view}' view`, async (t) => {
   const scheduler = new Scheduler('#container');

@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../../../helpers/createWidget';
-import url from '../../../../../helpers/getPageUrl';
-import { changeTheme } from '../../../../../helpers/changeTheme';
+import { createWidget } from '../../../../../../helpers/createWidget';
+import url from '../../../../../../helpers/getPageUrl';
+import { changeTheme } from '../../../../../../helpers/changeTheme';
 
 fixture.disablePageReloads`Scheduler: Material theme without all-day panel`
-  .page(url(__dirname, '../../../../container.html'));
+  .page(url(__dirname, '../../../../../container.html'));
 
 test('Week view without all-day panel should be rendered correctly', async (t) => {
   const scheduler = new Scheduler('#container');

@@ -1,11 +1,11 @@
-import url from '../../../../helpers/getPageUrl';
-import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../../helpers/createWidget';
 import { getAppointmentTime, screenshotTestFunc } from '../timezoneTestingUtils';
 
 const SCREENSHOT_BASE_NAME = 'timezone-weekly-recurrent';
 
 fixture.disablePageReloads`Weekly recurrent appointments with timezones`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 // === One day in week tests section ===
 
