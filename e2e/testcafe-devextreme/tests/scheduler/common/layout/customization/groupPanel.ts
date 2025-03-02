@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
-import { createWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
+import { insertStylesheetRulesToPage } from '../../../../../helpers/domUtils';
+import { createWidget } from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Scheduler: Layout Customization: Group Panel`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,

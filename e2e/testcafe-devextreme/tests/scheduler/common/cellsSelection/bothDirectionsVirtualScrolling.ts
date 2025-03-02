@@ -1,6 +1,6 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import url from '../../../helpers/getPageUrl';
-import { scrollTo } from '../utils';
+import url from '../../../../helpers/getPageUrl';
+import { scrollTo } from '../../helpers/utils';
 import {
   createScheduler,
   checkSelectionWhenFocusedInViewport,
@@ -10,7 +10,7 @@ import {
 } from './init/widget.setup';
 
 fixture.disablePageReloads`Scheduler: Cells Selection in Virtual Scrolling`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const baseConfig = {
   scrolling: { mode: 'virtual', orientation: 'both' },

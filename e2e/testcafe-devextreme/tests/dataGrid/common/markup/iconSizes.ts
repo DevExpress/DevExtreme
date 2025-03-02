@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import url from '../../../helpers/getPageUrl';
-import { changeTheme } from '../../../helpers/changeTheme';
-import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { changeTheme } from '../../../../helpers/changeTheme';
+import { createWidget } from '../../../../helpers/createWidget';
 
 fixture.disablePageReloads`Icon Sizes`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const GRID_CONTAINER = '#container';
 

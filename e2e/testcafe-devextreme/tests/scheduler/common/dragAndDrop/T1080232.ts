@@ -1,11 +1,11 @@
 import { ClientFunction, Selector } from 'testcafe';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
-import { appendElementTo } from '../../../helpers/domUtils';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import { appendElementTo } from '../../../../helpers/domUtils';
 
 fixture.disablePageReloads`Appointment (T1080232)`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('it should correctly drag external item to the appointment after drag appointment', async (t) => {
   const scheduler = new Scheduler('#scheduler');

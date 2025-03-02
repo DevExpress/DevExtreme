@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
-import { createWidget } from '../../../../../helpers/createWidget';
-import url from '../../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../../../helpers/safeSizeTest';
+import { createWidget } from '../../../../../../helpers/createWidget';
+import url from '../../../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Layout:BrowserResize`
-  .page(url(__dirname, '../../../../container.html'));
+  .page(url(__dirname, '../../../../../container.html'));
 
 const data = [{
   text: 'Website Re-Design Plan',

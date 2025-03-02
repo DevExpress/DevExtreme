@@ -1,10 +1,10 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { extend } from 'devextreme/core/utils/extend';
-import { createWidget } from '../../helpers/createWidget';
-import url from '../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Scheduler: Navigator`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const createScheduler = async (options = {}): Promise<void> => {
   await createWidget('dxScheduler', extend(options, {

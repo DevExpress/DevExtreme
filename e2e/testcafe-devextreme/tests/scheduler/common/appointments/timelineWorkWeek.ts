@@ -1,12 +1,12 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
 
 const SCHEDULER_SELECTOR = '#container';
 const CELL_WIDTH = 200;
 
 fixture`Appointments in TimelineWorkWeek`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Appointments should have correct width', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);

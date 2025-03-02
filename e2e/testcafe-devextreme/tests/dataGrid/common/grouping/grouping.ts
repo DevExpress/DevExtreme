@@ -1,12 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
-import { makeColumnHeadersViewTemplatesAsync } from '../helpers/asyncTemplates';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import { makeColumnHeadersViewTemplatesAsync } from '../../helpers/asyncTemplates';
 
 fixture.disablePageReloads`Grouping Panel`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
 

@@ -1,8 +1,8 @@
 import { createScreenshotsComparer, compareScreenshot } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { scrollToDate } from '../utils';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { scrollToDate } from '../../helpers/utils';
 import {
   resources,
   createDataSetForScreenShotTests,
@@ -13,7 +13,7 @@ import {
 } from './utils';
 
 fixture.disablePageReloads`Scheduler: Virtual Scrolling`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
