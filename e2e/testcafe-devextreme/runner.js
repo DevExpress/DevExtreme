@@ -5,6 +5,7 @@ const createTestCafe = require('testcafe');
 const fs = require('fs');
 const process = require('process');
 const parseArgs = require('minimist');
+const { globSync } = require('glob');
 const testPageUtils = require('./helpers/clearPage');
 require('nconf').argv();
 
@@ -62,8 +63,8 @@ createTestCafe({
         const browsers = args.browsers
             .split(' ')
             .map((browser) => expandBrowserAlias(browser, args.componentFolder.trim()));
-        // eslint-disable-next-line no-console
-        console.log('Browsers:', browsers);
+
+        console.info('Browsers:', browsers);
 
         const runner = testCafe.createRunner()
             .browsers(browsers)
@@ -78,17 +79,38 @@ createTestCafe({
 
         runner.concurrency(args.concurrency || 3);
 
+        const split = (array, chunkCount) => {
+            const fixturesInChunkCount = Math.ceil(array.length / chunkCount);
+            const [...arr] = array;
+            const res = [];
+
+            while(arr.length) {
+                res.push(arr.splice(0, fixturesInChunkCount));
+            }
+
+            return res;
+        };
+
         const filters = [];
+
         if(indices) {
             const [current, total] = indices.split(/_|of|\\|\//ig).map(x => +x);
-            let testIndex = 0;
-            filters.push(() => {
-                const result = (testIndex % total) === (current - 1);
-                testIndex += 1;
-                return result;
+            const fixtures = globSync([`./tests/${componentFolder}/*.ts`]);
+            const fixtureChunks = split(fixtures, total);
+            const targetFixtureChunk = fixtureChunks[current - 1] ?? [];
 
+            console.info(' === test run config ===');
+            console.info(` > indices: current = ${current} | total = ${total}`);
+            console.info(' > glob: ', [`./tests/${componentFolder}/*.ts`]);
+            console.info(' > all fixtures: ', fixtureChunks);
+            console.info(' > fixtures: ', targetFixtureChunk, '\n');
+
+            filters.push((testName, fixtureName, fixturePath) => {
+                // TODO: improve performance
+                return targetFixtureChunk.some((path) => fixturePath.includes(path));
             });
         }
+
         if(testName) {
             filters.push(name => name === testName);
         }
@@ -161,7 +183,7 @@ function setShadowDom(args) {
 function expandBrowserAlias(browser, componentFolder) {
     switch(browser) {
         case 'chrome:devextreme-shr2':
-            return 'chrome:headless --disable-gpu --window-size=1200,800';
+            return 'chrome:headless --no-sandbox --disable-gpu --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning';
         case 'chrome:docker':
             return 'chromium:headless --no-sandbox --disable-gpu --window-size=1200,800';
     }
