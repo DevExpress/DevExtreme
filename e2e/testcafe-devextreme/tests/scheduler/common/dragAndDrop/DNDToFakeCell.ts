@@ -1,11 +1,11 @@
 import { ClientFunction, Selector, t } from 'testcafe';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { appendElementTo } from '../../../helpers/domUtils';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { appendElementTo } from '../../../../helpers/domUtils';
 
 fixture.disablePageReloads`Drag-n-drop to fake cell`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Should not select cells outside the scheduler(T1040795)', async () => {
   const scheduler = new Scheduler('#container');

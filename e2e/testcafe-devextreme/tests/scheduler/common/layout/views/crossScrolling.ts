@@ -1,11 +1,11 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Scheduler: View with cross-scrolling`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 test('Scrollable synchronization should work after changing current date (T1027231)', async (t) => {
   const scheduler = new Scheduler('#container');

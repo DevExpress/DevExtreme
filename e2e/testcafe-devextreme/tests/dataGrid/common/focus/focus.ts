@@ -1,11 +1,11 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { ClientFunction } from 'testcafe';
 import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Focus`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const GRID_SELECTOR = '#container';
 const FOCUSED_CLASS = 'dx-focused';

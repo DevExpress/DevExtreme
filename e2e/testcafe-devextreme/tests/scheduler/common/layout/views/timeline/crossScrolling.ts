@@ -1,9 +1,9 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../../../helpers/createWidget';
-import url from '../../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../../../helpers/createWidget';
+import url from '../../../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Scheduler Timeline: Cross-Scrolling`
-  .page(url(__dirname, '../../../../container.html'));
+  .page(url(__dirname, '../../../../../container.html'));
 
 test('Timeline should have Cross-Scrolling enabled', async (t) => {
   const scheduler = new Scheduler('#container');

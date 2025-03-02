@@ -1,9 +1,9 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
 
 fixture.disablePageReloads`Export`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const GRID_CONTAINER = '#container';
 

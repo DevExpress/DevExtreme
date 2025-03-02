@@ -1,11 +1,11 @@
 // T1086079
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Layout:Appointments:longAppointments(T1086079)`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const dataSource = [{
   text: 'Website Re-Design Plan',

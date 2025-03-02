@@ -2,12 +2,12 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import type { ViewType, Orientation } from 'devextreme/ui/scheduler';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { generateOptionMatrix } from '../../../helpers/generateOptionMatrix';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { generateOptionMatrix } from '../../../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Scheduler: Virtual scrolling (many cells)`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const buildScreenshotName = (viewType: ViewType, orientation: Orientation, step: string) => `virtual-scrolling-many-cells-${viewType}-${orientation}-${step}.png`;
 

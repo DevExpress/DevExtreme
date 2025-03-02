@@ -2,15 +2,15 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
 import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
-import { a11yCheck } from '../../../helpers/accessibility/utils';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
-import { getData } from '../helpers/generateDataSourceData';
-import { Themes } from '../../../helpers/themes';
-import { changeTheme } from '../../../helpers/changeTheme';
+import { a11yCheck } from '../../../../helpers/accessibility/utils';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import { getData } from '../../helpers/generateDataSourceData';
+import { Themes } from '../../../../helpers/themes';
+import { changeTheme } from '../../../../helpers/changeTheme';
 
 fixture`Common tests with axe`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
 

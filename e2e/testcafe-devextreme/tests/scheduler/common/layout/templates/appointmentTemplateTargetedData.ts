@@ -4,14 +4,14 @@ import type {
   ScrollMode,
   ViewType,
 } from 'devextreme/ui/scheduler';
-import { createWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
 
-import { generateOptionMatrix } from '../../../../helpers/generateOptionMatrix';
-import { scrollToDate } from '../../utils';
+import { generateOptionMatrix } from '../../../../../helpers/generateOptionMatrix';
+import { scrollToDate } from '../../../helpers/utils';
 
 fixture.disablePageReloads`Layout:Templates:appointmentTemplate:targetedData`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const getResourceCount = (
   viewType: ViewType,

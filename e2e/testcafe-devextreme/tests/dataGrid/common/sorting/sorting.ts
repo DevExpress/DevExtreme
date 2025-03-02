@@ -1,12 +1,12 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { changeTheme } from '../../../helpers/changeTheme';
-import { Themes } from '../../../helpers/themes';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { changeTheme } from '../../../../helpers/changeTheme';
+import { Themes } from '../../../../helpers/themes';
 
 fixture.disablePageReloads`Sorting`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Filter expression should be valid when sortingMethod, remoteOperations, and autoNavigateToFocusedRow are specified (T1200546)', async (t) => {
   const dataGrid = new DataGrid('#container');

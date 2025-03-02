@@ -1,10 +1,10 @@
 import { ClientFunction, Selector } from 'testcafe';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
 import {
   setStyleAttribute,
-} from '../../../helpers/domUtils';
+} from '../../../../helpers/domUtils';
 
 const SCHEDULER_SELECTOR = '#scheduler';
 
@@ -19,7 +19,7 @@ const markup = '<div style="display: flex;">\
 </div>';
 
 fixture.disablePageReloads`T1118059`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const safeEvent = (value) => ClientFunction(() => {
   (window as any).eventName = value;

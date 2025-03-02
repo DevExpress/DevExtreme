@@ -1,13 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
-import { changeTheme } from '../../helpers/changeTheme';
-import { Themes } from '../../helpers/themes';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { changeTheme } from '../../../helpers/changeTheme';
+import { Themes } from '../../../helpers/themes';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Search Panel`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 // T1046688
 safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {

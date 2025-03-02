@@ -1,10 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`Summary`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Group footer summary should be focusable', async (t) => {
   const dataGrid = new DataGrid('#container');

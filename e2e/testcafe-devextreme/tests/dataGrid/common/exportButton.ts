@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Export button`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('allowExportSelectedData: false, menu: false', async (t) => {
   const dataGrid = new DataGrid('#container');
