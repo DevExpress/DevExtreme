@@ -16,6 +16,10 @@ const EDITORS_WITH_ARRAY_VALUE: FormItemComponent[] = [
   'dxRangeSlider',
   'dxDateRangeBox',
 ];
+const EDITORS_WITH_MULTIPLE_INPUT_FIELDS: FormItemComponent[] = [
+  'dxRangeSlider',
+  'dxDateRangeBox',
+];
 const EDITORS_WITH_SPECIFIC_LABELS: FormItemComponent[] = ['dxRangeSlider', 'dxSlider'];
 export const EDITORS_WITHOUT_LABELS: FormItemComponent[] = [
   'dxCalendar',
@@ -264,8 +268,32 @@ function _convertToEditorOptions({
     }
   }
 
-  if (defaultEditorName && !result.name) {
-    result.name = defaultEditorName;
+  if (defaultEditorName) {
+    if (EDITORS_WITH_MULTIPLE_INPUT_FIELDS.includes(editorType)) {
+      if (editorType === 'dxRangeSlider') {
+        if (!result.startName) {
+          result.startName = `${defaultEditorName}Start`;
+        }
+        if (!result.endName) {
+          result.endName = `${defaultEditorName}End`;
+        }
+      }
+
+      if (editorType === 'dxDateRangeBox') {
+        if (!result.startDateName) {
+          result.startDateName = `${defaultEditorName}Start`;
+        }
+        if (!result.endDateName) {
+          result.endDateName = `${defaultEditorName}End`;
+        }
+      }
+
+      return result;
+    }
+
+    if (!result.name) {
+      result.name = defaultEditorName;
+    }
   }
 
   return result;
@@ -275,7 +303,7 @@ function _convertToEditorOptions({
 function _hasRequiredRuleInSet(rules) {
   let hasRequiredRule;
 
-  if (rules && rules.length) {
+  if (rules?.length) {
     // @ts-expect-error
     each(rules, (index, rule) => {
       if (rule.type === 'required') {
