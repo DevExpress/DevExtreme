@@ -108,6 +108,7 @@ const SKIPPED_TESTS = {
       { demo: 'PointImage', themes: [THEME.material] },
       { demo: 'BiDirectionalBarChart', themes: [THEME.material] },
       { demo: 'CustomizePointsAndLabels', themes: [THEME.material] },
+      { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'MultiplePointSelection', themes: [THEME.material] },
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },

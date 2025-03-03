@@ -3,7 +3,8 @@ import url from '../../helpers/getPageUrl';
 import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
 
-fixture.disablePageReloads`Accessibility`
+// TODO Chrome133: skipped during chrome update
+fixture.disablePageReloads.skip`Accessibility`
   .page(url(__dirname, '../container.html'));
 
 const markersData = [
