@@ -1,6 +1,6 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import url from '../../../../helpers/getPageUrl';
-import { scrollTo } from '../utils';
+import { scrollTo } from '../../utils';
 import {
   createScheduler,
   selectCells,

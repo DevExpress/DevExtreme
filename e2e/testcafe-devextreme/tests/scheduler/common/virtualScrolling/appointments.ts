@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { getStyleAttribute, setStyleAttribute } from '../../../../helpers/domUtils';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { scrollToDate } from '../utils';
+import { scrollToDate } from '../../utils';
 
 fixture.disablePageReloads`Scheduler: Virtual Scrolling`
   .page(url(__dirname, '../../../container.html'));

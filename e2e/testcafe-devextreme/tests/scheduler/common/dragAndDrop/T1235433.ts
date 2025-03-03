@@ -1,11 +1,11 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import type Appointment from 'devextreme-testcafe-models/scheduler/appointment';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { scrollTo } from '../utils';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { scrollTo } from '../../utils';
 
 fixture.disablePageReloads`Scheduler Drag-and-Drop inside Group`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const dragAppointmentByCircle = async (
   t: TestController,
