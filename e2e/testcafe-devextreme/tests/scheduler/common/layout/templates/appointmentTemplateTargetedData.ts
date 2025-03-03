@@ -8,7 +8,7 @@ import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 
 import { generateOptionMatrix } from '../../../../../helpers/generateOptionMatrix';
-import { scrollToDate } from '../../utils';
+import { scrollToDate } from '../../../utils';
 
 fixture.disablePageReloads`Layout:Templates:appointmentTemplate:targetedData`
   .page(url(__dirname, '../../../../container.html'));
