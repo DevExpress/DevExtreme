@@ -190,7 +190,6 @@ jobs:
    #     include:
    #       - name: Check code base (TS and Lint)
    #         command: pnpx nx lint-non-demos
-   #         check-vue-ts: pnpm run ts-check-vue
           # NOTE: skipped due to enormous number of errors
           # - name: Lint demos (1/4)
           #   command: CONSTEL=1/4 npm run lint-demos
@@ -267,6 +266,14 @@ jobs:
     - name: Run check TS for Vue
       working-directory: apps/demos
       run: pnpm run ts-check-vue
+
+   # - name: Run check TS for Angular
+   #   working-directory: apps/demos
+   #   run: pnpm run ts-check-ng
+
+   # - name: Run check TS for React
+   #   working-directory: apps/demos
+   #   run: pnpm run ts-check-react
 
   check_generated_demos:
     name: ${{ matrix.name }}
