@@ -544,8 +544,13 @@ const SelectBox = (DropDownList as any).inherit({
 
       if (acceptCustomValue) {
         if (!saveEditingValue && !this._isValueChanging) {
-          const initialItem = initialSelectedItem
-            ?? (customItemCreateEvent !== '' ? this._createCustomItem(text) : null);
+          let initialItem = null;
+
+          if (isDefined(initialSelectedItem)) {
+            initialItem = initialSelectedItem;
+          } else if (customItemCreateEvent !== '') {
+            initialItem = this._createCustomItem(text);
+          }
 
           this._updateField(initialItem);
           this._clearFilter();
