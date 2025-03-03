@@ -63,7 +63,7 @@ test('The toolbar should not display if the config is empty', async (t) => {
     .expect(await takeScreenshot('scheduler-with-empty-toolbar-config.png'))
     .ok();
 
-  await scheduler.option('toolbar', [{ defaultElement: 'viewSwitcher' }]);
+  await scheduler.option('toolbar', { items: ['viewSwitcher'] });
 
   await t
     .expect(await takeScreenshot('scheduler-with-non-empty-toolbar-config.png'))
@@ -80,7 +80,7 @@ test('The toolbar should not display if the config is empty', async (t) => {
     currentView: 'day',
     views: ['day'],
     height: 580,
-    toolbar: [],
+    toolbar: { items: [] },
   });
 });
 
