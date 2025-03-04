@@ -1,6 +1,8 @@
 In our upcoming major release (v25.1) the DevExtreme Scheduler will include a customizable integrated toolbar. 
 
-For instance, in the screenshot, our new toolbar includes two custom buttons: "Today" and "New event".   
+For instance, in the screenshot, our new toolbar includes two custom buttons: "Today" and "New event".  
+
+<!--split-->
 
 Configuration options will include:  
 
