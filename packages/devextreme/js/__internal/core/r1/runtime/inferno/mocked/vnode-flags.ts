@@ -1,4 +1,4 @@
-export declare enum VNodeFlags {
+export enum VNodeFlags {
   HtmlElement = 1,
   ComponentUnknown = 2,
   ComponentClass = 4,
@@ -26,7 +26,7 @@ export declare enum VNodeFlags {
   ComponentKnown = 12,
 }
 
-export declare enum ChildFlags {
+export enum ChildFlags {
   UnknownChildren = 0,
   HasInvalidChildren = 1,
   HasVNodeChildren = 2,
