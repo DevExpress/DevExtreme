@@ -4180,6 +4180,20 @@
         ]
       },
       {
+        "Name": "Stepper",
+        "Equivalents": "dxStepper, dx-stepper",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Stepper",
+            "Badge": "Roadmap",
+            "DemoType": "Web",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-stepper.xml"
+          }
+        ]
+      },
+      {
         "Name": "Right-to-Left Support",
         "HasCustomImage": true,
         "Equivalents": "RTL",
