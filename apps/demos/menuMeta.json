@@ -1617,6 +1617,26 @@
     ]
   },
   {
+    "Name": "Card View",
+    "Equivalents": "dxCardView, dx-cardview, cardview",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "",
+            "Widget": "CardView",
+            "DemoType": "Web",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-cardview.xml"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "Name": "Scheduler",
     "Equivalents": "dxScheduler, dx-scheduler",
     "Groups": [
