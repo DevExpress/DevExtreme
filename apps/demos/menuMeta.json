@@ -1630,6 +1630,7 @@
             "DocUrl": "",
             "Widget": "CardView",
             "DemoType": "Web",
+            "Badge": "Roadmap",
             "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-cardview.xml"
           }
         ]
@@ -4237,8 +4238,8 @@
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "Stepper",
-            "Badge": "Roadmap",
             "DemoType": "Web",
+            "Badge": "Roadmap",
             "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-stepper.xml"
           }
         ]
