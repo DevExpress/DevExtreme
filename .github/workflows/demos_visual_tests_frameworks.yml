@@ -182,7 +182,10 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - name: Download devextreme sources
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Download devextreme packages
         uses: actions/download-artifact@v4
         with:
           name: devextreme-sources
