@@ -1,14 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { defaultConfig } from './data';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { defaultConfig } from '../helpers/data';
 
 const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`Sticky columns - Editing`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 safeSizeTest('The row edit mode: Edit row when there are sticky columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

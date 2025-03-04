@@ -1,13 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { getData } from '../helpers/generateDataSourceData';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { getData } from '../../helpers/generateDataSourceData';
 
 const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`FixedColumns - Focus Overlay`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Focus overlay should be displayed correctly if sticky columns are turned on', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

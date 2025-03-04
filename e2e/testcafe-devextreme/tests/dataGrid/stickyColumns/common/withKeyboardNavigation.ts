@@ -1,9 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { defaultConfig } from './data';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { defaultConfig } from '../helpers/data';
 
 const navigateToNextCell = async (t, $headerCell) => {
   // act
@@ -30,7 +30,7 @@ const navigateToPrevCell = async (t, $headerCell) => {
 const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`Fixed Columns - keyboard navigation`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 safeSizeTest('Headers navigation by Tab key when there are fixed columns', async (t) => {
   // arrange
