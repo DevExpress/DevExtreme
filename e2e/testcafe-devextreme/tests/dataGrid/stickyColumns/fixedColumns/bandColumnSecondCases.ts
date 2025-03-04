@@ -4,7 +4,7 @@ import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import url from '../../../../helpers/getPageUrl';
-import { borderConfigs, rtlAndRowAltConfigs } from './testMatrixConfig';
+import { borderConfigs, rtlAndRowAltConfigs } from '../helpers/testMatrixConfig';
 
 const DATA_GRID_SELECTOR = '#container';
 

@@ -1,10 +1,10 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { borderConfigs, rtlAndRowAltConfigs } from './testMatrixConfig';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import url from '../../../../helpers/getPageUrl';
+import { borderConfigs, rtlAndRowAltConfigs } from '../helpers/testMatrixConfig';
 
 fixture.disablePageReloads`FixedColumns`
   .page(url(__dirname, '../../../container.html'));
