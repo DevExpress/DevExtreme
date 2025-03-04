@@ -1,0 +1,3 @@
+In our upcoming major release (v25.1) our Chat component will allow users to edit/delete messages once they’ve been sent. 
+<!--split-->
+DevExtreme Chat is a client-side component that requires a backend solution. Message editing and delete operations will include relevant UI elements for end users and APIs to modify rendered messages. To edit and remove messages from a data source, you will need to use Push APIs. 

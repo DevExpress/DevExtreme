@@ -2100,6 +2100,20 @@
         ]
       },
       {
+        "Name": "Message Editing",
+        "Equivalents": "Editing",
+        "Demos": [
+          {
+            "Title": "Message Editing",
+            "Name": "MessageEditing",
+            "Widget": "Chat",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-messages.xml"
+          }
+        ]
+      },
+      {
         "Name": "Customization",
         "Equivalents": "Settings, Options",
         "Demos": [
@@ -2128,6 +2142,20 @@
             "Widget": "Chat",
             "Modules": "html-react-parser,openai,unified",
             "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Image Rendering",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Image Rendering",
+            "Name": "ImageRendering",
+            "Widget": "Chat",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-image-rendering.xml"
           }
         ]
       }
