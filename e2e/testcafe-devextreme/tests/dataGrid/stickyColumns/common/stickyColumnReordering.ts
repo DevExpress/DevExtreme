@@ -1,16 +1,16 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { createWidget } from '../../../helpers/createWidget';
-import { getData } from '../helpers/generateDataSourceData';
-import url from '../../../helpers/getPageUrl';
-import { Themes } from '../../../helpers/themes';
-import { changeTheme } from '../../../helpers/changeTheme';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { createWidget } from '../../../../helpers/createWidget';
+import { getData } from '../../helpers/generateDataSourceData';
+import url from '../../../../helpers/getPageUrl';
+import { Themes } from '../../../../helpers/themes';
+import { changeTheme } from '../../../../helpers/changeTheme';
 
 const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`Reorder columns`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 safeSizeTest('Move left fixed column to the right', async (t) => {
   // arrange
