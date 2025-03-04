@@ -1,0 +1,17 @@
+{
+   "extends": "./tsconfig.build.json",
+    "compilerOptions": {
+      "baseUrl": "../",
+      "outDir": "./dist",
+      "jsx": "react",
+      "paths": {
+          "@devextreme/runtime/common": ["./runtime/common"],
+          "@devextreme/runtime/declarations": ["./runtime/declarations"],
+          "@devextreme/runtime/inferno": ["./runtime/inferno"],
+          "@devextreme/runtime/angular": ["./runtime/angular"],
+          "@devextreme/runtime/react": ["./runtime/react"],
+          "@devextreme/runtime/vue": ["./runtime/vue"]
+        }
+    },
+  }
+  

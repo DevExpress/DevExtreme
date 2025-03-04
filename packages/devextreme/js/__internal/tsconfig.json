@@ -39,7 +39,7 @@
         "./*"
       ],
       "@devextreme/runtime/*": [
-        "../runtime/*"
+        "./__internal/core/r1/runtime/*"
       ],
     },
     "types": []

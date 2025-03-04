@@ -34,12 +34,12 @@ module.exports = {
     resolve: {
         alias: {
             // '@devextreme/vdom': require.resolve('@devextreme/vdom/dist/cjs/index.js'),
-            '@devextreme/runtime/common': require.resolve('./runtime/common/index.ts'),
-            '@devextreme/runtime/inferno': require.resolve('./runtime/inferno/index.ts'),
-            '@devextreme/runtime/declarations': require.resolve('./runtime/declarations/index.ts'),
-            '@devextreme/runtime/angular': require.resolve('./runtime/angular/index.ts'),
-            '@devextreme/runtime/vue': require.resolve('./runtime/vue/index.ts'),
-            '@devextreme/runtime/react': require.resolve('./runtime/react/index.tsx')
+            '@devextreme/runtime/common': require.resolve('./js/__internal/core/r1/runtime/common/index.ts'),
+            '@devextreme/runtime/inferno': require.resolve('./js/__internal/core/r1/runtime/inferno/index.ts'),
+            '@devextreme/runtime/declarations': require.resolve('./js/__internal/core/r1/runtime/declarations/index.ts'),
+            '@devextreme/runtime/angular': require.resolve('./js/__internal/core/r1/runtime/angular/index.ts'),
+            '@devextreme/runtime/vue': require.resolve('./js/__internal/core/r1/runtime/vue/index.ts'),
+            '@devextreme/runtime/react': require.resolve('./js/__internal/core/r1/runtime/react/index.tsx')
         }
     },
 };

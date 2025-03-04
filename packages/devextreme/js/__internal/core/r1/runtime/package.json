@@ -6,7 +6,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "build": "gulp build",
-    "build:watch": "tsc -p tsconfig.esm.build.json --watch",
+    "build:watch": "tsc -p ./tsconfig.esm.build.json --watch",
     "pack": "npm run build && gulp npm.build && shx cp *.tgz package.tgz",
     "clear": "shx rm -rf dist && shx rm -f *.tgz",
     "test": "jest --config=jest.config.js"

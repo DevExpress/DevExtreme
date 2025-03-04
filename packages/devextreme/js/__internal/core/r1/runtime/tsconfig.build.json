@@ -1,5 +1,10 @@
 {
+  "include": ["declarations/**/*", "common/**/*", "angular/**/*", "react/**/*", "vue/**/*", "inferno/**/*", "inferno-hooks/**/*"],
   "compilerOptions": {
+    "outDir": "./",
+    "skipLibCheck": true,
+    "typeRoots": ["node_modules/inferno"],
+    "jsx": "react",
     /* Basic Options */
     // "incremental": true,                   /* Enable incremental compilation */
     "target": "ES2016" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'. */,
@@ -58,5 +63,5 @@
     /* Advanced Options */
     "forceConsistentCasingInFileNames": true, /* Disallow inconsistently-cased references to the same file. */
   },
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["**/__tests__/","node_modules", "dist"]
 }
