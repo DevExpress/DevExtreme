@@ -36,6 +36,7 @@ export class IterableDifferHelper {
         try {
           this._propertyDiffers[prop] = this._differs.find(value).create(null);
           return true;
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) { }
       }
     } else {
