@@ -1,10 +1,10 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { createWidget } from '../../../helpers/createWidget';
-import { getData } from '../helpers/generateDataSourceData';
-import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { createWidget } from '../../../../helpers/createWidget';
+import { getData } from '../../helpers/generateDataSourceData';
+import url from '../../../../helpers/getPageUrl';
 
 const scrollTo = ClientFunction((x = 0, y = 0) => {
   window.scrollTo(x, y);
@@ -13,7 +13,7 @@ const scrollTo = ClientFunction((x = 0, y = 0) => {
 const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`Resize columns - nextColumn mode`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 [false, true].forEach((rtlEnabled) => {
   safeSizeTest(`Resize first fixed column width with left position (rtlEnabled = ${rtlEnabled})`, async (t) => {
@@ -94,7 +94,7 @@ fixture.disablePageReloads`Resize columns - nextColumn mode`
 });
 
 fixture.disablePageReloads`Resize columns - widget mode`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 [false, true].forEach((rtlEnabled) => {
   safeSizeTest(`Resize first fixed column width with left position (rtlEnabled = ${rtlEnabled})`, async (t) => {

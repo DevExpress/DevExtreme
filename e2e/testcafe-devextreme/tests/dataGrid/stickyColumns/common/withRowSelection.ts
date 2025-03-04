@@ -1,16 +1,16 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { defaultConfig } from './data';
-import { changeTheme } from '../../../helpers/changeTheme';
-import { Themes } from '../../../helpers/themes';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { defaultConfig } from '../helpers/data';
+import { changeTheme } from '../../../../helpers/changeTheme';
+import { Themes } from '../../../../helpers/themes';
 
 const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`Sticky columns - Row Selection`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 [Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
   safeSizeTest(`The selected row should be displayed correctly when there are sticky columns (${theme} theme)`, async (t) => {
