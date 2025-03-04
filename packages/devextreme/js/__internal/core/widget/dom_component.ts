@@ -332,7 +332,7 @@ class DOMComponent<
     element: string | HTMLElement | dxElementWrapper,
     component: string | (new (...args) => TTComponent),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    componentConfiguration: TTComponent extends Component<any, infer TTProperties>
+    componentConfiguration?: TTComponent extends Component<any, infer TTProperties>
       ? TTProperties
       : Record<string, unknown>,
   ): TTComponent {
