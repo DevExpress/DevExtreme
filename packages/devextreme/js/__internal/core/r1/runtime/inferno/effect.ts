@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/array-type */
+/* eslint-disable @typescript-eslint/prefer-readonly */
+/* eslint-disable @typescript-eslint/no-invalid-void-type */
 export class InfernoEffect {
   private destroy?: (() => void) | void;
 

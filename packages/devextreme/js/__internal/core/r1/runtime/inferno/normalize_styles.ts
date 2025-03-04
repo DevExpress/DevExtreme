@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-reduce-type-parameter */
 const NUMBER_STYLES = new Set([
   'animationIterationCount',
   'borderImageOutset',

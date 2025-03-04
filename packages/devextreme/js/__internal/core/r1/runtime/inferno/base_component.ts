@@ -1,5 +1,11 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable spellcheck/spell-checker */
+/* eslint-disable max-classes-per-file */
 import { Component, findDOMfromVNode } from 'inferno';
-import { InfernoEffect } from './effect';
+
+import type { InfernoEffect } from './effect';
 import { InfernoEffectHost } from './effect_host';
 
 const areObjectsEqual = (firstObject: any, secondObject: any) => {
@@ -102,10 +108,10 @@ export class InfernoWrapperComponent<
       ? el.className.split(' ')
       : [];
     const addedClasses = currentClasses.filter(
-      (className) => el.dxClasses.previous.indexOf(className) < 0,
+      (className) => !el.dxClasses.previous.includes(className),
     );
     const removedClasses = el.dxClasses.previous.filter(
-      (className: string): boolean => currentClasses.indexOf(className) < 0,
+      (className: string): boolean => !currentClasses.includes(className),
     );
 
     addedClasses.forEach((value: string): void => {

@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 export enum VNodeFlags {
   HtmlElement = 1,
   ComponentUnknown = 2,

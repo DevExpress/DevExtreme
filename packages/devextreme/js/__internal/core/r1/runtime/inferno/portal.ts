@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/consistent-type-definitions */
 import { createPortal } from 'inferno';
 
 type PortalProps = {
-  // eslint-disable-next-line react/require-default-props
   container?: HTMLElement | null;
   children: any;
 };

@@ -1,3 +1,7 @@
+/* eslint-disable @stylistic/function-paren-newline */
+/* eslint-disable @stylistic/member-delimiter-style */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render } from 'inferno';
 import { createElement } from 'inferno-create-element';
 

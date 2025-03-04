@@ -1,3 +1,24 @@
+/* eslint-disable no-cond-assign */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable no-return-assign */
+/* eslint-disable no-multi-assign */
+/* eslint-disable @stylistic/no-extra-parens */
+/* eslint-disable @typescript-eslint/no-wrapper-object-types */
+/* eslint-disable no-plusplus */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable prefer-destructuring */
+/* eslint-disable @typescript-eslint/prefer-optional-chain */
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-bitwise */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/init-declarations */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable spellcheck/spell-checker */
+/* eslint-disable @stylistic/max-len */
+/* eslint-disable simple-import-sort/imports */
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import {
   _CI, _HI, _M, _MCCC, _ME, _MFCC, _MP, _MR, EMPTY_OBJ, render, VNode, _RFC as renderFunctionalComponent,
 } from 'inferno';

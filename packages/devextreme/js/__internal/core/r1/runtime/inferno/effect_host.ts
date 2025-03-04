@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable no-plusplus */
+/* eslint-disable @typescript-eslint/array-type */
 export const InfernoEffectHost: {
   lockCount: number;
   lock: () => void;
