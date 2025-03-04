@@ -44,9 +44,6 @@
     },
     "types": []
   },
-  "include": [
-    "core/r1/runtime/**/*.ts",
-  ],
   "tsc-alias": {
     "verbose": false,
     "resolveFullPaths": false,

@@ -48,6 +48,7 @@
     "js/**/*.d.ts",
     "js/renovation",
     "../devextreme-themebuilder",
-    "testing/testcafe"
+    "testing/testcafe",
+    "js/__internal/core/r1/runtime/**/*.ts"
   ]
 }
