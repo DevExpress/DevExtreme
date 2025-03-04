@@ -1,0 +1,42 @@
+{
+  "name": "@devextreme/runtime",
+  "version": "3.1.0-next",
+  "description": "DevExtreme virtual DOM common components",
+  "author": "Developer Express Inc.",
+  "license": "SEE LICENSE IN LICENSE",
+  "scripts": {
+    "build": "gulp build",
+    "build:watch": "tsc -p tsconfig.esm.build.json --watch",
+    "pack": "npm run build && gulp npm.build && shx cp *.tgz package.tgz",
+    "clear": "shx rm -rf dist && shx rm -f *.tgz",
+    "test": "jest --config=jest.config.js"
+  },
+  "dependencies": {
+    "inferno": "^7.4.6",
+    "inferno-create-element": "^7.4.6",
+    "inferno-hydrate": "^7.4.6"
+  },
+  "devDependencies": {
+    "@angular/core": "^11.0.4",
+    "@babel/core": "^7.16.0",
+    "@babel/plugin-syntax-jsx": "^7.16.0",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-react": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
+    "@types/react": "^17.0.37",
+    "babel-plugin-inferno": "^6.3.0",
+    "gulp": "^4.0.2",
+    "gulp-plumber": "^1.2.1",
+    "gulp-replace": "^1.1.3",
+    "gulp-shell": "^0.8.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "inferno-test-utils": "^7.4.11",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "shx": "^0.3.3",
+    "typescript": "4.3.5",
+    "vue": "~2.6.14"
+  }
+}

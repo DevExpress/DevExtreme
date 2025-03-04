@@ -34,12 +34,12 @@ module.exports = {
     resolve: {
         alias: {
             // '@devextreme/vdom': require.resolve('@devextreme/vdom/dist/cjs/index.js'),
-            '@devextreme/runtime/common': require.resolve('@devextreme/runtime/cjs/common/index.js'),
-            '@devextreme/runtime/inferno': require.resolve('@devextreme/runtime/cjs/inferno/index.js'),
-            '@devextreme/runtime/declarations': require.resolve('@devextreme/runtime/cjs/declarations/index.js'),
-            '@devextreme/runtime/angular': require.resolve('@devextreme/runtime/cjs/angular/index.js'),
-            '@devextreme/runtime/vue': require.resolve('@devextreme/runtime/cjs/vue/index.js'),
-            '@devextreme/runtime/react': require.resolve('@devextreme/runtime/cjs/react/index.js')
+            '@devextreme/runtime/common': require.resolve('./runtime/common/index.ts'),
+            '@devextreme/runtime/inferno': require.resolve('./runtime/inferno/index.ts'),
+            '@devextreme/runtime/declarations': require.resolve('./runtime/declarations/index.ts'),
+            '@devextreme/runtime/angular': require.resolve('./runtime/angular/index.ts'),
+            '@devextreme/runtime/vue': require.resolve('./runtime/vue/index.ts'),
+            '@devextreme/runtime/react': require.resolve('./runtime/react/index.tsx')
         }
     },
 };
