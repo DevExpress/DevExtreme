@@ -2048,6 +2048,20 @@
         ]
       },
       {
+        "Name": "AI-powered Text Editing",
+        "Equivalents": "AI, text editing, text editor",
+        "Demos": [
+          {
+            "Title": "AI-powered Text Editing",
+            "Name": "AITextEditing",
+            "Widget": "HtmlEditor",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-ai.xml"
+          }
+        ]
+      },
+      {
         "Name": "Markdown Support",
         "Equivalents": "",
         "Demos": [
