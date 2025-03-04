@@ -6,6 +6,7 @@ import errors from '@js/core/errors';
 import { EventsStrategy } from '@js/core/events_strategy';
 // @ts-expect-error ts-error
 import { grep } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import {
   Deferred,
   // @ts-expect-error ts-error
@@ -22,6 +23,9 @@ import {
   isPromise,
   isString,
 } from '@js/core/utils/type';
+import type { ValidationResult } from '@js/ui/validation_group';
+
+import type Validator from './m_validator';
 
 const EMAIL_VALIDATION_REGEX = /^[\d\w.+_-]+@[\d\w._-]+\.[\w]+$/i;
 
@@ -340,8 +344,25 @@ const rulesValidators = {
   email: new EmailRuleValidator(),
 };
 
-const GroupConfig = Class.inherit({
-  ctor(group, isRemovable) {
+// @ts-expect-error dxClass inheritance issue
+class GroupConfig extends (Class.inherit({}) as new() => {}) {
+  group?: GroupConfig;
+
+  validators!: Validator[];
+
+  _isRemovable?: boolean;
+
+  _eventsStrategy!: EventsStrategy;
+
+  _pendingValidators!: Validator[];
+
+  _validationInfo!: {
+    result: ValidationResult;
+    deferred: DeferredObj<ValidationResult> | null;
+    skipValidation: boolean;
+  };
+
+  ctor(group, isRemovable): void {
     this.group = group;
     this.validators = [];
     this._isRemovable = isRemovable;
@@ -349,9 +370,9 @@ const GroupConfig = Class.inherit({
     this._onValidatorStatusChanged = this._onValidatorStatusChanged.bind(this);
     this._resetValidationInfo();
     this._eventsStrategy = new EventsStrategy(this);
-  },
+  }
 
-  validate() {
+  validate(): void {
     const result = {
       isValid: true,
       brokenRules: [],
@@ -368,7 +389,7 @@ const GroupConfig = Class.inherit({
       if (validatorResult.brokenRules) {
         result.brokenRules = result.brokenRules.concat(validatorResult.brokenRules);
       }
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       result.validators.push(validator);
       if (validatorResult.status === STATUS.pending) {
         this._addPendingValidator(validator);
@@ -384,23 +405,23 @@ const GroupConfig = Class.inherit({
     }
     this._updateValidationInfo(result);
     return extend({}, this._validationInfo.result);
-  },
+  }
 
   _subscribeToChangeEvents(validator) {
     validator.on('validating', this._onValidatorStatusChanged);
     validator.on('validated', this._onValidatorStatusChanged);
-  },
+  }
 
   _unsubscribeFromChangeEvents(validator) {
     validator.off('validating', this._onValidatorStatusChanged);
     validator.off('validated', this._onValidatorStatusChanged);
-  },
+  }
 
   _unsubscribeFromAllChangeEvents() {
     each(this.validators, (_, validator) => {
       this._unsubscribeFromChangeEvents(validator);
     });
-  },
+  }
 
   _updateValidationInfo(result) {
     this._validationInfo.result = result;
@@ -411,21 +432,21 @@ const GroupConfig = Class.inherit({
       this._validationInfo.deferred = Deferred();
       this._validationInfo.result.complete = this._validationInfo.deferred.promise();
     }
-  },
+  }
 
   _addPendingValidator(validator) {
     const foundValidator = grep(this._pendingValidators, (val) => val === validator)[0];
     if (!foundValidator) {
       this._pendingValidators.push(validator);
     }
-  },
+  }
 
   _removePendingValidator(validator) {
     const index = this._pendingValidators.indexOf(validator);
     if (index >= 0) {
       this._pendingValidators.splice(index, 1);
     }
-  },
+  }
 
   _orderBrokenRules(brokenRules) {
     let orderedRules = [];
@@ -436,7 +457,7 @@ const GroupConfig = Class.inherit({
       }
     });
     return orderedRules;
-  },
+  }
 
   _updateBrokenRules(result) {
     if (!this._validationInfo.result) {
@@ -448,7 +469,7 @@ const GroupConfig = Class.inherit({
       brokenRules = rules.concat(result.brokenRules);
     }
     this._validationInfo.result.brokenRules = this._orderBrokenRules(brokenRules);
-  },
+  }
 
   _onValidatorStatusChanged(result) {
     if (result.status === STATUS.pending) {
@@ -456,9 +477,9 @@ const GroupConfig = Class.inherit({
       return;
     }
     this._resolveIfComplete(result);
-  },
+  }
 
-  _resolveIfComplete(result) {
+  _resolveIfComplete(result): void {
     this._removePendingValidator(result.validator);
     this._updateBrokenRules(result);
     if (!this._pendingValidators.length) {
@@ -466,6 +487,7 @@ const GroupConfig = Class.inherit({
       if (!this._validationInfo.result) {
         return;
       }
+      // @ts-expect-error ts-error
       this._validationInfo.result.status = this._validationInfo.result.brokenRules.length === 0 ? STATUS.valid : STATUS.invalid;
       this._validationInfo.result.isValid = this._validationInfo.result.status === STATUS.valid;
       const res = extend({}, this._validationInfo.result, { complete: null });
@@ -476,59 +498,60 @@ const GroupConfig = Class.inherit({
         deferred.resolve(res);
       });
     }
-  },
+  }
 
-  _raiseValidatedEvent(result) {
+  _raiseValidatedEvent(result): void {
     this._eventsStrategy.fireEvent('validated', [result]);
-  },
+  }
 
   _resetValidationInfo() {
     this._validationInfo = {
+      // @ts-expect-error ts-error
       result: null,
       deferred: null,
     };
-  },
+  }
 
-  _synchronizeValidationInfo() {
+  _synchronizeValidationInfo(): void {
     if (this._validationInfo.result) {
       this._validationInfo.result.validators = this.validators;
     }
-  },
+  }
 
-  removeRegisteredValidator(validator) {
+  removeRegisteredValidator(validator): void {
     const index = this.validators.indexOf(validator);
     if (index > -1) {
       this.validators.splice(index, 1);
       this._synchronizeValidationInfo();
       this._resolveIfComplete({ validator });
     }
-  },
+  }
 
-  registerValidator(validator) {
+  registerValidator(validator): void {
     if (!this.validators.includes(validator)) {
       this.validators.push(validator);
       this._synchronizeValidationInfo();
     }
-  },
+  }
 
-  reset() {
+  reset(): void {
     each(this.validators, (_, validator) => {
       validator.reset();
     });
     this._pendingValidators = [];
     this._resetValidationInfo();
-  },
+  }
 
   on(eventName, eventHandler) {
     this._eventsStrategy.on(eventName, eventHandler);
     return this;
-  },
+  }
 
   off(eventName, eventHandler) {
     this._eventsStrategy.off(eventName, eventHandler);
     return this;
-  },
-});
+  }
+}
 
 const ValidationEngine = {
   groups: [],
@@ -566,6 +589,7 @@ const ValidationEngine = {
   addGroup(group, isRemovable = true) {
     let config = this.getGroupConfig(group);
     if (!config) {
+      // @ts-expect-error ts-error
       config = new GroupConfig(group, isRemovable);
       this.groups.push(config);
     }
