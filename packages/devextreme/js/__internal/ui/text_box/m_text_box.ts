@@ -1,11 +1,13 @@
 import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
 import { getOuterWidth, getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
+import type { OptionChanged } from '@ts/core/widget/types';
+import TextEditor from '@ts/ui/text_box/m_text_editor.mask';
 
-import TextEditor from './m_text_editor';
+import type { TextEditorBaseProperties } from './m_text_editor.base';
 
 const window = getWindow();
 
@@ -16,123 +18,138 @@ const SEARCHBOX_CLASS = 'dx-searchbox';
 const ICON_CLASS = 'dx-icon';
 const SEARCH_ICON_CLASS = 'dx-icon-search';
 
-const TextBox = TextEditor.inherit({
+export interface TextBoxProperties extends TextEditorBaseProperties {
+  maxLength?: string | number | null;
+}
 
-  ctor(element, options) {
+class TextBox<
+  TProperties extends TextBoxProperties = TextBoxProperties,
+> extends TextEditor<TProperties> {
+  _$searchIcon?: dxElementWrapper;
+
+  _showClearButton?: boolean;
+
+  ctor(element: Element, options: TProperties): void {
     if (options) {
       this._showClearButton = options.showClearButton;
     }
 
-    this.callBase.apply(this, arguments);
-  },
+    super.ctor(element, options);
+  }
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+  _getDefaultOptions(): TProperties {
+    return {
+      ...super._getDefaultOptions(),
       value: '',
       mode: 'text',
-
       maxLength: null,
-    });
-  },
+    };
+  }
 
-  _initMarkup() {
+  _initMarkup(): void {
     this.$element().addClass(TEXTBOX_CLASS);
 
-    this.callBase();
+    super._initMarkup();
     this.setAria('role', 'textbox');
-  },
+  }
 
-  _renderInputType() {
-    this.callBase();
+  _renderInputType(): void {
+    super._renderInputType();
 
     this._renderSearchMode();
-  },
+  }
 
-  _useTemplates() {
+  // eslint-disable-next-line class-methods-use-this
+  _useTemplates(): boolean {
     return false;
-  },
+  }
 
-  _renderProps() {
-    this.callBase();
+  _renderProps(): void {
+    super._renderProps();
     this._toggleMaxLengthProp();
-  },
+  }
 
-  _toggleMaxLengthProp() {
+  _toggleMaxLengthProp(): void {
     const maxLength = this._getMaxLength();
     if (maxLength && maxLength > 0) {
       this._input().attr('maxLength', maxLength);
     } else {
       this._input().removeAttr('maxLength');
     }
-  },
+  }
 
-  _renderSearchMode() {
-    const $element = this._$element;
+  _renderSearchMode(): void {
+    const { mode } = this.option();
 
-    if (this.option('mode') === 'search') {
-      $element.addClass(SEARCHBOX_CLASS);
+    if (mode === 'search') {
+      this.$element().addClass(SEARCHBOX_CLASS);
       this._renderSearchIcon();
 
       if (this._showClearButton === undefined) {
-        this._showClearButton = this.option('showClearButton');
+        const { showClearButton } = this.option();
+
+        this._showClearButton = showClearButton;
         this.option('showClearButton', true);
       }
     } else {
-      $element.removeClass(SEARCHBOX_CLASS);
-      this._$searchIcon && this._$searchIcon.remove();
+      this.$element().removeClass(SEARCHBOX_CLASS);
+      if (this._$searchIcon) {
+        this._$searchIcon.remove();
+      }
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       this.option('showClearButton', this._showClearButton === undefined ? this.option('showClearButton') : this._showClearButton);
       delete this._showClearButton;
     }
-  },
+  }
 
-  _renderSearchIcon() {
+  _renderSearchIcon(): void {
     const $searchIcon = $('<div>')
       .addClass(ICON_CLASS)
       .addClass(SEARCH_ICON_CLASS);
 
     $searchIcon.prependTo(this._input().parent());
     this._$searchIcon = $searchIcon;
-  },
+  }
 
-  _getLabelContainerWidth() {
+  _getLabelContainerWidth(): number {
     if (this._$searchIcon) {
       const $inputContainer = this._input().parent();
 
       return getWidth($inputContainer) - this._getLabelBeforeWidth();
     }
 
-    return this.callBase();
-  },
+    return super._getLabelContainerWidth();
+  }
 
-  _getLabelBeforeWidth() {
-    let labelBeforeWidth = this.callBase();
+  _getLabelBeforeWidth(): number {
+    let labelBeforeWidth = super._getLabelBeforeWidth();
 
     if (this._$searchIcon) {
       labelBeforeWidth += getOuterWidth(this._$searchIcon);
     }
 
     return labelBeforeWidth;
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     switch (args.name) {
       case 'maxLength':
         this._toggleMaxLengthProp();
         break;
       case 'mode':
-        this.callBase(args);
+        super._optionChanged(args);
         this._updateLabelWidth();
         break;
       case 'mask':
-        this.callBase(args);
+        super._optionChanged(args);
         this._toggleMaxLengthProp();
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
-  _onKeyDownCutOffHandler(e) {
+  _onKeyDownCutOffHandler(e): boolean {
     const actualMaxLength = this._getMaxLength();
 
     if (actualMaxLength && !e.ctrlKey && !this._hasSelection()) {
@@ -142,34 +159,38 @@ const TextBox = TextEditor.inherit({
       this._cutOffExtraChar($input);
 
       return $input.val().length < actualMaxLength
-        // @ts-expect-error
+        // @ts-expect-error ts-error
         || ignoreKeys.includes(key)
-        // @ts-expect-error
+        // @ts-expect-error ts-error
         || window.getSelection().toString() !== '';
     }
     return true;
-  },
+  }
 
-  _onChangeCutOffHandler(e) {
+  _onChangeCutOffHandler(e): void {
     const $input = $(e.target);
     if (this.option('maxLength')) {
       this._cutOffExtraChar($input);
     }
-  },
+  }
 
-  _cutOffExtraChar($input) {
+  _cutOffExtraChar($input: dxElementWrapper): void {
     const actualMaxLength = this._getMaxLength();
     const textInput = $input.val();
     if (actualMaxLength && textInput.length > actualMaxLength) {
+      // @ts-expect-error ts-error
       $input.val(textInput.substr(0, actualMaxLength));
     }
-  },
+  }
 
-  _getMaxLength() {
-    const isMaskSpecified = !!this.option('mask');
-    return isMaskSpecified ? null : this.option('maxLength');
-  },
-});
+  _getMaxLength(): string | number | null {
+    const { mask, maxLength } = this.option();
+
+    const isMaskSpecified = !!mask;
+    // @ts-expect-error ts-error
+    return isMaskSpecified ? null : maxLength;
+  }
+}
 
 registerComponent('dxTextBox', TextBox);
 

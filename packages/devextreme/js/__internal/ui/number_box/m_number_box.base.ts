@@ -26,7 +26,7 @@ const WIDGET_CLASS = 'dx-numberbox';
 const FIREFOX_CONTROL_KEYS = ['tab', 'del', 'backspace', 'leftArrow', 'rightArrow', 'home', 'end', 'enter'];
 
 const FORCE_VALUECHANGE_EVENT_NAMESPACE = 'NumberBoxForceValueChange';
-
+// @ts-expect-error
 const NumberBoxBase = TextEditor.inherit({
 
   _supportedKeys() {

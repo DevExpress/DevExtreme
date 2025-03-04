@@ -79,88 +79,86 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
   _supportedKeys(): Record<string, (e: KeyboardEvent) => void | boolean> {
     return {
       ...super._supportedKeys(),
-      ...{
-        rightArrow(e: KeyboardEvent): void {
-          e.preventDefault();
-          e.stopPropagation();
+      rightArrow(e: KeyboardEvent): void {
+        e.preventDefault();
+        e.stopPropagation();
 
-          const {
-            direction, showCollapseNext, showCollapsePrev, rtlEnabled,
-          } = this.option();
+        const {
+          direction, showCollapseNext, showCollapsePrev, rtlEnabled,
+        } = this.option();
 
-          const forbidCollapseNext = rtlEnabled
-            ? showCollapsePrev === false
-            : showCollapseNext === false;
+        const forbidCollapseNext = rtlEnabled
+          ? showCollapsePrev === false
+          : showCollapseNext === false;
 
-          if (isCommandKeyPressed(e)) {
-            if (direction === RESIZE_DIRECTION.vertical || forbidCollapseNext) {
-              return;
-            }
-
-            if (rtlEnabled) {
-              this._collapsePrevHandler(e);
-            } else {
-              this._collapseNextHandler(e);
-            }
-          } else {
-            this._resizeBy(e, { x: KEYBOARD_DELTA });
+        if (isCommandKeyPressed(e)) {
+          if (direction === RESIZE_DIRECTION.vertical || forbidCollapseNext) {
+            return;
           }
-        },
-        leftArrow(e: KeyboardEvent): void {
-          e.preventDefault();
-          e.stopPropagation();
 
-          const {
-            direction, showCollapsePrev, showCollapseNext, rtlEnabled,
-          } = this.option();
-
-          const forbidCollapsePrev = rtlEnabled
-            ? showCollapseNext === false
-            : showCollapsePrev === false;
-
-          if (isCommandKeyPressed(e)) {
-            if (direction === RESIZE_DIRECTION.vertical || forbidCollapsePrev) {
-              return;
-            }
-            if (rtlEnabled) {
-              this._collapseNextHandler(e);
-            } else {
-              this._collapsePrevHandler(e);
-            }
-          } else {
-            this._resizeBy(e, { x: -KEYBOARD_DELTA });
-          }
-        },
-        upArrow(e: KeyboardEvent): void {
-          e.preventDefault();
-          e.stopPropagation();
-
-          const { direction, showCollapsePrev } = this.option();
-
-          if (isCommandKeyPressed(e)) {
-            if (direction === RESIZE_DIRECTION.horizontal || showCollapsePrev === false) {
-              return;
-            }
+          if (rtlEnabled) {
             this._collapsePrevHandler(e);
           } else {
-            this._resizeBy(e, { y: -KEYBOARD_DELTA });
+            this._collapseNextHandler(e);
           }
-        },
-        downArrow(e: KeyboardEvent): void {
-          e.preventDefault();
-          e.stopPropagation();
+        } else {
+          this._resizeBy(e, { x: KEYBOARD_DELTA });
+        }
+      },
+      leftArrow(e: KeyboardEvent): void {
+        e.preventDefault();
+        e.stopPropagation();
 
-          const { direction, showCollapseNext } = this.option();
+        const {
+          direction, showCollapsePrev, showCollapseNext, rtlEnabled,
+        } = this.option();
 
-          if (isCommandKeyPressed(e)) {
-            if (direction === RESIZE_DIRECTION.horizontal || showCollapseNext === false) {
-              return;
-            }
+        const forbidCollapsePrev = rtlEnabled
+          ? showCollapseNext === false
+          : showCollapsePrev === false;
+
+        if (isCommandKeyPressed(e)) {
+          if (direction === RESIZE_DIRECTION.vertical || forbidCollapsePrev) {
+            return;
+          }
+          if (rtlEnabled) {
             this._collapseNextHandler(e);
           } else {
-            this._resizeBy(e, { y: KEYBOARD_DELTA });
+            this._collapsePrevHandler(e);
           }
-        },
+        } else {
+          this._resizeBy(e, { x: -KEYBOARD_DELTA });
+        }
+      },
+      upArrow(e: KeyboardEvent): void {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const { direction, showCollapsePrev } = this.option();
+
+        if (isCommandKeyPressed(e)) {
+          if (direction === RESIZE_DIRECTION.horizontal || showCollapsePrev === false) {
+            return;
+          }
+          this._collapsePrevHandler(e);
+        } else {
+          this._resizeBy(e, { y: -KEYBOARD_DELTA });
+        }
+      },
+      downArrow(e: KeyboardEvent): void {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const { direction, showCollapseNext } = this.option();
+
+        if (isCommandKeyPressed(e)) {
+          if (direction === RESIZE_DIRECTION.horizontal || showCollapseNext === false) {
+            return;
+          }
+          this._collapseNextHandler(e);
+        } else {
+          this._resizeBy(e, { y: KEYBOARD_DELTA });
+        }
       },
     };
   }
