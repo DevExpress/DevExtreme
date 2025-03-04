@@ -51,8 +51,6 @@ test('T1235433: Scheduler - Drag-n-Drop works inside the group with virtual scro
 
   await t.expect(scheduler.element.exists).ok();
 
-  await t.debug();
-
   await dragAppointmentByCircle(t, scheduler.getAppointment('Book 1'), appointmentDescriptions, appointment1Times);
   await scrollTo(1400, 0);
   await dragAppointmentByCircle(t, scheduler.getAppointment('Book 2'), appointmentDescriptions, appointment2Times);
