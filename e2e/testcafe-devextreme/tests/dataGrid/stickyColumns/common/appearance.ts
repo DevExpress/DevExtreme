@@ -1,15 +1,15 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { getData } from '../helpers/generateDataSourceData';
-import { Themes } from '../../../helpers/themes';
-import { changeTheme } from '../../../helpers/changeTheme';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { getData } from '../../helpers/generateDataSourceData';
+import { Themes } from '../../../../helpers/themes';
+import { changeTheme } from '../../../../helpers/changeTheme';
 
 const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`FixedColumns - appearance`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 ([
   [Themes.genericLight, false],

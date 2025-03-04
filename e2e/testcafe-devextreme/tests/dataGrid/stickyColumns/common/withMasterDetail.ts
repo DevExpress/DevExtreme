@@ -1,14 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { defaultConfig } from './data';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { defaultConfig } from '../helpers/data';
 
 const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`FixedColumns - MasterDetail`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 safeSizeTest('Sticky columns with master-detail', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

@@ -1,17 +1,17 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { defaultConfig } from './data';
-import { MouseAction, MouseUpEvents } from '../../../helpers/mouseUpEvents';
-import { changeTheme } from '../../../helpers/changeTheme';
-import { Themes } from '../../../helpers/themes';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { defaultConfig } from '../helpers/data';
+import { MouseAction, MouseUpEvents } from '../../../../helpers/mouseUpEvents';
+import { changeTheme } from '../../../../helpers/changeTheme';
+import { Themes } from '../../../../helpers/themes';
 
 const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`FixedColumns - Grouping`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 [false, true].forEach((rtlEnabled) => {
   safeSizeTest(`Sticky columns with grouping & summary (rtl=${rtlEnabled})`, async (t) => {
