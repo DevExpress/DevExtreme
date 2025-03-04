@@ -46,8 +46,6 @@
   ],
   "include": [
     "js/**/*.d.ts",
-    "js/__internal/core/r1/runtime/inferno/**/*.ts",
-    "js/__internal/core/r1/runtime/**/*.ts",
     "js/renovation",
     "../devextreme-themebuilder",
     "testing/testcafe"
