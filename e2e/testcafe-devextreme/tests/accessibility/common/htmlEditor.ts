@@ -1,11 +1,11 @@
 import { Properties } from 'devextreme/ui/html_editor.d';
 import { Selector } from 'testcafe';
-import url from '../../helpers/getPageUrl';
-import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
-import { Options } from '../../helpers/generateOptionMatrix';
+import url from '../../../helpers/getPageUrl';
+import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
+import { Options } from '../../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const markup = '<p>He<em>llo</em></p>';
 
