@@ -38,6 +38,9 @@
       "@js/*": [
         "./*"
       ],
+      "@devextreme/runtime/*": [
+        "../runtime/*"
+      ],
     },
     "types": []
   },
