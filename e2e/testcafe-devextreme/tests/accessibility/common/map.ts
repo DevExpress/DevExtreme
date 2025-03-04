@@ -1,7 +1,7 @@
 import { Properties } from 'devextreme/ui/map.d';
-import url from '../../helpers/getPageUrl';
-import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
-import { Options } from '../../helpers/generateOptionMatrix';
+import url from '../../../helpers/getPageUrl';
+import { testAccessibility, Configuration } from '../../../helpers/accessibility/test';
+import { Options } from '../../../helpers/generateOptionMatrix';
 
 // TODO Chrome133: skipped during chrome update
 // 1) AssertionError: 1 violations found:
@@ -12,7 +12,7 @@ import { Options } from '../../helpers/generateOptionMatrix';
 //       * aria-command-name
 //           ".copyrightLink"
 fixture.disablePageReloads.skip`Accessibility`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const markersData = [
   { location: '40.7825, -73.966111' },

@@ -1,23 +1,23 @@
 import { Properties } from 'devextreme/ui/gallery.d';
-import url from '../../helpers/getPageUrl';
-import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
-import { Options } from '../../helpers/generateOptionMatrix';
+import url from '../../../helpers/getPageUrl';
+import { testAccessibility, Configuration } from '../../../helpers/accessibility/test';
+import { Options } from '../../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const gallery = [
   {
     imageAlt: 'Image 1',
-    imageSrc: '../../images/1.jpg',
+    imageSrc: '../../../images/1.jpg',
   },
   {
     imageAlt: 'Image 2',
-    imageSrc: '../../images/2.jpg',
+    imageSrc: '../../../images/2.jpg',
   },
   {
     imageAlt: 'Image 3',
-    imageSrc: '../../images/3.jpg',
+    imageSrc: '../../../images/3.jpg',
   },
 ];
 
