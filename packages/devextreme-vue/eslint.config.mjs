@@ -129,7 +129,8 @@ export default [
     ...compat.extends('devextreme/typescript').map(config => {
       const newConfig = {
         ...config,
-        files: ['**/*.ts?(x)']
+        files: ['**/*.ts?(x)'],
+        ignores: ['**/*.d.ts'],
       };
 
       if (config.rules) {
@@ -140,7 +141,7 @@ export default [
     }),
     {
         files: ['**/*.ts?(x)'],
-        ignores: ['*.d.ts'],
+        ignores: ['**/*.d.ts'],
         languageOptions: {
             parser: tsParser,
             parserOptions: {
