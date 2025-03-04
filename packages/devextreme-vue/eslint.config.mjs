@@ -1,5 +1,5 @@
 import { FlatCompat } from '@eslint/eslintrc';
-import ts from "@typescript-eslint/eslint-plugin";
+import js from "@eslint/js";
 import tsParser from "@typescript-eslint/parser";
 import babelParser from '@babel/eslint-parser';
 import importPlugin from "eslint-plugin-import";
@@ -36,6 +36,7 @@ const processDevExtremeRules = devExtremeRules => (
 export default [
     ...compat.extends('devextreme/spell-check'),
     {
+        ignores: ['metadata/*'],
         plugins: {
             import: importPlugin,
             spellcheck,
@@ -62,6 +63,7 @@ export default [
             },
         },
         ...importPlugin.flatConfigs.recommended,
+        ...js.configs.recommended,
         rules: {
             "i18n/no-russian-character": ["error", { includeIdentifier: true }],
             "block-spacing": "error",
@@ -138,6 +140,7 @@ export default [
     }),
     {
         files: ['**/*.ts?(x)'],
+        ignores: ['*.d.ts'],
         languageOptions: {
             parser: tsParser,
             parserOptions: {
@@ -147,9 +150,6 @@ export default [
                 ecmaVersion: 6,
                 sourceType: "module",
             },
-        },
-        plugins: { 
-          "@typescript-eslint": ts,
         },
         rules: {
             "prefer-regex-literals": "off",
@@ -192,9 +192,6 @@ export default [
     }),
     {
         files: ["**/*.d.ts"],
-        plugins: {
-          i18n: i18N,
-        },
         languageOptions: {
             parser: tsParser,
             parserOptions: {
