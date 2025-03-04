@@ -1,7 +1,13 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
     "jsx": "react",
+    "paths": {
+      "@devextreme/runtime/inferno-hooks": ["./runtime/inferno-hooks"],
+      "@devextreme/runtime/inferno": ["./runtime/inferno"],
+      "@devextreme/runtime/angular": ["./runtime/angular"],
+      "@devextreme/runtime/react": ["./runtime/react"],
+      "@devextreme/runtime/vue": ["./runtime/vue"]
+    }
   },
 }
