@@ -43,6 +43,8 @@ export const testAccessibility = <TComponentOptions = unknown>(
 
   const optionConfigurations = getOptionConfigurations(options);
 
+  console.log(optionConfigurations.length);
+
   optionConfigurations.forEach((optionConfiguration, index) => {
     test(`${component}: test with axe #${index}`, async (t) => {
       await a11yCheck(t, a11yCheckConfig, selector, optionConfiguration);
