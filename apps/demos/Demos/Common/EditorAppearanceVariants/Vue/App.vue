@@ -135,6 +135,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
+import type { EditorStyle, LabelMode } from 'devextreme-vue/common';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxTextBox from 'devextreme-vue/text-box';
 import DxTextArea from 'devextreme-vue/text-area';
@@ -146,7 +147,6 @@ import {
   DxRequiredRule,
 } from 'devextreme-vue/validator';
 import notify from 'devextreme/ui/notify';
-import type { EditorStyle, LabelMode } from 'devextreme/common';
 import { states } from './data.ts';
 
 const birthDate = ref(new Date(1981, 5, 3));

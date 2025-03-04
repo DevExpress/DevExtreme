@@ -30,7 +30,7 @@ import {
   DxLegend,
 } from 'devextreme-vue/chart';
 import { DxButton } from 'devextreme-vue/button';
-import { type SeriesPoint } from 'devextreme/common/charts';
+import { type SeriesPoint } from 'devextreme-vue/common/charts';
 import service from './data.ts';
 
 const isFirstLevel = ref(true);

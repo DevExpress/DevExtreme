@@ -85,7 +85,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { type SingleOrMultiple } from 'devextreme/common';
+import { type SingleOrMultiple } from 'devextreme-vue/common';
 import DxTreeView from 'devextreme-vue/tree-view';
 import DxList from 'devextreme-vue/list';
 import DxSelectBox from 'devextreme-vue/select-box';

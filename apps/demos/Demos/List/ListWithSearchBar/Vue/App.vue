@@ -30,7 +30,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { type SearchMode } from 'devextreme/common';
+import { type SearchMode } from 'devextreme-vue/common';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxList from 'devextreme-vue/list';
 import { products } from './data.ts';

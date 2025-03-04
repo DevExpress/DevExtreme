@@ -68,7 +68,7 @@ import {
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-import { type DisplayMode } from 'devextreme/common';
+import { type DisplayMode } from 'devextreme-vue/common';
 import { generateData } from './data.ts';
 
 const dataSource = generateData(100000);

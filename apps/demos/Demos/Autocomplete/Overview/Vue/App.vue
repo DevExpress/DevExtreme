@@ -98,10 +98,11 @@
 import { ref } from 'vue';
 import ODataStore from 'devextreme/data/odata/store';
 import { DxAutocomplete } from 'devextreme-vue/autocomplete';
+import { type LoadOptions } from 'devextreme-vue/common/data';
 import CustomStore from 'devextreme/data/custom_store';
 import 'whatwg-fetch';
 import { names, surnames, positions } from './data.ts';
-import { type LoadOptions } from 'devextreme/common/data';
+
 
 const statesStore = new ODataStore({
   version: 2,

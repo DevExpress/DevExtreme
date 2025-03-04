@@ -115,8 +115,8 @@
 import {
   DxForm, DxItem, DxLabel, DxGroupItem
 } from 'devextreme-vue/form';
+import { type ValidationRule } from 'devextreme-vue/common';
 import service from './data.ts';
-import { type ValidationRule } from 'devextreme/common';
 import 'devextreme-vue/text-area';
 
 import LabelTemplate from './LabelTemplate.vue';

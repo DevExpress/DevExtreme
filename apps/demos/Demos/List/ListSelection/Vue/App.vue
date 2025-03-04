@@ -49,7 +49,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { type SingleMultipleAllOrNone } from 'devextreme/common';
+import { type SingleMultipleAllOrNone } from 'devextreme-vue/common';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxList from 'devextreme-vue/list';
 import DxCheckBox from 'devextreme-vue/check-box';

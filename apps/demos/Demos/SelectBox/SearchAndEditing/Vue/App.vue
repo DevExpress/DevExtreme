@@ -105,7 +105,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { type SimplifiedSearchMode } from 'devextreme/common';
+import { type SimplifiedSearchMode } from 'devextreme-vue/common';
 import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { DxNumberBox } from 'devextreme-vue/number-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
