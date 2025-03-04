@@ -1,14 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { createWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { defaultConfig } from './data';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { defaultConfig } from '../helpers/data';
 
 const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`Sticky columns - Adaptability`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 [false, true].forEach((rtlEnabled) => {
   safeSizeTest(`Sticky columns with adaptive detail row (rtlEnabled = ${rtlEnabled})`, async (t) => {

@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
-import { changeTheme } from '../../../helpers/changeTheme';
-import { Themes } from '../../../helpers/themes';
-import { getData } from '../helpers/generateDataSourceData';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import { changeTheme } from '../../../../helpers/changeTheme';
+import { Themes } from '../../../../helpers/themes';
+import { getData } from '../../helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Column Fixing`.page(
-  url(__dirname, '../../container.html'),
+  url(__dirname, '../../../container.html'),
 );
 
 [Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach(
