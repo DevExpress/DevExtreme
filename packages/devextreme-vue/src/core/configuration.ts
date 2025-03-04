@@ -298,6 +298,8 @@ function hasVModelValue(options: Record<string, any>, props: VNodeProps, vnode: 
         && vnode?.props?.hasOwnProperty(VMODEL_NAME);
 }
 
+const VModelEmittedProps = new Set(['text', 'value']);
+
 function setEmitOptionChangedFunc(
   config: Configuration,
   vueInstance: Pick<IVue, '$' | '$props' | '$emit' | '$options'>,
@@ -306,12 +308,12 @@ function setEmitOptionChangedFunc(
   config.emitOptionChanged = (name: string, value: string) => {
     const props = vueInstance.$props;
     const vnode = vueInstance?.$?.vnode;
-    if (hasProp(vueInstance, name) && !isEqual(value, props[name]) && vueInstance.$emit) {
-      innerChanges[name] = toRaw(value);
-      const eventName = name === 'value' && hasVModelValue(vueInstance.$options, props, vnode)
-        ? `update:${VMODEL_NAME}`
-        : `update:${name}`;
+    const eventName = VModelEmittedProps.has(name) && hasVModelValue(vueInstance.$options, props, vnode)
+      ? `update:${VMODEL_NAME}`
+      : `update:${name}`;
 
+    if (hasProp(vueInstance, name) && !isEqual(value, props[eventName]) && vueInstance.$emit) {
+      innerChanges[name] = toRaw(value);
       vueInstance.$emit(eventName, value);
     }
   };
