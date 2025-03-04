@@ -243,7 +243,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Check code base (TS and Lint)
+          - name: Lint code base (excluding demos)
             command: pnpx nx lint-non-demos
           # NOTE: skipped due to enormous number of errors
           # - name: Lint demos (1/4)
