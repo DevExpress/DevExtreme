@@ -424,8 +424,9 @@ class TextEditorBase<
     });
   }
 
-  _renderValue(): Promise<unknown> {
+  _renderValue(): DeferredObj<unknown> {
     const renderInputPromise = this._renderInputValue();
+    // @ts-expect-error ts-error
     return renderInputPromise.promise();
   }
 
