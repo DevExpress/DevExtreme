@@ -54,7 +54,7 @@ class Widget<
 
   private readonly _feedbackShowTimeout = 30;
 
-  private _contentReadyAction?: ((event?: Record<string, unknown>) => void) | null;
+  _contentReadyAction?: ((event?: Record<string, unknown>) => void) | null;
 
   private _keyboardListenerId?: string | null;
 

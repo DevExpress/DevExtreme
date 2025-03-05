@@ -9,6 +9,8 @@ import TextEditor from '@ts/ui/text_box/m_text_editor.mask';
 
 import type { TextEditorBaseProperties } from './m_text_editor.base';
 
+// STYLE textBox
+
 const window = getWindow();
 
 const ignoreKeys = ['backspace', 'tab', 'enter', 'pageUp', 'pageDown', 'end', 'home', 'leftArrow', 'rightArrow', 'downArrow', 'upArrow', 'del'];

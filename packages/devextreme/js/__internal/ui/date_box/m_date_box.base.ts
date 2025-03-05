@@ -57,7 +57,7 @@ const STRATEGY_CLASSES = {
   CalendarWithTime,
   List,
 };
-
+// @ts-expect-error
 const DateBox = DropDownEditor.inherit({
 
   _supportedKeys() {
