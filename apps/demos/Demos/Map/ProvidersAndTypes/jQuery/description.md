@@ -2,7 +2,7 @@ The [provider](/Documentation/ApiReference/UI_Components/dxMap/Configuration/#pr
 
 You can also set the [type](/Documentation/ApiReference/UI_Components/dxMap/Configuration/#type) property to specify desired map type: road, satellite (photographic), or hybrid map.
 
-[note] When copying this demo to CodeSandbox, specify your own [apiKey](/Documentation/ApiReference/UI_Components/dxMap/Configuration/apiKey/) for 'azure' and 'google' [providers](/Documentation/ApiReference/UI_Components/dxMap/Configuration/#provider). Our demo keys can be used only on our website.
+[note] When copying this demo to CodePen, specify your own [apiKey](/Documentation/ApiReference/UI_Components/dxMap/Configuration/apiKey/) for 'azure' and 'google' [providers](/Documentation/ApiReference/UI_Components/dxMap/Configuration/#provider). Our demo keys can be used only on our website.
 <!--split-->
 
 [note]
