@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
-import { PureComponent } from '@ts/grids/new/grid_core/core/pure_component';
 import { CollectionController } from '@ts/grids/new/grid_core/keyboard_navigation/collection_controller';
 import type { RefObject } from 'inferno';
-import { createRef } from 'inferno';
+import { Component, createRef } from 'inferno';
 
 import { Card } from './card/card';
 import type { CardHeaderItem } from './card/header';
@@ -38,7 +37,7 @@ function getInfernoCardKey(card: DataRow): undefined | string | number {
   return undefined;
 }
 
-export class Content extends PureComponent<ContentProps> {
+export class Content extends Component<ContentProps> {
   private readonly containerRef = createRef<HTMLDivElement>();
 
   private cardRefs: RefObject<HTMLDivElement>[] = [];

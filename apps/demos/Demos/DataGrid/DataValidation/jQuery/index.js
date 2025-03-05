@@ -1,5 +1,5 @@
 $(() => {
-  const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridEmployeesValidation';
+  const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridEmployeesValidation';
 
   $('#gridContainer').dxDataGrid({
     dataSource: DevExpress.data.AspNet.createStore({
@@ -50,7 +50,7 @@ $(() => {
         message: 'Email address is not unique',
         validationCallback(params) {
           return $.ajax({
-            url: 'https://js.devexpress.com/Demos/Mvc/RemoteValidation/CheckUniqueEmailAddress',
+            url: 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress',
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json',

@@ -100,9 +100,7 @@ const objectDiffsWithoutReactProps = objectDiffsFiltered((prop) => Object.keys(p
   .filter((p) => !reactProps[p]));
 
 export function getUpdatedOptions(
-  // eslint-disable-next-line @typescript-eslint/ban-types
   oldProps: {},
-  // eslint-disable-next-line @typescript-eslint/ban-types
   props: {},
   notDeepCopyArrays: string[] = defaultNotDeepCopyArrays,
 ): ResultItem[] {

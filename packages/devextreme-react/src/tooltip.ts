@@ -181,6 +181,7 @@ const Collision = Object.assign<typeof _componentCollision, NestedComponentMeta>
 
 // owners:
 // Hide
+// Show
 type IFromProps = React.PropsWithChildren<{
   left?: number;
   opacity?: number;
@@ -294,6 +295,7 @@ const Offset = Object.assign<typeof _componentOffset, NestedComponentMeta>(_comp
 
 // owners:
 // From
+// To
 // Tooltip
 type IPositionProps = React.PropsWithChildren<{
   at?: Record<string, any> | PositionAlignment | {
@@ -324,6 +326,13 @@ const _componentPosition = (props: IPositionProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "position",
+      ExpectedChildren: {
+        at: { optionName: "at", isCollectionItem: false },
+        boundaryOffset: { optionName: "boundaryOffset", isCollectionItem: false },
+        collision: { optionName: "collision", isCollectionItem: false },
+        my: { optionName: "my", isCollectionItem: false },
+        offset: { optionName: "offset", isCollectionItem: false }
+      },
     },
   });
 };
@@ -351,6 +360,10 @@ const _componentShow = (props: IShowProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "show",
+      ExpectedChildren: {
+        from: { optionName: "from", isCollectionItem: false },
+        to: { optionName: "to", isCollectionItem: false }
+      },
     },
   });
 };
@@ -380,6 +393,7 @@ const ShowEvent = Object.assign<typeof _componentShowEvent, NestedComponentMeta>
 
 // owners:
 // Hide
+// Show
 type IToProps = React.PropsWithChildren<{
   left?: number;
   opacity?: number;
@@ -392,6 +406,9 @@ const _componentTo = (props: IToProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "to",
+      ExpectedChildren: {
+        position: { optionName: "position", isCollectionItem: false }
+      },
     },
   });
 };

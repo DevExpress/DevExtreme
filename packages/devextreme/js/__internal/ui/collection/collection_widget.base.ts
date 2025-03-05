@@ -180,7 +180,6 @@ class CollectionWidget<
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getHandlerExtendedParams(
     e: Record<string, unknown>,
     $target: dxElementWrapper,
@@ -279,7 +278,6 @@ class CollectionWidget<
     super._initTemplates();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getAnonymousTemplateName(): string {
     return ANONYMOUS_TEMPLATE_NAME;
   }
@@ -301,7 +299,6 @@ class CollectionWidget<
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getBindableFields(): string[] {
     return ['text', 'html'];
   }
@@ -314,7 +311,6 @@ class CollectionWidget<
     return undefined;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _prepareDefaultItemTemplate(
     data: CollectionWidgetItemProperties,
     $container: dxElementWrapper,
@@ -367,7 +363,6 @@ class CollectionWidget<
     return templateId;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _dataSourceOptions(): DataSourceOptions {
     return { paginate: false };
   }
@@ -536,7 +531,6 @@ class CollectionWidget<
     this._updateParentActiveDescendant();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getElementClassToSkipRefreshId(): string {
     return '';
   }
@@ -581,7 +575,6 @@ class CollectionWidget<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isDisabled($element: dxElementWrapper): boolean {
     return $element && $($element).attr('aria-disabled') === 'true';
   }
@@ -670,7 +663,6 @@ class CollectionWidget<
     this._renderItem(this._renderedItemsCount + index, itemData, null, $item);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _updateParentActiveDescendant(): void {}
 
   _optionChanged(args: OptionChanged<TProperties>): void {
@@ -813,7 +805,6 @@ class CollectionWidget<
     return this._startIndexForAppendedItems != null && this._allowDynamicItemsAppend();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _allowDynamicItemsAppend(): boolean {
     return false;
   }
@@ -849,7 +840,6 @@ class CollectionWidget<
     return this.$element();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return ITEM_CLASS;
   }
@@ -858,12 +848,10 @@ class CollectionWidget<
     return `${this._itemClass()}${CONTENT_CLASS_POSTFIX}`;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _selectedItemClass(): string {
     return SELECTED_ITEM_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemResponseWaitClass(): string {
     return ITEM_RESPONSE_WAIT_CLASS;
   }
@@ -872,12 +860,10 @@ class CollectionWidget<
     return `.${this._itemClass()}`;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return ITEM_DATA_KEY;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemIndexKey(): string {
     return ITEM_INDEX_KEY;
   }
@@ -914,7 +900,6 @@ class CollectionWidget<
     this._attachContextMenuEvent();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getPointerEvent(): string {
     return pointerEvents.down;
   }
@@ -990,7 +975,6 @@ class CollectionWidget<
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _closestFocusable(
     $target: dxElementWrapper,
   ): dxElementWrapper | undefined {
@@ -1101,7 +1085,6 @@ class CollectionWidget<
   _renderItems(items: TItem[]): void {
     if (items.length) {
       each(items, (index, itemData) => {
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
         this._renderItem(this._renderedItemsCount + index, itemData);
       });
     }
@@ -1156,7 +1139,6 @@ class CollectionWidget<
       defaultTemplateName: itemTemplate,
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     when(renderContentPromise).done(($content) => {
       this._postprocessRenderItem({
         itemElement: $itemFrame,
@@ -1172,7 +1154,6 @@ class CollectionWidget<
     return $itemFrame;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getItemContent($itemFrame: dxElementWrapper): dxElementWrapper {
     const $itemContent = $itemFrame.find(`.${ITEM_CONTENT_PLACEHOLDER_CLASS}`);
     $itemContent.removeClass(ITEM_CONTENT_PLACEHOLDER_CLASS);
@@ -1181,7 +1162,7 @@ class CollectionWidget<
 
   _attachItemClickEvent(itemData: TItem, $itemElement: dxElementWrapper): void {
     // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
     if (!itemData || !itemData.onClick) {
       return;
     }
@@ -1220,7 +1201,6 @@ class CollectionWidget<
     return $node;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _addItemContentClasses(args: ItemRenderInfo<TItem>): void {
     const classes = [
       ITEM_CLASS + CONTENT_CLASS_POSTFIX,
@@ -1230,7 +1210,6 @@ class CollectionWidget<
     $(args.container).addClass(classes.join(' '));
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _appendItemToContainer(
     $container: dxElementWrapper,
     $itemFrame: dxElementWrapper,
@@ -1280,7 +1259,6 @@ class CollectionWidget<
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _postprocessRenderItem(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     args: PostprocessRenderItemInfo<TItem>,
@@ -1330,14 +1308,14 @@ class CollectionWidget<
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const templateProperty = args.templateProperty || this.option('itemTemplateProperty');
     // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
     const template = data && data[templateProperty];
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return template || args.defaultTemplateName;
   }
 
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   _createItemByTemplate(
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -1353,7 +1331,6 @@ class CollectionWidget<
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _onItemTemplateRendered(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     itemTemplate: { source: () => unknown },
@@ -1368,11 +1345,10 @@ class CollectionWidget<
   }
 
   _renderEmptyMessage(rootNodes?: TItem[]): void {
-    // eslint-disable-next-line no-param-reassign
     const items = rootNodes ?? this.option('items');
     const noDataText = this.option('noDataText');
     // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
     const hideNoData = !noDataText || (items && items.length) || this._dataController.isLoading();
 
     if (hideNoData && this._$noData) {
@@ -1460,7 +1436,6 @@ class CollectionWidget<
     return $(itemElement).data(this._itemDataKey());
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getSummaryItemsSize(
     dimension: string,
     items: dxElementWrapper,

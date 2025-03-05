@@ -180,6 +180,7 @@ const Annotation = Object.assign<typeof _componentAnnotation, NestedComponentMet
 
 // owners:
 // Annotation
+// CommonAnnotationSettings
 // Legend
 type IAnnotationBorderProps = React.PropsWithChildren<{
   color?: string;
@@ -223,6 +224,7 @@ const Background = Object.assign<typeof _componentBackground, NestedComponentMet
 
 // owners:
 // Annotation
+// CommonAnnotationSettings
 // Legend
 // Tooltip
 type IBorderProps = React.PropsWithChildren<{
@@ -304,6 +306,13 @@ const _componentCommonAnnotationSettings = (props: ICommonAnnotationSettingsProp
     ...props,
     elementDescriptor: {
       OptionName: "commonAnnotationSettings",
+      ExpectedChildren: {
+        annotationBorder: { optionName: "border", isCollectionItem: false },
+        border: { optionName: "border", isCollectionItem: false },
+        font: { optionName: "font", isCollectionItem: false },
+        image: { optionName: "image", isCollectionItem: false },
+        shadow: { optionName: "shadow", isCollectionItem: false }
+      },
       TemplateProps: [{
         tmplOption: "template",
         render: "render",
@@ -373,6 +382,7 @@ const Export = Object.assign<typeof _componentExport, NestedComponentMeta>(_comp
 
 // owners:
 // Annotation
+// CommonAnnotationSettings
 // Label
 // Legend
 // LegendTitle
@@ -403,6 +413,7 @@ const Font = Object.assign<typeof _componentFont, NestedComponentMeta>(_componen
 
 // owners:
 // Annotation
+// CommonAnnotationSettings
 type IImageProps = React.PropsWithChildren<{
   height?: number;
   url?: string | undefined;
@@ -726,6 +737,7 @@ const Projection = Object.assign<typeof _componentProjection, NestedComponentMet
 
 // owners:
 // Annotation
+// CommonAnnotationSettings
 // Tooltip
 type IShadowProps = React.PropsWithChildren<{
   blur?: number;

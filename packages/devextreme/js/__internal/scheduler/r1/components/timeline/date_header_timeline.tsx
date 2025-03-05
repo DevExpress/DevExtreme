@@ -47,6 +47,7 @@ export class TimelineDateHeaderLayout extends BaseInfernoComponent<DateHeaderPro
             const rowsCount = dataMap.length;
             const isTimeCellTemplate = rowsCount - 1 === rowIndex;
             const isWeekDayRow = rowsCount > 1 && rowIndex === 0;
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             const splitText = isMaterialBased && (isMonthDateHeader || isWeekDayRow);
 
             let validLeftVirtualCellCount: number | undefined = leftVirtualCellCount;

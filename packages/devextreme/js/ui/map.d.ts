@@ -26,7 +26,10 @@ export type MapType = 'hybrid' | 'roadmap' | 'satellite';
  * @type object
  * @inherits NativeEventInfo
  */
-export type ClickEvent = NativeEventInfo<dxMap, MouseEvent | PointerEvent>;
+export type ClickEvent = NativeEventInfo<dxMap, MouseEvent | PointerEvent> & {
+  /** @docid _ui_map_ClickEvent.location */
+  location: MapLocation;
+};
 
 /**
  * @docid _ui_map_DisposingEvent
@@ -133,6 +136,7 @@ export type RouteRemovedEvent = EventInfo<dxMap> & {
 };
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.ui
  */
@@ -434,7 +438,7 @@ export type Properties = dxMapOptions;
 /** @deprecated use Properties instead */
 export type Options = dxMapOptions;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -462,4 +466,4 @@ onInitialized?: ((e: InitializedEvent) => void);
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

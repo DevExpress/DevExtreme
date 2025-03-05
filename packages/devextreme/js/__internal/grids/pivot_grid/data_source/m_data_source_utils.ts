@@ -38,6 +38,7 @@ function getSortingMethod(field, dataSource, loadOptions, dimensionName, getAscO
     && getFieldSummaryValueSelector(field, dataSource, loadOptions, dimensionName);
   const summaryCompare = summaryValueSelector && getCompareFunction(summaryValueSelector);
   const sortingMethod = function (a, b) {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const result = summaryCompare && summaryCompare(a, b) || defaultCompare(a, b);
     return sortOrder === 'desc' ? -result : result;
   };
@@ -58,7 +59,7 @@ function getFieldSummaryValueSelector(field, dataSource, loadOptions, dimensionN
     ? getSliceIndex(sortByDimension, sortBySummaryPath)
     : grandTotalIndex;
 
-  if (values && values.length && sortBySummaryFieldIndex >= 0 && isDefined(sliceIndex)) {
+  if (values?.length && sortBySummaryFieldIndex >= 0 && isDefined(sliceIndex)) {
     return function (field) {
       const rowIndex = areRows ? field.index : sliceIndex;
       const columnIndex = areRows ? sliceIndex : field.index;

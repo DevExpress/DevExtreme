@@ -54,7 +54,7 @@ export function locale(): string;
  * @namespace DevExpress.common.core.localization
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/no-shadow
+
 export function locale(locale: string): void;
 
 /**

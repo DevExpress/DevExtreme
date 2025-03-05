@@ -188,7 +188,7 @@ export type Properties = dxTextBoxOptions<TextBoxInstance>;
 /** @deprecated use Properties instead */
 export type Options = Properties;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -274,4 +274,4 @@ onPaste?: ((e: PasteEvent) => void);
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

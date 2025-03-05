@@ -1,56 +1,56 @@
 /* global process */
 process.env.CHROME_BIN = require('puppeteer').executablePath();
 
-var webpackConfig = require('./webpack.test');
+const webpackConfig = require('./webpack.test');
 
-module.exports = function(config) {
-    config.set({
+module.exports = function (config) {
+  config.set({
 
-        basePath: './',
+    basePath: './',
 
-        frameworks: ['jasmine'],
+    frameworks: ['jasmine'],
 
-        port: 9876,
+    port: 9876,
 
-        logLevel: config.LOG_ERROR,
+    logLevel: config.LOG_ERROR,
 
-        colors: true,
+    colors: true,
 
-        autoWatch: true,
+    autoWatch: true,
 
-        browsers: ['ChromeHeadless'],
+    browsers: ['ChromeHeadless'],
 
-        reporters: [
-            'progress',
-            'junit'
-        ],
+    reporters: [
+      'progress',
+      'junit',
+    ],
 
-        client: {
-            jasmine: {
-              random: false,
-            }
-        },
+    client: {
+      jasmine: {
+        random: false,
+      },
+    },
 
-        junitReporter: {
-            outputFile: 'test-results.xml'
-        },
+    junitReporter: {
+      outputFile: 'test-results.xml',
+    },
 
-        // Karma plugins loaded
-        plugins: [
-            require('karma-jasmine'),
-            require('karma-chrome-launcher'),
-            require('karma-junit-reporter'),
-            require('karma-webpack')
-        ],
+    // Karma plugins loaded
+    plugins: [
+      require('karma-jasmine'),
+      require('karma-chrome-launcher'),
+      require('karma-junit-reporter'),
+      require('karma-webpack'),
+    ],
 
-        webpack: webpackConfig,
+    webpack: webpackConfig,
 
-        webpackMiddleware: {
-            stats: 'errors-only'
-        },
+    webpackMiddleware: {
+      stats: 'errors-only',
+    },
 
-        singleRun: true,
+    singleRun: true,
 
-        concurrency: Infinity
-    });
+    concurrency: Infinity,
+  });
 };

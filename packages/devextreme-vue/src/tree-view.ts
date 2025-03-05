@@ -356,6 +356,9 @@ const DxItem = defineComponent(DxItemConfig);
 
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
+(DxItem as any).$_expectedChildren = {
+  item: { isCollectionItem: true, optionName: "items" }
+};
 
 const DxOptionsConfig = {
   emits: {

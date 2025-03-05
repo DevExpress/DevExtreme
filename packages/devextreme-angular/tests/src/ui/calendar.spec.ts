@@ -1,8 +1,8 @@
 /* tslint:disable:component-selector */
 
 import {
-    Component,
-    ViewChild
+  Component,
+  ViewChild,
 } from '@angular/core';
 
 import { TestBed } from '@angular/core/testing';
@@ -10,44 +10,45 @@ import { TestBed } from '@angular/core/testing';
 import {
   DxCalendarModule,
   DxCalendarComponent,
-} from "devextreme-angular";
+} from 'devextreme-angular';
 
 @Component({
-    selector: 'test-container-component',
-    template: '',
+  selector: 'test-container-component',
+  template: '',
 })
 class TestContainerComponent {
-    @ViewChild(DxCalendarComponent) calendar: DxCalendarComponent;
+  @ViewChild(DxCalendarComponent) calendar: DxCalendarComponent;
 
-    value: any = [];
+  value: any = [];
 }
 
 describe('DxCalendar', () => {
-    beforeEach(() => {
-        TestBed.configureTestingModule(
-            {
-                declarations: [TestContainerComponent],
-                imports: [DxCalendarModule]
-            });
+  beforeEach(() => {
+    TestBed.configureTestingModule(
+      {
+        declarations: [TestContainerComponent],
+        imports: [DxCalendarModule],
+      },
+    );
+  });
+
+  // spec
+  it('should accept iterable and non-iterable values without exception', () => {
+    TestBed.overrideComponent(TestContainerComponent, {
+      set: {
+        template: '<dx-calendar [value]="value" selectionMode="multiple"></dx-calendar>',
+      },
     });
 
-    // spec
-    it('should accept iterable and non-iterable values without exception', () => {
-        TestBed.overrideComponent(TestContainerComponent, {
-            set: {
-                template: `<dx-calendar [value]="value" selectionMode="multiple"></dx-calendar>`
-            }
-        });
+    const fixture = TestBed.createComponent(TestContainerComponent);
 
-        const fixture = TestBed.createComponent(TestContainerComponent);
+    fixture.detectChanges();
 
-        fixture.detectChanges();
+    const { calendar } = fixture.componentInstance;
 
-        const calendar = fixture.componentInstance.calendar;
+    calendar.selectionMode = 'single';
+    calendar.instance.option('value', new Date());
 
-        calendar.selectionMode = 'single';
-        calendar.instance.option('value', new Date());
-
-        fixture.detectChanges();
-    });
+    fixture.detectChanges();
+  });
 });

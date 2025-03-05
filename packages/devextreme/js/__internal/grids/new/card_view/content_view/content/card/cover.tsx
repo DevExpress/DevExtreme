@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-import { PureComponent } from '@ts/grids/new/grid_core/core/pure_component';
-import type { InfernoNode } from 'inferno';
+import { Component } from 'inferno';
 
 const CLASSES = {
   cover: 'dx-card-cover',
@@ -13,14 +12,15 @@ export interface CoverProps {
   template?: (src: string, alt: string | undefined, className: string) => JSX.Element;
 }
 
-export class Cover extends PureComponent<CoverProps> {
-  render(): InfernoNode {
+export class Cover extends Component<CoverProps> {
+  render(): JSX.Element {
     const {
       imageSrc, alt, template,
     } = this.props;
     const src = imageSrc;
 
     if (!src) {
+      // @ts-expect-error
       return null;
     }
 
@@ -33,6 +33,8 @@ export class Cover extends PureComponent<CoverProps> {
           src={src}
           alt={alt}
           className={CLASSES.image}
+          // TODO: move to scss
+          style={{ width: '100%', height: 'auto' }}
         />
       </div>
     );

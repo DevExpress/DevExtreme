@@ -606,9 +606,9 @@ declare module DevExpress {
    */
   export function config(): DevExpress.common.GlobalConfig;
   /**
-   * [descr:config(config)]
-   */
-  export function config(config: DevExpress.common.GlobalConfig): void;
+    * [descr:config(config)]
+    */
+   export function config(config: DevExpress.common.GlobalConfig): void;
   /**
    * [descr:DataHelperMixin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -1197,7 +1197,6 @@ declare module DevExpress.common {
     | Array<DevExpress.common.data.GroupItem<TItem>>;
   export type MaskMode = 'always' | 'onFocus';
   export type Mode = 'auto';
-
   /**
    * [descr:NumericRule]
    */
@@ -1409,7 +1408,6 @@ declare module DevExpress.common {
   export type TabsIconPosition = 'top' | 'end' | 'bottom' | 'start';
   export type TabsStyle = 'primary' | 'secondary';
   export type TextBoxPredefinedButton = 'clear';
-
   /**
    * [descr:TextEditorButton]
    */
@@ -2557,9 +2555,9 @@ declare module DevExpress.common.core.environment {
     version?: Array<number>;
   };
   /**
-   * [descr:devices]
-   */
-  export const devices: DevExpress.core.DevicesObject;
+    * [descr:devices]
+    */
+   export const devices: DevExpress.core.DevicesObject;
   /**
    * [descr:utils.getTimeZones(date)]
    */
@@ -2861,9 +2859,9 @@ declare module DevExpress.common.core.localization {
    */
   export function locale(): string;
   /**
-   * [descr:localization.locale(locale)]
-   */
-  export function locale(locale: string): void;
+    * [descr:localization.locale(locale)]
+    */
+   export function locale(locale: string): void;
   /**
    * [descr:localization.parseDate(text, format)]
    */
@@ -3246,9 +3244,9 @@ declare module DevExpress.common.data {
      */
     group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     /**
-     * [descr:DataSourceOptions.langParams]
-     */
-    langParams?: LangParams;
+      * [descr:DataSourceOptions.langParams]
+      */
+     langParams?: LangParams;
     /**
      * [descr:DataSourceOptions.map]
      */
@@ -6521,11 +6519,13 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type DeepPartial<T> = T extends Scalar
-    ? T
-    : {
-        [P in keyof T]?: DeepPartial<T[P]>;
-      };
+  export type DeepPartial<T> =
+    | T
+    | (T extends Scalar
+        ? T
+        : {
+            [P in keyof T]?: DeepPartial<T[P]>;
+          });
   /**
    * [descr:DevicesObject]
    */
@@ -6848,10 +6848,10 @@ declare module DevExpress.core.utils {
     ): PromiseLike<TResult1 | TResult2>;
   };
   /**
-   * [descr:DxPromise]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type DxPromise<T = void> = {} extends PromiseType<T>
+    * [descr:DxPromise]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+    */
+   export type DxPromise<T = void> = {} extends PromiseType<T>
     ? Promise<T>
     : PromiseType<T>;
 }
@@ -7656,6 +7656,12 @@ declare module DevExpress.events {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface EventType {}
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface EventType extends JQueryEventObject {
+    cancel?: boolean;
+  }
   /**
    * [descr:events.triggerHandler(element, event)]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -8532,10 +8538,10 @@ declare module DevExpress.ui {
       'field' | 'reset'
     >);
   /**
-   * [descr:DraggableBase]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface DraggableBase {}
+    * [descr:DraggableBase]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+    */
+   export interface DraggableBase {}
   /**
    * [descr:DraggableBaseOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -9791,7 +9797,7 @@ declare module DevExpress.ui {
         /**
          * [descr:_ui_chat_MessageEnteredEvent.message]
          */
-        readonly message?: Message;
+        readonly message: Message;
       };
     export type MessageTemplateData = {
       readonly component: dxChat;
@@ -9812,7 +9818,7 @@ declare module DevExpress.ui {
         /**
          * [descr:_ui_chat_TypingEndEvent.user]
          */
-        readonly user?: User;
+        readonly user: User;
       };
     /**
      * [descr:_ui_chat_TypingStartEvent]
@@ -16828,6 +16834,23 @@ declare module DevExpress.ui {
       readonly setValue: Function;
     };
     /**
+     * [descr:FieldInfo]
+     */
+    export type FieldInfo = {
+      /**
+       * [descr:FieldInfo.value]
+       */
+      value?: string | number | Date;
+      /**
+       * [descr:FieldInfo.valueText]
+       */
+      valueText?: string;
+      /**
+       * [descr:FieldInfo.field]
+       */
+      field?: Field;
+    };
+    /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export type FilterBuilderOperation =
@@ -16898,11 +16921,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderCustomOperation.customizeText]
      */
-    customizeText?: (fieldInfo: {
-      value?: string | number | Date;
-      valueText?: string;
-      field?: Field;
-    }) => string;
+    customizeText?: (
+      fieldInfo: DevExpress.ui.dxFilterBuilder.FieldInfo
+    ) => string;
     /**
      * [descr:dxFilterBuilderCustomOperation.dataTypes]
      */
@@ -16948,10 +16969,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderField.customizeText]
      */
-    customizeText?: (fieldInfo: {
-      value?: string | number | Date;
-      valueText?: string;
-    }) => string;
+    customizeText?: (
+      fieldInfo: DevExpress.ui.dxFilterBuilder.FieldInfo
+    ) => string;
     /**
      * [descr:dxFilterBuilderField.dataField]
      */
@@ -21088,7 +21108,12 @@ declare module DevExpress.ui {
     export type ClickEvent = DevExpress.common.core.events.NativeEventInfo<
       dxMap,
       MouseEvent | PointerEvent
-    >;
+    > & {
+      /**
+       * [descr:_ui_map_ClickEvent.location]
+       */
+      location: MapLocation;
+    };
     /**
      * [descr:_ui_map_DisposingEvent]
      */
@@ -25701,10 +25726,10 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * [descr:dxSliderBase]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxSliderBase {}
+    * [descr:dxSliderBase]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+    */
+   export interface dxSliderBase {}
   /**
    * [descr:dxSliderBaseOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -31059,6 +31084,9 @@ declare module DevExpress.ui {
      */
     selectedExpr?: string | Function;
   }
+  /**
+   * [descr:MapLocation]
+   */
   export interface MapLocation {
     /**
      * [descr:MapLocation.lat]

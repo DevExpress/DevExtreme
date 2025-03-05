@@ -125,6 +125,7 @@ import {
 import {
  dxFilterBuilderOptions,
  dxFilterBuilderField,
+ FieldInfo,
  FilterBuilderOperation,
  dxFilterBuilderCustomOperation,
  GroupOperation,
@@ -1239,7 +1240,7 @@ const DxCustomOperationConfig = {
   props: {
     calculateFilterExpression: Function as PropType<((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>)>,
     caption: String,
-    customizeText: Function as PropType<((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string)>,
+    customizeText: Function as PropType<((fieldInfo: FieldInfo) => string)>,
     dataTypes: Array as PropType<Array<DataType>>,
     editorTemplate: {},
     hasValue: Boolean,
@@ -1577,7 +1578,7 @@ const DxFieldConfig = {
   props: {
     calculateFilterExpression: Function as PropType<((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>)>,
     caption: String,
-    customizeText: Function as PropType<((fieldInfo: { value: string | number | Date, valueText: string }) => string)>,
+    customizeText: Function as PropType<((fieldInfo: FieldInfo) => string)>,
     dataField: String,
     dataType: String as PropType<DataType>,
     editorOptions: {},
@@ -1817,6 +1818,11 @@ prepareConfigurationComponentConfig(DxFilterBuilderPopupConfig);
 const DxFilterBuilderPopup = defineComponent(DxFilterBuilderPopupConfig);
 
 (DxFilterBuilderPopup as any).$_optionName = "filterBuilderPopup";
+(DxFilterBuilderPopup as any).$_expectedChildren = {
+  animation: { isCollectionItem: false, optionName: "animation" },
+  position: { isCollectionItem: false, optionName: "position" },
+  toolbarItem: { isCollectionItem: true, optionName: "toolbarItems" }
+};
 
 const DxFilterOperationDescriptionsConfig = {
   emits: {
@@ -2895,6 +2901,13 @@ prepareConfigurationComponentConfig(DxPositionConfig);
 const DxPosition = defineComponent(DxPositionConfig);
 
 (DxPosition as any).$_optionName = "position";
+(DxPosition as any).$_expectedChildren = {
+  at: { isCollectionItem: false, optionName: "at" },
+  boundaryOffset: { isCollectionItem: false, optionName: "boundaryOffset" },
+  collision: { isCollectionItem: false, optionName: "collision" },
+  my: { isCollectionItem: false, optionName: "my" },
+  offset: { isCollectionItem: false, optionName: "offset" }
+};
 
 const DxRangeRuleConfig = {
   emits: {
@@ -3195,6 +3208,10 @@ prepareConfigurationComponentConfig(DxShowConfig);
 const DxShow = defineComponent(DxShowConfig);
 
 (DxShow as any).$_optionName = "show";
+(DxShow as any).$_expectedChildren = {
+  from: { isCollectionItem: false, optionName: "from" },
+  to: { isCollectionItem: false, optionName: "to" }
+};
 
 const DxSortByGroupSummaryInfoConfig = {
   emits: {
@@ -3484,6 +3501,9 @@ prepareConfigurationComponentConfig(DxToConfig);
 const DxTo = defineComponent(DxToConfig);
 
 (DxTo as any).$_optionName = "to";
+(DxTo as any).$_expectedChildren = {
+  position: { isCollectionItem: false, optionName: "position" }
+};
 
 const DxToolbarConfig = {
   emits: {

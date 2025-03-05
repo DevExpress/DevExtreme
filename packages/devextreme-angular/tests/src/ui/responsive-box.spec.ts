@@ -1,44 +1,45 @@
 /* tslint:disable:component-selector */
 import {
-    Component,
-    ViewChild
+  Component,
+  ViewChild,
 } from '@angular/core';
 
 import {
-    TestBed
+  TestBed,
 } from '@angular/core/testing';
 
 import {
-    DxResponsiveBoxModule,
-    DxResponsiveBoxComponent
+  DxResponsiveBoxModule,
+  DxResponsiveBoxComponent,
 } from 'devextreme-angular';
 
 @Component({
-    selector: 'test-container-component',
-    template: ''
+  selector: 'test-container-component',
+  template: '',
 })
 class TestContainerComponent {
-    @ViewChild(DxResponsiveBoxComponent) innerWidget: DxResponsiveBoxComponent;
-    screenByWidth() {
-        return 'sm';
-    }
+  @ViewChild(DxResponsiveBoxComponent) innerWidget: DxResponsiveBoxComponent;
+
+  screenByWidth() {
+    return 'sm';
+  }
 }
 
 describe('DxResponsiveBox', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule(
+      {
+        declarations: [TestContainerComponent],
+        imports: [DxResponsiveBoxModule],
+      },
+    );
+  });
 
-    beforeEach(() => {
-        TestBed.configureTestingModule(
-            {
-                declarations: [TestContainerComponent],
-                imports: [DxResponsiveBoxModule]
-            });
-    });
-
-    // spec
-    it('should be able to accept item locations as dxi components', () => {
-        TestBed.overrideComponent(TestContainerComponent, {
-            set: {
-                template: `
+  // spec
+  it('should be able to accept item locations as dxi components', () => {
+    TestBed.overrideComponent(TestContainerComponent, {
+      set: {
+        template: `
                     <dx-responsive-box
                         [rows]="[{ ratio: 1 }]"
                         [cols]="[{ ratio: 1 }]"
@@ -55,20 +56,19 @@ describe('DxResponsiveBox', () => {
                             <p>Header</p>
                         </dxi-item>
                     </dx-responsive-box>
-                `
-            }
-        });
-        let fixture = TestBed.createComponent(TestContainerComponent);
-        fixture.detectChanges();
-
-        let instance = fixture.componentInstance.innerWidget.instance;
-        fixture.detectChanges();
-
-        expect(instance.option('items')[0].location.length).toBe(1);
-        expect(instance.option('items')[0].location[0].row).toBe(0);
-        expect(instance.option('items')[0].location[0].col).toBe(0);
-        expect(instance.option('items')[0].location[0].colspan).toBe(1);
-        expect(instance.option('items')[0].location[0].screen).toBe('lg');
+                `,
+      },
     });
+    const fixture = TestBed.createComponent(TestContainerComponent);
+    fixture.detectChanges();
 
+    const { instance } = fixture.componentInstance.innerWidget;
+    fixture.detectChanges();
+
+    expect(instance.option('items')[0].location.length).toBe(1);
+    expect(instance.option('items')[0].location[0].row).toBe(0);
+    expect(instance.option('items')[0].location[0].col).toBe(0);
+    expect(instance.option('items')[0].location[0].colspan).toBe(1);
+    expect(instance.option('items')[0].location[0].screen).toBe('lg');
+  });
 });

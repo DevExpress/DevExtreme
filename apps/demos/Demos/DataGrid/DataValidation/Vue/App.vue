@@ -48,8 +48,8 @@ import {
 import { ValidationCallbackData } from 'devextreme-vue/common';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridEmployeesValidation';
-const emailValidationUrl = 'https://js.devexpress.com/Demos/Mvc/RemoteValidation/CheckUniqueEmailAddress';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridEmployeesValidation';
+const emailValidationUrl = 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
 
 const dataSource = createStore({
   key: 'ID',

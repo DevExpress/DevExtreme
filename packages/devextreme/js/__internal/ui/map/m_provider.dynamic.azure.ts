@@ -195,7 +195,10 @@ const AzureProvider = DynamicProvider.inherit({
 
   _clickActionHandler(e) {
     if (e.type === 'click') {
-      this._fireClickAction({ location: this._normalizeLocation(e.position) });
+      this._fireClickAction({
+        location: this._normalizeLocation(e.position),
+        event: e.originalEvent,
+      });
     }
   },
 
@@ -330,7 +333,7 @@ const AzureProvider = DynamicProvider.inherit({
 
     options = this._parseTooltipOptions(options);
 
-    const $content = $('<div>').text(options.text).addClass(MAP_MARKER_TOOLTIP_CLASS);
+    const $content = $('<div>').html(options.text).addClass(MAP_MARKER_TOOLTIP_CLASS);
     const popup = new atlas.Popup({
       content: $content[0],
       position: location,

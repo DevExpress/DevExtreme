@@ -8,8 +8,8 @@ import * as HeaderPanel from './header_panel/index';
  */
 export type Options =
   & GridCore.Options
-  & HeaderPanel.Options
-  & ContentView.Options;
+  & ContentView.Options
+  & HeaderPanel.Options;
 
 export const defaultOptions = {
   ...GridCore.defaultOptions,

@@ -53,7 +53,7 @@ export class Pagination extends InfernoWrapperComponent<PaginationProps> {
       ...this.props,
       className: this.getClassName(),
       pageIndex: this.getPageIndex(),
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       pageIndexChangedInternal: (pageIndex: number): void => this.pageIndexChangedInternal(pageIndex),
       pageSizeChangedInternal: (pageSize: number): void => this.pageSizeChangedInternal(pageSize),
     };

@@ -1,0 +1,9 @@
+{
+  "name": "eslint-migration-utils",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "src/index.mjs",
+  "devDependencies": {
+    "@eslint-stylistic/metadata": "catalog:"
+  }
+}

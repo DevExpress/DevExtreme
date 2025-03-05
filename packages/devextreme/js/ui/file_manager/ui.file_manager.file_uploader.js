@@ -75,7 +75,7 @@ class FileManagerFileUploader extends Widget {
     tryUpload() {
         const info = this._findAndUpdateAvailableUploaderInfo();
         if(info) {
-            info.fileUploader._selectButtonClickHandler();
+            info.fileUploader._selectFileDialogClickHandler();
         }
     }
 

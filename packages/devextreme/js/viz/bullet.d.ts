@@ -173,7 +173,7 @@ export type Properties = dxBulletOptions;
 /** @deprecated use Properties instead */
 export type Options = dxBulletOptions;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -234,4 +234,4 @@ onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
  */
 onTooltipShown?: ((e: TooltipShownEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

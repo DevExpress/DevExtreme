@@ -7,7 +7,6 @@ import { getHeight, getWidth } from '@js/core/utils/size';
 import { getNavigator } from '@js/core/utils/window';
 import type { Properties as PublicProps } from '@js/ui/load_indicator';
 
-// @ts-expect-error
 import { current, isGeneric, isMaterialBased } from '@js/ui/themes';
 import Widget from '@ts/core/widget/widget';
 

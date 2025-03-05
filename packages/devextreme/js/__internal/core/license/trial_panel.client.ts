@@ -18,7 +18,7 @@ export const isClient = (): boolean => typeof HTMLElement !== 'undefined' && typ
 
 const SafeHTMLElement = isClient()
   ? HTMLElement
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-extraneous-class
   : class {} as any as typeof HTMLElement;
 
@@ -222,7 +222,6 @@ class DxLicense extends SafeHTMLElement {
       this._observer.observe(this, {
         childList: true,
         attributes: true,
-        // eslint-disable-next-line spellcheck/spell-checker
         subtree: true,
       });
     }

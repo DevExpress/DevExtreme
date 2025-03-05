@@ -26,7 +26,7 @@ const WIDGET_CLASS = 'dx-numberbox';
 const FIREFOX_CONTROL_KEYS = ['tab', 'del', 'backspace', 'leftArrow', 'rightArrow', 'home', 'end', 'enter'];
 
 const FORCE_VALUECHANGE_EVENT_NAMESPACE = 'NumberBoxForceValueChange';
-
+// @ts-expect-error
 const NumberBoxBase = TextEditor.inherit({
 
   _supportedKeys() {
@@ -79,6 +79,7 @@ const NumberBoxBase = TextEditor.inherit({
 
     return (
       browser.chrome && version >= 66
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             || browser.safari && version >= 12
     );
   },
@@ -109,6 +110,7 @@ const NumberBoxBase = TextEditor.inherit({
     this.$element().addClass(WIDGET_CLASS);
 
     this.callBase();
+    this._toggleTabIndex();
   },
 
   _getDefaultAttributes() {

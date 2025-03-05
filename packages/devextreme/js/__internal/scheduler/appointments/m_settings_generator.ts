@@ -167,6 +167,7 @@ export class DateGeneratorBaseStrategy {
 
       return {
         ...item,
+        // TODO: Check usages & delete this field.
         exceptionDate: new Date(item.startDate),
       };
     });
@@ -188,22 +189,20 @@ export class DateGeneratorBaseStrategy {
     return !timeZoneUtils.isEqualLocalTimeZone(this.timeZone, appointment.startDate);
   }
 
+  _getDateOffsetDST(date) {
+    const dateMinusHour = new Date(date);
+    dateMinusHour.setHours(dateMinusHour.getHours() - 1);
+
+    const dateCommonOffset = this.timeZoneCalculator.getOffsets(date).common;
+    const dateMinusHourCommonOffset = this.timeZoneCalculator.getOffsets(dateMinusHour).common;
+
+    return dateMinusHourCommonOffset - dateCommonOffset;
+  }
+
   _getProcessedNotNativeDateIfCrossDST(date, offset) {
-    if (offset < 0) { // summer time
-      const newDate = new Date(date);
-
-      const newDateMinusOneHour = new Date(newDate);
-      newDateMinusOneHour.setHours(newDateMinusOneHour.getHours() - 1);
-
-      const newDateOffset = this.timeZoneCalculator.getOffsets(newDate).common;
-      const newDateMinusOneHourOffset = this.timeZoneCalculator.getOffsets(newDateMinusOneHour).common;
-
-      if (newDateOffset !== newDateMinusOneHourOffset) {
-        return 0;
-      }
-    }
-
-    return offset;
+    return offset < 0 && this._getDateOffsetDST(date) !== 0
+      ? 0
+      : offset;
   }
 
   _getCommonOffset(date) {
@@ -236,6 +235,7 @@ export class DateGeneratorBaseStrategy {
         ...item,
         startDate: newStartDate,
         endDate: newEndDate,
+        // TODO: Check usages & delete this field.
         exceptionDate: new Date(newStartDate),
       };
     });
@@ -386,18 +386,26 @@ export class DateGeneratorBaseStrategy {
         true,
       ),
 
-      getPostProcessedException: (date) => {
-        if (isEmptyObject(this.timeZone) || timeZoneUtils.isEqualLocalTimeZone(this.timeZone, date)) {
-          return date;
-        }
+      getExceptionDateTimezoneOffsets: (date: Date): [number, number, number] => {
+        const localMachineTimezoneOffset = -timeZoneUtils.getClientTimezoneOffset(date);
 
-        const appointmentOffset = this.timeZoneCalculator.getOffsets(originalAppointmentStartDate).common;
-        const exceptionAppointmentOffset = this.timeZoneCalculator.getOffsets(date).common;
+        const appointmentTimezoneOffset: number = this.timeZoneCalculator.getOriginStartDateOffsetInMs(
+          date,
+          appointment.rawAppointment.startDateTimeZone,
+          true,
+        );
 
-        let diff = appointmentOffset - exceptionAppointmentOffset;
-        diff = this._getProcessedNotNativeDateIfCrossDST(date, diff);
+        const offsetDST = this._getDateOffsetDST(date);
+        // NOTE: Apply only winter -> summer DST extra offset
+        const extraSummerTimeChangeOffset = offsetDST < 0
+          ? offsetDST * toMs('hour')
+          : 0;
 
-        return new Date(date.getTime() - diff * dateUtils.dateToMilliseconds('hour'));
+        return [
+          localMachineTimezoneOffset,
+          appointmentTimezoneOffset,
+          extraSummerTimeChangeOffset,
+        ];
       },
     };
   }

@@ -723,6 +723,9 @@ export class ColumnsView extends ColumnStateMixin(View) {
     if (!$root || $root.parent().length) {
       this.renderDelayedTemplates(e);
     }
+
+    // @ts-expect-error
+    return new Deferred().resolve();
   }
 
   /**
@@ -1124,6 +1127,9 @@ export class ColumnsView extends ColumnStateMixin(View) {
     return result.promise();
   }
 
+  /**
+   * @extended: sticky_columns, rows_view
+   */
   protected _updateContent($newTableElement, change, isFixedTableRendering?) {
     return this.waitAsyncTemplates().done(() => {
       this._removeContent(isFixedTableRendering);

@@ -22,35 +22,33 @@ const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 
 QUnit.testStart(() => {
     const markup =
-        '<div id="qunit-fixture">\
-            <div id="selectBox"></div>\
-            \
-            <div id="selectBoxWithItemTemplate">\
-                <div data-options="dxTemplate: { name: \'item\'}">\
-                    itemTemplate\
-                </div>\
+        '<div id="selectBox"></div>\
+        \
+        <div id="selectBoxWithItemTemplate">\
+            <div data-options="dxTemplate: { name: \'item\'}">\
+                itemTemplate\
             </div>\
-            \
-            <div id="selectBoxFieldTemplateWithoutTextBox">\
-                <div data-options="dxTemplate: { name: \'field\' }">\
-                    <span>test</span>\
-                </div>\
+        </div>\
+        \
+        <div id="selectBoxFieldTemplateWithoutTextBox">\
+            <div data-options="dxTemplate: { name: \'field\' }">\
+                <span>test</span>\
             </div>\
+        </div>\
 \
-            <div id="selectBoxFieldTemplate">\
-                <div data-options="dxTemplate: { name: \'field\' }">\
-                    fieldTemplate\
-                </div>\
-                <div data-options="dxTemplate: { name: \'item\'}">\
-                    itemTemplate\
-                </div>\
+        <div id="selectBoxFieldTemplate">\
+            <div data-options="dxTemplate: { name: \'field\' }">\
+                fieldTemplate\
             </div>\
-            \
-            <div id="selectBoxWithoutScrollWrapper">\
-                <div id="selectBoxWithoutScroll"></div>\
+            <div data-options="dxTemplate: { name: \'item\'}">\
+                itemTemplate\
             </div>\
-            <div id="test-container"></div>\
-        </div>';
+        </div>\
+        \
+        <div id="selectBoxWithoutScrollWrapper">\
+            <div id="selectBoxWithoutScroll"></div>\
+        </div>\
+        <div id="test-container"></div>';
 
     $('#qunit-fixture').html(markup);
 
@@ -79,6 +77,7 @@ const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
 const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 const LIST_ITEMS_CLASS = 'dx-list-items';
+const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
 
 const KEY_DOWN = 'ArrowDown';
 const KEY_ENTER = 'Enter';
@@ -2381,6 +2380,24 @@ QUnit.module('editing', moduleSetup, () => {
         assert.equal(onCustomItemCreating.callCount, 0, 'action has not been called');
     });
 
+    QUnit.test('onCustomItemCreating should not be called when customItemCreateEvent is equal to empty string and component loses focus (T1269852)', function(assert) {
+        const onCustomItemCreating = sinon.stub();
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            acceptCustomValue: true,
+            customItemCreateEvent: '',
+            onCustomItemCreating: onCustomItemCreating,
+        });
+
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('t');
+        $input.trigger('focusout');
+
+        assert.strictEqual(onCustomItemCreating.callCount, 0, 'action has not been called');
+    });
+
     QUnit.test('onCustomItemCreating should not be called more then once even when there is value change handler call inside of event handler (T893205)', function(assert) {
         let handlerCallCount = 0;
 
@@ -4417,6 +4434,49 @@ QUnit.module('Async tests', {}, () => {
         const listItemsHeight = $(`.${LIST_ITEMS_CLASS}`).height();
 
         assert.roughEqual(overlayContentHeight, listItemsHeight, 5, 'popup height is more than rendered list items height');
+
+        clock.restore();
+    });
+
+    QUnit.test('component with async fieldTemplate render only one value on re-render (T1262587)', function(assert) {
+        const clock = sinon.useFakeTimers();
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: [1, 2, 3],
+            fieldTemplate: 'custom',
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    custom: {
+                        render: function(args) {
+                            const result = $('<div>');
+                            setTimeout(() => {
+                                result.dxTextBox({
+                                    value: args.model ? args.model.text : '',
+                                });
+
+                                result.appendTo(args.container);
+                                args.onRendered();
+                            }, TIME_TO_WAIT);
+
+                            return result;
+                        }
+                    }
+                }
+            },
+        });
+
+        const instance = $selectBox.dxSelectBox('instance');
+
+        instance.option({ value: 1 });
+        instance.option({ value: null });
+
+        clock.tick(TIME_TO_WAIT);
+
+        const $wrapper = $selectBox.find(toSelector(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER));
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        assert.strictEqual($wrapper.children().length, 1, 'only 1 element is rendered');
+        assert.strictEqual($input.val(), '', 'last value is applied');
 
         clock.restore();
     });

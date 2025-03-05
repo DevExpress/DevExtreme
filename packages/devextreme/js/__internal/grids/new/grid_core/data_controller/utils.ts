@@ -8,7 +8,7 @@ import DataSource from '@js/data/data_source';
 import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
 import { applyBatch } from '@ts/data/m_array_utils';
 
-import type { DataObject, OperationOptions } from './types';
+import type { DataObject, OperationOptions, RemoteOperations } from './types';
 
 export function normalizeDataSource(
   dataSourceLike: DataSourceLike<unknown, unknown> | null | undefined,
@@ -42,47 +42,36 @@ export function isCustomStore(store: Store): boolean {
 }
 
 export function normalizeRemoteOptions(
-  remoteOperations: boolean | object | string,
+  remoteOperations: RemoteOperations,
   localStore: boolean,
   customStore: boolean,
 ): OperationOptions {
-  if (remoteOperations instanceof String && remoteOperations !== 'auto') {
-    throw new Error('Remote operations do not support any string values except \'auto\'');
-  }
-
   const disabledAllRemoteOperations = {
     filtering: false,
     sorting: false,
     paging: false,
-    summary: false,
   };
   if (remoteOperations === false) {
     return disabledAllRemoteOperations;
-  }
-
-  if (remoteOperations === 'auto') {
-    if (localStore || customStore) {
-      return disabledAllRemoteOperations;
-    }
-    return {
-      filtering: true,
-      sorting: true,
-      paging: true,
-      summary: false,
-    };
   }
 
   const enabledAllRemoteOperations = {
     filtering: true,
     sorting: true,
     paging: true,
-    summary: true,
   };
+  if (remoteOperations === 'auto') {
+    if (localStore || customStore) {
+      return disabledAllRemoteOperations;
+    }
+    return enabledAllRemoteOperations;
+  }
+
   if (remoteOperations === true) {
     return enabledAllRemoteOperations;
   }
 
-  return remoteOperations as object;
+  return remoteOperations;
 }
 
 export function normalizeLocalOptions(
@@ -92,7 +81,6 @@ export function normalizeLocalOptions(
     filtering: !normalizedRemoteOperations.filtering,
     sorting: !normalizedRemoteOperations.sorting,
     paging: !normalizedRemoteOperations.paging,
-    summary: !normalizedRemoteOperations.summary,
   };
 }
 

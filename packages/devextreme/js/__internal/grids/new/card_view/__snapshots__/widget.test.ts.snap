@@ -173,7 +173,7 @@ exports[`common initial render should be successfull 1`] = `
               class="dx-cardview-headers-content"
             >
               <div
-                class="dx-cardview-header-item undefined undefined"
+                class="dx-cardview-header-item  "
                 tabindex="0"
               >
                 A

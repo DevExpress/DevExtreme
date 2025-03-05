@@ -30,6 +30,7 @@ const props = {
           name: 'Field',
         },
         value: 'devextreme',
+        text: 'devextreme',
       },
     ],
     key: 0,

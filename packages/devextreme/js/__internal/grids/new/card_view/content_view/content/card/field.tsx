@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-import { PureComponent } from '@ts/grids/new/grid_core/core/pure_component';
 import type { RefObject } from 'inferno';
-import { createRef } from 'inferno';
+import { Component, createRef } from 'inferno';
 
 export const CLASSES = {
   field: 'dx-cardview-field',
@@ -27,7 +26,7 @@ export interface FieldProps {
   onPrepared?: (element: HTMLElement) => void;
 }
 
-export class Field extends PureComponent<FieldProps> {
+export class Field extends Component<FieldProps> {
   private readonly containerRef: RefObject<HTMLDivElement>;
 
   constructor(props: FieldProps) {
