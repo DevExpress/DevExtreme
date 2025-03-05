@@ -66,7 +66,7 @@ const KEY_CODES = {
 };
 
 interface ScrollByDelta { x: number; y: number }
-
+// @ts-expect-error ts-error
 const InertiaAnimator = Animator.inherit({
   ctor(scroller) {
     this.callBase();
@@ -518,7 +518,7 @@ export const Scroller = Class.inherit({
   },
 
   _isScrollbar($element) {
-    return this._scrollByThumb && $element && $element.is(this._$scrollbar);
+    return this._scrollByThumb && $element?.is(this._$scrollbar);
   },
 
   _reachedMin() {
@@ -693,7 +693,7 @@ export const SimulatedStrategy = Class.inherit({
       return;
     }
     this._saveActive();
-    e.preventDefault && e.preventDefault();
+    e.preventDefault?.();
 
     this._adjustDistance(e, e.delta);
     this._eventForUserAction = e;
@@ -720,7 +720,7 @@ export const SimulatedStrategy = Class.inherit({
 
   handleEnd(e) {
     this._resetActive();
-    this._refreshCursorState(e.originalEvent && e.originalEvent.target);
+    this._refreshCursorState(e.originalEvent?.target);
 
     this._adjustDistance(e, e.velocity);
     this._eventForUserAction = e;
@@ -889,10 +889,10 @@ export const SimulatedStrategy = Class.inherit({
     return {
       event: this._eventForUserAction,
       scrollOffset: this._scrollOffset,
-      reachedLeft: scrollerX && scrollerX._reachedMax(),
-      reachedRight: scrollerX && scrollerX._reachedMin(),
-      reachedTop: scrollerY && scrollerY._reachedMax(),
-      reachedBottom: scrollerY && scrollerY._reachedMin(),
+      reachedLeft: scrollerX?._reachedMax(),
+      reachedRight: scrollerX?._reachedMin(),
+      reachedTop: scrollerY?._reachedMax(),
+      reachedBottom: scrollerY?._reachedMin(),
     };
   },
 
@@ -959,7 +959,7 @@ export const SimulatedStrategy = Class.inherit({
 
     this._eventHandler('cursorLeave');
     hoveredScrollable = null;
-    this._refreshCursorState(e && e.relatedTarget);
+    this._refreshCursorState(e?.relatedTarget);
   },
 
   _refreshCursorState(target) {
@@ -1008,7 +1008,7 @@ export const SimulatedStrategy = Class.inherit({
   },
 
   _updateBounds() {
-    this._scrollers[HORIZONTAL] && this._scrollers[HORIZONTAL]._updateBounds();
+    this._scrollers[HORIZONTAL]?._updateBounds();
   },
 
   _isHorizontalAndRtlEnabled() {
@@ -1140,7 +1140,7 @@ export const SimulatedStrategy = Class.inherit({
       case VERTICAL:
         return VERTICAL;
       default:
-        return e && e.shiftKey ? HORIZONTAL : VERTICAL;
+        return e?.shiftKey ? HORIZONTAL : VERTICAL;
     }
   },
 
