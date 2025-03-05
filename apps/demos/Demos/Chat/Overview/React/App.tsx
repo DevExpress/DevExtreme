@@ -16,9 +16,9 @@ export default function App() {
 
   function typingStart({ user }: TypingStartEvent) {
     if (user.id === currentUser.id) {
-      setSupportChatTypingUsers([supportAgent]);
+      setSupportChatTypingUsers([currentUser]);
     } else {
-      setUserChatTypingUsers([currentUser]);
+      setUserChatTypingUsers([supportAgent]);
     }
   }
 
