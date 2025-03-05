@@ -28,8 +28,18 @@ const customToolbarItems = [
   'viewSwitcher',
 ];
 
+test('Scheduler default toolbar should works', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await t.expect(await compareScreenshot(t, 'scheduler-default toolbar.png', scheduler.element)).ok();
+}).before(async () => createWidget('dxScheduler', {
+  views: ['day', 'week', 'workWeek', 'month'],
+  currentView: 'workWeek',
+  currentDate: new Date(2021, 3, 27),
+  height: 200,
+}));
+
 [
-  { description: 'default toolbar' },
   { toolbar: { items: customToolbarItems }, description: 'custom toolbar' },
   { toolbar: { visible: false }, description: 'hided toolbar' },
   { toolbar: { disabled: true, items: customToolbarItems }, description: 'disabled toolbar' },
