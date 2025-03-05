@@ -247,7 +247,6 @@ function initBaseComponent() {
         thisComponent.$_instance = instance;
 
         instance.on('optionChanged', (args) => widgetConfig.onOptionChanged(args));
-
         setEmitOptionChangedFunc(widgetConfig, thisComponent, thisComponent.$_innerChanges);
         bindOptionWatchers(widgetConfig, thisComponent, thisComponent.$_innerChanges);
         this.$_createEmitters(instance);
