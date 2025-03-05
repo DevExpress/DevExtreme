@@ -298,7 +298,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _setUploadStrategy() {
-    // @ts-expect-error
     if (this.option('chunkSize') > 0) {
       const uploadChunk = this.option('uploadChunk');
       this._uploadStrategy = uploadChunk && isFunction(uploadChunk)
@@ -514,14 +513,14 @@ class FileUploader extends Editor<FileUploaderProperties> {
   _validateMaxFileSize(file): boolean {
     const fileSize = file.value.size;
     const maxFileSize = this.option('maxFileSize');
-    // @ts-expect-error
+
     return maxFileSize > 0 ? fileSize <= maxFileSize : true;
   }
 
   _validateMinFileSize(file): boolean {
     const fileSize = file.value.size;
     const minFileSize = this.option('minFileSize');
-    // @ts-expect-error
+
     return minFileSize > 0 ? fileSize >= minFileSize : true;
   }
 
