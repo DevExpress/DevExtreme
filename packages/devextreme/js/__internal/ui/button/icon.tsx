@@ -1,5 +1,5 @@
-import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 import { getImageSourceType } from '@js/core/utils/icon';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 import { getTemplate } from '@ts/core/r1/utils/index';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 

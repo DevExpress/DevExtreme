@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { render } from 'inferno';
+/* eslint-disable import/no-extraneous-dependencies */
 import { createElement } from 'inferno-create-element';
 
 interface IProps {

@@ -1,5 +1,5 @@
-import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { PropsWithStyles } from '@ts/core/r1/index';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 
 import { renderUtils } from '../../utils/index';
 import { HeaderCell } from './header_cell';
