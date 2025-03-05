@@ -28,7 +28,12 @@ import 'generic_light.css!';
 QUnit.testStart(() => {
     const markup =
         '<div id="tagBox"></div>\
-         <div id="anotherContainer"></div>';
+         <div id="anotherContainer"></div>\
+         <div id="scrollContainer" style="height: 200px; overflow: auto;">\
+         <div style="height: 1000px;">\
+         <div id="tagBoxScroll"></div>\
+         </div>\
+         </div>';
 
     $('#qunit-fixture').html(markup);
 });
@@ -5429,6 +5434,32 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
 
         assert.strictEqual(tagBox.option('value').length, 0);
         assert.strictEqual(tagBoxWithFieldTemplate.option('value').length, 1);
+    });
+
+    QUnit.test('does not scroll the page after editing when fieldTemplate is passed (T1259996)', function(assert) {
+        const items = [...new Array(200)].map((_, index) => (index + 1));
+
+        const $tagBox = $('#tagBoxScroll').dxTagBox({
+            items,
+            value: items,
+            height: 50,
+            fieldTemplate: () => $('<div>').dxTextBox()
+        });
+
+        const $container = $('#scrollContainer');
+
+        const initialScrollTop = $container.scrollTop();
+
+        assert.strictEqual(initialScrollTop, 0, 'page is initially not scrolled');
+
+        const $inputWrapper = $tagBox.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
+        $inputWrapper.trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT);
+
+        $tagBox.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS }`).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT);
+
+        assert.strictEqual($container.scrollTop(), initialScrollTop, 'page is not scrolled after deleting the tag');
     });
 });
 
