@@ -6,5 +6,5 @@ export * from './mocked/hydrate';
 export * from './normalize_styles';
 export * from './portal';
 export * from './re_render_effect';
-export * from './ref_object';
+export type { RefObject } from './ref_object';
 export * from './render_template';
