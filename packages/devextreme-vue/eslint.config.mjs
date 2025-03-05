@@ -155,7 +155,7 @@ export default [
         rules: {
             "prefer-regex-literals": "off",
             "i18n/no-russian-character": ["error", { includeIdentifier: true }],
-            "max-len": ["error", { code: 150 }],
+            "max-len": ["error", { "code": 150 }],
             "@typescript-eslint/no-explicit-any": "warn",
             "spellcheck/spell-checker": "warn",
             "@typescript-eslint/prefer-optional-chain": "warn",
