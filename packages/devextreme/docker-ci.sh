@@ -24,6 +24,7 @@ function run_test_impl {
     local runner_pid
     local runner_result=0
 
+    [ -z "$CHROME_CMD"] && CHROME_CMD=google-chrome-stable
     [ "$LOCAL" == "true" ] && url="http://host.docker.internal:$port/run?notimers=true"
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
@@ -96,23 +97,31 @@ function run_test_impl {
         ;;
 
         *)
-            local chrome_command=google-chrome-stable
+            local chrome_command=$CHROME_CMD
             local chrome_args=(
                 --no-sandbox
-                --disable-dev-shm-usage
                 --disable-gpu
+                --disable-partial-raster
+                --disable-skia-runtime-opts
+                --no-first-run
+                --run-all-compositor-stages-before-draw
+                --disable-new-content-rendering-timeout
+                --disable-background-timer-throttling
+                --disable-renderer-backgrounding
+                --disable-threaded-animation
+                --disable-threaded-scrolling
+                --disable-checker-imaging
+                --disable-image-animation-resync
+                --use-gl="swiftshader"
+                --disable-features=PaintHolding
+                --disable-features=ScriptStreaming
+                --disable-features=LazyFrameLoading
+                --font-render-hinting=none
+                --disable-font-subpixel-positioning
                 --disable-extensions
-                --user-data-dir=/tmp/chrome
             )
 
-            if [ "$NO_HEADLESS" != "true" ]; then
-                echo "Headless mode"
-                chrome_args+=(
-                    --headless
-                    --remote-debugging-address=0.0.0.0
-                    --remote-debugging-port=9222
-                )
-            else
+            if [ "$NO_HEADLESS" == "true" ]; then
                 chrome_command="dbus-launch --exit-with-session $chrome_command"
                 chrome_args+=(
                     --no-first-run
@@ -125,7 +134,6 @@ function run_test_impl {
                 echo "Performance tests"
                 chrome_args+=(
                     --disable-popup-blocking
-                    --remote-debugging-port=9223
                     --enable-impl-side-painting
                     --enable-skia-benchmarking
                     --disable-web-security
@@ -163,7 +171,7 @@ function run_test_impl {
                 printf '  %s\n' "${chrome_args[@]}"
                 tput setaf 9
             fi
-            google-chrome-stable --version
+            eval "$chrome_command --version"
             eval "$chrome_command ${chrome_args[@]} '$url'" &>chrome.log &
         ;;
 
