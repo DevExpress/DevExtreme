@@ -9,6 +9,16 @@ const { globSync } = require('glob');
 const testPageUtils = require('./helpers/clearPage');
 require('nconf').argv();
 
+const LAUNCH_RETRY_ATTEMPTS = 5;
+const LAUNCH_RETRY_TIMEOUT = 20000;
+const TESTCAFE_CONFIG = {
+    hostname: 'localhost',
+    port1: 1437,
+    port2: 1438,
+    // eslint-disable-next-line spellcheck/spell-checker
+    experimentalProxyless: true,
+};
+
 const changeTheme = async(t, themeName) => createTestCafe.ClientFunction(() => new Promise((resolve) => {
     // eslint-disable-next-line no-undef
     window.DevExpress.ui.themes.ready(resolve);
@@ -33,15 +43,29 @@ const addShadowRootTree = async(t) => {
     }).with({ boundTestRun: t })();
 };
 
+const wait = async(timeout) => new Promise(resolve => setTimeout(resolve, timeout));
+
+const retry = async(action, attempt) => {
+    return await action()
+        .catch(async(error) => {
+            if(attempt <= 1) {
+                throw error;
+            }
+
+            /* eslint-disable no-console */
+            console.log('\n > error occurred during testcafe launch!\n');
+            console.error(error);
+            console.info(`\n > waiting ${LAUNCH_RETRY_TIMEOUT / 1000} seconds...\n`);
+            await wait(LAUNCH_RETRY_TIMEOUT);
+            console.info('\n > retry launching testcafe\n');
+            /* eslint-enable no-console */
+            return await retry(action, attempt - 1);
+        });
+};
+
 let testCafe;
-createTestCafe({
-    hostname: 'localhost',
-    port1: 1437,
-    port2: 1438,
-    // eslint-disable-next-line spellcheck/spell-checker
-    experimentalProxyless: true,
-})
-    .then(tc => {
+createTestCafe(TESTCAFE_CONFIG)
+    .then(async(tc) => {
         testCafe = tc;
 
         const args = getArgs();
@@ -164,7 +188,7 @@ createTestCafe({
             runOptions.disableScreenshots = true;
         }
 
-        return runner.run(runOptions);
+        return await retry(() => runner.run(runOptions), LAUNCH_RETRY_ATTEMPTS);
     })
     .then(failedCount => {
         testCafe.close();
@@ -186,7 +210,7 @@ function setShadowDom(args) {
 function expandBrowserAlias(browser, componentFolder) {
     switch(browser) {
         case 'chrome:devextreme-shr2':
-            return 'chrome:headless --no-sandbox --disable-gpu --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning';
+            return 'chrome:headless --no-sandbox --disable-gpu --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --font-render-hinting=none --disable-font-subpixel-positioning';
         case 'chrome:docker':
             return 'chromium:headless --no-sandbox --disable-gpu --window-size=1200,800';
     }
