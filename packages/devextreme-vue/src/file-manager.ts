@@ -343,6 +343,9 @@ const DxContextMenuItem = defineComponent(DxContextMenuItemConfig);
 
 (DxContextMenuItem as any).$_optionName = "items";
 (DxContextMenuItem as any).$_isCollectionItem = true;
+(DxContextMenuItem as any).$_expectedChildren = {
+  item: { isCollectionItem: true, optionName: "items" }
+};
 
 const DxDetailsConfig = {
   emits: {
@@ -449,6 +452,9 @@ const DxItem = defineComponent(DxItemConfig);
 
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
+(DxItem as any).$_expectedChildren = {
+  item: { isCollectionItem: true, optionName: "items" }
+};
 
 const DxItemViewConfig = {
   emits: {

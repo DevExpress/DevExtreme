@@ -498,9 +498,9 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
   public reload() {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const rowsScrollController = this._rowsScrollController || this._dataSource;
-    const itemIndex = rowsScrollController && rowsScrollController.getItemIndexByPosition();
+    const itemIndex = rowsScrollController?.getItemIndexByPosition();
     const result = super.reload.apply(this, arguments as any);
-    return result && result.done(() => {
+    return result?.done(() => {
       if (isVirtualMode(this) || gridCoreUtils.isVirtualRowRendering(this)) {
         const rowIndexOffset = this.getRowIndexOffset();
         const rowIndex = Math.floor(itemIndex) - rowIndexOffset;
@@ -510,8 +510,8 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
 
         if (scrollable && !isSortingOperation && rowIndex >= 0) {
           const rowElement = component.getRowElement(rowIndex);
-          const $rowElement = rowElement && rowElement[0] && $(rowElement[0]);
-          let top = $rowElement && $rowElement.position()?.top;
+          const $rowElement = rowElement?.[0] && $(rowElement[0]);
+          let top = $rowElement?.position()?.top;
           const isChromeLatest = browser.chrome && Number(browser.version ?? 0) >= 91;
           const allowedTopOffset = browser.mozilla || isChromeLatest ? 1 : 0; // T884308
           if (top && top > allowedTopOffset) {
@@ -864,7 +864,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     if (this.option(LEGACY_SCROLLING_MODE)) {
       const visibleItems = this._visibleItems;
 
-      if (visibleItems && visibleItems[0]) {
+      if (visibleItems?.[0]) {
         delta = this._items.indexOf(visibleItems[0]);
       }
     }
@@ -1147,7 +1147,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     rowsScrollController && rowsScrollController.loadIfNeed();
 
     const dataSource = this._dataSource;
-    return dataSource && dataSource.loadIfNeed();
+    return dataSource?.loadIfNeed();
   }
 
   private getItemSize() {
@@ -1159,7 +1159,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     }
 
     const dataSource = this._dataSource;
-    return dataSource && dataSource.getItemSize.apply(dataSource, arguments);
+    return dataSource?.getItemSize.apply(dataSource, arguments);
   }
 
   private getItemSizes() {
@@ -1171,7 +1171,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     }
 
     const dataSource = this._dataSource;
-    return dataSource && dataSource.getItemSizes.apply(dataSource, arguments);
+    return dataSource?.getItemSizes.apply(dataSource, arguments);
   }
 
   private getContentOffset() {
@@ -1183,13 +1183,13 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     }
 
     const dataSource = this._dataSource;
-    return dataSource && dataSource.getContentOffset.apply(dataSource, arguments);
+    return dataSource?.getContentOffset.apply(dataSource, arguments);
   }
 
   public refresh(options) {
     const dataSource = this._dataSource;
 
-    if (dataSource && options && options.load && isAppendMode(this)) {
+    if (dataSource && options?.load && isAppendMode(this)) {
       dataSource.resetCurrentTotalCount();
     }
 
@@ -1419,7 +1419,6 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
       scrollPosition = itemIndex * itemSize;
 
-      // eslint-disable-next-line no-restricted-syntax
       for (const index in itemSizes) {
         // eslint-disable-next-line radix
         if (parseInt(index) < itemIndex) {
@@ -1465,7 +1464,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   public _getRowElements(tableElement) {
     const $rows = super._getRowElements(tableElement);
 
-    return $rows && $rows.not(`.${VIRTUAL_ROW_CLASS}`);
+    return $rows?.not(`.${VIRTUAL_ROW_CLASS}`);
   }
 
   private _removeRowsElements(contentTable, removeCount, changeType) {
@@ -1488,7 +1487,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   protected _updateContent(tableElement, change) {
     let $freeSpaceRowElements;
     const contentElement = this._findContentElement();
-    const changeType = change && change.changeType;
+    const changeType = change?.changeType;
     const d: any = Deferred();
 
     const contentTable = contentElement.children().first();
@@ -1680,8 +1679,8 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
   private _findBottomLoadPanel($contentElement?) {
     const $element = $contentElement || this.element();
-    const $bottomLoadPanel = $element && $element.find(`.${this.addWidgetPrefix(BOTTOM_LOAD_PANEL_CLASS)}`);
-    if ($bottomLoadPanel && $bottomLoadPanel.length) {
+    const $bottomLoadPanel = $element?.find(`.${this.addWidgetPrefix(BOTTOM_LOAD_PANEL_CLASS)}`);
+    if ($bottomLoadPanel?.length) {
       return $bottomLoadPanel;
     }
   }
@@ -1716,6 +1715,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     const zeroTopPosition = e.scrollOffset.top === 0;
     const isScrollTopChanged = this._scrollTop !== e.scrollOffset.top;
     const hasScrolled = isScrollTopChanged || e.forceUpdateScrollPosition;
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const isValidScrollTarget = this._hasHeight || !legacyScrollingMode && zeroTopPosition;
 
     if (hasScrolled && isValidScrollTarget && this._rowHeight) {
@@ -1735,6 +1735,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   }
 
   protected _needUpdateRowHeight(itemsCount) {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return super._needUpdateRowHeight.apply(this, arguments as any) || (itemsCount > 0
               && (isAppendMode(this) && !gridCoreUtils.isVirtualRowRendering(this))
     );

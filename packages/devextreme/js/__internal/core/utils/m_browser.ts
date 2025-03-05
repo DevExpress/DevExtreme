@@ -11,7 +11,9 @@ const browserFromUA = (ua) => {
 
   const result: any = {};
   const matches = webkitRegExp.exec(ua)
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             || ua.indexOf('compatible') < 0 && mozillaRegExp.exec(ua)
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             || [];
   let browserName = matches[1];
   let browserVersion: any = matches[2];

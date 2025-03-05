@@ -169,7 +169,7 @@ export type Properties = dxButtonOptions;
 /** @deprecated use Properties instead */
 export type Options = dxButtonOptions;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -202,4 +202,4 @@ onInitialized?: ((e: InitializedEvent) => void);
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

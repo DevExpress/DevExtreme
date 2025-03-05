@@ -14,7 +14,7 @@ const getFilteredCities = (options) => ({
 });
 function setStateValue(rowData, value) {
   rowData.CityID = null;
-  this.defaultSetCellValue(rowData, value);
+  this.defaultSetCellValue?.(rowData, value);
 }
 const App = () => (
   <div id="data-grid-demo">

@@ -248,7 +248,6 @@ class GroupStrategyBase {
 
     let result = lastGroupRow[0].top + lastGroupRow[0].height;
 
-    // TODO remove while refactoring dual calculcations.
     // Should decrease allDayPanel amount due to the dual calculation corrections.
     if (isGroupedAllDayPanel) {
       result -= (groupIndex + 1) * this._getAllDayHeight(showAllDayPanel);

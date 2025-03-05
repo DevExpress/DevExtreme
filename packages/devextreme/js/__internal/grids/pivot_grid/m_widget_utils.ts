@@ -197,26 +197,30 @@ function mergeArraysByMaxValue(values1, values2) {
   return result;
 }
 
+/**
+ * @returns Maximum expanded level in the axis
+ */
 function getExpandedLevel(options, axisName) {
-  const dimensions = options[axisName];
-  let expandLevel = 0;
+  const fields = options[axisName];
   const expandedPaths = (axisName === 'columns' ? options.columnExpandedPaths : options.rowExpandedPaths) || [];
 
+  let expandedLevel = 0;
+
   if (options.headerName === axisName) {
-    expandLevel = options.path.length;
+    expandedLevel = options.path.length;
   } else if (options.headerName && options.headerName !== axisName && options.oppositePath) {
-    expandLevel = options.oppositePath.length;
+    expandedLevel = options.oppositePath.length;
   } else {
     each(expandedPaths, (_, path) => {
-      expandLevel = Math.max(expandLevel, path.length);
+      expandedLevel = Math.max(expandedLevel, path.length);
     });
   }
 
-  while (dimensions[expandLevel + 1] && dimensions[expandLevel].expanded) {
-    expandLevel += 1;
+  while (fields[expandedLevel + 1] && fields[expandedLevel].expanded) {
+    expandedLevel += 1;
   }
 
-  return expandLevel;
+  return expandedLevel;
 }
 
 function createGroupFields(item) {

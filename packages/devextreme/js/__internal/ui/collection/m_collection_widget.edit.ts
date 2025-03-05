@@ -258,7 +258,7 @@ class CollectionWidget<
 
   _getItemsCount(items: TItem[]): number {
     // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, no-return-assign
+    // eslint-disable-next-line no-return-assign
     return items.reduce((itemsCount, item) => itemsCount += item.items
       // @ts-expect-error ts-error
       ? this._getItemsCount(item.items)
@@ -434,9 +434,9 @@ class CollectionWidget<
     } else if (selectionMode === 'single') {
       const newSelection = selectedItems ?? [];
 
-      // eslint-disable-next-line no-mixed-operators
-      if (newSelection.length > 1 || !newSelection.length && this.option('selectionRequired') && items && items.length) {
+      if (newSelection.length > 1 || !newSelection.length && this.option('selectionRequired') && items?.length) {
         const currentSelection = this._selection.getSelectedItems();
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         let normalizedSelection = newSelection[0] === undefined
           ? currentSelection[0]
           : newSelection[0];
@@ -446,7 +446,7 @@ class CollectionWidget<
           normalizedSelection = this._editStrategy.itemsGetter()[0];
         }
 
-        if (this.option('grouped') && normalizedSelection && normalizedSelection.items) {
+        if (this.option('grouped') && normalizedSelection?.items) {
           normalizedSelection.items = [normalizedSelection.items[0]];
         }
 
@@ -484,7 +484,7 @@ class CollectionWidget<
       event: e,
     });
     // const parentItemClickHandler = super._itemClickHandler.bind(this);
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
     itemSelectPromise.always(() => {
       super._itemClickHandler(e, args, config);
     });
@@ -621,7 +621,7 @@ class CollectionWidget<
         this._invalidate();
         break;
       case 'dataSource':
-        // eslint-disable-next-line no-mixed-operators
+
         if (!args.value || Array.isArray(args.value) && !args.value.length) {
           this.option('selectedItemKeys', []);
         }
@@ -672,7 +672,7 @@ class CollectionWidget<
     const deletingActionArgs = { cancel: false };
     const deletePromise = this._itemEventHandler($itemElement, 'onItemDeleting', deletingActionArgs, { excludeValidators: ['disabled', 'readOnly'] });
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises, func-names
+    // eslint-disable-next-line func-names
     when(deletePromise).always(function (value) {
       // @ts-expect-error ts-error
       const deletePromiseExists = !deletePromise;
@@ -680,24 +680,20 @@ class CollectionWidget<
       const deletePromiseResolved = !deletePromiseExists && deletePromise.state() === 'resolved';
       const argumentsSpecified = !!arguments.length;
 
-      // eslint-disable-next-line no-mixed-operators
       const shouldDelete = deletePromiseExists || deletePromiseResolved
-        // eslint-disable-next-line no-mixed-operators
+
         && !argumentsSpecified || deletePromiseResolved
-        // eslint-disable-next-line no-mixed-operators
+
         && value;
 
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       when(fromPromise(deletingActionArgs.cancel))
         .always(() => {
           $itemElement.data(ITEM_DELETING_DATA_KEY, false);
         })
         .done((cancel) => {
           if (shouldDelete && !cancel) {
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             deferred.resolve();
           } else {
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             deferred.reject();
           }
         })
@@ -728,19 +724,15 @@ class CollectionWidget<
     dataStore.remove(dataController.keyOf(this._getItemData($item)))
       .done((key) => {
         if (key !== undefined) {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           deferred.resolve();
         } else {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           deferred.reject();
         }
       })
       .fail(() => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         deferred.reject();
       });
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     deferred.always((): void => {
       this.option('disabled', disabledState);
     });
@@ -752,12 +744,9 @@ class CollectionWidget<
     const deferred = Deferred();
     // @ts-expect-error ts-error
     if (this._isLastPage() || this.option('grouped')) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       deferred.resolve();
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._refreshLastPage().done(() => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         deferred.resolve();
       });
     }
@@ -774,7 +763,7 @@ class CollectionWidget<
 
   _updateSelectionAfterDelete(index: number): void {
     const key = this._getKeyByIndex(index);
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
     this._selection.deselect([key]);
   }
 
@@ -844,7 +833,6 @@ class CollectionWidget<
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._selection.deselect([key]);
   }
 
@@ -890,23 +878,23 @@ class CollectionWidget<
           // @ts-expect-error ts-error
           this._tryRefreshLastPage().done(() => {
             // @ts-expect-error ts-error
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
             deferred.resolveWith(this);
           });
         }).fail(() => {
           $item.removeClass(itemResponseWaitClass);
           // @ts-expect-error ts-error
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
           deferred.rejectWith(this);
         });
       }).fail(() => {
         // @ts-expect-error ts-error
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
         deferred.rejectWith(this);
       });
     } else {
       // @ts-expect-error ts-error
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
       deferred.rejectWith(this);
     }
 
@@ -931,11 +919,11 @@ class CollectionWidget<
       && movingIndex !== destinationIndex;
     if (canMoveItems) {
       // @ts-expect-error ts-error
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
       deferred.resolveWith(this);
     } else {
       // @ts-expect-error ts-error
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
       deferred.rejectWith(this);
     }
     // @ts-expect-error ts-error

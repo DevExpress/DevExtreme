@@ -471,12 +471,17 @@ QUnit.test('click', function(assert) {
     let clicked = 0;
     let eventFired = 0;
 
+    const clickEvent = $.Event('click');
+
     return new Promise(function(resolve) {
-        new Map($('#map'), {
+        const map = new Map($('#map'), {
             provider: 'googleStatic',
             width: 400,
             height: 500,
-            onClick: function() {
+            onClick: function(e) {
+                assert.strictEqual(e.component, map, 'component is passed correctly');
+                assert.strictEqual($(e.element).is($('#map')), true, 'click event includes root element');
+                assert.strictEqual(e.event.originalEvent, clickEvent, 'event is passed correctly');
                 clicked++;
             },
             onReady: function(e) {
@@ -484,7 +489,7 @@ QUnit.test('click', function(assert) {
                 $element.dxMap('instance').on('click', function() {
                     eventFired++;
                 });
-                $element.children().trigger('dxclick');
+                $element.children().trigger(clickEvent);
 
                 resolve();
             }

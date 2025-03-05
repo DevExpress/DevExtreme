@@ -4150,6 +4150,26 @@ QUnit.test('Option maxCountOfBreaks is undefined', function(assert) {
     ]);
 });
 
+QUnit.test('Breaks generated correctly for float values, maxCountOfBreaks is default (T1256385)', function(assert) {
+    const min = 0;
+    const max = 426.2648;
+    this.series = [
+        this.stubSeries([[max, 55.6356, 6.1606, 0.6016, min, min, min], []]),
+    ];
+    this.axis.setGroupSeries(this.series);
+
+    this.options.maxAutoBreakCount = 4;
+    this.updateOptions({ autoBreaksEnabled: true });
+    this.axis.setBusinessRange({ min, max });
+
+    this.axis.createTicks(this.canvas);
+
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const spacing = breaks.reduce((prev, item) => prev + (item.to - item.from), 0);
+
+    assert.notEqual(spacing, max - min, 'Generated breaks length sum does not equal to business range');
+});
+
 QUnit.test('Logarithmic axis', function(assert) {
     this.series = [
         this.stubSeries([[0.1, 1, 10, 100, 1000, 10000000], []])

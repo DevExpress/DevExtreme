@@ -109,7 +109,7 @@ export class TrackerView extends modules.View {
 
     that._positionChanged = function (position) {
       const $element = that.element();
-      if ($element && $element.hasClass(that.addWidgetPrefix(TRACKER_CLASS))) {
+      if ($element?.hasClass(that.addWidgetPrefix(TRACKER_CLASS))) {
         $element.css({ top: position.top });
         setHeight($element, position.height);
       }
@@ -126,7 +126,7 @@ export class TrackerView extends modules.View {
   }
 
   private hide() {
-    this.element() && this.element().hide();
+    this.element()?.hide();
   }
 
   private setHeight(value) {
@@ -347,7 +347,7 @@ export class BlockSeparatorView extends SeparatorView {
     const groupPanelOptions: any = this.option('groupPanel');
     const columnChooserOptions = this.option('columnChooser');
 
-    return (groupPanelOptions && groupPanelOptions.visible) || (columnChooserOptions && columnChooserOptions.enabled);
+    return groupPanelOptions?.visible || columnChooserOptions?.enabled;
   }
 
   public show(targetLocation?) {
@@ -476,7 +476,7 @@ export class DraggingHeaderView extends modules.View {
     const element = this.element();
 
     this._dragOptions = null;
-    element && element.parent().find(`.${this.addWidgetPrefix(DRAGGING_HEADER_CLASS)}`).remove();
+    element?.parent().find(`.${this.addWidgetPrefix(DRAGGING_HEADER_CLASS)}`).remove();
   }
 
   public isVisible() {
@@ -511,10 +511,10 @@ export class DraggingHeaderView extends modules.View {
     that._controller.drag(that._dropOptions);
 
     that.element().css({
-      textAlign: columnElement && columnElement.css('textAlign'),
+      textAlign: columnElement?.css('textAlign'),
       height: columnElement && (isCommandColumn && columnElement.get(0).clientHeight || getHeight(columnElement)),
       width: columnElement && (isCommandColumn && columnElement.get(0).clientWidth || getWidth(columnElement)),
-      whiteSpace: columnElement && columnElement.css('whiteSpace'),
+      whiteSpace: columnElement?.css('whiteSpace'),
     })
       .addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS))
       .toggleClass(DRAGGING_COMMAND_CELL_CLASS, isCommandColumn)
@@ -1059,7 +1059,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
       let nextCellWidth;
       let needCorrectionNextCellWidth;
       const cellWidth = resizingInfo.currentColumnWidth + delta;
-      const minWidth = column && column.minWidth || columnsSeparatorWidth;
+      const minWidth = column?.minWidth || columnsSeparatorWidth;
       const result: any = {};
 
       if (cellWidth >= minWidth) {
@@ -1071,7 +1071,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
       if (isNextColumnMode) {
         nextCellWidth = resizingInfo.nextColumnWidth - delta;
-        nextMinWidth = nextColumn && nextColumn.minWidth || columnsSeparatorWidth;
+        nextMinWidth = nextColumn?.minWidth || columnsSeparatorWidth;
 
         if (nextCellWidth >= nextMinWidth) {
           if (needCorrectionNextCellWidth) {
@@ -1271,8 +1271,8 @@ export class TablePositionViewController extends modules.ViewController {
     const that = this;
     const params: any = {};
     const $element = that._columnHeadersView.element();
-    const offset = $element && $element.offset();
-    const offsetTop = offset && offset.top || 0;
+    const offset = $element?.offset();
+    const offsetTop = offset?.top || 0;
     const diffOffsetTop = isDefined(top) ? Math.abs(top - offsetTop) : 0;
     const columnsHeadersHeight = that._columnHeadersView ? that._columnHeadersView.getHeight() : 0;
     const scrollBarWidth = that._rowsView.getScrollbarWidth(true);
@@ -1290,7 +1290,7 @@ export class TablePositionViewController extends modules.ViewController {
       params.height += rowsHeight - diffOffsetTop;
     }
 
-    if (top !== null && $element && $element.length) {
+    if (top !== null && $element?.length) {
       params.top = $element[0].offsetTop + diffOffsetTop;
     }
 
@@ -1344,8 +1344,8 @@ export class DraggingHeaderViewController extends modules.ViewController {
     };
 
     this._columnHeadersView.renderCompleted.add(subscribeToEvents);
-    this._headerPanelView && this._headerPanelView.renderCompleted.add(subscribeToEvents);
-    this._columnChooserView && this._columnChooserView.renderCompleted.add(subscribeToEvents);
+    this._headerPanelView?.renderCompleted.add(subscribeToEvents);
+    this._columnChooserView?.renderCompleted.add(subscribeToEvents);
   }
 
   public dispose() {
@@ -1599,6 +1599,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewColumnsResizingEx
     const wordWrapEnabled = this.option('wordWrapEnabled');
     const isResizing = this._columnsResizerController.isResizing();
 
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return super._needUpdateRowHeight.apply(this, arguments as any) || itemCount > 0 && !!wordWrapEnabled && !!isResizing;
   }
 };

@@ -1,0 +1,11 @@
+.dx-stepper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dx-stepper-item {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #D6D6D6;
+  border-radius: 999em;
+}

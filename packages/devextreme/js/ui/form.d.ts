@@ -876,7 +876,7 @@ export type Options = dxFormOptions;
 // TODO: temporary commented out to fix jquery generation error in R1
 
 // ///#DEBUG
-// eslint-disable-next-line import/first
+
 // import { CheckedEvents } from '../core';
 
 // type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
@@ -908,4 +908,4 @@ onInitialized?: ((e: InitializedEvent) => void);
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

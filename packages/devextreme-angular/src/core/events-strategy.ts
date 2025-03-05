@@ -21,14 +21,14 @@ export class NgEventsStrategy {
     if (emitter.observers.length) {
       const internalSubs = this.subscriptions[name] || [];
       if (internalSubs.length === emitter.observers.length) {
-        emitter.next(args && args[0]);
+        emitter.next(args?.[0]);
       } else {
-        this.zone.run(() => emitter.next(args && args[0]));
+        this.zone.run(() => emitter.next(args?.[0]));
       }
     }
   }
 
-  on(name: string | Object, handler?: Function) {
+  on(name: string | object, handler?: Function) {
     if (typeof name === 'string') {
       const eventSubscriptions = this.subscriptions[name] || [];
       const subcription = this.getEmitter(name).subscribe(handler?.bind(this.instance));
@@ -87,9 +87,9 @@ export class EmitterHelper {
       return;
     }
     const emitter = this.component[eventName];
-    if (emitter && emitter.observers.length) {
+    if (emitter?.observers.length) {
       this.zone.run(() => {
-        emitter.next(eventArgs && eventArgs[0]);
+        emitter.next(eventArgs?.[0]);
       });
     }
   }

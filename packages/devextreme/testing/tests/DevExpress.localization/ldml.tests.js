@@ -228,6 +228,16 @@ QUnit.module('number formatter', () => {
         assert.strictEqual(getNumberFormatter('#0.00 руб\'.\'')(15), '15.00 руб.', 'special chars was escaped');
     });
 
+    QUnit.test('escaped semicolon in format', function(assert) {
+        const formatter = getNumberFormatter('\';\'plus \';\' 0;minus \';\' 0\';\'');
+
+        assert.strictEqual(formatter(-8), 'minus ; 8;', 'semicolons were escaped');
+        assert.strictEqual(formatter(8), ';plus ; 8', 'semicolons were escaped');
+
+        // T1275922
+        assert.strictEqual(getNumberFormatter('\';\'0')(8), ';8', 'semicolons were escaped');
+    });
+
     QUnit.test('percent formatting with leading zero', function(assert) {
         const formatter = getNumberFormatter('#0.#%;(#0.#%)');
 
