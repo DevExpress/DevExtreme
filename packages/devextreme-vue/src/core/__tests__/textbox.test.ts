@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable import/no-named-as-default */
 import { mount } from '@vue/test-utils';
 import { defineComponent, nextTick } from 'vue';
 

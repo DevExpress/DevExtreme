@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/init-declarations */
 import { mount } from '@vue/test-utils';
 import { defineComponent } from 'vue';
 import { discover } from '../templates-discovering';
