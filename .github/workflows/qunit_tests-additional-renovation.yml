@@ -127,7 +127,7 @@ jobs:
           browser: 'chrome'
           isPerformance: 'true'
           useJQuery: 'true'
-          headless: 'false'
+          headless: 'true'
           useCsp: 'false'
 
   qunit-tests-mobile-and-shadow-dom:
@@ -157,7 +157,6 @@ jobs:
         ]
         kind: [ 'shadow-dom', 'ios10', 'android6' ]
         include:
-          - headless: false
           - kind: 'shadow-dom'
             userAgent: ''
             useShadowDom: true
@@ -166,10 +165,6 @@ jobs:
           - kind: 'android6'
             userAgent: 'android6'
             useJQuery: true
-          - constel: 'ui'
-            headless: true
-          - constel: 'viz'
-            headless: true
 
     steps:
       - name: Get sources
@@ -184,7 +179,7 @@ jobs:
           useJQuery: ${{ matrix.useJquery || 'false' }}
           userAgent: ${{ matrix.userAgent }}
           useShadowDom: ${{ matrix.useShadowDom }}
-          headless: ${{ matrix.headless }}
+          headless: 'true'
           useCsp: 'true'
 
   qunit-tests-firefox:

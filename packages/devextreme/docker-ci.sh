@@ -24,6 +24,7 @@ function run_test_impl {
     local runner_pid
     local runner_result=0
 
+    [ -z "$CHROME_CMD"] && CHROME_CMD=google-chrome-stable
     [ "$LOCAL" == "true" ] && url="http://host.docker.internal:$port/run?notimers=true"
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
@@ -96,7 +97,7 @@ function run_test_impl {
         ;;
 
         *)
-            local chrome_command=google-chrome-stable
+            local chrome_command=$CHROME_CMD
             local chrome_args=(
                 --no-sandbox
                 --disable-dev-shm-usage
@@ -163,7 +164,7 @@ function run_test_impl {
                 printf '  %s\n' "${chrome_args[@]}"
                 tput setaf 9
             fi
-            google-chrome-stable --version
+            eval "$chrome_command --version"
             eval "$chrome_command ${chrome_args[@]} '$url'" &>chrome.log &
         ;;
 
