@@ -12,8 +12,8 @@ import {
 
 
 
+import { FieldInfo, FilterBuilderOperation } from 'devextreme/ui/filter_builder';
 import { DataType } from 'devextreme/common';
-import { FilterBuilderOperation } from 'devextreme/ui/filter_builder';
 import { Format } from 'devextreme/common/core/localization';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -48,10 +48,10 @@ export class DxiFilterBuilderFieldComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get customizeText(): ((fieldInfo: { value: string | number | Date, valueText: string }) => string) {
+    get customizeText(): ((fieldInfo: FieldInfo) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: ((fieldInfo: { value: string | number | Date, valueText: string }) => string)) {
+    set customizeText(value: ((fieldInfo: FieldInfo) => string)) {
         this._setOption('customizeText', value);
     }
 
