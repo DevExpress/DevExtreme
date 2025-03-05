@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import type { InfernoEffect } from '@devextreme/runtime/inferno';
-import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
+import type { InfernoEffect } from '@ts/core/r1/runtime/inferno';
+import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno';
 import devices from '@js/core/devices';
 import { convertRulesToOptions } from '@js/core/options/utils';
 import { combineClasses } from '@ts/core/utils/combine_classes';

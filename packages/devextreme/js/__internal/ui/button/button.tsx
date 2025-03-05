@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import { click } from '@js/common/core/events/short';
 import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
@@ -9,6 +8,7 @@ import { convertRulesToOptions, createDefaultOptionRules } from '@js/core/option
 import { getImageSourceType } from '@js/core/utils/icon';
 import { camelize } from '@js/core/utils/inflector';
 import { current, isMaterial } from '@js/ui/themes';
+import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno';
 import type { EffectReturn } from '@ts/core/r1/utils/effect_return';
 import { getTemplate } from '@ts/core/r1/utils/index';
 import { Widget } from '@ts/core/r1/widget';

@@ -1,4 +1,4 @@
-import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
 import { ALL_DAY_PANEL_CELL_CLASS } from '../const';

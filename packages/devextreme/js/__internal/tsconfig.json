@@ -38,9 +38,6 @@
       "@js/*": [
         "./*"
       ],
-      "@devextreme/runtime/*": [
-        "./__internal/core/r1/runtime/*"
-      ],
     },
     "types": []
   },

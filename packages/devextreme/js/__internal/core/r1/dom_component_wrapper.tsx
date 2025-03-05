@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   hasTemplate, InfernoComponent, InfernoEffect, renderTemplate,
-} from '@devextreme/runtime/inferno';
+} from '@ts/core/r1/runtime/inferno';
 import type { ComponentClass } from '@js/core/dom_component';
 import type { DisposeEffectReturn } from '@ts/core/r1/utils/effect_return';
 import { getUpdatedOptions } from '@ts/core/r1/utils/get_updated_options';

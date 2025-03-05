@@ -1,4 +1,4 @@
-import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno';
 import type { PropsWithChildren, PropsWithClassName } from '@ts/core/r1/index';
 
 import { renderUtils } from '../../utils/index';

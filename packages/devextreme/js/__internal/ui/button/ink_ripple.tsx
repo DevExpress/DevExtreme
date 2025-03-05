@@ -1,4 +1,4 @@
-import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno';
 import { hideWave, initConfig, showWave } from '@js/ui/widget/utils.ink_ripple';
 
 export interface InkRippleConfig {
