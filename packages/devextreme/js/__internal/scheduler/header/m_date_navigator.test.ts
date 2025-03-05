@@ -29,7 +29,7 @@ describe('getDateNavigator', () => {
       customField: 'customField',
       options: {
         customOption: 'customOption',
-        items: ['current', 'next', { key: 'customButton' }],
+        items: ['dateInterval', 'next', { key: 'customButton' }],
       },
     })).toEqual({
       widget: 'dxButtonGroup',

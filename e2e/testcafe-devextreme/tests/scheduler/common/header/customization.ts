@@ -15,7 +15,7 @@ const customToolbarItems = [
         { key: 'today', text: 'Today' },
         'prev',
         'next',
-        'current',
+        'dateInterval',
       ],
     },
   },

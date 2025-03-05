@@ -12,5 +12,5 @@ export const NEXT_BUTTON_CLASS = 'dx-scheduler-navigator-next';
 
 export const PREVIOUS_BUTTON_NAME = 'prev';
 export const NEXT_BUTTON_NAME = 'next';
-export const CALENDAR_BUTTON_NAME = 'current';
+export const CALENDAR_BUTTON_NAME = 'dateInterval';
 export const DEFAULT_ITEMS = [PREVIOUS_BUTTON_NAME, NEXT_BUTTON_NAME, CALENDAR_BUTTON_NAME];
