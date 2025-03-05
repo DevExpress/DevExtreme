@@ -12,6 +12,7 @@
   border-radius: $cardview-header-item-border-radius;
   padding: ($cardview-header-item-padding-vertical - $cardview-header-item-border-width) $cardview-header-item-padding-horizontal;
   min-width: fit-content;
+  user-select: none;
 
   &:hover {
     background-color: $cardview-header-item-hovered-background-color;

@@ -20,6 +20,10 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
 
   sortOrder?: SortOrder; // todo: move to sorting module
   sortIndex?: number; // todo: move to sorting module
+  allowSorting?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  sortingMethod?: ((this: Column, value1: any, value2: any) => number) | undefined;
+  calculateSortValue?: string | ((this: Column, rowData: DataObject) => unknown);
 
   name: string;
 

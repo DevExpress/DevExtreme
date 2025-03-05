@@ -56,7 +56,7 @@ export interface ItemProps {
   column: Column;
   status?: Status;
   showSortIndexes?: boolean;
-  onSortClick?: () => void;
+  onSortClick?: (e: MouseEvent) => void;
   template?: ComponentType<{ column: Column }>;
   cssClass?: string;
 }

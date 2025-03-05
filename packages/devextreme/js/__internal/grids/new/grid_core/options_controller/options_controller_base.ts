@@ -3,6 +3,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import { Component } from '@js/core/component';
 import { getPathParts } from '@js/core/utils/data';
+import type { SortDescriptor } from '@js/data';
 import type { ChangedOptionInfo } from '@js/events';
 import type {
   SubsGets, SubsGetsUpd,
@@ -78,6 +79,9 @@ export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
   private isControlledMode = false;
 
   private readonly props: SubsGetsUpd<TProps>;
+
+  // eslint-disable-next-line max-len
+  public sortParameters = state<SortDescriptor<unknown> | SortDescriptor<unknown>[] | undefined>(undefined);
 
   protected defaults: TDefaultProps;
 

@@ -174,7 +174,7 @@ export class DataController {
     );
 
     effect(
-      (dataSource, pageIndex, pageSize, filter, pagingEnabled) => {
+      (dataSource, pageIndex, pageSize, filter, pagingEnabled, sortParameters) => {
         let someParamChanged = false;
         if (dataSource.pageIndex() !== pageIndex) {
           dataSource.pageIndex(pageIndex);
@@ -197,13 +197,24 @@ export class DataController {
           dataSource.paginate(pagingEnabled);
           someParamChanged ||= true;
         }
+        if (sortParameters && dataSource.sort() !== sortParameters) {
+          dataSource.sort(sortParameters);
+          someParamChanged ||= true;
+        }
 
         if (someParamChanged || !dataSource.isLoaded()) {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           dataSource.load();
         }
       },
-      [this.dataSource, this.pageIndex, this.pageSize, this.filter, this.pagingEnabled],
+      [
+        this.dataSource,
+        this.pageIndex,
+        this.pageSize,
+        this.filter,
+        this.pagingEnabled,
+        this.options.sortParameters,
+      ],
     );
   }
 
