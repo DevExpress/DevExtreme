@@ -35,7 +35,7 @@ module.exports = {
         alias: {
             // '@devextreme/vdom': require.resolve('@devextreme/vdom/dist/cjs/index.js'),
             // '@devextreme/runtime/common': require.resolve('./js/__internal/core/r1/runtime/common/index.ts'),
-            '@devextreme/runtime/inferno': require.resolve(`${__dirname}/js/__internal/core/r1/runtime/inferno/index.ts`),
+            '@devextreme/runtime/inferno': require.resolve(`${__dirname}/js/__internal/core/r1/runtime/inferno/index`),
             // '@devextreme/runtime/declarations': require.resolve('./js/__internal/core/r1/runtime/declarations/index.ts'),
             // '@devextreme/runtime/angular': require.resolve('./js/__internal/core/r1/runtime/angular/index.ts'),
             // '@devextreme/runtime/vue': require.resolve('./js/__internal/core/r1/runtime/vue/index.ts'),
