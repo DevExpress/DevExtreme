@@ -13,9 +13,19 @@
   padding: ($cardview-header-item-padding-vertical - $cardview-header-item-border-width) $cardview-header-item-padding-horizontal;
   min-width: fit-content;
   user-select: none;
+  display: grid;
+  grid-auto-flow: column;
+  align-self: center;
+  gap: 5px;
 
   &:hover {
     background-color: $cardview-header-item-hovered-background-color;
     border: solid $cardview-header-item-border-width $cardview-header-item-hovered-border-color;
   }
+}
+
+.dx-cardview-header-item-sorting {
+  display: grid;
+  grid-auto-flow: column;
+  align-self: center;
 }
