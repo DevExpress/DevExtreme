@@ -29,7 +29,7 @@ const customToolbarItems = [
 ];
 
 [
-  { toolbar: undefined, description: 'default toolbar' },
+  { description: 'default toolbar' },
   { toolbar: { items: customToolbarItems }, description: 'custom toolbar' },
   { toolbar: { visible: false }, description: 'hided toolbar' },
   { toolbar: { disabled: true, items: customToolbarItems }, description: 'disabled toolbar' },
