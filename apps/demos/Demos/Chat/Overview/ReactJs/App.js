@@ -11,9 +11,9 @@ export default function App() {
   }
   function typingStart({ user }) {
     if (user.id === currentUser.id) {
-      setSupportChatTypingUsers([supportAgent]);
+      setSupportChatTypingUsers([currentUser]);
     } else {
-      setUserChatTypingUsers([currentUser]);
+      setUserChatTypingUsers([supportAgent]);
     }
   }
   function typingEnd({ user }) {
