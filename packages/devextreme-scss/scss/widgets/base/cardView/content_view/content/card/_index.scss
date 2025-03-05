@@ -1,0 +1,11 @@
+@use './header';
+@use './content';
+@use './variables' as *;
+
+.dx-cardview-card {
+  min-width: $cardview-card-min-width;
+  border: $cardview-card-border-size solid $cardview-card-border-color;
+  border-radius: $cardview-card-border-radius;
+  width: 100%;
+  background-color: $cardview-card-background-color;
+}

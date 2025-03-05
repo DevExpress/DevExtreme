@@ -1,0 +1,58 @@
+@use "../sizes" as *;
+
+@use '../../base/cardView/variables' as *;
+@use '../../base/cardView/header_panel/variables' as *;
+@use '../../base/cardView/content_view/content/card/variables' as *;
+@use '../../base/cardView/content_view/content/card/header/variables' as *;
+@use '../../base/cardView/content_view/content/card/content/variables' as *;
+@use '../../base/cardView/content_view/content/variables' as *;
+
+$cardview-paddings-12: null;
+$cardview-paddings-6: null;
+$cardview-text-size-16: null;
+$cardview-border-radius-8: null;
+$cardview-gaps-16: null;
+
+@if $size == "default" {
+  $cardview-paddings-12: 12px;
+  $cardview-paddings-6: 6px;
+  $cardview-text-size-16: 16px;
+  $cardview-border-radius-8: 8px;
+  $cardview-gaps-16: 16px;
+}
+@else if $size == "compact" {
+  $cardview-paddings-12: 8px;
+  $cardview-paddings-6: 4px;
+  $cardview-text-size-16: 14px;
+  $cardview-border-radius-8: 6px;
+  $cardview-gaps-16: 12px;
+}
+
+$cardview-gap: 24px !default;
+$cardview-padding: 24px !default;
+
+$cardview-header-item-border-width: 1px !default;
+$cardview-header-item-border-radius: 6px !default;
+
+$cardview-content-column-gap: $cardview-gaps-16 !default;
+$cardview-content-row-gap: $cardview-gaps-16 !default;
+
+$cardview-card-border-size: 1px !default;
+$cardview-card-min-width: 250px !default;
+$cardview-card-border-radius: $cardview-border-radius-8 !default;
+
+$cardview-card-content-padding-vertical: $cardview-paddings-12 !default;
+$cardview-card-content-padding-horizontal: $cardview-paddings-12 !default;
+$cardview-card-content-field-gap: 5px !default;
+$cardview-card-content-cell-padding-vertical: $cardview-paddings-6 !default;
+$cardview-card-content-cell-padding-horizontal: $cardview-paddings-12 !default;
+
+$cardview-card-header-text-size: $cardview-text-size-16 !default;
+$cardview-card-header-border-radius: 8px !default;
+
+
+@if $size == "default" {
+}
+
+@else if $size == "compact" {
+}

@@ -1,0 +1,31 @@
+@use './variables' as *;
+@use '../variables' as *;
+
+.dx-cardview-card-content {
+  padding: ($cardview-card-content-padding-vertical - $cardview-card-content-field-gap) $cardview-card-content-padding-horizontal;
+  display: table;
+  border-spacing: $cardview-card-content-field-gap;
+  width: 100%;
+}
+
+.dx-card-cover {
+  border-top: $cardview-card-border-size solid $cardview-card-border-color;
+  border-bottom: $cardview-card-border-size solid $cardview-card-border-color;
+}
+
+.dx-cardview-field {
+  display: table-row
+}
+
+.dx-cardview-field-name,
+.dx-cardview-field-value {
+  display: table-cell;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: $cardview-card-content-cell-padding-vertical $cardview-card-content-cell-padding-horizontal;
+}
+
+.dx-cardview-field-name {
+  font-weight: bold;
+}

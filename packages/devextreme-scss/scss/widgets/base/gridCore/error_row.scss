@@ -1,0 +1,21 @@
+.dx-gridcore-error-row {
+  position: sticky;
+  top: 5px;
+
+  .dx-gridcore-error-row-error {
+    margin: 5px;
+    background-color: red;
+    display: flex;
+    justify-content: space-between;
+
+    .dx-gridcore-error-row-text {
+      padding: 10px;
+      color: white;
+    }
+
+    .dx-gridcore-error-row-button {
+      align-self: flex-end;
+      margin-right: 10px;
+    }
+  }
+}

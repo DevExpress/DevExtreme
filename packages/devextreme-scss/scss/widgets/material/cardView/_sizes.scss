@@ -1,0 +1,24 @@
+@use '../../base/cardView/variables' as *;
+@use '../../base/cardView/header_panel/variables' as *;
+@use '../../base/cardView/content_view/content/card/variables' as *;
+@use '../../base/cardView/content_view/content/variables' as *;
+
+$cardview-gap: 24px !default;
+$cardview-padding: 24px !default;
+
+$cardview-header-item-border-width: 1px !default;
+$cardview-header-item-border-radius: 99 !default;
+
+$cardview-content-column-gap: 16px !default;
+$cardview-content-row-gap: 16px !default;
+
+$cardview-card-border-size: 1px !default;
+$cardview-card-min-width: 250px !default;
+$cardview-card-border-radius: 8px !default;
+
+$cardview-card-content-padding-vertical: 12px !default;
+$cardview-card-content-padding-horizontal: 12px !default;
+$cardview-card-content-field-gap: 5px !default;
+$cardview-card-content-cell-padding-vertical: 6px !default;
+$cardview-card-content-cell-padding-horizontal: 12px !default;
+
