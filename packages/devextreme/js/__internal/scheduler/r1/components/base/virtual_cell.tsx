@@ -1,4 +1,4 @@
-import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { PropsWithStyles } from '@ts/core/r1/index';
 
 import { renderUtils } from '../../utils/index';

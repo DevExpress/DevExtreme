@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import { InfernoComponent, InfernoEffect } from '@ts/core/r1/runtime/inferno';
+import { InfernoComponent, InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 import domAdapter from '@js/core/dom_adapter';
 import type { DxElement } from '@js/core/element';
 import { getPublicElement } from '@js/core/element';

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { EventCallback } from '@ts/core/r1/event_callback';
 
 import LegacyNumberBox from '../../../ui/number_box';
