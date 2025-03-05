@@ -103,6 +103,26 @@ function run_test_impl {
                 --disable-gpu
                 --disable-extensions
                 --user-data-dir=/tmp/chrome
+                --no-sandbox
+                --disable-gpu
+                --disable-partial-raster
+                --disable-skia-runtime-opts
+                --no-first-run
+                --run-all-compositor-stages-before-draw
+                --disable-new-content-rendering-timeout
+                --disable-background-timer-throttling
+                --disable-renderer-backgrounding
+                --disable-threaded-animation
+                --disable-threaded-scrolling
+                --disable-checker-imaging
+                --disable-image-animation-resync
+                --use-gl="swiftshader"
+                --disable-features=PaintHolding
+                --disable-features=ScriptStreaming
+                --disable-features=LazyFrameLoading
+                --font-render-hinting=none
+                --disable-font-subpixel-positioning
+                --disable-extensions
             )
 
             if [ "$NO_HEADLESS" != "true" ]; then
