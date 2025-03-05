@@ -1,5 +1,3 @@
-/* eslint-disable no-prototype-builtins */
-/* eslint-disable spellcheck/spell-checker */
 /* eslint-disable import/named */
 import {
     App,

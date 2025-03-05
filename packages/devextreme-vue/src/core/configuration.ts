@@ -1,6 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
-/* eslint-disable no-prototype-builtins */
-/* eslint-disable no-restricted-syntax */
 /* eslint-disable import/named */
 import {
     ComponentPublicInstance as IVue, toRaw, VNode, VNodeProps,

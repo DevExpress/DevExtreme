@@ -4,17 +4,17 @@ import { initDxExtensionComponent } from './extension-component';
 import { setVModel } from './vue-helper';
 
 export function prepareComponentConfig(config) {
-    config.extends = initDxComponent();
+  config.extends = initDxComponent();
 
-    if(config.model) {
-        setVModel(config);
-    }
+  if (config.model) {
+    setVModel(config);
+  }
 }
 
 export function prepareConfigurationComponentConfig(config: any): void {
-    config.extends = initDxConfiguration();
+  config.extends = initDxConfiguration();
 }
 
 export function prepareExtensionComponentConfig(config: any): void {
-    config.extends = initDxExtensionComponent();
+  config.extends = initDxExtensionComponent();
 }
