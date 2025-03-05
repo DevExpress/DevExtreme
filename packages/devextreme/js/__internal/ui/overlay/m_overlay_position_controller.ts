@@ -38,9 +38,9 @@ class OverlayPositionController {
 
   _$wrapper: dxElementWrapper;
 
-  _$markupContainer: dxElementWrapper | undefined;
+  _$markupContainer!: dxElementWrapper;
 
-  _$visualContainer: dxElementWrapper | undefined;
+  _$visualContainer!: dxElementWrapper;
 
   _shouldRenderContentInitialPosition: boolean;
 
@@ -74,8 +74,9 @@ class OverlayPositionController {
     this._$root = $root;
     this._$content = $content;
     this._$wrapper = $wrapper;
-
+    // @ts-expect-error
     this._$markupContainer = undefined;
+    // @ts-expect-error
     this._$visualContainer = undefined;
 
     this._shouldRenderContentInitialPosition = true;
@@ -94,7 +95,7 @@ class OverlayPositionController {
     return this._$markupContainer;
   }
 
-  get $visualContainer() {
+  get $visualContainer(): dxElementWrapper {
     return this._$visualContainer;
   }
 
@@ -167,7 +168,6 @@ class OverlayPositionController {
   }
 
   styleWrapperPosition(): void {
-    // @ts-expect-error
     const useFixed = isWindow(this.$visualContainer.get(0)) || this._props._fixWrapperPosition;
 
     const positionStyle = useFixed ? 'fixed' : 'absolute';
@@ -195,7 +195,7 @@ class OverlayPositionController {
     this.detectVisualPositionChange();
   }
 
-  _raisePositionedEvents(event) {
+  _raisePositionedEvents(event): void {
     const previousPosition = this._previousVisualPosition;
     const newPosition = this._visualPosition;
 

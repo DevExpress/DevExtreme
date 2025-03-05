@@ -200,7 +200,7 @@ export class Component<
 
   _logDeprecatedOptionWarning(
     option: string,
-    info: { since: string; message: string; alias: string },
+    info: { since: string; message: string; alias?: string },
   ): void {
     const message = info.message || `Use the '${info.alias}' option instead`;
     errors.log('W0001', this.NAME, option, info.since, message);
