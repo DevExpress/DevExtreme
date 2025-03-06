@@ -1,6 +1,5 @@
 /* eslint-env node */
 const TerserPlugin = require('terser-webpack-plugin');
-const path = require('path');
 
 module.exports = {
     mode: 'production',
@@ -32,15 +31,9 @@ module.exports = {
         'devexpress-gantt': 'window.DevExpress.Gantt',
         'luxon': 'window.luxon'
     },
-    resolve: {
+    /* resolve: {
         alias: {
-            // '@devextreme/vdom': require.resolve('@devextreme/vdom/dist/cjs/index.js'),
-            // '@devextreme/runtime/common': require.resolve('./js/__internal/core/r1/runtime/common/index.ts'),
             '@devextreme/runtime/inferno': path.join(__dirname, '/js/__internal/core/r1/runtime/inferno/index.ts'),
-            // '@devextreme/runtime/declarations': require.resolve('./js/__internal/core/r1/runtime/declarations/index.ts'),
-            // '@devextreme/runtime/angular': require.resolve('./js/__internal/core/r1/runtime/angular/index.ts'),
-            // '@devextreme/runtime/vue': require.resolve('./js/__internal/core/r1/runtime/vue/index.ts'),
-            // '@devextreme/runtime/react': require.resolve('./js/__internal/core/r1/runtime/react/index.tsx')
         }
-    },
+    }, */
 };
