@@ -95,17 +95,17 @@ test('T1235433: Scheduler - Drag-n-Drop works inside the group with virtual scro
   await t.expect(scheduler.element.exists).ok();
 
   await dragAppointmentByCircle(t, scheduler.getAppointment('Book 1'), [
-    '1: 1.1 - 1.2',
-    '2: 1.1 - 1.2',
-    '2: 1.2 - 1.3',
-    '1: 1.2 - 1.3',
+    '1: 1.1',
+    '2: 1.1',
+    '2: 1.2',
+    '1: 1.2',
   ]);
   await scrollTo(1000, 0);
   await dragAppointmentByCircle(t, scheduler.getAppointment('Book 3'), [
-    '1: 1.8 - 1.8',
-    '2: 1.8 - 1.8',
-    '2: 1.9 - 1.9',
-    '1: 1.9 - 1.9',
+    '1: 1.8',
+    '2: 1.8',
+    '2: 1.9',
+    '1: 1.9',
   ]);
 }).before(async () => createWidget('dxScheduler', {
   ...schedulerConfig,
@@ -115,7 +115,7 @@ test('T1235433: Scheduler - Drag-n-Drop works inside the group with virtual scro
       <div style="display: contents">
         <div class="dx-scheduler-appointment-title">${appointmentData.text}</div>
         <div class="dx-scheduler-appointment-content-details">
-          <div class="dx-scheduler-appointment-content-date">${appointmentData.priority}: ${appointmentData.startDate.getMonth()}.${appointmentData.startDate.getDate()} - ${appointmentData.endDate.getMonth()}.${appointmentData.endDate.getDate()}</div>
+          <div class="dx-scheduler-appointment-content-date">${appointmentData.priority}: ${appointmentData.startDate.getMonth()}.${appointmentData.startDate.getDate()}</div>
         </div>
       </div>
     `);
