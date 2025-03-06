@@ -315,9 +315,10 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     if (!$focusedElement.length && e?.virtualColumnsScrolling) {
       const focusedColumnIndex = this._focusedCellPosition?.columnIndex ?? -1;
-      const focusedColumnIndexWithoutOffset = focusedColumnIndex - this._getFocusedColumnIndexOffset(focusedColumnIndex);
+      const visibleColumns = this._columnsController.getVisibleColumns();
+      const isColumnVisible = visibleColumns.some((column) => column.index === focusedColumnIndex);
 
-      return focusedColumnIndexWithoutOffset >= 0;
+      return isColumnVisible;
     }
 
     return true;

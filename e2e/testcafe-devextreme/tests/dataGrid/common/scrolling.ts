@@ -1765,7 +1765,7 @@ test('DataGrid - Gray boxes appear when the push method is used to remove rows i
   });
 });
 
-// T1262288
+// T1262288 - Left to Right
 test('DataGrid - Focused cell moves to the end of the table after horizontal scrolling', async (t) => {
   const dataGrid = new DataGrid('#container');
 
@@ -1779,6 +1779,36 @@ test('DataGrid - Focused cell moves to the end of the table after horizontal scr
   await dataGrid.scrollBy({ x: -1000 });
 
   await t.expect(dataGrid.getDataCell(0, 0).isFocused).ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(1, 20).map((item, index) => ({ ...item, id: index })),
+  keyExpr: 'id',
+  columnWidth: 100,
+  showBorders: true,
+  focusedRowEnabled: true,
+  scrolling: {
+    columnRenderingMode: 'virtual',
+    mode: 'virtual',
+    showScrollbar: 'always',
+  },
+  paging: {
+    enabled: false,
+  },
+}));
+
+// T1277214 - Right to Left
+test.only('DataGrid - Scrolling position is reset to far right on an attempt to scroll left if the most right cell is focused using the keyboard', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await dataGrid.scrollTo(t, { x: 1000 });
+  await t
+    .click(dataGrid.getDataCell(0, 20).element)
+    .pressKey('right');
+
+  await t.expect(dataGrid.getDataCell(0, 20).isFocused).ok();
+
+  await dataGrid.scrollBy({ x: -1000 });
+  await dataGrid.scrollBy({ x: 1000 });
+
+  await t.expect(dataGrid.getDataCell(0, 20).isFocused).ok();
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(1, 20).map((item, index) => ({ ...item, id: index })),
   keyExpr: 'id',
