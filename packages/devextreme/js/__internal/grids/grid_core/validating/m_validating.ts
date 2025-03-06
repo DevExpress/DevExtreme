@@ -1144,6 +1144,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
       onPositioned: this.overlayPositionedHandler.bind(this),
     };
 
+    // @ts-expect-error ts-error
     this._revertTooltip = new Overlay($tooltipElement, tooltipOptions);
   }
 
