@@ -4100,6 +4100,21 @@
           }
         ]
       },
+      
+      {
+        "Name": "Stepper",
+        "Equivalents": "dxStepper, dx-stepper",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Stepper",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-stepper.xml"
+          }
+        ]
+      },
       {
         "Name": "Pagination",
         "Equivalents": "",
@@ -4250,20 +4265,6 @@
                 "DemoType": "Web"
               }
             ]
-          }
-        ]
-      },
-      {
-        "Name": "Stepper",
-        "Equivalents": "dxStepper, dx-stepper",
-        "Demos": [
-          {
-            "Title": "Overview",
-            "Name": "Overview",
-            "Widget": "Stepper",
-            "DemoType": "Web",
-            "Badge": "Roadmap",
-            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-stepper.xml"
           }
         ]
       },
