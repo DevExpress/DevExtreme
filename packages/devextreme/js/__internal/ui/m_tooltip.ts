@@ -7,7 +7,7 @@ import Popover from '@js/ui/popover/ui.popover';
 
 const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
-
+// @ts-expect-error ts-error
 const Tooltip = Popover.inherit({
   _getDefaultOptions() {
     return extend(this.callBase(), {
