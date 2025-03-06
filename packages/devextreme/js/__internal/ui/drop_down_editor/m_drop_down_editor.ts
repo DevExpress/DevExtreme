@@ -6,6 +6,7 @@ import { getPublicElement } from '@js/core/element';
 import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
+import browser from '@js/core/utils/browser';
 import {
   noop,
   // @ts-expect-error
@@ -365,8 +366,19 @@ const DropDownEditor = TextBox.inherit({
         }
 
         this._integrateInput();
-        // @ts-expect-error
-        isFocused && eventsEngine.trigger($input, 'focus');
+
+        if (!isFocused) {
+          return;
+        }
+
+        // T1259996
+        if (browser.mozilla) {
+          const inputElement = $input.get(0) as HTMLInputElement;
+          inputElement.focus({ preventScroll: true });
+        } else {
+          // @ts-expect-error
+          eventsEngine.trigger($input, 'focus');
+        }
       },
     });
   },
