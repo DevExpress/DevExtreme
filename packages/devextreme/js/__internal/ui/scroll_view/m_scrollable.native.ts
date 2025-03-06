@@ -2,11 +2,12 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import { isDxMouseWheelEvent } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import devices from '@js/core/devices';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
 import { each } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 
+import type Scrollable from './m_scrollable';
 import Scrollbar from './m_scrollbar';
 
 const SCROLLABLE_NATIVE = 'dxNativeScrollable';
@@ -18,21 +19,64 @@ const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 
 const HIDE_SCROLLBAR_TIMEOUT = 500;
+// @ts-expect-error dxClass inheritance issue
+class NativeStrategy extends (Class.inherit({}) as new() => {}) {
+  _component!: Scrollable;
 
-const NativeStrategy = Class.inherit({
+  _$element!: dxElementWrapper;
 
-  ctor(scrollable) {
+  _$container!: dxElementWrapper;
+
+  _$content!: dxElementWrapper;
+
+  _useSimulatedScrollbar?: boolean;
+
+  _direction?: string;
+
+  _getMaxOffset!: () => { top: number; left: number };
+
+  _allowedDirection!: () => string | null;
+
+  _hideScrollbarTimeout?: ReturnType<typeof setTimeout> | number;
+
+  _createActionByOption!: (event?: any) => (e?: Record<string, unknown>) => void;
+
+  _isLocked!: () => boolean | undefined;
+
+  _isRtlNativeStrategy!: () => boolean | undefined;
+
+  _isDirection!: (direction) => boolean;
+
+  option?: any;
+
+  _scrollAction?: (args?) => void;
+
+  _updateAction!: (args?) => void;
+
+  _scrollbars?: Record<string, Scrollbar>;
+
+  _contentSize!: { width: number; height: number };
+
+  _containerSize!: { width: number; height: number };
+
+  _componentContentSize!: { width: number; height: number };
+
+  _eventForUserAction?: any;
+
+  ctor(scrollable): void {
     this._init(scrollable);
-  },
+  }
 
-  _init(scrollable) {
+  _init(scrollable: Scrollable) {
     this._component = scrollable;
     this._$element = scrollable.$element();
     this._$container = $(scrollable.container());
     this._$content = scrollable.$content();
 
-    this._direction = scrollable.option('direction');
-    this._useSimulatedScrollbar = scrollable.option('useSimulatedScrollbar');
+    const { direction, useSimulatedScrollbar } = scrollable.option();
+
+    this._direction = direction;
+    this._useSimulatedScrollbar = useSimulatedScrollbar;
 
     this.option = scrollable.option.bind(scrollable);
     this._createActionByOption = scrollable._createActionByOption.bind(scrollable);
@@ -41,9 +85,9 @@ const NativeStrategy = Class.inherit({
     this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
     this._getMaxOffset = scrollable._getMaxOffset.bind(scrollable);
     this._isRtlNativeStrategy = scrollable._isRtlNativeStrategy.bind(scrollable);
-  },
+  }
 
-  render() {
+  render(): void {
     const device = devices.real();
     const deviceType = device.platform;
 
@@ -55,17 +99,17 @@ const NativeStrategy = Class.inherit({
     if (this._isScrollbarVisible() && this._useSimulatedScrollbar) {
       this._renderScrollbars();
     }
-  },
+  }
 
-  updateRtlPosition(isFirstRender) {
+  updateRtlPosition(isFirstRender): void {
     if (isFirstRender && this.option('rtlEnabled')) {
       if (this._isScrollbarVisible() && this._useSimulatedScrollbar) {
         this._moveScrollbars();
       }
     }
-  },
+  }
 
-  _renderScrollbars() {
+  _renderScrollbars(): void {
     this._scrollbars = {};
     this._hideScrollbarTimeout = 0;
 
@@ -73,9 +117,9 @@ const NativeStrategy = Class.inherit({
 
     this._renderScrollbar(VERTICAL);
     this._renderScrollbar(HORIZONTAL);
-  },
+  }
 
-  _renderScrollbar(direction) {
+  _renderScrollbar(direction): void {
     if (!this._isDirection(direction)) {
       return;
     }
@@ -84,12 +128,14 @@ const NativeStrategy = Class.inherit({
       direction,
       expandable: this._component.option('scrollByThumb'),
     });
-  },
+  }
 
-  handleInit: noop,
-  handleStart: noop,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  handleInit(e): void {}
 
-  handleMove(e) {
+  handleStart(): void {}
+
+  handleMove(e): void {
     if (this._isLocked()) {
       e.cancel = true;
       return;
@@ -98,23 +144,26 @@ const NativeStrategy = Class.inherit({
     if (this._allowedDirection()) {
       e.originalEvent.isScrollingEvent = true;
     }
-  },
+  }
 
-  handleEnd: noop,
-  handleCancel: noop,
-  handleStop: noop,
+  handleEnd(): void {}
 
-  _eachScrollbar(callback) {
+  handleCancel(): void {}
+
+  handleStop(): void {}
+
+  _eachScrollbar(callback): void {
     callback = callback.bind(this);
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     each(this._scrollbars || {}, (direction, scrollbar) => {
       callback(scrollbar, direction);
     });
-  },
+  }
 
-  createActions() {
+  createActions(): void {
     this._scrollAction = this._createActionByOption('onScroll');
     this._updateAction = this._createActionByOption('onUpdated');
-  },
+  }
 
   _createActionArgs() {
     const { left, top } = this.location();
@@ -127,7 +176,7 @@ const NativeStrategy = Class.inherit({
       reachedTop: this._isDirection(VERTICAL) ? Math.round(top) >= 0 : undefined,
       reachedBottom: this._isDirection(VERTICAL) ? Math.round(Math.abs(top) - this._getMaxOffset().top) >= 0 : undefined,
     };
-  },
+  }
 
   _getScrollOffset() {
     const { top, left } = this.location();
@@ -136,7 +185,7 @@ const NativeStrategy = Class.inherit({
       top: -top,
       left: this._normalizeOffsetLeft(-left),
     };
-  },
+  }
 
   _normalizeOffsetLeft(scrollLeft) {
     if (this._isRtlNativeStrategy()) {
@@ -144,29 +193,29 @@ const NativeStrategy = Class.inherit({
     }
 
     return scrollLeft;
-  },
+  }
 
   _isReachedLeft(left) {
     return this._isDirection(HORIZONTAL) ? Math.round(left) >= 0 : undefined;
-  },
+  }
 
   _isReachedRight(left) {
     return this._isDirection(HORIZONTAL) ? Math.round(Math.abs(left) - this._getMaxOffset().left) >= 0 : undefined;
-  },
+  }
 
   _isScrollbarVisible() {
     const { showScrollbar } = this.option();
 
     return showScrollbar !== 'never' && showScrollbar !== false;
-  },
+  }
 
-  handleScroll(e) {
+  handleScroll(e): void {
     this._eventForUserAction = e;
     this._moveScrollbars();
-    this._scrollAction(this._createActionArgs());
-  },
+    this._scrollAction?.(this._createActionArgs());
+  }
 
-  _moveScrollbars() {
+  _moveScrollbars(): void {
     const { top, left } = this._getScrollOffset();
 
     this._eachScrollbar((scrollbar) => {
@@ -175,7 +224,7 @@ const NativeStrategy = Class.inherit({
     });
 
     this._hideScrollbars();
-  },
+  }
 
   _hideScrollbars() {
     clearTimeout(this._hideScrollbarTimeout);
@@ -185,28 +234,29 @@ const NativeStrategy = Class.inherit({
         scrollbar.option('visible', false);
       });
     }, HIDE_SCROLLBAR_TIMEOUT);
-  },
+  }
 
   location() {
     return {
       left: -this._$container.scrollLeft(),
       top: -this._$container.scrollTop(),
     };
-  },
+  }
 
-  disabledChanged: noop,
+  // eslint-disable-next-line class-methods-use-this
+  disabledChanged(): void {}
 
-  update() {
+  update(): void {
     this._update();
     this._updateAction(this._createActionArgs());
-  },
+  }
 
-  _update() {
+  _update(): void {
     this._updateDimensions();
     this._updateScrollbars();
-  },
+  }
 
-  _updateDimensions() {
+  _updateDimensions(): void {
     this._containerSize = {
       height: getHeight(this._$container),
       width: getWidth(this._$container),
@@ -219,9 +269,9 @@ const NativeStrategy = Class.inherit({
       height: getHeight(this._$content),
       width: getWidth(this._$content),
     };
-  },
+  }
 
-  _updateScrollbars() {
+  _updateScrollbars(): void {
     this._eachScrollbar(function (scrollbar, direction) {
       const dimension = direction === VERTICAL ? 'height' : 'width';
       scrollbar.option({
@@ -230,20 +280,24 @@ const NativeStrategy = Class.inherit({
       });
       scrollbar.update();
     });
-  },
+  }
 
-  _allowedDirections() {
+  _allowedDirections(): {
+    vertical: boolean;
+    horizontal: boolean;
+  } {
     return {
       vertical: this._isDirection(VERTICAL) && this._contentSize.height > this._containerSize.height,
       horizontal: this._isDirection(HORIZONTAL) && this._contentSize.width > this._containerSize.width,
     };
-  },
+  }
 
-  dispose() {
+  dispose(): void {
     const { className } = this._$element.get(0);
     const scrollableNativeRegexp = new RegExp(`${SCROLLABLE_NATIVE_CLASS}\\S*`, 'g');
 
     if (scrollableNativeRegexp.test(className)) {
+      // @ts-expect-error ts-error
       this._$element.removeClass(className.match(scrollableNativeRegexp).join(' '));
     }
 
@@ -251,22 +305,26 @@ const NativeStrategy = Class.inherit({
     eventsEngine.off(this._$container, `.${SCROLLABLE_NATIVE}`);
     this._removeScrollbars();
     clearTimeout(this._hideScrollbarTimeout);
-  },
+  }
 
-  _removeScrollbars() {
+  _removeScrollbars(): void {
     this._eachScrollbar((scrollbar) => {
       scrollbar.$element().remove();
     });
-  },
+  }
 
-  scrollBy(distance) {
+  scrollBy(distance): void {
     const location = this.location();
+    // @ts-expect-error ts-error
     this._$container.scrollTop(Math.round(-location.top - distance.top));
+    // @ts-expect-error ts-error
     this._$container.scrollLeft(Math.round(-location.left - distance.left));
-  },
+  }
 
-  validate(e) {
-    if (this.option('disabled')) {
+  validate(e): boolean {
+    const { disabled } = this.option();
+
+    if (disabled) {
       return false;
     }
 
@@ -275,7 +333,7 @@ const NativeStrategy = Class.inherit({
     }
 
     return !!this._allowedDirection();
-  },
+  }
 
   // TODO: rtl
   // TODO: horizontal scroll when shift is pressed
@@ -292,11 +350,11 @@ const NativeStrategy = Class.inherit({
     }
 
     return result;
-  },
+  }
 
-  getDirection() {
+  getDirection(): string | null {
     return this._allowedDirection();
-  },
-});
+  }
+}
 
 export default NativeStrategy;

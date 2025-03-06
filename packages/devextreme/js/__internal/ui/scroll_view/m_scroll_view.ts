@@ -47,7 +47,7 @@ const scrollViewServerConfig = {
     }
   },
 };
-
+// @ts-expect-error ts-error
 const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
   _getDefaultOptions() {
@@ -284,11 +284,11 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     return this._strategy.release();
   },
 
-  toggleLoading(showOrHide) {
+  toggleLoading(showOrHide): void {
     this._reachBottomEnable(showOrHide);
   },
 
-  refresh() {
+  refresh(): void {
     if (!this.hasActionSubscription('onPullDown')) {
       return;
     }
@@ -297,14 +297,14 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     this._pullDownLoading();
   },
 
-  startLoading() {
+  startLoading(): void {
     if (this._loadingIndicator() && this.$element().is(':visible')) {
       this._loadPanel.show();
     }
     this._lock();
   },
 
-  finishLoading() {
+  finishLoading(): void {
     this._loadPanel.hide();
     this._unlock();
   },
@@ -313,7 +313,7 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     return this._strategy.isBottomReached();
   },
 
-  _dispose() {
+  _dispose(): void {
     this._strategy.dispose();
     this.callBase();
 

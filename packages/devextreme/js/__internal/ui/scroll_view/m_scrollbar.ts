@@ -55,7 +55,7 @@ class Scrollbar extends Widget<ScrollbarProperties> {
 
   _dimension!: string;
 
-  _realContainerToContentRatio?: number;
+  _realContainerToContentRatio!: number;
 
   _baseContainerToContentRatio!: number;
 
@@ -129,7 +129,7 @@ class Scrollbar extends Widget<ScrollbarProperties> {
     eventsEngine.on(this._$thumb, addNamespace(pointerEvents.down, SCROLLBAR), this.feedbackOn.bind(this));
   }
 
-  feedbackOn(e): void {
+  feedbackOn(e?): void {
     e?.preventDefault();
 
     this.$element().addClass(SCROLLABLE_SCROLLBAR_ACTIVE_CLASS);
@@ -254,7 +254,7 @@ class Scrollbar extends Widget<ScrollbarProperties> {
     return !this._isHidden() && (this._baseContainerToContentRatio < 1);
   }
 
-  containerToContentRatio(): number | undefined {
+  containerToContentRatio(): number {
     return this._realContainerToContentRatio;
   }
 
