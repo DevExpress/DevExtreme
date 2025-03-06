@@ -1,6 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
 
-import type { SingleMultipleOrNone } from '@js/common';
 import type { SortDescriptor } from '@js/data';
 import type {
   SubsGets,
@@ -12,6 +11,7 @@ import {
 
 import { ColumnsController } from '../columns_controller';
 import type { Column } from '../columns_controller/types';
+import { getColumnIndexByName } from '../columns_controller/utils';
 import { OptionsController } from '../options_controller/options_controller';
 import type { SortOptions } from './types';
 import { getNextSortOrder, sortOrderDelegate } from './utils';
@@ -83,29 +83,6 @@ export class SortingController {
       [this._showSortIndexes, this.sortedColumns],
     );
 
-    const updateOrderedSortedColumns = (
-      orderedSortedColumns: Column[],
-      mode: SingleMultipleOrNone,
-    ): void => {
-      const needChanges = !this.areColumnsInitialized || mode === 'multiple';
-      if (!needChanges) {
-        return;
-      }
-
-      this.areColumnsInitialized = true;
-      let counter = 1;
-      orderedSortedColumns.forEach((c) => {
-        this.columnsController.columnOption(c, 'sortIndex', counter);
-        counter += 1;
-        return c;
-      });
-    };
-
-    effect(
-      updateOrderedSortedColumns,
-      [this.orderedSortedColumns, this.mode],
-    );
-
     effect(
       (params) => {
         this.options.sortParameters.update(params);
@@ -161,6 +138,52 @@ export class SortingController {
       this.clearSorting();
     }
 
-    this.columnsController.columnOption(column, 'sortOrder', nextSortOrder);
+    // this.columnsController.columnOption(column, 'sortOrder', nextSortOrder);
+    this.updateColumnSortOrder(column, nextSortOrder);
+  }
+
+  private updateColumnSortOrder(column, nextSortOrder): void {
+    const needChanges = !this.areColumnsInitialized || this.mode.unreactive_get() === 'multiple';
+    if (!needChanges) {
+      return;
+    }
+    this.areColumnsInitialized = true;
+
+    this.columnsController.updateColumns((columns) => {
+      const newColumns = [...columns];
+
+      let needNormalizing = false;
+      const orderedSortedColumns = this.orderedSortedColumns.unreactive_get();
+      const orderedIndex = getColumnIndexByName(orderedSortedColumns, column.name);
+      const commonIndex = getColumnIndexByName(newColumns, column.name);
+
+      newColumns[commonIndex].sortOrder = nextSortOrder;
+      if (!!nextSortOrder && orderedIndex === -1) {
+        orderedSortedColumns.push(newColumns[commonIndex] as Column);
+        needNormalizing = true;
+      }
+      if (!nextSortOrder && orderedIndex > -1) {
+        delete newColumns[commonIndex].sortOrder;
+        delete newColumns[commonIndex].sortIndex;
+        orderedSortedColumns.splice(orderedIndex, 1);
+        needNormalizing = true;
+      }
+
+      if (needNormalizing) {
+        let counter = 1;
+        orderedSortedColumns.forEach((c) => {
+          const index = getColumnIndexByName(newColumns, c.name);
+          if (newColumns[index].sortIndex !== counter) {
+            newColumns[index] = {
+              ...newColumns[index],
+              sortIndex: counter,
+            };
+          }
+          counter += 1;
+        });
+      }
+
+      return newColumns;
+    });
   }
 }

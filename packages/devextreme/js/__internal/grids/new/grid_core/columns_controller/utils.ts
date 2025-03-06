@@ -138,7 +138,10 @@ export function normalizeStringColumn(column: ColumnProperties): ColumnSettings 
   return column;
 }
 
-export function getColumnIndexByName(columns: PreNormalizedColumn[], name: string): number {
+export function getColumnIndexByName(
+  columns: PreNormalizedColumn[] | Column[],
+  name: string,
+): number {
   return columns.findIndex((c) => c.name === name);
 }
 
