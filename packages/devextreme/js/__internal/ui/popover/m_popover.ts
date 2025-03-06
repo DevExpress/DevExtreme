@@ -408,7 +408,7 @@ TProperties extends PopoverProperties = PopoverProperties,
     const finalArrowLocation = fitIntoRange(
       arrowLocation - borderWidth + arrowOffset,
       borderWidth,
-      contentSize - arrowSize - borderWidth * 2
+      contentSize - arrowSize - borderWidth * 2,
     );
     this._$arrow.css(axis, finalArrowLocation);
   }
