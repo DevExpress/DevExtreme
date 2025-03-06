@@ -3,3 +3,7 @@ packages:
   - 'e2e/*'
   - 'packages/*'
   - 'packages/devextreme/artifacts/npm/devextreme-dist'
+
+catalog:
+  devexpress-diagram: 2.2.15
+  devexpress-gantt: 4.1.59

@@ -1,30 +1,37 @@
 import { cancelAnimationFrame, requestAnimationFrame } from '@js/common/core/animation/frame';
 import Class from '@js/core/class';
-import { noop } from '@js/core/utils/common';
 
-const { abstract } = Class;
+// @ts-expect-error dxClass inheritance issue
+// eslint-disable-next-line @typescript-eslint/ban-types
+class Animator extends (Class.inherit({}) as new() => {}) {
+  _finished!: boolean;
 
-const Animator = Class.inherit({
+  _stopped!: boolean;
 
-  ctor() {
+  _stepAnimationFrame?: any;
+
+  _proxiedStepCore?: any;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ctor(strategy?): void {
     this._finished = true;
     this._stopped = false;
 
     this._proxiedStepCore = this._stepCore.bind(this);
-  },
+  }
 
-  start() {
+  start(): void {
     this._stopped = false;
     this._finished = false;
     this._stepCore();
-  },
+  }
 
-  stop() {
+  stop(): void {
     this._stopped = true;
     cancelAnimationFrame(this._stepAnimationFrame);
-  },
+  }
 
-  _stepCore() {
+  _stepCore(): void {
     if (this._isStopped()) {
       this._stop();
       return;
@@ -38,21 +45,26 @@ const Animator = Class.inherit({
 
     this._step();
     this._stepAnimationFrame = requestAnimationFrame(this._proxiedStepCore);
-  },
+  }
 
-  _step: abstract,
-  _isFinished: noop,
-  _stop: noop,
-  _complete: noop,
+  _step(): void {
+    Class.abstract();
+  }
+
+  // @ts-expect-error ts-error
+  _isFinished(): boolean {}
+
+  _stop(): void {}
+
+  _complete(): void {}
 
   _isStopped() {
     return this._stopped;
-  },
+  }
 
   inProgress() {
     return !(this._stopped || this._finished);
-  },
-
-});
+  }
+}
 
 export default Animator;

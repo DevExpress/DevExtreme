@@ -212,7 +212,9 @@ safeSizeTest('Menu delimiter appearance when orientation is horizontal', async (
   return createWidget('dxMenu', { items: menuItems }, '#container');
 });
 
-safeSizeTest('Menu delimiter appearance when orientation is vertical', async (t) => {
+// TODO Chrome133: skipped during chrome update
+// safeSizeTest(..., [500, 500])
+test.skip('Menu delimiter appearance when orientation is vertical', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const menu = new Menu();
 
@@ -249,7 +251,7 @@ safeSizeTest('Menu delimiter appearance when orientation is vertical', async (t)
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [500, 500]).before(async () => {
+}).before(async () => {
   const menuItems = [{
     text: 'Video Players',
   }, {

@@ -589,6 +589,16 @@
             "DemoType": "Web"
           },
           {
+            "Title": "Column Reordering",
+            "Name": "ColumnReordering",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/employeeData.js"
+            ],
+            "DemoType": "Web",
+            "Badge": "New"
+          },
+          {
             "Title": "Column Resizing",
             "Name": "ColumnResizing",
             "Widget": "DataGrid",
@@ -617,16 +627,6 @@
               "/Scripts/data/employeeData.js"
             ],
             "DemoType": "Web"
-          },
-          {
-            "Title": "Column Reordering",
-            "Name": "ColumnReordering",
-            "Widget": "DataGrid",
-            "MvcAdditionalFiles": [
-              "/Scripts/data/employeeData.js"
-            ],
-            "DemoType": "Web",
-            "Badge": "New"
           },
           {
             "Title": "Column Chooser",
@@ -1528,16 +1528,6 @@
         "Equivalents": "",
         "Demos": [
           {
-            "Title": "Column Chooser",
-            "Name": "ColumnChooser",
-            "Widget": "TreeList",
-            "MvcAdditionalFiles": [
-              "/Models/TreeList/Employee.cs",
-              "/Models/SampleData/TreeListEmployees.cs"
-            ],
-            "DemoType": "Web"
-          },
-          {
             "Title": "Column Reordering",
             "Name": "Reordering",
             "Widget": "TreeList",
@@ -1569,6 +1559,16 @@
             ],
             "DemoType": "Web",
             "Badge": "Updated"
+          },
+          {
+            "Title": "Column Chooser",
+            "Name": "ColumnChooser",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
           }
         ]
       },
@@ -4101,6 +4101,23 @@
         ]
       },
       {
+        "Name": "Pagination",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "",
+            "Widget": "Pagination",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New"
+          }
+        ]
+      },
+      {
         "Name": "Tree View",
         "Breadcrumb": true,
         "Equivalents": "TreeView, TreeList, dxTreeView, dx-tree-view",
@@ -4266,23 +4283,6 @@
               "/Models/SampleData/EuropeanCountries.cs",
               "/ViewModels/RtlViewModel.cs"
             ]
-          }
-        ]
-      },
-      {
-        "Name": "Pagination",
-        "Equivalents": "",
-        "Demos": [
-          {
-            "Title": "Overview",
-            "Name": "Overview",
-            "DocUrl": "",
-            "Widget": "Pagination",
-            "MvcDescription": "",
-            "NetCoreDescription": "",
-            "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
           }
         ]
       }

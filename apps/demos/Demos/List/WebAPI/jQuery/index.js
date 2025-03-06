@@ -1,7 +1,7 @@
 $(() => {
   const store = DevExpress.data.AspNet.createStore({
     key: 'ProductID',
-    loadUrl: 'https://js.devexpress.com/Demos/Mvc/api/ListData/Orders',
+    loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/ListData',
   });
 
   const listData = new DevExpress.data.DataSource({

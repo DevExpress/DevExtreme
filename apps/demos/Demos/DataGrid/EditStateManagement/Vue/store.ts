@@ -9,7 +9,7 @@ import { sendRequest } from './utils.ts';
 // @ts-expect-error due to specific build options need to add .ts extension
 import { Order } from './data.ts';
 
-const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
+const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 
 export type State = {
   orders: Order[],

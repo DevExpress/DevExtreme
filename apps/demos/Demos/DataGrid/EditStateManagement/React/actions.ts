@@ -1,7 +1,7 @@
 import React from 'react';
 import { sendRequest } from './utils.ts';
 
-const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
+const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 
 export const FETCH_PENDING = 'FETCH_PENDING';
 export const FETCH_SUCCESS = 'FETCH_SUCCESS';

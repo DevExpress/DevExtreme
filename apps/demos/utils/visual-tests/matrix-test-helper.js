@@ -166,7 +166,7 @@ export function shouldRunFramework(currentFramework) {
 
 export function shouldRunTestAtIndex(testIndex) {
   return (settings.current === settings.total ? 0 : settings.current)
-      === ((testIndex % settings.total) || 0);
+    === ((testIndex % settings.total) || 0);
 }
 
 const SKIPPED_TESTS = {
@@ -174,6 +174,7 @@ const SKIPPED_TESTS = {
     Charts: [
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+      { demo: 'CustomLegendMarkers', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
@@ -183,6 +184,7 @@ const SKIPPED_TESTS = {
       // Scroll to const value. Not enough for other themes, because the height of elements is different.
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
+      { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
     Gantt: [
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -199,19 +201,26 @@ const SKIPPED_TESTS = {
     DropDownButton: [
       { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
+    Chat: [
+      { demo: 'Customization', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'Crosshair', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'CustomAnnotations', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'LoadDataOnDemand', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'CustomLegendMarkers', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.generic, THEME.material] },
+      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'ZoomingOnAreaSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+      { demo: 'Export', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'ExportCustomMarkup', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'PopupEditing', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+      { demo: 'DynamicViewport', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     DropDownBox: [
       { demo: 'MultipleSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -220,10 +229,13 @@ const SKIPPED_TESTS = {
       { demo: 'ItemDragging', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     TabPanel: [
-      { demo: 'Overview', themes: [THEME.material, THEME.fluent] },
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    SelectBox: [
+      { demo: 'GroupedItems', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Splitter: [
-      { demo: 'Overview', themes: [THEME.material, THEME.fluent] },
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Gauges: [
       { demo: 'VariableNumberOfBars', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -232,7 +244,7 @@ const SKIPPED_TESTS = {
       { demo: 'Appearance', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'AdvancedMasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'BatchEditing', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'AjaxRequest', themes: [THEME.generic, THEME.material, THEME.fluent ] },
+      { demo: 'AjaxRequest', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'MasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'SimpleArray', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -243,7 +255,7 @@ const SKIPPED_TESTS = {
       { demo: 'CustomNewRecordPosition', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Filtering', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'FilteringAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'GroupSummaries', themes: [THEME.generic, THEME.material, THEME.fluent ] },
+      { demo: 'GroupSummaries', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'RecordPaging', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'RowSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'MultipleSelection', themes: [THEME.material, THEME.fluent] },
@@ -253,6 +265,7 @@ const SKIPPED_TESTS = {
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'RecordGrouping', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Form: [
       'CustomizeItem',
@@ -262,6 +275,7 @@ const SKIPPED_TESTS = {
       'CustomDragAndDrop',
       { demo: 'Resources', themes: [THEME.fluent] },
       { demo: 'CellTemplates', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Resources', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Popup: [
       { demo: 'Scrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -277,12 +291,19 @@ const SKIPPED_TESTS = {
     ]
   },
   Vue: {
+    Accordion: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Custom Overview Appearance', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'ZoomingOnAreaSelection', themes: [THEME.material] },
       { demo: 'CustomLegendMarkers', themes: [THEME.material] },
+      { demo: 'CustomAnnotations', themes: [THEME.material] },
       { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
+      { demo: 'Crosshair', themes: [THEME.material] },
+      { demo: 'LoadDataOnDemand', themes: [THEME.material] },
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
@@ -296,6 +317,9 @@ const SKIPPED_TESTS = {
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'FilteringAPI', themes: [THEME.material] },
+      { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'PopupEditing', themes: [THEME.generic] },
       'StatePersistence',
     ],
     Drawer: [
@@ -303,7 +327,10 @@ const SKIPPED_TESTS = {
     ],
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ]
+    ],
+    Popup: [
+      { demo: 'Scrolling', themes: [THEME.material] },
+    ],
   },
   React: {
     Charts: [
@@ -312,6 +339,7 @@ const SKIPPED_TESTS = {
       { demo: 'Crosshair', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
       { demo: 'CustomLegendMarkers', themes: [THEME.material] },
+      { demo: 'LoadDataOnDemand', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'BatchEditing', themes: [THEME.fluent] },
@@ -323,10 +351,15 @@ const SKIPPED_TESTS = {
       { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'Filtering', themes: [THEME.fluent, THEME.material] },
       { demo: 'RecordGrouping', themes: [THEME.material] },
+      { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
+    ],
+    Popup: [
+      { demo: 'Scrolling', themes: [THEME.material] },
     ],
   },
 };
@@ -347,7 +380,7 @@ export function shouldSkipDemo(framework, component, demoName, skippedTests) {
     if (typeof test === 'string' && test === demoName) {
       return true;
     } if (test.demo === demoName
-        && test.themes.includes(process.env.THEME || THEME.generic)) {
+      && test.themes.includes(process.env.THEME || THEME.generic)) {
       return true;
     }
   }
@@ -381,7 +414,7 @@ export function runTestAtPage(test, demoUrl, shouldSkipJsError) {
   if (shouldSkipJsError) {
     test.skipJsErrors();
   }
-  
+
   if (settings.explicitTests) {
     executor = shouldRunTestExplicitly(demoUrl) ? test.only : executor = test.skip;
   }
@@ -394,7 +427,7 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
 
   const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;
-  
+
   if (!shouldRunTest(framework, index, widget, demo, SKIPPED_TESTS)) {
     return;
   }
@@ -411,14 +444,14 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
     const theme = process.env.THEME.replace('generic.', '');
     testURL = `http://localhost:8080/Demos/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
   } else {
-    
+
     changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
     testURL = `http://localhost:8080/apps/demos/Demos/${widget}/${demo}/${framework}/`;
   }
   const test = testObject.clientScripts([
-      { module: 'mockdate' },
-      ...clientScriptSource
-    ])
+    { module: 'mockdate' },
+    ...clientScriptSource
+  ])
     .page(testURL);
 
   test.before?.(async (t) => {

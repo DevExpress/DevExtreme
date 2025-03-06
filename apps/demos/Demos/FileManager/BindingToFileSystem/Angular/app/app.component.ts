@@ -28,7 +28,7 @@ export class AppComponent {
   constructor() {
     this.allowedFileExtensions = ['.js', '.json', '.css'];
     this.remoteProvider = new RemoteFileSystemProvider({
-      endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-file-system-scripts',
+      endpointUrl: 'https://js.devexpress.com/Demos/NetCore/api/file-manager-file-system',
     });
   }
 }

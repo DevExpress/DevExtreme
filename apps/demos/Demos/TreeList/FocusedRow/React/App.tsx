@@ -4,7 +4,7 @@ import TreeList, { Column, Lookup, TreeListTypes } from 'devextreme-react/tree-l
 import { NumberBox, NumberBoxTypes } from 'devextreme-react/number-box';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/TreeListTasks';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 const dataSourceOptions = AspNetData.createStore({
   key: 'Task_ID',
   loadUrl: `${url}/Tasks`,
