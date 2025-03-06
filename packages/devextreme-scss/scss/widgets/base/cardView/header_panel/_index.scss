@@ -13,9 +13,7 @@
   padding: ($cardview-header-item-padding-vertical - $cardview-header-item-border-width) $cardview-header-item-padding-horizontal;
   min-width: fit-content;
   user-select: none;
-  display: grid;
-  grid-auto-flow: column;
-  align-self: center;
+  display: flex;
   gap: 5px;
 
   &:hover {
@@ -25,7 +23,5 @@
 }
 
 .dx-cardview-header-item-sorting {
-  display: grid;
-  grid-auto-flow: column;
-  align-self: center;
+  display: flex;
 }
