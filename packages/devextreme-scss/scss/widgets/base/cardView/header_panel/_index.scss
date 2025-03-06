@@ -14,7 +14,7 @@
   min-width: fit-content;
   user-select: none;
   display: flex;
-  gap: 5px;
+  gap: $cardview-header-item-content-gap;
 
   &:hover {
     background-color: $cardview-header-item-hovered-background-color;
