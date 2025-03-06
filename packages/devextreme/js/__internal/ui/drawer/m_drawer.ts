@@ -4,22 +4,19 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
-import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
-import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import type { PanelLocation, Properties } from '@js/ui/drawer';
-import type { OptionChanged } from '@ts/core/widget/types';
-import Widget from '@ts/core/widget/widget';
+import type { PanelLocation } from '@js/ui/drawer';
+import Widget from '@js/ui/widget/ui.widget';
 import { animation } from '@ts/ui/drawer/m_drawer.animation';
 import OverlapStrategy from '@ts/ui/drawer/m_drawer.rendering.strategy.overlap';
 import PushStrategy from '@ts/ui/drawer/m_drawer.rendering.strategy.push';
 import ShrinkStrategy from '@ts/ui/drawer/m_drawer.rendering.strategy.shrink';
-import type Overlay from '@ts/ui/overlay/m_overlay';
 
 const DRAWER_CLASS = 'dx-drawer';
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
@@ -32,45 +29,13 @@ const OPENED_STATE_CLASS = 'dx-drawer-opened';
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 const PANEL_TEMPLATE_NAME = 'panel';
 
-export interface DrawerProperties extends Properties {
-  contentTemplate: string;
+const Drawer = (Widget as any).inherit({
 
-  __debugWhenPanelContentRendered?: (e: { drawer: Drawer }) => boolean;
-
-  templateSize?: number;
-}
-
-class Drawer extends Widget<DrawerProperties> {
-  _strategy!: PushStrategy | ShrinkStrategy | OverlapStrategy;
-
-  _overlay?: Overlay;
-
-  _$panelContentWrapper!: dxElementWrapper;
-
-  _$wrapper!: dxElementWrapper;
-
-  _whenAnimationCompleted?: DeferredObj<unknown>;
-
-  _whenPanelContentRendered?: DeferredObj<unknown>;
-
-  _whenPanelContentRefreshed?: DeferredObj<unknown>;
-
-  _$viewContentWrapper!: dxElementWrapper;
-
-  _$shader!: dxElementWrapper;
-
-  _maxSize?: number;
-
-  _minSize?: number;
-
-  _getDefaultOptions(): DrawerProperties {
-    return {
-      ...super._getDefaultOptions(),
+  _getDefaultOptions() {
+    return extend(this.callBase(), {
       position: 'left',
       opened: false,
-      // @ts-expect-error ts-error
       minSize: null,
-      // @ts-expect-error ts-error
       maxSize: null,
       shading: false,
       template: PANEL_TEMPLATE_NAME,
@@ -80,11 +45,11 @@ class Drawer extends Widget<DrawerProperties> {
       animationDuration: 400,
       closeOnOutsideClick: false,
       contentTemplate: ANONYMOUS_TEMPLATE_NAME,
-    };
-  }
+    });
+  },
 
-  _init(): void {
-    super._init();
+  _init() {
+    this.callBase();
 
     this._initStrategy();
 
@@ -100,12 +65,10 @@ class Drawer extends Widget<DrawerProperties> {
     this._$wrapper.append(this._$viewContentWrapper);
 
     this.$element().append(this._$wrapper);
-  }
+  },
 
-  _initStrategy(): void {
-    const { openedStateMode } = this.option();
-
-    switch (openedStateMode) {
+  _initStrategy() {
+    switch (this.option('openedStateMode')) {
       case 'push':
         this._strategy = new PushStrategy(this);
         break;
@@ -118,21 +81,20 @@ class Drawer extends Widget<DrawerProperties> {
       default:
         this._strategy = new PushStrategy(this);
     }
-  }
+  },
 
-  // eslint-disable-next-line class-methods-use-this
-  _getAnonymousTemplateName(): string {
+  _getAnonymousTemplateName() {
     return ANONYMOUS_TEMPLATE_NAME;
-  }
+  },
 
-  _initTemplates(): void {
+  _initTemplates() {
     const defaultTemplates = {};
     defaultTemplates[PANEL_TEMPLATE_NAME] = new EmptyTemplate();
     defaultTemplates[ANONYMOUS_TEMPLATE_NAME] = new EmptyTemplate();
     this._templateManager.addDefaultTemplates(defaultTemplates);
 
-    super._initTemplates();
-  }
+    this.callBase();
+  },
 
   _viewContentWrapperClickHandler(e) {
     let closeOnOutsideClick = this.option('closeOnOutsideClick');
@@ -150,14 +112,12 @@ class Drawer extends Widget<DrawerProperties> {
 
       this.hide();
     }
-  }
+  },
 
-  _initMarkup(): void {
-    super._initMarkup();
+  _initMarkup() {
+    this.callBase();
 
-    const { opened } = this.option();
-
-    this._toggleOpenedStateClass(opened);
+    this._toggleOpenedStateClass(this.option('opened'));
     this._renderPanelContentWrapper();
 
     this._refreshOpenedStateModeClass();
@@ -173,49 +133,41 @@ class Drawer extends Widget<DrawerProperties> {
     this._renderViewContent();
 
     eventsEngine.off(this._$viewContentWrapper, CLICK_EVENT_NAME);
-    eventsEngine.on(
-      this._$viewContentWrapper,
-      CLICK_EVENT_NAME,
-      this._viewContentWrapperClickHandler.bind(this),
-    );
+    eventsEngine.on(this._$viewContentWrapper, CLICK_EVENT_NAME, this._viewContentWrapperClickHandler.bind(this));
 
     this._refreshWrapperChildrenOrder();
-  }
+  },
 
-  _render(): void {
+  _render() {
     this._initMinMaxSize();
 
-    super._render();
+    this.callBase();
 
-    this._whenPanelContentRendered?.always(() => {
+    this._whenPanelContentRendered.always(() => {
       /// #DEBUG
       if (this.option('__debugWhenPanelContentRendered')) {
-        const { __debugWhenPanelContentRendered: onPanelContentRendered } = this.option();
-
-        onPanelContentRendered?.({ drawer: this });
+        this.option('__debugWhenPanelContentRendered')({ drawer: this });
       }
       /// #ENDDEBUG
 
       this._initMinMaxSize();
-      const { revealMode, opened } = this.option();
+      this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide');
 
-      this._strategy.refreshPanelElementSize(revealMode === 'slide');
-
-      this._renderPosition(opened, true);
+      this._renderPosition(this.option('opened'), true);
       this._removePanelManualPosition();
     });
-  }
+  },
 
-  _removePanelManualPosition(): void {
+  _removePanelManualPosition() {
     if (this._$panelContentWrapper.attr('manualposition')) {
       this._$panelContentWrapper.removeAttr('manualPosition');
       this._$panelContentWrapper.css({
         position: '', top: '', left: '', right: '', bottom: '',
       });
     }
-  }
+  },
 
-  _togglePanelContentHiddenClass(): void {
+  _togglePanelContentHiddenClass() {
     const callback = (): void => {
       const { minSize, opened } = this.option();
       const shouldBeSet = minSize ? false : !opened;
@@ -228,16 +180,16 @@ class Drawer extends Widget<DrawerProperties> {
     } else {
       callback();
     }
-  }
+  },
 
-  _renderPanelContentWrapper(): void {
+  _renderPanelContentWrapper() {
     const { openedStateMode, opened, minSize } = this.option();
 
     this._$panelContentWrapper = $('<div>').addClass(DRAWER_PANEL_CONTENT_CLASS);
     this._togglePanelContentHiddenClass();
 
     const position = this.calcTargetPosition();
-    // @ts-expect-error ts-error
+
     if (openedStateMode === 'push' && ['top', 'bottom'].includes(position)) {
       this._$panelContentWrapper.addClass(`${DRAWER_PANEL_CONTENT_CLASS}-push-top-or-bottom`);
     }
@@ -254,17 +206,15 @@ class Drawer extends Widget<DrawerProperties> {
     }
 
     this._$wrapper.append(this._$panelContentWrapper);
-  }
+  },
 
-  _refreshOpenedStateModeClass(prevOpenedStateMode?: string): void {
+  _refreshOpenedStateModeClass(prevOpenedStateMode) {
     if (prevOpenedStateMode) {
       this.$element().removeClass(`${DRAWER_CLASS}-${prevOpenedStateMode}`);
     }
 
-    const { openedStateMode } = this.option();
-
-    this.$element().addClass(`${DRAWER_CLASS}-${openedStateMode}`);
-  }
+    this.$element().addClass(`${DRAWER_CLASS}-${this.option('openedStateMode')}`);
+  },
 
   _refreshPositionClass(): void {
     const positions = ['left', 'right', 'top', 'bottom'];
@@ -273,28 +223,26 @@ class Drawer extends Widget<DrawerProperties> {
     this.$element()
       .removeClass(positions.map((position) => `${classPrefix}${position}`).join(' '))
       .addClass(`${classPrefix}${this.calcTargetPosition()}`);
-  }
+  },
 
-  _refreshWrapperChildrenOrder(): void {
+  _refreshWrapperChildrenOrder() {
     const position = this.calcTargetPosition();
     if (this._strategy.isViewContentFirst(position, this.option('rtlEnabled'))) {
       this._$wrapper.prepend(this._$viewContentWrapper);
     } else {
       this._$wrapper.prepend(this._$panelContentWrapper);
     }
-  }
+  },
 
-  _refreshRevealModeClass(prevRevealMode?: string): void {
+  _refreshRevealModeClass(prevRevealMode) {
     if (prevRevealMode) {
       this.$element().removeClass(`${DRAWER_CLASS}-${prevRevealMode}`);
     }
 
-    const { revealMode } = this.option();
+    this.$element().addClass(`${DRAWER_CLASS}-${this.option('revealMode')}`);
+  },
 
-    this.$element().addClass(`${DRAWER_CLASS}-${revealMode}`);
-  }
-
-  _renderViewContent(): void {
+  _renderViewContent() {
     const contentTemplateOption = this.option('contentTemplate');
     const contentTemplate = this._getTemplate(contentTemplateOption);
 
@@ -312,31 +260,27 @@ class Drawer extends Widget<DrawerProperties> {
           .replaceWith($viewTemplate);
       }
     }
-  }
+  },
 
-  _renderShader(): void {
+  _renderShader() {
     this._$shader = this._$shader || $('<div>').addClass(DRAWER_SHADER_CLASS);
     this._$shader.appendTo(this.viewContent());
 
-    const { opened } = this.option();
+    this._toggleShaderVisibility(this.option('opened'));
+  },
 
-    this._toggleShaderVisibility(opened);
-  }
-
-  _initSize(): void { // TODO: keep for ui.file_manager.adaptivity.js
+  _initSize() { // TODO: keep for ui.file_manager.adaptivity.js
     this._initMinMaxSize();
-  }
+  },
 
-  _initMinMaxSize(): void {
+  _initMinMaxSize() {
     const realPanelSize = this.isHorizontalDirection() ? this.getRealPanelWidth() : this.getRealPanelHeight();
 
-    const { maxSize, minSize } = this.option();
+    this._maxSize = this.option('maxSize') || realPanelSize;
+    this._minSize = this.option('minSize') || 0;
+  },
 
-    this._maxSize = maxSize ?? realPanelSize;
-    this._minSize = minSize ?? 0;
-  }
-
-  calcTargetPosition(): PanelLocation | undefined {
+  calcTargetPosition(): PanelLocation {
     const { position, rtlEnabled } = this.option();
 
     if (position === 'before') {
@@ -348,47 +292,43 @@ class Drawer extends Widget<DrawerProperties> {
     }
 
     return position;
-  }
+  },
 
   getOverlayTarget() {
     return this._$wrapper;
-  }
+  },
 
   getOverlay() {
     return this._overlay;
-  }
+  },
 
-  getMaxSize(): number | undefined {
+  getMaxSize() {
     return this._maxSize;
-  }
+  },
 
-  getMinSize(): number | undefined {
+  getMinSize() {
     return this._minSize;
-  }
+  },
 
-  getRealPanelWidth(): number {
+  getRealPanelWidth() {
     if (hasWindow()) {
-      const { templateSize } = this.option();
-
-      if (isDefined(templateSize)) {
-        return templateSize; // number is expected
+      if (isDefined(this.option('templateSize'))) {
+        return this.option('templateSize'); // number is expected
       }
       return getBoundingRect(this._getPanelTemplateElement()).width;
     }
     return 0;
-  }
+  },
 
-  getRealPanelHeight(): number {
+  getRealPanelHeight() {
     if (hasWindow()) {
-      const { templateSize } = this.option();
-
-      if (isDefined(templateSize)) {
-        return templateSize; // number is expected
+      if (isDefined(this.option('templateSize'))) {
+        return this.option('templateSize'); // number is expected
       }
       return getBoundingRect(this._getPanelTemplateElement()).height;
     }
     return 0;
-  }
+  },
 
   _getPanelTemplateElement() {
     const $panelContent = this._strategy.getPanelContent();
@@ -402,22 +342,21 @@ class Drawer extends Widget<DrawerProperties> {
       }
     }
     return $result.get(0);
-  }
+  },
 
   getElementHeight($element) {
     const $children = $element.children();
 
     return $children.length ? getBoundingRect($children.eq(0).get(0)).height : getBoundingRect($element.get(0)).height;
-  }
+  },
 
-  isHorizontalDirection(): boolean {
+  isHorizontalDirection() {
     const position = this.calcTargetPosition();
 
     return position === 'left' || position === 'right';
-  }
+  },
 
-  stopAnimations(jumpToEnd?): void {
-    // @ts-expect-error ts-error
+  stopAnimations(jumpToEnd) {
     fx.stop(this._$shader, jumpToEnd);
     // @ts-expect-error
     fx.stop($(this.content()), jumpToEnd);
@@ -429,28 +368,28 @@ class Drawer extends Widget<DrawerProperties> {
       // @ts-expect-error
       fx.stop($(overlay.$content()), jumpToEnd);
     }
-  }
+  },
 
-  setZIndex(zIndex): void {
+  setZIndex(zIndex) {
     this._$shader.css('zIndex', zIndex - 1);
     this._$panelContentWrapper.css('zIndex', zIndex);
-  }
+  },
 
-  resizeContent(): void { // TODO: keep for ui.file_manager.adaptivity.js
+  resizeContent() { // TODO: keep for ui.file_manager.adaptivity.js
     this.resizeViewContent;
-  }
+  },
 
-  resizeViewContent(): void {
+  resizeViewContent() {
     triggerResizeEvent(this.viewContent());
-  }
+  },
 
-  _isInvertedPosition(): boolean {
+  _isInvertedPosition() {
     const position = this.calcTargetPosition();
 
     return position === 'right' || position === 'bottom';
-  }
+  },
 
-  _renderPosition(isDrawerOpened, disableAnimation?, jumpToEnd?) {
+  _renderPosition(isDrawerOpened, disableAnimation, jumpToEnd) {
     this.stopAnimations(jumpToEnd);
     this._whenAnimationCompleted = Deferred();
 
@@ -479,52 +418,49 @@ class Drawer extends Widget<DrawerProperties> {
     }
 
     this._strategy.renderPosition(animationEnabled, this.option('animationDuration'));
-  }
+  },
 
-  _animationCompleteHandler(): void {
+  _animationCompleteHandler() {
     this.resizeViewContent();
 
-    this._whenAnimationCompleted?.resolve();
-  }
+    this._whenAnimationCompleted.resolve();
+  },
 
-  _getPositionCorrection(): number {
+  _getPositionCorrection() {
     return this._isInvertedPosition() ? -1 : 1;
-  }
+  },
 
-  _dispose(): void {
+  _dispose() {
     animation.complete($(this.viewContent()));
-    super._dispose();
-  }
+    this.callBase();
+  },
 
-  _visibilityChanged(visible: boolean): void {
+  _visibilityChanged(visible) {
     if (visible) {
       this._dimensionChanged();
     }
-  }
+  },
 
-  _dimensionChanged(): void {
+  _dimensionChanged() {
     this._initMinMaxSize();
-
-    const { revealMode } = this.option();
-
-    this._strategy.refreshPanelElementSize(revealMode === 'slide');
+    this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide');
     this._renderPosition(this.option('opened'), true);
-  }
+  },
 
-  _toggleShaderVisibility(visible: boolean | undefined): void {
+  _toggleShaderVisibility(visible) {
     if (this.option('shading')) {
       this._$shader.toggleClass(INVISIBLE_STATE_CLASS, !visible);
       this._$shader.css('visibility', visible ? 'visible' : 'hidden');
     } else {
       this._$shader.toggleClass(INVISIBLE_STATE_CLASS, true);
     }
-  }
+  },
 
-  _toggleOpenedStateClass(opened: boolean | undefined): void {
+  _toggleOpenedStateClass(opened) {
     this.$element().toggleClass(OPENED_STATE_CLASS, opened);
-  }
+  },
 
-  _refreshPanel(): void {
+  _refreshPanel() {
     $(this.viewContent()).css('left', 0); // can affect animation
     $(this.viewContent()).css('transform', 'translate(0px, 0px)'); // can affect animation
     $(this.viewContent()).removeClass('dx-theme-background-color');
@@ -541,41 +477,38 @@ class Drawer extends Widget<DrawerProperties> {
 
     if (hasWindow()) {
       this._whenPanelContentRefreshed.always(() => {
-        const { revealMode } = this.option();
-
-        this._strategy.refreshPanelElementSize(revealMode === 'slide');
+        this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide');
         this._renderPosition(this.option('opened'), true, true);
         this._removePanelManualPosition();
       });
     }
-  }
+  },
 
-  _clean(): void {
+  _clean() {
     this._cleanFocusState();
 
     this._removePanelContentWrapper();
     this._removeOverlay();
-  }
+  },
 
-  _removePanelContentWrapper(): void {
+  _removePanelContentWrapper() {
     if (this._$panelContentWrapper) {
       this._$panelContentWrapper.remove();
     }
-  }
+  },
 
-  _removeOverlay(): void {
+  _removeOverlay() {
     if (this._overlay) {
       this._overlay.dispose();
       delete this._overlay;
-      // @ts-expect-error ts-error
       delete this._$panelContentWrapper; // TODO: move to _removePanelContentWrapper?
     }
-  }
+  },
 
-  _optionChanged(args: OptionChanged<DrawerProperties>): void {
+  _optionChanged(args) {
     switch (args.name) {
       case 'width':
-        super._optionChanged(args);
+        this.callBase(args);
         this._dimensionChanged();
         break;
       case 'opened':
@@ -612,45 +545,42 @@ class Drawer extends Widget<DrawerProperties> {
 
         this._refreshPanel();
         break;
-      case 'shading': {
-        const { opened } = this.option();
-
-        this._toggleShaderVisibility(opened);
+      case 'shading':
+        this._toggleShaderVisibility(this.option('opened'));
         break;
-      }
       case 'animationEnabled':
       case 'animationDuration':
       case 'closeOnOutsideClick':
         break;
       default:
-        super._optionChanged(args);
+        this.callBase(args);
     }
-  }
+  },
 
   content() {
     return getPublicElement(this._$panelContentWrapper);
-  }
+  },
 
   viewContent() {
     return getPublicElement(this._$viewContentWrapper);
-  }
+  },
 
   show() {
     return this.toggle(true);
-  }
+  },
 
   hide() {
     return this.toggle(false);
-  }
+  },
 
   toggle(opened) {
     const targetOpened = opened === undefined ? !this.option('opened') : opened;
 
     this.option('opened', targetOpened);
 
-    return this._whenAnimationCompleted?.promise();
-  }
-}
+    return this._whenAnimationCompleted.promise();
+  },
+});
 
 registerComponent('dxDrawer', Drawer);
 

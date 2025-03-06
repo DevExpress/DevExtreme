@@ -3,7 +3,7 @@ import $ from '@js/core/renderer';
 import { ensureDefined } from '@js/core/utils/common';
 import { camelize } from '@js/core/utils/inflector';
 import { getWidth } from '@js/core/utils/size';
-import Overlay from '@ts/ui/overlay/m_overlay';
+import Overlay from '@js/ui/overlay/ui.overlay';
 
 import { animation } from './m_drawer.animation';
 import DrawerStrategy from './m_drawer.rendering.strategy';
