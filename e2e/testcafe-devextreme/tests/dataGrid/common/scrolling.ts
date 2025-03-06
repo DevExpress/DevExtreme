@@ -1796,7 +1796,7 @@ test('DataGrid - Focused cell moves to the end of the table after horizontal scr
 }));
 
 // T1277214 - Right to Left
-test.only('DataGrid - Scrolling position is reset to far right on an attempt to scroll left if the most right cell is focused using the keyboard', async (t) => {
+test('DataGrid - Scrolling position is reset to far right on an attempt to scroll left if the most right cell is focused using the keyboard', async (t) => {
   const dataGrid = new DataGrid('#container');
   await dataGrid.scrollTo(t, { x: 1000 });
   await t
