@@ -105,12 +105,6 @@ export const createDataSetForScreenShotTests = (): Record<string, unknown>[] => 
   return result;
 };
 
-export const scrollTo = ClientFunction((date: Date, groups?: Record<string, unknown>) => {
-  const instance = ($('#container') as any).dxScheduler('instance');
-
-  instance.scrollTo(date, groups);
-});
-
 export const scrollConfig = [{
   firstDate: new Date(2021, 0, 7),
   lastDate: new Date(2021, 0, 1),
