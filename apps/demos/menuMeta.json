@@ -4102,7 +4102,6 @@
           }
         ]
       },
-      
       {
         "Name": "Stepper",
         "Equivalents": "dxStepper, dx-stepper",
