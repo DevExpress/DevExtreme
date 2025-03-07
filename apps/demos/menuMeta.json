@@ -1623,10 +1623,12 @@
   {
     "Name": "Card View",
     "Equivalents": "dxCardView, dx-cardview, cardview",
+    "Badge": "Roadmap",
     "Groups": [
       {
         "Name": "Overview",
         "Equivalents": "",
+        "Badge": "Roadmap",
         "Demos": [
           {
             "Title": "Overview",
@@ -2135,6 +2137,20 @@
         ]
       },
       {
+        "Name": "Image Rendering",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Image Rendering",
+            "Name": "ImageRendering",
+            "Widget": "Chat",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-image-rendering.xml"
+          }
+        ]
+      },
+      {
         "Name": "Customization",
         "Equivalents": "Settings, Options",
         "Demos": [
@@ -2163,20 +2179,6 @@
             "Widget": "Chat",
             "Modules": "html-react-parser,openai,unified",
             "DemoType": "Web"
-          }
-        ]
-      },
-      {
-        "Name": "Image Rendering",
-        "Equivalents": "",
-        "Demos": [
-          {
-            "Title": "Image Rendering",
-            "Name": "ImageRendering",
-            "Widget": "Chat",
-            "DemoType": "Web",
-            "Badge": "Roadmap",
-            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-image-rendering.xml"
           }
         ]
       }
