@@ -358,10 +358,7 @@ export default class dxFilterBuilder extends Widget<dxFilterBuilderOptions> {
  */
 export type CustomOperation = dxFilterBuilderCustomOperation;
 
-/**
- * @docid
- * @public
- */
+/** @public */
 export type FieldInfo = {
   /**
    * @docid
@@ -402,6 +399,8 @@ export interface dxFilterBuilderCustomOperation {
     /**
      * @docid
      * @public
+     * @type_function_param1 fieldInfo:object
+     * @type_function_param1_field field:dxFilterBuilderField:optional
      */
     customizeText?: ((fieldInfo: FieldInfo) => string);
     /**
@@ -468,6 +467,8 @@ export interface dxFilterBuilderField {
     /**
      * @docid
      * @public
+     * @type_function_param1 fieldInfo:object
+     * @type_function_param1_field field:dxFilterBuilderField:optional
      */
     customizeText?: ((fieldInfo: FieldInfo) => string);
     /**
