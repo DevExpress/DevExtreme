@@ -59,7 +59,7 @@ export class SortingController {
         const result: SortOptions[] = [];
         columns.forEach((c) => {
           const sortItem = {
-            selector: c.dataField,
+            selector: c.calculateSortValue ?? c.dataField,
             desc: c.sortOrder === 'desc',
           } as SortOptions;
           if (c.sortingMethod) {
