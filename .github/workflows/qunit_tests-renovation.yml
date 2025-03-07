@@ -76,6 +76,7 @@ jobs:
     - name: Run QUnit tests
       uses: ./.github/actions/run-qunit-tests
       with:
+        name: Constel ${{ matrix.CONSTEL }}
         constel: ${{ matrix.CONSTEL }}
         useCsp: "false"
 
