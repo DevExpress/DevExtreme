@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import localizationMessage from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { camelize } from '@js/core/utils/inflector';
@@ -91,7 +92,6 @@ function getFormatHandlers(module) {
     },
     superscript: prepareShortcutHandler(module, 'script', 'super'),
     subscript: prepareShortcutHandler(module, 'script', 'sub'),
-    aIShortenText: prepareAIShortenTextHandler(module),
     insertTable: prepareInsertTableHandler(module),
     insertHeaderRow: getTableOperationHandler(module.quill, 'insertHeaderRow'),
     insertRowAbove: getTableOperationHandler(module.quill, 'insertRowAbove'),
@@ -103,52 +103,54 @@ function getFormatHandlers(module) {
     deleteTable: getTableOperationHandler(module.quill, 'deleteTable'),
     cellProperties: prepareShowFormProperties(module, 'cell'),
     tableProperties: prepareShowFormProperties(module, 'table'),
+    ai: handleAIDropdownSelection,
   };
 }
 
 function prepareAIShortenTextHandler(module) {
   return () => {
-    const selection = module.quill.getSelection();
-    const value = selection?.length ? module.quill.getText(selection) : module.quill.getText();
+    const { quill } = module;
+    const selection = quill.getSelection();
+    const hasSelection = selection?.length > 0;
+    const selectedText = hasSelection ? quill.getText(selection) : quill.getText();
 
-    const formData = { selectedText: value, modelResponse: '' };
+    const formData = { selectedText, modelResponse: '' };
 
-    module.editorInstance.formDialogOption({
-      title: 'AI SERVICE CUSTOM TITLE',
-    });
+    module.editorInstance.formDialogOption({ title: 'AI SERVICE CUSTOM TITLE' });
 
     const { aIIntegration } = module.editorInstance.option();
     const form = module.editorInstance._formDialog._form;
 
-    const promise = module.editorInstance.showFormDialog({
+    module.editorInstance.showFormDialog({
       formData,
       items: aIShortenTextItems(aIIntegration, form),
+    }).done((data, event) => {
+      const insertIndex = hasSelection ? selection.index : 0;
+
+      quill.focus();
+      quill.deleteText(
+        insertIndex,
+        hasSelection ? selection.length : selectedText.length,
+        SILENT_ACTION,
+      );
+      quill.insertText(insertIndex, data.modelResponse, '', data.modelResponse, USER_ACTION);
+
+      quill.setSelection(insertIndex, data.modelResponse.length, USER_ACTION);
+      module.saveValueChangeEvent(event);
+    }).always(() => {
+      quill.focus();
     });
-
-    promise
-      .done((formData, event) => {
-        module.quill.focus();
-
-        if (selection?.length) {
-          module.quill.deleteText(selection.index, selection.length, SILENT_ACTION);
-        } else {
-          module.quill.deleteText(0, value.length);
-        }
-
-        module.quill.insertText(selection?.index ?? 0, formData.modelResponse, '', formData.modelResponse, USER_ACTION);
-
-        if (selection?.length) {
-          module.quill.setSelection(selection.index - 1, selection.index - 1 + formData.modelResponse.length, USER_ACTION);
-        } else {
-          module.quill.setSelection(0, formData.modelResponse.length, USER_ACTION);
-        }
-
-        module.saveValueChangeEvent(event);
-      })
-      .always(() => {
-        module.quill.focus();
-      });
   };
+}
+
+function handleAIDropdownSelection(module, action) {
+  const handlers = {
+    aIShortenText: prepareAIShortenTextHandler,
+  };
+
+  if (handlers[action]) {
+    handlers[action](module)();
+  }
 }
 
 function resetFormDialogOptions(editorInstance, {
@@ -406,6 +408,7 @@ function aIShortenTextItems(aIIntegration, form) {
       editorOptions: {
         height: 200,
         width: 400,
+        disabled: true,
       },
     },
     {
@@ -414,6 +417,7 @@ function aIShortenTextItems(aIIntegration, form) {
       editorOptions: {
         height: 200,
         width: 400,
+        disabled: true,
       },
     },
     {

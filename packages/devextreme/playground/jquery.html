@@ -57,9 +57,43 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div id="editor"></div>
         <script>
             $(() => {
+                const options = {
+                    text: 'AI Assistant',
+                    dropDownOptions: {
+                        width: 'auto',
+                    },
+                    items: [
+                        {
+                            text: 'Shorten',
+                            name: 'aIShortenText'
+                        },
+                        {
+                            text: 'Translate',
+                        },
+                        {
+                            text: 'Summarize',
+                        },
+                        {
+                            text: 'Expand',
+                        },
+                        {
+                            text: 'Proofread',
+                        },
+                        {
+                            text: 'Explain',
+                        },
+                        {
+                            text: 'Change Style',
+                        },
+                        {
+                            text: 'Change Tone',
+                        },
+                    ],
+                };
+
                 const princ = `
                     The Sun: structure, evolution and influence on the Earth
 
@@ -162,15 +196,17 @@
                     },
                 };
 
-                const editor = $('#button').dxHtmlEditor({
+                const editor = $('#editor').dxHtmlEditor({
                     height: 400,
                     value: princ,
                     toolbar: {
                         items: [
-                            { 
-                                name: 'aIShortenText',
-                                options: { icon: 'user', type: 'danger' },
+                            {
+                                name: 'ai',
+                                options,
+                                widget: 'dxDropDownButton'
                             },
+                            'undo', 'redo', 'link', 'image', 'color', 'background',
                         ],
                     },
                     aIIntegration,
@@ -179,4 +215,5 @@
         </script>
     </div>
 </body>
+
 </html>

@@ -20,7 +20,8 @@ import Quill from 'devextreme-quill';
 
 import { getTableFormats, TABLE_OPERATIONS } from '../utils/m_table_helper';
 import {
-  applyFormat, getDefaultClickHandler, getFormatHandlers, ICON_MAP,
+  applyFormat, getDefaultClickHandler, getFormatHandlers,
+  ICON_MAP,
 } from '../utils/m_toolbar_helper';
 import BaseModule from './m_base';
 import WidgetCollector from './m_widget_collector';
@@ -311,6 +312,9 @@ if (Quill) {
 
         return this._getToolbarItem(buttonItemConfig);
       }
+      if (item.name && this._isAcceptableItem(item.widget, 'dxDropDownButton')) {
+        return this._getToolbarItem(this._prepareDropDownItemConfig(item));
+      }
       return this._getToolbarItem(item);
     }
 
@@ -355,6 +359,32 @@ if (Quill) {
             }
           },
         },
+      }, item);
+    }
+
+    _prepareDropDownItemConfig(item) {
+      const options = {
+        text: item.options?.text,
+        dropDownOptions: item.options?.dropDownOptions,
+        items: item.options?.items || [],
+        ...item.options,
+      };
+      if (item.name === 'ai') {
+        const userClickHandler = item.options?.onItemClick;
+
+        options.onItemClick = (e) => {
+          this._formatHandlers[item.name](this, e.itemData.name);
+
+          if (userClickHandler) {
+            userClickHandler(e);
+          }
+        };
+      }
+
+      return extend(true, {
+        widget: 'dxDropDownButton',
+        name: item.name,
+        options,
       }, item);
     }
 

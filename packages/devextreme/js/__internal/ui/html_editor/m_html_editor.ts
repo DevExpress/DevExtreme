@@ -138,7 +138,7 @@ const HtmlEditor = Editor.inherit({
     const template = this._getTemplate(ANONYMOUS_TEMPLATE_NAME);
     const transclude = true;
 
-    this._$templateResult = template && template.render({
+    this._$templateResult = template?.render({
       container: getPublicElement(this._$htmlContainer),
       noModel: true,
       transclude,
@@ -381,7 +381,7 @@ const HtmlEditor = Editor.inherit({
   },
 
   _hasTranscludedContent() {
-    return this._$templateResult && this._$templateResult.length;
+    return this._$templateResult?.length;
   },
 
   _getModulesConfig() {
@@ -647,7 +647,7 @@ const HtmlEditor = Editor.inherit({
   },
 
   _applyQuillHistoryMethod(methodName) {
-    if (this._quillInstance && this._quillInstance.history) {
+    if (this._quillInstance?.history) {
       this._quillInstance.history[methodName]();
     }
   },
