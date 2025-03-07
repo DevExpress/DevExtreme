@@ -5,12 +5,13 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
-import type { Properties } from '@js/ui/scroll_view';
 import { convertToLocation } from '@ts/ui/scroll_view/utils/convert_location';
 
+import type { ScrollableProperties } from '../scroll_view/m_scrollable';
 import Scrollable from '../scroll_view/m_scrollable';
 
 const DATEVIEW_ROLLER_CLASS = 'dx-dateviewroller';
@@ -22,9 +23,27 @@ const DATEVIEW_ROLLER_ITEM_SELECTED_CLASS = 'dx-dateview-item-selected';
 const DATEVIEW_ROLLER_ITEM_SELECTED_FRAME_CLASS = 'dx-dateview-item-selected-frame';
 const DATEVIEW_ROLLER_ITEM_SELECTED_BORDER_CLASS = 'dx-dateview-item-selected-border';
 
-export interface DateViewRollerProperties extends Properties {}
+export interface DateViewRollerProperties extends ScrollableProperties {
+  selectedIndex?: number;
+
+  items?: any[];
+
+  showOnClick?: boolean;
+
+  onClick?: () => void;
+}
 
 class DateViewRoller extends Scrollable {
+  _visibilityTimer?: ReturnType<typeof setTimeout>;
+
+  _selectedIndexChanged?: (e?: Record<string, unknown>) => void;
+
+  _isWheelScrolled?: boolean;
+
+  _$items!: dxElementWrapper;
+
+  _animation?: boolean;
+
   _getDefaultOptions(): DateViewRollerProperties {
     return {
       ...super._getDefaultOptions(),
@@ -34,6 +53,7 @@ class DateViewRoller extends Scrollable {
       bounceEnabled: false,
       items: [],
       showOnClick: false,
+      // @ts-expect-error ts-error
       onClick: null,
       onSelectedIndexChanged: null,
       scrollByContent: true,
@@ -56,7 +76,7 @@ class DateViewRoller extends Scrollable {
 
     this._renderContainerClick();
     this._renderItems();
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     this._renderSelectedValue();
     this._renderItemsClick();
     this._renderWheelEvent();
@@ -79,7 +99,7 @@ class DateViewRoller extends Scrollable {
     if (!this.option('showOnClick')) {
       return;
     }
-
+    // @ts-expect-error ts-error
     const eventName = addNamespace(clickEventName, this.NAME);
 
     const clickAction = this._createActionByOption('onClick');
@@ -96,6 +116,7 @@ class DateViewRoller extends Scrollable {
 
     $(this.content()).empty();
     // NOTE: rendering ~166+30+12+24+60 <div>s >> 50mc
+    // @ts-expect-error ts-error
     items.forEach((item) => {
       $items = $items.add(
         // @ts-expect-error
@@ -126,6 +147,7 @@ class DateViewRoller extends Scrollable {
 
   _fitIndex(index) {
     const items = this.option('items') || [];
+    // @ts-expect-error ts-error
     const itemCount = items.length;
 
     if (index >= itemCount) {
@@ -139,23 +161,24 @@ class DateViewRoller extends Scrollable {
     return index;
   }
 
-  _getItemPosition(index) {
+  _getItemPosition(index): number {
     return Math.round(this._itemHeight() * index);
   }
 
-  _renderItemsClick() {
+  _renderItemsClick(): void {
     const itemSelector = this._getItemSelector();
+    // @ts-expect-error ts-error
     const eventName = addNamespace(clickEventName, this.NAME);
 
     eventsEngine.off(this.$element(), eventName, itemSelector);
     eventsEngine.on(this.$element(), eventName, itemSelector, this._itemClickHandler.bind(this));
   }
 
-  _getItemSelector() {
+  _getItemSelector(): string {
     return `.${DATEVIEW_ROLLER_ITEM_CLASS}`;
   }
 
-  _itemClickHandler(e) {
+  _itemClickHandler(e): void {
     this.option('selectedIndex', this._itemElementIndex(e.currentTarget));
   }
 
@@ -221,6 +244,7 @@ class DateViewRoller extends Scrollable {
   }
 
   _fitSelectedIndexInRange(index) {
+    // @ts-expect-error ts-error
     const itemsCount = this.option('items').length;
     return Math.max(Math.min(index, itemsCount - 1), 0);
   }
@@ -269,7 +293,7 @@ class DateViewRoller extends Scrollable {
     this._isWheelScrolled = false;
   }
 
-  _itemHeight() {
+  _itemHeight(): number {
     const $item = this._$items.first();
 
     return getHeight($item);
@@ -284,7 +308,7 @@ class DateViewRoller extends Scrollable {
   }
 
   _fireSelectedIndexChanged(value, previousValue): void {
-    this._selectedIndexChanged({
+    this._selectedIndexChanged?.({
       value,
       previousValue,
       event: undefined,
@@ -348,7 +372,7 @@ class DateViewRoller extends Scrollable {
     super._dispose();
   }
 }
-// @ts-expect-error ts-error
+
 registerComponent('dxDateViewRoller', DateViewRoller);
 
 export default DateViewRoller;
