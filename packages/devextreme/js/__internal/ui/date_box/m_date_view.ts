@@ -276,6 +276,7 @@ class DateView extends Editor<DateViewProperties> {
     if (roller) {
       this._createRollerConfig(rollerType);
       const rollerConfig = this._rollerConfigs[rollerType];
+      // eslint-disable-next-line @typescript-eslint/no-base-to-string
       if (rollerType === ROLLER_TYPE.day || rollerConfig.displayItems.toString() !== roller.option('items').toString()) {
         roller.option({
           items: rollerConfig.displayItems,

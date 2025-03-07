@@ -332,8 +332,10 @@ class Drawer extends Widget<DrawerProperties> {
 
     const { maxSize, minSize } = this.option();
 
-    this._maxSize = maxSize ?? realPanelSize;
-    this._minSize = minSize ?? 0;
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    this._maxSize = maxSize || realPanelSize;
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    this._minSize = minSize || 0;
   }
 
   calcTargetPosition(): PanelLocation | undefined {

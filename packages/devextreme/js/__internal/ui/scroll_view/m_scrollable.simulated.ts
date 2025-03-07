@@ -119,8 +119,7 @@ class BounceAnimator extends InertiaAnimator {
   }
 }
 
-// @ts-expect-error dxClass inheritance issue
-export class Scroller extends (Class.inherit({}) as new() => {}) {
+export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
   _scrollbar!: Scrollbar;
 
   _direction?: string;
@@ -633,8 +632,7 @@ export class Scroller extends (Class.inherit({}) as new() => {}) {
 let hoveredScrollable;
 let activeScrollable;
 
-// @ts-expect-error dxClass inheritance issue
-export class SimulatedStrategy extends (Class.inherit({}) as new() => {}) {
+export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() => {}) {
   _component!: Scrollable;
 
   _$element!: dxElementWrapper;

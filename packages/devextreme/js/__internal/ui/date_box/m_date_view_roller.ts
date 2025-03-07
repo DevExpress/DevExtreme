@@ -9,7 +9,6 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
-import type { Properties } from '@js/ui/scroll_view';
 import { convertToLocation } from '@ts/ui/scroll_view/utils/convert_location';
 
 import type { ScrollableProperties } from '../scroll_view/m_scrollable';
