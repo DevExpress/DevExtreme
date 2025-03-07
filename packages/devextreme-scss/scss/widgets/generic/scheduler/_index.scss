@@ -148,6 +148,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   @include header-sizes(
     $generic-scheduler-header-height,
     $generic-scheduler-toolbar-item-offset,
+    baseScheduler.$scheduler-base-border,
   );
 
   background-color: $scheduler-header-bg;

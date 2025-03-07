@@ -28,10 +28,15 @@ $arrow-down: "\f016";
 @mixin header-sizes(
   $height,
   $item-padding,
+  $border,
 ) {
   .dx-toolbar {
     &:not(.dx-toolbar-multiline) {
-      height: $height;
+      @if $border {
+        height: $height - 2px;
+      } @else {
+        height: $height;
+      }
     }
 
     .dx-toolbar-item-content,
