@@ -269,7 +269,7 @@ class CollectionWidget<
     this._editStrategy = new PlainEditStrategy(this);
   }
 
-  _getSelectedItemIndices(keys): number[] {
+  _getSelectedItemIndices(keys?): number[] {
     const indices: number[] = [];
 
     keys = keys || this._selection.getSelectedItemKeys();
