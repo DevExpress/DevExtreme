@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 /* global google */
 
@@ -73,12 +74,19 @@ const initCustomMarkerClass = function () {
 
 const googleMapsLoaded = function () {
   // @ts-expect-error
-  return window.google && window.google.maps;
+  return window.google?.maps;
 };
 
 let googleMapsLoader;
 
-const GoogleProvider = DynamicProvider.inherit({
+class GoogleProvider extends DynamicProvider {
+  _clickListener?: any;
+
+  _geocodedLocations!: Record<string, unknown>;
+
+  _preventZoomChangeEvent?: any;
+
+  _boundsChangeListener?: any;
 
   _mapType(type) {
     const mapTypes = {
@@ -87,7 +95,7 @@ const GoogleProvider = DynamicProvider.inherit({
       satellite: google.maps.MapTypeId.SATELLITE,
     };
     return mapTypes[type] || mapTypes.hybrid;
-  },
+  }
 
   _movementMode(type) {
     const movementTypes = {
@@ -95,7 +103,7 @@ const GoogleProvider = DynamicProvider.inherit({
       walking: google.maps.TravelMode.WALKING,
     };
     return movementTypes[type] || movementTypes.driving;
-  },
+  }
 
   _resolveLocation(location) {
     return new Promise((resolve) => {
@@ -108,9 +116,8 @@ const GoogleProvider = DynamicProvider.inherit({
         });
       }
     });
-  },
+  }
 
-  _geocodedLocations: {},
   _geocodeLocationImpl(location) {
     return new Promise((resolve) => {
       if (!isDefined(location)) {
@@ -128,21 +135,21 @@ const GoogleProvider = DynamicProvider.inherit({
         }
       });
     });
-  },
+  }
 
   _normalizeLocation(location) {
     return {
       lat: location.lat(),
       lng: location.lng(),
     };
-  },
+  }
 
   _normalizeLocationRect(locationRect) {
     return {
       northEast: this._normalizeLocation(locationRect.getNorthEast()),
       southWest: this._normalizeLocation(locationRect.getSouthWest()),
     };
-  },
+  }
 
   _loadImpl() {
     return new Promise((resolve) => {
@@ -167,7 +174,7 @@ const GoogleProvider = DynamicProvider.inherit({
     }).then(() => {
       initCustomMarkerClass();
     });
-  },
+  }
 
   _loadMapScript() {
     return new Promise((resolve) => {
@@ -186,7 +193,7 @@ const GoogleProvider = DynamicProvider.inherit({
         window[GOOGLE_MAP_READY] = undefined;
       }
     });
-  },
+  }
 
   _init() {
     return new Promise((resolve) => {
@@ -208,14 +215,14 @@ const GoogleProvider = DynamicProvider.inherit({
     }).then((listener) => {
       google.maps.event.removeListener(listener);
     });
-  },
+  }
 
-  _attachHandlers() {
+  _attachHandlers(): void {
     this._boundsChangeListener = google.maps.event.addListener(this._map, 'bounds_changed', this._boundsChangeHandler.bind(this));
     this._clickListener = google.maps.event.addListener(this._map, 'click', this._clickActionHandler.bind(this));
-  },
+  }
 
-  _boundsChangeHandler() {
+  _boundsChangeHandler(): void {
     const bounds = this._map.getBounds();
     this._option('bounds', this._normalizeLocationRect(bounds));
 
@@ -225,11 +232,11 @@ const GoogleProvider = DynamicProvider.inherit({
     if (!this._preventZoomChangeEvent) {
       this._option('zoom', this._map.getZoom());
     }
-  },
+  }
 
   _clickActionHandler(e) {
     this._fireClickAction({ location: this._normalizeLocation(e.latLng) });
-  },
+  }
 
   updateDimensions() {
     const center = this._option('center');
@@ -237,13 +244,13 @@ const GoogleProvider = DynamicProvider.inherit({
     this._option('center', center);
 
     return this.updateCenter();
-  },
+  }
 
   updateMapType() {
     this._map.setMapTypeId(this._mapType(this._option('type')));
 
     return Promise.resolve();
-  },
+  }
 
   updateBounds() {
     return Promise.all([
@@ -256,20 +263,20 @@ const GoogleProvider = DynamicProvider.inherit({
 
       this._map.fitBounds(bounds);
     });
-  },
+  }
 
   updateCenter() {
     return this._resolveLocation(this._option('center')).then((center) => {
       this._map.setCenter(center);
       this._option('center', this._normalizeLocation(center));
     });
-  },
+  }
 
   updateZoom() {
     this._map.setZoom(this._option('zoom'));
 
     return Promise.resolve();
-  },
+  }
 
   updateControls() {
     const showDefaultUI = this._option('controls');
@@ -279,16 +286,16 @@ const GoogleProvider = DynamicProvider.inherit({
     });
 
     return Promise.resolve();
-  },
+  }
 
-  isEventsCanceled(e) {
-    const gestureHandling = this._map && this._map.get('gestureHandling');
+  isEventsCanceled(e): boolean {
+    const gestureHandling = this._map?.get('gestureHandling');
     const isInfoWindowContent = $(e.target).closest(`.${INFO_WINDOW_CLASS}`).length > 0;
     if (isInfoWindowContent || devices.real().deviceType !== 'desktop' && gestureHandling === 'cooperative') {
       return false;
     }
-    return this.callBase();
-  },
+    return super.isEventsCanceled(e);
+  }
 
   _renderMarker(options) {
     return this._resolveLocation(options.location).then((location) => {
@@ -346,7 +353,7 @@ const GoogleProvider = DynamicProvider.inherit({
         listener,
       };
     });
-  },
+  }
 
   _renderTooltip(marker, options) {
     if (!options) {
@@ -363,14 +370,14 @@ const GoogleProvider = DynamicProvider.inherit({
     }
 
     return infoWindow;
-  },
+  }
 
   _destroyMarker(marker) {
     marker.marker.setMap(null);
     if (marker.listener) {
       google.maps.event.removeListener(marker.listener);
     }
-  },
+  }
 
   _renderRoute(options) {
     return Promise.all(map(options.locations, (point) => this._resolveLocation(point))).then((locations) => new Promise((resolve) => {
@@ -417,11 +424,11 @@ const GoogleProvider = DynamicProvider.inherit({
         }
       });
     }));
-  },
+  }
 
   _destroyRoute(routeObject) {
     routeObject.instance.setMap(null);
-  },
+  }
 
   _fitBounds() {
     this._updateBounds();
@@ -443,7 +450,7 @@ const GoogleProvider = DynamicProvider.inherit({
     }
 
     return Promise.resolve();
-  },
+  }
 
   _extendBounds(location) {
     if (this._bounds) {
@@ -452,7 +459,7 @@ const GoogleProvider = DynamicProvider.inherit({
       this._bounds = new google.maps.LatLngBounds();
       this._bounds.extend(location);
     }
-  },
+  }
 
   clean() {
     if (this._map) {
@@ -467,11 +474,11 @@ const GoogleProvider = DynamicProvider.inherit({
     }
 
     return Promise.resolve();
-  },
-
-});
+  }
+}
 
 /// #DEBUG
+// @ts-expect-error ts-error
 GoogleProvider.remapConstant = function (newValue) {
   GOOGLE_URL = newValue;
 };
