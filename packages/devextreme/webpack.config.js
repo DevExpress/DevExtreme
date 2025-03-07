@@ -31,9 +31,4 @@ module.exports = {
         'devexpress-gantt': 'window.DevExpress.Gantt',
         'luxon': 'window.luxon'
     },
-    /* resolve: {
-        alias: {
-            '@devextreme/runtime/inferno': path.join(__dirname, '/js/__internal/core/r1/runtime/inferno/index.ts'),
-        }
-    }, */
 };
