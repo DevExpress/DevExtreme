@@ -37,6 +37,7 @@ export const defaultColumnProperties = {
   allowHeaderFiltering: true,
   trueText: messageLocalization.format('dxDataGrid-trueText'),
   falseText: messageLocalization.format('dxDataGrid-falseText'),
+  showInColumnChooser: true,
 } satisfies Partial<Column>;
 
 export const defaultColumnPropertiesByDataType: Record<

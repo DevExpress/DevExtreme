@@ -129,4 +129,25 @@ export class ColumnsController {
       return newColumns;
     });
   }
+
+  public updateColumns(func: (columns: PreNormalizedColumn[]) => PreNormalizedColumn[]): void {
+    this.columnsSettings.updateFunc((columns) => {
+      const newColumns = func(columns);
+
+      const visibleIndexes = normalizeVisibleIndexes(
+        newColumns.map((c) => c.visibleIndex),
+      );
+
+      visibleIndexes.forEach((visibleIndex, i) => {
+        if (newColumns[i].visibleIndex !== visibleIndex) {
+          newColumns[i] = {
+            ...newColumns[i],
+            visibleIndex,
+          };
+        }
+      });
+
+      return newColumns;
+    });
+  }
 }

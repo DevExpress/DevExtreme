@@ -18,7 +18,8 @@ type InheritedColumnProps =
   | 'allowHeaderFiltering'
   | 'trueText'
   | 'falseText'
-  | 'caption';
+  | 'caption'
+  | 'showInColumnChooser';
 
 export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   dataField?: string;
@@ -50,4 +51,7 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   headerItemCssClass?: string;
   // header filter options for specific column.
   headerFilter?: HeaderFilterColumnOptions;
+
+  // TODO: move to column_chooser module
+  // showInColumnChooser?: boolean;
 };

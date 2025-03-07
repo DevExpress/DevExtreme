@@ -1,5 +1,5 @@
 import { combined } from '@ts/core/reactive/index';
-import { ColumnsChooserView } from '@ts/grids/new/grid_core/columns_chooser/view';
+import { ColumnChooserView } from '@ts/grids/new/grid_core/column_chooser';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { FilterPanelView } from '@ts/grids/new/grid_core/filtering/filter_panel/view';
 import { HeaderFilterPopupView } from '@ts/grids/new/grid_core/filtering/header_filter';
@@ -20,12 +20,12 @@ interface MainViewProps {
   HeaderPanel: ComponentType;
   HeaderFilterPopup: ComponentType;
   FilterPanel: ComponentType;
-  ColumnsChooser: ComponentType;
+  ColumnChooser: ComponentType;
   config: Config;
 }
 
 function MainViewComponent({
-  Toolbar, Content, Pager, HeaderPanel, HeaderFilterPopup, FilterPanel, ColumnsChooser, config,
+  Toolbar, Content, Pager, HeaderPanel, HeaderFilterPopup, FilterPanel, ColumnChooser, config,
 }: MainViewProps): JSX.Element {
   return (<>
     <ConfigContext.Provider value={config}>
@@ -44,7 +44,7 @@ function MainViewComponent({
         */}
         <Pager/>
       </div>
-      <ColumnsChooser/>
+      <ColumnChooser/>
     </ConfigContext.Provider>
   </>);
 }
@@ -59,7 +59,7 @@ export class MainView extends View<MainViewProps> {
     HeaderPanelView,
     HeaderFilterPopupView,
     FilterPanelView,
-    ColumnsChooserView,
+    ColumnChooserView,
     OptionsController,
   ] as const;
 
@@ -70,7 +70,7 @@ export class MainView extends View<MainViewProps> {
     private readonly headerPanel: HeaderPanelView,
     private readonly headerFilterPopup: HeaderFilterPopupView,
     private readonly filterPanel: FilterPanelView,
-    private readonly columnsChooser: ColumnsChooserView,
+    private readonly columnsChooser: ColumnChooserView,
     private readonly options: OptionsController,
   ) {
     super();
@@ -86,7 +86,7 @@ export class MainView extends View<MainViewProps> {
       HeaderPanel: this.headerPanel.asInferno(),
       HeaderFilterPopup: this.headerFilterPopup.asInferno(),
       FilterPanel: this.filterPanel.asInferno(),
-      ColumnsChooser: this.columnsChooser.asInferno(),
+      ColumnChooser: this.columnsChooser.asInferno(),
       config: combined({
         rtlEnabled: this.options.oneWay('rtlEnabled'),
         disabled: this.options.oneWay('disabled'),
