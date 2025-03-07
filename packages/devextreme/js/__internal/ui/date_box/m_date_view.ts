@@ -1,12 +1,15 @@
 import dateLocalization from '@js/common/core/localization/date';
 import registerComponent from '@js/core/component_registrator';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
-import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import Editor from '@js/ui/editor/editor';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Editor from '@ts/ui/editor/editor';
 
+import type { EditorProperties } from '../editor/editor';
 import uiDateUtils from './m_date_utils';
+import type { DateViewRollerProperties } from './m_date_view_roller';
 import DateViewRoller from './m_date_view_roller';
 
 const DATEVIEW_CLASS = 'dx-dateview';
@@ -28,36 +31,57 @@ const ROLLER_TYPE = {
   hours: 'hours',
 };
 
-const DateView = (Editor as any).inherit({
-  _valueOption() {
-    const value = this.option('value');
-    const date = new Date(value);
-    // @ts-expect-error
-    return !value || isNaN(date) ? this._getDefaultDate() : date;
-  },
+export interface DateViewProperties extends EditorProperties {
+  applyCompactClass?: boolean;
 
-  _getDefaultDate() {
+  minDate: Date;
+
+  maxDate: Date;
+
+  type?: string;
+}
+
+class DateView extends Editor<DateViewProperties> {
+  _$rollersContainer?: dxElementWrapper;
+
+  _$wrapper?: dxElementWrapper;
+
+  _rollerConfigs!: DateViewRollerProperties;
+
+  _rollers!: Record<string, DateViewRoller>;
+
+  _valueOption(): Date {
+    const { value } = this.option();
+    const date = new Date(value);
+    // @ts-expect-error ts-error
+    return !value || isNaN(date) ? this._getDefaultDate() : date;
+  }
+
+  _getDefaultDate(): Date {
     const date = new Date();
 
-    if (this.option('type') === TYPE.date) {
+    const { type } = this.option();
+
+    if (type === TYPE.date) {
       return new Date(date.getFullYear(), date.getMonth(), date.getDate());
     }
 
     return date;
-  },
+  }
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+  _getDefaultOptions(): DateViewProperties {
+    return {
+      ...super._getDefaultOptions(),
       minDate: uiDateUtils.MIN_DATEVIEW_DEFAULT_DATE,
       maxDate: uiDateUtils.MAX_DATEVIEW_DEFAULT_DATE,
       type: TYPE.date,
       value: new Date(),
       applyCompactClass: false,
-    });
-  },
+    };
+  }
 
   _defaultOptionsRules() {
-    return this.callBase().concat([
+    return super._defaultOptionsRules().concat([
       {
         device(device) {
           return device.deviceType !== 'desktop';
@@ -67,36 +91,41 @@ const DateView = (Editor as any).inherit({
         },
       },
     ]);
-  },
+  }
 
-  _render() {
-    this.callBase();
+  _render(): void {
+    super._render();
     this.$element().addClass(DATEVIEW_CLASS);
-    this._toggleFormatClasses(this.option('type'));
-    this._toggleCompactClass();
-  },
 
-  _toggleFormatClasses(currentFormat, previousFormat) {
+    const { type } = this.option();
+
+    this._toggleFormatClasses(type);
+    this._toggleCompactClass();
+  }
+
+  _toggleFormatClasses(currentFormat, previousFormat?): void {
     this.$element().addClass(`${DATEVIEW_CLASS}-${currentFormat}`);
 
     previousFormat && this.$element().removeClass(`${DATEVIEW_CLASS}-${previousFormat}`);
-  },
+  }
 
-  _toggleCompactClass() {
-    this.$element().toggleClass(DATEVIEW_COMPACT_CLASS, this.option('applyCompactClass'));
-  },
+  _toggleCompactClass(): void {
+    const { applyCompactClass } = this.option();
 
-  _wrapper() {
+    this.$element().toggleClass(DATEVIEW_COMPACT_CLASS, applyCompactClass);
+  }
+
+  _wrapper(): dxElementWrapper | undefined {
     return this._$wrapper;
-  },
+  }
 
-  _renderContentImpl() {
+  _renderContentImpl(): void {
     this._$wrapper = $('<div>').addClass(DATEVIEW_WRAPPER_CLASS);
     this._renderRollers();
     this._$wrapper.appendTo(this.$element());
-  },
+  }
 
-  _renderRollers() {
+  _renderRollers(): void {
     if (!this._$rollersContainer) {
       this._$rollersContainer = $('<div>').addClass(DATEVIEW_ROLLER_CONTAINER_CLASS);
     }
@@ -109,6 +138,7 @@ const DateView = (Editor as any).inherit({
     const that = this;
 
     each(that._rollerConfigs, (name) => {
+      // @ts-expect-error ts-error
       const $roller = $('<div>').appendTo(that._$rollersContainer)
         .addClass(`${DATEVIEW_ROLLER_CLASS}-${that._rollerConfigs[name].type}`);
 
@@ -120,7 +150,7 @@ const DateView = (Editor as any).inherit({
         onStart(e) {
           const roller = e.component;
           roller._toggleActive(true);
-          that._setActiveRoller(that._rollerConfigs[name], roller.option('selectedIndex'));
+          that._setActiveRoller(that._rollerConfigs[name]);
         },
         onEnd(e) {
           const roller = e.component;
@@ -129,7 +159,7 @@ const DateView = (Editor as any).inherit({
         onClick(e) {
           const roller = e.component;
           roller._toggleActive(true);
-          that._setActiveRoller(that._rollerConfigs[name], roller.option('selectedIndex'));
+          that._setActiveRoller(that._rollerConfigs[name]);
           that._setRollerState(that._rollerConfigs[name], roller.option('selectedIndex'));
           roller._toggleActive(false);
         },
@@ -139,21 +169,22 @@ const DateView = (Editor as any).inherit({
         },
       });
     });
+    // @ts-expect-error ts-error
     that._$rollersContainer.appendTo(that._wrapper());
-  },
+  }
 
-  _createRollerConfigs(type) {
+  _createRollerConfigs(type?): void {
     const that = this;
     type = type || that.option('type');
     that._rollerConfigs = {};
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     dateLocalization.getFormatParts(uiDateUtils.FORMATS_MAP[type]).forEach((partName) => {
       that._createRollerConfig(partName);
     });
-  },
+  }
 
-  _createRollerConfig(componentName) {
-    // @ts-expect-error
+  _createRollerConfig(componentName): void {
+    // @ts-expect-error ts-error
     const componentInfo = uiDateUtils.DATE_COMPONENTS_INFO[componentName];
 
     const valueRange = this._calculateRollerConfigValueRange(componentName);
@@ -169,40 +200,40 @@ const DateView = (Editor as any).inherit({
       setValue: componentInfo.setter,
       valueItems: [],
       displayItems: [],
-      getIndex(value) {
+      getIndex(value): number {
         return value[componentInfo.getter]() - startValue;
       },
     };
 
     for (let i = startValue; i <= endValue; i++) {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       config.valueItems.push(i);
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       config.displayItems.push(formatter(i, curDate));
     }
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     config.selectedIndex = config.getIndex(curDate);
 
     this._rollerConfigs[componentName] = config;
-  },
+  }
 
-  _setActiveRoller(currentRoller) {
+  _setActiveRoller(currentRoller): void {
     const activeRoller = currentRoller && this._rollers[currentRoller.type];
 
     each(this._rollers, function () {
       this.toggleActiveState(this === activeRoller);
     });
-  },
+  }
 
-  _updateRollersPosition() {
+  _updateRollersPosition(): void {
     const that = this;
     each(this._rollers, function (type) {
       const correctIndex = that._rollerConfigs[type].getIndex(that._getCurrentDate());
       this.option('selectedIndex', correctIndex);
     });
-  },
+  }
 
-  _setRollerState(roller, selectedIndex) {
+  _setRollerState(roller, selectedIndex): void {
     if (selectedIndex !== roller.selectedIndex) {
       const rollerValue = roller.valueItems[selectedIndex];
       const { setValue } = roller;
@@ -237,9 +268,9 @@ const DateView = (Editor as any).inherit({
       this._refreshRoller(ROLLER_TYPE.day);
       this._refreshRoller(ROLLER_TYPE.hours);
     }
-  },
+  }
 
-  _refreshRoller(rollerType) {
+  _refreshRoller(rollerType): void {
     const roller = this._rollers[rollerType];
 
     if (roller) {
@@ -252,7 +283,7 @@ const DateView = (Editor as any).inherit({
         });
       }
     }
-  },
+  }
 
   _getCurrentDate() {
     const curDate = this._valueOption();
@@ -260,12 +291,11 @@ const DateView = (Editor as any).inherit({
     const maxDate = this.option('maxDate');
 
     return dateUtils.normalizeDate(curDate, minDate, maxDate);
-  },
+  }
 
   _calculateRollerConfigValueRange(componentName) {
     const curDate = this._getCurrentDate();
-    const minDate = this.option('minDate');
-    const maxDate = this.option('maxDate');
+    const { minDate, maxDate } = this.option();
 
     const minYear = dateUtils.sameYear(curDate, minDate);
     const minMonth = minYear && curDate.getMonth() === minDate.getMonth();
@@ -273,7 +303,7 @@ const DateView = (Editor as any).inherit({
     const maxMonth = maxYear && curDate.getMonth() === maxDate.getMonth();
     const minHour = minMonth && curDate.getDate() === minDate.getDate();
     const maxHour = maxMonth && curDate.getDate() === maxDate.getDate();
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     const componentInfo = uiDateUtils.DATE_COMPONENTS_INFO[componentName];
     let { startValue } = componentInfo;
     let { endValue } = componentInfo;
@@ -311,15 +341,15 @@ const DateView = (Editor as any).inherit({
       startValue,
       endValue,
     };
-  },
+  }
 
-  _refreshRollers() {
+  _refreshRollers(): void {
     this._refreshRoller(ROLLER_TYPE.month);
     this._refreshRoller(ROLLER_TYPE.day);
     this._refreshRoller(ROLLER_TYPE.hours);
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<DateViewProperties>): void {
     switch (args.name) {
       case 'minDate':
       case 'maxDate':
@@ -328,7 +358,7 @@ const DateView = (Editor as any).inherit({
         this._toggleFormatClasses(args.value, args.previousValue);
         break;
       case 'visible':
-        this.callBase(args);
+        super._optionChanged(args);
         if (args.value) {
           this._renderRollers();
         }
@@ -339,15 +369,15 @@ const DateView = (Editor as any).inherit({
         this._updateRollersPosition();
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
-  _clean() {
-    this.callBase();
+  _clean(): void {
+    super._clean();
     delete this._$rollersContainer;
-  },
-});
+  }
+}
 
 registerComponent('dxDateView', DateView);
 
