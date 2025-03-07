@@ -238,10 +238,8 @@ class SelectBox<
 
   _createPopup(): void {
     super._createPopup();
-    // @ts-expect-error ts-error
-    this._popup.$element().addClass(SELECTBOX_POPUP_CLASS);
-    // @ts-expect-error ts-error
-    this._popup.$overlayContent().attr('tabindex', -1);
+    this._popup?.$element().addClass(SELECTBOX_POPUP_CLASS);
+    this._popup?.$overlayContent().attr('tabindex', -1);
   }
 
   _popupWrapperClass(): string {
@@ -669,7 +667,6 @@ class SelectBox<
             && !isOverlayTarget;
 
     if (shouldCancelSearch) {
-      // @ts-expect-error ts-error
       const isPopupVisible = this._popup?._hideAnimationProcessing;
       this._clearSearchTimer();
       if (isPopupVisible) {

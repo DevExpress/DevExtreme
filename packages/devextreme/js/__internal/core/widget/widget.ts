@@ -682,7 +682,7 @@ class Widget<
     focus.trigger(this._focusTarget());
   }
 
-  registerKeyHandler(key: string, handler: () => void): void {
+  registerKeyHandler(key: string, handler: (event?) => void): void {
     const currentKeys = this._supportedKeys();
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return, max-len
