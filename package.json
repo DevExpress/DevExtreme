@@ -27,7 +27,9 @@
     "all:build": "ts-node tools/scripts/build-all.ts",
     "all:build-dev": "pnpm run all:build --dev",
     "all:pack-and-copy": "nx run-many -t pack-and-copy",
-    "webserver": "http-server --port 8080 -c-1"
+    "webserver": "http-server --port 8080 -c-1",
+    "update-screenshots:demo": "ts-node tools/scripts/update-screenshots.ts ./apps/demos/testing",
+    "update-screenshots:e2e": "ts-node tools/scripts/update-screenshots.ts ./e2e/testcafe-devextreme/tests"
   },
   "nx": {},
   "private": true,
