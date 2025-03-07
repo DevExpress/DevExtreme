@@ -161,12 +161,14 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     this.renderCurrentDateTimeLineAndShader();
 
     if (this.isRenovatedRender()) {
-      this.renderWorkSpace({
-        generateNewData: true,
-        renderComponents: {
-          header: true,
-          timePanel: true,
-        },
+      setTimeout(() => {
+        this.renderWorkSpace({
+          generateNewData: true,
+          renderComponents: {
+            header: true,
+            timePanel: true,
+          },
+        });
       });
     }
   }
