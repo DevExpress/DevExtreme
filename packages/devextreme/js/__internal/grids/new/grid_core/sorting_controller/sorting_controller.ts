@@ -83,6 +83,31 @@ export class SortingController {
       [this._showSortIndexes, this.sortedColumns],
     );
 
+    // TODO: Resolve the nested update issue
+
+    // const updateOrderedSortedColumns = (
+    //   orderedSortedColumns: Column[],
+    //   mode: SingleMultipleOrNone,
+    // ): void => {
+    //   const needChanges = !this.areColumnsInitialized || mode === 'multiple';
+    //   if (!needChanges) {
+    //     return;
+    //   }
+
+    //   this.areColumnsInitialized = true;
+    //   let counter = 1;
+    //   orderedSortedColumns.forEach((c) => {
+    //     this.columnsController.columnOption(c, 'sortIndex', counter);
+    //     counter += 1;
+    //     return c;
+    //   });
+    // };
+
+    // effect(
+    //   updateOrderedSortedColumns,
+    //   [this.orderedSortedColumns, this.mode],
+    // );
+
     effect(
       (params) => {
         this.options.sortParameters.update(params);
@@ -105,20 +130,21 @@ export class SortingController {
     if (!column.allowSorting) {
       return;
     }
+    const isCtrl = e.ctrlKey || e.metaKey;
 
-    const isClearSorting = !!column.sortOrder && e.ctrlKey;
+    const isClearSorting = !!column.sortOrder && isCtrl;
     if (isClearSorting) {
       this.clearSorting();
       return;
     }
 
-    const isClearSortingRequired = (!column.sortOrder && !e.ctrlKey)
+    const isClearSortingRequired = (!column.sortOrder && !isCtrl)
     || this.sortedColumns.unreactive_get().length > 1;
     if (isClearSortingRequired) {
       this.clearSorting();
     }
 
-    const nextSortOrder = getNextSortOrder(column.sortOrder, e.ctrlKey);
+    const nextSortOrder = getNextSortOrder(column.sortOrder, isCtrl);
     this.columnsController.columnOption(column, 'sortOrder', nextSortOrder);
   }
 
@@ -127,17 +153,19 @@ export class SortingController {
       return;
     }
 
-    const hasNothingToChange = !column.sortOrder && e.ctrlKey && !e.shiftKey;
+    const isCtrl = e.ctrlKey || e.metaKey;
+    const hasNothingToChange = !column.sortOrder && isCtrl && !e.shiftKey;
     if (hasNothingToChange) {
       return;
     }
 
-    const nextSortOrder = getNextSortOrder(column.sortOrder, e.ctrlKey);
-    const isClearSortingRequired = !e.ctrlKey && !e.shiftKey;
+    const nextSortOrder = getNextSortOrder(column.sortOrder, isCtrl);
+    const isClearSortingRequired = !isCtrl && !e.shiftKey;
     if (isClearSortingRequired) {
       this.clearSorting();
     }
 
+    // TODO: Resolve the nested update issue
     // this.columnsController.columnOption(column, 'sortOrder', nextSortOrder);
     this.updateColumnSortOrder(column, nextSortOrder);
   }
