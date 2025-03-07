@@ -1,18 +1,18 @@
 import $ from '@js/core/renderer';
-import CollectionWidgetItem from '@ts/ui/collection/m_item';
+import type { Item } from '@js/ui/tabs';
+import CollectionItem from '@ts/ui/collection/m_item';
 
 const TABS_ITEM_BADGE_CLASS = 'dx-tabs-item-badge';
 const BADGE_CLASS = 'dx-badge';
-// @ts-expect-error
-const TabsItem = CollectionWidgetItem.inherit({
 
-  _renderWatchers() {
-    this.callBase();
+class TabsItem extends CollectionItem<Item> {
+  _renderWatchers(): void {
+    super._renderWatchers();
 
     this._startWatcher('badge', this._renderBadge.bind(this));
-  },
+  }
 
-  _renderBadge(badge) {
+  _renderBadge(badge): void {
     this._$element.children(`.${BADGE_CLASS}`).remove();
 
     if (!badge) {
@@ -25,8 +25,7 @@ const TabsItem = CollectionWidgetItem.inherit({
       .text(badge);
 
     this._$element.append($badge);
-  },
-
-});
+  }
+}
 
 export default TabsItem;
