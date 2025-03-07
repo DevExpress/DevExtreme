@@ -6,7 +6,7 @@ import Stepper from 'ui/stepper';
 import 'generic_light.css!';
 
 import {
-    STEPPER_ITEM_CLASS
+    STEP_CLASS
 } from '__internal/ui/stepper/stepper';
 
 QUnit.testStart(() => {
@@ -31,7 +31,7 @@ const moduleConfig = {
         };
 
         this.getItems = () => {
-            return this.$element.find(`.${STEPPER_ITEM_CLASS}`);
+            return this.$element.find(`.${STEP_CLASS}`);
         };
     }
 };

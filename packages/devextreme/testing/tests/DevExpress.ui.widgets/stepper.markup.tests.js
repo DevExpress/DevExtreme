@@ -3,7 +3,9 @@ import $ from 'jquery';
 import 'ui/stepper';
 import {
     STEPPER_CLASS,
-    STEPPER_ITEM_CLASS,
+    STEP_CLASS,
+    STEP_LIST_CLASS,
+    STEP_SELECTED_CLASS,
     STEPPER_VERTICAL_ORIENTATION_CLASS,
     STEPPER_HORIZONTAL_ORIENTATION_CLASS,
 } from '__internal/ui/stepper/stepper';
@@ -29,8 +31,16 @@ const moduleConfig = {
             init(options);
         };
 
+        this.getStepList = () => {
+            return this.$element.find(`.${STEP_LIST_CLASS}`);
+        };
+
         this.getItems = () => {
-            return this.$element.find(`.${STEPPER_ITEM_CLASS}`);
+            return this.$element.find(`.${STEP_CLASS}`);
+        };
+
+        this.getStepByIndex = (index) => {
+            return this.getItems().eq(index);
         };
     }
 };
@@ -63,6 +73,31 @@ QUnit.module('Stepper markup', moduleConfig, () => {
         assert.strictEqual(this.$element.hasClass(STEPPER_HORIZONTAL_ORIENTATION_CLASS), true);
         assert.strictEqual(this.$element.hasClass(STEPPER_VERTICAL_ORIENTATION_CLASS), false);
     });
+
+    QUnit.test(`Selected step should have ${STEP_SELECTED_CLASS} class by default`, function(assert) {
+        this.reinit({
+            items: [{}, {}, {}],
+            selectedIndex: 1
+        });
+
+        assert.strictEqual(this.getStepByIndex(0).hasClass(STEP_SELECTED_CLASS), false);
+        assert.strictEqual(this.getStepByIndex(1).hasClass(STEP_SELECTED_CLASS), true);
+        assert.strictEqual(this.getStepByIndex(2).hasClass(STEP_SELECTED_CLASS), false);
+    });
+
+    QUnit.test(`Selected step should have ${STEP_SELECTED_CLASS} class after change selectedIndex at runtime`, function(assert) {
+        this.reinit({
+            items: [{}, {}, {}],
+            selectedIndex: 1
+        });
+
+        this.instance.option('selectedIndex', 2);
+
+        assert.strictEqual(this.getStepByIndex(0).hasClass(STEP_SELECTED_CLASS), false);
+        assert.strictEqual(this.getStepByIndex(1).hasClass(STEP_SELECTED_CLASS), false);
+        assert.strictEqual(this.getStepByIndex(2).hasClass(STEP_SELECTED_CLASS), true);
+    });
+
 });
 
 QUnit.module('Render', moduleConfig, () => {
@@ -89,5 +124,22 @@ QUnit.module('Render', moduleConfig, () => {
 
         assert.strictEqual($items.eq(0).text(), 'Step_1', 'first pane was rendered');
         assert.strictEqual($items.eq(1).text(), 'Step_2', 'second pane was rendered');
+    });
+
+    QUnit.test('step list element should be rendered inside root container with the correct class', function(assert) {
+        this.reinit({
+            items: []
+        });
+
+        assert.strictEqual(this.getStepList().length, 1, 'step list container was rendered');
+        assert.strictEqual(this.getStepList().parent().is(this.$element), true, 'step list container rendered inside root container');
+    });
+
+    QUnit.test('Step items should be rendered inside the step list container', function(assert) {
+        this.reinit({
+            items: [{}, {}, {}, {}, {}]
+        });
+
+        assert.strictEqual(this.getStepList().children().length, 5, 'steps are rendered in the list container');
     });
 });

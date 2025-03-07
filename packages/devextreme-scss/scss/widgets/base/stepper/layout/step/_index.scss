@@ -1,0 +1,29 @@
+.dx-step {
+  position: relative;
+}
+
+.dx-step-content {
+  gap: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  &::before {
+    content: '';
+    position: absolute;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 999em;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.dx-stepper-vertical {
+  .dx-step-content {
+    flex-direction: row;
+  }
+}
