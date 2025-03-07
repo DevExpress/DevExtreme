@@ -16819,9 +16819,6 @@ declare module DevExpress.ui {
       readonly field: Field;
       readonly setValue: Function;
     };
-    /**
-     * [descr:FieldInfo]
-     */
     export type FieldInfo = {
       /**
        * [descr:FieldInfo.value]

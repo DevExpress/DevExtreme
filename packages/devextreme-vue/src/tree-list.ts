@@ -119,7 +119,6 @@ import {
 import {
  dxFilterBuilderOptions,
  dxFilterBuilderField,
- FieldInfo,
  FilterBuilderOperation,
  dxFilterBuilderCustomOperation,
  GroupOperation,
@@ -1214,7 +1213,7 @@ const DxCustomOperationConfig = {
   props: {
     calculateFilterExpression: Function as PropType<((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>)>,
     caption: String,
-    customizeText: Function as PropType<((fieldInfo: FieldInfo) => string)>,
+    customizeText: Function as PropType<((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string)>,
     dataTypes: Array as PropType<Array<DataType>>,
     editorTemplate: {},
     hasValue: Boolean,
@@ -1396,7 +1395,7 @@ const DxFieldConfig = {
   props: {
     calculateFilterExpression: Function as PropType<((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>)>,
     caption: String,
-    customizeText: Function as PropType<((fieldInfo: FieldInfo) => string)>,
+    customizeText: Function as PropType<((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string)>,
     dataField: String,
     dataType: String as PropType<DataType>,
     editorOptions: {},

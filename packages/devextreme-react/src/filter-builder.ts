@@ -8,7 +8,7 @@ import dxFilterBuilder, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, ValueChangedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation } from "devextreme/ui/filter_builder";
+import type { ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, ValueChangedEvent, dxFilterBuilderField, FilterBuilderOperation } from "devextreme/ui/filter_builder";
 import type { DataType, template, Format as CommonFormat } from "devextreme/common";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
@@ -85,7 +85,7 @@ const FilterBuilder = memo(
 type ICustomOperationProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>);
   caption?: string | undefined;
-  customizeText?: ((fieldInfo: FieldInfo) => string);
+  customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string);
   dataTypes?: Array<DataType> | undefined;
   editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   hasValue?: boolean;
@@ -118,7 +118,7 @@ const CustomOperation = Object.assign<typeof _componentCustomOperation, NestedCo
 type IFieldProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>);
   caption?: string | undefined;
-  customizeText?: ((fieldInfo: FieldInfo) => string);
+  customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string);
   dataField?: string | undefined;
   dataType?: DataType;
   editorOptions?: any;

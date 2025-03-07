@@ -12,7 +12,7 @@ import {
 
 
 
-import { dxFilterBuilderField, FieldInfo } from 'devextreme/ui/filter_builder';
+import { dxFilterBuilderField } from 'devextreme/ui/filter_builder';
 import { DataType } from 'devextreme/common';
 
 import {
@@ -45,10 +45,10 @@ export class DxiTreeListCustomOperationComponent extends CollectionNestedOption 
     }
 
     @Input()
-    get customizeText(): ((fieldInfo: FieldInfo) => string) {
+    get customizeText(): ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: ((fieldInfo: FieldInfo) => string)) {
+    set customizeText(value: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
