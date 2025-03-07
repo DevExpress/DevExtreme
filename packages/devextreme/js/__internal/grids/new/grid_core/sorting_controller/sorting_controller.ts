@@ -46,10 +46,23 @@ export class SortingController {
 
     this.orderedSortedColumns = interruptableComputed(
       (columns, mode) => {
-        if (mode !== 'multiple') {
+        if (mode !== 'multiple' && this.areColumnsInitialized) {
           return columns;
         }
-        return columns.sort(sortOrderDelegate);
+        const result = columns.sort(sortOrderDelegate);
+
+        if (!this.areColumnsInitialized) {
+          this.areColumnsInitialized = true;
+
+          let counter = 0;
+          result.forEach((c) => {
+            this.columnsController.columnOption(c, 'sortIndex', counter);
+            counter += 1;
+            return c;
+          });
+        }
+
+        return result;
       },
       [this.sortedColumns, this.mode],
     );
@@ -95,7 +108,7 @@ export class SortingController {
     //   }
 
     //   this.areColumnsInitialized = true;
-    //   let counter = 1;
+    //   let counter = 0;
     //   orderedSortedColumns.forEach((c) => {
     //     this.columnsController.columnOption(c, 'sortIndex', counter);
     //     counter += 1;
@@ -171,11 +184,10 @@ export class SortingController {
   }
 
   private updateColumnSortOrder(column, nextSortOrder): void {
-    const needChanges = !this.areColumnsInitialized || this.mode.unreactive_get() === 'multiple';
+    const needChanges = this.mode.unreactive_get() === 'multiple';
     if (!needChanges) {
       return;
     }
-    this.areColumnsInitialized = true;
 
     this.columnsController.updateColumns((columns) => {
       const newColumns = [...columns];
@@ -198,7 +210,7 @@ export class SortingController {
       }
 
       if (needNormalizing) {
-        let counter = 1;
+        let counter = 0;
         orderedSortedColumns.forEach((c) => {
           const index = getColumnIndexByName(newColumns, c.name);
           if (newColumns[index].sortIndex !== counter) {

@@ -75,7 +75,7 @@ export function Item(props: ItemProps): JSX.Element {
         props.column.sortOrder !== undefined && (
           <SortIcon
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            sortIndex={props.column.sortIndex!}
+            sortIndex={props.column.sortIndex! + 1}
             sortOrder={props.column.sortOrder}
             showSortIndex={props.showSortIndexes ?? false}
           />

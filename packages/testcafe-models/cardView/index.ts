@@ -2,6 +2,7 @@ import type { WidgetName } from '../types';
 import GridCore from '../gridCore';
 import { CLASS as CLASS_BASE } from '../gridCore';
 import Card from './card';
+import HeadersElement from './headers/headers';
 
 export const CLASS = {
     ...CLASS_BASE,
@@ -25,5 +26,10 @@ export default class CardView extends GridCore {
   getCard(nth = 0): Card {
     const cards = this.element.find(`.${this.addWidgetPrefix(CLASS.card)}`);
     return new Card(cards.nth(nth));
+  }
+
+  getHeaders(): HeadersElement {
+    const selector = this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`)
+    return new HeadersElement(selector, this.getName());
   }
 }

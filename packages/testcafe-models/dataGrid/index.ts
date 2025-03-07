@@ -410,22 +410,6 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiColumnOption(id: string, name: string, value: any = 'empty'): Promise<any> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => {
-        const dataGrid = getInstance() as any;
-        return value !== 'empty' ? dataGrid.columnOption(id, name, value === 'undefined' ? undefined : value) : dataGrid.columnOption(id, name);
-      },
-      {
-        dependencies: {
-          getInstance, id, name, value,
-        },
-      },
-    )();
-  }
-
   apiAddRow(): Promise<void> {
     const { getInstance } = this;
 
