@@ -162,7 +162,7 @@ jobs:
           { componentFolder: "gantt", name: "gantt" },
         ]
     runs-on: devextreme-shr2
-    timeout-minutes: 90
+    timeout-minutes: 45
 
     steps:
     - name: Set machine timezone
