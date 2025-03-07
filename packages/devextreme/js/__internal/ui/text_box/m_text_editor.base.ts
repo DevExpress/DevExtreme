@@ -400,7 +400,12 @@ class TextEditorBase<
     return value;
   }
 
-  _getDefaultAttributes(): { autocomplete: string; placeholder: string | null } {
+  _getDefaultAttributes(): {
+    autocomplete: string;
+    placeholder: string | null;
+    // eslint-disable-next-line spellcheck/spell-checker
+    inputmode?: string;
+  } {
     const defaultAttributes = {
       autocomplete: 'off',
       placeholder: this._getPlaceholderAttr(),
@@ -444,7 +449,6 @@ class TextEditorBase<
 
     this.option('text', textValue);
 
-    // eslint-disable-next-line max-len
     // fallback to empty string is required to support WebKit native date picker in some basic scenarios
     // can not be covered by QUnit
     // @ts-expect-error @ts-error
@@ -812,7 +816,6 @@ class TextEditorBase<
     super._focusOutHandler(event);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _toggleFocusClass(isFocused: boolean, $element?: dxElementWrapper): void {
     super._toggleFocusClass(isFocused, this._focusClassTarget($element));
   }

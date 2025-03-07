@@ -1,42 +1,62 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import registerComponent from '@js/core/component_registrator';
-// @ts-expect-error
+// @ts-expect-error ts-error
 import { grep } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
-import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { CollectionWidgetEditProperties } from '@ts/ui/collection/m_collection_widget.edit';
+import CollectionWidget from '@ts/ui/collection/m_collection_widget.edit';
 
 import ValidationEngine from './m_validation_engine';
+import type ValidationGroup from './m_validation_group';
 
 const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
 const ITEM_CLASS = `${VALIDATION_SUMMARY_CLASS}-item`;
 const ITEM_DATA_KEY = `${VALIDATION_SUMMARY_CLASS}-item-data`;
-// @ts-expect-error
-const ValidationSummary = CollectionWidget.inherit({
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
-      focusStateEnabled: false,
-      noDataText: null,
-    });
-  },
 
-  _setOptionsByReference() {
-    this.callBase();
+export interface ValidationSummaryProperties extends CollectionWidgetEditProperties<ValidationSummary> {
+  validationGroup?: string;
+}
+
+class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
+  _groupWasInit?: boolean;
+
+  _validationGroup?: ValidationGroup;
+
+  validators?: any[];
+
+  groupSubscription?: (params) => void;
+
+  _getDefaultOptions(): ValidationSummaryProperties {
+    return {
+      ...super._getDefaultOptions(),
+      focusStateEnabled: false,
+      // @ts-expect-error ts-error
+      noDataText: null,
+    };
+  }
+
+  _setOptionsByReference(): void {
+    super._setOptionsByReference();
 
     extend(this._optionsByReference, {
       validationGroup: true,
     });
-  },
+  }
 
-  _init() {
-    this.callBase();
+  _init(): void {
+    super._init();
     this._initGroupRegistration();
-  },
+  }
 
-  _initGroupRegistration() {
+  _initGroupRegistration(): void {
     const $element = this.$element();
-    const group = this.option('validationGroup')
-            || ValidationEngine.findGroup($element, this._modelByElement($element));
+    const { validationGroup } = this.option();
+
+    const group = validationGroup
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      || ValidationEngine.findGroup($element, this._modelByElement($element));
     const groupConfig = ValidationEngine.addGroup(group, true);
 
     this._unsubscribeGroup();
@@ -46,18 +66,18 @@ const ValidationSummary = CollectionWidget.inherit({
 
     this.groupSubscription = this._groupValidationHandler.bind(this);
     groupConfig.on('validated', this.groupSubscription);
-  },
+  }
 
-  _unsubscribeGroup() {
+  _unsubscribeGroup(): void {
     const groupConfig = ValidationEngine.getGroupConfig(this._validationGroup);
-    groupConfig && groupConfig.off('validated', this.groupSubscription);
-  },
+    groupConfig?.off('validated', this.groupSubscription);
+  }
 
   _getOrderedItems(validators, items) {
     let orderedItems = [];
 
     each(validators, (_, validator) => {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       const foundItems = grep(items, (item) => {
         if (item.validator === validator) {
           return true;
@@ -70,9 +90,9 @@ const ValidationSummary = CollectionWidget.inherit({
     });
 
     return orderedItems;
-  },
+  }
 
-  _groupValidationHandler(params) {
+  _groupValidationHandler(params): void {
     const items = this._getOrderedItems(params.validators, map(params.brokenRules, (rule) => ({
       text: rule.message,
       validator: rule.validator,
@@ -87,6 +107,7 @@ const ValidationSummary = CollectionWidget.inherit({
         const disposingHandler = function () {
           validator.off('validated', handler);
           validator._validationSummary = null;
+          // @ts-expect-error ts-error
           handler = null;
         };
         validator.on('validated', handler);
@@ -96,18 +117,21 @@ const ValidationSummary = CollectionWidget.inherit({
     });
 
     this.option('items', items);
-  },
+  }
 
-  _itemValidationHandler({ isValid, validator, brokenRules }) {
-    let items = this.option('items');
+  _itemValidationHandler({ isValid, validator, brokenRules }): void {
+    let { items } = this.option();
     let itemsChanged = false;
 
     let itemIndex = 0;
+    // @ts-expect-error ts-error
     while (itemIndex < items.length) {
+      // @ts-expect-error ts-error
       const item = items[itemIndex];
       if (item.validator === validator) {
         const foundRule = grep(brokenRules || [], (rule) => rule.index === item.index)[0];
         if (isValid || !foundRule) {
+          // @ts-expect-error ts-error
           items.splice(itemIndex, 1);
           itemsChanged = true;
           continue;
@@ -122,6 +146,7 @@ const ValidationSummary = CollectionWidget.inherit({
     each(brokenRules, (_, rule) => {
       const foundItem = grep(items, (item) => item.validator === validator && item.index === rule.index)[0];
       if (!foundItem) {
+        // @ts-expect-error ts-error
         items.push({
           text: rule.message,
           validator,
@@ -135,46 +160,46 @@ const ValidationSummary = CollectionWidget.inherit({
       items = this._getOrderedItems(this.validators, items);
       this.option('items', items);
     }
-  },
+  }
 
-  _initMarkup() {
+  _initMarkup(): void {
     this.$element().addClass(VALIDATION_SUMMARY_CLASS);
-    this.callBase();
-  },
+    super._initMarkup();
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<ValidationSummaryProperties>): void {
     switch (args.name) {
       case 'validationGroup':
         this._initGroupRegistration();
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
-  _itemClass() {
+  _itemClass(): string {
     return ITEM_CLASS;
-  },
+  }
 
-  _itemDataKey() {
+  _itemDataKey(): string {
     return ITEM_DATA_KEY;
-  },
+  }
 
-  _postprocessRenderItem(params) {
+  _postprocessRenderItem(params): void {
     eventsEngine.on(params.itemElement, 'click', () => {
-      params.itemData.validator && params.itemData.validator.focus && params.itemData.validator.focus();
+      params.itemData.validator?.focus?.();
     });
-  },
+  }
 
-  _dispose() {
-    this.callBase();
+  _dispose(): void {
+    super._dispose();
     this._unsubscribeGroup();
-  },
+  }
 
-  refreshValidationGroup() {
+  refreshValidationGroup(): void {
     this._initGroupRegistration();
-  },
-});
+  }
+}
 
 registerComponent('dxValidationSummary', ValidationSummary);
 
