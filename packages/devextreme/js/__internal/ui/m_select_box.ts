@@ -238,8 +238,8 @@ class SelectBox<
 
   _createPopup(): void {
     super._createPopup();
-    this._popup.$element().addClass(SELECTBOX_POPUP_CLASS);
-    this._popup.$overlayContent().attr('tabindex', -1);
+    this._popup?.$element().addClass(SELECTBOX_POPUP_CLASS);
+    this._popup?.$overlayContent().attr('tabindex', -1);
   }
 
   _popupWrapperClass(): string {
@@ -416,7 +416,7 @@ class SelectBox<
       selectedItem: this.option('selectedItem'),
       onFocusedItemChanged: this._listFocusedItemChangeHandler.bind(this),
       _onItemsRendered: (): void => {
-        this._popup.repaint();
+        this._popup!.repaint();
         if (this.option('opened')) {
           this._scrollToSelectedItem();
         }

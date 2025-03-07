@@ -638,7 +638,7 @@ class DropDownEditor<
     // @ts-expect-error ts-error
     this._popup = this._createComponent(this._$popup, Popup, popupConfig);
 
-    this._popup!.on({
+    this._popup.on({
       showing: this._popupShowingHandler.bind(this),
       shown: this._popupShownHandler.bind(this),
       hiding: this._popupHidingHandler.bind(this),
