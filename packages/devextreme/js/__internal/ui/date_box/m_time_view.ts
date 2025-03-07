@@ -1,12 +1,15 @@
 import dateLocalization from '@js/common/core/localization/date';
 import registerComponent from '@js/core/component_registrator';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
-import Box from '@js/ui/box';
-import Editor from '@js/ui/editor/editor';
-import NumberBox from '@js/ui/number_box';
-import SelectBox from '@js/ui/select_box';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { EditorProperties } from '@ts/ui/editor/editor';
+import Editor from '@ts/ui/editor/editor';
+import Box from '@ts/ui/m_box';
+import SelectBox from '@ts/ui/m_select_box';
+import NumberBox from '@ts/ui/number_box/m_number_box';
 
+import type { NumberBoxMaskProperties } from '../number_box/m_number_box.mask';
 import dateUtils from './m_date_utils';
 
 const TIMEVIEW_CLASS = 'dx-timeview';
@@ -28,36 +31,52 @@ const cssRotate = function ($arrow, angle, offset) {
   $arrow.css('transform', `rotate(${angle}deg)` + ` translate(0,${offset}px)`);
 };
 
-const TimeView = (Editor as any).inherit({
+export interface TimeViewProperties extends EditorProperties {
+  use24HourFormat?: boolean;
+  _showClock?: boolean;
+  _arrowOffset?: number;
+}
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+class TimeView extends Editor<TimeViewProperties> {
+  _format12!: SelectBox;
+
+  _minuteBox!: NumberBox;
+
+  _hourBox!: NumberBox;
+
+  _$minuteArrow?: dxElementWrapper;
+
+  _$hourArrow?: dxElementWrapper;
+
+  _getDefaultOptions(): TimeViewProperties {
+    return {
+      ...super._getDefaultOptions(),
       value: new Date(Date.now()),
       use24HourFormat: true,
       _showClock: true,
       _arrowOffset: 5,
-      stylingMode: undefined,
-    });
-  },
+    };
+  }
 
   _getValue() {
-    return this.option('value') || new Date();
-  },
+    const { value } = this.option();
+    return value || new Date();
+  }
 
-  _init() {
-    this.callBase();
+  _init(): void {
+    super._init();
 
     this.$element().addClass(TIMEVIEW_CLASS);
-  },
+  }
 
-  _render() {
-    this.callBase();
+  _render(): void {
+    super._render();
 
     this._renderBox();
     this._updateTime();
-  },
+  }
 
-  _renderBox() {
+  _renderBox(): void {
     const $box = $('<div>').appendTo(this.$element());
     const items = [];
 
@@ -84,9 +103,9 @@ const TimeView = (Editor as any).inherit({
       direction: 'col',
       items,
     });
-  },
+  }
 
-  _renderClock(_, __, container) {
+  _renderClock(_, __, container): void {
     this._$hourArrow = $('<div>').addClass(TIMEVIEW_HOURARROW_CLASS);
     this._$minuteArrow = $('<div>').addClass(TIMEVIEW_MINUTEARROW_CLASS);
 
@@ -96,34 +115,34 @@ const TimeView = (Editor as any).inherit({
       .append(this._$minuteArrow);
 
     this.setAria('role', 'presentation', $container);
-  },
+  }
 
-  _updateClock() {
+  _updateClock(): void {
     const time = this._getValue();
     const hourArrowAngle = time.getHours() / 12 * 360 + time.getMinutes() / 60 * 30;
     const minuteArrowAngle = time.getMinutes() / 60 * 360;
 
     rotateArrow(this._$hourArrow, hourArrowAngle, this.option('_arrowOffset'));
     rotateArrow(this._$minuteArrow, minuteArrowAngle, this.option('_arrowOffset'));
-  },
+  }
 
-  _getBoxItems(is12HourFormat) {
+  _getBoxItems(is12HourFormat: boolean) {
     const items = [{
       ratio: 0,
       shrink: 0,
       baseSize: 'auto',
-      template: () => this._hourBox.$element(),
+      template: (): dxElementWrapper => this._hourBox.$element(),
     }, {
       ratio: 0,
       shrink: 0,
       baseSize: 'auto',
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       template: $('<div>').addClass(TIMEVIEW_TIME_SEPARATOR_CLASS).text(dateLocalization.getTimeSeparator()),
     }, {
       ratio: 0,
       shrink: 0,
       baseSize: 'auto',
-      template: () => this._minuteBox.$element(),
+      template: (): dxElementWrapper => this._minuteBox.$element(),
     }];
 
     if (is12HourFormat) {
@@ -136,9 +155,9 @@ const TimeView = (Editor as any).inherit({
     }
 
     return items;
-  },
+  }
 
-  _renderField() {
+  _renderField(): dxElementWrapper {
     const is12HourFormat = !this.option('use24HourFormat');
 
     this._createHourBox(is12HourFormat);
@@ -148,29 +167,39 @@ const TimeView = (Editor as any).inherit({
       this._createFormat12Box();
     }
 
-    return this._createComponent($('<div>').addClass(TIMEVIEW_FIELD_CLASS), Box, {
-      direction: 'row',
-      align: 'center',
-      crossAlign: 'center',
-      items: this._getBoxItems(is12HourFormat),
-    }).$element();
-  },
+    return this._createComponent(
+      $('<div>').addClass(TIMEVIEW_FIELD_CLASS),
+      Box,
+      {
+        direction: 'row',
+        align: 'center',
+        crossAlign: 'center',
+        items: this._getBoxItems(is12HourFormat),
+      },
+    ).$element();
+  }
 
-  _createHourBox(is12HourFormat) {
-    const editor = this._hourBox = this._createComponent($('<div>'), NumberBox, extend({
-      min: -1,
-      max: is12HourFormat ? 13 : 24,
-      value: this._getValue().getHours(),
-      onValueChanged: this._onHourBoxValueChanged.bind(this),
-      onKeyboardHandled: (opts) => this._keyboardHandler(opts),
-    }, this._getNumberBoxConfig()));
+  _createHourBox(is12HourFormat: boolean): void {
+    this._hourBox = this._createComponent(
+      $('<div>'),
+      NumberBox,
+      {
+        min: -1,
+        max: is12HourFormat ? 13 : 24,
+        value: this._getValue().getHours(),
+        onValueChanged: this._onHourBoxValueChanged.bind(this),
+        onKeyboardHandled: (opts) => this._keyboardHandler(opts),
+        ...this._getNumberBoxConfig(),
+      },
+    );
 
-    editor.setAria('label', 'hours');
-  },
+    this._hourBox.setAria('label', 'hours');
+  }
 
-  _isPM() {
+  _isPM(): boolean {
+    // @ts-expect-error ts-error
     return !this.option('use24HourFormat') && this._format12.option('value') === 1;
-  },
+  }
 
   _onHourBoxValueChanged({ value, component }) {
     const currentValue = this._getValue();
@@ -186,58 +215,67 @@ const TimeView = (Editor as any).inherit({
     newValue.setHours(newHours);
     dateUtils.normalizeTime(newValue);
     this.option('value', newValue);
-  },
+  }
 
-  _convertMaxHourToMin(hours) {
+  _convertMaxHourToMin(hours): number {
     const maxHoursValue = this.option('use24HourFormat') ? 24 : 12;
     return (maxHoursValue + hours) % maxHoursValue;
-  },
+  }
 
-  _createMinuteBox() {
-    const editor = this._minuteBox = this._createComponent($('<div>'), NumberBox, extend({
-      min: -1,
-      max: 60,
-      value: this._getValue().getMinutes(),
-      onKeyboardHandled: (opts) => this._keyboardHandler(opts),
-      onValueChanged: ({ value, component }) => {
-        const newMinutes = (60 + value) % 60;
-        component.option('value', newMinutes);
+  _createMinuteBox(): void {
+    this._minuteBox = this._createComponent(
+      $('<div>'),
+      NumberBox,
+      {
+        min: -1,
+        max: 60,
+        value: this._getValue().getMinutes(),
+        onKeyboardHandled: (opts) => this._keyboardHandler(opts),
+        onValueChanged: ({ value, component }) => {
+          const newMinutes = (60 + value) % 60;
+          component.option('value', newMinutes);
 
-        const time = new Date(this._getValue());
-        time.setMinutes(newMinutes);
-        dateUtils.normalizeTime(time);
-        this.option('value', time);
+          const time = new Date(this._getValue());
+          time.setMinutes(newMinutes);
+          dateUtils.normalizeTime(time);
+          this.option('value', time);
+        },
+        ...this._getNumberBoxConfig(),
       },
-    }, this._getNumberBoxConfig()));
+    );
 
-    editor.setAria('label', 'minutes');
-  },
+    this._minuteBox.setAria('label', 'minutes');
+  }
 
-  _createFormat12Box() {
-    // @ts-expect-error
+  _createFormat12Box(): void {
+    // @ts-expect-error ts-error
     const periodNames = dateLocalization.getPeriodNames();
-    const editor = this._format12 = this._createComponent($('<div>').addClass(TIMEVIEW_FORMAT12_CLASS), SelectBox, {
-      items: [
-        { value: TIMEVIEW_FORMAT12_AM, text: periodNames[0] },
-        { value: TIMEVIEW_FORMAT12_PM, text: periodNames[1] },
-      ],
-      valueExpr: 'value',
-      displayExpr: 'text',
-      onKeyboardHandled: (opts) => this._keyboardHandler(opts),
-      onValueChanged: ({ value }) => {
-        const hours = this._getValue().getHours();
-        const time = new Date(this._getValue());
-        const newHours = (hours + value * 12) % 24;
+    this._format12 = this._createComponent(
+      $('<div>').addClass(TIMEVIEW_FORMAT12_CLASS),
+      SelectBox,
+      {
+        items: [
+          { value: TIMEVIEW_FORMAT12_AM, text: periodNames[0] },
+          { value: TIMEVIEW_FORMAT12_PM, text: periodNames[1] },
+        ],
+        valueExpr: 'value',
+        displayExpr: 'text',
+        onKeyboardHandled: (opts) => this._keyboardHandler(opts),
+        onValueChanged: ({ value }) => {
+          const hours = this._getValue().getHours();
+          const time = new Date(this._getValue());
+          const newHours = (hours + value * 12) % 24;
 
-        time.setHours(newHours);
-        this.option('value', time);
+          time.setHours(newHours);
+          this.option('value', time);
+        },
+        value: this._getValue().getHours() >= 12 ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM,
+        stylingMode: this.option('stylingMode'),
       },
-      value: this._getValue().getHours() >= 12 ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM,
-      stylingMode: this.option('stylingMode'),
-    });
+    );
 
-    editor.setAria('label', 'type');
-  },
+    this._format12.setAria('label', 'type');
+  }
 
   _refreshFormat12() {
     if (this.option('use24HourFormat')) return;
@@ -248,7 +286,7 @@ const TimeView = (Editor as any).inherit({
     const newValue = isPM ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM;
 
     this._silentEditorValueUpdate(this._format12, newValue);
-  },
+  }
 
   _silentEditorValueUpdate(editor, value) {
     if (editor) {
@@ -256,50 +294,53 @@ const TimeView = (Editor as any).inherit({
       editor.option('value', value);
       editor._resumeValueChangeAction();
     }
-  },
+  }
 
-  _getNumberBoxConfig() {
+  _getNumberBoxConfig(): NumberBoxMaskProperties {
+    const { stylingMode } = this.option();
+
     return {
       showSpinButtons: true,
-      displayValueFormatter(value) {
+      // @ts-expect-error ts-error
+      displayValueFormatter(value): string {
         return (value < 10 ? '0' : '') + value;
       },
-      stylingMode: this.option('stylingMode'),
+      stylingMode,
     };
-  },
+  }
 
-  _normalizeHours(hours) {
+  _normalizeHours(hours: number): number {
     return this.option('use24HourFormat') ? hours : hours % 12 || 12;
-  },
+  }
 
-  _updateField() {
+  _updateField(): void {
     const hours = this._normalizeHours(this._getValue().getHours());
 
     this._silentEditorValueUpdate(this._hourBox, hours);
     this._silentEditorValueUpdate(this._minuteBox, this._getValue().getMinutes());
 
     this._refreshFormat12();
-  },
+  }
 
-  _updateTime() {
+  _updateTime(): void {
     if (this.option('_showClock')) {
       this._updateClock();
     }
 
     this._updateField();
-  },
+  }
 
-  _visibilityChanged(visible) {
+  _visibilityChanged(visible: boolean): void {
     if (visible) {
       this._updateTime();
     }
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<TimeViewProperties>): void {
     switch (args.name) {
       case 'value':
         this._updateTime();
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       case '_arrowOffset':
         break;
@@ -309,10 +350,10 @@ const TimeView = (Editor as any).inherit({
         this._invalidate();
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
-});
+  }
+}
 
 registerComponent('dxTimeView', TimeView);
 
