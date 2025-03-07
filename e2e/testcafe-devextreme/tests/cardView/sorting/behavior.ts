@@ -1,7 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import { changeTheme } from '../../../helpers/changeTheme';
-import { Themes } from '../../../helpers/themes';
 import { createWidget } from '../../../helpers/createWidget';
 import CardView from 'devextreme-testcafe-models/cardView';
 
