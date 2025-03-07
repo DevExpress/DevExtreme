@@ -29,9 +29,11 @@ $arrow-down: "\f016";
   $height,
   $item-padding,
 ) {
-  height: $height;
-
   .dx-toolbar {
+    &:not(.dx-toolbar-multiline) {
+      height: $height;
+    }
+
     .dx-toolbar-item-content,
     .dx-toolbar-menu-container {
       padding: $item-padding;
