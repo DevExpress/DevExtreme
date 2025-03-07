@@ -238,9 +238,7 @@ class SelectBox<
 
   _createPopup(): void {
     super._createPopup();
-    // @ts-expect-error ts-error
     this._popup.$element().addClass(SELECTBOX_POPUP_CLASS);
-    // @ts-expect-error ts-error
     this._popup.$overlayContent().attr('tabindex', -1);
   }
 
@@ -418,7 +416,7 @@ class SelectBox<
       selectedItem: this.option('selectedItem'),
       onFocusedItemChanged: this._listFocusedItemChangeHandler.bind(this),
       _onItemsRendered: (): void => {
-        this._popup!.repaint();
+        this._popup.repaint();
         if (this.option('opened')) {
           this._scrollToSelectedItem();
         }
@@ -669,7 +667,6 @@ class SelectBox<
             && !isOverlayTarget;
 
     if (shouldCancelSearch) {
-      // @ts-expect-error ts-error
       const isPopupVisible = this._popup?._hideAnimationProcessing;
       this._clearSearchTimer();
       if (isPopupVisible) {

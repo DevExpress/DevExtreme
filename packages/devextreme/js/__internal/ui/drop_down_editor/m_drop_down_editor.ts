@@ -27,7 +27,6 @@ import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { Options as Properties } from '@js/ui/drop_down_editor/ui.drop_down_editor';
 import type { Properties as PopupProperties } from '@js/ui/popup';
-import type dxPopup from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import { focused } from '@js/ui/widget/selectors';
 import errors from '@js/ui/widget/ui.errors';
@@ -71,7 +70,7 @@ class DropDownEditor<
 
   _$popup?: dxElementWrapper;
 
-  _popup?: dxPopup;
+  _popup?: Popup;
 
   _$templateWrapper?: dxElementWrapper;
 
@@ -650,7 +649,7 @@ class DropDownEditor<
     this._attachPopupKeyHandler();
 
     this._contentReadyHandler();
-    // @ts-expect-error ts-error
+
     this._setPopupContentId(this._popup.$content());
 
     this._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
@@ -777,7 +776,7 @@ class DropDownEditor<
     if (!this._popup) {
       return;
     }
-    // @ts-expect-error ts-error
+
     const $popupOverlayContent = this._popup.$overlayContent();
     const isOverlayFlipped = e.position?.v?.flip;
     const shouldIndentForLabel = labelMode !== 'hidden' && labelMode !== 'outside' && stylingMode === 'outlined';
@@ -827,7 +826,7 @@ class DropDownEditor<
 
     if (this._popup?.option('visible')) {
       const { top: myTop } = animationPosition.setup(this.$element());
-      // @ts-expect-error ts-error
+
       const { top: popupTop } = animationPosition.setup(this._popup.$content());
       // @ts-expect-error ts-error
       positionSide = (myTop + this.option('popupPosition').offset.v) > popupTop ? 'bottom' : 'top';

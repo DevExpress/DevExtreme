@@ -1,46 +1,68 @@
+import type { ValidationRule } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
-import DOMComponent from '@js/core/dom_component';
 import { data as elementData } from '@js/core/element_data';
 import Guid from '@js/core/guid';
+import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { map } from '@js/core/utils/iterator';
+import type { Properties, ValidationResult } from '@js/ui/validator';
 import errors from '@js/ui/widget/ui.errors';
+import DOMComponent from '@ts/core/widget/dom_component';
 
 import ValidationEngine from './m_validation_engine';
+import type ValidationGroup from './m_validation_group';
 import DefaultAdapter from './validation/m_default_adapter';
 
 const VALIDATOR_CLASS = 'dx-validator';
 const VALIDATION_STATUS_VALID = 'valid';
 const VALIDATION_STATUS_INVALID = 'invalid';
 const VALIDATION_STATUS_PENDING = 'pending';
-// @ts-expect-error
-const Validator = DOMComponent.inherit({
-  _initOptions(options) {
-    this.callBase.apply(this, arguments);
+
+class Validator extends DOMComponent<Validator, Properties> {
+  _groupWasInit?: boolean;
+
+  focused?: Callback;
+
+  _validationInfo!: {
+    result: ValidationResult;
+    deferred: DeferredObj<ValidationResult> | null;
+    skipValidation: boolean;
+  };
+
+  _validationRules?: ValidationRule[];
+
+  _validationGroup?: ValidationGroup;
+
+  _initOptions(options): void {
+    // @ts-expect-error ts-error
+    super._initOptions.apply(this, arguments);
     this.option(ValidationEngine.initValidationOptions(options));
-  },
+  }
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+  _getDefaultOptions(): Properties {
+    return {
+      ...super._getDefaultOptions(),
       validationRules: [],
-    });
-  },
+    };
+  }
 
-  _init() {
-    this.callBase();
+  _init(): void {
+    super._init();
     this._initGroupRegistration();
     this.focused = Callbacks();
     this._initAdapter();
     this._validationInfo = {
+      // @ts-expect-error ts-error
       result: null,
       deferred: null,
       skipValidation: false,
     };
-  },
+  }
 
-  _initGroupRegistration() {
+  _initGroupRegistration(): void {
     const group = this._findGroup();
     if (!this._groupWasInit) {
       this.on('disposing', (args) => {
@@ -53,28 +75,28 @@ const Validator = DOMComponent.inherit({
       this._validationGroup = group;
       ValidationEngine.registerValidatorInGroup(group, this);
     }
-  },
+  }
 
-  _setOptionsByReference() {
-    this.callBase();
+  _setOptionsByReference(): void {
+    super._setOptionsByReference();
     extend(this._optionsByReference, {
       validationGroup: true,
     });
-  },
+  }
 
   _getEditor() {
     const element = this.$element()[0];
     return elementData(element, 'dx-validation-target');
-  },
+  }
 
-  _initAdapter() {
+  _initAdapter(): void {
     const dxStandardEditor = this._getEditor();
-    let adapter = this.option('adapter');
+    let { adapter } = this.option();
     if (!adapter) {
       if (dxStandardEditor) {
         adapter = new DefaultAdapter(dxStandardEditor, this);
-        adapter.validationRequestsCallbacks.push((args) => {
-          if (this._validationInfo.skipValidation) {
+        adapter?.validationRequestsCallbacks?.push((args) => {
+          if (this._validationInfo?.skipValidation) {
             return;
           }
           this.validate(args);
@@ -90,28 +112,31 @@ const Validator = DOMComponent.inherit({
         this.validate(args);
       });
     }
-  },
+  }
 
-  _toggleRTLDirection(isRtl) {
-    const rtlEnabled = this.option('adapter')?.editor?.option('rtlEnabled') ?? isRtl;
+  _toggleRTLDirection(isRtl: boolean): void {
+    const { adapter } = this.option();
+    // @ts-expect-error ts-error
+    const rtlEnabled = adapter?.editor?.option('rtlEnabled') ?? isRtl;
 
-    this.callBase(rtlEnabled);
-  },
+    super._toggleRTLDirection(rtlEnabled);
+  }
 
-  _initMarkup() {
+  _initMarkup(): void {
     this.$element().addClass(VALIDATOR_CLASS);
-    this.callBase();
-  },
+    super._initMarkup();
+  }
 
-  _render() {
-    this.callBase();
+  _render(): void {
+    super._render();
     this._toggleAccessibilityAttributes();
-  },
+  }
 
-  _toggleAccessibilityAttributes() {
+  _toggleAccessibilityAttributes(): void {
     const dxStandardEditor = this._getEditor();
     if (dxStandardEditor) {
       const rules = this.option('validationRules') || [];
+      // @ts-expect-error ts-error
       const isRequired = rules.some(({ type }) => type === 'required') || null;
 
       if (dxStandardEditor.isInitialized()) {
@@ -121,15 +146,15 @@ const Validator = DOMComponent.inherit({
         dxStandardEditor.setAria('required', isRequired);
       });
     }
-  },
+  }
 
-  _visibilityChanged(visible) {
+  _visibilityChanged(visible: boolean): void {
     if (visible) {
       this._initGroupRegistration();
     }
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args): void {
     switch (args.name) {
       case 'validationGroup':
         this._initGroupRegistration();
@@ -147,9 +172,9 @@ const Validator = DOMComponent.inherit({
         this.option(ValidationEngine.synchronizeValidationOptions(args, this.option()));
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
   _getValidationRules() {
     if (!this._validationRules) {
@@ -159,25 +184,28 @@ const Validator = DOMComponent.inherit({
       }));
     }
     return this._validationRules;
-  },
+  }
 
-  _findGroup() {
+  _findGroup(): ValidationGroup {
     const $element = this.$element();
 
-    return this.option('validationGroup')
-            || ValidationEngine.findGroup($element, this._modelByElement($element));
-  },
+    const { validationGroup } = this.option();
 
-  _resetValidationRules() {
+    return validationGroup
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      || ValidationEngine.findGroup($element, this._modelByElement($element));
+  }
+
+  _resetValidationRules(): void {
     delete this._validationRules;
-  },
+  }
 
-  validate(args) {
-    const adapter = this.option('adapter');
-    const name = this.option('name');
-    const bypass = adapter.bypass && adapter.bypass();
-    const value = args && args.value !== undefined ? args.value : adapter.getValue();
-    const currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError();
+  validate(args?) {
+    const { adapter, name } = this.option();
+    const bypass = adapter?.bypass?.();
+    const value = args && args.value !== undefined ? args.value : adapter?.getValue?.();
+    // @ts-expect-error ts-error
+    const currentError = adapter?.getCurrentValidationError?.();
     const rules = this._getValidationRules();
     const currentResult = this._validationInfo && this._validationInfo.result;
     if (currentResult && currentResult.status === VALIDATION_STATUS_PENDING && currentResult.value === value) {
@@ -196,16 +224,17 @@ const Validator = DOMComponent.inherit({
     }
     result.id = new Guid().toString();
     this._applyValidationResult(result, adapter);
-    result.complete && result.complete.then((res) => {
+    result.complete?.then((res) => {
+      // @ts-expect-error ts-error
       if (res.id === this._validationInfo.result.id) {
         this._applyValidationResult(res, adapter);
       }
     });
     return extend({}, this._validationInfo.result);
-  },
+  }
 
-  reset() {
-    const adapter = this.option('adapter');
+  reset(): void {
+    const { adapter } = this.option();
     const result = {
       id: null,
       isValid: true,
@@ -217,13 +246,15 @@ const Validator = DOMComponent.inherit({
     };
 
     this._validationInfo.skipValidation = true;
+    // @ts-expect-error ts-error
     adapter.reset();
     this._validationInfo.skipValidation = false;
     this._resetValidationRules();
     this._applyValidationResult(result, adapter);
-  },
+  }
 
-  _updateValidationResult(result) {
+  _updateValidationResult(result): void {
+    // @ts-expect-error ts-error
     if (!this._validationInfo.result || this._validationInfo.result.id !== result.id) {
       const complete = this._validationInfo.deferred && this._validationInfo.result.complete;
       this._validationInfo.result = extend({}, result, { complete });
@@ -235,9 +266,9 @@ const Validator = DOMComponent.inherit({
         }
       }
     }
-  },
+  }
 
-  _applyValidationResult(result, adapter) {
+  _applyValidationResult(result, adapter): void {
     const validatedAction = this._createActionByOption('onValidated', {
       excludeValidators: ['readOnly'],
     });
@@ -255,6 +286,7 @@ const Validator = DOMComponent.inherit({
       this._eventsStrategy.fireEvent('validating', [this._validationInfo.result]);
       return;
     }
+    // @ts-expect-error ts-error
     if (this._validationInfo.result.status !== VALIDATION_STATUS_PENDING) {
       validatedAction(result);
       if (this._validationInfo.deferred) {
@@ -262,15 +294,18 @@ const Validator = DOMComponent.inherit({
         this._validationInfo.deferred = null;
       }
     }
-  },
-  focus() {
-    const adapter = this.option('adapter');
+  }
+
+  focus(): void {
+    const { adapter } = this.option();
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions, @typescript-eslint/prefer-optional-chain
     adapter && adapter.focus && adapter.focus();
-  },
-  _useTemplates() {
+  }
+
+  _useTemplates(): boolean {
     return false;
-  },
-});
+  }
+}
 
 registerComponent('dxValidator', Validator);
 
