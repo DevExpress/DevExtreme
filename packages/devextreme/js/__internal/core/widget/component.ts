@@ -207,7 +207,7 @@ export class Component<
 
   _logDeprecatedOptionWarning(
     option: string,
-    info: { since: string; message: string; alias: string },
+    info: { since: string; message: string; alias?: string },
   ): void {
     const message = info.message || `Use the '${info.alias}' option instead`;
     errors.log('W0001', this.NAME, option, info.since, message);
@@ -490,7 +490,7 @@ export class Component<
 
   // eslint-disable-next-line max-len
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-  _getOptionValue(name: string, context: any): any {
+  _getOptionValue(name: string, context?: any): any {
     const value = this.option(name);
 
     if (isFunction(value)) {

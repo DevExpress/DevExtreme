@@ -60,9 +60,8 @@ class Widget<
 
   private _isReady?: boolean;
 
-  // eslint-disable-next-line max-len
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
-  static getOptionsFromContainer({ name, fullName, value }) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  static getOptionsFromContainer({ name, fullName, value }): Record<string, unknown> {
     let options = {};
 
     if (name === fullName) {
@@ -205,7 +204,7 @@ class Widget<
       .done(() => (!this._disposed ? this._fireContentReadyAction() : void 0));
   }
 
-  _renderContentImpl(): void {}
+  _renderContentImpl(): Promise<void> | void {}
 
   _fireContentReadyAction(): Promise<void> | DeferredObj<void> | void {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -307,7 +306,6 @@ class Widget<
     return this._focusTarget();
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _focusInHandler(event: DxEvent): void {
     if (!event.isDefaultPrevented()) {
       this._createActionByOption('onFocusIn', {
@@ -317,7 +315,6 @@ class Widget<
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _focusOutHandler(event: DxEvent): void {
     if (!event.isDefaultPrevented()) {
       this._createActionByOption('onFocusOut', {

@@ -83,7 +83,7 @@ export const custom = function (options) {
     .attr('id', messageId);
 
   const popupToolbarItems = [];
-
+  // @ts-expect-error ts-error
   const popupInstance = new Popup($element, extend({
     title: options.title ?? '',
     showTitle: ensureDefined(options.showTitle, true),

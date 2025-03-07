@@ -2,12 +2,17 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
 import { isString } from '@js/core/utils/type';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { isMaterialBased } from '@js/ui/themes';
+import type { Properties } from '@js/ui/toast';
+import type { OptionChanged } from '@ts/core/widget/types';
 
 const ready = readyCallbacks.add;
 
@@ -46,29 +51,33 @@ const DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
 const DEFAULT_MARGIN = 20;
 
 ready(() => {
-  // @ts-expect-error
+  // @ts-expect-error ts-error
   eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, (e) => {
     for (let i = TOAST_STACK.length - 1; i >= 0; i--) {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       if (!TOAST_STACK[i]._proxiedDocumentDownHandler(e)) {
         return;
       }
     }
   });
 });
-// @ts-expect-error
-const Toast = Overlay.inherit({
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+interface ToastProperties extends Properties {}
+
+class Toast<
+TProperties extends ToastProperties = ToastProperties,
+> extends Overlay<TProperties> {
+  _message?: dxElementWrapper;
+
+  _hideTimeout?: ReturnType<typeof setTimeout>;
+
+  _getDefaultOptions(): TProperties {
+    return {
+      ...super._getDefaultOptions(),
       message: '',
-
       type: 'info',
-
       displayTime: 2000,
-
       position: 'bottom center',
-
       animation: {
         show: {
           type: 'fade',
@@ -89,10 +98,10 @@ const Toast = Overlay.inherit({
       preventScrollEvents: false,
       closeOnSwipe: true,
       closeOnClick: false,
-    });
-  },
+    };
+  }
 
-  _defaultOptionsRules() {
+  _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
     const tabletAndMobileAnimation = {
       show: {
         type: 'fade',
@@ -109,15 +118,15 @@ const Toast = Overlay.inherit({
     };
 
     const tabletAndMobileCommonOptions = {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       displayTime: isMaterialBased() ? 4000 : 2000,
       hideOnOutsideClick: true,
       animation: tabletAndMobileAnimation,
     };
-
-    return this.callBase().concat([
+    // @ts-expect-error ts-error
+    return super._defaultOptionsRules().concat([
       {
-        device(device) {
+        device(device): boolean {
           return device.deviceType === 'phone';
         },
         options: {
@@ -126,7 +135,7 @@ const Toast = Overlay.inherit({
         },
       },
       {
-        device(device) {
+        device(device): boolean {
           return device.deviceType === 'tablet';
         },
         options: {
@@ -136,8 +145,8 @@ const Toast = Overlay.inherit({
         },
       },
       {
-        device(device) {
-          // @ts-expect-error
+        device(device): boolean {
+          // @ts-expect-error ts-error
           return isMaterialBased() && device.deviceType === 'desktop';
         },
         options: {
@@ -147,53 +156,61 @@ const Toast = Overlay.inherit({
         },
       },
     ]);
-  },
+  }
 
-  _init() {
-    this.callBase();
+  _init(): void {
+    super._init();
 
     this._posStringToObject();
-  },
+  }
 
+  // @ts-expect-error ts-error
   _renderContentImpl() {
+    const { message, type } = this.option();
+
     this._message = $('<div>')
       .addClass(TOAST_MESSAGE_CLASS)
-      .text(this.option('message'))
+      // @ts-expect-error ts-error
+      .text(message)
       .appendTo(this.$content());
 
     this.setAria('role', 'alert', this._message);
-
-    if (toastTypes.includes(this.option('type').toLowerCase())) {
+    // @ts-expect-error ts-error
+    if (toastTypes.includes(type.toLowerCase())) {
       this.$content().prepend($('<div>').addClass(TOAST_ICON_CLASS));
     }
 
-    this.callBase();
-  },
+    super._renderContentImpl();
+  }
 
-  _render() {
-    this.callBase();
+  _render(): void {
+    super._render();
 
     this.$element().addClass(TOAST_CLASS);
     this.$wrapper().addClass(TOAST_WRAPPER_CLASS);
-    this.$content().addClass(TOAST_CLASS_PREFIX + String(this.option('type')).toLowerCase());
+
+    const { type } = this.option();
+    this.$content().addClass(TOAST_CLASS_PREFIX + String(type).toLowerCase());
     this.$content().addClass(TOAST_CONTENT_CLASS);
 
     this._toggleCloseEvents('Swipe');
     this._toggleCloseEvents('Click');
-  },
+  }
 
-  _toggleCloseEvents(event) {
+  _toggleCloseEvents(event): void {
     const dxEvent = `dx${event.toLowerCase()}`;
 
     eventsEngine.off(this.$content(), dxEvent);
     this.option(`closeOn${event}`) && eventsEngine.on(this.$content(), dxEvent, this.hide.bind(this));
-  },
+  }
 
-  _posStringToObject() {
-    if (!isString(this.option('position'))) return;
+  _posStringToObject(): void {
+    const { position } = this.option();
 
-    const verticalPosition = this.option('position').split(' ')[0];
-    const horizontalPosition = this.option('position').split(' ')[1];
+    if (!isString(position)) return;
+
+    const verticalPosition = position.split(' ')[0];
+    const horizontalPosition = position.split(' ')[1];
 
     this.option('position', extend({ boundaryOffset: DEFAULT_BOUNDARY_OFFSET }, POSITION_ALIASES[verticalPosition]));
 
@@ -202,42 +219,53 @@ const Toast = Overlay.inherit({
       case 'center':
       case 'left':
       case 'right':
+        // @ts-expect-error ts-error
         this.option('position').at += ` ${horizontalPosition}`;
+        // @ts-expect-error ts-error
         this.option('position').my += ` ${horizontalPosition}`;
         break;
     }
-  },
+  }
 
-  _show() {
-    return this.callBase.apply(this, arguments).always(() => {
+  _show(): DeferredObj<unknown> {
+    // @ts-expect-error ts-error
+    return super._show.apply(this, arguments).always(() => {
       clearTimeout(this._hideTimeout);
 
-      this._hideTimeout = setTimeout(this.hide.bind(this), this.option('displayTime'));
+      const { displayTime } = this.option();
+
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      this._hideTimeout = setTimeout(this.hide.bind(this), displayTime);
     });
-  },
+  }
 
-  _overlayStack() {
+  // @ts-expect-error ts-error
+  // eslint-disable-next-line class-methods-use-this
+  _overlayStack(): Toast[] {
     return TOAST_STACK;
-  },
+  }
 
-  _zIndexInitValue() {
-    return this.callBase() + FIRST_Z_INDEX_OFFSET;
-  },
+  _zIndexInitValue(): number {
+    return super._zIndexInitValue() + FIRST_Z_INDEX_OFFSET;
+  }
 
-  _dispose() {
+  _dispose(): void {
     clearTimeout(this._hideTimeout);
-    this.callBase();
-  },
+    super._dispose();
+  }
 
-  _optionChanged(args) {
-    switch (args.name) {
+  _optionChanged(args: OptionChanged<TProperties>): void {
+    const { name, value, previousValue } = args;
+
+    switch (name) {
       case 'type':
-        this.$content().removeClass(TOAST_CLASS_PREFIX + args.previousValue);
-        this.$content().addClass(TOAST_CLASS_PREFIX + String(args.value).toLowerCase());
+        this.$content().removeClass(TOAST_CLASS_PREFIX + previousValue);
+        this.$content().addClass(TOAST_CLASS_PREFIX + String(value).toLowerCase());
         break;
       case 'message':
         if (this._message) {
-          this._message.text(args.value);
+          // @ts-expect-error ts-error
+          this._message.text(value);
         }
         break;
       case 'closeOnSwipe':
@@ -249,10 +277,10 @@ const Toast = Overlay.inherit({
       case 'displayTime':
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
-});
+  }
+}
 
 registerComponent(WIDGET_NAME, Toast);
 
