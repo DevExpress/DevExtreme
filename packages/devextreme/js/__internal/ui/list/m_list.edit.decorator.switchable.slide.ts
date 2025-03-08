@@ -37,6 +37,7 @@ const SLIDE_MENU_ANIMATION_EASING = 'cubic-bezier(0.075, 0.82, 0.165, 1)';
 registerDecorator(
   'menu',
   'slide',
+  // @ts-expect-error
   SwitchableEditDecorator.inherit({
 
     _shouldHandleSwipe: true,
