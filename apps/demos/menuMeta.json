@@ -1633,7 +1633,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "DocUrl": "",
             "Widget": "CardView",
             "DemoType": "Web",
             "Badge": "Roadmap",
