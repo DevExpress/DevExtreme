@@ -6,7 +6,9 @@ import Stepper from 'ui/stepper';
 import 'generic_light.css!';
 
 import {
-    STEP_CLASS
+    STEP_CLASS,
+    STEP_INDICATOR_CLASS,
+    STEP_TITLE_CLASS,
 } from '__internal/ui/stepper/stepper';
 
 QUnit.testStart(() => {
@@ -57,5 +59,50 @@ QUnit.module('Initialization', moduleConfig, () => {
         });
 
         assert.strictEqual(this.getItems().length, 3);
+    });
+});
+
+QUnit.module('Item data', moduleConfig, () => {
+    QUnit.test('Item indicator should contain item 1-based index by default', function(assert) {
+        this.reinit({
+            items: [{}, {}, {}],
+        });
+
+        const steps = this.getItems();
+        const getIndicatorText = (index) => steps.eq(index).find(`.${STEP_INDICATOR_CLASS}`).text();
+
+        assert.strictEqual(getIndicatorText(0), '1');
+        assert.strictEqual(getIndicatorText(1), '2');
+        assert.strictEqual(getIndicatorText(2), '3');
+    });
+
+    QUnit.test('Item text option should overwrite default indicator text', function(assert) {
+        this.reinit({
+            items: [{ text: 'test1' }, { text: 'test2' }, {}],
+        });
+
+        const steps = this.getItems();
+        const getIndicatorText = (index) => steps.eq(index).find(`.${STEP_INDICATOR_CLASS}`).text();
+
+        assert.strictEqual(getIndicatorText(0), 'test1');
+        assert.strictEqual(getIndicatorText(1), 'test2');
+        assert.strictEqual(getIndicatorText(2), '3');
+    });
+
+    QUnit.test('Item should have title that is passed in options', function(assert) {
+        this.reinit({
+            items: [
+                { title: 'Step 1' },
+                { text: 'Step 2', title: 'Step 2' },
+                { icon: 'test', title: 'Step 3' }
+            ],
+        });
+
+        const steps = this.getItems();
+        const getStepTitle = (index) => steps.eq(index).find(`.${STEP_TITLE_CLASS}`).text();
+
+        assert.strictEqual(getStepTitle(0), 'Step 1');
+        assert.strictEqual(getStepTitle(1), 'Step 2');
+        assert.strictEqual(getStepTitle(2), 'Step 3');
     });
 });
