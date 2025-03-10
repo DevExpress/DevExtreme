@@ -1,9 +1,9 @@
 /* tslint:disable:component-selector */
 import {
-    Component,
-    PLATFORM_ID,
-    TransferState,
-    makeStateKey,
+  Component,
+  PLATFORM_ID,
+  TransferState,
+  makeStateKey,
 } from '@angular/core';
 
 import { isPlatformServer } from '@angular/common';
@@ -19,70 +19,69 @@ import { ServerModule, ServerTransferStateModule } from '@angular/platform-serve
 import { BrowserModule } from '@angular/platform-browser';
 
 import {
-    TestBed
+  TestBed,
 } from '@angular/core/testing';
 
-let mockSendRequest = {
-    callBase: function() {
-        let d = (Deferred as any)();
-        d.resolve('test', 'success');
+const mockSendRequest = {
+  callBase() {
+    const d = (Deferred as any)();
+    d.resolve('test', 'success');
 
-        return d.promise();
-    }
+    return d.promise();
+  },
 };
 
 @Component({
-    selector: 'test-container-component',
-    template: ''
+  selector: 'test-container-component',
+  template: '',
 })
 class TestContainerComponent {
 }
 
 describe('Universal', () => {
-    let sendRequest: any;
-    let ajaxInject = ajax.inject;
-    beforeEach(() => {
-        ajax.inject = function(obj) {
-            sendRequest = obj['sendRequest'];
+  let sendRequest: any;
+  const ajaxInject = ajax.inject;
+  beforeEach(() => {
+    ajax.inject = function (obj) {
+      sendRequest = obj.sendRequest;
+    };
+    TestBed.configureTestingModule(
+      {
+        declarations: [TestContainerComponent],
+        imports: [
+          DxServerModule,
+          ServerModule,
+          DxServerTransferStateModule,
+          ServerTransferStateModule,
+          BrowserModule.withServerTransition({ appId: 'appid' })],
+      },
+    );
+  });
 
-        };
-        TestBed.configureTestingModule(
-            {
-                declarations: [TestContainerComponent],
-                imports: [
-                    DxServerModule,
-                    ServerModule,
-                    DxServerTransferStateModule,
-                    ServerTransferStateModule,
-                    BrowserModule.withServerTransition({appId: 'appid'})]
-            });
-    });
+  afterEach(() => {
+    ajax.inject = ajaxInject;
+  });
+  // spec
+  it('should set state and remove data from the state when the request is repeated', () => {
+    const platformId = TestBed.get(PLATFORM_ID);
+    if (isPlatformServer(platformId)) {
+      sendRequest.apply(mockSendRequest, [{ url: 'someurl' }]);
+      const transferState: TransferState = TestBed.get(TransferState);
+      const key = makeStateKey('0urlsomeurl');
 
-    afterEach(function() {
-        ajax.inject = ajaxInject;
-    });
-    // spec
-    it('should set state and remove data from the state when the request is repeated', () => {
-        const platformId = TestBed.get(PLATFORM_ID);
-        if (isPlatformServer(platformId)) {
-            sendRequest.apply(mockSendRequest, [{url: 'someurl'}]);
-            const transferState: TransferState = TestBed.get(TransferState);
-            let key = makeStateKey('0urlsomeurl');
+      expect(transferState.hasKey(key)).toBe(true);
+      expect(transferState.get(key, null as any)).toEqual(Object({ data: 'test', status: 'success' }));
+    }
+  });
 
-            expect(transferState.hasKey(key)).toBe(true);
-            expect(transferState.get(key, null as any)).toEqual(Object({ data: 'test', status: 'success' }));
-        }
-    });
+  it('should generate complex key', () => {
+    const platformId = TestBed.get(PLATFORM_ID);
+    if (isPlatformServer(platformId)) {
+      sendRequest.apply(mockSendRequest, [{ url: 'someurl', data: { filter: { name: 'test' }, select: ['name'] } }]);
+      const key = makeStateKey('0urlsomeurldatafilternametestselect0name');
+      const transferState: TransferState = TestBed.get(TransferState);
 
-    it('should generate complex key', () => {
-        const platformId = TestBed.get(PLATFORM_ID);
-        if (isPlatformServer(platformId)) {
-            sendRequest.apply(mockSendRequest, [{url: 'someurl', data: { filter: { name: 'test'}, select: ['name']}}]);
-            let key = makeStateKey('0urlsomeurldatafilternametestselect0name');
-            const transferState: TransferState = TestBed.get(TransferState);
-
-            expect(transferState.hasKey(key)).toBe(true);
-        }
-    });
-
+      expect(transferState.hasKey(key)).toBe(true);
+    }
+  });
 });

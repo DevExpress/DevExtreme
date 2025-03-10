@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import Color from '@js/color';
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
@@ -8,40 +9,39 @@ import Provider from './m_provider';
 
 let GOOGLE_STATIC_URL = 'https://maps.google.com/maps/api/staticmap?';
 
-const GoogleStaticProvider = Provider.inherit({
-
+class GoogleStaticProvider extends Provider {
   _locationToString(location) {
     const latLng = this._getLatLng(location);
     return latLng ? `${latLng.lat},${latLng.lng}` : location.toString().replace(/ /g, '+');
-  },
+  }
 
-  _renderImpl() {
+  _renderImpl(): Promise<boolean> {
     return this._updateMap();
-  },
+  }
 
-  updateDimensions() {
+  updateDimensions(): Promise<boolean> {
     return this._updateMap();
-  },
+  }
 
-  updateMapType() {
+  updateMapType(): Promise<boolean> {
     return this._updateMap();
-  },
+  }
 
-  updateBounds() {
+  updateBounds(): Promise<void> {
     return Promise.resolve();
-  },
+  }
 
-  updateCenter() {
+  updateCenter(): Promise<boolean> {
     return this._updateMap();
-  },
+  }
 
-  updateZoom() {
+  updateZoom(): Promise<boolean> {
     return this._updateMap();
-  },
+  }
 
-  updateControls() {
+  updateControls(): Promise<void> {
     return Promise.resolve();
-  },
+  }
 
   addMarkers(options) {
     const that = this;
@@ -54,7 +54,7 @@ const GoogleStaticProvider = Provider.inherit({
       });
       return result;
     });
-  },
+  }
 
   removeMarkers(options) {
     const that = this;
@@ -67,11 +67,11 @@ const GoogleStaticProvider = Provider.inherit({
       });
       return result;
     });
-  },
+  }
 
-  adjustViewport() {
+  adjustViewport(): Promise<void> {
     return Promise.resolve();
-  },
+  }
 
   addRoutes(options) {
     const that = this;
@@ -84,7 +84,7 @@ const GoogleStaticProvider = Provider.inherit({
       });
       return result;
     });
-  },
+  }
 
   removeRoutes(options) {
     const that = this;
@@ -97,20 +97,20 @@ const GoogleStaticProvider = Provider.inherit({
       });
       return result;
     });
-  },
+  }
 
-  clean() {
+  clean(): Promise<void> {
     this._$container.css('backgroundImage', 'none');
     eventsEngine.off(this._$container, this._addEventNamespace(clickEventName));
 
     return Promise.resolve();
-  },
+  }
 
-  mapRendered() {
+  mapRendered(): boolean {
     return true;
-  },
+  }
 
-  _updateMap() {
+  _updateMap(): Promise<boolean> {
     const key = this._keyOption('googleStatic');
     const providerConfig = this._option('providerConfig');
     const mapId = providerConfig?.mapId;
@@ -140,7 +140,7 @@ const GoogleStaticProvider = Provider.inherit({
     this._attachClickEvent();
 
     return Promise.resolve(true);
-  },
+  }
 
   _markersSubstring() {
     const that = this;
@@ -158,7 +158,7 @@ const GoogleStaticProvider = Provider.inherit({
     });
 
     return `markers=${markers.join('|')}`;
-  },
+  }
 
   _routeSubstrings() {
     const that = this;
@@ -178,9 +178,9 @@ const GoogleStaticProvider = Provider.inherit({
     });
 
     return routes;
-  },
+  }
 
-  _attachClickEvent() {
+  _attachClickEvent(): void {
     const that = this;
     const eventName = this._addEventNamespace(clickEventName);
 
@@ -188,11 +188,11 @@ const GoogleStaticProvider = Provider.inherit({
     eventsEngine.on(this._$container, eventName, (e) => {
       that._fireClickAction({ event: e });
     });
-  },
-
-});
+  }
+}
 
 /// #DEBUG
+// @ts-expect-error ts-error
 GoogleStaticProvider.remapConstant = function (newValue) {
   GOOGLE_STATIC_URL = newValue;
 };

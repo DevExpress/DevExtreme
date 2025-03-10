@@ -45,24 +45,23 @@ gulp.task('clean.generatedComponents', (done) => {
 
   del.sync([
     `${outputFolderPath}/*/**`,
-    ...skipFromCleaningFiles.flatMap(keepPattern => {
+    ...skipFromCleaningFiles.flatMap((keepPattern) => {
       const pathParts = keepPattern.match(/[\*\/]$/) ? keepPattern.split('/') : [keepPattern];
 
       const patternsToKeep = pathParts.reduce((acc, pathPart) => {
-
-        if(pathPart) {
-          acc.path += '/' + pathPart;
+        if (pathPart) {
+          acc.path += `/${pathPart}`;
           acc.patterns.push(`!${acc.path}`);
         }
 
         return acc;
       }, {
         patterns: [],
-        path: outputFolderPath.replace(/\/$/,'')
+        path: outputFolderPath.replace(/\/$/, ''),
       }).patterns;
 
       return patternsToKeep;
-    })
+    }),
   ]);
 
   done();
@@ -262,11 +261,9 @@ gulp.task('generate-component-names', (done) => {
   done();
 });
 
-gulp.task('copy.dist.dx-angular', () => {
-  return gulp
-    .src(`${buildConfig.npm.distPath}/**/*`)
-    .pipe(gulp.dest(path.join(buildConfig.components.testsPath, 'node_modules/devextreme-angular')));
-});
+gulp.task('copy.dist.dx-angular', () => gulp
+  .src(`${buildConfig.npm.distPath}/**/*`)
+  .pipe(gulp.dest(path.join(buildConfig.components.testsPath, 'node_modules/devextreme-angular'))));
 
 gulp.task('build.tests', gulp.series('clean.tests', 'generate-component-names', 'copy.dist.dx-angular', () => {
   const config = buildConfig.components;
@@ -289,7 +286,7 @@ const getKarmaConfig = function (testsPath) {
   return karmaConfig.parseConfig(path.resolve('./karma.conf.js'), {
     files: [{ pattern: testsPath, watched: false }],
     preprocessors,
-  }, {throwErrors: true});
+  }, { throwErrors: true });
 };
 
 gulp.task('test.components.client', gulp.series('build.tests', (done) => {

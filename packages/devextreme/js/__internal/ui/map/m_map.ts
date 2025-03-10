@@ -3,17 +3,19 @@ import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { wrapToArray } from '@js/core/utils/array';
-import { noop } from '@js/core/utils/common';
 // @ts-expect-error
 import { fromPromise } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { titleize } from '@js/core/utils/inflector';
 import { each } from '@js/core/utils/iterator';
 import { isNumeric } from '@js/core/utils/type';
+import type { Properties } from '@js/ui/map';
 import errors from '@js/ui/widget/ui.errors';
-import Widget from '@js/ui/widget/ui.widget';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
 
 import azure from './m_provider.dynamic.azure';
 import bing from './m_provider.dynamic.bing';
@@ -32,11 +34,30 @@ const MAP_CLASS = 'dx-map';
 const MAP_CONTAINER_CLASS = 'dx-map-container';
 const MAP_SHIELD_CLASS = 'dx-map-shield';
 
-// @ts-expect-error
-const Map = Widget.inherit({
+export interface MapProperties extends Properties {
+  onUpdated?: () => {};
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+  bounds?: Record<string, unknown>;
+}
+
+class Map extends Widget<MapProperties> {
+  _optionChangeBag?: Record<string, unknown> | null;
+
+  _lastAsyncAction!: Promise<void>;
+
+  _provider!: azure | googleStatic | google | bing;
+
+  _asyncActionSuppressed?: boolean;
+
+  _suppressAsyncAction?: boolean;
+
+  _rendered!: Record<string, unknown>;
+
+  _$container?: dxElementWrapper;
+
+  _getDefaultOptions(): MapProperties {
+    return {
+      ...super._getDefaultOptions(),
       bounds: {
         northEast: null,
         southWest: null,
@@ -52,11 +73,16 @@ const Map = Widget.inherit({
       provider: 'google',
       autoAdjust: true,
       markers: [],
+      // @ts-expect-error ts-error
       markerIconSrc: null,
+      // @ts-expect-error ts-error
       onMarkerAdded: null,
+      // @ts-expect-error ts-error
       onMarkerRemoved: null,
       routes: [],
+      // @ts-expect-error ts-error
       onRouteAdded: null,
+      // @ts-expect-error ts-error
       onRouteRemoved: null,
       apiKey: {
         bing: '',
@@ -68,15 +94,18 @@ const Map = Widget.inherit({
         useAdvancedMarkers: true,
       },
       controls: false,
+      // @ts-expect-error ts-error
       onReady: null,
       // for internal use only
+      // @ts-expect-error ts-error
       onUpdated: null,
+      // @ts-expect-error ts-error
       onClick: null,
-    });
-  },
+    };
+  }
 
   _defaultOptionsRules() {
-    return this.callBase().concat([
+    return super._defaultOptionsRules().concat([
       {
         device() {
           return devices.real().deviceType === 'desktop' && !devices.isSimulator();
@@ -86,36 +115,36 @@ const Map = Widget.inherit({
         },
       },
     ]);
-  },
+  }
 
   ctor(element, options) {
-    this.callBase(element, options);
+    super.ctor(element, options);
 
     if (options) {
       if ('provider' in options && options.provider === 'bing') {
         this._logDeprecatedBingProvider();
       }
     }
-  },
+  }
 
-  _logDeprecatedBingProvider() {
+  _logDeprecatedBingProvider(): void {
     this._logDeprecatedOptionWarning('provider: bing', {
       since: '24.2',
       message: 'Use other map providers, such as Azure, Google, or GoogleStatic.',
     });
-  },
+  }
 
-  _setDeprecatedOptions() {
-    this.callBase();
+  _setDeprecatedOptions(): void {
+    super._setDeprecatedOptions();
     extend(this._deprecatedOptions, {
       'providerConfig.useAdvancedMarkers': { since: '24.2', message: 'Google deprecated the original map markers. Transition to advanced markers for future compatibility.' },
     });
-  },
+  }
 
-  _renderFocusTarget: noop,
+  _renderFocusTarget(): void {}
 
-  _init() {
-    this.callBase();
+  _init(): void {
+    super._init();
 
     this.$element()
       .addClass(MAP_CLASS);
@@ -130,13 +159,13 @@ const Map = Widget.inherit({
     this._grabEvents();
 
     this._rendered = {};
-  },
+  }
 
-  _useTemplates() {
+  _useTemplates(): boolean {
     return false;
-  },
+  }
 
-  _checkOption(option) {
+  _checkOption(option): void {
     const value = this.option(option);
 
     if (option === 'markers' && !Array.isArray(value)) {
@@ -145,46 +174,51 @@ const Map = Widget.inherit({
     if (option === 'routes' && !Array.isArray(value)) {
       throw errors.Error('E1023');
     }
-  },
+  }
 
-  _initContainer() {
+  _initContainer(): void {
     this._$container = $('<div>')
       .addClass(MAP_CONTAINER_CLASS);
 
     this.$element().append(this._$container);
-  },
+  }
 
-  _grabEvents() {
+  _grabEvents(): void {
+    // @ts-expect-error ts-error
     const eventName = addNamespace(pointerEvents.down, this.NAME);
 
     eventsEngine.on(this.$element(), eventName, this._cancelEvent.bind(this));
-  },
+  }
 
-  _cancelEvent(e) {
+  _cancelEvent(e): void {
     const cancelByProvider = this._provider?.isEventsCanceled(e) && !this.option('disabled');
     if (cancelByProvider) {
       e.stopPropagation();
     }
-  },
+  }
 
-  _saveRendered(option) {
+  _saveRendered(option): void {
     const value = this.option(option);
-
+    // @ts-expect-error ts-error
     this._rendered[option] = value.slice();
-  },
+  }
 
-  _render() {
-    this.callBase();
+  _render(): void {
+    super._render();
 
     this._renderShield();
 
     this._saveRendered('markers');
     this._saveRendered('routes');
-    this._provider = new PROVIDERS[this.option('provider')](this, this._$container);
-    this._queueAsyncAction('render', this._rendered.markers, this._rendered.routes);
-  },
 
-  _renderShield() {
+    const { provider } = this.option();
+
+    // @ts-expect-error ts-error
+    this._provider = new PROVIDERS[provider](this, this._$container);
+    this._queueAsyncAction('render', this._rendered.markers, this._rendered.routes);
+  }
+
+  _renderShield(): void {
     let $shield;
 
     if (this.option('disabled')) {
@@ -194,21 +228,22 @@ const Map = Widget.inherit({
       $shield = this.$element().find(`.${MAP_SHIELD_CLASS}`);
       $shield.remove();
     }
-  },
+  }
 
-  _clean() {
+  _clean(): void {
     this._cleanFocusState();
     if (this._provider) {
       this._provider.clean();
     }
+    // @ts-expect-error ts-error
     this._provider = null;
     this._lastAsyncAction = Promise.resolve();
     this.setOptionSilent('bounds', { northEast: null, southWest: null });
 
     delete this._suppressAsyncAction;
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<MapProperties>): void {
     const { name, value } = args;
 
     const changeBag = this._optionChangeBag;
@@ -217,12 +252,12 @@ const Map = Widget.inherit({
     switch (name) {
       case 'disabled':
         this._renderShield();
-        this.callBase(args);
+        super._optionChanged(args);
         this._queueAsyncAction('updateDisabled');
         break;
       case 'width':
       case 'height':
-        this.callBase(args);
+        super._optionChanged(args);
         this._dimensionChanged();
         break;
       case 'provider':
@@ -265,6 +300,7 @@ const Map = Widget.inherit({
           changeBag ? changeBag.added : this._rendered[name],
         ).then((result) => {
           if (changeBag) {
+            // @ts-expect-error ts-error
             changeBag.resolve(result);
           }
         });
@@ -286,21 +322,23 @@ const Map = Widget.inherit({
       case 'onClick':
         break;
       default:
-        this.callBase.apply(this, arguments);
+        // @ts-expect-error ts-error
+        super._optionChanged.apply(this, arguments);
     }
-  },
+  }
 
-  _visibilityChanged(visible) {
+  _visibilityChanged(visible: boolean): void {
     if (visible) {
       this._dimensionChanged();
     }
-  },
+  }
 
-  _dimensionChanged() {
+  _dimensionChanged(): void {
     this._queueAsyncAction('updateDimensions');
-  },
+  }
 
-  _queueAsyncAction(name) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _queueAsyncAction(name, markers?, routers?) {
     const options = [].slice.call(arguments).slice(1);
     const isActionSuppressed = this._suppressAsyncAction;
 
@@ -330,44 +368,44 @@ const Map = Widget.inherit({
     });
 
     return this._lastAsyncAction;
-  },
+  }
 
-  _triggerReadyAction() {
+  _triggerReadyAction(): void {
     this._createActionByOption('onReady')({ originalMap: this._provider.map() });
-  },
+  }
 
-  _triggerUpdateAction() {
+  _triggerUpdateAction(): void {
     this._createActionByOption('onUpdated')();
-  },
+  }
 
-  setOptionSilent(name, value) {
+  setOptionSilent(name, value): void {
     this._setOptionWithoutOptionChange(name, value);
-  },
+  }
 
   addMarker(marker) {
     return this._addFunction('markers', marker);
-  },
+  }
 
   removeMarker(marker) {
     return this._removeFunction('markers', marker);
-  },
+  }
 
   addRoute(route) {
     return this._addFunction('routes', route);
-  },
+  }
 
   removeRoute(route) {
     return this._removeFunction('routes', route);
-  },
+  }
 
   _addFunction(optionName, addingValue) {
     const optionValue = this.option(optionName);
     const addingValues = wrapToArray(addingValue);
-
+    // @ts-expect-error ts-error
     optionValue.push.apply(optionValue, addingValues);
 
     return this._partialArrayOptionChange(optionName, optionValue, addingValues, []);
-  },
+  }
 
   _removeFunction(optionName, removingValue) {
     const optionValue = this.option(optionName);
@@ -376,9 +414,11 @@ const Map = Widget.inherit({
     each(removingValues, (removingIndex, removingValue) => {
       const index = isNumeric(removingValue)
         ? removingValue
+      // @ts-expect-error ts-error
         : optionValue?.indexOf(removingValue);
 
       if (index !== -1) {
+        // @ts-expect-error ts-error
         const removing = optionValue.splice(index, 1)[0];
         removingValues.splice(removingIndex, 1, removing);
       } else {
@@ -387,7 +427,7 @@ const Map = Widget.inherit({
     });
 
     return this._partialArrayOptionChange(optionName, optionValue, [], removingValues);
-  },
+  }
 
   _partialArrayOptionChange(optionName, optionValue, addingValues, removingValues) {
     return fromPromise(new Promise((resolve) => {
@@ -399,9 +439,8 @@ const Map = Widget.inherit({
       this.option(optionName, optionValue);
       // @ts-expect-error
     }).then((result) => (result && result.length === 1 ? result[0] : result)), this);
-  },
-
-});
+  }
+}
 
 registerComponent('dxMap', Map);
 
