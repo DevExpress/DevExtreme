@@ -49,7 +49,7 @@ export function getNormalizedProps(props: VNodeProps): VNodeProps {
 }
 
 export function configurationChildren(component): VNode[] {
-  if (!component.children || !component.children.default) {
+  if (!component.children?.default) {
     return [];
   }
   return findConfigurationComponents(component.children.default());
