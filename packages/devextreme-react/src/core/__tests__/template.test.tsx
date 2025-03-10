@@ -453,11 +453,45 @@ describe('nested template', () => {
       </ComponentWithTemplates>,
     );
 
-    const options = WidgetClass.mock.calls[0][1];
+    let options = WidgetClass.mock.calls[0][1];
 
     expect(options.item).toBeUndefined();
 
-    const { integrationOptions } = options;
+    let { integrationOptions } = options;
+
+    expect(integrationOptions).toBeDefined();
+    expect(integrationOptions.templates).toBeDefined();
+
+    expect(integrationOptions.templates.item1).toBeDefined();
+    expect(typeof integrationOptions.templates.item1.render).toBe('function');
+
+    expect(integrationOptions.templates.item2).toBeDefined();
+    expect(typeof integrationOptions.templates.item2.render).toBe('function');
+
+    expect(integrationOptions.templates.item3).toBeDefined();
+    expect(typeof integrationOptions.templates.item3.render).toBe('function');
+
+    const MySetOfTemplates = () => (
+      <>
+        <Template name="item1" render={ItemTemplate} />
+        <Template name="item2" component={ItemTemplate} />
+        <Template name="item3">
+          <ItemTemplate />
+        </Template>
+      </>
+    );
+
+    render(
+      <ComponentWithTemplates>
+        <MySetOfTemplates />
+      </ComponentWithTemplates>,
+    );
+
+    options = WidgetClass.mock.calls[1][1];
+
+    expect(options.item).toBeUndefined();
+
+    ({ integrationOptions } = options);
 
     expect(integrationOptions).toBeDefined();
     expect(integrationOptions.templates).toBeDefined();
@@ -475,7 +509,7 @@ describe('nested template', () => {
   it('renders nested templates', () => {
     const ref = React.createRef<HTMLDivElement>();
     const FirstTemplate = () => <div className="template">Template</div>;
-    const { container } = render(
+    let { container } = render(
       <ComponentWithTemplates>
         <Template name="item1" render={FirstTemplate} />
         <div ref={ref} />
@@ -484,11 +518,27 @@ describe('nested template', () => {
     act(() => { renderTemplate('item1', undefined, ref.current); });
 
     expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">Template</div>');
+
+    const MyCustomComponent = () => (
+      <>
+        <Template name="item1" render={FirstTemplate} />
+        <div ref={ref} />
+      </>
+    );
+
+    ({ container } = render(
+      <ComponentWithTemplates>
+        <MyCustomComponent />
+      </ComponentWithTemplates>,
+    ));
+    act(() => { renderTemplate('item1', undefined, ref.current); });
+
+    expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">Template</div>');
   });
 
   it('renders children of nested template', () => {
     const ref = React.createRef<HTMLDivElement>();
-    const { container } = render(
+    let { container } = render(
       <ComponentWithTemplates>
         <Template name="item1">
           <div className="template">Template</div>
@@ -496,6 +546,25 @@ describe('nested template', () => {
         <div ref={ref} />
       </ComponentWithTemplates>,
     );
+    act(() => { renderTemplate('item1', undefined, ref.current); });
+
+    expect(container.querySelector('.template')?.outerHTML)
+      .toBe('<div class="template">Template</div>');
+
+    const MyCustomComponent = () => (
+      <>
+        <Template name="item1">
+          <div className="template">Template</div>
+        </Template>
+        <div ref={ref} />
+      </>
+    );
+
+    ({ container } = render(
+      <ComponentWithTemplates>
+        <MyCustomComponent />
+      </ComponentWithTemplates>,
+    ));
     act(() => { renderTemplate('item1', undefined, ref.current); });
 
     expect(container.querySelector('.template')?.outerHTML)
@@ -587,6 +656,28 @@ describe('component/render in nested options', () => {
 
   NestedComponent.componentType = 'option';
 
+  const LeafNestedComponent = function NestedComponent(props: any) {
+    return (
+      <ConfigurationComponent<{
+        item?: any;
+        itemRender?: any;
+        itemComponent?: any;
+      } & React.PropsWithChildren>
+        elementDescriptor={{
+          OptionName: 'leafOption',
+          TemplateProps: [{
+            tmplOption: 'item',
+            render: 'itemRender',
+            component: 'itemComponent',
+          }],
+        }}
+        {...props}
+      />
+    );
+  } as React.ComponentType<any> & NestedComponentMeta;
+
+  LeafNestedComponent.componentType = 'option';
+
   const CollectionNestedComponent = function CollectionNestedComponent(props: any) {
     return (
       <ConfigurationComponent<{
@@ -652,6 +743,61 @@ describe('component/render in nested options', () => {
 
     expect(integrationOptions.templates['option.item']).toBeDefined();
     expect(typeof integrationOptions.templates['option.item'].render).toBe('function');
+  });
+
+  it('pass integrationOptions from its nested Template component to widget', () => {
+    const ItemTemplate = () => <div>Template</div>;
+    render(
+      <ComponentWithTemplates>
+        <NestedComponent item='myTemplate'>
+          <Template name='myTemplate' render={ItemTemplate} />
+        </NestedComponent>
+        <LeafNestedComponent item='leafOptionTemplate'>
+          <Template name='leafOptionTemplate' render={ItemTemplate} />
+        </LeafNestedComponent>
+      </ComponentWithTemplates>,
+    );
+
+    let options = WidgetClass.mock.calls[0][1];
+    let { integrationOptions } = options;
+
+    expect(integrationOptions.templates.myTemplate).toBeDefined();
+    expect(typeof integrationOptions.templates.myTemplate.render).toBe('function');
+
+    expect(integrationOptions.templates.leafOptionTemplate).toBeDefined();
+    expect(typeof integrationOptions.templates.leafOptionTemplate.render).toBe('function');
+
+    expect(options.option.item).toBe('myTemplate');
+    expect(options.leafOption.item).toBe('leafOptionTemplate');
+
+    const MyCustomComponent = () => (
+      <>
+        <NestedComponent item='myTemplate'>
+          <Template name='myTemplate' render={ItemTemplate} />
+        </NestedComponent>
+        <LeafNestedComponent item='leafOptionTemplate'>
+          <Template name='leafOptionTemplate' render={ItemTemplate} />
+        </LeafNestedComponent>
+      </>
+    );
+
+    render(
+      <ComponentWithTemplates>
+        <MyCustomComponent />
+      </ComponentWithTemplates>,
+    );
+
+    options = WidgetClass.mock.calls[1][1];
+    ({ integrationOptions } = options);
+
+    expect(integrationOptions.templates.myTemplate).toBeDefined();
+    expect(typeof integrationOptions.templates.myTemplate.render).toBe('function');
+
+    expect(integrationOptions.templates.leafOptionTemplate).toBeDefined();
+    expect(typeof integrationOptions.templates.leafOptionTemplate.render).toBe('function');
+
+    expect(options.option.item).toBe('myTemplate');
+    expect(options.leafOption.item).toBe('leafOptionTemplate');
   });
 
   it('pass integrationOptions options to widget with several templates', () => {
