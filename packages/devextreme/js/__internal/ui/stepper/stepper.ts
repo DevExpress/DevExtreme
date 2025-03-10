@@ -21,7 +21,7 @@ export const STEP_SELECTED_CLASS = 'dx-step-selected';
 export const STEPPER_HORIZONTAL_ORIENTATION_CLASS = 'dx-stepper-horizontal';
 export const STEPPER_VERTICAL_ORIENTATION_CLASS = 'dx-stepper-vertical';
 export const STEP_INDICATOR_CLASS = 'dx-step-indicator';
-export const STEP_TEXT_ICON_CLASS = 'dx-step-text-icon';
+export const STEP_TEXT_CLASS = 'dx-step-text';
 export const STEP_TITLE_CLASS = 'dx-step-title';
 
 export const STEPPER_ITEM_DATA_KEY = 'dxStepperItemData';
@@ -42,7 +42,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
 
   _prepareDefaultItemTemplate(data: StepperItemProperties, $container: dxElementWrapper): void {
     const $indicatorElement = $('<span>').addClass(STEP_INDICATOR_CLASS);
-    const $iconElement = getImageContainer(data.icon) ?? $('<span>').addClass(STEP_TEXT_ICON_CLASS).text(data.text ?? '');
+    const $iconElement = getImageContainer(data.icon) ?? $('<span>').addClass(STEP_TEXT_CLASS).text(data.text ?? '');
 
     $iconElement.appendTo($indicatorElement);
     $indicatorElement.prependTo($container);

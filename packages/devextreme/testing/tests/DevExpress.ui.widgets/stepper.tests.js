@@ -68,8 +68,8 @@ QUnit.module('Item data', moduleConfig, () => {
             items: [{}, {}, {}],
         });
 
-        const steps = this.getItems();
-        const getIndicatorText = (index) => steps.eq(index).find(`.${STEP_INDICATOR_CLASS}`).text();
+        const $steps = this.getItems();
+        const getIndicatorText = (index) => $steps.eq(index).find(`.${STEP_INDICATOR_CLASS}`).text();
 
         assert.strictEqual(getIndicatorText(0), '1');
         assert.strictEqual(getIndicatorText(1), '2');
@@ -81,8 +81,8 @@ QUnit.module('Item data', moduleConfig, () => {
             items: [{ text: 'test1' }, { text: 'test2' }, {}],
         });
 
-        const steps = this.getItems();
-        const getIndicatorText = (index) => steps.eq(index).find(`.${STEP_INDICATOR_CLASS}`).text();
+        const $steps = this.getItems();
+        const getIndicatorText = (index) => $steps.eq(index).find(`.${STEP_INDICATOR_CLASS}`).text();
 
         assert.strictEqual(getIndicatorText(0), 'test1');
         assert.strictEqual(getIndicatorText(1), 'test2');
@@ -98,8 +98,8 @@ QUnit.module('Item data', moduleConfig, () => {
             ],
         });
 
-        const steps = this.getItems();
-        const getStepTitle = (index) => steps.eq(index).find(`.${STEP_TITLE_CLASS}`).text();
+        const $steps = this.getItems();
+        const getStepTitle = (index) => $steps.eq(index).find(`.${STEP_TITLE_CLASS}`).text();
 
         assert.strictEqual(getStepTitle(0), 'Step 1');
         assert.strictEqual(getStepTitle(1), 'Step 2');
