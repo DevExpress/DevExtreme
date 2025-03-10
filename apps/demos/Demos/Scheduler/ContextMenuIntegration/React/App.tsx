@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
-import Scheduler, { Resource, SchedulerTypes, SchedulerRef } from 'devextreme-react/scheduler';
-import ContextMenu, { ContextMenuTypes } from 'devextreme-react/context-menu';
+import Scheduler, { Resource, type SchedulerTypes, SchedulerRef } from 'devextreme-react/scheduler';
+import ContextMenu, { type ContextMenuTypes } from 'devextreme-react/context-menu';
 import { data, resourcesData, Resource as ResourceItem } from './data.ts';
 import AppointmentMenuTemplate from './AppointmentTemplate.tsx';
 

@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
-import NumberBox, { NumberBoxTypes } from 'devextreme-react/number-box';
-import Form, { FormTypes } from 'devextreme-react/form';
+import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
+import NumberBox, { type NumberBoxTypes } from 'devextreme-react/number-box';
+import Form, { type FormTypes } from 'devextreme-react/form';
 import service from './data.ts';
 
 const labelModes = ['outside', 'static', 'floating', 'hidden'];

@@ -59,7 +59,7 @@ import DxPivotGrid, {
   DxExport,
   DxFieldChooser,
   DxFieldPanel,
-  DxPivotGridTypes,
+  type DxPivotGridTypes,
 } from 'devextreme-vue/pivot-grid';
 import DxCheckBox from 'devextreme-vue/check-box';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';

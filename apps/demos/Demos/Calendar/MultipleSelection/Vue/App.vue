@@ -63,40 +63,40 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxCheckBox from 'devextreme-vue/check-box';
+import DxCheckBox, { type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
-import DxCalendar from 'devextreme-vue/calendar';
+import DxCalendar, { type DxCalendarTypes } from 'devextreme-vue/calendar';
 import DxButton from 'devextreme-vue/button';
 
-const calendarRef = ref(null);
+const calendarRef = ref();
 const initialValue = [new Date(), new Date(new Date().getTime() + 1000 * 60 * 60 * 24)];
 const selectWeekOnClick = ref(true);
-const selectionMode = ref('multiple');
-const minDateValue = ref(null);
-const maxDateValue = ref(null);
-const disabledDates = ref(null);
-const selectionModes = ['single', 'multiple', 'range'];
+const selectionMode = ref<DxCalendarTypes.CalendarSelectionMode>('multiple');
+const minDateValue = ref();
+const maxDateValue = ref();
+const disabledDates = ref();
+const selectionModes: DxCalendarTypes.CalendarSelectionMode[] = ['single', 'multiple', 'range'];
 
-function isWeekend(date) {
+function isWeekend(date: Date) {
   const day = date.getDay();
   return day === 0 || day === 6;
 }
 
-function setMinDate({ value }) {
+function setMinDate({ value }: DxCheckBoxTypes.ValueChangedEvent) {
   minDateValue.value = value
     ? new Date((new Date()).getTime() - 1000 * 60 * 60 * 24 * 3)
     : null;
 }
 
-function setMaxDate({ value }) {
+function setMaxDate({ value }: DxCheckBoxTypes.ValueChangedEvent) {
   maxDateValue.value = value
     ? new Date((new Date()).getTime() + 1000 * 60 * 60 * 24 * 3)
     : null;
 }
 
-function disableWeekend({ value }) {
+function disableWeekend({ value }: DxCheckBoxTypes.ValueChangedEvent) {
   disabledDates.value = value
-    ? (data) => data.view === 'month' && isWeekend(data.date)
+    ? (data: Record<string, string | Date>) => data.view === 'month' && isWeekend(data.date as Date)
     : null;
 }
 

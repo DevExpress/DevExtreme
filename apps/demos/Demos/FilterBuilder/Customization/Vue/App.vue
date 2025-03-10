@@ -32,13 +32,13 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxFilterBuilder, { DxCustomOperation } from 'devextreme-vue/filter-builder';
+import DxFilterBuilder, { DxCustomOperation, type DxFilterBuilderTypes } from 'devextreme-vue/filter-builder';
 import { filter, fields } from './data.ts';
 import { formatValue } from './helpers.js';
 import EditorComponent from './EditorComponent.vue';
 
 const filterText = ref('');
-const groupOperations = ['and', 'or'];
+const groupOperations: DxFilterBuilderTypes.GroupOperation[] = ['and', 'or'];
 const dataSourceText = ref('');
 
 function updateTexts(e) {

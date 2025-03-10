@@ -1,7 +1,7 @@
 import 'whatwg-fetch';
 import React from 'react';
 
-import Scheduler, { SchedulerTypes } from 'devextreme-react/scheduler';
+import Scheduler, { type SchedulerTypes } from 'devextreme-react/scheduler';
 
 import CustomStore from 'devextreme/data/custom_store';
 

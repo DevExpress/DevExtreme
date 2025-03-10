@@ -141,7 +141,9 @@
         "stylelint-config-standard": "35.0.0",
         "systemjs-builder": "0.16.15",
         "testcafe": "2.6.2",
-        "ts-node": "10.9.2"
+        "ts-node": "10.9.2",
+        "vue-tsc": "^2.2.2",
+        "@vue/tsconfig": "^0.7.0"
     },
     "scripts": {
         "test": "jest --coverage --runInBand",
@@ -173,7 +175,10 @@
         "update-angular-json": "ts-node ./utils/create-bundles/Angular/update-angular-json.ts",
         "build-angular": "ng build",
         "post-process-angular": "ts-node ./utils/create-bundles/Angular/post-process-index.ts",
-        "webserver-gh": "cd ./publish-demos && http-server --port 5645"
+        "webserver-gh": "cd ./publish-demos && http-server --port 5645",
+        "ts-check-react": "pnpm exec tsc --noEmit --project tsconfig.react-check.json",
+        "ts-check-ng": "pnpm exec ngc --noEmit --project tsconfig.ngc-check.json",
+        "ts-check-vue": "pnpm exec vue-tsc --noEmit --project tsconfig.vue-check.json"
     },
     "license": "SEE LICENSE IN README.md",
     "keywords": [

@@ -88,7 +88,7 @@ import {
   DxPaging,
   DxEditing,
   DxLookup,
-  DxDataGridTypes,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import TreeView, { TreeViewTypes } from 'devextreme-react/tree-view';
-import service, { ProductType } from './data.ts';
+import TreeView, { type TreeViewTypes } from 'devextreme-react/tree-view';
+import service, { type ProductType } from './data.ts';
 
 const products = service.getProducts();
 

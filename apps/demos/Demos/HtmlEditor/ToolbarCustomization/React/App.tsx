@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useMemo } from 'react';
-import HtmlEditor, { Toolbar, Item, HtmlEditorTypes } from 'devextreme-react/html-editor';
+import HtmlEditor, { Toolbar, Item, type HtmlEditorTypes } from 'devextreme-react/html-editor';
 import Popup from 'devextreme-react/popup';
 import { markup } from './data.ts';
 

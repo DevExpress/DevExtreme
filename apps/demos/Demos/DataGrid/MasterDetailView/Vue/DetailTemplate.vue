@@ -26,10 +26,10 @@
 </template>
 <script setup lang="ts">
 import { reactive } from 'vue';
-import { DxDataGrid, DxColumn, DxDataGridTypes } from 'devextreme-vue/data-grid';
+import { DxDataGrid, DxColumn, type DxDataGridTypes } from 'devextreme-vue/data-grid';
 import ArrayStore from 'devextreme/data/array_store';
 import DataSource from 'devextreme/data/data_source';
-import { tasks, Task } from './data.ts';
+import { tasks, type Task } from './data.ts';
 
 const props = defineProps<{
   templateData: DxDataGridTypes.MasterDetailTemplateData

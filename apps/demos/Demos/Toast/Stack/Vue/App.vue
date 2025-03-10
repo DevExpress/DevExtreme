@@ -78,7 +78,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxButton from 'devextreme-vue/button';
-import DxRadioGroup from 'devextreme-vue/radio-group';
+import DxRadioGroup, { type DxRadioGroupTypes } from 'devextreme-vue/radio-group';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxNumberBox from 'devextreme-vue/number-box';
 import notify from 'devextreme/ui/notify';
@@ -89,11 +89,11 @@ const positions = [
   'top left', 'top center', 'top right',
   'bottom left', 'bottom center', 'bottom right',
   'left center', 'center', 'right center',
-] as const;
+];
 const directions = [
   'down-push', 'down-stack', 'up-push', 'up-stack',
   'left-push', 'left-stack', 'right-push', 'right-stack',
-] as const;
+];
 let id = 1;
 const isPredefined = ref(true);
 const predefinedPosition = ref<typeof positions[number]>('bottom center');
@@ -123,13 +123,13 @@ function show() {
       hide: { type: 'fade', duration: 40, to: 0 },
     },
   },
-  { position: newPosition, direction: newDirection });
+  { position: newPosition as any, direction: newDirection as any });
   id += 1;
 }
 function hideAll() {
   hideToasts();
 }
-function radioGroupValueChanged({ value }) {
+function radioGroupValueChanged({ value }: DxRadioGroupTypes.ValueChangedEvent) {
   isPredefined.value = value === 'predefined';
 }
 </script>

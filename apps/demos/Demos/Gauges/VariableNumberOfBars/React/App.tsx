@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { BarGauge, Label } from 'devextreme-react/bar-gauge';
-import { CheckBox, CheckBoxTypes } from 'devextreme-react/check-box';
+import { CheckBox, type CheckBoxTypes } from 'devextreme-react/check-box';
 import { products } from './data.ts';
 
 const format = {
