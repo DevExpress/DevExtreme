@@ -375,6 +375,7 @@ class Scheduler extends Widget<any> {
 
       toolbar: {
         disabled: false,
+        multiline: false,
         items: [
           { location: 'before', name: 'dateNavigator' },
           { location: 'after', name: 'viewSwitcher' },
