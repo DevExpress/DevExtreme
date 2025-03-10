@@ -1,8 +1,6 @@
-/* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 interface AbstractType<T> extends Function {
   prototype: T;
 }

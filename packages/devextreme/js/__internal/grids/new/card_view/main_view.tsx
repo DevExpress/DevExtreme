@@ -1,5 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import { combined } from '@ts/core/reactive/index';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { PagerView } from '@ts/grids/new/grid_core/pager/view';
@@ -56,7 +54,7 @@ export class MainView extends View<MainViewProps> {
     super();
   }
 
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
   protected override getProps() {
     return combined({

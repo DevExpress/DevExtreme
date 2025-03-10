@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable spellcheck/spell-checker */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { MainView as MainViewBase } from '@ts/grids/new/grid_core/main_view';
@@ -42,7 +41,7 @@ export class CardViewBase extends GridCoreNew {
     this.headerPanel = this.diContext.get(HeaderPanelView);
   }
 
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   protected _getDefaultOptions() {
     return {
