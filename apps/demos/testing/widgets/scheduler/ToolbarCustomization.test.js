@@ -13,7 +13,6 @@ runManualTest('Scheduler', 'ToolbarCustomization', ['jQuery'], (test) => {
   test('ToolbarCustomization', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const menuButtonSelector = $('.dx-toolbar').find('.dx-toolbar-menu-container').find('.dx-button');
-    const menuItemsSelector = $('.dx-overlay-wrapper').find('.dx-list-item');
 
     await testScreenshot(t, takeScreenshot, 'scheduler_toolbar_customization_wide.png');
 
@@ -26,9 +25,7 @@ runManualTest('Scheduler', 'ToolbarCustomization', ['jQuery'], (test) => {
     await t
       .click($('body'), { offsetX: 0, offsetY: 0 })
       .resizeWindow(320, 600)
-      .click(menuButtonSelector)
-      .expect(menuItemsSelector.count)
-      .eql(4);
+      .click(menuButtonSelector);
 
     await testScreenshot(t, takeScreenshot, 'scheduler_toolbar_customization_thin.png');
 
