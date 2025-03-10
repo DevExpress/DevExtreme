@@ -7,8 +7,11 @@ import type { RefObject } from 'inferno';
 import type { Column } from '../columns_controller/types';
 import { Popup } from '../inferno_wrappers/popup';
 import { TreeView } from '../inferno_wrappers/tree_view';
+import dxPopup from '@js/ui/popup';
 
 export interface ColumnChooserProps {
+  popupRef: RefObject<dxPopup>;
+
   treeViewRef: RefObject<dxTreeView>;
 
   columns: Column[];
@@ -24,7 +27,7 @@ export interface ColumnChooserProps {
 
 export function ColumnChooser(props: ColumnChooserProps): JSX.Element | null {
   const {
-    visible, treeViewConfig, popupConfig, treeViewRef,
+    visible, treeViewConfig, popupConfig, popupRef, treeViewRef,
   } = props;
 
   if (!visible) {
@@ -34,6 +37,7 @@ export function ColumnChooser(props: ColumnChooserProps): JSX.Element | null {
   return (
     <Popup
       visible={visible}
+      componentRef={popupRef}
       { ...popupConfig }
     >
       <TreeView

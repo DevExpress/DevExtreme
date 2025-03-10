@@ -8,11 +8,11 @@ import type { GridCoreNewBase } from '../widget';
 export function PublicMethods<TBase extends Constructor<GridCoreNewBase>>(GridCore: TBase) {
   return class GridCoreWithColumnChooser extends GridCore {
     public showColumnChooser(): void {
-      this.columnChooserView.visible.update(true);
+      this.columnChooserView.showColumnChooser();
     }
 
     public hideColumnChooser(): void {
-      this.columnChooserView.visible.update(false);
+      this.columnChooserView.hideColumnChooser();
     }
   };
 }

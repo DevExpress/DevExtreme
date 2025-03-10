@@ -13,11 +13,27 @@ import { ToolbarController } from '../toolbar/controller';
 import type { ColumnChooserProps } from './column_chooser';
 import { ColumnChooser } from './column_chooser';
 import { ColumnChooserController } from './controller';
+import { PredefinedToolbarItem } from '../toolbar/types';
+import dxPopup from '@js/ui/popup';
+import { createRef } from 'inferno';
+import { current, isGeneric, isMaterial } from '@js/ui/themes';
+import messageLocalization from '@js/localization/message';
+
+const COLUMN_CHOOSER_CLASS = 'column-chooser';
+const COLUMN_CHOOSER_BUTTON_CLASS = 'column-chooser-button';
+const COLUMN_CHOOSER_LIST_CLASS = 'column-chooser-list';
+const COLUMN_CHOOSER_PLAIN_CLASS = 'column-chooser-plain';
+const COLUMN_CHOOSER_DRAG_CLASS = 'column-chooser-mode-drag';
+const COLUMN_CHOOSER_SELECT_CLASS = 'column-chooser-mode-select';
 
 export class ColumnChooserView extends View<ColumnChooserProps> {
   protected override component = ColumnChooser;
 
-  public readonly visible = state(false);
+  private readonly popupVisible = state(false);
+
+  private readonly popupRef = createRef<dxPopup>();
+
+  private readonly mode: SubsGets<ColumnChooserMode>;
 
   public static dependencies = [
     ToolbarController, ColumnsController, ColumnChooserController, OptionsController,
@@ -31,41 +47,65 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
   ) {
     super();
 
-    this.toolbarController.addDefaultItem({
-      name: 'columnChooserButton',
-      widget: 'dxButton',
-      options: {
-        icon: 'column-chooser',
-        onClick: () => { this.visible.updateFunc((value) => !value); },
-        elementAttr: { 'aria-haspopup': 'dialog' },
-      } as ButtonProperties,
-      showText: 'inMenu',
-      location: 'after',
-      locateInMenu: 'auto',
-    });
-  }
-
-  protected override getProps(): SubsGets<ColumnChooserProps> {
-    const mode = computed(
+    this.mode = computed(
       (v) => (v ?? 'select') as ColumnChooserMode,
       [this.options.oneWay('columnChooser.mode')],
     );
 
+    this.toolbarController.addDefaultItem(
+      computed(
+        (enabled) => ({
+          name: 'columnChooserButton',
+          widget: 'dxButton',
+          options: {
+            icon: 'column-chooser',
+            onClick: () => { this.popupVisible.update(true); },
+            elementAttr: { 
+              'aria-haspopup': 'dialog',
+              class: COLUMN_CHOOSER_BUTTON_CLASS
+            },
+          } as ButtonProperties,
+          showText: 'inMenu',
+          location: 'after',
+          locateInMenu: 'auto',
+          visible: enabled
+        } as PredefinedToolbarItem), 
+        [this.options.oneWay('columnChooser.enabled')]
+      )
+    );
+  }
+
+  public showColumnChooser() {
+    this.popupVisible.update(true);
+  }
+
+  public hideColumnChooser() {
+    this.popupRef.current?.hide();
+  }
+
+  // TODO: move it to the other place
+  private addWidgetPrefix(cssClass: string) {
+    return 'dx-cardview-' + cssClass;
+  }
+
+  protected override getProps(): SubsGets<ColumnChooserProps> {
     let treeViewScrollTop = 0;
 
     return combined({
+      popupRef: this.popupRef,
       treeViewRef: this.columnChooserController.treeViewRef,
 
-      visible: this.visible,
+      visible: this.popupVisible,
       columns: this.columnsController.columns,
 
-      mode,
+      mode: this.mode,
 
       popupConfig: combined({
         shading: false,
-        showCloseButton: true,
+        showCloseButton: this.isMaterialOrGeneric(),
         dragEnabled: true,
         resizeEnabled: true,
+        wrapperAttr: { class: this.addWidgetPrefix(COLUMN_CHOOSER_CLASS) },
         _loopFocus: true,
 
         width: this.options.oneWay('columnChooser.width'),
@@ -86,13 +126,22 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
         // ),
 
         toolbarItems: computed(
-          (title) => [
-            { text: title, toolbar: 'top', location: 'center' },
-          ],
+          (title) => {
+            const items = [
+              { text: title, toolbar: 'top', location: this.isMaterialOrGeneric() ? 'before' : 'center' },
+            ]
+
+            if (!this.isMaterialOrGeneric()) {
+              items.push({ shortcut: 'cancel' } as any);
+            }
+            
+            return items;
+          },
           [this.options.oneWay('columnChooser.title')],
         ),
 
-        onHidden: this.onPopupHidden.bind(this),
+        onShown: () => { this.setPopupAttributes(); },
+        onHidden: () => { this.popupVisible.update(false); },
       } as MapMaybeSubscribable<PopupProperties>),
 
       treeViewConfig: combined({
@@ -115,12 +164,14 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
           e.component.getScrollable().scrollTo({ top: treeViewScrollTop });
         },
 
-        ...this.getTreeViewConfig(mode.unreactive_get()),
+        ...this.getTreeViewConfig(),
       } as MapMaybeSubscribable<TreeViewProperties>),
     });
   }
 
-  protected getTreeViewConfig(mode: ColumnChooserMode): MapMaybeSubscribable<TreeViewProperties> {
+  protected getTreeViewConfig(): MapMaybeSubscribable<TreeViewProperties> {
+    const mode = this.mode.unreactive_get();
+
     if (mode === 'select') {
       const controller = this.columnChooserController;
 
@@ -138,7 +189,30 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
     return {};
   }
 
-  private onPopupHidden(): void {
-    this.visible.update(false);
+  private isMaterialOrGeneric() {
+    const theme = current();
+
+    return isMaterial(theme) || isGeneric(theme);
+  }
+
+  private setPopupAttributes() {
+    const isSelectMode = this.mode.unreactive_get() === 'select';
+    const isBandColumnsUsed = false; // TODO: band columns aren't yet implemented in cardview
+    const popup = this.popupRef.current! as any;
+
+    popup.setAria({
+      role: 'dialog',
+      label: messageLocalization.format('dxDataGrid-columnChooserTitle'),
+    });
+
+    popup.$wrapper()
+      .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_DRAG_CLASS), !isSelectMode)
+      .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_SELECT_CLASS), isSelectMode);
+
+    popup.$content().addClass(this.addWidgetPrefix(COLUMN_CHOOSER_LIST_CLASS));
+
+    if (isSelectMode && !isBandColumnsUsed) {
+      popup.$content().addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
+    }
   }
 }
