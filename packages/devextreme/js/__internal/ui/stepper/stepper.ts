@@ -41,18 +41,18 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   _$stepsContainer!: dxElementWrapper;
 
   _prepareDefaultItemTemplate(data: StepperItemProperties, $container: dxElementWrapper): void {
-    const $indicatorElement = $('<span>').addClass(STEP_INDICATOR_CLASS);
-    const $iconElement = getImageContainer(data.icon) ?? $('<span>').addClass(STEP_TEXT_CLASS).text(data.text ?? '');
+    const $indicatorElement = $('<div>').addClass(STEP_INDICATOR_CLASS);
+    const $iconElement = getImageContainer(data.icon) ?? $('<div>').addClass(STEP_TEXT_CLASS).text(data.text ?? '');
 
     $iconElement.appendTo($indicatorElement);
     $indicatorElement.prependTo($container);
 
     if (isDefined(data.title)) {
-      const $stepTitleSpan = $('<span>').addClass(STEP_TITLE_CLASS);
+      const $stepTitleDiv = $('<div>').addClass(STEP_TITLE_CLASS);
 
-      $stepTitleSpan.text(data.title);
+      $stepTitleDiv.text(data.title);
 
-      $stepTitleSpan.appendTo($container);
+      $stepTitleDiv.appendTo($container);
     }
   }
 
