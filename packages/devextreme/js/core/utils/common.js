@@ -5,6 +5,9 @@ import { toComparable } from './data';
 import { each } from './iterator';
 import { isDefined, isFunction, isString, isObject, type } from './type';
 
+// @ts-expect-error new deferred
+export const uiLayerInitialized = new Deferred();
+
 export const ensureDefined = function(value, defaultValue) {
     return isDefined(value) ? value : defaultValue;
 };

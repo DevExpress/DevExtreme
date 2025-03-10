@@ -5,11 +5,13 @@ import { extend } from './utils/extend';
 import { isPlainObject } from './utils/type';
 import errors from './errors';
 import Callbacks from './utils/callbacks';
+import { when } from './utils/deferred';
 import readyCallbacks from './utils/ready_callbacks';
 import resizeCallbacks from './utils/resize_callbacks';
 import { EventsStrategy } from './events_strategy';
 import { sessionStorage as SessionStorage } from './utils/storage';
 import { changeCallback, value as viewPort } from './utils/view_port';
+import { uiLayerInitialized } from './utils/common';
 import Config from './config';
 
 const window = getWindow();
@@ -360,14 +362,16 @@ class Devices {
 
 const devices = new Devices();
 
-const viewPortElement = viewPort();
-if(viewPortElement) {
-    devices.attachCssClasses(viewPortElement);
-}
+when(uiLayerInitialized).done(() => {
+    const viewPortElement = viewPort();
+    if(viewPortElement) {
+        devices.attachCssClasses(viewPortElement);
+    }
 
-changeCallback.add((viewPort, prevViewport) => {
-    devices.detachCssClasses(prevViewport);
-    devices.attachCssClasses(viewPort);
+    changeCallback.add((viewPort, prevViewport) => {
+        devices.detachCssClasses(prevViewport);
+        devices.attachCssClasses(viewPort);
+    });
 });
 
 ///#DEBUG
