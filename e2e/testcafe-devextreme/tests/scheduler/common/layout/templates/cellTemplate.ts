@@ -7,9 +7,11 @@ import url from '../../../../../helpers/getPageUrl';
 fixture.disablePageReloads`Layout:Templates:CellTemplate`
   .page(url(__dirname, '../../../../container.html'));
 
+const SCHEDULER_SELECTOR = '#container';
+
 ['day', 'workWeek', 'month', 'timelineDay', 'timelineWorkWeek', 'timelineMonth'].forEach((currentView) => {
   test(`dataCellTemplate and dateCellTemplate layout should be rendered right in '${currentView}'`, async (t) => {
-    const scheduler = new Scheduler('#container');
+    const scheduler = new Scheduler(SCHEDULER_SELECTOR);
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
@@ -34,5 +36,30 @@ fixture.disablePageReloads`Layout:Templates:CellTemplate`
       })),
       height: 600,
     });
+  });
+});
+
+test('Async dateCellTemplate should be rendered only once (T1251590)', async (t) => {
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+
+  const firstTableCell = scheduler.headerPanel.headerCells.nth(0);
+
+  await t.expect(firstTableCell.textContent).eql('TEST');
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    dataSource: [
+      {
+        startDate: '2024-01-01T01:00:00',
+        endDate: '2024-01-01T02:00:00',
+        allDay: true,
+      },
+    ],
+    currentDate: '2024-01-01',
+    currentView: 'week',
+    dateCellTemplate: ClientFunction((_, __, itemElement) => {
+      setTimeout(() => {
+        itemElement.append('TEST');
+      }, 0);
+    }),
   });
 });
