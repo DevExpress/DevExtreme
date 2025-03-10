@@ -16,7 +16,6 @@
     "test": "jest --coverage --verbose --runInBand",
     "copy-resources": "ts-node --files=true src/tools/copy-resources.ts",
     "generate-metadata": "ts-node --files=true src/metadata/generate.ts",
-    "lint": "eslint --ignore-pattern src/tools --ignore-pattern src/metadata --ignore-pattern src/data/metadata src/**/*.ts",
     "build-ts": "tsc",
     "build": "pnpm run generate-metadata && pnpm run build-ts && pnpm run copy-resources",
     "pack": "cd dist && pnpm pack"
