@@ -15,13 +15,13 @@ runManualTest('Scheduler', 'ToolbarCustomization', ['jQuery'], (test) => {
     const menuButtonSelector = $('.dx-toolbar').find('.dx-toolbar-menu-container').find('.dx-button');
     const menuItemsSelector = $('.dx-overlay-wrapper').find('.dx-list-item');
 
-    await testScreenshot(t, takeScreenshot, 'toolbar_customization_wide.png');
+    await testScreenshot(t, takeScreenshot, 'scheduler_toolbar_customization_wide.png');
 
     await t
       .resizeWindow(490, 600)
       .click(menuButtonSelector);
 
-    await testScreenshot(t, takeScreenshot, 'toolbar_customization_medium.png');
+    await testScreenshot(t, takeScreenshot, 'scheduler_toolbar_customization_medium.png');
 
     await t
       .click($('body'), { offsetX: 0, offsetY: 0 })
@@ -30,7 +30,7 @@ runManualTest('Scheduler', 'ToolbarCustomization', ['jQuery'], (test) => {
       .expect(menuItemsSelector.count)
       .eql(4);
 
-    await testScreenshot(t, takeScreenshot, 'toolbar_customization_thin.png');
+    await testScreenshot(t, takeScreenshot, 'scheduler_toolbar_customization_thin.png');
 
     await t
       .expect(compareResults.isValid())
