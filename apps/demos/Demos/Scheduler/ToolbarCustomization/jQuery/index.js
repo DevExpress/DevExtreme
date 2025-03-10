@@ -69,7 +69,11 @@ $(() => {
             },
           },
         },
-        'viewSwitcher',
+        {
+          location: 'after',
+          locateInMenu: 'auto',
+          name: 'viewSwitcher',
+        }
       ]
     },
     height: 600,
