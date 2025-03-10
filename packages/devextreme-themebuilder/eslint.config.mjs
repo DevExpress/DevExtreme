@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { FlatCompat } from '@eslint/eslintrc';
@@ -14,9 +13,6 @@ const compat = new FlatCompat({
 
 export default [
     {
-        plugins: {
-            "import": importPlugin,
-        },
         ignores: [
             "coverage",
             "dist",
