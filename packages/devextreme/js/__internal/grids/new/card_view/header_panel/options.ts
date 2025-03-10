@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import type * as Sortable from '@js/ui/sortable';
 
 import type { Column } from '../../grid_core/columns_controller/types';

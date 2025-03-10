@@ -72,7 +72,7 @@ class Editor<
 
   private _valueChangeActionSuppressed?: boolean;
 
-  private _valueChangeEventInstance?: ValueChangedEvent;
+  _valueChangeEventInstance?: ValueChangedEvent;
 
   _$validationMessage?: dxElementWrapper;
 
@@ -219,12 +219,10 @@ class Editor<
     super._focusInHandler(e);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _canValueBeChangedByClick(): boolean {
     return false;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getStylingModePrefix(): string {
     return 'dx-editor-';
   }
@@ -246,7 +244,6 @@ class Editor<
         this._defaultOptionsRules(),
       )[optionName];
 
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       stylingModeClass = prefix + (platformOptionValue ?? defaultOptionValue);
     }
 
@@ -381,7 +378,6 @@ class Editor<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getSubmitElement(): dxElementWrapper | null {
     return null;
   }
@@ -396,7 +392,6 @@ class Editor<
     this._validationMessage?.option(optionKey, value);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _hasActiveElement(): boolean {
     return false;
   }

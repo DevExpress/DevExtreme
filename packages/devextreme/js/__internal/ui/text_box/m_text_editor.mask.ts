@@ -169,7 +169,6 @@ class TextEditorMask<
     });
   }
 
-  // eslint-disable-next-line max-len
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _onMouseWheel(e?): void {}
 
@@ -367,7 +366,8 @@ class TextEditorMask<
     return this._convertToValue().replace(/\s+$/, '');
   }
 
-  _valueChangeEventHandler(e): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _valueChangeEventHandler(e, value?): void {
     if (!this._maskRulesChain) {
       // @ts-expect-error
       super._valueChangeEventHandler.apply(this, arguments);

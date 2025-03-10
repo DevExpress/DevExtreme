@@ -1,5 +1,6 @@
 import type { Orientation } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { OptionChanged } from '@ts/core/widget/types';
 import CollectionWidgetAsync from '@ts/ui/collection/m_collection_widget.async';
@@ -9,7 +10,9 @@ import type { StepperItemProperties } from './stepper_item';
 import StepperItem from './stepper_item';
 
 export const STEPPER_CLASS = 'dx-stepper';
-export const STEPPER_ITEM_CLASS = 'dx-stepper-item';
+export const STEP_LIST_CLASS = 'dx-step-list';
+export const STEP_CLASS = 'dx-step';
+export const STEP_SELECTED_CLASS = 'dx-step-selected';
 export const STEPPER_HORIZONTAL_ORIENTATION_CLASS = 'dx-stepper-horizontal';
 export const STEPPER_VERTICAL_ORIENTATION_CLASS = 'dx-stepper-vertical';
 
@@ -27,19 +30,40 @@ export interface StepperProperties extends CollectionWidgetEditProperties<Steppe
 class Stepper extends CollectionWidgetAsync<StepperProperties> {
   static ItemClass = StepperItem;
 
+  _$stepsContainer!: dxElementWrapper;
+
   _getDefaultOptions(): StepperProperties {
     return {
       ...super._getDefaultOptions(),
       orientation: 'horizontal',
+      selectionMode: 'single',
+      selectOnFocus: true,
+      activeStateEnabled: true,
+      hoverStateEnabled: true,
+      focusStateEnabled: true,
     };
   }
 
   _itemClass(): string {
-    return STEPPER_ITEM_CLASS;
+    return STEP_CLASS;
+  }
+
+  _itemContainer(): dxElementWrapper {
+    return this._$stepsContainer;
+  }
+
+  _selectedItemClass(): string {
+    return STEP_SELECTED_CLASS;
   }
 
   _itemDataKey(): string {
     return STEPPER_ITEM_DATA_KEY;
+  }
+
+  _init(): void {
+    super._init();
+
+    this._appendStepsContainer();
   }
 
   _initMarkup(): void {
@@ -48,6 +72,13 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     this._toggleOrientationClass();
 
     super._initMarkup();
+  }
+
+  _appendStepsContainer(): void {
+    this._$stepsContainer = $('<div>')
+      .addClass(STEP_LIST_CLASS);
+
+    $(this.element()).append(this._$stepsContainer);
   }
 
   _toggleOrientationClass(): void {

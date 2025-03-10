@@ -107,11 +107,11 @@ test('Navigate between toolbar items', async (t) => {
     .ok()
 
     .pressKey('right')
-    .expect(caption.hasFocusedState)
+    .expect(nextDuration.hasFocusedState)
     .ok()
 
     .pressKey('right')
-    .expect(nextDuration.hasFocusedState)
+    .expect(caption.hasFocusedState)
     .ok()
 
     .pressKey('tab')
@@ -156,30 +156,32 @@ test('Navigate between custom toolbar items', async (t) => {
     .ok()
 
     .pressKey('right')
-    .expect(caption.hasFocusedState)
+    .expect(nextDuration.hasFocusedState)
     .ok()
 
     .pressKey('right')
-    .expect(nextDuration.hasFocusedState)
+    .expect(caption.hasFocusedState)
     .ok();
 }).before(async () => createScheduler({
   views: ['day', 'week'],
   currentView: 'day',
-  toolbar: [
-    {
-      location: 'before',
-      defaultElement: 'viewSwitcher',
-    },
-    {
-      location: 'before',
-      widget: 'dxButton',
-      options: {
-        text: 'Today',
+  toolbar: {
+    items: [
+      {
+        location: 'before',
+        name: 'viewSwitcher',
       },
-    },
-    {
-      location: 'after',
-      defaultElement: 'dateNavigator',
-    },
-  ],
+      {
+        location: 'before',
+        widget: 'dxButton',
+        options: {
+          text: 'Today',
+        },
+      },
+      {
+        location: 'after',
+        name: 'dateNavigator',
+      },
+    ],
+  },
 }));
