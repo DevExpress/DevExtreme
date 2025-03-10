@@ -1,4 +1,4 @@
-/* eslint-disable object-curly-newline */
+/* eslint-disable @stylistic/object-curly-newline */
 import { describe, expect } from '@jest/globals';
 import each from 'jest-each';
 
