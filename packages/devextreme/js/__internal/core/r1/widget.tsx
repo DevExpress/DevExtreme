@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable spellcheck/spell-checker */
+
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import '@js/common/core/events/click';
@@ -95,10 +95,8 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
 
   public refs: any = null;
 
-  // eslint-disable-next-line max-len
   public rootElementRef?: RefObject<HTMLDivElement> = infernoCreateRef();
 
-  // eslint-disable-next-line max-len
   public widgetElementRef?: RefObject<HTMLDivElement> = infernoCreateRef();
 
   public config?: ConfigContextValue;
@@ -264,7 +262,7 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
   activeEffect(): EffectReturn {
     const {
       activeStateEnabled, activeStateUnit, disabled,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
+
       _feedbackShowTimeout, onActive,
     } = this.props;
     const namespace = 'UIFeedback';
@@ -292,7 +290,7 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
   inactiveEffect(): EffectReturn {
     const {
       activeStateEnabled, activeStateUnit,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
+
       _feedbackHideTimeout, onInactive,
     } = this.props;
     const namespace = 'UIFeedback';

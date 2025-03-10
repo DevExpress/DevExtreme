@@ -654,14 +654,14 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
         // arrange
         const $testElement = $('#treeList');
 
-        /* eslint-disable indent */
+        /* eslint-disable @stylistic/indent */
         const array = [
             { id: 1, field1: 'test1', field2: 1 },
                 { id: 2, parentId: 1, field1: 'test2', field2: 2 },
             { id: 3, field1: 'test3', field2: 3 },
                 { id: 4, parentId: 3, field1: 'test4', field2: 4 }
         ];
-        /* eslint-enable indent */
+        /* eslint-enable @stylistic/indent */
 
         this.options.autoExpandAll = true;
         this.options.dataSource = array;
@@ -691,14 +691,14 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
         // arrange
         const $testElement = $('#treeList');
 
-        /* eslint-disable indent */
+        /* eslint-disable @stylistic/indent */
         const array = [
             { id: 1, field1: 'test1', field2: 1 },
                 { id: 2, parentId: 1, field1: 'test2', field2: 2 },
             { id: 3, field1: 'test3', field2: 3 },
                 { id: 4, parentId: 3, field1: 'test4', field2: 4 }
         ];
-        /* eslint-enable indent */
+        /* eslint-enable @stylistic/indent */
 
         this.options.autoExpandAll = true;
         this.options.dataSource = array;
@@ -1140,7 +1140,7 @@ QUnit.module('Recursive selection', {
             // arrange
             const $testElement = $('#treeList');
 
-            /* eslint-disable indent */
+            /* eslint-disable @stylistic/indent */
             this.options.dataSource = [
                 { id: 1, field1: 'field1', field2: 1, field3: new Date(2001, 0, 1) },
                     { id: 2, parentId: 1, field1: 'field2', field2: 2, field3: new Date(2002, 1, 2) },
@@ -1150,7 +1150,7 @@ QUnit.module('Recursive selection', {
                 { id: 6, field1: 'field3', field2: 6, field3: new Date(2002, 1, 6) },
                 { id: 7, field1: 'test3', field2: 7, field3: new Date(2002, 1, 7) }
             ];
-            /* eslint-enable indent */
+            /* eslint-enable @stylistic/indent */
             this.options.searchPanel = { text: 'test' };
             this.options.expandNodesOnFiltering = true;
             this.options.filterMode = filterMode;
@@ -1170,7 +1170,7 @@ QUnit.module('Recursive selection', {
             // arrange
             const $testElement = $('#treeList');
 
-            /* eslint-disable indent */
+            /* eslint-disable @stylistic/indent */
             this.options.dataSource = [
                 { id: 1, field1: 'field1', field2: 1, field3: new Date(2001, 0, 1) },
                     { id: 2, parentId: 1, field1: 'field2', field2: 2, field3: new Date(2002, 1, 2) },
@@ -1182,7 +1182,7 @@ QUnit.module('Recursive selection', {
                     { id: 8, parentId: 1, field1: 'field6', field2: 8, field3: new Date(2002, 1, 8) },
                         { id: 9, parentId: 8, field1: 'field7', field2: 9, field3: new Date(2002, 1, 9) }
             ];
-            /* eslint-enable indent */
+            /* eslint-enable @stylistic/indent */
             this.options.searchPanel = { text: 'test' };
             this.options.expandNodesOnFiltering = true;
             this.options.filterMode = filterMode;

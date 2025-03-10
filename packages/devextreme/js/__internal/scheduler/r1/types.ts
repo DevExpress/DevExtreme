@@ -52,7 +52,7 @@ export interface AppointmentFilter {
 export interface CustomLoadDataType { data: Appointment[] }
 
 export interface AppointmentGeometry {
-  empty: boolean; // TODO
+  empty: boolean;
   left: number;
   top: number;
   width: number;

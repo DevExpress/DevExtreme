@@ -59,7 +59,7 @@ export class WatcherHelper {
     return value;
   }
 
-  private _checkObjectsFields(checkingFromObject: Object, checkingToObject: Object) {
+  private _checkObjectsFields(checkingFromObject: object, checkingToObject: object) {
     for (const field in checkingFromObject) {
       const oldValue = this._toComparable(checkingFromObject[field]);
       const newValue = this._toComparable(checkingToObject[field]);

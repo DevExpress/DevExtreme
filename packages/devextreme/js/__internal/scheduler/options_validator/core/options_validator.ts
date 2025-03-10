@@ -12,17 +12,17 @@ export abstract class OptionsValidator<TValidators extends string, TWidgetOption
   validate(options: TWidgetOptions): OptionsValidatorResult<TValidators> {
     const errors = Object.entries<ValidatorType<TWidgetOptions>>(this.validators)
       .reduce<OptionsValidatorErrors<TValidators>>((
-      result,
-      [validatorName, validator],
-    ) => {
-      const validatorResult = validator.validate(options);
+        result,
+        [validatorName, validator],
+      ) => {
+        const validatorResult = validator.validate(options);
 
-      if (validatorResult !== true) {
-        result[validatorName] = validatorResult;
-      }
+        if (validatorResult !== true) {
+          result[validatorName] = validatorResult;
+        }
 
-      return result;
-    }, {});
+        return result;
+      }, {});
 
     return Object.keys(errors).length > 0
       ? errors

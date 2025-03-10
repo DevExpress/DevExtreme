@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import {
   HttpClient, HttpEventType, HttpParams, HttpEvent, HttpErrorResponse, HttpResponse,
 } from '@angular/common/http';
@@ -171,7 +170,7 @@ function getUploadCallbacks(options: Options, deferred: DeferredResult, xhrSurro
   let isUploadStarted = false;
 
   return {
-    next: (event: HttpEvent<Object>) => {
+    next: (event: HttpEvent<object>) => {
       if (!isUploadStarted
           && [HttpEventType.UploadProgress, HttpEventType.Sent].includes(event.type)) {
         options.upload.onloadstart?.(event);

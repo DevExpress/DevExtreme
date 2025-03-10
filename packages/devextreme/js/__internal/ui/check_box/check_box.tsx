@@ -88,11 +88,11 @@ export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
     if (!readOnly) {
       saveValueChangeEvent?.(event);
       if (enableThreeStateBehavior) {
-        // eslint-disable-next-line max-len
+        // eslint-disable-next-line @stylistic/max-len
         // eslint-disable-next-line @typescript-eslint/init-declarations, @typescript-eslint/naming-convention
         let __newValue;
         this.setState((__state_argument) => {
-          // eslint-disable-next-line max-len
+          // eslint-disable-next-line @stylistic/max-len
           __newValue = (this.props.value !== undefined ? this.props.value : __state_argument.value) === null || (!(this.props.value !== undefined ? this.props.value : __state_argument.value) ? null : false);
           return {
             value: __newValue,
@@ -100,11 +100,11 @@ export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
         });
         this.props.valueChange?.(__newValue);
       } else {
-        // eslint-disable-next-line max-len
+        // eslint-disable-next-line @stylistic/max-len
         // eslint-disable-next-line @typescript-eslint/init-declarations, @typescript-eslint/naming-convention
         let __newValue;
         this.setState((__state_argument) => {
-          // eslint-disable-next-line max-len
+          // eslint-disable-next-line @stylistic/max-len
           __newValue = !((this.props.value !== undefined ? this.props.value : __state_argument.value) ?? false);
           return {
             value: __newValue,
@@ -164,7 +164,7 @@ export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
 
   get restAttributes(): Record<string, unknown> {
     const {
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       accessKey, activeStateEnabled, aria, className, classes, defaultValue, disabled, enableThreeStateBehavior, focusStateEnabled, height, hint, hoverStateEnabled, iconSize, inputAttr, isDirty, isValid, name, onClick, onFocusIn, onKeyDown, readOnly, rtlEnabled, saveValueChangeEvent, tabIndex, text, validationError, validationErrors, validationMessageMode, validationMessagePosition, validationStatus, value, valueChange, visible, width,
       ...restProps
     } = this.props;

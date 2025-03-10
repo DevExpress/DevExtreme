@@ -3,13 +3,13 @@ import * as events from 'devextreme/events';
 
 import {
   useContext,
+  useMemo,
   useImperativeHandle,
   forwardRef,
   useRef,
   useLayoutEffect,
   useCallback,
   useState,
-  useMemo,
   ReactElement,
 } from 'react';
 
@@ -31,7 +31,7 @@ import {
   NestedOptionContext,
   RemovalLockerContext,
   RestoreTreeContext,
-  TemplateDiscoveryContext,
+  TemplateRenderingContext,
 } from './contexts';
 
 const DX_REMOVE_EVENT = 'dxremove';
@@ -94,13 +94,9 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     const updateTemplates = useRef<(callback: () => void) => void>();
 
     const prevPropsRef = useRef<P & ComponentBaseProps>();
+    const childrenContainer = useRef<HTMLDivElement>(null);
 
-    const templateContainer = useMemo(
-      () => (typeof document !== 'undefined'
-        ? document.createElement('div')
-        : undefined),
-      [],
-    );
+    const { parentType } = useContext(NestedOptionContext);
 
     const [widgetConfig, context] = useOptionScanning(
       {
@@ -116,8 +112,9 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         props,
       },
       props.children,
-      templateContainer,
+      childrenContainer,
       Symbol('initial update token'),
+      'component',
     );
 
     const restoreTree = useCallback(() => {
@@ -282,6 +279,10 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     }, [shouldRestoreFocus.current, instance.current]);
 
     const onComponentUpdated = useCallback(() => {
+      if (parentType === 'option') {
+        return;
+      }
+
       if (!optionsManager.current?.isInstanceSet) {
         return;
       }
@@ -306,6 +307,10 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     ]);
 
     const onComponentMounted = useCallback(() => {
+      if (parentType === 'option') {
+        return;
+      }
+
       const { style } = props;
 
       if (childElementsDetached.current) {
@@ -424,18 +429,14 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       _renderChildren,
     ]);
 
+    const renderContextValue = useMemo(() => ({
+      isTemplateRendering: false,
+    }), []);
+
     return (
       <RestoreTreeContext.Provider value={restoreTree}>
-        <TemplateDiscoveryContext.Provider value={{ discoveryRendering: false }}>
-          { templateContainer
-            && createPortal(
-              <TemplateDiscoveryContext.Provider value={{ discoveryRendering: true }}>
-                {_renderChildren()}
-              </TemplateDiscoveryContext.Provider>,
-              templateContainer,
-            )
-          }
-          <div {...getElementProps()}>
+        <TemplateRenderingContext.Provider value={renderContextValue}>
+          <div ref={childrenContainer} {...getElementProps()}>
             <NestedOptionContext.Provider value={context}>
               {renderContent()}
             </NestedOptionContext.Provider>
@@ -446,7 +447,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
                 </NestedOptionContext.Provider>
               }
           </div>
-        </TemplateDiscoveryContext.Provider>
+        </TemplateRenderingContext.Provider>
       </RestoreTreeContext.Provider>
     );
   },

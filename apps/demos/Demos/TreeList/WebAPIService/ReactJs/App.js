@@ -10,7 +10,7 @@ import TreeList, {
 } from 'devextreme-react/tree-list';
 import AspNetData from 'devextreme-aspnet-data-nojquery';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/TreeListTasks';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 const tasksData = AspNetData.createStore({
   key: 'Task_ID',
   loadUrl: `${url}/Tasks`,

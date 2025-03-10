@@ -577,7 +577,7 @@ export interface dxListOptions<
     selectAllMode?: SelectAllMode;
     /**
      * @docid
-     * @default 'true'
+     * @default true
      * @public
      */
     selectByClick?: boolean;
@@ -855,7 +855,7 @@ export type Options<
     TKey = any,
 > = Properties<TItem, TKey>;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -903,4 +903,4 @@ onSelectionChanging?: ((e: SelectionChangingEvent) => void);
  */
 onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

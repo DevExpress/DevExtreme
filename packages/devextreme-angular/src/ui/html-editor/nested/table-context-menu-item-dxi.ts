@@ -10,7 +10,10 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -26,6 +29,7 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+import { DxiHtmlEditorItemComponent } from './item-dxi';
 
 
 @Component({
@@ -129,6 +133,14 @@ export class DxiHtmlEditorTableContextMenuItemComponent extends CollectionNested
         return 'items';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent))
+    get itemsChildren(): QueryList<DxiHtmlEditorItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

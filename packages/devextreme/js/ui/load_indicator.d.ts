@@ -67,7 +67,7 @@ export type Properties = dxLoadIndicatorOptions;
 /** @deprecated use Properties instead */
 export type Options = dxLoadIndicatorOptions;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -100,4 +100,4 @@ onInitialized?: ((e: InitializedEvent) => void);
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

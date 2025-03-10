@@ -22,7 +22,7 @@ import {
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import MasterDetailGrid from './MasterDetailGrid.js';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 const dataSource = createStore({
   key: 'OrderID',
   loadUrl: `${url}/Orders`,

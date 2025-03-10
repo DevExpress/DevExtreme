@@ -1,5 +1,5 @@
 $(() => {
-  const url = 'https://js.devexpress.com/Demos/Mvc/api/TreeListTasks';
+  const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
   $('#tree-list').dxTreeList({
     dataSource: DevExpress.data.AspNet.createStore({
       key: 'Task_ID',

@@ -67,7 +67,7 @@ export class AppComponent {
             params = params.set(option, JSON.stringify(loadOptions[option]));
           }
         });
-        return lastValueFrom(httpClient.get('https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi/CustomersLookup', { params }))
+        return lastValueFrom(httpClient.get('https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi/CustomersLookup', { params }))
           .then(({ data }: { data: Record<string, unknown>[] }) => ({
             data,
           }))

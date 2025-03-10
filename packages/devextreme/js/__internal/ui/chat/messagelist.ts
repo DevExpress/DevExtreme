@@ -114,6 +114,7 @@ class MessageList extends Widget<Properties> {
   }
 
   _renderContentImpl(): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     super._renderContentImpl();
 
     this._attachResizeObserverSubscription();

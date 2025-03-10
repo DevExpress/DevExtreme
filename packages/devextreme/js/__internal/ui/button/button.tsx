@@ -107,7 +107,7 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
       }), {
         namespace,
       });
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
       return () => click.off(this.submitInputRef.current, {
         namespace,
       });
@@ -152,7 +152,6 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   keyDown(e): unknown {
     const {
       onKeyDown,
@@ -361,6 +360,6 @@ const __defaultOptionRules: any = [];
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function defaultOptions(rule) {
   __defaultOptionRules.push(rule);
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   Button.defaultProps = Object.create(Object.prototype, Object.assign(Object.getOwnPropertyDescriptors(Button.defaultProps), Object.getOwnPropertyDescriptors(convertRulesToOptions(defaultOptionRules)), Object.getOwnPropertyDescriptors(convertRulesToOptions(__defaultOptionRules))));
 }

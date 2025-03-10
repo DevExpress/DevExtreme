@@ -27,7 +27,7 @@ export const getIntersection = function (firstArray, secondArray) {
   });
 };
 
-export const removeDuplicates = function (from = [], toRemove = []) {
+export const removeDuplicates = function (from = [], toRemove: any[] = []) {
   const toRemoveMap = createOccurrenceMap(toRemove);
   return from.filter((value) => {
     const occurrencesCount = toRemoveMap.get(value);

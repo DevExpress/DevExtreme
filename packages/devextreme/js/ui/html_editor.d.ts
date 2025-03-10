@@ -722,7 +722,7 @@ export type Properties = dxHtmlEditorOptions;
 /** @deprecated use Properties instead */
 export type Options = dxHtmlEditorOptions;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -758,4 +758,4 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

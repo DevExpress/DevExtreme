@@ -46,11 +46,11 @@ class TextEditorLabel {
     this._toggleMarkupVisibility();
   }
 
-  _isVisible() {
+  _isVisible(): boolean {
     return !!this._props.text && this._props.mode !== 'hidden';
   }
 
-  _render() {
+  _render(): void {
     this._$before = $('<div>').addClass(LABEL_BEFORE_CLASS);
 
     this._$labelSpan = $('<span>');
@@ -73,7 +73,7 @@ class TextEditorLabel {
     this._updateMaxWidth();
   }
 
-  _toggleMarkupVisibility() {
+  _toggleMarkupVisibility(): void {
     const visible = this._isVisible();
 
     this._updateEditorBeforeButtonsClass(visible);
@@ -86,7 +86,7 @@ class TextEditorLabel {
     this._attachEvents();
   }
 
-  _attachEvents() {
+  _attachEvents(): void {
     const clickEventName = addNamespace(click, this.NAME);
     const hoverStartEventName = addNamespace(hoverStart, this.NAME);
     const activeEventName = addNamespace(active, this.NAME);
@@ -114,7 +114,7 @@ class TextEditorLabel {
     }
   }
 
-  _updateEditorLabelClass(visible) {
+  _updateEditorLabelClass(visible): void {
     this._props.$editor
       .removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS)
       .removeClass(TEXTEDITOR_LABEL_OUTSIDE_CLASS)
@@ -137,7 +137,7 @@ class TextEditorLabel {
     return this._props.mode === 'outside';
   }
 
-  _updateEditorBeforeButtonsClass(visible = this._isVisible()) {
+  _updateEditorBeforeButtonsClass(visible = this._isVisible()): void {
     this._props.$editor
       .removeClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS);
 
@@ -148,15 +148,15 @@ class TextEditorLabel {
     }
   }
 
-  _updateMark() {
+  _updateMark(): void {
     this._$labelSpan.attr('data-mark', this._props.mark);
   }
 
-  _updateText() {
+  _updateText(): void {
     this._$labelSpan.text(this._props.text);
   }
 
-  _updateBeforeWidth() {
+  _updateBeforeWidth(): void {
     if (this._isVisible()) {
       const width = this._props.beforeWidth ?? this._props.getBeforeWidth();
       // @ts-expect-error
@@ -166,7 +166,7 @@ class TextEditorLabel {
     }
   }
 
-  _updateLabelTransform(offset = 0) {
+  _updateLabelTransform(offset = 0): void {
     this._$labelSpan.css('transform', '');
 
     if (this._isVisible() && this._isOutsideMode()) {
@@ -178,7 +178,7 @@ class TextEditorLabel {
     }
   }
 
-  _updateMaxWidth() {
+  _updateMaxWidth(): void {
     if (this._isVisible() && !this._isOutsideMode()) {
       const maxWidth = this._props.containerWidth ?? this._props.getContainerWidth();
       this._$label.css({ maxWidth });
@@ -198,14 +198,14 @@ class TextEditorLabel {
     if (this._isVisible()) return this._id;
   }
 
-  updateMode(mode) {
+  updateMode(mode): void {
     this._props.mode = mode;
     this._toggleMarkupVisibility();
     this._updateBeforeWidth();
     this._updateMaxWidth();
   }
 
-  updateText(text) {
+  updateText(text): void {
     this._props.text = text;
     this._updateText();
     this._toggleMarkupVisibility();
@@ -213,22 +213,22 @@ class TextEditorLabel {
     this._updateMaxWidth();
   }
 
-  updateMark(mark) {
+  updateMark(mark): void {
     this._props.mark = mark;
     this._updateMark();
   }
 
-  updateContainsButtonsBefore(containsButtonsBefore) {
+  updateContainsButtonsBefore(containsButtonsBefore): void {
     this._props.containsButtonsBefore = containsButtonsBefore;
     this._updateEditorBeforeButtonsClass();
   }
 
-  updateBeforeWidth(beforeWidth) {
+  updateBeforeWidth(beforeWidth): void {
     this._props.beforeWidth = beforeWidth;
     this._updateBeforeWidth();
   }
 
-  updateMaxWidth(containerWidth) {
+  updateMaxWidth(containerWidth): void {
     this._props.containerWidth = containerWidth;
     this._updateMaxWidth();
   }

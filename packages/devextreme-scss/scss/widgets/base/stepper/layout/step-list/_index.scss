@@ -1,0 +1,18 @@
+.dx-step-list {
+  display: grid;
+}
+
+.dx-stepper-horizontal {
+  .dx-step-list {
+    width: 100%;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  }
+}
+
+.dx-stepper-vertical {
+  .dx-step-list {
+    height: 100%;
+    grid-template-columns: 1fr;
+    grid-auto-rows: minmax(0, 1fr);
+  }
+}

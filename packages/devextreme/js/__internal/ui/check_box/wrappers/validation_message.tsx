@@ -41,7 +41,7 @@ export class ValidationMessage extends BaseInfernoComponent<ValidationMessagePro
 
   get restAttributes(): Record<string, unknown> {
     const {
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       accessKey, activeStateEnabled, boundary, className, contentId, disabled, focusStateEnabled, height, hint, hoverStateEnabled, mode, offset, onClick, onKeyDown, positionSide, rtlEnabled, tabIndex, target, validationErrors, visible, visualContainer, width,
       ...restProps
     } = this.props;
