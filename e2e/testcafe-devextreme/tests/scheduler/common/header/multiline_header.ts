@@ -17,7 +17,9 @@ const buttons = Array.from({ length: 12 }).map((_, index) => ({
   test(`Scheduler [multiline=${multiline}] toolbar`, async (t) => {
     const scheduler = new Scheduler('#container');
 
-    await t.expect(await compareScreenshot(t, `scheduler-multiline-${multiline}-toolbar.png`, scheduler.element)).ok();
+    await t.expect(
+      await compareScreenshot(t, `scheduler-multiline-${multiline}-toolbar.png`, scheduler.toolbar.element),
+    ).ok();
   }).before(async () => createWidget('dxScheduler', {
     views: ['day', 'week', 'workWeek', 'month'],
     currentView: 'workWeek',
