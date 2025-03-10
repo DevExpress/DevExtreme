@@ -6,6 +6,7 @@ const fs = require('fs');
 const process = require('process');
 const parseArgs = require('minimist');
 const { globSync } = require('glob');
+const { DEFAULT_BROWSER_SIZE } = require('./helpers/const');
 const testPageUtils = require('./helpers/clearPage');
 require('nconf').argv();
 
@@ -167,8 +168,8 @@ createTestCafe(TESTCAFE_CONFIG)
         runOptions.hooks = {
             test: {
                 before: async(t) => {
-                    // TODO: Move to a single const (look at restoreBrowserSize helper module)
-                    await t.resizeWindow(1200, 800);
+                    const [width, height] = DEFAULT_BROWSER_SIZE;
+                    await t.resizeWindow(width, height);
 
                     if(args.shadowDom) {
                         await addShadowRootTree(t);

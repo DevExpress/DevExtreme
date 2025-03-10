@@ -13,6 +13,7 @@ import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
+import browser from '@js/core/utils/browser';
 import {
   // @ts-expect-error
   splitPair,
@@ -26,7 +27,6 @@ import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { Options as Properties } from '@js/ui/drop_down_editor/ui.drop_down_editor';
 import type { Properties as PopupProperties } from '@js/ui/popup';
-import type dxPopup from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import { focused } from '@js/ui/widget/selectors';
 import errors from '@js/ui/widget/ui.errors';
@@ -34,6 +34,7 @@ import Widget from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import TextBox from '@ts/ui/text_box/m_text_box';
 
+import type Popover from '../popover/m_popover';
 import type { TextEditorButtonInfo } from '../text_box/texteditor_button_collection/m_index';
 import DropDownButton from './m_drop_down_button';
 import { getElementWidth, getSizeValue } from './m_utils';
@@ -70,7 +71,7 @@ class DropDownEditor<
 
   _$popup?: dxElementWrapper;
 
-  _popup?: dxPopup;
+  _popup?: Popup | Popover;
 
   _$templateWrapper?: dxElementWrapper;
 
@@ -425,8 +426,19 @@ class DropDownEditor<
         }
 
         this._integrateInput();
-        // @ts-expect-error ts-error
-        isFocused && eventsEngine.trigger($input, 'focus');
+
+        if (!isFocused) {
+          return;
+        }
+
+        // T1259996
+        if (browser.mozilla) {
+          const inputElement = $input.get(0) as HTMLInputElement;
+          inputElement.focus({ preventScroll: true });
+        } else {
+          // @ts-expect-error
+          eventsEngine.trigger($input, 'focus');
+        }
       },
     });
   }
@@ -638,7 +650,7 @@ class DropDownEditor<
     this._attachPopupKeyHandler();
 
     this._contentReadyHandler();
-    // @ts-expect-error ts-error
+
     this._setPopupContentId(this._popup.$content());
 
     this._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
@@ -765,7 +777,7 @@ class DropDownEditor<
     if (!this._popup) {
       return;
     }
-    // @ts-expect-error ts-error
+
     const $popupOverlayContent = this._popup.$overlayContent();
     const isOverlayFlipped = e.position?.v?.flip;
     const shouldIndentForLabel = labelMode !== 'hidden' && labelMode !== 'outside' && stylingMode === 'outlined';
@@ -815,7 +827,7 @@ class DropDownEditor<
 
     if (this._popup?.option('visible')) {
       const { top: myTop } = animationPosition.setup(this.$element());
-      // @ts-expect-error ts-error
+
       const { top: popupTop } = animationPosition.setup(this._popup.$content());
       // @ts-expect-error ts-error
       positionSide = (myTop + this.option('popupPosition').offset.v) > popupTop ? 'bottom' : 'top';

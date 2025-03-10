@@ -1547,6 +1547,11 @@ testComponentDefaults(Stepper,
     {},
     {
         orientation: 'horizontal',
+        selectionMode: 'single',
+        selectOnFocus: true,
+        activeStateEnabled: true,
+        hoverStateEnabled: true,
+        focusStateEnabled: true,
     }
 );
 

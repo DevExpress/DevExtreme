@@ -234,7 +234,7 @@ class DropDownList<
 
   _saveFocusOnWidget(): void {
     // @ts-expect-error ts-error
-    if (this._list && this._list.initialOption('focusStateEnabled')) {
+    if (this._list?.initialOption('focusStateEnabled')) {
       this._focusInput();
     }
   }
@@ -385,7 +385,7 @@ class DropDownList<
     items = items || this.option('items') || this._dataSource.items() || [];
 
     for (let i = 0; i < items.length; i++) {
-      if (items[i] && items[i].items) {
+      if (items[i]?.items) {
         plainItems = plainItems.concat(items[i].items);
       } else {
         plainItems.push(items[i]);
@@ -395,7 +395,7 @@ class DropDownList<
     return plainItems;
   }
 
-  _updateActiveDescendant($target): void {
+  _updateActiveDescendant($target?): void {
     const opened = this.option('opened');
     // @ts-expect-error ts-error
     const listFocusedItemId = this._list?.getFocusedItemId();
@@ -551,7 +551,6 @@ class DropDownList<
 
   _renderOpenedState(): void {
     super._renderOpenedState();
-    // @ts-expect-error ts-error
     this._list && this._updateActiveDescendant();
     this.setAria('owns', this._popup && this._popupContentId);
   }

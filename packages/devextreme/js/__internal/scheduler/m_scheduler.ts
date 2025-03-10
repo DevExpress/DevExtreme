@@ -373,16 +373,13 @@ class Scheduler extends Widget<any> {
       _collectorOffset: 0,
       _appointmentOffset: 26,
 
-      toolbar: [
-        {
-          location: 'before',
-          defaultElement: 'dateNavigator',
-        },
-        {
-          location: 'after',
-          defaultElement: 'viewSwitcher',
-        },
-      ],
+      toolbar: {
+        disabled: false,
+        items: [
+          { location: 'before', name: 'dateNavigator' },
+          { location: 'after', name: 'viewSwitcher' },
+        ],
+      },
     });
 
     return extend(true, defaultOptions, {
@@ -812,7 +809,7 @@ class Scheduler extends Widget<any> {
         break;
       case 'toolbar':
         this._header
-          ? this._header.option('items', value)
+          ? this._header.option('toolbar', value)
           : this.repaint();
         break;
       case 'loadedResources':
@@ -1273,7 +1270,7 @@ class Scheduler extends Widget<any> {
   }
 
   _dispose() {
-    this._appointmentTooltip && this._appointmentTooltip.dispose();
+    this._appointmentTooltip?.dispose();
     this._recurrenceDialog?.hide(RECURRENCE_EDITING_MODE.CANCEL);
 
     this.hideAppointmentPopup();
@@ -1530,7 +1527,7 @@ class Scheduler extends Widget<any> {
   }
 
   _isDataSourceLoaded() {
-    return this._dataSource && this._dataSource.isLoaded();
+    return this._dataSource?.isLoaded();
   }
 
   _render() {
@@ -1546,7 +1543,11 @@ class Scheduler extends Widget<any> {
   }
 
   _renderHeader() {
-    if (this.option('toolbar').length !== 0) {
+    const toolbarOptions = this.option('toolbar');
+    const isHeaderShown = toolbarOptions.visible
+      || (toolbarOptions.visible === undefined && toolbarOptions.items.length);
+
+    if (isHeaderShown) {
       const $header = $('<div>').appendTo(this._mainContainer);
       // @ts-expect-error
       this._header = this._createComponent($header, SchedulerHeader, this._headerConfig());
@@ -1580,7 +1581,7 @@ class Scheduler extends Widget<any> {
     result.onCurrentDateChange = (date) => {
       this.option('currentDate', date);
     };
-    result.items = this.option('toolbar');
+    result.toolbar = this.option('toolbar');
     result.startViewDate = this.getStartViewDate();
 
     result.todayDate = () => {
@@ -1666,8 +1667,8 @@ class Scheduler extends Widget<any> {
     const currentView = this.option('currentView');
 
     const view = this._getViewByName(currentView);
-    const viewCount = view && view.intervalCount || 1;
-    const startDate = view && view.startDate || null;
+    const viewCount = view?.intervalCount || 1;
+    const startDate = view?.startDate || null;
 
     return {
       intervalCount: viewCount,
@@ -1805,7 +1806,7 @@ class Scheduler extends Widget<any> {
   _getAppointmentTemplate(optionName) {
     const currentViewOptions = this._getCurrentViewOptions();
 
-    if (currentViewOptions && currentViewOptions[optionName]) {
+    if (currentViewOptions?.[optionName]) {
       return this._getTemplate(currentViewOptions[optionName]);
     }
 
@@ -2175,7 +2176,7 @@ class Scheduler extends Widget<any> {
           deferred = this.appointmentDataProvider
             .update(target, rawAppointment)
             .done(() => {
-              dragEvent && dragEvent.cancel.resolve(false);
+              dragEvent?.cancel.resolve(false);
             })
             .always((storeAppointment) => this._onDataPromiseCompleted(StoreEventNames.UPDATED, storeAppointment))
             .fail(() => performFailAction());
@@ -2485,7 +2486,7 @@ class Scheduler extends Widget<any> {
   }
 
   hideAppointmentTooltip() {
-    this._appointmentTooltip && this._appointmentTooltip.hide();
+    this._appointmentTooltip?.hide();
   }
 
   scrollToTime(hours, minutes, date) {
