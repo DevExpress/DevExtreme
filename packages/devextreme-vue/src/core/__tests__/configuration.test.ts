@@ -1,4 +1,5 @@
 import { ComponentPublicInstance, reactive } from 'vue';
+import { VMODEL_NAME } from '../vue-helper';
 import Configuration, {
   bindOptionWatchers,
   ExpectedChild,
@@ -643,5 +644,36 @@ describe('onOptionChanged', () => {
     });
 
     expect(emitStubRoot).toHaveBeenCalledTimes(0);
+  });
+
+  it('should use v-model event name and mutate innerChanges with VMODEL_NAME when option is "value" and v-model is active', () => {
+    const innerChanges = {};
+    const config = new Configuration(jest.fn(), null, {});
+    const emitStub = jest.fn();
+    const component = {
+      $emit: emitStub,
+      $props: { value: false, [VMODEL_NAME]: false },
+      $options: {
+        props: { value: false, [VMODEL_NAME]: false },
+        model: true,
+      },
+      $: {
+        vnode: {
+          props: { value: false, [VMODEL_NAME]: false },
+        },
+      },
+    };
+    setEmitOptionChangedFunc(config, component as unknown as ComponentPublicInstance, innerChanges);
+
+    config.onOptionChanged({
+      fullName: 'value',
+      value: true,
+      previousValue: false,
+      component: null,
+    });
+
+    expect(emitStub).toHaveBeenCalledTimes(1);
+    expect(emitStub).toHaveBeenCalledWith(`update:${VMODEL_NAME}`, true);
+    expect(innerChanges[VMODEL_NAME]).toBe(true);
   });
 });
