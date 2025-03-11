@@ -16,7 +16,7 @@ import Widget, {
 /** @public */
 export type MapProvider = 'azure' | 'bing' | 'google' | 'googleStatic';
 /** @public */
-export type RouteMode = 'driving' | 'walking';
+export type RouteMode = 'driving' | 'walking' | string;
 /** @public */
 export type MapType = 'hybrid' | 'roadmap' | 'satellite';
 
