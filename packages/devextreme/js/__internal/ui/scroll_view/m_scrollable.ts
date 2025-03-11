@@ -54,7 +54,7 @@ class Scrollable<
 
   _allowedDirectionValue!: string | null;
 
-  _strategy?: any;
+  _strategy!: NativeStrategy | SimulatedStrategy;
 
   _savedScrollOffset?: {
     top?: number;
@@ -88,8 +88,10 @@ class Scrollable<
     // @ts-expect-error ts-error
     return super._defaultOptionsRules().concat(deviceDependentOptions(), [
       {
-        device() {
-          return supportUtils.nativeScrolling && devices.real().platform === 'android' && !browser.mozilla;
+        device(): boolean {
+          return supportUtils.nativeScrolling
+            && devices.real().platform === 'android'
+            && !browser.mozilla;
         },
         options: {
           useSimulatedScrollbar: true,
@@ -198,12 +200,37 @@ class Scrollable<
     };
 
     eventsEngine.off(this._$wrapper, `.${SCROLLABLE}`);
-    eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.init, SCROLLABLE), initEventData, this._initHandler.bind(this));
-    eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.start, SCROLLABLE), strategy.handleStart.bind(strategy));
-    eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.move, SCROLLABLE), strategy.handleMove.bind(strategy));
-    eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.end, SCROLLABLE), strategy.handleEnd.bind(strategy));
-    eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.cancel, SCROLLABLE), strategy.handleCancel.bind(strategy));
-    eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.stop, SCROLLABLE), strategy.handleStop.bind(strategy));
+    eventsEngine.on(
+      this._$wrapper,
+      addNamespace(scrollEvents.init, SCROLLABLE),
+      initEventData,
+      this._initHandler.bind(this),
+    );
+    eventsEngine.on(
+      this._$wrapper,
+      addNamespace(scrollEvents.start, SCROLLABLE),
+      strategy.handleStart.bind(strategy),
+    );
+    eventsEngine.on(
+      this._$wrapper,
+      addNamespace(scrollEvents.move, SCROLLABLE),
+      strategy.handleMove.bind(strategy),
+    );
+    eventsEngine.on(
+      this._$wrapper,
+      addNamespace(scrollEvents.end, SCROLLABLE),
+      strategy.handleEnd.bind(strategy),
+    );
+    eventsEngine.on(
+      this._$wrapper,
+      addNamespace(scrollEvents.cancel, SCROLLABLE),
+      strategy.handleCancel.bind(strategy),
+    );
+    eventsEngine.on(
+      this._$wrapper,
+      addNamespace(scrollEvents.stop, SCROLLABLE),
+      strategy.handleStop.bind(strategy),
+    );
 
     eventsEngine.off(this._$container, `.${SCROLLABLE}`);
     eventsEngine.on(this._$container, addNamespace('scroll', SCROLLABLE), strategy.handleScroll.bind(strategy));
@@ -228,11 +255,13 @@ class Scrollable<
   }
 
   _prepareDirections(value): void {
+    // @ts-expect-error ts-error
     this._strategy._prepareDirections(value);
   }
 
   _initHandler(): void {
     const strategy = this._strategy;
+    // @ts-expect-error ts-error
     strategy.handleInit.apply(strategy, arguments);
   }
 
@@ -483,9 +512,12 @@ class Scrollable<
 
     let location = this._location();
 
-    if (!this.option('useNative')) {
-      targetLocation = this._strategy._applyScaleRatio(targetLocation);
-      location = this._strategy._applyScaleRatio(location);
+    const { useNative } = this.option();
+    if (!useNative) {
+      const strategy = this._strategy as SimulatedStrategy;
+
+      targetLocation = strategy._applyScaleRatio(targetLocation);
+      location = strategy._applyScaleRatio(location);
     }
 
     if (this._isRtlNativeStrategy()) {
