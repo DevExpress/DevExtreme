@@ -180,6 +180,19 @@ window.config = {
     /* devextreme-angular umd maps */
     'devextreme-angular': 'bundles:devextreme-angular/devextreme-angular.umd.js',
     'devextreme-angular/core': 'bundles:devextreme-angular/devextreme-angular-core.umd.js',
+    'devextreme-angular/common/charts': 'bundles:devextreme-angular/devextreme-angular-common-charts.umd.js',
+    'devextreme-angular/common/core/animation': 'bundles:devextreme-angular/devextreme-angular-common-core-animation.umd.js',
+    'devextreme-angular/common/core/environment': 'bundles:devextreme-angular/devextreme-angular-common-core-environment.umd.js',
+    'devextreme-angular/common/core/events': 'bundles:devextreme-angular/devextreme-angular-common-core-events.umd.js',
+    'devextreme-angular/common/core/localization': 'bundles:devextreme-angular/devextreme-angular-common-core-localization.umd.js',
+    'devextreme-angular/common/core': 'bundles:devextreme-angular/devextreme-angular-common-core.umd.js',
+    'devextreme-angular/common/data/custom-store': 'bundles:devextreme-angular/devextreme-angular-common-data-custom-store.umd.js',
+    'devextreme-angular/common/data': 'bundles:devextreme-angular/devextreme-angular-common-data.umd.js',
+    'devextreme-angular/common/export/excel': 'bundles:devextreme-angular/devextreme-angular-common-export-excel.umd.js',
+    'devextreme-angular/common/export/pdf': 'bundles:devextreme-angular/devextreme-angular-common-export-pdf.umd.js',
+    'devextreme-angular/common/export': 'bundles:devextreme-angular/devextreme-angular-common-export.umd.js',
+    'devextreme-angular/common/grids': 'bundles:devextreme-angular/devextreme-angular-common-grids.umd.js',
+    'devextreme-angular/common': 'bundles:devextreme-angular/devextreme-angular-common.umd.js',
     'devextreme-angular/http': 'bundles:devextreme-angular/devextreme-angular-http.umd.js',
     ...componentNames.reduce((acc, name) => {
       acc[`devextreme-angular/ui/${name}`] = `bundles:devextreme-angular/devextreme-angular-ui-${name}.umd.js`;
