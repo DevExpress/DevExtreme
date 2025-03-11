@@ -20,7 +20,7 @@ import {
   Orientation,
 } from '../common';
 
-type ItemLike<TKey> = Item<TKey> | any;
+type ItemLike<TKey> = string | Item<TKey> | any;
 
 /**
  * @docid _ui_stepper_DisposingEvent

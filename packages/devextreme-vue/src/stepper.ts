@@ -4,7 +4,6 @@ import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import Stepper, { Properties } from "devextreme/ui/stepper";
 import  DataSource from "devextreme/data/data_source";
-import  CollectionWidget from "devextreme/ui/collection/ui.collection_widget.base";
 import {
  DataSourceOptions,
 } from "devextreme/common/data";
@@ -15,14 +14,12 @@ import {
  DisposingEvent,
  InitializedEvent,
  ItemClickEvent,
+ ItemContextMenuEvent,
  ItemRenderedEvent,
  OptionChangedEvent,
  SelectionChangedEvent,
  SelectionChangingEvent,
 } from "devextreme/ui/stepper";
-import {
- event,
-} from "devextreme/events/events.types";
 import {
  Orientation,
 } from "devextreme/common";
@@ -55,6 +52,7 @@ type AccessibleOptions = Pick<Properties,
   "selectedIndex" |
   "selectedItem" |
   "selectedItemKeys" |
+  "selectOnFocus" |
   "tabIndex" |
   "visible" |
   "width"
@@ -68,21 +66,21 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    dataSource: [Array, Object, String] as PropType<(Array<any | Object | string>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
+    dataSource: [Array, Object, String] as PropType<Array<Object> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
     height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
-    items: Array as PropType<Array<any | Object>>,
+    items: Array as PropType<Array<Object>>,
     itemTemplate: {},
     keyExpr: [Function, String] as PropType<((() => void)) | string>,
     noDataText: String,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
     onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
-    onItemContextMenu: Function as PropType<((e: { component: CollectionWidget<any>, element: any, event: event, itemData: Record<string, any>, itemElement: any, itemIndex: number, model: any }) => void)>,
+    onItemContextMenu: Function as PropType<((e: ItemContextMenuEvent) => void)>,
     onItemRendered: Function as PropType<((e: ItemRenderedEvent) => void)>,
     onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
@@ -92,6 +90,7 @@ const componentConfig = {
     selectedIndex: Number,
     selectedItem: {},
     selectedItemKeys: Array as PropType<Array<any>>,
+    selectOnFocus: Boolean,
     tabIndex: Number,
     visible: Boolean,
     width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
@@ -125,6 +124,7 @@ const componentConfig = {
     "update:selectedIndex": null,
     "update:selectedItem": null,
     "update:selectedItemKeys": null,
+    "update:selectOnFocus": null,
     "update:tabIndex": null,
     "update:visible": null,
     "update:width": null,

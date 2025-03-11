@@ -10,7 +10,7 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { dxStepperItem } from "UNKNOWN_MODULE";
-import type { DisposingEvent, InitializedEvent, ItemClickEvent, ItemRenderedEvent, SelectionChangingEvent } from "devextreme/ui/stepper";
+import type { DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, SelectionChangingEvent } from "devextreme/ui/stepper";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { template } from "devextreme/common";
 
@@ -22,6 +22,7 @@ type IStepperOptionsNarrowedEvents<TItem = any, TKey = any> = {
   onDisposing?: ((e: DisposingEvent<TItem, TKey>) => void);
   onInitialized?: ((e: InitializedEvent<TItem, TKey>) => void);
   onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void);
+  onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
   onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
   onSelectionChanging?: ((e: SelectionChangingEvent<TItem, TKey>) => void);
 }
@@ -30,11 +31,11 @@ type IStepperOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceF
   dataSource?: Properties<TItem, TKey>["dataSource"];
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
-  defaultItems?: Array<any | dxStepperItem>;
+  defaultItems?: Array<dxStepperItem>;
   defaultSelectedIndex?: number;
   defaultSelectedItem?: any;
   defaultSelectedItemKeys?: Array<any>;
-  onItemsChange?: (value: Array<any | dxStepperItem>) => void;
+  onItemsChange?: (value: Array<dxStepperItem>) => void;
   onSelectedIndexChange?: (value: number) => void;
   onSelectedItemChange?: (value: any) => void;
   onSelectedItemKeysChange?: (value: Array<any>) => void;

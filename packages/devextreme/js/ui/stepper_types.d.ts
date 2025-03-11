@@ -2,6 +2,7 @@ export {
   DisposingEvent,
   InitializedEvent,
   ItemClickEvent,
+  ItemContextMenuEvent,
   ItemRenderedEvent,
   OptionChangedEvent,
   SelectionChangingEvent,

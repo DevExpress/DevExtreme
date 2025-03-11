@@ -27,7 +27,7 @@ import DataSource from 'devextreme/data/data_source';
 import { dxStepperItem } from 'UNKNOWN_MODULE';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { DisposingEvent, InitializedEvent, ItemClickEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SelectionChangingEvent } from 'devextreme/ui/stepper';
+import { DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SelectionChangingEvent } from 'devextreme/ui/stepper';
 import { Orientation } from 'devextreme/common';
 
 import DxStepper from 'devextreme/ui/stepper';
@@ -84,7 +84,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
 
 
     /**
-     * [descr:WidgetOptions.activeStateEnabled]
+     * [descr:dxStepperOptions.activeStateEnabled]
     
      */
     @Input()
@@ -101,10 +101,10 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Input()
-    get dataSource(): Array<any | dxStepperItem | string> | DataSource | DataSourceOptions | null | Store | string {
+    get dataSource(): Array<dxStepperItem> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Array<any | dxStepperItem | string> | DataSource | DataSourceOptions | null | Store | string) {
+    set dataSource(value: Array<dxStepperItem> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -136,7 +136,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
 
 
     /**
-     * [descr:WidgetOptions.focusStateEnabled]
+     * [descr:dxStepperOptions.focusStateEnabled]
     
      */
     @Input()
@@ -175,7 +175,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
 
 
     /**
-     * [descr:WidgetOptions.hoverStateEnabled]
+     * [descr:dxStepperOptions.hoverStateEnabled]
     
      */
     @Input()
@@ -192,10 +192,10 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Input()
-    get items(): Array<any | dxStepperItem> {
+    get items(): Array<dxStepperItem> {
         return this._getOption('items');
     }
-    set items(value: Array<any | dxStepperItem>) {
+    set items(value: Array<dxStepperItem>) {
         this._setOption('items', value);
     }
 
@@ -305,6 +305,19 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
 
 
     /**
+     * [descr:dxStepperOptions.selectOnFocus]
+    
+     */
+    @Input()
+    get selectOnFocus(): boolean {
+        return this._getOption('selectOnFocus');
+    }
+    set selectOnFocus(value: boolean) {
+        this._setOption('selectOnFocus', value);
+    }
+
+
+    /**
      * [descr:WidgetOptions.tabIndex]
     
      */
@@ -368,11 +381,11 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
     
-     * [descr:CollectionWidgetOptions.onItemContextMenu]
+     * [descr:dxStepperOptions.onItemContextMenu]
     
     
      */
-    @Output() onItemContextMenu: EventEmitter<Object>;
+    @Output() onItemContextMenu: EventEmitter<ItemContextMenuEvent>;
 
     /**
     
@@ -425,7 +438,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Array<any | dxStepperItem | string> | DataSource | DataSourceOptions | null | Store | string>;
+    @Output() dataSourceChange: EventEmitter<Array<dxStepperItem> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -474,7 +487,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<any | dxStepperItem>>;
+    @Output() itemsChange: EventEmitter<Array<dxStepperItem>>;
 
     /**
     
@@ -531,6 +544,13 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Output() selectedItemKeysChange: EventEmitter<Array<any>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() selectOnFocusChange: EventEmitter<boolean>;
 
     /**
     
@@ -612,6 +632,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
             { emit: 'selectedIndexChange' },
             { emit: 'selectedItemChange' },
             { emit: 'selectedItemKeysChange' },
+            { emit: 'selectOnFocusChange' },
             { emit: 'tabIndexChange' },
             { emit: 'visibleChange' },
             { emit: 'widthChange' }

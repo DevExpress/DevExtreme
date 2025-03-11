@@ -26565,6 +26565,7 @@ declare module DevExpress.ui {
       DisposingEvent: DisposingEvent<TItem, TKey>;
       InitializedEvent: InitializedEvent<TItem, TKey>;
       ItemClickEvent: ItemClickEvent<TItem, TKey>;
+      ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
       ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
       OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
       SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
@@ -26591,9 +26592,20 @@ declare module DevExpress.ui {
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
+     * [descr:_ui_stepper_ItemContextMenuEvent]
+     */
+    export type ItemContextMenuEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.common.core.events.NativeEventInfo<
+      dxStepper<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
+      DevExpress.common.core.events.ItemInfo<TItem>;
+    /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    type ItemLike<TKey> = Item<TKey> | any;
+    type ItemLike<TKey> = string | Item<TKey> | any;
     /**
      * [descr:_ui_stepper_ItemRenderedEvent]
      */
@@ -26645,6 +26657,22 @@ declare module DevExpress.ui {
     TItem extends DevExpress.ui.dxStepper.ItemLike<TKey> = any,
     TKey = any
   > extends CollectionWidgetOptions<dxStepper<TItem, TKey>, TItem, TKey> {
+    /**
+     * [descr:dxStepperOptions.activeStateEnabled]
+     */
+    activeStateEnabled?: boolean;
+    /**
+     * [descr:dxStepperOptions.focusStateEnabled]
+     */
+    focusStateEnabled?: boolean;
+    /**
+     * [descr:dxStepperOptions.hoverStateEnabled]
+     */
+    hoverStateEnabled?: boolean;
+    /**
+     * [descr:dxStepperOptions.selectOnFocus]
+     */
+    selectOnFocus?: boolean;
     /**
      * [descr:dxStepperOptions.dataSource]
      */
