@@ -49,15 +49,15 @@ const resources = [{
 });
 
 [undefined, resources].forEach((resourcesValue) => {
-  /*
-   * If appointment position is the same in the next view, then mouse doesn't change their position
-   * and doesn't trigger hover effect. This is the reason for the instability of the tests.
-   * This order ensure mouse position changes.
-   */
   ['timelineDay', 'timelineWeek', 'timelineMonth', 'timelineWorkWeek'].forEach((view) => {
     test(`Timeline views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 
+      /*
+       * If appointment position is the same in the next view,then mouse doesn't change
+       * their position and doesn't trigger hover effect. This is the reason for the instability
+       * of the tests. The following operation ensures that the mouse position is changed.
+       */
       await t.click(scheduler.getAppointment('2 appointment', 0).element);
       await t.click(scheduler.getAppointment('1 appointment', 0).element);
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
