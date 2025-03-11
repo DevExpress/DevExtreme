@@ -30,6 +30,10 @@ export class NewDataController implements DataController {
 
   public filter!: SubsGetsUpd<unknown>;
 
+  public displayFilter!: SubsGetsUpd<unknown>;
+
+  public filterEnabled!: SubsGetsUpd<boolean>;
+
   public init(oldDataController: OldDataController): void {
     this.oldDataController = oldDataController;
 

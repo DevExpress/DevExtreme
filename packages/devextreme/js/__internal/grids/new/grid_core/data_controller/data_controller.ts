@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-invalid-void-type */
-/* eslint-disable no-param-reassign */
+
 /* eslint-disable spellcheck/spell-checker */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import type { DataSource } from '@js/common/data';
 import ArrayStore from '@js/common/data/array_store';
 import type { SubsGets } from '@ts/core/reactive/index';
@@ -62,8 +62,19 @@ export class DataController {
 
   public readonly isLoading = state(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public readonly filter = this.options.twoWay('filterValue');
+
+  public readonly filterEnabled = this.options.twoWay('filterPanel.filterEnabled');
+
+  public readonly displayFilter = computed(
+    (filter, filterEnabled) => {
+      if (!filterEnabled) {
+        return null;
+      }
+      return filter;
+    },
+    [this.filter, this.filterEnabled],
+  );
 
   // public itemsWithChanges = computed(
   //   (items, changes: Change[] | undefined) => items.map((item) => (changes ?? []).filter(
@@ -174,7 +185,7 @@ export class DataController {
     );
 
     effect(
-      (dataSource, pageIndex, pageSize, filter, pagingEnabled) => {
+      (dataSource, pageIndex, pageSize, displayFilter, pagingEnabled) => {
         let someParamChanged = false;
         if (dataSource.pageIndex() !== pageIndex) {
           dataSource.pageIndex(pageIndex);
@@ -189,8 +200,8 @@ export class DataController {
           dataSource.requireTotalCount(true);
           someParamChanged ||= true;
         }
-        if (dataSource.filter() !== filter) {
-          dataSource.filter(filter);
+        if (dataSource.filter() !== displayFilter) {
+          dataSource.filter(displayFilter);
           someParamChanged ||= true;
         }
         if (dataSource.paginate() !== pagingEnabled) {
@@ -203,7 +214,7 @@ export class DataController {
           dataSource.load();
         }
       },
-      [this.dataSource, this.pageIndex, this.pageSize, this.filter, this.pagingEnabled],
+      [this.dataSource, this.pageIndex, this.pageSize, this.displayFilter, this.pagingEnabled],
     );
   }
 
