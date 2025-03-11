@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`Filtering`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const GRID_CONTAINER = '#container';
 
