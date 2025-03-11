@@ -21,10 +21,13 @@ export class FilterPanelComponent extends Component<FilterPanelProps> {
   private readonly filterBuilderRef = createRef<HTMLDivElement>();
 
   public render(): JSX.Element {
+    if (!this.props.visible) {
+      return <></>;
+    }
     return <>
-            <div ref={this.filterPanelRef}></div>
-            <div ref={this.filterBuilderRef}></div>
-        </>;
+        <div ref={this.filterPanelRef}></div>
+        <div ref={this.filterBuilderRef}></div>
+    </>;
   }
 
   public componentDidMount(): void {

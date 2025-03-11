@@ -34,7 +34,7 @@ export class FilterPanelView extends View<FilterPanelProps> {
       oldFilterPanelView: this.oldFilterPanelView,
 
       visible: this.options.oneWay('filterPanel.visible'),
-      filterValue: this.options.twoWay('filterValue'),
+      filterValue: this.options.oneWay('filterValue'),
       popupVisible: this.options.oneWay('filterBuilderPopup.visible'),
     });
   }
