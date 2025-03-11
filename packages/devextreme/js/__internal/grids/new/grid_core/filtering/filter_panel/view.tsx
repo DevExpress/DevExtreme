@@ -1,22 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/member-ordering */
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable spellcheck/spell-checker */
-/* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable max-classes-per-file */
-
-import { combined, computed, Subscription, SubsGets } from '@ts/core/reactive/index';
-
-import { View } from '../../core/view';
-import { OptionsController } from '../../options_controller/options_controller';
-import { FilterPanelComponent, FilterPanelProps } from './filter_panel';
-import { WidgetMock } from '../../widget_mock';
-
+import type { SubsGets } from '@ts/core/reactive/index';
+import { combined } from '@ts/core/reactive/index';
 import { FilterBuilderView as OldFilterBuilderView } from '@ts/grids/grid_core/filter/m_filter_builder';
 import { FilterPanelView as OldFilterPanelView } from '@ts/grids/grid_core/filter/m_filter_panel';
 
+import { View } from '../../core/view';
+import { OptionsController } from '../../options_controller/options_controller';
+import { WidgetMock } from '../../widget_mock';
+import type { FilterPanelProps } from './filter_panel';
+import { FilterPanelComponent } from './filter_panel';
 
 export class FilterPanelView extends View<FilterPanelProps> {
   protected component = FilterPanelComponent;
@@ -41,6 +32,10 @@ export class FilterPanelView extends View<FilterPanelProps> {
     return combined({
       oldFilterBuilderView: this.oldFilterBuilderView,
       oldFilterPanelView: this.oldFilterPanelView,
+
+      visible: this.options.oneWay('filterPanel.visible'),
+      filterValue: this.options.twoWay('filterValue'),
+      popupVisible: this.options.oneWay('filterBuilderPopup.visible'),
     });
   }
 }
