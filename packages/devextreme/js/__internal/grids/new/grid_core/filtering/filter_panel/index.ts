@@ -1,2 +1,2 @@
-export { FilterPanelView } from './filter_panel';
+export { FilterPanelView } from './view';
 export { defaultOptions, type Options } from './options';

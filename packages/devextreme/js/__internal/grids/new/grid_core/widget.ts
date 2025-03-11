@@ -15,7 +15,7 @@ import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
 import { EditingController } from './editing/controller';
 import { ErrorController } from './error_controller/error_controller';
-import { FilterPanelView } from './filtering/filter_panel/filter_panel';
+import { FilterPanelView } from './filtering/filter_panel/view';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
