@@ -6,6 +6,7 @@ export default Stepper;
 
 /**
  * @name dxStepperOptions.onContentReady
+ * @action
  * @hidden
  */
 

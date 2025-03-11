@@ -47,6 +47,14 @@ export type InitializedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = I
 export type ItemClickEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxStepper<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /**
+ * @docid _ui_stepper_ItemContextMenuEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ItemInfo
+ */
+export type ItemContextMenuEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxStepper<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/**
  * @docid _ui_stepper_ItemRenderedEvent
  * @public
  * @type object
@@ -90,7 +98,31 @@ export interface dxStepperOptions<
 > extends CollectionWidgetOptions<dxStepper<TItem, TKey>, TItem, TKey> {
   /**
    * @docid
-   * @type string | Array<string | dxStepperItem | any> | Store | DataSource | DataSourceOptions | null
+   * @default true
+   * @public
+   */
+  activeStateEnabled?: boolean;
+  /**
+   * @docid
+   * @default true &for(desktop)
+   * @public
+   */
+  focusStateEnabled?: boolean;
+  /**
+   * @docid
+   * @default true
+   * @public
+   */
+  hoverStateEnabled?: boolean;
+  /**
+   * @docid
+   * @default true
+   * @public
+   */
+  selectOnFocus?: boolean;
+  /**
+   * @docid
+   * @type string | Array<dxStepperItem> | Store | DataSource | DataSourceOptions | null
    * @default null
    * @public
    */
@@ -103,7 +135,7 @@ export interface dxStepperOptions<
   orientation?: Orientation;
   /**
    * @docid
-   * @type Array<dxStepperItem | any>
+   * @type Array<dxStepperItem>
    * @fires dxStepperOptions.onOptionChanged
    * @public
    */
@@ -143,6 +175,7 @@ export type ExplicitTypes<
   DisposingEvent: DisposingEvent<TItem, TKey>;
   InitializedEvent: InitializedEvent<TItem, TKey>;
   ItemClickEvent: ItemClickEvent<TItem, TKey>;
+  ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
   ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
   OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
   SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
@@ -159,7 +192,7 @@ export type Properties<
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered' | 'onItemContextMenu' | 'onItemHold' | 'onContentReady'>;
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered' | 'onItemHold' | 'onContentReady'>;
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
@@ -182,6 +215,11 @@ type Events = {
    * @type_function_param1 e:{ui/stepper:ItemClickEvent}
    */
   onItemClick?: ((e: ItemClickEvent) => void);
+  /**
+   * @docid dxStepperOptions.onItemContextMenu
+   * @type_function_param1 e:{ui/stepper:ItemContextMenuEvent}
+   */
+  onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
   /**
    * @docid dxStepperOptions.onItemRendered
    * @type_function_param1 e:{ui/stepper:ItemRenderedEvent}
