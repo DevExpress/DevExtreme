@@ -115,7 +115,17 @@ export class GridCoreNewBase<
   }
 
   private _optionChanged(args) {
-    this.filterPanelView.optionChanged(args);
+    [
+      this.pagerView,
+      this.toolbarView,
+      this.columnsChooser,
+      this.filterPanelView,
+    ].forEach((c) => {
+      if (c.isCompatibilityMode()) {
+        c.optionChanged(args);
+      }
+    });
+
     if (!args.handled) {
       // @ts-expect-error
       super._optionChanged(args);

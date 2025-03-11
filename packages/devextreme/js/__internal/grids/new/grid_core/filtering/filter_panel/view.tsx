@@ -44,4 +44,8 @@ export class FilterPanelView extends View<FilterPanelProps> {
     this.oldFilterBuilderView.optionChanged(args);
     this.oldFilterPanelView.optionChanged(args);
   }
+
+  public isCompatibilityMode(): boolean {
+    return true;
+  }
 }

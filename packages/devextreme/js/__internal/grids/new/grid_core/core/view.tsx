@@ -1,8 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable spellcheck/spell-checker */
@@ -53,6 +50,16 @@ export abstract class View<T extends {}> {
   public asInferno(): ComponentType {
     // eslint-disable-next-line no-return-assign
     return this.inferno ??= this._asInferno();
+  }
+
+  public isCompatibilityMode(): boolean {
+    return false;
+  }
+
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-module-boundary-types
+  public optionChanged(_args: any): void {
+
   }
 
   private _asInferno() {
