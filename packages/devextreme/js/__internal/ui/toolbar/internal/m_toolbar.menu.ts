@@ -9,13 +9,13 @@ import { extend } from '@js/core/utils/extend';
 import { getOuterHeight } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
 import Button from '@js/ui/button';
-import type dxList from '@js/ui/list';
 import type { dxPopupAnimation } from '@js/ui/popup';
 import type Popup from '@js/ui/popup';
 import { isFluent, isMaterialBased } from '@js/ui/themes';
 import type { Item } from '@js/ui/toolbar';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import Widget from '@ts/core/widget/widget';
+import type { ListBase } from '@ts/ui/list/m_list.base';
 
 import { toggleItemFocusableElementTabIndex } from '../m_toolbar.utils';
 import ToolbarMenuList from './m_toolbar.menu.list';
@@ -28,7 +28,7 @@ const DROP_DOWN_MENU_BUTTON_CLASS = 'dx-dropdownmenu-button';
 const POPUP_BOUNDARY_VERTICAL_OFFSET = 10;
 const POPUP_VERTICAL_OFFSET = 3;
 
-export interface Properties extends WidgetOptions<DropDownMenu> {
+export interface DropDownMenuProperties extends WidgetOptions<DropDownMenu> {
   opened?: boolean;
 
   container: string | Element | undefined;
@@ -36,14 +36,20 @@ export interface Properties extends WidgetOptions<DropDownMenu> {
   animation?: dxPopupAnimation;
 
   items?: Item[];
+
+  itemTemplate?: string | (() => void);
+
+  onItemRendered?: (e: Record<string, unknown>) => void;
+
+  onItemClick?: (e) => void;
 }
 
-export default class DropDownMenu extends Widget<Properties> {
+export default class DropDownMenu extends Widget<DropDownMenuProperties> {
   _button?: Button;
 
   _popup?: Popup;
 
-  _list?: dxList;
+  _list?: ListBase;
 
   _$popup?: dxElementWrapper;
 
@@ -63,16 +69,16 @@ export default class DropDownMenu extends Widget<Properties> {
 
     return extend(super._supportedKeys(), extension, {
       tab() {
-        this._popup && this._popup.hide();
+        this._popup?.hide();
       },
     });
   }
 
-  _getDefaultOptions(): Properties {
+  _getDefaultOptions(): DropDownMenuProperties {
     return {
       ...super._getDefaultOptions(),
       items: [],
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       onItemClick: null,
       dataSource: null,
       itemTemplate: 'item',
@@ -80,6 +86,7 @@ export default class DropDownMenu extends Widget<Properties> {
       activeStateEnabled: true,
       hoverStateEnabled: true,
       opened: false,
+      // @ts-expect-error ts-error
       onItemRendered: null,
       closeOnClick: true,
       useInkRipple: false,
@@ -91,7 +98,7 @@ export default class DropDownMenu extends Widget<Properties> {
     };
   }
 
-  _defaultOptionsRules(): DefaultOptionsRule<Properties>[] {
+  _defaultOptionsRules(): DefaultOptionsRule<DropDownMenuProperties>[] {
     return super._defaultOptionsRules().concat([
       {
         device() {
@@ -174,8 +181,8 @@ export default class DropDownMenu extends Widget<Properties> {
   _clean(): void {
     this._cleanFocusState();
 
-    this._list && this._list.$element().remove();
-    this._popup && this._popup.$element().remove();
+    this._list?.$element().remove();
+    this._popup?.$element().remove();
 
     delete this._list;
     delete this._popup;
@@ -278,17 +285,18 @@ export default class DropDownMenu extends Widget<Properties> {
     return isOutsideClick;
   }
 
-  _renderList(contentElement): void {
+  _renderList(contentElement: Element): void {
     const $content = $(contentElement);
     $content.addClass(DROP_DOWN_MENU_LIST_CLASS);
 
-    // @ts-expect-error
+    const { itemTemplate, onItemRendered } = this.option();
+    // @ts-expect-error ts-error
     this._list = this._createComponent($content, ToolbarMenuList, {
       dataSource: this._getListDataSource(),
       pageLoadMode: 'scrollBottom',
       indicateLoading: false,
       noDataText: '',
-      itemTemplate: this.option('itemTemplate'),
+      itemTemplate,
       onItemClick: (e) => {
         if (this.option('closeOnClick')) {
           this.option('opened', false);
@@ -298,13 +306,13 @@ export default class DropDownMenu extends Widget<Properties> {
       tabIndex: -1,
       focusStateEnabled: false,
       activeStateEnabled: true,
-      onItemRendered: this.option('onItemRendered'),
+      onItemRendered,
+      // @ts-expect-error ts-error
       _itemAttributes: { role: 'menuitem' },
     });
   }
 
   _itemOptionChanged(item, property, value): void {
-    // @ts-expect-error
     this._list?._itemOptionChanged(item, property, value);
     toggleItemFocusableElementTabIndex(this._list, item);
   }
