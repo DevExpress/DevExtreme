@@ -38,6 +38,9 @@
       "@js/*": [
         "./*"
       ],
+      "@runtime/inferno": [
+        "./__internal/core/r1/runtime/inferno/index.ts"
+      ],
     },
     "types": []
   },

@@ -1,4 +1,4 @@
-import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
+import { BaseInfernoComponent } from '@runtime/inferno';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
 import { GroupPanelHorizontalCell, GroupPanelHorizontalCellDefaultProps } from './group_panel_horizontal_cell';

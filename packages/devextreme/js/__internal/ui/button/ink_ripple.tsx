@@ -1,5 +1,5 @@
 import { hideWave, initConfig, showWave } from '@js/ui/widget/utils.ink_ripple';
-import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
+import { BaseInfernoComponent } from '@runtime/inferno';
 
 export interface InkRippleConfig {
   isCentered?: boolean;

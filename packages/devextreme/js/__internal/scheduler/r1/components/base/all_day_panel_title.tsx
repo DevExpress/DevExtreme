@@ -1,6 +1,6 @@
 import messageLocalization from '@js/common/core/localization/message';
-import type { InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
-import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
+import type { InfernoEffect } from '@runtime/inferno';
+import { createReRenderEffect, InfernoWrapperComponent } from '@runtime/inferno';
 
 export class AllDayPanelTitle extends InfernoWrapperComponent {
   createEffects(): InfernoEffect[] {

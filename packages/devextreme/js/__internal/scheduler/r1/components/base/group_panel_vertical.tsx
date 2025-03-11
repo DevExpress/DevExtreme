@@ -1,4 +1,4 @@
-import { BaseInfernoComponent, normalizeStyles } from '@ts/core/r1/runtime/inferno/index';
+import { BaseInfernoComponent, normalizeStyles } from '@runtime/inferno';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
 import { renderUtils } from '../../utils/index';

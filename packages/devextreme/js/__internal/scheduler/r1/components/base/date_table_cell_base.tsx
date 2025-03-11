@@ -1,4 +1,4 @@
-import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
+import { BaseInfernoComponent } from '@runtime/inferno';
 import type { JSXTemplate } from '@ts/core/r1/types';
 import { getTemplate } from '@ts/core/r1/utils/index';
 

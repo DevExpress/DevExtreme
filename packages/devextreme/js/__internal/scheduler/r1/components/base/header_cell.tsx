@@ -1,4 +1,4 @@
-import { BaseInfernoComponent, normalizeStyles } from '@ts/core/r1/runtime/inferno/index';
+import { BaseInfernoComponent, normalizeStyles } from '@runtime/inferno';
 
 import type { OrdinaryCellProps } from './ordinary_cell';
 import { OrdinaryCellDefaultProps } from './ordinary_cell';

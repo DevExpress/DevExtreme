@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { RefObject } from '@ts/core/r1/runtime/inferno/index';
-import { InfernoComponent, InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
+import type { RefObject } from '@runtime/inferno';
+import { InfernoComponent, InfernoEffect } from '@runtime/inferno';
 
 import { PaginationDefaultProps, type PaginationProps } from '../common/pagination_props';
 import type { FullPageSize } from '../common/types';

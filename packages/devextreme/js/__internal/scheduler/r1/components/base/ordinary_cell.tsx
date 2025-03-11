@@ -1,5 +1,5 @@
 import type { PropsWithChildren, PropsWithClassName, PropsWithStyles } from '@ts/core/r1/index';
-import { BaseInfernoComponent, normalizeStyles } from '@ts/core/r1/runtime/inferno/index';
+import { BaseInfernoComponent, normalizeStyles } from '@runtime/inferno';
 
 export interface OrdinaryCellProps extends Partial<PropsWithStyles>,
   Partial<PropsWithClassName>,

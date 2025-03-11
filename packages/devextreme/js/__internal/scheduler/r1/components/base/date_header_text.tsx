@@ -1,4 +1,4 @@
-import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
+import { BaseInfernoComponent } from '@runtime/inferno';
 
 export interface DateHeaderTextProps {
   text?: string;
