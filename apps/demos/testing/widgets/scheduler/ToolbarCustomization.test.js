@@ -3,31 +3,38 @@ import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
+const SCREEN_SIZES = {
+  'wide': [900, 600],
+  'medium': [490, 600],
+  'thin': [320, 600]
+};
+
 fixture('Scheduler.ToolbarCustomization')
   .page('http://localhost:8080/')
   .before(async (ctx) => {
-    ctx.initialWindowSize = [900, 600];
+    ctx.initialWindowSize = SCREEN_SIZES.wide;
   });
 
 runManualTest('Scheduler', 'ToolbarCustomization', ['jQuery'], (test) => {
   test('ToolbarCustomization', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const scheduler = $('#scheduler');
     const menuButtonSelector = $('.dx-toolbar').find('.dx-toolbar-menu-container').find('.dx-button');
 
-    await testScreenshot(t, takeScreenshot, 'scheduler_toolbar_customization_wide.png');
+    await testScreenshot(t, takeScreenshot, 'scheduler_toolbar_customization_wide.png', scheduler);
 
     await t
-      .resizeWindow(490, 600)
+      .resizeWindow(...SCREEN_SIZES.medium)
       .click(menuButtonSelector);
 
-    await testScreenshot(t, takeScreenshot, 'scheduler_toolbar_customization_medium.png');
+    await testScreenshot(t, takeScreenshot, 'scheduler_toolbar_customization_medium.png', scheduler);
 
     await t
-      .click($('body'), { offsetX: 0, offsetY: 0 })
-      .resizeWindow(320, 600)
-      .click(menuButtonSelector);
+      .click($('body'), { offsetX: 0, offsetY: 0 }) // close menu by clicking outside
+      .resizeWindow(...SCREEN_SIZES.thin)
+      .click(menuButtonSelector); // open menu with additional items and updated dimensions
 
-    await testScreenshot(t, takeScreenshot, 'scheduler_toolbar_customization_thin.png');
+    await testScreenshot(t, takeScreenshot, 'scheduler_toolbar_customization_thin.png', scheduler);
 
     await t
       .expect(compareResults.isValid())

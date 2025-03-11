@@ -56,14 +56,12 @@ $(() => {
             inputAttr: {
               'aria-label': 'Assignees',
             },
-            elementAttr: {
-              class: 'assignees-tag-box'
-            },
-            onValueChanged(event) {
+            width: 200,
+            onValueChanged({ value }) {
               scheduler.option(
                   'dataSource',
-                  event.value.length
-                      ? data.filter((item) => event.value.some((id) => item.assigneeId.includes(id)))
+                  value.length
+                      ? data.filter((item) => value.some((id) => item.assigneeId.includes(id)))
                       : data
               );
             },
