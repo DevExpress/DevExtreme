@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { InfernoComponent, InfernoEffect } from '@runtime/inferno';
+import { InfernoComponent, InfernoEffect } from '@ts/core/r1/runtime/inferno';
 import type { JSXTemplate } from '@ts/core/r1/types';
 import { createRef as infernoCreateRef } from 'inferno';
 

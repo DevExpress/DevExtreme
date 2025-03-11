@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import Guid from '@js/core/guid';
 import { convertRulesToOptions } from '@js/core/options/utils';
-import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@runtime/inferno';
+import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno';
 import type { WidgetProps } from '@ts/core/r1/widget';
 import { Widget, WidgetDefaultProps } from '@ts/core/r1/widget';
 import { combineClasses } from '@ts/core/utils/combine_classes';

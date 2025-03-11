@@ -1,5 +1,5 @@
 import type { PropsWithChildren, PropsWithClassName, PropsWithStyles } from '__internal/core/r1';
-import { BaseInfernoComponent, normalizeStyles } from '@runtime/inferno';
+import { BaseInfernoComponent, normalizeStyles } from '@ts/core/r1/runtime/inferno';
 import type * as CSS from 'csstype';
 import type { RefObject } from 'inferno';
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import type { InfernoEffect } from '@runtime/inferno';
-import { createReRenderEffect, InfernoWrapperComponent } from '@runtime/inferno';
+import type { InfernoEffect } from '@ts/core/r1/runtime/inferno';
+import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno';
 
 import { combineClasses } from '../core/r1/utils/render_utils';
 import type { PaginationProps } from './common/pagination_props';

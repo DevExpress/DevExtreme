@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BaseInfernoComponent } from '@runtime/inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno';
 import { Fragment } from 'inferno';
 
 import type { ConfigContextValue } from '../../core/r1/config_context';

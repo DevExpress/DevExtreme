@@ -2,7 +2,7 @@
 import '@js/ui/themes';
 
 import { normalizeStyleProp } from '@js/core/utils/style';
-import { BaseInfernoComponent, normalizeStyles } from '@runtime/inferno';
+import { BaseInfernoComponent, normalizeStyles } from '@ts/core/r1/runtime/inferno';
 import type { RefObject } from 'inferno';
 import { createRef as infernoCreateRef } from 'inferno';
 

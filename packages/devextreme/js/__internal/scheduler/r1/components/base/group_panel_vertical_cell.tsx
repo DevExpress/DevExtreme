@@ -1,4 +1,4 @@
-import { BaseInfernoComponent } from '@runtime/inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
 import type { GroupPanelCellProps } from './group_panel_props';

@@ -8,7 +8,7 @@ import { convertRulesToOptions, createDefaultOptionRules } from '@js/core/option
 import { getImageSourceType } from '@js/core/utils/icon';
 import { camelize } from '@js/core/utils/inflector';
 import { current, isMaterial } from '@js/ui/themes';
-import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@runtime/inferno';
+import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno';
 import type { EffectReturn } from '@ts/core/r1/utils/effect_return';
 import { getTemplate } from '@ts/core/r1/utils/index';
 import { Widget } from '@ts/core/r1/widget';

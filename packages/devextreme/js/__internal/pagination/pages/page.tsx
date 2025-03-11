@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { BaseInfernoComponent } from '@runtime/inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno';
 
 import { format } from '../../../core/utils/string';
 import type { EventCallback } from '../../core/r1/event_callback';

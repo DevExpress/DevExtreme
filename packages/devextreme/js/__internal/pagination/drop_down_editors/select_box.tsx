@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BaseInfernoComponent } from '@runtime/inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno';
 
 import type { DataSource, DataSourceOptions } from '../../../common/data';
 import type Store from '../../../data/abstract_store';

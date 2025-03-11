@@ -1,4 +1,4 @@
-import { createContext } from '@runtime/inferno';
+import { createContext } from '@ts/core/r1/runtime/inferno';
 
 export interface PaginationConfigContextValue {
   isGridCompatibilityMode?: boolean;

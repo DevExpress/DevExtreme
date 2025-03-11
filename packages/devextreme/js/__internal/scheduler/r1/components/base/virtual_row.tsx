@@ -1,4 +1,4 @@
-import { BaseInfernoComponent } from '@runtime/inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno';
 
 import { renderUtils } from '../../utils/index';
 import type { RowProps } from './row';

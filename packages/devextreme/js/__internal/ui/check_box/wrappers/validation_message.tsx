@@ -2,7 +2,7 @@ import LegacyValidationMessage from '@js/ui/validation_message';
 import type { BaseWidgetProps } from '@ts/core/r1/base_props';
 import { BaseWidgetDefaultProps } from '@ts/core/r1/base_props';
 import { DomComponentWrapper } from '@ts/core/r1/dom_component_wrapper';
-import { BaseInfernoComponent } from '@runtime/inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno';
 
 export interface ValidationMessageProps extends BaseWidgetProps {
   mode?: 'auto' | 'always';

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { RefObject } from '@runtime/inferno';
-import { BaseInfernoComponent } from '@runtime/inferno';
+import type { RefObject } from '@ts/core/r1/runtime/inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno';
 import { createRef as infernoCreateRef } from 'inferno';
 
 import { format } from '../../core/utils/string';
