@@ -13,7 +13,6 @@ export interface FilterPanelProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filterValue?: any;
   popupVisible?: boolean;
-  filterEnabled?: boolean;
 }
 
 export class FilterPanelComponent extends Component<FilterPanelProps> {

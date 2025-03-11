@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable spellcheck/spell-checker */
 // eslint-disable-next-line max-classes-per-file
 import Widget from '@js/ui/widget/ui.widget';
@@ -49,6 +47,8 @@ export class GridCoreNewBase<
 
   private search!: Search;
 
+  private filterPanelView!: FilterPanelView;
+
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
     this.diContext.register(DataControllerModule.DataController);
@@ -83,6 +83,7 @@ export class GridCoreNewBase<
     this.pagerView = this.diContext.get(PagerView);
     this.search = this.diContext.get(Search);
     this.errorController = this.diContext.get(ErrorController);
+    this.filterPanelView = this.diContext.get(FilterPanelView);
   }
 
   protected _init(): void {
@@ -93,8 +94,6 @@ export class GridCoreNewBase<
     this._initDIContext();
   }
 
-  // eslint-disable-next-line max-len
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   protected _getDefaultOptions() {
     return {
       // @ts-expect-error
@@ -113,6 +112,14 @@ export class GridCoreNewBase<
     // @ts-expect-error
     super._initMarkup();
     this.renderSubscription = this.diContext.get(MainView).render(this.$element().get(0));
+  }
+
+  private _optionChanged(args) {
+    this.filterPanelView.optionChanged(args);
+    if (!args.handled) {
+      // @ts-expect-error
+      super._optionChanged(args);
+    }
   }
 
   protected _clean(): void {
