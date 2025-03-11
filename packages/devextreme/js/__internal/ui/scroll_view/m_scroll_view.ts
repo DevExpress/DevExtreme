@@ -19,6 +19,8 @@ import SimulatedStrategy from './m_scroll_view.simulated';
 import Scrollable from './m_scrollable';
 import type { RefreshStrategy, ScrollOffset } from './types';
 
+// STYLE loadPanel
+
 const SCROLLVIEW_CLASS = 'dx-scrollview';
 const SCROLLVIEW_CONTENT_CLASS = `${SCROLLVIEW_CLASS}-content`;
 const SCROLLVIEW_TOP_POCKET_CLASS = `${SCROLLVIEW_CLASS}-top-pocket`;
@@ -383,4 +385,4 @@ class ScrollView extends Scrollable<ScrollViewProperties> {
 
 registerComponent('dxScrollView', isServerSide ? ScrollViewServerSide : ScrollView);
 
-export default isServerSide ? ScrollView : ScrollView;
+export default isServerSide ? ScrollViewServerSide : ScrollView;
