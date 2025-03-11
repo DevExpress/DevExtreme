@@ -1109,7 +1109,7 @@ importers:
         version: 18.0.0(@typescript-eslint/eslint-plugin@8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6)))(eslint@9.18.0(jiti@1.21.6))
       eslint-config-devextreme:
         specifier: 1.1.5
-        version: 1.1.5(exvrhn6g4m6aerk4xgkmwi4j24)
+        version: 1.1.5(gtf3gt7qoktlkhvd3kqhmild5e)
       eslint-migration-utils:
         specifier: workspace:~
         version: link:../eslint-migration-utils
@@ -1836,7 +1836,7 @@ importers:
         version: 18.0.0(@typescript-eslint/eslint-plugin@8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6)))(eslint@9.18.0(jiti@1.21.6))
       eslint-config-devextreme:
         specifier: 1.1.5
-        version: 1.1.5(tegwiszkcetciamfkcgav5h5lu)
+        version: 1.1.5(ej4wbhyrqreseudgptfru4w2ya)
       eslint-plugin-i18n:
         specifier: 'catalog:'
         version: 2.4.0
@@ -4188,49 +4188,42 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@napi-rs/nice-linux-arm64-musl@1.0.1':
     resolution: {integrity: sha512-wG8fa2VKuWM4CfjOjjRX9YLIbysSVV1S3Kgm2Fnc67ap/soHBeYZa6AGMeR5BJAylYRjnoVOzV19Cmkco3QEPw==, tarball: https://registry.npmjs.org/@napi-rs/nice-linux-arm64-musl/-/nice-linux-arm64-musl-1.0.1.tgz}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@napi-rs/nice-linux-ppc64-gnu@1.0.1':
     resolution: {integrity: sha512-lxQ9WrBf0IlNTCA9oS2jg/iAjQyTI6JHzABV664LLrLA/SIdD+I1i3Mjf7TsnoUbgopBcCuDztVLfJ0q9ubf6Q==, tarball: https://registry.npmjs.org/@napi-rs/nice-linux-ppc64-gnu/-/nice-linux-ppc64-gnu-1.0.1.tgz}
     engines: {node: '>= 10'}
     cpu: [ppc64]
     os: [linux]
-    libc: [glibc]
 
   '@napi-rs/nice-linux-riscv64-gnu@1.0.1':
     resolution: {integrity: sha512-3xs69dO8WSWBb13KBVex+yvxmUeEsdWexxibqskzoKaWx9AIqkMbWmE2npkazJoopPKX2ULKd8Fm9veEn0g4Ig==, tarball: https://registry.npmjs.org/@napi-rs/nice-linux-riscv64-gnu/-/nice-linux-riscv64-gnu-1.0.1.tgz}
     engines: {node: '>= 10'}
     cpu: [riscv64]
     os: [linux]
-    libc: [glibc]
 
   '@napi-rs/nice-linux-s390x-gnu@1.0.1':
     resolution: {integrity: sha512-lMFI3i9rlW7hgToyAzTaEybQYGbQHDrpRkg+1gJWEpH0PLAQoZ8jiY0IzakLfNWnVda1eTYYlxxFYzW8Rqczkg==, tarball: https://registry.npmjs.org/@napi-rs/nice-linux-s390x-gnu/-/nice-linux-s390x-gnu-1.0.1.tgz}
     engines: {node: '>= 10'}
     cpu: [s390x]
     os: [linux]
-    libc: [glibc]
 
   '@napi-rs/nice-linux-x64-gnu@1.0.1':
     resolution: {integrity: sha512-XQAJs7DRN2GpLN6Fb+ZdGFeYZDdGl2Fn3TmFlqEL5JorgWKrQGRUrpGKbgZ25UeZPILuTKJ+OowG2avN8mThBA==, tarball: https://registry.npmjs.org/@napi-rs/nice-linux-x64-gnu/-/nice-linux-x64-gnu-1.0.1.tgz}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@napi-rs/nice-linux-x64-musl@1.0.1':
     resolution: {integrity: sha512-/rodHpRSgiI9o1faq9SZOp/o2QkKQg7T+DK0R5AkbnI/YxvAIEHf2cngjYzLMQSQgUhxym+LFr+UGZx4vK4QdQ==, tarball: https://registry.npmjs.org/@napi-rs/nice-linux-x64-musl/-/nice-linux-x64-musl-1.0.1.tgz}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@napi-rs/nice-win32-arm64-msvc@1.0.1':
     resolution: {integrity: sha512-rEcz9vZymaCB3OqEXoHnp9YViLct8ugF+6uO5McifTedjq4QMQs3DHz35xBEGhH3gJWEsXMUbzazkz5KNM5YUg==, tarball: https://registry.npmjs.org/@napi-rs/nice-win32-arm64-msvc/-/nice-win32-arm64-msvc-1.0.1.tgz}
@@ -4389,28 +4382,24 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@nx/nx-linux-arm64-musl@19.4.2':
     resolution: {integrity: sha512-JKc3Bw84jWbOhlqXGBIH9/qz3kzTwpKfsIqtar8K8Gd5/UFJS8GLEdy0mXsnoeFrA1DuYJJ0PWxoHkAa1MYLxg==, tarball: https://registry.npmjs.org/@nx/nx-linux-arm64-musl/-/nx-linux-arm64-musl-19.4.2.tgz}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@nx/nx-linux-x64-gnu@19.4.2':
     resolution: {integrity: sha512-hyf0cDZ3rAM8WERZ/M82v1rnf6oO1X+xwYq363Qx04SufU+Knto7xHGndLNkx2i18+UtCoEr4ZhDYrIb8ZWHww==, tarball: https://registry.npmjs.org/@nx/nx-linux-x64-gnu/-/nx-linux-x64-gnu-19.4.2.tgz}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@nx/nx-linux-x64-musl@19.4.2':
     resolution: {integrity: sha512-XbKut3RTb04FNA0diDhO/OM8DgqaWaaXhyybRocfhITxH+mPQBZPUs/NM3xeQCrzlGjwrBYxt+Y9Ep8Ftgd/MA==, tarball: https://registry.npmjs.org/@nx/nx-linux-x64-musl/-/nx-linux-x64-musl-19.4.2.tgz}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@nx/nx-win32-arm64-msvc@19.4.2':
     resolution: {integrity: sha512-VMOQ44KlndtAKE6JaXSQqrAdHBEqbJSJP4EKrBREn8HyVyr6LAfAG3Pj93ZPMvQC47uheisBcDwitxEY/Mhs1Q==, tarball: https://registry.npmjs.org/@nx/nx-win32-arm64-msvc/-/nx-win32-arm64-msvc-19.4.2.tgz}
@@ -4675,42 +4664,36 @@ packages:
     engines: {node: '>= 10.0.0'}
     cpu: [arm]
     os: [linux]
-    libc: [glibc]
 
   '@parcel/watcher-linux-arm-musl@2.5.0':
     resolution: {integrity: sha512-6uHywSIzz8+vi2lAzFeltnYbdHsDm3iIB57d4g5oaB9vKwjb6N6dRIgZMujw4nm5r6v9/BQH0noq6DzHrqr2pA==, tarball: https://registry.npmjs.org/@parcel/watcher-linux-arm-musl/-/watcher-linux-arm-musl-2.5.0.tgz}
     engines: {node: '>= 10.0.0'}
     cpu: [arm]
     os: [linux]
-    libc: [musl]
 
   '@parcel/watcher-linux-arm64-glibc@2.5.0':
     resolution: {integrity: sha512-BfNjXwZKxBy4WibDb/LDCriWSKLz+jJRL3cM/DllnHH5QUyoiUNEp3GmL80ZqxeumoADfCCP19+qiYiC8gUBjA==, tarball: https://registry.npmjs.org/@parcel/watcher-linux-arm64-glibc/-/watcher-linux-arm64-glibc-2.5.0.tgz}
     engines: {node: '>= 10.0.0'}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@parcel/watcher-linux-arm64-musl@2.5.0':
     resolution: {integrity: sha512-S1qARKOphxfiBEkwLUbHjCY9BWPdWnW9j7f7Hb2jPplu8UZ3nes7zpPOW9bkLbHRvWM0WDTsjdOTUgW0xLBN1Q==, tarball: https://registry.npmjs.org/@parcel/watcher-linux-arm64-musl/-/watcher-linux-arm64-musl-2.5.0.tgz}
     engines: {node: '>= 10.0.0'}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@parcel/watcher-linux-x64-glibc@2.5.0':
     resolution: {integrity: sha512-d9AOkusyXARkFD66S6zlGXyzx5RvY+chTP9Jp0ypSTC9d4lzyRs9ovGf/80VCxjKddcUvnsGwCHWuF2EoPgWjw==, tarball: https://registry.npmjs.org/@parcel/watcher-linux-x64-glibc/-/watcher-linux-x64-glibc-2.5.0.tgz}
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@parcel/watcher-linux-x64-musl@2.5.0':
     resolution: {integrity: sha512-iqOC+GoTDoFyk/VYSFHwjHhYrk8bljW6zOhPuhi5t9ulqiYq1togGJB5e3PwYVFFfeVgc6pbz3JdQyDoBszVaA==, tarball: https://registry.npmjs.org/@parcel/watcher-linux-x64-musl/-/watcher-linux-x64-musl-2.5.0.tgz}
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@parcel/watcher-win32-arm64@2.5.0':
     resolution: {integrity: sha512-twtft1d+JRNkM5YbmexfcH/N4znDtjgysFaV9zvZmmJezQsKpkfLYJ+JFV3uygugK6AtIM2oADPkB2AdhBrNig==, tarball: https://registry.npmjs.org/@parcel/watcher-win32-arm64/-/watcher-win32-arm64-2.5.0.tgz}
@@ -4731,7 +4714,7 @@ packages:
     os: [win32]
 
   '@parcel/watcher@2.5.0':
-    resolution: {integrity: sha512-i0GV1yJnm2n3Yq1qw6QrUrd/LI9bE8WEBOTtOkpCXHHdyN3TAGgqAK/DAT05z4fq2x04cARXt2pDmjWjL92iTQ==}
+    resolution: {integrity: sha512-i0GV1yJnm2n3Yq1qw6QrUrd/LI9bE8WEBOTtOkpCXHHdyN3TAGgqAK/DAT05z4fq2x04cARXt2pDmjWjL92iTQ==, tarball: https://registry.npmjs.org/@parcel/watcher/-/watcher-2.5.0.tgz}
     engines: {node: '>= 10.0.0'}
 
   '@parcel/workers@2.12.0':
@@ -5289,55 +5272,46 @@ packages:
     resolution: {integrity: sha512-j63YtCIRAzbO+gC2L9dWXRh5BFetsv0j0va0Wi9epXDgU/XUi5dJKo4USTttVyK7fGw2nPWK0PbAvyliz50SCQ==, tarball: https://registry.npmjs.org/@rollup/rollup-linux-arm-gnueabihf/-/rollup-linux-arm-gnueabihf-4.22.4.tgz}
     cpu: [arm]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-arm-musleabihf@4.22.4':
     resolution: {integrity: sha512-dJnWUgwWBX1YBRsuKKMOlXCzh2Wu1mlHzv20TpqEsfdZLb3WoJW2kIEsGwLkroYf24IrPAvOT/ZQ2OYMV6vlrg==, tarball: https://registry.npmjs.org/@rollup/rollup-linux-arm-musleabihf/-/rollup-linux-arm-musleabihf-4.22.4.tgz}
     cpu: [arm]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-arm64-gnu@4.22.4':
     resolution: {integrity: sha512-AdPRoNi3NKVLolCN/Sp4F4N1d98c4SBnHMKoLuiG6RXgoZ4sllseuGioszumnPGmPM2O7qaAX/IJdeDU8f26Aw==, tarball: https://registry.npmjs.org/@rollup/rollup-linux-arm64-gnu/-/rollup-linux-arm64-gnu-4.22.4.tgz}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-arm64-musl@4.22.4':
     resolution: {integrity: sha512-Gl0AxBtDg8uoAn5CCqQDMqAx22Wx22pjDOjBdmG0VIWX3qUBHzYmOKh8KXHL4UpogfJ14G4wk16EQogF+v8hmA==, tarball: https://registry.npmjs.org/@rollup/rollup-linux-arm64-musl/-/rollup-linux-arm64-musl-4.22.4.tgz}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-powerpc64le-gnu@4.22.4':
     resolution: {integrity: sha512-3aVCK9xfWW1oGQpTsYJJPF6bfpWfhbRnhdlyhak2ZiyFLDaayz0EP5j9V1RVLAAxlmWKTDfS9wyRyY3hvhPoOg==, tarball: https://registry.npmjs.org/@rollup/rollup-linux-powerpc64le-gnu/-/rollup-linux-powerpc64le-gnu-4.22.4.tgz}
     cpu: [ppc64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-gnu@4.22.4':
     resolution: {integrity: sha512-ePYIir6VYnhgv2C5Xe9u+ico4t8sZWXschR6fMgoPUK31yQu7hTEJb7bCqivHECwIClJfKgE7zYsh1qTP3WHUA==, tarball: https://registry.npmjs.org/@rollup/rollup-linux-riscv64-gnu/-/rollup-linux-riscv64-gnu-4.22.4.tgz}
     cpu: [riscv64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-s390x-gnu@4.22.4':
     resolution: {integrity: sha512-GqFJ9wLlbB9daxhVlrTe61vJtEY99/xB3C8e4ULVsVfflcpmR6c8UZXjtkMA6FhNONhj2eA5Tk9uAVw5orEs4Q==, tarball: https://registry.npmjs.org/@rollup/rollup-linux-s390x-gnu/-/rollup-linux-s390x-gnu-4.22.4.tgz}
     cpu: [s390x]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-x64-gnu@4.22.4':
     resolution: {integrity: sha512-87v0ol2sH9GE3cLQLNEy0K/R0pz1nvg76o8M5nhMR0+Q+BBGLnb35P0fVz4CQxHYXaAOhE8HhlkaZfsdUOlHwg==, tarball: https://registry.npmjs.org/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.22.4.tgz}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-x64-musl@4.22.4':
     resolution: {integrity: sha512-UV6FZMUgePDZrFjrNGIWzDo/vABebuXBhJEqrHxrGiU6HikPy0Z3LfdtciIttEUQfuDdCn8fqh7wiFJjCNwO+g==, tarball: https://registry.npmjs.org/@rollup/rollup-linux-x64-musl/-/rollup-linux-x64-musl-4.22.4.tgz}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-win32-arm64-msvc@4.22.4':
     resolution: {integrity: sha512-BjI+NVVEGAXjGWYHz/vv0pBqfGoUH0IGZ0cICTn7kB9PyjrATSkX+8WkguNjWoj2qSr1im/+tTGRaY+4/PdcQw==, tarball: https://registry.npmjs.org/@rollup/rollup-win32-arm64-msvc/-/rollup-win32-arm64-msvc-4.22.4.tgz}
@@ -5656,28 +5630,24 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@swc/core-linux-arm64-musl@1.9.2':
     resolution: {integrity: sha512-8xzrOmsyCC1zrx2Wzx/h8dVsdewO1oMCwBTLc1gSJ/YllZYTb04pNm6NsVbzUX2tKddJVRgSJXV10j/NECLwpA==, tarball: https://registry.npmjs.org/@swc/core-linux-arm64-musl/-/core-linux-arm64-musl-1.9.2.tgz}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@swc/core-linux-x64-gnu@1.9.2':
     resolution: {integrity: sha512-kZrNz/PjRQKcchWF6W292jk3K44EoVu1ad5w+zbS4jekIAxsM8WwQ1kd+yjUlN9jFcF8XBat5NKIs9WphJCVXg==, tarball: https://registry.npmjs.org/@swc/core-linux-x64-gnu/-/core-linux-x64-gnu-1.9.2.tgz}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@swc/core-linux-x64-musl@1.9.2':
     resolution: {integrity: sha512-TTIpR4rjMkhX1lnFR+PSXpaL83TrQzp9znRdp2TzYrODlUd/R20zOwSo9vFLCyH6ZoD47bccY7QeGZDYT3nlRg==, tarball: https://registry.npmjs.org/@swc/core-linux-x64-musl/-/core-linux-x64-musl-1.9.2.tgz}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@swc/core-win32-arm64-msvc@1.9.2':
     resolution: {integrity: sha512-+Eg2d4icItKC0PMjZxH7cSYFLWk0aIp94LNmOw6tPq0e69ax6oh10upeq0D1fjWsKLmOJAWEvnXlayZcijEXDw==, tarball: https://registry.npmjs.org/@swc/core-win32-arm64-msvc/-/core-win32-arm64-msvc-1.9.2.tgz}
@@ -6860,7 +6830,7 @@ packages:
     engines: {node: '>=10'}
 
   ansi-styles@6.2.1:
-    resolution: {integrity: sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==}
+    resolution: {integrity: sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==, tarball: https://registry.npmjs.org/ansi-styles/-/ansi-styles-6.2.1.tgz}
     engines: {node: '>=12'}
 
   ansi-wrap@0.1.0:
@@ -7376,7 +7346,7 @@ packages:
     resolution: {integrity: sha512-1ugUSr8BHXRnK23KfuYS+gVMC3LB8QGH9W1iGtDPsNWoQbgtXSExkBu2aDR4epiGWZOjZsj6lDl/N/AqqTC3UA==}
 
   bare-events@2.5.0:
-    resolution: {integrity: sha512-/E8dDe9dsbLyh2qrZ64PEPadOQ0F4gbl1sUJOrmph7xOiIxfY8vwab/4bFLh4Y88/Hk/ujKcrQKc+ps0mv873A==}
+    resolution: {integrity: sha512-/E8dDe9dsbLyh2qrZ64PEPadOQ0F4gbl1sUJOrmph7xOiIxfY8vwab/4bFLh4Y88/Hk/ujKcrQKc+ps0mv873A==, tarball: https://registry.npmjs.org/bare-events/-/bare-events-2.5.0.tgz}
 
   bare-fs@2.3.5:
     resolution: {integrity: sha512-SlE9eTxifPDJrT6YgemQ1WGFleevzwY+XAP1Xqgl56HtcrisC2CHCZ2tq6dBpcH2TnNxwUEUGhweo+lrQtYuiw==, tarball: https://registry.npmjs.org/bare-fs/-/bare-fs-2.3.5.tgz}
@@ -9010,7 +8980,7 @@ packages:
     resolution: {integrity: sha512-2bmlRpNKBxT/CRmPOlyISQpNj+qSeYvcym/uT0Jx2bMOlKLtSy1ZmLuVxSEKKyor/N5yhvp/ZiG1oE3DEYMSFA==}
 
   errno@0.1.8:
-    resolution: {integrity: sha512-dJ6oBr5SQ1VSd9qkk7ByRgb/1SH4JZjCHSW/mr63/QcXO9zLVxvJ6Oy13nio03rxpSnVDDjFor75SjVeZWPW/A==}
+    resolution: {integrity: sha512-dJ6oBr5SQ1VSd9qkk7ByRgb/1SH4JZjCHSW/mr63/QcXO9zLVxvJ6Oy13nio03rxpSnVDDjFor75SjVeZWPW/A==, tarball: https://registry.npmjs.org/errno/-/errno-0.1.8.tgz}
     hasBin: true
 
   error-ex@1.3.2:
@@ -9319,7 +9289,7 @@ packages:
       eslint: ^8.56.0
 
   eslint-config-devextreme@0.2.0:
-    resolution: {integrity: sha512-0U4BbsNotgQ6S0vGZLnjMMLmOeIj1TIN2mkLNg501P6C4kR3qqFmgdd1ICU8vdXIY+mvo6h840y9eYaaUh8/3g==}
+    resolution: {integrity: sha512-0U4BbsNotgQ6S0vGZLnjMMLmOeIj1TIN2mkLNg501P6C4kR3qqFmgdd1ICU8vdXIY+mvo6h840y9eYaaUh8/3g==, tarball: https://registry.npmjs.org/eslint-config-devextreme/-/eslint-config-devextreme-0.2.0.tgz}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^5.32.0
       eslint: ^8.22.0
@@ -9334,7 +9304,7 @@ packages:
       eslint-plugin-spellcheck: ^0.0.19
 
   eslint-config-devextreme@1.1.5:
-    resolution: {integrity: sha512-FiG6+B9Q6zrXQdYin31oq8ph+EbgypUol8T3KXl59kXBmwcp4ykkL0BmJBEcN+Z4XVY/E1JVCuk5XVG8RlsI5Q==}
+    resolution: {integrity: sha512-FiG6+B9Q6zrXQdYin31oq8ph+EbgypUol8T3KXl59kXBmwcp4ykkL0BmJBEcN+Z4XVY/E1JVCuk5XVG8RlsI5Q==, tarball: https://registry.npmjs.org/eslint-config-devextreme/-/eslint-config-devextreme-1.1.5.tgz}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^5.53.0
       eslint: ^8.35.0
@@ -10346,7 +10316,7 @@ packages:
     resolution: {integrity: sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA==}
 
   graceful-fs@4.2.11:
-    resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
+    resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==, tarball: https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.11.tgz}
 
   graceful-readlink@1.0.1:
     resolution: {integrity: sha512-8tLu60LgxF6XpdbK8OW3FA+IfTNBn1ZHGHKF4KQbEeSkajYw5PlYJcKluntgegDPTg8UkHjpet1T82vk6TQ68w==}
@@ -12059,28 +12029,24 @@ packages:
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   lightningcss-linux-arm64-musl@1.28.1:
     resolution: {integrity: sha512-dnMHeXEmCUzHHZjaDpQBYuBKcN9nPC3nPFKl70bcj5Bkn5EmkcgEqm5p035LKOgvAwk1XwLpQCML6pXmCwz0NQ==, tarball: https://registry.npmjs.org/lightningcss-linux-arm64-musl/-/lightningcss-linux-arm64-musl-1.28.1.tgz}
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   lightningcss-linux-x64-gnu@1.28.1:
     resolution: {integrity: sha512-7vWDISaMUn+oo2TwRdf2hl/BLdPxvywv9JKEqNZB/0K7bXwV4XE9wN/C2sAp1gGuh6QBA8lpjF4JIPt3HNlCHA==, tarball: https://registry.npmjs.org/lightningcss-linux-x64-gnu/-/lightningcss-linux-x64-gnu-1.28.1.tgz}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   lightningcss-linux-x64-musl@1.28.1:
     resolution: {integrity: sha512-IHCu9tVGP+x5BCpA2rF3D04DBokcBza/a8AuHQU+1AiMKubuMegPwcL7RatBgK4ztFHeYnnD5NdhwhRfYMAtNA==, tarball: https://registry.npmjs.org/lightningcss-linux-x64-musl/-/lightningcss-linux-x64-musl-1.28.1.tgz}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   lightningcss-win32-arm64-msvc@1.28.1:
     resolution: {integrity: sha512-Erm72kHmMg/3h350PTseskz+eEGBM17Fuu79WW2Qqt0BfWSF1jHHc12lkJCWMYl5jcBHPs5yZdgNHtJ7IJS3Uw==, tarball: https://registry.npmjs.org/lightningcss-win32-arm64-msvc/-/lightningcss-win32-arm64-msvc-1.28.1.tgz}
@@ -12611,7 +12577,7 @@ packages:
     hasBin: true
 
   mime@1.6.0:
-    resolution: {integrity: sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==}
+    resolution: {integrity: sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==, tarball: https://registry.npmjs.org/mime/-/mime-1.6.0.tgz}
     engines: {node: '>=4'}
     hasBin: true
 
@@ -15062,7 +15028,7 @@ packages:
     engines: {node: '>=0.10.0'}
 
   source-map@0.6.1:
-    resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
+    resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==, tarball: https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz}
     engines: {node: '>=0.10.0'}
 
   source-map@0.7.4:
@@ -16878,7 +16844,7 @@ packages:
     engines: {node: '>=8'}
 
   wrap-ansi@7.0.0:
-    resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}
+    resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==, tarball: https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-7.0.0.tgz}
     engines: {node: '>=10'}
 
   wrap-ansi@8.1.0:
@@ -27539,7 +27505,7 @@ snapshots:
     transitivePeerDependencies:
       - eslint-plugin-import
 
-  eslint-config-devextreme@0.2.0(ve3irduu2nwiylddfwflahfd3y):
+  eslint-config-devextreme@0.2.0(d7ps4by3c7kra7qj5yfutnfiaa):
     dependencies:
       '@typescript-eslint/eslint-plugin': 8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5)
       eslint: 9.18.0(jiti@1.21.6)
@@ -27552,6 +27518,22 @@ snapshots:
       eslint-plugin-qunit: 8.1.2(eslint@9.18.0(jiti@1.21.6))
       eslint-plugin-rulesdir: 0.2.2
       eslint-plugin-spellcheck: 0.0.20(eslint@9.18.0(jiti@1.21.6))
+
+  eslint-config-devextreme@1.1.5(ej4wbhyrqreseudgptfru4w2ya):
+    dependencies:
+      '@typescript-eslint/eslint-plugin': 8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5)
+      eslint: 9.18.0(jiti@1.21.6)
+      eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6)))(eslint@9.18.0(jiti@1.21.6))
+      eslint-config-airbnb-typescript: 18.0.0(@typescript-eslint/eslint-plugin@8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6)))(eslint@9.18.0(jiti@1.21.6))
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))
+      eslint-plugin-jest: 27.6.0(@typescript-eslint/eslint-plugin@8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(jest@29.7.0(@types/node@20.14.5)(node-notifier@9.0.1)(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@20.12.8)(typescript@5.4.5)))(typescript@4.9.5)
+      eslint-plugin-jest-formatting: 3.1.0(eslint@9.18.0(jiti@1.21.6))
+      eslint-plugin-jsx-a11y: 6.8.0(eslint@9.18.0(jiti@1.21.6))
+      eslint-plugin-qunit: 8.1.2(eslint@9.18.0(jiti@1.21.6))
+      eslint-plugin-rulesdir: 0.2.2
+      eslint-plugin-spellcheck: 0.0.20(eslint@9.18.0(jiti@1.21.6))
+      stylelint: 16.5.0(typescript@4.9.5)
+      stylelint-config-standard: 35.0.0(stylelint@16.5.0(typescript@4.9.5))
 
   eslint-config-devextreme@1.1.5(en434vihwhylys55dfvcrqcrya):
     dependencies:
@@ -27569,7 +27551,7 @@ snapshots:
       stylelint: 16.5.0(typescript@5.4.5)
       stylelint-config-standard: 35.0.0(stylelint@16.5.0(typescript@5.4.5))
 
-  eslint-config-devextreme@1.1.5(exvrhn6g4m6aerk4xgkmwi4j24):
+  eslint-config-devextreme@1.1.5(gtf3gt7qoktlkhvd3kqhmild5e):
     dependencies:
       '@typescript-eslint/eslint-plugin': 8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5)
       eslint: 9.18.0(jiti@1.21.6)
@@ -27601,23 +27583,7 @@ snapshots:
       stylelint: 16.5.0(typescript@4.9.5)
       stylelint-config-standard: 35.0.0(stylelint@16.5.0(typescript@4.9.5))
 
-  eslint-config-devextreme@1.1.5(tegwiszkcetciamfkcgav5h5lu):
-    dependencies:
-      '@typescript-eslint/eslint-plugin': 8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5)
-      eslint: 9.18.0(jiti@1.21.6)
-      eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6)))(eslint@9.18.0(jiti@1.21.6))
-      eslint-config-airbnb-typescript: 18.0.0(@typescript-eslint/eslint-plugin@8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6)))(eslint@9.18.0(jiti@1.21.6))
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))
-      eslint-plugin-jest: 27.6.0(@typescript-eslint/eslint-plugin@8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.6))(jest@29.7.0(@types/node@20.12.8)(node-notifier@9.0.1)(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@20.12.8)(typescript@5.4.5)))(typescript@4.9.5)
-      eslint-plugin-jest-formatting: 3.1.0(eslint@9.18.0(jiti@1.21.6))
-      eslint-plugin-jsx-a11y: 6.8.0(eslint@9.18.0(jiti@1.21.6))
-      eslint-plugin-qunit: 8.1.2(eslint@9.18.0(jiti@1.21.6))
-      eslint-plugin-rulesdir: 0.2.2
-      eslint-plugin-spellcheck: 0.0.20(eslint@9.18.0(jiti@1.21.6))
-      stylelint: 16.5.0(typescript@4.9.5)
-      stylelint-config-standard: 35.0.0(stylelint@16.5.0(typescript@4.9.5))
-
-  eslint-config-devextreme@1.1.5(x2rugoatnectwbdt7nelvgmpbm):
+  eslint-config-devextreme@1.1.5(ly4pnzcujrj7oti34ynx2lxhta):
     dependencies:
       '@typescript-eslint/eslint-plugin': 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@4.9.5))(eslint@8.56.0)(typescript@4.9.5)
       eslint: 8.56.0
