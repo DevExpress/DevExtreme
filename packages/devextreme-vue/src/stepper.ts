@@ -5,12 +5,7 @@ import { prepareComponentConfig } from "./core/index";
 import Stepper, { Properties } from "devextreme/ui/stepper";
 import  DataSource from "devextreme/data/data_source";
 import {
- DataSourceOptions,
-} from "devextreme/common/data";
-import {
- Store,
-} from "devextreme/data/store";
-import {
+ dxStepperItem,
  DisposingEvent,
  InitializedEvent,
  ItemClickEvent,
@@ -20,6 +15,12 @@ import {
  SelectionChangedEvent,
  SelectionChangingEvent,
 } from "devextreme/ui/stepper";
+import {
+ DataSourceOptions,
+} from "devextreme/common/data";
+import {
+ Store,
+} from "devextreme/data/store";
 import {
  Orientation,
 } from "devextreme/common";
@@ -66,14 +67,14 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    dataSource: [Array, Object, String] as PropType<Array<Object> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
+    dataSource: [Array, Object, String] as PropType<Array<dxStepperItem> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
     height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
-    items: Array as PropType<Array<Object>>,
+    items: Array as PropType<Array<dxStepperItem>>,
     itemTemplate: {},
     keyExpr: [Function, String] as PropType<((() => void)) | string>,
     noDataText: String,

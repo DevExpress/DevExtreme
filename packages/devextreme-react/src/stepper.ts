@@ -9,8 +9,7 @@ import dxStepper, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { dxStepperItem } from "UNKNOWN_MODULE";
-import type { DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, SelectionChangingEvent } from "devextreme/ui/stepper";
+import type { dxStepperItem, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, SelectionChangingEvent } from "devextreme/ui/stepper";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { template } from "devextreme/common";
 

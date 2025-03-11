@@ -24,10 +24,9 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/stepper';
 
 import DataSource from 'devextreme/data/data_source';
-import { dxStepperItem } from 'UNKNOWN_MODULE';
+import { dxStepperItem, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SelectionChangingEvent } from 'devextreme/ui/stepper';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SelectionChangingEvent } from 'devextreme/ui/stepper';
 import { Orientation } from 'devextreme/common';
 
 import DxStepper from 'devextreme/ui/stepper';
