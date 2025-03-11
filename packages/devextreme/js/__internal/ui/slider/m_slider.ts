@@ -419,7 +419,7 @@ const Slider = TrackBar.inherit({
     });
   },
 
-  _itemWidthFunc() {
+  _itemWidthFunc(): number {
     return this._itemWidthRatio;
   },
 
