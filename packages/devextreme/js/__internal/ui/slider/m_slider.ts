@@ -315,6 +315,7 @@ class Slider<
       onStart: this._swipeStartHandler.bind(this),
       onUpdated: this._swipeUpdateHandler.bind(this),
       onEnd: this._swipeEndHandler.bind(this),
+      // @ts-expect-error
       itemSizeFunc: this._itemWidthFunc.bind(this),
     });
   }
