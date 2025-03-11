@@ -5840,5 +5840,33 @@
         ]
       }
     ]
+  },
+  {
+    "Name": "Card View",
+    "Equivalents": "",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": []
+      },
+      {
+        "Name": "Data Binding",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "SimpleArray",
+            "Name": "SimpleArray",
+            "DocUrl": "",
+            "Widget": "CardView",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New"
+          }
+        ]
+      }
+    ]
   }
 ]
