@@ -73,7 +73,7 @@ import DxTreeView from 'devextreme-vue/tree-view';
 import {
   DxDataGrid, DxSelection, DxPaging, DxFilterRow, DxScrolling,
 } from 'devextreme-vue/data-grid';
-import CustomStore from 'devextreme/data/custom_store';
+import CustomStore from 'devextreme-vue/common/data/custom-store';
 import 'whatwg-fetch';
 
 const treeBoxValue = ref(['1_1']);

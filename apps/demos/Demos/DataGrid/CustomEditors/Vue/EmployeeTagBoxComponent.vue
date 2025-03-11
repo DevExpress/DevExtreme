@@ -18,7 +18,7 @@
 import { ref } from 'vue';
 import { DxDataGrid, DxDataGridTypes } from 'devextreme-vue/data-grid';
 import DxTagBox, { DxTagBoxTypes } from 'devextreme-vue/tag-box';
-import CustomStore from 'devextreme/data/custom_store';
+import CustomStore from 'devextreme-vue/common/data/custom-store';
 
 const props = defineProps<{
   cellInfo: DxDataGridTypes.ColumnEditCellTemplateData,

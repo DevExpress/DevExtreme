@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule, DxTextBoxModule } from 'devextreme-angular';
-import CustomStore from 'devextreme/data/custom_store';
+import { CustomStore } from 'devextreme-angular/common/data';
 import { CollaborativeEditingService } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

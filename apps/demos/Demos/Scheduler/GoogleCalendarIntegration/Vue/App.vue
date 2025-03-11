@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import 'whatwg-fetch';
 import DxScheduler from 'devextreme-vue/scheduler';
-import CustomStore from 'devextreme/data/custom_store';
+import CustomStore from 'devextreme-vue/common/data/custom-store';
 
 const views = ['day', 'workWeek', 'month'];
 const currentDate = new Date(2017, 4, 25);

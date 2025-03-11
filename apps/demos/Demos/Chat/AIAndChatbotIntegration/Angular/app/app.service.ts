@@ -11,7 +11,7 @@ import {
   MessageEnteredEvent
 } from 'devextreme/ui/chat';
 import DataSource from 'devextreme/data/data_source';
-import CustomStore from 'devextreme/data/custom_store';
+import { CustomStore } from 'devextreme-angular/common/data';
 
 @Injectable({
   providedIn: 'root',

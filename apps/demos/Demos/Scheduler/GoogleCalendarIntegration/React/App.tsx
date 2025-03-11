@@ -3,7 +3,7 @@ import React from 'react';
 
 import Scheduler, { SchedulerTypes } from 'devextreme-react/scheduler';
 
-import CustomStore from 'devextreme/data/custom_store';
+import CustomStore from 'devextreme-react/common/data/custom-store';
 
 // eslint-disable-next-line space-before-function-paren
 const getData = async (_, requestOptions) => {

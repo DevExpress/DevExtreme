@@ -45,7 +45,7 @@ import {
 } from 'devextreme-vue/data-grid';
 
 import { createStore } from 'devextreme-aspnet-data-nojquery';
-import CustomStore from 'devextreme/data/custom_store';
+import CustomStore from 'devextreme-vue/common/data/custom-store';
 
 import { Task, Employee } from './data.ts';
 

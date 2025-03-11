@@ -40,7 +40,7 @@
 <script setup lang="ts">
 import DxSelectBox from 'devextreme-vue/select-box';
 import DataSource from 'devextreme/data/data_source';
-import CustomStore from 'devextreme/data/custom_store';
+import CustomStore from 'devextreme-vue/common/data/custom-store';
 import RowTemplate from './RowTemplate.vue';
 
 const months = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
