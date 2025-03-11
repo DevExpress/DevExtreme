@@ -109,7 +109,7 @@ export interface CollectionWidgetBaseProperties<
 
   encodeNoDataText?: boolean;
 
-  _itemAttributes?: Record<string, string>;
+  _itemAttributes?: Record<string, unknown>;
 
   selectOnFocus?: boolean;
 }
