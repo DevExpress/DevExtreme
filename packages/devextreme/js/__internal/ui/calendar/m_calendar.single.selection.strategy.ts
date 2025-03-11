@@ -19,7 +19,7 @@ class CalendarSingleSelectionStrategy extends CalendarSelectionStrategy {
     this.dateValue(selectedValue, e);
   }
 
-  updateAriaSelected(value, previousValue) {
+  updateAriaSelected(value?, previousValue?) {
     value ??= [this.dateOption('value')];
     previousValue ??= [];
 

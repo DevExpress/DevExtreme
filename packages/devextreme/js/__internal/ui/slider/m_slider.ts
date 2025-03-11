@@ -465,7 +465,8 @@ class Slider<
     });
   }
 
-  _itemWidthFunc(): number | undefined {
+  _itemWidthFunc(): number {
+    // @ts-expect-error ts-error
     return this._itemWidthRatio;
   }
 
