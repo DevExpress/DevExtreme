@@ -82,17 +82,15 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
     }
 
     return () => {
-      if (element.current) {
-        container.appendChild(element.current);
-      }
-
-      if (hiddenNodeElement.current) {
-        container.appendChild(hiddenNodeElement.current);
-      }
-
-      if (removalListenerElement.current) {
-        container.appendChild(removalListenerElement.current);
-      }
+      [
+        element.current,
+        hiddenNodeElement.current,
+        removalListenerElement.current,
+      ].forEach((htmlElement) => {
+        if (htmlElement && htmlElement.parentElement !== container) {
+          container.appendChild(htmlElement);
+        }
+      });
 
       if (el) {
         events.off(el, DX_REMOVE_EVENT, onTemplateRemoved);
