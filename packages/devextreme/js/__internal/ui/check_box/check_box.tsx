@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import devices from '@js/core/devices';
 import { convertRulesToOptions } from '@js/core/options/utils';
-import type { InfernoEffect } from '@ts/core/r1/runtime/inferno';
-import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno';
+import type { InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
+import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 import type { RefObject } from 'inferno';
 import { createRef as infernoCreateRef, Fragment } from 'inferno';

@@ -6,7 +6,7 @@ import $ from '@js/core/renderer';
 import type { FunctionTemplate } from '@js/core/templates/function_template';
 import { replaceWith } from '@js/core/utils/dom';
 import { isDefined } from '@js/core/utils/type';
-import { InfernoComponent, InfernoEffect } from '@ts/core/r1/runtime/inferno';
+import { InfernoComponent, InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 // eslint-disable-next-line spellcheck/spell-checker
 import { findDOMfromVNode } from 'inferno';
 

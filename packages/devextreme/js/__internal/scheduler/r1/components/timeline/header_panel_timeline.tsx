@@ -1,5 +1,5 @@
-import type { InfernoEffect } from '@ts/core/r1/runtime/inferno';
-import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno';
+import type { InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
+import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
 import type { HeaderPanelProps } from '../base/header_panel';
