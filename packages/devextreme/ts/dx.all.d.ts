@@ -21165,7 +21165,7 @@ declare module DevExpress.ui {
          */
         originalRoute: any;
       };
-    export type RouteMode = 'driving' | 'walking' | string;
+    export type RouteMode = 'driving' | 'walking';
     /**
      * [descr:_ui_map_RouteRemovedEvent]
      */
@@ -21320,7 +21320,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxMapOptions.routes.mode]
        */
-      mode?: DevExpress.ui.dxMap.RouteMode;
+      mode?: DevExpress.ui.dxMap.RouteMode | string;
       /**
        * [descr:dxMapOptions.routes.opacity]
        */
