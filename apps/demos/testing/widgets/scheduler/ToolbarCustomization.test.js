@@ -4,9 +4,9 @@ import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 const SCREEN_SIZES = {
-  'wide': [900, 600],
-  'medium': [490, 600],
-  'thin': [320, 600]
+  wide: [900, 600],
+  medium: [490, 600],
+  thin: [320, 600],
 };
 
 fixture('Scheduler.ToolbarCustomization')
