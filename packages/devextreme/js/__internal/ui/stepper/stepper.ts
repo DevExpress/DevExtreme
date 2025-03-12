@@ -3,9 +3,11 @@ import registerComponent from '@js/core/component_registrator';
 import type { DxElement } from '@js/core/element';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
 import { BindableTemplate } from '@ts/core/templates/m_bindable_template';
 import type { Template } from '@ts/core/templates/m_template';
 import { getImageContainer } from '@ts/core/utils/m_icon';
+import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
 import CollectionWidgetAsync from '@ts/ui/collection/m_collection_widget.async';
@@ -39,6 +41,7 @@ export const ORIENTATION: Record<string, Orientation> = {
 
 export interface StepperProperties extends CollectionWidgetEditProperties<Stepper> {
   orientation?: Orientation;
+  linear?: boolean;
 }
 
 class Stepper extends CollectionWidgetAsync<StepperProperties> {
@@ -47,6 +50,17 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   _connector!: Connector;
 
   _$stepsContainer!: dxElementWrapper;
+
+  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+    const defaultHandlers = super._supportedKeys();
+    const { linear } = this.option();
+
+    return {
+      ...defaultHandlers,
+      home: linear ? defaultHandlers.leftArrow : defaultHandlers.home,
+      end: linear ? defaultHandlers.rightArrow : defaultHandlers.end,
+    };
+  }
 
   _prepareDefaultItemTemplate(data: StepperItemProperties, $container: dxElementWrapper): void {
     const $indicatorElement = $('<div>').addClass(STEP_INDICATOR_CLASS);
@@ -93,11 +107,14 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     return {
       ...super._getDefaultOptions(),
       orientation: 'horizontal',
+      linear: true,
       selectionMode: 'single',
       selectOnFocus: true,
       activeStateEnabled: true,
       hoverStateEnabled: true,
       focusStateEnabled: true,
+      loopItemFocus: false,
+      selectionRequired: true,
     };
   }
 
@@ -185,6 +202,35 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     return orientation === ORIENTATION.horizontal;
   }
 
+  _shouldPreventItemEvent(itemElement: Element): boolean {
+    const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
+    const { linear, selectedIndex = 0 } = this.option();
+
+    return !!linear && Math.abs(selectedIndex - itemIndex) > 1;
+  }
+
+  _itemClickHandler(
+    e: DxEvent,
+    args?: Record<string, unknown>,
+    config?: ActionConfig,
+  ): void {
+    if (!this._shouldPreventItemEvent(e.currentTarget)) {
+      super._itemClickHandler(e, args, config);
+    }
+  }
+
+  _itemPointerDownHandler(e: DxEvent): void {
+    if (!this._shouldPreventItemEvent(e.currentTarget)) {
+      super._itemPointerDownHandler(e);
+    }
+  }
+
+  _itemSelectHandler(e: DxEvent): void {
+    if (!this._shouldPreventItemEvent(e.currentTarget)) {
+      super._itemSelectHandler(e);
+    }
+  }
+
   _itemOptionChanged(
     item: StepperItemProperties,
     property: keyof StepperItemProperties,
@@ -205,6 +251,8 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
         this._toggleOrientationClass();
 
         this._connector.option(name, value);
+        break;
+      case 'linear':
         break;
       default:
         super._optionChanged(args);
