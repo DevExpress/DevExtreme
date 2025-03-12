@@ -38,6 +38,7 @@
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import { type SliderValueChangeMode } from 'devextreme-vue/common';
 import {
   DxRangeSelector,
   DxMargin,
@@ -51,7 +52,7 @@ import {
 import { DxSelectBox } from 'devextreme-vue/select-box';
 
 const range = ref([new Date(2011, 0, 1), new Date(2011, 11, 31)]);
-const behaviorModes = ['onHandleMove', 'onHandleRelease'];
+const behaviorModes: SliderValueChangeMode[] = ['onHandleMove', 'onHandleRelease'];
 
 const startValue = ref(range.value[0]);
 const endValue = ref(range.value[1]);

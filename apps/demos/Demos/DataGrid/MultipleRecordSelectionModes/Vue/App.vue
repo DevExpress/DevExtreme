@@ -70,16 +70,15 @@ import {
   DxSelection,
   DxFilterRow,
   DxPager,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import themes from 'devextreme/ui/themes';
 import { sales } from './data.ts';
 
-const selectAllModes = ['allPages', 'page'];
-const showCheckBoxesModes = ['none', 'onClick', 'onLongTap', 'always'];
-
-const allMode = ref('allPages');
-
-const checkBoxesMode = ref(themes.current().startsWith('material') ? 'always' : 'onClick');
+const selectAllModes: DxDataGridTypes.SelectAllMode[] = ['allPages', 'page'];
+const showCheckBoxesModes: DxDataGridTypes.SelectionColumnDisplayMode[] = ['none', 'onClick', 'onLongTap', 'always'];
+const allMode = ref(selectAllModes[0]);
+const checkBoxesMode = ref<DxDataGridTypes.SelectionColumnDisplayMode>(themes.current().startsWith('material') ? 'always' : 'onClick');
 </script>
 <style scoped>
 .options {
