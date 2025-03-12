@@ -49,11 +49,11 @@ class AzureProvider extends DynamicProvider {
       walking: 'pedestrian',
     };
 
-    if (!isDefined(type)) {
+    if (!type) {
       return movementTypes.driving;
     }
 
-    return movementTypes[type] || type;
+    return movementTypes[type] ?? type;
   }
 
   _resolveLocation(location) {

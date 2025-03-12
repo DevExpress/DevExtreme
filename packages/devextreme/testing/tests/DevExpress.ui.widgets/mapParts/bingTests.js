@@ -1160,24 +1160,30 @@ QUnit.test('Route mode should be passed without changes if it is not driving or 
     });
 });
 
-QUnit.test('Driving route mode should be used by default if route mode is not defined', function(assert) {
-    const done = assert.async();
+[
+    { mode: undefined, scenario: 'undefined' },
+    { mode: '', scenario: 'empty string' },
+].forEach(({ mode, scenario }) => {
+    QUnit.test(`Driving route mode should be used by default if route mode is ${scenario}`, function(assert) {
+        const done = assert.async();
 
-    $('#map').dxMap({
-        provider: 'bing',
-        routes: [
-            {
-                locations: [
-                    [40.737102, -73.990318],
-                    [40.749825, -73.987963],
-                ]
-            },
-        ],
-        onReady: function() {
-            assert.strictEqual(window.Microsoft.directionsOptions.routeMode, Microsoft.Maps.Directions.RouteMode.driving, 'driving direction mode is used');
+        $('#map').dxMap({
+            provider: 'bing',
+            routes: [
+                {
+                    mode,
+                    locations: [
+                        [40.737102, -73.990318],
+                        [40.749825, -73.987963],
+                    ]
+                },
+            ],
+            onReady: function() {
+                assert.strictEqual(window.Microsoft.directionsOptions.routeMode, Microsoft.Maps.Directions.RouteMode.driving, 'default driving direction mode is used');
 
-            done();
-        }
+                done();
+            }
+        });
     });
 });
 

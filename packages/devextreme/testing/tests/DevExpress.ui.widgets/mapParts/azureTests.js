@@ -1004,19 +1004,24 @@ QUnit.module('Routes', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Provider should use car travelMode if route mode is not defined', function(assert) {
-        const done = assert.async();
+    [
+        { mode: undefined, scenario: 'undefined' },
+        { mode: '', scenario: 'empty string' },
+    ].forEach(({ mode, scenario }) => {
+        QUnit.test(`Provider should use car travelMode if route mode is ${scenario}`, function(assert) {
+            const done = assert.async();
 
-        const map = $('#map').dxMap({
-            provider: 'azure',
-            onReady: () => {
-                const travelMode = getMovementMode(map);
+            const map = $('#map').dxMap({
+                provider: 'azure',
+                onReady: () => {
+                    const travelMode = getMovementMode(map, mode);
 
-                assert.strictEqual(travelMode, 'car');
+                    assert.strictEqual(travelMode, 'car');
 
-                done();
-            }
-        }).dxMap('instance');
+                    done();
+                }
+            }).dxMap('instance');
+        });
     });
 
     QUnit.test('Provider should use route mode as a travelMode without changes if it is not driving or walking mode', function(assert) {

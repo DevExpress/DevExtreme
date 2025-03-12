@@ -54,11 +54,11 @@ class BingProvider extends DynamicProvider {
       walking: Microsoft.Maps.Directions.RouteMode.walking,
     };
 
-    if (!isDefined(type)) {
+    if (!type) {
       return movementTypes.driving;
     }
 
-    return movementTypes[type] || Microsoft.Maps.Directions.RouteMode[type];
+    return movementTypes[type] ?? Microsoft.Maps.Directions.RouteMode[type];
   }
 
   _resolveLocation(location) {
